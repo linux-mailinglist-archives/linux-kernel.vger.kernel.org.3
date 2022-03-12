@@ -2,123 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C034D704E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 19:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D844D7051
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 19:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiCLSHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 13:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S232426AbiCLSHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 13:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbiCLSHd (ORCPT
+        with ESMTP id S232398AbiCLSHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 13:07:33 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A4070CDB;
-        Sat, 12 Mar 2022 10:06:28 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q19so10193948pgm.6;
-        Sat, 12 Mar 2022 10:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p0GzujtrGM9Z+sUlTt2clDdUTuQkuCPOBQNUOQ7491g=;
-        b=JMoKF9I+mRFfMuK0T25u/ur8rVBEIOJGM/i02jlg13o5RMotmChfNNixCR57t0Zye9
-         pvn7EzqX0tpt/14Pth37E42Twkvv8+2Wmxi9HIZuPtAh7cCnCQUJO2jYDhj9tw5qvtN2
-         is3gU+XiPUjGNazWT1sYwkYyV9MwW2ZfcLeiYG1y6u9+yf/LVavP2eLBmAu+m67a0mCq
-         5YOztOkUY65BA3fU9LklrlaFi6hPkAI2knZI+C2pmkVd4D1LWZUb7E+FgSOG3IMoGAF9
-         l7fkMBP8iMlVc/p11LkxYMhePEOVs1+CrvFnAhVjJKbjuOmCd8LGw2vK9RtjhfSzPEqc
-         UAAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p0GzujtrGM9Z+sUlTt2clDdUTuQkuCPOBQNUOQ7491g=;
-        b=WE7J/7uQY4N/SV0V5yPc1DstG6iyBESTIyVbHKN/oJ8yGzwkVGCeZujOsAM+/PueGf
-         tzwRxtCkXRNqLUjlGr1quiVKhm8BqB37pSe58q4k35zAEvz7skNv4ATzuUILHbjaoavR
-         AejaQW8TfB7PrWhg4XAezXShSDcM2rRo5TnP+HJpncijkMuK6Il2MJ44Hn5RHZWAp1k3
-         tXJ2mPkI8S7nNqglfJ1+krPsZ13Gjpst2XbMyGaJDnFoS/kxxugQgCC5NA5tgA9xp1sn
-         j32LWagO/lGNM9bnMTK2RseKpvuRkQzwsFfuHvxJvFqs4B0a0xGUYTtMGQJ0/Bc7vW9P
-         LbNA==
-X-Gm-Message-State: AOAM530xllwbty1Kx19Jl1XsKgpY+01kh2KFZbEtJc2MInNhesQzpf9h
-        wR2cGIvQBpoXz1eZU3I+hZ1rsem5rYI=
-X-Google-Smtp-Source: ABdhPJyF9kO3rvea9Hls8NcNDo5E9gu1t9UmoheAdi6EQE8QSPmyP5CHKblJH4//un/nzAQtzI1eSw==
-X-Received: by 2002:a63:4412:0:b0:372:f29e:3108 with SMTP id r18-20020a634412000000b00372f29e3108mr13209087pga.354.1647108387749;
-        Sat, 12 Mar 2022 10:06:27 -0800 (PST)
-Received: from localhost.localdomain ([122.161.53.68])
-        by smtp.gmail.com with ESMTPSA id z72-20020a627e4b000000b004f70cbcb06esm14017951pfc.49.2022.03.12.10.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 10:06:27 -0800 (PST)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vladimir Zapolskiy <vz@mleia.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ARM: dts: lpc18xx: Update SPI dma properties
-Date:   Sat, 12 Mar 2022 23:36:15 +0530
-Message-Id: <20220312180615.68929-3-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
-References: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
+        Sat, 12 Mar 2022 13:07:42 -0500
+X-Greylist: delayed 713 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Mar 2022 10:06:34 PST
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B828214077
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 10:06:33 -0800 (PST)
+Date:   Sat, 12 Mar 2022 18:06:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theinnocuous.com;
+        s=protonmail; t=1647108389;
+        bh=pF5aFf7SemcKJBLn9tNyRA8gtZ66Ynxsv9UXCkHzUc4=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=bp4n3XRRNygyjAnezhLQ+j5uNp1yRYmDcCvBD/4Lj5loB2rAT1dPn8lpAbtxw05AQ
+         Evb+vcqzxc2Azk5ZgP8jmluKZtYEQX/DxKGZdJ1KHeiIPST6OCceU36M6RoFZaoPDi
+         pJt7X4dGR+IPv/TzS33lqM3SfHJjs/fZXH6ss6WST6Wo82TTWhMxCS0LG2qhHIDka0
+         6AgWzO+gqVu/l4laqIljqq6b+FiypxEMTLCUeldmJLiBGZaMivW1zemvQcXiJZXl2C
+         b7ayDuueXWrS1T5KmS2M7gancJbGLqMNrAQh/iopITSjIRz41QkpVfVUH/E2txjVSx
+         9JcmtwhIDdDbw==
+To:     bp@alien8.de, keescook@chromium.org
+From:   James Jones <linux@theinnocuous.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+Reply-To: James Jones <linux@theinnocuous.com>
+Subject: Re: [PATCH] x86: Remove a.out support
+Message-ID: <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
+In-Reply-To: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
+References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI pl022 describes dma-names as RX,TX.
-Reorder dmas and dma-names properties to follow specified convention.
-And while at it, also fix entries order within dma pairs.
+On 3/12/22 9:54 AM, James Jones wrote:
+>> From: Borislav Petkov <bp@suse.de>
+>>
+>> Commit
+>>
+>>    eac616557050 ("x86: Deprecate a.out support")
+>>
+>> deprecated a.out support with the promise to remove it a couple of
+>> releases later. That commit landed in v5.1.
+>>
+>> Now it is more than a couple of releases later, no one has complained so
+>> remove it.
+>
+> Sorry for taking so long to complain, but I have been meaning to note
+> that I and a few others are still using a.out. I saw it go by in my
+> morning Google news skim that this went in, and figured it was now or
+> never. The use case is running an old set of tools to build programs for
+> the Atari Jaguar. Namely, Atari's assembler (mac) and linker (aln). The
+> alternative is running windows versions in dosbox, or using some
+> replacements that have been developed based on an even older,
+> less-featureful version of the source code for mac and aln, but which
+> still haven't managed to add back in all the features needed to build
+> some programs or use the Atari debugging tools (Also available in a.out
+> only).
+>
+> I've been running with a few local patches to fix the a.out build and
+> add the Kconfig options back for the last year or so to enable this on a
+> few of my machines, and it's been working fine. I know of at least one
+> other person doing this. If the code itself and supporting
+> syscalls/other code go away though, it'll probably become impractical.
+> If others are open to it, I can share my small local patches along with
+> a revert of this change. I'd also like to ask whether much is gained by
+> deleting this code as far as reducing maintenance burden. It has
+> survived nearly untouched since the deprecation notice and still works
+> modulo a broken preprocessor macro in fs/exec.c.
+>
+> For the curious, or if anyone wants proof I'm not making this up and
+> really do spend time on these things, my amalgamation of Jaguar tools &
+> docs, including copies of the old mac and aln a.out binaries, is
+> available here:
+>
+> https://github.com/cubanismo/jaguar-sdk
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-CC: soc@kernel.org
----
- arch/arm/boot/dts/lpc18xx.dtsi | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+Apologies, fixing x86 maintainer alias address.
 
-diff --git a/arch/arm/boot/dts/lpc18xx.dtsi b/arch/arm/boot/dts/lpc18xx.dtsi
-index 10b8249b8ab6..b3070cc927b7 100644
---- a/arch/arm/boot/dts/lpc18xx.dtsi
-+++ b/arch/arm/boot/dts/lpc18xx.dtsi
-@@ -317,8 +317,7 @@ ssp0: spi@40083000 {
- 			clocks = <&ccu2 CLK_APB0_SSP0>, <&ccu1 CLK_CPU_SSP0>;
- 			clock-names = "sspclk", "apb_pclk";
- 			resets = <&rgu 50>;
--			dmas = <&dmamux  9 0 2
--				&dmamux 10 0 2>;
-+			dmas = <&dmamux  10 0 2>, <&dmamux 9 0 2>;
- 			dma-names = "rx", "tx";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -424,16 +423,12 @@ ssp1: spi@400c5000 {
- 			clocks = <&ccu2 CLK_APB2_SSP1>, <&ccu1 CLK_CPU_SSP1>;
- 			clock-names = "sspclk", "apb_pclk";
- 			resets = <&rgu 51>;
--			dmas = <&dmamux 11 2 2
--				&dmamux 12 2 2
--				&dmamux  3 3 2
--				&dmamux  4 3 2
--				&dmamux  5 2 2
--				&dmamux  6 2 2
--				&dmamux 13 2 2
--				&dmamux 14 2 2>;
--			dma-names = "rx", "tx", "tx", "rx",
--				    "tx", "rx", "rx", "tx";
-+			dmas = <&dmamux 12 2 2>, <&dmamux 11 2 2>,
-+					<&dmamux  4 3 2>, <&dmamux  3 3 2>,
-+					<&dmamux  6 2 2>, <&dmamux  5 2 2>,
-+					<&dmamux 14 2 2>, <&dmamux 13 2 2>;
-+			dma-names = "rx", "tx", "rx", "tx",
-+						"rx", "tx", "rx", "tx";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			status = "disabled";
--- 
-2.25.1
+> Thanks,
+> -James
+>
+>> Signed-off-by: Borislav Petkov <bp@suse.de>
+>> ---
+>>   arch/x86/Kconfig          |   7 -
+>>   arch/x86/ia32/Makefile    |   2 -
+>>   arch/x86/ia32/ia32_aout.c | 325 --------------------------------------
+>>   3 files changed, 334 deletions(-)
+>>   delete mode 100644 arch/x86/ia32/ia32_aout.c
+>>
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 976dd6b532bf..6f3d63dbbddf 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -2835,13 +2835,6 @@ config IA32_EMULATION
+>>   =09  64-bit kernel. You should likely turn this on, unless you're
+>>   =09  100% sure that you don't have any 32-bit programs left.
+>>
+>> -config IA32_AOUT
+>> -=09tristate "IA32 a.out support"
+>> -=09depends on IA32_EMULATION
+>> -=09depends on BROKEN
+>> -=09help
+>> -=09  Support old a.out binaries in the 32bit emulation.
+>> -
+>>   config X86_X32
+>>   =09bool "x32 ABI for 64-bit mode"
+>>   =09depends on X86_64
+>> diff --git a/arch/x86/ia32/Makefile b/arch/x86/ia32/Makefile
+>> index 8e4d0391ff6c..e481056698de 100644
+>> --- a/arch/x86/ia32/Makefile
+>> +++ b/arch/x86/ia32/Makefile
+>> @@ -5,7 +5,5 @@
+>>
+>>   obj-$(CONFIG_IA32_EMULATION) :=3D ia32_signal.o
+>>
+>> -obj-$(CONFIG_IA32_AOUT) +=3D ia32_aout.o
+>> -
+>>   audit-class-$(CONFIG_AUDIT) :=3D audit.o
+>>   obj-$(CONFIG_IA32_EMULATION) +=3D $(audit-class-y)
+>> diff --git a/arch/x86/ia32/ia32_aout.c b/arch/x86/ia32/ia32_aout.c
+>> deleted file mode 100644
+>> index 9bd15241fadb..000000000000
+>> --- a/arch/x86/ia32/ia32_aout.c
+>> +++ /dev/null
+>> @@ -1,325 +0,0 @@
+>> -// SPDX-License-Identifier: GPL-2.0-only
+>> -/*
+>> - *  a.out loader for x86-64
+>> - *
+>> - *  Copyright (C) 1991, 1992, 1996  Linus Torvalds
+>> - *  Hacked together by Andi Kleen
+>> - */
+>> -
+>> -#include <linux/module.h>
+>> -
+>> -#include <linux/time.h>
+>> -#include <linux/kernel.h>
+>> -#include <linux/mm.h>
+>> -#include <linux/mman.h>
+>> -#include <linux/a.out.h>
+>> -#include <linux/errno.h>
+>> -#include <linux/signal.h>
+>> -#include <linux/string.h>
+>> -#include <linux/fs.h>
+>> -#include <linux/file.h>
+>> -#include <linux/stat.h>
+>> -#include <linux/fcntl.h>
+>> -#include <linux/ptrace.h>
+>> -#include <linux/user.h>
+>> -#include <linux/binfmts.h>
+>> -#include <linux/personality.h>
+>> -#include <linux/init.h>
+>> -#include <linux/jiffies.h>
+>> -#include <linux/perf_event.h>
+>> -#include <linux/sched/task_stack.h>
+>> -
+>> -#include <linux/uaccess.h>
+>> -#include <asm/cacheflush.h>
+>> -#include <asm/user32.h>
+>> -#include <asm/ia32.h>
+>> -
+>> -#undef WARN_OLD
+>> -
+>> -static int load_aout_binary(struct linux_binprm *);
+>> -static int load_aout_library(struct file *);
+>> -
+>> -static struct linux_binfmt aout_format =3D {
+>> -=09.module=09=09=3D THIS_MODULE,
+>> -=09.load_binary=09=3D load_aout_binary,
+>> -=09.load_shlib=09=3D load_aout_library,
+>> -};
+>> -
+>> -static int set_brk(unsigned long start, unsigned long end)
+>> -{
+>> -=09start =3D PAGE_ALIGN(start);
+>> -=09end =3D PAGE_ALIGN(end);
+>> -=09if (end <=3D start)
+>> -=09=09return 0;
+>> -=09return vm_brk(start, end - start);
+>> -}
+>> -
+>> -
+>> -/*
+>> - * create_aout_tables() parses the env- and arg-strings in new user
+>> - * memory and creates the pointer tables from them, and puts their
+>> - * addresses on the "stack", returning the new stack pointer value.
+>> - */
+>> -static u32 __user *create_aout_tables(char __user *p, struct linux_binp=
+rm *bprm)
+>> -{
+>> -=09u32 __user *argv, *envp, *sp;
+>> -=09int argc =3D bprm->argc, envc =3D bprm->envc;
+>> -
+>> -=09sp =3D (u32 __user *) ((-(unsigned long)sizeof(u32)) & (unsigned lon=
+g) p);
+>> -=09sp -=3D envc+1;
+>> -=09envp =3D sp;
+>> -=09sp -=3D argc+1;
+>> -=09argv =3D sp;
+>> -=09put_user((unsigned long) envp, --sp);
+>> -=09put_user((unsigned long) argv, --sp);
+>> -=09put_user(argc, --sp);
+>> -=09current->mm->arg_start =3D (unsigned long) p;
+>> -=09while (argc-- > 0) {
+>> -=09=09char c;
+>> -
+>> -=09=09put_user((u32)(unsigned long)p, argv++);
+>> -=09=09do {
+>> -=09=09=09get_user(c, p++);
+>> -=09=09} while (c);
+>> -=09}
+>> -=09put_user(0, argv);
+>> -=09current->mm->arg_end =3D current->mm->env_start =3D (unsigned long) =
+p;
+>> -=09while (envc-- > 0) {
+>> -=09=09char c;
+>> -
+>> -=09=09put_user((u32)(unsigned long)p, envp++);
+>> -=09=09do {
+>> -=09=09=09get_user(c, p++);
+>> -=09=09} while (c);
+>> -=09}
+>> -=09put_user(0, envp);
+>> -=09current->mm->env_end =3D (unsigned long) p;
+>> -=09return sp;
+>> -}
+>> -
+>> -/*
+>> - * These are the functions used to load a.out style executables and sha=
+red
+>> - * libraries.  There is no binary dependent code anywhere else.
+>> - */
+>> -static int load_aout_binary(struct linux_binprm *bprm)
+>> -{
+>> -=09unsigned long error, fd_offset, rlim;
+>> -=09struct pt_regs *regs =3D current_pt_regs();
+>> -=09struct exec ex;
+>> -=09int retval;
+>> -
+>> -=09ex =3D *((struct exec *) bprm->buf);=09=09/* exec-header */
+>> -=09if ((N_MAGIC(ex) !=3D ZMAGIC && N_MAGIC(ex) !=3D OMAGIC &&
+>> -=09     N_MAGIC(ex) !=3D QMAGIC && N_MAGIC(ex) !=3D NMAGIC) ||
+>> -=09    N_TRSIZE(ex) || N_DRSIZE(ex) ||
+>> -=09    i_size_read(file_inode(bprm->file)) <
+>> -=09    ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
+>> -=09=09return -ENOEXEC;
+>> -=09}
+>> -
+>> -=09fd_offset =3D N_TXTOFF(ex);
+>> -
+>> -=09/* Check initial limits. This avoids letting people circumvent
+>> -=09 * size limits imposed on them by creating programs with large
+>> -=09 * arrays in the data or bss.
+>> -=09 */
+>> -=09rlim =3D rlimit(RLIMIT_DATA);
+>> -=09if (rlim >=3D RLIM_INFINITY)
+>> -=09=09rlim =3D ~0;
+>> -=09if (ex.a_data + ex.a_bss > rlim)
+>> -=09=09return -ENOMEM;
+>> -
+>> -=09/* Flush all traces of the currently running executable */
+>> -=09retval =3D begin_new_exec(bprm);
+>> -=09if (retval)
+>> -=09=09return retval;
+>> -
+>> -=09/* OK, This is the point of no return */
+>> -=09set_personality(PER_LINUX);
+>> -=09set_personality_ia32(false);
+>> -
+>> -=09setup_new_exec(bprm);
+>> -
+>> -=09regs->cs =3D __USER32_CS;
+>> -=09regs->r8 =3D regs->r9 =3D regs->r10 =3D regs->r11 =3D regs->r12 =3D
+>> -=09=09regs->r13 =3D regs->r14 =3D regs->r15 =3D 0;
+>> -
+>> -=09current->mm->end_code =3D ex.a_text +
+>> -=09=09(current->mm->start_code =3D N_TXTADDR(ex));
+>> -=09current->mm->end_data =3D ex.a_data +
+>> -=09=09(current->mm->start_data =3D N_DATADDR(ex));
+>> -=09current->mm->brk =3D ex.a_bss +
+>> -=09=09(current->mm->start_brk =3D N_BSSADDR(ex));
+>> -
+>> -=09retval =3D setup_arg_pages(bprm, IA32_STACK_TOP, EXSTACK_DEFAULT);
+>> -=09if (retval < 0)
+>> -=09=09return retval;
+>> -
+>> -=09if (N_MAGIC(ex) =3D=3D OMAGIC) {
+>> -=09=09unsigned long text_addr, map_size;
+>> -
+>> -=09=09text_addr =3D N_TXTADDR(ex);
+>> -=09=09map_size =3D ex.a_text+ex.a_data;
+>> -
+>> -=09=09error =3D vm_brk(text_addr & PAGE_MASK, map_size);
+>> -
+>> -=09=09if (error)
+>> -=09=09=09return error;
+>> -
+>> -=09=09error =3D read_code(bprm->file, text_addr, 32,
+>> -=09=09=09=09  ex.a_text + ex.a_data);
+>> -=09=09if ((signed long)error < 0)
+>> -=09=09=09return error;
+>> -=09} else {
+>> -#ifdef WARN_OLD
+>> -=09=09static unsigned long error_time, error_time2;
+>> -=09=09if ((ex.a_text & 0xfff || ex.a_data & 0xfff) &&
+>> -=09=09    (N_MAGIC(ex) !=3D NMAGIC) &&
+>> -=09=09=09=09time_after(jiffies, error_time2 + 5*HZ)) {
+>> -=09=09=09printk(KERN_NOTICE "executable not page aligned\n");
+>> -=09=09=09error_time2 =3D jiffies;
+>> -=09=09}
+>> -
+>> -=09=09if ((fd_offset & ~PAGE_MASK) !=3D 0 &&
+>> -=09=09=09    time_after(jiffies, error_time + 5*HZ)) {
+>> -=09=09=09printk(KERN_WARNING
+>> -=09=09=09       "fd_offset is not page aligned. Please convert "
+>> -=09=09=09       "program: %pD\n",
+>> -=09=09=09       bprm->file);
+>> -=09=09=09error_time =3D jiffies;
+>> -=09=09}
+>> -#endif
+>> -
+>> -=09=09if (!bprm->file->f_op->mmap || (fd_offset & ~PAGE_MASK) !=3D 0) {
+>> -=09=09=09error =3D vm_brk(N_TXTADDR(ex), ex.a_text+ex.a_data);
+>> -=09=09=09if (error)
+>> -=09=09=09=09return error;
+>> -
+>> -=09=09=09read_code(bprm->file, N_TXTADDR(ex), fd_offset,
+>> -=09=09=09=09=09ex.a_text+ex.a_data);
+>> -=09=09=09goto beyond_if;
+>> -=09=09}
+>> -
+>> -=09=09error =3D vm_mmap(bprm->file, N_TXTADDR(ex), ex.a_text,
+>> -=09=09=09=09PROT_READ | PROT_EXEC,
+>> -=09=09=09=09MAP_FIXED | MAP_PRIVATE | MAP_32BIT,
+>> -=09=09=09=09fd_offset);
+>> -
+>> -=09=09if (error !=3D N_TXTADDR(ex))
+>> -=09=09=09return error;
+>> -
+>> -=09=09error =3D vm_mmap(bprm->file, N_DATADDR(ex), ex.a_data,
+>> -=09=09=09=09PROT_READ | PROT_WRITE | PROT_EXEC,
+>> -=09=09=09=09MAP_FIXED | MAP_PRIVATE | MAP_32BIT,
+>> -=09=09=09=09fd_offset + ex.a_text);
+>> -=09=09if (error !=3D N_DATADDR(ex))
+>> -=09=09=09return error;
+>> -=09}
+>> -
+>> -beyond_if:
+>> -=09error =3D set_brk(current->mm->start_brk, current->mm->brk);
+>> -=09if (error)
+>> -=09=09return error;
+>> -
+>> -=09set_binfmt(&aout_format);
+>> -
+>> -=09current->mm->start_stack =3D
+>> -=09=09(unsigned long)create_aout_tables((char __user *)bprm->p, bprm);
+>> -=09/* start thread */
+>> -=09loadsegment(fs, 0);
+>> -=09loadsegment(ds, __USER32_DS);
+>> -=09loadsegment(es, __USER32_DS);
+>> -=09load_gs_index(0);
+>> -=09(regs)->ip =3D ex.a_entry;
+>> -=09(regs)->sp =3D current->mm->start_stack;
+>> -=09(regs)->flags =3D 0x200;
+>> -=09(regs)->cs =3D __USER32_CS;
+>> -=09(regs)->ss =3D __USER32_DS;
+>> -=09regs->r8 =3D regs->r9 =3D regs->r10 =3D regs->r11 =3D
+>> -=09regs->r12 =3D regs->r13 =3D regs->r14 =3D regs->r15 =3D 0;
+>> -=09return 0;
+>> -}
+>> -
+>> -static int load_aout_library(struct file *file)
+>> -{
+>> -=09unsigned long bss, start_addr, len, error;
+>> -=09int retval;
+>> -=09struct exec ex;
+>> -=09loff_t pos =3D 0;
+>> -
+>> -=09retval =3D -ENOEXEC;
+>> -=09error =3D kernel_read(file, &ex, sizeof(ex), &pos);
+>> -=09if (error !=3D sizeof(ex))
+>> -=09=09goto out;
+>> -
+>> -=09/* We come in here for the regular a.out style of shared libraries *=
+/
+>> -=09if ((N_MAGIC(ex) !=3D ZMAGIC && N_MAGIC(ex) !=3D QMAGIC) || N_TRSIZE=
+(ex) ||
+>> -=09    N_DRSIZE(ex) || ((ex.a_entry & 0xfff) && N_MAGIC(ex) =3D=3D ZMAG=
+IC) ||
+>> -=09    i_size_read(file_inode(file)) <
+>> -=09    ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
+>> -=09=09goto out;
+>> -=09}
+>> -
+>> -=09if (N_FLAGS(ex))
+>> -=09=09goto out;
+>> -
+>> -=09/* For  QMAGIC, the starting address is 0x20 into the page.  We mask
+>> -=09   this off to get the starting address for the page */
+>> -
+>> -=09start_addr =3D  ex.a_entry & 0xfffff000;
+>> -
+>> -=09if ((N_TXTOFF(ex) & ~PAGE_MASK) !=3D 0) {
+>> -#ifdef WARN_OLD
+>> -=09=09static unsigned long error_time;
+>> -=09=09if (time_after(jiffies, error_time + 5*HZ)) {
+>> -=09=09=09printk(KERN_WARNING
+>> -=09=09=09       "N_TXTOFF is not page aligned. Please convert "
+>> -=09=09=09       "library: %pD\n",
+>> -=09=09=09       file);
+>> -=09=09=09error_time =3D jiffies;
+>> -=09=09}
+>> -#endif
+>> -=09=09retval =3D vm_brk(start_addr, ex.a_text + ex.a_data + ex.a_bss);
+>> -=09=09if (retval)
+>> -=09=09=09goto out;
+>> -
+>> -=09=09read_code(file, start_addr, N_TXTOFF(ex),
+>> -=09=09=09  ex.a_text + ex.a_data);
+>> -=09=09retval =3D 0;
+>> -=09=09goto out;
+>> -=09}
+>> -=09/* Now use mmap to map the library into memory. */
+>> -=09error =3D vm_mmap(file, start_addr, ex.a_text + ex.a_data,
+>> -=09=09=09PROT_READ | PROT_WRITE | PROT_EXEC,
+>> -=09=09=09MAP_FIXED | MAP_PRIVATE | MAP_32BIT,
+>> -=09=09=09N_TXTOFF(ex));
+>> -=09retval =3D error;
+>> -=09if (error !=3D start_addr)
+>> -=09=09goto out;
+>> -
+>> -=09len =3D PAGE_ALIGN(ex.a_text + ex.a_data);
+>> -=09bss =3D ex.a_text + ex.a_data + ex.a_bss;
+>> -=09if (bss > len) {
+>> -=09=09retval =3D vm_brk(start_addr + len, bss - len);
+>> -=09=09if (retval)
+>> -=09=09=09goto out;
+>> -=09}
+>> -=09retval =3D 0;
+>> -out:
+>> -=09return retval;
+>> -}
+>> -
+>> -static int __init init_aout_binfmt(void)
+>> -{
+>> -=09register_binfmt(&aout_format);
+>> -=09return 0;
+>> -}
+>> -
+>> -static void __exit exit_aout_binfmt(void)
+>> -{
+>> -=09unregister_binfmt(&aout_format);
+>> -}
+>> -
+>> -module_init(init_aout_binfmt);
+>> -module_exit(exit_aout_binfmt);
+>> -MODULE_LICENSE("GPL");
+>> --
+>> 2.29.2
+>
 

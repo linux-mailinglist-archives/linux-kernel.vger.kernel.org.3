@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E8F4D710C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 22:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3774D7112
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 22:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbiCLVoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 16:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S232770AbiCLVpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 16:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbiCLVoU (ORCPT
+        with ESMTP id S232773AbiCLVpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 16:44:20 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5513EB82
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:43:12 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g17so20910930lfh.2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:43:12 -0800 (PST)
+        Sat, 12 Mar 2022 16:45:18 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BCC6E4D3
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:44:11 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id g17so20913246lfh.2
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:44:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gkrxwfNAo+wqaPPhsyYAGfR02IOHUYddLvZA6FjMTBI=;
-        b=FxJI0HFe2HmQgNZiUkdK9qEcNJJeSgk4FpoWUuXVXhAG8PE6Z/+Wb1cQUhO8D8Oltz
-         gpa3xaJ5I7fTr48Jxvxm8vFopvlo5SnVkTZk5zQA3NjrSol6HjXqCryzaIJ+Jt3TBQqn
-         IePtH5560IjsGAuL0JrBmszuiytvSoJTC8hZ2cjUzx+qYnybpYijooYq5UH7JkZo/pjM
-         broSIP1ct1Rz7ddFtS/rUhUxLtIwPjZ810pO3bERK2Bv+jNzNuq9R4IKkAFOG59hXOyt
-         DYPiwdT6WPd4flHWLoEc+CxIAUC8YdNFHxBIHNBbAQY1+OFU/mp5dFWNMOc6RL0VuJDH
-         IWRg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Al6bnHgVgcqWGS7SzpEP6EcNnlitYzP4oWhkmGFLRYg=;
+        b=TUNQe6vdMdyq5Mk9RcZa0WrgFWSQNBekv3itbnQYPfxEcKkulC5M9G35QESGHx3lCs
+         CkiAAaqI2HmrSs4euU/9PrCa+nGQ4kj+UavhRfZqSrLFd9YMMCelxwBYrKyghkz/zT4k
+         cSm+n0RWPhJ3qKq/xEsoqAW/Ef3Ix0mfhyfWA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gkrxwfNAo+wqaPPhsyYAGfR02IOHUYddLvZA6FjMTBI=;
-        b=29pxryeeFtD5K0nOiP7KrSa0TN1CYUDfDvIZMc1okUjvQUtQuWNeIyqA9T45BCWHT8
-         BPBdfgVSTKJui+HY4lUQFqklKKLJczbk1DbtwFm/p+Kc5NwYQx2/Hbyx+CoyjGjbHFDY
-         Sy76vzkyIbn1D0vItmzTK8nCczgZkG7rdSB8cFi5Q1u5b7EH5qiig5e9YcAMKtmjabNr
-         5zS7lemXhx6idONoif86I/QLlG4hQn/lscE5pi2UXMwyzl3JV55jUuIuEi/BLwdgH5ar
-         mrvrX4Fg3XpiDTuk/eZe9vyxUXtbMdfcDcThyL/jehQMAf6KpODxZxh6bGjiv0WaWlpS
-         QN1g==
-X-Gm-Message-State: AOAM533M5gKF9+5NzrxyOQI39KstROgGmZlt6PlapH81W7noyDLhzWkh
-        oJoEacqtVf/yw3NecC/ge1uwCY983E0=
-X-Google-Smtp-Source: ABdhPJyU1EdFdwFwd3jDaeaQazah7k5dV1l8H1XNs9zkmyWxayD1F82B8UB6lKU9gFsSZO5K14fjiQ==
-X-Received: by 2002:a05:6512:2316:b0:446:a84a:173e with SMTP id o22-20020a056512231600b00446a84a173emr8994713lfu.73.1647121390992;
-        Sat, 12 Mar 2022 13:43:10 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.107])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac247e1000000b0044842b76861sm2377192lfp.140.2022.03.12.13.43.09
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Al6bnHgVgcqWGS7SzpEP6EcNnlitYzP4oWhkmGFLRYg=;
+        b=G0ugqZOBgfeUWnE9VpaIyF9aa0arRul6/+/B8KPXUAx1nSuE8CXuqESRaYJdaF8xDU
+         ZwKXWfiAlNObzMpsdpPViv9U5ZBLZ6lyrDxmnFWcmzSgTGAPqRbftjifKNobafaERBcu
+         w4nWyN978xMTvAUMdgzfRhsbWJGd1PXvsdYilQ+VK8pc6EdNfqdjOMSiWUVTsHpHcCGo
+         GCNHtUHuD2twnD99S5zbDDTc+OtTc2F8ThLSPKQMUQYXFVBG2Ly7y8c51kF8Kj7uxsfG
+         0Xu4SCqWWpHGFfWPLFRkmoZcDf6NtGlgQ3eq/cbjglSVvqiOLeMeRBbOxt9ZL5U8+vNn
+         okGw==
+X-Gm-Message-State: AOAM5316N9g28xd1GNzLmQ2V9LnZU2hv/cp7AnjFNI1leIjyoli4P7Dl
+        2w5HrmXrRR4XG0KfpovWOHNcRWEXg8c17Qvek+I=
+X-Google-Smtp-Source: ABdhPJzkrPNyKc+apCw5CFb2a3t9WDQ1maJVPgWM3F44pPAJS1q6lUQCopoT2QCTCrm6gCrOLMeKrA==
+X-Received: by 2002:a19:f115:0:b0:448:277f:8e with SMTP id p21-20020a19f115000000b00448277f008emr9419260lfh.503.1647121449845;
+        Sat, 12 Mar 2022 13:44:09 -0800 (PST)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id w24-20020a194918000000b004488e49f2f7sm185210lfa.127.2022.03.12.13.44.06
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 13:43:10 -0800 (PST)
-Message-ID: <303ed0c8-8e2c-51a4-a4da-be973a25cdec@gmail.com>
-Date:   Sun, 13 Mar 2022 00:43:08 +0300
+        Sat, 12 Mar 2022 13:44:07 -0800 (PST)
+Received: by mail-lf1-f43.google.com with SMTP id bt26so20921775lfb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:44:06 -0800 (PST)
+X-Received: by 2002:a05:6512:b13:b0:448:90c6:dc49 with SMTP id
+ w19-20020a0565120b1300b0044890c6dc49mr147974lfu.542.1647121446538; Sat, 12
+ Mar 2022 13:44:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] staging: android: ashmem: Declared file operation with
- const keyword Warning found by checkpatch.pl script.
-Content-Language: en-US
-To:     shaikh kamal <shaikhkamal2012@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20220312204128.3942-1-shaikhkamal2012@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220312204128.3942-1-shaikhkamal2012@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com>
+ <YiqPmIdZ/RGiaOei@qmqm.qmqm.pl> <CAADWXX-Pr-D3wSr5wsqTEOBSJzB9k7bSH+7hnCAj0AeL0=U4mg@mail.gmail.com>
+ <Yix06B9rPaGh0dp8@qmqm.qmqm.pl>
+In-Reply-To: <Yix06B9rPaGh0dp8@qmqm.qmqm.pl>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 12 Mar 2022 13:43:50 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgxtcTbBdtm9ewarth476Wr5vYYnptaWpwdHcML8-xayA@mail.gmail.com>
+Message-ID: <CAHk-=wgxtcTbBdtm9ewarth476Wr5vYYnptaWpwdHcML8-xayA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shaikh,
+On Sat, Mar 12, 2022 at 2:24 AM Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.=
+qmqm.pl> wrote:
+>
+> The source type is not needed for the macros [..]
 
-On 3/12/22 23:41, shaikh kamal wrote:
-> Signed-off-by: shaikh kamal <shaikhkamal2012@gmail.com>
-> ---
->   drivers/staging/android/ashmem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
-> index ddbde3f8430e..4c6b420fbf4d 100644
-> --- a/drivers/staging/android/ashmem.c
-> +++ b/drivers/staging/android/ashmem.c
-> @@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file *file, unsigned long addr,
->   
->   static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
->   {
-> -	static struct file_operations vmfile_fops;
-> +	static const struct file_operations vmfile_fops;
->   	struct ashmem_area *asma = file->private_data;
->   	int ret = 0;
->   
+Ahh. Yeah, as long as we don't do typedefs, it looks like we don't
+need to pre-declare the member access types.
 
-Are you sure this patch compiles? vmfile_fops is overrided few lines below
+I expected that to be required, because function declarations taking
+arguments need it, but that's because they create their own scope.
+Just doing it in a regular struct (or in this case union) declaration
+is fine.
 
-odd checkpatch.pl warning...
+So we would only need that post-declaration.
 
+That said, your naming is wrong. It's not just about "self". It's any
+case where the type we iterate over is declared after the type that
+has the head.
 
+So I suspect it would be a lot better to just always do it, and not do
+that "self vs non-self" distinction.
 
-
-With regards,
-Pavel Skripkin
+              Linus

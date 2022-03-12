@@ -2,136 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA074D6D6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880F34D6D71
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiCLIDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 03:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
+        id S230237AbiCLIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 03:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiCLIDW (ORCPT
+        with ESMTP id S229618AbiCLIFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 03:03:22 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F928235323
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:02:17 -0800 (PST)
+        Sat, 12 Mar 2022 03:05:23 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDC423D1AB
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:04:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647072137; x=1678608137;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hVR0dnqDvGnGwUX5RSyBTsj4yBAKFv6H9cJ2YKh7ces=;
-  b=I5m03aHfM8NxyPl3dl9NyvqkcH1EWRtwDnp2jj6WOn/TPMOytpS/1mAR
-   C9bbugfZT17NutwGS5EgS1TnYXcYYHIb1ySfc8I27vR2dKkal2rA8Mu4Y
-   lvesbpWclvEnVMgNk98LcBxuuDax3LI/SZM/2PPzTquoSPl9rb7i5o9iD
-   dTNLJiMkJL/PI5/9jn87o4Ckf2H4zAe0j0rEGRBCCd2OSJsweKYeQ+OHz
-   QnsgmVQ08kwJb+NSlZ7vPwsLcjyoLl/yJGhk2kiP8zeW3kVU/Q/46gKki
-   iEhZyUAx8sZOYhOMSSscT8J2jmZnET/YNe2ImkudqCTYEqXWw4yozJq2v
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255721902"
+  t=1647072258; x=1678608258;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2QXr5Dogh/A8C04F74qHZI3XCpmDhhOHsBxhQnRiaeQ=;
+  b=OckBjM71PP9He/+dBt+O1imrxeLXSn55k0a53N+ddi2VzOmQxOfmigKS
+   vuQOd4pz1zoP5/QgMbeRMOUs5f+dIs2xaYhULETFBQ+KL5OSxWbugDfyt
+   dy4lpO0nXz6f7jKTdfwPwWyXJ8RXTMpJ4pfn1BnlcbyTwJ356/iixE4fQ
+   rUk3i9lI24bpZ7G+wlUIneEl7G9WwFGRi2sjOFRolKgzLDEORx1BnsKvf
+   HLBlXll0JyLR8yJasE6LN7xMd3rAI0KSytK0Jl9pu9UOYvFNXyX0xUsTl
+   /O6WeqTJHo4J0NyjSQ8Plvvpkxw1Q/6XnBZMKFTinlWn/Rs8WkMASQrZC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237942995"
 X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="255721902"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 00:02:17 -0800
+   d="scan'208";a="237942995"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 00:04:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="689334561"
+   d="scan'208";a="539317860"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Mar 2022 00:02:15 -0800
+  by orsmga007.jf.intel.com with ESMTP; 12 Mar 2022 00:04:15 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nSwhb-0007hX-9D; Sat, 12 Mar 2022 08:02:15 +0000
-Date:   Sat, 12 Mar 2022 16:01:40 +0800
+        id 1nSwjX-0007hh-9d; Sat, 12 Mar 2022 08:04:15 +0000
+Date:   Sat, 12 Mar 2022 16:03:32 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 08999b2489b4c9b939d7483dbd03702ee4576d96
-Message-ID: <622c5364.yC38Rd5X3DOS0CNz%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Subbaraya Sundeep <sbhatta@marvell.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Geetha sowjanya <gakula@marvell.com>,
+        Sunil Goutham <sgoutham@marvell.com>
+Subject: drivers/net/ethernet/marvell/octeontx2/af/rvu.c:1964:46: sparse:
+ sparse: cast removes address space '__iomem' of expression
+Message-ID: <202203121536.7EHHGIrm-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 08999b2489b4c9b939d7483dbd03702ee4576d96  x86/sgx: Free backing memory after faulting the enclave page
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   68453767131a5deec1e8f9ac92a9042f929e585d
+commit: 98c5611163603d3d8012b1bf64ab48fd932cf734 octeontx2-af: cn10k: Add mbox support for CN10K platform
+date:   1 year, 1 month ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220312/202203121536.7EHHGIrm-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=98c5611163603d3d8012b1bf64ab48fd932cf734
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 98c5611163603d3d8012b1bf64ab48fd932cf734
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/ drivers/gpu/host1x/ drivers/hid/ drivers/irqchip/ drivers/net/ethernet/marvell/octeontx2/af/ drivers/net/ethernet/ti/ drivers/remoteproc/ drivers/scsi/hisi_sas/ security/integrity/ima/
 
-elapsed time: 729m
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-configs tested: 56
-configs skipped: 78
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:780:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct rvu_fwdata *fwdata @@     got void [noderef] __iomem * @@
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:780:21: sparse:     expected struct rvu_fwdata *fwdata
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:780:21: sparse:     got void [noderef] __iomem *
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:786:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct rvu_fwdata *fwdata @@
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:786:28: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:786:28: sparse:     got struct rvu_fwdata *fwdata
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:799:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct rvu_fwdata *fwdata @@
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:799:28: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:799:28: sparse:     got struct rvu_fwdata *fwdata
+>> drivers/net/ethernet/marvell/octeontx2/af/rvu.c:1964:46: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:1984:38: sparse: sparse: cast removes address space '__iomem' of expression
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+vim +/__iomem +1964 drivers/net/ethernet/marvell/octeontx2/af/rvu.c
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
+  1941	
+  1942	static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
+  1943					int num, int type)
+  1944	{
+  1945		struct rvu_hwinfo *hw = rvu->hw;
+  1946		int region;
+  1947		u64 bar4;
+  1948	
+  1949		/* For cn10k platform VF mailbox regions of a PF follows after the
+  1950		 * PF <-> AF mailbox region. Whereas for Octeontx2 it is read from
+  1951		 * RVU_PF_VF_BAR4_ADDR register.
+  1952		 */
+  1953		if (type == TYPE_AFVF) {
+  1954			for (region = 0; region < num; region++) {
+  1955				if (hw->cap.per_pf_mbox_regs) {
+  1956					bar4 = rvu_read64(rvu, BLKADDR_RVUM,
+  1957							  RVU_AF_PFX_BAR4_ADDR(0)) +
+  1958							  MBOX_SIZE;
+  1959					bar4 += region * MBOX_SIZE;
+  1960				} else {
+  1961					bar4 = rvupf_read64(rvu, RVU_PF_VF_BAR4_ADDR);
+  1962					bar4 += region * MBOX_SIZE;
+  1963				}
+> 1964				mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
+  1965				if (!mbox_addr[region])
+  1966					goto error;
+  1967			}
+  1968			return 0;
+  1969		}
+  1970	
+  1971		/* For cn10k platform AF <-> PF mailbox region of a PF is read from per
+  1972		 * PF registers. Whereas for Octeontx2 it is read from
+  1973		 * RVU_AF_PF_BAR4_ADDR register.
+  1974		 */
+  1975		for (region = 0; region < num; region++) {
+  1976			if (hw->cap.per_pf_mbox_regs) {
+  1977				bar4 = rvu_read64(rvu, BLKADDR_RVUM,
+  1978						  RVU_AF_PFX_BAR4_ADDR(region));
+  1979			} else {
+  1980				bar4 = rvu_read64(rvu, BLKADDR_RVUM,
+  1981						  RVU_AF_PF_BAR4_ADDR);
+  1982				bar4 += region * MBOX_SIZE;
+  1983			}
+  1984			mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
+  1985			if (!mbox_addr[region])
+  1986				goto error;
+  1987		}
+  1988		return 0;
+  1989	
+  1990	error:
+  1991		while (region--)
+  1992			iounmap((void __iomem *)mbox_addr[region]);
+  1993		return -ENOMEM;
+  1994	}
+  1995	
 
 ---
 0-DAY CI Kernel Test Service

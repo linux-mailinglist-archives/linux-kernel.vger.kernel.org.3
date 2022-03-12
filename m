@@ -2,144 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C040E4D6BCE
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 03:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BA44D6BD7
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 03:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiCLCLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 21:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S230031AbiCLCOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 21:14:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiCLCLP (ORCPT
+        with ESMTP id S229477AbiCLCOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 21:11:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF4F4FC7F;
-        Fri, 11 Mar 2022 18:10:11 -0800 (PST)
+        Fri, 11 Mar 2022 21:14:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD90CEA07;
+        Fri, 11 Mar 2022 18:13:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB21AB82C0F;
-        Sat, 12 Mar 2022 02:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F6EC340E9;
-        Sat, 12 Mar 2022 02:10:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32AE3616FF;
+        Sat, 12 Mar 2022 02:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96180C340EE;
+        Sat, 12 Mar 2022 02:13:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647051008;
-        bh=bp069JGN4ocK6yuNHpcDkHggg5EUw4G/koG2EZ6uGZw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WHcMISdP/M7cIEW7D6QoAw8quonpsAfRVpqaRZBmAv397rAdx1X+wHl570R8VKrEX
-         UW+98a/5yJAImtgEfXqqhZ5IDrPSVYfji9B7fLD0/TkF2XUcBsw0J/vilNlz8zAAHl
-         oBR3cHjp5zHzrx4YZIe+Z7vwvmuuGMUdl6RrsaRA6WXTI3WJh7NQLGLm5EoJy0OTAi
-         AUFFzXEtUqIRb5VUjKedWir4xliYOECFrn+psx+cs+dG/naS76omeJFqIa0vUUoF88
-         wfe5Tj5191F2WV4JKjgJDhYxSrHcs/C8TbXBSkhrxjyvI5EZAxmS6vKdj+vN1v1JAL
-         T0VyjeuBXdpnA==
-Date:   Sat, 12 Mar 2022 11:10:04 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linux Trace Devel <linux-trace-devel@vger.kernel.org>
-Subject: Re: [PATCH] tracing/user_events: Use alloc_pages instead of
- kzalloc() for register pages
-Message-Id: <20220312111004.a199b41e036fe79da05b84f6@kernel.org>
-In-Reply-To: <20220311190457.0345eeb2@gandalf.local.home>
-References: <20220311190457.0345eeb2@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1647051209;
+        bh=iRWRs787HfJQ4SmemjGupG5ATeZbj3chEC+s846rFUI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dzXW6D8a2fZcblys/QjCjL1M/69kjw27NQiwmxnI6v3Ty+JBSWuIwfIfHMmel2imr
+         vGu03UC1vkaZOz0pVbvbaJ9VjatjyUMXrOjzw24dIgQIhPT2twm3Y7jpIEc+Sz1sZv
+         xbefw+amYIJbHgLb9GrTrmKiMUF0Kh9g0oRa9QtveWDvFd6jsFRy9NIp4DXV0Ut1IQ
+         qOhqK6ZRwENFgrFfhjtXN1OmpfCbVK48hQDU1kPXHAQlBTM9+QsrxqThgGkRXzKr2N
+         vavIpsLAOCj0FM0mLCPoFRDvSj/f0Tjjlyok2eBV73W6cwj6H+ndb0VRdsWuF97g+/
+         fjPsQcegOyixw==
+Received: by mail-vs1-f47.google.com with SMTP id a186so11438325vsc.3;
+        Fri, 11 Mar 2022 18:13:29 -0800 (PST)
+X-Gm-Message-State: AOAM532FGz9ujwjqJuwNQBFVM5/3NTtFzxwhIVOqfjAMfz6+Xu2z4ClP
+        pFKOX+FYA0hrePt2W9/cSw1JS1yOTi9rzqar40I=
+X-Google-Smtp-Source: ABdhPJzCzz+Egly7/GI0fNYhw4sbiCEhUuQJ2YUO3cGoxYtVTwt+tqnmQKqPh36WSK6cQ0MJdLShbyuO/M99QnpoqW0=
+X-Received: by 2002:a67:fc17:0:b0:320:b039:afc0 with SMTP id
+ o23-20020a67fc17000000b00320b039afc0mr7125264vsq.2.1647051208526; Fri, 11 Mar
+ 2022 18:13:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-14-guoren@kernel.org>
+ <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com> <509d2b62-7d52-bf5c-7a6c-213a740a5c00@codethink.co.uk>
+In-Reply-To: <509d2b62-7d52-bf5c-7a6c-213a740a5c00@codethink.co.uk>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 12 Mar 2022 10:13:17 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSkrm+Ek5i--TTikR2RDBUa6Eo72jwvszbj3uZg=Kxorg@mail.gmail.com>
+Message-ID: <CAJF2gTSkrm+Ek5i--TTikR2RDBUa6Eo72jwvszbj3uZg=Kxorg@mail.gmail.com>
+Subject: Re: [PATCH V7 13/20] riscv: compat: process: Add UXL_32 support in start_thread
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 19:04:57 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Mar 11, 2022 at 9:38 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
+>
+> On 11/03/2022 02:38, Guo Ren wrote:
+> > Hi Arnd,
+> >
+> > On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
+> >>
+> >> From: Guo Ren <guoren@linux.alibaba.com>
+> >>
+> >> If the current task is in COMPAT mode, set SR_UXL_32 in status for
+> >> returning userspace. We need CONFIG _COMPAT to prevent compiling
+> >> errors with rv32 defconfig.
+> >>
+> >> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> >> Signed-off-by: Guo Ren <guoren@kernel.org>
+> >> Cc: Arnd Bergmann <arnd@arndb.de>
+> >> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> >> ---
+> >>   arch/riscv/kernel/process.c | 5 +++++
+> >>   1 file changed, 5 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> >> index 03ac3aa611f5..54787ca9806a 100644
+> >> --- a/arch/riscv/kernel/process.c
+> >> +++ b/arch/riscv/kernel/process.c
+> >> @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+> >>          }
+> >>          regs->epc = pc;
+> >>          regs->sp = sp;
+> >> +
+> > FIxup:
+> >
+> > + #ifdef CONFIG_COMPAT
+> >> +       if (is_compat_task())
+> >> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
+> >> +       else
+> >> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
+> > + #endif
+> >
+> > We still need "#ifdef CONFIG_COMPAT" here, because for rv32 we can't
+> > set SR_UXL at all. SR_UXL is BIT[32, 33].
+>
+> would an if (IS_ENABLED(CONFIG_COMPAT)) { } around the lot be better
+> than an #ifdef here?
+I don't think, seems #ifdef CONFIG_COMPAT is more commonly used in arch/*
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> kzalloc virtual addresses do not work with SetPageReserved, use the actual
-> page virtual addresses instead via alloc_pages.
+>
+> >>   }
+> >>
+> >>   void flush_thread(void)
+> >> --
+> >> 2.25.1
+> >>
+> >
+> >
+>
+>
+> --
+> Ben Dooks                               http://www.codethink.co.uk/
+> Senior Engineer                         Codethink - Providing Genius
+>
+> https://www.codethink.co.uk/privacy.html
 
-Indeed. kzalloc allocates a slab object, we need a page.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you,
-
-> 
-> The issue is reported when booting with user_events and
-> DEBUG_VM_PGFLAGS=y.
-> 
-> Also make the number of events based on the ORDER.
-> 
-> Link: https://lore.kernel.org/all/CADYN=9+xY5Vku3Ws5E9S60SM5dCFfeGeRBkmDFbcxX0ZMoFing@mail.gmail.com/
-> Link: https://lore.kernel.org/all/20220311223028.1865-1-beaub@linux.microsoft.com/
-> 
-> Cc: Beau Belgrave <beaub@linux.microsoft.com>
-> Reported-by: Anders Roxell <anders.roxell@linaro.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_events_user.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 4febc1d6ae72..e10ad057e797 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -30,9 +30,10 @@
->  
->  /*
->   * Limits how many trace_event calls user processes can create:
-> - * Must be multiple of PAGE_SIZE.
-> + * Must be a power of two of PAGE_SIZE.
->   */
-> -#define MAX_PAGES 1
-> +#define MAX_PAGE_ORDER 0
-> +#define MAX_PAGES (1 << MAX_PAGE_ORDER)
->  #define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
->  
->  /* Limit how long of an event name plus args within the subsystem. */
-> @@ -1622,16 +1623,17 @@ static void set_page_reservations(bool set)
->  
->  static int __init trace_events_user_init(void)
->  {
-> +	struct page *pages;
->  	int ret;
->  
->  	/* Zero all bits beside 0 (which is reserved for failures) */
->  	bitmap_zero(page_bitmap, MAX_EVENTS);
->  	set_bit(0, page_bitmap);
->  
-> -	register_page_data = kzalloc(MAX_EVENTS, GFP_KERNEL);
-> -
-> -	if (!register_page_data)
-> +	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, MAX_PAGE_ORDER);
-> +	if (!pages)
->  		return -ENOMEM;
-> +	register_page_data = page_address(pages);
->  
->  	set_page_reservations(true);
->  
-> @@ -1640,7 +1642,7 @@ static int __init trace_events_user_init(void)
->  	if (ret) {
->  		pr_warn("user_events could not register with tracefs\n");
->  		set_page_reservations(false);
-> -		kfree(register_page_data);
-> +		__free_pages(pages, MAX_PAGE_ORDER);
->  		return ret;
->  	}
->  
-> -- 
-> 2.34.1
-> 
 
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

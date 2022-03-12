@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2C84D6F44
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDE84D6F45
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiCLNsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 08:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S231984AbiCLNtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 08:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiCLNr5 (ORCPT
+        with ESMTP id S231963AbiCLNth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 08:47:57 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49C24F476;
-        Sat, 12 Mar 2022 05:46:49 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id e6so13068594lfc.1;
-        Sat, 12 Mar 2022 05:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YhT9hr883XEA4HVpbnlXz1RtCYAWAHmAITaWaM00IqQ=;
-        b=BUEZbTI4dUbp/fqGnLyBe/d8iC9iH2iOo3vURg8uqKUqZIye7/BiROG9+KqA/sBt/S
-         rGl2b5saJMnYHhAjICvm+TdNwkeqxVUly9yfZBdWMqZqVqqG+majtIEtGZYvliK7RISP
-         GGoRHPw/Qka96+3ilrUtCgACvVCnWl3nZ7tO4WIw0wLmL5RvHDYsKb9fu+O2zDo7R1jH
-         axSM/BSKStLoO9XPmftjkWM3evpfH9ls9m1WQnLECm+EvNku6KLgak9U1PBXNO/pBPvC
-         NL2Iw3bw6pYb68J8VtTq/d6Psja7ZoaMzeShpqgX35XZiY+9EaxmoIY57f2fKKF/HUeU
-         0COw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YhT9hr883XEA4HVpbnlXz1RtCYAWAHmAITaWaM00IqQ=;
-        b=PxBFWSOpGStTVE21V1G8f55aEdktA9Bx5QCBNz3NMIoajJFMOGMWSmKt8WzDP+MI+2
-         F7Ro1cjuT1fd4vpDLeABEMtGqpAEcYBMALw/ibp5jwSot28TyM2BXi2Bg62J5tPoUA2V
-         nAJ2fTZpdynex/+eYWQpb2jpTUtYHGXBwIxgt7gkfViSZdNyPe1P/gwbYcKgoogYL4vT
-         KnDoaLQo/slmfpEdUvliufqryx9YxZVRGA2QMYS+iBTMuyzcFLDXCATWbZWIVUqCX2YQ
-         aP675GzTzuUqiw9ARZ17exgLKxJFFdQyszHdK1r8q+pvIYL1os+02umlnzpiWXSyFF0F
-         HL+Q==
-X-Gm-Message-State: AOAM531km/D1p/4iaEuDz0DPPAeNZjVVgna+6PivlDfm1qCfcQw+6oP3
-        siKr4Mj6dShnMdv9tOhiJ+s=
-X-Google-Smtp-Source: ABdhPJy9p1jDB866V18WNktXttY5ah85fSiIpQ/ZJfPWDanT6KTGfuJygSUXZHUaQOYIP8FPen4Q/A==
-X-Received: by 2002:ac2:5598:0:b0:448:1c0f:b7db with SMTP id v24-20020ac25598000000b004481c0fb7dbmr8490016lfg.585.1647092807922;
-        Sat, 12 Mar 2022 05:46:47 -0800 (PST)
-Received: from [192.168.2.145] (109-252-136-171.dynamic.spd-mgts.ru. [109.252.136.171])
-        by smtp.googlemail.com with ESMTPSA id z10-20020a19504a000000b004483c8359f9sm2189035lfj.131.2022.03.12.05.46.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 05:46:47 -0800 (PST)
-Message-ID: <4968263c-b4c5-0e54-22f1-81cc43d93b83@gmail.com>
-Date:   Sat, 12 Mar 2022 16:46:46 +0300
+        Sat, 12 Mar 2022 08:49:37 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F62B41636
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 05:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647092912; x=1678628912;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m0PMow11GgjybL+zR1EgyzARPWovbBXPkKqejp2s5ig=;
+  b=PxzDLFt5BSF1bBz82YORG+LsDlZxPGk0PJishvg0VcHIVKa5iYzlpl7I
+   CFw9euB+YYuga5aH6rsqyXKfbwApved6xQm2m/r7ETls11dT54KETnhgN
+   pBc2lh/0D2XfPfppJPfbIIBIICn1t/Gn6l6rAUQG908kSITiCdFHu2LJz
+   pNrs29j94+q+A+E8TUspKiJ7iKeSmsOoTeVcCGGELScRu4FGv1vSt1Vx8
+   WN1yTAjbJL5srGu/88ZPYsNS0EpIxOklHXD7VZP6A+w1hKGGskgyLdXHQ
+   CflNKwl28yP11L5Ap7tZwaukLldM90SNtjIQlV+QomqMRZ8SQXdl5LDDf
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237965421"
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="237965421"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 05:48:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="817529627"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Mar 2022 05:48:29 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nT26f-0007v3-4j; Sat, 12 Mar 2022 13:48:29 +0000
+Date:   Sat, 12 Mar 2022 21:48:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Prasad Sodagudi <psodagud@codeaurora.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Elliot Berman <eberman@codeaurora.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-01
+ 129/9999] drivers/android/debug_symbols.c:11:10: fatal error:
+ asm/stacktrace.h: No such file or directory
+Message-ID: <202203122107.sTzN2ohn-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 30/38] media: platform: vde: move config to its own
- file
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1647006877.git.mchehab@kernel.org>
- <ffd86389feee80c36309aab89c30990e4fd80f4b.1647006877.git.mchehab@kernel.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <ffd86389feee80c36309aab89c30990e4fd80f4b.1647006877.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-11.03.2022 17:07, Mauro Carvalho Chehab пишет:
-> In order to better organize the platform/Kconfig, place
-> vde-specific config stuff on a separate Kconfig file.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
-> 
->  drivers/media/platform/Kconfig           | 19 +------------------
->  drivers/media/platform/tegra/vde/Kconfig | 17 +++++++++++++++++
->  2 files changed, 18 insertions(+), 18 deletions(-)
->  create mode 100644 drivers/media/platform/tegra/vde/Kconfig
+Hi Prasad,
 
-Acked-by: Dmitry Osipenko <digetx@gmail.com>
+FYI, the error/warning still remains.
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-01
+head:   d262b276948e382dbaa38474845bac692bae4236
+commit: 3fcbb15c1a91a318fb9367bee24603af24648a2d [129/9999] ANDROID: android: Create debug_symbols driver
+config: microblaze-allyesconfig (https://download.01.org/0day-ci/archive/20220312/202203122107.sTzN2ohn-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/3fcbb15c1a91a318fb9367bee24603af24648a2d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-01
+        git checkout 3fcbb15c1a91a318fb9367bee24603af24648a2d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/android/debug_symbols.c:11:10: fatal error: asm/stacktrace.h: No such file or directory
+      11 | #include <asm/stacktrace.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +11 drivers/android/debug_symbols.c
+
+     2	
+     3	/*
+     4	 * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+     5	 */
+     6	
+     7	#include <linux/types.h>
+     8	#include <linux/kernel.h>
+     9	#include <linux/module.h>
+    10	#include <linux/android_debug_symbols.h>
+  > 11	#include <asm/stacktrace.h>
+    12	#include <asm/sections.h>
+    13	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

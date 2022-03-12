@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A704D6E93
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 972004D6E94
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbiCLMGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 07:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S231573AbiCLMGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 07:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiCLMGL (ORCPT
+        with ESMTP id S229505AbiCLMGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 07:06:11 -0500
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991C23C48E;
-        Sat, 12 Mar 2022 04:05:05 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id j26so16782207wrb.1;
-        Sat, 12 Mar 2022 04:05:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZKGaYYerdbWBJGeucH7XwXR+zyNCr4xDH2MU71MfP98=;
-        b=m6ur3o9A/AvOSdxm3RkzRz7QyxNB00D78rHz0Yyr5Gsc30vPXLbuzruONyblCartoo
-         +FZVEPeMiM6vuU3GniTRAmw7VeOMIpRM5dGdQktPM9c+GYacSWNSTiHNF+FELlGGCKob
-         yboy+b7FctPTH0fBcmv2hXRjunI/7TBPDT6teuRoGb9HnuzJvA7itKCBNLyu9H7TWGuO
-         pIvGtupds+2+Eq5wpC8JS/H/JhDuC/sX9l4Lp1cRgaZCM7qm/0aHdt87crli5T3Em1hP
-         5cq9odaPmUKB/rJ3E+Dl0I+rYDC4QB9IiOZ3R1Dp/Qgqb2Qc78klr7GOG2XXwISYauri
-         fVeg==
-X-Gm-Message-State: AOAM5332/UfTwe6POoJsQjWX9mDd+Hrr8+CGTuQ3Ejq5cjpOAQA8P91V
-        gRZH/XLU32d7pv+d/pK1rwU=
-X-Google-Smtp-Source: ABdhPJwirxuw/aJHDS9bJW/y6AhtTClHMwW2mGG40jIKmVoUrPhfF2PEvdlz3c+4KvcE+F3Oed9cFw==
-X-Received: by 2002:a05:6000:144c:b0:1f1:f24b:a70b with SMTP id v12-20020a056000144c00b001f1f24ba70bmr10696191wrx.541.1647086704156;
-        Sat, 12 Mar 2022 04:05:04 -0800 (PST)
-Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id h15-20020a05600c350f00b00389e7897190sm5795435wmq.3.2022.03.12.04.05.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 04:05:03 -0800 (PST)
-Message-ID: <2a4bddac-dca3-0e9a-5d84-00dc39b31699@kernel.org>
-Date:   Sat, 12 Mar 2022 13:05:02 +0100
+        Sat, 12 Mar 2022 07:06:52 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4CC972B1
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 04:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ejU6WI5jmR2smgFVL5pnl7wQ3KUvcvihCK5Q5wkohU0=; b=MMV8ty8liqf04/w5STtdINZm4Y
+        qFQph5LR3+2BXUbw+lafq+o8K1yT1atlLjBFF/jmWnu1XVXeRrSjKprw0FG0g06vQpVGVHT4D9fEn
+        FfOSHDKLdNYuk3YdX46TAAIgnHfIGWUejhLCILMpp3FCElLuZMfaSMdWPiaAgeBTWxtg+mKwaNn8W
+        DvDBT9luafIUSMqE2+MUgyv7b4x4rBBiqHEgKUPiOEQJv7jJqCQNfjokF2MBLvxWulkmvKO+U6qAw
+        kgYaYVrQ4MWZ+XVl27qQqizeX8uShACA7ppUccX+8HV7g4d/OuBGIMfII+3iSlJ+83eyynXhjJIaO
+        T730WJvA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nT0Up-000A3C-Uo; Sat, 12 Mar 2022 12:05:20 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5C28598791D; Sat, 12 Mar 2022 13:05:18 +0100 (CET)
+Date:   Sat, 12 Mar 2022 13:05:18 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] sched: topology: make cache topology separate from
+ cpu topology
+Message-ID: <20220312120518.GC6235@worktop.programming.kicks-ass.net>
+References: <1646969135-26647-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: intel: add device tree for n6010
-Content-Language: en-US
-To:     tien.sung.ang@intel.com, dinguyen@kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     niravkumar.l.rabara@intel.com
-References: <20220312080127.1528190-1-tien.sung.ang@intel.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220312080127.1528190-1-tien.sung.ang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646969135-26647-1-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,22 +64,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2022 09:01, tien.sung.ang@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On Thu, Mar 10, 2022 at 07:25:33PM -0800, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
 > 
-> Add a dts file for the Silicom FPGA SmartNIC N6010/N6011,
-> which is based on the Intel Agliex platform.
+> Some architectures(e.g. ARM64), caches are implemented like below:
+> SD(Level 1):          ************ DIE ************
+> SD(Level 0):          **** MC ****    **** MC *****
+> cluster:              **cluster 0**   **cluster 1**
+> cores:                0   1   2   3   4   5   6   7
+> cache(Level 1):       C   C   C   C   C   C   C   C
+> cache(Level 2):  	  **C**   **C**   **C**   **C**
+> cache(Level 3):       *******shared Level 3********
+> sd_llc_id(current):   0   0   0   0   4   4   4   4
+> sd_llc_id(should be): 0   0   2   2   4   4   6   6
 > 
-> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->  arch/arm64/boot/dts/intel/Makefile            |  1 +
->  .../boot/dts/intel/socfpga_agilex_n6010.dts   | 83 +++++++++++++++++++
->  2 files changed, 84 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6010.dts
-> 
+> Caches and cpus have different topology, this causes cpus_share_cache()
+> return the wrong value in sd, which will affect the CPU load balance.
 
-I understand this one should be abandoned?
+Then fix your SD_flags already.
 
-Best regards,
-Krzysztof
+> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> index cce6136b..3048fa6
+> --- a/include/linux/arch_topology.h
+> +++ b/include/linux/arch_topology.h
+> @@ -82,6 +82,8 @@ extern struct cpu_topology cpu_topology[NR_CPUS];
+>  #define topology_cluster_cpumask(cpu)	(&cpu_topology[cpu].cluster_sibling)
+>  #define topology_llc_cpumask(cpu)	(&cpu_topology[cpu].llc_sibling)
+>  void init_cpu_topology(void);
+> +void init_cpu_cache_topology(void);
+> +void fix_cpu_llc(int cpu, int *first_cpu, int *cpu_num);
+>  void store_cpu_topology(unsigned int cpuid);
+>  const struct cpumask *cpu_coregroup_mask(int cpu);
+>  const struct cpumask *cpu_clustergroup_mask(int cpu);
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index d201a70..d894ced
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -661,6 +661,9 @@ static void update_top_cache_domain(int cpu)
+>  	if (sd) {
+>  		id = cpumask_first(sched_domain_span(sd));
+>  		size = cpumask_weight(sched_domain_span(sd));
+> +#ifdef CONFIG_GENERIC_ARCH_TOPOLOGY
+> +		fix_cpu_llc(cpu, &id, &size);
+> +#endif
+>  		sds = sd->shared;
+>  	}
+
+NAK on that.

@@ -2,163 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726834D6E67
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 12:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AA54D6E68
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 12:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbiCLLY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 06:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S231379AbiCLLZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 06:25:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiCLLY5 (ORCPT
+        with ESMTP id S231319AbiCLLZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 06:24:57 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F20558C;
-        Sat, 12 Mar 2022 03:23:51 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id gb39so24084134ejc.1;
-        Sat, 12 Mar 2022 03:23:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3f+ibCQHYhTXQxUBNEK2juHi8lBsmqsUoSUZZ8pGA8w=;
-        b=WFsof7h/DWoEA4aa3AcV6OW1zKC+pvshdXwFujuf9dDsuK2yISxJ13BkVmZS+54QuY
-         Pm7rSBHQVBapi8rTUm5LEodgjxh9KvBg88OTVmSdHjN441gskyv83nigVpQ1bO0AHX2o
-         hFEGKTP8fDlYM8t4m/Eu4A7tTJaJefGgKKO76HSTZBTF9gE3vi6OhscfBzwbO6iAO2x2
-         0mXZjrqXXdxMJ+/oF5+1tSKSGW3ikbakxba5wPD5bjf/amBym4dWdQ3UZjEoCQzM+Qos
-         tKjG04iJNHBO3eTxZ8OZ3kiIvR68nMPYUSO/yP1pbgTEBgLvRBmp0prKz+QIitPaYmzV
-         tcUA==
+        Sat, 12 Mar 2022 06:25:05 -0500
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5B06315;
+        Sat, 12 Mar 2022 03:24:00 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id g20so13862607edw.6;
+        Sat, 12 Mar 2022 03:24:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3f+ibCQHYhTXQxUBNEK2juHi8lBsmqsUoSUZZ8pGA8w=;
-        b=uHkO5+Drb+ViEtaTs1gqhPJPmWykdqlcyBmYOUOp4vT9UVv7jZvDugKN05qX3x3ny/
-         RazbMSex63ge3JGpJY7rK3W0+WI6BdeBSN2g/TshWVZrjy+6pSWOXLDT72BdrK1+tDDJ
-         F99QoYKjL5aw8lW2nDUnRXMwIWCINPfHJYY0sCSC9D/Bsajq4zfd8MS02agiTgGJ/HHx
-         ST5ZT3M4nfbwuolM42t9n2Iow+e8N3X9jwxq/hwMFd3Gyfl4PaQdLy1+p/oSfThdzFJL
-         McbiPHhLsAz8hSUk9vBdpaQijvmcrPQclpMmtRa9dpH/LlfZ1+Y0wExKQd/DW3w3ncLA
-         mQCg==
-X-Gm-Message-State: AOAM530kN8k2bSBvJBx5v2APHpHWJrK7VUZEMzsZEKYb82uJAuMaqxMl
-        UN3r8kfyBWglv5+/Sl/csLM=
-X-Google-Smtp-Source: ABdhPJxgA2H/bN1nGZKBG20n06Z/JGFlfDtEt1jrDZkcOzT5HlHGrlcgclUA2ihc7ep5CyZC5OTpnA==
-X-Received: by 2002:a17:907:2d90:b0:6d8:9fc9:ac36 with SMTP id gt16-20020a1709072d9000b006d89fc9ac36mr11900287ejc.28.1647084230371;
-        Sat, 12 Mar 2022 03:23:50 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id zk1-20020a17090733c100b006dab4a41df8sm4071929ejb.111.2022.03.12.03.23.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 03:23:49 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ming Qian <ming.qian@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 29/38] media: platform: sun8i-rotate: move config to its own file
-Date:   Sat, 12 Mar 2022 12:23:48 +0100
-Message-ID: <2619690.mvXUDI8C0e@kista>
-In-Reply-To: <bd96344ebc563aa632a3a1c5ddad7b7d7ee6fc0a.1647006877.git.mchehab@kernel.org>
-References: <cover.1647006877.git.mchehab@kernel.org> <bd96344ebc563aa632a3a1c5ddad7b7d7ee6fc0a.1647006877.git.mchehab@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OSf1OwJ7magl6qu7qroFSGgkU8xwtM3u7m6pE+i/ZuY=;
+        b=2xDVGXcqM84Oy2dPsCXRgpHFDXfHFA51svmuCdavaplV+1RWfzOE7EwL0olvHrAwko
+         HZdsLttzAnXcMcPs227jZvVuY652iSdcGKE72mRvZ+1b85TPSYogrUE+f6v2jsls5MFM
+         wLEm7m+d95DAXpCglj+HxpvfyTzbVGO8WZQ43CblzgPrpHfB0pJIzvEQt4zXxA2qtgdj
+         ylp+TKxA7H0evIDr5UgI7cuKFUr2fmCgDH8H5JMqp3Ifuo5OXFudjRVig8VmmQwQufjg
+         uj+EVisZZvnrP24TUouo04CiiBDr6OjmwfSerKenBi89ZIOP19XpiBcqFv15fDbNUqXL
+         EiWA==
+X-Gm-Message-State: AOAM531KEzM03z8c1bUqwV/AmqT8FK6jTs/g1/xS3HU86ihb4WR3//ka
+        /nodgT1KAQ3CelH1xnhjS7c=
+X-Google-Smtp-Source: ABdhPJwNOq5DkxOgDmvFW1pYBkpqCGq0vx2MY/WBchfflM8IP0pOMftZ8a2mga9NeAkMM5ra2LlHpQ==
+X-Received: by 2002:a05:6402:11ce:b0:418:633b:ed95 with SMTP id j14-20020a05640211ce00b00418633bed95mr2058091edw.0.1647084239107;
+        Sat, 12 Mar 2022 03:23:59 -0800 (PST)
+Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id v2-20020a17090606c200b006a728f4a9bcsm4210406ejb.148.2022.03.12.03.23.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Mar 2022 03:23:58 -0800 (PST)
+Message-ID: <c80eed69-088b-cfaa-a041-cdd6d5fe160c@kernel.org>
+Date:   Sat, 12 Mar 2022 12:23:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ASoC: dt-bindings: Fix patternProperties with fixed
+ strings
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220311234802.417610-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220311234802.417610-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 11. marec 2022 ob 15:07:42 CET je Mauro Carvalho Chehab napisal(a):
-> In order to better organize the platform/Kconfig, place
-> sun8i-rotate-specific config stuff on a separate Kconfig file.
+On 12/03/2022 00:48, Rob Herring wrote:
+> The simple-audio-card and renesas,rsnd bindings used 'patternProperties'
+> with fixed strings to work-around a dtschema meta-schema limitation. This
+> is now fixed and the schemas can be fixed to use 'properties' instead.
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
+>  .../bindings/sound/renesas,rsnd.yaml          | 16 ++++---
+>  .../bindings/sound/simple-card.yaml           | 42 +++++++++----------
+>  2 files changed, 28 insertions(+), 30 deletions(-)
+> 
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
 
 Best regards,
-Jernej
-
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/
-C on the cover.
-> See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.
-1647006877.git.mchehab@kernel.org/
-> 
->  drivers/media/platform/Kconfig                    | 14 +-------------
->  drivers/media/platform/sunxi/sun8i-rotate/Kconfig | 14 ++++++++++++++
->  2 files changed, 15 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/media/platform/sunxi/sun8i-rotate/Kconfig
-> 
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index 37103f24979f..8d0fa9670eaa 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -71,6 +71,7 @@ source "drivers/media/platform/s5p-g2d/Kconfig"
->  source "drivers/media/platform/sti/hva/Kconfig"
->  source "drivers/media/platform/stm32/Kconfig"
->  source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-> +source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
->  
->  config VIDEO_MUX
->  	tristate "Video Multiplexer"
-> @@ -241,19 +242,6 @@ config VIDEO_TI_VPE_DEBUG
->  	help
->  	  Enable debug messages on VPE driver.
->  
-> -config VIDEO_SUN8I_ROTATE
-> -	tristate "Allwinner DE2 rotation driver"
-> -	depends on V4L_MEM2MEM_DRIVERS
-> -	depends on VIDEO_DEV && VIDEO_V4L2
-> -	depends on ARCH_SUNXI || COMPILE_TEST
-> -	depends on COMMON_CLK && OF
-> -	depends on PM
-> -	select VIDEOBUF2_DMA_CONTIG
-> -	select V4L2_MEM2MEM_DEV
-> -	help
-> -	   Support for the Allwinner DE2 rotation unit.
-> -	   To compile this driver as a module choose m here.
-> -
->  config VIDEO_TEGRA_VDE
->  	tristate "NVIDIA Tegra Video Decoder Engine driver"
->  	depends on V4L_MEM2MEM_DRIVERS
-> diff --git a/drivers/media/platform/sunxi/sun8i-rotate/Kconfig b/drivers/
-media/platform/sunxi/sun8i-rotate/Kconfig
-> new file mode 100644
-> index 000000000000..64a8ea76e917
-> --- /dev/null
-> +++ b/drivers/media/platform/sunxi/sun8i-rotate/Kconfig
-> @@ -0,0 +1,14 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +config VIDEO_SUN8I_ROTATE
-> +	tristate "Allwinner DE2 rotation driver"
-> +	depends on V4L_MEM2MEM_DRIVERS
-> +	depends on VIDEO_DEV && VIDEO_V4L2
-> +	depends on ARCH_SUNXI || COMPILE_TEST
-> +	depends on COMMON_CLK && OF
-> +	depends on PM
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select V4L2_MEM2MEM_DEV
-> +	help
-> +	   Support for the Allwinner DE2 rotation unit.
-> +	   To compile this driver as a module choose m here.
-> -- 
-> 2.35.1
-> 
-> 
-
-
+Krzysztof

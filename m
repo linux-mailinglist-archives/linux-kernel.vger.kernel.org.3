@@ -2,178 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720474D6DEC
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6494D6DF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiCLKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 05:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S231664AbiCLKKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 05:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiCLKJt (ORCPT
+        with ESMTP id S231332AbiCLKKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 05:09:49 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13FF21F9D8
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:08:43 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id rm8-20020a17090b3ec800b001c55791fdb1so2514303pjb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:08:43 -0800 (PST)
+        Sat, 12 Mar 2022 05:10:18 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEA7226C39
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:09:13 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d2d45c0df7so90510197b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:09:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XBkUs4cDEh7cGme8nvi6DRoD473BuT/65cMNIANA6kg=;
-        b=qqrFxDtNPmebmRhEKI/0NjR3h2txIrNZsbHIQyirapsMejHKtBJuUXpC4CuzUQzy+j
-         7MBEHl7XyYnB/ef82iHhANzR+4q20BBxcogXCUYB0LsFC2JqEeoLpAOuJkSbCc7cu28A
-         clAv2F2t2CE4+vkhZhB2HqFJT32fps1QI2s3zke/fEA4NnOQpHXhxyTrQkzQz40eghSK
-         WXbOSfPutXZvev9BDgaJeOCbWG1zRmJc/ipd7eoJDrG0TSjsJ1uZqeGSArOyvOvXWJ6a
-         bW333jvmpEJR0qMgLuTAXaqDnWSblgwpmeuc/diJcDQ6PfmJs13o33t1EYAUToYr1Ujj
-         7y+Q==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=v0INzGgR4QVffzC6zq3G/Euc0szlm+qrGZcoVeZG7VQ=;
+        b=ShszOJyZjdPPLb5B4ng5mZ6noaksydnRNmBc5T8kVfAiGIFOSDc0SuvjuGA4RfYLJU
+         vKu4zUJduKDBH2q1hDlkW9E2n9VlaRNkcFrdjmYNf3DEAo4fRm7Cw4lwWLLvMYbX1gvx
+         AiJL2pyQZD90I7DnnpI+po/up1t6XtjJ4zo9LQ1HEi1xDNb9K8dge6a/nkQokgQEfbEE
+         Y1G+Xb+j6F3RAtO4TWJ7jpy0mEmSbgjehIQp3tB7wI3rE8fwXd1HIptIIdYQOytkl/Bz
+         ZBQVt2kSEY8YQ9FDSUbTr5K5gKVK7uRyFVc3Ut1dmFKaTV285BxcIu6okv0YnNHoP9xP
+         W+eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XBkUs4cDEh7cGme8nvi6DRoD473BuT/65cMNIANA6kg=;
-        b=WMtvfjTW7L0VthyVd1tVWDbvlaJMp/y6W3muTzN15nU3aV7ev0MPFNCooWyCwqMiXT
-         z1vaeUJBiB4JQqHyC1S2HbvkloYaIRD6fwSy2V/P9MEgDKyUOSD2ipsIYm4jNN2ZyILx
-         gfGum0Q2ttzvI0ISQNXmAzRrkWaVlfYBNT4yHqVEjmaxnaw6u8NYnLAnXNgo+o+JWN7V
-         YVFWuyWa69A6MI7/1L0+t6vigNt5HAInMQT0RsoxgNjTA458pivvFXdUtKLowKPKD0xu
-         GzAiZx0qP7HLk6fe2FBuf4camVqvIfoKYeiPhlHp+QpFGBk9SJl5t3xu907I9eEuvJEC
-         KIxw==
-X-Gm-Message-State: AOAM5331SqybtGhqSAI1xhgR+6D73gbioq2HvPuYc8ORC5dhdBpTFDnx
-        yL+z4zAKduEzL7iSDE/V4JROU7OMGXx5WLdb5W/UYQ==
-X-Google-Smtp-Source: ABdhPJygr/AMMTAACupNOM2mgpqdZHpcr+uF0kJe3Q4pIdneeG8n+Deg6+8AbstBqDC3C6sQYMJcE3tkSaDCqZi08a8=
-X-Received: by 2002:a17:90b:906:b0:1be:e765:882 with SMTP id
- bo6-20020a17090b090600b001bee7650882mr15235648pjb.152.1647079723285; Sat, 12
- Mar 2022 02:08:43 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1647006877.git.mchehab@kernel.org> <b1803d005b2f671d238fc8579882a493c173d1ef.1647006877.git.mchehab@kernel.org>
-In-Reply-To: <b1803d005b2f671d238fc8579882a493c173d1ef.1647006877.git.mchehab@kernel.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Sat, 12 Mar 2022 11:08:32 +0100
-Message-ID: <CAG3jFyvxb5Q+bYu4=SReSku9=LrGD2h_O10W40+0+XsHk1XLJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 38/38] drivers: media: platform: move some manufacturer entries
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ming Qian <ming.qian@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=v0INzGgR4QVffzC6zq3G/Euc0szlm+qrGZcoVeZG7VQ=;
+        b=fIGitwgTFE+6JBCB5LamPIS6An8+cJF5XgviLAuV/Ix128+n4dE9OoN8GReNQUzoZ/
+         twEOfVEbzQrxdyvTCS7yYXcV5+Ovg+M6qsNnuC0DyCjB0Scf3DU0AxOnPOF8s3RcW2Y7
+         8QI4OFnlDuvBnuF3lT+6nNxFXgmqxzmbCS+cd4oC6S75JthbvxUvD1fPuO/tQAJPwZ3D
+         pDECdod4wQhlWBTDH1wqlg1wmgsoDxbGWCq1bEqKKE5Enpalt2ryqQF9tgpJFp2+glOj
+         1cbgWNv4vGLXAGhgSR3ezIFTH6AcdMPlCMckBfhBUwUtGxV4XLYnDMej10GPbfNoS79E
+         LmkQ==
+X-Gm-Message-State: AOAM5331/ZOMRGkkUXybUYWICNBqlnNZA7stM9/ZeF4hErEduKXulFSI
+        M8CEuNhCYxkJ5OeJXbh0KG5lF+ToV7wTdA==
+X-Google-Smtp-Source: ABdhPJxixmLfsMESvqL79T2A6JOIB9t89esliSfrsowEfLFeyDrZH5Kj0WGMoZtHy6z0g5QgukynEccfCabYKw==
+X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:1cf8:bbfc:56cd:c500])
+ (user=mmandlik job=sendgmr) by 2002:a0d:d6c2:0:b0:2dc:a9b0:d22 with SMTP id
+ y185-20020a0dd6c2000000b002dca9b00d22mr11818901ywd.194.1647079752865; Sat, 12
+ Mar 2022 02:09:12 -0800 (PST)
+Date:   Sat, 12 Mar 2022 02:08:58 -0800
+Message-Id: <20220312020707.1.I2b7f789329979102339d7e0717522ba417b63109@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH 1/2] Bluetooth: msft: Clear tracked devices on resume
+From:   Manish Mandlik <mmandlik@google.com>
+To:     marcel@holtmann.org, luiz.dentz@gmail.com
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        linux-bluetooth@vger.kernel.org,
+        Manish Mandlik <mmandlik@google.com>,
+        Miao-chen Chou <mcchou@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 at 15:10, Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
->
-> As there are 4 manufacturer's directories with multiple sources
-> (qcom, rockchip, sti and sunxi), move the sources from
-> platform/Kconfig to their specific Konfig files.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.1647006877.git.mchehab@kernel.org/
->
->  drivers/media/platform/Kconfig          | 13 +++----------
->  drivers/media/platform/qcom/Kconfig     |  3 +++
->  drivers/media/platform/rockchip/Kconfig |  3 +++
->  drivers/media/platform/sti/Kconfig      |  5 +++++
->  drivers/media/platform/sunxi/Kconfig    |  2 ++
->  5 files changed, 16 insertions(+), 10 deletions(-)
->  create mode 100644 drivers/media/platform/qcom/Kconfig
->  create mode 100644 drivers/media/platform/rockchip/Kconfig
->  create mode 100644 drivers/media/platform/sti/Kconfig
->
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index 527e9f08008b..a3ad25c6a56c 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -85,23 +85,16 @@ source "drivers/media/platform/mtk-vpu/Kconfig"
->  source "drivers/media/platform/nxp/Kconfig"
->  source "drivers/media/platform/omap3isp/Kconfig"
->  source "drivers/media/platform/omap/Kconfig"
-> -source "drivers/media/platform/qcom/camss/Kconfig"
-> -source "drivers/media/platform/qcom/venus/Kconfig"
-> +source "drivers/media/platform/qcom/Kconfig"
->  source "drivers/media/platform/renesas/Kconfig"
-> -source "drivers/media/platform/rockchip/rga/Kconfig"
-> -source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-> +source "drivers/media/platform/rockchip/Kconfig"
->  source "drivers/media/platform/s3c-camif/Kconfig"
->  source "drivers/media/platform/s5p-g2d/Kconfig"
->  source "drivers/media/platform/s5p-jpeg/Kconfig"
->  source "drivers/media/platform/s5p-mfc/Kconfig"
-> -source "drivers/media/platform/sti/bdisp/Kconfig"
-> -source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-> -source "drivers/media/platform/sti/delta/Kconfig"
-> -source "drivers/media/platform/sti/hva/Kconfig"
-> +source "drivers/media/platform/sti/Kconfig"
->  source "drivers/media/platform/stm32/Kconfig"
->  source "drivers/media/platform/sunxi/Kconfig"
-> -source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-> -source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
->  source "drivers/media/platform/tegra/vde/Kconfig"
->  source "drivers/media/platform/ti-vpe/Kconfig"
->  source "drivers/media/platform/via/Kconfig"
-> diff --git a/drivers/media/platform/qcom/Kconfig b/drivers/media/platform/qcom/Kconfig
-> new file mode 100644
-> index 000000000000..aa2428f641d3
-> --- /dev/null
-> +++ b/drivers/media/platform/qcom/Kconfig
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +source "drivers/media/platform/qcom/camss/Kconfig"
-> +source "drivers/media/platform/qcom/venus/Kconfig"
-> diff --git a/drivers/media/platform/rockchip/Kconfig b/drivers/media/platform/rockchip/Kconfig
-> new file mode 100644
-> index 000000000000..c7ba06388780
-> --- /dev/null
-> +++ b/drivers/media/platform/rockchip/Kconfig
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +source "drivers/media/platform/rockchip/rga/Kconfig"
-> +source "drivers/media/platform/rockchip/rkisp1/Kconfig"
-> diff --git a/drivers/media/platform/sti/Kconfig b/drivers/media/platform/sti/Kconfig
-> new file mode 100644
-> index 000000000000..9fb5e78a92cf
-> --- /dev/null
-> +++ b/drivers/media/platform/sti/Kconfig
-> @@ -0,0 +1,5 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +source "drivers/media/platform/sti/bdisp/Kconfig"
-> +source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-> +source "drivers/media/platform/sti/delta/Kconfig"
-> +source "drivers/media/platform/sti/hva/Kconfig"
-> diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
-> index 7151cc249afa..a10032215b08 100644
-> --- a/drivers/media/platform/sunxi/Kconfig
-> +++ b/drivers/media/platform/sunxi/Kconfig
-> @@ -2,3 +2,5 @@
->
->  source "drivers/media/platform/sunxi/sun4i-csi/Kconfig"
->  source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
-> +source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
-> +source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
-> --
-> 2.35.1
->
+Clear already tracked devices on system resume. Once the monitors are
+reregistered after resume, matched devices in range will be found again.
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Manish Mandlik <mmandlik@google.com>
+Reviewed-by: Miao-chen Chou <mcchou@chromium.org>
+---
+
+ net/bluetooth/msft.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+index 9a3d77d3ca86..f43994523b1f 100644
+--- a/net/bluetooth/msft.c
++++ b/net/bluetooth/msft.c
+@@ -330,12 +330,13 @@ static void msft_le_cancel_monitor_advertisement_cb(struct hci_dev *hdev,
+ 		/* Do not free the monitor if it is being removed due to
+ 		 * suspend. It will be re-monitored on resume.
+ 		 */
+-		if (monitor && !msft->suspending)
++		if (monitor && !msft->suspending) {
+ 			hci_free_adv_monitor(hdev, monitor);
+ 
+-		/* Clear any monitored devices by this Adv Monitor */
+-		msft_monitor_device_del(hdev, handle_data->mgmt_handle, NULL,
+-					0, false);
++			/* Clear any monitored devices by this Adv Monitor */
++			msft_monitor_device_del(hdev, handle_data->mgmt_handle,
++						NULL, 0, false);
++		}
+ 
+ 		list_del(&handle_data->list);
+ 		kfree(handle_data);
+@@ -522,6 +523,16 @@ int msft_resume_sync(struct hci_dev *hdev)
+ 	if (!msft || !msft_monitor_supported(hdev))
+ 		return 0;
+ 
++	hci_dev_lock(hdev);
++
++	/* Clear already tracked devices on resume. Once the monitors are
++	 * reregistered, devices in range will be found again after resume.
++	 */
++	hdev->advmon_pend_notify = false;
++	msft_monitor_device_del(hdev, 0, NULL, 0, true);
++
++	hci_dev_unlock(hdev);
++
+ 	msft->resuming = true;
+ 
+ 	while (1) {
+-- 
+2.35.1.723.g4982287a31-goog
+

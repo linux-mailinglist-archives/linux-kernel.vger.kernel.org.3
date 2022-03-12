@@ -2,103 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE6C4D6D05
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 07:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188054D6D07
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 07:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiCLGeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 01:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S230470AbiCLGgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 01:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiCLGeN (ORCPT
+        with ESMTP id S230407AbiCLGf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 01:34:13 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADD538BCA
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 22:33:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647066787; x=1678602787;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+b0VZEx+YMOz50j9JYS/6oci0qLqoQBc4dJLtODBa3U=;
-  b=FB/Vo5vQspOJyHnNQyznJnwzXG7fR8Cl0qbmy+4Z93dz7eE2mAQdJJoP
-   9U6yoxVl+FdFTXLHa5IpUzmveCEHz98ij6xZIid8a7pXX8Go+QXS80BZ1
-   TPzpFOG6X1a/OpiRfCAUT2It+lALjQg66JOAn3Yapwr692feIy0jWnBGI
-   S5wsjoKYM2KcvCXsNoV61Cz7dGPfY4RlD+Wco9iUrf4mI4yTyvv3MPt6H
-   1nCW85EkhnopntjY7mFXAbUOPBGYve5jlozuJzuid9QBv+YPN1CfTQEVC
-   VCUbaUKMeAujIommvr2Jl54EPNNHAd3u0ghcCfQpdGUw50UYWAouCz5z2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="254595054"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="254595054"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 22:33:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="555663939"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 11 Mar 2022 22:33:05 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSvJJ-0007bZ-2A; Sat, 12 Mar 2022 06:33:05 +0000
-Date:   Sat, 12 Mar 2022 14:32:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: arch/arm64/kernel/proton-pack.c:953 this_cpu_set_vectors() warn:
- unsigned 'slot' is never less than zero.
-Message-ID: <202203121458.ZX5wQMAu-lkp@intel.com>
+        Sat, 12 Mar 2022 01:35:57 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB07C12E745
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 22:34:52 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KFtJz5LhLzBrjh;
+        Sat, 12 Mar 2022 14:32:51 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 12 Mar
+ 2022 14:34:49 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <airlied@linux.ie>, <daniel@ffwll.ch>, <javierm@redhat.com>,
+        <yuehaibing@huawei.com>, <maxime@cerno.tech>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] drm/solomon: Make DRM_SSD130X depends on MMU
+Date:   Sat, 12 Mar 2022 14:34:37 +0800
+Message-ID: <20220312063437.19160-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   68453767131a5deec1e8f9ac92a9042f929e585d
-commit: 558c303c9734af5a813739cd284879227f7297d2 arm64: Mitigate spectre style branch history side channels
-date:   2 weeks ago
-config: arm64-randconfig-m031-20220310 (https://download.01.org/0day-ci/archive/20220312/202203121458.ZX5wQMAu-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
+WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+  Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
+  Selected by [m]:
+  - DRM_SSD130X [=m] && HAS_IOMEM [=y] && DRM [=m]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+DRM_GEM_SHMEM_HELPER depends on MMU, DRM_SSD130X should also depends on MMU.
 
-smatch warnings:
-arch/arm64/kernel/proton-pack.c:953 this_cpu_set_vectors() warn: unsigned 'slot' is never less than zero.
-
-vim +/slot +953 arch/arm64/kernel/proton-pack.c
-
-   948	
-   949	static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
-   950	{
-   951		const char *v = arm64_get_bp_hardening_vector(slot);
-   952	
- > 953		if (slot < 0)
-   954			return;
-   955	
-   956		__this_cpu_write(this_cpu_vector, v);
-   957	
-   958		/*
-   959		 * When KPTI is in use, the vectors are switched when exiting to
-   960		 * user-space.
-   961		 */
-   962		if (arm64_kernel_unmapped_at_el0())
-   963			return;
-   964	
-   965		write_sysreg(v, vbar_el1);
-   966		isb();
-   967	}
-   968	
-
+Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/solomon/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/solomon/Kconfig b/drivers/gpu/drm/solomon/Kconfig
+index 5861c3ab7c45..6230369505c9 100644
+--- a/drivers/gpu/drm/solomon/Kconfig
++++ b/drivers/gpu/drm/solomon/Kconfig
+@@ -1,6 +1,6 @@
+ config DRM_SSD130X
+ 	tristate "DRM support for Solomon SSD130x OLED displays"
+-	depends on DRM
++	depends on DRM && MMU
+ 	select BACKLIGHT_CLASS_DEVICE
+ 	select DRM_GEM_SHMEM_HELPER
+ 	select DRM_KMS_HELPER
+-- 
+2.17.1
+

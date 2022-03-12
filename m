@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6554D6D3E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 08:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783AB4D6D44
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 08:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiCLHl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 02:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S231244AbiCLHq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 02:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiCLHlV (ORCPT
+        with ESMTP id S229830AbiCLHq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 02:41:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A508E0CA;
-        Fri, 11 Mar 2022 23:40:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9D0DB82E1A;
-        Sat, 12 Mar 2022 07:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 568EBC340ED;
-        Sat, 12 Mar 2022 07:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647070813;
-        bh=fqGDsrVs1RmDl1vTbTkS8swP3batv9lzALsm6v4pEpo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=dvu05tVX5YG1mqABYeZvouMR1x5MzxLMMpiLiuk1u87nlrhVenLjCyEfBxiGUHVM1
-         chGMrC2DwFSZguZ1DO0IdEsFZZPXdnxHnY8av4TakozmpXYZe2SJ1ySCju/c5Ndg/H
-         AZPRKVSNQVRvIp0Dn9V4Yv7wI1ioqrE6c837TQ5zJbeXJ5tSllPbUua4FbjRjENQF4
-         /6+o+PGeDpKXVhmEwMJiFGipxSUUT6cmTIqFRu7q7O+R5SRsQAlNXM1A96us8LHVrg
-         ekFuau5f1BO/7eWKPzipqt7hKJcoDdUUU6oW2YE9ZzfweT2BKKQ9ZnsoKuQIzsHrxW
-         mO+76rCTep60g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D75BF0383D;
-        Sat, 12 Mar 2022 07:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 12 Mar 2022 02:46:57 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3812C23404B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 23:45:52 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id bi12so23592990ejb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 23:45:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=4835zrpoRS2nrbhwxOavV/79b/8h8dZXR7yphVPqqJk=;
+        b=TGkV97FD5HKzfpXnmTpEW/Y3rJXTQToFDLlcpuzUs2cRYWDYXdNBRlYuU7df1EjlO6
+         Njo/xDuI1piuGPGhJMf/8NdaOOZUuysQQpFZB/EkFSsiljC/JpIQpRE+2j0GCgndKT1o
+         9re0gBbcqmUf3/Uh3xwhrvLSrmBVgVEQY+HkYS68T7FWgbow4wLJDEAJS2hBLRmRFb/W
+         +UOoMa8dLJQTHCi4eVmch/MsFWVEbzq41QFgnxYah6Gem1XhleS08pSQnBCO+VokkhQe
+         oTqqAZtE4/gvT+yEEJbQIHGkMNngM+i513CjOk6mwZ4HsonNW2ju8IjCAzFFAU/x0LK8
+         AgEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=4835zrpoRS2nrbhwxOavV/79b/8h8dZXR7yphVPqqJk=;
+        b=6sfKD9KYFpFQnatGRKMtXrgHvkDSN5zvT4iwgbYBIDMO74TvTBTQjCA39Vp4LANYtM
+         0/R+J8LOOa6AY+yFtLFOxsjt/gO3Dsn05S1526ud73qRbfp65Knct6iyb6+U83iGsT5r
+         FRWtdGCrFy8P9dCh6cxMq8JBR+HRQhG6MJkwWyiU9hjFPqZY4mt+G0JPdeeXpdB5nxt6
+         TTsI1IH5a0n/jALlOK2wtXXz9lQj+ACrp0KZ/h1bnR5k6WIEw1TME/cYkcoNxFiGX+D9
+         E/T6DNOI8uDKrgjUNg5blkWJRse9nuD+JlH02any/WHl1PjRjcTOWDNEqJKQLEpM49GH
+         i7gw==
+X-Gm-Message-State: AOAM531Xhq9Vs7uS8+tjLMWYCQW0yM15tnYuv0AIgmP5y9SXfxoDoTLc
+        VdF1+Ull/6/dOaxeFYBS9/9IkdTbLDfXyrufW8r8zHECQRo=
+X-Google-Smtp-Source: ABdhPJzjtbzf7x03rRzfOfAJe3TZUOVLe4N49aaVEBcQx3Ibw5YAowY/oMZlRD2XUwIFpJXYB297Yu/qIMmSeeNAt6s=
+X-Received: by 2002:a17:907:869f:b0:6da:888b:4258 with SMTP id
+ qa31-20020a170907869f00b006da888b4258mr11695684ejc.720.1647071149837; Fri, 11
+ Mar 2022 23:45:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 resend] vsock: each transport cycles only on its own
- sockets
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164707081324.11016.12108323329246547130.git-patchwork-notify@kernel.org>
-Date:   Sat, 12 Mar 2022 07:40:13 +0000
-References: <20220311020017.1509316-1-jiyong@google.com>
-In-Reply-To: <20220311020017.1509316-1-jiyong@google.com>
-To:     Jiyong Park <jiyong@google.com>
-Cc:     stefanha@redhat.com, sgarzare@redhat.com, mst@redhat.com,
-        jasowang@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        adelva@google.com, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Sat, 12 Mar 2022 17:45:38 +1000
+Message-ID: <CAPM=9tyAqzcvaba2OffVt_EEP_1tQc3UV6h1J92An0uKOF1TJA@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.17-rc8 (kconfig fix)
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        regressions@leemhuis.info, Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Linus,
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Thorsten pointed out this had fallen down the cracks and was in -next
+only, I've picked it out, fixed up it's Fixes: line.
 
-On Fri, 11 Mar 2022 11:00:16 +0900 you wrote:
-> When iterating over sockets using vsock_for_each_connected_socket, make
-> sure that a transport filters out sockets that don't belong to the
-> transport.
-> 
-> There actually was an issue caused by this; in a nested VM
-> configuration, destroying the nested VM (which often involves the
-> closing of /dev/vhost-vsock if there was h2g connections to the nested
-> VM) kills not only the h2g connections, but also all existing g2h
-> connections to the (outmost) host which are totally unrelated.
-> 
-> [...]
+Thanks,
+Dave.
 
-Here is the summary with links:
-  - [net,v3,resend] vsock: each transport cycles only on its own sockets
-    https://git.kernel.org/netdev/net/c/8e6ed963763f
+drm-fixes-2022-03-12:
+drm kconfig fix for 5.17-rc8
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+- fix regression in Kconfig.
+The following changes since commit 30eb13a26014ca640b5eb57b6d010114084d5c92:
 
+  Merge tag 'drm-intel-fixes-2022-03-10' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes (2022-03-11
+13:26:19 +1000)
 
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-03-12
+
+for you to fetch changes up to 3755d35ee1d2454b20b8a1e20d790e56201678a4:
+
+  drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP (2022-03-12 17:41:30 +1000)
+
+----------------------------------------------------------------
+drm kconfig fix for 5.17-rc8
+
+- fix regression in Kconfig.
+
+----------------------------------------------------------------
+Thomas Zimmermann (1):
+      drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
+
+ drivers/gpu/drm/panel/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)

@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434784D6F36
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16E14D6F38
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiCLNdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 08:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S231453AbiCLNeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 08:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiCLNdA (ORCPT
+        with ESMTP id S230460AbiCLNeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 08:33:00 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617D650E3A;
-        Sat, 12 Mar 2022 05:31:51 -0800 (PST)
-X-UUID: 99baf5ba28184cf080b2aedc2d23801a-20220312
-X-UUID: 99baf5ba28184cf080b2aedc2d23801a-20220312
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1999243638; Sat, 12 Mar 2022 21:31:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sat, 12 Mar 2022 21:31:44 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 12 Mar 2022 21:31:43 +0800
-Message-ID: <bb5737baf5c7430ccc40d7cfeaa1bc1a7c8890af.camel@mediatek.com>
-Subject: Re: [PATCH 2/5] dt-bindings: mediatek: mt8195: add reset property
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <broonie@kernel.org>, <tiwai@suse.com>, <matthias.bgg@gmail.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <aaronyu@google.com>, <yc.hung@mediatek.com>
-Date:   Sat, 12 Mar 2022 21:31:43 +0800
-In-Reply-To: <Yip3z3XoarN8TeMn@robh.at.kernel.org>
-References: <20220308072435.22460-1-trevor.wu@mediatek.com>
-         <20220308072435.22460-3-trevor.wu@mediatek.com>
-         <Yip3z3XoarN8TeMn@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sat, 12 Mar 2022 08:34:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F54BE4
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 05:32:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1021BB8013A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:32:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E53C340EB;
+        Sat, 12 Mar 2022 13:32:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647091972;
+        bh=z6eDtSo9u9x6ePaflNE4F8fwVoYsvAC3AWPaIS6jwm8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TLVDmCE6ObD1HazvAL/1gYYpMv3se7eZBH3SZ9SngPcFkXsbphlIDhqkym8iTcnin
+         O4ZgyavmtQeKNsTNMbdbJpMW+4dlxHJ14BuMuVvwKRx6+G61OZsF7/0mCm7Pl74sgj
+         lQ3bYttiNPMSEA24vsoKPqccycfG7gHxrVg6JPWRrICXj062hoXEscls9cb5HSTrEF
+         kIOWq3ylE4rL8uyusFsBO6ESpGI3/cMRxMOsoPFbaGvVXpJOcDhGM89E+iNGiLwMv6
+         WOf3e+aWfHp9SZ0zS51/2Q6GXgBe7SM/1Pa6Ilnd1BAf2+TvSV+zZ7vEJ7bp8g5j9T
+         gCBMhNodGUebQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E3F80403C8; Sat, 12 Mar 2022 10:32:48 -0300 (-03)
+Date:   Sat, 12 Mar 2022 10:32:48 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/1] tools kvm headers arm64: Update KVM headers from the
+ kernel sources
+Message-ID: <YiyhAK6sVPc83FaI@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-10 at 16:12 -0600, Rob Herring wrote:
-> On Tue, Mar 08, 2022 at 03:24:32PM +0800, Trevor Wu wrote:
-> > Add required properties "resets" and "reset_names", which are used
-> > to
-> > specify audiosys hw reset for mt8195 afe driver.
-> 
-> The subject needs to be more specific and indicate this applies to
-> ASoC 
-> and mt8195-afe-pcm. Try to write subjects that could only ever
-> appear 
-> once as you can never make the same change twice.
-> 
-> Rob
 
-Hi Rob,
+FYI, I'm carrying this on my perf tools tree,
 
-Thanks for your suggestion.
-I will revise the subject to "ASoC: dt-bindings: mediatek: mt8195-afe-
-pcm: add reset property" in v2.
+Regards,
 
-Thanks,
-Trevor
+- Arnaldo
+
+----
+
+To pick the changes from:
+
+  a5905d6af492ee6a ("KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated")
+
+That don't causes any changes in tooling (when built on x86), only
+addresses this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/kvm.h' differs from latest version at 'arch/arm64/include/uapi/asm/kvm.h'
+  diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/asm/kvm.h
+
+Cc: James Morse <james.morse@arm.com>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/arm64/include/uapi/asm/kvm.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/arch/arm64/include/uapi/asm/kvm.h b/tools/arch/arm64/include/uapi/asm/kvm.h
+index b3edde68bc3e013c..323e251ed37bc0f6 100644
+--- a/tools/arch/arm64/include/uapi/asm/kvm.h
++++ b/tools/arch/arm64/include/uapi/asm/kvm.h
+@@ -281,6 +281,11 @@ struct kvm_arm_copy_mte_tags {
+ #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED	3
+ #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED     	(1U << 4)
+ 
++#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3	KVM_REG_ARM_FW_REG(3)
++#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL		0
++#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL		1
++#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED	2
++
+ /* SVE registers */
+ #define KVM_REG_ARM64_SVE		(0x15 << KVM_REG_ARM_COPROC_SHIFT)
+ 
+-- 
+2.35.1
 

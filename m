@@ -2,178 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0CB4D70CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 760354D70D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbiCLUXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 15:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S232602AbiCLU0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 15:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiCLUXh (ORCPT
+        with ESMTP id S230017AbiCLU01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 15:23:37 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE10208266;
-        Sat, 12 Mar 2022 12:22:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1647116521;
-        bh=Kipwnu9i0XJKTtS/vkHsIeGhK2mTOYwd9Fe3CUqyhYc=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=UBhJ7b9IlVmT4EkmHV02GlVuK0MB7q9abBtPaRAY5uf7QVEJ9EjwhfutrcwEWT8sq
-         YXFayw4At97xktykMq7E4uoUmPxTD/H9tSHQpEhhsX0v++gfjIXV07O6813VKZBXhU
-         U1WRUzYr2A7imhWUzPh3AjSrD+rT85/b0gvq5jeY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([85.197.41.77]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrhUK-1nx1Tw3oCS-00nfow; Sat, 12
- Mar 2022 21:22:01 +0100
-Date:   Sat, 12 Mar 2022 21:21:58 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, alistair@alistair23.me,
-        samuel@sholland.org, josua.mayer@jm0.eu,
-        letux-kernel@openphoenux.org
-Subject: Re: [RFC PATCH 4/6] drm: mxc-epdc: Add update management
-Message-ID: <Yi0A5inJh0Whkh5n@latitude>
-References: <20220206080016.796556-1-andreas@kemnade.info>
- <20220206080016.796556-5-andreas@kemnade.info>
+        Sat, 12 Mar 2022 15:26:27 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EEA205E01;
+        Sat, 12 Mar 2022 12:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=W98kJ8M5wU591OAtrR3WbZqBuGols1ohFkbdgxOPZmQ=; b=YXWkPF+Ud0qtMHwCIRWl+Z4utS
+        BShtIUsURWMw2TsLlE7kSNs7kUU6aKCaBlSZwepfW/5SEHoO/0Iu7FjErDqVDpmtJLDXCHQSwbtIt
+        dKpAXm/tuCPANtqEdpT8FUqyUJhYem6qGg81CPIp2JZ5k4EFWuOFr/ygN8NWeqNUXTpc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nT8IW-00AVUA-3z; Sat, 12 Mar 2022 21:25:08 +0100
+Date:   Sat, 12 Mar 2022 21:25:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kurt Cancemi <kurt@x64architecture.com>
+Cc:     netdev@vger.kernel.org, kabel@kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v3] net: phy: marvell: Fix invalid comparison in the
+ resume and suspend functions
+Message-ID: <Yi0BpO5er+5w7UDY@lunn.ch>
+References: <20220312002016.60416-1-kurt@x64architecture.com>
+ <20220312201512.326047-1-kurt@x64architecture.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KGiIJO+uT5QL2O/C"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220206080016.796556-5-andreas@kemnade.info>
-X-Provags-ID: V03:K1:LUNg/vUU63M4JNITfsENQEGLDAqQgIJnfYNsY+v4K23T2MDIEHo
- Jl4sGt1IMYukgUjGNhzu5Tm8Da+/r0BBtaK3fHq8LSq34ZeHA6C5UwVz1WZskw6ko7Y7Vh1
- fYxjQCEQzdDeriYQxZSgcRBabREVihDEgouu48NutLnlDZ3jaYfAxEufhIvOBYIFcgci2AX
- c03IWTkSxyD9gm+BDq9Lg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gzRNHYYwgDQ=:0Q74Y/hL8fApK7J8WSJqKV
- 5SXZmwZHXjAUQxVia3LyaJAJtUzhCS6D7MH4GsSQ4kLf/jvGP6vlCiKDo8SIgBC+ZUdy8T0L3
- 05hKk1PlcJqQ2S2jIMOCN7NySZo5daljzLUO4HaxrEujN8ou/xOxfgw7ppBd03nTzJ5CeZ1ot
- Vmpi/wZ6tPNp2QGk8ZExQSJuVasN6ioqgxvmDrMxX8SrpCHKjt+YlgN6I1ppuSy0BQUeirQlf
- HcG7xmv44Ho8o1yFzoM94iiVsirpJEMsJng1H9NME2SNqMBuOONJ9/W5uXrA+J0MoVDthc4bS
- qxCYoZNSN3U9tRDk7MStptDoeTtH5TLOUmlSa2UQ7wH1OSFrllTDLuDB+uM97b5SEER5oddQ9
- OGxcFzz4nqLHQmMrANhT3NmNtiBluV0rvzPOcir7Qbfh00gu+LMCHdXceTzITPwHfW5LfkWCD
- 6m/WCfxI58aFKGDfHF01B8dQcvTQph98tmiAuCVTpBWki2HtWs9Gre0egnHh4QZFaa/WgmEkQ
- napTXnO7097NELB5G3B8m1kAUthfuAeKOed8jt68YRdQHH04Fw6sDmZW3d5XgaL2cP5MWBYBi
- WBdX+N9LY5NTmbraVlm4QhKGK8LKnOF8rifHR+ZEg5+0Q7HYrGfxaKMPhFYWEU3qrDn/SfbH5
- KsExIYV9sLsfuKG1GAHbls69hwXAbQWQsWthf+0IS+Md6ssmKYao961c/7W++L230coHf9PSs
- pmD+aKGDJOzKg9rjLa5TvanBQAPiEJoak5eeaX2dgxroiNOLnaYa64RAoeVCR1xL83a8zbd3a
- OwA9wc04nPrrkb31iDzXcKLgcPni/yFxh3ANMF8awEPtTYoo4QSC4k6fzL/uvRWp8R6woC6WC
- /jcyR8DSRmxARZpeT4ENNieExzVYxHZgjOKKj9o5Vgdb1AOn0+H2dr6Lj52KiURVkJGu8jKm7
- tqUccIewUVkBxatfn1isnjeZQrYRk+YtTsQO4DgzvjaVVuWzfWaIomqQmn3Zw819Yn6jcqq2/
- mj/Zm92RVHOeQ8dDHbDFQ1jha43qLYl4C4TyUVxHCJ7m+z3znQgPgSCTy8f22s8CwCEDji2xx
- /utk2hTriST7Qk=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220312201512.326047-1-kurt@x64architecture.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 12, 2022 at 03:15:13PM -0500, Kurt Cancemi wrote:
+> This bug resulted in only the current mode being resumed and suspended when
+> the PHY supported both fiber and copper modes and when the PHY only supported
+> copper mode the fiber mode would incorrectly be attempted to be resumed and
+> suspended.
+> 
+> Fixes: 3758be3dc162 ("Marvell phy: add functions to suspend and resume both interfaces: fiber and copper links.")
+> Signed-off-by: Kurt Cancemi <kurt@x64architecture.com>
 
---KGiIJO+uT5QL2O/C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Kurt
 
-On Sun, Feb 06, 2022 at 09:00:14AM +0100, Andreas Kemnade wrote:
-> The EPDC can process some dirty rectangles at a time, pick them up and
-> forward them to the controller. Only processes not involving PXP are
-> supported at the moment. Due to that and to work with more waveforms,
-> there is some masking/shifting done. It was tested with the factory
-> waveforms of Kobo Clara HD, Tolino Shine 3, and Tolino Shine 2HD.
-> Also the waveform called epdc_E060SCM.fw from NXP BSP works with the
-> i.MX6SL devices.
->=20
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
+Best practice is to add any Reviewed-by or Tested-by to the patch
+whenever you repost it, except when you make major changes. Otherwise
+they can get lost.
 
-[...]
-> +	adj_update_region =3D upd_data_list->update_desc->upd_data.update_regio=
-n;
-> +	/*
-> +	 * Is the working buffer idle?
-> +	 * If the working buffer is busy, we must wait for the resource
-> +	 * to become free. The IST will signal this event.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-What does IST mean?
-
-
-> +void mxc_epdc_draw_mode0(struct mxc_epdc *priv)
-
-What does mode 0 imply? An overview of the possible modes would be
-appreciated.
-
-> +{
-> +	u32 *upd_buf_ptr;
-> +	int i;
-> +	u32 xres, yres;
-> +
-> +	upd_buf_ptr =3D (u32 *)priv->epdc_mem_virt;
-> +
-> +	epdc_working_buf_intr(priv, true);
-> +	epdc_lut_complete_intr(priv, 0, true);
-> +
-> +	/* Use unrotated (native) width/height */
-> +	xres =3D priv->epdc_mem_width;
-> +	yres =3D priv->epdc_mem_height;
-> +
-> +	/* Program EPDC update to process buffer */
-> +	epdc_set_update_area(priv, priv->epdc_mem_phys, 0, 0, xres, yres, 0);
-> +	epdc_submit_update(priv, 0, priv->wv_modes.mode_init, UPDATE_MODE_FULL,
-> +		false, true, 0xFF);
-> +
-> +	dev_dbg(priv->drm.dev, "Mode0 update - Waiting for LUT to complete...\n=
-");
-> +
-> +	/* Will timeout after ~4-5 seconds */
-> +
-> +	for (i =3D 0; i < 40; i++) {
-> +		if (!epdc_is_lut_active(priv, 0)) {
-> +			dev_dbg(priv->drm.dev, "Mode0 init complete\n");
-> +			return;
-> +		}
-> +		msleep(100);
-> +	}
-> +
-> +	dev_err(priv->drm.dev, "Mode0 init failed!\n");
-> +}
-
-> +#define WAVEFORM_MODE_GLR16			4
-> +#define WAVEFORM_MODE_GLD16			5
-> +#define WAVEFORM_MODE_AUTO			257
-
-(How) are these mode numbers related to "mode 0"?
-
-
-Jonathan
-
---KGiIJO+uT5QL2O/C
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmItAOYACgkQCDBEmo7z
-X9t/Fw//WJXYK5In6OQvEJeTImkCzhxbqniGCtE1+Jw/e2CfJQhBvZ77tElUhbHk
-7IMr9JVLrQ19o32h7p/xFdeM6PWNVOiYFP7woHiU3SXasNB8t6JHxnUkX7CXhZvL
-0FmfHtJRVGljFKi9VDMkicJxBwxsOQoEbAmfUiRdcimwjjDjKLl4HThP1kPaeMBm
-6NEKVqBp5KoTqHmB+1XLfM9dZGwxrzHs5QYlAnyZZzv/OuZUgSjzhB2qK45nr8UH
-1C7Psmeo7MaYP+ZqgqeYU3k9PcrQ9OxUUZ9HKjdPJ61oXhuTR0wesGpPulOxPbV/
-uloHVV8bdYyVYrr/CAs3bhL5GvhcTkuTGO9y3OUW74l9xRsn8xQxwio6NbvSigdn
-6AfjUk9F298wN7d3j7scryZ8RuDFkuocWSm0NdUhynQb2LeRXwYNz35KDq34DSgQ
-SmR99dsdQJnqPre7oz7NQr6mPw3lretW5Rbfai60Wp5POwvLLXktZX4tVnkM0CBz
-g0wZoXJywqgoRMcd1jRSUzcZMytfBss1dz7j3Fg3PNk7EylJ+/xWv72ZUOTMftXW
-6hvwHRyo9SUpNi0sCWT1uh6aPAgrt2xQkTBObb9UJozSfL6mSxIChRbuSHKeLz4q
-reX0HS0EEgsFYoVROEVMNxqS3kKg78ceqbE4Q6bnWZ2dpNHya0E=
-=SlcQ
------END PGP SIGNATURE-----
-
---KGiIJO+uT5QL2O/C--
+    Andrew

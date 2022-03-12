@@ -2,112 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972004D6E94
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 485684D6E95
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiCLMGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 07:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S231579AbiCLMHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 07:07:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiCLMGw (ORCPT
+        with ESMTP id S229505AbiCLMHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 07:06:52 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4CC972B1
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 04:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ejU6WI5jmR2smgFVL5pnl7wQ3KUvcvihCK5Q5wkohU0=; b=MMV8ty8liqf04/w5STtdINZm4Y
-        qFQph5LR3+2BXUbw+lafq+o8K1yT1atlLjBFF/jmWnu1XVXeRrSjKprw0FG0g06vQpVGVHT4D9fEn
-        FfOSHDKLdNYuk3YdX46TAAIgnHfIGWUejhLCILMpp3FCElLuZMfaSMdWPiaAgeBTWxtg+mKwaNn8W
-        DvDBT9luafIUSMqE2+MUgyv7b4x4rBBiqHEgKUPiOEQJv7jJqCQNfjokF2MBLvxWulkmvKO+U6qAw
-        kgYaYVrQ4MWZ+XVl27qQqizeX8uShACA7ppUccX+8HV7g4d/OuBGIMfII+3iSlJ+83eyynXhjJIaO
-        T730WJvA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nT0Up-000A3C-Uo; Sat, 12 Mar 2022 12:05:20 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5C28598791D; Sat, 12 Mar 2022 13:05:18 +0100 (CET)
-Date:   Sat, 12 Mar 2022 13:05:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] sched: topology: make cache topology separate from
- cpu topology
-Message-ID: <20220312120518.GC6235@worktop.programming.kicks-ass.net>
-References: <1646969135-26647-1-git-send-email-wangqing@vivo.com>
+        Sat, 12 Mar 2022 07:07:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8618972B8
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 04:06:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A8DA60B21
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:06:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43545C340EB;
+        Sat, 12 Mar 2022 12:06:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647086788;
+        bh=Qmxx7R+RnvkfnWZfNeYD7t3XzGrx3KORhI3L8qTe8SE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mb32UQKROIKdCcaWy71L4Ie4Q7LvIDr29N8/T23C+e5CHvFQVs7bFnQVKXlOt57nR
+         +Ie+TJRLWSTvlusPvZnsv9J62eTiLI4VzYVwYjXgXAnw/2YBa1xPXgu+ZBtk57tjb5
+         SNoy1RAzF58jfNx9CwCO2vm6yEE3EkKjcbGKxtM2J4gES8r1laRKvz6QrxyWvYra33
+         oPKrCAc17lRCt1j9Lyn7lpO6vhSOXz02ulJr5hAemQb/uj+7/miKVYD/App8HxDK4I
+         LZJPcpyo0VZqDF4bCQIqsr5Gthk8Omwt6F7XaJRw7sppPO9pM2vN9D5K1Bqk8aNtIF
+         3WDKkVFv1zyFw==
+Date:   Sat, 12 Mar 2022 14:06:20 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        kernel test robot <oliver.sang@intel.com>,
+        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
+        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org
+Subject: Re: [mm/slub] ae107fa919: BUG:unable_to_handle_page_fault_for_address
+Message-ID: <YiyMvBouXGLk/xWP@kernel.org>
+References: <20220311145427.GA1227220@odroid>
+ <667d594b-bdad-4082-09d5-7b0587af2ae3@suse.cz>
+ <20220311164600.GA1234616@odroid>
+ <YivzD7PYilkFwjFt@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <a8dc8bc4-9a00-b2f7-1f68-273f7a14a14c@suse.cz>
+ <Yix+Pn9a9yKIiXC4@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1646969135-26647-1-git-send-email-wangqing@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yix+Pn9a9yKIiXC4@ip-172-31-19-208.ap-northeast-1.compute.internal>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 07:25:33PM -0800, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
+On Sat, Mar 12, 2022 at 11:04:30AM +0000, Hyeonggon Yoo wrote:
+> On Sat, Mar 12, 2022 at 10:21:25AM +0100, Vlastimil Babka wrote:
+> > On 3/12/22 02:10, Hyeonggon Yoo wrote:
+> > > On Fri, Mar 11, 2022 at 04:46:00PM +0000, Hyeonggon Yoo wrote:
+> > >> On Fri, Mar 11, 2022 at 04:36:47PM +0100, Vlastimil Babka wrote:
+> > >>> On 3/11/22 15:54, Hyeonggon Yoo wrote:
+> > >>>> On Wed, Mar 09, 2022 at 10:15:31AM +0800, kernel test robot wrote:
+> > >>>>>
+> > >>>>>
+> > >>>>> Greeting,
+> > >>>>>
+> > >>>>> FYI, we noticed the following commit (built with gcc-9):
+> > >>>>>
+> > >>>>> commit: ae107fa91914f098cd54ab77e68f83dd6259e901 ("mm/slub: use stackdepot to save stack trace in objects")
+> > >>>>> https://git.kernel.org/cgit/linux/kernel/git/vbabka/linux.git slub-stackdepot-v3r0
+> > >>>>>
+> > >>>>> in testcase: boot
+> > >>>>>
+> > >>>>> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> > >>>>>
+> > >>>>> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > >>>>>
+> > >>>>
+> > >>>> [+Cc Vlastimil and linux-mm]
+> > >>>
+> > >>> Thanks.
+> > >>> lkp folks: it would be nice if I was CC'd automatically on this, it's a
+> > >>> commit from my git tree and with by s-o-b :)
+> > >>>
+> > >>>> I _strongly_ suspect that this is because we don't initialize
+> > >>>> stack_table[i] = NULL when we allocate it from memblock_alloc().
+> > >>>
+> > >>> No, Mike (CC'd) suggested to drop the array init cycle, because
+> > >>> memblock_alloc would zero the area anyway.
+> > >>
+> > >> Ah, you are right. My mistake.
+> > >>
+> > >>> There has to be a different
+> > >>> reason. Wondering if dmesg contains the stack depot initialization message
+> > >>> at all...
+> > >>
+> > >> I think I found the reason.
+> > >> This is because of CONFIG_SLUB_DEBUG_ON.
+> > >> It can enable debugging without passing boot parameter.
+> > >>
+> > >> if CONFIG_SLUB_DEBUG_ON=y && slub_debug is not passed, we do not call
+> > >> stack_depot_want_early_init(), but the debugging flags are set.
+> > >>
+> > >> And we only call stack_depot_init() later in kmem_cache_create_usercopy().
+> > >>
+> > >> so it crashed while creating boot cache.
+> > > 
+> > > I tested this, and this was the reason.
+> > > It crashed on CONFIG_SLUB_DEBUG_ON=y because stackdepot always assume
+> > > that it was initialized in boot step, or failed
+> > > (stack_depot_disable=true).
+> > > 
+> > > But as it didn't even tried to initialize it, stack_table == NULL &&
+> > > stack_depot_disable == false. So accessing *(NULL + <hash value>)
+> > 
+> > Thanks for finding the cause!
+> > 
 > 
-> Some architectures(e.g. ARM64), caches are implemented like below:
-> SD(Level 1):          ************ DIE ************
-> SD(Level 0):          **** MC ****    **** MC *****
-> cluster:              **cluster 0**   **cluster 1**
-> cores:                0   1   2   3   4   5   6   7
-> cache(Level 1):       C   C   C   C   C   C   C   C
-> cache(Level 2):  	  **C**   **C**   **C**   **C**
-> cache(Level 3):       *******shared Level 3********
-> sd_llc_id(current):   0   0   0   0   4   4   4   4
-> sd_llc_id(should be): 0   0   2   2   4   4   6   6
+> ;)
 > 
-> Caches and cpus have different topology, this causes cpus_share_cache()
-> return the wrong value in sd, which will affect the CPU load balance.
+> > > Ideas? implementing something like kmem_cache_init_early() again?
+> > 
+> > I think we could simply make CONFIG_SLUB_DEBUG_ON select/depend on
+> > STACKDEPOT_ALWAYS_INIT?
+> 
+> Oh, sounds better.
+> 
+> If we make CONFIG_SLUB_DEBUG_ON select STACK_DEPOT_ALWAYS_INIT,
+> that is simple solution. but stackdepot will be initialized on
+> slub_debug=- too.
+>
+> But I think no one will set CONFIG_SLUB_DEBUG_ON=y if not debugging...
 
-Then fix your SD_flags already.
+If memory wasted by stack_table is a real concern, we may free it after
+parsing slub_debug or add a condition taking into account
+CONFIG_SLUB_DEBUG_ON and slub_debug=- to the 
 
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index cce6136b..3048fa6
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -82,6 +82,8 @@ extern struct cpu_topology cpu_topology[NR_CPUS];
->  #define topology_cluster_cpumask(cpu)	(&cpu_topology[cpu].cluster_sibling)
->  #define topology_llc_cpumask(cpu)	(&cpu_topology[cpu].llc_sibling)
->  void init_cpu_topology(void);
-> +void init_cpu_cache_topology(void);
-> +void fix_cpu_llc(int cpu, int *first_cpu, int *cpu_num);
->  void store_cpu_topology(unsigned int cpuid);
->  const struct cpumask *cpu_coregroup_mask(int cpu);
->  const struct cpumask *cpu_clustergroup_mask(int cpu);
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index d201a70..d894ced
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -661,6 +661,9 @@ static void update_top_cache_domain(int cpu)
->  	if (sd) {
->  		id = cpumask_first(sched_domain_span(sd));
->  		size = cpumask_weight(sched_domain_span(sd));
-> +#ifdef CONFIG_GENERIC_ARCH_TOPOLOGY
-> +		fix_cpu_llc(cpu, &id, &size);
-> +#endif
->  		sds = sd->shared;
->  	}
+	if (slub_debug & SLAB_STORE_USER)
+		stack_depot_want_early_init();
 
-NAK on that.
+But I agree that if somebody runs a kernel with CONFIG_SLUB_DEBUG_ON=y, the
+goal is to have slub debugging on, so making CONFIG_SLUB_DEBUG_ON select
+STACK_DEPOT_ALWAYS_INIT totally makes sense to me.
+ 
+> I don't think making CONFIG_SLUB_DEBUG_ON depend on
+> CONFIG_STACKDEPOT_ALWAYS_INIT is good solution. only KASAN selects it.
+> 
+> -- 
+> Thank you, You are awesome!
+> Hyeonggon :-)
+
+-- 
+Sincerely yours,
+Mike.

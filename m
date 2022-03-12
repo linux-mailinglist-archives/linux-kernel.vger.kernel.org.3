@@ -2,221 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D49C4D6BA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 02:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C074D6BA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 02:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiCLBOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 20:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S229768AbiCLBXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 20:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiCLBOI (ORCPT
+        with ESMTP id S229464AbiCLBXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 20:14:08 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A009921DF27
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 17:13:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647047583; x=1678583583;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vjx50F+8LXY0mc5/R+S8iGlv9N58orjUWyfvimwsWwQ=;
-  b=mtaBROCQg456mhDx1TcbAT1nvSVGQBloA6uBmMEtPmkF1DVDmPvS6eEO
-   3sEjyv6VRquXN1rJ0H8AadlDXqSIbKa+/Z92r4xa5oki+VB05uf/qhVrF
-   d1m7trciVCFBE3kkJJPVU0ASmJsfP7WU07kpN0/skBYYogF1snNdd7h68
-   po4vzZUxCXSxspTcf1mvUhdey9cP5tno+2e9alED1Os3QCproE9tCp4pA
-   rDU+lZ6i/wm+b/Vvkd3+GVkeMQpequdJjZde5XeDbWoaELpkfqgEwKEIt
-   raU3JMPOXDh4qyc+akQds823g/X8Tlh0pnT7MbiDLcQ/jkTtULp9m1F26
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255879275"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="255879275"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 17:13:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="511568491"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Mar 2022 17:13:01 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSqJY-0007M2-W0; Sat, 12 Mar 2022 01:13:00 +0000
-Date:   Sat, 12 Mar 2022 09:12:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [rmk-arm:zii 184/199] include/linux/container_of.h:19:54: error:
- invalid use of undefined type 'struct b53_device'
-Message-ID: <202203120915.ngsC6dne-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 20:23:13 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3498B240D22;
+        Fri, 11 Mar 2022 17:22:09 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id n2so9049721plf.4;
+        Fri, 11 Mar 2022 17:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=pWYgEiBYOYawrjVkjtKlGXVa4e5QOFCJd9hcRju3xX8=;
+        b=moq0CsNcU+qKSsYEfwlsZME/d0xeg2VImMpQvGWcgnw4lydi31sRzzliSC+IorfqVP
+         c/50WG7e9LzvmQscmvJrxtlibnPTVXJ2PY5D4vjMVlOhuo1ciQswUDNmFgXsIfuqP/VK
+         AH+mWLxHNcpCce6Yq71uiNOw3jJTe4ASulQRj28qzkaQsFyo1iF7YHc/BCfOl7dlU7JU
+         06yehRMh5CjK0PCDnhDC6JyIofTgWjU9piX1gH8zFuVWhITM/9Blq/ld371G3Cy3vHIn
+         y/qnlLgDwpmlxtu+ifaSMhl73NwVTaJNSnlA0x7WbbvMYiddYmJW5h8dVhWs3vv6AsXI
+         zD5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=pWYgEiBYOYawrjVkjtKlGXVa4e5QOFCJd9hcRju3xX8=;
+        b=NW6sxnIlXcaOFmnmr6aBsgEkxM7/IJeXd/B3YYnSxkRUBcNRZaOhdeR91dRFpq284U
+         fa//40zcFHIjaQGnazVQDu2fdakWPoZsS1QuqnmOnsomqk31/KUQ8S+coGmvmQNrmzo8
+         OF/52MloQtUGV1qd3/ZuxoUxIGZbQHp5yTIxPUgUFpaeycP08VoSJGx3Y1x4qx5HEEL2
+         ywmE4xyYxUQSV5Z0qmUlC2oEW4DgfSh27En1cckXsn2FYMw/lENuq94OFfNBVp6ItL4S
+         e9T2EQ4aCvT/NWLGD2tSq27JygKL6SMO81Bq3cS2aXY5gRfj6M2rZBK+n9nQyprmZkgm
+         eYGQ==
+X-Gm-Message-State: AOAM531ceOsl4jAMlOnLy51moZDoO6FzVi5g3fgqfD9t9vajTPRxmqHa
+        nx2G2iVdh3Xe6VdJjLDdsuvysyF3gzq9153HKyTPTA==
+X-Google-Smtp-Source: ABdhPJzMD/iAf/t5t7VBM78cI6NgpFald40ejgQ12V8mvmtW8bmH8VTRa1loakC28Lac2gBNMNjvHw==
+X-Received: by 2002:a17:90b:3b8c:b0:1bf:8841:41e6 with SMTP id pc12-20020a17090b3b8c00b001bf884141e6mr24321386pjb.242.1647048127677;
+        Fri, 11 Mar 2022 17:22:07 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id 16-20020a17090a19d000b001c1c6b25cb2sm6086556pjj.26.2022.03.11.17.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 17:22:06 -0800 (PST)
+Message-ID: <622bf5be.1c69fb81.65cb0.f8d7@mx.google.com>
+Date:   Fri, 11 Mar 2022 17:22:06 -0800 (PST)
+X-Google-Original-Date: Sat, 12 Mar 2022 01:22:04 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 00/58] 5.10.105-rc2 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm zii
-head:   6c861f50ef8f930ea963f334f1b9cf06e9d040f6
-commit: 648a4dae40d98210ca4b54b2aefffe2e4cf3bcf8 [184/199] net: dsa: b53: convert to phylink_pcs
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220312/202203120915.ngsC6dne-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm zii
-        git checkout 648a4dae40d98210ca4b54b2aefffe2e4cf3bcf8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/dsa/b53/
+On Thu, 10 Mar 2022 15:18:20 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.105 release.
+> There are 58 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.105-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+5.10.105-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/bits.h:22,
-                    from include/linux/bitops.h:6,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/sh/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:5,
-                    from include/linux/delay.h:22,
-                    from drivers/net/dsa/b53/b53_common.c:20:
-   drivers/net/dsa/b53/b53_priv.h: In function 'pcs_to_b53_pcs':
->> include/linux/container_of.h:19:54: error: invalid use of undefined type 'struct b53_device'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                                                      ^~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   drivers/net/dsa/b53/b53_priv.h:89:16: note: in expansion of macro 'container_of'
-      89 |         return container_of(pcs, struct b53_device, pcs);
-         |                ^~~~~~~~~~~~
->> include/linux/compiler_types.h:276:27: error: expression in static assertion is not an integer
-     276 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   drivers/net/dsa/b53/b53_priv.h:89:16: note: in expansion of macro 'container_of'
-      89 |         return container_of(pcs, struct b53_device, pcs);
-         |                ^~~~~~~~~~~~
-   In file included from <command-line>:
->> include/linux/compiler_types.h:140:41: error: invalid use of undefined type 'struct b53_device'
-     140 | #define __compiler_offsetof(a, b)       __builtin_offsetof(a, b)
-         |                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/stddef.h:17:33: note: in expansion of macro '__compiler_offsetof'
-      17 | #define offsetof(TYPE, MEMBER)  __compiler_offsetof(TYPE, MEMBER)
-         |                                 ^~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
-      22 |         ((type *)(__mptr - offsetof(type, member))); })
-         |                            ^~~~~~~~
-   drivers/net/dsa/b53/b53_priv.h:89:16: note: in expansion of macro 'container_of'
-      89 |         return container_of(pcs, struct b53_device, pcs);
-         |                ^~~~~~~~~~~~
---
-   In file included from include/linux/bits.h:22,
-                    from include/linux/bitops.h:6,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from ./arch/sh/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:5,
-                    from include/linux/delay.h:22,
-                    from drivers/net/dsa/b53/b53_serdes.c:10:
-   drivers/net/dsa/b53/b53_priv.h: In function 'pcs_to_b53_pcs':
->> include/linux/container_of.h:19:54: error: invalid use of undefined type 'struct b53_device'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                                                      ^~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   drivers/net/dsa/b53/b53_priv.h:89:16: note: in expansion of macro 'container_of'
-      89 |         return container_of(pcs, struct b53_device, pcs);
-         |                ^~~~~~~~~~~~
->> include/linux/compiler_types.h:276:27: error: expression in static assertion is not an integer
-     276 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |         ^~~~~~~~~~~~~
-   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
-      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^~~~~~~~~~~
-   drivers/net/dsa/b53/b53_priv.h:89:16: note: in expansion of macro 'container_of'
-      89 |         return container_of(pcs, struct b53_device, pcs);
-         |                ^~~~~~~~~~~~
-   In file included from <command-line>:
->> include/linux/compiler_types.h:140:41: error: invalid use of undefined type 'struct b53_device'
-     140 | #define __compiler_offsetof(a, b)       __builtin_offsetof(a, b)
-         |                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/stddef.h:17:33: note: in expansion of macro '__compiler_offsetof'
-      17 | #define offsetof(TYPE, MEMBER)  __compiler_offsetof(TYPE, MEMBER)
-         |                                 ^~~~~~~~~~~~~~~~~~~
-   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
-      22 |         ((type *)(__mptr - offsetof(type, member))); })
-         |                            ^~~~~~~~
-   drivers/net/dsa/b53/b53_priv.h:89:16: note: in expansion of macro 'container_of'
-      89 |         return container_of(pcs, struct b53_device, pcs);
-         |                ^~~~~~~~~~~~
-   In file included from drivers/net/dsa/b53/b53_serdes.c:16:
-   drivers/net/dsa/b53/b53_priv.h:90:1: error: control reaches end of non-void function [-Werror=return-type]
-      90 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +19 include/linux/container_of.h
-
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08   9  
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  10  /**
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  11   * container_of - cast a member of a structure out to the containing structure
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  12   * @ptr:	the pointer to the member.
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  13   * @type:	the type of the container struct this is embedded in.
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  14   * @member:	the name of the member within the struct.
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  15   *
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  16   */
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  17  #define container_of(ptr, type, member) ({				\
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  18  	void *__mptr = (void *)(ptr);					\
-e1edc277e6f6df Rasmus Villemoes 2021-11-08 @19  	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
-e1edc277e6f6df Rasmus Villemoes 2021-11-08  20  		      __same_type(*(ptr), void),			\
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  21  		      "pointer type mismatch in container_of()");	\
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  22  	((type *)(__mptr - offsetof(type, member))); })
-d2a8ebbf8192b8 Andy Shevchenko  2021-11-08  23  
-
-:::::: The code at line 19 was first introduced by commit
-:::::: e1edc277e6f6dfb372216522dfc57f9381c39e35 linux/container_of.h: switch to static_assert
-
-:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

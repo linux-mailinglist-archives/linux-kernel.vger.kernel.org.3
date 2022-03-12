@@ -2,45 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDEF4D6FA6
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7A44D6FA9
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiCLPPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 10:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S231643AbiCLPQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 10:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiCLPPL (ORCPT
+        with ESMTP id S230322AbiCLPQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 10:15:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA0F14076D;
-        Sat, 12 Mar 2022 07:14:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C07DAB80184;
-        Sat, 12 Mar 2022 15:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FF8C340EC;
-        Sat, 12 Mar 2022 15:14:01 +0000 (UTC)
-Date:   Sat, 12 Mar 2022 10:13:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org
-Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
-Message-ID: <20220312101359.27b713b8@rorschach.local.home>
-In-Reply-To: <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
-References: <cover.1647057583.git.riteshh@linux.ibm.com>
-        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 12 Mar 2022 10:16:08 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F47164D0A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:15:01 -0800 (PST)
+Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MMY9X-1nkSFY3QrX-00JaWK for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022
+ 16:14:59 +0100
+Received: by mail-wr1-f43.google.com with SMTP id k24so17224249wrd.7
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:14:59 -0800 (PST)
+X-Gm-Message-State: AOAM530GEC4KCc9BCa+y416e4O6E6trGeVfb5I2vHzZkqgXnD9aeK3Bg
+        F6kuZ2k8A9wx+mHUg1Hh5DSNW+1qr7mN5K5jMU0=
+X-Google-Smtp-Source: ABdhPJyudNhlBw0tJ/5WiGDJFYjX12l0wCUN2bOmsgWFosBDsHKvJZwSa1kPAnzw505pxWzkf4bs+raIpnaju7rp2+E=
+X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
+ y1-20020adfd081000000b001ef9378b7ccmr11482464wrh.407.1647098099508; Sat, 12
+ Mar 2022 07:14:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+References: <20220310195229.109477-1-nick.hawkins@hpe.com> <202203122119.szjgiy49-lkp@intel.com>
+In-Reply-To: <202203122119.szjgiy49-lkp@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 12 Mar 2022 16:14:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Ma2A4nirocELT2c4dtNsdg9tGn5Dzzpbz4tRDEzO5aA@mail.gmail.com>
+Message-ID: <CAK8P3a0Ma2A4nirocELT2c4dtNsdg9tGn5Dzzpbz4tRDEzO5aA@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] arch: arm: mach-hpe: Introduce the HPE GXP architecture
+To:     kernel test robot <lkp@intel.com>
+Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>, kbuild-all@lists.01.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:GcbEpyQDOTugHTCnzxXC4g1pK8vyg43jovUmYiCPGImVi0JtcOb
+ A5tfB6Zv3yU5P7hJCWiRhPy7hl34xfczdYkjI0WCqziRwUF6TNvG7rKVwBWZa/W80B1SdJk
+ S4d47WArMcxE0kTpx69SiUNG4B7N5W4wnqZDof7ncLQbH93NZ+6cMB49B1JPQENUQvX3Phk
+ 9P1MhVfR/k74oQ2eTh0uQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:L+RnyB3GTd0=:t1yo5tuM1AjQmlVR5aMis5
+ 7C1QIJMjv/jV5ALivzoNpss0UCdMqcc2eZJ0ZPzv1NyxO9+9s3H+dWoQJcMHnnbjOqeT0AQSN
+ q0f2nnigfjSAN453ACl0BRkT+iF3z1OFZv4fWJMdj641k26HngqewHoK1Xu3X4S5054porWNj
+ 8AqBMdjXHWdPlr1h1AVvrAVn64a4bQDb86Mhs7S2rD3bXa8Zi3WReMtwXf6HZkWbaO26gtxbX
+ DxUXyB50MsQLKu+XwPNEUOWXha9mJnQlgJ4DBMPHLJ3zwIhxxGzcn3ZdR5O2byhT9O4E1CwcN
+ t+gVOBqYAxtiLO+F1MCtBrgu65tnvhpkqfnirwGUZ9DleVg8vo9xpy6lUje9FdIIvVMPXxxEn
+ 0vXVgpfq8GBKoOrV2MfnaHkNbEo5hMNN5iG3MpMp4X0FSV3CIQCk73C8fGwzuyFXh5Wdwm6Mh
+ oKIdvBvRmy3AmGOBY0Z9AWAHe4GfSJd+90kT0d13vnsixMVdiPloy3tg8YyV3ua/z17qWsxoi
+ t1xumaDdaJURe2KPzAVDn2Z8XPWa87cbgsHFE3RnSVef/DdzWHXqhsE0Pv1QoNREW5zRwlqbT
+ swlsNAMTRsjw/fdrm8/BT1FBflQ0ArcTITjMkdthK8k8/dFjYNIVRFMrEgSoguS6ljw6MC/jw
+ ZbshXV+8WEWbZSfxmf30eZj/cZ6QSRfTca/K/u+4I8mC3+DP+Mowa/mVEuLTbVN6W2mM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,141 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Mar 2022 11:09:47 +0530
-Ritesh Harjani <riteshh@linux.ibm.com> wrote:
+On Sat, Mar 12, 2022 at 2:27 PM kernel test robot <lkp@intel.com> wrote:
 
-> ftrace's __print_symbolic() requires that any enum values used in the
-> symbol to string translation table be wrapped in a TRACE_DEFINE_ENUM
-> so that the enum value can be decoded from the ftrace ring buffer by
-> user space tooling.
-> 
-> This patch also fixes few other problems found in this trace point.
-> e.g. dereferencing structures in TP_printk which should not be done
-> at any cost.
-> 
-> Also to avoid checkpatch warnings, this patch removes those
-> whitespaces/tab stops issues.
-> 
+>
+> All error/warnings (new ones prefixed by >>):
+>
+> >> cc1: warning: arch/arm/mach-hpe/include: No such file or directory [-Wmissing-include-dirs]
 
-It is recommend now that when there's a fixes and a reported-by tag,
-you should include the link to the report when available.
+You need to make CONFIG_ARCH_HPE depend on CONFIG_ARCH_MULTI_V7, otherwise
+it becomes possible to select this for non-multiplatform configs that expect
+an include directory below the platform.
 
-Link: https://lore.kernel.org/all/20220221160916.333e6491@rorschach.local.home/
-
--- Steve
-
-
-> Cc: stable@kernel.org
-> Fixes: commit aa75f4d3daae ("ext4: main fast-commit commit path")
-> Reported-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
-> ---
->  include/trace/events/ext4.h | 78 +++++++++++++++++++++++--------------
->  1 file changed, 49 insertions(+), 29 deletions(-)
-> 
-> diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
-> index 19e957b7f941..1a0b7030f72a 100644
-> --- a/include/trace/events/ext4.h
-> +++ b/include/trace/events/ext4.h
-> @@ -95,6 +95,17 @@ TRACE_DEFINE_ENUM(ES_REFERENCED_B);
->  	{ FALLOC_FL_COLLAPSE_RANGE,	"COLLAPSE_RANGE"},	\
->  	{ FALLOC_FL_ZERO_RANGE,		"ZERO_RANGE"})
->  
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_XATTR);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_CROSS_RENAME);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_NOMEM);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_SWAP_BOOT);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RESIZE);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RENAME_DIR);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_FALLOC_RANGE);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_INODE_JOURNAL_DATA);
-> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);
-> +
->  #define show_fc_reason(reason)						\
->  	__print_symbolic(reason,					\
->  		{ EXT4_FC_REASON_XATTR,		"XATTR"},		\
-> @@ -2723,41 +2734,50 @@ TRACE_EVENT(ext4_fc_commit_stop,
->  
->  #define FC_REASON_NAME_STAT(reason)					\
->  	show_fc_reason(reason),						\
-> -	__entry->sbi->s_fc_stats.fc_ineligible_reason_count[reason]
-> +	__entry->fc_ineligible_rc[reason]
->  
->  TRACE_EVENT(ext4_fc_stats,
-> -	    TP_PROTO(struct super_block *sb),
-> -
-> -	    TP_ARGS(sb),
-> +	TP_PROTO(struct super_block *sb),
->  
-> -	    TP_STRUCT__entry(
-> -		    __field(dev_t, dev)
-> -		    __field(struct ext4_sb_info *, sbi)
-> -		    __field(int, count)
-> -		    ),
-> +	TP_ARGS(sb),
->  
-> -	    TP_fast_assign(
-> -		    __entry->dev = sb->s_dev;
-> -		    __entry->sbi = EXT4_SB(sb);
-> -		    ),
-> +	TP_STRUCT__entry(
-> +		__field(dev_t, dev)
-> +		__array(unsigned int, fc_ineligible_rc, EXT4_FC_REASON_MAX)
-> +		__field(unsigned long, fc_commits)
-> +		__field(unsigned long, fc_ineligible_commits)
-> +		__field(unsigned long, fc_numblks)
-> +	),
->  
-> -	    TP_printk("dev %d:%d fc ineligible reasons:\n"
-> -		      "%s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d; "
-> -		      "num_commits:%ld, ineligible: %ld, numblks: %ld",
-> -		      MAJOR(__entry->dev), MINOR(__entry->dev),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
-> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
-> -		      __entry->sbi->s_fc_stats.fc_num_commits,
-> -		      __entry->sbi->s_fc_stats.fc_ineligible_commits,
-> -		      __entry->sbi->s_fc_stats.fc_numblks)
-> +	TP_fast_assign(
-> +		int i;
->  
-> +		__entry->dev = sb->s_dev;
-> +		for (i = 0; i < EXT4_FC_REASON_MAX; i++) {
-> +			__entry->fc_ineligible_rc[i] =
-> +				EXT4_SB(sb)->s_fc_stats.fc_ineligible_reason_count[i];
-> +		}
-> +		__entry->fc_commits = EXT4_SB(sb)->s_fc_stats.fc_num_commits;
-> +		__entry->fc_ineligible_commits =
-> +			EXT4_SB(sb)->s_fc_stats.fc_ineligible_commits;
-> +		__entry->fc_numblks = EXT4_SB(sb)->s_fc_stats.fc_numblks;
-> +	),
-> +
-> +	TP_printk("dev %d,%d fc ineligible reasons:\n"
-> +		  "%s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u "
-> +		  "num_commits:%lu, ineligible: %lu, numblks: %lu",
-> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
-> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
-> +		  __entry->fc_commits, __entry->fc_ineligible_commits,
-> +		  __entry->fc_numblks)
->  );
->  
->  #define DEFINE_TRACE_DENTRY_EVENT(__type)				\
-
+       Arnd

@@ -2,143 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93D04D6FA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F904D6F9F
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiCLPJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 10:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S231470AbiCLPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 10:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiCLPJ2 (ORCPT
+        with ESMTP id S230322AbiCLPLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 10:09:28 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C03E0DF;
-        Sat, 12 Mar 2022 07:08:21 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id 25so15906609ljv.10;
-        Sat, 12 Mar 2022 07:08:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RMVbKUWJoamB63L91lhDISjUh7OaK8vRX+H8kEUqYOE=;
-        b=EjkTLmpAHX67yQM2n/+sUQihO7Fulp+NNSqyOGypiVqBU/dAfqzJF3yz8HT6KR1MbM
-         GbENIMt439W67jP7Ntb+BkGHnMo9kayaET6+DFIFeSGDqY0a4X6X2e64Iz21lINOcd5W
-         PyShUvDMFe0NgQlxbgDEu0llHvdFFxtK+T8M5sI7KEsihHIXPMNXNY0w6KP9XFNTsEYy
-         Aa9TAVhg3KWM3Fp8DkirQ2DoWkiGeKG3GRaLAtTIQvEmpoWnHrjkL5oA81tawkZFv6xY
-         xoaRDfEy0TUl4dJ/cLNgCaMc38U83SJpd58Xlc6c9+agu8xlCfgUxURP1im6jmjhpcUN
-         1fuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RMVbKUWJoamB63L91lhDISjUh7OaK8vRX+H8kEUqYOE=;
-        b=rUXvms/8THLgUxB7rLanRTu7xlAyW4WUquRa91LuXYxb/zwxyaLOoHBIRxohm5zV++
-         uGkcy2jgTqVe8cZ6SmNfx9FA7KPWL2xYz9JlA1Fz2oGIc3y3krtRXb8j7S89XJRL1Hik
-         cKXRxWTQZzcw/mEoF+ORW0Gg8pJrOiIF3Ddc9uZGAdPpr2Zl/jVU4STj6hzZeRbnY26F
-         QHWJTcmKTfdDucCWuWCPEErsF6wUtR7RN17cv7FeQExO8g0WKSzzbgNInnvjaCORNP2b
-         ytCM6K4KJBb4/detvradC1iRZaD2YTmH8MVb63H6ZSoqNwwsNa01FDDq2VkuLXC1rQ8A
-         WJng==
-X-Gm-Message-State: AOAM530p1rRdqFHSwaXq/YWZuWy2xtuEPWLjX9Ye1yVTRBfhGiAD+3aT
-        RD72JXtHPn21JUQhQtofN8w=
-X-Google-Smtp-Source: ABdhPJzxT/GTuOUsrm+q1hjLcJeKu+0aFdKY79wyvFZTM9ptYNfnnAfkSB/maO55BFKdInm9jU8OMg==
-X-Received: by 2002:a2e:871a:0:b0:246:ee2:1109 with SMTP id m26-20020a2e871a000000b002460ee21109mr8909285lji.165.1647097699713;
-        Sat, 12 Mar 2022 07:08:19 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.107])
-        by smtp.gmail.com with ESMTPSA id o1-20020a2e7301000000b002461808ad8bsm2408984ljc.102.2022.03.12.07.08.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 07:08:19 -0800 (PST)
-Message-ID: <d17aef8a-adbe-9d90-3173-60eb2f0828a5@gmail.com>
-Date:   Sat, 12 Mar 2022 18:08:18 +0300
+        Sat, 12 Mar 2022 10:11:39 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFE271EC8
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:10:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647097833; x=1678633833;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QwnU73SKGxv90bFeR3kPYdo+JxFder4HzAABlCz+DZY=;
+  b=n4k2VxL4b3xPZhmZ45/cHN+5FerNDqylq6vg6wtNV+ZQAKrYO1IG0BSG
+   BBp64UDsA+2dsoHUML3nX24bPjJ5wF6R9se+WxNskkDUymATtikrsz11D
+   Q1ZCcS3NZ+B2V9cTifJrIJYnHGfpx+rR9jaYh5M+7q8nzH2UxcEsnnfO3
+   I1j8RV0G5Q/c1Ow3cEBFxUqEh1apEP7s8nL765tWOx5GJEvxuc4Ij/ARI
+   VcVJgng29fzqj3ln2EFi3VJiKVwDkqXE1OcQWA/smJsOys/xbGOvT1DWt
+   dvs2UnkDfZDQ/cUcwzTWjelkzpKnKGGGjzh1y4mXw++Ws+UskT12DL/fV
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="254629217"
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="254629217"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 07:10:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="645279576"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2022 07:10:31 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nT3O2-0007zI-CW; Sat, 12 Mar 2022 15:10:30 +0000
+Date:   Sat, 12 Mar 2022 23:09:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Siddharth Gupta <sidgup@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Gurbir Arora <gurbaror@codeaurora.org>
+Subject: drivers/remoteproc/qcom_common.c:126:27: sparse: sparse: restricted
+ __le32 degrades to integer
+Message-ID: <202203122312.Oo7An9yZ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [syzbot] memory leak in usb_get_configuration
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
-        rob@robgreener.com, syzkaller-bugs@googlegroups.com
-References: <000000000000351b8605d9d1d1bf@google.com>
- <Yiu4tCONfHVH1Qfv@rowland.harvard.edu>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <Yiu4tCONfHVH1Qfv@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   68453767131a5deec1e8f9ac92a9042f929e585d
+commit: 8ed8485c4f056d488d17a2b56581c86aeb42955d remoteproc: qcom: Add capability to collect minidumps
+date:   1 year, 3 months ago
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220312/202203122312.Oo7An9yZ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8ed8485c4f056d488d17a2b56581c86aeb42955d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8ed8485c4f056d488d17a2b56581c86aeb42955d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-imx/ arch/arm/mach-mvebu/ arch/arm/mach-rockchip/ arch/arm/mach-socfpga/ arch/arm/mach-tegra/ drivers/dma/ drivers/edac/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/irqchip/ drivers/mtd/nand/onenand/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/soc/bcm/brcmstb/pm/ drivers/staging/ fs/proc/ net/sched/
 
-On 3/12/22 00:01, Alan Stern wrote:
-> On Wed, Mar 09, 2022 at 03:54:24PM -0800, syzbot wrote:
->> Hello,
->> 
->> syzbot found the following issue on:
->> 
->> HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
->> dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
->> 
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
->> 
->> BUG: memory leak
->> unreferenced object 0xffff88810c0289e0 (size 32):
->>   comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
->>   hex dump (first 32 bytes):
->>     09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
->>     3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
->>   backtrace:
->>     [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
->>     [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
->>     [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
->>     [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
->>     [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
->>     [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
->>     [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
->>     [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
->>     [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
->>     [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
->>     [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
->>     [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> 
-> The console log shows that this is connected to gspca_dev_probe.  Let's
-> see who's calling it...
-> 
-
-The execution path is more complicated. I've done some debugging, but no 
-luck with root case... Just want to share what I found and maybe it will 
-help.
-
-Firsly syzbot connects carl9170 device (usb ids from the log). 
-carl9170_usb_probe() calls usb_reset_device() which fails with -19. If I 
-remove this usb_reset_device() call then issue is no more reproducible.
-
-Then 2 other probes are called: usbtest and spca501. spca501 calls 
-gspca_dev_probe(), but it fails early and I do not suspect this driver.
-usbtest probe function also looks correct, so I do not suspect this 
-driver as well.
-
-Looks like the issue either in usb_reset_device() call or somewhere in 
-usb internals
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/qcom_common.c:126:27: sparse: sparse: restricted __le32 degrades to integer
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
+>> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
 
+vim +126 drivers/remoteproc/qcom_common.c
 
-With regards,
-Pavel Skripkin
+   103	
+   104	static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsystem *subsystem)
+   105	{
+   106		struct minidump_region __iomem *ptr;
+   107		struct minidump_region region;
+   108		int seg_cnt, i;
+   109		dma_addr_t da;
+   110		size_t size;
+   111		char *name;
+   112	
+   113		if (WARN_ON(!list_empty(&rproc->dump_segments))) {
+   114			dev_err(&rproc->dev, "dump segment list already populated\n");
+   115			return -EUCLEAN;
+   116		}
+   117	
+   118		seg_cnt = le32_to_cpu(subsystem->region_count);
+   119		ptr = ioremap((unsigned long)le64_to_cpu(subsystem->regions_baseptr),
+   120			      seg_cnt * sizeof(struct minidump_region));
+   121		if (!ptr)
+   122			return -EFAULT;
+   123	
+   124		for (i = 0; i < seg_cnt; i++) {
+   125			memcpy_fromio(&region, ptr + i, sizeof(region));
+ > 126			if (region.valid == MD_REGION_VALID) {
+   127				name = kstrdup(region.name, GFP_KERNEL);
+   128				if (!name) {
+   129					iounmap(ptr);
+   130					return -ENOMEM;
+   131				}
+   132				da = le64_to_cpu(region.address);
+ > 133				size = le32_to_cpu(region.size);
+   134				rproc_coredump_add_custom_segment(rproc, da, size, NULL, name);
+   135			}
+   136		}
+   137	
+   138		iounmap(ptr);
+   139		return 0;
+   140	}
+   141	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

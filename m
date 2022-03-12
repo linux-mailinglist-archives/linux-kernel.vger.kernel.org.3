@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0D84D6E76
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 12:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689724D6E7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 12:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiCLLaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 06:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S231205AbiCLLkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 06:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiCLLaS (ORCPT
+        with ESMTP id S229483AbiCLLkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 06:30:18 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C10C35;
-        Sat, 12 Mar 2022 03:29:09 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C3BDD240006;
-        Sat, 12 Mar 2022 11:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647084548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jOH08bKV9K2o0RK2gMfpuKKcHc4JTuayEfTcXVSyoKg=;
-        b=SoqJe68LgVq4CRgKPCCveLY+ejVgYCvL/1qfwaBt5hGH0BPknjJBopP4JIp6xYiQQwyVla
-        RvQUc2jDlwa0548Y5tV4gOvIWASgxS3dUJEYSJ6E0oTUtTlpw0qO+Xx9putEeqr3oNgpFU
-        D4O+5sF3hDydCnEqR9tpM2RY9SbnsL8taQVzwxMmeEFDqFtPvgyFsGxW7EPaCfp4wgD0a+
-        p44rqi3d7vJiQs2CZjhc+Ewj80jlPXDPLNxXKMPbcdaKiavaysDalf4c2VzGLNNXZ85rET
-        ThhkrG9VhzsMGyIPf55tjdihiPTxn5KyIOoPtctgGk8UpirGVca1xxQPtArF7w==
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Maxime Ripard <mripard@kernel.org>, linux-sunxi@lists.linux.dev,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v3 0/6] clk: sunxi-ng: Add a RTC CCU driver
-Date:   Sat, 12 Mar 2022 12:29:04 +0100
-Message-Id: <164708452927.194759.8728581507803680066.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220203021736.13434-1-samuel@sholland.org>
-References: <20220203021736.13434-1-samuel@sholland.org>
+        Sat, 12 Mar 2022 06:40:06 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20871D981A;
+        Sat, 12 Mar 2022 03:39:00 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 132so9647094pga.5;
+        Sat, 12 Mar 2022 03:39:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TbMwWLdeFpytda/SuyMy6a3U6z6EORwEzk+ecuTxS64=;
+        b=JhTAiOQY+dP2Zl+oj6gEka2qN8UYhLaLWGsv8z6R4jdqoT/SovX6mL856zxx5hcO7E
+         ByZN30S31eblbz9vchNtGkXE7tQV1SKF6sEp8Ter+EomArVjA1OnGFMP+T/qBQolU/hG
+         ztRBmatrXj+w6XWsYxVh5r6PXkGRf1GqpALrwsdQyWPJ2UbWwa3/ceIGhLRuoCjspity
+         IgmohA+9Kqc2kRuOxSs8d3eDxF1Js16JhKLnKsVUqmn9BCCbGL4H0Pwz1VSzA/v1XGGU
+         X/XZ2/xiv8TcOU5Whr0lcHPeZC5kxRHZYdCssa1/p4QLAXnLMPdp0aQVJmVRlasFaOkD
+         uiEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TbMwWLdeFpytda/SuyMy6a3U6z6EORwEzk+ecuTxS64=;
+        b=v2ti/Bv08klANjdLOSUqVIT0I4IgBkgzYONN7WHOOBFb4TOP7rWjgO8WMEVzv5SLaE
+         MVJ7FuuCgnh6EH8x1letVb6F9A3ZwID912Dx2FLLsPs00JsHAZ5EkIfdGE7abtaFFQ+f
+         UPqHC3MR0yt65m8YIh5YTeesozq2SNI8yEmKcWYBm+qoZjfJzCk+LPjvTYesz7lQA600
+         b4vjBVLy0idt/RYhSLJNoXA0v6ao8F5eUHHbs6oN+qds3KvSvfdHmq4sWLy2KobOAbBH
+         7nQFdf4sahmK7eICkvowhjnsWp/E5Wrt8SVZB+uWOGkSAlbGSGhzAbbcrXC2ezOv86se
+         Au2w==
+X-Gm-Message-State: AOAM532kJ/A2LEf2DBk/MHoHkzBxMTH7UMHlIhA5gNR0m+JV0CeaBIMg
+        QpzJFqOfUiRvZryXMnJGZVA=
+X-Google-Smtp-Source: ABdhPJxM95Ms2pBmwEbJ5W4IEqk507Y4QMHA9fPLH1HLUjT6YonxouNAeYeTJdkP2/3c7PI0tZzo7w==
+X-Received: by 2002:a63:447:0:b0:37d:b683:2c06 with SMTP id 68-20020a630447000000b0037db6832c06mr12291129pge.16.1647085140223;
+        Sat, 12 Mar 2022 03:39:00 -0800 (PST)
+Received: from localhost.localdomain ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id h6-20020a636c06000000b00363a2533b17sm11065191pgc.8.2022.03.12.03.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 03:38:59 -0800 (PST)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] DT fixes for pl022 for arm platforms
+Date:   Sat, 12 Mar 2022 17:08:49 +0530
+Message-Id: <20220312113853.63446-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 20:17:30 -0600, Samuel Holland wrote:
-> This patch series adds a CCU driver for the RTC in the H616, R329 and
-> D1. The extra patch at the end of this series shows how it would be
-> explanded to additional hardware variants.
-> 
-> The driver is intended to support the existing binding used for the H6,
-> but also an updated binding which includes all RTC input clocks.
-> 
-> [...]
+This patchset is an attempt to fix device trees and resolve binding
+warnings for pl022. This requires updation in clock name to keep
+alignment with other platforms and spi node properties for integratorap
+platform.
 
-Applied, thanks!
+warning: 'sspclk' was expected
+Above warning got generated after binding patch got accepted from spi
+tree.
+https://lore.kernel.org/linux-spi/164703017513.264521.4229870520812086440.b4-ty@kernel.org/T/#m0301ae2addf60781a956d94c2b192aa26db42074
 
-[1/6] dt-bindings: rtc: sun6i: Clean up repetition
-      (no commit info)
-[2/6] dt-bindings: rtc: sun6i: Add H616, R329, and D1 support
-      (no commit info)
-[3/6] rtc: sun6i: Enable the bus clock when provided
-      (no commit info)
-[4/6] clk: sunxi-ng: mux: Allow muxes to have keys
-      commit: b6e649834afa1fc6fd856b287e808cebe2c6fb8e
-[5/6] clk: sunxi-ng: Add support for the sun6i RTC clocks
-      commit: df8925adc02f1cb2c87582d688dd8991aaabf8b2
-[6/6] clk: sunxi-ng: sun6i-rtc: Add support for H6
-      commit: dc1d63a697304fbd246e24901e0635885856ef63
+This patchset is based on
+git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik.git,
+master
 
-Best regards,
+v3:
+- Reword commit message for patches 2-4
+- No functional change
+- Rebase to top
+
+v2:
+- Remove alias in ste platform added in v1
+- Split patches as per platforms
+
+Kuldeep Singh (4):
+  ARM: dts: integratorap: Update spi node properties
+  ARM: dts: realview: Update spi clock-names property
+  ARM: dts: versatile: Update spi clock-names property
+  ARM: dts: ste-dbx: Update spi clock-names property
+
+ arch/arm/boot/dts/arm-realview-eb.dtsi    |  2 +-
+ arch/arm/boot/dts/arm-realview-pb1176.dts |  2 +-
+ arch/arm/boot/dts/arm-realview-pb11mp.dts |  2 +-
+ arch/arm/boot/dts/arm-realview-pbx.dtsi   |  2 +-
+ arch/arm/boot/dts/integratorap-im-pd1.dts |  4 ++--
+ arch/arm/boot/dts/ste-dbx5x0.dtsi         | 12 ++++++------
+ arch/arm/boot/dts/versatile-ab.dts        |  2 +-
+ 7 files changed, 13 insertions(+), 13 deletions(-)
+
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+2.25.1
+

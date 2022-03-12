@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8BF4D714C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 23:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A47E4D7151
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 23:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232829AbiCLWm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 17:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S232839AbiCLWz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 17:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiCLWmy (ORCPT
+        with ESMTP id S230380AbiCLWz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 17:42:54 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B581C2F78;
-        Sat, 12 Mar 2022 14:41:48 -0800 (PST)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E854422239;
-        Sat, 12 Mar 2022 23:41:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647124906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=41OBeTclfUqu9E10Glc2yaP92LM2mbCEsKFyGzia5ns=;
-        b=Bcn6TJQ5PIRq9iL30BAkPa0a8pZNAeeweCiUUFVv+KPsAq9+0DdqDKkFsyjIS7dpq4sim6
-        C+/u3gQgAL2fZqiP748QRXdhRJ2zkqBpLsk1qEF5tOZqGeDzmw8ZZHFI7M/gwtxYO8wnBt
-        3d1Oull4pGs6zUkgaUiE8/unIaV7tJk=
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Colin Foster <colin.foster@in-advantage.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH net] net: mdio: mscc-miim: fix duplicate debugfs entry
-Date:   Sat, 12 Mar 2022 23:41:40 +0100
-Message-Id: <20220312224140.4173930-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Sat, 12 Mar 2022 17:55:56 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD97B190B67
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 14:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UN+I6odUaBYTA4m+e/Oxb8RNXN0nVDOuL+cCCpQwFjQ=; b=nzJJTcMaUeG4JjhS61aYzuExUL
+        azyJ57kC0z7btePyzz3OHEuoNu+MvLGazR+6tqMtT/wC5/lMbf5W/HjS9FB+dpAOVc/MvfwXhrtgP
+        EVf4u79WPd4LeQW5UO0vE9NAMLTbCYSwYuX+jxJl2HgPloIOAuwJmhOfL+LXEEuOhd+GWVjPZUgq9
+        77001txcf7/Px0Mj71LmL96JnhBZ8aLB9EUaaEFkNtA3OnnMDItuyR4vj59tdJIgw1x6YSJ6Cd4BE
+        AcqmTF9FxaKBa4yBsO1WwVjsgskRAJUjXkK1gIW1x1u6AboUgm1du7/eBw+hnilgcHCzSnDELylP2
+        8oIcfkfg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nTAcm-000JUR-3K; Sat, 12 Mar 2022 22:54:12 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CAC47987D0D; Sat, 12 Mar 2022 23:54:09 +0100 (CET)
+Date:   Sat, 12 Mar 2022 23:54:09 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 16/19] context_tracking: Convert state to atomic_t
+Message-ID: <20220312225409.GH28057@worktop.programming.kicks-ass.net>
+References: <20220302154810.42308-1-frederic@kernel.org>
+ <20220302154810.42308-17-frederic@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302154810.42308-17-frederic@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,47 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver can have up to two regmaps. If the second one is registered
-its debugfs entry will have the same name as the first one and the
-following error will be printed:
+On Wed, Mar 02, 2022 at 04:48:07PM +0100, Frederic Weisbecker wrote:
+> +static __always_inline int __ct_state(void)
+> +{
+> +	return atomic_read(this_cpu_ptr(&context_tracking.state));
+> +}
 
-[    3.833521] debugfs: Directory 'e200413c.mdio' with parent 'regmap' already present!
+One arguably horrible thing to do would be to write it like:
 
-Give the second regmap a name to avoid this.
+	return __this_cpu_read(context_tracking.state.counter);
 
-Fixes: a27a76282837 ("net: mdio: mscc-miim: convert to a regmap implementation")
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- drivers/net/mdio/mdio-mscc-miim.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+IIRC that will actually DTRT since atomic_read() is basically defined to
+be READ_ONCE() and this_cpu_read() implies the same.
 
-diff --git a/drivers/net/mdio/mdio-mscc-miim.c b/drivers/net/mdio/mdio-mscc-miim.c
-index dfd7f3001a15..fc5655328b1f 100644
---- a/drivers/net/mdio/mdio-mscc-miim.c
-+++ b/drivers/net/mdio/mdio-mscc-miim.c
-@@ -197,6 +197,13 @@ static const struct regmap_config mscc_miim_regmap_config = {
- 	.reg_stride	= 4,
- };
- 
-+static const struct regmap_config mscc_miim_phy_regmap_config = {
-+	.reg_bits	= 32,
-+	.val_bits	= 32,
-+	.reg_stride	= 4,
-+	.name		= "phy",
-+};
-+
- int mscc_miim_setup(struct device *dev, struct mii_bus **pbus, const char *name,
- 		    struct regmap *mii_regmap, int status_offset)
- {
-@@ -260,7 +267,7 @@ static int mscc_miim_probe(struct platform_device *pdev)
- 		}
- 
- 		phy_regmap = devm_regmap_init_mmio(&pdev->dev, phy_regs,
--						   &mscc_miim_regmap_config);
-+						   &mscc_miim_phy_regmap_config);
- 		if (IS_ERR(phy_regmap)) {
- 			dev_err(&pdev->dev, "Unable to create phy register regmap\n");
- 			return PTR_ERR(phy_regmap);
--- 
-2.30.2
+Only PowerPC and s390 implement arch_atomic_read() in asm, but I don't
+think they have a particularly good reason to. The only other weird case
+is Alpha, where READ_ONCE() implies smp_mb() because Alpha. I'm not sure
+we care about that case, hmm?
 
+The same can be done for ct_dynticks(), which is basically the same
+function with a different mask.
+
+As mentioned elsewhere, ct_state() appears unused at the end of the
+ride.

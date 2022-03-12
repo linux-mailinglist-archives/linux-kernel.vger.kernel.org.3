@@ -2,306 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4404D6D10
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 07:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D784D6D18
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 07:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiCLGzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 01:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S230526AbiCLG7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 01:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiCLGzI (ORCPT
+        with ESMTP id S230422AbiCLG72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 01:55:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30746F1E8B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 22:54:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFCB660AC7
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 06:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9DAC340EB;
-        Sat, 12 Mar 2022 06:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647068042;
-        bh=g7xOCtQ5ZP3xXF7uJsMRAvG58VMRZfFYl1gYE6j5sg0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZiK7EFU1hAwRwEC5HJJ/7mK6tzdyEzbgGgpGt9cgYtrX/fqznde4yfmhWzGBWyVq4
-         +W7hMusvWAib92jlN3WsrtwK6nBsyOFfMfoE22QeIiFn2cw6Q2Vc3GCUPmCQis2izK
-         ywYQa8GL41pyPcrJeOq93PRr5zzPVx8gXtYWbndqBB158Ou8qPmKMhqvwu4snhWUo+
-         BZ8SR1nThYy1Ek1jkKi0/4f5DGXGskFYrJtijxbbizERL2HjpVLqrNF7k4lz+71fX2
-         7BIpavzGO7Uv+8Qw3IcfKq0XUvjDtcWtPhIf2V2NY3BjpQ8lu4PMlt9fC0FAdcmRUu
-         8E/c4GtsWL+2Q==
-Date:   Sat, 12 Mar 2022 15:53:58 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org
-Subject: Re: tracing : bootconfig : Early boot config for non intrd systems
-Message-Id: <20220312155358.d6bc78866f4ca31e9a37e23a@kernel.org>
-In-Reply-To: <20220309190651.GA3735@pswork>
-References: <20220307184011.GA2570@pswork>
-        <20220308163600.3109f19854c7b051924f262b@kernel.org>
-        <20220308174829.GA2471@pswork>
-        <20220309170124.82dcfadbcda6f8ab6ed51797@kernel.org>
-        <20220309190651.GA3735@pswork>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 12 Mar 2022 01:59:28 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8B4B848
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 22:58:22 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id q19so9287051pgm.6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 22:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8IWEKdPyVvolpnOSuxir86XbGUS+YtCt+QShkTKy2vI=;
+        b=3cIBfacJ4Ngt0vxOsAI3eGekmsLwkkcuxIySQrBeDF2CVcEbrd0g+mhjcK88bmQS3u
+         VpWCY7trcpLvHv3RD433T4Tq4AWklAAK3jLPfp5ZpkEW7peB5UkygzNNgtFyHE/xBAL0
+         0ykEX1LD4lJ2Sojxv2emy/u0xWCE7TvfdLMYEzfuuVYudddlHYcTMdO+Iqh2HB++H38R
+         MoOgEq2kdc8QOk0miUFI7OqrEaFW5t7C2gJ2eCf8fPBLlffNIXT5WZ9w1BmADAV3ouf6
+         8QH+5ZkWtcwXmg9px/e18owU8aBhKYBcK8B6x0eGJOL6l5RdClgkFoNWMUFrI3JBqdss
+         ey3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8IWEKdPyVvolpnOSuxir86XbGUS+YtCt+QShkTKy2vI=;
+        b=OPV/mF+c41AbmWYug+fPSTnL28MAypuhQs6yZUJSLYVaFi2efswLHWyKMslKDMYfRi
+         pEqlD8hY61kl0w/RIOoImpzKVkNpbDZLIJeliXl20oNFfhvWjO+DAUB0W6JyDGjkEciE
+         EvDLi5g1btkotF8aRUdNdjIJW1Njgx71/Ndt3TbKAHESF69eZ4AteypBIWOGZ+SErool
+         Qdrkpb7yeGsAPJyPfyE2Tkdk3cnWLmll7qJ666bBoWpUfn9J/u5MN1WI44yN9r87MMDK
+         i4Y4mu/O3V/HmTXQU2fa9hk57Y6XJWuSlkkP0hcqDDJLcw7ilHnEbIOtjx3ZifHF7eGD
+         vHkQ==
+X-Gm-Message-State: AOAM531bC5RxPx2RSvaOv7PpZM0eJdjIVEBoa6/WqIoOMM3FxT6Nl3iE
+        XqXos0QlE722yxbVN2L5fNNZvA==
+X-Google-Smtp-Source: ABdhPJw9NxbTKMqYmhV3GYkJeL1pcfmqyQ7KmwdtjC1OFhPRsbzMEqY/gk8HNh38I8mzagvZa3OYLg==
+X-Received: by 2002:aa7:918f:0:b0:4cc:3c00:b2dd with SMTP id x15-20020aa7918f000000b004cc3c00b2ddmr14117555pfa.77.1647068302047;
+        Fri, 11 Mar 2022 22:58:22 -0800 (PST)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id lb4-20020a17090b4a4400b001b9b20eabc4sm11915419pjb.5.2022.03.11.22.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 22:58:21 -0800 (PST)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        osalvador@suse.de, david@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH RFC] mm: hugetlb_vmemmap: introduce HAS_STRUCT_PAGE_SIZE_POWER_OF_2
+Date:   Sat, 12 Mar 2022 14:56:54 +0800
+Message-Id: <20220312065654.44543-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Padmanabha,
+If the size of "struct page" is not the power of two and this
+feature is enabled, then the vmemmap pages of HugeTLB will be
+corrupted after remapping (panic is about to happen in theory).
+But this only exists when !CONFIG_MEMCG && !CONFIG_SLUB on
+x86_64.  However, it is not a conventional configuration nowadays.
+So it is not a real word issue, just the result of a code review.
+But we have to prevent anyone from configuring that combined
+configuration.  In order to avoid many checks like "is_power_of_2
+(sizeof(struct page))" through mm/hugetlb_vmemmap.c.  Introduce
+HAS_STRUCT_PAGE_SIZE_POWER_OF_2 to detect if the size of struct
+page is power of 2 and make this feature depends on this new
+config.  Then we could prevent anyone do any unexpected
+configuration.
 
-On Wed, 9 Mar 2022 20:06:51 +0100
-Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-
-> On Wed, Mar 09, 2022 at 05:01:24PM +0900, Masami Hiramatsu wrote:
-> > On Tue, 8 Mar 2022 18:48:29 +0100
-> > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > 
-> > > Hello Masami Hiramatsu,
-> > > 
-> > > On Tue, Mar 08, 2022 at 04:36:00PM +0900, Masami Hiramatsu wrote:
-> > > > Hello Padmanabha,
-> > > > 
-> > > > On Mon, 7 Mar 2022 19:40:11 +0100
-> > > > Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
-> > > > 
-> > > > > Hello Masami Hiramatsu,
-> > > > > 
-> > > > > Thanks for detailed explanation on boot time tracing using early boot configuration file.
-> > > > > https://linuxfoundation.org/wp-content/uploads/boottrace-LF-live-2021-update.pdf
-> > > > > 
-> > > > > Also for https://lwn.net/Articles/806002/.
-> > > > > 
-> > > > > Latter link also states we can embed boot config into the kernel image for non intrd based system.
-> > > > 
-> > > > Ah, that was an original plan, but since no one interested in, I didn't implement it.
-> > > > So we still need the initrd for bootconfig.
-> > > >
-> > > Ok.
-> > > > > 
-> > > > > I tried searching mailing lists not able to find pointer for same.
-> > > > > 
-> > > > > A hint/pointer on how-to will be very helpful. 
-> > > > 
-> > > > BTW, what is your problem, could you share your use-case?
-> > > > 
-> > > 
-> > > I have hetrogenous system which donot use intrd.
-> > > 
-> > > The use-case is to capture __system wide__ event based tracing for
-> > > boot-up sequence, which also covers early stage of default init programs
-> > > used.
-> > > 
-> > > As buffer size is limited, will have hand-picked events set configured.
-> > 
-> > Hm, so I guess you will boot linux from your custom bootloader (or binary loader on sub processor?).
-> >
-> Yes, customised implemation which loads linux. 
-> 
-> > Can you even try to add a dummy initrd? or are you OK to rebuild kernel for embedding the bootconfig data?
-> Yes, re-building the kernel image to appended bootconfig data is feasable option.
-> 
-
-OK, please try below patch. You can embed your bootconfig in the kernel via
-CONFIG_EMBED_BOOT_CONFIG_FILE.
-
-
-From 7478a8fbfe4669ee61fcb12b85b36d7e36f992ba Mon Sep 17 00:00:00 2001
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Date: Sat, 12 Mar 2022 14:59:30 +0900
-Subject: [PATCH] bootconfig: Support embedding a bootconfig file in kernel
-
-This allows kernel developer to embed a default bootconfig file in
-the kernel instead of embedding it in the initrd. This will be good
-for who are using the kernel without initrd, or who needs a default
-bootconfigs.
-This needs 2 options: CONFIG_EMBED_BOOT_CONFIG=y and set the file
-name to CONFIG_EMBED_BOOT_CONFIG_FILE.
-Note that you still need 'bootconfig' command line option to load the
-embedded bootconfig. And if you boot with the initrd which has another
-bootconfig, the kernel will use the bootconfig in the initrd, instead
-of embedding one.
-
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 ---
- include/linux/bootconfig.h | 10 ++++++++++
- init/Kconfig               | 19 +++++++++++++++++++
- init/main.c                | 25 +++++++++++++------------
- lib/bootconfig.c           | 23 +++++++++++++++++++++++
- 4 files changed, 65 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-index a4665c7ab07c..5dbda5e3e9bb 100644
---- a/include/linux/bootconfig.h
-+++ b/include/linux/bootconfig.h
-@@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
- /* XBC cleanup data structures */
- void __init xbc_exit(void);
+Thanks Luis for proposing this idea.  The initial implementation is as
+follows.  I found it could work properly at the first time after creating
+.config.  Then, if we use "make menuconfig" to disable CONFIG_MEMCG and
+CONFIG_SLOB meaning the size of "struct page" becomes not power of 2,
+whereas HAS_STRUCT_PAGE_SIZE_POWER_OF_2 will not be changed to "n"
+accordingly.  I don't know how to make HAS_STRUCT_PAGE_SIZE_POWER_OF_2
+realize the potential change of the size of "struct page" since I am not
+familiar with the Kconfig and how to detect this dependency.  If you have
+any suggestions, comments are really welcome.
+
+ Kbuild                           | 11 +++++++++++
+ fs/Kconfig                       |  5 ++++-
+ include/linux/mm_types.h         |  2 ++
+ mm/hugetlb_vmemmap.c             |  6 ------
+ mm/struct_page_size.c            | 19 +++++++++++++++++++
+ scripts/check_struct_page_po2.sh | 16 ++++++++++++++++
+ 6 files changed, 52 insertions(+), 7 deletions(-)
+ create mode 100644 mm/struct_page_size.c
+ create mode 100755 scripts/check_struct_page_po2.sh
+
+diff --git a/Kbuild b/Kbuild
+index fa441b98c9f6..7885e1211135 100644
+--- a/Kbuild
++++ b/Kbuild
+@@ -14,6 +14,17 @@ $(bounds-file): kernel/bounds.s FORCE
+ 	$(call filechk,offsets,__LINUX_BOUNDS_H__)
  
-+/* XBC embedded bootconfig data in kernel */
-+#ifdef CONFIG_EMBED_BOOT_CONFIG
-+char * __init xbc_get_embedded_bootconfig(size_t *size);
-+#else
-+static inline char *xbc_get_embedded_bootconfig(size_t *size)
-+{
-+	return NULL;
-+}
-+#endif
+ #####
++# Generate struct_page_size.h. Must follows bounds.h.
 +
++struct_page_size-file := include/generated/struct_page_size.h
++
++always-y := $(struct_page_size-file)
++targets := mm/struct_page_size.s
++
++$(struct_page_size-file): mm/struct_page_size.s FORCE
++	$(call filechk,offsets,__LINUX_STRUCT_PAGE_SIZE_H__)
++
++#####
+ # Generate timeconst.h
+ 
+ timeconst-file := include/generated/timeconst.h
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 7f2455e8e18a..d663f600c608 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -245,10 +245,13 @@ config HUGETLBFS
+ config HUGETLB_PAGE
+ 	def_bool HUGETLBFS
+ 
++config HAS_STRUCT_PAGE_SIZE_POWER_OF_2
++	def_bool $(success,test "$(shell, $(srctree)/scripts/check_struct_page_po2.sh)" = y)
++
+ config HUGETLB_PAGE_FREE_VMEMMAP
+ 	def_bool HUGETLB_PAGE
+ 	depends on X86_64
+-	depends on SPARSEMEM_VMEMMAP
++	depends on SPARSEMEM_VMEMMAP && HAS_STRUCT_PAGE_SIZE_POWER_OF_2
+ 
+ config HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON
+ 	bool "Default freeing vmemmap pages of HugeTLB to on"
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 11dc4586464d..5da7dfa26596 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -224,6 +224,7 @@ struct page {
  #endif
-diff --git a/init/Kconfig b/init/Kconfig
-index e9119bf54b1f..1b736ac7f90d 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1357,6 +1357,25 @@ config BOOT_CONFIG
+ } _struct_page_alignment;
  
- 	  If unsure, say Y.
++#ifndef __GENERATING_STRUCT_PAGE_SIZE_H
+ /**
+  * struct folio - Represents a contiguous set of bytes.
+  * @flags: Identical to the page flags.
+@@ -849,5 +850,6 @@ enum fault_flag {
+ 	FAULT_FLAG_INSTRUCTION =	1 << 8,
+ 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
+ };
++#endif /* !__GENERATING_STRUCT_PAGE_SIZE_H */
  
-+config EMBED_BOOT_CONFIG
-+	bool "Embed bootconfig file in the kernel"
-+	depends on BOOT_CONFIG
-+	default n
-+	help
-+	  Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
-+	  kernel. Usually, the bootconfig file is loaded with the initrd
-+	  image. But if the system doesn't support initrd, this option will
-+	  help you by embedding a bootconfig file while building the kernel.
-+
-+	  If unsure, say N.
-+
-+config EMBED_BOOT_CONFIG_FILE
-+	string "Embedded bootconfig file path"
-+	default ""
-+	depends on EMBED_BOOT_CONFIG
-+	help
-+	  Specify a bootconfig file which will be embedded to the kernel.
-+
- choice
- 	prompt "Compiler optimization level"
- 	default CC_OPTIMIZE_FOR_PERFORMANCE
-diff --git a/init/main.c b/init/main.c
-index 65fa2e41a9c0..f371610bc008 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -265,7 +265,7 @@ static int __init loglevel(char *str)
- early_param("loglevel", loglevel);
+ #endif /* _LINUX_MM_TYPES_H */
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index b3118dba0518..d9e6b8b0af30 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -28,12 +28,6 @@ EXPORT_SYMBOL(hugetlb_free_vmemmap_enabled_key);
  
- #ifdef CONFIG_BLK_DEV_INITRD
--static void * __init get_boot_config_from_initrd(u32 *_size, u32 *_csum)
-+static void * __init get_boot_config_from_initrd(size_t *_size)
+ static int __init early_hugetlb_free_vmemmap_param(char *buf)
  {
- 	u32 size, csum;
- 	char *data;
-@@ -299,12 +299,15 @@ static void * __init get_boot_config_from_initrd(u32 *_size, u32 *_csum)
- 		return NULL;
- 	}
- 
-+	if (xbc_calc_checksum(data, size) != csum) {
-+		pr_err("bootconfig checksum failed\n");
-+		return NULL;
-+	}
-+
- 	/* Remove bootconfig from initramfs/initrd */
- 	initrd_end = (unsigned long)data;
- 	if (_size)
- 		*_size = size;
--	if (_csum)
--		*_csum = csum;
- 
- 	return data;
- }
-@@ -408,12 +411,15 @@ static void __init setup_boot_config(void)
- 	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
- 	const char *msg;
- 	int pos;
--	u32 size, csum;
-+	size_t size;
- 	char *data, *err;
- 	int ret;
- 
- 	/* Cut out the bootconfig data even if we have no bootconfig option */
--	data = get_boot_config_from_initrd(&size, &csum);
-+	data = get_boot_config_from_initrd(&size);
-+	/* If there is no bootconfig in initrd, try embedded one. */
-+	if (!data)
-+		data = xbc_get_embedded_bootconfig(&size);
- 
- 	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
- 	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-@@ -432,16 +438,11 @@ static void __init setup_boot_config(void)
- 	}
- 
- 	if (size >= XBC_DATA_MAX) {
--		pr_err("bootconfig size %d greater than max size %d\n",
-+		pr_err("bootconfig size %ld greater than max size %d\n",
- 			size, XBC_DATA_MAX);
- 		return;
- 	}
- 
--	if (xbc_calc_checksum(data, size) != csum) {
--		pr_err("bootconfig checksum failed\n");
--		return;
+-	/* We cannot optimize if a "struct page" crosses page boundaries. */
+-	if (!is_power_of_2(sizeof(struct page))) {
+-		pr_warn("cannot free vmemmap pages because \"struct page\" crosses page boundaries\n");
+-		return 0;
 -	}
 -
- 	ret = xbc_init(data, size, &msg, &pos);
- 	if (ret < 0) {
- 		if (pos < 0)
-@@ -451,7 +452,7 @@ static void __init setup_boot_config(void)
- 				msg, pos);
- 	} else {
- 		xbc_get_info(&ret, NULL);
--		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-+		pr_info("Load bootconfig: %ld bytes %d nodes\n", size, ret);
- 		/* keys starting with "kernel." are passed via cmdline */
- 		extra_command_line = xbc_make_cmdline("kernel");
- 		/* Also, "init." keys are init arguments */
-diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-index 74f3201ab8e5..bf84f5838c08 100644
---- a/lib/bootconfig.c
-+++ b/lib/bootconfig.c
-@@ -12,6 +12,29 @@
- #include <linux/kernel.h>
- #include <linux/memblock.h>
- #include <linux/string.h>
+ 	if (!buf)
+ 		return -EINVAL;
+ 
+diff --git a/mm/struct_page_size.c b/mm/struct_page_size.c
+new file mode 100644
+index 000000000000..6022a95ffc8a
+--- /dev/null
++++ b/mm/struct_page_size.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Generate definitions needed by the preprocessor.
++ * This code generates raw asm output which is post-processed
++ * to extract and format the required data.
++ */
 +
-+#ifdef CONFIG_EMBED_BOOT_CONFIG
-+asm (
-+"	.pushsection .init.data, \"aw\"			\n"
-+"	.global embedded_bootconfig_data		\n"
-+"embedded_bootconfig_data:				\n"
-+"	.incbin \"" CONFIG_EMBED_BOOT_CONFIG_FILE "\"	\n"
-+"	.global embedded_bootconfig_data_end		\n"
-+"embedded_bootconfig_data_end:				\n"
-+"	.popsection					\n"
-+);
++#define __GENERATING_STRUCT_PAGE_SIZE_H
++/* Include headers that define the enum constants of interest */
++#include <linux/kbuild.h>
++#include <linux/log2.h>
++#include <linux/mm_types.h>
 +
-+extern __visible char embedded_bootconfig_data[];
-+extern __visible char embedded_bootconfig_data_end[];
-+
-+char * __init xbc_get_embedded_bootconfig(size_t *size)
++int main(void)
 +{
-+	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
-+	return embedded_bootconfig_data;
++	DEFINE(STRUCT_PAGE_SIZE_POWER_OF_2, is_power_of_2(sizeof(struct page)));
++
++	return 0;
 +}
+diff --git a/scripts/check_struct_page_po2.sh b/scripts/check_struct_page_po2.sh
+new file mode 100755
+index 000000000000..cf54c6b16cd2
+--- /dev/null
++++ b/scripts/check_struct_page_po2.sh
+@@ -0,0 +1,16 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Check if the size of "struct page" is power of 2
 +
-+#endif
++file="include/generated/struct_page_size.h"
++if [ ! -f "$file" ]; then
++	exit 1
++fi
 +
- #else /* !__KERNEL__ */
- /*
-  * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
++struct_page_po2=$(grep STRUCT_PAGE_SIZE_POWER_OF_2 "$file" | cut -d' ' -f3)
++if [ "$struct_page_po2" = "1" ]; then
++	echo y
++else
++	echo n
++fi
 -- 
-2.25.1
+2.11.0
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8494D6FFA
+	by mail.lfdr.de (Postfix) with ESMTP id 7B02F4D6FFB
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 17:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiCLQRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 11:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S232167AbiCLQRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 11:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiCLQQ7 (ORCPT
+        with ESMTP id S232152AbiCLQRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 11:16:59 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79F858E77;
-        Sat, 12 Mar 2022 08:15:53 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id d19so3227364pfv.7;
-        Sat, 12 Mar 2022 08:15:53 -0800 (PST)
+        Sat, 12 Mar 2022 11:17:03 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DA059389;
+        Sat, 12 Mar 2022 08:15:56 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id lj8-20020a17090b344800b001bfaa46bca3so10569078pjb.2;
+        Sat, 12 Mar 2022 08:15:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=yrcD1G6HHwDCRU9+/o880Il2ZFF6sGg4EeKix4IPxpk=;
-        b=YfxIT3wYkQZ+MAsiC64PTdErbpzTuSyTM9KFgxKFrBY39ky/FiWB8N0ntSk1cQGyQr
-         XN7QLFVk2x0mnyyPy18E/j0s9nFMEiTsGqM6lIyLsHETC8xJ2gFJd6N7pMLoA0OquJtY
-         7/LT9MuXjH+5FLk9AKu0O3CpycjSPdvrJo5FGeUdQjjeiBo5Whlm0whEAXsZUp9y7zrf
-         vSpapL5y9R9c68dIL2siEAwggoQ8/+u+XRHOlr+qb572krG5uWrQqyoHAtc6/CnY+Ddi
-         Jm0Jr7BPu/iVgBSjnqoawub30/0Z6pZc8dF7bEvM0s525rd/4lNV5bfY7CgC708VD7pW
-         xx5Q==
+        bh=iUDnHddu1iJC/UEMzDGUYonnbY5buKU28EnANA4F+zw=;
+        b=o8M/jVkoxeQv8d97lB5RtOubmqw80mbF9GWbsl5mpZQ/sWu9iFRXtsYWtVQXM79wx/
+         1FW2OtWP5pwTVllgyqDhw/N1ebHz7jluUyfQDBwI8lOWxgk5X20QrihnHKZPMJ43ol/f
+         7qU3RIFfNwF6Ab4DcVQIdKKc38sF6wMkPY5cfHERw7zVWIZJRhMekMGWbiVzkrjhTf7w
+         e0iu4fiYxcxKUs+11pZQm2sSUK/D5VK0uhQSW7bNF9Slp0LTBZfOPrgspYBlroCKYE7c
+         9Wn3vhtnEUrOiE7te0Y4SlOBdu1hEgZXqZof+ijYLVZjT4iDHErJC20ZEVS7qzN6vBGa
+         GTNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=yrcD1G6HHwDCRU9+/o880Il2ZFF6sGg4EeKix4IPxpk=;
-        b=tWZcCQMkz7nf+7urlYZjemwRYBfMGieT5erKbxO8bo47tEYgXa5uhUUl6jotNI7Cnv
-         p4eznyXHwQrot4ay+tUPZQbPKuvgVXE5U1bvCn3FylS3Nb2My1jwonl7NujrwvpB35X9
-         wAgzJVpzej7iXbwU2MmOU92CGlXkdll/uJ1+WEXxZ+ltksereBowno/C/gCgwP6AP7XV
-         ulMTrMeDvSyRg0ZNxlPezcmsvh3AngCN645du58jCevjhRoeVJNGm9zMj8I7IYHIkD7P
-         Fvg/kN+wPQ1S8sRQb+l2p6j/Pq6XYPGkyyP1DPXXCzArV5m+X9w/9QVxy5FPCAz1/hj/
-         KzoA==
-X-Gm-Message-State: AOAM530fmeIirvtwXXd3CZgyVne44glRGjtWNWh48HtU7++axhqBpqKb
-        h3NfrIpKa/0deinjaccB/2wfDwErrJI=
-X-Google-Smtp-Source: ABdhPJy4PTix7RP8IV4oZUqxrz4J8PP6DlfpSYIOxRm7TgZELdUnkBt+HKYNCz9tZuFvenEI/i8/fQ==
-X-Received: by 2002:a63:82c7:0:b0:37c:8729:a70c with SMTP id w190-20020a6382c7000000b0037c8729a70cmr13339835pgd.108.1647101752993;
-        Sat, 12 Mar 2022 08:15:52 -0800 (PST)
+        bh=iUDnHddu1iJC/UEMzDGUYonnbY5buKU28EnANA4F+zw=;
+        b=4gQMIFAIwPCFoCCOXtiUmFioHXco607XyqQuhxVI2bRa0++xMl9gilMYEwYSYEvjKU
+         D1AxCqNWuzqeriNm+5hglWF5y5sI9HFDG9jeF9EdFlkEgGlGTPLmJJ3LFhGxAsP5Gzjb
+         9vRGmBoidieKIy1/8h7mggplkPssiXk35ZLLUh0wmn47Kx6k3CrTG6ZU0sBt6v5A9hRM
+         DUzK4LkLx0u1f8qJC12KRAhdVsX6Kai2CBQXt6OMWXUxwukPeppibfR522OCEaingLRw
+         hJEmKhsgrucXBF58ZAazEYUISSlEM/LOxNjYE3DqXdovLeKb5CoYOxssYQQU57wqjAZr
+         dc2w==
+X-Gm-Message-State: AOAM531ArBBFPieiUG+cfr6lBXrQEazqcQW0tfqtvcDc2LjxH3ugaBoH
+        BaakJQSIpDV1tKfDzLgqvdg=
+X-Google-Smtp-Source: ABdhPJz8A1f+yWufOIiNdLVdldr8kXJnp4AdpSdTExgTfGRR1BM1YGVTVFIAOgoopKPck9rKbcn2ZA==
+X-Received: by 2002:a17:90a:6543:b0:1b9:1dce:a23d with SMTP id f3-20020a17090a654300b001b91dcea23dmr16290503pjs.243.1647101755607;
+        Sat, 12 Mar 2022 08:15:55 -0800 (PST)
 Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id js15-20020a17090b148f00b001bfc8614b93sm9735079pjb.1.2022.03.12.08.15.50
+        by smtp.googlemail.com with ESMTPSA id js15-20020a17090b148f00b001bfc8614b93sm9735079pjb.1.2022.03.12.08.15.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 12 Mar 2022 08:15:52 -0800 (PST)
+        Sat, 12 Mar 2022 08:15:55 -0800 (PST)
 From:   Tony Huang <tonyhuang.sunplus@gmail.com>
 To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, derek.kiernan@xilinx.com,
@@ -55,9 +55,9 @@ To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
         gregkh@linuxfoundation.org, krzysztof.kozlowski@canonical.com
 Cc:     wells.lu@sunplus.com, tony.huang@sunplus.com,
         Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: [PATCH v11 1/2] dt-bindings: misc: Add iop yaml file for Sunplus SP7021
-Date:   Sun, 13 Mar 2022 00:16:04 +0800
-Message-Id: <c0ef91adc0af9fedca2791e4006009fabfdfef2c.1647095774.git.tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v11 2/2] misc: Add iop driver for Sunplus SP7021
+Date:   Sun, 13 Mar 2022 00:16:05 +0800
+Message-Id: <07f507a84a9e39d3cd8393f41d1292c250e07642.1647095774.git.tonyhuang.sunplus@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1647095774.git.tonyhuang.sunplus@gmail.com>
 References: <cover.1647095774.git.tonyhuang.sunplus@gmail.com>
@@ -73,120 +73,512 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add iop yaml file for Sunplus SP7021
+This driver is load 8051 bin code.
+The IOP core is DQ8051, so also named IOP8051.
+Need Install DQ8051, The DQ8051 bin file generated by keil C.
+We will provide users with 8051 normal and power off source code.
+Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/
+How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source-
+files-for-IOP
+Users can follow the operation steps to generate normal.bin and 
+poweroff.bin.
+Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338
+/26.+IOP8051 26.5?How To Create 8051 bin file
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+PMC in power management purpose:
+Add sp_iop_poweroff() function. pm_power_off=sp_iop_poweroff.
+When the power off command is executed.
+The 8051 has a register(DEF_PWR_EN_0=0) to control the power-on and
+power-off of the system.
+
 Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
 ---
 Changes in v11:
+ - Addressed comments from Arnd Bergmann.
  - Addressed comments from krzysztof.
 
- .../devicetree/bindings/misc/sunplus,iop.yaml      | 78 ++++++++++++++++++++++
- MAINTAINERS                                        |  5 ++
- 2 files changed, 83 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/misc/sunplus,iop.yaml
+ MAINTAINERS                |   1 +
+ drivers/misc/Kconfig       |  23 +++
+ drivers/misc/Makefile      |   1 +
+ drivers/misc/sunplus_iop.c | 411 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 436 insertions(+)
+ create mode 100644 drivers/misc/sunplus_iop.c
 
-diff --git a/Documentation/devicetree/bindings/misc/sunplus,iop.yaml b/Documentation/devicetree/bindings/misc/sunplus,iop.yaml
-new file mode 100644
-index 0000000..ad1c4be
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/sunplus,iop.yaml
-@@ -0,0 +1,78 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Ltd. Co. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/misc/sunplus-iop.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus IOP(8051) controller
-+
-+maintainers:
-+  - Tony Huang <tonyhuang.sunplus@gmail.com>
-+
-+description: |
-+  Processor for I/O control, RTC wake-up procedure management,
-+  and cooperation with CPU&PMC in power management.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-iop
-+
-+  reg:
-+    items:
-+      - description: IOP registers regions
-+      - description: PMC registers regions
-+      - description: MOON0 registers regions
-+
-+  reg-names:
-+    items:
-+      - const: iop
-+      - const: iop_pmc
-+      - const: moon0
-+
-+  interrupts:
-+    items:
-+      - description: IOP_INT0. IOP to system Interrupt 0.
-+                     Sent by IOP to system RISC.
-+      - description: IOP_INT1. IOP to System Interrupt 1.
-+                     Sent by IOP to system RISC.
-+
-+  memory-region:
-+    maxItems: 1
-+
-+  wakeup-gpios:
-+    description: When the linux kernel system is powered off.
-+      8051 is always powered. 8051 cand receive external signals
-+      according to this gpio pin. 8051 receives external signal
-+      through gpio pin. 8051 can power on linux kernel system.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - interrupts
-+  - memory-region
-+  - wakeup-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    iop: iop@9c000400 {
-+        compatible = "sunplus,sp7021-iop";
-+        reg = <0x9c000400 0x80>, <0x9c003100 0x80>, <0x9c000000 0x80>;
-+        reg-names = "iop", "iop_pmc", "moon0";
-+        clocks = <&clkc 0x14>;
-+        interrupt-parent = <&intc>;
-+        interrupts = <41 IRQ_TYPE_LEVEL_HIGH>, <42 IRQ_TYPE_LEVEL_HIGH>;
-+        memory-region = <&iop_reserve>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&iop_pins>;
-+        wakeup-gpios = <&pctl 1 GPIO_ACTIVE_HIGH>;
-+    };
-\ No newline at end of file
 diff --git a/MAINTAINERS b/MAINTAINERS
-index fb18ce7..d64c8ed 100644
+index d64c8ed..c282e95 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18242,6 +18242,11 @@ L:	netdev@vger.kernel.org
+@@ -18246,6 +18246,7 @@ SUNPLUS IOP DRIVER
+ M:	Tony Huang <tonyhuang.sunplus@gmail.com>
  S:	Maintained
- F:	drivers/net/ethernet/dlink/sundance.c
+ F:	Documentation/devicetree/bindings/misc/sunplus,iop.yaml
++F:	drivers/misc/sunplus_iop.c
  
-+SUNPLUS IOP DRIVER
-+M:	Tony Huang <tonyhuang.sunplus@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/misc/sunplus,iop.yaml
-+
  SUPERH
  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
- M:	Rich Felker <dalias@libc.org>
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 0f5a49f..e5f32d8 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -470,6 +470,29 @@ config HISI_HIKEY_USB
+ 	  switching between the dual-role USB-C port and the USB-A host ports
+ 	  using only one USB controller.
+ 
++config SUNPLUS_IOP
++	tristate "Sunplus IOP support"
++	default ARCH_SUNPLUS
++	help
++	  This driver is load 8051 bin code.
++	  The IOP core is DQ8051, so also named IOP8051.
++	  Need Install DQ8051, The DQ8051 bin file generated by keil C.
++	  We will provide users with 8051 normal and power off source code.
++	  Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/
++	  How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source-files-for-IOP
++	  Users can follow the operation steps to generate normal.bin and poweroff.bin.
++	  Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338/26.+IOP8051
++	  26.5?How To Create 8051 bin file
++
++	  PMC in power management purpose:
++	  Add sp_iop_poweroff() function. pm_power_off=sp_iop_poweroff.
++	  When the power off command is executed.
++	  The 8051 has a register(DEF_PWR_EN_0=0) to control the power-on and
++	  power-off of the system.
++
++	  This driver can also be built as a module.  If so, the module
++	  will be called sunplus_iop.
++
+ source "drivers/misc/c2port/Kconfig"
+ source "drivers/misc/eeprom/Kconfig"
+ source "drivers/misc/cb710/Kconfig"
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index a086197..eafeab6 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -52,6 +52,7 @@ obj-$(CONFIG_DW_XDATA_PCIE)	+= dw-xdata-pcie.o
+ obj-$(CONFIG_PCI_ENDPOINT_TEST)	+= pci_endpoint_test.o
+ obj-$(CONFIG_OCXL)		+= ocxl/
+ obj-$(CONFIG_BCM_VK)		+= bcm-vk/
++obj-$(CONFIG_SUNPLUS_IOP)	+= sunplus_iop.o
+ obj-y				+= cardreader/
+ obj-$(CONFIG_PVPANIC)   	+= pvpanic/
+ obj-$(CONFIG_HABANA_AI)		+= habanalabs/
+diff --git a/drivers/misc/sunplus_iop.c b/drivers/misc/sunplus_iop.c
+new file mode 100644
+index 0000000..5bdce5e
+--- /dev/null
++++ b/drivers/misc/sunplus_iop.c
+@@ -0,0 +1,411 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * The IOP driver for Sunplus SP7021
++ *
++ * Copyright (C) 2021 Sunplus Technology Inc.
++ *
++ * All Rights Reserved.
++ */
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/dma-mapping.h>
++#include <linux/firmware.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <linux/of_address.h>
++#include <linux/of_gpio.h>
++
++/* IOP register offset */
++#define IOP_CONTROL	0x00
++#define IOP_DATA0	0x20
++#define IOP_DATA1	0x24
++#define IOP_DATA2	0x28
++#define IOP_DATA3	0x2c
++#define IOP_DATA4	0x30
++#define IOP_DATA5	0x34
++#define IOP_DATA6	0x38
++#define IOP_DATA7	0x3c
++#define IOP_DATA8	0x40
++#define IOP_DATA9	0x44
++#define IOP_DATA10	0x48
++#define IOP_DATA11	0x4c
++#define IOP_BASE_ADR_L	0x50
++#define IOP_BASE_ADR_H	0x54
++
++/* PMC register offset */
++#define IOP_PMC_TIMER		0x00
++#define IOP_PMC_CTRL		0x04
++#define IOP_XTAL27M_PASSWORD_I	0x08
++#define IOP_XTAL27M_PASSWORD_II	0x0c
++#define IOP_XTAL32K_PASSWORD_I	0x10
++#define IOP_XTAL32K_PASSWORD_II	0x14
++#define IOP_CLK27M_PASSWORD_I	0x18
++#define IOP_CLK27M_PASSWORD_II	0x1c
++#define IOP_PMC_TIMER2		0x20
++
++/* Max size of poweroff.bin that can be received */
++#define POWEROFF_CODE_MAX_SIZE 0x4000
++
++/* 8051 informs linux kerenl. 8051 has been switched to poweroff.bin code. */
++#define IOP_READY	0x0004
++#define RISC_READY	0x0008
++
++/* System linux kernel tells 8051 which  gpio pin to wake-up through. */
++#define WAKEUP_PIN	0xFE02
++
++/*
++ * There are 3 power domains in SP7021, AO domain, IOP domain,
++ * Default domain. Default domain is linux kernel system.
++ * System linux kernel tells 8051 to execute power off.
++ */
++#define DEFAULT_DOMAIN_POWEROFF	0x5331 /* AO&IOP domain on, Default domain off */
++#define DEFAULT_AND_IOP_DOMAIN_POWEROFF	0x5333 /* AO domain on, IOP&Default domain off */
++
++struct sp_iop {
++	struct device *dev;
++	struct clk *iopclk;
++	struct reset_control *rstc;
++	void __iomem *iop_regs;
++	void __iomem *pmc_regs;
++	void __iomem *moon0_regs;
++	int irq;
++	int gpio_wakeup;
++	resource_size_t iop_mem_start;
++	resource_size_t iop_mem_size;
++	unsigned char bin_code_mode;
++};
++
++static struct sp_iop *iop_poweroff;
++
++static void sp_iop_load_normal_code(struct sp_iop *iop)
++{
++	const struct firmware *fw;
++	void __iomem *iop_kernel_base;
++	unsigned int reg, err;
++
++	err = request_firmware(&fw, "normal.bin", iop->dev);
++	if (err)
++		dev_err(iop->dev, "get bin file error\n");
++
++	iop_kernel_base = ioremap(iop->iop_mem_start, fw->size);
++	memset(iop_kernel_base, 0, fw->size);
++	memcpy(iop_kernel_base, fw->data, fw->size);
++	release_firmware(fw);
++
++	clk_prepare_enable(iop->iopclk);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg |= 0x01;
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg &= ~(0x8000);
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg |= 0x0200;/* disable watchdog event reset IOP */
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++
++	reg = (iop->iop_mem_start & 0xFFFF);
++	writel(reg, iop->iop_regs + IOP_BASE_ADR_L);
++	reg	= (iop->iop_mem_start >> 16);
++	writel(reg, iop->iop_regs + IOP_BASE_ADR_H);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg &= ~(0x01);
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++	iop->bin_code_mode = 0;
++}
++
++static void sp_iop_load_poweroff_code(struct sp_iop *iop)
++{
++	const struct firmware *fw;
++	void __iomem *iop_kernel_base;
++	unsigned int reg, err;
++
++	err = request_firmware(&fw, "poweroff.bin", iop->dev);
++	if (err)
++		dev_err(iop->dev, "get bin file error\n");
++
++	iop_kernel_base = ioremap(iop->iop_mem_start, POWEROFF_CODE_MAX_SIZE);
++	memset(iop_kernel_base, 0, POWEROFF_CODE_MAX_SIZE);
++	memcpy(iop_kernel_base, fw->data, POWEROFF_CODE_MAX_SIZE);
++	release_firmware(fw);
++
++	clk_prepare_enable(iop->iopclk);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg |= 0x01;
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg &= ~(0x8000);
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg |= 0x0200;/* disable watchdog event reset IOP */
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++
++	reg = (iop->iop_mem_start & 0xFFFF);
++	writel(reg, iop->iop_regs + IOP_BASE_ADR_L);
++	reg = (iop->iop_mem_start >> 16);
++	writel(reg, iop->iop_regs + IOP_BASE_ADR_H);
++
++	reg = readl(iop->iop_regs + IOP_CONTROL);
++	reg &= ~(0x01);
++	writel(reg, iop->iop_regs + IOP_CONTROL);
++	iop->bin_code_mode = 1;
++}
++
++static int sp_iop_default_iop_domain_poweroff(struct device *dev, struct sp_iop *iop)
++{
++	unsigned int reg;
++	int ret, value;
++
++	/* PMC set */
++	writel(0x00010001, iop->pmc_regs + IOP_PMC_TIMER);
++	reg = readl(iop->pmc_regs + IOP_PMC_CTRL);
++	/* disable system reset PMC, enalbe power down IOP Domain, enable gating clock 27Mhz */
++	reg |= 0x23;
++	writel(reg, iop->pmc_regs + IOP_PMC_CTRL);
++
++	writel(0x55aa00ff, iop->pmc_regs + IOP_XTAL27M_PASSWORD_I);
++	writel(0x00ff55aa, iop->pmc_regs + IOP_XTAL27M_PASSWORD_II);
++	writel(0xaa00ff55, iop->pmc_regs + IOP_XTAL32K_PASSWORD_I);
++	writel(0xff55aa00, iop->pmc_regs + IOP_XTAL32K_PASSWORD_II);
++	writel(0xaaff0055, iop->pmc_regs + IOP_CLK27M_PASSWORD_I);
++	writel(0x5500aaff, iop->pmc_regs + IOP_CLK27M_PASSWORD_II);
++	writel(0x01000100, iop->pmc_regs + IOP_PMC_TIMER2);
++
++	reg = readl(iop->moon0_regs + 32 * 4 * 1 + 4 * 2);
++	reg |= 0x08000800;
++	writel(reg, (iop->moon0_regs + 32 * 4 * 1 + 4 * 2));
++
++	writel(WAKEUP_PIN, iop->iop_regs + IOP_DATA0);
++	writel(iop->gpio_wakeup, iop->iop_regs + IOP_DATA1);
++
++	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA2, value,
++				 (value & IOP_READY) == IOP_READY, 1000, 10000);
++	if (ret) {
++		dev_err(dev, "timed out\n");
++		return ret;
++	}
++
++	/*
++	 * IOP_DATA0~11(8051-RSIC mailbox register 0~11)
++	 * Mailbox is register that can be read and written by 8051 and System,
++	 * used to exchange information with system.
++	 * System fill in 0 to mailbox register 5.
++	 * System fill in 0x60 mailbox register 6.
++	 */
++	reg = RISC_READY;
++	writel(reg, iop->iop_regs + IOP_DATA2);
++	reg = 0x0000;
++	writel(reg, iop->iop_regs + IOP_DATA5);
++	reg = 0x0060;
++	writel(reg, iop->iop_regs + IOP_DATA6);
++	/*
++	 * After 8051 reads  mailbox register 5 = 0 and mailbox register 6 = 0x60,
++	 * and fill in 0xaaaa in mailbox register 7.
++	 * System reads mailbox register 7 = 0xaaaa, it can be donfirmed
++	 * that 8051 is executing poweroff code.
++	 */
++	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA7, value,
++				 value == 0xaaaa, 1000, 10000);
++	if (ret) {
++		dev_err(dev, "timed out\n");
++		return ret;
++	}
++
++	/* 8051 bin file call Ultra low function. */
++	writel(0xdd, iop->iop_regs + IOP_DATA1);
++	/*
++	 * When the execution is here, the system linux kernel
++	 * is about to be powered off
++	 * The purpose of mdelay(10): Do not let the system linux
++	 * kernel continue to run other programs.
++	 */
++	mdelay(10);
++	return 0;
++}
++
++static int sp_iop_default_domain_poweroff(struct device *dev, struct sp_iop *iop)
++{
++	int ret, value;
++
++	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA2, value,
++				 (value & IOP_READY) == IOP_READY, 1000, 10000);
++	if (ret) {
++		dev_err(dev, "timed out\n");
++		return ret;
++	}
++	/*
++	 * IOP_DATA0~11(8051-RSIC mailbox register 0~11)
++	 * Mailbox is register that can be read and written by 8051 and System,
++	 * used to exchange information with system.
++	 * System fill in 0 to mailbox register 5.
++	 * System fill in 0x60 mailbox register 6.
++	 */
++	writel(RISC_READY, iop->iop_regs + IOP_DATA2);
++	writel(0x0000, iop->iop_regs + IOP_DATA5);
++	writel(0x0060, iop->iop_regs + IOP_DATA6);
++	/*
++	 * After 8051 reads  mailbox register 5 = 0 and mailbox register 6 = 0x60,
++	 * and fill in 0xaaaa in mailbox register 7.
++	 * System reads mailbox register 7 = 0xaaaa, it can be donfirmed
++	 * that 8051 is executing poweroff code.
++	 */
++	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA7, value,
++				 value == 0xaaaa, 1000, 10000);
++	if (ret) {
++		dev_err(dev, "timed out\n");
++		return ret;
++	}
++
++	/* 8051 bin file call poweroff function. */
++	writel(0xee, iop->iop_regs + IOP_DATA1);
++	/*
++	 * When the execution is here, the system linux kernel
++	 * is about to be powered off
++	 * The purpose of mdelay(10): Do not let the system linux
++	 * kernel continue to run other programs.
++	 */
++	mdelay(10);
++	return 0;
++}
++
++static void sp_iop_poweroff(void)
++{
++	struct sp_iop *iop = iop_poweroff;
++	unsigned int ret, value;
++
++	value = readl(iop->iop_regs + IOP_DATA11);
++	/*
++	 * When system linux kernel is power off, 8051 is to execute poweroff.bin code.
++	 * Standby.bin code cannot exceed 16K bytes. Because 8051 Icache size is 16k.
++	 * 8051 runs with poweroff.bin code in the Icache before the system(linux kernel)
++	 * is poweroff.
++	 */
++	sp_iop_load_poweroff_code(iop);
++
++	ret = readl_poll_timeout(iop->iop_regs + IOP_DATA0, value,
++				 value == 0x2222, 1000, 100000);
++	if (ret)
++		dev_warn(iop->dev, "timed out\n");
++
++	if (value == DEFAULT_DOMAIN_POWEROFF)
++		sp_iop_default_domain_poweroff(iop->dev, iop);
++	else
++		sp_iop_default_iop_domain_poweroff(iop->dev, iop);
++}
++
++static int sp_iop_get_resources(struct platform_device *pdev, struct sp_iop *p_sp_iop_info)
++{
++	struct resource *r;
++
++	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "iop");
++	p_sp_iop_info->iop_regs = devm_ioremap_resource(&pdev->dev, r);
++	if (IS_ERR(p_sp_iop_info->iop_regs)) {
++		dev_err(&pdev->dev, "ioremap fail\n");
++		return PTR_ERR(p_sp_iop_info->iop_regs);
++	}
++
++	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "iop_pmc");
++	p_sp_iop_info->pmc_regs = devm_ioremap_resource(&pdev->dev, r);
++	if (IS_ERR(p_sp_iop_info->pmc_regs)) {
++		dev_err(&pdev->dev, "ioremap fail\n");
++		return PTR_ERR(p_sp_iop_info->pmc_regs);
++	}
++
++	r = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon0");
++	p_sp_iop_info->moon0_regs = devm_ioremap_resource(&pdev->dev, r);
++	if (IS_ERR(p_sp_iop_info->moon0_regs)) {
++		dev_err(&pdev->dev, "ioremap fail\n");
++		return PTR_ERR(p_sp_iop_info->moon0_regs);
++	}
++	return 0;
++}
++
++static int sp_iop_platform_driver_probe(struct platform_device *pdev)
++{
++	int ret = -ENXIO;
++	int rc;
++	struct sp_iop *iop;
++	struct device_node *memnp;
++	struct resource mem_res;
++
++	iop = devm_kzalloc(&pdev->dev, sizeof(struct sp_iop), GFP_KERNEL);
++	if (!iop) {
++		ret = -ENOMEM;
++		goto fail_kmalloc;
++	}
++
++	ret = sp_iop_get_resources(pdev, iop);
++
++	/* Get reserve address. */
++	memnp = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
++	if (!memnp) {
++		dev_err(&pdev->dev, "no memory-region node\n");
++		return -EINVAL;
++	}
++
++	rc = of_address_to_resource(memnp, 0, &mem_res);
++	of_node_put(memnp);
++	if (rc) {
++		dev_err(&pdev->dev, "failed to translate memory-region to a resource\n");
++		return -EINVAL;
++	}
++
++	iop->dev = &pdev->dev;
++	iop->iop_mem_start = mem_res.start;
++	iop->iop_mem_size = resource_size(&mem_res);
++	iop->iopclk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(iop->iopclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(iop->iopclk),
++					    "devm_clk_get fail\n");
++
++	/*
++	 * 8051 has two bin files, normal.bin and poweroff.bin in rootfs.
++	 * Normally, 8051 executes normal.bin code. Normal.bin code size can exceed 16K.
++	 */
++	sp_iop_load_normal_code(iop);
++
++	platform_set_drvdata(pdev, iop);
++	iop->gpio_wakeup = of_get_named_gpio(pdev->dev.of_node, "iop-wakeup", 0);
++	iop_poweroff = iop;
++	pm_power_off = sp_iop_poweroff;
++
++	return 0;
++
++fail_kmalloc:
++	return ret;
++}
++
++static int sp_iop_remove(struct platform_device *pdev)
++{
++	pm_power_off = NULL;
++	return 0;
++}
++
++static const struct of_device_id sp_iop_of_match[] = {
++	{ .compatible = "sunplus,sp7021-iop" },
++	{ /* sentinel */ },
++};
++
++MODULE_DEVICE_TABLE(of, sp_iop_of_match);
++
++static struct platform_driver sp_iop_platform_driver = {
++	.probe		= sp_iop_platform_driver_probe,
++	.remove		= sp_iop_remove,
++	.driver = {
++		.name	= "sunplus,sp7021-iop",
++		.of_match_table = sp_iop_of_match,
++	}
++};
++
++module_platform_driver(sp_iop_platform_driver);
++
++MODULE_AUTHOR("Tony Huang <tonyhuang.sunplus@gmail.com>");
++MODULE_DESCRIPTION("Sunplus IOP Driver");
++MODULE_LICENSE("GPL v2");
 -- 
 2.7.4
 

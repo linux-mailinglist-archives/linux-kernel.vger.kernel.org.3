@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E776F4D714A
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 23:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8BF4D714C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 23:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiCLW24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 17:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S232829AbiCLWm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 17:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiCLW2z (ORCPT
+        with ESMTP id S230380AbiCLWmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 17:28:55 -0500
-Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDB012AE3
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 14:27:48 -0800 (PST)
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay13.hostedemail.com (Postfix) with ESMTP id D544D603B9;
-        Sat, 12 Mar 2022 22:27:46 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 927AA80011;
-        Sat, 12 Mar 2022 22:27:45 +0000 (UTC)
-Message-ID: <05dbfbd2670e2b28229d0ab96c1bd99787d4a187.camel@perches.com>
-Subject: Re: [PATCH] drm/v3d: Use kvcalloc
-From:   Joe Perches <joe@perches.com>
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     dan.carpenter@oracle.com, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Sat, 12 Mar 2022 14:27:44 -0800
-In-Reply-To: <20220312152656.51625-1-harshit.m.mogalapalli@oracle.com>
-References: <20220312152656.51625-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 12 Mar 2022 17:42:54 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B581C2F78;
+        Sat, 12 Mar 2022 14:41:48 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E854422239;
+        Sat, 12 Mar 2022 23:41:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647124906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=41OBeTclfUqu9E10Glc2yaP92LM2mbCEsKFyGzia5ns=;
+        b=Bcn6TJQ5PIRq9iL30BAkPa0a8pZNAeeweCiUUFVv+KPsAq9+0DdqDKkFsyjIS7dpq4sim6
+        C+/u3gQgAL2fZqiP748QRXdhRJ2zkqBpLsk1qEF5tOZqGeDzmw8ZZHFI7M/gwtxYO8wnBt
+        3d1Oull4pGs6zUkgaUiE8/unIaV7tJk=
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net] net: mdio: mscc-miim: fix duplicate debugfs entry
+Date:   Sat, 12 Mar 2022 23:41:40 +0100
+Message-Id: <20220312224140.4173930-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 927AA80011
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: fpmtk5ye341iyaf6udwzfgyky1pez8ws
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18grHNWCCtKCR1M4ZlyWIVxGMpFIRxX0Fs=
-X-HE-Tag: 1647124065-574508
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-03-12 at 07:26 -0800, Harshit Mogalapalli wrote:
-> kvcalloc is same as kvmalloc_array + __GFP_ZERO.
-[]
-> diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
-[]
-> @@ -308,9 +308,8 @@ v3d_lookup_bos(struct drm_device *dev,
->  		return -EINVAL;
->  	}
->  
-> -	job->bo = kvmalloc_array(job->bo_count,
-> -				 sizeof(struct drm_gem_cma_object *),
-> -				 GFP_KERNEL | __GFP_ZERO);
-> +	job->bo = kvcalloc(job->bo_count, sizeof(struct drm_gem_cma_object *),
-> +			   GFP_KERNEL);
->  	if (!job->bo) {
->  		DRM_DEBUG("Failed to allocate validated BO pointers\n");
->  		return -ENOMEM;
+This driver can have up to two regmaps. If the second one is registered
+its debugfs entry will have the same name as the first one and the
+following error will be printed:
 
-trivia:
+[    3.833521] debugfs: Directory 'e200413c.mdio' with parent 'regmap' already present!
 
-The DRM_DEBUG could also be removed as the the alloc will do a
-a dump_stack on failure.
+Give the second regmap a name to avoid this.
 
+Fixes: a27a76282837 ("net: mdio: mscc-miim: convert to a regmap implementation")
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/net/mdio/mdio-mscc-miim.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/mdio/mdio-mscc-miim.c b/drivers/net/mdio/mdio-mscc-miim.c
+index dfd7f3001a15..fc5655328b1f 100644
+--- a/drivers/net/mdio/mdio-mscc-miim.c
++++ b/drivers/net/mdio/mdio-mscc-miim.c
+@@ -197,6 +197,13 @@ static const struct regmap_config mscc_miim_regmap_config = {
+ 	.reg_stride	= 4,
+ };
+ 
++static const struct regmap_config mscc_miim_phy_regmap_config = {
++	.reg_bits	= 32,
++	.val_bits	= 32,
++	.reg_stride	= 4,
++	.name		= "phy",
++};
++
+ int mscc_miim_setup(struct device *dev, struct mii_bus **pbus, const char *name,
+ 		    struct regmap *mii_regmap, int status_offset)
+ {
+@@ -260,7 +267,7 @@ static int mscc_miim_probe(struct platform_device *pdev)
+ 		}
+ 
+ 		phy_regmap = devm_regmap_init_mmio(&pdev->dev, phy_regs,
+-						   &mscc_miim_regmap_config);
++						   &mscc_miim_phy_regmap_config);
+ 		if (IS_ERR(phy_regmap)) {
+ 			dev_err(&pdev->dev, "Unable to create phy register regmap\n");
+ 			return PTR_ERR(phy_regmap);
+-- 
+2.30.2
 

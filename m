@@ -2,177 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC18C4D6C1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 03:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14724D6C1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 03:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiCLCuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 21:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S230131AbiCLCtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 21:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiCLCuO (ORCPT
+        with ESMTP id S229505AbiCLCtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 21:50:14 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD4A117CB9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 18:49:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647053349; x=1678589349;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bh/vl/5slwpWD89rHRoLv3V3kmSfGbWWI8kWD0Cu+/I=;
-  b=Qtn5TZ6tSGGf0phw8gqjIF72pmDlyiJqqejvnbr0Cr94/Wl9tfyS9IKE
-   XpUpSetloUSu0UfNYvpdgdWVi7xQ7lRNg+/Ilcq65lOC/KNNS+i/WBhB2
-   ayAsuaaEgl5ZFHWBkl+8ni2tAKjvrAmags+RtIXh7vkmcqjfKJ7CxVWS/
-   gMpNW6FTu6BU3LpIhnDXNQSmaWorDOqFMoC6vT9zJKZc49gw/NFX2DXrn
-   er8X+dAaDvyfWsZjtxImAzCHnqt+SeIelu+PQvdRqteX02IbgQqb+ouI+
-   bSXgjoABL/TGBXw6u0du5Im542JqiXZeCTshFPC/+81KHcjS5AD4Lpm2s
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255454712"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="255454712"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 18:49:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="496984962"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 18:49:07 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSroY-0007Qf-VE; Sat, 12 Mar 2022 02:49:06 +0000
-Date:   Sat, 12 Mar 2022 10:48:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- a0a7e453b502cbbf7ff372f907a4e27a2ebf5445
-Message-ID: <622c09e8.NEu6SThXYjclw7iv%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 11 Mar 2022 21:49:36 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE65132942;
+        Fri, 11 Mar 2022 18:48:32 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id q13so9121553plk.12;
+        Fri, 11 Mar 2022 18:48:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=/QbyG5b+gu58LmSy08Yok7CVH6tbIv8OI8nBcPnh//o=;
+        b=VGCvYKe86Qmt0bozZS/+t8wm2hRX+gn0qMv82VM4J+ZgD3yDNbZj/cvmraaFVLXz44
+         ST1xhsD5eUCTrFc/seeYdpC1nyr0r2oc9efFLe4As1YPesDY+oNshx9IRMsZWmhedv5f
+         roUovRnrMBrWrNKA0OBIQ2YDOETa8qCAOlJzYqgt2A6mW1fMiiOIvvsx7T0hqoGpWm6y
+         cgRRSU3Ct0qvbULzQhTKHjBQmzyBDp7ipdjYh8I2/JZd6R4fsaLYcD+mkoQjAaaa0wz2
+         1qZ9byifv3byyNRkLuPcyJ8Vzv9dOHn/NHvBFS8SOeuib0wQnIBDiEC9iWFtHMKq3Sda
+         askg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=/QbyG5b+gu58LmSy08Yok7CVH6tbIv8OI8nBcPnh//o=;
+        b=6Fxhetzk3NpsX9UlDr6p63rYH7ldSpbQtXB58/ERr1lWKDwGomxb/nnmSpCM8L2Vsj
+         01IZdRHVcF9QogfFG3U41FIFTzbn61XCGEXsh8C1D/R4E/WDkqvplQTX+yMD4NFEu6U1
+         RysDq96gUnzVoxZmVf6pKnw6MzOIspARdaHShzExFMw5wP3lkrsqmXlh54+nqImlzUIi
+         ANorpyl68q29pG9WH0iL0sTxhpYHJUmyuRNlUVaNFXgDW8QfX+6i/rK3FLPGp3DRnIzl
+         21r1+gEBmV2TgjFb780X2GPIEthYVx/4QfbW/wI+M5GjQZ/F0BEszhOCQxWvVBdbbDWJ
+         VFcg==
+X-Gm-Message-State: AOAM533cJ+blCBTkBLdT5Z9c4KqSi5WoZjLKn0ocnmzSx9S6uum4rBYK
+        /wmf6XBmVxa2hx9Tq8zIag4=
+X-Google-Smtp-Source: ABdhPJz3J7O/rNgX0CpFlkzK7uDxO5Fx+Y+H+FeHN0n/8IZsGArnxxnU2d7UsdpojmXRt/YWwQ9p0A==
+X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id m17-20020a17090a859100b001b9da102127mr25128598pjn.13.1647053311967;
+        Fri, 11 Mar 2022 18:48:31 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id x18-20020a63b212000000b003807411b89esm9685936pge.54.2022.03.11.18.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 18:48:31 -0800 (PST)
+Date:   Fri, 11 Mar 2022 18:48:28 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Woojung.Huh@microchip.com
+Cc:     linux@armlinux.org.uk, Horatiu.Vultur@microchip.com,
+        andrew@lunn.ch, Divya.Koppera@microchip.com,
+        netdev@vger.kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220312024828.GA15046@hoboy.vegasvil.org>
+References: <CO1PR11MB4771F7C1819E033EC613E262E2099@CO1PR11MB4771.namprd11.prod.outlook.com>
+ <YidgHT8CLWrmhbTW@lunn.ch>
+ <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
+ <YiecBKGhVui1Gtb/@lunn.ch>
+ <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
+ <YifoltDp4/Fs+9op@lunn.ch>
+ <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
+ <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
+ <20220309195252.GB9663@hoboy.vegasvil.org>
+ <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: a0a7e453b502cbbf7ff372f907a4e27a2ebf5445  sched/preempt: Tell about PREEMPT_DYNAMIC on kernel headers
+On Fri, Mar 11, 2022 at 03:21:58PM +0000, Woojung.Huh@microchip.com wrote:
 
-elapsed time: 720m
+> If you are referring to the delayAsymmetry of ptp4l,
 
-configs tested: 93
-configs skipped: 3
+No, really, I'm not.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+       PTP4l(8)                    System Manager's Manual                   PTP4l(8)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm                           h3600_defconfig
-riscv                            allmodconfig
-powerpc                 mpc85xx_cds_defconfig
-mips                           gcw0_defconfig
-sh                        apsh4ad0a_defconfig
-m68k                           sun3_defconfig
-powerpc                 mpc834x_mds_defconfig
-sh                   sh7724_generic_defconfig
-m68k                          amiga_defconfig
-sh                            migor_defconfig
-m68k                        mvme16x_defconfig
-arc                           tb10x_defconfig
-arm                           viper_defconfig
-powerpc                       ppc64_defconfig
-ia64                      gensparse_defconfig
-mips                      fuloong2e_defconfig
-arm                  randconfig-c002-20220310
-arm                  randconfig-c002-20220312
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+       NAME
+           ptp4l - PTP Boundary/Ordinary/Transparent Clock
 
-clang tested configs:
-arm                  randconfig-c002-20220310
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220310
-riscv                randconfig-c006-20220310
-mips                 randconfig-c004-20220310
-i386                          randconfig-c001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220310
-hexagon              randconfig-r041-20220310
-riscv                randconfig-r042-20220310
+       ...
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+       egressLatency
+              Specifies  the  difference  in  nanoseconds  between  the actual
+              transmission time at the reference plane and the reported trans‐
+              mit  time  stamp. This value will be added to egress time stamps
+              obtained from the hardware.  The default is 0.
+
+       ingressLatency
+              Specifies the difference in nanoseconds between the reported re‐
+              ceive  time  stamp  and  the  actual reception time at reference
+              plane. This value will be subtracted from  ingress  time  stamps
+              obtained from the hardware.  The default is 0.
+
+> So, this latency should (hopefully) be not-much-change in the same board after manufactured. 
+
+Please read the papers on this topic.  I posted links in another reply
+in this thread.
+
+> Of cause, all values may be small enough to ignore though.
+> Do I miss something here?
+
+Yes, you miss the point entirely.  PHY delays are relatively large and
+cannot be even measured in some cases.  However, for well behaved
+PHYs, the user space stack already covers the configuration.
+
+Thanks,
+Richard

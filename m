@@ -2,187 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFEE4D6B48
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 01:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFDD4D6B4B
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 01:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiCLAIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 19:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S229693AbiCLAJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 19:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiCLAID (ORCPT
+        with ESMTP id S229448AbiCLAJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 19:08:03 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E54C14089
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:06:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647043619; x=1678579619;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uP2bQMi7foToz6URoboXiSv1BaDOD/4DPEY+RqnK/qc=;
-  b=bdbfFaspXdue9aXWVoSeEduUoDKi9CSvaftdg83Rj+hezLz0XsxvlELH
-   56XUZOa0LJ4UbgkKUimNhLq6bLiTnEstDQF9UKfSNQeByX11oL8IT/VHO
-   cJmLGu29G/AKb5o8IW/lLpvD5Y71bEDounCMd4XU+ADofguL1Ybmw+3O3
-   1lj2sAHD9vrfOHeWLKSXZUO5gTK5C/N4qeKg+1nL42gBgjX823insNg6s
-   zHm2xrl+STzm/A5dMPYe2dgEbXXm2B/pWkni2zgr82b5eq5PgtvQbAJUR
-   lxww5QFzqLK8opLzXhqw1stIlkbroTCHpskGgPmUcPGfPgEERt44925Mp
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="342104585"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="342104585"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 16:06:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="511546906"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Mar 2022 16:06:57 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSpHc-0007J4-Tu; Sat, 12 Mar 2022 00:06:56 +0000
-Date:   Sat, 12 Mar 2022 08:06:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: src/utils.c:6:10: fatal error: proc/readproc.h: No such file or
- directory
-Message-ID: <202203120738.FgJwp7oP-lkp@intel.com>
+        Fri, 11 Mar 2022 19:09:57 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FF622635A;
+        Fri, 11 Mar 2022 16:08:50 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id u30-20020a4a6c5e000000b00320d8dc2438so12373196oof.12;
+        Fri, 11 Mar 2022 16:08:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O+ZowuaGpChH9k7dXrO+pQwCk5UuyOxTNI7OLQVdPlw=;
+        b=HnogdFWeuUfOHy4wp4FG9lhBQrDHhAlNHvBlkQntWIKWP1d7OR41oEThEUnuq8qCkq
+         hoGNrxRs2reFTEynEoAuKk/7UauHhjtGIMGcbCeOWRiLYBGaeV5hroxfTc1qSksIY2QW
+         zW3y3XOOOdB1t7Y3k/ExGUpcTq8Kif1rF7pyTJQXDeGtm2FJxi9MtV+Cxmr0xPcXEue2
+         WuICvwAWWL9R50QjJi/2PrMJ+J5J0q/mDgq9s4iLMNb3ACgFWpiTNQih+i/FIWVVs57a
+         qwuEoSSDzdiWNjjO6/G7WjG6hsEz7+w0toJmU7/X9hMVsyrppfeZmbKuavxkolCRKph7
+         POaw==
+X-Gm-Message-State: AOAM5334pxmx8Oh1VRp/TwDkmdzEp05zfzjjA6PKool13eCe5uDZ/lwy
+        HzkJboHmd2r4t6aWei+voA==
+X-Google-Smtp-Source: ABdhPJxKJfen2kigP0gnh/8VFptrw0maG5VWC2hBhKLIhJu+QNoF9eXdi5I/avYm4FAyN1IQGZsxTg==
+X-Received: by 2002:a05:6871:890:b0:da:6895:1b41 with SMTP id r16-20020a056871089000b000da68951b41mr12065172oaq.74.1647043729574;
+        Fri, 11 Mar 2022 16:08:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p21-20020a4a2f15000000b00320fca09b74sm4282072oop.1.2022.03.11.16.08.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 16:08:48 -0800 (PST)
+Received: (nullmailer pid 445165 invoked by uid 1000);
+        Sat, 12 Mar 2022 00:08:47 -0000
+Date:   Fri, 11 Mar 2022 18:08:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: Add power-efuse binding
+Message-ID: <YivkjyFhpW61VmJ2@robh.at.kernel.org>
+References: <20220308011811.10353-1-zev@bewilderbeest.net>
+ <20220308011811.10353-2-zev@bewilderbeest.net>
+ <YitpuR+SlDiKh4eq@robh.at.kernel.org>
+ <YivDpkajrJk3KfBM@hatter.bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YivDpkajrJk3KfBM@hatter.bewilderbeest.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   68453767131a5deec1e8f9ac92a9042f929e585d
-commit: e9380df851878cee71df5a1c7611584421527f7e ACPI: Add stubs for wakeup handler functions
-date:   4 months ago
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220312/202203120738.FgJwp7oP-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e9380df851878cee71df5a1c7611584421527f7e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e9380df851878cee71df5a1c7611584421527f7e
-        # save the config file to linux build tree
-        make W=1 ARCH=x86_64 SHELL=/bin/bash tools/all
+On Fri, Mar 11, 2022 at 01:48:22PM -0800, Zev Weiss wrote:
+> On Fri, Mar 11, 2022 at 07:24:41AM PST, Rob Herring wrote:
+> > On Mon, Mar 07, 2022 at 05:18:09PM -0800, Zev Weiss wrote:
+> > > This can be used to describe a power output supplied by a regulator
+> > > device that the system controls.
+> > > 
+> > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> > > ---
+> > >  .../devicetree/bindings/misc/power-efuse.yaml | 49 +++++++++++++++++++
+> > >  1 file changed, 49 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+> > > new file mode 100644
+> > > index 000000000000..5f8f0b21af0e
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+> > > @@ -0,0 +1,49 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Generic power efuse device
+> > > +
+> > > +maintainers:
+> > > +  - Zev Weiss <zev@bewilderbeest.net>
+> > > +
+> > > +description: |
+> > > +  This binding describes a physical power output supplied by a
+> > > +  regulator providing efuse functionality (manual on/off control, and
+> > > +  auto-shutoff if current, voltage, or thermal limits are exceeded).
+> > > +
+> > > +  These may be found on systems such as "smart" network PDUs, and
+> > > +  typically supply power to devices entirely separate from the system
+> > > +  described by the device-tree by way of an external connector such as
+> > > +  an Open19 power cable:
+> > > +
+> > > +  https://www.open19.org/marketplace/coolpower-cable-assembly-8ru/
+> > 
+> > Not really a helpful link...
+> > 
+> > I still don't understand what the h/w looks like here. At least I now
+> > understand we're talking a fuse on power rail, not efuses in an SoC
+> > used as OTP bits or feature disables.
+> > 
+> 
+> The systems this would actually be used for would be things like these:
+>  - https://www.open19.org/marketplace/delta-16kw-power-shelf/
+>  - https://www.open19.org/marketplace/inspur-open19-power-shelf-ob19200l1/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Those still don't help show me what the h/w looks like. High level 
+schematics is what I'm looking for.
 
-All errors (new ones prefixed by >>):
 
->> src/utils.c:6:10: fatal error: proc/readproc.h: No such file or directory
-       6 | #include <proc/readproc.h>
-         |          ^~~~~~~~~~~~~~~~~
-   compilation terminated.
-   make[4]: *** [<builtin>: src/utils.o] Error 1
-   make[4]: *** Waiting for unfinished jobs....
-   src/osnoise.c: In function 'osnoise_init_trace_tool':
-   src/osnoise.c:805:11: warning: implicit declaration of function 'tracefs_event_enable'; did you mean 'tracefs_event_systems'? [-Wimplicit-function-declaration]
-     805 |  retval = tracefs_event_enable(trace->trace.inst, "osnoise", NULL);
-         |           ^~~~~~~~~~~~~~~~~~~~
-         |           tracefs_event_systems
-   src/trace.c: In function 'enable_tracer_by_name':
-   src/trace.c:18:23: error: storage size of 'tracer' isn't known
-      18 |  enum tracefs_tracers tracer;
-         |                       ^~~~~~
-   src/trace.c:21:11: error: 'TRACEFS_TRACER_CUSTOM' undeclared (first use in this function)
-      21 |  tracer = TRACEFS_TRACER_CUSTOM;
-         |           ^~~~~~~~~~~~~~~~~~~~~
-   src/trace.c:21:11: note: each undeclared identifier is reported only once for each function it appears in
-   src/trace.c:25:11: warning: implicit declaration of function 'tracefs_tracer_set'; did you mean 'tracefs_tracers'? [-Wimplicit-function-declaration]
-      25 |  retval = tracefs_tracer_set(inst, tracer, tracer_name);
-         |           ^~~~~~~~~~~~~~~~~~
-         |           tracefs_tracers
-   src/trace.c:18:23: warning: unused variable 'tracer' [-Wunused-variable]
-      18 |  enum tracefs_tracers tracer;
-         |                       ^~~~~~
-   src/trace.c: In function 'disable_tracer':
-   src/trace.c:42:7: error: variable 't' has initializer but incomplete type
-      42 |  enum tracefs_tracers t = TRACEFS_TRACER_NOP;
-         |       ^~~~~~~~~~~~~~~
-   src/trace.c:42:27: error: 'TRACEFS_TRACER_NOP' undeclared (first use in this function)
-      42 |  enum tracefs_tracers t = TRACEFS_TRACER_NOP;
-         |                           ^~~~~~~~~~~~~~~~~~
-   src/trace.c:42:23: error: storage size of 't' isn't known
-      42 |  enum tracefs_tracers t = TRACEFS_TRACER_NOP;
-         |                       ^
-   src/trace.c:42:23: warning: unused variable 't' [-Wunused-variable]
-   src/osnoise_hist.c: In function 'osnoise_destroy_trace_hist':
-   src/osnoise_hist.c:151:2: warning: implicit declaration of function 'tracefs_hist_pause'; did you mean 'tracefs_list_free'? [-Wimplicit-function-declaration]
-     151 |  tracefs_hist_pause(tool->trace.inst, data->trace_hist);
-         |  ^~~~~~~~~~~~~~~~~~
-         |  tracefs_list_free
-   src/trace.c: In function 'save_trace_to_file':
-   src/trace.c:78:10: warning: implicit declaration of function 'tracefs_instance_file_open'; did you mean 'tracefs_instance_file_read'? [-Wimplicit-function-declaration]
-      78 |  in_fd = tracefs_instance_file_open(inst, file, O_RDONLY);
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |          tracefs_instance_file_read
-   src/osnoise_hist.c:152:2: warning: implicit declaration of function 'tracefs_hist_destroy'; did you mean 'tracefs_instance_destroy'? [-Wimplicit-function-declaration]
-     152 |  tracefs_hist_destroy(tool->trace.inst, data->trace_hist);
-         |  ^~~~~~~~~~~~~~~~~~~~
-         |  tracefs_instance_destroy
-   src/trace.c:78:49: error: 'O_RDONLY' undeclared (first use in this function)
-      78 |  in_fd = tracefs_instance_file_open(inst, file, O_RDONLY);
-         |                                                 ^~~~~~~~
-   src/osnoise_hist.c: In function 'osnoise_init_trace_hist':
-   src/osnoise_hist.c:172:21: warning: implicit declaration of function 'tracefs_hist_alloc'; did you mean 'tracefs_get_clock'? [-Wimplicit-function-declaration]
-     172 |  data->trace_hist = tracefs_hist_alloc(tool->trace.tep, "osnoise", "sample_threshold",
-         |                     ^~~~~~~~~~~~~~~~~~
-         |                     tracefs_get_clock
-   src/trace.c:84:11: warning: implicit declaration of function 'creat' [-Wimplicit-function-declaration]
-      84 |  out_fd = creat(filename, mode);
-         |           ^~~~~
-   src/trace.c: In function 'trace_instance_init':
-   src/trace.c:177:2: warning: implicit declaration of function 'tracefs_trace_off'; did you mean 'tracefs_tracers'? [-Wimplicit-function-declaration]
-     177 |  tracefs_trace_off(trace->inst);
-         |  ^~~~~~~~~~~~~~~~~
-         |  tracefs_tracers
-   src/trace.c: In function 'trace_instance_start':
-   src/trace.c:191:9: warning: implicit declaration of function 'tracefs_trace_on'; did you mean 'tracefs_tracers'? [-Wimplicit-function-declaration]
-     191 |  return tracefs_trace_on(trace->inst);
-         |         ^~~~~~~~~~~~~~~~
-         |         tracefs_tracers
-   src/osnoise_hist.c:173:10: error: 'TRACEFS_HIST_KEY_NORMAL' undeclared (first use in this function)
-     173 |    buff, TRACEFS_HIST_KEY_NORMAL);
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-   src/osnoise_hist.c:173:10: note: each undeclared identifier is reported only once for each function it appears in
-   src/osnoise_hist.c:177:11: warning: implicit declaration of function 'tracefs_hist_add_key'; did you mean 'tracefs_list_free'? [-Wimplicit-function-declaration]
-     177 |  retval = tracefs_hist_add_key(data->trace_hist, "cpu", 0);
-         |           ^~~~~~~~~~~~~~~~~~~~
-         |           tracefs_list_free
-   make[4]: *** [<builtin>: src/trace.o] Error 1
-   src/osnoise_hist.c:181:11: warning: implicit declaration of function 'tracefs_hist_start'; did you mean 'tracefs_list_free'? [-Wimplicit-function-declaration]
-     181 |  retval = tracefs_hist_start(tool->trace.inst, data->trace_hist);
-         |           ^~~~~~~~~~~~~~~~~~
-         |           tracefs_list_free
-   src/osnoise_hist.c: In function 'osnoise_read_trace_hist':
-   src/osnoise_hist.c:203:12: warning: implicit declaration of function 'tracefs_event_file_read'; did you mean 'tracefs_instance_file_read'? [-Wimplicit-function-declaration]
-     203 |  content = tracefs_event_file_read(tool->trace.inst, "osnoise",
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
-         |            tracefs_instance_file_read
-   src/osnoise_hist.c:203:10: warning: assignment to 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     203 |  content = tracefs_event_file_read(tool->trace.inst, "osnoise",
-         |          ^
-   src/timerlat_hist.c: In function 'timerlat_hist_main':
-   src/timerlat_hist.c:798:8: warning: implicit declaration of function 'tracefs_trace_is_on'; did you mean 'tracefs_tracers'? [-Wimplicit-function-declaration]
-     798 |   if (!tracefs_trace_is_on(trace->inst))
-         |        ^~~~~~~~~~~~~~~~~~~
-         |        tracefs_tracers
-   src/osnoise_hist.c: In function 'osnoise_hist_main':
-   src/osnoise_hist.c:774:8: warning: implicit declaration of function 'tracefs_trace_is_on'; did you mean 'tracefs_tracers'? [-Wimplicit-function-declaration]
-     774 |   if (!tracefs_trace_is_on(trace->inst))
+> The rightmost pictures on those pages show the four black connectors where
+> the cable assembly linked in the patch plugs in, each of which provides the
+> outputs from 12 such efuses, on 12 pairs of ground and +12VDC pins.  (There
+> are also two more single outputs off to the side.)
+> 
+> It essentially just amounts to an external power output supplied by a
+> regulator, with the regulator providing an on/off switch, overcurrent
+> protection, etc.
+> 
+> And yes, the ambiguity of the "efuse" terminology is unfortunate (the
+> "power-" prefix was an attempt to clarify it slightly).  That's the term
+> used in the documentation for the hardware and hence is what I've called it
+> here, but I'd be open to using a different name if that would help.
+> 
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: power-efuse
+> > > +
+> > > +  vout-supply:
+> > > +    description:
+> > > +      phandle to the regulator providing power for the efuse
+> > 
+> > Vout is a supply to the efuse and not the rail being fused?
+> 
+> Yeah, that was a fairly muddled description -- it's really the latter.
+> Perhaps:
+> 
+>   phandle to the regulator providing power for the output rail
+>   controlled by the efuse
+> 
+> ?
+> 
+> > 
+> > Sorry, I know nothing about how an efuse is implemented so you are going
+> > to have to explain or draw it.
+> > 
+> > > +
+> > > +  error-flags-cache-ttl-ms:
+> > > +    description:
+> > > +      The number of milliseconds the vout-supply regulator's error
+> > > +      flags should be cached before re-fetching them.
+> > 
+> > How does one fetch/read? the error flags?
+> > 
+> 
+> In the specific case I'm dealing with, via PMBus STATUS_* commands, though I
+> was aiming to keep this more generic so it could potentially be used to
+> describe non-PMBus arrangements (in the Linux case, via whatever mechanism
+> the implementation of the regulator's .get_error_flags() function uses).
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+PMBus is I2C (subset). What device(s) is on the PMBus?
+
+Here's what I've got for connections so far:
+
+Vout(regulator)-->|efuse|-->12V
+
+Host-->PMbus--->????
+
+Rob

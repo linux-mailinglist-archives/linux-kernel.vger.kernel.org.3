@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBBE4D6D2C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 08:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D25B4D6D2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 08:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiCLHE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 02:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S231148AbiCLHFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 02:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiCLHEX (ORCPT
+        with ESMTP id S229480AbiCLHFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 02:04:23 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A3C16A5A9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 23:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647068597; x=1678604597;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mq+yxatIfFg6Adkr4V+wz6SUO06zkgbVREe2zAP6jdk=;
-  b=KiC2xnsjz/m9GGa/q/rdDv3G/nX+6p0bxUiesoMxvopU1YkrD3c2zyvY
-   XUV3DzNK0OY+Ip9JdpgZer0mf5DQrTSququgcKLJZ/dwrdeh3XDMVa3v6
-   t7xJ5KR/F+91ZD5FkdkbwG116691KlL2r/LKygptCj0/EsBni78uD0d8/
-   ro0atT0BJiVwrRBGNePuZvZAlUY0MsaDDX84mNnaMIlalHa4bPggHDa2D
-   eeysbJw6HBhVtrwkaTSCBl4Rz22TFrTs55wWcBMsF4TyaXdZA0lF0Nc4j
-   VccBcRXRAh8HpoFCUhET6gJ0DABytSGoMc+IY/g1lypdRKKY97cLh2KFJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="255717228"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="255717228"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 23:03:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="514804860"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2022 23:03:14 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSvmU-0007eC-8J; Sat, 12 Mar 2022 07:03:14 +0000
-Date:   Sat, 12 Mar 2022 15:02:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Kai Huang <kai.huang@linux.intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: [intel-tdx:kvm 114/195] arch/x86/kvm/vmx/common.h: tdx.h is included
- more than once.
-Message-ID: <202203121540.sZcSHg7j-lkp@intel.com>
+        Sat, 12 Mar 2022 02:05:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0EC27E8B7;
+        Fri, 11 Mar 2022 23:04:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7CDC60C05;
+        Sat, 12 Mar 2022 07:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4BCC340EB;
+        Sat, 12 Mar 2022 07:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647068680;
+        bh=QsMSTvT3trLHBPifeW4bppOk5xaZrWGBQUCtUaxLjZ8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=scHx8tWrPFD3R9n/GjVuObRg3JrCMY/IkvHNMkfBJWD9Th13Q5nsQ4B13yERyvy/L
+         QmS235IdpsJ9pfTg5yKAeCxk3dfq15fHwjmXfuM9YZogNhDALTpF3KAyAamne05S/v
+         ddMLf+EQqeUkv+WsVLQLVjx5+k3W2qQEAjy5S471f8Lf9ldKnE4LkEe6bOfUcuBmCO
+         FzdD4ibAjznjrIpfasjpGGUdR1cDuaTooqdbsAmyiAg1vHZ00gq46j2uJFBoDuQfUR
+         mqijmVkLYfmM66xyBjG/zmoUmJb1J6+uZzpFRz6yIAoZCPuFwdEIYKcD4Ph8Bw4yK7
+         xu2Kx0gA8N2iw==
+Date:   Fri, 11 Mar 2022 23:04:38 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     3chas3@gmail.com, linux-atm-general@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] atm: eni: Add check for dma_map_single
+Message-ID: <20220311230438.2caa4673@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220311071656.2062663-1-jiasheng@iscas.ac.cn>
+References: <20220311071656.2062663-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,18 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm
-head:   2329ab1a0d8e32cf28b08c635c051738d12301c3
-commit: bd8051a37f63f4840847dd4577034413ed48585a [114/195] KVM: TDX: Add "basic" support for building and running Trust Domains
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+On Fri, 11 Mar 2022 15:16:56 +0800 Jiasheng Jiang wrote:
+> As the potential failure of the dma_map_single(),
+> it should be better to check it and return error
+> if fails.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/atm/eni.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/atm/eni.c b/drivers/atm/eni.c
+> index 422753d52244..96c2d8f5646b 100644
+> --- a/drivers/atm/eni.c
+> +++ b/drivers/atm/eni.c
+> @@ -1112,6 +1112,8 @@ DPRINTK("iovcnt = %d\n",skb_shinfo(skb)->nr_frags);
+>  	skb_data3 = skb->data[3];
+>  	paddr = dma_map_single(&eni_dev->pci_dev->dev,skb->data,skb->len,
+>  			       DMA_TO_DEVICE);
+> +	if (dma_mapping_error(&eni_dev->pci_dev->dev, paddr))
+> +		return enq_jam;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Probably better to drop the packet if mapping fails.
 
+>  	ENI_PRV_PADDR(skb) = paddr;
+>  	/* prepare DMA queue entries */
+>  	j = 0;
 
-includecheck warnings: (new ones prefixed by >>)
->> arch/x86/kvm/vmx/common.h: tdx.h is included more than once.
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

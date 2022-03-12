@@ -2,54 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6930D4D6D73
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C964D6D77
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiCLIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 03:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S230436AbiCLILI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 03:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiCLIFY (ORCPT
+        with ESMTP id S230113AbiCLILF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 03:05:24 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FD423D5BE
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:04:19 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id e11-20020a5d8e0b000000b006412cf3f627so8006501iod.17
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:04:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=5zOjHs3cDSO0d/sc2bYpHYPQ7grv3p5Pd+1pHqicW7k=;
-        b=z8isO8NocNV/ByyS0Ye+BwNDJ/WQSCL9Mj6UUidi0BeQkwBkEghRTJ8Bd9e/WAiQ6J
-         K/pYOaLrGkTFs7NHgXQb5Hx6mX/z/Y78rhHXPYgfCXczMBmTiI6AoXJ6XleT2pLY1LTU
-         ZnwxP6+Y+qq6m/7KZ9llxYGwKjC5uTbSbSGo/6UJxlP1UnoeDO1Qa37BFIyQNqDdm7cc
-         6pr57+M7O46ovo5ES1IuNWOZ1I+HVGrYxiTYQj422A3OFRIATzle5UZuJvLR9WRXBl+V
-         YySU09HCyj4A06BGn10wgvnwBhU7+xY935IBdMDEHu1IcIIGCB9g+1f1TwcA/dnMlVW1
-         LcEA==
-X-Gm-Message-State: AOAM531Rqxv3A5evq1CxAIF3k6Tnqxfn4N2xuhRUw0XRpiNqRJXWIOKN
-        npjqGxECD1vYd2uNYvKVvqPQeRrQmZwfmf4NDpp90TCetsb2
-X-Google-Smtp-Source: ABdhPJxGVWggqKaOvI8uV4fq9PifdIw3pZTopnX1If/fbvee7OSbGfz804S8ZmkgGbIQXfz3JTErP+2vjS9eGsZ5VnPSAVA2rWQs
+        Sat, 12 Mar 2022 03:11:05 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C65268C2A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:10:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1647072601; x=1678608601;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xg8uSEFC4VVSOLUzy8XVH2UP2EqFKRvXohpU2kfNqDs=;
+  b=dRIdZb40vMu+JbNYBkS/M0v2yv9tiRvcKV5EJf1h54TVgOiTniv+XnPi
+   CxybF2BRYjry7EE7rcww1TPLY5OyOhFNp34yI1rCHwAK/jHsa7EbItNnD
+   1LVyNn4RcGoJKj28R53j92H/IT1z+W1MTqFa40t4HePeS6ccloX4Anprz
+   tZmZqDIZ8vYROeIyL2BpLXV3bB22Lj6yKFa1EXonhzevnNu8gXABM1rEa
+   io4NizQVc8QoHsjGbTByFNAsk/xi0hyARhuWfh+/Bxv6axFxNDdxVmfN+
+   BtMaLbqAwWB/XjK/ijBfWxixEpLuwRtL/NLMKF2thCVoX8RkkuBC1Iy5k
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,175,1643644800"; 
+   d="scan'208";a="196114691"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 12 Mar 2022 16:09:59 +0800
+IronPort-SDR: Xn7b5Z5GzSPfIptknokYsZLYS2eDEpTZRl/yRNv/vgc4TMKHD1W3w+JOjChRtkFW1YF4F/vhBH
+ MEiERfifSO+r4EfkYruUz0ayKDsBD1clfBU0UOpI/3a4uK2ilXK6mTbBFhq/O1evm00HmPu8iU
+ eptr0bFSbI0+gZQObvFUNTvEY09JE8PUgoznvu429/5oRFIVCvPRzVS18Tyuf99Jx8iwK+RABY
+ MxwyIQ1HH3z/b/WVdr5EmtUXVeu1UIHu1xsm/ZwdtT6Ti83/7Yp9nh6yV8wnGb6ZeTK6Qm35LI
+ NCE9HuhS4RdYS15wmzCRUMts
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 23:42:09 -0800
+IronPort-SDR: uL72MW66rKB2MPmSUdj2IAavkwTL0EfV1ApyQmxEtKsT74ZSCNQqszc31rYn6G41TmQ7B6qJmj
+ iwEoFoO4Wc/BbLdY0O+Kthl9ZrSR6oMb7MCrTx8MAJ7nvDlyPaPRUjfxpOm/CUcriaONKaffvb
+ 9VFrXo9bObM7NyK20rqiI8YExmD2EIWUD14Umbk8oqPlGyXFq0AO/ege1RK7oYqng50O4BuIaX
+ /+xVAm/HUAgSkA/Pvxh65T9kP3ouyVJ3c/m8Piuc4TAa1o07XzAfmsqOGm01eh8jB1HEb37UNy
+ qo8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 00:09:58 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KFwT20H1tz1SVp2
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:09:57 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1647072597; x=1649664598; bh=Xg8uSEFC4VVSOLUzy8XVH2UP2EqFKRvXohp
+        U2kfNqDs=; b=bUlxQEyf5YNOaXAIzafgjDdDEvysiik5N/qu/BWRFppOCOKl54g
+        U0to5GEf8ZHhN/O+D9vLzG0mfgJjKR9bXWbb3rFYrP6Q0SBrL5N25lX+XXAhefjQ
+        fvj52z2ylKne9ODgq1zmVb4OS6U4UNzP7nQ+oF0R5kWYnMl98vIxC7gk/GqUMkrQ
+        T6EVQ51rDK9YEdWD4PwFbh1tOW3ipP9QGiM/uBGGyELwIP3enFYIZ6kqLYg7Oms8
+        iqS4wznT2Y+keszTIPRf3h6BkRgIxpYkrLtWEynlc8jk/4QxZZj4tiUGyk85Ihf8
+        qTEroOPLy/xsAr2DKxjkWfYfiqDBGhnxeJQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Gq4uRFw9PaAc for <linux-kernel@vger.kernel.org>;
+        Sat, 12 Mar 2022 00:09:57 -0800 (PST)
+Received: from [10.225.163.91] (unknown [10.225.163.91])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KFwSz5gRXz1Rvlx;
+        Sat, 12 Mar 2022 00:09:55 -0800 (PST)
+Message-ID: <c0a6065c-3e89-a4be-e257-ce25711e4368@opensource.wdc.com>
+Date:   Sat, 12 Mar 2022 17:09:54 +0900
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d89:b0:2c6:5a4f:5bb5 with SMTP id
- h9-20020a056e021d8900b002c65a4f5bb5mr11670304ila.210.1647072259089; Sat, 12
- Mar 2022 00:04:19 -0800 (PST)
-Date:   Sat, 12 Mar 2022 00:04:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec2a8205da00e46f@google.com>
-Subject: [syzbot] WARNING in drm_prime_destroy_file_private
-From:   syzbot <syzbot+2448673875b4e20db46a@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, christian.koenig@amd.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v0] pata_parport: add driver (PARIDE replacement)
+Content-Language: en-US
+To:     Ondrej Zary <linux@zary.sk>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
+        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220310212812.13944-1-linux@zary.sk>
+ <e41b526d-18d4-ae05-976d-3021e739cd8e@opensource.wdc.com>
+ <202203111955.15743.linux@zary.sk>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <202203111955.15743.linux@zary.sk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,74 +102,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 3/12/22 03:55, Ondrej Zary wrote:
+> On Friday 11 March 2022 00:59:20 Damien Le Moal wrote:
+>> On 3/11/22 06:28, Ondrej Zary wrote:
+>>> Add pata_parport (PARIDE replacement) core libata driver.
+>>>
+>>> The original paride protocol modules are used for now so allow them to
+>>> be compiled without old PARIDE core.
+>>>
+>>> Signed-off-by: Ondrej Zary <linux@zary.sk>
+>>> ---
+>>>  drivers/Makefile                   |   2 +-
+>>>  drivers/ata/Kconfig                |  22 +
+>>>  drivers/ata/Makefile               |   2 +
+>>>  drivers/ata/parport/Makefile       |   3 +
+>>>  drivers/ata/parport/pata_parport.c | 805 +++++++++++++++++++++++++++++
+>>>  drivers/ata/parport/pata_parport.h | 108 ++++
+>>>  drivers/block/paride/Kconfig       |  32 +-
+>>>  drivers/block/paride/paride.h      |   5 +
+>>>  8 files changed, 962 insertions(+), 17 deletions(-)
+>>>  create mode 100644 drivers/ata/parport/Makefile
+>>>  create mode 100644 drivers/ata/parport/pata_parport.c
+>>>  create mode 100644 drivers/ata/parport/pata_parport.h
+>>>
+>>> diff --git a/drivers/Makefile b/drivers/Makefile
+>>> index a110338c860c..8ec515f3614e 100644
+>>> --- a/drivers/Makefile
+>>> +++ b/drivers/Makefile
+>>> @@ -98,7 +98,7 @@ obj-$(CONFIG_DIO)		+= dio/
+>>>  obj-$(CONFIG_SBUS)		+= sbus/
+>>>  obj-$(CONFIG_ZORRO)		+= zorro/
+>>>  obj-$(CONFIG_ATA_OVER_ETH)	+= block/aoe/
+>>> -obj-$(CONFIG_PARIDE) 		+= block/paride/
+>>> +obj-y		 		+= block/paride/
+>>>  obj-$(CONFIG_TC)		+= tc/
+>>>  obj-$(CONFIG_USB_PHY)		+= usb/
+>>>  obj-$(CONFIG_USB)		+= usb/
+>>> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+>>> index e5641e6c52ee..671c27b77a48 100644
+>>> --- a/drivers/ata/Kconfig
+>>> +++ b/drivers/ata/Kconfig
+>>> @@ -1161,6 +1161,28 @@ config PATA_WINBOND_VLB
+>>>  	  Support for the Winbond W83759A controller on Vesa Local Bus
+>>>  	  systems.
+>>>  
+>>> +config PATA_PARPORT
+>>> +	tristate "Parallel port IDE device support"
+>>> +	depends on PARPORT_PC && PARIDE=n
+>>
+>> This is very confusing. The change above this one switch paride
+>> compilation to be unconditional, regardless of CONFIG_PARIDE value, but
+>> here, you have the dependency to PARIDE=n. I do not understand... Please
+>> clarify.
+> 
+> pata_parport will use existing paride protocol modules. So the paride/ directory must be processed to compile the protocol modules (if they're enabled) even if paride is not enabled.
+> 
+> pata_parport and paride are mutually exclusive because the binary protocol modules are incompatible (the struct pi_adapter is different).
 
-syzbot found the following issue on:
+So if both CONFIG_PARIDE and CONFIG_PATA_PARPORT are disabled, there
+should be no need to compile the core PARIDE code under block/. You
+should have something like:
 
-HEAD commit:    ea4424be1688 Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14095f9e700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
-dashboard link: https://syzkaller.appspot.com/bug?extid=2448673875b4e20db46a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+In drivers/Makefile:
 
-Unfortunately, I don't have any reproducer for this issue yet.
+-obj-$(CONFIG_PARIDE) 		+= block/paride/
++obj-$(CONFIG_PARIDE_CORE) 	+= block/paride/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2448673875b4e20db46a@syzkaller.appspotmail.com
+And then have CONFIG_PARIDE and CONFIG_PATA_PARPORT select PARIDE_CORE,
+with CONFIG_PARIDE and CONFIG_PATA_PARPORT being mutually exclusive
+(using "depends on" as you did).
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 16791 at drivers/gpu/drm/drm_prime.c:228 drm_prime_destroy_file_private+0x3e/0x50 drivers/gpu/drm/drm_prime.c:228
-Modules linked in:
-CPU: 1 PID: 16791 Comm: syz-executor.5 Not tainted 5.17.0-rc7-syzkaller-00020-gea4424be1688 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:drm_prime_destroy_file_private+0x3e/0x50 drivers/gpu/drm/drm_prime.c:228
-Code: 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 1f 48 8b 83 90 00 00 00 48 85 c0 75 06 5b e9 e7 6c 1d fd e8 e2 6c 1d fd <0f> 0b 5b e9 da 6c 1d fd e8 05 5a 64 fd eb da 0f 1f 00 41 55 49 89
-RSP: 0018:ffffc90002af79e0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888025e72370 RCX: 0000000000000000
-RDX: ffff8880727aa1c0 RSI: ffffffff845a788e RDI: ffff888025e72400
-RBP: ffff8881471d4068 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff817e23e8 R11: 0000000000088078 R12: ffff888025e72000
-R13: ffff888025e722b8 R14: ffff8881471d4098 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffea39ef0d8 CR3: 00000000791d8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- drm_file_free.part.0+0x6e5/0xb80 drivers/gpu/drm/drm_file.c:291
- drm_file_free drivers/gpu/drm/drm_file.c:248 [inline]
- drm_close_helper.isra.0+0x17d/0x1f0 drivers/gpu/drm/drm_file.c:308
- drm_release+0x1e6/0x530 drivers/gpu/drm/drm_file.c:495
- __fput+0x286/0x9f0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- do_exit+0xb29/0x2a30 kernel/exit.c:806
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- get_signal+0x45a/0x2490 kernel/signal.c:2863
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- ret_from_fork+0x15/0x30 arch/x86/entry/entry_64.S:288
-RIP: 0033:0x7f836c6a0471
-Code: Unable to access opcode bytes at RIP 0x7f836c6a0447.
-RSP: 002b:00007f836afd22f0 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
-RAX: 0000000000000000 RBX: 00007f836afd2700 RCX: 00007f836c6a0471
-RDX: 00007f836afd29d0 RSI: 00007f836afd22f0 RDI: 00000000003d0f00
-RBP: 00007ffed5e285a0 R08: 00007f836afd2700 R09: 00007f836afd2700
-R10: 00007f836afd29d0 R11: 0000000000000206 R12: 00007ffed5e2840e
-R13: 00007ffed5e2840f R14: 00007f836afd2300 R15: 0000000000022000
- </TASK>
+Here, I am assuming that block/paride is the core code used by both
+PARIDE and PATA_PARPORT. Not sure what PARPORT_PC does nor what its
+dependency on block/paride code is.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+Damien Le Moal
+Western Digital Research

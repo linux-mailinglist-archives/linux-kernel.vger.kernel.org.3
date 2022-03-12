@@ -2,148 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F904D6F9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406FB4D6FA3
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiCLPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 10:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S231539AbiCLPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 10:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiCLPLj (ORCPT
+        with ESMTP id S230322AbiCLPM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 10:11:39 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFE271EC8
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:10:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647097833; x=1678633833;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QwnU73SKGxv90bFeR3kPYdo+JxFder4HzAABlCz+DZY=;
-  b=n4k2VxL4b3xPZhmZ45/cHN+5FerNDqylq6vg6wtNV+ZQAKrYO1IG0BSG
-   BBp64UDsA+2dsoHUML3nX24bPjJ5wF6R9se+WxNskkDUymATtikrsz11D
-   Q1ZCcS3NZ+B2V9cTifJrIJYnHGfpx+rR9jaYh5M+7q8nzH2UxcEsnnfO3
-   I1j8RV0G5Q/c1Ow3cEBFxUqEh1apEP7s8nL765tWOx5GJEvxuc4Ij/ARI
-   VcVJgng29fzqj3ln2EFi3VJiKVwDkqXE1OcQWA/smJsOys/xbGOvT1DWt
-   dvs2UnkDfZDQ/cUcwzTWjelkzpKnKGGGjzh1y4mXw++Ws+UskT12DL/fV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="254629217"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="254629217"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 07:10:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="645279576"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2022 07:10:31 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nT3O2-0007zI-CW; Sat, 12 Mar 2022 15:10:30 +0000
-Date:   Sat, 12 Mar 2022 23:09:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Siddharth Gupta <sidgup@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        Gurbir Arora <gurbaror@codeaurora.org>
-Subject: drivers/remoteproc/qcom_common.c:126:27: sparse: sparse: restricted
- __le32 degrades to integer
-Message-ID: <202203122312.Oo7An9yZ-lkp@intel.com>
+        Sat, 12 Mar 2022 10:12:56 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3A986C9;
+        Sat, 12 Mar 2022 07:11:51 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e2ca8d7812so61141417b3.13;
+        Sat, 12 Mar 2022 07:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K98030A73zLeeoJmJeXlU5g/68giFukC00BYhoPQePQ=;
+        b=PJWpgYp3y0X47kmD0RbKsQsv50e9EHMwVHy1fGRT7+xPaXqBBTyb8WJlhz4aXeUmX+
+         i/3bK+Je/HlZShOGXMYLYxN8oXmb99quNJJx73gq2YNhS/zrIYHouDgIdJbmubBv3OuI
+         CmqGu9lIl7ghHJWkSKX9hghFz17XkbYgrbjZwN4adnQB6VYn2hZxYkf3esSi2cizPCYO
+         x/lxj1iA4z9/8HKKCZ0vJ44SQwHL6aPsIBD+vkNEzWVlYfPHTyph1K/kXboaRa1azVti
+         dKpzLi75jl/Y9F8YUU0blFYSbja9ClzAVi4UWckQF+sgJUsoCyJRwIVjr3Uow+TxaeAz
+         O32Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K98030A73zLeeoJmJeXlU5g/68giFukC00BYhoPQePQ=;
+        b=18osgWswvog/8QmBv4l5Ub1ZOGv2t20r2nO15Q/9UESbAGClJtBvrECsHA0ozj0jaw
+         /TmYgyygyDzZhWvVKQ9mCSM1a07z6RmnwQUwMj7Pjt0pi2MNJJvZ5ybien0iGQ1eD64d
+         CznLyNid9e3EKxByw34U904WcRR+Ya6UXPwUxVDFakLwdgm/eJxtioAQBWywrgEXJ5eq
+         PsZF3YDDRNmTNlqyEaiYuY0ABVXXyxEv96Or1EUy7ItsEBXHX9SvdQQcxoa3avcM/9Ae
+         WYGIEc+EXIWTEAaGvOVrFfbid7qu6u/tx//IU2tdI7wECXMc1BXUkisXjW5WyWSC1Hov
+         rx/A==
+X-Gm-Message-State: AOAM53337sOGqRLiGxfjDicoh6liAadqGetdEsyS3Q0K/SbKaoiw6E3e
+        Buxq5a5BUU6o6g/nZ/ARKHk841RWcmtlzdPm37DgmgKD1fM=
+X-Google-Smtp-Source: ABdhPJx9jMKBuCWxF8MForqcYIH25wObesDaHt4kx/iw7ePlPHMda/GyAodFlasmPOzu/17EecxEpDx7Z8YGycLjFQ0=
+X-Received: by 2002:a81:9844:0:b0:2db:db74:f7db with SMTP id
+ p65-20020a819844000000b002dbdb74f7dbmr12407164ywg.359.1647097910104; Sat, 12
+ Mar 2022 07:11:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <3192BC90-D082-472B-B310-6E09A14A77C6@hust.edu.cn>
+ <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
+ <CAKFNMokdB+Zph-1OyC1-Xnyi93r+yKSusgaEaa=CkuUBttwRZA@mail.gmail.com>
+ <CAD-N9QU8-Od3G+-=RHM5K7vR2-4Af+4t=XutJJVdmkKhH7OarA@mail.gmail.com>
+ <CAKFNMo=E8mMuY7Et0auH02fOzGKx04k2=LOj8mZJ6a-=J+sPzQ@mail.gmail.com>
+ <CAD-N9QWt=d2Vj2bevSzOPL4AWF08_zTyq=hHOcOOROCazNY4_A@mail.gmail.com>
+ <CAD-N9QWrBLygN24EC6QLRFF6uf7=PiTRdA4suKqEXJ7tk9aocA@mail.gmail.com> <dac7104a-21ac-24f4-6132-e51960fa0b7e@gmail.com>
+In-Reply-To: <dac7104a-21ac-24f4-6132-e51960fa0b7e@gmail.com>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Sun, 13 Mar 2022 00:11:38 +0900
+Message-ID: <CAKFNMon3=fFWtuUa1_wDyK9agpCXjbzA8b+rj=OYu=7Gs8nMqQ@mail.gmail.com>
+Subject: Re: Fw:Re: [PATCH] fs: nilfs2: fix memory leak in nilfs sysfs create
+ device group
+To:     Pavel Skripkin <paskripkin@gmail.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-nilfs <linux-nilfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   68453767131a5deec1e8f9ac92a9042f929e585d
-commit: 8ed8485c4f056d488d17a2b56581c86aeb42955d remoteproc: qcom: Add capability to collect minidumps
-date:   1 year, 3 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220312/202203122312.Oo7An9yZ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8ed8485c4f056d488d17a2b56581c86aeb42955d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8ed8485c4f056d488d17a2b56581c86aeb42955d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-imx/ arch/arm/mach-mvebu/ arch/arm/mach-rockchip/ arch/arm/mach-socfpga/ arch/arm/mach-tegra/ drivers/dma/ drivers/edac/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/irqchip/ drivers/mtd/nand/onenand/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/soc/bcm/brcmstb/pm/ drivers/staging/ fs/proc/ net/sched/
+Hi Pavel,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Sat, Mar 12, 2022 at 11:20 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Hi Dongliang,
+>
+> On 3/9/22 11:30, Dongliang Mu wrote:
+> >> Now I am checking the log and trying to find error injection in the
+> >> log file, as said by Pavel.
+> >
+> > Attached is the report and log file.
+> >
+> > @Pavel Skripkin I don't find any useful error injection in the log file.
+> >
+> > In case I made some mistakes, I will clean up my local crash reports,
+> > update to the latest upstream kernel and restart the syzkaller. Let's
+> > see if the crash still occurs.
+>
+> The execution path is clear from the logs. Quick grep for nilfs shows
+> these lines
+>
+> [  886.701044][T25972] NILFS (loop2): broken superblock, retrying with
+> spare superblock (blocksize = 1024)
+> [  886.703251][T25972] NILFS (loop2): broken superblock, retrying with
+> spare superblock (blocksize = 4096)
+> [  886.706454][T25972] NILFS (loop2): error -4 creating segctord thread
+>
+> So here is calltrace:
+>
+> nilfs_fill_super
+>    nilfs_attach_log_writer
+>      nilfs_segctor_start_thread <- failed
+>
+>
+> In case of nilfs_attach_log_writer() error code jumps to
+> failed_checkpoint label and calls destroy_nilfs() which should call
+> nilfs_sysfs_delete_device_group().
+
+nilfs_sysfs_delete_device_group() is called in destroy_nilfs()
+if nilfs->ns_flags has THE_NILFS_INIT flag -- nilfs_init() inline
+function tests this flag.
+
+The flag is set after init_nilfs() succeeded at the beginning of
+nilfs_fill_super() because the set_nilfs_init() inline in init_nilfs() sets it.
+
+So,  nilfs_sysfs_delete_group() seems to be called in case of
+the above failure.   Am I missing something?
+
+Thanks,
+Ryusuke Konishi
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/qcom_common.c:126:27: sparse: sparse: restricted __le32 degrades to integer
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast to restricted __le32
->> drivers/remoteproc/qcom_common.c:133:32: sparse: sparse: cast from restricted __le64
-
-vim +126 drivers/remoteproc/qcom_common.c
-
-   103	
-   104	static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsystem *subsystem)
-   105	{
-   106		struct minidump_region __iomem *ptr;
-   107		struct minidump_region region;
-   108		int seg_cnt, i;
-   109		dma_addr_t da;
-   110		size_t size;
-   111		char *name;
-   112	
-   113		if (WARN_ON(!list_empty(&rproc->dump_segments))) {
-   114			dev_err(&rproc->dev, "dump segment list already populated\n");
-   115			return -EUCLEAN;
-   116		}
-   117	
-   118		seg_cnt = le32_to_cpu(subsystem->region_count);
-   119		ptr = ioremap((unsigned long)le64_to_cpu(subsystem->regions_baseptr),
-   120			      seg_cnt * sizeof(struct minidump_region));
-   121		if (!ptr)
-   122			return -EFAULT;
-   123	
-   124		for (i = 0; i < seg_cnt; i++) {
-   125			memcpy_fromio(&region, ptr + i, sizeof(region));
- > 126			if (region.valid == MD_REGION_VALID) {
-   127				name = kstrdup(region.name, GFP_KERNEL);
-   128				if (!name) {
-   129					iounmap(ptr);
-   130					return -ENOMEM;
-   131				}
-   132				da = le64_to_cpu(region.address);
- > 133				size = le32_to_cpu(region.size);
-   134				rproc_coredump_add_custom_segment(rproc, da, size, NULL, name);
-   135			}
-   136		}
-   137	
-   138		iounmap(ptr);
-   139		return 0;
-   140	}
-   141	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> So I can really see how this leak is possible on top of current Linus' HEAD.
+>
+>
+> Also in the log there are onlyh 4 syz_mount_image$nilfs2 programs, so
+> only one of them may be a reproducer. If you have spare time you can try
+> to execute them using syz-execprog and see if it works :))
+>
+>
+>
+> With regards,
+> Pavel Skripkin

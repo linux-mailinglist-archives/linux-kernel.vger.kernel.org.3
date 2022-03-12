@@ -2,182 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E114D6D8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E624D6D91
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiCLI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 03:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S231405AbiCLIba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 03:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbiCLI3b (ORCPT
+        with ESMTP id S229952AbiCLIb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 03:29:31 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF6C1DD0E1
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:28:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647073706; x=1678609706;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V84UHGfUUc9EBJ0+RP2e3LRwu5+YQ5tnufzlqeNhHmQ=;
-  b=NMzw9RfORF+aS+ZsWin2ToHc4VTbCuuOaoQoyUKqZpqYv4Zc8ffaBXKc
-   uEe69S1XjAYEm/YUBxi8AeN3ra8BuCfSIoU1GP613ntGALvBU73ck6ttB
-   JDDf11MzEB8ioLSek96f/hfNkBA0zcVn0y+NNOxCVK0nL5aIOV+Vqub1+
-   jTzZP1zYd6IoUnS/ygQ27zqwBHI7QfX+nFoUM2rP6bzvjch4zt6+frgj4
-   Re7ke/5ya2FTV9NdEdMbrz+wynO9QrfCpjnHSbfOg05KeOe9dEOyv5MHi
-   vf2mw59gpk9sznIIMNIKFOsMmXZIgpqU0q6j0aJ63n38HR1XH5q/ww9Jd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="253336200"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="253336200"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 00:28:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="633695699"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Mar 2022 00:28:25 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSx6u-0007iT-J1; Sat, 12 Mar 2022 08:28:24 +0000
-Date:   Sat, 12 Mar 2022 16:28:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/core] BUILD SUCCESS
- 9e1db76f44de4d9439e48c9ef61e5d457395202b
-Message-ID: <622c5999.svGB30AihHglAQtP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 12 Mar 2022 03:31:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2802E291B8F
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647073820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bXLQcaZ+lfbTrZcLRD6Ak8e0Z+SxGQP7BwbnusBAwsM=;
+        b=Ti6zC8TAqvbBVhLliPZzEXRqbYTH7WLL0e9GmI/7cAPpSwaf0XCKD6gRV1Iw6xLyXjODEG
+        8IXGHvbt23NEdWLSsEhwahfN/rAI0vI/pKXsi4s3mwujzt2c6H57xAo7fISilGu1U+rqlp
+        5zSAkNgRVFVZToCPqYfTxNEXIwuimY4=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-Vek947TJMxOjvBPPcabx0g-1; Sat, 12 Mar 2022 03:30:19 -0500
+X-MC-Unique: Vek947TJMxOjvBPPcabx0g-1
+Received: by mail-pg1-f197.google.com with SMTP id h12-20020a63530c000000b0037c8f45bf1bso6226314pgb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:30:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=bXLQcaZ+lfbTrZcLRD6Ak8e0Z+SxGQP7BwbnusBAwsM=;
+        b=oTuV0DfRZE5/5Ds44BblSvIsp9XH5jstiJRiDgwFRuOnQ1iiar2Xtn8LqE1eeWELZW
+         xHbwT8MToJKGvQoOW+c3XX82itDGQ6zUZDFKCblBY2Mek83q78Fi/7T9IOMJJRxs191B
+         F/e6PZmrLYrMZbzSVUTRvHBsDbLaIAjiFdtFfNcxQK/NX14LDua+xkE1MlCK0wEvvBTa
+         O+MaULPucaiIut1e87xE8YT4kg5GEdeJXstbwkBRx/1vgWw+ZT/YeqQsbixgHX4anMYO
+         gU12M+SXWTVeK9Uo0vReYJlEsepBjSoovUVpE1ggURD4Xe6f/ZYrELfNeXuM3shZuvdq
+         p9mQ==
+X-Gm-Message-State: AOAM5312hvZn0fiQJTfGkHNYjEaWvOKIp2wCK4vKQhpU/j71RUDvs6Kz
+        54/Xx4GSrgnDwbKyCWKq5ZChGe/gZ9ebbM3zMkw7bYdMJQhBn19G+Tg9l8LRtYYYhSp91HVU+QQ
+        OV6J+ucg8/2FRvuS7znjqKj6RJrL7CNtueF0/A6N1jIKVJKh9wxMlVTepv5WTE6jMjG7kmNPqTg
+        ==
+X-Received: by 2002:a17:90b:3ece:b0:1bf:16ac:7a1b with SMTP id rm14-20020a17090b3ece00b001bf16ac7a1bmr14955355pjb.236.1647073817646;
+        Sat, 12 Mar 2022 00:30:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy5BNfS+5sXdHtEhhA4PmP+4R8hBxs9nG240NzZ9/QsgRe7q+MbwM8b60+FflZ6MChtAR63AQ==
+X-Received: by 2002:a17:90b:3ece:b0:1bf:16ac:7a1b with SMTP id rm14-20020a17090b3ece00b001bf16ac7a1bmr14955317pjb.236.1647073817130;
+        Sat, 12 Mar 2022 00:30:17 -0800 (PST)
+Received: from [10.72.12.132] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id s30-20020a056a001c5e00b004f75773f3fcsm12644829pfw.119.2022.03.12.00.30.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Mar 2022 00:30:16 -0800 (PST)
+Subject: Re: [RFC PATCH 1/2] ceph: add support for encrypted snapshot names
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220310172616.16212-1-lhenriques@suse.de>
+ <20220310172616.16212-2-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <fdf774cd-3cca-14e5-d5aa-44de70bb89f0@redhat.com>
+Date:   Sat, 12 Mar 2022 16:30:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220310172616.16212-2-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
-branch HEAD: 9e1db76f44de4d9439e48c9ef61e5d457395202b  x86,bpf: Fix bpf_arch_text_poke()
 
-elapsed time: 1059m
+On 3/11/22 1:26 AM, Luís Henriques wrote:
+> Since filenames in encrypted directories are already encrypted and shown
+> as a base64-encoded string when the directory is locked, snapshot names
+> should show a similar behaviour.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/dir.c   |  9 +++++++++
+>   fs/ceph/inode.c | 13 +++++++++++++
+>   2 files changed, 22 insertions(+)
+>
+> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+> index 6df2a91af236..123e3b9c8161 100644
+> --- a/fs/ceph/dir.c
+> +++ b/fs/ceph/dir.c
+> @@ -1075,6 +1075,15 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+>   		op = CEPH_MDS_OP_MKSNAP;
+>   		dout("mksnap dir %p snap '%pd' dn %p\n", dir,
+>   		     dentry, dentry);
+> +		/*
+> +		 * Encrypted snapshots require d_revalidate to force a
+> +		 * LOOKUPSNAP to cleanup dcache
+> +		 */
+> +		if (IS_ENCRYPTED(dir)) {
+> +			spin_lock(&dentry->d_lock);
+> +			dentry->d_flags |= DCACHE_NOKEY_NAME;
 
-configs tested: 101
-configs skipped: 3
+I think this is not correct fix of this issue.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Actually this dentry's name is a KEY NAME, which is human readable name.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-mips                        vocore2_defconfig
-i386                             alldefconfig
-arm                            zeus_defconfig
-mips                           gcw0_defconfig
-sh                        apsh4ad0a_defconfig
-m68k                           sun3_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                        trizeps4_defconfig
-sh                ecovec24-romimage_defconfig
-parisc64                            defconfig
-arm                          lpd270_defconfig
-powerpc                       ppc64_defconfig
-ia64                      gensparse_defconfig
-arm                  randconfig-c002-20220310
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220310
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+DCACHE_NOKEY_NAME means the base64_encoded names. This usually will be 
+set when filling a new dentry if the directory is locked. If the 
+directory is unlocked the directory inode will be set with the key.
 
-clang tested configs:
-arm                         shannon_defconfig
-powerpc                     akebono_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220310
-hexagon              randconfig-r045-20220310
-s390                 randconfig-r044-20220310
-riscv                randconfig-r042-20220310
+The root cause should be the snapshot's inode doesn't correctly set the 
+encrypt stuff when you are reading from it.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+NOTE: when you are 'ls -l .snap/snapXXX' the snapXXX dentry name is 
+correct, it's just corrupted for the file or directory names under snapXXX/.
+
+
+> +			spin_unlock(&dentry->d_lock);
+> +		}
+>   	} else if (ceph_snap(dir) == CEPH_NOSNAP) {
+>   		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
+>   		op = CEPH_MDS_OP_MKDIR;
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index b573a0f33450..81d3d554d261 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -182,6 +182,19 @@ struct inode *ceph_get_snapdir(struct inode *parent)
+>   	ci->i_rbytes = 0;
+>   	ci->i_btime = ceph_inode(parent)->i_btime;
+>   
+> +	/* if encrypted, just borrow fscrypt_auth from parent */
+> +	if (IS_ENCRYPTED(parent)) {
+> +		struct ceph_inode_info *pci = ceph_inode(parent);
+> +
+> +		ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
+> +					   pci->fscrypt_auth_len,
+> +					   GFP_KERNEL);
+> +		if (ci->fscrypt_auth) {
+> +			inode->i_flags |= S_ENCRYPTED;
+> +			ci->fscrypt_auth_len = pci->fscrypt_auth_len;
+> +		} else
+> +			dout("Failed to alloc memory for fscrypt_auth in snapdir\n");
+> +	}
+
+Here I think Jeff has already commented it in your last version, it 
+should fail by returning NULL ?
+
+- Xiubo
+
+>   	if (inode->i_state & I_NEW) {
+>   		inode->i_op = &ceph_snapdir_iops;
+>   		inode->i_fop = &ceph_snapdir_fops;
+>
+

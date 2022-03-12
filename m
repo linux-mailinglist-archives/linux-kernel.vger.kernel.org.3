@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674D74D6F53
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D03CA4D6F59
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiCLNyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 08:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S232009AbiCLN4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 08:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiCLNyD (ORCPT
+        with ESMTP id S229494AbiCLN4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 08:54:03 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7F7186DD
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 05:52:57 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id c11so9827754pgu.11
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 05:52:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QFxRuFIIyUtKxPUjKxAoQZpclTWWztE3frWzZ93Pv0Y=;
-        b=Jx2PMS5TOmNxCI9YKroZvJkzkSoZrhxKepW/vba0EAa06XrTjPa2B6j/wtBI7yxGfV
-         RdDM0ORBhdec7qEhctALqVH9dr0z9jdRyFVLT5C7VCAGMY83kYbdfo7ElLBjKAPr73QX
-         Xfs07tTVcE7HlGwU2cnZwefvp1V5M0phtEm+1rRIAg1WZjCvTO4+wZS+XEp+0Jk52dDe
-         oJKQvp5YRP1VpoX7uJR88MUUjc1LTgg+lvbqqeE3Y3izmKqNRQ5pkD6a6shvVzIHYh1s
-         yMW/arHPJW1L3nR81zifCIH1WCGbrteEAL/uQHrlnepkJ2bE5MadXIncQlHPJmtl43fW
-         9xXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QFxRuFIIyUtKxPUjKxAoQZpclTWWztE3frWzZ93Pv0Y=;
-        b=LIZ+bAv6JIuh1prI4uVPGOTiAQDcbWoulR8sZxZmocbdirosId2RIrZr/uZSNrNKSM
-         QtmHY0txVMJpmOYoVHAZvsn9zAL1TwN48M7EgAqwV8evZv61KwCx36HbUv7B4TXOz4XY
-         r7BgXzKybXzyqK1ZwkvqRWxd+FhP8noIso1sCPn3PD/LLdP40Q9kUolQlfePrdmlfAXu
-         /GMCsryiUiIwjDtGzfp7N7E8frlh75ux7ZLLtp8z1B/c9nkVMJSWXT7TRJt2WZXXMQDG
-         7uBm5h0JxMuvS7SZE3qw4iJKAY3IH8rvVBzXu/Bz8cXT+kDN1kT7ww3NM/ilVAecdCZD
-         HFjg==
-X-Gm-Message-State: AOAM531Q8OiFnPPzg8+MZb5Y3uhVrVioUgJbk/fk4FApm/UjcBMcWJfZ
-        xI+uKRajd6D349QKXzzVV7mmBw==
-X-Google-Smtp-Source: ABdhPJw6MPM53nxToLlEoRzxC8BU/yZdvEhZUhPouYyRygf1NBJv4KNgszzy1AtEDgdRagPBt6RWWQ==
-X-Received: by 2002:a05:6a00:140c:b0:4e1:530c:edc0 with SMTP id l12-20020a056a00140c00b004e1530cedc0mr15312968pfu.18.1647093176538;
-        Sat, 12 Mar 2022 05:52:56 -0800 (PST)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id p186-20020a62d0c3000000b004f6fa49c4b9sm13398228pfg.218.2022.03.12.05.52.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 05:52:56 -0800 (PST)
-Message-ID: <e217e3fe-5e9d-fc6e-a547-2ebc6db5b850@kernel.dk>
-Date:   Sat, 12 Mar 2022 06:52:54 -0700
+        Sat, 12 Mar 2022 08:56:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F135ECC56;
+        Sat, 12 Mar 2022 05:55:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01AF360C1F;
+        Sat, 12 Mar 2022 13:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCD7C340EB;
+        Sat, 12 Mar 2022 13:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647093300;
+        bh=TghPhgKyHcNCjr1VOkt+QHNFrI1ynMBVDbgZcDen3jI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PT697Y42+cFRDGafYgs29QGueDdpoLjQUloPnz1x0n5ZaT7G4kp008eAbvdtTk7GN
+         vw4dEOp2ja5cFXghYizRc+xNsHIt+CY4osJ0uL3R8krmW4dl9J1EIPQ6agO+4FDKaf
+         7rjqk8PxOynoOJ1Xwjf46GMWXrTDGAzpuc2t/d1AHGkVDWxVKWhRlg9/h1luTiCkTn
+         vMIy1ZlPcKVKC5gBB/6Ge0PjdSdnDRMAzbCschfoywrNcpIjio/76iY6fS2D6UaEDY
+         +VxWwtn+qg+Z17NUXcwUUkUprye+Tdgs7kdGnd+BkDwj/G6N/NG98f1Ouge4C4Aao+
+         bI1jw+PC9FRyw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E8C48403C8; Sat, 12 Mar 2022 10:54:57 -0300 (-03)
+Date:   Sat, 12 Mar 2022 10:54:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     zhengjun.xing@linux.intel.com
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+Subject: Re: [PATCH] perf parse: Fix event parser error for hybrid systems
+Message-ID: <YiymMXe5Wdj9rJzP@kernel.org>
+References: <20220307151627.30049-1-zhengjun.xing@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [axboe-block:for-5.18/io_uring 19/25] fs/io_uring.c:4338:42-56:
- duplicated argument to && or || (fwd)
-Content-Language: en-US
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <alpine.DEB.2.22.394.2203121440550.18925@hadrien>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <alpine.DEB.2.22.394.2203121440550.18925@hadrien>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307151627.30049-1-zhengjun.xing@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/22 6:41 AM, Julia Lawall wrote:
-> sqe->buf_index appears twice.
+Em Mon, Mar 07, 2022 at 11:16:27PM +0800, zhengjun.xing@linux.intel.com escreveu:
+> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> 
+> This bug happened on hybrid systems when both cpu_core and cpu_atom
+> have the same event name such as "UOPS_RETIRED.MS" while their event
+> terms are different, then during perf stat, the event for cpu_atom
+> will parse fail and then no output for cpu_atom.
+> 
+> UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
+> UOPS_RETIRED.MS -> cpu_atom/period=0x1e8483,umask=0x1,event=0xc2/
+> 
+> It is because event terms in the "head" of parse_events_multi_pmu_add
+> will be changed to event terms for cpu_core after parsing UOPS_RETIRED.MS
+> for cpu_core, then when parsing the same event for cpu_atom, it still
+> uses the event terms for cpu_core, but event terms for cpu_atom are
+> different with cpu_core, the event parses for cpu_atom will fail. This
+> patch fixes it, the event terms should be parsed from the original
+> event.
+> 
+> This patch can work for the hybrid systems that have the same event
+> in more than 2 PMUs. It also can work in non-hybrid systems.
+> 
+> Before:
+> 
+>  #perf stat -v  -e  UOPS_RETIRED.MS  -a sleep 1
+> 
+> Using CPUID GenuineIntel-6-97-1
+> UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
+> Control descriptor is not initialized
+> UOPS_RETIRED.MS: 2737845 16068518485 16068518485
+> 
+>  Performance counter stats for 'system wide':
+> 
+>          2,737,845      cpu_core/UOPS_RETIRED.MS/
+> 
+>        1.002553850 seconds time elapsed
+> 
+> After:
+> 
+>  #perf stat -v  -e  UOPS_RETIRED.MS  -a sleep 1
+> 
+> Using CPUID GenuineIntel-6-97-1
+> UOPS_RETIRED.MS -> cpu_core/period=0x1e8483,umask=0x4,event=0xc2,frontend=0x8/
+> UOPS_RETIRED.MS -> cpu_atom/period=0x1e8483,umask=0x1,event=0xc2/
+> Control descriptor is not initialized
+> UOPS_RETIRED.MS: 1977555 16076950711 16076950711
+> UOPS_RETIRED.MS: 568684 8038694234 8038694234
 
-Thanks, fixed up.
+Thanks, applied.
 
--- 
-Jens Axboe
+- Arnaldo
 

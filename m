@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC48D4D7021
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 18:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BB64D702B
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 18:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiCLRct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 12:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S232339AbiCLRhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 12:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCLRco (ORCPT
+        with ESMTP id S232296AbiCLRhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 12:32:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E33C6D1A4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:31:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647106296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OQDHbRK5h5hzHKCQDiG2Xi9MV3Kh7CjgfW1/1yG8i58=;
-        b=Tv+uLLhEep3UjQopCNW3XhbvsxzfrUptD6b50UsSdksIZE+2tYryCto3S9s3QWk2rHIna+
-        04hXDv9DWHmbd1pJ8H2kEQj92v4IaSN5Ey5nhH/Hpc4VBTO++nL4eXDjURDgwYlJ0IgqaL
-        2MNxQgCP4ymGga/rmLo3aoWE2i1WNWA=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-3qlx9y-uOxORA6moy21J0Q-1; Sat, 12 Mar 2022 12:31:35 -0500
-X-MC-Unique: 3qlx9y-uOxORA6moy21J0Q-1
-Received: by mail-qk1-f198.google.com with SMTP id m123-20020a375881000000b0067af33d4ac1so8468113qkb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:31:35 -0800 (PST)
+        Sat, 12 Mar 2022 12:37:35 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0E8B7C7D
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:36:29 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id l24-20020a4a8558000000b00320d5a1f938so14616737ooh.8
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iRAZJoZoZh3qRV/UYKwJwKogthRoGQB0qt95Y42xJ0o=;
+        b=oKm0ZN3ZKvIZN/GefFAARdns9WrE3x4XoBJ1uXZNjdXYJBaoCaTRVBtd93sMGwI+wb
+         p8+Rmdi0ffArNKC5tXIP3YZaSq6/DeK62G9RbnTr32gMAG+JgcMDg+JdNv++AmYUV1Df
+         O/HZTYKLa5nkt0j7LQvGtgOghhLEbfRLRX/FE9l+m8hY+tB0hxUqoUtufFnw1e6szCRd
+         JAfZbCuLpYAvWUxWJlNGHYM84N582JIcLYdIYqJWPblubxZzIUmM93j3yCcHmtdVpNJX
+         ZzlMrZWr4rSZLALOPDVB2B3L7jmmV2Ran9m0xNL+HRRM0xboeJumYwhCKmr7ZVJI1CyN
+         gxgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OQDHbRK5h5hzHKCQDiG2Xi9MV3Kh7CjgfW1/1yG8i58=;
-        b=4KUgfwrXUWupWB1NIYXEuYQOxZLgnElLTou3blsEKjVDN7T9udWCSk6mxWY2z/ts7l
-         i+pRaMUs5hUfYE/v/aLs81WhZUYHxi1W1fyH4FrDor1zNkVEv+THdq2TqLS0Q1E78Hlz
-         wQbEyXqZSBupRuJABLDQ+xSMAChkADTf2NbAHfctoWSjZkvT3HAoByw6Npkzc+aWbKJV
-         lq/YGUs7VPHcUtNkbVsyb4Eer8QJ9AycYUORHzhDy/FoXhmxoY200Thpjp7KkHA64knG
-         zHW42g8kbCbkfbZ613aDEMEmS8NjD7qaOJQN/+yIE0eZSiyGPxS3ic52by7jr44ejKi6
-         Fu+Q==
-X-Gm-Message-State: AOAM533UMjIqoi7og+qgSbd+cHp40yKPs9PbXKIWhl4rVPTuN9UwoePt
-        sPB6YqzGTWz+5rDIQoHMkSCPAXrHbCV1Za6YlmDj6MrSdLtmYCzUwD+M84rVM0Yjd2fSCfABh64
-        IozIbe5aLrLHRsrTi5nFkLWKq
-X-Received: by 2002:a05:620a:4442:b0:67d:b94a:8c6a with SMTP id w2-20020a05620a444200b0067db94a8c6amr46205qkp.569.1647106295010;
-        Sat, 12 Mar 2022 09:31:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxtnu94rjTmOi+1VORDdqL74UhgzCuwVSAqQfaBh5XrYQnCoZ1rChJn2tfiQdAuzAwWyfgQ1Q==
-X-Received: by 2002:a05:620a:4442:b0:67d:b94a:8c6a with SMTP id w2-20020a05620a444200b0067db94a8c6amr46188qkp.569.1647106294786;
-        Sat, 12 Mar 2022 09:31:34 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05622a188300b002e1cbca8ea4sm1161476qtc.59.2022.03.12.09.31.33
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iRAZJoZoZh3qRV/UYKwJwKogthRoGQB0qt95Y42xJ0o=;
+        b=AesW1w7UiIDOeQUNkMPdzxhZibHCKfizIBK/6IU2QGqNBrPRd67oQoIZr5Fg7wuwfp
+         CRREWlyfPAWKlk/rJR/C8YyOuR1eMtX3BI926UgqB3mOBxnZgYXH2y+i1cvlmR2u1hgM
+         22duHT7LNEmAuRu4u98Y8KO97pRLiWoVufPZ5DGO3m+i+8oeVXHj6/iYPhK+O84ECX5P
+         lqSL7BxeqT/Yf44Mp7MM8S0jH74D6rJKSJkWOjq/WXiAC1pstRDKrOpysMEfDGbPzz8O
+         uyOzQbwZ8x2p4UrqOYUFDFcrLejdgkkcwJt4pxFpzkrtg8zt8fYLgy6MDpakHzcjIZm9
+         PNjQ==
+X-Gm-Message-State: AOAM531M6J/XG6YweshzxCDK59Q2Lf5FzpSjMMi7lcarHBWKiyTEZYne
+        9ccs2pPXjkeXaMFBMmRemwOn0Q==
+X-Google-Smtp-Source: ABdhPJyn9jljunqjT976KNT5QT5bTu3YoYxtUp/Qci2+b4frJrNNW1FUWyYNGk3vpCQ8IWOrnRf9uA==
+X-Received: by 2002:a4a:6b5d:0:b0:321:493c:edcb with SMTP id h29-20020a4a6b5d000000b00321493cedcbmr7108644oof.81.1647106588714;
+        Sat, 12 Mar 2022 09:36:28 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id q16-20020a9d4b10000000b005b22b93d468sm5105250otf.74.2022.03.12.09.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 09:31:34 -0800 (PST)
-From:   trix@redhat.com
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        cai.huoqing@linux.dev, paskripkin@gmail.com, xose.vazquez@gmail.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] media: stkwebcam: move stk_camera_read_reg() scratch buffer to struct stk_camera
-Date:   Sat, 12 Mar 2022 09:30:49 -0800
-Message-Id: <20220312173049.1410977-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sat, 12 Mar 2022 09:36:28 -0800 (PST)
+Date:   Sat, 12 Mar 2022 11:36:26 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com
+Subject: Re: [PATCH v5 1/5] arm64/dts/qcom/sc7280: remove assigned-clock-rate
+ property for mdp clk
+Message-ID: <YizaGgCLxH0D9MRF@builder.lan>
+References: <1646758500-3776-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1646758500-3776-2-git-send-email-quic_vpolimer@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646758500-3776-2-git-send-email-quic_vpolimer@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,64 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Tue 08 Mar 10:54 CST 2022, Vinod Polimera wrote:
 
-In stk_camera_read_reg() a single byte buffer is alloc-ed and
-freed on every function call.  Since the size is known,
-move the buffer to the struct stk_camera where it will be alloc-ed
-and freed once.
+Please run:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/media/usb/stkwebcam/stk-webcam.c | 11 ++---------
- drivers/media/usb/stkwebcam/stk-webcam.h |  2 ++
- 2 files changed, 4 insertions(+), 9 deletions(-)
+  git log --oneline --no-decorate -- arch/arm64/boot/dts/qcom/sc7280.dtsi
 
-diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-index 5b822214ccc5c..787edb3d47c23 100644
---- a/drivers/media/usb/stkwebcam/stk-webcam.c
-+++ b/drivers/media/usb/stkwebcam/stk-webcam.c
-@@ -150,25 +150,18 @@ int stk_camera_write_reg(struct stk_camera *dev, u16 index, u8 value)
- int stk_camera_read_reg(struct stk_camera *dev, u16 index, u8 *value)
- {
- 	struct usb_device *udev = dev->udev;
--	unsigned char *buf;
- 	int ret;
- 
--	buf = kmalloc(sizeof(u8), GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
- 	ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
- 			0x00,
- 			USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 			0x00,
- 			index,
--			buf,
-+			&dev->read_reg_scratch,
- 			sizeof(u8),
- 			500);
- 	if (ret >= 0)
--		*value = *buf;
--
--	kfree(buf);
-+		*value = dev->read_reg_scratch;
- 
- 	if (ret < 0)
- 		return ret;
-diff --git a/drivers/media/usb/stkwebcam/stk-webcam.h b/drivers/media/usb/stkwebcam/stk-webcam.h
-index 14519e5308b18..136decffe9ced 100644
---- a/drivers/media/usb/stkwebcam/stk-webcam.h
-+++ b/drivers/media/usb/stkwebcam/stk-webcam.h
-@@ -105,6 +105,8 @@ struct stk_camera {
- 	struct list_head sio_avail;
- 	struct list_head sio_full;
- 	unsigned sequence;
-+
-+	u8 read_reg_scratch;
- };
- 
- #define vdev_to_camera(d) container_of(d, struct stk_camera, vdev)
--- 
-2.26.3
+and make sure your $subject is prefixed according to all other
+sc7280-specific changes.
 
+> Kernel clock driver assumes that initial rate is the
+> max rate for that clock and was not allowing it to scale
+> beyond the assigned clock value.
+> 
+> Drop the assigned clock rate property and vote on the mdp clock as per
+> calculated value during the usecase.
+> 
+> Changes in v2:
+> - Remove assigned-clock-rate property and set mdp clk during resume sequence.
+> - Add fixes tag.
+> 
+> Changes in v3:
+> - Remove extra line after fixes tag.(Stephen Boyd)
+
+It's only in drivers/drm that the changelog goes in the commit message,
+so please move this below the ---.
+
+Thanks,
+Bjorn
+
+> 
+> Fixes: 62fbdce91("arm64: dts: qcom: sc7280: add display dt nodes")
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index baf1653..408cf6c 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -2856,9 +2856,6 @@
+>  				      "ahb",
+>  				      "core";
+>  
+> -			assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> -			assigned-clock-rates = <300000000>;
+> -
+>  			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <1>;
+> @@ -2892,11 +2889,9 @@
+>  					      "lut",
+>  					      "core",
+>  					      "vsync";
+> -				assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
+> -						<&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+>  						<&dispcc DISP_CC_MDSS_AHB_CLK>;
+> -				assigned-clock-rates = <300000000>,
+> -							<19200000>,
+> +				assigned-clock-rates = <19200000>,
+>  							<19200000>;
+>  				operating-points-v2 = <&mdp_opp_table>;
+>  				power-domains = <&rpmhpd SC7280_CX>;
+> -- 
+> 2.7.4
+> 

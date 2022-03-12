@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B664D70CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EE64D70C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiCLUV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 15:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        id S232579AbiCLUST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 15:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiCLUV4 (ORCPT
+        with ESMTP id S230017AbiCLUSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 15:21:56 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1FD207A1A
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:20:50 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id 11so10176731qtt.9
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=x64architecture.com; s=x64;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rxkUDg+qBB3WQG4mCBC3m79wqb1PB3BKKrUVCN9KZn0=;
-        b=2tZaw4Qwh/ihASXpHkGEsxQLKIj1+qcRrCZ7L5/y3AauHchtWbFXGIovhMRfZORndK
-         8X9euYlM/49MOrxzsCq5zpJOwmRjjeeYNC0ZJW4g3xAFp73IbehzbLQW1phi+ugXFPW1
-         tUWxPzIGITeRjkSmJ5U+YQKdvPOhRnw+TaLnv4jNFKDihCdIkqwZltFzjxUf/g1Rz3/g
-         euVvNrkf3aiab64rMf7aWzIKBczGi0NfElF3+/fX/ACn2OeuYvjtEH8uHm07KURR+zA0
-         MCy1qG220vPLj/NH/LyyjkV3ZG3avKbXplyYrtefbGOXLgh00qaldxERpzl1tJRWqaCM
-         Bnrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rxkUDg+qBB3WQG4mCBC3m79wqb1PB3BKKrUVCN9KZn0=;
-        b=caEdOY7Ki9SUT/27SnUPij1j8N/dPM19nwOV827+GHne2y8vBWWm2ErF+qClMcSFsz
-         b9C0j/ObwyuqxKi0GYXgUWdDX/UlxjKDn9fe0Pz2blgMvhcDM2ztVK6YJv03Bi6K6wA3
-         hJ5UhcsqEmMpw90Q+85FgA2ty/E2UvRb9HJooHJq9vT0nfHA2PbtrHlFIrjLA39eR5/w
-         NyVa7uaBdtB7UVTHoFbvRffRW80kXdSETeAbDpxjn/bCAbvEL+C1/VY16L1C1QKzKwuS
-         rLQ2QlrmzzC4dCiWJgTcavUxNFIwDkuqIwoqckaUfw5FaKkhTM6I1+QT/AIRKTA4Rzo+
-         D1GQ==
-X-Gm-Message-State: AOAM533NhZ/IqNvnDCAXUkmIBttL46tzauGH9tnlbHEHfYGS/zzIye5B
-        WZhyGgtknjCwn6koVywmjhnkoA==
-X-Google-Smtp-Source: ABdhPJwQlz+GEvLyQCD1Kv5tSQI55A5GrgRbqCvQTLLCKRhh2ZOSv30BGtcfgL2/z1olP9SXo0ZWZA==
-X-Received: by 2002:ac8:5dd2:0:b0:2e0:688f:ba8f with SMTP id e18-20020ac85dd2000000b002e0688fba8fmr13227062qtx.139.1647116449276;
-        Sat, 12 Mar 2022 12:20:49 -0800 (PST)
-Received: from kcancemi-arch.Engineering.com ([167.206.126.218])
-        by smtp.gmail.com with ESMTPSA id o21-20020ac85a55000000b002e16389b501sm8186224qta.96.2022.03.12.12.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 12:20:49 -0800 (PST)
-From:   Kurt Cancemi <kurt@x64architecture.com>
-To:     netdev@vger.kernel.org
-Cc:     kurt@x64architecture.com, kabel@kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v3] net: phy: marvell: Fix invalid comparison in the resume and suspend functions
-Date:   Sat, 12 Mar 2022 15:15:13 -0500
-Message-Id: <20220312201512.326047-1-kurt@x64architecture.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220312002016.60416-1-kurt@x64architecture.com>
-References: <20220312002016.60416-1-kurt@x64architecture.com>
+        Sat, 12 Mar 2022 15:18:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C25205972;
+        Sat, 12 Mar 2022 12:17:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66C8EB80AFD;
+        Sat, 12 Mar 2022 20:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5579EC340EB;
+        Sat, 12 Mar 2022 20:17:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647116229;
+        bh=GadeI9krdmz72UAKX4LbaW8MXzY58uGXhigxFEem6Ec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jE3/CwikWAHLy/vqmyy6WAdYAkZIYo18cP1UTBbNI+1qsTH8/ey4mJDVOwp5KnOJD
+         CctZ0fpjWAK9ar+FEBg8naCczl9EI0rh/I2HBSa8IuhdJaDaoputRSDhpjkQEwRUYz
+         f1PLc/A01nyLo7xirNHN8cObJVcjFjcrePXcinOLYdLyW7dLu/B9wBfijr3ZvMl9qj
+         hASD7WSQe5Li02dTiC7rM+tULT+ShfOi7u+4AWvO5SNpLn2pMlnEMLi5Az+1vzVFiH
+         Hx0dvNjx7Qsw9YhSkQcMg1UxBt9O1Qi83GgaTfR2LdHMZAwVCUwSiOcBmmA5/GURvu
+         h02OwujwM4Rww==
+Date:   Sat, 12 Mar 2022 12:17:06 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <Yiz/wm3nlJ/wOo6n@sol.localdomain>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217162848.303601-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,42 +75,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug resulted in only the current mode being resumed and suspended when
-the PHY supported both fiber and copper modes and when the PHY only supported
-copper mode the fiber mode would incorrectly be attempted to be resumed and
-suspended.
+On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
+> This topic has come up countless times, and usually doesn't go anywhere.
+> This time I thought I'd bring it up with a slightly narrower focus,
+> updated for some developments over the last three years: we finally can
+> make /dev/urandom always secure, in light of the fact that our RNG is
+> now always seeded.
+> 
+> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
+> rather than passively wait for it"), the RNG does a haveged-style jitter
+> dance around the scheduler, in order to produce entropy (and credit it)
+> for the case when we're stuck in wait_for_random_bytes(). How ever you
+> feel about the Linus Jitter Dance is beside the point: it's been there
+> for three years and usually gets the RNG initialized in a second or so.
+> 
+> As a matter of fact, this is what happens currently when people use
+> getrandom(). It's already there and working, and most people have been
+> using it for years without realizing.
+> 
+> So, given that the kernel has grown this mechanism for seeding itself
+> from nothing, and that this procedure happens pretty fast, maybe there's
+> no point any longer in having /dev/urandom give insecure bytes. In the
+> past we didn't want the boot process to deadlock, which was
+> understandable. But now, in the worst case, a second goes by, and the
+> problem is resolved. It seems like maybe we're finally at a point when
+> we can get rid of the infamous "urandom read hole".
+> 
+> The one slight drawback is that the Linus Jitter Dance relies on random_
+> get_entropy() being implemented. The first lines of try_to_generate_
+> entropy() are:
+> 
+> 	stack.now = random_get_entropy();
+> 	if (stack.now == random_get_entropy())
+> 		return;
+> 
+> On most platforms, random_get_entropy() is simply aliased to get_cycles().
+> The number of machines without a cycle counter or some other
+> implementation of random_get_entropy() in 2022, which can also run a
+> mainline kernel, and at the same time have a both broken and out of date
+> userspace that relies on /dev/urandom never blocking at boot is thought
+> to be exceedingly low. And to be clear: those museum pieces without
+> cycle counters will continue to run Linux just fine, and even
+> /dev/urandom will be operable just like before; the RNG just needs to be
+> seeded first through the usual means, which should already be the case
+> now.
+> 
+> On systems that really do want unseeded randomness, we already offer
+> getrandom(GRND_INSECURE), which is in use by, e.g., systemd for seeding
+> their hash tables at boot. Nothing in this commit would affect
+> GRND_INSECURE, and it remains the means of getting those types of random
+> numbers.
+> 
+> This patch goes a long way toward eliminating a long overdue userspace
+> crypto footgun. After several decades of endless user confusion, we will
+> finally be able to say, "use any single one of our random interfaces and
+> you'll be fine. They're all the same. It doesn't matter." And that, I
+> think, is really something. Finally all of those blog posts and
+> disagreeing forums and contradictory articles will all become correct
+> about whatever they happened to recommend, and along with it, a whole
+> class of vulnerabilities eliminated.
+> 
+> With very minimal downside, we're finally in a position where we can
+> make this change.
+> 
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Nick Hu <nickhu@andestech.com>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Michal Simek <monstr@monstr.eu>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Joshua Kinard <kumba@gentoo.org>
+> Cc: David Laight <David.Laight@aculab.com>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Eric Biggers <ebiggers@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> Having learned that MIPS32 isn't affected by this (initially my largest
+> worry), and then heartened today upon reading LWN's summary of our
+> previous discussion ("it would seem there are no huge barriers to
+> removing the final distinction between /dev/random and /dev/urandom"), I
+> figured I'd go ahead and submit a v1 of this. It seems at least worth
+> trying and seeing if somebody arrives with legitimate complaints. To
+> that end I've also widened the CC list quite a bit.
+> 
+> Changes v0->v1:
+> - We no longer touch GRND_INSECURE at all, in anyway. Lennart (and to an
+>   extent, Andy) pointed out that getting insecure numbers immediately at
+>   boot is still something that has legitimate use cases, so this patch
+>   no longer touches that code.
+> 
+>  drivers/char/mem.c     |  2 +-
+>  drivers/char/random.c  | 51 ++++++------------------------------------
+>  include/linux/random.h |  2 +-
+>  3 files changed, 9 insertions(+), 46 deletions(-)
+> 
 
-Fixes: 3758be3dc162 ("Marvell phy: add functions to suspend and resume both interfaces: fiber and copper links.")
-Signed-off-by: Kurt Cancemi <kurt@x64architecture.com>
----
+Just a small nit: the comments above rng_is_initialized() and
+wait_for_random_bytes() still imply that /dev/urandom is nonblocking.
 
-I removed the dot from the summary line.
-
- drivers/net/phy/marvell.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index 2429db614b59..80b888a88127 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -1687,7 +1687,7 @@ static int marvell_suspend(struct phy_device *phydev)
- 	int err;
- 
- 	/* Suspend the fiber mode first */
--	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
- 			       phydev->supported)) {
- 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
- 		if (err < 0)
-@@ -1722,7 +1722,7 @@ static int marvell_resume(struct phy_device *phydev)
- 	int err;
- 
- 	/* Resume the fiber mode first */
--	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
- 			       phydev->supported)) {
- 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
- 		if (err < 0)
--- 
-2.35.1
-
+- Eric

@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A664F4D6FB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF634D6FBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiCLPYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 10:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
+        id S231859AbiCLP1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 10:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiCLPYJ (ORCPT
+        with ESMTP id S231791AbiCLP06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 10:24:09 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A79E1C8
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:22:43 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso13673744pjb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XRw+YAJ4GLl11xdBATgXVNGTmbm0rcp15o7Ojv9QUYU=;
-        b=HrPTJCVhf/GjWoAVFjv1jesn4SLS7xZ6WBQSAqte9w3LiKSMPRIizxvT8wzrrhbToK
-         9qRsJ3il+CNF+NGoQaVWkhPS6TbxTn2z4Z2Dbhx/qyzfYn2NvOLurKE82w2ZDQ3N9KGr
-         EsKLfYxLzD1e0kiaoVZujjMVufCe4SUxn3osfNe2yYd8E23tHMTsQ53ObFGsaxpcLo8F
-         i2gUm7tRiIThup7jJftVOQM3wmnSC75QoZieflOK2ZNVdLvXfjhboFFYt5xIRqe2A6s2
-         J1qioIIsDwyy63tQd0njPVZdKOUQmgZZJ+rfkJkfVdcsH18vxmUufs3D06dg15TS7pnR
-         O+2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XRw+YAJ4GLl11xdBATgXVNGTmbm0rcp15o7Ojv9QUYU=;
-        b=DYciCDVHj4PL1vk0BASQgxt7uQWh9jSMMdZ2P5Q3DN8NC1v/ldB49Yv2NLghi3Nzfm
-         /NWvA9lSoCep4zKBl+J4HtCWmCXyG+YqL66FGRvxtupYTXMcbjguneJv+AeZp4JIwQff
-         og0MfyFOV0+LVgl4r3PfgpvKqwdwiJEUKUgpGjPMKSfUpFfpK1RU+qDdMbtnDWzJt3aN
-         wyPXqqlTX3MWGwRui0qlrTVBWqZDBrZkHQ2XWsI31GSUllTVfwZe9xnTtKaGHIu7jJ1t
-         mutZIHmWwRACOJ0+sytXyCkbOB2XlCOwSYttGPOSaBESNhzThur2ZO3XbbF/xQEyVpXc
-         W9bw==
-X-Gm-Message-State: AOAM531RSWFgOVBwAg/AQIe96TMPcAAXiSB5EAl8I+S1mKncpBjeE8y5
-        wHj4Wgk31PZFds/K/VbiHhl66w==
-X-Google-Smtp-Source: ABdhPJw0PdBgilaHU0OIB9uq21V827X4Efg8i3Efs4jn/EtALEnLrO3LoCU+I0rWkT53YIuOYagbvQ==
-X-Received: by 2002:a17:902:cec6:b0:151:e4a6:6af1 with SMTP id d6-20020a170902cec600b00151e4a66af1mr15233205plg.64.1647098563062;
-        Sat, 12 Mar 2022 07:22:43 -0800 (PST)
-Received: from localhost.localdomain ([2409:8a28:e63:f230:50dc:173d:c83a:7b2])
-        by smtp.gmail.com with ESMTPSA id ay5-20020a056a00300500b004f6d510af4asm12974605pfb.124.2022.03.12.07.22.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 07:22:42 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, joe.lawrence@redhat.com
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, qirui.001@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v3] livepatch: Don't block removal of patches that are safe to unload
-Date:   Sat, 12 Mar 2022 23:22:20 +0800
-Message-Id: <20220312152220.88127-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 12 Mar 2022 10:26:58 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DA5855C35A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:25:52 -0800 (PST)
+Received: (qmail 1618232 invoked by uid 1000); 12 Mar 2022 10:25:52 -0500
+Date:   Sat, 12 Mar 2022 10:25:52 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     syzbot <syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, pavel.hofman@ivitera.com,
+        rob@robgreener.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] memory leak in usb_get_configuration
+Message-ID: <Yiy7gEfSPZlfLHSY@rowland.harvard.edu>
+References: <000000000000351b8605d9d1d1bf@google.com>
+ <Yiu4tCONfHVH1Qfv@rowland.harvard.edu>
+ <d17aef8a-adbe-9d90-3173-60eb2f0828a5@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d17aef8a-adbe-9d90-3173-60eb2f0828a5@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-module_put() is not called for a patch with "forced" flag. It should
-block the removal of the livepatch module when the code might still
-be in use after forced transition.
+On Sat, Mar 12, 2022 at 06:08:18PM +0300, Pavel Skripkin wrote:
+> Hi Alan,
+> 
+> On 3/12/22 00:01, Alan Stern wrote:
+> > On Wed, Mar 09, 2022 at 03:54:24PM -0800, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > > 
+> > > HEAD commit:    0014404f9c18 Merge branch 'akpm' (patches from Andrew)
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=15864216700000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3f0a704147ec8e32
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=f0fae482604e6d9a87c9
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13a63dbe700000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e150a1700000
+> > > 
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+f0fae482604e6d9a87c9@syzkaller.appspotmail.com
+> > > 
+> > > BUG: memory leak
+> > > unreferenced object 0xffff88810c0289e0 (size 32):
+> > >   comm "kworker/1:2", pid 139, jiffies 4294947862 (age 15.910s)
+> > >   hex dump (first 32 bytes):
+> > >     09 02 12 00 01 00 00 00 00 09 04 00 00 00 d0 bb  ................
+> > >     3a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  :...............
+> > >   backtrace:
+> > >     [<ffffffff82c98127>] kmalloc include/linux/slab.h:586 [inline]
+> > >     [<ffffffff82c98127>] usb_get_configuration+0x1c7/0x1cd0 drivers/usb/core/config.c:919
+> > >     [<ffffffff82c863f9>] usb_enumerate_device drivers/usb/core/hub.c:2398 [inline]
+> > >     [<ffffffff82c863f9>] usb_new_device+0x1a9/0x2e0 drivers/usb/core/hub.c:2536
+> > >     [<ffffffff82c88ea4>] hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+> > >     [<ffffffff82c88ea4>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+> > >     [<ffffffff82c88ea4>] port_event drivers/usb/core/hub.c:5660 [inline]
+> > >     [<ffffffff82c88ea4>] hub_event+0x1364/0x21a0 drivers/usb/core/hub.c:5742
+> > >     [<ffffffff8126a41f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
+> > >     [<ffffffff8126ad49>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
+> > >     [<ffffffff81274705>] kthread+0x125/0x160 kernel/kthread.c:377
+> > >     [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > 
+> > The console log shows that this is connected to gspca_dev_probe.  Let's
+> > see who's calling it...
+> > 
+> 
+> The execution path is more complicated. I've done some debugging, but no
+> luck with root case... Just want to share what I found and maybe it will
+> help.
+> 
+> Firsly syzbot connects carl9170 device (usb ids from the log).
+> carl9170_usb_probe() calls usb_reset_device() which fails with -19. If I
+> remove this usb_reset_device() call then issue is no more reproducible.
+> 
+> Then 2 other probes are called: usbtest and spca501. spca501 calls
+> gspca_dev_probe(), but it fails early and I do not suspect this driver.
+> usbtest probe function also looks correct, so I do not suspect this driver
+> as well.
+> 
+> Looks like the issue either in usb_reset_device() call or somewhere in usb
+> internals
 
-klp_force_transition() currently sets "forced" flag for all patches on
-the list.
+Okay, thanks for the information.
 
-In fact, any patch can be safely unloaded when it passed through
-the consistency model in KLP_UNPATCHED transition.
+Is there any reason for carl9170_usb_probe to do a reset?  I can't 
+imagine why that would be needed.  Maybe the simplest solution is just 
+to remove the reset.
 
-By other words, the "forced" flag must be set only for livepatches
-that are being removed. In particular, set the "forced" flag:
+Unfortunately, that won't tell us where the extra reference is coming 
+from.  Here's one thing you could do if you want to continue your 
+debugging: At the start of the probe routines for carl9170, usbtest, and 
+spca501, add code to print in the kernel log the reference count value 
+for the usb_device and usb_interface.  Maybe you'll be able to see where 
+the refcount goes up.
 
-  + only for klp_transition_patch when the transition to KLP_UNPATCHED
-    state was forced.
-
-  + all replaced patches when the transition to KLP_PATCHED state was
-    forced and the patch was replacing the existing patches.
-
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
-Changes in v3:
- - rewrite more clear commit message by Petr.
-
-Changes in v2:
- - interact nicely with the atomic replace feature noted by Miroslav.
----
- kernel/livepatch/transition.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index 5683ac0d2566..7f25a5ae89f6 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -641,6 +641,18 @@ void klp_force_transition(void)
- 	for_each_possible_cpu(cpu)
- 		klp_update_patch_state(idle_task(cpu));
- 
--	klp_for_each_patch(patch)
--		patch->forced = true;
-+	/*
-+	 * Only need to set forced flag for the transition patch
-+	 * when force transition to KLP_UNPATCHED state, but
-+	 * have to set forced flag for all replaced patches
-+	 * when force atomic replace transition.
-+	 */
-+	if (klp_target_state == KLP_UNPATCHED)
-+		klp_transition_patch->forced = true;
-+	else if (klp_transition_patch->replace) {
-+		klp_for_each_patch(patch) {
-+			if (patch != klp_transition_patch)
-+				patch->forced = true;
-+		}
-+	}
- }
--- 
-2.20.1
-
+Alan Stern

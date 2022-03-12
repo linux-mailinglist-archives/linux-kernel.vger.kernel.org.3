@@ -2,75 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13844D6DBB
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 10:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0894E4D6DCB
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 10:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiCLJXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 04:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        id S231629AbiCLJlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 04:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiCLJXg (ORCPT
+        with ESMTP id S229909AbiCLJly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 04:23:36 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF91264832
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 01:22:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sat, 12 Mar 2022 04:41:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475771E6EAA;
+        Sat, 12 Mar 2022 01:40:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C049521115;
-        Sat, 12 Mar 2022 09:22:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647076948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vGJCc13UG0K1VbfEUqQBOawVmyBeZkeKPtFXK/dmfXw=;
-        b=nPLA+jwbqemdF0yMl+jHAT0VKgcAXBHMAkZ84hPxVc4OvBhDNj+s/mGJg8jARMPaKPkyvH
-        OmfDuMK/6xDAyjD39sQlPT/jGB2/QXZO3vp1ksQJNfHhFqbdRdwBasL4GTuKzuqDMQDrXb
-        m+LG8iK+Ot1NzBusXxWhdhwKcRr2dp4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647076948;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vGJCc13UG0K1VbfEUqQBOawVmyBeZkeKPtFXK/dmfXw=;
-        b=xFWVrnxWNVuQFS/8TqdWuVXxNVm3Y5ZrhrhTIYg95u8H6Er6hrCGc+LbAKhkixy5WpAbEx
-        Gzrh16XYYW2iQ2Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CC3E13AB1;
-        Sat, 12 Mar 2022 09:22:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x+7DIFRmLGKsPwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Sat, 12 Mar 2022 09:22:28 +0000
-Message-ID: <a8dc8bc4-9a00-b2f7-1f68-273f7a14a14c@suse.cz>
-Date:   Sat, 12 Mar 2022 10:21:25 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE7F560A25;
+        Sat, 12 Mar 2022 09:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB41CC340EB;
+        Sat, 12 Mar 2022 09:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647078048;
+        bh=ZVSVuE716SVWZ8ing31mCUoBFVx1GTpTayrR9ETv+bk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t4jUIJf0p0/kzAiStf+ONlCOqNGOfx7YdTg+vXbePV8tlR75Km0Vo8xA3Zgs15Ggi
+         zvC47q+Cy3RCGAQHcZIVCR5BqaACuO0+cyWLGsxf1GBohM1yGFMaBgRvF1/9WTyQiF
+         dyUbmNnKaUmdxpoOCN3lOf0j7BUEmhXi4ck6+tPw=
+Date:   Sat, 12 Mar 2022 10:40:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] Documentation: update stable review cycle
+ documentation
+Message-ID: <YixqnPTe0Wr6E1G3@kroah.com>
+References: <20220312080043.37581-1-bagasdotme@gmail.com>
+ <20220312080043.37581-3-bagasdotme@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [mm/slub] ae107fa919: BUG:unable_to_handle_page_fault_for_address
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
-        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>
-References: <20220311145427.GA1227220@odroid>
- <667d594b-bdad-4082-09d5-7b0587af2ae3@suse.cz>
- <20220311164600.GA1234616@odroid>
- <YivzD7PYilkFwjFt@ip-172-31-19-208.ap-northeast-1.compute.internal>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <YivzD7PYilkFwjFt@ip-172-31-19-208.ap-northeast-1.compute.internal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220312080043.37581-3-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,67 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/22 02:10, Hyeonggon Yoo wrote:
-> On Fri, Mar 11, 2022 at 04:46:00PM +0000, Hyeonggon Yoo wrote:
->> On Fri, Mar 11, 2022 at 04:36:47PM +0100, Vlastimil Babka wrote:
->>> On 3/11/22 15:54, Hyeonggon Yoo wrote:
->>>> On Wed, Mar 09, 2022 at 10:15:31AM +0800, kernel test robot wrote:
->>>>>
->>>>>
->>>>> Greeting,
->>>>>
->>>>> FYI, we noticed the following commit (built with gcc-9):
->>>>>
->>>>> commit: ae107fa91914f098cd54ab77e68f83dd6259e901 ("mm/slub: use stackdepot to save stack trace in objects")
->>>>> https://git.kernel.org/cgit/linux/kernel/git/vbabka/linux.git slub-stackdepot-v3r0
->>>>>
->>>>> in testcase: boot
->>>>>
->>>>> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
->>>>>
->>>>> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->>>>>
->>>>
->>>> [+Cc Vlastimil and linux-mm]
->>>
->>> Thanks.
->>> lkp folks: it would be nice if I was CC'd automatically on this, it's a
->>> commit from my git tree and with by s-o-b :)
->>>
->>>> I _strongly_ suspect that this is because we don't initialize
->>>> stack_table[i] = NULL when we allocate it from memblock_alloc().
->>>
->>> No, Mike (CC'd) suggested to drop the array init cycle, because
->>> memblock_alloc would zero the area anyway.
->>
->> Ah, you are right. My mistake.
->>
->>> There has to be a different
->>> reason. Wondering if dmesg contains the stack depot initialization message
->>> at all...
->>
->> I think I found the reason.
->> This is because of CONFIG_SLUB_DEBUG_ON.
->> It can enable debugging without passing boot parameter.
->>
->> if CONFIG_SLUB_DEBUG_ON=y && slub_debug is not passed, we do not call
->> stack_depot_want_early_init(), but the debugging flags are set.
->>
->> And we only call stack_depot_init() later in kmem_cache_create_usercopy().
->>
->> so it crashed while creating boot cache.
+On Sat, Mar 12, 2022 at 03:00:41PM +0700, Bagas Sanjaya wrote:
+> In recent times, the review cycle for stable releases have been changed.
+> In particular, there is release candidate phase between ACKing patches
+> and new stable release. Also, in case of failed submissions (fail to
+> apply to stable tree), manual backport (Option 3) have to be submitted
+> instead.
 > 
-> I tested this, and this was the reason.
-> It crashed on CONFIG_SLUB_DEBUG_ON=y because stackdepot always assume
-> that it was initialized in boot step, or failed
-> (stack_depot_disable=true).
+> Update the release cycle documentation on stable-kernel-rules.rst to
+> reflect the above.
 > 
-> But as it didn't even tried to initialize it, stack_table == NULL &&
-> stack_depot_disable == false. So accessing *(NULL + <hash value>)
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Sasha Levin <sashal@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: stable@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/process/stable-kernel-rules.rst | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
+> index d8ce4c0c775..c0c87d87f7d 100644
+> --- a/Documentation/process/stable-kernel-rules.rst
+> +++ b/Documentation/process/stable-kernel-rules.rst
+> @@ -139,6 +139,9 @@ Following the submission:
+>     days, according to the developer's schedules.
+>   - If accepted, the patch will be added to the -stable queue, for review by
+>     other developers and by the relevant subsystem maintainer.
+> + - Some submitted patches may fail to apply to -stable tree. When this is the
+> +   case, the maintainer will reply to the sender requesting the backport.
 
-Thanks for finding the cause!
+This is tricky, as yes, most of the time this happens, but there are
+exceptions.  I would just leave this out for now as I don't think it
+helps anyone, right?
 
-> Ideas? implementing something like kmem_cache_init_early() again?
+> +   If no backport is made, the submission will be ignored.
 
-I think we could simply make CONFIG_SLUB_DEBUG_ON select/depend on
-STACKDEPOT_ALWAYS_INIT?
+That's kind of obvious :)
+
+
+> @@ -147,13 +150,22 @@ Review cycle
+>   - When the -stable maintainers decide for a review cycle, the patches will be
+>     sent to the review committee, and the maintainer of the affected area of
+>     the patch (unless the submitter is the maintainer of the area) and CC: to
+> -   the linux-kernel mailing list.
+> +   the linux-kernel mailing list. Patches are prefixed with either ``[PATCH
+> +   AUTOSEL]`` (for automatically selected patches) or ``[PATCH MANUALSEL]``
+> +   for manually backported patches.
+
+These two prefixes are different and not part of the review cycle for
+the normal releases.  So that shouldn't go into this list.  Perhaps a
+different section?
+
+>   - The review committee has 48 hours in which to ACK or NAK the patch.
+>   - If the patch is rejected by a member of the committee, or linux-kernel
+>     members object to the patch, bringing up issues that the maintainers and
+>     members did not realize, the patch will be dropped from the queue.
+> - - At the end of the review cycle, the ACKed patches will be added to the
+> -   latest -stable release, and a new -stable release will happen.
+> + - The ACKed patches will be posted again as part of release candidate (-rc)
+
+Is this the first place we call it "-rc"?
+
+> +   to be tested by developers and users willing to test (testers). When
+
+No need for "(testers)".
+
+> +   testing all went OK, they can give Tested-by: tag for the -rc. Usually
+
+"testing all went OK" is a bit ackward.  How about this wording instead:
+	Responses to the -rc releases can be done on the mailing list by
+	sending a "Tested-by:" email with any other testing information
+	desired.  The "Tested-by:" tags will be collected and added to
+	the release commit.
+
+Thanks for taking this on, it's been a long time since we looked at this
+document.
+
+thanks,
+
+greg k-h

@@ -2,48 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E46C4D6EA8
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48A94D6EAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiCLMVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 07:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S231643AbiCLM1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 07:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiCLMVL (ORCPT
+        with ESMTP id S229745AbiCLM1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 07:21:11 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DD917A96
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 04:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=I4LbsDeMsT9PAzJ2X50ulKRjmZGAas7W4QaYBWmBc+c=; b=Vh1QuQPvLdKK7Q1gALKLp5ebnY
-        VReCh60MtZR8uf4Wbqto6ILSSDF3OcCYeHUJ0OsDU9b/S2DKgycXIhWsKP0hNw7sAj/mcHT5FYnWJ
-        8AykbnXvWaLSMIxI3H9vsidoGHmrA/Lh40OmEHcHolID/vHfnyZk0DBiht9GVpYq6+xpUIm1hdCfo
-        Dme8w5aWqhrOZEA1YAsQVj6aQtuxs6HMt4ybKge1pkOBi0hYfbHpd17HXaoN+/qYCHMmGj/1hoxBi
-        l3DGbg04Mlnil6LX9rceP/bQh/sXPaX6gas9YkXoJAwQf0VQeFrffdgaSU1g33rMhT5e9Z4t3j2OX
-        A2xKo5sg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nT0j2-000AEP-Je; Sat, 12 Mar 2022 12:20:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 39C4B98791D; Sat, 12 Mar 2022 13:20:00 +0100 (CET)
-Date:   Sat, 12 Mar 2022 13:20:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     x86@kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/ibt: Fix CC_HAS_IBT check for clang
-Message-ID: <20220312122000.GB28057@worktop.programming.kicks-ass.net>
-References: <20220311195642.2033108-1-nathan@kernel.org>
+        Sat, 12 Mar 2022 07:27:34 -0500
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875E274DD7;
+        Sat, 12 Mar 2022 04:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647087985; bh=g13EmdZxu+uLRpV+kyaRzAukTxiJf6X3eNAGmWIHgAo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CPnErHe4YEwRBekyBp89em3A6FstmaMFoVzhG4gIDx0dr/UrgvKNIejKbv36zEXT+
+         4s5bRvAUM4vpCI9MgzvafySLRtu29/sz4kwmtZpNCvJniC2S0sO+1JK45MBn5Tv0t3
+         vOIhvQfSIxQgDBVeccTpunjOPlcYYTeXas0n/3HLt1+6ug/jjuVhHGk/cz22hLeu8P
+         1OuY2e4QhzlYQmqqZ2k+gYCvaNpN4Ze7HufNj3+k39ejyuoFklHrnKXM2cY+Oa1Dnb
+         5NgfrIEJ+ULEErViYlhMKWqfPFmnESkLzp+cxaz12dRSHlp32R3VVlHHTIa8fNKH4l
+         Alk7eqhtu+RAQ==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 3297239ED25;
+        Sat, 12 Mar 2022 12:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1647087985; bh=g13EmdZxu+uLRpV+kyaRzAukTxiJf6X3eNAGmWIHgAo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CPnErHe4YEwRBekyBp89em3A6FstmaMFoVzhG4gIDx0dr/UrgvKNIejKbv36zEXT+
+         4s5bRvAUM4vpCI9MgzvafySLRtu29/sz4kwmtZpNCvJniC2S0sO+1JK45MBn5Tv0t3
+         vOIhvQfSIxQgDBVeccTpunjOPlcYYTeXas0n/3HLt1+6ug/jjuVhHGk/cz22hLeu8P
+         1OuY2e4QhzlYQmqqZ2k+gYCvaNpN4Ze7HufNj3+k39ejyuoFklHrnKXM2cY+Oa1Dnb
+         5NgfrIEJ+ULEErViYlhMKWqfPFmnESkLzp+cxaz12dRSHlp32R3VVlHHTIa8fNKH4l
+         Alk7eqhtu+RAQ==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id B6B5D39E5F9;
+        Sat, 12 Mar 2022 12:26:24 +0000 (UTC)
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+ <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
+ <9f4e3cdc-f5e2-7102-949e-7b3032118e63@mleia.com>
+ <e0da4fbc-b72c-60a0-5a5f-99d18653c294@canonical.com>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <d3e4e548-47c9-7488-26bc-f42be5e3c62a@mleia.com>
+Date:   Sat, 12 Mar 2022 14:26:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311195642.2033108-1-nathan@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <e0da4fbc-b72c-60a0-5a5f-99d18653c294@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220312_122625_237657_4D9DD867 
+X-CRM114-Status: GOOD (  22.68  )
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,36 +82,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 12:56:42PM -0700, Nathan Chancellor wrote:
-> Commit 41c5ef31ad71 ("x86/ibt: Base IBT bits") added a check for a crash
-> in clang. However, this check does not work for two reasons.
+On 3/12/22 12:23 PM, Krzysztof Kozlowski wrote:
+> On 11/03/2022 22:26, Vladimir Zapolskiy wrote:
+>> On 3/11/22 4:33 PM, Krzysztof Kozlowski wrote:
+>>> On 11/03/2022 15:07, Vladimir Zapolskiy wrote:
+>>>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+>>>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>>>>>>
+>>>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>>>>>> PL022 binding require two clocks to be defined but lpc platform doesn't
+>>>>>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>>>>>
+>>>>>>> Update spi clocks and clocks-names property by adding appropriate clock
+>>>>>>> reference to make it compliant with bindings.
+>>>>>>>
+>>>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>>>>>> ---
+>>>>>>> v2:
+>>>>>>> - New patch with similar changeset
+>>>>>>> - Send to soc ML
+>>>>>>>
+>>>>>>>      arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>>>>>      1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>>> index c87066d6c995..30958e02d5e2 100644
+>>>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>>>>>                                  compatible = "arm,pl022", "arm,primecell";
+>>>>>>>                                  reg = <0x20084000 0x1000>;
+>>>>>>>                                  interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>>>>>> -                             clock-names = "apb_pclk";
+>>>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+>>>>>>> +                             clock-names = "sspclk", "apb_pclk";
+>>>>>>
+>>>>>> In fact I'm uncertain if it is the right change, could it happen that the commit
+>>>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+>>>>>> schema pattern?
+>>>>>
+>>>>> Good pointm this doesn't quite seem right: it is unlikely that the same clock
+>>>>> is used for both the SPI bus and the APB bus.
+>>>>>
+>>>>>> Apparently just one clock is wanted on all observed platforms and cases, this
+>>>>>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
+>>>>>>
+>>>>>>            pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>>>>>
+>>>>>> So, I would vote to fix the device tree bindings schema.
+>>>
+>>> Drivers do not describe the hardware. Bindings should not be modeled on
+>>> drivers, but on actual hardware, so the example is not convincing.
+>>
+>> My concern is that fixing the bindings can break the driver and all its users,
+>> is it clear enough how it can happen in assumption that the driver uses just
+>> one clock at the moment?
 > 
-> The first reason is that '-pg' is missing from the check, which is
-> required for '-mfentry' to do anything.
-> 
-> The second reason is that cc-option only uses /dev/null as the input
-> file, which does not show a problem:
-> 
-> $ clang --version | head -1
-> Ubuntu clang version 12.0.1-8build1
-> 
-> $ clang -fcf-protection=branch -mfentry -pg -c -x c /dev/null -o /dev/null
-> 
-> $ echo $?
-> 0
-> 
-> $ echo "void a(void) {}" | clang -fcf-protection=branch -mfentry -pg -c -x c - -o /dev/null
-> ...
-> 
-> $ echo $?
-> 139
-> 
-> Use this test instead so that the check works for older versions of
-> clang.
-> 
-> Fixes: 41c5ef31ad71 ("x86/ibt: Base IBT bits")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> You meant fixing the DTS? We do not consider here "fixing bindings"
 
-Urgh... not pretty, but that's what we gotta live with I suppose.
+Yes, I meant fixing the DTS, sorry for confusion.
 
-Thanks!
+> because they look correct. About DTS, using the same clock twice should
+> not cause negative effect.
+
+But it is erroneous to specify the SSP clock as APB clock, so this v2 is
+incorrect, and I've mentioned above in the discussion that the APB clock
+shall be HCLK on the platform.
+
+To avoid any unpleasant uncertainties I expect to get a change in the
+driver firstly, the driver shall work according to the bindings, at
+the moment it is obviously broken.
+
+--
+Best wishes,
+Vladimir

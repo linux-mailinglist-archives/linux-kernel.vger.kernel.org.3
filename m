@@ -2,131 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3203A4D6FB3
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A664F4D6FB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiCLPSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 10:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S231539AbiCLPYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 10:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiCLPSp (ORCPT
+        with ESMTP id S231184AbiCLPYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 10:18:45 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAC020C185
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:17:38 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id y8so9237304edl.9
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:17:38 -0800 (PST)
+        Sat, 12 Mar 2022 10:24:09 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A79E1C8
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:22:43 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso13673744pjb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 07:22:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Pxin1j5j6CcmsdIEAHJPFzyAPatANahFw6X6/cFoxnM=;
-        b=SU4xr4X6+2waARawoylMlsiCPWBIBETU0MciuaZEiWdrDk2hx5UmhtjVBnOvAg/j8Y
-         P5AEc3LcMVyzxEP5nHlv2Olz53uvkKS0fxrgUxGcRFmX98+Qq6Q6eMA/vwzJmqCvzO/O
-         j+/mBzE+2Hp2rK2NI//4QDTmfX1LS9FohQxULpnfR8tTvY+r5fNWcupz8YhvqN+Qfuv8
-         G8GJScHk8gdOrtgUA2dETidap7xy6kcyCZ5Ayh4fMOWadoH7T5SieRyl6yB9ATdxntP9
-         /mrpSZqnk7afxXSrRZfLG9VUNA1B3WEMpKhYck68O+2UM4Q/g0ZrqJAGonS296H4uEre
-         YMyA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XRw+YAJ4GLl11xdBATgXVNGTmbm0rcp15o7Ojv9QUYU=;
+        b=HrPTJCVhf/GjWoAVFjv1jesn4SLS7xZ6WBQSAqte9w3LiKSMPRIizxvT8wzrrhbToK
+         9qRsJ3il+CNF+NGoQaVWkhPS6TbxTn2z4Z2Dbhx/qyzfYn2NvOLurKE82w2ZDQ3N9KGr
+         EsKLfYxLzD1e0kiaoVZujjMVufCe4SUxn3osfNe2yYd8E23tHMTsQ53ObFGsaxpcLo8F
+         i2gUm7tRiIThup7jJftVOQM3wmnSC75QoZieflOK2ZNVdLvXfjhboFFYt5xIRqe2A6s2
+         J1qioIIsDwyy63tQd0njPVZdKOUQmgZZJ+rfkJkfVdcsH18vxmUufs3D06dg15TS7pnR
+         O+2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Pxin1j5j6CcmsdIEAHJPFzyAPatANahFw6X6/cFoxnM=;
-        b=PfeTQOjJzhfX2jiJQLuUTrKCBqm/Qfh74RKUdcsfDKy5+kuD/yrZEFVAaJFhIJj/3k
-         QUT5xr9fepj8+6N8Ke5PE5eVZ8RgDD9cC4cbpbbzcHtlQ+iqECZBfbuSycoIkMLvvLnG
-         tHpl/I2YOseFMFYeqgBFR4eiacfSEUryEehjr9hc41ONRwYx90SKMAwuYyq7Vd9Ye13l
-         Idaw8X+TL5LoMWVqmBETAUIaYulPqwinPQFKKGN5TS5VpFaxmrkRlsdKmfctfZyOTLff
-         qYAsMpFv9cH0kR6Ho4BdTJ19iAg4o21vYI450bmm5F5wQUjrtbNze3vIxXyRsDT37MNA
-         sz1Q==
-X-Gm-Message-State: AOAM5303s0xj74C7u0PcMfUh0oHQITgLeuQjjIJXzpYkM9S/qrCMYl+2
-        s4ej2wja7vZKDUa3IdyZy+J0u1yvf6Xrm964/FCe
-X-Google-Smtp-Source: ABdhPJx4I73OmpEwBz9ywyJrJAWk2KLqVxBU5gzL/MTLzVaMx0+vl+oJ6aU8A6EOZmbP9Kz1KnrnrjH5oF/o50aIp00=
-X-Received: by 2002:a05:6402:2552:b0:416:a745:9626 with SMTP id
- l18-20020a056402255200b00416a7459626mr13558015edb.405.1647098256718; Sat, 12
- Mar 2022 07:17:36 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XRw+YAJ4GLl11xdBATgXVNGTmbm0rcp15o7Ojv9QUYU=;
+        b=DYciCDVHj4PL1vk0BASQgxt7uQWh9jSMMdZ2P5Q3DN8NC1v/ldB49Yv2NLghi3Nzfm
+         /NWvA9lSoCep4zKBl+J4HtCWmCXyG+YqL66FGRvxtupYTXMcbjguneJv+AeZp4JIwQff
+         og0MfyFOV0+LVgl4r3PfgpvKqwdwiJEUKUgpGjPMKSfUpFfpK1RU+qDdMbtnDWzJt3aN
+         wyPXqqlTX3MWGwRui0qlrTVBWqZDBrZkHQ2XWsI31GSUllTVfwZe9xnTtKaGHIu7jJ1t
+         mutZIHmWwRACOJ0+sytXyCkbOB2XlCOwSYttGPOSaBESNhzThur2ZO3XbbF/xQEyVpXc
+         W9bw==
+X-Gm-Message-State: AOAM531RSWFgOVBwAg/AQIe96TMPcAAXiSB5EAl8I+S1mKncpBjeE8y5
+        wHj4Wgk31PZFds/K/VbiHhl66w==
+X-Google-Smtp-Source: ABdhPJw0PdBgilaHU0OIB9uq21V827X4Efg8i3Efs4jn/EtALEnLrO3LoCU+I0rWkT53YIuOYagbvQ==
+X-Received: by 2002:a17:902:cec6:b0:151:e4a6:6af1 with SMTP id d6-20020a170902cec600b00151e4a66af1mr15233205plg.64.1647098563062;
+        Sat, 12 Mar 2022 07:22:43 -0800 (PST)
+Received: from localhost.localdomain ([2409:8a28:e63:f230:50dc:173d:c83a:7b2])
+        by smtp.gmail.com with ESMTPSA id ay5-20020a056a00300500b004f6d510af4asm12974605pfb.124.2022.03.12.07.22.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 07:22:42 -0800 (PST)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        pmladek@suse.com, joe.lawrence@redhat.com
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, qirui.001@bytedance.com,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v3] livepatch: Don't block removal of patches that are safe to unload
+Date:   Sat, 12 Mar 2022 23:22:20 +0800
+Message-Id: <20220312152220.88127-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220228215935.748017-1-mic@digikod.net> <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
- <f6b63133-d555-a77c-0847-de15a9302283@digikod.net> <CAHC9VhQd3rL-13k0u39Krkdjp2_dtPfgEPxr=kawWUM9FjjOsw@mail.gmail.com>
- <8d520529-4d3e-4874-f359-0ead9207cead@canonical.com> <CAHC9VhRrjqe1AdZYtjpzLJyBF6FTeQ4EcEwsOd2YMimA5_tzEA@mail.gmail.com>
- <b848fe63-e86d-af38-5198-5519cb3c02ef@I-love.SAKURA.ne.jp>
-In-Reply-To: <b848fe63-e86d-af38-5198-5519cb3c02ef@I-love.SAKURA.ne.jp>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 12 Mar 2022 10:17:25 -0500
-Message-ID: <CAHC9VhQqx7B+6Ji_92eMZ1o9O_yaDQQoPVw92Av0Zznv7i8F8w@mail.gmail.com>
-Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     John Johansen <john.johansen@canonical.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Eric Paris <eparis@parisplace.org>,
-        James Morris <jmorris@namei.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Steve French <sfrench@samba.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>,
-        selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 8:35 PM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2022/03/12 7:15, Paul Moore wrote:
-> > The silence on this has been deafening :/  No thoughts on fixing, or
-> > not fixing OPEN_FMODE(), Al?
->
-> On 2022/03/01 19:15, Micka=C3=ABl Sala=C3=BCn wrote:
-> >
-> > On 01/03/2022 10:22, Christian Brauner wrote:
-> >> That specific part seems a bit risky at first glance. Given that the
-> >> patch referenced is from 2009 this means we've been allowing O_WRONLY =
-|
-> >> O_RDWR to succeed for almost 13 years now.
-> >
-> > Yeah, it's an old bug, but we should keep in mind that a file descripto=
-r
-> > created with such flags cannot be used to read nor write. However,
-> > unfortunately, it can be used for things like ioctl, fstat, chdir=E2=80=
-=A6 I
-> > don't know if there is any user of this trick.
->
-> I got a reply from Al at https://lkml.kernel.org/r/20090212032821.GD28946=
-@ZenIV.linux.org.uk
-> that sys_open(path, 3) is for ioctls only. And I'm using this trick when =
-opening something
-> for ioctls only.
+module_put() is not called for a patch with "forced" flag. It should
+block the removal of the livepatch module when the code might still
+be in use after forced transition.
 
-Thanks Tetsuo, that's helpful.  After reading your email I went
-digging around to see if this was documented anywhere, and buried in
-the open(2) manpage, towards the bottom under the "File access mode"
-header, is this paragraph:
+klp_force_transition() currently sets "forced" flag for all patches on
+the list.
 
- "Linux reserves the special, nonstandard access mode 3 (binary 11)
-  in flags to mean: check for read and write permission on the file
-  and return a file descriptor that can't be used for reading or
-  writing.  This nonstandard access mode is used by some Linux
-  drivers to return a file descriptor that is to be used only for
-  device-specific ioctl(2) operations."
+In fact, any patch can be safely unloaded when it passed through
+the consistency model in KLP_UNPATCHED transition.
 
-I learned something new today :)  With this in mind it looks like
-doing a SELinux file:ioctl check is the correct thing to do.
+By other words, the "forced" flag must be set only for livepatches
+that are being removed. In particular, set the "forced" flag:
 
-Thanks again Tetsuo for clearing things up.
+  + only for klp_transition_patch when the transition to KLP_UNPATCHED
+    state was forced.
 
---=20
-paul-moore.com
+  + all replaced patches when the transition to KLP_PATCHED state was
+    forced and the patch was replacing the existing patches.
+
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+Changes in v3:
+ - rewrite more clear commit message by Petr.
+
+Changes in v2:
+ - interact nicely with the atomic replace feature noted by Miroslav.
+---
+ kernel/livepatch/transition.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 5683ac0d2566..7f25a5ae89f6 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -641,6 +641,18 @@ void klp_force_transition(void)
+ 	for_each_possible_cpu(cpu)
+ 		klp_update_patch_state(idle_task(cpu));
+ 
+-	klp_for_each_patch(patch)
+-		patch->forced = true;
++	/*
++	 * Only need to set forced flag for the transition patch
++	 * when force transition to KLP_UNPATCHED state, but
++	 * have to set forced flag for all replaced patches
++	 * when force atomic replace transition.
++	 */
++	if (klp_target_state == KLP_UNPATCHED)
++		klp_transition_patch->forced = true;
++	else if (klp_transition_patch->replace) {
++		klp_for_each_patch(patch) {
++			if (patch != klp_transition_patch)
++				patch->forced = true;
++		}
++	}
+ }
+-- 
+2.20.1
+

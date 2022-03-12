@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12894D70EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE184D70F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiCLUot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 15:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S232674AbiCLU5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 15:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiCLUor (ORCPT
+        with ESMTP id S231488AbiCLU5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 15:44:47 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3606EB20;
-        Sat, 12 Mar 2022 12:43:41 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D924A8C4;
-        Sat, 12 Mar 2022 21:43:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647117819;
-        bh=ZeEH/itQEzkuzgNJu5BxrRT3n9gQmJU57PR5oFX6p8g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHvUE9q5bHcZFWT6aj0KRl3j4WM7nSI2b+A3nDiy1SWDbDF1y/K7V3XYi5vSfNZaO
-         qNsLF8rZKqIbyvRCnpVuoi5SI6P++UBpAgO+mT037IcuKc0xBXlq64hOdIY5R+Hr1g
-         i3QINgGKA3/8WvtHOwMIsex/TCzwakAMiuNom4kU=
-Date:   Sat, 12 Mar 2022 22:43:22 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: media: uvcvideo: Update mailing list address
-Message-ID: <Yi0F6mUm7iCRGvCt@pendragon.ideasonboard.com>
-References: <20220312203323.626657-1-j.neuschaefer@gmx.net>
+        Sat, 12 Mar 2022 15:57:06 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE5B1BAF33;
+        Sat, 12 Mar 2022 12:55:59 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id A5C9B22239;
+        Sat, 12 Mar 2022 21:55:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647118558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vMgLswBA0/NbjgyCuBu9aMBgpNZnNIEHqc7S0Jyg3rE=;
+        b=ce7amQ7BEY6accaQP6fbi3KtF154KsNPlUep2oetXRO2av6Gt1tVkxnBV+ee8kCBIjYKPN
+        tqrDjAifF5sfhQsRjQuaPDjh0tbXI2MO2+hGoP1BmMtJqF+MwWeZNP3g0EWJOov41viXHM
+        5Zlh0D3gfr2hrmr2QGHvPvWAmdRhZWs=
+From:   Michael Walle <michael@walle.cc>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next] net: sfp: add 2500base-X quirk for Lantech SFP module
+Date:   Sat, 12 Mar 2022 21:50:14 +0100
+Message-Id: <20220312205014.4154907-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220312203323.626657-1-j.neuschaefer@gmx.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+The Lantech 8330-262D-E module is 2500base-X capable, but it reports the
+nominal bitrate as 2500MBd instead of 3125MBd. Add a quirk for the
+module.
 
-Thank you for the patch.
+The following in an EEPROM dump of such a SFP with the serial number
+redacted:
 
-On Sat, Mar 12, 2022 at 09:33:22PM +0100, Jonathan Neuschäfer wrote:
-> The mailing list address for UVC development has changed a while ago,
-> but it was only updated in MAINTAINERS, not in the documentation.
-> Update it there, too.
+00: 03 04 07 00 00 00 01 20 40 0c 05 01 19 00 00 00    ???...? @????...
+10: 1e 0f 00 00 4c 61 6e 74 65 63 68 20 20 20 20 20    ??..Lantech
+20: 20 20 20 20 00 00 00 00 38 33 33 30 2d 32 36 32        ....8330-262
+30: 44 2d 45 20 20 20 20 20 56 31 2e 30 03 52 00 cb    D-E     V1.0?R.?
+40: 00 1a 00 00 46 43 XX XX XX XX XX XX XX XX XX XX    .?..FCXXXXXXXXXX
+50: 20 20 20 20 32 32 30 32 31 34 20 20 68 b0 01 98        220214  h???
+60: 45 58 54 52 45 4d 45 4c 59 20 43 4f 4d 50 41 54    EXTREMELY COMPAT
+70: 49 42 4c 45 20 20 20 20 20 20 20 20 20 20 20 20    IBLE
 
-Thanks for bringing this to my attention, I didn't know we were still
-referencing that old list.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/net/phy/sfp-bus.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-How about moving to the linux-media@vger.kernel.org mailing list instead
-? I don't see many reasons to treat this driver with a special mailing
-list anymore.
-
-> Fixes: 616bd4e2573cb ("[media] MAINTAINERS: Update UVC driver's mailing list address")
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> ---
-> 
-> The ML is marked "subscribers-only" in MAINTAINERS. Perhaps it would
-> be useful to bring that up in the docs too.
-> ---
->  Documentation/userspace-api/media/drivers/uvcvideo.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/userspace-api/media/drivers/uvcvideo.rst b/Documentation/userspace-api/media/drivers/uvcvideo.rst
-> index e5fd8fad333c9..dcf992f85d471 100644
-> --- a/Documentation/userspace-api/media/drivers/uvcvideo.rst
-> +++ b/Documentation/userspace-api/media/drivers/uvcvideo.rst
-> @@ -7,7 +7,7 @@ This file documents some driver-specific aspects of the UVC driver, such as
->  driver-specific ioctls and implementation notes.
-> 
->  Questions and remarks can be sent to the Linux UVC development mailing list at
-> -linux-uvc-devel@lists.berlios.de.
-> +linux-uvc-devel@lists.sourceforce.net.
-> 
-> 
->  Extension Unit (XU) support
-
+diff --git a/drivers/net/phy/sfp-bus.c b/drivers/net/phy/sfp-bus.c
+index c1512c9925a6..15aa5ac1ff49 100644
+--- a/drivers/net/phy/sfp-bus.c
++++ b/drivers/net/phy/sfp-bus.c
+@@ -74,6 +74,12 @@ static const struct sfp_quirk sfp_quirks[] = {
+ 		.vendor = "HUAWEI",
+ 		.part = "MA5671A",
+ 		.modes = sfp_quirk_2500basex,
++	}, {
++		// Lantech 8330-262D-E can operate at 2500base-X, but
++		// incorrectly report 2500MBd NRZ in their EEPROM
++		.vendor = "Lantech",
++		.part = "8330-262D-E",
++		.modes = sfp_quirk_2500basex,
+ 	}, {
+ 		.vendor = "UBNT",
+ 		.part = "UF-INSTANT",
 -- 
-Regards,
+2.30.2
 
-Laurent Pinchart

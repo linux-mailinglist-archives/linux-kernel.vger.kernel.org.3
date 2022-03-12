@@ -2,189 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EE64D70C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0CB4D70CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiCLUST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 15:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S232594AbiCLUXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 15:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiCLUSS (ORCPT
+        with ESMTP id S230017AbiCLUXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 15:18:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C25205972;
-        Sat, 12 Mar 2022 12:17:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66C8EB80AFD;
-        Sat, 12 Mar 2022 20:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5579EC340EB;
-        Sat, 12 Mar 2022 20:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647116229;
-        bh=GadeI9krdmz72UAKX4LbaW8MXzY58uGXhigxFEem6Ec=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jE3/CwikWAHLy/vqmyy6WAdYAkZIYo18cP1UTBbNI+1qsTH8/ey4mJDVOwp5KnOJD
-         CctZ0fpjWAK9ar+FEBg8naCczl9EI0rh/I2HBSa8IuhdJaDaoputRSDhpjkQEwRUYz
-         f1PLc/A01nyLo7xirNHN8cObJVcjFjcrePXcinOLYdLyW7dLu/B9wBfijr3ZvMl9qj
-         hASD7WSQe5Li02dTiC7rM+tULT+ShfOi7u+4AWvO5SNpLn2pMlnEMLi5Az+1vzVFiH
-         Hx0dvNjx7Qsw9YhSkQcMg1UxBt9O1Qi83GgaTfR2LdHMZAwVCUwSiOcBmmA5/GURvu
-         h02OwujwM4Rww==
-Date:   Sat, 12 Mar 2022 12:17:06 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <Yiz/wm3nlJ/wOo6n@sol.localdomain>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
+        Sat, 12 Mar 2022 15:23:37 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE10208266;
+        Sat, 12 Mar 2022 12:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647116521;
+        bh=Kipwnu9i0XJKTtS/vkHsIeGhK2mTOYwd9Fe3CUqyhYc=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=UBhJ7b9IlVmT4EkmHV02GlVuK0MB7q9abBtPaRAY5uf7QVEJ9EjwhfutrcwEWT8sq
+         YXFayw4At97xktykMq7E4uoUmPxTD/H9tSHQpEhhsX0v++gfjIXV07O6813VKZBXhU
+         U1WRUzYr2A7imhWUzPh3AjSrD+rT85/b0gvq5jeY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([85.197.41.77]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrhUK-1nx1Tw3oCS-00nfow; Sat, 12
+ Mar 2022 21:22:01 +0100
+Date:   Sat, 12 Mar 2022 21:21:58 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, alistair@alistair23.me,
+        samuel@sholland.org, josua.mayer@jm0.eu,
+        letux-kernel@openphoenux.org
+Subject: Re: [RFC PATCH 4/6] drm: mxc-epdc: Add update management
+Message-ID: <Yi0A5inJh0Whkh5n@latitude>
+References: <20220206080016.796556-1-andreas@kemnade.info>
+ <20220206080016.796556-5-andreas@kemnade.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KGiIJO+uT5QL2O/C"
 Content-Disposition: inline
-In-Reply-To: <20220217162848.303601-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220206080016.796556-5-andreas@kemnade.info>
+X-Provags-ID: V03:K1:LUNg/vUU63M4JNITfsENQEGLDAqQgIJnfYNsY+v4K23T2MDIEHo
+ Jl4sGt1IMYukgUjGNhzu5Tm8Da+/r0BBtaK3fHq8LSq34ZeHA6C5UwVz1WZskw6ko7Y7Vh1
+ fYxjQCEQzdDeriYQxZSgcRBabREVihDEgouu48NutLnlDZ3jaYfAxEufhIvOBYIFcgci2AX
+ c03IWTkSxyD9gm+BDq9Lg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gzRNHYYwgDQ=:0Q74Y/hL8fApK7J8WSJqKV
+ 5SXZmwZHXjAUQxVia3LyaJAJtUzhCS6D7MH4GsSQ4kLf/jvGP6vlCiKDo8SIgBC+ZUdy8T0L3
+ 05hKk1PlcJqQ2S2jIMOCN7NySZo5daljzLUO4HaxrEujN8ou/xOxfgw7ppBd03nTzJ5CeZ1ot
+ Vmpi/wZ6tPNp2QGk8ZExQSJuVasN6ioqgxvmDrMxX8SrpCHKjt+YlgN6I1ppuSy0BQUeirQlf
+ HcG7xmv44Ho8o1yFzoM94iiVsirpJEMsJng1H9NME2SNqMBuOONJ9/W5uXrA+J0MoVDthc4bS
+ qxCYoZNSN3U9tRDk7MStptDoeTtH5TLOUmlSa2UQ7wH1OSFrllTDLuDB+uM97b5SEER5oddQ9
+ OGxcFzz4nqLHQmMrANhT3NmNtiBluV0rvzPOcir7Qbfh00gu+LMCHdXceTzITPwHfW5LfkWCD
+ 6m/WCfxI58aFKGDfHF01B8dQcvTQph98tmiAuCVTpBWki2HtWs9Gre0egnHh4QZFaa/WgmEkQ
+ napTXnO7097NELB5G3B8m1kAUthfuAeKOed8jt68YRdQHH04Fw6sDmZW3d5XgaL2cP5MWBYBi
+ WBdX+N9LY5NTmbraVlm4QhKGK8LKnOF8rifHR+ZEg5+0Q7HYrGfxaKMPhFYWEU3qrDn/SfbH5
+ KsExIYV9sLsfuKG1GAHbls69hwXAbQWQsWthf+0IS+Md6ssmKYao961c/7W++L230coHf9PSs
+ pmD+aKGDJOzKg9rjLa5TvanBQAPiEJoak5eeaX2dgxroiNOLnaYa64RAoeVCR1xL83a8zbd3a
+ OwA9wc04nPrrkb31iDzXcKLgcPni/yFxh3ANMF8awEPtTYoo4QSC4k6fzL/uvRWp8R6woC6WC
+ /jcyR8DSRmxARZpeT4ENNieExzVYxHZgjOKKj9o5Vgdb1AOn0+H2dr6Lj52KiURVkJGu8jKm7
+ tqUccIewUVkBxatfn1isnjeZQrYRk+YtTsQO4DgzvjaVVuWzfWaIomqQmn3Zw819Yn6jcqq2/
+ mj/Zm92RVHOeQ8dDHbDFQ1jha43qLYl4C4TyUVxHCJ7m+z3znQgPgSCTy8f22s8CwCEDji2xx
+ /utk2hTriST7Qk=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
-> This topic has come up countless times, and usually doesn't go anywhere.
-> This time I thought I'd bring it up with a slightly narrower focus,
-> updated for some developments over the last three years: we finally can
-> make /dev/urandom always secure, in light of the fact that our RNG is
-> now always seeded.
-> 
-> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
-> rather than passively wait for it"), the RNG does a haveged-style jitter
-> dance around the scheduler, in order to produce entropy (and credit it)
-> for the case when we're stuck in wait_for_random_bytes(). How ever you
-> feel about the Linus Jitter Dance is beside the point: it's been there
-> for three years and usually gets the RNG initialized in a second or so.
-> 
-> As a matter of fact, this is what happens currently when people use
-> getrandom(). It's already there and working, and most people have been
-> using it for years without realizing.
-> 
-> So, given that the kernel has grown this mechanism for seeding itself
-> from nothing, and that this procedure happens pretty fast, maybe there's
-> no point any longer in having /dev/urandom give insecure bytes. In the
-> past we didn't want the boot process to deadlock, which was
-> understandable. But now, in the worst case, a second goes by, and the
-> problem is resolved. It seems like maybe we're finally at a point when
-> we can get rid of the infamous "urandom read hole".
-> 
-> The one slight drawback is that the Linus Jitter Dance relies on random_
-> get_entropy() being implemented. The first lines of try_to_generate_
-> entropy() are:
-> 
-> 	stack.now = random_get_entropy();
-> 	if (stack.now == random_get_entropy())
-> 		return;
-> 
-> On most platforms, random_get_entropy() is simply aliased to get_cycles().
-> The number of machines without a cycle counter or some other
-> implementation of random_get_entropy() in 2022, which can also run a
-> mainline kernel, and at the same time have a both broken and out of date
-> userspace that relies on /dev/urandom never blocking at boot is thought
-> to be exceedingly low. And to be clear: those museum pieces without
-> cycle counters will continue to run Linux just fine, and even
-> /dev/urandom will be operable just like before; the RNG just needs to be
-> seeded first through the usual means, which should already be the case
-> now.
-> 
-> On systems that really do want unseeded randomness, we already offer
-> getrandom(GRND_INSECURE), which is in use by, e.g., systemd for seeding
-> their hash tables at boot. Nothing in this commit would affect
-> GRND_INSECURE, and it remains the means of getting those types of random
-> numbers.
-> 
-> This patch goes a long way toward eliminating a long overdue userspace
-> crypto footgun. After several decades of endless user confusion, we will
-> finally be able to say, "use any single one of our random interfaces and
-> you'll be fine. They're all the same. It doesn't matter." And that, I
-> think, is really something. Finally all of those blog posts and
-> disagreeing forums and contradictory articles will all become correct
-> about whatever they happened to recommend, and along with it, a whole
-> class of vulnerabilities eliminated.
-> 
-> With very minimal downside, we're finally in a position where we can
-> make this change.
-> 
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Nick Hu <nickhu@andestech.com>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Joshua Kinard <kumba@gentoo.org>
-> Cc: David Laight <David.Laight@aculab.com>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Eric Biggers <ebiggers@google.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Lennart Poettering <mzxreary@0pointer.de>
-> Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+
+--KGiIJO+uT5QL2O/C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Feb 06, 2022 at 09:00:14AM +0100, Andreas Kemnade wrote:
+> The EPDC can process some dirty rectangles at a time, pick them up and
+> forward them to the controller. Only processes not involving PXP are
+> supported at the moment. Due to that and to work with more waveforms,
+> there is some masking/shifting done. It was tested with the factory
+> waveforms of Kobo Clara HD, Tolino Shine 3, and Tolino Shine 2HD.
+> Also the waveform called epdc_E060SCM.fw from NXP BSP works with the
+> i.MX6SL devices.
+>=20
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
-> Having learned that MIPS32 isn't affected by this (initially my largest
-> worry), and then heartened today upon reading LWN's summary of our
-> previous discussion ("it would seem there are no huge barriers to
-> removing the final distinction between /dev/random and /dev/urandom"), I
-> figured I'd go ahead and submit a v1 of this. It seems at least worth
-> trying and seeing if somebody arrives with legitimate complaints. To
-> that end I've also widened the CC list quite a bit.
-> 
-> Changes v0->v1:
-> - We no longer touch GRND_INSECURE at all, in anyway. Lennart (and to an
->   extent, Andy) pointed out that getting insecure numbers immediately at
->   boot is still something that has legitimate use cases, so this patch
->   no longer touches that code.
-> 
->  drivers/char/mem.c     |  2 +-
->  drivers/char/random.c  | 51 ++++++------------------------------------
->  include/linux/random.h |  2 +-
->  3 files changed, 9 insertions(+), 46 deletions(-)
-> 
 
-Just a small nit: the comments above rng_is_initialized() and
-wait_for_random_bytes() still imply that /dev/urandom is nonblocking.
+[...]
+> +	adj_update_region =3D upd_data_list->update_desc->upd_data.update_regio=
+n;
+> +	/*
+> +	 * Is the working buffer idle?
+> +	 * If the working buffer is busy, we must wait for the resource
+> +	 * to become free. The IST will signal this event.
 
-- Eric
+What does IST mean?
+
+
+> +void mxc_epdc_draw_mode0(struct mxc_epdc *priv)
+
+What does mode 0 imply? An overview of the possible modes would be
+appreciated.
+
+> +{
+> +	u32 *upd_buf_ptr;
+> +	int i;
+> +	u32 xres, yres;
+> +
+> +	upd_buf_ptr =3D (u32 *)priv->epdc_mem_virt;
+> +
+> +	epdc_working_buf_intr(priv, true);
+> +	epdc_lut_complete_intr(priv, 0, true);
+> +
+> +	/* Use unrotated (native) width/height */
+> +	xres =3D priv->epdc_mem_width;
+> +	yres =3D priv->epdc_mem_height;
+> +
+> +	/* Program EPDC update to process buffer */
+> +	epdc_set_update_area(priv, priv->epdc_mem_phys, 0, 0, xres, yres, 0);
+> +	epdc_submit_update(priv, 0, priv->wv_modes.mode_init, UPDATE_MODE_FULL,
+> +		false, true, 0xFF);
+> +
+> +	dev_dbg(priv->drm.dev, "Mode0 update - Waiting for LUT to complete...\n=
+");
+> +
+> +	/* Will timeout after ~4-5 seconds */
+> +
+> +	for (i =3D 0; i < 40; i++) {
+> +		if (!epdc_is_lut_active(priv, 0)) {
+> +			dev_dbg(priv->drm.dev, "Mode0 init complete\n");
+> +			return;
+> +		}
+> +		msleep(100);
+> +	}
+> +
+> +	dev_err(priv->drm.dev, "Mode0 init failed!\n");
+> +}
+
+> +#define WAVEFORM_MODE_GLR16			4
+> +#define WAVEFORM_MODE_GLD16			5
+> +#define WAVEFORM_MODE_AUTO			257
+
+(How) are these mode numbers related to "mode 0"?
+
+
+Jonathan
+
+--KGiIJO+uT5QL2O/C
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmItAOYACgkQCDBEmo7z
+X9t/Fw//WJXYK5In6OQvEJeTImkCzhxbqniGCtE1+Jw/e2CfJQhBvZ77tElUhbHk
+7IMr9JVLrQ19o32h7p/xFdeM6PWNVOiYFP7woHiU3SXasNB8t6JHxnUkX7CXhZvL
+0FmfHtJRVGljFKi9VDMkicJxBwxsOQoEbAmfUiRdcimwjjDjKLl4HThP1kPaeMBm
+6NEKVqBp5KoTqHmB+1XLfM9dZGwxrzHs5QYlAnyZZzv/OuZUgSjzhB2qK45nr8UH
+1C7Psmeo7MaYP+ZqgqeYU3k9PcrQ9OxUUZ9HKjdPJ61oXhuTR0wesGpPulOxPbV/
+uloHVV8bdYyVYrr/CAs3bhL5GvhcTkuTGO9y3OUW74l9xRsn8xQxwio6NbvSigdn
+6AfjUk9F298wN7d3j7scryZ8RuDFkuocWSm0NdUhynQb2LeRXwYNz35KDq34DSgQ
+SmR99dsdQJnqPre7oz7NQr6mPw3lretW5Rbfai60Wp5POwvLLXktZX4tVnkM0CBz
+g0wZoXJywqgoRMcd1jRSUzcZMytfBss1dz7j3Fg3PNk7EylJ+/xWv72ZUOTMftXW
+6hvwHRyo9SUpNi0sCWT1uh6aPAgrt2xQkTBObb9UJozSfL6mSxIChRbuSHKeLz4q
+reX0HS0EEgsFYoVROEVMNxqS3kKg78ceqbE4Q6bnWZ2dpNHya0E=
+=SlcQ
+-----END PGP SIGNATURE-----
+
+--KGiIJO+uT5QL2O/C--

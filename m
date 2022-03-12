@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9244D6E65
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 12:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726834D6E67
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 12:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiCLLXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 06:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S231293AbiCLLY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 06:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiCLLXH (ORCPT
+        with ESMTP id S229519AbiCLLY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 06:23:07 -0500
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85FB2214175;
-        Sat, 12 Mar 2022 03:22:00 -0800 (PST)
-Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 582817A018C;
-        Sat, 12 Mar 2022 12:21:58 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH v0] pata_parport: add driver (PARIDE replacement)
-Date:   Sat, 12 Mar 2022 12:21:55 +0100
-User-Agent: KMail/1.9.10
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220310212812.13944-1-linux@zary.sk> <202203111955.15743.linux@zary.sk> <c0a6065c-3e89-a4be-e257-ce25711e4368@opensource.wdc.com>
-In-Reply-To: <c0a6065c-3e89-a4be-e257-ce25711e4368@opensource.wdc.com>
-X-KMail-QuotePrefix: > 
+        Sat, 12 Mar 2022 06:24:57 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F20558C;
+        Sat, 12 Mar 2022 03:23:51 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id gb39so24084134ejc.1;
+        Sat, 12 Mar 2022 03:23:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3f+ibCQHYhTXQxUBNEK2juHi8lBsmqsUoSUZZ8pGA8w=;
+        b=WFsof7h/DWoEA4aa3AcV6OW1zKC+pvshdXwFujuf9dDsuK2yISxJ13BkVmZS+54QuY
+         Pm7rSBHQVBapi8rTUm5LEodgjxh9KvBg88OTVmSdHjN441gskyv83nigVpQ1bO0AHX2o
+         hFEGKTP8fDlYM8t4m/Eu4A7tTJaJefGgKKO76HSTZBTF9gE3vi6OhscfBzwbO6iAO2x2
+         0mXZjrqXXdxMJ+/oF5+1tSKSGW3ikbakxba5wPD5bjf/amBym4dWdQ3UZjEoCQzM+Qos
+         tKjG04iJNHBO3eTxZ8OZ3kiIvR68nMPYUSO/yP1pbgTEBgLvRBmp0prKz+QIitPaYmzV
+         tcUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3f+ibCQHYhTXQxUBNEK2juHi8lBsmqsUoSUZZ8pGA8w=;
+        b=uHkO5+Drb+ViEtaTs1gqhPJPmWykdqlcyBmYOUOp4vT9UVv7jZvDugKN05qX3x3ny/
+         RazbMSex63ge3JGpJY7rK3W0+WI6BdeBSN2g/TshWVZrjy+6pSWOXLDT72BdrK1+tDDJ
+         F99QoYKjL5aw8lW2nDUnRXMwIWCINPfHJYY0sCSC9D/Bsajq4zfd8MS02agiTgGJ/HHx
+         ST5ZT3M4nfbwuolM42t9n2Iow+e8N3X9jwxq/hwMFd3Gyfl4PaQdLy1+p/oSfThdzFJL
+         McbiPHhLsAz8hSUk9vBdpaQijvmcrPQclpMmtRa9dpH/LlfZ1+Y0wExKQd/DW3w3ncLA
+         mQCg==
+X-Gm-Message-State: AOAM530kN8k2bSBvJBx5v2APHpHWJrK7VUZEMzsZEKYb82uJAuMaqxMl
+        UN3r8kfyBWglv5+/Sl/csLM=
+X-Google-Smtp-Source: ABdhPJxgA2H/bN1nGZKBG20n06Z/JGFlfDtEt1jrDZkcOzT5HlHGrlcgclUA2ihc7ep5CyZC5OTpnA==
+X-Received: by 2002:a17:907:2d90:b0:6d8:9fc9:ac36 with SMTP id gt16-20020a1709072d9000b006d89fc9ac36mr11900287ejc.28.1647084230371;
+        Sat, 12 Mar 2022 03:23:50 -0800 (PST)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id zk1-20020a17090733c100b006dab4a41df8sm4071929ejb.111.2022.03.12.03.23.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 03:23:49 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ming Qian <ming.qian@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 29/38] media: platform: sun8i-rotate: move config to its own file
+Date:   Sat, 12 Mar 2022 12:23:48 +0100
+Message-ID: <2619690.mvXUDI8C0e@kista>
+In-Reply-To: <bd96344ebc563aa632a3a1c5ddad7b7d7ee6fc0a.1647006877.git.mchehab@kernel.org>
+References: <cover.1647006877.git.mchehab@kernel.org> <bd96344ebc563aa632a3a1c5ddad7b7d7ee6fc0a.1647006877.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202203121221.56068.linux@zary.sk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dne petek, 11. marec 2022 ob 15:07:42 CET je Mauro Carvalho Chehab napisal(a):
+> In order to better organize the platform/Kconfig, place
+> sun8i-rotate-specific config stuff on a separate Kconfig file.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
 
-On Saturday 12 March 2022 09:09:54 Damien Le Moal wrote:
-> On 3/12/22 03:55, Ondrej Zary wrote:
-> > On Friday 11 March 2022 00:59:20 Damien Le Moal wrote:
-> >> On 3/11/22 06:28, Ondrej Zary wrote:
-> >>> Add pata_parport (PARIDE replacement) core libata driver.
-> >>>
-> >>> The original paride protocol modules are used for now so allow them to
-> >>> be compiled without old PARIDE core.
-> >>>
-> >>> Signed-off-by: Ondrej Zary <linux@zary.sk>
-> >>> ---
-> >>>  drivers/Makefile                   |   2 +-
-> >>>  drivers/ata/Kconfig                |  22 +
-> >>>  drivers/ata/Makefile               |   2 +
-> >>>  drivers/ata/parport/Makefile       |   3 +
-> >>>  drivers/ata/parport/pata_parport.c | 805 +++++++++++++++++++++++++++++
-> >>>  drivers/ata/parport/pata_parport.h | 108 ++++
-> >>>  drivers/block/paride/Kconfig       |  32 +-
-> >>>  drivers/block/paride/paride.h      |   5 +
-> >>>  8 files changed, 962 insertions(+), 17 deletions(-)
-> >>>  create mode 100644 drivers/ata/parport/Makefile
-> >>>  create mode 100644 drivers/ata/parport/pata_parport.c
-> >>>  create mode 100644 drivers/ata/parport/pata_parport.h
-> >>>
-> >>> diff --git a/drivers/Makefile b/drivers/Makefile
-> >>> index a110338c860c..8ec515f3614e 100644
-> >>> --- a/drivers/Makefile
-> >>> +++ b/drivers/Makefile
-> >>> @@ -98,7 +98,7 @@ obj-$(CONFIG_DIO)		+= dio/
-> >>>  obj-$(CONFIG_SBUS)		+= sbus/
-> >>>  obj-$(CONFIG_ZORRO)		+= zorro/
-> >>>  obj-$(CONFIG_ATA_OVER_ETH)	+= block/aoe/
-> >>> -obj-$(CONFIG_PARIDE) 		+= block/paride/
-> >>> +obj-y		 		+= block/paride/
-> >>>  obj-$(CONFIG_TC)		+= tc/
-> >>>  obj-$(CONFIG_USB_PHY)		+= usb/
-> >>>  obj-$(CONFIG_USB)		+= usb/
-> >>> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-> >>> index e5641e6c52ee..671c27b77a48 100644
-> >>> --- a/drivers/ata/Kconfig
-> >>> +++ b/drivers/ata/Kconfig
-> >>> @@ -1161,6 +1161,28 @@ config PATA_WINBOND_VLB
-> >>>  	  Support for the Winbond W83759A controller on Vesa Local Bus
-> >>>  	  systems.
-> >>>  
-> >>> +config PATA_PARPORT
-> >>> +	tristate "Parallel port IDE device support"
-> >>> +	depends on PARPORT_PC && PARIDE=n
-> >>
-> >> This is very confusing. The change above this one switch paride
-> >> compilation to be unconditional, regardless of CONFIG_PARIDE value, but
-> >> here, you have the dependency to PARIDE=n. I do not understand... Please
-> >> clarify.
-> > 
-> > pata_parport will use existing paride protocol modules. So the paride/ directory must be processed to compile the protocol modules (if they're enabled) even if paride is not enabled.
-> > 
-> > pata_parport and paride are mutually exclusive because the binary protocol modules are incompatible (the struct pi_adapter is different).
-> 
-> So if both CONFIG_PARIDE and CONFIG_PATA_PARPORT are disabled, there
-> should be no need to compile the core PARIDE code under block/. You
-> should have something like:
-> 
-> In drivers/Makefile:
-> 
-> -obj-$(CONFIG_PARIDE) 		+= block/paride/
-> +obj-$(CONFIG_PARIDE_CORE) 	+= block/paride/
-> 
-> And then have CONFIG_PARIDE and CONFIG_PATA_PARPORT select PARIDE_CORE,
-> with CONFIG_PARIDE and CONFIG_PATA_PARPORT being mutually exclusive
-> (using "depends on" as you did).
-> 
-> Here, I am assuming that block/paride is the core code used by both
-> PARIDE and PATA_PARPORT. Not sure what PARPORT_PC does nor what its
-> dependency on block/paride code is.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-There's no common core in block/paride. The block/paride/Makefile says:
-obj-$(CONFIG_PARIDE)            += paride.o
-obj-$(CONFIG_PARIDE_ATEN)       += aten.o
-obj-$(CONFIG_PARIDE_...other protocol drivers
+Best regards,
+Jernej
 
-So if PARIDE and all protocol drivers are disabled, nothing is compiled there.
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/
+C on the cover.
+> See [PATCH v2 00/38] at: https://lore.kernel.org/all/cover.
+1647006877.git.mchehab@kernel.org/
+> 
+>  drivers/media/platform/Kconfig                    | 14 +-------------
+>  drivers/media/platform/sunxi/sun8i-rotate/Kconfig | 14 ++++++++++++++
+>  2 files changed, 15 insertions(+), 13 deletions(-)
+>  create mode 100644 drivers/media/platform/sunxi/sun8i-rotate/Kconfig
+> 
+> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+> index 37103f24979f..8d0fa9670eaa 100644
+> --- a/drivers/media/platform/Kconfig
+> +++ b/drivers/media/platform/Kconfig
+> @@ -71,6 +71,7 @@ source "drivers/media/platform/s5p-g2d/Kconfig"
+>  source "drivers/media/platform/sti/hva/Kconfig"
+>  source "drivers/media/platform/stm32/Kconfig"
+>  source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
+> +source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
+>  
+>  config VIDEO_MUX
+>  	tristate "Video Multiplexer"
+> @@ -241,19 +242,6 @@ config VIDEO_TI_VPE_DEBUG
+>  	help
+>  	  Enable debug messages on VPE driver.
+>  
+> -config VIDEO_SUN8I_ROTATE
+> -	tristate "Allwinner DE2 rotation driver"
+> -	depends on V4L_MEM2MEM_DRIVERS
+> -	depends on VIDEO_DEV && VIDEO_V4L2
+> -	depends on ARCH_SUNXI || COMPILE_TEST
+> -	depends on COMMON_CLK && OF
+> -	depends on PM
+> -	select VIDEOBUF2_DMA_CONTIG
+> -	select V4L2_MEM2MEM_DEV
+> -	help
+> -	   Support for the Allwinner DE2 rotation unit.
+> -	   To compile this driver as a module choose m here.
+> -
+>  config VIDEO_TEGRA_VDE
+>  	tristate "NVIDIA Tegra Video Decoder Engine driver"
+>  	depends on V4L_MEM2MEM_DRIVERS
+> diff --git a/drivers/media/platform/sunxi/sun8i-rotate/Kconfig b/drivers/
+media/platform/sunxi/sun8i-rotate/Kconfig
+> new file mode 100644
+> index 000000000000..64a8ea76e917
+> --- /dev/null
+> +++ b/drivers/media/platform/sunxi/sun8i-rotate/Kconfig
+> @@ -0,0 +1,14 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config VIDEO_SUN8I_ROTATE
+> +	tristate "Allwinner DE2 rotation driver"
+> +	depends on V4L_MEM2MEM_DRIVERS
+> +	depends on VIDEO_DEV && VIDEO_V4L2
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on COMMON_CLK && OF
+> +	depends on PM
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select V4L2_MEM2MEM_DEV
+> +	help
+> +	   Support for the Allwinner DE2 rotation unit.
+> +	   To compile this driver as a module choose m here.
+> -- 
+> 2.35.1
+> 
+> 
 
--- 
-Ondrej Zary
+

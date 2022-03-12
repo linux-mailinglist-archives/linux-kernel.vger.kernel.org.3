@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16E14D6F38
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0554D6F3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiCLNeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 08:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S230195AbiCLNf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 08:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiCLNeC (ORCPT
+        with ESMTP id S229494AbiCLNf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 08:34:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F54BE4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 05:32:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1021BB8013A
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E53C340EB;
-        Sat, 12 Mar 2022 13:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647091972;
-        bh=z6eDtSo9u9x6ePaflNE4F8fwVoYsvAC3AWPaIS6jwm8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TLVDmCE6ObD1HazvAL/1gYYpMv3se7eZBH3SZ9SngPcFkXsbphlIDhqkym8iTcnin
-         O4ZgyavmtQeKNsTNMbdbJpMW+4dlxHJ14BuMuVvwKRx6+G61OZsF7/0mCm7Pl74sgj
-         lQ3bYttiNPMSEA24vsoKPqccycfG7gHxrVg6JPWRrICXj062hoXEscls9cb5HSTrEF
-         kIOWq3ylE4rL8uyusFsBO6ESpGI3/cMRxMOsoPFbaGvVXpJOcDhGM89E+iNGiLwMv6
-         WOf3e+aWfHp9SZ0zS51/2Q6GXgBe7SM/1Pa6Ilnd1BAf2+TvSV+zZ7vEJ7bp8g5j9T
-         gCBMhNodGUebQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E3F80403C8; Sat, 12 Mar 2022 10:32:48 -0300 (-03)
-Date:   Sat, 12 Mar 2022 10:32:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] tools kvm headers arm64: Update KVM headers from the
- kernel sources
-Message-ID: <YiyhAK6sVPc83FaI@kernel.org>
+        Sat, 12 Mar 2022 08:35:57 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084A460EE;
+        Sat, 12 Mar 2022 05:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=d7N9wsNuqkZgK1+eKcOkZTC3C9GRGbNq5Ad3wwuX278=; b=JAgaT3p5mES5x2vTc50l81A/DB
+        EfXJ8ZAn7+PI9x974nNSvog0QkLWoGopkOCd7o7eTeEaaBNbP2v3QilphZ2Rl/SGRB8mVQfV0Ffpj
+        OMEG9fkNHugB0DJ7/oHB/HiP984qdWzoySy9d2q+zRTLdUTzKySOyuzUyID2IhePt/k/CFTrHSJ+q
+        CAg0hfpNXy4Xd/4j9C+34pNiNr/j5MBP8Kq/lsIad/5QH2Ygn7PYm1i84BIpyeRJ6gZNid+ke9wIv
+        BEWXD5rAG4q9Csv1MRUZ7qf4zPX60fwuCOsBAxjFQtoRy8PwYwkXkYrYCwgcAcBawTnfDy427BEOT
+        x3Xa8Upw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nT1tN-000BDr-Mm; Sat, 12 Mar 2022 13:34:45 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1DB8F987D0D; Sat, 12 Mar 2022 14:34:45 +0100 (CET)
+Date:   Sat, 12 Mar 2022 14:34:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>
+Subject: Re: [PATCH linux-next] cgroup: fix suspicious
+ rcu_dereference_check() usage warning
+Message-ID: <20220312133445.GA28086@worktop.programming.kicks-ass.net>
+References: <20220305034103.57123-1-zhouchengming@bytedance.com>
+ <20220312121913.GA28057@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220312121913.GA28057@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 12, 2022 at 01:19:13PM +0100, Peter Zijlstra wrote:
+> On Sat, Mar 05, 2022 at 11:41:03AM +0800, Chengming Zhou wrote:
+> > task_css_set_check() will use rcu_dereference_check() to check for
+> > rcu_read_lock_held() on the read-side, which is not true after commit
+> > dc6e0818bc9a ("sched/cpuacct: Optimize away RCU read lock"). This
+> > commit drop explicit rcu_read_lock(), change to RCU-sched read-side
+> > critical section. So fix the RCU warning by adding check for
+> > rcu_read_lock_sched_held().
+> > 
+> > Fixes: dc6e0818bc9a ("sched/cpuacct: Optimize away RCU read lock")
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Reported-by: syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com
+> > Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> 
+> Thanks, I'll go stick this in sched/core so it's in the same branch that
+> caused the problem.
 
-FYI, I'm carrying this on my perf tools tree,
+FWIW I never saw this patch because it doesn't instantly look like a
+patch I should be interested in. It's classified as 'for-next' and I
+don't run -next, sfr does that. Then it's tagged as cgroup, which I also
+don't do.
 
-Regards,
+Nowhere does that look like a patch that wants to go in sched/core and
+fixes a cpuacct issue.
 
-- Arnaldo
-
-----
-
-To pick the changes from:
-
-  a5905d6af492ee6a ("KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated")
-
-That don't causes any changes in tooling (when built on x86), only
-addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/kvm.h' differs from latest version at 'arch/arm64/include/uapi/asm/kvm.h'
-  diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/asm/kvm.h
-
-Cc: James Morse <james.morse@arm.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/arm64/include/uapi/asm/kvm.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/arch/arm64/include/uapi/asm/kvm.h b/tools/arch/arm64/include/uapi/asm/kvm.h
-index b3edde68bc3e013c..323e251ed37bc0f6 100644
---- a/tools/arch/arm64/include/uapi/asm/kvm.h
-+++ b/tools/arch/arm64/include/uapi/asm/kvm.h
-@@ -281,6 +281,11 @@ struct kvm_arm_copy_mte_tags {
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED	3
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED     	(1U << 4)
- 
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3	KVM_REG_ARM_FW_REG(3)
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL		0
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL		1
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED	2
-+
- /* SVE registers */
- #define KVM_REG_ARM64_SVE		(0x15 << KVM_REG_ARM_COPROC_SHIFT)
- 
--- 
-2.35.1
-
+On top of that, I still don't agree with this, I really think
+rcu_dereference_check() itself should be changed.

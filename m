@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C074D6BA7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 02:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803E84D6BAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 02:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiCLBXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 20:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
+        id S229785AbiCLBhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 20:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiCLBXN (ORCPT
+        with ESMTP id S229447AbiCLBhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 20:23:13 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3498B240D22;
-        Fri, 11 Mar 2022 17:22:09 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id n2so9049721plf.4;
-        Fri, 11 Mar 2022 17:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=pWYgEiBYOYawrjVkjtKlGXVa4e5QOFCJd9hcRju3xX8=;
-        b=moq0CsNcU+qKSsYEfwlsZME/d0xeg2VImMpQvGWcgnw4lydi31sRzzliSC+IorfqVP
-         c/50WG7e9LzvmQscmvJrxtlibnPTVXJ2PY5D4vjMVlOhuo1ciQswUDNmFgXsIfuqP/VK
-         AH+mWLxHNcpCce6Yq71uiNOw3jJTe4ASulQRj28qzkaQsFyo1iF7YHc/BCfOl7dlU7JU
-         06yehRMh5CjK0PCDnhDC6JyIofTgWjU9piX1gH8zFuVWhITM/9Blq/ld371G3Cy3vHIn
-         y/qnlLgDwpmlxtu+ifaSMhl73NwVTaJNSnlA0x7WbbvMYiddYmJW5h8dVhWs3vv6AsXI
-         zD5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=pWYgEiBYOYawrjVkjtKlGXVa4e5QOFCJd9hcRju3xX8=;
-        b=NW6sxnIlXcaOFmnmr6aBsgEkxM7/IJeXd/B3YYnSxkRUBcNRZaOhdeR91dRFpq284U
-         fa//40zcFHIjaQGnazVQDu2fdakWPoZsS1QuqnmOnsomqk31/KUQ8S+coGmvmQNrmzo8
-         OF/52MloQtUGV1qd3/ZuxoUxIGZbQHp5yTIxPUgUFpaeycP08VoSJGx3Y1x4qx5HEEL2
-         ywmE4xyYxUQSV5Z0qmUlC2oEW4DgfSh27En1cckXsn2FYMw/lENuq94OFfNBVp6ItL4S
-         e9T2EQ4aCvT/NWLGD2tSq27JygKL6SMO81Bq3cS2aXY5gRfj6M2rZBK+n9nQyprmZkgm
-         eYGQ==
-X-Gm-Message-State: AOAM531ceOsl4jAMlOnLy51moZDoO6FzVi5g3fgqfD9t9vajTPRxmqHa
-        nx2G2iVdh3Xe6VdJjLDdsuvysyF3gzq9153HKyTPTA==
-X-Google-Smtp-Source: ABdhPJzMD/iAf/t5t7VBM78cI6NgpFald40ejgQ12V8mvmtW8bmH8VTRa1loakC28Lac2gBNMNjvHw==
-X-Received: by 2002:a17:90b:3b8c:b0:1bf:8841:41e6 with SMTP id pc12-20020a17090b3b8c00b001bf884141e6mr24321386pjb.242.1647048127677;
-        Fri, 11 Mar 2022 17:22:07 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a19d000b001c1c6b25cb2sm6086556pjj.26.2022.03.11.17.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 17:22:06 -0800 (PST)
-Message-ID: <622bf5be.1c69fb81.65cb0.f8d7@mx.google.com>
-Date:   Fri, 11 Mar 2022 17:22:06 -0800 (PST)
-X-Google-Original-Date: Sat, 12 Mar 2022 01:22:04 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220310140812.869208747@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 00/58] 5.10.105-rc2 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 20:37:15 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215E974633;
+        Fri, 11 Mar 2022 17:36:10 -0800 (PST)
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22C1YYxk016513;
+        Sat, 12 Mar 2022 10:34:34 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Sat, 12 Mar 2022 10:34:34 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22C1YTKo016496
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 12 Mar 2022 10:34:34 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <b848fe63-e86d-af38-5198-5519cb3c02ef@I-love.SAKURA.ne.jp>
+Date:   Sat, 12 Mar 2022 10:34:27 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        John Johansen <john.johansen@canonical.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        James Morris <jmorris@namei.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20220228215935.748017-1-mic@digikod.net>
+ <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
+ <f6b63133-d555-a77c-0847-de15a9302283@digikod.net>
+ <CAHC9VhQd3rL-13k0u39Krkdjp2_dtPfgEPxr=kawWUM9FjjOsw@mail.gmail.com>
+ <8d520529-4d3e-4874-f359-0ead9207cead@canonical.com>
+ <CAHC9VhRrjqe1AdZYtjpzLJyBF6FTeQ4EcEwsOd2YMimA5_tzEA@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHC9VhRrjqe1AdZYtjpzLJyBF6FTeQ4EcEwsOd2YMimA5_tzEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 15:18:20 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.105 release.
-> There are 58 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 12 Mar 2022 14:07:58 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.105-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On 2022/03/12 7:15, Paul Moore wrote:
+> The silence on this has been deafening :/  No thoughts on fixing, or
+> not fixing OPEN_FMODE(), Al?
 
-5.10.105-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+On 2022/03/01 19:15, Mickaël Salaün wrote:
+> 
+> On 01/03/2022 10:22, Christian Brauner wrote:
+>> That specific part seems a bit risky at first glance. Given that the
+>> patch referenced is from 2009 this means we've been allowing O_WRONLY |
+>> O_RDWR to succeed for almost 13 years now.
+>
+> Yeah, it's an old bug, but we should keep in mind that a file descriptor
+> created with such flags cannot be used to read nor write. However,
+> unfortunately, it can be used for things like ioctl, fstat, chdir… I
+> don't know if there is any user of this trick.
 
+I got a reply from Al at https://lkml.kernel.org/r/20090212032821.GD28946@ZenIV.linux.org.uk
+that sys_open(path, 3) is for ioctls only. And I'm using this trick when opening something
+for ioctls only.

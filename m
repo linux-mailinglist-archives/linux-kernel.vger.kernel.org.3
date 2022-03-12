@@ -2,295 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BFE4D6BBF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 02:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59E34D6BC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 02:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiCLByr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 20:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S229983AbiCLB6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 20:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiCLByo (ORCPT
+        with ESMTP id S229447AbiCLB6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 20:54:44 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FC2105AB0;
-        Fri, 11 Mar 2022 17:53:40 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q29so7896471pgn.7;
-        Fri, 11 Mar 2022 17:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ht6HTWzeDDSjzovkz/Dn5LtCoWbKyGL4ZoLDTCpXzFw=;
-        b=lRkZKAti5NwwJX2TYq75LN9EBk9uqoLtaYNaQnZDeu3+Sf/XjTTgejpFa8+Sb73SRY
-         jzpe3Iw1q/hQaseI0Z/mv2D7qYOnI0q3idU0NreqsLflIAoFHQGJQ4/n3+My7FtlBUTn
-         HQakjAM5qhEpfMgDFTr4TE8sKLZZzwf+nfPHAtiBdusOJZ7ktaxvwXBOlBREzNUrQEOH
-         Us2RJX6HG3CaZSlixhiw1LzTjT/P1emF4LjK+ZkzTurrFrIAJOJMG+1+pTtU9Tgch1Kj
-         lsNtFUJzabqwZMuMxVwWjTFNp2V+uve/mPDCMda0UXXoiTyxIL92a8Lr2yQdkSoopMGg
-         UD9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ht6HTWzeDDSjzovkz/Dn5LtCoWbKyGL4ZoLDTCpXzFw=;
-        b=z8vhIUv42sps1RGw29rrgtDeWnrhk/v6Yr0BXSyx5QQuGx95D8Chr+8MlbNkLJ1kW9
-         Q6qRncI1Rl3VbAVewnb4WgnY/EjnRpf1njdnUyM2X1DiW5YcAJaVV5qQbIFHJmZLdYpL
-         9tQiquJhYpUlyvOiZd+mNI6l5siFI0tlAIyidSArxIIsN4TYKS/L1JFSXoxil3HT/WOk
-         pn1mC5bBUO3Z6HTSQv/L8la4PhF7L35eYs1HxGA2gUI2k2i+3Y6P49v7fjTuvR9MH3Vn
-         HHXqDNpvAc/XPeodz9JjcF6c1gQFR2xCovkVJyYppyoGUSMLxfGSL7hh9PSL1NxCXm6r
-         nYdw==
-X-Gm-Message-State: AOAM530+Axif6gjhmG1amLbNLWHJSiCBsxb3W4Smd6xVG20dAv10+tCE
-        3rymQOqDCru0Mf49lxJ7dtQ=
-X-Google-Smtp-Source: ABdhPJzdGk36Vq6Yg4JEbEgfF+GRvGA4uY/jGiPc+8DxmmxqOYymmUob+gZ8lyghyS+C/lIVFYSSXA==
-X-Received: by 2002:a62:1515:0:b0:4f7:83b1:2e34 with SMTP id 21-20020a621515000000b004f783b12e34mr8976716pfv.66.1647050019979;
-        Fri, 11 Mar 2022 17:53:39 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id e13-20020a63370d000000b003810782e0cdsm3457862pga.56.2022.03.11.17.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 17:53:39 -0800 (PST)
-Date:   Sat, 12 Mar 2022 01:53:26 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Byungchul Park <byungchul.park@lge.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
-        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        djwong@kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: [PATCH v4 00/24] DEPT(Dependency Tracker)
-Message-ID: <Yiv9Fn4kcRbXJLmu@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Fri, 11 Mar 2022 20:58:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755CC1C3D26;
+        Fri, 11 Mar 2022 17:57:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07A48616C8;
+        Sat, 12 Mar 2022 01:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2C6C340E9;
+        Sat, 12 Mar 2022 01:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647050231;
+        bh=PFSibOWGdDwOfUSOtu7ctlKnbZRLcRFKGOjRfHqpfp4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NXqsyCw+XMDmEblziBhd04ifsm2RDmqfR/YjYHyPBZb0Qo0VOs8oIm44uIgq0DG2b
+         c6a02hYTz3juewFAY/EswWyIPi7ixE34zPwmEpA/K9ZlNv0gtE/rnjYpBYoU1lPkjP
+         MLZ52epgOHBe65xuAvN5DYulx/46BNn8D62o05HdC2FkaUgtT/VtBo2T12wZx+NIx3
+         T2lyJSF0XZwYUkmhtrMVbYlXh6Nx40dbkPyV9QiEujXNB3L710eypo8Fl6PgLcJgcZ
+         9U6y3/+lreLGNAW77iXUJS2zzDc0OHOYi5oSen+SAAGBe5mz6wA/hoh245bSpkRBw4
+         O1CWUNS/O8D3g==
+Date:   Sat, 12 Mar 2022 10:57:05 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v10 12/12] fprobe: Add a selftest for fprobe
+Message-Id: <20220312105705.f1d2c30c4e2023f5e7a7842c@kernel.org>
+In-Reply-To: <CAEf4BzZXS5eg-409S5XGB-gC8CkC9YAYk7EsugKgOpCr+zAsUg@mail.gmail.com>
+References: <164673771096.1984170.8155877393151850116.stgit@devnote2>
+        <164673784786.1984170.244480726272055433.stgit@devnote2>
+        <20220310091745.73580bd6314803cfbf21312d@kernel.org>
+        <CAEf4BzavZUn2Y40MjyGg_gkZqYQet_L0sWAJGOSgt_QVrtf21Q@mail.gmail.com>
+        <20220311001103.6d3f30c80175b0d169e3f4f6@kernel.org>
+        <CAEf4BzZXS5eg-409S5XGB-gC8CkC9YAYk7EsugKgOpCr+zAsUg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 04:06:19PM +0900, Byungchul Park wrote:
-> Hi Linus and folks,
+On Fri, 11 Mar 2022 10:35:30 -0800
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+
+> On Thu, Mar 10, 2022 at 7:11 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Wed, 9 Mar 2022 16:40:00 -0800
+> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > > On Wed, Mar 9, 2022 at 4:17 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Tue,  8 Mar 2022 20:10:48 +0900
+> > > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > >
+> > > > > Add a KUnit based selftest for fprobe interface.
+> > > > >
+> > > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > ---
+> > > > >  Changes in v9:
+> > > > >   - Rename fprobe_target* to fprobe_selftest_target*.
+> > > > >   - Find the correct expected ip by ftrace_location_range().
+> > > > >   - Since the ftrace_location_range() is not exposed to module, make
+> > > > >     this test only for embedded.
+> > > > >   - Add entry only test.
+> > > > >   - Reset the fprobe structure before reuse it.
+> > > > > ---
+> > > > >  lib/Kconfig.debug |   12 ++++
+> > > > >  lib/Makefile      |    2 +
+> > > > >  lib/test_fprobe.c |  174 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+> > > > >  3 files changed, 188 insertions(+)
+> > > > >  create mode 100644 lib/test_fprobe.c
+> > > > >
+> > > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > > > > index 14b89aa37c5c..ffc469a12afc 100644
+> > > > > --- a/lib/Kconfig.debug
+> > > > > +++ b/lib/Kconfig.debug
+> > > > > @@ -2100,6 +2100,18 @@ config KPROBES_SANITY_TEST
+> > > > >
+> > > > >         Say N if you are unsure.
+> > > > >
+> > > > > +config FPROBE_SANITY_TEST
+> > > > > +     bool "Self test for fprobe"
+> > > > > +     depends on DEBUG_KERNEL
+> > > > > +     depends on FPROBE
+> > > > > +     depends on KUNIT
+> > > >
+> > > > Hmm, this caused a build error with allmodconfig because KUNIT=m but FPROBE_SANITY_TEST=y.
+> > > > Let me fix this issue.
+> > >
+> > > Please base on top of bpf-next and add [PATCH v11 bpf-next] to subject.
+> >
+> > OK, let me rebase on it.
+> > There are master and for-next branch, which one is better to use?
+> >
 > 
-> I've been developing a tool for detecting deadlock possibilities by
-> tracking wait/event rather than lock(?) acquisition order to try to
-> cover all synchonization machanisms. It's done on v5.17-rc1 tag.
+> Sorry, missed your reply earlier. Always rebase against master.
 > 
-> https://github.com/lgebyungchulpark/linux-dept/commits/dept1.14_on_v5.17-rc1
->
-
-Small feedback unrelated to thread:
-I'm not sure "Need to expand the ring buffer" is something to call
-WARN(). Is this stack trace useful for something?
-========
-
-Hello Byungchul. These are two warnings of DEPT on system.
-Both cases look similar.
-
-In what case DEPT says (unknown)?
-I'm not sure we can properly debug this.
-
-===================================================
-DEPT: Circular dependency has been detected.
-5.17.0-rc1+ #3 Tainted: G        W        
----------------------------------------------------
-summary
----------------------------------------------------
-*** AA DEADLOCK ***
-
-context A
-    [S] (unknown)(&vfork:0)
-    [W] wait_for_completion_killable(&vfork:0)
-    [E] complete(&vfork:0)
-
-[S]: start of the event context
-[W]: the wait blocked
-[E]: the event not reachable
----------------------------------------------------
-context A's detail
----------------------------------------------------
-context A
-    [S] (unknown)(&vfork:0)
-    [W] wait_for_completion_killable(&vfork:0)
-    [E] complete(&vfork:0)
-
-[S] (unknown)(&vfork:0):
-(N/A)
-
-[W] wait_for_completion_killable(&vfork:0):
-[<ffffffc00802204c>] kernel_clone+0x25c/0x2b8
-stacktrace:
-      dept_wait+0x74/0x88
-      wait_for_completion_killable+0x60/0xa0
-      kernel_clone+0x25c/0x2b8
-      __do_sys_clone+0x5c/0x74
-      __arm64_sys_clone+0x18/0x20
-      invoke_syscall.constprop.0+0x78/0xc4
-      do_el0_svc+0x98/0xd0
-      el0_svc+0x44/0xe4
-      el0t_64_sync_handler+0xb0/0x12c
-      el0t_64_sync+0x158/0x15c
-
-[E] complete(&vfork:0):
-[<ffffffc00801f49c>] mm_release+0x7c/0x90
-stacktrace:
-      dept_event+0xe0/0x100
-      complete+0x48/0x98
-      mm_release+0x7c/0x90
-      exit_mm_release+0xc/0x14
-      do_exit+0x1b4/0x81c
-      do_group_exit+0x30/0x9c
-      __wake_up_parent+0x0/0x24
-      invoke_syscall.constprop.0+0x78/0xc4
-      do_el0_svc+0x98/0xd0
-      el0_svc+0x44/0xe4
-      el0t_64_sync_handler+0xb0/0x12c
-      el0t_64_sync+0x158/0x15c
----------------------------------------------------
-information that might be helpful
----------------------------------------------------
-CPU: 6 PID: 229 Comm: start-stop-daem Tainted: G        W         5.17.0-rc1+ #3
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace.part.0+0x9c/0xc4
- show_stack+0x14/0x28
- dump_stack_lvl+0x9c/0xcc
- dump_stack+0x14/0x2c
- print_circle+0x2d4/0x438
- cb_check_dl+0x44/0x70
- bfs+0x60/0x168
- add_dep+0x88/0x11c
- do_event.constprop.0+0x19c/0x2c0
- dept_event+0xe0/0x100
- complete+0x48/0x98
- mm_release+0x7c/0x90
- exit_mm_release+0xc/0x14
- do_exit+0x1b4/0x81c
- do_group_exit+0x30/0x9c
- __wake_up_parent+0x0/0x24
- invoke_syscall.constprop.0+0x78/0xc4
- do_el0_svc+0x98/0xd0
- el0_svc+0x44/0xe4
- el0t_64_sync_handler+0xb0/0x12c
- el0t_64_sync+0x158/0x15c
-
-
-
-
-===================================================
-DEPT: Circular dependency has been detected.
-5.17.0-rc1+ #3 Tainted: G        W        
----------------------------------------------------
-summary
----------------------------------------------------
-*** AA DEADLOCK ***
-
-context A
-    [S] (unknown)(&try_completion:0)
-    [W] wait_for_completion_timeout(&try_completion:0)
-    [E] complete(&try_completion:0)
-
-[S]: start of the event context
-[W]: the wait blocked
-[E]: the event not reachable
----------------------------------------------------
-context A's detail
----------------------------------------------------
-context A
-    [S] (unknown)(&try_completion:0)
-    [W] wait_for_completion_timeout(&try_completion:0)
-    [E] complete(&try_completion:0)
-
-[S] (unknown)(&try_completion:0):
-(N/A)
-
-[W] wait_for_completion_timeout(&try_completion:0):
-[<ffffffc008166bf4>] kunit_try_catch_run+0xb4/0x160
-stacktrace:
-      dept_wait+0x74/0x88
-      wait_for_completion_timeout+0x64/0xa0
-      kunit_try_catch_run+0xb4/0x160
-      kunit_test_try_catch_successful_try_no_catch+0x3c/0x98
-      kunit_try_run_case+0x9c/0xa0
-      kunit_generic_run_threadfn_adapter+0x1c/0x28
-      kthread+0xd4/0xe4
-      ret_from_fork+0x10/0x20
-
-[E] complete(&try_completion:0):
-[<ffffffc00803dce4>] kthread_complete_and_exit+0x18/0x20
-stacktrace:
-      dept_event+0xe0/0x100
-      complete+0x48/0x98
-      kthread_complete_and_exit+0x18/0x20
-      kunit_try_catch_throw+0x0/0x1c
-      kthread+0xd4/0xe4
-      ret_from_fork+0x10/0x20
-
----------------------------------------------------
-information that might be helpful
----------------------------------------------------
-CPU: 15 PID: 132 Comm: kunit_try_catch Tainted: G        W         5.17.0-rc1+ #3
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace.part.0+0x9c/0xc4
- show_stack+0x14/0x28
- dump_stack_lvl+0x9c/0xcc
- dump_stack+0x14/0x2c
- print_circle+0x2d4/0x438
- cb_check_dl+0x44/0x70
- bfs+0x60/0x168
- add_dep+0x88/0x11c
- do_event.constprop.0+0x19c/0x2c0
- dept_event+0xe0/0x100
- complete+0x48/0x98
- kthread_complete_and_exit+0x18/0x20
- kunit_try_catch_throw+0x0/0x1c
- kthread+0xd4/0xe4
- ret_from_fork+0x10/0x20
-
-
-> Benifit:
+> You forgot to add "bpf-next" into [PATCH] prefix, so I had to manually
+> mark it in patchworks as delegated to bpf queue (this is necessary for
+> our CI to properly pick it up). For future submissions to bpf-next,
+> please don't forget to add "bpf-next" marker.
 > 
-> 	0. Works with all lock primitives.
-> 	1. Works with wait_for_completion()/complete().
-> 	2. Works with 'wait' on PG_locked.
-> 	3. Works with 'wait' on PG_writeback.
-> 	4. Works with swait/wakeup.
-> 	5. Works with waitqueue.
-> 	6. Multiple reports are allowed.
-> 	7. Deduplication control on multiple reports.
-> 	8. Withstand false positives thanks to 6.
-> 	9. Easy to tag any wait/event.
-> 
-> Future work:
 
-[...]
+Oops, sorry, I forgot that. Should I resend with that tag?
 
-> -- 
-> 1.9.1
-> 
+Thank you,
+
+
+> > Thank you,
+> >
+> > >
+> > > >
+> > > > Thank you,
+> > > >
+> > > > > +     help
+> > > > > +       This option will enable testing the fprobe when the system boot.
+> > > > > +       A series of tests are made to verify that the fprobe is functioning
+> > > > > +       properly.
+> > > > > +
+> > > > > +       Say N if you are unsure.
+> > > > > +
+> > > > >  config BACKTRACE_SELF_TEST
+> > > > >       tristate "Self test for the backtrace code"
+> > > > >       depends on DEBUG_KERNEL
+> > > > > diff --git a/lib/Makefile b/lib/Makefile
+> > > > > index 300f569c626b..154008764b16 100644
+> > > > > --- a/lib/Makefile
+> > > > > +++ b/lib/Makefile
+> > > > > @@ -103,6 +103,8 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+> > > > >  obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
+> > > > >  obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+> > > > >  obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
+> > > > > +CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
+> > > > > +obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
+> > > > >  #
+> > > > >  # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
+> > > > >  # off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
+> > > > > diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..ed70637a2ffa
+> > > > > --- /dev/null
+> > > > > +++ b/lib/test_fprobe.c
+> > > > > @@ -0,0 +1,174 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > > +/*
+> > > > > + * test_fprobe.c - simple sanity test for fprobe
+> > > > > + */
+> > > > > +
+> > > > > +#include <linux/kernel.h>
+> > > > > +#include <linux/fprobe.h>
+> > > > > +#include <linux/random.h>
+> > > > > +#include <kunit/test.h>
+> > > > > +
+> > > > > +#define div_factor 3
+> > > > > +
+> > > > > +static struct kunit *current_test;
+> > > > > +
+> > > > > +static u32 rand1, entry_val, exit_val;
+> > > > > +
+> > > > > +/* Use indirect calls to avoid inlining the target functions */
+> > > > > +static u32 (*target)(u32 value);
+> > > > > +static u32 (*target2)(u32 value);
+> > > > > +static unsigned long target_ip;
+> > > > > +static unsigned long target2_ip;
+> > > > > +
+> > > > > +static noinline u32 fprobe_selftest_target(u32 value)
+> > > > > +{
+> > > > > +     return (value / div_factor);
+> > > > > +}
+> > > > > +
+> > > > > +static noinline u32 fprobe_selftest_target2(u32 value)
+> > > > > +{
+> > > > > +     return (value / div_factor) + 1;
+> > > > > +}
+> > > > > +
+> > > > > +static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
+> > > > > +{
+> > > > > +     KUNIT_EXPECT_FALSE(current_test, preemptible());
+> > > > > +     /* This can be called on the fprobe_selftest_target and the fprobe_selftest_target2 */
+> > > > > +     if (ip != target_ip)
+> > > > > +             KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
+> > > > > +     entry_val = (rand1 / div_factor);
+> > > > > +}
+> > > > > +
+> > > > > +static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
+> > > > > +{
+> > > > > +     unsigned long ret = regs_return_value(regs);
+> > > > > +
+> > > > > +     KUNIT_EXPECT_FALSE(current_test, preemptible());
+> > > > > +     if (ip != target_ip) {
+> > > > > +             KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
+> > > > > +             KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor) + 1);
+> > > > > +     } else
+> > > > > +             KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor));
+> > > > > +     KUNIT_EXPECT_EQ(current_test, entry_val, (rand1 / div_factor));
+> > > > > +     exit_val = entry_val + div_factor;
+> > > > > +}
+> > > > > +
+> > > > > +/* Test entry only (no rethook) */
+> > > > > +static void test_fprobe_entry(struct kunit *test)
+> > > > > +{
+> > > > > +     struct fprobe fp_entry = {
+> > > > > +             .entry_handler = fp_entry_handler,
+> > > > > +     };
+> > > > > +
+> > > > > +     current_test = test;
+> > > > > +
+> > > > > +     /* Before register, unregister should be failed. */
+> > > > > +     KUNIT_EXPECT_NE(test, 0, unregister_fprobe(&fp_entry));
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp_entry, "fprobe_selftest_target*", NULL));
+> > > > > +
+> > > > > +     entry_val = 0;
+> > > > > +     exit_val = 0;
+> > > > > +     target(rand1);
+> > > > > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, exit_val);
+> > > > > +
+> > > > > +     entry_val = 0;
+> > > > > +     exit_val = 0;
+> > > > > +     target2(rand1);
+> > > > > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, exit_val);
+> > > > > +
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp_entry));
+> > > > > +}
+> > > > > +
+> > > > > +static void test_fprobe(struct kunit *test)
+> > > > > +{
+> > > > > +     struct fprobe fp = {
+> > > > > +             .entry_handler = fp_entry_handler,
+> > > > > +             .exit_handler = fp_exit_handler,
+> > > > > +     };
+> > > > > +
+> > > > > +     current_test = test;
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp, "fprobe_selftest_target*", NULL));
+> > > > > +
+> > > > > +     entry_val = 0;
+> > > > > +     exit_val = 0;
+> > > > > +     target(rand1);
+> > > > > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > > > > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > > > > +
+> > > > > +     entry_val = 0;
+> > > > > +     exit_val = 0;
+> > > > > +     target2(rand1);
+> > > > > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > > > > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > > > > +
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
+> > > > > +}
+> > > > > +
+> > > > > +static void test_fprobe_syms(struct kunit *test)
+> > > > > +{
+> > > > > +     static const char *syms[] = {"fprobe_selftest_target", "fprobe_selftest_target2"};
+> > > > > +     struct fprobe fp = {
+> > > > > +             .entry_handler = fp_entry_handler,
+> > > > > +             .exit_handler = fp_exit_handler,
+> > > > > +     };
+> > > > > +
+> > > > > +     current_test = test;
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, register_fprobe_syms(&fp, syms, 2));
+> > > > > +
+> > > > > +     entry_val = 0;
+> > > > > +     exit_val = 0;
+> > > > > +     target(rand1);
+> > > > > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > > > > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > > > > +
+> > > > > +     entry_val = 0;
+> > > > > +     exit_val = 0;
+> > > > > +     target2(rand1);
+> > > > > +     KUNIT_EXPECT_NE(test, 0, entry_val);
+> > > > > +     KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
+> > > > > +
+> > > > > +     KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
+> > > > > +}
+> > > > > +
+> > > > > +static unsigned long get_ftrace_location(void *func)
+> > > > > +{
+> > > > > +     unsigned long size, addr = (unsigned long)func;
+> > > > > +
+> > > > > +     if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
+> > > > > +             return 0;
+> > > > > +
+> > > > > +     return ftrace_location_range(addr, addr + size - 1);
+> > > > > +}
+> > > > > +
+> > > > > +static int fprobe_test_init(struct kunit *test)
+> > > > > +{
+> > > > > +     do {
+> > > > > +             rand1 = prandom_u32();
+> > > > > +     } while (rand1 <= div_factor);
+> > > > > +
+> > > > > +     target = fprobe_selftest_target;
+> > > > > +     target2 = fprobe_selftest_target2;
+> > > > > +     target_ip = get_ftrace_location(target);
+> > > > > +     target2_ip = get_ftrace_location(target2);
+> > > > > +
+> > > > > +     return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static struct kunit_case fprobe_testcases[] = {
+> > > > > +     KUNIT_CASE(test_fprobe_entry),
+> > > > > +     KUNIT_CASE(test_fprobe),
+> > > > > +     KUNIT_CASE(test_fprobe_syms),
+> > > > > +     {}
+> > > > > +};
+> > > > > +
+> > > > > +static struct kunit_suite fprobe_test_suite = {
+> > > > > +     .name = "fprobe_test",
+> > > > > +     .init = fprobe_test_init,
+> > > > > +     .test_cases = fprobe_testcases,
+> > > > > +};
+> > > > > +
+> > > > > +kunit_test_suites(&fprobe_test_suite);
+> > > > > +
+> > > > > +MODULE_LICENSE("GPL");
+> > > > >
+> > > >
+> > > >
+> > > > --
+> > > > Masami Hiramatsu <mhiramat@kernel.org>
+> >
+> >
+> > --
+> > Masami Hiramatsu <mhiramat@kernel.org>
+
 
 -- 
-Thank you, You are awesome!
-Hyeonggon :-)
+Masami Hiramatsu <mhiramat@kernel.org>

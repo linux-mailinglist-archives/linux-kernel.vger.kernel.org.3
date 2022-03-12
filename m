@@ -2,39 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E4E4D6C3D
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 04:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2EC4D6C40
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 04:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiCLDZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 22:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S230158AbiCLD3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 22:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiCLDZz (ORCPT
+        with ESMTP id S229491AbiCLD3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 22:25:55 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D6C108554;
-        Fri, 11 Mar 2022 19:24:50 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nSsMc-00A6DH-Dc; Sat, 12 Mar 2022 03:24:18 +0000
-Date:   Sat, 12 Mar 2022 03:24:18 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Meng Tang <tangmeng@uniontech.com>
-Cc:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        ebiederm@xmission.com, willy@infradead.org, nixiaoming@huawei.com,
-        nizhen@uniontech.com, zhanglianjie@uniontech.com,
-        sujiaxun@uniontech.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] fs/proc: optimize exactly register one ctl_table
-Message-ID: <YiwSYvuAkntr4A/V@zeniv-ca.linux.org.uk>
-References: <20220303070847.28684-1-tangmeng@uniontech.com>
+        Fri, 11 Mar 2022 22:29:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFEA21D09B;
+        Fri, 11 Mar 2022 19:28:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 735C2B82462;
+        Sat, 12 Mar 2022 03:28:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 115FCC340EE;
+        Sat, 12 Mar 2022 03:28:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647055718;
+        bh=eAepGPFthZRnMOifGDED89YfZDFoEDTTbOpsq50itSI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=VuZhxBO8Ndx/XnvM19LvOH793QJlaTm+8ejDG3t/82zKLg+/2ChlWXL+kNqWmXgAr
+         gBfDVBszP3wi7539eRl9OaRMJF+JegZqxsBCv9iRM299s69RbLdW4Wh+J25V6ZZodi
+         vFU1Qip68y03SjdP4eEBEFDI3lA6lyKcgmz4gYCekN1e7V2FrTw6eVEJsdfE7dHFgS
+         Lj6jx5eePcDgB4xbYeLGTEGA+jiee9U0U3tOVLIOyKYTxHFOG5FexW75YONMVBKr39
+         JDWjpg0AYJBqzKeyB4SWrb6djVejKTAkOqw7ure2ntD/uyObpIltWr+a0xygejLWZ3
+         ovV6K0OkQBCcg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303070847.28684-1-tangmeng@uniontech.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <eb102eae05e5667b9bd342a0c387f7f262d24bda.1645716471.git.geert+renesas@glider.be>
+References: <eb102eae05e5667b9bd342a0c387f7f262d24bda.1645716471.git.geert+renesas@glider.be>
+Subject: Re: [PATCH] clk: COMMON_CLK_LAN966X should depend on SOC_LAN966
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Date:   Fri, 11 Mar 2022 19:28:36 -0800
+User-Agent: alot/0.10
+Message-Id: <20220312032838.115FCC340EE@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,69 +59,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 03:08:46PM +0800, Meng Tang wrote:
+Quoting Geert Uytterhoeven (2022-02-24 07:29:17)
+> The LAN966x Generic Clock Controller is only present on Microchip
+> LAN966x SoCs.  Hence add a dependency on SOC_LAN966, to prevent asking
+> the user about this driver when configuring a kernel without LAN966x SoC
+> support.
+>=20
+> Fixes: 54104ee023333e3b ("clk: lan966x: Add lan966x SoC clock driver")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
 
-> +#define REGISTER_SINGLE_ONE (register_single_one ? true : false)
-
-????
-
-> +static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header,
-> +	bool register_single_one)
-
-> +	err = insert_links(header, REGISTER_SINGLE_ONE);
-
-> +	erase_header(header, REGISTER_SINGLE_ONE);
-> +	put_links(header, REGISTER_SINGLE_ONE);
-
-
->  static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table *table,
-> -	struct ctl_table_root *link_root)
-> +	struct ctl_table_root *link_root, bool register_single_one)
-
-> +	init_header(links, dir->header.root, dir->header.set, node, link_table,
-> +		    REGISTER_SINGLE_ONE);
-
-> -static int insert_links(struct ctl_table_header *head)
-> +static int insert_links(struct ctl_table_header *head, bool register_single_one)
->  {
->  	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
->  	struct ctl_dir *core_parent = NULL;
-> @@ -1248,13 +1278,13 @@ static int insert_links(struct ctl_table_header *head)
->  	if (IS_ERR(core_parent))
->  		return 0;
->  
-> -	if (get_links(core_parent, head->ctl_table, head->root))
-> +	if (get_links(core_parent, head->ctl_table, head->root, REGISTER_SINGLE_ONE))
-
-> -	links = new_links(core_parent, head->ctl_table, head->root);
-> +	links = new_links(core_parent, head->ctl_table, head->root, REGISTER_SINGLE_ONE);
-
-> +	if (get_links(core_parent, head->ctl_table, head->root, REGISTER_SINGLE_ONE)) {
-
-> +	err = insert_header(core_parent, links, REGISTER_SINGLE_ONE);
-
-> -struct ctl_table_header *__register_sysctl_table(
-> +struct ctl_table_header *__register_sysctl_tables(
->  	struct ctl_table_set *set,
-> -	const char *path, struct ctl_table *table)
-> +	const char *path, struct ctl_table *table, bool register_single_one)
-
-> +	init_header(header, root, set, node, table, REGISTER_SINGLE_ONE);
-> +	if (sysctl_check_table(path, table, REGISTER_SINGLE_ONE))
-
-> +	if (insert_header(dir, header, REGISTER_SINGLE_ONE))
-
->  static int register_leaf_sysctl_tables(const char *path, char *pos,
->  	struct ctl_table_header ***subheader, struct ctl_table_set *set,
-> -	struct ctl_table *table)
-> +	struct ctl_table *table, bool register_single_one)
-
-> +		header = __register_sysctl_tables(set, path, files, REGISTER_SINGLE_ONE);
-
-
-Could you explain what is that REGISTER_SINGLE_ONE macro for?  Looks like
-some very odd kind of cargo-culting...  I might be missing something subtle
-here, but I'm honestly at loss as to what could that possibly be.  If nothing
-else, why would one ever want boolean_expression ? true : false instead of
-boolean_expression?  Especially since in all cases you are passing that
-as a bool argument...
+Applied to clk-next

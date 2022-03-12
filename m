@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BC24D70D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22284D70D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiCLU0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 15:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
+        id S232615AbiCLU1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 15:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiCLU0s (ORCPT
+        with ESMTP id S230017AbiCLU1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 15:26:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A897820D51D
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:25:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647116742; x=1678652742;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mtIYlnMi0Kl1kCrxo6c2DXSW7BmyRb7PReoq3xNTmfA=;
-  b=Zqb7MbaHCY2Hhwtb2XTXtjbDYmRzn+Fsnf8hFfNnyke0LQ/MnJtH0bw1
-   d88bIx52cWngDh4cWKP8TrmkLA7epmE7nonxxAAipaYR9eoy8nmf2J7y1
-   PIe7di6Wnp7eqIHdIhclPi7DP9FHyzdMNpag3P/WN8vmHpGtRib1Dlm0K
-   sXfh5MbCDWEDhprjKBwGBVbxxHH2b5oOOphFrZctYsFR2B0WzWw9k2aCk
-   PR0ZQ+ioL1d7Hx8oq95pVozG78skXtAqWV9obPDC9j/61UnnMQxFepwHp
-   xUuNot3HPGkS32z1CW5J+SLy5lCMtNz6pflYtO7MxugCmVCG3zRmghk2s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="236421167"
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="236421167"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 12:25:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="645329305"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2022 12:25:40 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nT8J2-0008Fg-0t; Sat, 12 Mar 2022 20:25:40 +0000
-Date:   Sun, 13 Mar 2022 04:25:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Liu Yi L <yi.l.liu@intel.com>
-Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 25/31] vfio.c:undefined
- reference to `vfio_group_unset_iommufd'
-Message-ID: <202203130417.G9Mdfrna-lkp@intel.com>
+        Sat, 12 Mar 2022 15:27:24 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9EF1D67FF
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:26:17 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id bn33so16623983ljb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=6vzIbjKqZ45U+1eU3xnvvtAJS9airowoXo10bHb4aLk=;
+        b=nNRBjWPMkjPz4KnhdWbdcmq7iF9hHcfkXj+w0MlO1XO2gjkuESb3XozdfmLR6UPsAv
+         wY+tJpYDUTQ8GyZVdq8n1hY/G+wnK+vlXDOwVSSNQSgKrn8Juk0iQaChXoxxBLhMHTRq
+         aKyieTLoU3DLeSPYuYLHq5n57liHkhubTYpGCPmkRRega5fBAp3fsQ6kBOllaBCrs2xn
+         yvDgABS2gwpgov8YMx+lf45qmHjDjCX9DirANM9XeV/4I/escH8Ym/IxF6SKIdAe61KQ
+         xS47YxogwwWvlIXTucAx0AlVfjbYqv9PYd2MGdsU+R/3a4uKRjqTQ0/d3C+WBzAFnIrT
+         p7Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=6vzIbjKqZ45U+1eU3xnvvtAJS9airowoXo10bHb4aLk=;
+        b=a9zUTSLWmwk8mu4GPKR4LNouyuBfBGmQT7HeI1uSTdHycV15Ph7W/KP56mtElCtJVj
+         zdULpHeeL9/U+2kE2DsUweWpGlv7YYnKtGmTy/3Mrpr3oZO4+JcQWFUbEj7gn3KAm4el
+         CM34cCDhDdxFYDAhLtjl0IQz6GqkXmvXIPEtQK5F42KH34e77KlPIXXXIWvzZbpspjgj
+         2MNdhEAWpAxYPqWF7mTex4CIJmFklTLKxR1HR34Ssui5F3xrSXvv4webNyted6+dai8H
+         OnwGSyJ9KIJKyL91Awh/CJ7yKABFPBDIoi3MTKrLGds9cjrAhNkNUtGNtbWhzuxwLz7l
+         x2oA==
+X-Gm-Message-State: AOAM532XaTbdt8QXErdsek4Lt/3HwErvUvEuFor21feWeU3hQbcpCvzR
+        9crUgkjfTD8x2jc9p7Dk9uRez/koKNylRQKpyOU=
+X-Google-Smtp-Source: ABdhPJxtnxYIIwhbXT2nGaWVqUjDKTiu42T7KIFk0OXF8ONFyNz5a9IudcRY2gRi/VJ1ep9z7CYNFclksFApLLtldRI=
+X-Received: by 2002:a2e:7f13:0:b0:247:ef72:9e8b with SMTP id
+ a19-20020a2e7f13000000b00247ef729e8bmr9572936ljd.205.1647116775778; Sat, 12
+ Mar 2022 12:26:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: natodtoday@gmail.com
+Received: by 2002:aa6:d8cb:0:b0:190:979c:eb76 with HTTP; Sat, 12 Mar 2022
+ 12:26:15 -0800 (PST)
+From:   "Mrs Yu. Ging Yunnan" <yunnanmrsyuging@gmail.com>
+Date:   Sat, 12 Mar 2022 20:26:15 +0000
+X-Google-Sender-Auth: BNYrtoSEFGDLabLrtoY3zZcSdGk
+Message-ID: <CANfVWTT_tLFufcy=ve4K-zGJ24mnm1t2gwhVr5JBhPPzxCrxpA@mail.gmail.com>
+Subject: hello dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_NAME_FM_MR_MRS,
+        HK_SCAM,LOTS_OF_MONEY,MILLION_USD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
-head:   d0e769d6ae11d7abe38d2f0598926ba499bf3ec1
-commit: 32bd602a155904c029c1514c6d0bb2aa2fd863c5 [25/31] vfio: Add iommufd VFIO compat support to group_fd
-config: arc-randconfig-r043-20220313 (https://download.01.org/0day-ci/archive/20220313/202203130417.G9Mdfrna-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/luxis1999/iommufd/commit/32bd602a155904c029c1514c6d0bb2aa2fd863c5
-        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
-        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
-        git checkout 32bd602a155904c029c1514c6d0bb2aa2fd863c5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arc-elf-ld: drivers/vfio/vfio.o: in function `__vfio_group_unset_container':
->> vfio.c:(.text+0x8d8): undefined reference to `vfio_group_unset_iommufd'
->> arc-elf-ld: vfio.c:(.text+0x8d8): undefined reference to `vfio_group_unset_iommufd'
-   arc-elf-ld: drivers/vfio/vfio.o: in function `vfio_group_set_container':
->> vfio.c:(.text+0x113c): undefined reference to `vfio_group_set_iommufd'
->> arc-elf-ld: vfio.c:(.text+0x113c): undefined reference to `vfio_group_set_iommufd'
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+hello dear
+I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
+will not survive it because all vaccines has been given to me but to
+no avian, am a China woman but I base here in France because am
+married here and I have no child for my late husband and now am a
+widow. My reason of communicating you is that i have $9.2million USD
+which was deposited in BNP Paribas Bank here in France by my late
+husband which  am the next of  kin to and I want you to stand as the
+beneficiary for the claim now that am about to end my race according
+to my doctor.I will want you to use the fund to build an orphanage
+home in my name there in   country, please kindly reply to this
+message urgently if willing to handle this project. God bless you and
+i wait your swift response asap.
+Yours fairly friend,
+Mrs Yu. Ging Yunnan

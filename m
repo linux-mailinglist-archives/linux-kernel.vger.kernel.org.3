@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880F34D6D71
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6930D4D6D73
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 09:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiCLIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 03:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S231294AbiCLIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 03:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiCLIFX (ORCPT
+        with ESMTP id S230313AbiCLIFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 03:05:23 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDC423D1AB
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647072258; x=1678608258;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2QXr5Dogh/A8C04F74qHZI3XCpmDhhOHsBxhQnRiaeQ=;
-  b=OckBjM71PP9He/+dBt+O1imrxeLXSn55k0a53N+ddi2VzOmQxOfmigKS
-   vuQOd4pz1zoP5/QgMbeRMOUs5f+dIs2xaYhULETFBQ+KL5OSxWbugDfyt
-   dy4lpO0nXz6f7jKTdfwPwWyXJ8RXTMpJ4pfn1BnlcbyTwJ356/iixE4fQ
-   rUk3i9lI24bpZ7G+wlUIneEl7G9WwFGRi2sjOFRolKgzLDEORx1BnsKvf
-   HLBlXll0JyLR8yJasE6LN7xMd3rAI0KSytK0Jl9pu9UOYvFNXyX0xUsTl
-   /O6WeqTJHo4J0NyjSQ8Plvvpkxw1Q/6XnBZMKFTinlWn/Rs8WkMASQrZC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="237942995"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="237942995"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 00:04:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="539317860"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 12 Mar 2022 00:04:15 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nSwjX-0007hh-9d; Sat, 12 Mar 2022 08:04:15 +0000
-Date:   Sat, 12 Mar 2022 16:03:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Subbaraya Sundeep <sbhatta@marvell.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Geetha sowjanya <gakula@marvell.com>,
-        Sunil Goutham <sgoutham@marvell.com>
-Subject: drivers/net/ethernet/marvell/octeontx2/af/rvu.c:1964:46: sparse:
- sparse: cast removes address space '__iomem' of expression
-Message-ID: <202203121536.7EHHGIrm-lkp@intel.com>
+        Sat, 12 Mar 2022 03:05:24 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FD423D5BE
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:04:19 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id e11-20020a5d8e0b000000b006412cf3f627so8006501iod.17
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 00:04:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=5zOjHs3cDSO0d/sc2bYpHYPQ7grv3p5Pd+1pHqicW7k=;
+        b=z8isO8NocNV/ByyS0Ye+BwNDJ/WQSCL9Mj6UUidi0BeQkwBkEghRTJ8Bd9e/WAiQ6J
+         K/pYOaLrGkTFs7NHgXQb5Hx6mX/z/Y78rhHXPYgfCXczMBmTiI6AoXJ6XleT2pLY1LTU
+         ZnwxP6+Y+qq6m/7KZ9llxYGwKjC5uTbSbSGo/6UJxlP1UnoeDO1Qa37BFIyQNqDdm7cc
+         6pr57+M7O46ovo5ES1IuNWOZ1I+HVGrYxiTYQj422A3OFRIATzle5UZuJvLR9WRXBl+V
+         YySU09HCyj4A06BGn10wgvnwBhU7+xY935IBdMDEHu1IcIIGCB9g+1f1TwcA/dnMlVW1
+         LcEA==
+X-Gm-Message-State: AOAM531Rqxv3A5evq1CxAIF3k6Tnqxfn4N2xuhRUw0XRpiNqRJXWIOKN
+        npjqGxECD1vYd2uNYvKVvqPQeRrQmZwfmf4NDpp90TCetsb2
+X-Google-Smtp-Source: ABdhPJxGVWggqKaOvI8uV4fq9PifdIw3pZTopnX1If/fbvee7OSbGfz804S8ZmkgGbIQXfz3JTErP+2vjS9eGsZ5VnPSAVA2rWQs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:1d89:b0:2c6:5a4f:5bb5 with SMTP id
+ h9-20020a056e021d8900b002c65a4f5bb5mr11670304ila.210.1647072259089; Sat, 12
+ Mar 2022 00:04:19 -0800 (PST)
+Date:   Sat, 12 Mar 2022 00:04:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ec2a8205da00e46f@google.com>
+Subject: [syzbot] WARNING in drm_prime_destroy_file_private
+From:   syzbot <syzbot+2448673875b4e20db46a@syzkaller.appspotmail.com>
+To:     airlied@linux.ie, christian.koenig@amd.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com,
+        tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   68453767131a5deec1e8f9ac92a9042f929e585d
-commit: 98c5611163603d3d8012b1bf64ab48fd932cf734 octeontx2-af: cn10k: Add mbox support for CN10K platform
-date:   1 year, 1 month ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220312/202203121536.7EHHGIrm-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=98c5611163603d3d8012b1bf64ab48fd932cf734
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 98c5611163603d3d8012b1bf64ab48fd932cf734
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/ drivers/gpu/host1x/ drivers/hid/ drivers/irqchip/ drivers/net/ethernet/marvell/octeontx2/af/ drivers/net/ethernet/ti/ drivers/remoteproc/ drivers/scsi/hisi_sas/ security/integrity/ima/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
+HEAD commit:    ea4424be1688 Merge tag 'mtd/fixes-for-5.17-rc8' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14095f9e700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
+dashboard link: https://syzkaller.appspot.com/bug?extid=2448673875b4e20db46a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:780:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct rvu_fwdata *fwdata @@     got void [noderef] __iomem * @@
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:780:21: sparse:     expected struct rvu_fwdata *fwdata
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:780:21: sparse:     got void [noderef] __iomem *
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:786:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct rvu_fwdata *fwdata @@
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:786:28: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:786:28: sparse:     got struct rvu_fwdata *fwdata
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:799:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct rvu_fwdata *fwdata @@
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:799:28: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:799:28: sparse:     got struct rvu_fwdata *fwdata
->> drivers/net/ethernet/marvell/octeontx2/af/rvu.c:1964:46: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:1984:38: sparse: sparse: cast removes address space '__iomem' of expression
+Unfortunately, I don't have any reproducer for this issue yet.
 
-vim +/__iomem +1964 drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2448673875b4e20db46a@syzkaller.appspotmail.com
 
-  1941	
-  1942	static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
-  1943					int num, int type)
-  1944	{
-  1945		struct rvu_hwinfo *hw = rvu->hw;
-  1946		int region;
-  1947		u64 bar4;
-  1948	
-  1949		/* For cn10k platform VF mailbox regions of a PF follows after the
-  1950		 * PF <-> AF mailbox region. Whereas for Octeontx2 it is read from
-  1951		 * RVU_PF_VF_BAR4_ADDR register.
-  1952		 */
-  1953		if (type == TYPE_AFVF) {
-  1954			for (region = 0; region < num; region++) {
-  1955				if (hw->cap.per_pf_mbox_regs) {
-  1956					bar4 = rvu_read64(rvu, BLKADDR_RVUM,
-  1957							  RVU_AF_PFX_BAR4_ADDR(0)) +
-  1958							  MBOX_SIZE;
-  1959					bar4 += region * MBOX_SIZE;
-  1960				} else {
-  1961					bar4 = rvupf_read64(rvu, RVU_PF_VF_BAR4_ADDR);
-  1962					bar4 += region * MBOX_SIZE;
-  1963				}
-> 1964				mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
-  1965				if (!mbox_addr[region])
-  1966					goto error;
-  1967			}
-  1968			return 0;
-  1969		}
-  1970	
-  1971		/* For cn10k platform AF <-> PF mailbox region of a PF is read from per
-  1972		 * PF registers. Whereas for Octeontx2 it is read from
-  1973		 * RVU_AF_PF_BAR4_ADDR register.
-  1974		 */
-  1975		for (region = 0; region < num; region++) {
-  1976			if (hw->cap.per_pf_mbox_regs) {
-  1977				bar4 = rvu_read64(rvu, BLKADDR_RVUM,
-  1978						  RVU_AF_PFX_BAR4_ADDR(region));
-  1979			} else {
-  1980				bar4 = rvu_read64(rvu, BLKADDR_RVUM,
-  1981						  RVU_AF_PF_BAR4_ADDR);
-  1982				bar4 += region * MBOX_SIZE;
-  1983			}
-  1984			mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
-  1985			if (!mbox_addr[region])
-  1986				goto error;
-  1987		}
-  1988		return 0;
-  1989	
-  1990	error:
-  1991		while (region--)
-  1992			iounmap((void __iomem *)mbox_addr[region]);
-  1993		return -ENOMEM;
-  1994	}
-  1995	
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 16791 at drivers/gpu/drm/drm_prime.c:228 drm_prime_destroy_file_private+0x3e/0x50 drivers/gpu/drm/drm_prime.c:228
+Modules linked in:
+CPU: 1 PID: 16791 Comm: syz-executor.5 Not tainted 5.17.0-rc7-syzkaller-00020-gea4424be1688 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:drm_prime_destroy_file_private+0x3e/0x50 drivers/gpu/drm/drm_prime.c:228
+Code: 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 1f 48 8b 83 90 00 00 00 48 85 c0 75 06 5b e9 e7 6c 1d fd e8 e2 6c 1d fd <0f> 0b 5b e9 da 6c 1d fd e8 05 5a 64 fd eb da 0f 1f 00 41 55 49 89
+RSP: 0018:ffffc90002af79e0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888025e72370 RCX: 0000000000000000
+RDX: ffff8880727aa1c0 RSI: ffffffff845a788e RDI: ffff888025e72400
+RBP: ffff8881471d4068 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff817e23e8 R11: 0000000000088078 R12: ffff888025e72000
+R13: ffff888025e722b8 R14: ffff8881471d4098 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffea39ef0d8 CR3: 00000000791d8000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ drm_file_free.part.0+0x6e5/0xb80 drivers/gpu/drm/drm_file.c:291
+ drm_file_free drivers/gpu/drm/drm_file.c:248 [inline]
+ drm_close_helper.isra.0+0x17d/0x1f0 drivers/gpu/drm/drm_file.c:308
+ drm_release+0x1e6/0x530 drivers/gpu/drm/drm_file.c:495
+ __fput+0x286/0x9f0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ get_signal+0x45a/0x2490 kernel/signal.c:2863
+ arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ ret_from_fork+0x15/0x30 arch/x86/entry/entry_64.S:288
+RIP: 0033:0x7f836c6a0471
+Code: Unable to access opcode bytes at RIP 0x7f836c6a0447.
+RSP: 002b:00007f836afd22f0 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: 0000000000000000 RBX: 00007f836afd2700 RCX: 00007f836c6a0471
+RDX: 00007f836afd29d0 RSI: 00007f836afd22f0 RDI: 00000000003d0f00
+RBP: 00007ffed5e285a0 R08: 00007f836afd2700 R09: 00007f836afd2700
+R10: 00007f836afd29d0 R11: 0000000000000206 R12: 00007ffed5e2840e
+R13: 00007ffed5e2840f R14: 00007f836afd2300 R15: 0000000000022000
+ </TASK>
+
 
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

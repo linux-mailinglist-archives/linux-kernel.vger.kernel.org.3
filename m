@@ -2,160 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181AC4D7003
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 17:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006B44D7007
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 17:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbiCLQhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 11:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S232191AbiCLQsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 11:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiCLQhV (ORCPT
+        with ESMTP id S232144AbiCLQsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 11:37:21 -0500
-Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29B3574B1
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 08:36:15 -0800 (PST)
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 2F7CF12089B;
-        Sat, 12 Mar 2022 16:36:14 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id BB5D634;
-        Sat, 12 Mar 2022 16:36:12 +0000 (UTC)
-Message-ID: <e9c77d12092a4f048992f67d3fa0cf363b8614d4.camel@perches.com>
-Subject: Re: [PATCH 1/5] x86/alternative: simplify DUMP_BYTES macro
-From:   Joe Perches <joe@perches.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>, x86@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
+        Sat, 12 Mar 2022 11:48:53 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117427A9BE
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 08:47:46 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id j26so17485335wrb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 08:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fireburn-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9w/6bA1aoDkuJHS9K/TSkBOWaS4khHnnBbWGRmad4GA=;
+        b=kX8golIdtVAkBB6ZLCRB9mXOVYRu7qL+w+gaG/UC2GEXzB+k3ZzNYziZElwDT5HkFV
+         KD3W5VxxuCyy64hmDiXUv7e4DAvLYv6q2hGxOHdRmUGDbXhMwfFdkHqnfYdSa3BMNmVc
+         pUU4TinqRVEmwF3fpE3OnuBGO8m/VfnW8RpVxjJt71chm04YyjbQ+Ed/Ec6/T/RJNLGZ
+         o2XH2qxT5YO0Ye2SWI9gZcyzI8xguptKee4X5xjzwhQMuBdYy8+KAGWvdt7rSot3rIOc
+         vMC2D8a/XG8IvHDMJBTS+fh6cfizjyAa1B1O0D7t63cc9c01uzm0R2lnv+unShXC4dpG
+         fm+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9w/6bA1aoDkuJHS9K/TSkBOWaS4khHnnBbWGRmad4GA=;
+        b=vIUJ3rulT378yMEhR5qhqCegBjMH8M7SEVnsfmTFql4SeCPmxv8muXHAIaNwHaS+cC
+         io6GCJ0lVXkJB6nkY4xZgKaNyr/5170gDUOVJ87UhvZv4i1hqRMeqTFQsHfQNPbL9KJ4
+         Or9Or8Ho/wv2QwMF2rwg4kzT8lOlaYRIisR27rI1XiKOXioCZsyFFxj5guH4sEzqE1eq
+         yab4sSl74W282vKhcqC3ePS/ydsn93cCfzLWH0YXRSFfuSWspm+f6/JcA2Kte7R1DktI
+         Hf3QRB5pEJLGNvINSYUZ2/aLk/7Umdt66dC7d5C9CcmW+AZyGIwNZv/NL0MlcrQNX1xp
+         zpYA==
+X-Gm-Message-State: AOAM530tQHgwL3QkhPXUt1wyAWcHCKb5bo34eGDF2wD/rdJVSAUGsmOT
+        5QpQX+y4T54g/f/aIe6KKkGOkw==
+X-Google-Smtp-Source: ABdhPJyA0kGFQ3L/J2KAMLzwTEX3mpb7NfSn4ieEi+P9Pmntd3uMjnsV0BEOouselFo9ecimO19RHw==
+X-Received: by 2002:adf:d1c3:0:b0:203:8647:6fbe with SMTP id b3-20020adfd1c3000000b0020386476fbemr10323720wrd.65.1647103664396;
+        Sat, 12 Mar 2022 08:47:44 -0800 (PST)
+Received: from axion.fireburn.co.uk.fireburn.co.uk ([2a01:4b00:f40e:900::24e])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm12760833wmp.44.2022.03.12.08.47.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 08:47:43 -0800 (PST)
+From:   Mike Lothian <mike@fireburn.co.uk>
+Cc:     Mike Lothian <mike@fireburn.co.uk>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Sat, 12 Mar 2022 08:36:11 -0800
-In-Reply-To: <20220311144312.88466-1-adobriyan@gmail.com>
-References: <20220311144312.88466-1-adobriyan@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+Subject: [PATCH] Bluetooth: hci_event: Remove excessive bluetooth warning
+Date:   Sat, 12 Mar 2022 16:45:51 +0000
+Message-Id: <20220312164550.1810665-1-mike@fireburn.co.uk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: c6gs414ciqyugqo9h4ijd6e6zsennyq5
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: BB5D634
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX194K3XRck3ArpoYUkfPKFo7/9WGxwsHxS8=
-X-HE-Tag: 1647102972-289440
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-11 at 17:43 +0300, Alexey Dobriyan wrote:
-> Avoid zero length check with clever whitespace placement in the format
-> string.
-[]
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-[]
-> @@ -66,13 +66,10 @@ do {									\
->  	if (unlikely(debug_alternative)) {				\
->  		int j;							\
->  									\
-> -		if (!(len))						\
-> -			break;						\
-> -									\
->  		printk(KERN_DEBUG pr_fmt(fmt), ##args);			\
-> -		for (j = 0; j < (len) - 1; j++)				\
-> -			printk(KERN_CONT "%02hhx ", buf[j]);		\
-> -		printk(KERN_CONT "%02hhx\n", buf[j]);			\
-> +		for (j = 0; j < (len); j++)				\
-> +			printk(KERN_CONT " %02hhx", buf[j]);		\
-> +		printk(KERN_CONT "\n");					\
->  	}								\
-
-This could also use %02x and not %02hhx
-
-And MAX_PATCH_LEN is 255 but is that really possible?
-
-Maybe if the actual patch length is always <= 64 this could use
-	printk(KERN_CONT "%*ph\n", (int)len, buf);
-instead and avoid all possible interleaving?
-
-If so, maybe just remove DUMP_BYTES and use DPRINTK directly.
-
-Perhaps:
+Fixes: 3e54c5890c87a ("Bluetooth: hci_event: Use of a function table to handle HCI events")
+Signed-off-by: Mike Lothian <mike@fireburn.co.uk>
 ---
- arch/x86/kernel/alternative.c | 31 ++++++++++---------------------
- 1 file changed, 10 insertions(+), 21 deletions(-)
+ net/bluetooth/hci_event.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 018b61febf0e7..74fa946093467 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -61,21 +61,6 @@ do {									\
- 		printk(KERN_DEBUG pr_fmt(fmt) "\n", ##args);		\
- } while (0)
- 
--#define DUMP_BYTES(buf, len, fmt, args...)				\
--do {									\
--	if (unlikely(debug_alternative)) {				\
--		int j;							\
--									\
--		if (!(len))						\
--			break;						\
--									\
--		printk(KERN_DEBUG pr_fmt(fmt), ##args);			\
--		for (j = 0; j < (len) - 1; j++)				\
--			printk(KERN_CONT "%02hhx ", buf[j]);		\
--		printk(KERN_CONT "%02hhx\n", buf[j]);			\
--	}								\
--} while (0)
--
- static const unsigned char x86nops[] =
- {
- 	BYTES_NOP1,
-@@ -214,7 +199,8 @@ static __always_inline int optimize_nops_range(u8 *instr, u8 instrlen, int off)
- 	add_nops(instr + off, nnops);
- 	local_irq_restore(flags);
- 
--	DUMP_BYTES(instr, instrlen, "%px: [%d:%d) optimized NOPs: ", instr, off, i);
-+	DPRINTK("%px: [%d:%d) optimized NOPs: %*ph",
-+		instr, off, i, (int)instrlen, instr);
- 
- 	return nnops;
- }
-@@ -303,8 +289,10 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
- 			instr, instr, a->instrlen,
- 			replacement, a->replacementlen);
- 
--		DUMP_BYTES(instr, a->instrlen, "%px:   old_insn: ", instr);
--		DUMP_BYTES(replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
-+		DPRINTK("%px:   old_insn: %*ph",
-+			instr, (int)a->instrlen, instr);
-+		DPRINTK("%px:   rpl_insn: %*ph",
-+			replacement, (int)a->replacementlen, replacement);
- 
- 		memcpy(insn_buff, replacement, a->replacementlen);
- 		insn_buff_sz = a->replacementlen;
-@@ -328,7 +316,8 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
- 		for (; insn_buff_sz < a->instrlen; insn_buff_sz++)
- 			insn_buff[insn_buff_sz] = 0x90;
- 
--		DUMP_BYTES(insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
-+		DPRINTK("%px: final_insn: %*ph",
-+			instr, (int)insn_buff_sz, insn_buff);
- 
- 		text_poke_early(instr, insn_buff, insn_buff_sz);
- 
-@@ -499,8 +488,8 @@ void __init_or_module noinline apply_retpolines(s32 *start, s32 *end)
- 		len = patch_retpoline(addr, &insn, bytes);
- 		if (len == insn.length) {
- 			optimize_nops(bytes, len);
--			DUMP_BYTES(((u8*)addr),  len, "%px: orig: ", addr);
--			DUMP_BYTES(((u8*)bytes), len, "%px: repl: ", addr);
-+			DPRINTK("%px: orig: %*ph", addr, (int)len, addr);
-+			DPRINTK("%px: repl: %*ph", addr, (int)len, bytes);
- 			text_poke_early(addr, bytes, len);
- 		}
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index fc30f4c03d29..aa57fccd2e47 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -6818,14 +6818,6 @@ static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_buff *skb,
+ 		return;
  	}
-
+ 
+-	/* Just warn if the length is over max_len size it still be
+-	 * possible to partially parse the event so leave to callback to
+-	 * decide if that is acceptable.
+-	 */
+-	if (skb->len > ev->max_len)
+-		bt_dev_warn(hdev, "unexpected event 0x%2.2x length: %u > %u",
+-			    event, skb->len, ev->max_len);
+-
+ 	data = hci_ev_skb_pull(hdev, skb, event, ev->min_len);
+ 	if (!data)
+ 		return;
+-- 
+2.35.1
 

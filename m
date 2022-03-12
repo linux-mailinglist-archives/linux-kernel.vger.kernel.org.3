@@ -2,142 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406FB4D6FA3
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDEF4D6FA6
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 16:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiCLPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 10:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S231629AbiCLPPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 10:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiCLPM4 (ORCPT
+        with ESMTP id S230322AbiCLPPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 10:12:56 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3A986C9;
-        Sat, 12 Mar 2022 07:11:51 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e2ca8d7812so61141417b3.13;
-        Sat, 12 Mar 2022 07:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K98030A73zLeeoJmJeXlU5g/68giFukC00BYhoPQePQ=;
-        b=PJWpgYp3y0X47kmD0RbKsQsv50e9EHMwVHy1fGRT7+xPaXqBBTyb8WJlhz4aXeUmX+
-         i/3bK+Je/HlZShOGXMYLYxN8oXmb99quNJJx73gq2YNhS/zrIYHouDgIdJbmubBv3OuI
-         CmqGu9lIl7ghHJWkSKX9hghFz17XkbYgrbjZwN4adnQB6VYn2hZxYkf3esSi2cizPCYO
-         x/lxj1iA4z9/8HKKCZ0vJ44SQwHL6aPsIBD+vkNEzWVlYfPHTyph1K/kXboaRa1azVti
-         dKpzLi75jl/Y9F8YUU0blFYSbja9ClzAVi4UWckQF+sgJUsoCyJRwIVjr3Uow+TxaeAz
-         O32Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K98030A73zLeeoJmJeXlU5g/68giFukC00BYhoPQePQ=;
-        b=18osgWswvog/8QmBv4l5Ub1ZOGv2t20r2nO15Q/9UESbAGClJtBvrECsHA0ozj0jaw
-         /TmYgyygyDzZhWvVKQ9mCSM1a07z6RmnwQUwMj7Pjt0pi2MNJJvZ5ybien0iGQ1eD64d
-         CznLyNid9e3EKxByw34U904WcRR+Ya6UXPwUxVDFakLwdgm/eJxtioAQBWywrgEXJ5eq
-         PsZF3YDDRNmTNlqyEaiYuY0ABVXXyxEv96Or1EUy7ItsEBXHX9SvdQQcxoa3avcM/9Ae
-         WYGIEc+EXIWTEAaGvOVrFfbid7qu6u/tx//IU2tdI7wECXMc1BXUkisXjW5WyWSC1Hov
-         rx/A==
-X-Gm-Message-State: AOAM53337sOGqRLiGxfjDicoh6liAadqGetdEsyS3Q0K/SbKaoiw6E3e
-        Buxq5a5BUU6o6g/nZ/ARKHk841RWcmtlzdPm37DgmgKD1fM=
-X-Google-Smtp-Source: ABdhPJx9jMKBuCWxF8MForqcYIH25wObesDaHt4kx/iw7ePlPHMda/GyAodFlasmPOzu/17EecxEpDx7Z8YGycLjFQ0=
-X-Received: by 2002:a81:9844:0:b0:2db:db74:f7db with SMTP id
- p65-20020a819844000000b002dbdb74f7dbmr12407164ywg.359.1647097910104; Sat, 12
- Mar 2022 07:11:50 -0800 (PST)
+        Sat, 12 Mar 2022 10:15:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA0F14076D;
+        Sat, 12 Mar 2022 07:14:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C07DAB80184;
+        Sat, 12 Mar 2022 15:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FF8C340EC;
+        Sat, 12 Mar 2022 15:14:01 +0000 (UTC)
+Date:   Sat, 12 Mar 2022 10:13:59 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
+Message-ID: <20220312101359.27b713b8@rorschach.local.home>
+In-Reply-To: <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+References: <cover.1647057583.git.riteshh@linux.ibm.com>
+        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <3192BC90-D082-472B-B310-6E09A14A77C6@hust.edu.cn>
- <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
- <CAKFNMokdB+Zph-1OyC1-Xnyi93r+yKSusgaEaa=CkuUBttwRZA@mail.gmail.com>
- <CAD-N9QU8-Od3G+-=RHM5K7vR2-4Af+4t=XutJJVdmkKhH7OarA@mail.gmail.com>
- <CAKFNMo=E8mMuY7Et0auH02fOzGKx04k2=LOj8mZJ6a-=J+sPzQ@mail.gmail.com>
- <CAD-N9QWt=d2Vj2bevSzOPL4AWF08_zTyq=hHOcOOROCazNY4_A@mail.gmail.com>
- <CAD-N9QWrBLygN24EC6QLRFF6uf7=PiTRdA4suKqEXJ7tk9aocA@mail.gmail.com> <dac7104a-21ac-24f4-6132-e51960fa0b7e@gmail.com>
-In-Reply-To: <dac7104a-21ac-24f4-6132-e51960fa0b7e@gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sun, 13 Mar 2022 00:11:38 +0900
-Message-ID: <CAKFNMon3=fFWtuUa1_wDyK9agpCXjbzA8b+rj=OYu=7Gs8nMqQ@mail.gmail.com>
-Subject: Re: Fw:Re: [PATCH] fs: nilfs2: fix memory leak in nilfs sysfs create
- device group
-To:     Pavel Skripkin <paskripkin@gmail.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+On Sat, 12 Mar 2022 11:09:47 +0530
+Ritesh Harjani <riteshh@linux.ibm.com> wrote:
 
-On Sat, Mar 12, 2022 at 11:20 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
->
-> Hi Dongliang,
->
-> On 3/9/22 11:30, Dongliang Mu wrote:
-> >> Now I am checking the log and trying to find error injection in the
-> >> log file, as said by Pavel.
-> >
-> > Attached is the report and log file.
-> >
-> > @Pavel Skripkin I don't find any useful error injection in the log file.
-> >
-> > In case I made some mistakes, I will clean up my local crash reports,
-> > update to the latest upstream kernel and restart the syzkaller. Let's
-> > see if the crash still occurs.
->
-> The execution path is clear from the logs. Quick grep for nilfs shows
-> these lines
->
-> [  886.701044][T25972] NILFS (loop2): broken superblock, retrying with
-> spare superblock (blocksize = 1024)
-> [  886.703251][T25972] NILFS (loop2): broken superblock, retrying with
-> spare superblock (blocksize = 4096)
-> [  886.706454][T25972] NILFS (loop2): error -4 creating segctord thread
->
-> So here is calltrace:
->
-> nilfs_fill_super
->    nilfs_attach_log_writer
->      nilfs_segctor_start_thread <- failed
->
->
-> In case of nilfs_attach_log_writer() error code jumps to
-> failed_checkpoint label and calls destroy_nilfs() which should call
-> nilfs_sysfs_delete_device_group().
+> ftrace's __print_symbolic() requires that any enum values used in the
+> symbol to string translation table be wrapped in a TRACE_DEFINE_ENUM
+> so that the enum value can be decoded from the ftrace ring buffer by
+> user space tooling.
+> 
+> This patch also fixes few other problems found in this trace point.
+> e.g. dereferencing structures in TP_printk which should not be done
+> at any cost.
+> 
+> Also to avoid checkpatch warnings, this patch removes those
+> whitespaces/tab stops issues.
+> 
 
-nilfs_sysfs_delete_device_group() is called in destroy_nilfs()
-if nilfs->ns_flags has THE_NILFS_INIT flag -- nilfs_init() inline
-function tests this flag.
+It is recommend now that when there's a fixes and a reported-by tag,
+you should include the link to the report when available.
 
-The flag is set after init_nilfs() succeeded at the beginning of
-nilfs_fill_super() because the set_nilfs_init() inline in init_nilfs() sets it.
+Link: https://lore.kernel.org/all/20220221160916.333e6491@rorschach.local.home/
 
-So,  nilfs_sysfs_delete_group() seems to be called in case of
-the above failure.   Am I missing something?
-
-Thanks,
-Ryusuke Konishi
+-- Steve
 
 
->
-> So I can really see how this leak is possible on top of current Linus' HEAD.
->
->
-> Also in the log there are onlyh 4 syz_mount_image$nilfs2 programs, so
-> only one of them may be a reproducer. If you have spare time you can try
-> to execute them using syz-execprog and see if it works :))
->
->
->
-> With regards,
-> Pavel Skripkin
+> Cc: stable@kernel.org
+> Fixes: commit aa75f4d3daae ("ext4: main fast-commit commit path")
+> Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+> ---
+>  include/trace/events/ext4.h | 78 +++++++++++++++++++++++--------------
+>  1 file changed, 49 insertions(+), 29 deletions(-)
+> 
+> diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
+> index 19e957b7f941..1a0b7030f72a 100644
+> --- a/include/trace/events/ext4.h
+> +++ b/include/trace/events/ext4.h
+> @@ -95,6 +95,17 @@ TRACE_DEFINE_ENUM(ES_REFERENCED_B);
+>  	{ FALLOC_FL_COLLAPSE_RANGE,	"COLLAPSE_RANGE"},	\
+>  	{ FALLOC_FL_ZERO_RANGE,		"ZERO_RANGE"})
+>  
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_XATTR);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_CROSS_RENAME);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_NOMEM);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_SWAP_BOOT);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RESIZE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RENAME_DIR);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_FALLOC_RANGE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_INODE_JOURNAL_DATA);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);
+> +
+>  #define show_fc_reason(reason)						\
+>  	__print_symbolic(reason,					\
+>  		{ EXT4_FC_REASON_XATTR,		"XATTR"},		\
+> @@ -2723,41 +2734,50 @@ TRACE_EVENT(ext4_fc_commit_stop,
+>  
+>  #define FC_REASON_NAME_STAT(reason)					\
+>  	show_fc_reason(reason),						\
+> -	__entry->sbi->s_fc_stats.fc_ineligible_reason_count[reason]
+> +	__entry->fc_ineligible_rc[reason]
+>  
+>  TRACE_EVENT(ext4_fc_stats,
+> -	    TP_PROTO(struct super_block *sb),
+> -
+> -	    TP_ARGS(sb),
+> +	TP_PROTO(struct super_block *sb),
+>  
+> -	    TP_STRUCT__entry(
+> -		    __field(dev_t, dev)
+> -		    __field(struct ext4_sb_info *, sbi)
+> -		    __field(int, count)
+> -		    ),
+> +	TP_ARGS(sb),
+>  
+> -	    TP_fast_assign(
+> -		    __entry->dev = sb->s_dev;
+> -		    __entry->sbi = EXT4_SB(sb);
+> -		    ),
+> +	TP_STRUCT__entry(
+> +		__field(dev_t, dev)
+> +		__array(unsigned int, fc_ineligible_rc, EXT4_FC_REASON_MAX)
+> +		__field(unsigned long, fc_commits)
+> +		__field(unsigned long, fc_ineligible_commits)
+> +		__field(unsigned long, fc_numblks)
+> +	),
+>  
+> -	    TP_printk("dev %d:%d fc ineligible reasons:\n"
+> -		      "%s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d; "
+> -		      "num_commits:%ld, ineligible: %ld, numblks: %ld",
+> -		      MAJOR(__entry->dev), MINOR(__entry->dev),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
+> -		      __entry->sbi->s_fc_stats.fc_num_commits,
+> -		      __entry->sbi->s_fc_stats.fc_ineligible_commits,
+> -		      __entry->sbi->s_fc_stats.fc_numblks)
+> +	TP_fast_assign(
+> +		int i;
+>  
+> +		__entry->dev = sb->s_dev;
+> +		for (i = 0; i < EXT4_FC_REASON_MAX; i++) {
+> +			__entry->fc_ineligible_rc[i] =
+> +				EXT4_SB(sb)->s_fc_stats.fc_ineligible_reason_count[i];
+> +		}
+> +		__entry->fc_commits = EXT4_SB(sb)->s_fc_stats.fc_num_commits;
+> +		__entry->fc_ineligible_commits =
+> +			EXT4_SB(sb)->s_fc_stats.fc_ineligible_commits;
+> +		__entry->fc_numblks = EXT4_SB(sb)->s_fc_stats.fc_numblks;
+> +	),
+> +
+> +	TP_printk("dev %d,%d fc ineligible reasons:\n"
+> +		  "%s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u "
+> +		  "num_commits:%lu, ineligible: %lu, numblks: %lu",
+> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
+> +		  __entry->fc_commits, __entry->fc_ineligible_commits,
+> +		  __entry->fc_numblks)
+>  );
+>  
+>  #define DEFINE_TRACE_DENTRY_EVENT(__type)				\
+

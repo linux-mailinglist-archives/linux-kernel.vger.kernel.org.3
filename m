@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF964D6E15
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 964FA4D6E14
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiCLK2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 05:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S231827AbiCLK2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 05:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiCLK2X (ORCPT
+        with ESMTP id S231752AbiCLK2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 05:28:23 -0500
+        Sat, 12 Mar 2022 05:28:24 -0500
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E671E6972;
-        Sat, 12 Mar 2022 02:27:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D631E7A6B;
+        Sat, 12 Mar 2022 02:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=e5B8WLnGeGxNelCPBu35HFjirj5Rn9KY1Jc9NSO7c+8=;
-  b=hx3/hp1hBR3Ukjh+9CGEmElIJ6kMvnEnDOiAt58ECguIen7ZsR799zDv
-   3D9C6WMmLfKLKkNvXur8YHmz+HpmuAOcqW+HWE/gDgBOaMJe+2Ldushgm
-   L2jucx+qkcOGSSJUV0+Y9DvDHzFUJznTAFr9d9j6AE15ull5qGPH2m/G1
-   Y=;
+  bh=13mCydMK3ZTDSn8+n91omN6RvcvIaMym7+9DGgEIYSE=;
+  b=ldu364k1QFGBFDbdZ+iM5EyVIXN7g7HSFDJ8SmCVkljd/KV9dyqcOouY
+   ZozD09ySl0pKK3dGwCKbBJ9shjatJaa9Kdh8nOlnjI0vbHpmhzz20pbdT
+   Ugo33+12IWPJl2KXtIxjvgbS0CfV4H4HaD4aYP1vgpez5VbQgwbY8lzZ3
+   o=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,175,1643670000"; 
-   d="scan'208";a="25781350"
+   d="scan'208";a="25781351"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 11:27:11 +0100
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     James Smart <james.smart@broadcom.com>
+To:     Kalle Valo <kvalo@kernel.org>
 Cc:     kernel-janitors@vger.kernel.org,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] scsi: lpfc: use kzalloc
-Date:   Sat, 12 Mar 2022 11:27:03 +0100
-Message-Id: <20220312102705.71413-5-Julia.Lawall@inria.fr>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 5/6] zd1201: use kzalloc
+Date:   Sat, 12 Mar 2022 11:27:04 +0100
+Message-Id: <20220312102705.71413-6-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220312102705.71413-1-Julia.Lawall@inria.fr>
 References: <20220312102705.71413-1-Julia.Lawall@inria.fr>
@@ -72,34 +72,28 @@ expression res, size, flag;
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/scsi/lpfc/lpfc_debugfs.c |    9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/net/wireless/zydas/zd1201.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index 30fac2f6fb06..7c4a71703065 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -6272,10 +6272,8 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 				 phba->hba_debugfs_root,
- 				 phba, &lpfc_debugfs_op_slow_ring_trc);
- 		if (!phba->slow_ring_trc) {
--			phba->slow_ring_trc = kmalloc(
--				(sizeof(struct lpfc_debugfs_trc) *
--				lpfc_debugfs_max_slow_ring_trc),
--				GFP_KERNEL);
-+			phba->slow_ring_trc = kzalloc((sizeof(struct lpfc_debugfs_trc) * lpfc_debugfs_max_slow_ring_trc),
-+						      GFP_KERNEL);
- 			if (!phba->slow_ring_trc) {
- 				lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
- 						 "0416 Cannot create debugfs "
-@@ -6283,9 +6281,6 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 				goto debug_failed;
- 			}
- 			atomic_set(&phba->slow_ring_trc_cnt, 0);
--			memset(phba->slow_ring_trc, 0,
--				(sizeof(struct lpfc_debugfs_trc) *
--				lpfc_debugfs_max_slow_ring_trc));
+diff --git a/drivers/net/wireless/zydas/zd1201.c b/drivers/net/wireless/zydas/zd1201.c
+index e64e4e579518..82bc0d44212e 100644
+--- a/drivers/net/wireless/zydas/zd1201.c
++++ b/drivers/net/wireless/zydas/zd1201.c
+@@ -521,7 +521,7 @@ static int zd1201_setconfig(struct zd1201 *zd, int rid, const void *buf, int len
+ 	zd->rxdatas = 0;
+ 	zd->rxlen = 0;
+ 	for (seq=0; len > 0; seq++) {
+-		request = kmalloc(16, gfp_mask);
++		request = kzalloc(16, gfp_mask);
+ 		if (!request)
+ 			return -ENOMEM;
+ 		urb = usb_alloc_urb(0, gfp_mask);
+@@ -529,7 +529,6 @@ static int zd1201_setconfig(struct zd1201 *zd, int rid, const void *buf, int len
+ 			kfree(request);
+ 			return -ENOMEM;
  		}
- 
- 		snprintf(name, sizeof(name), "nvmeio_trc");
+-		memset(request, 0, 16);
+ 		reqlen = len>12 ? 12 : len;
+ 		request[0] = ZD1201_USB_RESREQ;
+ 		request[1] = seq;
 

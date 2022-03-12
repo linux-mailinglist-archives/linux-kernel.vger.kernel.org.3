@@ -2,69 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548DA4D6C80
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 05:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C9C4D6C84
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 05:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiCLEuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 23:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S230396AbiCLEww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 23:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbiCLEuG (ORCPT
+        with ESMTP id S230015AbiCLEwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 23:50:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018C1314;
-        Fri, 11 Mar 2022 20:49:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84AD060A76;
-        Sat, 12 Mar 2022 04:49:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D240DC340EB;
-        Sat, 12 Mar 2022 04:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647060539;
-        bh=J8NQh13S5v2vpddLJISI7AP6ZNVa8WkorQTN/M+/6E8=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=kQyvBw/K+GwRi4gANm9Qo237AwTL95BycA6KPyfbG+x+R6qhgQo9y+09ZIjWnaSAf
-         488cAbJXL5BCdBlUSIFERi6M+WTbOymW4nXyVKS5M+8RkjxncDqKDos+7UqYWuioLt
-         6wmVYRipey2s52ag/qrP+KkYOZOBLPeFytOPFLWeEhR14FBMAMEncaH3KIVbDoHHWr
-         IzEpLNlsokAataK+EKglDIjzr1rozmu26OibkynAxNdAGfPyrm44YHwDVfQCSExpw5
-         4VG3pbzpH9mgtREheXXV8uK7qJbTdnILJV5Y0LrBBzi03glSf9i8Rg0hwUKf5GwIMG
-         yqotF3SDdg/AQ==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 11 Mar 2022 23:52:50 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAA9E9D;
+        Fri, 11 Mar 2022 20:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647060703; x=1678596703;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZfF/lzNX9XMkZ21coHM0wPTpmygS6/b4qFfbU1ZtBVs=;
+  b=R3t0O7y8fpYnAMSvpPCrpn577lD9ibGrZWs0NJdSnvRqaihqDE5o0uO5
+   LXxC9TmVMUP/OhNgVWmkWRfLxi0EyONTlXnMtQ4LUTheNzRtRObIHfBcb
+   SiRId0t6qxovmxA8daTDHL/j9ZVcg24vG4RFDN6TEKWYah4MPKdbvyaqi
+   mLxgAR7DUQ4R7MBC/8vq+cD/XjRK5j1K46mn0K1NTt3U7ksGop4yRM73v
+   9EvJ2ZYsFJ/VX/lZoiUhndBRpQ88ztfufOgO2JutljVg81Mz9XEaUMSU2
+   gjuSeeTq+qM3Vt+j58ggOugioSKT2TJnOzUalqIIF1gGyVp0yHTHUXxxy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="280502984"
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="280502984"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 20:51:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
+   d="scan'208";a="497025121"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 20:51:19 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nStio-0007WW-PR; Sat, 12 Mar 2022 04:51:18 +0000
+Date:   Sat, 12 Mar 2022 12:50:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v33 13/29] LSM: Use lsmblob in security_cred_getsecid
+Message-ID: <202203121225.Ab2lmSD3-lkp@intel.com>
+References: <20220310234632.16194-14-casey@schaufler-ca.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220208183411.61090-4-povik+lin@cutebit.org>
-References: <20220208183411.61090-1-povik+lin@cutebit.org> <20220208183411.61090-4-povik+lin@cutebit.org>
-Subject: Re: [PATCH v4 3/3] MAINTAINERS: Add clk-apple-nco under ARM/APPLE MACHINE
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
-        Martin =?utf-8?q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Martin =?utf-8?q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 11 Mar 2022 20:48:58 -0800
-User-Agent: alot/0.10
-Message-Id: <20220312044859.D240DC340EB@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310234632.16194-14-casey@schaufler-ca.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Martin Povi=C5=A1er (2022-02-08 10:34:11)
-> Acked-by: Sven Peter <sven@svenpeter.dev>
-> Acked-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
-> ---
+Hi Casey,
 
-Applied to clk-next
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on pcmoore-audit/next]
+[also build test WARNING on linus/master v5.17-rc7]
+[cannot apply to pcmoore-selinux/next jmorris-security/next-testing next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
+config: microblaze-randconfig-s031-20220310 (https://download.01.org/0day-ci/archive/20220312/202203121225.Ab2lmSD3-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/77c3979bacdff1630a3c6211db065f2c79412621
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
+        git checkout 77c3979bacdff1630a3c6211db065f2c79412621
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> kernel/audit.c:128:25: sparse: sparse: symbol 'audit_sig_lsm' was not declared. Should it be static?
+   kernel/audit.c:2197:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/audit.c:2197:9: sparse:     expected struct spinlock [usertype] *lock
+   kernel/audit.c:2197:9: sparse:     got struct spinlock [noderef] __rcu *
+   kernel/audit.c:2200:40: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
+   kernel/audit.c:2200:40: sparse:     expected struct spinlock [usertype] *lock
+   kernel/audit.c:2200:40: sparse:     got struct spinlock [noderef] __rcu *
+
+vim +/audit_sig_lsm +128 kernel/audit.c
+
+   124	
+   125	/* The identity of the user shutting down the audit system. */
+   126	static kuid_t		audit_sig_uid = INVALID_UID;
+   127	static pid_t		audit_sig_pid = -1;
+ > 128	struct lsmblob		audit_sig_lsm;
+   129	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,142 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1B24D6EC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 13:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267824D6EC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 14:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiCLNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 08:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S231382AbiCLNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 08:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiCLNAf (ORCPT
+        with ESMTP id S229681AbiCLNIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 08:00:35 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30B722FDBB
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 04:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647089970; x=1678625970;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ju9V6YAGUwo4nKMH+Mz6f80b8b+5n9urQ/tMnI0roiM=;
-  b=VY/NDtqsUBwXa1CfKoYSdavyr3vZp45kQlC/c5X98wCVZR/UiTtngRlT
-   kXU3Yd1YlEqJN9urRlQboByRo6zwqygBVjDJfYWDilp1z5VKUYeYWJk2u
-   7hV7za+Y86Hujv+lp/sI5gNs8/SZFWueNDbE02MasfO20vBS6zP+TpIkS
-   m3J/Rv/xJLlTHmMU+T5VWpNx5zlc4ZcKWzPffDVsKTXa7ayNUON4RYbqO
-   Gev3O7BEX8C9q3Syo+NFERXlEU4nClJQIljAjsS32fCPA0OsFaYOL0Eby
-   UqWp47rYvJN2JOBH+R1WFDlHI9vg51QnA2AsigAnurjixlLSZfBlQxp4v
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="254621592"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="254621592"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 04:59:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="514865949"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 12 Mar 2022 04:59:29 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nT1LE-0007sv-Az; Sat, 12 Mar 2022 12:59:28 +0000
-Date:   Sat, 12 Mar 2022 20:59:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:auto-latest] BUILD SUCCESS
- 6ca31f662ae524f9141e432208c6d8d94ba57788
-Message-ID: <622c9916.WFIpUcuD5toyPuNJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 12 Mar 2022 08:08:05 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9E235849;
+        Sat, 12 Mar 2022 05:06:58 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id yy13so24607879ejb.2;
+        Sat, 12 Mar 2022 05:06:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XbcW2OOJ7LSE1WOue0Ifdm+n2BhfLZSK5oy0hShBNp8=;
+        b=i0Df7eXgu5ECZdRFO999p7sSOXO9g2T7uxD/dwZdpbmYIyEDGH0YiC8IazXIqTJWBn
+         wMQ369rGT7wUPS7vgp7RvYlEiI7g3oYrwJmlqXqWnast52NdFbmpeoWQ+tvYbFR4YZMb
+         fFSfFrfRXO/TiiqYle1hG1QBtuSNcwWXwK9wLN/qqORlgHeb+j9U+4EqUhEIxX/GD2lj
+         TOs2cr231JZiKkUUbfFGWGDDNNUHqT3NfJ22jQvHAsyJ2D7uBVNfpln+iryVbSU3/40g
+         XkhOTtUvFUT0ZzwbevUSELlVswoACPIfMUFvMhzu1H7r15CEtPwkuCnZhZNPimN929ns
+         OvNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XbcW2OOJ7LSE1WOue0Ifdm+n2BhfLZSK5oy0hShBNp8=;
+        b=2lfCr2x/u3nWi4pRay99xGDIFRlEpqTKKoBVqsebn2TQs8bdvVFfT3873rmoNf6NZM
+         AKVuagpFDSN2YVZgX9mjtij8rGKh1E+O9cVTX58PA7sXmmMu5zrMRJowststJXT+eaiA
+         qbtI0vNl6Fur68WlzT10yzoir6l6wX2LAQey4LLXMPVL9jitL5/fHPF3csWMdaGY1R1r
+         OIcwedaWVXGI+p2EUpBvYdMMZ9eE1UOSRpHrlfSwYJ9tDZTvJQYvoa+w6cNmptPfv9e2
+         fAFWOROIFXgw1T70ePcc23Dm/0D93OlvKLkY9k1hZVSdDTzYsXb+3yuRKtPA3IDTeXus
+         QN2g==
+X-Gm-Message-State: AOAM531YWNNG/uffIqjFkkaERmx6+TmY3Yr4nY/8bBrn//A0i70d02RX
+        Apj4sqP1OcdXHMv/N5iEs6Q0jXo0y0upHVtRidA=
+X-Google-Smtp-Source: ABdhPJwqtxEcJgQom5xQ63KkbG6+LO8HbumW/l63Ii9C88UxG/hHoFSg0W5PUCIoip6Fm0apWFcRrcRlu+kaAlOLc70=
+X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
+ sd1-20020a1709076e0100b006d0562ce389mr12346915ejc.497.1647090416933; Sat, 12
+ Mar 2022 05:06:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220311181958.4487-1-kris@embeddedTS.com>
+In-Reply-To: <20220311181958.4487-1-kris@embeddedTS.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 12 Mar 2022 15:06:20 +0200
+Message-ID: <CAHp75VfVhCa-Td+X0cg-eYPtarFyKrsF92oPB2HdraCXW2CRTg@mail.gmail.com>
+Subject: Re: [PATCH] gpio: ts4900: Fix comment formatting and grammar
+To:     Kris Bahnsen <kris@embeddedts.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git auto-latest
-branch HEAD: 6ca31f662ae524f9141e432208c6d8d94ba57788  Merge sched/core into tip/master
+On Fri, Mar 11, 2022 at 8:20 PM Kris Bahnsen <kris@embeddedts.com> wrote:
+>
+> The issues were pointed out after the prior commit was applied
 
-elapsed time: 1027m
+Missed period in the above sentence.
 
-configs tested: 61
-configs skipped: 3
+Otherwise LGTM,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+> ---
+>  drivers/gpio/gpio-ts4900.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
+> index d918d2df4de2..ede605b8e098 100644
+> --- a/drivers/gpio/gpio-ts4900.c
+> +++ b/drivers/gpio/gpio-ts4900.c
+> @@ -55,8 +55,9 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
+>  {
+>         struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
+>
+> -       /* Only clear the OE bit here, requires a RMW. Prevents potential issue
+> -        * with OE and data getting to the physical pin at different times.
+> +       /*
+> +        * Only clear the OE bit here, requires a RMW. Prevents a potential issue
+> +        * with OE and DAT getting to the physical pin at different times.
+>          */
+>         return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
+>  }
+> @@ -68,9 +69,10 @@ static int ts4900_gpio_direction_output(struct gpio_chip *chip,
+>         unsigned int reg;
+>         int ret;
+>
+> -       /* If changing from an input to an output, we need to first set the
+> -        * proper data bit to what is requested and then set OE bit. This
+> -        * prevents a glitch that can occur on the IO line
+> +       /*
+> +        * If changing from an input to an output, we need to first set the
+> +        * GPIO's DAT bit to what is requested and then set the OE bit. This
+> +        * prevents a glitch that can occur on the IO line.
+>          */
+>         regmap_read(priv->regmap, offset, &reg);
+>         if (!(reg & TS4900_GPIO_OE)) {
+> --
+> 2.11.0
+>
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-arc                  randconfig-r043-20220310
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
 
-clang tested configs:
-hexagon              randconfig-r041-20220310
-hexagon              randconfig-r045-20220310
-riscv                randconfig-r042-20220310
-s390                 randconfig-r044-20220310
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+With Best Regards,
+Andy Shevchenko

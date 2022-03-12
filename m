@@ -2,123 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C9C4D6C84
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 05:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F014D6C8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 05:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiCLEww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 23:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S229847AbiCLFAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 00:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiCLEwu (ORCPT
+        with ESMTP id S229379AbiCLFAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 23:52:50 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAA9E9D;
-        Fri, 11 Mar 2022 20:51:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647060703; x=1678596703;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZfF/lzNX9XMkZ21coHM0wPTpmygS6/b4qFfbU1ZtBVs=;
-  b=R3t0O7y8fpYnAMSvpPCrpn577lD9ibGrZWs0NJdSnvRqaihqDE5o0uO5
-   LXxC9TmVMUP/OhNgVWmkWRfLxi0EyONTlXnMtQ4LUTheNzRtRObIHfBcb
-   SiRId0t6qxovmxA8daTDHL/j9ZVcg24vG4RFDN6TEKWYah4MPKdbvyaqi
-   mLxgAR7DUQ4R7MBC/8vq+cD/XjRK5j1K46mn0K1NTt3U7ksGop4yRM73v
-   9EvJ2ZYsFJ/VX/lZoiUhndBRpQ88ztfufOgO2JutljVg81Mz9XEaUMSU2
-   gjuSeeTq+qM3Vt+j58ggOugioSKT2TJnOzUalqIIF1gGyVp0yHTHUXxxy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10283"; a="280502984"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="280502984"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2022 20:51:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="497025121"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2022 20:51:19 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nStio-0007WW-PR; Sat, 12 Mar 2022 04:51:18 +0000
-Date:   Sat, 12 Mar 2022 12:50:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v33 13/29] LSM: Use lsmblob in security_cred_getsecid
-Message-ID: <202203121225.Ab2lmSD3-lkp@intel.com>
-References: <20220310234632.16194-14-casey@schaufler-ca.com>
+        Sat, 12 Mar 2022 00:00:31 -0500
+Received: from out29-149.mail.aliyun.com (out29-149.mail.aliyun.com [115.124.29.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9C7369FF;
+        Fri, 11 Mar 2022 20:59:24 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07676834|-1;BR=01201311R121S41rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00954498-0.000797976-0.989657;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.N2bFlkM_1647061161;
+Received: from sunxibot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.N2bFlkM_1647061161)
+          by smtp.aliyun-inc.com(10.147.40.233);
+          Sat, 12 Mar 2022 12:59:22 +0800
+From:   Kant Fan <kant@allwinnertech.com>
+To:     rafael@kernel.org (supporter:THERMAL),
+        daniel.lezcano@linaro.org (supporter:THERMAL)
+Cc:     Kant Fan <kant@allwinnertech.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org (open list:THERMAL),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] thermal: devfreq_cooling: use local ops instead of global ops
+Date:   Sat, 12 Mar 2022 12:59:21 +0800
+Message-Id: <20220312045922.9779-1-kant@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220310234632.16194-14-casey@schaufler-ca.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
+Fix access illegal address problem in following condition:
+There are muti devfreq cooling devices in system, some of them has
+em model but other does not, energy model ops such as state2power will
+append to global devfreq_cooling_ops when the cooling device with
+em model register. It makes the cooling device without em model
+also use devfreq_cooling_ops after appending when register later by
+of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
 
-I love your patch! Perhaps something to improve:
+IPA governor regards the cooling devices without em model as a power actor
+because they also have energy model ops, and will access illegal address
+at dfc->em_pd when execute cdev->ops->get_requested_power,
+cdev->ops->state2power or cdev->ops->power2state.
 
-[auto build test WARNING on pcmoore-audit/next]
-[also build test WARNING on linus/master v5.17-rc7]
-[cannot apply to pcmoore-selinux/next jmorris-security/next-testing next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-config: microblaze-randconfig-s031-20220310 (https://download.01.org/0day-ci/archive/20220312/202203121225.Ab2lmSD3-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/77c3979bacdff1630a3c6211db065f2c79412621
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220311-084644
-        git checkout 77c3979bacdff1630a3c6211db065f2c79412621
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> kernel/audit.c:128:25: sparse: sparse: symbol 'audit_sig_lsm' was not declared. Should it be static?
-   kernel/audit.c:2197:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/audit.c:2197:9: sparse:     expected struct spinlock [usertype] *lock
-   kernel/audit.c:2197:9: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/audit.c:2200:40: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/audit.c:2200:40: sparse:     expected struct spinlock [usertype] *lock
-   kernel/audit.c:2200:40: sparse:     got struct spinlock [noderef] __rcu *
-
-vim +/audit_sig_lsm +128 kernel/audit.c
-
-   124	
-   125	/* The identity of the user shutting down the audit system. */
-   126	static kuid_t		audit_sig_uid = INVALID_UID;
-   127	static pid_t		audit_sig_pid = -1;
- > 128	struct lsmblob		audit_sig_lsm;
-   129	
-
+Signed-off-by: Kant Fan <kant@allwinnertech.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+index 4310cb342a9f..d38a80adec73 100644
+--- a/drivers/thermal/devfreq_cooling.c
++++ b/drivers/thermal/devfreq_cooling.c
+@@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+ 	struct thermal_cooling_device *cdev;
+ 	struct device *dev = df->dev.parent;
+ 	struct devfreq_cooling_device *dfc;
++	struct thermal_cooling_device_ops *ops;
+ 	char *name;
+ 	int err, num_opps;
+ 
+-	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+-	if (!dfc)
++	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
++	if (!ops)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
++	if (!dfc) {
++		err = -ENOMEM;
++		goto free_ops;
++	}
++
+ 	dfc->devfreq = df;
+ 
+ 	dfc->em_pd = em_pd_get(dev);
+ 	if (dfc->em_pd) {
+-		devfreq_cooling_ops.get_requested_power =
++		ops->get_requested_power =
+ 			devfreq_cooling_get_requested_power;
+-		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+-		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
++		ops->state2power = devfreq_cooling_state2power;
++		ops->power2state = devfreq_cooling_power2state;
+ 
+ 		dfc->power_ops = dfc_power;
+ 
+@@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+ 	if (!name)
+ 		goto remove_qos_req;
+ 
+-	cdev = thermal_of_cooling_device_register(np, name, dfc,
+-						  &devfreq_cooling_ops);
++	cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+ 	kfree(name);
+ 
+ 	if (IS_ERR(cdev)) {
+@@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+ 	kfree(dfc->freq_table);
+ free_dfc:
+ 	kfree(dfc);
++free_ops:
++	kfree(ops);
+ 
+ 	return ERR_PTR(err);
+ }
+@@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+ {
+ 	struct devfreq_cooling_device *dfc;
++	const struct thermal_cooling_device_ops *ops;
+ 	struct device *dev;
+ 
+ 	if (IS_ERR_OR_NULL(cdev))
+ 		return;
+ 
++	ops = cdev->ops;
+ 	dfc = cdev->devdata;
+ 	dev = dfc->devfreq->dev.parent;
+ 
+@@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+ 
+ 	kfree(dfc->freq_table);
+ 	kfree(dfc);
++	kfree(ops);
+ }
+ EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+-- 
+2.29.0
+

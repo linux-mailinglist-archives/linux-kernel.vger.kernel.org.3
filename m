@@ -2,216 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FACC4D6DF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D634D6DFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiCLKKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 05:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S231579AbiCLKYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 05:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiCLKKV (ORCPT
+        with ESMTP id S231233AbiCLKYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 05:10:21 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BC92272F0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:09:15 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d11b6259adso90235007b3.19
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:09:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=KYvhJwEqPqMacll2Nmd0cKWfMMmSrt6TYTGYVr6fAKo=;
-        b=J7927ySszHyeEQ7P3AfY7detl3yHPIjk9WdOIkUB8+zI2dkgItouavznSbYeg3NM+P
-         SXANcpzXzr3G/7UmiTDBUm88mHvQp2aL2VATbxYYqV7D1DdBv5ZoxAQTX3Vs+qiW7I5B
-         4zV1G9DGOv7Mt5OkPAoI6c13wbFEgyatJJ7jtAUNK1V8jHkroNF6kmgknUSn+dt3gDTs
-         F0+ynuPrf1nqKM8RahsoEZHKcR7VchM17ovI8tyUc3uTtPsGp+QbOc4cbu6frU1Qi06R
-         EF0rKjFbynmwND6YkEz6lAcGwdMSRWh1R4fsqzk8M6SYRs/5P751Zaii0RPBZ3cSYrfO
-         Y1Rw==
+        Sat, 12 Mar 2022 05:24:48 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0D663531
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:23:22 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BACDE3F60E
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 10:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647080600;
+        bh=xDCJmkuolk+37CRthskXGD5BwRwajHEJ6ASCw/gpw94=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=mEWZmVT6h+ici+6Gy60hl2LX9D/dfEf/amdLJBLfwyExj/vIYR7erTk5gW0bhaiN/
+         qDcBOZjq0GPl6W2RewK6fE1TPGr0Buw6z2081gF97oJ/LH2mB6UhthLtIjpuzryt3E
+         PifLQEivOncia3yiET25uWcfWHntadbL1JZyLGCpglCn2nDNiNkzELYxgm9gsA0xD5
+         CwNG9iHkxLeOYZphlUvSn7l8Xr2Ty5qxCGHbKB8s1djbn7pu5MDH6WuQVFVZZuRBuy
+         +s6hYMNWPqQK7HbYY8A1az4gw/i8hG2Hi19vDKuu/J8m5B0eSgs1kfucep5jRg2Xw6
+         GAJVtVu5p1b9w==
+Received: by mail-wm1-f69.google.com with SMTP id n62-20020a1ca441000000b0038124c99ebcso3478326wme.9
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 02:23:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=KYvhJwEqPqMacll2Nmd0cKWfMMmSrt6TYTGYVr6fAKo=;
-        b=MNfLkn66lm0TzyDm49jqPhL+Vi6FBnEVQ+/VbuXhQs3q4IlOFuM8TvauYst58sQSgV
-         zqiHvsDRq1boN5z6oF/qmpyCY9QfI6hsVd+aXdNW5+SlsPKJxvPCjzisX4pDHY9m4yPb
-         Ve0jlk5Rj4RvxUgBW/4n/1z5QiR1HwFz4TqQxGCfd6QkfsBTVkDVL/+xZkcTmivUUdU5
-         C1hp6pyrYFtkaJLxaDHUJ6yF4C4FckOvGb6/Lyysf3LcKWFP0AI4xF3vvdrmJcB/1Obh
-         av+mmDSA8zY0gBbSy78294j4TBTfjzl7e+R7+wTJ/U2SK3bHEPiajPvl2hHfMX/kyLLH
-         JViA==
-X-Gm-Message-State: AOAM5336P1kPPdTdHv1r+NNJVxAmTfVatPGJQMA/FeISfQ7nds/wujL0
-        r3xEtV/SgXXIS5oiwT0T6ElERHZvI2DfOA==
-X-Google-Smtp-Source: ABdhPJxcRzDPnhDhS87upQvOk2nbkWf71y95bto7e4L03qhYhuyrC/KST/9j5nK7UuzuIkXsbhSUQCrLvX6E5w==
-X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:1cf8:bbfc:56cd:c500])
- (user=mmandlik job=sendgmr) by 2002:a81:493:0:b0:2dc:a1c3:5e13 with SMTP id
- 141-20020a810493000000b002dca1c35e13mr11655097ywe.381.1647079755192; Sat, 12
- Mar 2022 02:09:15 -0800 (PST)
-Date:   Sat, 12 Mar 2022 02:08:59 -0800
-In-Reply-To: <20220312020707.1.I2b7f789329979102339d7e0717522ba417b63109@changeid>
-Message-Id: <20220312020707.2.Ie20f132ad5cb6bcd435d6c6e0fca8a9d858e83d4@changeid>
-Mime-Version: 1.0
-References: <20220312020707.1.I2b7f789329979102339d7e0717522ba417b63109@changeid>
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH 2/2] Bluetooth: Send AdvMonitor Dev Found for all matched devices
-From:   Manish Mandlik <mmandlik@google.com>
-To:     marcel@holtmann.org, luiz.dentz@gmail.com
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        linux-bluetooth@vger.kernel.org,
-        Manish Mandlik <mmandlik@google.com>,
-        Miao-chen Chou <mcchou@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xDCJmkuolk+37CRthskXGD5BwRwajHEJ6ASCw/gpw94=;
+        b=DUafG/9sLTJ6quDELjEwH7K/H/1glLjYzaTi7B9YYIFAz2oyaNNS0IWQEfRrSs2F1o
+         maT3oPFZv1NUbioUqrxqNJD0fwnoUAVcOJePlTyBiOJH4TRoXrzWTPUKEY+Wwoi71VhN
+         4Sjf5k6IVmo529PZybz2f15sTaPspd5taaZLsPejObAPZ/gorQCsTwTQibzWe1H1naR+
+         M/5XuoDHFH3dpeZJTcopQbJU5Iu/bn08osA4eFVOYzAdJ3vkjLnGZXsg2cISrLxB3ap5
+         ZeFzOpcP+dtCrxlXN3mmiTLNjHhITaPbDgPxVPagVcJ2QpxiLfF5VfiPHiKM8g7jEgkl
+         RGXw==
+X-Gm-Message-State: AOAM530D0iGP9kT8/+uw1QS6cAoDtOHsHWPC8NNQGQfDMECbgzkOhlN2
+        zLWzY3e99IEsCaBzOMn9o8H4wVgb4sP8lIBdFzqAhpIpBxX2nArSfI3/YU2EbE4m0KxJ535xbln
+        sklzELdLFpuTBye3oYlhwbHMqz+Jk4f35SoTe5sJYJA==
+X-Received: by 2002:a5d:55c5:0:b0:1f0:7672:637d with SMTP id i5-20020a5d55c5000000b001f07672637dmr10456071wrw.170.1647080600303;
+        Sat, 12 Mar 2022 02:23:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyFIGW8or/HGHeWCNJyi2pEy+yZaNExUDX0cSktJR/WW3PJOCLqu9GeD9VB0AwoAH5nNBQyPA==
+X-Received: by 2002:a5d:55c5:0:b0:1f0:7672:637d with SMTP id i5-20020a5d55c5000000b001f07672637dmr10456048wrw.170.1647080600043;
+        Sat, 12 Mar 2022 02:23:20 -0800 (PST)
+Received: from [192.168.0.148] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id r5-20020a5d4945000000b001f06372fa9fsm13157691wrs.54.2022.03.12.02.23.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Mar 2022 02:23:19 -0800 (PST)
+Message-ID: <e0da4fbc-b72c-60a0-5a5f-99d18653c294@canonical.com>
+Date:   Sat, 12 Mar 2022 11:23:18 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+Content-Language: en-US
+To:     Vladimir Zapolskiy <vz@mleia.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+ <2f53f17a-427c-62d6-a0c6-4a3962ab01f0@canonical.com>
+ <9f4e3cdc-f5e2-7102-949e-7b3032118e63@mleia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <9f4e3cdc-f5e2-7102-949e-7b3032118e63@mleia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an Advertisement Monitor is configured with SamplingPeriod 0xFF,
-the controller reports only one adv report along with the MSFT Monitor
-Device event.
+On 11/03/2022 22:26, Vladimir Zapolskiy wrote:
+> On 3/11/22 4:33 PM, Krzysztof Kozlowski wrote:
+>> On 11/03/2022 15:07, Vladimir Zapolskiy wrote:
+>>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+>>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
+>>>>>
+>>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>>>>> PL022 binding require two clocks to be defined but lpc platform doesn't
+>>>>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>>>>
+>>>>>> Update spi clocks and clocks-names property by adding appropriate clock
+>>>>>> reference to make it compliant with bindings.
+>>>>>>
+>>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>>>>> ---
+>>>>>> v2:
+>>>>>> - New patch with similar changeset
+>>>>>> - Send to soc ML
+>>>>>>
+>>>>>>     arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> index c87066d6c995..30958e02d5e2 100644
+>>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>>>>                                 compatible = "arm,pl022", "arm,primecell";
+>>>>>>                                 reg = <0x20084000 0x1000>;
+>>>>>>                                 interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>>>>> -                             clock-names = "apb_pclk";
+>>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+>>>>>> +                             clock-names = "sspclk", "apb_pclk";
+>>>>>
+>>>>> In fact I'm uncertain if it is the right change, could it happen that the commit
+>>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema") sets a wrong
+>>>>> schema pattern?
+>>>>
+>>>> Good pointm this doesn't quite seem right: it is unlikely that the same clock
+>>>> is used for both the SPI bus and the APB bus.
+>>>>
+>>>>> Apparently just one clock is wanted on all observed platforms and cases, this
+>>>>> is implicitly confirmed by clock handling in the drivers/spi/spi-pl022.c :
+>>>>>
+>>>>>           pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>>>>
+>>>>> So, I would vote to fix the device tree bindings schema.
+>>
+>> Drivers do not describe the hardware. Bindings should not be modeled on
+>> drivers, but on actual hardware, so the example is not convincing.
+> 
+> My concern is that fixing the bindings can break the driver and all its users,
+> is it clear enough how it can happen in assumption that the driver uses just
+> one clock at the moment?
 
-When an advertiser matches multiple monitors, some controllers send one
-adv report for each matched monitor; whereas, some controllers send just
-one adv report for all matched monitors.
+You meant fixing the DTS? We do not consider here "fixing bindings"
+because they look correct. About DTS, using the same clock twice should
+not cause negative effect.
 
-In such a case, report Adv Monitor Device Found event for each matched
-monitor.
 
-Signed-off-by: Manish Mandlik <mmandlik@google.com>
-Reviewed-by: Miao-chen Chou <mcchou@chromium.org>
----
-
- net/bluetooth/mgmt.c | 70 +++++++++++++++++++++++---------------------
- 1 file changed, 37 insertions(+), 33 deletions(-)
-
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index d59c70e9166f..e4da2318a2f6 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -9628,17 +9628,44 @@ void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
- 		   NULL);
- }
- 
-+static void mgmt_send_adv_monitor_device_found(struct hci_dev *hdev,
-+					       struct sk_buff *skb,
-+					       struct sock *skip_sk,
-+					       u16 handle)
-+{
-+	struct sk_buff *advmon_skb;
-+	size_t advmon_skb_len;
-+	__le16 *monitor_handle;
-+
-+	if (!skb)
-+		return;
-+
-+	advmon_skb_len = (sizeof(struct mgmt_ev_adv_monitor_device_found) -
-+			  sizeof(struct mgmt_ev_device_found)) + skb->len;
-+	advmon_skb = mgmt_alloc_skb(hdev, MGMT_EV_ADV_MONITOR_DEVICE_FOUND,
-+				    advmon_skb_len);
-+	if (!advmon_skb)
-+		return;
-+
-+	/* ADV_MONITOR_DEVICE_FOUND is similar to DEVICE_FOUND event except
-+	 * that it also has 'monitor_handle'. Make a copy of DEVICE_FOUND and
-+	 * store monitor_handle of the matched monitor.
-+	 */
-+	monitor_handle = skb_put(advmon_skb, sizeof(*monitor_handle));
-+	*monitor_handle = cpu_to_le16(handle);
-+	skb_put_data(advmon_skb, skb->data, skb->len);
-+
-+	mgmt_event_skb(advmon_skb, skip_sk);
-+}
-+
- static void mgmt_adv_monitor_device_found(struct hci_dev *hdev,
- 					  bdaddr_t *bdaddr, bool report_device,
- 					  struct sk_buff *skb,
- 					  struct sock *skip_sk)
- {
--	struct sk_buff *advmon_skb;
--	size_t advmon_skb_len;
--	__le16 *monitor_handle;
- 	struct monitored_device *dev, *tmp;
- 	bool matched = false;
--	bool notify = false;
-+	bool notified = false;
- 
- 	/* We have received the Advertisement Report because:
- 	 * 1. the kernel has initiated active discovery
-@@ -9660,25 +9687,6 @@ static void mgmt_adv_monitor_device_found(struct hci_dev *hdev,
- 		return;
- 	}
- 
--	advmon_skb_len = (sizeof(struct mgmt_ev_adv_monitor_device_found) -
--			  sizeof(struct mgmt_ev_device_found)) + skb->len;
--	advmon_skb = mgmt_alloc_skb(hdev, MGMT_EV_ADV_MONITOR_DEVICE_FOUND,
--				    advmon_skb_len);
--	if (!advmon_skb) {
--		if (report_device)
--			mgmt_event_skb(skb, skip_sk);
--		else
--			kfree_skb(skb);
--		return;
--	}
--
--	/* ADV_MONITOR_DEVICE_FOUND is similar to DEVICE_FOUND event except
--	 * that it also has 'monitor_handle'. Make a copy of DEVICE_FOUND and
--	 * store monitor_handle of the matched monitor.
--	 */
--	monitor_handle = skb_put(advmon_skb, sizeof(*monitor_handle));
--	skb_put_data(advmon_skb, skb->data, skb->len);
--
- 	hdev->advmon_pend_notify = false;
- 
- 	list_for_each_entry_safe(dev, tmp, &hdev->monitored_devices, list) {
-@@ -9686,8 +9694,10 @@ static void mgmt_adv_monitor_device_found(struct hci_dev *hdev,
- 			matched = true;
- 
- 			if (!dev->notified) {
--				*monitor_handle = cpu_to_le16(dev->handle);
--				notify = true;
-+				mgmt_send_adv_monitor_device_found(hdev, skb,
-+								   skip_sk,
-+								   dev->handle);
-+				notified = true;
- 				dev->notified = true;
- 			}
- 		}
-@@ -9697,25 +9707,19 @@ static void mgmt_adv_monitor_device_found(struct hci_dev *hdev,
- 	}
- 
- 	if (!report_device &&
--	    ((matched && !notify) || !msft_monitor_supported(hdev))) {
-+	    ((matched && !notified) || !msft_monitor_supported(hdev))) {
- 		/* Handle 0 indicates that we are not active scanning and this
- 		 * is a subsequent advertisement report for an already matched
- 		 * Advertisement Monitor or the controller offloading support
- 		 * is not available.
- 		 */
--		*monitor_handle = 0;
--		notify = true;
-+		mgmt_send_adv_monitor_device_found(hdev, skb, skip_sk, 0);
- 	}
- 
- 	if (report_device)
- 		mgmt_event_skb(skb, skip_sk);
- 	else
- 		kfree_skb(skb);
--
--	if (notify)
--		mgmt_event_skb(advmon_skb, skip_sk);
--	else
--		kfree_skb(advmon_skb);
- }
- 
- void mgmt_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
--- 
-2.35.1.723.g4982287a31-goog
-
+Best regards,
+Krzysztof

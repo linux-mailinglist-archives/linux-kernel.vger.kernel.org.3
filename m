@@ -2,180 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB464D7080
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 20:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0E84D7083
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 20:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbiCLTFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 14:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S232184AbiCLTI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 14:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiCLTFr (ORCPT
+        with ESMTP id S232053AbiCLTIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 14:05:47 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAD82D1C6
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 11:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647111881; x=1678647881;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j0y488dDDTkFl0KjFKd5Plei11YuXJkLm+149rmheEU=;
-  b=hEcorKK4cYLF2N9czuWJAbkjWy7OIV8gmjZqzxyxEZE35s6Z/TsQIMNx
-   q5yJmysRDMN8wJfH467uNCbl6lnhxmDWpPNNpXclctoBD/J7jWjkd4tQj
-   W9scCce8hZoTgAi8RDqKGIhN77Yt6EAyf7rdxJMLDzf4ZnpIdn0rRL7YO
-   gErioLAWon+iqdmebyLRVeYOtDsCqiBLZpLOoU6cIsaS5KOzt1sKqj3K2
-   Qg74WaE86V/QyaXNzBsl95uTomq2+HLZtJxVzPC3DZyWCggFIPCsXx5+N
-   W2ToCHm4F1lFtcovRSzN/ATDBlPyYcoHFsu2WhTB5O2d7yCcUjhscVRiK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="255765170"
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="255765170"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 11:04:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,175,1643702400"; 
-   d="scan'208";a="633779140"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Mar 2022 11:04:38 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nT72c-0008BX-6m; Sat, 12 Mar 2022 19:04:38 +0000
-Date:   Sun, 13 Mar 2022 03:03:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:queue/5.10 6159/9999]
- arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used
-Message-ID: <202203130226.6bWnmxN8-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 12 Mar 2022 14:08:25 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DB421046E
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 11:07:19 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b70-20020a253449000000b0062c16d950c5so10270869yba.9
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 11:07:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc:content-transfer-encoding;
+        bh=TWhUcEhJnfBz1oTu7BiAWZwmJa9vzrkYnnSYzliORuM=;
+        b=YlL5wbo0sMKLZYKtJvoEY2SZ/FFC4zjf4E0ldQCYpcuQWiSq6tThSfLpZXtjOymvO0
+         zjD3DkgKcLDthdXByQmLr8kU7NGYUeJEJvN6F72GWhtz78HJQP3DpFshdY24SfaMxjTG
+         7pZXfq6bIgmxKpXHWte/pr0AuKz9s7VSgoSOYQV9ArZz4sLdjMS02gBMIDzBOMSLAc0Z
+         TMLehhLhzoWfUkvUQlwiq8mqeYokM5OOjt2YEjn9JhOva+1q+pW6zbdO7xwq/TWpwrr7
+         cCMi+uWUnhod11KQWTTeZtHhhean/gyxtSr+o2uRczHcH3q3JKX5gXFcwtUTWcPywtRY
+         rN/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=TWhUcEhJnfBz1oTu7BiAWZwmJa9vzrkYnnSYzliORuM=;
+        b=3biPL0cOdKtuAmWf2OGv/bAyTH/jq8RMiST3il4+PJOLTU/95z4e6sG+3IiYN2JpN+
+         Ydh/aLp9SDtqnDySuLa4d/upgaz1BSr+JZbGDhG4MGRVTxlKzp5/+FBRBS6BTKgbVIob
+         he909qtf0uHuD16ae4vVZZ09+zKLc8kzVs5Xs5FBB096Tp8zooHYuVBNqgUGaeIDZ/43
+         U9jsKTQ0UNgs9FTgHpfyfgh4k4m+k5ijFBJFsrN1Kt8jnS14ro4gFhFvDBF2N0JFuW/y
+         UsoD0kzeUYasEOrjz2yJWZ4teJqqJdjFfwhgNH7FGyOksibR7AcCoAYdmMhEiXDoPOdG
+         LFmw==
+X-Gm-Message-State: AOAM530nyJcef2CJynNQzKTqTh+JxzsVtqk6RBbr8xrd46g65SGOqZve
+        9PbrEb4vt5ynsSk6nb4mx8JdKBPc5LatFg==
+X-Google-Smtp-Source: ABdhPJwITP06nQ15VGDrmQ7iJQEv8VZmDxnDgedrPCcT4HTXkkjfvihJapSTTwUJvrBPMzqDl48d/4QpM97lSA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
+ (user=shakeelb job=sendgmr) by 2002:a25:698d:0:b0:628:79c5:e4c5 with SMTP id
+ e135-20020a25698d000000b0062879c5e4c5mr12094300ybc.574.1647112038218; Sat, 12
+ Mar 2022 11:07:18 -0800 (PST)
+Date:   Sat, 12 Mar 2022 19:07:15 +0000
+In-Reply-To: <20220311160051.GA24796@blackbody.suse.cz>
+Message-Id: <20220312190715.cx4aznnzf6zdp7wv@google.com>
+Mime-Version: 1.0
+References: <20220304184040.1304781-1-shakeelb@google.com> <20220311160051.GA24796@blackbody.suse.cz>
+Subject: Re: [PATCH] memcg: sync flush only if periodic flush is delayed
+From:   Shakeel Butt <shakeelb@google.com>
+To:     "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Frank Hofmann <fhofmann@cloudflare.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srikar,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   2e0c126269348617f46918f1261ec99883358841
-commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [6159/9999] powerpc/smp: Update cpu_core_map on all PowerPc systems
-config: powerpc-xes_mpc85xx_defconfig (https://download.01.org/0day-ci/archive/20220313/202203130226.6bWnmxN8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 43f668b98e8d87290fc6bbf5ed13c3ab542e3497)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/powerpc/kernel/smp.c:551:6: error: no previous prototype for function 'tick_broadcast' [-Werror,-Wmissing-prototypes]
-   void tick_broadcast(const struct cpumask *mask)
-        ^
-   arch/powerpc/kernel/smp.c:551:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tick_broadcast(const struct cpumask *mask)
-   ^
-   static 
->> arch/powerpc/kernel/smp.c:1380:7: error: variable 'ret' set but not used [-Werror,-Wunused-but-set-variable]
-           bool ret;
-                ^
-   arch/powerpc/kernel/smp.c:1491:5: error: no previous prototype for function 'setup_profiling_timer' [-Werror,-Wmissing-prototypes]
-   int setup_profiling_timer(unsigned int multiplier)
-       ^
-   arch/powerpc/kernel/smp.c:1491:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int setup_profiling_timer(unsigned int multiplier)
-   ^
-   static 
-   3 errors generated.
-
-
-vim +/ret +1380 arch/powerpc/kernel/smp.c
-
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
-425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
-2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
-e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
-e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
-e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
-a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
-a8a5356cd511db Paul Mackerras    2013-08-12  1427  
-
-:::::: The code at line 1380 was first introduced by commit
-:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
-
-:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+SGkgTWljaGFsLA0KDQpPbiBGcmksIE1hciAxMSwgMjAyMiBhdCAwNTowMDo1MVBNICswMTAwLCBN
+aWNoYWwgS291dG7DvSB3cm90ZToNCj4gSGVsbG8uDQoNCj4gVEw7RFIgcnN0YXRzIGFyZSBzbG93
+IGJ1dCBhY2N1cmF0ZSBvbiByZWFkZXIgc2lkZS4gVG8gdGFja2xlIHRoZQ0KPiBwZXJmb3JtYW5j
+ZSByZWdyZXNzaW9uIG5vIGZsdXNoIHNlZW1zIHNpbXBsZXIgdGhhbiB0aGlzIHBhdGNoLg0KDQoN
+ClRoZSB0ZXJtICdzaW1wbGVyJyBpcyB2ZXJ5IHN1YmplY3RpdmUgaGVyZSBhbmQgSSB3b3VsZCBh
+cmd1ZSB0aGlzIHBhdGNoDQppcyBub3QgdGhhdCBjb21wbGljYXRlZCB0aGFuIG5vIGZsdXNoIGJ1
+dCBJIHRoaW5rIHRoZXJlIGlzIG5vIGJlbmVmaXQgb24NCmFyZ3Vpbmcgb24gdGhpcyBhcyB0aGVz
+ZSBhcmUgbm90IHNvbWUgc3RhYmxlIEFQSSB3aGljaCBjYW4gbm90IGJlDQpjaGFuZ2VkIGxhdGVy
+LiBXZSBjYW4gYWx3YXlzIGNvbWUgYmFjayBhbmQgY2hhbmdlIGJhc2VkIG9uIG5ldyBmaW5kaW5n
+cy4NCg0KQmVmb3JlIGdvaW5nIGZ1cnRoZXIsIEkgZG8gd2FudCB0byBtZW50aW9uIHRoZSBtYWlu
+IHJlYXNvbiB0byBtb3ZlIHRvDQpyc3RhdCBpbmZyYXN0cnVjdHVyZSB3YXMgdG8gZGVjb3VwbGUg
+dGhlIGVycm9yIHJhdGUgaW4gdGhlIHN0YXRzIGZyb20NCnRoZSBudW1iZXIgb2YgbWVtb3J5IGNn
+cm91cHMgYW5kIHRoZSBudW1iZXIgb2Ygc3RhdCBpdGVtcy4gU28sIEkgd2lsbA0KZm9jdXMgb24g
+dGhlIGVycm9yIHJhdGUgaW4gdGhpcyBlbWFpbC4NCg0KWy4uLl0NCg0KPiBUaGUgYmVuZWZpdCB0
+aGlzIHdhcyB0cmFkZWQgZm9yIHdhcyB0aGUgZ3JlYXRlciBhY2N1cmFjeSwgdGhlIHBvc3NpYmxl
+DQo+IGVycm9yIGlzOg0KPiAtIGJlZm9yZQ0KPiAgICAtIE8obnJfY3B1cyAqIG5yX2Nncm91cHMo
+c3VidHJlZSkgKiBNRU1DR19DSEFSR0VfQkFUQ0gpCSgxKQ0KDQpQbGVhc2Ugbm90ZSB0aGF0ICgx
+KSBpcyB0aGUgcG9zc2libGUgZXJyb3IgZm9yIGVhY2ggc3RhdCBpdGVtIGFuZA0Kd2l0aG91dCBh
+bnkgdGltZSBib3VuZC4NCg0KPiAtIGFmdGVyDQo+ICAgICAgTyhucl9jcHVzICogTUVNQ0dfQ0hB
+UkdFX0JBVENIKSAvLyBzeW5jLiBmbHVzaA0KDQpUaGUgYWJvdmUgaXMgYWNyb3NzIGFsbCB0aGUg
+c3RhdCBpdGVtcy4NCg0KPiAgICAgIG9yDQo+ICAgICAgTyhmbHVzaF9wZXJpb2QgKiBtYXhfY3Ip
+IC8vIHBlcmlvZGljIGZsdXNoIG9ubHkJCSgyKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAvLyBtYXhfY3IgaXMgcGVyLWNvdW50ZXIgbWF4IGNoYW5nZSByYXRlDQoNCkFuZCB0aGlz
+IGFib3ZlIG9uZSwgSSBhbSBhc3N1bWluZywgaXMgZm9yIHBlcmZvcm1hbmNlIGNyaXRpY2FsIHJl
+YWRlcnMNCih3b3JraW5nc2V0X3JlZmF1bHQgaW50cm9kdWNlZCBieSB0aGlzIHBhdGNoKSBhbmQg
+Zmx1c2hfcGVyaW9kIGhlcmUgaXMgNA0Kc2Vjb25kcy4gUGxlYXNlIGNvcnJlY3QgbWUgaWYgSSBt
+aXN1bmRlcnN0b29kIHRoaXMuDQoNCg0KPiBTbyB3ZSBjb3VsZCBhcmd1ZSB0aGF0IGlmIHRoZSBw
+cmUtcnN0YXQga2VybmVscyBkaWQganVzdCBmaW5lIHdpdGggdGhlDQo+IGVycm9yICgxKSwgdGhl
+eSB3b3VsZCBub3QgYmUgd29yc2Ugd2l0aCBwZXJpb2RpYyBmbHVzaCBpZiB3ZSBjYW4gY29tcGFy
+ZQ0KPiAoMSkgYW5kICgyKS4NCg0KSSBhZ3JlZSB3aXRoIHRoaXMgYXNzZXNzbWVudCBidXQgcGxl
+YXNlIG5vdGUgdGhhdCBwcmUtcnN0YXQga2VybmVscyB3ZXJlDQpub3QgZ29vZCBmb3IgbWFjaGlu
+ZXMgd2l0aCBsYXJnZSBudW1iZXIgb2YgQ1BVcyBhbmQgcnVubmluZyBsYXJnZSBudW1iZXINCm9m
+IHdvcmtsb2Fkcy4NCg0KWy4uLl0NCg0KPiBJJ20gbm90IHN1cmUgd2hldGhlciB5b3VyIHBhdGNo
+IGF0dGVtcHRzIHRvIHNvbHZlIHRoZSBwcm9ibGVtIG9mDQo+IChhKSBwZXJpb2RpYyBmbHVzaCBn
+ZXR0aW5nIHN0dWNrIG9yIChiKSBsaW1pdGluZyBlcnJvciBvbiByZWZhdWx0IHBhdGguDQo+IElm
+IGl0J3MgKGEpLCBpdCBzaG91bGQgYmUgdGFja2xlZCBtb3JlIHN5c3RlbWF0aWNhbGx5IChkZWRp
+Y2F0ZWQgd3E/KS4NCj4gSWYgaXQncyAoYiksIHdoeSBub3QganVzdCByZWx5IG9uIHBlcmlvZGlj
+IGZsdXNoIChzZWxmIGFuc3dlcjogKDEpIGFuZA0KPiAoMikgY29tcGFyaXNvbiBpcyB3b3JrbG9h
+ZCBkZXBlbmRlbnQpLg0KDQoNCkl0IGlzIChiKSB0aGF0IEkgYW0gYWltaW5nIGZvciBpbiB0aGlz
+IHBhdGNoLiBBdCBsZWFzdCAoYSkgd2FzIG5vdA0KaGFwcGVuaW5nIGluIHRoZSBjbG91ZGZsYXJl
+IGV4cGVyaW1lbnRzLiBBcmUgeW91IHN1Z2dlc3RpbmcgaGF2aW5nIGENCmRlZGljYXRlZCBoaWdo
+IHByaW9yaXR5IHdxIHdvdWxkIHNvbHZlIGJvdGggKGEpIGFuZCAoYik/DQoNCj4gPiBOb3cgdGhl
+IHF1ZXN0aW9uOiB3aGF0IGFyZSB0aGUgc2lkZS1lZmZlY3RzIG9mIHRoaXMgY2hhbmdlPyBUaGUg
+d29yc3QNCj4gPiB0aGF0IGNhbiBoYXBwZW4gaXMgdGhlIHJlZmF1bHQgY29kZXBhdGggd2lsbCBz
+ZWUgNHNlYyBvbGQgbHJ1dmVjIHN0YXRzDQo+ID4gYW5kIG1heSBjYXVzZSBmYWxzZSAob3IgbWlz
+c2VkKSBhY3RpdmF0aW9ucyBvZiB0aGUgcmVmYXVsdGVkIHBhZ2Ugd2hpY2gNCj4gPiBtYXkgdW5k
+ZXItb3Itb3ZlcmVzdGltYXRlIHRoZSB3b3JraW5nc2V0IHNpemUuIFRob3VnaCB0aGF0IGlzIG5v
+dCB2ZXJ5DQo+ID4gY29uY2VybmluZyBhcyB0aGUga2VybmVsIGNhbiBhbHJlYWR5IG1pc3Mgb3Ig
+ZG8gZmFsc2UgYWN0aXZhdGlvbnMuDQoNCj4gV2UgY2FuJ3QgYXJndWUgd2hhdCdzIHRoZSBlZmZl
+Y3Qgb2YgcGVyaW9kaWMgb25seSBmbHVzaGluZyBzbyB0aGlzDQo+IG5ld2x5IGludHJvZHVjZWQg
+ZmFjdG9yIHdvdWxkIGluaGVyaXQgdGhhdCB0b28uIEkgZmluZCBpdCBzdXBlcmZsdW91cy4NCg0K
+DQpTb3JyeSBJIGRpZG4ndCBnZXQgeW91ciBwb2ludC4gV2hhdCBpcyBzdXBlcmZsdW91cz8NCg0K
+DQo+IE1pY2hhbA0KDQo+IFsxXSBUaGlzIGlzIHdvcnRoIGxvb2tpbmcgYXQgaW4gbW9yZSBkZXRh
+aWwuDQoNCg0KT2ggeW91IGRpZCBzb21lIGF3ZXNvbWUgYW5hbHlzaXMgaGVyZS4NCg0KPiAgRnJv
+bSB0aGUgZmx1c2ggY29uZGl0aW9uIHdlIGhhdmUNCj4gICAgY3IgKiDOlHQgPSBucl9jcHVzICog
+TUVNQ0dfQ0hBUkdFX0JBVENIDQo+IHdoZXJlIM6UdCBpcyB0aW1lIGJldHdlZW4gZmx1c2hlcyBh
+bmQgY3IgaXMgZ2xvYmFsIGNoYW5nZSByYXRlLg0KDQo+IGNyIGNvbXBvc2VzIG9mIGFsbCB1cGRh
+dGVzIHRvZ2V0aGVyIChjb3JyZXNwb25kcyB0byBzdGF0c191cGRhdGVzIGluDQo+IG1lbWNnX3Jz
+dGF0X3VwZGF0ZWQoKSwgbWF4X2NyIGlzIGNoYW5nZSByYXRlIHBlciBjb3VudGVyKQ0KPiAgICBj
+ciA9IM6jIGNyX2kgPD0gbnJfY291bnRlcnMgKiBtYXhfY3INCg0KSSBkb24ndCBnZXQgdGhlIHJl
+YXNvbiBvZiBicmVha2luZyAnY3InIGludG8gaW5kaXZpZHVhbCBzdGF0IGl0ZW0gb3INCmNvdW50
+ZXIuIFdoYXQgaXMgdGhlIGJlbmVmaXQ/IFdlIHdhbnQgdG8ga2VlcCB0aGUgZXJyb3IgcmF0ZSBk
+ZWNvdXBsZWQNCmZyb20gdGhlIG51bWJlciBvZiBjb3VudGVycyAob3Igc3RhdCBpdGVtcykuDQoN
+Cg0KPiBCeSBjb21iaW5pbmcgdGhlc2UgdHdvIHdlIGdldCBzaG9ydGVzdCB0aW1lIGJldHdlZW4g
+Zmx1c2hlczoNCj4gICAgY3IgKiDOlHQgPD0gbnJfY291bnRlcnMgKiBtYXhfY3IgKiDOlHQNCj4g
+ICAgbnJfY3B1cyAqIE1FTUNHX0NIQVJHRV9CQVRDSCA8PSBucl9jb3VudGVycyAqIG1heF9jciAq
+IM6UdA0KPiAgICDOlHQgPj0gKG5yX2NwdXMgKiBNRU1DR19DSEFSR0VfQkFUQ0gpIC8gKG5yX2Nv
+dW50ZXJzICogbWF4X2NyKQ0KDQo+IFdlIGFyZSBpbnRlcmVzdGVkIGluDQo+ICAgIFJfYW1vcnQg
+PSBmbHVzaF93b3JrIC8gzpR0DQo+IHdoaWNoIGlzDQo+ICAgIFJfYW1vcnQgPD0gZmx1c2hfd29y
+ayAqIG5yX2NvdW50ZXJzICogbWF4X2NyIC8gKG5yX2NwdXMgKiAgDQo+IE1FTUNHX0NIQVJHRV9C
+QVRDSCkNCg0KPiBSX2Ftb3J0OiBPKCBucl9jcHVzICogbnJfY2dyb3VwcyhzdWJ0cmVlKSAqIG5y
+X2NvdW50ZXJzICogKG5yX2NvdW50ZXJzICogIA0KPiBtYXhfY3IpIC8gKG5yX2NwdXMgKiBNRU1D
+R19DSEFSR0VfQkFUQ0gpICkNCj4gUl9hbW9ydDogTyggbnJfY2dyb3VwcyhzdWJ0cmVlKSAqIG5y
+X2NvdW50ZXJzXjIgKiBtYXhfY3IpIC8gIA0KPiAoTUVNQ0dfQ0hBUkdFX0JBVENIKSApDQoNCj4g
+VGhlIHNxdWFyZSBsb29rcyBpbnRlcmVzdGluZyBnaXZlbiB0aGVyZSBhcmUgYWxyZWFkeSB0ZW5z
+IG9mIGNvdW50ZXJzLg0KPiAoQXMgZGF0YSBmcm9tIEl2YW4gaGF2ZSBzaG93biwgd2UgY2FuIGhh
+cmRseSByZXN0b3JlIHRoZSBwcmUtcnN0YXQNCj4gcGVyZm9ybWFuY2Ugb24gdGhlIHJlYWQgc2lk
+ZSBldmVuIHdpdGggbWVyZSBtb2RfZGVsYXllZF93b3JrKCkuKQ0KPiBUaGlzIGlzIHdoYXQgeW91
+IHBhcnRpYWxseSBzb2x2ZWQgd2l0aCBpbnRyb2R1Y3Rpb24gb2YgTlJfTUVNQ0dfRVZFTlRTDQoN
+Ck15IG1haW4gcmVhc29uIGJlaGluZCB0cnlpbmcgTlJfTUVNQ0dfRVZFTlRTIHdhcyB0byByZWR1
+Y2UgZmx1c2hfd29yayBieQ0KcmVkdWNpbmcgbnJfY291bnRlcnMgYW5kIEkgZG9uJ3QgdGhpbmsg
+bnJfY291bnRlcnMgc2hvdWxkIGhhdmUgYW4gaW1wYWN0DQpvbiDOlHQuDQoNCj4gYnV0IHRoZSBz
+dGF0c191cGRhdGVzIHdhcyBzdGlsbCBzdW0gb2YgYWxsIGV2ZW50cywgc28gdGhlIGZsdXNoIG1p
+Z2h0DQo+IGhhdmUgc3RpbGwgdHJpZ2dlcmVkIHRvbyBmcmVxdWVudGx5Lg0KDQo+IE1heWJlIHRo
+YXQgd291bGQgYmUgYmV0dGVyIGxvbmctdGVybSBhcHByb2FjaCwgc3BsaXR0aW5nIGludG8gYWNj
+dXJhdGUNCj4gYW5kIGFwcHJveGltYXRlIGNvdW50ZXJzIGFuZCByZWZsZWN0IHRoYXQgaW4gdGhl
+IGVycm9yIGVzdGltYXRvciAgDQo+IHN0YXRzX3VwZGF0ZXMuDQoNCj4gT3Igc29tZSBvdGhlciBv
+cHRpbWl6YXRpb24gb2YgbWVtX2Nncm91cF9jc3NfcnN0YXRfZmx1c2goKS4NCg0KDQpUaGFua3Mg
+Zm9yIHlvdXIgaW5zaWdodHMuIFRoaXMgaXMgcmVhbGx5IGF3ZXNvbWUgYW5kIGdvb2QgdG8gZXhw
+bG9yZSB0aGUNCmxvbmctdGVybSBhcHByb2FjaC4gRG8geW91IGhhdmUgYW55IHN0cm9uZyBjb25j
+ZXJucyB3aXRoIHRoZSBjdXJyZWN0DQpwYXRjaD8gSSB0aGluayB3ZSBzaG91bGQgcHJvY2VlZCB3
+aXRoIHRoaXMgYW5kIGZvY3VzIG1vcmUgb24gbG9uZy10ZXJtDQphcHByb2FjaC4NCg0KdGhhbmtz
+LA0KU2hha2VlbA0KDQoNCg0K

@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215254D701A
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 18:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB4C4D7019
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 18:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiCLRUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 12:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S232308AbiCLRUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 12:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiCLRUi (ORCPT
+        with ESMTP id S232302AbiCLRUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 12:20:38 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB11ADF48E;
-        Sat, 12 Mar 2022 09:19:31 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nT5Og-00ALTz-6x; Sat, 12 Mar 2022 17:19:18 +0000
-Date:   Sat, 12 Mar 2022 17:19:18 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
+        Sat, 12 Mar 2022 12:20:45 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D747EB165
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:19:39 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id t2so7908663pfj.10
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vHg87Lf9dvBWlrB/awtWe477mXwsvDm+/Qcqu3QGI80=;
+        b=P88T2Pc7DXzAMOhsmi4ll9qyZi+5Qpj2tcqNVzq4AvE3Btwe59iYCYxfuRIWU/4Uve
+         eSt+8IeuNbi346lYRjc5pjNbZs9QlaNPhqJrRgLL8sTTv0dHf/kfRgnOmNsg7YDmPxwk
+         KTnaxGL460jujbNG59nbcmLiJfJt8dpUQ3Pg8XUPATQvH6TJbUzShvaZwG3lcM65YD9J
+         dUZVAhVIt6fQCKIZNv9mobfxRTiqBM6F4+x+uCbXhdQxRqLkWCyFoObDUTxU+s70GE76
+         2YiJmulbX34OKn3HR27BxhQR8Da5veWA7SLJGdcbvUi+DIfeFaBRILiVVuMY3FSsyMNR
+         E82g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vHg87Lf9dvBWlrB/awtWe477mXwsvDm+/Qcqu3QGI80=;
+        b=V+kYTM2V5aCRAe/2gVx6JkRH9pknSNeYxh6hzGpbvAkBouIuvnQsg+oTBVjun2eH9d
+         Ld8aPNLm8qOawGtaWdk6PLKoYDYfUz8EaN2H8uHoy4FCUN15AkF0I3SloolV/bE1PFWh
+         FKLTKZeuz++ZDblF+kDf4LUV90nm72eGDtivW/uX6nyEV/pyNfzEPfmxT41QmGzHEYcG
+         yXLmLDP0uEO6cFg8va3Sya4OeG+JKAUnX36trY4iDa0WKWfbD+h+COvTGbO9s3F9/yWF
+         YDI2vKDsXsbKE4zZTe+vAetpu/KtLt6dOLdUonENthLLQN4YtBl9tBsbZzQKY1Z6LyAB
+         mBUw==
+X-Gm-Message-State: AOAM530cbTiNtt7gIUe28SE0YnTzPbkjgG2pz3s11z6ahxQUthqaIb/Q
+        ldDDA70qHCZU1SkjZ5Z3YyFTVg==
+X-Google-Smtp-Source: ABdhPJzAGbpjKN9uYdw3be5VX6wUc+PScuzlCc3yzyeyf4Kvzr9TeuhhGHSz0qLB5ZpfVGydWxWXyw==
+X-Received: by 2002:a63:c156:0:b0:37c:9955:ab24 with SMTP id p22-20020a63c156000000b0037c9955ab24mr13289109pgi.90.1647105579096;
+        Sat, 12 Mar 2022 09:19:39 -0800 (PST)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id e18-20020a056a001a9200b004f759dcd841sm13899457pfv.42.2022.03.12.09.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 09:19:38 -0800 (PST)
+Date:   Sat, 12 Mar 2022 09:19:36 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
 To:     Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
-Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Cc:     <edumazet@google.com>, <davem@davemloft.net>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] net: ipv4: tcp.c: fix an assignment in an if condition
-Message-ID: <YizWFod6LIhIWXmK@zeniv-ca.linux.org.uk>
+Message-ID: <20220312091936.1f8c9289@hermes.local>
+In-Reply-To: <20220312162744.32318-1-alexander.vorwerk@stud.uni-goettingen.de>
 References: <20220312162744.32318-1-alexander.vorwerk@stud.uni-goettingen.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220312162744.32318-1-alexander.vorwerk@stud.uni-goettingen.de>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 05:27:44PM +0100, Alexander Vorwerk wrote:
+On Sat, 12 Mar 2022 17:27:44 +0100
+Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de> wrote:
+
 > reported by checkpatch.pl
-
-... nicely demonstrating why checkpatch.pl is a menace.
-
+> 
 > Signed-off-by: Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
 > ---
 >  net/ipv4/tcp.c | 6 +++---
@@ -65,12 +95,8 @@ On Sat, Mar 12, 2022 at 05:27:44PM +0100, Alexander Vorwerk wrote:
 > -	if (!skb || (copy = size_goal - skb->len) <= 0 ||
 > -	    !tcp_skb_can_collapse_to(skb)) {
 > +	if (!skb || copy <= 0 || !tcp_skb_can_collapse_to(skb)) {
+>  new_segment:
+>  		if (!sk_stream_memory_free(sk))
+>  			return NULL;
 
-	What is going to happen when you variant runs into
-skb == NULL?  And if for some reason that cannot happen, where
-is the explanation of that reason?
-
-	IOW, this patch ends up quietly introducing a bug, with
-no better rationale than "checkpatch.pl pointed me to that line".
-
-NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
+Your new code will crash if skb is NULL.

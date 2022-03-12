@@ -2,530 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B57E4D711C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 22:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E024D7136
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 22:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbiCLVql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 16:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
+        id S232770AbiCLV5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 16:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiCLVqe (ORCPT
+        with ESMTP id S230051AbiCLV5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 16:46:34 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882061DB8B0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:45:26 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id w25-20020a6bd619000000b00640ddd0ad11so9428184ioa.2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:45:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Ct5lREH82s9udYR1fdl4zYR0ltj+8XZHSKD6BawGeNs=;
-        b=T6WHzFu7E/45y0c+AkqaTBW6plF2Qw0bhE8K5vWeG68fFkZrn0MZ/BaHDy/7WdjnLK
-         rmMtkj2n7Fg4le+bJkeqJJ7UariharaCCHnS4xZFBAlOtdC711p3vxmNONWwOiDV+Xfy
-         QGhkldb3H5QcECV//yAGxZp3GxxNeLFcqPGp8UldGF7Sz5Tt4/k5zKARqMeqdvRZBsdt
-         C96rO/4FHgMQ2YpPBKoHCWs+k/5+F1tfBhia7GsdQ9mVp9xrQCPB+GLJLA5+x9UkOEQa
-         W1x08hzQgvWQBqvMJn0AJn2EzxIupS3/E5zi/k3ZB47UasklMTuxkaY3lOo6XHwoq/Ob
-         QQEg==
-X-Gm-Message-State: AOAM531lgjQLgUdDGkF0Am9r1db/v3YIIrl4a41Okb1weyPQlW8VdyF+
-        MTDazHAHUVMckwoLp26b8DgHqN49nkzxBd3D4oUZGbC0W1Ty
-X-Google-Smtp-Source: ABdhPJxpp2Prvr0d6VA6nYUKzMcyVjycfSW9ihV8mjo900p/r9Rekh7C89SX9wkxl5SP7oh0D1QrybMsw19+VAdNnvEZ48wptzoM
+        Sat, 12 Mar 2022 16:57:49 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E952A70F
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 13:56:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647122203; x=1678658203;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XSJjHBp+LyUwaRZ7wRbHiYl2tBHPKJ6xV6R6R0QDBVY=;
+  b=mR+0zy+CL3+lfzhb3KytCp/b1CRjkwo3QquGPhdkFGsHiTJYxP/GJ3YI
+   Js7zjH2AJo1N2ykfzI0utgjxBr74SzKDjL5xgmOu4p8eYGaeYBhGXR7I8
+   HLrs4BoEYMEFNmril3HEGbfMOWBNKnfuxnNjpYzd/rXQguaeCJwo4zokc
+   XJUP2TJck+6uw6B/Y2S5VT7FNKSOzyfjSIlerNX6rbgWnHkUEz7u8X5WI
+   nY75HSoLRWAOoONxZdkBQdJ6wANEGxV3DhcXa8qnjuDOmaCT7VIpsu1D9
+   GA7WXbmF5OERvIpNxc1aqEtu5GcW7cZ7ba8dyTUzf2++T1HH88bwR3r0Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="237994502"
+X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
+   d="scan'208";a="237994502"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 13:56:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
+   d="scan'208";a="645341713"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2022 13:56:42 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nT9j7-0008JL-FC; Sat, 12 Mar 2022 21:56:41 +0000
+Date:   Sun, 13 Mar 2022 05:56:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Yi L <yi.l.liu@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [luxis1999-iommufd:iommufd-v5.17-rc4 29/31] vfio.c:undefined
+ reference to `iommufd_vfio_check_extension'
+Message-ID: <202203130530.K8aEny7T-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:dc5:b0:313:f8bd:35a7 with SMTP id
- m5-20020a0566380dc500b00313f8bd35a7mr14095224jaj.75.1647121525902; Sat, 12
- Mar 2022 13:45:25 -0800 (PST)
-Date:   Sat, 12 Mar 2022 13:45:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007414e805da0c5de4@google.com>
-Subject: [syzbot] memory leak in blk_iolatency_init (2)
-From:   syzbot <syzbot+b42749a851a47a0f581b@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/luxis1999/iommufd iommufd-v5.17-rc4
+head:   d0e769d6ae11d7abe38d2f0598926ba499bf3ec1
+commit: d1878386aaf2b9c574b6ceafc7437ddd2152f926 [29/31] vfio: Fix kernel panic in vfio_external_check_extension()
+config: arc-randconfig-r043-20220313 (https://download.01.org/0day-ci/archive/20220313/202203130530.K8aEny7T-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/luxis1999/iommufd/commit/d1878386aaf2b9c574b6ceafc7437ddd2152f926
+        git remote add luxis1999-iommufd https://github.com/luxis1999/iommufd
+        git fetch --no-tags luxis1999-iommufd iommufd-v5.17-rc4
+        git checkout d1878386aaf2b9c574b6ceafc7437ddd2152f926
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    79b00034e9dc Merge tag 'drm-fixes-2022-03-11' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15cf8329700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c9e1a3a8e38b9582
-dashboard link: https://syzkaller.appspot.com/bug?extid=b42749a851a47a0f581b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101cc4ee700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1270b5e9700000
+All errors (new ones prefixed by >>):
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b42749a851a47a0f581b@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.480s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.480s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.560s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.560s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.630s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.630s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.700s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.700s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.770s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.770s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.850s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.850s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.920s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.920s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fa00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 504.000s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-BUG: memory leak
-unreferenced object 0xffff888103f8fb00 (size 96):
-  comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 504.000s)
-  hex dump (first 32 bytes):
-    40 5d ca 85 ff ff ff ff c0 c2 26 04 81 88 ff ff  @]........&.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
-    [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
-    [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
-    [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
-    [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
-    [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
-    [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
-    [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
-    [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
-    [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
-    [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
-    [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
-    [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
-    [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
-    [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
-    [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
-    [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
-    [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-
+   arc-elf-ld: drivers/vfio/vfio.o: in function `vfio_external_check_extension':
+>> vfio.c:(.text+0x7c8): undefined reference to `iommufd_vfio_check_extension'
+>> arc-elf-ld: vfio.c:(.text+0x7c8): undefined reference to `iommufd_vfio_check_extension'
+   arc-elf-ld: drivers/vfio/vfio.o: in function `__vfio_group_unset_container':
+   vfio.c:(.text+0x8fa): undefined reference to `vfio_group_unset_iommufd'
+   arc-elf-ld: vfio.c:(.text+0x8fa): undefined reference to `vfio_group_unset_iommufd'
+   arc-elf-ld: drivers/vfio/vfio.o: in function `vfio_group_set_container':
+   vfio.c:(.text+0x1180): undefined reference to `vfio_group_set_iommufd'
+   arc-elf-ld: vfio.c:(.text+0x1180): undefined reference to `vfio_group_set_iommufd'
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

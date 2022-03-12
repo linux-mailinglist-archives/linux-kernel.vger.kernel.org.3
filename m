@@ -2,125 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42C54D706B
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 19:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592124D7072
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 19:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiCLSnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 13:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S232481AbiCLSos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 13:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiCLSnT (ORCPT
+        with ESMTP id S232287AbiCLSoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 13:43:19 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0F46A038;
-        Sat, 12 Mar 2022 10:42:13 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id h11so16420994ljb.2;
-        Sat, 12 Mar 2022 10:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g1uGOM5u14MmhWi9rlkVl0ueDCnCUd0QgmfYxjyLPSc=;
-        b=Z4FtFIHnrBs7Bo7clCb9t3fLwNx468Jj88pgZxP6sJMo4S5aiVj+ZE5Q+0kJ280rS1
-         zY3T8SzGFrB72+A4x9ZSpSql4Zn1C8waUytrhkahQQ/70zNjQuARP3r+UR/TDMQCUI0E
-         a/0N71LoJpc5yEZ3btQw1d+EvlNst37lVk8hnFEJfZxEcTeP1xbFI3AC//OeLNpdrhKY
-         AajyDBgEzz3XkJ+iMEobjGjCDi084v0vQKqFrCH7EHk5Mc/wH6hsZwJOaM+fMK5ukaLX
-         1h3j0RiaW7/Jxhzq4ip9HyrG8/tlEzvbYivJpENh+ekzTGEMZzTI8vWYxCEF+US6iTFg
-         ydiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g1uGOM5u14MmhWi9rlkVl0ueDCnCUd0QgmfYxjyLPSc=;
-        b=m35IyY40/oSDOIyGbSc5C+DtGkJoNkOSkPBt6cOU3pzP48bz/UUgko7zM2F8SA4+NY
-         RosyuAUXeiHSec+EOGy5eAeXCZ8b2svgNxNnfjjQqN3sry0SxNzZhZ5UC8GL2m8kMQQM
-         ff+8PvFMg2xBGnA+TG8S2DTEt60vNyaCIF1YGd5xI/hDXIkOnXD3ff3qCvgwIEiQmsWO
-         bFmTkS0oXS0msALp9i61ZkQcMSgjgxyMtuJwT3xz6rdEYIIxW8dHgNC6T2Vyh3guZmmJ
-         g5SrILHNuAnITVCN/rkuCuPLSXD5jlF4+rit3pjxxxI9cH9hDQH5YmZdLJyHhRsdVMKB
-         pIFA==
-X-Gm-Message-State: AOAM532Gr1SbizDaSeBpQMC21CQp4m4eIBahj21XlG06gIRIDrBkAjym
-        yGC7GvhEDhl0e6jI4cmdt/+WYHIq44LiO0zV
-X-Google-Smtp-Source: ABdhPJxNolyjlitctLsfFGw0Iq5X8GG9Jj2XPpzo27cyK/1MpnmQZpOOMTK9SCSE2ehkP6rkwejY3A==
-X-Received: by 2002:a05:651c:a08:b0:247:eb2e:fb04 with SMTP id k8-20020a05651c0a0800b00247eb2efb04mr9442297ljq.524.1647110531727;
-        Sat, 12 Mar 2022 10:42:11 -0800 (PST)
-Received: from localhost.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac247e1000000b0044842b76861sm2311236lfp.140.2022.03.12.10.42.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 10:42:11 -0800 (PST)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, ~postmarketos-upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v1 2/2] extcon: sm5502: Add support for SM5703
-Date:   Sat, 12 Mar 2022 20:41:54 +0200
-Message-Id: <20220312184156.24912-3-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220312184156.24912-1-markuss.broks@gmail.com>
-References: <20220312184156.24912-1-markuss.broks@gmail.com>
+        Sat, 12 Mar 2022 13:44:44 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B95575C0B;
+        Sat, 12 Mar 2022 10:43:37 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7AD3A8C4;
+        Sat, 12 Mar 2022 19:43:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1647110615;
+        bh=C8/4uNqE9SOK8e3iKf9Yp+FDIyoC3+n8dlsKXnWNR7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KBaxek1GWMxa3WFPIj/VTxbAFToVKcnICSsq495bmSe5gBllVgnqe/EvM/UiYPr9J
+         JAkfWfJIdPqfiFLTy/kU32FfEX4F77swV78JvGmgVfixLvp9sITEd/LfuvfzGdZxia
+         VAQVqX9s0zmK0nuZrjuo38zfSeScftEkfUkKQ3no=
+Date:   Sat, 12 Mar 2022 20:43:18 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
+Message-ID: <YizpxhxPBxJ0EHQR@pendragon.ideasonboard.com>
+References: <20200917022547.198090-1-linux@roeck-us.net>
+ <20220311202426.GE23776@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220311202426.GE23776@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM5703 is another MFD from Silicon Mitus which has a very similar MUIC
-unit to the one in SM5502. The only difference I've noticed is slightly different
-configuration only enables the interrupts which are exactly the same as on SM5502.
-If we make use of different interrupts in the future, this can be improved by having
-a separate struct for SM5703, but the main functionality (detecting cable or OTG adapter)
-is working properly.
+Hi Michael,
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- drivers/extcon/Kconfig         | 2 +-
- drivers/extcon/extcon-sm5502.c | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+On Fri, Mar 11, 2022 at 09:24:26PM +0100, Michael Grzeschik wrote:
+> Ping!
+> 
+> This series seems to be hanging around. It would be nice to get these
+> patches upstream, as they help my uvc-gadget workflow. Without them it
+> is likely that in the development cases my gadget won't start and then
+> leave the whole xhci controller broken.
+> 
+> @Laurent, what do you think?
 
-diff --git a/drivers/extcon/Kconfig b/drivers/extcon/Kconfig
-index 0d42e49105dd..88a8b3d7d78a 100644
---- a/drivers/extcon/Kconfig
-+++ b/drivers/extcon/Kconfig
-@@ -156,7 +156,7 @@ config EXTCON_RT8973A
- 	  from abnormal high input voltage (up to 28V).
- 
- config EXTCON_SM5502
--	tristate "Silicon Mitus SM5502/SM5504 EXTCON support"
-+	tristate "Silicon Mitus SM5502/SM5504/SM5703 EXTCON support"
- 	depends on I2C
- 	select IRQ_DOMAIN
- 	select REGMAP_I2C
-diff --git a/drivers/extcon/extcon-sm5502.c b/drivers/extcon/extcon-sm5502.c
-index 93da2d8379b1..17a40c3782ee 100644
---- a/drivers/extcon/extcon-sm5502.c
-+++ b/drivers/extcon/extcon-sm5502.c
-@@ -798,6 +798,7 @@ static const struct sm5502_type sm5504_data = {
- static const struct of_device_id sm5502_dt_match[] = {
- 	{ .compatible = "siliconmitus,sm5502-muic", .data = &sm5502_data },
- 	{ .compatible = "siliconmitus,sm5504-muic", .data = &sm5504_data },
-+	{ .compatible = "siliconmitus,sm5703-muic", .data = &sm5502_data },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, sm5502_dt_match);
-@@ -830,6 +831,7 @@ static SIMPLE_DEV_PM_OPS(sm5502_muic_pm_ops,
- static const struct i2c_device_id sm5502_i2c_id[] = {
- 	{ "sm5502", (kernel_ulong_t)&sm5502_data },
- 	{ "sm5504", (kernel_ulong_t)&sm5504_data },
-+	{ "sm5703", (kernel_ulong_t)&sm5502_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, sm5502_i2c_id);
+I think I've explained before how this should be fixed at the V4L2
+level. The problem actually affects character devices globally, and Greg
+KH said he would have a go at fixing it there, but I don't think much
+happened. Starting with a V4L2-level fix is fine with me.
+
+There are a few patches in the series that are specific to uvcvideo,
+I'll have another look and merge those.
+
+> On Wed, Sep 16, 2020 at 07:25:42PM -0700, Guenter Roeck wrote:
+> > Something seems to have gone wrong with v3 of this patch series.
+> > I am sure I sent it out, but I don't find it anywhere.
+> > Resending. Sorry for any duplicates.
+> > 
+> > The uvcvideo code has no lock protection against USB disconnects
+> > while video operations are ongoing. This has resulted in random
+> > error reports, typically pointing to a crash in usb_ifnum_to_if(),
+> > called from usb_hcd_alloc_bandwidth(). A typical traceback is as
+> > follows.
+> > 
+> > usb 1-4: USB disconnect, device number 3
+> > BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
+> > PGD 0 P4D 0
+> > Oops: 0000 [#1] PREEMPT SMP PTI
+> > CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
+> > Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
+> > RIP: 0010:usb_ifnum_to_if+0x29/0x40
+> > Code: <...>
+> > RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
+> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
+> > RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
+> > RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
+> > R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
+> > R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
+> > FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
+> > CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
+> > Call Trace:
+> >  usb_hcd_alloc_bandwidth+0x1ee/0x30f
+> >  usb_set_interface+0x1a3/0x2b7
+> >  uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
+> >  uvc_video_start_streaming+0x91/0xdd [uvcvideo]
+> >  uvc_start_streaming+0x28/0x5d [uvcvideo]
+> >  vb2_start_streaming+0x61/0x143 [videobuf2_common]
+> >  vb2_core_streamon+0xf7/0x10f [videobuf2_common]
+> >  uvc_queue_streamon+0x2e/0x41 [uvcvideo]
+> >  uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
+> >  __video_do_ioctl+0x33d/0x42a
+> >  video_usercopy+0x34e/0x5ff
+> >  ? video_ioctl2+0x16/0x16
+> >  v4l2_ioctl+0x46/0x53
+> >  do_vfs_ioctl+0x50a/0x76f
+> >  ksys_ioctl+0x58/0x83
+> >  __x64_sys_ioctl+0x1a/0x1e
+> >  do_syscall_64+0x54/0xde
+> > 
+> > While there are not many references to this problem on mailing lists, it is
+> > reported on a regular basis on various Chromebooks (roughly 300 reports
+> > per month). The problem is relatively easy to reproduce by adding msleep()
+> > calls into the code.
+> > 
+> > I tried to reproduce the problem with non-uvcvideo webcams, but was
+> > unsuccessful. I was unable to get Philips (pwc) webcams to work. gspca
+> > based webcams don't experience the problem, or at least I was unable to
+> > reproduce it (The gspa driver does not trigger sending USB messages in the
+> > open function, and otherwise uses the locking mechanism provided by the
+> > v4l2/vb2 core).
+> > 
+> > I don't presume to claim that I found every issue, but this patch series
+> > should fix at least the major problems.
+> > 
+> > The patch series was tested exensively on a Chromebook running chromeos-4.19
+> > and on a Linux system running a v5.8.y based kernel.
+> > 
+> > v3:
+> > - In patch 5/5, add missing calls to usb_autopm_put_interface() and kfree()
+> >   to failure code path
+> > 
+> > v2:
+> > - Added details about problem frequency and testing with non-uvc webcams
+> >   to summary
+> > - In patch 4/5, return EPOLLERR instead of -ENODEV on poll errors
+> > - Fix description in patch 5/5
+> > 
+> > ----------------------------------------------------------------
+> > Guenter Roeck (5):
+> >       media: uvcvideo: Cancel async worker earlier
+> >       media: uvcvideo: Lock video streams and queues while unregistering
+> >       media: uvcvideo: Release stream queue when unregistering video device
+> >       media: uvcvideo: Protect uvc queue file operations against disconnect
+> >       media: uvcvideo: Abort uvc_v4l2_open if video device is unregistered
+> > 
+> >  drivers/media/usb/uvc/uvc_ctrl.c   | 11 ++++++----
+> >  drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++
+> >  drivers/media/usb/uvc/uvc_queue.c  | 32 +++++++++++++++++++++++++--
+> >  drivers/media/usb/uvc/uvc_v4l2.c   | 45 ++++++++++++++++++++++++++++++++++++--
+> >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+> >  5 files changed, 93 insertions(+), 8 deletions(-)
+
 -- 
-2.35.1
+Regards,
 
+Laurent Pinchart

@@ -2,110 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CDD4D6B70
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 01:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABB54D6B7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 01:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiCLA0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Mar 2022 19:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S229805AbiCLAkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Mar 2022 19:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiCLA0G (ORCPT
+        with ESMTP id S229669AbiCLAkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Mar 2022 19:26:06 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BF48930A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:25:01 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so6226111pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Mar 2022 16:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=pyncn/uVxB66BCY7x3SIh/kgQlmj4ZSWJds3wQzq3I4=;
-        b=mJ+3x6VVmBDGt9svMNU3c2pcW9D5V3ir9bCVeO30pI0nvR7IrUFZ9jsGJAHJ289UZR
-         W49rMzoQSA/SvCW8bbJqD2V3NugBbe+JI5UqNMErJDbpOsZl9Gwn8LNTMVk7yYwYH0V/
-         TxUgXfjKWR7w8YrH7mVvf1AsTSL8wM7aUZ8865ZrxcH55E5TBNMMCIwhO+tTz1H8v3QA
-         MfEZQ1wkMSArrDugBkQIABPFSG7ApJFki8iOwgJ2lYyNe/jRGov7/9vKNghXoZFEIgRs
-         YQl7s2JU/g1Pe9D/XgEp88rZI5NBJ5qirSY7/vPPeXMope0H5vSuyJXYTbRqOMMJaCTP
-         BiLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pyncn/uVxB66BCY7x3SIh/kgQlmj4ZSWJds3wQzq3I4=;
-        b=NSvZAGNVEkAAbEMJEvb5vjCiY5Mb2eN/AdVfYYe+H9o+xEMpDuvZLbuNjoLa/WlBCn
-         juj1bBmKNcIfxaAvBOWKEYJdPHLwd4U+Kywd867vzncRDG8v5vBNiXKtil8TH4Mu+YNe
-         YJFE1n1IdiidrKRntlCxKA5VVsUKfPhlbcymYnW8GCX4yn8JpAw9l/JzygmGUfYgaeQ/
-         atUzbDf1uh+3VDSd1YuvO573zljBit8CSMer9GRCOY003cGAZw0CdvsLqADk8tHaiK8R
-         7UoyBP/zEx/jBXg3RgLhYXDnD2NAY4XNwhb2kf/WqWLFTTVPPDlp+ipYtz4X+182PwrC
-         0o+A==
-X-Gm-Message-State: AOAM532sNffKjHRRlbJesE58DDcoBWW2VAPFkzw/F85jQwZBFV2G0EfX
-        bPJzq40MkisSMqYJ/UtyPOg=
-X-Google-Smtp-Source: ABdhPJy7jWE6Md6pE8pvBgnIfPc7YYjI1QJZMcnZ13NcS6fw/v7htifKwzVzPLu/bkle6WXYqdZZug==
-X-Received: by 2002:a17:90b:4f8c:b0:1bf:3ef:d668 with SMTP id qe12-20020a17090b4f8c00b001bf03efd668mr13122156pjb.219.1647044700923;
-        Fri, 11 Mar 2022 16:25:00 -0800 (PST)
-Received: from localhost.localdomain ([211.212.143.131])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056a001a0600b004f2a4316a0asm11325696pfv.60.2022.03.11.16.24.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 16:25:00 -0800 (PST)
-From:   Steve Lee <steve.lee.analog@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, ckeepax@opensource.cirrus.com,
-        geert@linux-m68k.org, rf@opensource.wolfsonmicro.com,
-        shumingf@realtek.com, srinivas.kandagatla@linaro.org,
-        krzk@kernel.org, jack.yu@realtek.com, nuno.sa@analog.com,
-        ryans.lee@maximintegrated.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     Steve Lee <steve.lee.analog@gmail.com>
-Subject: [RESEND V2] ASoC: max98390: Add reset gpio control
-Date:   Sat, 12 Mar 2022 09:24:29 +0900
-Message-Id: <20220312002429.16175-1-steve.lee.analog@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 11 Mar 2022 19:40:13 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4399D26B5B8;
+        Fri, 11 Mar 2022 16:39:09 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id AE39C531;
+        Fri, 11 Mar 2022 16:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1647045548;
+        bh=HtlsTwz17UXvyufh1vIWE2ju5pkzj9Qx42xNXiD/wTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QNJmzpKXdKZqrdj7y7lIyN5Pes05LDrKzH7vmJkbe8GzkadKS7/HvUAyjtns8fxEX
+         +c6J3rv3W8cSwsASZYfwy9GbSRk62NhK0avXHoqE8E8Zl7ggxZyD/FyriK1JXvHJGs
+         wsu1NwCFtizAkrMZ3Lbq4kL9dSIYUTwyQsHjlfHY=
+Date:   Fri, 11 Mar 2022 16:39:05 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: Add power-efuse binding
+Message-ID: <YivrqQA4r2hQ+xSL@hatter.bewilderbeest.net>
+References: <20220308011811.10353-1-zev@bewilderbeest.net>
+ <20220308011811.10353-2-zev@bewilderbeest.net>
+ <YitpuR+SlDiKh4eq@robh.at.kernel.org>
+ <YivDpkajrJk3KfBM@hatter.bewilderbeest.net>
+ <YivkjyFhpW61VmJ2@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YivkjyFhpW61VmJ2@robh.at.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Add reset gpio control to support RESET PIN connected to gpio.
+On Fri, Mar 11, 2022 at 04:08:47PM PST, Rob Herring wrote:
+>On Fri, Mar 11, 2022 at 01:48:22PM -0800, Zev Weiss wrote:
+>> On Fri, Mar 11, 2022 at 07:24:41AM PST, Rob Herring wrote:
+>> > On Mon, Mar 07, 2022 at 05:18:09PM -0800, Zev Weiss wrote:
+>> > > This can be used to describe a power output supplied by a regulator
+>> > > device that the system controls.
+>> > >
+>> > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> > > ---
+>> > >  .../devicetree/bindings/misc/power-efuse.yaml | 49 +++++++++++++++++++
+>> > >  1 file changed, 49 insertions(+)
+>> > >  create mode 100644 Documentation/devicetree/bindings/misc/power-efuse.yaml
+>> > >
+>> > > diff --git a/Documentation/devicetree/bindings/misc/power-efuse.yaml b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+>> > > new file mode 100644
+>> > > index 000000000000..5f8f0b21af0e
+>> > > --- /dev/null
+>> > > +++ b/Documentation/devicetree/bindings/misc/power-efuse.yaml
+>> > > @@ -0,0 +1,49 @@
+>> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> > > +%YAML 1.2
+>> > > +---
+>> > > +$id: http://devicetree.org/schemas/misc/power-efuse.yaml#
+>> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> > > +
+>> > > +title: Generic power efuse device
+>> > > +
+>> > > +maintainers:
+>> > > +  - Zev Weiss <zev@bewilderbeest.net>
+>> > > +
+>> > > +description: |
+>> > > +  This binding describes a physical power output supplied by a
+>> > > +  regulator providing efuse functionality (manual on/off control, and
+>> > > +  auto-shutoff if current, voltage, or thermal limits are exceeded).
+>> > > +
+>> > > +  These may be found on systems such as "smart" network PDUs, and
+>> > > +  typically supply power to devices entirely separate from the system
+>> > > +  described by the device-tree by way of an external connector such as
+>> > > +  an Open19 power cable:
+>> > > +
+>> > > +  https://www.open19.org/marketplace/coolpower-cable-assembly-8ru/
+>> >
+>> > Not really a helpful link...
+>> >
+>> > I still don't understand what the h/w looks like here. At least I now
+>> > understand we're talking a fuse on power rail, not efuses in an SoC
+>> > used as OTP bits or feature disables.
+>> >
+>>
+>> The systems this would actually be used for would be things like these:
+>>  - https://www.open19.org/marketplace/delta-16kw-power-shelf/
+>>  - https://www.open19.org/marketplace/inspur-open19-power-shelf-ob19200l1/
+>
+>Those still don't help show me what the h/w looks like. High level
+>schematics is what I'm looking for.
+>
+>
+>> The rightmost pictures on those pages show the four black connectors where
+>> the cable assembly linked in the patch plugs in, each of which provides the
+>> outputs from 12 such efuses, on 12 pairs of ground and +12VDC pins.  (There
+>> are also two more single outputs off to the side.)
+>>
+>> It essentially just amounts to an external power output supplied by a
+>> regulator, with the regulator providing an on/off switch, overcurrent
+>> protection, etc.
+>>
+>> And yes, the ambiguity of the "efuse" terminology is unfortunate (the
+>> "power-" prefix was an attempt to clarify it slightly).  That's the term
+>> used in the documentation for the hardware and hence is what I've called it
+>> here, but I'd be open to using a different name if that would help.
+>>
+>> > > +
+>> > > +properties:
+>> > > +  compatible:
+>> > > +    const: power-efuse
+>> > > +
+>> > > +  vout-supply:
+>> > > +    description:
+>> > > +      phandle to the regulator providing power for the efuse
+>> >
+>> > Vout is a supply to the efuse and not the rail being fused?
+>>
+>> Yeah, that was a fairly muddled description -- it's really the latter.
+>> Perhaps:
+>>
+>>   phandle to the regulator providing power for the output rail
+>>   controlled by the efuse
+>>
+>> ?
+>>
+>> >
+>> > Sorry, I know nothing about how an efuse is implemented so you are going
+>> > to have to explain or draw it.
+>> >
+>> > > +
+>> > > +  error-flags-cache-ttl-ms:
+>> > > +    description:
+>> > > +      The number of milliseconds the vout-supply regulator's error
+>> > > +      flags should be cached before re-fetching them.
+>> >
+>> > How does one fetch/read? the error flags?
+>> >
+>>
+>> In the specific case I'm dealing with, via PMBus STATUS_* commands, though I
+>> was aiming to keep this more generic so it could potentially be used to
+>> describe non-PMBus arrangements (in the Linux case, via whatever mechanism
+>> the implementation of the regulator's .get_error_flags() function uses).
+>
+>PMBus is I2C (subset). What device(s) is on the PMBus?
+>
+>Here's what I've got for connections so far:
+>
+>Vout(regulator)-->|efuse|-->12V
+>
+>Host-->PMbus--->????
+>
 
-Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
----
- sound/soc/codecs/max98390.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On the hardware I'm currently working with (the Delta unit linked 
+above), the PMBus device is a TI LM25066 with various other components 
+(MOSFET, thermal diode, sense resistor, etc.) in the surrounding 
+circuitry.  My understanding is that "efuse" as used by the manufacturer 
+refers to the combined circuit, including the LM25066.
 
-diff --git a/sound/soc/codecs/max98390.c b/sound/soc/codecs/max98390.c
-index 40fd6f363f35..9a9299e5cc5a 100644
---- a/sound/soc/codecs/max98390.c
-+++ b/sound/soc/codecs/max98390.c
-@@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
- 
- 	struct max98390_priv *max98390 = NULL;
- 	struct i2c_adapter *adapter = i2c->adapter;
-+	struct gpio_desc *reset_gpio;
- 
- 	ret = i2c_check_functionality(adapter,
- 		I2C_FUNC_SMBUS_BYTE
-@@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct i2c_client *i2c,
- 		return ret;
- 	}
- 
-+	reset_gpio = devm_gpiod_get_optional(&i2c->dev,
-+					     "maxim,reset-gpios", GPIOD_OUT_LOW);
-+
-+	/* Power on device */
-+	if (reset_gpio) {
-+		usleep_range(1000, 2000);
-+		/* bring out of reset */
-+		gpiod_set_value_cansleep(reset_gpio, 1);
-+		usleep_range(1000, 2000);
-+	}
-+
- 	/* Check Revision ID */
- 	ret = regmap_read(max98390->regmap,
- 		MAX98390_R24FF_REV_ID, &reg);
--- 
-2.17.1
+Is that a sufficient "high level schematic", or is there additional 
+information you're looking for?  I do have access to a detailed 
+schematic of the circuit, but unfortunately I don't think I'm at liberty 
+to share it.
+
+(I don't know exactly what the Inspur unit uses because I haven't dealt 
+with that one first-hand, but I'd guess it's probably broadly similar.)
+
+
+Thanks,
+Zev
 

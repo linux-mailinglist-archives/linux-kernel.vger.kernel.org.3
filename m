@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9424D70AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F7E4D70AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 21:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiCLUFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 15:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S232568AbiCLUKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 15:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiCLUFp (ORCPT
+        with ESMTP id S231804AbiCLUKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 15:05:45 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C44532F1;
-        Sat, 12 Mar 2022 12:04:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=rGqBRcNw4s56JzIh4WiyNNxrcGXW+DdMyOtuGHG9ozs=; b=Th
-        q7cmAGUFE8nRztSu7eUZNV1O7EeMSsqNdrjI7WI0cQIeFuv1kPRsRUaRvYA/UY7L5Tt3Q0ZoidFMw
-        XmV+pmrS23Qb/0J6GhIRUbv+cKaLmt2leNehEFa7JYwmSxqNoQzGBgLmhyce+dzrBbqVuKqPKjFlX
-        ph1KD5vJHJVUG90=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nT7yZ-00AVKz-Qt; Sat, 12 Mar 2022 21:04:31 +0100
-Date:   Sat, 12 Mar 2022 21:04:31 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Richard Cochran <richardcochran@gmail.com>
-Cc:     Woojung.Huh@microchip.com, linux@armlinux.org.uk,
-        Horatiu.Vultur@microchip.com, Divya.Koppera@microchip.com,
-        netdev@vger.kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <Yiz8z3UPqNANa5zA@lunn.ch>
-References: <YidgHT8CLWrmhbTW@lunn.ch>
- <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
- <YiecBKGhVui1Gtb/@lunn.ch>
- <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
- <YifoltDp4/Fs+9op@lunn.ch>
- <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
- <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
- <20220309195252.GB9663@hoboy.vegasvil.org>
- <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
- <20220312024828.GA15046@hoboy.vegasvil.org>
+        Sat, 12 Mar 2022 15:10:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3728E5A0B2
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 12:09:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0F8FB80184
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 20:09:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F2AC340EB;
+        Sat, 12 Mar 2022 20:09:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647115765;
+        bh=b9jb1rCoyEDj7gVWncPzm9o0K4cPIjdFW4hxASp/f/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LV+eMpVbBgkx71pC8YbN5jrQ0l7YavOJpdTOYsY+IidDAIyJXesntz8G/a/1kVWWn
+         OM+l4ews+7y5WKrawwQyBowlCzT8Kr2WL0uxy2rptN8mtShVDI+xpc3qvRkBnpXtdR
+         nX5HziFIrm0avu20hiMUavblnTADE68PTmYPS9/mJPJUhKWc9vu2a7FsshyQfSZDG1
+         wngTdlZy9zL5zeSnUjQbK3+7fLGd/qjENlXMcq+jrTqlYosdsaA6FK9p3cm41hueZK
+         EDZStG7Ag65yD5G/PzBt/txoHbiVrXodd7I+TFISZDFTY3XP6C1mPKAVakTxFJqWmY
+         3Wxc8b6rY271Q==
+Date:   Sat, 12 Mar 2022 12:09:23 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: make consistent usage of crng_ready()
+Message-ID: <Yiz98wP1hiPR5Azm@sol.localdomain>
+References: <20220308182517.273662-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220312024828.GA15046@hoboy.vegasvil.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220308182517.273662-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->        PTP4l(8)                    System Manager's Manual                   PTP4l(8)
-> 
->        NAME
->            ptp4l - PTP Boundary/Ordinary/Transparent Clock
-> 
->        ...
-> 
->        egressLatency
->               Specifies  the  difference  in  nanoseconds  between  the actual
->               transmission time at the reference plane and the reported trans‐
->               mit  time  stamp. This value will be added to egress time stamps
->               obtained from the hardware.  The default is 0.
-> 
->        ingressLatency
->               Specifies the difference in nanoseconds between the reported re‐
->               ceive  time  stamp  and  the  actual reception time at reference
->               plane. This value will be subtracted from  ingress  time  stamps
->               obtained from the hardware.  The default is 0.
-> 
+On Tue, Mar 08, 2022 at 11:25:17AM -0700, Jason A. Donenfeld wrote:
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 69591d599338..e37ae7ef039c 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -123,7 +123,7 @@ static void try_to_generate_entropy(void);
+>   */
+>  int wait_for_random_bytes(void)
+>  {
+> -	if (likely(crng_ready()))
+> +	if (crng_ready())
+>  		return 0;
+>  
+>  	do {
+...
+>  	} while (!crng_ready());
 
-Hi Richard
+I guess the reason why the above doesn't simply use a 'while' loop is because
+someone wanted 'likely()' on the first crng_ready()?  That doesn't actually
+apply, since crng_ready() has likely() itself, it should just be a 'while' loop.
 
-Do these get passed to the kernel so the hardware can act on them, or
-are they used purely in userspace by ptp4l?
-
-If they has passed to the kernel, could we provide a getter as well as
-a setter, so the defaults hard coded in the driver can be read back?
-
-	Andrew
+- Eric

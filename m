@@ -2,75 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6134D6E35
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480004D6E37
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiCLKh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 05:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
+        id S230321AbiCLKi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 05:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiCLKhZ (ORCPT
+        with ESMTP id S229379AbiCLKix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 05:37:25 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52F9265B7E;
-        Sat, 12 Mar 2022 02:36:19 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bu29so19276084lfb.0;
-        Sat, 12 Mar 2022 02:36:19 -0800 (PST)
+        Sat, 12 Mar 2022 05:38:53 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5049610E052;
+        Sat, 12 Mar 2022 02:37:47 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2dc348dab52so118544557b3.6;
+        Sat, 12 Mar 2022 02:37:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cVMykGM44N1x59rRBnWq4F2y+SQvEKrBG4xksC7zjJo=;
-        b=R4iG36zRM1avPy+Cd8IFirUlQqyvhoLwlZoCr/vaEHb8QpKSrx8XubJ+Zs3YxZLUXN
-         obK5Izo2M6O4p/mWnc+Kn7RRna9fDiA+4MNbERLQfQTp1rJz27L07t1qOE7s6/o6QbPd
-         0J3T9NFjOXCUhN13q2ox9sXNFo2rProCMZqd/2rftpD91iQISfMqL1W8HLGeiddTUOa1
-         NSK/AuZifoc3BYb/8wFlTG01xBze1yLCK1ZNL2Vhf0E72my1QWgZdU9UX9v9vl/svYn7
-         +B0NS42TfgvHj4dx/hLbVeomns5MDo580L73ReS+WEUilVb8BGcUXWwfWn2evqC01dRN
-         hTDw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M1bd0GMikTEkuWaHRWz8cZoWjC5BnF6mI6Xq7ESbeM0=;
+        b=D5OAwynWbOtXSOPxCNmXI21wxYKK8tWl5p9WpcvhaONPNhxVPy6WSAHKu8jz0JjHoL
+         I3It/QS1ORaXhjqTkIwzmV4SQr/ckkJ8LARMq+c7lVonj3nEsSLExLmSyJSp6LPHvJ/J
+         5l8Mh7bTmzVqHbUEtVpGgm7LNmxIN3kH99B3qif7NNptdxElHmEAp94HbOuPeYIecqWY
+         /84AzZ9sR8BknA5s7dWlz1/jXVWHVOSh+RsADR8/Ic1oxQypGsgJ/uBKsGiVXYGpSvSF
+         eD1lyMR3eMkGER8PgKH2mCAPXDkAlsYudANaLxiw0HaXMwYZPpvGu1wmAwAB/P3QV9GN
+         2OVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cVMykGM44N1x59rRBnWq4F2y+SQvEKrBG4xksC7zjJo=;
-        b=yI49zcoyNmnp2QIpNKnLbwLG+2d+uCWCU1qr1rG4Wlwd6b3dfkHLpY5/TQVOdWZcsI
-         +SRFHbEcgenbmwnYBs/dk9R6eGhVNZ3IXAr8Ba0l4ePpjTQeFRMYlehaLV+5TmUcHQ01
-         utGCVDLdLZuGXNBNxQDZ6MG2Fy+Z5PqxnSsbz5KxkZBtCn5JI5SSvpUnYWwk3sRt7jqj
-         c3JfTzt30g6dYoJQDzfyKynz9RzLyG0q2oDwnLXWgAhaHRPDbCK/pdshKzQas6HLnHXf
-         +zmz6uVz+3mh+vK/aRgXUYsFay+E7BSbSqFf4xnS0bPV6YsfBIn/nyehAbpqWfvkFlGe
-         zXPA==
-X-Gm-Message-State: AOAM531RwI50K49nM4sfb7xh5M1KdadtgZ9306A03nnG4mxjFYALX/uC
-        t05KjoCWZOwKNyxFCY4THH0=
-X-Google-Smtp-Source: ABdhPJwjgRadCVDsz2iiQqoREhkfedSRAVn4c3qnX9gSi8nz4QTRvG2LSStr6XLQkDPN+57SRpHoUA==
-X-Received: by 2002:a05:6512:3d12:b0:448:5f9f:92ab with SMTP id d18-20020a0565123d1200b004485f9f92abmr7910228lfv.667.1647081378030;
-        Sat, 12 Mar 2022 02:36:18 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.107])
-        by smtp.gmail.com with ESMTPSA id u2-20020a2e9f02000000b00244c5e20ee9sm2351933ljk.23.2022.03.12.02.36.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 02:36:17 -0800 (PST)
-Message-ID: <afbc1c26-8aea-e0b7-47e0-bee0d195a21b@gmail.com>
-Date:   Sat, 12 Mar 2022 13:36:15 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M1bd0GMikTEkuWaHRWz8cZoWjC5BnF6mI6Xq7ESbeM0=;
+        b=Ri1FNPpQpu7U+QmkuLBwEK3/HDPfKDr17Xdr90njByvuQwyUnjZUF+JSeHHHmKOs78
+         O5MO0C3OlC6yya/uhjZVr3OdYW6Sfdq+EI+XQYXkNnZ8/O+qmbVgkSZX+s84zDtMHaGW
+         N2bWs1SdHTxza5ZaK7C53P6ww50q81YDqb9yJ3JdpYYAsOHGDVUfd4hV7tyk1wFhooQj
+         1EY9bF1oZO4KuMnEzWQaLZNb5rIX859vCFWRJa0SAYRNYsFRQVUnXicRyEH6swhZseY3
+         bKfG9CjduYTtE4gUKkPU9GFarUrK8MHPOBqRK7bJERwnOUiqdVmbMyLQ1YtUBOZbdd/C
+         55BQ==
+X-Gm-Message-State: AOAM531HDEVoU//tFJN1xnE92IwiY2pXmzT0lC9pM6RBNA+GSaLHWWCu
+        U/Wiu2DFiI87Pr3ojmlXZJWZd0ipMdj01DGTeYY=
+X-Google-Smtp-Source: ABdhPJzg7xAB7h8JW4bHsV019kKs7xGRffKUSBEupdCX+zGWN1izM4TaZn6FHw5ryHhJTcpFCl2QEYhz/1eV8RSpszk=
+X-Received: by 2002:a81:1658:0:b0:2dc:5e3b:488d with SMTP id
+ 85-20020a811658000000b002dc5e3b488dmr11866621yww.399.1647081466454; Sat, 12
+ Mar 2022 02:37:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [syzbot] INFO: task hung in port100_probe
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+abd2e0dafb481b621869@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <20220310084247.1148-1-hdanton@sina.com>
- <20220311053751.1226-1-hdanton@sina.com>
- <20220312005624.1310-1-hdanton@sina.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220312005624.1310-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220208081902.3550911-1-yuzhao@google.com> <20220208081902.3550911-5-yuzhao@google.com>
+ <YgV4lZXc6+jhUdsR@cmpxchg.org> <Ygt1qaQM5YobEZK9@google.com>
+ <CAGsJ_4wN_CAOsyR3LATE+EUhuV0gO-zhhNiMwEBwyXOp0CbkZg@mail.gmail.com> <CAOUHufaUJD8nC6PDVfmkeTwB4BtzBzigxh+V-hfR-_26VwjOPA@mail.gmail.com>
+In-Reply-To: <CAOUHufaUJD8nC6PDVfmkeTwB4BtzBzigxh+V-hfR-_26VwjOPA@mail.gmail.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Sat, 12 Mar 2022 23:37:35 +1300
+Message-ID: <CAGsJ_4zT7gtGSEoAay=VE6x_YZkNKtLymRL94pBnVgKekPzxaQ@mail.gmail.com>
+Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,36 +100,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hillf,
+On Sat, Mar 12, 2022 at 12:45 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> On Fri, Mar 11, 2022 at 3:16 AM Barry Song <21cnbao@gmail.com> wrote:
+> >
+> > On Tue, Feb 15, 2022 at 10:43 PM Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > On Thu, Feb 10, 2022 at 03:41:57PM -0500, Johannes Weiner wrote:
+> > >
+> > > Thanks for reviewing.
+> > >
+> > > > > +static inline bool lru_gen_is_active(struct lruvec *lruvec, int gen)
+> > > > > +{
+> > > > > +   unsigned long max_seq = lruvec->lrugen.max_seq;
+> > > > > +
+> > > > > +   VM_BUG_ON(gen >= MAX_NR_GENS);
+> > > > > +
+> > > > > +   /* see the comment on MIN_NR_GENS */
+> > > > > +   return gen == lru_gen_from_seq(max_seq) || gen == lru_gen_from_seq(max_seq - 1);
+> > > > > +}
+> > > >
+> > > > I'm still reading the series, so correct me if I'm wrong: the "active"
+> > > > set is split into two generations for the sole purpose of the
+> > > > second-chance policy for fresh faults, right?
+> > >
+> > > To be precise, the active/inactive notion on top of generations is
+> > > just for ABI compatibility, e.g., the counters in /proc/vmstat.
+> > > Otherwise, this function wouldn't be needed.
+> >
+> > Hi Yu,
+> > I am still quite confused as i am seeing both active/inactive and lru_gen.
+> > eg:
+> >
+> > root@ubuntu:~# cat /proc/vmstat | grep active
+> > nr_zone_inactive_anon 22797
+> > nr_zone_active_anon 578405
+> > nr_zone_inactive_file 0
+> > nr_zone_active_file 4156
+> > nr_inactive_anon 22800
+> > nr_active_anon 578574
+> > nr_inactive_file 0
+> > nr_active_file 4215
+>
+> Yes, this is expected. We have to maintain the ABI, i.e., the
+> *_active/inactive_* counters.
+>
+> > and:
+> >
+> > root@ubuntu:~# cat /sys//kernel/debug/lru_gen
+> >
+> > ...
+> > memcg    36 /user.slice/user-0.slice/user@0.service
+> >  node     0
+> >          20      18820         22           0
+> >          21       7452          0           0
+> >          22       7448          0           0
+> > memcg    33 /user.slice/user-0.slice/user@0.service/app.slice
+> >  node     0
+> >           0    2171452          0           0
+> >           1    2171452          0           0
+> >           2    2171452          0           0
+> >           3    2171452          0           0
+> > memcg    37 /user.slice/user-0.slice/session-1.scope
+> >  node     0
+> >          42      51804     102127           0
+> >          43      18840     275622           0
+> >          44      16104     216805           1
+> >
+> > Does it mean one page could be in both one of the generations and one
+> > of the active/inactive lists?
+>
+> In terms of the data structure, evictable pages are either on
+> lruvec->lists or lrugen->lists.
+>
+> > Do we have some mapping relationship between active/inactive lists
+> > with generations?
+>
+> For the counters, yes -- pages in max_seq and max_seq-1 are counted as
+> active, and the rest are inactive.
+>
+> > We used to put a faulted file page in inactive, if we access it a
+> > second time, it can be promoted
+> > to active. then in recent years, we have also applied this to anon
+> > pages while kernel adds
+> > workingset protection for anon pages. so basically both anon and file
+> > pages go into the inactive
+> > list for the 1st time, if we access it for the second time, they go to
+> > the active list. if we don't access
+> > it any more, they are likely to be reclaimed as they are inactive.
+> > we do have some special fastpath for code section, executable file
+> > pages are kept on active list
+> > as long as they are accessed.
+>
+> Yes.
+>
+> > so all of the above concerns are actually not that correct?
+>
+> They are valid concerns but I don't know any popular workloads that
+> care about them.
 
-On 3/12/22 03:56, Hillf Danton wrote:
->> upstream branch already has my patch: see commit 
->> f80cfe2f26581f188429c12bd937eb905ad3ac7b.
->> 
-> Thanks for your fix.
-> 
->> let's test previous commit to see if my really fixes this issue
->> 
->> #syz test: 
->> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
->> 3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b3bf7edc84a9eb4007dd9a0cb8878a7e1d5ec6a3b
-> 
-> Given the Reported-and-tested-by tag in syzbot's echo [1], can you try and
-> bisect the curing commit in your spare cycles?
-> 
-> Hillf
-> 
-> [1] https://lore.kernel.org/lkml/00000000000002e20d05d9f663c6@google.com/
-> 
+Hi Yu,
+here we can get a workload in Kim's patchset while he added workingset
+protection
+for anon pages:
+https://patchwork.kernel.org/project/linux-mm/cover/1581401993-20041-1-git-send-email-iamjoonsoo.kim@lge.com/
+anon pages used to go to active rather than inactive, but kim's patchset
+moved to use inactive first. then only after the anon page is accessed
+second time, it can move to active.
 
-Hm, that's odd. Last hit was 4d09h ago and I don't see related patches 
-went it expect for mine.
+"In current implementation, newly created or swap-in anonymous page is
 
-Will try to bisect...
+started on the active list. Growing the active list results in rebalancing
+active/inactive list so old pages on the active list are demoted to the
+inactive list. Hence, hot page on the active list isn't protected at all.
 
-Also there is a chance, that reproducer is just unstable.
+Following is an example of this situation.
 
+Assume that 50 hot pages on active list and system can contain total
+100 pages. Numbers denote the number of pages on active/inactive
+list (active | inactive). (h) stands for hot pages and (uo) stands for
+used-once pages.
 
+1. 50 hot pages on active list
+50(h) | 0
 
-With regards,
-Pavel Skripkin
+2. workload: 50 newly created (used-once) pages
+50(uo) | 50(h)
+
+3. workload: another 50 newly created (used-once) pages
+50(uo) | 50(uo), swap-out 50(h)
+
+As we can see, hot pages are swapped-out and it would cause swap-in later."
+
+Is MGLRU able to avoid the swap-out of the 50 hot pages? since MGLRU
+is putting faulted pages to the youngest generation directly, do we have the
+risk mentioned in Kim's patchset?
+
+Thanks
+Barry

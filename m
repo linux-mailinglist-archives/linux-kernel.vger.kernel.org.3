@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F135B4D6DB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 10:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13844D6DBB
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 10:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiCLJQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 04:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
+        id S231624AbiCLJXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 04:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiCLJQK (ORCPT
+        with ESMTP id S231218AbiCLJXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 04:16:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BF71C7C33
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 01:15:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 12 Mar 2022 04:23:36 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF91264832
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 01:22:31 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0146C60A23
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:15:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC1FC36AE2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 09:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647076504;
-        bh=ndlAtVsMZB6QjhlQTA/+jwZ87IhmzTbmHCx6H4JJ6pA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gdTWYo2fsAGvwYaFT+OlNOWdTazMawskneOM96CHkk+NjXRL6vjM9dPcHykyic/oV
-         pVvrxQfLega/A4d7EvLpTqGdS1JT43CvIIr44nav7jjt/12QNXondIm+J5zqpoojyI
-         p/nYETs11xcQTBnSoGzueNtsw0oIUTfs6sLKR9rov4LwxLhJrhPAdXo1idMKbXWcKx
-         qA01bgilxvEfodYCUI5jZ8X/gH7wog3YqQ75Pvd1rgQBlDhRn6AoLD07eIq/fsc9yG
-         0JO43s8uU/y+agFFkLu8TVry9ITWjB90Uc3RnOxOOvTH2RkDCQrLDyA8QSl9aOSw9C
-         7SnZaYqC5kDcA==
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d07ae0b1c0so117608077b3.2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 01:15:04 -0800 (PST)
-X-Gm-Message-State: AOAM533idf03IwHgM4pj8m/9FwejISiahWu9mZvmr/AUh4qLldIbafrL
-        Mxh8Ybh5c2489Wf5+DZKk8dYuYSmjurF1eArnmA=
-X-Google-Smtp-Source: ABdhPJxXVFvCA3xfCEKDQSGwJzxV1O7JYrkhwTAU08jl9Kd850SEd8pe7dJoJppZL7UIOIDCZROgPvCpP0ExJFMip2k=
-X-Received: by 2002:a81:c24b:0:b0:2dc:7d67:a57a with SMTP id
- t11-20020a81c24b000000b002dc7d67a57amr12162597ywg.272.1647076503381; Sat, 12
- Mar 2022 01:15:03 -0800 (PST)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C049521115;
+        Sat, 12 Mar 2022 09:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647076948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vGJCc13UG0K1VbfEUqQBOawVmyBeZkeKPtFXK/dmfXw=;
+        b=nPLA+jwbqemdF0yMl+jHAT0VKgcAXBHMAkZ84hPxVc4OvBhDNj+s/mGJg8jARMPaKPkyvH
+        OmfDuMK/6xDAyjD39sQlPT/jGB2/QXZO3vp1ksQJNfHhFqbdRdwBasL4GTuKzuqDMQDrXb
+        m+LG8iK+Ot1NzBusXxWhdhwKcRr2dp4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647076948;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vGJCc13UG0K1VbfEUqQBOawVmyBeZkeKPtFXK/dmfXw=;
+        b=xFWVrnxWNVuQFS/8TqdWuVXxNVm3Y5ZrhrhTIYg95u8H6Er6hrCGc+LbAKhkixy5WpAbEx
+        Gzrh16XYYW2iQ2Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8CC3E13AB1;
+        Sat, 12 Mar 2022 09:22:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x+7DIFRmLGKsPwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Sat, 12 Mar 2022 09:22:28 +0000
+Message-ID: <a8dc8bc4-9a00-b2f7-1f68-273f7a14a14c@suse.cz>
+Date:   Sat, 12 Mar 2022 10:21:25 +0100
 MIME-Version: 1.0
-References: <20220309144138.360482-1-arnd@kernel.org>
-In-Reply-To: <20220309144138.360482-1-arnd@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 12 Mar 2022 10:14:51 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH6naR0FJHnie2NjqixFegX1EJVjB8_X=6_g2nZKFS=AQ@mail.gmail.com>
-Message-ID: <CAMj1kXH6naR0FJHnie2NjqixFegX1EJVjB8_X=6_g2nZKFS=AQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ARM: fix building NOMMU ARMv4/v5 kernels
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [mm/slub] ae107fa919: BUG:unable_to_handle_page_fault_for_address
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
+        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>
+References: <20220311145427.GA1227220@odroid>
+ <667d594b-bdad-4082-09d5-7b0587af2ae3@suse.cz>
+ <20220311164600.GA1234616@odroid>
+ <YivzD7PYilkFwjFt@ip-172-31-19-208.ap-northeast-1.compute.internal>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <YivzD7PYilkFwjFt@ip-172-31-19-208.ap-northeast-1.compute.internal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,67 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 15:41, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The removal of the old-style irq entry broke obscure NOMMU
-> configurations on machines that have an MMU:
->
-> ld.lld: error: undefined symbol: generic_handle_arch_irq
->  referenced by kernel/entry-armv.o:(__irq_svc) in archive arch/arm/built-in.a
->
-> A follow-up patch to convert nvic to the generic_handle_arch_irq()
-> could have fixed this by removing the Kconfig conditional, but did
-> it differently.
->
-> Change the Kconfig logic so ARM machines now unconditionally
-> enable the feature.
->
-> I have also submitted a patch to remove support for the configurations
-> that broke, but fixing the regression first is a trivial and correct
-> change.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 54f481a2308e ("ARM: remove old-style irq entry")
-> Fixes: 52d240871760 ("irqchip: nvic: Use GENERIC_IRQ_MULTI_HANDLER")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 3/12/22 02:10, Hyeonggon Yoo wrote:
+> On Fri, Mar 11, 2022 at 04:46:00PM +0000, Hyeonggon Yoo wrote:
+>> On Fri, Mar 11, 2022 at 04:36:47PM +0100, Vlastimil Babka wrote:
+>>> On 3/11/22 15:54, Hyeonggon Yoo wrote:
+>>>> On Wed, Mar 09, 2022 at 10:15:31AM +0800, kernel test robot wrote:
+>>>>>
+>>>>>
+>>>>> Greeting,
+>>>>>
+>>>>> FYI, we noticed the following commit (built with gcc-9):
+>>>>>
+>>>>> commit: ae107fa91914f098cd54ab77e68f83dd6259e901 ("mm/slub: use stackdepot to save stack trace in objects")
+>>>>> https://git.kernel.org/cgit/linux/kernel/git/vbabka/linux.git slub-stackdepot-v3r0
+>>>>>
+>>>>> in testcase: boot
+>>>>>
+>>>>> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>>>>>
+>>>>> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>>>>>
+>>>>
+>>>> [+Cc Vlastimil and linux-mm]
+>>>
+>>> Thanks.
+>>> lkp folks: it would be nice if I was CC'd automatically on this, it's a
+>>> commit from my git tree and with by s-o-b :)
+>>>
+>>>> I _strongly_ suspect that this is because we don't initialize
+>>>> stack_table[i] = NULL when we allocate it from memblock_alloc().
+>>>
+>>> No, Mike (CC'd) suggested to drop the array init cycle, because
+>>> memblock_alloc would zero the area anyway.
+>>
+>> Ah, you are right. My mistake.
+>>
+>>> There has to be a different
+>>> reason. Wondering if dmesg contains the stack depot initialization message
+>>> at all...
+>>
+>> I think I found the reason.
+>> This is because of CONFIG_SLUB_DEBUG_ON.
+>> It can enable debugging without passing boot parameter.
+>>
+>> if CONFIG_SLUB_DEBUG_ON=y && slub_debug is not passed, we do not call
+>> stack_depot_want_early_init(), but the debugging flags are set.
+>>
+>> And we only call stack_depot_init() later in kmem_cache_create_usercopy().
+>>
+>> so it crashed while creating boot cache.
+> 
+> I tested this, and this was the reason.
+> It crashed on CONFIG_SLUB_DEBUG_ON=y because stackdepot always assume
+> that it was initialized in boot step, or failed
+> (stack_depot_disable=true).
+> 
+> But as it didn't even tried to initialize it, stack_table == NULL &&
+> stack_depot_disable == false. So accessing *(NULL + <hash value>)
 
-Reviewed by: Ard Biesheuvel <ardb@kernel.org>
+Thanks for finding the cause!
 
-> ---
-> This patch should go into the arm/devel-stable branch that has
-> the arm-irq-and-vmap-stacks-for-rmk patches from Ard
-> ---
->  arch/arm/Kconfig        | 2 +-
->  drivers/irqchip/Kconfig | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index e9975ddd5034..5f0b40bab4fb 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -60,7 +60,7 @@ config ARM
->         select GENERIC_CPU_AUTOPROBE
->         select GENERIC_EARLY_IOREMAP
->         select GENERIC_IDLE_POLL_SETUP
-> -       select GENERIC_IRQ_MULTI_HANDLER if MMU
-> +       select GENERIC_IRQ_MULTI_HANDLER
->         select GENERIC_IRQ_PROBE
->         select GENERIC_IRQ_SHOW
->         select GENERIC_IRQ_SHOW_LEVEL
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index 488eaa14d3a7..7038957f4a77 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -58,7 +58,6 @@ config ARM_NVIC
->         bool
->         select IRQ_DOMAIN_HIERARCHY
->         select GENERIC_IRQ_CHIP
-> -       select GENERIC_IRQ_MULTI_HANDLER
->
->  config ARM_VIC
->         bool
-> --
-> 2.29.2
->
+> Ideas? implementing something like kmem_cache_init_early() again?
+
+I think we could simply make CONFIG_SLUB_DEBUG_ON select/depend on
+STACKDEPOT_ALWAYS_INIT?

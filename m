@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BD04D6E04
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F7A4D6E13
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Mar 2022 11:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiCLK2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 05:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S231788AbiCLK23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 05:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiCLK2T (ORCPT
+        with ESMTP id S231720AbiCLK2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 05:28:19 -0500
+        Sat, 12 Mar 2022 05:28:22 -0500
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FE21E6951;
-        Sat, 12 Mar 2022 02:27:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C89A1E6951;
+        Sat, 12 Mar 2022 02:27:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Cf3d/zYyP1qElLyGMKalfDePFpmbmiLI2TKBOV9FAj8=;
-  b=r1LvOmlMPSBgD1ppTQls3Zx1NDsxNu/BY1x1IlAbU4VoDfy0tGxd7p1v
-   9UDwmqUuvBCgRGtSd5UR4X6K8V1l7ZtjpMe88rbvO2r3tgx9aaHYbrPK9
-   Ykws3igWEYUgiBIOhLGyjtnrOmUplk3NkoOiT9UGgxTAd3PvoI0hjW5nn
-   w=;
+  bh=E22sNuoFdaUOS4+WwLkXyv8STbZDc50AAO8Dj225850=;
+  b=ihL6XsakQk6+pfogM7zSLsmG19WLigBxJRkJgmSwuffhYtEaSzep0klY
+   QFHKPcST9D03gZdcVWLX4I24nZEdikdu/p7Qwm1jDC9aVN85Rpqfphn9T
+   A0F3ENhgKUCkb74WcGH1PiiJ8q7akjDZeB8G7aZa7r6B1KBQi0yLCLpQ2
+   M=;
 Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,175,1643670000"; 
-   d="scan'208";a="25781347"
+   d="scan'208";a="25781348"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 11:27:11 +0100
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Steve French <sfrench@samba.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] cifs: use kzalloc
-Date:   Sat, 12 Mar 2022 11:27:00 +0100
-Message-Id: <20220312102705.71413-2-Julia.Lawall@inria.fr>
+To:     Tariq Toukan <tariqt@nvidia.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/6] net/mlx4_en: use kzalloc
+Date:   Sat, 12 Mar 2022 11:27:01 +0100
+Message-Id: <20220312102705.71413-3-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220312102705.71413-1-Julia.Lawall@inria.fr>
 References: <20220312102705.71413-1-Julia.Lawall@inria.fr>
@@ -69,26 +71,28 @@ expression res, size, flag;
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- fs/cifs/transport.c |    3 +--
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c |    3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/cifs/transport.c b/fs/cifs/transport.c
-index eeb1a699bd6f..4ff8e165a180 100644
---- a/fs/cifs/transport.c
-+++ b/fs/cifs/transport.c
-@@ -464,13 +464,12 @@ smb_send_rqst(struct TCP_Server_Info *server, int num_rqst,
- 		return -EIO;
- 	}
+diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+index 8cfc649f226b..8f762fc170b3 100644
+--- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
+@@ -1067,7 +1067,7 @@ static int mlx4_en_config_rss_qp(struct mlx4_en_priv *priv, int qpn,
+ 	struct mlx4_qp_context *context;
+ 	int err = 0;
  
--	tr_hdr = kmalloc(sizeof(*tr_hdr), GFP_NOFS);
-+	tr_hdr = kzalloc(sizeof(*tr_hdr), GFP_NOFS);
- 	if (!tr_hdr)
+-	context = kmalloc(sizeof(*context), GFP_KERNEL);
++	context = kzalloc(sizeof(*context), GFP_KERNEL);
+ 	if (!context)
  		return -ENOMEM;
  
- 	memset(&cur_rqst[0], 0, sizeof(cur_rqst));
- 	memset(&iov, 0, sizeof(iov));
--	memset(tr_hdr, 0, sizeof(*tr_hdr));
+@@ -1078,7 +1078,6 @@ static int mlx4_en_config_rss_qp(struct mlx4_en_priv *priv, int qpn,
+ 	}
+ 	qp->event = mlx4_en_sqp_event;
  
- 	iov.iov_base = tr_hdr;
- 	iov.iov_len = sizeof(*tr_hdr);
+-	memset(context, 0, sizeof(*context));
+ 	mlx4_en_fill_qp_context(priv, ring->actual_size, ring->stride, 0, 0,
+ 				qpn, ring->cqn, -1, context);
+ 	context->db_rec_addr = cpu_to_be64(ring->wqres.db.dma);
 

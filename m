@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525A34D75D5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 698EE4D75D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiCMO0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 10:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S234622AbiCMO1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 10:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiCMO0J (ORCPT
+        with ESMTP id S231244AbiCMO1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 10:26:09 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6893085958
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 07:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647181501; x=1678717501;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GsoMy3pNwX+miIvAX+S9WS81Z/reAnObWZHUu459PP8=;
-  b=hYXHXk7NuhEJ/4wDBUhxqpJFkQsbmd6QOauRvLX8ESpc8WeJ57yHDkOm
-   XP30yHgts4Ajz1TZAwbflmVXidPp/aod4Zurj3i0uASydzDtgNFLhbTFU
-   yJJ0KL8RF+mDTHE5HpWzkAI1NGN/s3xAHhbIBuQ0VyV+hB/RtHFnxgJqv
-   dZg/OY6fe48MZg+AQBz9DA61ADZOyhnpSGCGQK1HuO3hiqk9FB+u+KicJ
-   EU+o9+DBR4AWE4ICO/ipr6aZRYXxcLcRKdwr52i8Ji8Wl3XxSLjbjFcB2
-   ex6zHHdS+UfJsMa4jdrhef4zkgF0SD57JiE0ARPLbE1i9DTwNCHKSD/Fk
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="280628290"
-X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="280628290"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 07:25:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="515113492"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 07:24:58 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTP9W-000919-0h; Sun, 13 Mar 2022 14:24:58 +0000
-Date:   Sun, 13 Mar 2022 22:24:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Sun, 13 Mar 2022 10:27:01 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1D5C6242;
+        Sun, 13 Mar 2022 07:25:53 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4DF2C475;
+        Sun, 13 Mar 2022 15:25:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1647181552;
+        bh=+R31GasfFNJAvD+168Wfu9KCxUt7oNMiXPUAQ5qTUCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WQFVMPw8Z0kHghFhPjQi4iGGP0Z/JhlDlzdE7Xw05g0Pl19fb5Zhwq3rfV0JaWe6f
+         L9hFk8OBhNubi+iig69qXIidMRBYCi5gh/1m77Ae6uLcU05X4//k6dessh2RV+7hlY
+         YnWFHa7h479/XV8uXERiFZB4R/CimgGBQbo5k0x8=
+Date:   Sun, 13 Mar 2022 16:25:35 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:tls-upcall.v4 118/156] crypto/hkdf.c:26:5: warning:
- no previous prototype for function 'hkdf_extract'
-Message-ID: <202203132236.VeI6E96J-lkp@intel.com>
+Subject: Re: [PATCH] docs: media: uvcvideo: Update mailing list address
+Message-ID: <Yi3+33EysD/JqCdr@pendragon.ideasonboard.com>
+References: <20220312203323.626657-1-j.neuschaefer@gmx.net>
+ <Yi0F6mUm7iCRGvCt@pendragon.ideasonboard.com>
+ <Yi0IH48oA8ztvX8K@latitude>
+ <164716363247.3407360.2736836911812651199@Monstersaurus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <164716363247.3407360.2736836911812651199@Monstersaurus>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,86 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
-head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
-commit: ea4c6fc32e5e02a1e4c841f462c3a931b8838f33 [118/156] crypto,fs: Separate out hkdf_extract() and hkdf_expand()
-config: hexagon-randconfig-r045-20220313 (https://download.01.org/0day-ci/archive/20220313/202203132236.VeI6E96J-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=ea4c6fc32e5e02a1e4c841f462c3a931b8838f33
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-upcall.v4
-        git checkout ea4c6fc32e5e02a1e4c841f462c3a931b8838f33
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+On Sun, Mar 13, 2022 at 09:27:12AM +0000, Kieran Bingham wrote:
+> Quoting Jonathan Neuschäfer (2022-03-12 20:52:47)
+> > On Sat, Mar 12, 2022 at 10:43:22PM +0200, Laurent Pinchart wrote:
+> > > Hi Jonathan,
+> > > 
+> > > Thank you for the patch.
+> > > 
+> > > On Sat, Mar 12, 2022 at 09:33:22PM +0100, Jonathan Neuschäfer wrote:
+> > > > The mailing list address for UVC development has changed a while ago,
+> > > > but it was only updated in MAINTAINERS, not in the documentation.
+> > > > Update it there, too.
+> > > 
+> > > Thanks for bringing this to my attention, I didn't know we were still
+> > > referencing that old list.
+> > > 
+> > > How about moving to the linux-media@vger.kernel.org mailing list instead
+> > > ? I don't see many reasons to treat this driver with a special mailing
+> > > list anymore.
+> > 
+> > Fine by me, but I'll wait for the opinion of others who more regularly
+> > contribute to the media subsystem.
+> 
+> Being subscribed to the linux-uvc-devel list, and seeing that it's a
+> black hole where people post, and unfortunately get very little to no
+> response I certainly concur that it needs to be changed.
+> 
+> I don't think we can guarantee a better response with linux-media, but
+> at least it's the right place, where the driver is actually maintained.
+> 
+> So I also believe it should be moved to linux-media.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Jonathan, would you send a v2 that references the
+linux-media@vger.kernel.org list ?
 
-All warnings (new ones prefixed by >>):
+-- 
+Regards,
 
->> crypto/hkdf.c:26:5: warning: no previous prototype for function 'hkdf_extract' [-Wmissing-prototypes]
-   int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-       ^
-   crypto/hkdf.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-   ^
-   static 
->> crypto/hkdf.c:52:5: warning: no previous prototype for function 'hkdf_expand' [-Wmissing-prototypes]
-   int hkdf_expand(struct crypto_shash *hmac_tfm,
-       ^
-   crypto/hkdf.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int hkdf_expand(struct crypto_shash *hmac_tfm,
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/hkdf_extract +26 crypto/hkdf.c
-
-    14	
-    15	/*
-    16	 * HKDF consists of two steps:
-    17	 *
-    18	 * 1. HKDF-Extract: extract a pseudorandom key of length HKDF_HASHLEN bytes from
-    19	 *    the input keying material and optional salt.
-    20	 * 2. HKDF-Expand: expand the pseudorandom key into output keying material of
-    21	 *    any length, parameterized by an application-specific info string.
-    22	 *
-    23	 */
-    24	
-    25	/* HKDF-Extract (RFC 5869 section 2.2), unsalted */
-  > 26	int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
-    27			 unsigned int ikmlen, u8 *prk)
-    28	{
-    29		unsigned int prklen = crypto_shash_digestsize(hmac_tfm);
-    30		u8 *default_salt;
-    31		int err;
-    32	
-    33		default_salt = kzalloc(prklen, GFP_KERNEL);
-    34		if (!default_salt)
-    35			return -ENOMEM;
-    36		err = crypto_shash_setkey(hmac_tfm, default_salt, prklen);
-    37		if (!err)
-    38			err = crypto_shash_tfm_digest(hmac_tfm, ikm, ikmlen, prk);
-    39	
-    40		kfree(default_salt);
-    41		return err;
-    42	}
-    43	EXPORT_SYMBOL_GPL(hkdf_extract);
-    44	
-    45	/*
-    46	 * HKDF-Expand (RFC 5869 section 2.3).
-    47	 * This expands the pseudorandom key, which was already keyed into @hmac_tfm,
-    48	 * into @okmlen bytes of output keying material parameterized by the
-    49	 * application-specific @info of length @infolen bytes.
-    50	 * This is thread-safe and may be called by multiple threads in parallel.
-    51	 */
-  > 52	int hkdf_expand(struct crypto_shash *hmac_tfm,
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Laurent Pinchart

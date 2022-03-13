@@ -2,137 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809CB4D76A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEE64D76AA
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbiCMQLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S234512AbiCMQQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 12:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiCMQLN (ORCPT
+        with ESMTP id S229983AbiCMQQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:11:13 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7626564;
-        Sun, 13 Mar 2022 09:10:05 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id t1so16498225edc.3;
-        Sun, 13 Mar 2022 09:10:05 -0700 (PDT)
+        Sun, 13 Mar 2022 12:16:04 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1FE35DC0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:14:56 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q10so18623282ljc.7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=MdfBfkBUpL2bSvoudLMFBEa9b6pECpCEDNH8K1hwrao=;
+        b=L2N2StlxKHhQG9J2PUUQ8BMT81Woo2WARfqwCCCaRsZCgYrB8qKZW7nYAVcxEV0MvG
+         tAmI14/Fy2JGdqKqs3PVqlGuqRQ8BpIEoEsS7WIDwUntQH4fhtauk18n+SdaBbTbknEg
+         T43aEH7UMyT7VepC/Q6G9X121xGeTZWPVzIIumRjSQd+j/Vsp8I3qJKLKqIHRBdZT7HA
+         IFOc9cqMtBzSi/mt6pNoqCZZ9zAy3mGmED4YPsP4Q4Bi1DVExMV9Xnghx4G6cvj1mZcn
+         G+f98Oe6HB9hQIR/VdLOmejfPMCiVKHSSa//IqLdDWqFJHs/Hn1z4ifHEnaaCzJ5VGYV
+         oyIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=u8bQocCu7+BWd2wXu/r5WL7YQLXrKPOJ0zyslcPG8rg=;
-        b=RBSOCQKoZXiub3rmTcCWiDkoZA7YoOdiCV9DVh1rRwPdSryCJAtIkANZHEDOJS872E
-         sHXFRYGpoHS8SLE0rm39QPdOLK5tWG93zCXtxxhITSjHM9x06TLVdyMGxOH3yHX4kCwE
-         5vDbHuaZ18MmskpwYx2hIl/NXvmKtLR0DU0RhAy/ZgNrtxN/7jg2B5FYGhk8iMKc55GO
-         n8RckuJxhvbLwnQebowE4X94vp3htcyEBoMmZBm5PUzFi0vO+iWSmT64pzhJxwWqJDKe
-         5NQBjltufOCSOFkn22tXy1QlwQuSwavUtTjdCkMyBaOAaKgNc45E6xWW8R3jTKARiv6Q
-         AHzA==
-X-Gm-Message-State: AOAM531PgPvaZ939/7I+eSZSM4bk1scAtEZ0Qm4rVxy5DvIXo+UAEU/Q
-        DEQ26smb5VayStnIIa40OP5GnlAEWKM=
-X-Google-Smtp-Source: ABdhPJzEWGkwnv6d819epLuSt1JobOIpBGfSTwGt4yj9R+qVneNoFCVpjowCAJIw0oFiC1VR5TKewA==
-X-Received: by 2002:a50:d550:0:b0:416:2ac8:b98e with SMTP id f16-20020a50d550000000b004162ac8b98emr17167215edj.236.1647187803964;
-        Sun, 13 Mar 2022 09:10:03 -0700 (PDT)
-Received: from [192.168.0.152] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id i6-20020a17090685c600b006daecf0b350sm5689279ejy.75.2022.03.13.09.10.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 09:10:03 -0700 (PDT)
-Message-ID: <2d35127c-d4ef-6644-289a-5c10bcbbbf84@kernel.org>
-Date:   Sun, 13 Mar 2022 17:10:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH net-next v2 1/3] dt-bindings: net: mscc-miim: add lan966x
- compatible
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220313002536.13068-1-michael@walle.cc>
- <20220313002536.13068-2-michael@walle.cc>
- <08b89b3f-d0d3-e96f-d1c3-80e8dfd0798f@kernel.org>
- <d18291ff8d81f03a58900935d92115f2@walle.cc>
-In-Reply-To: <d18291ff8d81f03a58900935d92115f2@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=MdfBfkBUpL2bSvoudLMFBEa9b6pECpCEDNH8K1hwrao=;
+        b=Qf1Ly8l6z4JIiLXxmLy/U0mLrbzGg81EowudykcqY14QSdHdu+mnPdmNcB2TGWi6Ty
+         YWFuTP1iiQzOneyqtWjvVQWHL2KWVd3FydMF+jasCOb7p+oWxSr0SbE8OmMWp2OcMzPe
+         yj/Le5HZvRZaewEHNYYRCOVEKx72u59EPRK6eZn+sZQ8u8Ah04AeqqgalLMvcbwpDf7U
+         cxL4mXPLOhAMSj3CTe7wRfevPGqU1UHaZUvNNUx54HyQgfAcQTd69ohdYIatN9/lQZbS
+         K5hRE14uPiD4g3M++XKjyjdAflSHd5Y91JoDdnWT8BWxJnp6UiegcYOYZXMDFoee1G0R
+         DhQw==
+X-Gm-Message-State: AOAM532bmPKCGDh8vyst8U6XWkbJMY2DX9jOCZ7CnF1df4nSpLIffpkU
+        J2qiJ4buNEMG7In41d7pL7Q=
+X-Google-Smtp-Source: ABdhPJywSUqzwjhi8sTT2bXMPlpeMIA9hr6XzmiR9VlakP+DJzJlrecpRXrO/NRoaY3lGt7mgYEN8Q==
+X-Received: by 2002:a2e:320c:0:b0:247:ec95:fdea with SMTP id y12-20020a2e320c000000b00247ec95fdeamr11940110ljy.288.1647188093586;
+        Sun, 13 Mar 2022 09:14:53 -0700 (PDT)
+Received: from smtpclient.apple (31-178-191-245.dynamic.chello.pl. [31.178.191.245])
+        by smtp.gmail.com with ESMTPSA id f17-20020a2e1f11000000b00247f8eb86a7sm3158089ljf.108.2022.03.13.09.14.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 13 Mar 2022 09:14:53 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH] drm/bridge: synopsys/dw-hdmi: set cec clock rate
+From:   Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+In-Reply-To: <CAMdYzYq06QSmFAwCuTmBYy4LfQAQDxzx2PGc8HOB1iEjxXHGyg@mail.gmail.com>
+Date:   Sun, 13 Mar 2022 17:14:49 +0100
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Pierre-Hugues Husson <phh@phh.me>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        dri-devel@lists.freedesktop.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E86F11A4-011B-43ED-90D2-BB6BA9353A3F@gmail.com>
+References: <20220126202427.3047814-1-pgwipeout@gmail.com>
+ <3AFD1DD4-AF0A-4ECC-B4F5-E6BD6B9F1BB7@gmail.com>
+ <CAMdYzYq06QSmFAwCuTmBYy4LfQAQDxzx2PGc8HOB1iEjxXHGyg@mail.gmail.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2022 11:47, Michael Walle wrote:
-> Hi Krzysztof,
-> 
-> Am 2022-03-13 10:47, schrieb Krzysztof Kozlowski:
->> On 13/03/2022 01:25, Michael Walle wrote:
->>> The MDIO controller has support to release the internal PHYs from 
->>> reset
->>> by specifying a second memory resource. This is different between the
->>> currently supported SparX-5 and the LAN966x. Add a new compatible to
->>> distiguish between these two.
-
-Typo here, BTW.
-
->>>
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> ---
->>>  Documentation/devicetree/bindings/net/mscc-miim.txt | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/mscc-miim.txt 
->>> b/Documentation/devicetree/bindings/net/mscc-miim.txt
->>> index 7104679cf59d..a9efff252ca6 100644
->>> --- a/Documentation/devicetree/bindings/net/mscc-miim.txt
->>> +++ b/Documentation/devicetree/bindings/net/mscc-miim.txt
->>> @@ -2,7 +2,7 @@ Microsemi MII Management Controller (MIIM) / MDIO
->>>  =================================================
->>>
->>>  Properties:
->>> -- compatible: must be "mscc,ocelot-miim"
->>> +- compatible: must be "mscc,ocelot-miim" or "mscc,lan966x-miim"
->>
->> No wildcards, use one, specific compatible.
-> 
-> I'm in a kind of dilemma here, have a look yourself:
-> grep -r "lan966[28x]-" Documentation
-> 
-> Should I deviate from the common "name" now? To make things
-> worse, there was a similar request by Arnd [1]. But the
-> solution feels like cheating ("lan966x" -> "lan966") ;)
-
-The previous 966x cases were added by one person from Microchip, so he
-actually might know something. But do you know whether lan966x will
-cover all current and future designs from Microchip? E.g. lan9669 (if
-ever made) will be the same? Avoiding wildcard is the easiest, just
-choose one implementation, e.g. "lan9662".
-
-Different topic is that all current lan966[28] are from Microchip and
-you still add Microsemi, even though it was acquired by Microchip.
-That's an inconsistency which should be rather fixed.
-
-> 
-> On a side note, I understand that there should be no wildcards,
-> because the compatible should target one specific implementation,
-> right? But then the codename "ocelot" represents a whole series of
-> chips. Therefore, names for whole families shouldn't be used neither,
-> right?
-
-You're not adding "ocelot" now, so it is separate topic. However a
-compatible like "mscc,ocelot" feels wrong, unless it is used as a
-fallback (see: git grep 'apple,').
 
 
-Best regards,
-Krzysztof
+> Wiadomo=C5=9B=C4=87 napisana przez Peter Geis <pgwipeout@gmail.com> w =
+dniu 13.03.2022, o godz. 13:56:
+>=20
+>>=20
+>=20
+> I was worried about that, thanks for testing it.
+> Can you send me the cec_clk rate before and after this patch?
+>=20
+
+Here it is:
+
+working:
+                                 enable  prepare  protect                =
+                duty  hardware
+   clock                          count    count    count        rate   =
+accuracy phase  cycle    enable
+=
+--------------------------------------------------------------------------=
+-----------------------------
+clk_hdmi_cec                      1        2        0       32743        =
+  0     0  50000         Y
+
+
+
+non-working:
+                                 enable  prepare  protect                =
+                duty  hardware
+   clock                          count    count    count        rate   =
+accuracy phase  cycle    enable
+=
+--------------------------------------------------------------------------=
+-----------------------------
+clk_hdmi_cec                      1        2        0       32768        =
+  0     0  50000         Y
+
+
+
+dmesg
+[   52.745988] cec-dw_hdmi: message 44 timed out
+[   54.879307] cec-dw_hdmi: message 44 timed out
+[   57.012654] cec-dw_hdmi: message 88 timed out
+[   59.145973] cec-dw_hdmi: message 88 timed out
+
+
+
+player:
+2022-03-13 11:04:40.938355 E CECAdapter: =
+CLinuxCECAdapterCommunication::Write - ioctl CEC_TRANSMIT failed - =
+tx_status=3D00 errno=3D22
+2022-03-13 11:04:40.938366 E CECAdapter: =
+CLinuxCECAdapterCommunication::Write - ioctl CEC_TRANSMIT failed - =
+tx_status=3D00 errno=3D22
+

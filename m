@@ -2,119 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B984D72D6
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 06:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149234D730D
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 06:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbiCMFoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 00:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S233638AbiCMF4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 00:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiCMFoJ (ORCPT
+        with ESMTP id S232495AbiCMF4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 00:44:09 -0500
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B74A2D1C9
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:43:02 -0800 (PST)
-Received: by mail-il1-x143.google.com with SMTP id h21so891418ila.7
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:43:02 -0800 (PST)
+        Sun, 13 Mar 2022 00:56:37 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65B05622A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:55:29 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id b8so11655418pjb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:55:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=yeehAnwXiFpjq47LCkJzC+vZeMh+kdhUAc1wvTjLTKQ=;
-        b=d15j8gZEJQ2cUKh8lIyS1UGKxT0GQRDadj6U6b5zp/zFIkaK8rHI0s8XZuz4eqi8ob
-         I3K6xhmzr5iV/ZIk+GweWX06qMX0wTcI41QSx+nyDNUrsaSHf4KK9ipFE2F9udgT4r1/
-         bMRzGQrpRmnoWIS+vkfBy3Uku9G+ZJzXECwUIcznZ1g25LQtEeIIspETWyFJr/lUj85F
-         oCGYCLmFGRNpviEw5oYvW/gDFKnBJ8waBRZjdNRb+e9mQEYuTZln7NGY7ZBd4ZKcOyr5
-         gPw554sJanMM/5vvrGRKQWpsXIDM7yBzFMu1YXvqqftKcvu/HCfQVgOMJMvpd8oJPG+8
-         cWdA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xFyi6CYJoEjSm5+1sguLJsv91/a710qzltT1W0qTjmc=;
+        b=APGtWmOooE0GwzcShavkvPRur63kCnyYMMpFCY58hFomGr2GMQwwE14TVfG3ekC3D6
+         GhJ+fad0u4r/rMM6DMb3LILbXzWbM2qJAyNyPQY7OcqPvJP1wG15uEohV5KevcoDwLin
+         xhzWFFFCyNtFYTBfSExEIsI1bf1mycV4yIFYRBCOpK6S5p6vvY/T/LkwCHorheNJtmOV
+         SZvCPlkMxbbCVG6F3d4M5N0NGicuB7rYR8/PdLq+bahUtrB2zfBLJo6yDfh2iyWeSoY4
+         n9TG4SJqb3QvrMNIlSPiNL793vF3HMyshF5ljBq9sVj1aINgU997C8AP34Rl+lskG4bg
+         kUHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yeehAnwXiFpjq47LCkJzC+vZeMh+kdhUAc1wvTjLTKQ=;
-        b=KEbLo8iPHQwW2KE73y8sqP4uBhXd/g8+Aqj5UNTQLT8FjVEdraBNGh/gGlTSmg1XFZ
-         Fkq8RS436QPoV5CTELaD5U6atOq50NGs0GZZ9vIwhuAvPCJesoc7IZH/+x04u2hZGBpA
-         6d5N4DKrdKNO1nnSqdCnLltu5xB+o7TCpYtVL3c+yTtuf/0WQU2WuuXTk1V8cIbauPjL
-         67QQqxREyGNK1jtCx1C3LpGLwMxY2M5SNLoKin9BH5UCeMrlHaYnxfrtgcRojmlGu1Xr
-         V2LwXdGXzJYeBfDe+OHreHFZ6Atj0EPeCTB8wat9HVyp2YwpVCBoJEApK4B5Dcg4LJho
-         nstg==
-X-Gm-Message-State: AOAM532gYsvM5eLaWomHTB9mdwGdgqSdgtTntLdnZS0V1MS/jJwchOrj
-        2lc1bTLWP1IZ0Z60vnyfOKqOyjOKX9Y1k8lVpaI=
-X-Google-Smtp-Source: ABdhPJyLTEK5UR27XDcIpYknILzSaUN8Y3JJAFOiT/4220BDdd+8py7fiGMLjHgDdFYZ9jhehUyR6JKiC7uNev8Uebs=
-X-Received: by 2002:a92:cdad:0:b0:2c6:7b76:a086 with SMTP id
- g13-20020a92cdad000000b002c67b76a086mr14632088ild.5.1647150181750; Sat, 12
- Mar 2022 21:43:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xFyi6CYJoEjSm5+1sguLJsv91/a710qzltT1W0qTjmc=;
+        b=EB02TrQlgdLXtL/8t6Xd+NGu/iAshvrVOV8T/NyepCEkzXw+8MbByGMsWECRbwwU9+
+         xmsdolRux3vUA1QDTNykU3AfSfnKsDBXwv5H864WhnA/e8P7DQ4Q3Pf8kk1OhXZXM+Z2
+         dpOSDK1eUYQ8rsWFBJoyav4U3vjMA6M5pIF336hMqEDpeeHMC+0jq7iSZLL435gUihqp
+         qhnIwYc4qKHLKp6rv+RjloMLY7adjTH1/w+WhPbxoGAo2cIuU+aVJ06Pg+5na7RV7vxH
+         +jNU9QBkab5mCS+mP0ZkaWrOxLeqyG3qvB84Dxk6Ib59lM8wlpZ8bbz7wxNSCSjAA9jg
+         /NBg==
+X-Gm-Message-State: AOAM532wq34Iz6ykThu4cDSlxtwYakNMXkjIsES9onjBIru5cYRHCwdF
+        nHtjFgjnL/bWPHEsdqoMUFAhng==
+X-Google-Smtp-Source: ABdhPJxgY7Q7uv72XuecPePNWWP+SkoffrEYEZW2fP/ONZx69HHDRFzvxSczjmHZy1i/AvUkIB2u7Q==
+X-Received: by 2002:a17:902:9a02:b0:14f:2d93:92f4 with SMTP id v2-20020a1709029a0200b0014f2d9392f4mr18810902plp.160.1647150929175;
+        Sat, 12 Mar 2022 21:55:29 -0800 (PST)
+Received: from localhost.localdomain (104.225.159.237.16clouds.com. [104.225.159.237])
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm14792447pfk.26.2022.03.12.21.55.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 21:55:28 -0800 (PST)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v1 0/3] arch_topology: Correct CPU capacity scaling
+Date:   Sun, 13 Mar 2022 13:55:09 +0800
+Message-Id: <20220313055512.248571-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220312002429.16175-1-steve.lee.analog@gmail.com> <8f4a088ffc0fc1d4aa14aa1d0adf575cdc94291b.camel@gmail.com>
-In-Reply-To: <8f4a088ffc0fc1d4aa14aa1d0adf575cdc94291b.camel@gmail.com>
-From:   Lee Steve <steve.lee.analog@gmail.com>
-Date:   Sun, 13 Mar 2022 14:42:50 +0900
-Message-ID: <CA+Fz0PaRM7zCShHsK1WDAaFGwz1D2dV5LrvRqnYXkiB5i=rFPQ@mail.gmail.com>
-Subject: Re: [RESEND V2] ASoC: max98390: Add reset gpio control
-To:     =?UTF-8?B?TnVubyBTw6E=?= <noname.nuno@gmail.com>
-Cc:     lgirdwood@gmail.com, Mark Brown <broonie@kernel.org>,
-        perex@perex.cz, tiwai@suse.com, ckeepax@opensource.cirrus.com,
-        geert@linux-m68k.org, rf@opensource.wolfsonmicro.com,
-        shumingf@realtek.com, srinivas.kandagatla@linaro.org,
-        krzk@kernel.org, jack.yu@realtek.com,
-        "Sa, Nuno" <nuno.sa@analog.com>, ryans.lee@maximintegrated.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 9:58 PM Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
->
-> On Sat, 2022-03-12 at 09:24 +0900, Steve Lee wrote:
-> >  Add reset gpio control to support RESET PIN connected to gpio.
-> >
-> > Signed-off-by: Steve Lee <steve.lee.analog@gmail.com>
-> > ---
-> >  sound/soc/codecs/max98390.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/sound/soc/codecs/max98390.c
-> > b/sound/soc/codecs/max98390.c
-> > index 40fd6f363f35..9a9299e5cc5a 100644
-> > --- a/sound/soc/codecs/max98390.c
-> > +++ b/sound/soc/codecs/max98390.c
-> > @@ -1022,6 +1022,7 @@ static int max98390_i2c_probe(struct i2c_client
-> > *i2c,
-> >
-> >         struct max98390_priv *max98390 =3D NULL;
-> >         struct i2c_adapter *adapter =3D i2c->adapter;
-> > +       struct gpio_desc *reset_gpio;
-> >
-> >         ret =3D i2c_check_functionality(adapter,
-> >                 I2C_FUNC_SMBUS_BYTE
-> > @@ -1073,6 +1074,17 @@ static int max98390_i2c_probe(struct
-> > i2c_client *i2c,
-> >                 return ret;
-> >         }
-> >
-> > +       reset_gpio =3D devm_gpiod_get_optional(&i2c->dev,
-> > +                                            "maxim,reset-gpios",
-> > GPIOD_OUT_LOW);
->
-> A reset GPIO is a standard property so there's no need for a vendor
-> prefix. This should be devm_gpiod_get_optional(&i2c->dev, "reset",
-> ...). And, as said before, you need to add a reset-gpios property to
-> the bindings in a different patch.
->
-> I'm also not sure why you have this as RESEND...
->
-> - Nuno S=C3=A1
-> >
->
+This patch set is to address issues for CPU capacity scaling.
 
-I forgot to add another patch mail. I will check it before sending patch ag=
-ain.
+"capacity-dmips-mhz" property might be absent in all CPU nodes, and in
+another situation, DT might have inconsistent binding issue, e.g. some
+CPU nodes have "capacity-dmips-mhz" property and some nodes miss the
+property.  Current code mixes these two cases and always rollback to CPU
+capacity 1024 for these two cases.
+
+Patches 01 and 02 in this set are used to distinguish the two different
+DT binding cases, and for the inconsistent binding issue, it rolls back
+to 1024 without CPU capacity scaling.
+
+Patch 03 is to handle the case for absenting "capacity-dmips-mhz"
+property in CPU nodes, the patch proceeds to do CPU capacity scaling based
+on CPU maximum capacity.  Thus it can reflect the correct CPU capacity for
+Arm platforms with "fast" and "slow" clusters (CPUs in two clusters have
+the same raw capacity but with different maximum frequencies).
+
+This patch set is applied on the mainline kernel with the latest commit
+68453767131a ("ARM: Spectre-BHB: provide empty stub for non-config").
+And tested on Arm64 Hikey960 platform (with a bit hacking to emulate
+fast and slow clusters).
+
+
+Leo Yan (3):
+  arch_topology: Correct semantics for 'cap_parsing_failed'
+  arch_topology: Handle inconsistent binding of CPU raw capacity
+  arch_topology: Scale CPU capacity if without CPU raw capacity
+
+ drivers/base/arch_topology.c | 42 +++++++++++++++++++++++++++++-------
+ 1 file changed, 34 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46A04D769C
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EEA4D76F3
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbiCMQCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S233896AbiCMQm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 12:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiCMQCT (ORCPT
+        with ESMTP id S231143AbiCMQmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:02:19 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590E89CE2;
-        Sun, 13 Mar 2022 09:01:11 -0700 (PDT)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id F1D4C22238;
-        Sun, 13 Mar 2022 17:01:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647187270;
+        Sun, 13 Mar 2022 12:42:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DE856162
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647189675;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BMJ8vMF7BASLVLZYhk3xHd53t++fSBFmJliFAFF8JaE=;
-        b=CDBuG19+Bhs0Cigf+XXpXCutMGKS2/ppu+6XG75xS1VKPL3rTUJQhFCoyu3sq4Cf4iNyh9
-        aILsLyOkdgdTWrQ66swx4wVKaeO5C4oOHVyuuZCRGi7ncfOjkh0pnO+eL7PfqrpaZZwhlI
-        BpwDaq543ixJhc8yUTetTEPKFd4w0uQ=
-From:   Michael Walle <michael@walle.cc>
-To:     horatiu.vultur@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, robh@kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH 1/2] dt-bindings: reset: lan966x phy reset driver bindings
-Date:   Sun, 13 Mar 2022 17:00:56 +0100
-Message-Id: <20220313160056.8767-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211029125848.k4vwmzxpljbwlve6@soft-dev3-1.localhost>
-References: <20211029125848.k4vwmzxpljbwlve6@soft-dev3-1.localhost>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bqoVTiTsGXXHBBRYe8M9hzomUWdwc4CvqTvtEGolwng=;
+        b=Lx9Z0SLRwS/w7zAHj59wmtZFpcxoKT8E6yAtjErySoJXQe6ixq2WWx91G0Bna3WE4Wc0Y3
+        KzHaXeyIglaiJYGQbnugrZQ5Wk9eK+B1QixA9yU6sFCfiDCQkJtZj4RUy8GVPoo98r4kpU
+        0Q2iG53qZnTCUIk9lGvPSIy9KU0TVlg=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-ZL0q2wkcPMu4G9Ypz5deuw-1; Sun, 13 Mar 2022 12:41:14 -0400
+X-MC-Unique: ZL0q2wkcPMu4G9Ypz5deuw-1
+Received: by mail-oo1-f69.google.com with SMTP id h42-20020a4a942d000000b00321739192d0so6978432ooi.8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:41:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bqoVTiTsGXXHBBRYe8M9hzomUWdwc4CvqTvtEGolwng=;
+        b=D5bIcf8AD7rViKgNHmZiBVk3amInM3GTMObYV1V/F3pLc2S2VsdDeAVJzoF82uOZBo
+         up+iAMR+EYw6y4m8y55thiB9Mutx9LeR+HkZpG2UokjZxK1Wr9YD7+pbCmQjbbLB1uFV
+         vtuyatH5eeaUoaMDeUcUG5V28a0j8pRvKOyhiXTuc+haKJBBOqJIPYDsqrdAQLaiY6pI
+         4r5qrNLDDynzTkeChbGoU6t1FIMPyU6kkG70xJyVrFzSbV0svi/ZCzXWfkhTOoCRbBSd
+         E1vWVznQaBNTBF8ozmpK6hMIcoXkFCeIDMcG0YCkKoybLy1eI56YNOAfBq71xFV5oEi5
+         3nUg==
+X-Gm-Message-State: AOAM532wI+DpmckaMrvNWy8AD6tKpzZ3nVQozxSZw19t4xTOk7FyQdvb
+        HCMUCozfoHqEfhsQn2+RMFb81sGoSErqq2fH0OzoYIua4Nc/ZPsCRNR74QfdosYo8bHWNBKvL1M
+        wfnx75fA2l5q4Gedhed7U+MPK
+X-Received: by 2002:a4a:8c0a:0:b0:2dd:e256:88c8 with SMTP id u10-20020a4a8c0a000000b002dde25688c8mr8551825ooj.9.1647189673424;
+        Sun, 13 Mar 2022 09:41:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwCOOpV5kTWBACRUlg4bObdEcMfOX5390WS3Kv1BpjVdmUqwie4T3pC2DQr7CUxkbwB6+ko/Q==
+X-Received: by 2002:a4a:8c0a:0:b0:2dd:e256:88c8 with SMTP id u10-20020a4a8c0a000000b002dde25688c8mr8551818ooj.9.1647189673249;
+        Sun, 13 Mar 2022 09:41:13 -0700 (PDT)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id q62-20020a4a3341000000b00320f8a179d0sm6160816ooq.30.2022.03.13.09.41.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Mar 2022 09:41:12 -0700 (PDT)
+From:   trix@redhat.com
+To:     jacopo@jmondi.org, mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] media: i2c: cleanup comments
+Date:   Sun, 13 Mar 2022 09:04:57 -0700
+Message-Id: <20220313160457.1513543-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horatiu,
+From: Tom Rix <trix@redhat.com>
 
-> > On Tue, Oct 19, 2021 at 01:52:04PM +0200, Horatiu Vultur wrote:
-> > > Document the lan966x phy reset device driving bindings.
-> > > It is using register access for the internal PHYs and toggles
-> > > GPIO for external PHYs.
-> > >
-> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > > ---
-> > >  .../bindings/reset/lan966x-phy,rst.yaml       | 53 +++++++++++++++++++
-> > >  1 file changed, 53 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/reset/lan966x-phy,rst.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/reset/lan966x-phy,rst.yaml b/Documentation/devicetree/bindings/reset/lan966x-phy,rst.yaml
-> > > new file mode 100644
-> > > index 000000000000..35a32458cafe
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/reset/lan966x-phy,rst.yaml
-> > > @@ -0,0 +1,53 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/reset/lan966x-phy,rst.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: Microchip Lan966x PHY Reset
-> > > +
-> > > +maintainers:
-> > > +  - Horatiu Vultur <horatiu.vultur@microchip.com>
-> > > +
-> > > +description: |
-> > > +  The Microchip Lan966x Switch provides 2 internal PHY which needs to be
-> > > +  released from reset before they can be accessed. Also it might have external
-> > > +  PHYs which requires to toggle a GPIO before the access to the PHYs.
+For spdx, remove leading space
 
-I don't think this driver is needed at all. See more below.
+Replacements
+parametrize to parameterize
 
-> > > +  external-phy-reset-gpios:
-> > > +    description: used for release of reset of the external PHY
-> > > +    maxItems: 1
-> > 
-> > This belongs in the external PHY's node.
-> 
-> My problem is if I put this in the external PHY's node, once the switch
-> gets reset it would reset also the GPIO pin and then it can't connect
-> to the external PHYs anymore.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ include/media/i2c/mt9t112.h | 2 +-
+ include/media/i2c/wm8775.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-But this will only solve your use case. If there is anything else
-connected on the GPIO it will be reset, too. So you'd loose GPIO state
-and you just 'fix' the exernal PHY reset lines here.
+diff --git a/include/media/i2c/mt9t112.h b/include/media/i2c/mt9t112.h
+index e678b6ae8e2f5..825b4a169da81 100644
+--- a/include/media/i2c/mt9t112.h
++++ b/include/media/i2c/mt9t112.h
+@@ -1,4 +1,4 @@
+-/*  SPDX-License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: GPL-2.0 */
+ /* mt9t112 Camera
+  *
+  * Copyright (C) 2009 Renesas Solutions Corp.
+diff --git a/include/media/i2c/wm8775.h b/include/media/i2c/wm8775.h
+index 83675817639e3..6ccdeb3817ab0 100644
+--- a/include/media/i2c/wm8775.h
++++ b/include/media/i2c/wm8775.h
+@@ -23,7 +23,7 @@
+ 
+ struct wm8775_platform_data {
+ 	/*
+-	 * FIXME: Instead, we should parametrize the params
++	 * FIXME: Instead, we should parameterize the params
+ 	 * that need different settings between ivtv, pvrusb2, and Nova-S
+ 	 */
+ 	bool is_nova_s;
+-- 
+2.26.3
 
-Fortunately, this is already solved by the shared reset lines. See [1]
-for my proposal. Once the GPIO controller isn't reset anymore, we can
-describe the reset line to the external PHYs by using the "reset-gpios"
-property of the MDIO controller.
-
-> The switch will need anyway to call this driver to release the reset of
-> the internal PHYs, so I was thinking to put also the release of the
-> external PHYs in the same driver.
-
-There is already support for this in the MDIO driver, see [2]. This
-is already used on the Ocelot series.
-
-> Initially we wanted to extend the 'sparx5-switch-reset' driver to do
-> this but the output of that discussion was to have 2 different drivers,
-> one for the switch and one for the PHYs.
-
--michael
-
-[1] https://lore.kernel.org/linux-devicetree/20220313154640.63813-1-michael@walle.cc/
-[2] https://lore.kernel.org/netdev/20220313002153.11280-1-michael@walle.cc/

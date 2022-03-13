@@ -2,106 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DB44D76F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 538CC4D76FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbiCMQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
+        id S234978AbiCMQwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 12:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233595AbiCMQjK (ORCPT
+        with ESMTP id S234725AbiCMQwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:39:10 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A1415A17;
-        Sun, 13 Mar 2022 09:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647189482; x=1678725482;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I6qN1Sg+iqsdbF/CTX0o5V6Hvh5AhvG9qew5bwtGzZI=;
-  b=SnOxWxR7mNTk38MjTjcnHr7ZIfTlCpfTD8rLv9f049r7k0vevhD2ATUU
-   2B9gh3swBl84sUb4/WObkFi0jX37YDOe81kOlqyixNjpe4ETnp312474G
-   4m0TA7fg5hXTTo8BRPkUMiVr7i8Bt97NKljIrYQgXJDvjWpPYT2QO0r1r
-   RB3bQCoaOz/5xGXgaK2iIW3e9e51P+xAUFHJ/JiWaLpncdOJosh3GC1g+
-   YjddtVe03KHWsIovwYc2NKr6rtOHoqizXFBU8u0su3jJYPOa3Wv0+MLiZ
-   k20kIdpqxS9orfEnmaRzWqH4PWSol4FQKOkeX9PmnGjLB4VbRUW9XHHaJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253442975"
-X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="253442975"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 09:38:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="539643470"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 13 Mar 2022 09:38:00 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTREG-00097E-2w; Sun, 13 Mar 2022 16:38:00 +0000
-Date:   Mon, 14 Mar 2022 00:37:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [mchehab-media-next:master 314/316] scripts/Makefile.build:44:
- drivers/media/platform/nvidia/Makefile: No such file or directory
-Message-ID: <202203140022.R4erbrkI-lkp@intel.com>
+        Sun, 13 Mar 2022 12:52:19 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F02B985A7;
+        Sun, 13 Mar 2022 09:51:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V70i25e_1647190256;
+Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0V70i25e_1647190256)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 14 Mar 2022 00:51:04 +0800
+From:   Wen Yang <simon.wy@alibaba-inc.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
+        Stephane Eranian <eranian@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Wen Yang <wenyang@linux.alibaba.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] perf/x86: extract code to assign perf events for both core and uncore
+Date:   Mon, 14 Mar 2022 00:50:45 +0800
+Message-Id: <20220313165047.77391-1-simon.wy@alibaba-inc.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/mchehab/media-next.git master
-head:   9d8c4cc1be6c37e66662141f1a3ebc8b54cb8dae
-commit: 63533d0167e608fde8c40a7579e6ac22b1ffdfbc [314/316] media: platform: Create vendor/{Makefile,Kconfig} files
-config: arc-randconfig-r043-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140022.R4erbrkI-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add mchehab-media-next git://linuxtv.org/mchehab/media-next.git
-        git fetch --no-tags mchehab-media-next master
-        git checkout 63533d0167e608fde8c40a7579e6ac22b1ffdfbc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+Following two patterns in x86 perf code are used in multiple places where
+similar code is duplicated:
+- fast path, try to reuse previous register
+- slow path, assign a counter for each event
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+In order to improve code quality and prepare for following patch series
+that also uses described patterns, extract the codes to perf_assign_events.
 
-All errors (new ones prefixed by >>):
+This commit doesn't change functionality.
 
->> scripts/Makefile.build:44: drivers/media/platform/nvidia/Makefile: No such file or directory
->> make[5]: *** No rule to make target 'drivers/media/platform/nvidia/Makefile'.
-   make[5]: Failed to remake makefile 'drivers/media/platform/nvidia/Makefile'.
-
-
-vim +44 scripts/Makefile.build
-
-20a468b51325b3 Sam Ravnborg   2006-01-22  40  
-2a691470345a00 Sam Ravnborg   2005-07-25  41  # The filename Kbuild has precedence over Makefile
-db8c1a7b2ca25f Sam Ravnborg   2005-07-27  42  kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
-0c53c8e6eb456c Sam Ravnborg   2007-10-14  43  kbuild-file := $(if $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Kbuild,$(kbuild-dir)/Makefile)
-0c53c8e6eb456c Sam Ravnborg   2007-10-14 @44  include $(kbuild-file)
-^1da177e4c3f41 Linus Torvalds 2005-04-16  45  
-
-:::::: The code at line 44 was first introduced by commit
-:::::: 0c53c8e6eb456cde30f2305421c605713856abc8 kbuild: check for wrong use of CFLAGS
-
-:::::: TO: Sam Ravnborg <sam@neptun.(none)>
-:::::: CC: Sam Ravnborg <sam@neptun.(none)>
-
+Signed-off-by: Wen Yang <simon.wy@alibaba-inc.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: Wen Yang <wenyang@linux.alibaba.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/x86/events/core.c         | 141 ++++++++++++++++++++++-------------------
+ arch/x86/events/intel/uncore.c |  31 +--------
+ arch/x86/events/perf_event.h   |   6 +-
+ 3 files changed, 82 insertions(+), 96 deletions(-)
+
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index e686c5e..b14fb1b 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -950,10 +950,7 @@ static bool perf_sched_next_event(struct perf_sched *sched)
+ 	return true;
+ }
+ 
+-/*
+- * Assign a counter for each event.
+- */
+-int perf_assign_events(struct event_constraint **constraints, int n,
++static int __perf_assign_events(struct event_constraint **constraints, int n,
+ 			int wmin, int wmax, int gpmax, int *assign)
+ {
+ 	struct perf_sched sched;
+@@ -969,16 +966,66 @@ int perf_assign_events(struct event_constraint **constraints, int n,
+ 
+ 	return sched.state.unassigned;
+ }
++
++/*
++ * Assign a counter for each event.
++ */
++int perf_assign_events(struct perf_event **event_list,
++		struct event_constraint **constraints, int n,
++		int wmin, int wmax, int gpmax, int *assign)
++{
++	struct event_constraint *c;
++	struct hw_perf_event *hwc;
++	u64 used_mask = 0;
++	int unsched = 0;
++	int i;
++
++	/*
++	 * fastpath, try to reuse previous register
++	 */
++	for (i = 0; i < n; i++) {
++		u64 mask;
++
++		hwc = &event_list[i]->hw;
++		c = constraints[i];
++
++		/* never assigned */
++		if (hwc->idx == -1)
++			break;
++
++		/* constraint still honored */
++		if (!test_bit(hwc->idx, c->idxmsk))
++			break;
++
++		mask = BIT_ULL(hwc->idx);
++		if (is_counter_pair(hwc))
++			mask |= mask << 1;
++
++		/* not already used */
++		if (used_mask & mask)
++			break;
++
++		used_mask |= mask;
++
++		if (assign)
++			assign[i] = hwc->idx;
++	}
++
++	/* slow path */
++	if (i != n)
++		unsched = __perf_assign_events(constraints, n,
++				wmin, wmax, gpmax, assign);
++
++	return unsched;
++}
+ EXPORT_SYMBOL_GPL(perf_assign_events);
+ 
+ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ {
+ 	int num_counters = hybrid(cpuc->pmu, num_counters);
+-	struct event_constraint *c;
+-	struct perf_event *e;
+ 	int n0, i, wmin, wmax, unsched = 0;
+-	struct hw_perf_event *hwc;
+-	u64 used_mask = 0;
++	struct event_constraint *c;
++	int gpmax = num_counters;
+ 
+ 	/*
+ 	 * Compute the number of events already present; see x86_pmu_add(),
+@@ -1017,66 +1064,30 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 	}
+ 
+ 	/*
+-	 * fastpath, try to reuse previous register
++	 * Do not allow scheduling of more than half the available
++	 * generic counters.
++	 *
++	 * This helps avoid counter starvation of sibling thread by
++	 * ensuring at most half the counters cannot be in exclusive
++	 * mode. There is no designated counters for the limits. Any
++	 * N/2 counters can be used. This helps with events with
++	 * specific counter constraints.
+ 	 */
+-	for (i = 0; i < n; i++) {
+-		u64 mask;
+-
+-		hwc = &cpuc->event_list[i]->hw;
+-		c = cpuc->event_constraint[i];
+-
+-		/* never assigned */
+-		if (hwc->idx == -1)
+-			break;
+-
+-		/* constraint still honored */
+-		if (!test_bit(hwc->idx, c->idxmsk))
+-			break;
+-
+-		mask = BIT_ULL(hwc->idx);
+-		if (is_counter_pair(hwc))
+-			mask |= mask << 1;
+-
+-		/* not already used */
+-		if (used_mask & mask)
+-			break;
++	if (is_ht_workaround_enabled() && !cpuc->is_fake &&
++			READ_ONCE(cpuc->excl_cntrs->exclusive_present))
++		gpmax /= 2;
+ 
+-		used_mask |= mask;
+-
+-		if (assign)
+-			assign[i] = hwc->idx;
++	/*
++	 * Reduce the amount of available counters to allow fitting
++	 * the extra Merge events needed by large increment events.
++	 */
++	if (x86_pmu.flags & PMU_FL_PAIR) {
++		gpmax = num_counters - cpuc->n_pair;
++		WARN_ON(gpmax <= 0);
+ 	}
+ 
+-	/* slow path */
+-	if (i != n) {
+-		int gpmax = num_counters;
+-
+-		/*
+-		 * Do not allow scheduling of more than half the available
+-		 * generic counters.
+-		 *
+-		 * This helps avoid counter starvation of sibling thread by
+-		 * ensuring at most half the counters cannot be in exclusive
+-		 * mode. There is no designated counters for the limits. Any
+-		 * N/2 counters can be used. This helps with events with
+-		 * specific counter constraints.
+-		 */
+-		if (is_ht_workaround_enabled() && !cpuc->is_fake &&
+-		    READ_ONCE(cpuc->excl_cntrs->exclusive_present))
+-			gpmax /= 2;
+-
+-		/*
+-		 * Reduce the amount of available counters to allow fitting
+-		 * the extra Merge events needed by large increment events.
+-		 */
+-		if (x86_pmu.flags & PMU_FL_PAIR) {
+-			gpmax = num_counters - cpuc->n_pair;
+-			WARN_ON(gpmax <= 0);
+-		}
+-
+-		unsched = perf_assign_events(cpuc->event_constraint, n, wmin,
+-					     wmax, gpmax, assign);
+-	}
++	unsched = perf_assign_events(cpuc->event_list, cpuc->event_constraint,
++			n, wmin, wmax, gpmax, assign);
+ 
+ 	/*
+ 	 * In case of success (unsched = 0), mark events as committed,
+@@ -1093,7 +1104,7 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 			static_call_cond(x86_pmu_commit_scheduling)(cpuc, i, assign[i]);
+ 	} else {
+ 		for (i = n0; i < n; i++) {
+-			e = cpuc->event_list[i];
++			struct perf_event *e = cpuc->event_list[i];
+ 
+ 			/*
+ 			 * release events that failed scheduling
+diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
+index e497da9..101358a 100644
+--- a/arch/x86/events/intel/uncore.c
++++ b/arch/x86/events/intel/uncore.c
+@@ -442,12 +442,8 @@ static void uncore_put_event_constraint(struct intel_uncore_box *box,
+ 
+ static int uncore_assign_events(struct intel_uncore_box *box, int assign[], int n)
+ {
+-	unsigned long used_mask[BITS_TO_LONGS(UNCORE_PMC_IDX_MAX)];
+ 	struct event_constraint *c;
+ 	int i, wmin, wmax, ret = 0;
+-	struct hw_perf_event *hwc;
+-
+-	bitmap_zero(used_mask, UNCORE_PMC_IDX_MAX);
+ 
+ 	for (i = 0, wmin = UNCORE_PMC_IDX_MAX, wmax = 0; i < n; i++) {
+ 		c = uncore_get_event_constraint(box, box->event_list[i]);
+@@ -456,31 +452,8 @@ static int uncore_assign_events(struct intel_uncore_box *box, int assign[], int
+ 		wmax = max(wmax, c->weight);
+ 	}
+ 
+-	/* fastpath, try to reuse previous register */
+-	for (i = 0; i < n; i++) {
+-		hwc = &box->event_list[i]->hw;
+-		c = box->event_constraint[i];
+-
+-		/* never assigned */
+-		if (hwc->idx == -1)
+-			break;
+-
+-		/* constraint still honored */
+-		if (!test_bit(hwc->idx, c->idxmsk))
+-			break;
+-
+-		/* not already used */
+-		if (test_bit(hwc->idx, used_mask))
+-			break;
+-
+-		__set_bit(hwc->idx, used_mask);
+-		if (assign)
+-			assign[i] = hwc->idx;
+-	}
+-	/* slow path */
+-	if (i != n)
+-		ret = perf_assign_events(box->event_constraint, n,
+-					 wmin, wmax, n, assign);
++	ret = perf_assign_events(box->event_list,
++			box->event_constraint, n, wmin, wmax, n, assign);
+ 
+ 	if (!assign || ret) {
+ 		for (i = 0; i < n; i++)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 150261d..f1acd1d 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1130,8 +1130,10 @@ static inline void __x86_pmu_enable_event(struct hw_perf_event *hwc,
+ 
+ void x86_pmu_enable_all(int added);
+ 
+-int perf_assign_events(struct event_constraint **constraints, int n,
+-			int wmin, int wmax, int gpmax, int *assign);
++int perf_assign_events(struct perf_event **event_list,
++		struct event_constraint **constraints, int n,
++		int wmin, int wmax, int gpmax, int *assign);
++
+ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign);
+ 
+ void x86_pmu_stop(struct perf_event *event, int flags);
+-- 
+1.8.3.1
+

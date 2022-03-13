@@ -2,102 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA60D4D786E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 22:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5FB4D7872
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 22:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbiCMV3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 17:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S235605AbiCMVaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 17:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiCMV3J (ORCPT
+        with ESMTP id S234482AbiCMVay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 17:29:09 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AEE255AB
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 14:28:00 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2e2ca8d7812so82370347b3.13
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 14:28:00 -0700 (PDT)
+        Sun, 13 Mar 2022 17:30:54 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6277A5D661
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 14:29:45 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id k125so5951998qkf.0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 14:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kMbbSXeuuVuuTs669VGVPiqKk5sYijV81mJywT7+SYQ=;
-        b=qCIbgh1hhic7psMQ3Brv/zUqNUeuV4Vb5RbHdc6HNtSu7mDzBpSBHda9392NK1yI8R
-         1V6O2zn60vAUJZZ1PiOOuaHQFAyTk7Z/Fi2j1Bf1oHg4C0FNLynb9lLlU+sn4s8p+aux
-         /NHkUnMT6WeM3vZ/VnbpisxKt+pbTNzOglmGIB/4EgjgsplEd164ilsqFKiTDmuRB2Fd
-         bh8l25F/Wa6+ksklovFsdkSyXHP++kBDlDbXj4Cykrj6+kG6v/0rjNfcSre8soz5AtTV
-         2XWbXooYGZlKg2ktB7NkT7GzQuV3ycZckvAdNoFeN6AbE54OFT2bVkxRffVvsaC4ujX4
-         S0Zw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aqwRVou3ZEqbHgCp0ui7E/IKLtOENN+H8FN5ocvbXL8=;
+        b=Z+YpcfL47Bh2vNnmxsytQB2Td2LUfIQjzltJ8tuAdRbJ/IuUlCOTg1Bhbv3/4TmR++
+         hiL71NlQpCDX6vhMyvdGEMKat7fd9ky+2q4Ch8jHx1u+aH+FumJIGeCk5ONTqsFufYp3
+         uDAKxtd+DJZ1YLc7znBXpdbFkKGvlDFeDFt8F2upNOOXVeM05voLfqpQhBOO+2xvncee
+         TMzDb+MMkAQITroUh/VTblfayNO5e0jHf8kB1A13aA3sXBbP13NiSoJAGaSQuaotXwbA
+         FgWDGg20dRoyGq1yd0vJeAhUGFSeVnO2SbxOPVtdv64GIqyscbKY3cZrVqJKXS7zNxRp
+         bc9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kMbbSXeuuVuuTs669VGVPiqKk5sYijV81mJywT7+SYQ=;
-        b=Q9Z/DfmyGak8VyTHuXBhectWnELDq/cs9uq3RBRMfZZTr7aFaF4GKkjCbZGr5vkHHJ
-         fQCN2i6myJXPs/u0Cp3rI+huKuyYEiQjNvshisLS2QaQoFFcTpMHoNS/1CLhheRTv8gf
-         RRoduwqCjRNSQPTLy4lnlprj/NOuub8iWbMZpY3aiaGF7CR6RiPT02B0+n0di4UC0bLZ
-         2c+Tcm/3qCvq6I4PKjSEarwCmhzAPsskBDMozb4cUCzM/iI6yBA74gYBApZXDP7G3YFj
-         f6pezEuV8XjS+8n2O1Lfgg5opyPA8wbWcHkQmBu90fNYPNI0RVTmHMFLjQxSm/KemH5o
-         dGYA==
-X-Gm-Message-State: AOAM532g00j72Zh7YPwB2P3zgY+q1jUk9RIa3NP4MdVNkrZyfOLYsZVQ
-        AgV6rE6XkbsgAgj+mz9G+h0yDBshmVf/zYDJzHfQjw==
-X-Google-Smtp-Source: ABdhPJyoVATrmtdXU5YGPBbpEoF/1Z+Jdn9w9QfpXBMvz/HzxT+n1v2FIcXvgWnKr5Akom1tswDuq1uSVuuVFO99ZFs=
-X-Received: by 2002:a81:846:0:b0:2db:f920:5c62 with SMTP id
- 67-20020a810846000000b002dbf9205c62mr16607788ywi.489.1647206879050; Sun, 13
- Mar 2022 14:27:59 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aqwRVou3ZEqbHgCp0ui7E/IKLtOENN+H8FN5ocvbXL8=;
+        b=zUO77EVqYxrXN1c/pyVkuUoOKEFYSP+asvcqLVefhzN1RJbrfKI66Le60m2HvCPS/V
+         25K5oeF3bmbg2KamfMXjuUEorj6QpjqrL5hhx2bs+K9fZiCtUez3Y8BOwvnpic5fNpqf
+         BhsrZr2SavHXH4OSSpXHom+nfwJTPxVuMeBWosRoG4WR/P2e6SyuthRmsx2DipZSBE4d
+         1BlrldUn1aS5UiVWO4tz26ekYjBLCBXHZ30BtHcrgtyY5RIfBx652I92ccpGn8bQUqMX
+         A2hH0ymZL8tRho8C+hJSc1H6KG6trvOijL3tqcEJigXCQEvTneceXMujX/f3M6Z1JVHa
+         GV1Q==
+X-Gm-Message-State: AOAM530WwCD1GKkGEtMZUeX/hJm5uYENCIoOjZZYajFIFH10icpfm+H5
+        rHaS91BiG267d/5E+i+YMNWPW6FEQ7uRxcet9dsPHJzJUhc213U3
+X-Google-Smtp-Source: ABdhPJz+FUxoWBFgHLfleQugSvPSwkttfaq5mRMSDT167fhqujfvlMcTf4pCalIxX08WsW1CejxrLVnX4Ue0yGFHZls=
+X-Received: by 2002:a05:620a:1181:b0:60d:f3ab:595f with SMTP id
+ b1-20020a05620a118100b0060df3ab595fmr12723091qkk.275.1647206984550; Sun, 13
+ Mar 2022 14:29:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220312154321.GC1189@xsang-OptiPlex-9020> <15307f8a-c202-75d8-1361-dae0146df734@suse.cz>
- <CANn89i+fM0k+=Qw0M0fso1f-Ya8--5+==gtcWqCpo=Gu-ca1Ow@mail.gmail.com>
- <8f499c76-68cb-a2c3-01fd-c8759e2fd317@suse.cz> <CANn89iJwBe4+C8KP--c_9O6QE_Tou+1Z0+ugtuniG-06nzxPmg@mail.gmail.com>
- <Yi5ftFbykAZLLCwf@casper.infradead.org>
-In-Reply-To: <Yi5ftFbykAZLLCwf@casper.infradead.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sun, 13 Mar 2022 14:27:48 -0700
-Message-ID: <CANn89iL9u-dWpgNF7YGrQ4RQ5M_BwmS8Hqq3DPeWJunKRbu-PA@mail.gmail.com>
-Subject: Re: [mm/page_alloc] 8212a964ee: vm-scalability.throughput 30.5% improvement
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        kernel test robot <oliver.sang@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        0day robot <lkp@intel.com>, Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Eric Dumazet <eric.dumazet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>
+Received: by 2002:a05:620a:d96:0:0:0:0 with HTTP; Sun, 13 Mar 2022 14:29:44
+ -0700 (PDT)
+Reply-To: susanneklatten210@gmail.com
+From:   Susanne Klatten <aminuinuwaauwalu@gmail.com>
+Date:   Mon, 14 Mar 2022 00:29:44 +0300
+Message-ID: <CAPGf0ucetLyFHSaF-fQf-=UwmGMcKOjbv2XWU_O8AcL4Fq2VGA@mail.gmail.com>
+Subject: Darlehensangebot
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM_LOOSE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:729 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5203]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [susanneklatten210[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aminuinuwaauwalu[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  1.0 REPTO_419_FRAUD_GM_LOOSE Ends-in-digits Reply-To is similar to
+        *      known advance fee fraud collector mailbox
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 2:18 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Sun, Mar 13, 2022 at 02:10:12PM -0700, Eric Dumazet wrote:
-> > @@ -3065,6 +3062,12 @@ static int rmqueue_bulk(struct zone *zone,
-> > unsigned int order,
-> >          */
-> >         __mod_zone_page_state(zone, NR_FREE_PAGES, -(i << order));
-> >         spin_unlock(&zone->lock);
-> > +       list_for_each_entry_safe(page, tmp, list, lru) {
-> > +               if (unlikely(check_pcp_refill(page))) {
-> > +                       list_del(&page->lru);
-> > +                       allocated--;
-> > +               }
-> > +       }
->
-> ... you'd need to adjust __mod_zone_page_state() too, right?
+--=20
+Hallo
 
-Probably !
-This was only to show the basic idea, as I said, not even compiled or tested :)
+Ich bin Susanne Klatten und komme aus Deutschland, ich kann Ihre
+finanziellen Probleme ohne R=C3=BCckgriff auf Banken im Bereich Kreditgeld
+in den Griff bekommen. Wir bieten Privatkredite und Gesch=C3=A4ftskredite
+an, ich bin ein zugelassener und zertifizierter Kreditgeber mit
+jahrelanger Erfahrung in der Kreditvergabe und wir vergeben besicherte
+und nicht besicherte Kreditbetr=C3=A4ge von 10.000,00 =E2=82=AC ($) bis max=
+imal
+500.000.000,00 =E2=82=AC mit einem festen Zinssatz von 3 % j=C3=A4hrlich. B=
+en=C3=B6tigen
+Sie einen Kredit? Senden Sie uns eine E-Mail an:
+susanneklatten210@gmail.com
+
+Sie k=C3=B6nnen auch meinen Link anzeigen und mehr =C3=BCber mich erfahren.
+
+https://en.wikipedia.org/wiki/Susanne_Klatten
+https://www.forbes.com/profile/susanne-klatten
+
+E-Mail: susanneklatten210@gmail.com
+Unterschrift,
+Vorstandsvorsitzender
+Susanne Klatten.

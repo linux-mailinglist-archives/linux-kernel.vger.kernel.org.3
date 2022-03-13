@@ -2,235 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB06B4D74D6
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 12:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5504D74C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 12:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbiCMLBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 07:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S234666AbiCMLB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 07:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbiCMLAy (ORCPT
+        with ESMTP id S234654AbiCMLBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 07:00:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF514D4464
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 03:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647169186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ydYQlcdWBx6DLdxNSVJhNFn+Jsx+dRyjUHL0Hzpc8Nw=;
-        b=eyLAnLKbuMQ4bBZgu5baLD8Y8leGQernS7+jXkUEc4eGSxvMzQtpBCFrySgyc56oHC1oWT
-        LiMzk+G6cP8IIOlff33UtQW1ltEoJQbZdGGePnHlMSzRxzHcxE8ynho8NCKx4BPv208o72
-        TwAgLdhyp90IHDdyYMNcUgjCbooor6s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-chUAXzk1Of6tQPciTabVYA-1; Sun, 13 Mar 2022 06:59:43 -0400
-X-MC-Unique: chUAXzk1Of6tQPciTabVYA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sun, 13 Mar 2022 07:01:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD3ED4464;
+        Sun, 13 Mar 2022 04:00:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED22B3C00102;
-        Sun, 13 Mar 2022 10:59:42 +0000 (UTC)
-Received: from starship (unknown [10.40.192.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A0E0540D2820;
-        Sun, 13 Mar 2022 10:59:37 +0000 (UTC)
-Message-ID: <2900660d947a878e583ebedf60e7332e74a1af5f.camel@redhat.com>
-Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
- unconditionally
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Zeng Guang <guang.zeng@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     "Gao, Chao" <chao.gao@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Date:   Sun, 13 Mar 2022 12:59:36 +0200
-In-Reply-To: <01586c518de0c72ff3997d32654b8fa6e7df257d.camel@redhat.com>
-References: <20220225082223.18288-1-guang.zeng@intel.com>
-         <20220225082223.18288-7-guang.zeng@intel.com> <Yifg4bea6zYEz1BK@google.com>
-         <20220309052013.GA2915@gao-cwp> <YihCtvDps/qJ2TOW@google.com>
-         <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
-         <YirPkr5efyylrD0x@google.com>
-         <29c76393-4884-94a8-f224-08d313b73f71@intel.com>
-         <01586c518de0c72ff3997d32654b8fa6e7df257d.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id C328CB80CA9;
+        Sun, 13 Mar 2022 11:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9060C340EC;
+        Sun, 13 Mar 2022 11:00:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647169213;
+        bh=K6raQ3hcVYXvtlWvYXOLgzshf6ywpYtouqfgtS4XSgI=;
+        h=Date:From:Cc:Subject:In-Reply-To:References:From;
+        b=f6FajvJWGzBUEAJpip4FTCW+ziT2N4Fes+bwxhm6P4X7wHhwUaOMcP7i6caQXwqAV
+         SWFJaTRBzr7UeVqgZ+iQvK2L3/es8ZmF5h5H5xaq7iNbSQ7hOWUmfOoqgkr4yH0Kyi
+         NtI8zelQGEh4QkIsNyt+pRe1NmA2S5GeVN6NyJtGOiToEcx9OvPpDe6BbFPYjsJ0TW
+         Q2BxYhRUItV5G1A7lThY+qbpnEFFMkYGlshPOVw01Xmd9feBk2BRWRn4e0xWiwwXF3
+         /6jc7G1QK35edetsIKmeke+nHWz8o2iqh3gG38fXqgG+tLtV3iKAFRUZpClo/8XJVp
+         Lk/RW6spFk5+g==
+Date:   Sun, 13 Mar 2022 12:00:02 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Mikhail Ulyanov <mikhail.ulyanov@cogentembedded.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 00/24] Organize media platform drivers per manufacturer
+Message-ID: <20220313120002.0d782ce7@coco.lan>
+In-Reply-To: <cover.1647167750.git.mchehab@kernel.org>
+References: <cover.1647167750.git.mchehab@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-03-13 at 11:19 +0200, Maxim Levitsky wrote:
-> On Fri, 2022-03-11 at 21:28 +0800, Zeng Guang wrote:
-> > On 3/11/2022 12:26 PM, Sean Christopherson wrote:
-> > > On Wed, Mar 09, 2022, Maxim Levitsky wrote:
-> > > > On Wed, 2022-03-09 at 06:01 +0000, Sean Christopherson wrote:
-> > > > > > Could you share the links?
-> > > > > 
-> > > > > Doh, sorry (they're both in this one).
-> > > > > 
-> > > > > https://lore.kernel.org/all/20220301135526.136554-5-mlevitsk@redhat.com
-> > > > > 
-> > > > > 
-> > > > 
-> > > > My opinion on this subject is very simple: we need to draw the line somewhere.
-> > > 
-> > > ...
-> > > 
-> > > 
-> > > Since the goal is to simplify KVM, can we try the inhibit route and see what the
-> > > code looks like before making a decision?  I think it might actually yield a less
-> > > awful KVM than the readonly approach, especially if the inhibit is "sticky", i.e.
-> > > we don't try to remove the inhibit on subsequent changes.
-> > > 
-> > > Killing the VM, as proposed, is very user unfriendly as the user will have no idea
-> > > why the VM was killed.  WARN is out of the question because this is user triggerable.
-> > > Returning an emulation error would be ideal, but getting that result up through
-> > > apic_mmio_write() could be annoying and end up being more complex.
-> > > 
-> > > The touchpoints will all be the same, unless I'm missing something the difference
-> > > should only be a call to set an inhibit instead killing the VM.
-> > 
-> > Introduce an inhibition - APICV_INHIBIT_REASON_APICID_CHG to deactivate
-> > APICv once KVM guest would try to change APIC ID in xapic mode, and same
-> > sanity check in KVM_{SET,GET}_LAPIC for live migration. KVM will keep
-> > alive but obviously lose benefit from hardware acceleration in this way.
-> > 
-> > So how do you think the proposal like this ?
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 6dcccb304775..30d825c069be 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1046,6 +1046,7 @@ struct kvm_x86_msr_filter {
-> >  #define APICV_INHIBIT_REASON_X2APIC    5
-> >  #define APICV_INHIBIT_REASON_BLOCKIRQ  6
-> >  #define APICV_INHIBIT_REASON_ABSENT    7
-> > +#define APICV_INHIBIT_REASON_APICID_CHG 8
-> > 
-> >  struct kvm_arch {
-> >         unsigned long n_used_mmu_pages;
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index 22929b5b3f9b..66cd54fa4515 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -2044,10 +2044,19 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
-> > 
-> >         switch (reg) {
-> >         case APIC_ID:           /* Local APIC ID */
-> > -               if (!apic_x2apic_mode(apic))
-> > -                       kvm_apic_set_xapic_id(apic, val >> 24);
-> > -               else
-> > +               if (apic_x2apic_mode(apic)) {
-> >                         ret = 1;
-> > +                       break;
-> > +               }
-> > +               /*
-> > +                * If changing APIC ID with any APIC acceleration enabled,
-> > +                * deactivate APICv to avoid unexpected issues.
-> > +                */
-> > +               if (enable_apicv && (val >> 24) != apic->vcpu->vcpu_id)
-> > +                       kvm_request_apicv_update(apic->vcpu->kvm,
-> > +                               false, APICV_INHIBIT_REASON_APICID_CHG);
-> > +
-> > +               kvm_apic_set_xapic_id(apic, val >> 24);
-> >                 break;
-> > 
-> >         case APIC_TASKPRI:
-> > @@ -2628,11 +2637,19 @@ int kvm_get_apic_interrupt(struct kvm_vcpu *vcpu)
-> >  static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
-> >                 struct kvm_lapic_state *s, bool set)
-> >  {
-> > -       if (apic_x2apic_mode(vcpu->arch.apic)) {
-> > -               u32 *id = (u32 *)(s->regs + APIC_ID);
-> > -               u32 *ldr = (u32 *)(s->regs + APIC_LDR);
-> > -               u64 icr;
-> > +       u32 *id = (u32 *)(s->regs + APIC_ID);
-> > +       u32 *ldr = (u32 *)(s->regs + APIC_LDR);
-> > +       u64 icr;
-> > +       if (!apic_x2apic_mode(vcpu->arch.apic)) {
-> > +               /*
-> > +                * If APIC ID changed with any APIC acceleration enabled,
-> > +                * deactivate APICv to avoid unexpected issues.
-> > +                */
-> > +               if (enable_apicv && (*id >> 24) != vcpu->vcpu_id)
-> > +                       kvm_request_apicv_update(vcpu->kvm,
-> > +                               false, APICV_INHIBIT_REASON_APICID_CHG);
-> > +       } else {
-> >                 if (vcpu->kvm->arch.x2apic_format) {
-> >                         if (*id != vcpu->vcpu_id)
-> >                                 return -EINVAL;
-> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > index 82d56f8055de..f78754bdc1d0 100644
-> > --- a/arch/x86/kvm/svm/avic.c
-> > +++ b/arch/x86/kvm/svm/avic.c
-> > @@ -931,7 +931,8 @@ bool svm_check_apicv_inhibit_reasons(ulong bit)
-> >                           BIT(APICV_INHIBIT_REASON_IRQWIN) |
-> >                           BIT(APICV_INHIBIT_REASON_PIT_REINJ) |
-> >                           BIT(APICV_INHIBIT_REASON_X2APIC) |
-> > -                         BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
-> > +                         BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
-> > +                         BIT(APICV_INHIBIT_REASON_APICID_CHG);
-> > 
-> >         return supported & BIT(bit);
-> >  }
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index 7beba7a9f247..91265f0784bd 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -7751,7 +7751,8 @@ static bool vmx_check_apicv_inhibit_reasons(ulong bit)
-> >         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
-> >                           BIT(APICV_INHIBIT_REASON_ABSENT) |
-> >                           BIT(APICV_INHIBIT_REASON_HYPERV) |
-> > -                         BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
-> > +                         BIT(APICV_INHIBIT_REASON_BLOCKIRQ) |
-> > +                         BIT(APICV_INHIBIT_REASON_APICID_CHG);
-> > 
-> >         return supported & BIT(bit);
-> >  }
-> > 
-> > 
-> > 
+Em Sun, 13 Mar 2022 11:51:41 +0100
+Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
+
+> This series comes after the one I sent earlier today sorting media/platform Makefile and Kconfig.
 > 
-> This won't work with nested AVIC - we can't just inhibit a nested guest using its own AVIC,
-> because migration happens.
-
-I mean because host decided to change its apic id, which it can in theory do any time,
-even after the nested guest has started. Seriously, the only reason guest has to change apic id,
-is to try to exploit some security hole.
- 
-Best regards,
-	Maxim Levitsky
-
+> It basically groups all drivers per vendor, ensuring that each vendor has a Makefile/Kconfig
+> pair.
 > 
-> Best regards,
-> 	Maxim Levitsky
+> The end goal is to keep the platform Makefile/Kconfig clean and easier to maintain, less
+> prune to errors. After applying both series, the size of such files were drastically reduced:
+> 
+> 	 drivers/media/platform/Kconfig  |  731 ++------------------------------
+> 	 drivers/media/platform/Makefile |  115 +----
+> 	 2 files changed, 78 insertions(+), 768 deletions(-)
+> 
+> Mauro Carvalho Chehab (24):
+>   media: platform: rename coda/ to chips-media/
+>   media: platform: rename marvell-ccic/ to marvell/
+>   media: platform: rename meson/ge2d/ to amlogic/meson-ge2d/
+>   media: platform: rename mtk-jpeg/ to mediatek/mtk-jpeg/
+>   media: platform: rename mtk-mdp/ to mediatek/mtk-mdp/
+>   media: platform: rename mtk-vcodec/ to mediatek/mtk-vcodec/
+>   media: platform: rename mtk-vpu/ to mediatek/mtk-vpu/
+>   media: platform: rename sunxi/ to allwinner/
+>   media: platform: rename tegra/vde/ to nvidia/tegra-vde/
+>   media: platform: rename amphion/ to nxp/amphion/
+>   media: platform: rename exynos4-is/ to samsung/exynos4-is/
+>   media: platform: rename exynos-gsc/ to samsung/exynos-gsc/
+>   media: platform: rename s3c-camif/ to samsung/s3c-camif/
+>   media: platform: rename s5p-g2d/ to samsung/s5p-g2d/
+>   media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+>   media: platform: rename s5p-mfc/ to samsung/s5p-mfc/
+>   media: platform: rename stm32/ to sti/stm32/
+>   media: platform: rename am437x/ to ti/am437x/
+>   media: platform: rename davinci/ to ti/davinci/
+>   media: platform: rename omap3isp/ to ti/omap3isp/
+>   media: platform: rename omap/ to ti/omap/
+>   media: platform: rename ti-vpe/ to ti/vpe/
+>   media: platform: Create vendor/{Makefile,Kconfig} files
 
+Worth mention that, while the above changes are really trivial, it is
+no fun to do them individually. It is also subject to errors.
 
+So, after manually doing a couple of them, I decided to revert
+to the original state and do it via the script below, checking
+the patches and editing the last one.
+
+Thanks,
+Mauro
+
+---
+
+#!/bin/bash -e
+
+export LC_ALL=C # Needed by sort
+
+TMP=$(mktemp /tmp/rename.XXXXXXXXX)
+
+trap 'catch $LINENO' ERR SIGINT
+catch()
+{
+	echo "Error on line $1"
+	rm $TMP || true
+	exit 1
+}
+
+sort_makefile()
+{
+	# sort Makefile
+	sed '/^obj-y/Q' drivers/media/platform/Makefile> $TMP
+	grep "^obj-y" drivers/media/platform/Makefile |sort | uniq >> $TMP
+	cat <<EOF >> $TMP
+
+# Please place here only ancillary drivers that aren't SoC-specific
+# Please keep it alphabetically sorted by Kconfig name
+# (e. g. LC_ALL=C sort Makefile)
+obj-\$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
+obj-\$(CONFIG_VIDEO_MUX)			+= video-mux.o
+EOF
+	mv $TMP drivers/media/platform/Makefile
+}
+
+sort_kconfig()
+{
+	# sort Kconfig
+	sed '/^source/Q' drivers/media/platform/Kconfig> $TMP
+	grep "^source" drivers/media/platform/Kconfig |sort | uniq >> $TMP
+	cat <<EOF >> $TMP
+
+endif # MEDIA_PLATFORM_DRIVERS
+EOF
+
+	mv $TMP drivers/media/platform/Kconfig
+}
+
+do_rename_vendor()
+{
+	old=$(echo $1 |perl -ne 's,/$,,; print $_')
+	new=$(echo $2 |perl -ne 's,/$,,; print $_')
+
+	echo "$old -> $new"
+
+	mkdir -p dirname drivers/media/platform/$new
+
+	git mv drivers/media/platform/$old/* drivers/media/platform/$new/
+
+	sed s,$old/,$new/, -i $(find drivers/media/platform/ -name Kconfig) $(find drivers/media/platform/ -name Makefile)
+	sed s,drivers/media/platform/$old,drivers/media/platform/$new, -i $(git grep -l drivers/media/platform/$old) || true
+
+	# Remove obj files, to make the directory cleaner
+	rm -rf drivers/media/platform/$old/ || true
+
+	sort_makefile
+	sort_kconfig
+
+	cat <<EOF >> $TMP
+media: platform: rename $old/ to $new/
+
+As the end goal is to have platform drivers split by vendor,
+rename $old/ to $new/.
+EOF
+
+	git commit -as -m "$(cat $TMP)" --no-edit
+}
+
+do_rename_vendor coda chips-media
+do_rename_vendor marvell-ccic/ marvell/
+do_rename_vendor meson/ge2d/ amlogic/meson-ge2d/
+do_rename_vendor mtk-jpeg mediatek/mtk-jpeg
+do_rename_vendor mtk-mdp mediatek/mtk-mdp
+do_rename_vendor mtk-vcodec mediatek/mtk-vcodec
+do_rename_vendor mtk-vpu mediatek/mtk-vpu
+do_rename_vendor sunxi/ allwinner/
+do_rename_vendor tegra/vde nvidia/tegra-vde
+do_rename_vendor amphion nxp/amphion
+do_rename_vendor exynos4-is/ samsung/exynos4-is/
+do_rename_vendor exynos-gsc samsung/exynos-gsc
+do_rename_vendor s3c-camif samsung/s3c-camif
+do_rename_vendor s5p-g2d samsung/s5p-g2d
+do_rename_vendor s5p-jpeg samsung/s5p-jpeg
+do_rename_vendor s5p-mfc samsung/s5p-mfc
+do_rename_vendor stm32 sti/stm32
+do_rename_vendor am437x/ ti/am437x/
+do_rename_vendor davinci ti/davinci
+do_rename_vendor omap3isp ti/omap3isp
+do_rename_vendor omap ti/omap
+do_rename_vendor ti-vpe ti/vpe
+
+# Create or update drivers/media/platform/*/Kconfig
+
+IFS=$'\n'
+
+# Fixup Kconfig files
+for i in $(cat drivers/media/platform/Kconfig|perl -ne 'if (m,platform/([^/]+)/([^/]+)/Kconfig,) { print "$1 $2\n" }'); do
+        echo "Handling $i Kconfig entries"
+
+        a=$(echo $i|cut -d' ' -f1)
+        b=$(echo $i|cut -d' ' -f2)
+
+	kconfig="drivers/media/platform/$a/$b/Kconfig"
+	parent="drivers/media/platform/$a/Kconfig"
+
+        if [ ! -e $parent ]; then
+                echo "creating $parent..."
+                echo "# SPDX-License-Identifier: GPL-2.0" > $parent
+		git add $parent
+        fi
+
+        echo "source \"$kconfig\"" >> drivers/media/platform/$a/Kconfig
+        echo "source \"$parent\"" >> drivers/media/platform/Kconfig
+
+        sed s,$kconfig,$parent, -i drivers/media/platform/Kconfig
+
+        echo "sorting..."
+	sort_kconfig
+done
+
+# Create or update drivers/media/platform/*/Makefile
+
+for i in $(cat drivers/media/platform/Makefile|perl -ne 'if (m,.*=\s*([^/]+)/([^/]+)/,) { print "$1 $2\n" }'); do
+        echo "Handling $i Makefile entries"
+
+        a=$(echo $i|cut -d' ' -f1)
+        b=$(echo $i|cut -d' ' -f2)
+
+        make="$a/$b/"
+        parent="$a/"
+
+        if [ ! -e drivers/media/platform/$a/Makefile ]; then
+                echo "creating $parent..."
+                echo "# SPDX-License-Identifier: GPL-2.0" > drivers/media/platform/$a/Makefile
+                git add drivers/media/platform/$a/Makefile
+        fi
+        echo "obj-y += $b/" >> drivers/media/platform/$a/Makefile
+        echo "obj-y += $parent" >> drivers/media/platform/Makefile
+
+        sed s,$make\$,$parent, -i drivers/media/platform/Makefile
+done
+
+sort_kconfig
+sort_makefile
+
+	cat <<EOF >> $TMP
+media: platform: Create vendor/{Makefile,Kconfig} files
+
+Instead of placing multiple per-vendor entries at the
+platform/{Makefile,Kconfig}, create them at the per-vendor
+directories.
+EOF
+
+git commit -as -m "$(cat $TMP)" --no-edit

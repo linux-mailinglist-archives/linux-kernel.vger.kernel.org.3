@@ -2,142 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EFE4D72D0
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 06:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9FC4D72D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 06:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbiCMFgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 00:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S233612AbiCMFjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 00:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiCMFgf (ORCPT
+        with ESMTP id S229441AbiCMFjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 00:36:35 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212F624BF9
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:35:26 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id y7-20020a056e02128700b002c62013aaa6so7186863ilq.3
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:35:26 -0800 (PST)
+        Sun, 13 Mar 2022 00:39:15 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C38139A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:38:06 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id bx5so11635817pjb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=7qpUz8ye2ArhpAi8guP0rB56tWXiT9C88VgIHLYyMps=;
+        b=MuYZ9axCrl2zhwNAN6CDPMtSl0xFnKucgj5dvBDi/bI0rQS3G+ao0LfP7vxHV8DhnC
+         aGpitno5ubZhut77wJe9s/kaJcg4AGRaAvQ85b3FqAmyLVAQ88c3+O+KZ5KiGzOQEHPk
+         vJiQePWe9o373SHrCZtcgDpeBPAfzw8yON0B0AaMX2KscnycBjn9cg9j/HxsraXViBLm
+         zRlzhlZcc0JbKhO4CXasDC0dZeLvQIoERmxCz2nf+lsPJVDPfp8Td9IlXOMK8IihWIpv
+         R9TAfKbCD1VvaW532zMXF0dE/Aa7M2R+tqyZPyyOP2IbLE2qJCoa4/k9+stN+uMLp5NA
+         wIVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=j3QVeTqDupds0I2GmAX2joYrfRgvBoY7gI4v066BCts=;
-        b=TZcwuxJunLvQcajMincIvFrcsnnI7JCusl7GFSxckedwH2EpFDgSNx4OQkLv4CdFO+
-         7gtbIU0UJAr+TiWLxPKWs/tixwoN1SjzAohjQ1naLqFDZx05JN3KPYaEo7pghEhkYQ8W
-         NkWwkElzGzKcG3zcEEQUM8iWXGRfgE/8LVvgiHiPXYyyU8nw7h9CDgO2YNfgQHLmvDSa
-         ZR6dPkqUFSjwixdZz+hItQ8kHRHLUL0LkdkW1Do5VvNQ796qnlq971a3RM9LD9ol5eWQ
-         YNnm3vqZBQxrgYRGIW+Z11TkHQKbSYHHWGumzn0VETf8RB8txhdgxeFzkA/gnh04rrsL
-         gzMQ==
-X-Gm-Message-State: AOAM5300unaWK8BsCBk/VPz2/FVuPz1xDVrjkhGBy6ATKnqZkKbKVFSK
-        CrxgtOaaMvyaeV9/7iCmP+fpz6lYqzSspzegEdHEtlw4DniV
-X-Google-Smtp-Source: ABdhPJzyQkwRsmmFLCuJXHTJ0EzTiQU7r8wIsUdsQXOFYLMLVUzVeJrDYZvNf14ZOqXsOAQumj5EQ0RhXT6EkBXWJUxCqjUbADh+
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7qpUz8ye2ArhpAi8guP0rB56tWXiT9C88VgIHLYyMps=;
+        b=54Y/gYsRyHfKMP7cMMvefVRIKw0EioWAuFRXV9w23yh36JgjZgJsP714x5cgylYWK5
+         ISb+5UV6/6kBtXyGmWmhaUJMZRkPb1nVPMO9tG2Lnd+MUfn+xHzkV7Q22913jLEy7Ad7
+         oGA4nWDbggUmX2EPVn9KgGoQVJMVYSPS0FOCXqmE+QPrNZ0Deqt+Z24Ua2M40XrCbQIv
+         jngz/xxrk7XXl+gHeU8MBa46nKOGsVAMs2dV3Sx1bMIJm5MI5WPFkmYYoUk/l4OIiTnu
+         lSAEWN/+CWjEPIf/hnkhtTZN31M9Vs1C00tOxQmbW8JbpaCzdvYZYXSP/1AAUVVD/iq5
+         CudA==
+X-Gm-Message-State: AOAM531r1vjC/qYD/aKqPL5yKZnnAEDiAaNAGwszcp/vpSCwxH0EsQa1
+        xSHjS3uZjfvfsOAKYK0R7VOMmg==
+X-Google-Smtp-Source: ABdhPJy3LoMdBQq7WLEd9ERuPFRcls1FcG1R2cPXgqho3KCk0KL8UUkRBQNB3LdzTzFJEb0Ld8i0+Q==
+X-Received: by 2002:a17:902:ecd0:b0:151:dd64:c79b with SMTP id a16-20020a170902ecd000b00151dd64c79bmr18180355plh.79.1647149885978;
+        Sat, 12 Mar 2022 21:38:05 -0800 (PST)
+Received: from [10.4.241.58] ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id e13-20020a63370d000000b003810782e0cdsm6640955pga.56.2022.03.12.21.38.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Mar 2022 21:38:05 -0800 (PST)
+Message-ID: <a528d7bf-a634-00b6-42ab-dcb516567c34@bytedance.com>
+Date:   Sun, 13 Mar 2022 13:37:37 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8552:0:b0:63d:8cae:b2ca with SMTP id
- b18-20020a5d8552000000b0063d8caeb2camr14515240ios.81.1647149725464; Sat, 12
- Mar 2022 21:35:25 -0800 (PST)
-Date:   Sat, 12 Mar 2022 21:35:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000473c1a05da12ee25@google.com>
-Subject: [syzbot] general protection fault in __pm_runtime_resume (2)
-From:   syzbot <syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, len.brown@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        pavel@ucw.cz, rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [External] Re: Subject: [PATCH] sched/fair: prioritize normal
+ task over sched_idle task with vruntime offset
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bristot@redhat.com,
+        bsegall@google.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, zhouchengming@bytedance.com,
+        songmuchun@bytedance.com, zhengqi.arch@bytedance.com,
+        zhoufeng.zf@bytedance.com, ligang.bdlg@bytedance.com
+References: <f87a8c0d-527d-a9bc-9653-ff955e0e95b4@bytedance.com>
+ <20220312120309.GB6235@worktop.programming.kicks-ass.net>
+From:   chenying <chenying.kernel@bytedance.com>
+In-Reply-To: <20220312120309.GB6235@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+在 2022/3/12 20:03, Peter Zijlstra 写道:
+> On Fri, Mar 11, 2022 at 03:58:47PM +0800, chenying wrote:
+>> We add a time offset to the se->vruntime when the idle sched_entity
+>> is enqueued, so that the idle entity will always be on the right of
+>> the non-idle in the runqueue. This can allow non-idle tasks to be
+>> selected and run before the idle.
+>>
+>> A use-case is that sched_idle for background tasks and non-idle
+>> for foreground. The foreground tasks are latency sensitive and do
+>> not want to be disturbed by the background. It is well known that
+>> the idle tasks can be preempted by the non-idle tasks when waking up,
+>> but will not distinguish between idle and non-idle when pick the next
+>> entity. This may cause background tasks to disturb the foreground.
+>>
+>> Test results as below:
+>>
+>> ~$ ./loop.sh &
+>> [1] 764
+>> ~$ chrt -i 0 ./loop.sh &
+>> [2] 765
+>> ~$ taskset -p 04 764
+>> ~$ taskset -p 04 765
+>>
+>> ~$ top -p 764 -p 765
+>> top - 13:10:01 up 1 min,  2 users,  load average: 1.30, 0.38, 0.13
+>> Tasks:   2 total,   2 running,   0 sleeping,   0 stopped,   0 zombie
+>> %Cpu(s): 12.5 us,  0.0 sy,  0.0 ni, 87.4 id,  0.0 wa,  0.0 hi, 0.0 si,  0.0
+>> st
+>> KiB Mem : 16393492 total, 16142256 free,   111028 used,   140208 buff/cache
+>> KiB Swap:   385836 total,   385836 free,        0 used. 16037992 avail Mem
+>>
+>>    PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM TIME+ COMMAND
+>>    764 chenyin+  20   0   12888   1144   1004 R 100.0  0.0 1:05.12 loop.sh
+>>    765 chenyin+  20   0   12888   1224   1080 R   0.0  0.0 0:16.21 loop.sh
+>>
+>> The non-idle process (764) can run at 100% and without being disturbed by
+>> the idle process (765).
+> 
+> Did you just do a very complicated true idle time scheduler, with all
+> the problems that brings?
 
-syzbot found the following issue on:
-
-HEAD commit:    92f90cc9fe0e Merge tag 'fuse-fixes-5.17-rc8' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=118cd3be700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
-dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd12fbed3485a3e51f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b64e79700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1652811a700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000072: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000390-0x0000000000000397]
-CPU: 0 PID: 46 Comm: kworker/u5:0 Not tainted 5.17.0-rc7-syzkaller-00060-g92f90cc9fe0e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: hci0 hci_cmd_work
-RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
-Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
-RSP: 0018:ffffc9000116fc28 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: ffff888022f8d000 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a0f
-R10: ffffffff84761483 R11: 000000000000000a R12: 0000000000000004
-R13: 0000000000000000 R14: ffff888022f8d190 R15: ffff888022f8d128
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc3fad2418 CR3: 000000007f4c3000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- pm_runtime_get_sync include/linux/pm_runtime.h:420 [inline]
- h5_enqueue+0x175/0x390 drivers/bluetooth/hci_h5.c:632
- hci_uart_send_frame+0x1ee/0x6b0 drivers/bluetooth/hci_ldisc.c:286
- hci_send_frame+0x1c0/0x370 net/bluetooth/hci_core.c:2942
- hci_cmd_work+0x204/0x3c0 net/bluetooth/hci_core.c:3861
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
-Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
-RSP: 0018:ffffc9000116fc28 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: ffff888022f8d000 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a0f
-R10: ffffffff84761483 R11: 000000000000000a R12: 0000000000000004
-R13: 0000000000000000 R14: ffff888022f8d190 R15: ffff888022f8d128
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f989adfd718 CR3: 000000007683c000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	44 89 ee             	mov    %r13d,%esi
-   3:	e8 2d af 02 fd       	callq  0xfd02af35
-   8:	45 85 ed             	test   %r13d,%r13d
-   b:	75 4e                	jne    0x5b
-   d:	e8 a3 ab 02 fd       	callq  0xfd02abb5
-  12:	48 8d bd 91 03 00 00 	lea    0x391(%rbp),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	48 89 fa             	mov    %rdi,%rdx
-  31:	83 e2 07             	and    $0x7,%edx
-  34:	38 d0                	cmp    %dl,%al
-  36:	7f 08                	jg     0x40
-  38:	84 c0                	test   %al,%al
-  3a:	0f 85 03 01 00 00    	jne    0x143
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+When colocating CPU-intensive jobs with latency-sensitive services can 
+improve CPU utilization but it is difficult to meet the stringent 
+tail-latency requirements of latency-sensitive services. We use a true 
+idle time scheduler for CPU-intensive jobs to minimize the impact on 
+latency-sensitive services.

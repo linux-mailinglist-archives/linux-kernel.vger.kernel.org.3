@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCD74D730E
+	by mail.lfdr.de (Postfix) with ESMTP id AA9BF4D730F
 	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 06:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbiCMF4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 00:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S233664AbiCMF4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 00:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiCMF4l (ORCPT
+        with ESMTP id S232495AbiCMF4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 00:56:41 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E78456754
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:55:34 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso11637643pjc.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:55:34 -0800 (PST)
+        Sun, 13 Mar 2022 00:56:44 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7900E5C64F
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:55:37 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v1-20020a17090a088100b001bf25f97c6eso11637701pjc.0
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 21:55:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=exfznBY+8JaiqjcDeRUubcAF4qIYlFp8JUbTCkFqZ5M=;
-        b=MhMvtLvpQJWvNVTUIsimGCFiMnhO17PlQOSbHa1pVzGpCBXKJSO9eYMDQY99ENqKDO
-         z8a0bTEav96SfAg9Xf+JdUs8Qkka9rU3toWCQwDrlPKkjVfSIlTE0MwRLn41dGG9/SWX
-         SdpNcu6ogCgiwUxMDPZsNxacJSYUW5kNHb24Im+q2HbgOaE6XR6s+c/SaZYRExm8eO6+
-         VeVti0x8MhS/2jZYl90RuUs32iDHks9uJN/fLVRUmTVufw9H7dMyka+aLd/DvuPT3f3T
-         qST4L48iIrP2owBmWbfj8DqP1UkcORLJ3DowTTqyygq3slmQJD281ZAt2f9ZeBqrCuoJ
-         z4bw==
+        bh=RoUZCESpVak/+s5nDva9vIyHAPScWiyh0Htj7zHIWxk=;
+        b=dbrQWgCvpao5bpKsgabNyuQl7n+KLu0erxIIC+VyQTMy5PYHC2x1tproIsCaoXdNjP
+         enSAgXnHVsbuqwh8g3leH5yayk+IHu2TF/3JrAOO9EbcYd/tfy2l6FrVBY03X0n+/oez
+         5RMboM8nWN+bYjS9tQRd7rLcR4ZLClsVTNpgtmzL1cD8GnNc005YOSQUlbT7H09Qi75d
+         cR+hItwwF9Vlg04pynhV1iowFCDIMQ7Gqjuzh6hedIkW6Nj695FwOLVdXzCe1D7LjOIs
+         VchRnbZt5dtm0JnYD2uDoT+z0cWoHh5Uw6mpNyZqbhSWaJjjvpNR9YLKHGkl7CuxGiLl
+         aumw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=exfznBY+8JaiqjcDeRUubcAF4qIYlFp8JUbTCkFqZ5M=;
-        b=q5UVBlbBFH1SB2hgj72dvf3EOixoFXfyielm5Xt0myFjryGgwLeb34lij9tes36us2
-         Fwt+5Rm79h9zEi8ZsT9xCikaozqgAz2WCEMpIYkDIgwl4s7C2OeVh2EJxYFzwIhnpJ9O
-         FK0CA28NXsNd4ekdlfU1LOvK8BDhn38CDGKRYISRd7wsqwoikuNm/tGpmDo2JzBM34Nz
-         uGzps7HGL4ae8ROELEA99ih3IoHrWECTf51/dIcqyebPCrufT5ZZyTSQbLN+Bj0H+sgR
-         kNbTtCOHo+j2dGx3IXZT7iuUSwln3q64cD/BbFOEOisM80TYcupuN/+d9silROgiF5Ex
-         sMuA==
-X-Gm-Message-State: AOAM531n0mvHSKkt4Ro44NGHzl89MbCu8fUkw9BVvW9Ug3ypBVirkN/D
-        a6uWUng7U71AhueVZZzkLJllB9qRuXzTzWHE
-X-Google-Smtp-Source: ABdhPJyOK+qFktZuiPxUZjxTeitrjLe/+UsVD0eU1EpOK6RKocPEjcoE0FAT8+CG23cjszCMULLz8A==
-X-Received: by 2002:a17:902:ce05:b0:14f:8cfa:1ace with SMTP id k5-20020a170902ce0500b0014f8cfa1acemr17779214plg.149.1647150933943;
-        Sat, 12 Mar 2022 21:55:33 -0800 (PST)
+        bh=RoUZCESpVak/+s5nDva9vIyHAPScWiyh0Htj7zHIWxk=;
+        b=bSQUNl5IRlBbotEubzj31uNBe7wN/TK5pr/fQuwDl4haa1EtCdJgKCD+Mzpx+27zSy
+         n0r52v+kINbR9xOtDywi1vFJmLZdUNS0G1fCBttAvZ+BE4d6DXOlovVDpd0E1EsJR5JT
+         96fzolHmemxFbgLiDqGUU3WW+bBpGZ25mo1OuAwa4OXWsvDCF5h/g462lzPtqzk+tULs
+         oQG6ZagW4DRy9vbEyuNslXs5SVLzW71CxhMRRlXWEr412LayXStMym9iNkseq4X9O6/Y
+         M9Yv583maNbMKlCizf90z4zQbyLscxOIkH0T/v30V0PdYkejXrsxk15iNJszBNIOm2NV
+         pVcA==
+X-Gm-Message-State: AOAM532tw2UsCKgXvhF6IefjulIXQ8fHJnaMoLBONpgEKfcPJFbydS+o
+        FJXemM0URed6GxZFDFuSr+YAmw==
+X-Google-Smtp-Source: ABdhPJyxMxe8oMdlaQF42Ft12F68YNmEg9/wp3cIe9ei2q/SPjhJh6S68VwX0tS32LdQLYkhxfqpLw==
+X-Received: by 2002:a17:902:c7c5:b0:153:3a41:aa45 with SMTP id r5-20020a170902c7c500b001533a41aa45mr9400958pla.88.1647150936905;
+        Sat, 12 Mar 2022 21:55:36 -0800 (PST)
 Received: from localhost.localdomain (104.225.159.237.16clouds.com. [104.225.159.237])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm14792447pfk.26.2022.03.12.21.55.29
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f75d5f9b5csm14792447pfk.26.2022.03.12.21.55.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 21:55:33 -0800 (PST)
+        Sat, 12 Mar 2022 21:55:36 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -56,9 +56,9 @@ To:     Sudeep Holla <sudeep.holla@arm.com>,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-kernel@vger.kernel.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v1 1/3] arch_topology: Correct semantics for 'cap_parsing_failed'
-Date:   Sun, 13 Mar 2022 13:55:10 +0800
-Message-Id: <20220313055512.248571-2-leo.yan@linaro.org>
+Subject: [PATCH v1 2/3] arch_topology: Handle inconsistent binding of CPU raw capacity
+Date:   Sun, 13 Mar 2022 13:55:11 +0800
+Message-Id: <20220313055512.248571-3-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220313055512.248571-1-leo.yan@linaro.org>
 References: <20220313055512.248571-1-leo.yan@linaro.org>
@@ -74,68 +74,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As described in the DT binding document [1]: "capacity-dmips-mhz
-property is all-or-nothing: if it is specified for a cpu node, it has to
-be specified for every other cpu nodes, or the system will fall back to
-the default capacity value for every CPU".
+There have a corner case is if we use below DT binding:
 
-In other words, we can accept that cases that "capacity-dmips-mhz"
-property is specified or not specified for all CPU nodes.  The only
-failure is the DT binding is inconsistent for all CPUs nodes, e.g only
-part of CPUs have bound the "capacity-dmips-mhz" property.
+  cpu0: cpu@0 {
+  	compatible = "arm,cortex-a53";
+  	device_type = "cpu";
+  	reg = <0x0 0x0>;
+  	enable-method = "psci";
+  };
 
-Currently kernel only considers all CPU nodes having "capacity-dmips-mhz"
-property as a parsing success; for the other two cases, one is all CPU
-nodes without "capacity-dmips-mhz" property, and another is inconsistent
-binding crossing CPU nodes, kernel considers them as parsing failure and
-set 'cap_parsing_failed' flag as true.
+  cpu1: cpu@1 {
+  	compatible = "arm,cortex-a53";
+  	device_type = "cpu";
+  	reg = <0x0 0x1>;
+  	enable-method = "psci";
+  	capacity-dmips-mhz = <1024>;
+  };
 
-This patch makes more clear for the semantics of 'cap_parsing_failed',
-it only takes the inconsistent binding case as parsing failure.  So it
-sets the flag 'cap_parsing_failed' to true only when the array
-'raw_capacity' is not NULL and current CPU node doesn't contain the
-property "capacity-dmips-mhz".  It marks 'cap_parsing_failed' as
-a static global variable to allow it can be used in the source file.
+In this case, CPU0 node misses to bind "capacity-dmips-mhz" property,
+and CPU1 node binds the property, this means the CPU raw capacity
+binding is inconsistent across all CPUs.
 
-[1] Documentation/devicetree/bindings/arm/cpu-capacity.txt
+This patch introduces an extra flag 'cap_property_miss' to indicate that
+any previous CPU nodes miss binding for "capacity-dmips-mhz" property,
+and any new CPU node contains the property, it detects the inconsistent
+binding, and sets 'cap_parsing_failed' to true and frees raw capacity
+array.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- drivers/base/arch_topology.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/base/arch_topology.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 976154140f0b..b81777ae6425 100644
+index b81777ae6425..0687576e880b 100644
 --- a/drivers/base/arch_topology.c
 +++ b/drivers/base/arch_topology.c
-@@ -234,6 +234,7 @@ static int register_cpu_capacity_sysctl(void)
- subsys_initcall(register_cpu_capacity_sysctl);
- 
- static int update_topology;
-+static bool cap_parsing_failed;
- 
- int topology_update_cpu_topology(void)
- {
-@@ -291,7 +292,6 @@ void topology_normalize_cpu_scale(void)
- bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
- {
+@@ -294,6 +294,7 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
  	struct clk *cpu_clk;
--	static bool cap_parsing_failed;
  	int ret;
  	u32 cpu_capacity;
++	static bool cap_property_miss;
  
-@@ -331,9 +331,9 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
+ 	if (cap_parsing_failed)
+ 		return false;
+@@ -301,6 +302,20 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
+ 	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
+ 				   &cpu_capacity);
+ 	if (!ret) {
++		/*
++		 * A previous CPU node misses binding for CPU raw capacity and
++		 * current CPU node finds its property "capacity-dmips-mhz",
++		 * thus the DT binding for "capacity-dmips-mhz" is inconsistent
++		 * across all CPUs.  Set 'cap_parsing_failed' flag and drop the
++		 * CPU raw capacity values.
++		 */
++		if (cap_property_miss) {
++			pr_err("cpu_capacity: binding %pOF raw capacity\n",
++				cpu_node);
++			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
++			goto parsing_failure;
++		}
++
+ 		if (!raw_capacity) {
+ 			raw_capacity = kcalloc(num_possible_cpus(),
+ 					       sizeof(*raw_capacity),
+@@ -331,12 +346,18 @@ bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
  			pr_err("cpu_capacity: missing %pOF raw capacity\n",
  				cpu_node);
  			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
-+			cap_parsing_failed = true;
-+			free_raw_capacity();
+-			cap_parsing_failed = true;
+-			free_raw_capacity();
++			goto parsing_failure;
++		} else {
++			cap_property_miss = true;
  		}
--		cap_parsing_failed = true;
--		free_raw_capacity();
  	}
  
  	return !ret;
++
++parsing_failure:
++	cap_parsing_failed = true;
++	free_raw_capacity();
++	return !ret;
+ }
+ 
+ #ifdef CONFIG_CPU_FREQ
 -- 
 2.25.1
 

@@ -2,93 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BEE4D75F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B1C4D75F6
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234689AbiCMOx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 10:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S234685AbiCMOx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 10:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiCMOxZ (ORCPT
+        with ESMTP id S234636AbiCMOxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 10:53:25 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3663D8879A;
-        Sun, 13 Mar 2022 07:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=SYLJecFzMoXae9Yd63DSIRQsBWaqYrsKU+5452Z4zcQ=; b=AECFhEzbz4hZ9WbIJVzXpFpbKH
-        kidJPcYSinNrYvzgsSMIytPZjpRanYKa7XnHlYUxM2QtD/A3TK2LpQKi5q7PNg+mlwYh2LfC5Vvqu
-        JX55NxICbc6nzjMLUm/evTnRuIp+a0JiiPdOqBuzUxuwWax+z5zkCZuSpZgo0f2lmsGA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nTPZs-00AdA3-1f; Sun, 13 Mar 2022 15:52:12 +0100
-Date:   Sun, 13 Mar 2022 15:52:12 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] net: mdio: mscc-miim: replace magic numbers
- for the bus reset
-Message-ID: <Yi4FHDz+ya8VZZDq@lunn.ch>
-References: <20220313002153.11280-1-michael@walle.cc>
- <20220313002153.11280-3-michael@walle.cc>
- <Yi1ALN6hN9aV1VrA@lunn.ch>
- <7cbe529d46c64b01eb99c016d9f16f1a@walle.cc>
+        Sun, 13 Mar 2022 10:53:54 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCDD888E9;
+        Sun, 13 Mar 2022 07:52:46 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id b16so15484650ioz.3;
+        Sun, 13 Mar 2022 07:52:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i/XezRwvh2gzL6Ttf5VHhgwtutiLUu4G+QBeYqkcdxc=;
+        b=JlswR+2w6s45M6iLlDIZMJkpJdKO1GUMNUv2bF5jmu+WIK6sGHxzY8408fzrsdZMCr
+         gNyxbdC4rA/9nhGriZeyQFWJT4gL8H2tLm8EHhLuXbfCVMT9YbCDzp+cU/MbGXSd3HkX
+         lO3iX4hAVSmpCejNwl8qkyoLTGvkItlx0bUkyToXQcclkqebDr0MpMjgH8jBXaNgc3vM
+         NgmbaoaGrJnqcHsvvlBNp/lNPK0HeOM32TyFFIQgMMU7yjo1p7gxbwep7M7RgLfvxd7v
+         cqC4HgyK5VNf9MzPWXtrMx7x1dOE/PAoyNfKndC4e5HxBUlxtRQ0kx+3+I2AkFQJRus6
+         dtBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i/XezRwvh2gzL6Ttf5VHhgwtutiLUu4G+QBeYqkcdxc=;
+        b=8Qgkuk0v71tf0imNlIvsfOvcF8EFdR1IZgoNLrO7huxCSi96nSJLjYBh9fzCsRUyFR
+         wAF5X7t7rEgHTHG3COE0pQfByHu4keU2yuX7RQ+HXdfLi6XK0wT6Yy2eDA+a6Nz7po6I
+         MQ9HWELVUwim3BNUJFjYav/EbB/hBdD8vIsyWVnUH23ib6YxCFLvizeLJbmXz2G7axTf
+         8/1tV3ZlqzjsIXgrKcHetIhYcQMNFVwnpkbdUy3zN05LY1lDzdansMRjmYmUrY/1oKtj
+         G9I941eLglMMI7fFkrsyH284D2mmR5mzhj6jarJbf8048Q0K2e31IWQw3wl5RpArZxPW
+         isNA==
+X-Gm-Message-State: AOAM533oRskQPTRDehB8pbu83/KDXeHdMKopYz64XFdVRDQbE0hAR4EU
+        oc2ZKK/N/4nP1f+6ExTXgsZ180gHbNFwjdyITvFcolpn
+X-Google-Smtp-Source: ABdhPJw7YFcidFnVOL/eCTnU0sWP31A2Zyx0IitwSpYV1dPANnItK2s6TayRSMvVa4aPhLMb8ER31D2QQ7Oc8kGww8Q=
+X-Received: by 2002:a05:6638:a2f:b0:314:b8b9:1c21 with SMTP id
+ 15-20020a0566380a2f00b00314b8b91c21mr16766450jao.22.1647183165672; Sun, 13
+ Mar 2022 07:52:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cbe529d46c64b01eb99c016d9f16f1a@walle.cc>
+References: <CA+fCnZd2GoU6LVvT4eBT3w7TigRrp_9XcAGyL55K5nbi3yt4sA@mail.gmail.com>
+ <20220311082944.4881-1-jj251510319013@gmail.com>
+In-Reply-To: <20220311082944.4881-1-jj251510319013@gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 13 Mar 2022 15:52:35 +0100
+Message-ID: <CA+fCnZeXMKXBzJm=akMNm4OVN53T_1aQw4n+yYZ6Vkqmj8+KAQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: raw-gadget: return -EINVAL if no proper ep
+ address available
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 02:17:55AM +0100, Michael Walle wrote:
-> Am 2022-03-13 01:51, schrieb Andrew Lunn:
-> > > diff --git a/drivers/net/mdio/mdio-mscc-miim.c
-> > > b/drivers/net/mdio/mdio-mscc-miim.c
-> > > index 64fb76c1e395..7773d5019e66 100644
-> > > --- a/drivers/net/mdio/mdio-mscc-miim.c
-> > > +++ b/drivers/net/mdio/mdio-mscc-miim.c
-> > > @@ -158,18 +158,18 @@ static int mscc_miim_reset(struct mii_bus *bus)
-> > >  {
-> > >  	struct mscc_miim_dev *miim = bus->priv;
-> > >  	int offset = miim->phy_reset_offset;
-> > > +	int mask = PHY_CFG_PHY_ENA | PHY_CFG_PHY_COMMON_RESET |
-> > > +		   PHY_CFG_PHY_RESET;
-> > 
-> > > -		ret = regmap_write(miim->phy_regs,
-> > > -				   MSCC_PHY_REG_PHY_CFG + offset, 0x1ff);
-> > > +		ret = regmap_write(miim->phy_regs, offset, mask);
-> > 
-> > Is mask the correct name? It is not being used in the typical way for
-> > a mask.
-> 
-> It is the mask of all the reset bits, see also patch 3/3. Either all
-> these bits are set or none.
+On Fri, Mar 11, 2022 at 9:30 AM Wei Ming Chen <jj251510319013@gmail.com> wrote:
+>
+> If we try to use raw_ioctl_ep_enable() for ep5in on a hardware that
+> only support from ep1-ep4 for both in and out direction, it will return
+> -EBUSY originally.
+>
+> I think it will be more intuitive if we return -EINVAL, because -EBUSY
+> sounds like ep5in is not available now, but might be available in the
+> future.
+>
+> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+> ---
+>
+> Changes in v2:
+> - Rename variable from ep_num_matched to ep_props_matched
+> - Incorporate the patch from Andrey Konovalov that cover
+>   the foloowing cases:
+>     1. If there are no endpoints that match the provided descriptor, return
+>        EINVAL.
+>     2. If there are matching endpoints, but they are all already enabled,
+>        return EBUSY.
+>
+>  drivers/usb/gadget/legacy/raw_gadget.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index d86c3a36441e..e5707626c4d4 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -758,6 +758,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>         unsigned long flags;
+>         struct usb_endpoint_descriptor *desc;
+>         struct raw_ep *ep;
+> +       bool ep_props_matched = false;
+>
+>         desc = memdup_user((void __user *)value, sizeof(*desc));
+>         if (IS_ERR(desc))
+> @@ -787,13 +788,14 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>
+>         for (i = 0; i < dev->eps_num; i++) {
+>                 ep = &dev->eps[i];
+> -               if (ep->state != STATE_EP_DISABLED)
+> -                       continue;
+>                 if (ep->addr != usb_endpoint_num(desc) &&
+>                                 ep->addr != USB_RAW_EP_ADDR_ANY)
+>                         continue;
+>                 if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep, desc, NULL))
+>                         continue;
+> +               ep_props_matched = true;
+> +               if (ep->state != STATE_EP_DISABLED)
+> +                       continue;
+>                 ep->ep->desc = desc;
+>                 ret = usb_ep_enable(ep->ep);
+>                 if (ret < 0) {
+> @@ -815,8 +817,13 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+>                 goto out_unlock;
+>         }
+>
+> -       dev_dbg(&dev->gadget->dev, "fail, no gadget endpoints available\n");
+> -       ret = -EBUSY;
+> +       if (!ep_props_matched) {
+> +               dev_dbg(&dev->gadget->dev, "fail, bad endpoint descriptor\n");
+> +               ret = -EINVAL;
+> +       } else {
+> +               dev_dbg(&dev->gadget->dev, "fail, no endpoints available\n");
+> +               ret = -EBUSY;
+> +       }
+>
+>  out_free:
+>         kfree(desc);
+> --
+> 2.25.1
+>
 
-Yes, it is you just don't use it in the typical way for a mask
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-	foo = bar & mask;
+Greg, could you consider picking this up?
 
-The name mask made me look for a read-modify-write or similar. And
-that then makes me thing of race conditions.
-
-> Do you haave any suggestion?
-
-value everywhere? Or phy_reset_bits?
-
-      Andrew
+Thanks!

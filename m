@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461104D789D
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 23:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1118B4D789E
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 23:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbiCMWnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 18:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S235582AbiCMWqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 18:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiCMWnh (ORCPT
+        with ESMTP id S229463AbiCMWqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 18:43:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0055774DD7;
-        Sun, 13 Mar 2022 15:42:28 -0700 (PDT)
+        Sun, 13 Mar 2022 18:46:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6910573079
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 15:45:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647211348; x=1678747348;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cyiTK7byaZJ6qM8AR155i2GjEMQZs5N+uOLkdJTzm0o=;
-  b=iHVftaLxOWQnr98yeP0hNhwEX2Rets0TvaMMbZdQzKT8PAiacapM00R3
-   xGu3svvyPlwCXFB5XsvU9b4wwOZXHa7Dq/xeK7owT1TbdkkvTyxalOCi8
-   Q5mJLxFE40OqYLYcsDiR8l0nQGykaTPWi3zXBumZGiMqu7k7zUEju8NHC
-   NpwOFzWj9s9l9coR1w5rJlXDiSN2Js8J5/n8aTXpaETXQaTSKKy7hi20l
-   HaCJHWJLZgzkqejaF2nv/no4BaaBAvSUypZQd5LmO6P5JwT4c7UTXuwnX
-   DGlQI3L12CS8CowkyxQ5VThnnAGKSK+TeJNdUOVa9aiOFuwM7+DaIbhJ/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="238074935"
+  t=1647211534; x=1678747534;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6/PmBlsNMqYSzZY3dIK0TjfWjBpSYq6IwPvIuaEWwtc=;
+  b=XLBL/ii5GdOgWerM0qnZMqKIcCiyaBqDLVsQilPEehiTegx7mo3FpaIp
+   7RbUGxKE5wtRwbuEoAANoM4/++g0hPomqDtpBpCZ+3MHuoFBaDaNSVRxo
+   qoy6z30UXKebP9iwiF0pMjK0gwDCKhVqpSdi0Z6oipNuhpaFdkKWIDBc4
+   ZMdccAnqkx7XkYZrQfmVJSayuOk75hKrc6PceIWcx30u+b1QPX2b/b/0C
+   uaU1cfP4doophGUlVASwq9RQ45qkaap5iqdMYYOuQatJEBpImU7b64ja7
+   AYo3adAlFUZaXriClTjDNXkfKWUkMG0jZaMbExXtdfoh2KK9heKyqTiBH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="254732977"
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="238074935"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 15:42:28 -0700
+   d="scan'208";a="254732977"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 15:45:34 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="549012627"
-Received: from mvideche-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.251.130.249])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 15:42:26 -0700
-Message-ID: <292e56e9b2050a1e8c7d64ff3f4ccaf0593a3deb.camel@intel.com>
-Subject: Re: [RFC PATCH v5 014/104] KVM: TDX: Add a function for KVM to
- invoke SEAMCALL
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        kirill.shutemov@linux.intel.com
-Date:   Mon, 14 Mar 2022 11:42:24 +1300
-In-Reply-To: <355f08931d2b1917fd7230393de6f1052bf6f0c9.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <355f08931d2b1917fd7230393de6f1052bf6f0c9.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+   d="scan'208";a="713504214"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2022 15:45:32 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTWxv-0009LS-V4; Sun, 13 Mar 2022 22:45:31 +0000
+Date:   Mon, 14 Mar 2022 06:44:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: [toke:xdp-queueing-03 7/9] net/core/filter.c:9720:14: warning:
+ assignment to 'struct btf *' from 'int' makes pointer from integer without a
+ cast
+Message-ID: <202203140612.pwI8TzBG-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,165 +63,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Add an assembly function for KVM to call the TDX module because __seamcall
-> defined in arch/x86/virt/vmx/seamcall.S doesn't fit for the KVM use case.
-> 
-> TDX module API returns extended error information in registers, rcx, rdx,
-> r8, r9, r10, and r11 in addition to success case.  KVM uses those extended
-> error information in addition to the status code returned in RAX.  Update
-> the assembly code to optionally return those outputs even in the error case
-> and define the specific version for KVM to call the TDX module.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
+head:   3e7f25d58b1bfd5ad623678bf9e11f27c98a8094
+commit: 28d9ca982b9ae96bcad2bee81647ba18ae049a69 [7/9] bpf: Enable direct packet access for dequeue packets
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220314/202203140612.pwI8TzBG-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-03
+        git checkout 28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash net/core/
 
-+Kirill.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Kirill's patches hasn't been merged yet.  Can Kirill just change his patch so
-you don't have to change the assembly code again?  Btw this change is
-reasonable for host kernel support series as well.  Sorry that I failed to
-notice.
+All warnings (new ones prefixed by >>):
 
-Btw, SEAMCALL C function is already implemented in host kernel support series:
+   In file included from include/linux/skmsg.h:7,
+                    from net/core/filter.c:38:
+   include/linux/bpf.h:2062:15: error: return type defaults to 'int' [-Werror=return-type]
+    2062 | static inline bpf_get_btf_vmlinux(void)
+         |               ^~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h: In function 'bpf_get_btf_vmlinux':
+   include/linux/bpf.h:2064:9: warning: returning 'void *' from a function with return type 'int' makes integer from pointer without a cast [-Wint-conversion]
+    2064 |  return ERR_PTR(-EINVAL);
+         |         ^~~~~~~~~~~~~~~~
+   net/core/filter.c: In function 'dequeue_btf_struct_access':
+>> net/core/filter.c:9720:14: warning: assignment to 'struct btf *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    9720 |  btf_vmlinux = bpf_get_btf_vmlinux();
+         |              ^
+   net/core/filter.c: In function 'dequeue_get_convert_ctx_access':
+   net/core/filter.c:9848:14: warning: assignment to 'struct btf *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    9848 |  btf_vmlinux = bpf_get_btf_vmlinux();
+         |              ^
+   cc1: some warnings being treated as errors
 
-https://lore.kernel.org/kvm/269a053607357eedd9a1e8ddf0e7240ae0c3985c.1647167475.git.kai.huang@intel.com/
 
-I think maybe you can just export __seamcall() and use it?
+vim +9720 net/core/filter.c
 
-> 
-> SEAMCALL to the SEAM module (P-SEAMLDR or TDX module) can result in the
-> error of VmFailInvalid indicated by CF=1 when VMX isn't enabled by VMXON
-> instruction.  Because KVM guarantees that VMX is enabled, VmFailInvalid
-> error won't happen.  Don't check the error for KVM.
+  9709	
+  9710	static int dequeue_btf_struct_access(struct bpf_verifier_log *log,
+  9711					     const struct btf *btf,
+  9712					     const struct btf_type *t, int off, int size,
+  9713					     enum bpf_access_type atype,
+  9714					     u32 *next_btf_id, enum bpf_type_flag *flag)
+  9715	{
+  9716		const struct btf_type *pkt_type;
+  9717		enum bpf_reg_type reg_type;
+  9718		struct btf *btf_vmlinux;
+  9719	
+> 9720		btf_vmlinux = bpf_get_btf_vmlinux();
+  9721		if (IS_ERR(btf_vmlinux) || btf != btf_vmlinux)
+  9722			return -EINVAL;
+  9723	
+  9724		if (atype != BPF_READ) {
+  9725			bpf_log(log, "only read is supported\n");
+  9726			return -EACCES;
+  9727		}
+  9728	
+  9729		pkt_type = btf_type_by_id(btf_vmlinux, xdp_md_btf_ids[0]);
+  9730		if (!pkt_type)
+  9731			return -EINVAL;
+  9732		if (t != pkt_type)
+  9733			return btf_struct_access(log, btf, t, off, size, atype,
+  9734						 next_btf_id, flag);
+  9735	
+  9736		switch (off) {
+  9737		case offsetof(struct xdp_md, data):
+  9738			reg_type = PTR_TO_PACKET;
+  9739			break;
+  9740		case offsetof(struct xdp_md, data_meta):
+  9741			reg_type = PTR_TO_PACKET_META;
+  9742			break;
+  9743		case offsetof(struct xdp_md, data_end):
+  9744			reg_type = PTR_TO_PACKET_END;
+  9745			break;
+  9746		default:
+  9747			bpf_log(log, "only access to data, data_meta, and data_end allowed for xdp_md\n");
+  9748			return -EACCES;
+  9749		}
+  9750	
+  9751		if (!__is_valid_xdp_access(off, size)) {
+  9752			bpf_log(log, "invalid xdp_md access off=%d size=%d\n", off, size);
+  9753			return -EINVAL;
+  9754		}
+  9755		return reg_type;
+  9756	}
+  9757	
 
-Perhaps you can introduce kvm_seamcall() which calls __seamcall(), but WARN()
-if it returns VMfailInvalid?
-
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/Makefile       |  2 +-
->  arch/x86/kvm/vmx/seamcall.S | 55 +++++++++++++++++++++++++++++++++++++
->  arch/x86/virt/tdxcall.S     |  8 ++++--
->  3 files changed, 62 insertions(+), 3 deletions(-)
->  create mode 100644 arch/x86/kvm/vmx/seamcall.S
-> 
-> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> index e2c05195cb95..e8f83a7d0dc3 100644
-> --- a/arch/x86/kvm/Makefile
-> +++ b/arch/x86/kvm/Makefile
-> @@ -24,7 +24,7 @@ kvm-$(CONFIG_KVM_XEN)	+= xen.o
->  kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
->  			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o vmx/main.o
->  kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
-> -kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o
-> +kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o vmx/seamcall.o
->  
->  kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
->  
-> diff --git a/arch/x86/kvm/vmx/seamcall.S b/arch/x86/kvm/vmx/seamcall.S
-> new file mode 100644
-> index 000000000000..4a15017fc7dd
-> --- /dev/null
-> +++ b/arch/x86/kvm/vmx/seamcall.S
-> @@ -0,0 +1,55 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/linkage.h>
-> +#include <asm/export.h>
-> +#include <asm/frame.h>
-> +
-> +#include "../../virt/tdxcall.S"
-> +
-> +/*
-> + * kvm_seamcall()  - Host-side interface functions to SEAM software (TDX module)
-> + *
-> + * Transform function call register arguments into the SEAMCALL register
-> + * ABI.  Return the completion status of the SEAMCALL.  Additional output
-> + * operands are saved in @out (if it is provided by the user).
-> + * It doesn't check TDX_SEAMCALL_VMFAILINVALID unlike __semcall() because KVM
-> + * guarantees that VMX is enabled so that TDX_SEAMCALL_VMFAILINVALID doesn't
-> + * happen.  In the case of error completion status code, extended error code may
-> + * be stored in leaf specific output registers.
-> + *
-> + *-------------------------------------------------------------------------
-> + * SEAMCALL ABI:
-> + *-------------------------------------------------------------------------
-> + * Input Registers:
-> + *
-> + * RAX                 - SEAMCALL Leaf number.
-> + * RCX,RDX,R8-R9       - SEAMCALL Leaf specific input registers.
-> + *
-> + * Output Registers:
-> + *
-> + * RAX                 - SEAMCALL completion status code.
-> + * RCX,RDX,R8-R11      - SEAMCALL Leaf specific output registers.
-> + *
-> + *-------------------------------------------------------------------------
-> + *
-> + * kvm_seamcall() function ABI:
-> + *
-> + * @fn  (RDI)          - SEAMCALL Leaf number, moved to RAX
-> + * @rcx (RSI)          - Input parameter 1, moved to RCX
-> + * @rdx (RDX)          - Input parameter 2, moved to RDX
-> + * @r8  (RCX)          - Input parameter 3, moved to R8
-> + * @r9  (R8)           - Input parameter 4, moved to R9
-> + *
-> + * @out (R9)           - struct tdx_module_output pointer
-> + *                       stored temporarily in R12 (not
-> + *                       shared with the TDX module). It
-> + *                       can be NULL.
-> + *
-> + * Return (via RAX) the completion status of the SEAMCALL
-> + */
-> +SYM_FUNC_START(kvm_seamcall)
-> +        FRAME_BEGIN
-> +        TDX_MODULE_CALL host=1 error_check=0
-> +        FRAME_END
-> +        ret
-> +SYM_FUNC_END(kvm_seamcall)
-> +EXPORT_SYMBOL_GPL(kvm_seamcall)
-
-> diff --git a/arch/x86/virt/tdxcall.S b/arch/x86/virt/tdxcall.S
-> index 90569faedacc..2e614b6b5f1e 100644
-> --- a/arch/x86/virt/tdxcall.S
-> +++ b/arch/x86/virt/tdxcall.S
-> @@ -13,7 +13,7 @@
->  #define tdcall		.byte 0x66,0x0f,0x01,0xcc
->  #define seamcall	.byte 0x66,0x0f,0x01,0xcf
->  
-> -.macro TDX_MODULE_CALL host:req
-> +.macro TDX_MODULE_CALL host:req error_check=1
->  	/*
->  	 * R12 will be used as temporary storage for struct tdx_module_output
->  	 * pointer. Since R12-R15 registers are not used by TDCALL/SEAMCALL
-> @@ -51,9 +51,11 @@
->  	 *
->  	 * Set %rax to TDX_SEAMCALL_VMFAILINVALID for VMfailInvalid.
->  	 * This value will never be used as actual SEAMCALL error code.
-> -	 */
-> +	*/
-> +	.if \error_check
->  	jnc .Lno_vmfailinvalid
->  	mov $TDX_SEAMCALL_VMFAILINVALID, %rax
-> +	.endif
->  .Lno_vmfailinvalid:
->  	.else
->  	tdcall
-> @@ -66,8 +68,10 @@
->  	pop %r12
->  
->  	/* Check for success: 0 - Successful, otherwise failed */
-> +	.if \error_check
->  	test %rax, %rax
->  	jnz .Lno_output_struct
-> +	.endif
->  
-
-Checking VMfailInvalid, and checking whether %rax is 0 are totally different
-things.  I don't think it's good to use one single 'error_check' to handle.
-
-As I mentioned above, I think checking whether %rax is 0 can be just removed
-in Kirill's patch.  But I don't have strong opinion on whether you should add
-another parameter to determine whether to check VMfailInvalid, or you should
-just call __seamcall() which is implemented in host support series.
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

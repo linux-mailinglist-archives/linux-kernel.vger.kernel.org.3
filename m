@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76864D776E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 19:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E710A4D7770
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 19:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235254AbiCMSGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 14:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
+        id S235246AbiCMSLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 14:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiCMSGu (ORCPT
+        with ESMTP id S231997AbiCMSLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 14:06:50 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E697779384
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 11:05:39 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bg10so29432565ejb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 11:05:39 -0700 (PDT)
+        Sun, 13 Mar 2022 14:11:10 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38077DE25
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 11:10:01 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so16939561edw.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 11:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Ba/SyefjHkKlZlkknq5QxkIEqcl/0Yy/G2fW6GbUc1w=;
-        b=XaW39Az9MYtw5O/zqYNHeKLzkvbfNfOkx9ZZ2y6fhzja3ETHuBzJs9KuXun/GcdMQZ
-         7y5EzbmzA9Zmra2huedlDvhXwL4MkNBCaSWlvPLaZavJuC4VbH4Tv8+GdhqBASDlLObK
-         UJXqGcdLOVg7DK7vstMaUjouuF+NsyAiO+/8cmvO6XovJW52+Cs4f64wVAwkKi1OXgUf
-         7rGD2c6Qddin/zHAyoNDgem9n7JRyrgZm2+QEqIL1Hn2SsCHT9IzuNAmc+DZD7YbKzM4
-         ZPmDCA6TNljX6U5sBb7bkc6sDzhFacvNdZA19W2Q1bm4BrI3a3UuZY1cl062yRxVy68G
-         LRtw==
+         :content-disposition:in-reply-to;
+        bh=ufb3dhCc+RaygURJJfIihlttMucJHhJP5zB8nwebvgc=;
+        b=I/9YlFiBZKF4sxHpFHrMRfCuoDO+WYX5/8kYU34r8QY21N/ChJ+O7sw6ED+hnuAwFB
+         Pai2d+GtluDaC+NvlPj0YrsA9ZMGPbf9U3Evc+eqwMFC8YhfauHxUUDnGzmdhFBI/utP
+         k171CCoCWG/snQ8iKfa3tqaqozONqPr1IHlRZisJbAdd7YRRcLqnwjfdXK1NZ4hbsRFM
+         OEYSy1btTwvFJoDMxGjigoy2FF9bsQ1W7bBA0zs8yBW7Xq1GxpwNdhOmEDu+Q6C/dDBO
+         Wq6REy3KK3XUNFGUdEz+GyYMBUl1y31aTJBGMBGGpTaqttgemiwUfInRqmRqHGIYd2aq
+         MpdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Ba/SyefjHkKlZlkknq5QxkIEqcl/0Yy/G2fW6GbUc1w=;
-        b=0DCRVqXNEFqlT/fxYeBzV+4WFN+U2Qn/LhGN2YbXvhNmBHlT/iOh8emhxFoEY4SUYU
-         ZlFZBYDooyXSqldlaODcM/RBROvNPneQM4x2iENQyV7kRS3mMqxQXx/KIZvHkESZVinG
-         ndntJRR2vQgQ6hGP9v9Mg8jh7YFPDHDotUTof9Mr9h08/JRgae1xugsrj6DwU0Pmy7Hz
-         nUAwxSP8nBAY8Gtd3AtynvBkcKr0FRw083WIY0ldAbndrsEdWhAsFQBYKsAZNIDpqTxA
-         v5DQPLapnwbKHV9pPcHjoq/oh2ZJns/wNM/hqlu5Vqjlb8B48V3eZ1O27POvDi2l3dKO
-         r6ng==
-X-Gm-Message-State: AOAM533g5gHs7z0c+r0js/k1SEIpghUJEy2i+FvoNJzrbxQjT4zYrW5E
-        si3c6tTCL1fuBbQYVmxUbw==
-X-Google-Smtp-Source: ABdhPJznc5zEXT/NucxDl2fAOK09BwcM+HPBAE3BpHDEd/3ZIrj6FFdri5Yl35phLsPRbq35yPlo0Q==
-X-Received: by 2002:a17:906:6a02:b0:6d7:cda:2cf7 with SMTP id qw2-20020a1709066a0200b006d70cda2cf7mr15818319ejc.53.1647194738396;
-        Sun, 13 Mar 2022 11:05:38 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=ufb3dhCc+RaygURJJfIihlttMucJHhJP5zB8nwebvgc=;
+        b=nnURMkfIIkS7LaynAmvA+A5zzjWcmeE+fDUSYCF5iS++/fSP7WBEMR8jeSue/b7yQV
+         HD12S3kZHG2ySf1x7fBK9c8IhtJL4zT/wiLu1/60EHw2utJbDmaBKqMKeu2OEwmYyXlY
+         oqgAq9gXHfQDQlKfY8dMWuKt1sjVleWWAB6M/ZSzMaPfyARLCXvfU6QkA/25j1guZ2Qp
+         9hNfWebe3Ci9e4JMeDN3DTyyULKRsJqdx3vOy9CEb4Xpm+Xx+vaqZgnDq2qVv9m9fH1T
+         ZZrQUCG+00DLSh+aAzMiglyEofz2OyHNemFsO8bcxsynemYalF7gfbbTsMQz9kolkylQ
+         Kn8A==
+X-Gm-Message-State: AOAM532NWDMExesmzL3oa1VdpQ61ecrOoEjmEDsqTlu6bNRAO+DtIQkm
+        l+qoU0QUURjDX4YMeqiDzA==
+X-Google-Smtp-Source: ABdhPJwdhinSd7OG+Z0G1VcDVWAEeo7shExIBhkQtc1uYhuhK5TAZ3JxYBP9kpiR9HI//wkSuzopYw==
+X-Received: by 2002:a50:e696:0:b0:413:3846:20a9 with SMTP id z22-20020a50e696000000b00413384620a9mr17249150edm.96.1647195000203;
+        Sun, 13 Mar 2022 11:10:00 -0700 (PDT)
 Received: from localhost.localdomain ([46.53.254.141])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05640206cf00b0041655b577f1sm6769345edy.25.2022.03.13.11.05.37
+        by smtp.gmail.com with ESMTPSA id z10-20020aa7cf8a000000b004160af67840sm6464857edx.66.2022.03.13.11.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 11:05:37 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 21:05:35 +0300
+        Sun, 13 Mar 2022 11:09:59 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 21:09:58 +0300
 From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
+To:     Joe Perches <joe@perches.com>
 Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] x86/alternative: record .altinstructions section
- entity size
-Message-ID: <Yi4ybwog/H4gk5Ts@localhost.localdomain>
+Subject: Re: [PATCH 1/5] x86/alternative: simplify DUMP_BYTES macro
+Message-ID: <Yi4zdkj4Ye4iVj7J@localhost.localdomain>
 References: <20220311144312.88466-1-adobriyan@gmail.com>
- <20220311144312.88466-3-adobriyan@gmail.com>
- <20220312211740.GG28057@worktop.programming.kicks-ass.net>
+ <e9c77d12092a4f048992f67d3fa0cf363b8614d4.camel@perches.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220312211740.GG28057@worktop.programming.kicks-ass.net>
+In-Reply-To: <e9c77d12092a4f048992f67d3fa0cf363b8614d4.camel@perches.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,75 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 10:17:40PM +0100, Peter Zijlstra wrote:
-> On Fri, Mar 11, 2022 at 05:43:10PM +0300, Alexey Dobriyan wrote:
-> > .altinstructions entry was 12 bytes in size, then it was 13 bytes,
-> > now it is 12 again. It was 24 bytes on some distros as well.
-> > Record this information as section sh_entsize value so that tools
-> > which parse .altinstructions have easier time.
+On Sat, Mar 12, 2022 at 08:36:11AM -0800, Joe Perches wrote:
+> On Fri, 2022-03-11 at 17:43 +0300, Alexey Dobriyan wrote:
+> > Avoid zero length check with clever whitespace placement in the format
+> > string.
+> []
+> > diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> []
+> > @@ -66,13 +66,10 @@ do {									\
+> >  	if (unlikely(debug_alternative)) {				\
+> >  		int j;							\
+> >  									\
+> > -		if (!(len))						\
+> > -			break;						\
+> > -									\
+> >  		printk(KERN_DEBUG pr_fmt(fmt), ##args);			\
+> > -		for (j = 0; j < (len) - 1; j++)				\
+> > -			printk(KERN_CONT "%02hhx ", buf[j]);		\
+> > -		printk(KERN_CONT "%02hhx\n", buf[j]);			\
+> > +		for (j = 0; j < (len); j++)				\
+> > +			printk(KERN_CONT " %02hhx", buf[j]);		\
+> > +		printk(KERN_CONT "\n");					\
+> >  	}								\
 > 
-> Which tools would that be? Because afaict you've not actually updated
-> objtool.
+> This could also use %02x and not %02hhx
 
-We parse .altinstructions to look for "dangerous" functions so that we
-don't unpatch when a process is sleeping in a userspace pagefault caused
-by such function. Defining .sh_entsize will simplify this process in the future.
-Now that padding issues have been solved, "struct alt_instr" should be
-stable and sizeof should be enough to tell one layout from another.
+I doubt as there is funky stuff possible with 255 and such values.
+Format specifiers aren't the purpose of the patch anyway.
 
-> > --- a/arch/x86/include/asm/alternative.h
-> > +++ b/arch/x86/include/asm/alternative.h
-> > @@ -9,6 +9,8 @@
-> >  #define ALTINSTR_FLAG_INV	(1 << 15)
-> >  #define ALT_NOT(feat)		((feat) | ALTINSTR_FLAG_INV)
-> >  
-> > +#define sizeof_struct_alt_instr 12
-> > +
-> >  #ifndef __ASSEMBLY__
-> >  
-> >  #include <linux/stddef.h>
-> > @@ -66,6 +68,7 @@ struct alt_instr {
-> >  	u8  instrlen;		/* length of original instruction */
-> >  	u8  replacementlen;	/* length of new instruction */
-> >  } __packed;
-> > +_Static_assert(sizeof(struct alt_instr) == sizeof_struct_alt_instr, "");
-> 
-> Would it not be much simpler to have this in asm-offsets.h ?
+> And MAX_PATCH_LEN is 255 but is that really possible?
 
-I tried this and failed. alternative.h is getting included and
-preprocessed before asm-offsets.c is generated so there are lines like
+Yes if you try hard enough.
 
-	#define 12 12
+> Maybe if the actual patch length is always <= 64 this could use
+> 	printk(KERN_CONT "%*ph\n", (int)len, buf);
+> instead and avoid all possible interleaving?
 
-and it doesn't work.
-
-> > +	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
-> > +	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
-> > +	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
-> 
-> > +	.pushsection .altinstructions,"aM",@progbits,sizeof_struct_alt_instr
-> > +	.pushsection .altinstructions,"aM",@progbits,sizeof_struct_alt_instr
-> 
-> Aside of adding entsize, you're also adding the M(ergable) bit. Also,
-> those lines are on the unwieldy side of things.
-
-binutils doc says
-
-	https://sourceware.org/binutils/docs/as/Section.html
-
-	If flags contains the M symbol then the type argument must be specified as well as an extra argument—entsize—like this:
-
-	.section name , "flags"M, @type, entsize
-
-	Sections with the M flag but not S flag must contain fixed size constants,
-	each entsize octets long. Sections with both M and S must contain zero
-	terminated strings where each character is entsize bytes long. The linker
-	may remove duplicates within sections with the same name, same entity size
-	and same flags. entsize must be an absolute expression. For sections with
-	both M and S, a string which is a suffix of a larger string is considered
-	a duplicate. Thus "def" will be merged with "abcdef"; A reference to the
-	first "def" will be changed to a reference to "abcdef"+3.
-
-"a"M doesn't work, but "aM" does.
-
-I don't know if merging is the issue, it is not like alt replacements have names.
+It is for debugging feature nobody uses (because it works).

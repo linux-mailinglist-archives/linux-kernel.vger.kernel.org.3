@@ -2,41 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992EE4D7443
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357494D744C
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232736AbiCMKjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 06:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S232850AbiCMKsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 06:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbiCMKjA (ORCPT
+        with ESMTP id S230260AbiCMKsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 06:39:00 -0400
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D333F117E;
-        Sun, 13 Mar 2022 03:37:49 -0700 (PDT)
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id BAEDC72C90A;
-        Sun, 13 Mar 2022 13:29:07 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id B01877CE0CA; Sun, 13 Mar 2022 13:29:07 +0300 (MSK)
-Date:   Sun, 13 Mar 2022 13:29:07 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] shmbuf.h: add asm/shmbuf.h to UAPI compile-test
- coverage
-Message-ID: <20220313102907.GC28782@altlinux.org>
-References: <20220210021129.3386083-1-masahiroy@kernel.org>
- <20220210021129.3386083-3-masahiroy@kernel.org>
+        Sun, 13 Mar 2022 06:48:37 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22518114FC3;
+        Sun, 13 Mar 2022 03:47:28 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 7B54922239;
+        Sun, 13 Mar 2022 11:47:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647168446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wIZiFEsZAeYnOqGs2+bUuvQH61Nh7FBJ6q0NJr//BIc=;
+        b=Jsqb8R27K4Qb9rhh2kkLgl4QF30L8Zoir/MEJOYpBLov6Da5zXRUtfV+p+nGRhKbvGTnwF
+        4Lb61D5TLrpwVDwpyDGWfpEDpMqzJDkq/3IQ2AZ2Lh/Uc0xSmioHscQLiXleTN7XG8PXKq
+        Wb9AV4OIWFUGZw+ADvWBDNImlOWbAMk=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210021129.3386083-3-masahiroy@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sun, 13 Mar 2022 11:47:26 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/3] dt-bindings: net: mscc-miim: add lan966x
+ compatible
+In-Reply-To: <08b89b3f-d0d3-e96f-d1c3-80e8dfd0798f@kernel.org>
+References: <20220313002536.13068-1-michael@walle.cc>
+ <20220313002536.13068-2-michael@walle.cc>
+ <08b89b3f-d0d3-e96f-d1c3-80e8dfd0798f@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d18291ff8d81f03a58900935d92115f2@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,138 +62,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 11:11:25AM +0900, Masahiro Yamada wrote:
-> asm/shmbuf.h is currently excluded from the UAPI compile-test because of
-> the errors like follows:
+Hi Krzysztof,
+
+Am 2022-03-13 10:47, schrieb Krzysztof Kozlowski:
+> On 13/03/2022 01:25, Michael Walle wrote:
+>> The MDIO controller has support to release the internal PHYs from 
+>> reset
+>> by specifying a second memory resource. This is different between the
+>> currently supported SparX-5 and the LAN966x. Add a new compatible to
+>> distiguish between these two.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>  Documentation/devicetree/bindings/net/mscc-miim.txt | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/net/mscc-miim.txt 
+>> b/Documentation/devicetree/bindings/net/mscc-miim.txt
+>> index 7104679cf59d..a9efff252ca6 100644
+>> --- a/Documentation/devicetree/bindings/net/mscc-miim.txt
+>> +++ b/Documentation/devicetree/bindings/net/mscc-miim.txt
+>> @@ -2,7 +2,7 @@ Microsemi MII Management Controller (MIIM) / MDIO
+>>  =================================================
+>> 
+>>  Properties:
+>> -- compatible: must be "mscc,ocelot-miim"
+>> +- compatible: must be "mscc,ocelot-miim" or "mscc,lan966x-miim"
 > 
->     HDRTEST usr/include/asm/shmbuf.h
->   In file included from ./usr/include/asm/shmbuf.h:6,
->                    from <command-line>:
->   ./usr/include/asm-generic/shmbuf.h:26:33: error: field ‘shm_perm’ has incomplete type
->      26 |         struct ipc64_perm       shm_perm;       /* operation perms */
->         |                                 ^~~~~~~~
->   ./usr/include/asm-generic/shmbuf.h:27:9: error: unknown type name ‘size_t’
->      27 |         size_t                  shm_segsz;      /* size of segment (bytes) */
->         |         ^~~~~~
->   ./usr/include/asm-generic/shmbuf.h:40:9: error: unknown type name ‘__kernel_pid_t’
->      40 |         __kernel_pid_t          shm_cpid;       /* pid of creator */
->         |         ^~~~~~~~~~~~~~
->   ./usr/include/asm-generic/shmbuf.h:41:9: error: unknown type name ‘__kernel_pid_t’
->      41 |         __kernel_pid_t          shm_lpid;       /* pid of last operator */
->         |         ^~~~~~~~~~~~~~
-> 
-> The errors can be fixed by replacing size_t with __kernel_size_t and by
-> including proper headers.
-> 
-> Then, remove the no-header-test entry from user/include/Makefile.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> No wildcards, use one, specific compatible.
 
-This is essentially the same patch as
-https://lore.kernel.org/lkml/20211227105303.GA25101@altlinux.org/
+I'm in a kind of dilemma here, have a look yourself:
+grep -r "lan966[28x]-" Documentation
 
-Apparently, some people are more lucky in getting their patches reviewed.
+Should I deviate from the common "name" now? To make things
+worse, there was a similar request by Arnd [1]. But the
+solution feels like cheating ("lan966x" -> "lan966") ;)
 
-[...]
-> diff --git a/arch/mips/include/uapi/asm/shmbuf.h b/arch/mips/include/uapi/asm/shmbuf.h
-> index 680bb95b2240..eb74d304b779 100644
-> --- a/arch/mips/include/uapi/asm/shmbuf.h
-> +++ b/arch/mips/include/uapi/asm/shmbuf.h
-> @@ -2,6 +2,9 @@
->  #ifndef _ASM_SHMBUF_H
->  #define _ASM_SHMBUF_H
->  
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
+On a side note, I understand that there should be no wildcards,
+because the compatible should target one specific implementation,
+right? But then the codename "ocelot" represents a whole series of
+chips. Therefore, names for whole families shouldn't be used neither,
+right?
 
-There is no need to include <asm/posix_types.h> since <asm/ipcbuf.h>
-already includes it, but there is no harm either.
+-michael
 
-[...]
-> diff --git a/arch/parisc/include/uapi/asm/shmbuf.h b/arch/parisc/include/uapi/asm/shmbuf.h
-> index 5da3089be65e..532da742fb56 100644
-> --- a/arch/parisc/include/uapi/asm/shmbuf.h
-> +++ b/arch/parisc/include/uapi/asm/shmbuf.h
-> @@ -3,6 +3,8 @@
->  #define _PARISC_SHMBUF_H
->  
->  #include <asm/bitsperlong.h>
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
-
-Likewise.
-
-[...]
-> diff --git a/arch/powerpc/include/uapi/asm/shmbuf.h b/arch/powerpc/include/uapi/asm/shmbuf.h
-> index 00422b2f3c63..439a3a02ba64 100644
-> --- a/arch/powerpc/include/uapi/asm/shmbuf.h
-> +++ b/arch/powerpc/include/uapi/asm/shmbuf.h
-> @@ -2,6 +2,9 @@
->  #ifndef _ASM_POWERPC_SHMBUF_H
->  #define _ASM_POWERPC_SHMBUF_H
->  
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
-
-Likewise.
-
-[...]
-> diff --git a/arch/sparc/include/uapi/asm/shmbuf.h b/arch/sparc/include/uapi/asm/shmbuf.h
-> index a5d7d8d681c4..ed4f061c7a15 100644
-> --- a/arch/sparc/include/uapi/asm/shmbuf.h
-> +++ b/arch/sparc/include/uapi/asm/shmbuf.h
-> @@ -2,6 +2,9 @@
->  #ifndef _SPARC_SHMBUF_H
->  #define _SPARC_SHMBUF_H
->  
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
-
-Likewise.
-
-[...]
-> diff --git a/arch/x86/include/uapi/asm/shmbuf.h b/arch/x86/include/uapi/asm/shmbuf.h
-> index fce18eaa070c..13775bfdfee2 100644
-> --- a/arch/x86/include/uapi/asm/shmbuf.h
-> +++ b/arch/x86/include/uapi/asm/shmbuf.h
-> @@ -5,6 +5,10 @@
->  #if !defined(__x86_64__) || !defined(__ILP32__)
->  #include <asm-generic/shmbuf.h>
->  #else
-> +
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
-
-Likewise.
-
-[...]
-> diff --git a/arch/xtensa/include/uapi/asm/shmbuf.h b/arch/xtensa/include/uapi/asm/shmbuf.h
-> index 554a57a6a90f..bb8bdddae9b5 100644
-> --- a/arch/xtensa/include/uapi/asm/shmbuf.h
-> +++ b/arch/xtensa/include/uapi/asm/shmbuf.h
-> @@ -20,9 +20,12 @@
->  #ifndef _XTENSA_SHMBUF_H
->  #define _XTENSA_SHMBUF_H
->  
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
-
-Likewise.
-
-[...]
-> diff --git a/include/uapi/asm-generic/shmbuf.h b/include/uapi/asm-generic/shmbuf.h
-> index 2bab955e0fed..2979b6dd2c56 100644
-> --- a/include/uapi/asm-generic/shmbuf.h
-> +++ b/include/uapi/asm-generic/shmbuf.h
-> @@ -3,6 +3,8 @@
->  #define __ASM_GENERIC_SHMBUF_H
->  
->  #include <asm/bitsperlong.h>
-> +#include <asm/ipcbuf.h>
-> +#include <asm/posix_types.h>
-
-Likewise.
-
-
--- 
-ldv
+[1] 
+https://lore.kernel.org/lkml/CAK8P3a2kRhCOoXnvcMyqS-zK2WDZjtUq4aqOzE5VV=VMg=pVOA@mail.gmail.com/

@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A024D742F
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F314D7433
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiCMKLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 06:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S232603AbiCMKON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 06:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiCMKL3 (ORCPT
+        with ESMTP id S231351AbiCMKOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 06:11:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F3F645075
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 03:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647166221;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k2FADEf28TqJAPkif0KyeCNyGcMlkFHLeXIWnUuPnn8=;
-        b=a/pB/CYDJh07eF2LWt5RFaHkDkM5Gy9tUWZ0V0ASusF+e92BTNy1KlBULtlC3PDBpc75MP
-        rplhhrc0lRTNTJpJ4/aSWTEH6vbsch7CA00RSJpYW7ak7xamzJOG9yIfui0peDlTTg4ktH
-        CpQkMvJsEorAGv46To1fw6aAFHZJus0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-31-dTHlVspjN6SRUFTa_5iuKA-1; Sun, 13 Mar 2022 06:10:18 -0400
-X-MC-Unique: dTHlVspjN6SRUFTa_5iuKA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DFB4801597;
-        Sun, 13 Mar 2022 10:10:17 +0000 (UTC)
-Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D6410400F3F8;
-        Sun, 13 Mar 2022 10:10:11 +0000 (UTC)
-Date:   Sun, 13 Mar 2022 18:10:05 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     syzbot <syzbot+b42749a851a47a0f581b@syzkaller.appspotmail.com>
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [syzbot] memory leak in blk_iolatency_init (2)
-Message-ID: <Yi3C/Xai8TepwBeE@T590>
-References: <0000000000007414e805da0c5de4@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000007414e805da0c5de4@google.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sun, 13 Mar 2022 06:14:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32953DEAC
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 03:13:03 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id g17so22289797lfh.2
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 03:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=m2Ai362wiP1vbbI9s63xOoA0fn/s0S5gwcjrtQUOdC0=;
+        b=Xb2KG/qzbCzKWRqqkFkNLDfgZbNIdJq0K48cH98toOKzlr++cToOqHLTfu6dONqa9n
+         E4l0UR2UGi2dW6U+ARQf6VscmLDjBYT3A6EBOGd34QBivuhQ9RVHylgsSjxO/MvlUgdt
+         CkidXajy0njCyepY4aBdXlDLMRXsIf+1ufVPdpqE4qiu6v9tkMMfyW8I9CM1D0bUDg9A
+         aXq1TrhMc8QyQSkfuf9tSJE5U4fJQanWybZm1Y8VW3ZDIilhUPWz2ho+TYbdl9cEDdVj
+         gfW3YiVi62q8A8osD/oTlUEZVcwCH0A0RJuIqiH6blQyygQsyjDbr/zvU0m2Zjjngrow
+         S/wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=m2Ai362wiP1vbbI9s63xOoA0fn/s0S5gwcjrtQUOdC0=;
+        b=1mtGyjMShMwzuCfGOFHMu7bP17lFK1CjQ9dqm03onKZxrIfL5fJ9BpLoxfecfghmOy
+         x6J4V5C4T/OdG9gYwot5sr6HxSQWKyA9GjNVQ+befjKCZpXGG9kOghTlYXI1nQR2+YZe
+         r6vx8l0226v8HFGbq2ZWUXG7zkTbWxD+HAlEvOPogU6wHVMiqqjNKrtzhVZT1GTCpGMJ
+         eLF/jOfZhgtHIWWAwuugC4GKzMcCtW63V8drSaFJbovX3wVXTjHMlS70xYZLGjKCuLrO
+         6sQAx79xOTjsScLYFBXJlUuTMKmJtWJwVDAHW63lYA1KRBtkL/vAnJ+/GVYcXjMASwso
+         g1eQ==
+X-Gm-Message-State: AOAM531SFwqb4CgN+BUXuk5EY54qNkVQEYnneX/WNJ5OmX9gMHoNXD9P
+        iB4U7LWN1yDO7XHcvbVtjZ0=
+X-Google-Smtp-Source: ABdhPJyCp5AaYs+cO005a0E86TOpIdIPyD2467a87+CRiH9PN/jRXTTSeStgacBI42adrU6kiqdj6g==
+X-Received: by 2002:a05:6512:e90:b0:448:6d41:c736 with SMTP id bi16-20020a0565120e9000b004486d41c736mr7125972lfb.453.1647166381462;
+        Sun, 13 Mar 2022 03:13:01 -0700 (PDT)
+Received: from smtpclient.apple (31-178-191-245.dynamic.chello.pl. [31.178.191.245])
+        by smtp.gmail.com with ESMTPSA id bp4-20020a056512158400b0044332792f30sm2649522lfb.175.2022.03.13.03.13.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 13 Mar 2022 03:13:01 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH] drm/bridge: synopsys/dw-hdmi: set cec clock rate
+From:   Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
+In-Reply-To: <20220126202427.3047814-1-pgwipeout@gmail.com>
+Date:   Sun, 13 Mar 2022 11:12:59 +0100
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Pierre-Hugues Husson <phh@phh.me>,
+        Archit Taneja <architt@codeaurora.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        dri-devel@lists.freedesktop.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3AFD1DD4-AF0A-4ECC-B4F5-E6BD6B9F1BB7@gmail.com>
+References: <20220126202427.3047814-1-pgwipeout@gmail.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 01:45:25PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    79b00034e9dc Merge tag 'drm-fixes-2022-03-11' of git://ano..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15cf8329700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c9e1a3a8e38b9582
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b42749a851a47a0f581b
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101cc4ee700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1270b5e9700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b42749a851a47a0f581b@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff888103f8fa00 (size 96):
->   comm "kworker/u4:0", pid 8, jiffies 4294937736 (age 503.480s)
->   hex dump (first 32 bytes):
->     40 5d ca 85 ff ff ff ff 38 c8 26 04 81 88 ff ff  @]......8.&.....
->     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<ffffffff8228f408>] kmalloc include/linux/slab.h:581 [inline]
->     [<ffffffff8228f408>] kzalloc include/linux/slab.h:714 [inline]
->     [<ffffffff8228f408>] blk_iolatency_init+0x28/0x190 block/blk-iolatency.c:725
->     [<ffffffff82285ede>] blkcg_init_queue+0xee/0x1c0 block/blk-cgroup.c:1206
->     [<ffffffff8224b1aa>] blk_alloc_queue+0x24a/0x4a0 block/blk-core.c:495
->     [<ffffffff822647a5>] blk_mq_init_queue_data block/blk-mq.c:3883 [inline]
->     [<ffffffff822647a5>] blk_mq_init_queue+0x35/0x90 block/blk-mq.c:3897
->     [<ffffffff8277f2b1>] scsi_alloc_sdev+0x231/0x3b0 drivers/scsi/scsi_scan.c:330
->     [<ffffffff82780425>] scsi_probe_and_add_lun+0xff5/0x17e0 drivers/scsi/scsi_scan.c:1167
->     [<ffffffff827812df>] __scsi_scan_target+0x14f/0x9a0 drivers/scsi/scsi_scan.c:1649
->     [<ffffffff82781da7>] scsi_scan_channel drivers/scsi/scsi_scan.c:1737 [inline]
->     [<ffffffff82781da7>] scsi_scan_channel+0xb7/0x100 drivers/scsi/scsi_scan.c:1713
->     [<ffffffff82781faf>] scsi_scan_host_selected+0x1bf/0x220 drivers/scsi/scsi_scan.c:1766
->     [<ffffffff827820d0>] do_scsi_scan_host+0xc0/0xd0 drivers/scsi/scsi_scan.c:1905
->     [<ffffffff82782359>] do_scan_async+0x19/0x200 drivers/scsi/scsi_scan.c:1915
->     [<ffffffff8127cff4>] async_run_entry_fn+0x24/0xf0 kernel/async.c:127
->     [<ffffffff8126b43f>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
->     [<ffffffff8126bd69>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
->     [<ffffffff81275725>] kthread+0x125/0x160 kernel/kthread.c:377
->     [<ffffffff810021ef>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-This is caused by 8e141f9eb803 ("block: drain file system I/O on del_gendisk").
-
-rq_qos_exit() is for calling blkcg_iolatency_exit() to release data
-allocated in blk_iolatency_init(). Since 8e141f9eb803, rq_qos_exit() is
-moved to del_gendisk() from blk_cleanup_queue, it becomes not possible
-to free the data when scanning un-present luns.
-
-The following patch should fix it for v5.16/v5.17, and V5.18 needn't that
-since v5.18 will move blkcg init/uninit into gendisk alloc/release.
 
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index ce08f0aa9dfc..1ea7e523960c 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -321,6 +321,7 @@ void blk_cleanup_queue(struct request_queue *q)
- 	 */
- 	blk_freeze_queue(q);
- 
-+	rq_qos_exit(q);
- 	blk_queue_flag_set(QUEUE_FLAG_DEAD, q);
- 
- 	blk_sync_queue(q);
+> Wiadomo=C5=9B=C4=87 napisana przez Peter Geis <pgwipeout@gmail.com> w =
+dniu 26.01.2022, o godz. 21:24:
+>=20
+> The hdmi-cec clock must be 32khz in order for cec to work correctly.
+> Ensure after enabling the clock we set it in order for the hardware to
+> work as expected.
+> Warn on failure, in case this is a static clock that is slighty off.
+> Fixes hdmi-cec support on Rockchip devices.
+>=20
+> Fixes: ebe32c3e282a ("drm/bridge: synopsys/dw-hdmi: Enable cec clock")
+>=20
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 7 +++++++
+> 1 file changed, 7 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
+b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index 54d8fdad395f..1a96da60e357 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -48,6 +48,9 @@
+>=20
+> #define HDMI14_MAX_TMDSCLK	340000000
+>=20
+> +/* HDMI CEC needs a clock rate of 32khz */
+> +#define HDMI_CEC_CLK_RATE	32768
+> +
+> enum hdmi_datamap {
+> 	RGB444_8B =3D 0x01,
+> 	RGB444_10B =3D 0x03,
+> @@ -3347,6 +3350,10 @@ struct dw_hdmi *dw_hdmi_probe(struct =
+platform_device *pdev,
+> 				ret);
+> 			goto err_iahb;
+> 		}
+> +
+> +		ret =3D clk_set_rate(hdmi->cec_clk, HDMI_CEC_CLK_RATE);
+> +		if (ret)
+> +			dev_warn(hdmi->dev, "Cannot set HDMI cec clock =
+rate: %d\n", ret);
+> 	}
+>=20
+> 	/* Product and revision IDs */
+> --=20
+> 2.25.1
+>=20
+>=20
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
 
+Peter,
 
-Thanks,
-Ming
+On my 5.17-rc7 with applied rk356x VOP2 v8 series - this patch makes CEC =
+working on rk3566.
+Unfortunately it breaks working ok CEC on rk3399 rockpi-4b.
 
+Reverting this patch brings back CEC on rk3399 - but rk3366 becomes with =
+non working CEC
+=20
+I'm not sure how to move forward with this....
+=20
+br=

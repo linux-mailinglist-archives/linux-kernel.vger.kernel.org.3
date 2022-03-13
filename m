@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E964D75DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD684D75E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiCMOcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 10:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
+        id S234644AbiCMOhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 10:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiCMOcB (ORCPT
+        with ESMTP id S232925AbiCMOhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 10:32:01 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3C69BAF4;
-        Sun, 13 Mar 2022 07:30:53 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id x15so20024079wru.13;
-        Sun, 13 Mar 2022 07:30:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vvFg0tG8qKQJGX7GaBTq12KHlg0aXVnGRCZLTU302pk=;
-        b=NgUVjisQDjaJPqCiBCqkTz686mHZsPa7RWV+vLCjA1AmEpu5t9JQHE7mg0/OgP1WXN
-         CR6qAKLZtgUy1JF3aM+oGNoSs6JDZAfGt9m0DQ6LnEBVuQcTvK2aDXgjXjI4is1SSRCb
-         aKKuYMV+wvvYgm3sXsz/8TLP/a9wUgYuDZyzdb2Nx/39jvqi7oSXUrZUnBTl1MbVx0P+
-         fBfegXYLtANgjUTsO/UIhS16EyfdEsRsPTeNsM34yc1sd7aGysDfZDA1A2P0tUrWGY4r
-         k3gKw/Dov8lXz/QyC5q6kx6F756IOhQ7tpZal3KGhGsl0eDyzVZbic8bwWyej25QBmm/
-         wKjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vvFg0tG8qKQJGX7GaBTq12KHlg0aXVnGRCZLTU302pk=;
-        b=tu/+KBdtL/bwxzhED77M/IlZi8tmfqG1cgsYvacupvlB6/uZ6IF4aLGBq4MXrCCN5k
-         6wb0il5/eHOnFHNg0cQ8tP3ad2imphZ3CteqN4u+NWsDvVFLfk2y5uww+6+ZtU/atNpr
-         Uc9kLfklfYbLeOQW0txfW3i4tAazl8coJE1s2i/5n8iuRIGhDX13tunE/Ma0ITgY1MGR
-         7mXgPmIle5hmgP2/12OzSlsuhySBDOVnbpjqcOmWRiANDt1dxde5OjLDMLZA7cfKZwT3
-         g8VBaIzzG3AuIC8OTNd/soYxaDkda55O+0cYacIVrLsreI2gzdmqVduqc2aBG2d7AZz2
-         UAVg==
-X-Gm-Message-State: AOAM533ifTDdE/pLtMAvFm9qCEau+yC5V8BD6NQTWAJG+0Ytt0om70yT
-        7JwfvXEG/GHhuQsjlimUGoEM1MrOez0=
-X-Google-Smtp-Source: ABdhPJx0TnNje9HcnOzo3VxH19llTtCTHjxXBlskjJR1Q0AyGCCPqUaXEnhCsKqhrMYDjyDRz6dwxw==
-X-Received: by 2002:adf:816b:0:b0:203:7fae:a245 with SMTP id 98-20020adf816b000000b002037faea245mr13943998wrm.619.1647181852145;
-        Sun, 13 Mar 2022 07:30:52 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id l25-20020a1c7919000000b0038999b380e9sm12287708wme.38.2022.03.13.07.30.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 07:30:51 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <21922e4b-20ed-f8e4-3f37-a1e3523c2110@redhat.com>
-Date:   Sun, 13 Mar 2022 15:30:50 +0100
+        Sun, 13 Mar 2022 10:37:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D1D7E583
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 07:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647182160; x=1678718160;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xowV+94AKlePEPfVcZV+VxLoVWYZ92R6m7A/HpWh13s=;
+  b=l4UiQTfT8vW2WEfhkgJ8wl7wg23L5j29P4x0DQAlHenXkJB2S8ysUMoM
+   mK8fbd0uAubxkV/Jc5Ei8sz5p0PKrA7z/nrVfNq2CFaW13+80sF4nZYWH
+   E1up15UXNrMuOPOsQU4y49jDEyW5J15h1JVNKdnyuxttNsRPIFHhmnOS5
+   OKcVP5stpAPbZdN6DjIt1qCm0uftj9PNANuKgNNbiO/KfPsR58wR9XcNV
+   e2ZuMGUl7YPZJeJWi5m7zokYtc/7pC9IZMnWNFgkv2jhgtAnUV4cvHf+U
+   IoH2s6zbNGqpEpstho6vcae6FFIDbDbbmsJQ1sUJA+mRSTmYkpPhTiCz/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="238046042"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="238046042"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 07:36:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="511921507"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 13 Mar 2022 07:35:58 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTPKA-00091d-4o; Sun, 13 Mar 2022 14:35:58 +0000
+Date:   Sun, 13 Mar 2022 22:35:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>
+Subject: [hare-scsi-devel:tls-upcall.v4 121/156] net/tls/af_tlsh.c:452:
+ undefined reference to `inet6_getname'
+Message-ID: <202203132205.eE6eTsBS-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v5 012/104] KVM: TDX: Define TDX architectural
- definitions
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <d32e6bac7028e7e60929846cda126cd0e4309bff.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <d32e6bac7028e7e60929846cda126cd0e4309bff.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,186 +62,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Define architectural definitions for KVM to issue the TDX SEAMCALLs.
-> 
-> Structures and values that are architecturally defined in the TDX module
-> specifications the chapter of ABI Reference.
-> 
-> Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/vmx/tdx_arch.h | 158 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 158 insertions(+)
->   create mode 100644 arch/x86/kvm/vmx/tdx_arch.h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
+head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
+commit: 33ec82590b0b919215a255fb431d661be4807b45 [121/156] net/tls: Add support for PF_TLSH (a TLS handshake listener)
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220313/202203132205.eE6eTsBS-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=33ec82590b0b919215a255fb431d661be4807b45
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v4
+        git checkout 33ec82590b0b919215a255fb431d661be4807b45
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> diff --git a/arch/x86/kvm/vmx/tdx_arch.h b/arch/x86/kvm/vmx/tdx_arch.h
-> new file mode 100644
-> index 000000000000..3824491d22dc
-> --- /dev/null
-> +++ b/arch/x86/kvm/vmx/tdx_arch.h
-> @@ -0,0 +1,158 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* architectural constants/data definitions for TDX SEAMCALLs */
-> +
-> +#ifndef __KVM_X86_TDX_ARCH_H
-> +#define __KVM_X86_TDX_ARCH_H
-> +
-> +#include <linux/types.h>
-> +
-> +/*
-> + * TDX SEAMCALL API function leaves
-> + */
-> +#define TDH_VP_ENTER			0
-> +#define TDH_MNG_ADDCX			1
-> +#define TDH_MEM_PAGE_ADD		2
-> +#define TDH_MEM_SEPT_ADD		3
-> +#define TDH_VP_ADDCX			4
-> +#define TDH_MEM_PAGE_AUG		6
-> +#define TDH_MEM_RANGE_BLOCK		7
-> +#define TDH_MNG_KEY_CONFIG		8
-> +#define TDH_MNG_CREATE			9
-> +#define TDH_VP_CREATE			10
-> +#define TDH_MNG_RD			11
-> +#define TDH_MR_EXTEND			16
-> +#define TDH_MR_FINALIZE			17
-> +#define TDH_VP_FLUSH			18
-> +#define TDH_MNG_VPFLUSHDONE		19
-> +#define TDH_MNG_KEY_FREEID		20
-> +#define TDH_MNG_INIT			21
-> +#define TDH_VP_INIT			22
-> +#define TDH_VP_RD			26
-> +#define TDH_MNG_KEY_RECLAIMID		27
-> +#define TDH_PHYMEM_PAGE_RECLAIM		28
-> +#define TDH_MEM_PAGE_REMOVE		29
-> +#define TDH_MEM_TRACK			38
-> +#define TDH_MEM_RANGE_UNBLOCK		39
-> +#define TDH_PHYMEM_CACHE_WB		40
-> +#define TDH_PHYMEM_PAGE_WBINVD		41
-> +#define TDH_VP_WR			43
-> +#define TDH_SYS_LP_SHUTDOWN		44
-> +
-> +#define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO		0x10000
-> +#define TDG_VP_VMCALL_MAP_GPA				0x10001
-> +#define TDG_VP_VMCALL_GET_QUOTE				0x10002
-> +#define TDG_VP_VMCALL_REPORT_FATAL_ERROR		0x10003
-> +#define TDG_VP_VMCALL_SETUP_EVENT_NOTIFY_INTERRUPT	0x10004
-> +
-> +/* TDX control structure (TDR/TDCS/TDVPS) field access codes */
-> +#define TDX_NON_ARCH			BIT_ULL(63)
-> +#define TDX_CLASS_SHIFT			56
-> +#define TDX_FIELD_MASK			GENMASK_ULL(31, 0)
-> +
-> +#define __BUILD_TDX_FIELD(non_arch, class, field)	\
-> +	(((non_arch) ? TDX_NON_ARCH : 0) |		\
-> +	 ((u64)(class) << TDX_CLASS_SHIFT) |		\
-> +	 ((u64)(field) & TDX_FIELD_MASK))
-> +
-> +#define BUILD_TDX_FIELD(class, field)			\
-> +	__BUILD_TDX_FIELD(false, (class), (field))
-> +
-> +#define BUILD_TDX_FIELD_NON_ARCH(class, field)		\
-> +	__BUILD_TDX_FIELD(true, (class), (field))
-> +
-> +
-> +/* @field is the VMCS field encoding */
-> +#define TDVPS_VMCS(field)		BUILD_TDX_FIELD(0, (field))
-> +
-> +enum tdx_guest_other_state {
-> +	TD_VCPU_STATE_DETAILS_NON_ARCH = 0x100,
-> +};
-> +
-> +union tdx_vcpu_state_details {
-> +	struct {
-> +		u64 vmxip	: 1;
-> +		u64 reserved	: 63;
-> +	};
-> +	u64 full;
-> +};
-> +
-> +/* @field is any of enum tdx_guest_other_state */
-> +#define TDVPS_STATE(field)		BUILD_TDX_FIELD(17, (field))
-> +#define TDVPS_STATE_NON_ARCH(field)	BUILD_TDX_FIELD_NON_ARCH(17, (field))
-> +
-> +/* Management class fields */
-> +enum tdx_guest_management {
-> +	TD_VCPU_PEND_NMI = 11,
-> +};
-> +
-> +/* @field is any of enum tdx_guest_management */
-> +#define TDVPS_MANAGEMENT(field)		BUILD_TDX_FIELD(32, (field))
-> +
-> +enum tdx_tdcs_execution_control {
-> +	TD_TDCS_EXEC_TSC_OFFSET = 10,
-> +};
-> +
-> +/* @field is any of enum tdx_tdcs_execution_control */
-> +#define TDCS_EXEC(field)		BUILD_TDX_FIELD(17, (field))
-> +
-> +#define TDX_EXTENDMR_CHUNKSIZE		256
-> +
-> +struct tdx_cpuid_value {
-> +	u32 eax;
-> +	u32 ebx;
-> +	u32 ecx;
-> +	u32 edx;
-> +} __packed;
-> +
-> +#define TDX_TD_ATTRIBUTE_DEBUG		BIT_ULL(0)
-> +#define TDX_TD_ATTRIBUTE_PKS		BIT_ULL(30)
-> +#define TDX_TD_ATTRIBUTE_KL		BIT_ULL(31)
-> +#define TDX_TD_ATTRIBUTE_PERFMON	BIT_ULL(63)
-> +
-> +#define TDX_TD_XFAM_LBR			BIT_ULL(15)
-> +#define TDX_TD_XFAM_AMX			(BIT_ULL(17) | BIT_ULL(18))
-> +
-> +/*
-> + * TD_PARAMS is provided as an input to TDH_MNG_INIT, the size of which is 1024B.
-> + */
-> +struct td_params {
-> +	u64 attributes;
-> +	u64 xfam;
-> +	u32 max_vcpus;
-> +	u32 reserved0;
-> +
-> +	u64 eptp_controls;
-> +	u64 exec_controls;
-> +	u16 tsc_frequency;
-> +	u8  reserved1[38];
-> +
-> +	u64 mrconfigid[6];
-> +	u64 mrowner[6];
-> +	u64 mrownerconfig[6];
-> +	u64 reserved2[4];
-> +
-> +	union {
-> +		struct tdx_cpuid_value cpuid_values[0];
-> +		u8 reserved3[768];
-> +	};
-> +} __packed __aligned(1024);
-> +
-> +/*
-> + * Guest uses MAX_PA for GPAW when set.
-> + * 0: GPA.SHARED bit is GPA[47]
-> + * 1: GPA.SHARED bit is GPA[51]
-> + */
-> +#define TDX_EXEC_CONTROL_MAX_GPAW      BIT_ULL(0)
-> +
-> +/*
-> + * TDX requires the frequency to be defined in units of 25MHz, which is the
-> + * frequency of the core crystal clock on TDX-capable platforms, i.e. the TDX
-> + * module can only program frequencies that are multiples of 25MHz.  The
-> + * frequency must be between 100mhz and 10ghz (inclusive).
-> + */
-> +#define TDX_TSC_KHZ_TO_25MHZ(tsc_in_khz)	((tsc_in_khz) / (25 * 1000))
-> +#define TDX_TSC_25MHZ_TO_KHZ(tsc_in_25mhz)	((tsc_in_25mhz) * (25 * 1000))
-> +#define TDX_MIN_TSC_FREQUENCY_KHZ		(100 * 1000)
-> +#define TDX_MAX_TSC_FREQUENCY_KHZ		(10 * 1000 * 1000)
-> +
-> +#endif /* __KVM_X86_TDX_ARCH_H */
+All errors (new ones prefixed by >>):
 
+   ld: net/tls/af_tlsh.o: in function `tlsh_getname':
+>> net/tls/af_tlsh.c:452: undefined reference to `inet6_getname'
+   ld: net/tls/af_tlsh.o: in function `tlsh_release':
+>> net/tls/af_tlsh.c:283: undefined reference to `inet6_release'
+
+
+vim +452 net/tls/af_tlsh.c
+
+   259	
+   260	/**
+   261	 * tlsh_release - free an AF_TLSH socket
+   262	 * @sock: socket to release
+   263	 *
+   264	 * Return values:
+   265	 *   %0: success
+   266	 */
+   267	static int tlsh_release(struct socket *sock)
+   268	{
+   269		struct sock *sk = sock->sk;
+   270		struct tlsh_sock *tsk = tlsh_sk(sk);
+   271	
+   272		if (!sk)
+   273			return 0;
+   274	
+   275		switch (sk->sk_family) {
+   276		case AF_INET:
+   277			if (!tlsh_handshake_done(sk))
+   278				return inet_release(sock);
+   279			return 0;
+   280	#if IS_ENABLED(CONFIG_IPV6)
+   281		case AF_INET6:
+   282			if (!tlsh_handshake_done(sk))
+ > 283				return inet6_release(sock);
+   284			return 0;
+   285	#endif
+   286		case AF_TLSH:
+   287			break;
+   288		default:
+   289			return 0;
+   290		}
+   291	
+   292		sock_hold(sk);	/* Ref: D */
+   293		sock_orphan(sk);
+   294		lock_sock(sk);
+   295	
+   296		tlsh_unregister_listener(sk);
+   297		tlsh_accept_drain(sk);
+   298	
+   299		sk->sk_state = TCP_CLOSE;
+   300		sk->sk_shutdown |= SEND_SHUTDOWN;
+   301		sk->sk_state_change(sk);
+   302	
+   303		tsk->th_bind_family = AF_UNSPEC;
+   304		sock->sk = NULL;
+   305		release_sock(sk);
+   306		sock_put(sk);	/* Ref: D */
+   307	
+   308		sock_put(sk);	/* Ref: A */
+   309		return 0;
+   310	}
+   311	
+   312	/**
+   313	 * tlsh_bind - bind a name to an AF_TLSH socket
+   314	 * @sock: socket to be bound
+   315	 * @uaddr: address to bind to
+   316	 * @addrlen: length in bytes of @uaddr
+   317	 *
+   318	 * Binding an AF_TLSH socket defines the family of addresses that
+   319	 * are able to be accept(2)'d. So, AF_INET for ipv4, AF_INET6 for
+   320	 * ipv6.
+   321	 *
+   322	 * Return values:
+   323	 *   %0: binding was successful.
+   324	 *   %-EPERM: Caller not privileged
+   325	 *   %-EINVAL: Family of @sock or @uaddr not supported
+   326	 */
+   327	static int tlsh_bind(struct socket *sock, struct sockaddr *uaddr, int addrlen)
+   328	{
+   329		struct sock *listener, *sk = sock->sk;
+   330		struct tlsh_sock *tsk = tlsh_sk(sk);
+   331	
+   332		if (!capable(CAP_NET_BIND_SERVICE))
+   333			return -EPERM;
+   334	
+   335		switch (uaddr->sa_family) {
+   336		case AF_INET:
+   337			if (addrlen != sizeof(struct sockaddr_in))
+   338				return -EINVAL;
+   339			break;
+   340	#if IS_ENABLED(CONFIG_IPV6)
+   341		case AF_INET6:
+   342			if (addrlen != sizeof(struct sockaddr_in6))
+   343				return -EINVAL;
+   344			break;
+   345	#endif
+   346		default:
+   347			return -EAFNOSUPPORT;
+   348		}
+   349	
+   350		listener = tlsh_find_listener(sock_net(sk), uaddr->sa_family);
+   351		if (listener) {
+   352			sock_put(listener);	/* Ref: C */
+   353			return -EADDRINUSE;
+   354		}
+   355	
+   356		tsk->th_bind_family = uaddr->sa_family;
+   357		return 0;
+   358	}
+   359	
+   360	/**
+   361	 * tlsh_accept - return a connection waiting for a TLS handshake
+   362	 * @listener: listener socket which connection requests arrive on
+   363	 * @newsock: socket to move incoming connection to
+   364	 * @flags: SOCK_NONBLOCK and/or SOCK_CLOEXEC
+   365	 * @kern: "boolean": 1 for kernel-internal sockets
+   366	 *
+   367	 * Return values:
+   368	 *   %0: @newsock has been initialized.
+   369	 *   %-EPERM: caller is not privileged
+   370	 */
+   371	static int tlsh_accept(struct socket *listener, struct socket *newsock, int flags,
+   372			       bool kern)
+   373	{
+   374		struct sock *sk = listener->sk, *newsk;
+   375		DECLARE_WAITQUEUE(wait, current);
+   376		long timeo;
+   377		int rc;
+   378	
+   379		rc = -EPERM;
+   380		if (!capable(CAP_NET_BIND_SERVICE))
+   381			goto out;
+   382	
+   383		lock_sock(sk);
+   384	
+   385		if (sk->sk_state != TCP_LISTEN) {
+   386			rc = -EBADF;
+   387			goto out_release;
+   388		}
+   389	
+   390		timeo = sock_rcvtimeo(sk, flags & O_NONBLOCK);
+   391	
+   392		rc = 0;
+   393		add_wait_queue_exclusive(sk_sleep(sk), &wait);
+   394		while (!(newsk = tlsh_accept_dequeue(sk))) {
+   395			set_current_state(TASK_INTERRUPTIBLE);
+   396			if (!timeo) {
+   397				rc = -EAGAIN;
+   398				break;
+   399			}
+   400			release_sock(sk);
+   401	
+   402			timeo = schedule_timeout(timeo);
+   403	
+   404			lock_sock(sk);
+   405			if (sk->sk_state != TCP_LISTEN) {
+   406				rc = -EBADF;
+   407				break;
+   408			}
+   409			if (signal_pending(current)) {
+   410				rc = sock_intr_errno(timeo);
+   411				break;
+   412			}
+   413		}
+   414		set_current_state(TASK_RUNNING);
+   415		remove_wait_queue(sk_sleep(sk), &wait);
+   416		if (rc) {
+   417			tlsh_handshake_done(sk);
+   418			goto out_release;
+   419		}
+   420	
+   421		sock_graft(newsk, newsock);
+   422	
+   423		/* prevent user agent close from releasing the kernel socket */
+   424		__module_get(THIS_MODULE);
+   425		sock_hold(newsk);
+   426	
+   427	out_release:
+   428		release_sock(sk);
+   429	out:
+   430		return rc;
+   431	}
+   432	
+   433	/**
+   434	 * tlsh_getname - retrieve src/dst address information from an AF_TLSH socket
+   435	 * @sock: socket to query
+   436	 * @uaddr: buffer to fill in
+   437	 * @peer: value indicates which address to retrieve
+   438	 *
+   439	 * Return values:
+   440	 *   On success, a positive length of the address in @uaddr
+   441	 *   On error, a negative errno
+   442	 */
+   443	static int tlsh_getname(struct socket *sock, struct sockaddr *uaddr, int peer)
+   444	{
+   445		struct sock *sk = sock->sk;
+   446	
+   447		switch (sk->sk_family) {
+   448		case AF_INET:
+   449			return inet_getname(sock, uaddr, peer);
+   450	#if IS_ENABLED(CONFIG_IPV6)
+   451		case AF_INET6:
+ > 452			return inet6_getname(sock, uaddr, peer);
+   453	#endif
+   454		default:
+   455			return -EOPNOTSUPP;
+   456		}
+   457	}
+   458	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

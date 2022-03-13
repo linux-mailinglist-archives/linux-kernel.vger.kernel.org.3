@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BE04D7392
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 08:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F684D7385
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 08:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbiCMHZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 03:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S230366AbiCMHYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 03:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbiCMHXK (ORCPT
+        with ESMTP id S233775AbiCMHXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 13 Mar 2022 03:23:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BC91945D1;
-        Sat, 12 Mar 2022 23:21:58 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8816A194576;
+        Sat, 12 Mar 2022 23:21:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CEBC60F8A;
-        Sun, 13 Mar 2022 07:21:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6037C341D5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D70C960F6F;
+        Sun, 13 Mar 2022 07:21:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1104C36AEB;
         Sun, 13 Mar 2022 07:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647156114;
-        bh=/ogxKzZ0m6khAgDWEbqpQVa3n5tf3pCSQuh7JVzkivY=;
+        bh=BOiGB4sNHzTN94Svjzn5HIDTxNSi9vo6g7hrj1wHpfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XH6gg3RXqCBOWOOYQZt6g4I62KabpJA9CBhlooEMj9nCldin+E9DX1q7qCqm4BlI5
-         0n9zeTdPJezGNvbwWIyl2REB7mhf2kOGBn+29l8VD/qhB165HfFCSckqXTIGIFKlmg
-         g9dIEaMpb6dgTtE0lwvHOhq0R6sdGkS9qM+F4H0fHldzZVhQzUFOHrtehl9T7oIpR1
-         rWylN7mKqkxeh3UKoGR4CITQdcOrqPJqigMvqrVYFBOfJz3roJuNP897GQr+VrXGP0
-         8qAxd7a5uNuUnK2il2expLRL0ORsb1mj6oC0VsyQAn/GUsjI/Id9Ge8DUzg8d1pi7H
-         /dFekLlRoH14Q==
+        b=ZnIfz/LW3lailNCIWIXjUt23a5jfRFjoYMetc6iPD63HhZy8ZUDEccpwDS0/H+GGC
+         EQep/bgpm2AIt0SMjSYJ+idfNfPFhSszHuaV7leg0guDV8tNkrIPpm149kRNJZpBCS
+         nfruwPsuVGfXenkWh6PjwMbiQsCmZSqwde/SrgRPx7eyv7OInHHvd6ULDqYZ5SlNmW
+         BnBaTqezQJNMlLZ21OXD63psdAep9ranZXA2ApZaaaNH+Pr8agKSkBlCvjwSA0KgrT
+         NIgNKBz3CvwoXGduPf4AL1pOqcVi/+TDdxhNof3S0oUxISA5cGlXRq6B8BcgI5fg1q
+         B9ljmyFo2ifcA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTIY4-0012xk-GN; Sun, 13 Mar 2022 08:21:52 +0100
+        id 1nTIY4-0012xo-HY; Sun, 13 Mar 2022 08:21:52 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
         Ming Qian <ming.qian@nxp.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 35/39] media: platform: s5p-mfc: move config to its own file
-Date:   Sun, 13 Mar 2022 08:21:44 +0100
-Message-Id: <a2a4db642a19b66cdef1a2f0dabd39cdc370a6cf.1647155572.git.mchehab@kernel.org>
+Subject: [PATCH v3 36/39] media: platform: s5p-jpeg: move config to its own file
+Date:   Sun, 13 Mar 2022 08:21:45 +0100
+Message-Id: <822d8d6a7fa225bf756fc023f9c5287808f10ef0.1647155572.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647155572.git.mchehab@kernel.org>
 References: <cover.1647155572.git.mchehab@kernel.org>
@@ -68,54 +69,69 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-s5p-mfc-specific config stuff on a separate Kconfig file.
+s5p-jpeg-specific config stuff on a separate Kconfig file.
 
+Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v3 00/39] at: https://lore.kernel.org/all/cover.1647155572.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig         | 9 +--------
- drivers/media/platform/s5p-mfc/Kconfig | 9 +++++++++
- 2 files changed, 10 insertions(+), 8 deletions(-)
- create mode 100644 drivers/media/platform/s5p-mfc/Kconfig
+ drivers/media/platform/Kconfig          | 13 +------------
+ drivers/media/platform/s5p-jpeg/Kconfig | 12 ++++++++++++
+ 2 files changed, 13 insertions(+), 12 deletions(-)
+ create mode 100644 drivers/media/platform/s5p-jpeg/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 2069eee801af..fd6b18ac0c7c 100644
+index fd6b18ac0c7c..d5aedc6b5ca3 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -113,14 +113,7 @@ config VIDEO_SAMSUNG_S5P_JPEG
- 	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
- 	  and EXYNOS4 JPEG codec
+@@ -62,6 +62,7 @@ source "drivers/media/platform/rockchip/rga/Kconfig"
+ source "drivers/media/platform/rockchip/rkisp1/Kconfig"
+ source "drivers/media/platform/s3c-camif/Kconfig"
+ source "drivers/media/platform/s5p-g2d/Kconfig"
++source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/sti/hva/Kconfig"
+ source "drivers/media/platform/stm32/Kconfig"
+ source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
+@@ -101,18 +102,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
+ 	help
+ 	    Generic deinterlacing V4L2 driver.
  
--config VIDEO_SAMSUNG_S5P_MFC
--	tristate "Samsung S5P MFC Video Codec"
+-
+-config VIDEO_SAMSUNG_S5P_JPEG
+-	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
 -	depends on V4L_MEM2MEM_DRIVERS
 -	depends on VIDEO_DEV && VIDEO_V4L2
 -	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
 -	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
 -	help
--	    MFC 5.1 and 6.x driver for V4L2
-+source "drivers/media/platform/s5p-mfc/Kconfig"
+-	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
+-	  and EXYNOS4 JPEG codec
+-
+ source "drivers/media/platform/s5p-mfc/Kconfig"
  
  source "drivers/media/platform/sti/bdisp/Kconfig"
- 
-diff --git a/drivers/media/platform/s5p-mfc/Kconfig b/drivers/media/platform/s5p-mfc/Kconfig
+diff --git a/drivers/media/platform/s5p-jpeg/Kconfig b/drivers/media/platform/s5p-jpeg/Kconfig
 new file mode 100644
-index 000000000000..34b52b0de304
+index 000000000000..e522860d2b15
 --- /dev/null
-+++ b/drivers/media/platform/s5p-mfc/Kconfig
-@@ -0,0 +1,9 @@
++++ b/drivers/media/platform/s5p-jpeg/Kconfig
+@@ -0,0 +1,12 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_SAMSUNG_S5P_MFC
-+	tristate "Samsung S5P MFC Video Codec"
++
++config VIDEO_SAMSUNG_S5P_JPEG
++	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
 +	depends on V4L_MEM2MEM_DRIVERS
 +	depends on VIDEO_DEV && VIDEO_V4L2
 +	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
 +	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
 +	help
-+	    MFC 5.1 and 6.x driver for V4L2
++	  This is a v4l2 driver for Samsung S5P, EXYNOS3250
++	  and EXYNOS4 JPEG codec
 -- 
 2.35.1
 

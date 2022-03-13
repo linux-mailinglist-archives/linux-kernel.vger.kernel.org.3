@@ -2,163 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380E34D77EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F394D77FE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbiCMTUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 15:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
+        id S235414AbiCMTjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 15:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiCMTUq (ORCPT
+        with ESMTP id S233197AbiCMTi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 15:20:46 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F949915;
-        Sun, 13 Mar 2022 12:19:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1647199177; x=1678735177;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ve+oXaOgu6qvGAolk5Rb1X8uZUgs41sB9uCGpnnALzQ=;
-  b=jyFmOz+n4JvzeL/caUaghqkWSnrdRQ4Gg16NIT9At6R4PHB07f0jg9yt
-   Zn66/gBj+LhVPuxqd550U7r7XmZYtr5UfVhOM3rsN0pUWieA5b2oZOF1l
-   B/nNTeKswmi093AYa1KnAa+u6N8lq9gjcR2uNgGflsnYiQEDs3ShF8F7o
-   I=;
-X-IronPort-AV: E=Sophos;i="5.90,179,1643673600"; 
-   d="scan'208";a="999060961"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-90419278.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 13 Mar 2022 19:19:36 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-90419278.us-west-2.amazon.com (Postfix) with ESMTPS id 54BE041995;
-        Sun, 13 Mar 2022 19:19:36 +0000 (UTC)
-Received: from EX13D02UWB003.ant.amazon.com (10.43.161.48) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Sun, 13 Mar 2022 19:19:36 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D02UWB003.ant.amazon.com (10.43.161.48) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Sun, 13 Mar 2022 19:19:35 +0000
-Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
- (172.19.181.128) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Sun, 13 Mar 2022 19:19:35
- +0000
-Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id 867CB76A; Sun, 13 Mar 2022 19:19:34 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <leo.yan@linaro.org>
-CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <alisaidi@amazon.com>, <andrew.kilroy@arm.com>,
-        <benh@kernel.crashing.org>, <german.gomez@arm.com>,
-        <james.clark@arm.com>, <john.garry@huawei.com>, <jolsa@kernel.org>,
-        <kjain@linux.ibm.com>, <lihuafei1@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <yao.jin@linux.intel.com>
-Subject: Re: [PATCH v2 2/2] perf mem: Support HITM for when mem_lvl_num is used
-Date:   Sun, 13 Mar 2022 19:19:33 +0000
-Message-ID: <20220313191933.26621-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220313124427.GB143848@leoy-ThinkPad-X240s>
-References: <20220313124427.GB143848@leoy-ThinkPad-X240s>
+        Sun, 13 Mar 2022 15:38:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDD6375;
+        Sun, 13 Mar 2022 12:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1647200267; x=1678736267;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QcQ93NfFKUvvlAYnkpLnWJz4ZOtAVwAyG2MeuEBh5o8=;
+  b=laIUw12BSPRc/S3arr2RV35QkFSaiPDE0DNW0L549hRC8jNzMYyjEzfo
+   kF9Lebjmgz6U55JSgT8p4HGjqA+g0pUwjwjH1wxEgAT1dyfnc+2YpCjxw
+   Pm29ASpfsRO953q8Nt6ah359UAy34tLdQZOUniYzLfC8cHhedcv/163Zf
+   ywFDfnb4CvBJd+Kju/iAeqEloydook+Csa02LKRMoKX0M4zcgOlxKHJjW
+   hCFcHfcmS49BHb5DuPlCQu3vA98k57WfCz934quHpyTL6oGct918PjxjK
+   1qnqNd6ELXB06baEokzxEz6qDUJ7wJ1vE9eWFxFXrrPElKrZxgL2pT1Rh
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,179,1643698800"; 
+   d="scan'208";a="165583193"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Mar 2022 12:37:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 13 Mar 2022 12:37:45 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Sun, 13 Mar 2022 12:37:45 -0700
+Date:   Sun, 13 Mar 2022 20:37:44 +0100
+From:   "Allan W. Nielsen" <allan.nielsen@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     Richard Cochran <richardcochran@gmail.com>,
+        <Woojung.Huh@microchip.com>, <linux@armlinux.org.uk>,
+        <Horatiu.Vultur@microchip.com>, <Divya.Koppera@microchip.com>,
+        <netdev@vger.kernel.org>, <hkallweit1@gmail.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>,
+        <Manohar.Puri@microchip.com>
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220313193744.6gu6l2mjj4r3wj6x@den-dk-m31684h>
+References: <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
+ <YifoltDp4/Fs+9op@lunn.ch>
+ <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
+ <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
+ <20220309195252.GB9663@hoboy.vegasvil.org>
+ <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
+ <20220312024828.GA15046@hoboy.vegasvil.org>
+ <Yiz8z3UPqNANa5zA@lunn.ch>
+ <20220313024646.GC29538@hoboy.vegasvil.org>
+ <Yi4IrO4Qcm1KVMaa@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yi4IrO4Qcm1KVMaa@lunn.ch>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
-
-On Sun, 13 Mar 2022 12:46:02 +0000, Leo Yan wrote:
-> On Wed, Mar 02, 2022 at 03:39:04PM +0000, German Gomez wrote:
-> > 
-> > On 21/02/2022 22:48, Ali Saidi wrote:
-> > > Current code only support HITM statistics for last level cache (LLC)
-> > > when mem_lvl encodes the level. On existing Arm64 machines there are as
-> > > many as four levels cache and this change supports decoding l1, l2, and
-> > > llc hits from the mem_lvl_num data. Given that the mem_lvl namespace is
-> > > being deprecated take this opportunity to encode the neoverse data into
-> > > mem_lvl_num.
-> > 
-> > Since Neoverse is mentioned in the commit message, I think there should be a comment somewhere in the code as well.
+On Sun, Mar 13, 2022 at 04:07:24PM +0100, Andrew Lunn wrote:
+> On Sat, Mar 12, 2022 at 06:46:46PM -0800, Richard Cochran wrote:
+> > On Sat, Mar 12, 2022 at 09:04:31PM +0100, Andrew Lunn wrote:
+> > > Do these get passed to the kernel so the hardware can act on them, or
+> > > are they used purely in userspace by ptp4l?
 > >
-> 
-> > > For loads that hit in a the LLC snoop filter and are fullfilled from a
-> > > higher level cache, it's not usually clear what the true level of the
-> > > cache the data came from (i.e. a transfer from a core could come from
-> > > it's L1 or L2). Instead of making an assumption of where the line came
-> > > from, add support for incrementing HITM if the source is CACHE_ANY.
-> > >
-> > > Since other architectures don't seem to populate the mem_lvl_num field
-> > > here there shouldn't be a change in functionality.
-> > >
-> > > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
-> > > ---
-> > >  tools/perf/util/mem-events.c | 14 ++++++++++----
-> > >  1 file changed, 10 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-> > > index ed0ab838bcc5..6c3fd4aac7ae 100644
-> > > --- a/tools/perf/util/mem-events.c
-> > > +++ b/tools/perf/util/mem-events.c
-> > > @@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
-> > >  	u64 daddr  = mi->daddr.addr;
-> > >  	u64 op     = data_src->mem_op;
-> > >  	u64 lvl    = data_src->mem_lvl;
-> > > +	u64 lnum   = data_src->mem_lvl_num;
-> > >  	u64 snoop  = data_src->mem_snoop;
-> > >  	u64 lock   = data_src->mem_lock;
-> > >  	u64 blk    = data_src->mem_blk;
-> > > @@ -527,16 +528,18 @@ do {				\
-> > >  			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
-> > >  			if (lvl & P(LVL, IO))  stats->ld_io++;
-> > >  			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
-> > > -			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
-> > > -			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
-> > > -			if (lvl & P(LVL, L3 )) {
-> > > +			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
-> > > +				stats->ld_l1hit++;
-> > > +			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
-> > > +				stats->ld_l2hit++;
-> 
-> It's good to split into two patches: one patch is to add statistics for
-> field 'mem_lvl_num', the second patch is to handle HITM tags.
-> 
-> > > +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L4)) {
-> 
-> It's a bit weird that we take either PERF_MEM_LVL_L3 or
-> PERF_MEM_LVLNUM_L4 as the last level local cache in the same condition
-> checking.
-> 
-> > According to a comment in the previous patch, using L4 is specific to Neoverse, right?
-> > 
-> > Maybe we need to distinguish the Neoverse case from the generic one here as well
-> > 
-> > if (is_neoverse)
-> > // treat L4 as llc
-> > else
-> > // treat L3 as llc
-> 
-> I personally think it's not good idea to distinguish platforms in the decoding code.
+> > user space only.
+I'm wondering if one-step will work if these correction values are not
+applied to HW.
 
-I agree here. The more we talk about this, the more I'm wondering if we're
-spending too much code solving a problem that doesn't exist. I know of no
-Neoverse systems that actually have 4 cache levels, they all actually have three
-even though it's technically possible to have four.  I have some doubts anyone
-will actually build four levels of cache and perhaps the most prudent path here
-is to assume only three levels (and adjust the previous patch) until someone 
-actually produces a system with four levels instead of a lot of code that is
-never actually exercised?
+> > > If they has passed to the kernel, could we provide a getter as well as
+> > > a setter, so the defaults hard coded in the driver can be read back?
+> >
+> > Any hard coded defaults in the kernel are a nuisance.
+> >
+> > I mean, do you want user space to say,
+> >
+> >    "okay, so I know the correct value is X.  But the drivers may offer
+> >    random values according to kernel version.  So, I'll read out the
+> >    driver value Y, and then apply X-Y."
+> >
+> > Insanity.
+> 
+> No, i would not suggests that at all.
+> 
+> You quoted the man page and it says the default it zero. If there was
+> an API to ask the driver what correction it is doing, and an API to
+> offload the delay correction to the hardware, i would simply remove
+> the comment about the default being zero. If these calls return
+> -EOPNOTSUPP, then user space stays the same, and does actually use a
+> default of 0. If offload is supported, you can show the user the
+> current absolute values, and allow the user to set the absolute
+> values.
+This sounds like a good approach to me (but I know it is not my opinion
+you are asking for).
 
-Thanks,
-Ali
+In all cases, if there is a desire to have such APIs, and let drivers
+advertise default compensation values in this way, we can work on that.
 
+> Anyway, it is clear you don't want the driver doing any correction, so
+> lets stop this discussion.
+> 
+>      Andrew
+
+-- 
+/Allan

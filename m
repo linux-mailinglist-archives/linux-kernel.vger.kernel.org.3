@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F1C4D74B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1466D4D748E
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiCMKyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 06:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S234473AbiCMKyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 06:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234395AbiCMKxl (ORCPT
+        with ESMTP id S234418AbiCMKxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 13 Mar 2022 06:53:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CA12D925;
-        Sun, 13 Mar 2022 03:52:18 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608412E150;
+        Sun, 13 Mar 2022 03:52:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57CDA6100F;
-        Sun, 13 Mar 2022 10:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80889C34105;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22504B80CAE;
+        Sun, 13 Mar 2022 10:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D67CC34106;
         Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647168729;
-        bh=H6riGIBHtNh9i24lR1ghBv7IWPMVqrM/Sm5wev2DUhM=;
+        bh=tGu7bQT0kjgdt+9soh7Njfucu1RtXJqYP6JxRUeck8s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVtAdKkqtZ5ZA+NofFZGNPilI5nhFHIelynGP6u9aLDHjlnnZI8mhfuvhe8RcyeFC
-         KcB7E119SVcPvrk4Zja01XLAEa5gesea29Ew1WRq/Wey6Ca4f3uQEv/dY+CHYsROzs
-         BwVCM1dEzzCv3Z3PQKmIS+PHtVup2fnL5YjStCNasCHMbChQ5SB8Ox7hHgU8nLCjlV
-         CRl0rM8ylwr/PXDaBNJ4EiSrZBeTrMFi/KUuRGIKu2j6V+6sh1j1w+198r8MX3pH6K
-         Pzd+Gp7tRLWlPF6UiFJE3MOKeIhR73JubY+rz/5hGv80/844Nk2PPYb+GwapuffzUf
-         6tZVVEXk0Ky/Q==
+        b=fa+RU51c/TfvS163ZdETR6tbP5dgmOuT/avDdn29IvJ2tc5Xo7gxMsRuvg4TCEUhI
+         SnnqtbXRzOnxqnbHimSzLTMAMj3p+S/ibvsndj/Tl391yzk2tvHfJdLg2rJdEAMH9Q
+         jcfCfSNWRTsq/gTl2sc4sdT1uKKejJq6Jko6oz55qWjERJlciQ6djGbbEIw4rrjGcx
+         YXFDDMTk5ZT4/AW2tsuPGKqrm2+Fxdgg8eVWWN5fwZ6s2Zt3XjNf/RyPf5SB6yQIef
+         zv2ZP0/DLE1+Jx1JGqzPXROjEVK1kcaH6uDdqDat5yFE87DRirG+Rsi8LphgU7wuh0
+         gNdCj42zhs01g==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTLpX-001I20-94; Sun, 13 Mar 2022 11:52:07 +0100
+        id 1nTLpX-001I24-AN; Sun, 13 Mar 2022 11:52:07 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Cai Huoqing <caihuoqing@baidu.com>,
         Dmitry Osipenko <digetx@gmail.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ming Qian <ming.qian@nxp.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 12/24] media: platform: rename exynos-gsc/ to samsung/exynos-gsc/
-Date:   Sun, 13 Mar 2022 11:51:53 +0100
-Message-Id: <d070ff68a414fb51eb6dc1b3c77d275912f1c5d1.1647167750.git.mchehab@kernel.org>
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 13/24] media: platform: rename s3c-camif/ to samsung/s3c-camif/
+Date:   Sun, 13 Mar 2022 11:51:54 +0100
+Message-Id: <829b44d692bf8fd06eb584809ad9c2c0540f9812.1647167750.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647167750.git.mchehab@kernel.org>
 References: <cover.1647167750.git.mchehab@kernel.org>
@@ -74,7 +75,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename exynos-gsc/ to samsung/exynos-gsc/.
+rename s3c-camif/ to samsung/s3c-camif/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -82,92 +83,102 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                             | 2 +-
- drivers/media/platform/Makefile                            | 2 +-
- drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig    | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/Makefile   | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c  | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c | 0
- drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h | 0
- 9 files changed, 2 insertions(+), 2 deletions(-)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/Kconfig (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/Makefile (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-core.h (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-m2m.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.c (100%)
- rename drivers/media/platform/{ => samsung}/exynos-gsc/gsc-regs.h (100%)
+ MAINTAINERS                                                    | 2 +-
+ drivers/media/platform/Kconfig                                 | 2 +-
+ drivers/media/platform/Makefile                                | 2 +-
+ drivers/media/platform/{ => samsung}/s3c-camif/Kconfig         | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/Makefile        | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-capture.c | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-core.c    | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-core.h    | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.c    | 0
+ drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.h    | 0
+ 10 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-capture.c (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-core.c (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-core.h (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.c (100%)
+ rename drivers/media/platform/{ => samsung}/s3c-camif/camif-regs.h (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b1418853d56f..8ce4894699cc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17063,7 +17063,7 @@ M:	Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
+ L:	linux-media@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+-F:	drivers/media/platform/s3c-camif/
++F:	drivers/media/platform/samsung/s3c-camif/
+ F:	include/media/drv-intf/s3c_camif.h
+ 
+ SAMSUNG S3FWRN5 NFC DRIVER
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 1bbada840723..81888d348149 100644
+index 81888d348149..0a87d835b2f5 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -74,7 +74,6 @@ source "drivers/media/platform/atmel/Kconfig"
- source "drivers/media/platform/cadence/Kconfig"
- source "drivers/media/platform/chips-media/Kconfig"
- source "drivers/media/platform/davinci/Kconfig"
--source "drivers/media/platform/exynos-gsc/Kconfig"
- source "drivers/media/platform/intel/Kconfig"
- source "drivers/media/platform/marvell/Kconfig"
- source "drivers/media/platform/mediatek/mtk-jpeg/Kconfig"
-@@ -93,6 +92,7 @@ source "drivers/media/platform/s3c-camif/Kconfig"
+@@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
+ source "drivers/media/platform/qcom/Kconfig"
+ source "drivers/media/platform/renesas/Kconfig"
+ source "drivers/media/platform/rockchip/Kconfig"
+-source "drivers/media/platform/s3c-camif/Kconfig"
  source "drivers/media/platform/s5p-g2d/Kconfig"
  source "drivers/media/platform/s5p-jpeg/Kconfig"
  source "drivers/media/platform/s5p-mfc/Kconfig"
-+source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
+ source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
  source "drivers/media/platform/samsung/exynos4-is/Kconfig"
++source "drivers/media/platform/samsung/s3c-camif/Kconfig"
  source "drivers/media/platform/sti/Kconfig"
  source "drivers/media/platform/stm32/Kconfig"
+ source "drivers/media/platform/ti-vpe/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 613ca6a3efa7..848cbd6147ae 100644
+index 848cbd6147ae..c3dfe40b2def 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -14,7 +14,6 @@ obj-y += atmel/
- obj-y += cadence/
- obj-y += chips-media/
- obj-y += davinci/
--obj-y += exynos-gsc/
- obj-y += intel/
- obj-y += marvell/
- obj-y += mediatek/mtk-jpeg/
-@@ -35,6 +34,7 @@ obj-y += s3c-camif/
+@@ -30,12 +30,12 @@ obj-y += qcom/venus/
+ obj-y += renesas/
+ obj-y += rockchip/rga/
+ obj-y += rockchip/rkisp1/
+-obj-y += s3c-camif/
  obj-y += s5p-g2d/
  obj-y += s5p-jpeg/
  obj-y += s5p-mfc/
-+obj-y += samsung/exynos-gsc/
+ obj-y += samsung/exynos-gsc/
  obj-y += samsung/exynos4-is/
++obj-y += samsung/s3c-camif/
  obj-y += sti/bdisp/
  obj-y += sti/c8sectpfe/
-diff --git a/drivers/media/platform/exynos-gsc/Kconfig b/drivers/media/platform/samsung/exynos-gsc/Kconfig
+ obj-y += sti/delta/
+diff --git a/drivers/media/platform/s3c-camif/Kconfig b/drivers/media/platform/samsung/s3c-camif/Kconfig
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/Kconfig
-rename to drivers/media/platform/samsung/exynos-gsc/Kconfig
-diff --git a/drivers/media/platform/exynos-gsc/Makefile b/drivers/media/platform/samsung/exynos-gsc/Makefile
+rename from drivers/media/platform/s3c-camif/Kconfig
+rename to drivers/media/platform/samsung/s3c-camif/Kconfig
+diff --git a/drivers/media/platform/s3c-camif/Makefile b/drivers/media/platform/samsung/s3c-camif/Makefile
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/Makefile
-rename to drivers/media/platform/samsung/exynos-gsc/Makefile
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.c b/drivers/media/platform/samsung/exynos-gsc/gsc-core.c
+rename from drivers/media/platform/s3c-camif/Makefile
+rename to drivers/media/platform/samsung/s3c-camif/Makefile
+diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/samsung/s3c-camif/camif-capture.c
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-core.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.h b/drivers/media/platform/samsung/exynos-gsc/gsc-core.h
+rename from drivers/media/platform/s3c-camif/camif-capture.c
+rename to drivers/media/platform/samsung/s3c-camif/camif-capture.c
+diff --git a/drivers/media/platform/s3c-camif/camif-core.c b/drivers/media/platform/samsung/s3c-camif/camif-core.c
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-core.h
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-core.h
-diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
+rename from drivers/media/platform/s3c-camif/camif-core.c
+rename to drivers/media/platform/samsung/s3c-camif/camif-core.c
+diff --git a/drivers/media/platform/s3c-camif/camif-core.h b/drivers/media/platform/samsung/s3c-camif/camif-core.h
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-m2m.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-m2m.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.c b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
+rename from drivers/media/platform/s3c-camif/camif-core.h
+rename to drivers/media/platform/samsung/s3c-camif/camif-core.h
+diff --git a/drivers/media/platform/s3c-camif/camif-regs.c b/drivers/media/platform/samsung/s3c-camif/camif-regs.c
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-regs.c
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.c
-diff --git a/drivers/media/platform/exynos-gsc/gsc-regs.h b/drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
+rename from drivers/media/platform/s3c-camif/camif-regs.c
+rename to drivers/media/platform/samsung/s3c-camif/camif-regs.c
+diff --git a/drivers/media/platform/s3c-camif/camif-regs.h b/drivers/media/platform/samsung/s3c-camif/camif-regs.h
 similarity index 100%
-rename from drivers/media/platform/exynos-gsc/gsc-regs.h
-rename to drivers/media/platform/samsung/exynos-gsc/gsc-regs.h
+rename from drivers/media/platform/s3c-camif/camif-regs.h
+rename to drivers/media/platform/samsung/s3c-camif/camif-regs.h
 -- 
 2.35.1
 

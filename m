@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F394D77FE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F7B4D7802
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235414AbiCMTjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 15:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        id S235451AbiCMTmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 15:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbiCMTi7 (ORCPT
+        with ESMTP id S233197AbiCMTmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 15:38:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDD6375;
-        Sun, 13 Mar 2022 12:37:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647200267; x=1678736267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QcQ93NfFKUvvlAYnkpLnWJz4ZOtAVwAyG2MeuEBh5o8=;
-  b=laIUw12BSPRc/S3arr2RV35QkFSaiPDE0DNW0L549hRC8jNzMYyjEzfo
-   kF9Lebjmgz6U55JSgT8p4HGjqA+g0pUwjwjH1wxEgAT1dyfnc+2YpCjxw
-   Pm29ASpfsRO953q8Nt6ah359UAy34tLdQZOUniYzLfC8cHhedcv/163Zf
-   ywFDfnb4CvBJd+Kju/iAeqEloydook+Csa02LKRMoKX0M4zcgOlxKHJjW
-   hCFcHfcmS49BHb5DuPlCQu3vA98k57WfCz934quHpyTL6oGct918PjxjK
-   1qnqNd6ELXB06baEokzxEz6qDUJ7wJ1vE9eWFxFXrrPElKrZxgL2pT1Rh
+        Sun, 13 Mar 2022 15:42:16 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A53D46649
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 12:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647200467; x=1678736467;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=svrbwD1vAwBdp0B/NJZW2Wx/ZbO0Qa4uavKbDO0rfLI=;
+  b=csr/JtegkULCRjMy22p0atzfZWLq9sKkCxdxPn7oDbMqe2dikOcEC3X4
+   +i0BB2MvpZmQFe3riCKKX0wmkLrp7Y/ThjRCZzV4FbQF644kIYzJzNQZv
+   ASis6aeYOw3IjpvuwbmgfCgenEd7kQ/NWiJBrU42vVh9e4WS/5OR0AKBV
+   aYxZzw1f5EjGaNYXK5eB8AVhho5IPTwyvsFSgSblZH3O6QaaREoJ49zlM
+   SBGDVXLhf9DZqb1tUQvqpGTS06xAHk5o6LAJ9j6XOlJCqrsOdHL6OM6w0
+   juLhp/Y6lp5+CGaN3zwJkrGibDW17DEOxDlKDAk4dkso7ijWuVeLee3qD
    g==;
-X-IronPort-AV: E=Sophos;i="5.90,179,1643698800"; 
-   d="scan'208";a="165583193"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Mar 2022 12:37:46 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 13 Mar 2022 12:37:45 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Sun, 13 Mar 2022 12:37:45 -0700
-Date:   Sun, 13 Mar 2022 20:37:44 +0100
-From:   "Allan W. Nielsen" <allan.nielsen@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Richard Cochran <richardcochran@gmail.com>,
-        <Woojung.Huh@microchip.com>, <linux@armlinux.org.uk>,
-        <Horatiu.Vultur@microchip.com>, <Divya.Koppera@microchip.com>,
-        <netdev@vger.kernel.org>, <hkallweit1@gmail.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>,
-        <Manohar.Puri@microchip.com>
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <20220313193744.6gu6l2mjj4r3wj6x@den-dk-m31684h>
-References: <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
- <YifoltDp4/Fs+9op@lunn.ch>
- <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
- <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
- <20220309195252.GB9663@hoboy.vegasvil.org>
- <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
- <20220312024828.GA15046@hoboy.vegasvil.org>
- <Yiz8z3UPqNANa5zA@lunn.ch>
- <20220313024646.GC29538@hoboy.vegasvil.org>
- <Yi4IrO4Qcm1KVMaa@lunn.ch>
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="254723443"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="254723443"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 12:41:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="511970430"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 13 Mar 2022 12:41:05 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTU5Q-0009EO-Co; Sun, 13 Mar 2022 19:41:04 +0000
+Date:   Mon, 14 Mar 2022 03:40:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [hare-scsi-devel:tls-upcall.v4 121/156] ld.lld: error: undefined
+ symbol: inet6_release
+Message-ID: <202203140324.e59XsOnR-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yi4IrO4Qcm1KVMaa@lunn.ch>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 04:07:24PM +0100, Andrew Lunn wrote:
-> On Sat, Mar 12, 2022 at 06:46:46PM -0800, Richard Cochran wrote:
-> > On Sat, Mar 12, 2022 at 09:04:31PM +0100, Andrew Lunn wrote:
-> > > Do these get passed to the kernel so the hardware can act on them, or
-> > > are they used purely in userspace by ptp4l?
-> >
-> > user space only.
-I'm wondering if one-step will work if these correction values are not
-applied to HW.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
+head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
+commit: 33ec82590b0b919215a255fb431d661be4807b45 [121/156] net/tls: Add support for PF_TLSH (a TLS handshake listener)
+config: hexagon-randconfig-r011-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140324.e59XsOnR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=33ec82590b0b919215a255fb431d661be4807b45
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v4
+        git checkout 33ec82590b0b919215a255fb431d661be4807b45
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-> > > If they has passed to the kernel, could we provide a getter as well as
-> > > a setter, so the defaults hard coded in the driver can be read back?
-> >
-> > Any hard coded defaults in the kernel are a nuisance.
-> >
-> > I mean, do you want user space to say,
-> >
-> >    "okay, so I know the correct value is X.  But the drivers may offer
-> >    random values according to kernel version.  So, I'll read out the
-> >    driver value Y, and then apply X-Y."
-> >
-> > Insanity.
-> 
-> No, i would not suggests that at all.
-> 
-> You quoted the man page and it says the default it zero. If there was
-> an API to ask the driver what correction it is doing, and an API to
-> offload the delay correction to the hardware, i would simply remove
-> the comment about the default being zero. If these calls return
-> -EOPNOTSUPP, then user space stays the same, and does actually use a
-> default of 0. If offload is supported, you can show the user the
-> current absolute values, and allow the user to set the absolute
-> values.
-This sounds like a good approach to me (but I know it is not my opinion
-you are asking for).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-In all cases, if there is a desire to have such APIs, and let drivers
-advertise default compensation values in this way, we can work on that.
+All errors (new ones prefixed by >>):
 
-> Anyway, it is clear you don't want the driver doing any correction, so
-> lets stop this discussion.
-> 
->      Andrew
+>> ld.lld: error: undefined symbol: inet6_release
+   >>> referenced by af_tlsh.c
+   >>> tls/af_tlsh.o:(tlsh_release) in archive net/built-in.a
+   >>> referenced by af_tlsh.c
+   >>> tls/af_tlsh.o:(tlsh_release) in archive net/built-in.a
+   >>> did you mean: inet_release
+   >>> defined in: net/built-in.a(ipv4/af_inet.o)
+--
+>> ld.lld: error: undefined symbol: inet6_getname
+   >>> referenced by af_tlsh.c
+   >>> tls/af_tlsh.o:(tlsh_getname) in archive net/built-in.a
+   >>> referenced by af_tlsh.c
+   >>> tls/af_tlsh.o:(tlsh_getname) in archive net/built-in.a
 
--- 
-/Allan
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

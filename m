@@ -2,78 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434844D7599
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 14:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCE84D759B
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 14:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbiCMN47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 09:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S234212AbiCMN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 09:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiCMN4y (ORCPT
+        with ESMTP id S230497AbiCMN5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 09:56:54 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2353BBF0;
-        Sun, 13 Mar 2022 06:55:46 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id i8so20010740wrr.8;
-        Sun, 13 Mar 2022 06:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rlMOnsFuU1AgOBi7rOi+2Mth/ukPdCXZlzT0m/8TXBw=;
-        b=auZRoSCfL40y5lDr+kYRP4dasa23w7SteTZpUjA5FlrrkoQ44MZKozo9qQgIZPJwSL
-         KwWIyJzs6j84238Id65mR7QSDgO3VEyhS/NaqkgkhAUYC6zKu7TQ9t4RmTg2JfhxX3m3
-         KdKcVL9lkml8DTGKtjOsfB8JMUi5sSZwBy+uE63a6h/9yyqZ9GnXqei42wsoXuvL/+tW
-         raNKkRwPUG5JKuXliWZMZNLQgSBqEEQuNPaittkTSh8sonlv3lJZAZWwWHohiJvAFT/M
-         OBhHVhwPgVmoWm4LOON9NZokLFUlw77oYs0gjdUQbokE52lPxq4lsjp5qYAADUhKX6wq
-         uL3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rlMOnsFuU1AgOBi7rOi+2Mth/ukPdCXZlzT0m/8TXBw=;
-        b=653cEXzvO41FNFekkBs3u2fDKt0/lf633673z5PSR18h5GyoOX7bXTvh52282yvOvo
-         l+82TslEY1ejiNuub0oB7/bWJE5Byw0q4LCNdtLAhHafIrCuCz0iZavWsAEd7xOBFX+p
-         ZMpUsY6HYH+WtzhDwpJv3TQoFwHPgv/NyVHIhzxO1+jUOKZ5WvegU0TT3uhJlB0hu3Gd
-         qPD7qAN35goKS0aRR8Ejc7YJUUu1tQFWt9hJzK0jcSJvN8Myk4B5+UgDtsk0YCI0afuq
-         s5t5x6n6isO8WV4GqaYUTAJOcG+sLVVsCu9q+WWcy55RZPwk8yYH+nWBj2SKv1oSbtrK
-         M4Gg==
-X-Gm-Message-State: AOAM532vStdOgSmtAwx/i3vR2KxkqCd8yJG47xJroaBks2VR0qBdiDaW
-        B2Yk3Sw49rlU0yHYnfksV1g=
-X-Google-Smtp-Source: ABdhPJx7oVZQgRT7yFlRnHna5og7MKNX9TD3EFwP7rCXQQa40QbUxWlgO9DXT3GUEBcBC2FGcnrmCg==
-X-Received: by 2002:a5d:4441:0:b0:1f0:882d:77e9 with SMTP id x1-20020a5d4441000000b001f0882d77e9mr13354363wrr.718.1647179745374;
-        Sun, 13 Mar 2022 06:55:45 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id p125-20020a1c2983000000b00389cc36a3bfsm14721066wmp.6.2022.03.13.06.55.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 06:55:44 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <50a659fd-b597-7dee-f6fa-e447a552dc6c@redhat.com>
-Date:   Sun, 13 Mar 2022 14:55:43 +0100
+        Sun, 13 Mar 2022 09:57:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E878A5EBF8;
+        Sun, 13 Mar 2022 06:56:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93911B80C9E;
+        Sun, 13 Mar 2022 13:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB707C340E8;
+        Sun, 13 Mar 2022 13:56:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647179773;
+        bh=49ahMuVXxqXMyt89yNWAq5YEkn+FI4r2gRQSYHmOZrI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nuElmcwEzGH/oSe2cGOWfzYNg+/DpDaloYcSkCXBCRB5DO8EzSTs9gwT8j0m6CYFI
+         x5q5voQ+3tmLyAkdHvhnGrl2mx7TQI67x8M1z37+AYT0o88lCmOPRYT0njByre/7V/
+         B2gpmwTibBkX/1RjV50kpMVnRtV9ry+b9O/48OVGpEdH5nBMOswUyn2PYCiZLd17s0
+         ITHPNIFWHtPAGn7du4/pDlmh3buCQmPYz9eiCFHk7C+XOtv4F5pK2Onz7YFPQn88JU
+         HhHKHK7bY+MwAd1hAuwUdDZRUHreF6npWR4naNlGCyfYeiNfqCmF/C+hGHsTe+SigA
+         wjYvRUst5v6JQ==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH 0/3] bootconfig: Support embedding a bootconfig in kernel for non initrd boot
+Date:   Sun, 13 Mar 2022 22:56:08 +0900
+Message-Id: <164717976871.656425.6189991392886085524.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v5 006/104] KVM: TDX: Add placeholders for TDX VM/vcpu
- structure
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <8572ed61be2bb771fc4dc1d366a1261c80b7f666.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <8572ed61be2bb771fc4dc1d366a1261c80b7f666.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,23 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> +void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
-> +			unsigned int *vcpu_align, unsigned int *vm_size)
-> +{
-> +	*vcpu_size = sizeof(struct vcpu_tdx);
-> +	*vcpu_align = __alignof__(struct vcpu_tdx);
-> +
-> +	if (sizeof(struct kvm_tdx) > *vm_size)
-> +		*vm_size = sizeof(struct kvm_tdx);
-> +}
+Hi,
 
-No need for this function, I would just do
+Here are the patchset to enable kernel embedded bootconfig for non-initrd
+kernel boot environment. You can embed a bootconfig file into the kernel
+as a default bootconfig, which will be used if there is no initrd or no
+bootconfig is attached to initrd.
 
-	vcpu_size = max(sizeof vcpu_vmx, sizeof vcpu_tdx);
-	vcpu_align = max(...);
-	vt_x86_ops.vm_size = max(...);
+This needs 2 options: CONFIG_EMBED_BOOT_CONFIG=y and set the file
+path to CONFIG_EMBED_BOOT_CONFIG_FILE. Even if you embed the bootconfig file
+to the kernel, it will not be enabled unless you pass "bootconfig" kernel
+command line option at boot. Moreover, since this is just a "default"
+bootconfig, you can override it with a new bootconfig if you attach another
+bootconfig to the initrd (if possible).
 
-in vt_init.
+This is requested by Padmanabha at the below thread;
 
-Paolo
+ https://lore.kernel.org/all/20220307184011.GA2570@pswork/T/#u
+
+Thank you,
+
+---
+
+Masami Hiramatsu (3):
+      bootconfig: Check the checksum before removing the bootconfig from initrd
+      bootconfig: Support embedding a bootconfig file in kernel
+      docs: bootconfig: Add how to embed the bootconfig into kernel
+
+
+ Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
+ include/linux/bootconfig.h               |   10 ++++++++++
+ init/Kconfig                             |   21 ++++++++++++++++++++
+ init/main.c                              |   31 +++++++++++++++---------------
+ lib/.gitignore                           |    1 +
+ lib/Makefile                             |   12 ++++++++++++
+ lib/bootconfig.c                         |   23 ++++++++++++++++++++++
+ 7 files changed, 111 insertions(+), 18 deletions(-)
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

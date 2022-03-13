@@ -2,133 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77B14D78F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 01:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E824D797D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbiCNAuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 20:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S235987AbiCNCyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 22:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbiCNAuT (ORCPT
+        with ESMTP id S232847AbiCNCyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 20:50:19 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918B41EAF8
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 17:49:09 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id k10-20020a5d91ca000000b006414a00b160so11127590ior.18
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 17:49:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=OHRLMLoHkEbfYamoPLRuqVSCdAcnIFKnHOlbAz7Kclk=;
-        b=N/fOLr/IKzOQKDUREmCKSdAQDAoeu/QeEc/fYQdiwPXZzed57G24I7e7YqZlWrj/NH
-         0x9/iIYAaf6FI5Oswd9i5k8txKLsQGY91/gQs8OPENs5xTvKMEw7iD3ZGGVBktFRGTiA
-         72+SbvVpzdZOYxuRaVbDspNZs/94LhyEKVf5yGXYC+1m1GFvYRpL3FHnPuUBcH2Yqimz
-         JloN2lUlDNSVpB65WagdC6pP8DlWbJ3dZ6/027ljpSgACxh9zMwt62W0cV1XSE6MKi1a
-         hgxiHUrZE51lNZDKINBiGbhcqSpYE7N6ZiPqDLspGzzWzNfWH+xeDeq7gA9H9+5MHdwD
-         QU0Q==
-X-Gm-Message-State: AOAM530FCvLejLLjtKOhI6nOQd3FbDbBdC+J879L01nCoeWJJtrkRZwV
-        pthOg9xxeoZk/QfPnlB1XDndRq6JneGcDHwjswySlF2LIgkn
-X-Google-Smtp-Source: ABdhPJzu0OBRWuXc30QXUnUn0/csjXuuxH1iONtXJ/c+/bb6rJJS4XnK2aGrn8buVl//ZtI4K+O+vhFj7IX3nnChWYL+7316kF3d
+        Sun, 13 Mar 2022 22:54:51 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B4C3A71F;
+        Sun, 13 Mar 2022 19:53:41 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8DFD85C0112;
+        Sun, 13 Mar 2022 22:53:39 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 13 Mar 2022 22:53:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=turner.link; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=mk9hxX9pdpaTprhpWtmYamoWls5zOpQ2mqbAXe
+        YUr48=; b=a5KXI2BZUJhiA3fDQXwftBtJeQjfqVmIUk8KXXTvsbGB7pnI99fXuT
+        ZqzBOPwaDNwAPweuJAE/hKTYUob78wbwev83/J/Viqsv+SOPjGIPfqQqiIJ/EqyD
+        mZcR12Zt8dnNRCI4T9QXJKiFg4PlCLTViM5WBkhrHVO042BR50fVpbmt0lScv7Dw
+        SNB8WqIVDS/KQgfKJlNKERCJvOKHfW5+flWckvaPDCe+1dq51PzpyYM5Zir2Tbkl
+        yIcybJjvd4NVtj1/lnQ34GJTOGIRMsbSiTRyDAvKFoUZVEuYvE6MSk6Ze9UpfcH3
+        hVQqoKPHht3FfOQrt3PkFAkqc0+Ok9sQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=mk9hxX9pdpaTprhpW
+        tmYamoWls5zOpQ2mqbAXeYUr48=; b=ENWQVZ/6OdSptCSfVJ9UQ4r1zW+lXOx/8
+        4hzi6mFnY8SVDSK51blxdzEyt3JIxXyyF0ZGybf7UQnpAsZZDOtSxxa+CM70TvNh
+        C6Z15dLy/cRj6qY4E73Re6K7d/4G1o/KsQvc4t+Q+XnmPWtKLsP9Fj5Kjsd3Gx8G
+        D0YcmOGF3ICYXR7GS6fNziTvbVebiChvxMCHsGslkItQ4KFY8H6sypJAHcSdiuc6
+        C5mEAWwmC8w4y33hGjTX7RJlOSqn2ebiZ5iTXK+CNz2ivgm29jq4qG9O68limXpm
+        Ki79dwLbg2XlVbr0yx2Nx/56TiU4E7O6XAQcLJfmqMJ4WUuVKDDvA==
+X-ME-Sender: <xms:M64uYvpRU_NVx3x1jdn7bK_ETsK5smMmf6lGp6z4cVyQVYPOmX9ODQ>
+    <xme:M64uYpqfjhzCaPLraVydYPbOoZkACm8OqNVgH8_-jpYONEP527vnu24TWGcPBbcZB
+    T3rwKyOmJbHiOIN9w>
+X-ME-Received: <xmr:M64uYsOodvFcZ_0A-Drudina2r_Wzl09k17jCQV3d_VYakIXa1a-Lsx08Dws8ES_XqWn5PKbNeB8CsSoJq3g-Ln4EyeOGMdCiZE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvjedgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfhfhvffuffgjkfggtgesthdtredttddttdenucfhrhhomheplfgrmhgvshcu
+    vfhurhhnvghruceolhhinhhugihkvghrnhgvlhdrfhhoshhssegumhgrrhgtqdhnohhnvg
+    drthhurhhnvghrrdhlihhnkheqnecuggftrfgrthhtvghrnhepfffhveeugfevteeileej
+    vdeltdegtdeggfeujefgveekueevkeehheehffduleevnecuffhomhgrihhnpegrrhgthh
+    hlihhnuhigrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
+    lhhfrhhomheplhhinhhugihkvghrnhgvlhdrfhhoshhssegumhgrrhgtqdhnohhnvgdrth
+    hurhhnvghrrdhlihhnkh
+X-ME-Proxy: <xmx:M64uYi55zF0psFGYdGy0OHLjJYK6VRocUJZ7LgqeOTLP81UHUdb4GQ>
+    <xmx:M64uYu6wmns2j2EAVEO2pAAZuIaDGfnQ8SuPM1zsXGwUKnq8IthXXw>
+    <xmx:M64uYqjFIZysjikoexKSzSt6J3lGtbaj9QQp8Od8fvlYDXDEdE_IhQ>
+    <xmx:M64uYhL9-F_nAtrpjLcqE3yK8XZbMACDoPzp93_XWIM69tV15Z1BQg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 13 Mar 2022 22:53:39 -0400 (EDT)
+References: <87ee57c8fu.fsf@turner.link>
+ <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
+ <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link>
+ <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
+ <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
+ <87czkk1pmt.fsf@dmarc-none.turner.link>
+ <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
+ <87sftfqwlx.fsf@dmarc-none.turner.link>
+ <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
+ <87ee4wprsx.fsf@turner.link>
+ <4b3ed7f6-d2b6-443c-970e-d963066ebfe3@amd.com>
+ <87pmo8r6ob.fsf@turner.link>
+ <5a68afe4-1e9e-c683-e06d-30afc2156f14@leemhuis.info>
+ <CADnq5_MCKTLOfWKWvi94Q9-d5CGdWBoWVxEYL3YXOpMiPnLOyg@mail.gmail.com>
+ <87pmnnpmh5.fsf@dmarc-none.turner.link>
+ <CADnq5_NG_dQCYwqHM0umjTMg5Uud6zC4=MiscH91Y9v7mW9bJA@mail.gmail.com>
+ <092b825a-10ff-e197-18a1-d3e3a097b0e3@leemhuis.info>
+ <877d96to55.fsf@dmarc-none.turner.link>
+From:   James Turner <linuxkernel.foss@dmarc-none.turner.link>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        "Lazar, Lijo" <lijo.lazar@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
+ PCI-passed-through to Windows VM
+Date:   Sun, 13 Mar 2022 14:33:41 -0400
+In-reply-to: <877d96to55.fsf@dmarc-none.turner.link>
+Message-ID: <87lexdw8gd.fsf@turner.link>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:29ce:b0:609:4f60:59cb with SMTP id
- z14-20020a05660229ce00b006094f6059cbmr17350284ioq.183.1647218948201; Sun, 13
- Mar 2022 17:49:08 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 17:49:08 -0700
-In-Reply-To: <20220314003725.1713-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000046602c05da230c76@google.com>
-Subject: Re: [syzbot] general protection fault in __pm_runtime_resume (2)
-From:   syzbot <syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi all,
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-general protection fault in __pm_runtime_resume
+I've confirmed that changing the `amdgpu_atif_pci_probe_handle` function
+to do nothing does make the GPU work properly in the VM. I started with
+f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)")
+and changed the function implementation to:
 
-general protection fault, probably for non-canonical address 0xdffffc0000000072: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000390-0x0000000000000397]
-CPU: 0 PID: 45 Comm: kworker/u5:0 Not tainted 5.17.0-rc7-syzkaller-00060-g92f90cc9fe0e-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: hci0 hci_cmd_work
-RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
-Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
-RSP: 0018:ffffc9000115fc28 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: ffff888021a7e000 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a7f
-R10: ffffffff84761483 R11: 000000000000000c R12: 0000000000000004
-R13: 0000000000000000 R14: ffff888021a7e190 R15: ffff888021a7e128
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555c48214048 CR3: 000000007e914000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- pm_runtime_get_sync include/linux/pm_runtime.h:420 [inline]
- h5_enqueue+0x175/0x390 drivers/bluetooth/hci_h5.c:632
- hci_uart_send_frame+0x1ee/0x6b0 drivers/bluetooth/hci_ldisc.c:286
- hci_send_frame+0x1c0/0x370 net/bluetooth/hci_core.c:2942
- hci_cmd_work+0x204/0x3c0 net/bluetooth/hci_core.c:3861
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
-Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
-RSP: 0018:ffffc9000115fc28 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: ffff888021a7e000 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a7f
-R10: ffffffff84761483 R11: 000000000000000c R12: 0000000000000004
-R13: 0000000000000000 R14: ffff888021a7e190 R15: ffff888021a7e128
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fcda3cf0718 CR3: 0000000021ecd000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	44 89 ee             	mov    %r13d,%esi
-   3:	e8 2d af 02 fd       	callq  0xfd02af35
-   8:	45 85 ed             	test   %r13d,%r13d
-   b:	75 4e                	jne    0x5b
-   d:	e8 a3 ab 02 fd       	callq  0xfd02abb5
-  12:	48 8d bd 91 03 00 00 	lea    0x391(%rbp),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	48 89 fa             	mov    %rdi,%rdx
-  31:	83 e2 07             	and    $0x7,%edx
-  34:	38 d0                	cmp    %dl,%al
-  36:	7f 08                	jg     0x40
-  38:	84 c0                	test   %al,%al
-  3a:	0f 85 03 01 00 00    	jne    0x143
+static bool amdgpu_atif_pci_probe_handle(struct pci_dev *pdev)
+{
+	DRM_DEBUG_DRIVER("Entered amdgpu_atif_pci_probe_handle");
+	return false;
+}
 
+With that change, the GPU works properly in the VM.
 
-Tested on:
+I'm not sure where to go from here. This issue isn't much of a concern
+for me anymore, since blacklisting `amdgpu` works for my machine. At
+this point, my understanding is that the root problem needs to be fixed
+in AMD's Windows GPU driver or Dell's firmware, not the Linux kernel. If
+any of the AMD developers on this thread would like to forward it to the
+AMD Windows driver team, I'd be happy to work with AMD to fix the issue
+properly.
 
-commit:         92f90cc9 Merge tag 'fuse-fixes-5.17-rc8' of git://git...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ec83ad700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
-dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd12fbed3485a3e51f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16d10379700000
+I've added a mention of this issue and workaround to the [Arch Wiki][1]
+to make it more discoverable. If anyone has a better place to document
+this, please let me know.
 
+Thank you all for your help on this.
+
+[1]: https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Too-low_frequency_limit_for_AMD_GPU_passed-through_to_virtual_machine
+
+James

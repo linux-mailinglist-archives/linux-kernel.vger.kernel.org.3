@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9413C4D765A
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 16:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C8C4D7672
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 16:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiCMPbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 11:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        id S234890AbiCMPbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 11:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233131AbiCMPbA (ORCPT
+        with ESMTP id S234724AbiCMPbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 11:31:00 -0400
+        Sun, 13 Mar 2022 11:31:01 -0400
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E59838DA9;
-        Sun, 13 Mar 2022 08:29:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E4F27CC8;
+        Sun, 13 Mar 2022 08:29:53 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 3B59622438;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 9C3C52244E;
         Sun, 13 Mar 2022 16:29:49 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647185389;
+        t=1647185390;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3/jJPQNTYcscMExGs+f7OHojmn6MFY4V2UBkBJ0zayk=;
-        b=KUBxIRbgQqOpPnYnojPVvo44Vma2rf8pFgAO5tLGcaptKcF3NtgMu/MDqdyU9F6oShT5CZ
-        MIBmB85uIGWJiWLDhTsYN/6pQEtiteFZl1XDXzv4bT1PN5tR53B10hGVUttD94K2in9H3r
-        NvhnFcZb8Ewkr7IYoA5TEBS6SeDy93I=
+        bh=Sf4D+lq8p2304IqZfXohb7B3lm+eDnMGkVWOmv4VwzU=;
+        b=c7oZT4mVHRAXKYJ0eG4cFJh3hinYHI5LZxGiXqNLk3NZQKPhiChw8K+SqhdmOLp4YKLSuZ
+        Zynux8D0m+kIzA/FSdTz1R1S7WvaLh+N8U2X6g0l6JolnbNMR7KhY1N91lmwxHiizmg5rB
+        5cB6RxDTGPaMIVv7zcp7Rl+9DYZMyQs=
 From:   Michael Walle <michael@walle.cc>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 4/8] MIPS: mscc: ocelot: fix load/save GPIO pinctrl name
-Date:   Sun, 13 Mar 2022 16:29:20 +0100
-Message-Id: <20220313152924.61931-5-michael@walle.cc>
+Subject: [PATCH v1 5/8] MIPS: mscc: serval: fix pinctrl node names
+Date:   Sun, 13 Mar 2022 16:29:21 +0100
+Message-Id: <20220313152924.61931-6-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220313152924.61931-1-michael@walle.cc>
 References: <20220313152924.61931-1-michael@walle.cc>
@@ -70,25 +70,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The pinctrl device tree binding will be converted to YAML format. All
 the pin nodes should end with "-pins". Fix them.
 
-Fixes: 15324652f612 ("MIPS: dts: ocelot: describe the load/save GPIO")
+Fixes: fe0052018a84 ("MIPS: mscc: Add serval support")
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/mips/boot/dts/mscc/ocelot_pcb120.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/boot/dts/mscc/serval_common.dtsi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mscc/ocelot_pcb120.dts b/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-index cda6c5ff58ad..d348742c233d 100644
---- a/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-+++ b/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-@@ -27,7 +27,7 @@ phy_int_pins: phy-int-pins {
- 		function = "gpio";
+diff --git a/arch/mips/boot/dts/mscc/serval_common.dtsi b/arch/mips/boot/dts/mscc/serval_common.dtsi
+index 5b404836db5e..0893de420e27 100644
+--- a/arch/mips/boot/dts/mscc/serval_common.dtsi
++++ b/arch/mips/boot/dts/mscc/serval_common.dtsi
+@@ -82,38 +82,38 @@ i2c_pins: i2c-pins {
+ 		pins = "GPIO_7"; /* No "default" scl for i2c0 */
+ 		function = "twi";
  	};
- 
--	phy_load_save_pins: phy_load_save_pins {
-+	phy_load_save_pins: phy-load-save-pins {
- 		pins = "GPIO_10";
- 		function = "ptp2";
+-	i2cmux_pins_i: i2cmux-pins-i {
++	i2cmux_pins_i: i2cmux-pins {
+ 		pins = "GPIO_11", "GPIO_12", "GPIO_18", "GPIO_19",
+ 			"GPIO_20", "GPIO_21";
+ 		function = "twi_scl_m";
+ 		output-low;
  	};
+-	i2cmux_0: i2cmux-0 {
++	i2cmux_0: i2cmux-0-pins {
+ 		pins = "GPIO_11";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_1: i2cmux-1 {
++	i2cmux_1: i2cmux-1-pins {
+ 		pins = "GPIO_12";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_2: i2cmux-2 {
++	i2cmux_2: i2cmux-2-pins {
+ 		pins = "GPIO_18";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_3: i2cmux-3 {
++	i2cmux_3: i2cmux-3-pins {
+ 		pins = "GPIO_19";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_4: i2cmux-4 {
++	i2cmux_4: i2cmux-4-pins {
+ 		pins = "GPIO_20";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_5: i2cmux-5 {
++	i2cmux_5: i2cmux-5-pins {
+ 		pins = "GPIO_21";
+ 		function = "twi_scl_m";
+ 		output-high;
 -- 
 2.30.2
 

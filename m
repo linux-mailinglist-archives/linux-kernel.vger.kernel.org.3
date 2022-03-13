@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E374D7265
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 05:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F2D4D726E
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 05:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbiCMEF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 23:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S233524AbiCME0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 23:26:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiCMEFY (ORCPT
+        with ESMTP id S229796AbiCMEZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 23:05:24 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5D28BF3A;
-        Sat, 12 Mar 2022 20:04:16 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id bx5so11542742pjb.3;
-        Sat, 12 Mar 2022 20:04:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uksUDscG18pH8EI9uIGKs4R4Dd0p9gKfak1RBaRXBys=;
-        b=AHhiVJ3UBkF49PV21p3KrPS9TLHac4Wb9F+3IGlTDZiDKwNLoLSCK7ymCrBjA/FB8g
-         ymqHVMjFIl9JYl7Iu1Ge3wb3XNw1xesgT+ryR1GjrpuDxeEHCCnl/042FiL+/OS2evHF
-         H2V5167S7Y3CWJhqaFveCWGFGyVfHP0NcfRZJhxMby5oCauTRuR1WBhhdjKstiqu2YSn
-         WPfwG36Ugd7IBxh6uLZbE5y06m7q3+bl68he0wEMpT387ke8irt00/kGEHuLMJjmB82o
-         qUlZlOvCSgw0wcF4AOuTUkD5jDpebm8oh77B/OQEvPMro3s/wrqUTUbCNGnRB9EeSHsJ
-         kuYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uksUDscG18pH8EI9uIGKs4R4Dd0p9gKfak1RBaRXBys=;
-        b=c8WkZiLo0k3jBta5YwQVQJ1rhPBO+Bw0yC2xA/8jbBgpfYmYfZqrFF8JQp5BLXNv1a
-         fOU1aeWRza6MGH+3qHby3+G5iVKZXv8A7t+GNhVbVCMtuXRl/MRjKVW4iSVqCBGPIM35
-         ZW4olnH2BPpD+u+K+Bp6J04bH6Sr5lwQv42MRs3VrOrU4OP6b1xPS4GlkoRJUOliAvk2
-         EjY/mQj1se9X4gcvJXtSSgheqn3YjY0m836/WTZF/oSR6NJv/Jw1klEi1kz3A9rqd+Oq
-         SFezF/uibq69uQSFz24vxel6zxsLaMJtZfhGbf8x0D4CsLLzdjYpKcsPACq1wEdgowA3
-         5ncw==
-X-Gm-Message-State: AOAM530LgWfI2jgjbvMih3+gjVHZ1bbtVMyiyhi6gbhyg+/Da1GrN3yE
-        xXlnhudAr9+dTTpnCb4/PRI=
-X-Google-Smtp-Source: ABdhPJwpTnJVzXK4pQicWpojH8vBxMFMcbQP0DV2GLcxezgDZ5yuqgt8CS65wXuElZO48wwKZGX+vg==
-X-Received: by 2002:a17:903:124a:b0:153:47d7:de49 with SMTP id u10-20020a170903124a00b0015347d7de49mr5921852plh.81.1647144256165;
-        Sat, 12 Mar 2022 20:04:16 -0800 (PST)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm18337904pjb.16.2022.03.12.20.04.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 20:04:15 -0800 (PST)
-Date:   Sat, 12 Mar 2022 20:04:12 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     "Allan W. Nielsen" <allan.nielsen@microchip.com>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, Divya.Koppera@microchip.com,
-        netdev@vger.kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <20220313040412.GA30488@hoboy.vegasvil.org>
-References: <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
- <YiecBKGhVui1Gtb/@lunn.ch>
- <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
- <YifoltDp4/Fs+9op@lunn.ch>
- <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
- <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
- <20220309195252.GB9663@hoboy.vegasvil.org>
- <20220311142814.z3h5nystnrkvbzek@soft-dev3-1.localhost>
- <20220311150842.GC7817@hoboy.vegasvil.org>
- <20220312193620.owhfd43dzzxtytgs@den-dk-m31684h>
+        Sat, 12 Mar 2022 23:25:58 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13F3255B6
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 20:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647145491; x=1678681491;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9J8S9D3tolT3syBEsNBVrXwYMktTH47yOb3kKFdt1fc=;
+  b=OdZdc5CJ57eVUMaDhWGDszuHwYLaC5NkXzEwVtC6GORbqiXchVzhsep+
+   GIsUBuS5Dr195juILbVaNEqCU1XpjFhbomJrOVKFTayEOsH30oZ14XqLK
+   wv5NIAzBq7PcrrO0O8YkHIUaq1QQkYcQVOEV/TtICBy1RxMReqWywEvcr
+   lYT8kVC9tW2Ix6yvPzFdbcSQHy94i68X0iCNK1GxTccvbuxrkqz0q7xeu
+   u+7UndgdtIDH6ZATqQ0UH3DzQKsBZ3Cv0FV7PFxZDPs1XpCqXuVPmlic6
+   FD2X7K2K8bPnMUka29uUZ+hFl6TdVMvjnWsYp6uVf0VulWrcqMYRbemm8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="255791500"
+X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
+   d="scan'208";a="255791500"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 20:24:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
+   d="scan'208";a="713326550"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 12 Mar 2022 20:24:49 -0800
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTFmi-0008aw-Tv; Sun, 13 Mar 2022 04:24:48 +0000
+Date:   Sun, 13 Mar 2022 12:23:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>
+Subject: ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
+Message-ID: <202203131256.9dyj6eO2-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220312193620.owhfd43dzzxtytgs@den-dk-m31684h>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 08:36:20PM +0100, Allan W. Nielsen wrote:
-> I did skim through the articles, and as you hinted he does find small
-> latency differences across different packets. (but as I understood, very
-> few PHYs was tested).
+Hi Arnd,
 
-There is also previous work cited in those articles.
- 
-> But this is not really an argument for not having _default_ values
-> hard-coded in the driver (or DT, but lets forget about DT for now).
+First bad commit (maybe != root cause):
 
-You put them in the DTS.  That means you expect them to need changes.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aad611a868d16cdc16a7d4a764cef955293e47e3
+commit: 606b102876e3741851dfb09d53f3ee57f650a52c drm: fb_helper: fix CONFIG_FB dependency
+date:   5 months ago
+config: nios2-randconfig-r014-20220313 (https://download.01.org/0day-ci/archive/20220313/202203131256.9dyj6eO2-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=606b102876e3741851dfb09d53f3ee57f650a52c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 606b102876e3741851dfb09d53f3ee57f650a52c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-DTS is the WRONG place for such things.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If your numbers are perfect, then do the corrections in silicon/firmware.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-If the numbers aren't 100% perfect, then provide your customers with a
-test report providing the recommended numbers.  Include a proper
-explanation of the test methodology and assumptions used in your
-analysis.  Heck, you can even given them linuxptp config snippets (and
-other for other popular PTP stacks, Oregano, ixat, ptpd, etc)
+>> ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
 
-Don't hard code random, changing numbers into kernel drivers.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SERIAL_CORE_CONSOLE
+   Depends on TTY && HAS_IOMEM
+   Selected by
+   - EARLY_PRINTK
 
-Thanks,
-Richard
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

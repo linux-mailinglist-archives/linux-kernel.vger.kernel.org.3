@@ -2,193 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AFD4D78D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF9F4D78D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbiCMXp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 19:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S235693AbiCMXuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 19:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235696AbiCMXp1 (ORCPT
+        with ESMTP id S235718AbiCMXrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 19:45:27 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB2738A0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 16:44:18 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id d62so16273157iog.13
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 16:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Y6GoVLUy81HdtypjoVfjZaaJkl3pvlY7l5U9nDab9U=;
-        b=QwLaq6hTTwazfXOiSsmqZNItgMiNPPIF5v/VcRYcoPJN3WWYE7bdHvvdWAaqC3OlVz
-         oPJGPf66ZBl4A0+VmVY3Tw0RLSKsYm5/HhaLtCl9Vqc71ZBAHlayUdu6s4TrxytdExxm
-         KvPSFgLBMVsolLw2zCg8KYT6FfNMEYXCvLIlfKwWV+TeUaIn7n0xxqpF8E7EOu6yFnW3
-         ijMsimaSals9IiEfkXplc4KlOizcvlfOhBys83quskTgatcBXVFcmPsrpyFZXeBF2Ku/
-         OQwgaRd+ZRunYwVQjuhR0Uk4hJQtMmtlb82wSAnqmZBRG70umgZOVLxIBiPV01rJtvHf
-         q2xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Y6GoVLUy81HdtypjoVfjZaaJkl3pvlY7l5U9nDab9U=;
-        b=pLMMFPW9zBuh5iTMnUQHkEqaQIaPZpDiNFtB2DDX/Ji1SRosJx+fa5viw+gp5/L5qR
-         RG4tmPsEuV3eBO/Kz9Ss8XlTQmnAyeOMmYDSqA23TmjJDjbyG49mjn00S8QBwMMDxSkw
-         kf2Uinnk/GGC8IjKwvkinzU/Cx1P9ld1qGUMzsHFGhmA9q1T9tUOcR3N7RtjTsPngkm1
-         i6JjEVxIFGNg4cJnZzrHrrGTfyFQBO7XXbaI3X5qdpBwQvfaQOCpglY7nbXkph+jwJId
-         SdZWba8cn3r1WgL3eOkU405UAiDcgA3usBUrs+QoCHSgCz0Oyg0gu9ZbEINxV9xlyvNt
-         KhtQ==
-X-Gm-Message-State: AOAM532K8fCpBkrzbkaz5Q2JWm4979xs1S78J9hBwGIF2usDb7BJSI7H
-        NXQaJz0nl5hyqxD1z4wpjrcI8rySyy5b+KwRGO8=
-X-Google-Smtp-Source: ABdhPJxeUMr9fsIxWbNq8YPG7hWDuaKrG8FpeP86LODHC0n6rpPIvhGNr5tMXeV/8gLdZ46qI7Is52Al8WDXVx7fWHg=
-X-Received: by 2002:a05:6602:2b8e:b0:5e9:74e7:6b01 with SMTP id
- r14-20020a0566022b8e00b005e974e76b01mr17690829iov.127.1647215058035; Sun, 13
- Mar 2022 16:44:18 -0700 (PDT)
+        Sun, 13 Mar 2022 19:47:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232D564C7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 16:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647215205; x=1678751205;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wMf00R80cVF9qHEEHx61TQwqkfmpJ3tk31BJz9qEcok=;
+  b=a6vzues0T1oEWS6nQDX+qrbdGvgfE0ESPGK4xIzSX+/acngcNslSijSV
+   polp7waZxiaexoO4b4tNK0KYmYqMZEDhCvfIEpl26CgzY464ZpvbY31Ea
+   VqTKRW7gVrLlqURVpvRU/sNfjHfLO2SYnp+UwODDzb/yy0EWlzrmpAsIX
+   v1BS+uTrvk+UtWMMsXJJHFkmWRAn6x3eiHcA4ANOuZ7i+tRn8tFIKzVNK
+   wBfGmHBWOB0MDP7/VqKL60BF70S5935BIChTyf4Huo2HLnCPFBuLtjr9Y
+   sHTIYbtpC2HjO47y+DYHSObO83mHOYxASyo6cM+yCuuVe5bPf7zOuGX4W
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255637274"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="255637274"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:46:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="515207768"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 16:46:43 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTXv8-0009OV-ES; Sun, 13 Mar 2022 23:46:42 +0000
+Date:   Mon, 14 Mar 2022 07:45:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: [toke:xdp-queueing-03 7/9] include/linux/bpf.h:2064:9: warning:
+ incompatible pointer to integer conversion returning 'void *' from a
+ function with result type 'int'
+Message-ID: <202203140739.otiRAMwr-lkp@intel.com>
 MIME-Version: 1.0
-References: <57133fafc4d74377a4a08d98e276d58fe4a127dc.1647115974.git.andreyknvl@google.com>
-In-Reply-To: <57133fafc4d74377a4a08d98e276d58fe4a127dc.1647115974.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 14 Mar 2022 00:44:07 +0100
-Message-ID: <CA+fCnZe-zj8Xqi5ACz0FjRX92b5KnnP=qKCjEck0=mAjV0nohA@mail.gmail.com>
-Subject: Re: [PATCH] kasan, scs: collect stack traces from shadow stack
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Florian Mayer <fmayer@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 9:14 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Currently, KASAN always uses the normal stack trace collection routines,
-> which rely on the unwinder, when saving alloc and free stack traces.
->
-> Instead of invoking the unwinder, collect the stack trace by copying
-> frames from the Shadow Call Stack whenever it is enabled. This reduces
-> boot time by 30% for all KASAN modes when Shadow Call Stack is enabled.
->
-> To avoid potentially leaking PAC pointer tags, strip them when saving
-> the stack trace.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
->
-> ---
->
-> Things to consider:
->
-> We could integrate shadow stack trace collection into kernel/stacktrace.c
-> as e.g. stack_trace_save_shadow(). However, using stack_trace_consume_fn
-> leads to invoking a callback on each saved from, which is undesirable.
-> The plain copy loop is faster.
->
-> We could add a command line flag to switch between stack trace collection
-> modes. I noticed that Shadow Call Stack might be missing certain frames
-> in stacks originating from a fault that happens in the middle of a
-> function. I am not sure if this case is important to handle though.
->
-> Looking forward to thoughts and comments.
->
-> Thanks!
->
-> ---
->  mm/kasan/common.c | 36 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 35 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index d9079ec11f31..65a0723370c7 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -9,6 +9,7 @@
->   *        Andrey Konovalov <andreyknvl@gmail.com>
->   */
->
-> +#include <linux/bits.h>
->  #include <linux/export.h>
->  #include <linux/init.h>
->  #include <linux/kasan.h>
-> @@ -21,6 +22,7 @@
->  #include <linux/printk.h>
->  #include <linux/sched.h>
->  #include <linux/sched/task_stack.h>
-> +#include <linux/scs.h>
->  #include <linux/slab.h>
->  #include <linux/stacktrace.h>
->  #include <linux/string.h>
-> @@ -30,12 +32,44 @@
->  #include "kasan.h"
->  #include "../slab.h"
->
-> +#ifdef CONFIG_SHADOW_CALL_STACK
-> +
-> +#ifdef CONFIG_ARM64_PTR_AUTH
-> +#define PAC_TAG_RESET(x) (x | GENMASK(63, CONFIG_ARM64_VA_BITS))
-> +#else
-> +#define PAC_TAG_RESET(x) (x)
-> +#endif
-> +
-> +static unsigned int save_shadow_stack(unsigned long *entries,
-> +                                     unsigned int nr_entries)
-> +{
-> +       unsigned long *scs_sp = task_scs_sp(current);
-> +       unsigned long *scs_base = task_scs(current);
-> +       unsigned long *frame;
-> +       unsigned int i = 0;
-> +
-> +       for (frame = scs_sp - 1; frame >= scs_base; frame--) {
-> +               entries[i++] = PAC_TAG_RESET(*frame);
-> +               if (i >= nr_entries)
-> +                       break;
-> +       }
-> +
-> +       return i;
-> +}
-> +#else /* CONFIG_SHADOW_CALL_STACK */
-> +static inline unsigned int save_shadow_stack(unsigned long *entries,
-> +                                       unsigned int nr_entries) { return 0; }
-> +#endif /* CONFIG_SHADOW_CALL_STACK */
-> +
->  depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
->  {
->         unsigned long entries[KASAN_STACK_DEPTH];
->         unsigned int nr_entries;
->
-> -       nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-> +       if (IS_ENABLED(CONFIG_SHADOW_CALL_STACK))
-> +               nr_entries = save_shadow_stack(entries, ARRAY_SIZE(entries));
-> +       else
-> +               nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
->         return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
+head:   3e7f25d58b1bfd5ad623678bf9e11f27c98a8094
+commit: 28d9ca982b9ae96bcad2bee81647ba18ae049a69 [7/9] bpf: Enable direct packet access for dequeue packets
+config: hexagon-randconfig-r045-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140739.otiRAMwr-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-03
+        git checkout 28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/
 
-Another option here is to instruct stack depot to get the stack from
-the Shadow Call Stack. This would avoid copying the frames twice.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  }
->
-> --
-> 2.25.1
->
+All warnings (new ones prefixed by >>):
+
+   In file included from net/core/sock.c:133:
+   In file included from include/linux/filter.h:9:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+   1 warning generated.
+--
+   In file included from net/core/dev.c:95:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+   net/core/dev.c:5011:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
+   sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
+   ^
+   net/core/dev.c:5160:19: warning: unused function 'nf_ingress' [-Wunused-function]
+   static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
+                     ^
+   3 warnings generated.
+--
+   In file included from net/core/filter.c:38:
+   In file included from include/linux/skmsg.h:7:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+>> net/core/filter.c:9720:14: warning: incompatible integer to pointer conversion assigning to 'struct btf *' from 'int' [-Wint-conversion]
+           btf_vmlinux = bpf_get_btf_vmlinux();
+                       ^ ~~~~~~~~~~~~~~~~~~~~~
+   net/core/filter.c:9848:14: warning: incompatible integer to pointer conversion assigning to 'struct btf *' from 'int' [-Wint-conversion]
+           btf_vmlinux = bpf_get_btf_vmlinux();
+                       ^ ~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+   In file included from net/core/net-traces.c:35:
+   In file included from include/trace/events/tcp.h:12:
+   In file included from include/net/tcp.h:35:
+   In file included from include/net/sock_reuseport.h:5:
+   In file included from include/linux/filter.h:9:
+>> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+           return ERR_PTR(-EINVAL);
+                  ^~~~~~~~~~~~~~~~
+   In file included from net/core/net-traces.c:50:
+   In file included from include/trace/events/neigh.h:255:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:873:
+   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
+                   struct in6_addr *pin6;
+                                    ^
+   2 warnings generated.
+
+
+vim +2064 include/linux/bpf.h
+
+  2061	
+  2062	static inline bpf_get_btf_vmlinux(void)
+  2063	{
+> 2064		return ERR_PTR(-EINVAL);
+  2065	}
+  2066	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

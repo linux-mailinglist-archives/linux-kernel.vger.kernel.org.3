@@ -2,229 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C2D4D7673
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 16:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242714D7676
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 16:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbiCMPbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 11:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S233172AbiCMPhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 11:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiCMPbC (ORCPT
+        with ESMTP id S231488AbiCMPgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 11:31:02 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC2F38DA0;
-        Sun, 13 Mar 2022 08:29:54 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 031F722456;
-        Sun, 13 Mar 2022 16:29:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647185392;
+        Sun, 13 Mar 2022 11:36:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92669723CF
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 08:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647185744;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yt2gL4KuLnT9oDpbREzmWUWnEukuKhjWlhhV7P7jUFM=;
-        b=Je7x+Ab2uR+xyLP1FaLkkzECLR1MrQspMjQ7JvWUj9BkisxBgIJdRHESUMEuNdhuE6e0Oq
-        N/rpOBZBaLgPTvLtRdWS35AGqjSMmmfcjoX93SyxzHGJHO0GVzlvh3zAcDqN1miSRe1FoG
-        Lp5o907+vyxMtv3G/H9XzXJ8BMYGQiY=
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 8/8] dt-bindings: pinctrl: convert ocelot-pinctrl to YAML format
-Date:   Sun, 13 Mar 2022 16:29:24 +0100
-Message-Id: <20220313152924.61931-9-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220313152924.61931-1-michael@walle.cc>
-References: <20220313152924.61931-1-michael@walle.cc>
+        bh=8lIyBMBGORfp1VxiABBqMU4c3GxXnpu4EV87YIyaZMI=;
+        b=bChcxHYKWd/T4sDxR4B5tj/Z58ew73S9xl7EODfAeZoR3coVMzT+Sd3tnRDBP5R57SD84r
+        H6nkpWl38rTb1Q1OegDdzKLqWAqsy+1vlDhExF3boobCRockkl/p++EqpIoEtJqm1aXjHw
+        tOgUKLW6/iheHJdyKjO1wntF12qmsnU=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-ehKApbcXMASilGmf16-fzA-1; Sun, 13 Mar 2022 11:35:43 -0400
+X-MC-Unique: ehKApbcXMASilGmf16-fzA-1
+Received: by mail-oi1-f197.google.com with SMTP id m16-20020a056808025000b002d9ddfbc38fso9793310oie.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 08:35:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=8lIyBMBGORfp1VxiABBqMU4c3GxXnpu4EV87YIyaZMI=;
+        b=1MurW2UbL3QaR02VmmV4rf0h9LfDghjChfmrRVQvhy+iypWZvqwknEU+10hPs9f6Dv
+         GNE3lv9FEsjOFwH9tLcg5mxDQR7T7Y6uHIGVgcpOijaQmR8p0TgmsmDyulIoHU/82SVv
+         RcIplQscE2zUv1uIWeQYVBhxFulrzXoFjY5d+wtrfMFZDyJZAlYMQrECpA52hNkUW+LB
+         PIm5X1vtXNDPFX8dj7+yVi6SS1as0JUrz6wcg1HFJBbiqq8EbdFulyygJYZqp8iJkgdV
+         Ecg+h6+RerShzmQ5d7m2eN+akTTuUUZOjLXy9ODbG2ojrJZmJpdI4hQDh0a99h1VFsf/
+         lK2Q==
+X-Gm-Message-State: AOAM5334slx5AJLMwGseQ6mJFuhb/h80jisaJfIqoEVFhE/6o0RP1SeJ
+        QA2Xzwv/v/3jYnuM6tzjrIHWKg48WBjBQh6spXTCEEb+kEWqFXmAPGE/p4vhaWi/ckG7yw44HaW
+        VysrtRUcdlyPZuT0Xnu8lo2D+XAIVzLpGHGnYIch5y+5dIdDSChShwi1b7qLpjnOjRVdh4OA=
+X-Received: by 2002:aca:2119:0:b0:2ec:a7ff:c042 with SMTP id 25-20020aca2119000000b002eca7ffc042mr5766992oiz.73.1647185742614;
+        Sun, 13 Mar 2022 08:35:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyiUqUbO1cgdW16d+fK6APreS35khYTNjQE4uRvu0O4kZQO/jSJCfXtJ8gHlGESptMtsI5+bg==
+X-Received: by 2002:aca:2119:0:b0:2ec:a7ff:c042 with SMTP id 25-20020aca2119000000b002eca7ffc042mr5766977oiz.73.1647185742376;
+        Sun, 13 Mar 2022 08:35:42 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id s2-20020a4ae482000000b0031c42eb457csm5875274oov.43.2022.03.13.08.35.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Mar 2022 08:35:42 -0700 (PDT)
+Subject: Re: [PATCH] media: stkwebcam: move stk_camera_read_reg() scratch
+ buffer to struct stk_camera
+To:     Pavel Skripkin <paskripkin@gmail.com>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl, cai.huoqing@linux.dev,
+        xose.vazquez@gmail.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220312173049.1410977-1-trix@redhat.com>
+ <65a1d178-8511-a023-2655-94540114086c@gmail.com>
+ <c3723690-cacb-0c42-cc5d-397a3363b4da@redhat.com>
+ <0d8dfedb-1c2c-1a70-18dc-0c4439cf4bda@gmail.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <b5711870-b047-d1cb-d272-b193175d6238@redhat.com>
+Date:   Sun, 13 Mar 2022 08:35:40 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0d8dfedb-1c2c-1a70-18dc-0c4439cf4bda@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the ocelot-pinctrl device tree binding to the new YAML format.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  | 42 ---------
- .../bindings/pinctrl/mscc,ocelot-pinctrl.yaml | 94 +++++++++++++++++++
- 2 files changed, 94 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
- create mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+On 3/13/22 8:11 AM, Pavel Skripkin wrote:
+> Hi Tom,
+>
+> On 3/13/22 02:48, Tom Rix wrote:
+>> These do show up in my usual static analysis and it why I was looking at
+>> this file.
+>>
+>> And was sidetracked by the short malloc.
+>>
+>> Unfortunately I looked and there are many other similar instances
+>> treewide ~100
+>>
+>
+> Most of them are in very old drivers and I don't think they ever be 
+> fixed. I've looked into one bug reported by syzkaller and there was 
+> like 30 calls w/o proper error handling in one driver. Redoing whole 
+> driver logic without access to hw seems dangerous :))
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
-deleted file mode 100644
-index 5d84fd299ccf..000000000000
---- a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Microsemi Ocelot pin controller Device Tree Bindings
------------------------------------------------------
--
--Required properties:
-- - compatible		: Should be "mscc,ocelot-pinctrl",
--			  "mscc,jaguar2-pinctrl", "microchip,sparx5-pinctrl",
--			  "mscc,luton-pinctrl", "mscc,serval-pinctrl",
--			  "microchip,lan966x-pinctrl" or "mscc,servalt-pinctrl"
-- - reg			: Address and length of the register set for the device
-- - gpio-controller	: Indicates this device is a GPIO controller
-- - #gpio-cells		: Must be 2.
--			  The first cell is the pin number and the
--			  second cell specifies GPIO flags, as defined in
--			  <dt-bindings/gpio/gpio.h>.
-- - gpio-ranges		: Range of pins managed by the GPIO controller.
--
--
--The ocelot-pinctrl driver uses the generic pin multiplexing and generic pin
--configuration documented in pinctrl-bindings.txt.
--
--The following generic properties are supported:
-- - function
-- - pins
--
--Example:
--	gpio: pinctrl@71070034 {
--		compatible = "mscc,ocelot-pinctrl";
--		reg = <0x71070034 0x28>;
--		gpio-controller;
--		#gpio-cells = <2>;
--		gpio-ranges = <&gpio 0 0 22>;
--
--		uart_pins: uart-pins {
--				pins = "GPIO_6", "GPIO_7";
--				function = "uart";
--		};
--
--		uart2_pins: uart2-pins {
--				pins = "GPIO_12", "GPIO_13";
--				function = "uart2";
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
-new file mode 100644
-index 000000000000..40148aef4ecf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/mscc,ocelot-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microsemi Ocelot pin controller Device Tree Bindings
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+  - Lars Povlsen <lars.povlsen@microchip.com>
-+
-+allOf:
-+  - $ref: "pinctrl.yaml#"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,lan966x-pinctrl
-+      - microchip,sparx5-pinctrl
-+      - mscc,jaguar2-pinctrl
-+      - mscc,luton-pinctrl
-+      - mscc,ocelot-pinctrl
-+      - mscc,serval-pinctrl
-+      - mscc,servalt-pinctrl
-+
-+  reg: true
-+
-+  gpio-controller: true
-+
-+  '#gpio-cells':
-+    const: 2
-+
-+  gpio-ranges: true
-+
-+  interrupts:
-+    maxItems: 1
-+    description: The GPIO parent interrupt.
-+
-+  interrupt-controller: true
-+
-+  "#interrupt-cells":
-+    const: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - gpio-controller
-+  - '#gpio-cells'
-+  - gpio-ranges
-+
-+patternProperties:
-+  '-pins$':
-+    type: object
-+    allOf:
-+      - $ref: "pinmux-node.yaml"
-+      - $ref: "pincfg-node.yaml"
-+
-+    properties:
-+      function: true
-+      pins: true
-+      output-high: true
-+      output-low: true
-+      drive-strength: true
-+
-+    required:
-+      - function
-+      - pins
-+
-+    additionalProperties: false
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    gpio: pinctrl@71070034 {
-+        compatible = "mscc,ocelot-pinctrl";
-+        reg = <0x71070034 0x28>;
-+        gpio-controller;
-+        #gpio-cells = <2>;
-+        gpio-ranges = <&gpio 0 0 22>;
-+
-+        uart_pins: uart-pins {
-+            pins = "GPIO_6", "GPIO_7";
-+            function = "uart";
-+        };
-+
-+        uart2_pins: uart2-pins {
-+            pins = "GPIO_12", "GPIO_13";
-+            function = "uart2";
-+        };
-+    };
-+
-+...
--- 
-2.30.2
+ From the checkpatch change below, there are about 150 dinky allocs treewide
+
+Here is a refactoring
+
+https://lore.kernel.org/lkml/20220313141008.1503638-1-trix@redhat.com/
+
+>
+>
+>> These aren't caught in checkpatch, so working on that..
+>>
+>
+> I think, it's not checkpath responsibility. Maybe it worth adding such 
+> check to smatch. I tried to implement such checker, but never finished 
+> it :(
+>
+>
+Poking new development to not do dinky allocs I think is worth it, here 
+is my checkpatch patch
+
+https://lore.kernel.org/lkml/20220313140827.1503359-1-trix@redhat.com/
+
+steal the regex for smatch.
+
+Tom
+
+>
+> With regards,
+> Pavel Skripkin
+>
 

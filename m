@@ -2,170 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E854D7232
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 03:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C281E4D7235
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 03:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbiCMCmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 21:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S233441AbiCMCm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 21:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiCMCl4 (ORCPT
+        with ESMTP id S233385AbiCMCm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 21:41:56 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B397EB3E
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 18:40:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647139249; x=1678675249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IfviMtav1mbQ6V8D7kPAXwRYYvcsSKMpDyFUw0UvMzg=;
-  b=QZlny2WmdmsgGZXbBoUX+Y67+m/sCxjRvg5VHlFg3CTDicA0bU1lTMPI
-   eHLNgZq55IhVPx3PsWgnRUM8Gp9jEG5bfQDSwPCAI2CrxLhLcbORIjTtu
-   PmpIDcAgR8kb+gSH4egg1Ymek808tX76jYfOK9kb5O5qgKakFiv/9RX/w
-   +WA5b9+x4Sy65fIuNt1gqD05Cz+PWXg6rcOtqu+a9Eej42UQw0byx+J3c
-   SwROb3EvsFxHbzQLtNiGSFtnwt3x3+R4KoNLEhACCpAt7jVBFvWoWsYgg
-   7gJkgNKytgTwh2jJdqDU2ND5tbVS2fdhxNWOBEwp9RXa9jVUTiZERqApG
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="255567528"
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="255567528"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 18:40:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="511819082"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Mar 2022 18:40:47 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTEA2-0008Vm-DN; Sun, 13 Mar 2022 02:40:46 +0000
-Date:   Sun, 13 Mar 2022 10:40:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [dsahern:vrf-keep-orig-oif 1/2] net/xfrm/xfrm_interface.c:514:55:
- error: incompatible type for argument 6 of 'ip6_update_pmtu'
-Message-ID: <202203131040.XgH7dGI6-lkp@intel.com>
+        Sat, 12 Mar 2022 21:42:57 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5218E187;
+        Sat, 12 Mar 2022 18:41:50 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id n15so10864811plh.2;
+        Sat, 12 Mar 2022 18:41:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1fskSP0gHERAtz5LalHkiwzylQjQwe89pEx6fQtp0KU=;
+        b=nuaDnykYqpqHHDXkEJjdRwt3rvLdCah9IO+tYgdEVvzbW7oreof2LjyZAYQEEyS37p
+         2eiRXF03z+Iu632ooK6v/yptBJLSqWseKc3g4Ok1qmdGW8N6yVaK7rdM/726SckB3OQ4
+         8N8E3Xtob+3I9VyVhp+dKXrsq+ERf3YgKP+FbiBBvQAg0pqRc818l+UzTyn6222/q4Yu
+         vA57n/tX6gmbV2D0OHdAa2zSyrSDFdQSZOPQI3J1XNgAQ0l6lPr8scqVUJ0AlzWYYaPq
+         DjTz/4c478lJp2zM/TO83/b+SXwwD/PB87gnciq/a2Q/5FmvxkQi0XIP49ZAOWmDdpTe
+         P0Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1fskSP0gHERAtz5LalHkiwzylQjQwe89pEx6fQtp0KU=;
+        b=LDwvY5KPgOFolH+AoD0zqmuJcXLAtGhwxTdyQqiCeQeenlTfDydCjDdI56rt7t7n8z
+         OuWK8+g83nGQ8QcxqDxviMURN/BpD/UVn0dg2J7jPMcN3y+Qfep3Mu7pF4nbDDVd7afD
+         b2gj8THFWF2FKpoFGclKht7GdqPHN+V5e7OLmvKr4e+hmdenq6zz/dkqJmN4b1Ac3aFw
+         99f5Jk1WgA6M0AmgkW1UgVT82ori09P0LytZUGeZMGCoxLu/83J8dUgOyUEHaVQlQp53
+         SbU4SwKAxSoFHYOIn/WJ/PSX+NOHqwAAUqVwthTJYiNpZMmBSMwvMMX7nsxy5B7saNcx
+         NoQA==
+X-Gm-Message-State: AOAM531V99mbPYcvkeNI4a1AFU3BsgoxjNKAXigp7SJr0FXgvugSaYwp
+        5Y21Q7xL2CiJSsGFl5nI3gE=
+X-Google-Smtp-Source: ABdhPJwVsLdRl9naAj33/DxeBv99mrEP2FURQlajcdcPPUBf2U9/Q3Vci+rEmwqkSh5FzOBIrRxlsA==
+X-Received: by 2002:a17:902:6902:b0:14d:6aa4:f3f5 with SMTP id j2-20020a170902690200b0014d6aa4f3f5mr18008224plk.20.1647139310204;
+        Sat, 12 Mar 2022 18:41:50 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001bce781ce03sm12825798pjp.18.2022.03.12.18.41.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 18:41:49 -0800 (PST)
+Date:   Sat, 12 Mar 2022 18:41:46 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     "Allan W. Nielsen" <allan.nielsen@microchip.com>
+Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, Divya.Koppera@microchip.com,
+        netdev@vger.kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
+Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
+ values and timestamping check for LAN8814 phy
+Message-ID: <20220313024146.GB29538@hoboy.vegasvil.org>
+References: <20220308154345.l4mk2oab4u5ydn5r@soft-dev3-1.localhost>
+ <YiecBKGhVui1Gtb/@lunn.ch>
+ <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
+ <YifoltDp4/Fs+9op@lunn.ch>
+ <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
+ <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
+ <20220309195252.GB9663@hoboy.vegasvil.org>
+ <20220311142814.z3h5nystnrkvbzek@soft-dev3-1.localhost>
+ <20220311150842.GC7817@hoboy.vegasvil.org>
+ <20220312193620.owhfd43dzzxtytgs@den-dk-m31684h>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220312193620.owhfd43dzzxtytgs@den-dk-m31684h>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/dsahern/linux vrf-keep-orig-oif
-head:   9830d54a15a0e242fe89180d8e54fe04211abd82
-commit: 038474b9858f889e59d274e2eaea63e2d3bcc00e [1/2] wip - mostly works needs to be simplified
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220313/202203131040.XgH7dGI6-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/dsahern/linux/commit/038474b9858f889e59d274e2eaea63e2d3bcc00e
-        git remote add dsahern https://github.com/dsahern/linux
-        git fetch --no-tags dsahern vrf-keep-orig-oif
-        git checkout 038474b9858f889e59d274e2eaea63e2d3bcc00e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash net/xfrm/
+On Sat, Mar 12, 2022 at 08:36:20PM +0100, Allan W. Nielsen wrote:
+> With this in mind, I do agree with you that it does not make much sense
+> to compensate they few cm of PCB tracks without also calibrating for
+> differences from packet to packet.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The PCB traces AFTER the PHY are part of the network, and if they
+contribute to path asymmetry, then that can and should be corrected
+using the delayAsymmetry configuration variable.
+ 
+> If we do not offer default delays directly in the driver, everybody will
+> have to calibrate all boards just to have decent results, we will not
+> have a good way to provide default delay numbers, and this will be
+> different from what is done in other drivers.
 
-All errors (new ones prefixed by >>):
+Who says the other drivers are even remotely reasonable?  Not me.
+I've been fighting this voodoo engineering all along, but people seem
+to ignore me.
 
-   net/xfrm/xfrm_interface.c: In function 'xfrmi6_err':
->> net/xfrm/xfrm_interface.c:514:55: error: incompatible type for argument 6 of 'ip6_update_pmtu'
-     514 |                 ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
-         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~
-         |                                                       |
-         |                                                       kuid_t
-   In file included from net/xfrm/xfrm_interface.c:39:
-   include/net/ip6_route.h:186:38: note: expected 'u32' {aka 'unsigned int'} but argument is of type 'kuid_t'
-     186 |                      int l3mdev, u32 mark, kuid_t uid);
-         |                                  ~~~~^~~~
->> net/xfrm/xfrm_interface.c:514:17: error: too few arguments to function 'ip6_update_pmtu'
-     514 |                 ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
-         |                 ^~~~~~~~~~~~~~~
-   In file included from net/xfrm/xfrm_interface.c:39:
-   include/net/ip6_route.h:185:6: note: declared here
-     185 | void ip6_update_pmtu(struct sk_buff *skb, struct net *net, __be32 mtu, int oif,
-         |      ^~~~~~~~~~~~~~~
+> I do understand that you have a concern that these numbers may change in
+> future updates. But this has not been a problem in other drivers doing
+> the same.
 
+Wrong.  See the git history of the i210 driver.  Also the data sheets.
 
-vim +/ip6_update_pmtu +514 net/xfrm/xfrm_interface.c
+> But if this is still a concern, we can add a comment to say
+> that these numbers must be treated as UAPI, and chancing them, may
+> cause regressions on calibrated PHYs.
 
-f203b76d78092f Steffen Klassert 2018-06-12  464  
-f203b76d78092f Steffen Klassert 2018-06-12  465  static int xfrmi6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
-f203b76d78092f Steffen Klassert 2018-06-12  466  		    u8 type, u8 code, int offset, __be32 info)
-f203b76d78092f Steffen Klassert 2018-06-12  467  {
-f203b76d78092f Steffen Klassert 2018-06-12  468  	const struct ipv6hdr *iph = (const struct ipv6hdr *)skb->data;
-f203b76d78092f Steffen Klassert 2018-06-12  469  	struct net *net = dev_net(skb->dev);
-f203b76d78092f Steffen Klassert 2018-06-12  470  	int protocol = iph->nexthdr;
-f203b76d78092f Steffen Klassert 2018-06-12  471  	struct ip_comp_hdr *ipch;
-f203b76d78092f Steffen Klassert 2018-06-12  472  	struct ip_esp_hdr *esph;
-f203b76d78092f Steffen Klassert 2018-06-12  473  	struct ip_auth_hdr *ah;
-f203b76d78092f Steffen Klassert 2018-06-12  474  	struct xfrm_state *x;
-f203b76d78092f Steffen Klassert 2018-06-12  475  	struct xfrm_if *xi;
-f203b76d78092f Steffen Klassert 2018-06-12  476  	__be32 spi;
-f203b76d78092f Steffen Klassert 2018-06-12  477  
-f203b76d78092f Steffen Klassert 2018-06-12  478  	switch (protocol) {
-f203b76d78092f Steffen Klassert 2018-06-12  479  	case IPPROTO_ESP:
-f203b76d78092f Steffen Klassert 2018-06-12  480  		esph = (struct ip_esp_hdr *)(skb->data + offset);
-f203b76d78092f Steffen Klassert 2018-06-12  481  		spi = esph->spi;
-f203b76d78092f Steffen Klassert 2018-06-12  482  		break;
-f203b76d78092f Steffen Klassert 2018-06-12  483  	case IPPROTO_AH:
-f203b76d78092f Steffen Klassert 2018-06-12  484  		ah = (struct ip_auth_hdr *)(skb->data + offset);
-f203b76d78092f Steffen Klassert 2018-06-12  485  		spi = ah->spi;
-f203b76d78092f Steffen Klassert 2018-06-12  486  		break;
-f203b76d78092f Steffen Klassert 2018-06-12  487  	case IPPROTO_COMP:
-f203b76d78092f Steffen Klassert 2018-06-12  488  		ipch = (struct ip_comp_hdr *)(skb->data + offset);
-f203b76d78092f Steffen Klassert 2018-06-12  489  		spi = htonl(ntohs(ipch->cpi));
-f203b76d78092f Steffen Klassert 2018-06-12  490  		break;
-f203b76d78092f Steffen Klassert 2018-06-12  491  	default:
-f203b76d78092f Steffen Klassert 2018-06-12  492  		return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  493  	}
-f203b76d78092f Steffen Klassert 2018-06-12  494  
-f203b76d78092f Steffen Klassert 2018-06-12  495  	if (type != ICMPV6_PKT_TOOBIG &&
-f203b76d78092f Steffen Klassert 2018-06-12  496  	    type != NDISC_REDIRECT)
-f203b76d78092f Steffen Klassert 2018-06-12  497  		return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  498  
-f203b76d78092f Steffen Klassert 2018-06-12  499  	x = xfrm_state_lookup(net, skb->mark, (const xfrm_address_t *)&iph->daddr,
-f203b76d78092f Steffen Klassert 2018-06-12  500  			      spi, protocol, AF_INET6);
-f203b76d78092f Steffen Klassert 2018-06-12  501  	if (!x)
-f203b76d78092f Steffen Klassert 2018-06-12  502  		return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  503  
-f203b76d78092f Steffen Klassert 2018-06-12  504  	xi = xfrmi_lookup(net, x);
-f203b76d78092f Steffen Klassert 2018-06-12  505  	if (!xi) {
-f203b76d78092f Steffen Klassert 2018-06-12  506  		xfrm_state_put(x);
-f203b76d78092f Steffen Klassert 2018-06-12  507  		return -1;
-f203b76d78092f Steffen Klassert 2018-06-12  508  	}
-f203b76d78092f Steffen Klassert 2018-06-12  509  
-f203b76d78092f Steffen Klassert 2018-06-12  510  	if (type == NDISC_REDIRECT)
-f203b76d78092f Steffen Klassert 2018-06-12  511  		ip6_redirect(skb, net, skb->dev->ifindex, 0,
-f203b76d78092f Steffen Klassert 2018-06-12  512  			     sock_net_uid(net, NULL));
-f203b76d78092f Steffen Klassert 2018-06-12  513  	else
-f203b76d78092f Steffen Klassert 2018-06-12 @514  		ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
-f203b76d78092f Steffen Klassert 2018-06-12  515  	xfrm_state_put(x);
-f203b76d78092f Steffen Klassert 2018-06-12  516  
-f203b76d78092f Steffen Klassert 2018-06-12  517  	return 0;
-f203b76d78092f Steffen Klassert 2018-06-12  518  }
-f203b76d78092f Steffen Klassert 2018-06-12  519  
+Comments will be ignored.  And when the next batch of developers comes
+along, they will ignore your prohibition.
 
-:::::: The code at line 514 was first introduced by commit
-:::::: f203b76d78092faf248db3f851840fbecf80b40e xfrm: Add virtual xfrm interfaces
-
-:::::: TO: Steffen Klassert <steffen.klassert@secunet.com>
-:::::: CC: Steffen Klassert <steffen.klassert@secunet.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Richard

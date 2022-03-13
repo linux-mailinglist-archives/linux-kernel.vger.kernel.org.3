@@ -2,149 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455254D7403
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 10:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF0A4D7404
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 10:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbiCMJl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 05:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S234182AbiCMJlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 05:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbiCMJlZ (ORCPT
+        with ESMTP id S233001AbiCMJlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 05:41:25 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3697941F8C;
-        Sun, 13 Mar 2022 01:40:16 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id qa43so27813522ejc.12;
-        Sun, 13 Mar 2022 01:40:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uw3lq7vLPxX+iH0m7HFnAo21FTEbg+aY/u5LJQ61UbU=;
-        b=ez+wfinzEQq6ZQgi6TBC3785UJsMprsaguvwk8xCslZSjIb9zWry9XXjsYtwDdc63p
-         iZt3J0dUs5bQ8fAvGCZyTdI/kP9eQUq77KHSe0SgYe3Rr78L9nI5TttAPpKhsUZhv+2I
-         Ydcx8yzQ8Cfm9IhAXyIEASnjh/IRmdtKM/eizCvqgJCKBgmQWEDLx67LIX6hVPdqnqA3
-         bV71owmZxIiAYekH5iXle+l3aNVcCAFzbBkFCe4xBNIQxk1qfzvvwWTME8Ikkssmwx37
-         unYLS8S2LXxUh5Rj5P5jUA2YUHXqk53Peps79Ls2auiocf9f7OfGJ7B98kXvL0FZLxvz
-         v3Sg==
-X-Gm-Message-State: AOAM530soGe7AM/V5SQu2Vdpka0PGzNtYAkSUuqIJsPPLbacPdAmHbjC
-        laemfEKfkm/7CV1a3G6/Sq9H5TkcBMc=
-X-Google-Smtp-Source: ABdhPJxI7CMJ09gJVJiCp7o20L0dz9C5EVkVKl7mxe1+8+1aTf2O7zi++aQJw2BujxPCNSCzCrRphg==
-X-Received: by 2002:a17:907:1c95:b0:6db:6b05:549c with SMTP id nb21-20020a1709071c9500b006db6b05549cmr14466612ejc.651.1647164414570;
-        Sun, 13 Mar 2022 01:40:14 -0800 (PST)
-Received: from [192.168.0.150] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id f26-20020a50ee9a000000b004160c295356sm5928639edr.5.2022.03.13.01.40.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 01:40:14 -0800 (PST)
-Message-ID: <45c40613-fe0a-1a5e-408c-493f4d012aa6@kernel.org>
-Date:   Sun, 13 Mar 2022 10:40:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v11 1/2] dt-bindings: misc: Add iop yaml file for Sunplus
- SP7021
-Content-Language: en-US
-To:     Tony Huang <tonyhuang.sunplus@gmail.com>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-Cc:     wells.lu@sunplus.com, tony.huang@sunplus.com
-References: <cover.1647095774.git.tonyhuang.sunplus@gmail.com>
- <c0ef91adc0af9fedca2791e4006009fabfdfef2c.1647095774.git.tonyhuang.sunplus@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <c0ef91adc0af9fedca2791e4006009fabfdfef2c.1647095774.git.tonyhuang.sunplus@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Sun, 13 Mar 2022 05:41:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA48712F166
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 01:40:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A15260FCB
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510E0C340E8;
+        Sun, 13 Mar 2022 09:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647164442;
+        bh=yN+bM3PjYMladZwdjGcofNA5/OEc+f2QdWCFqlFvN0A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rpu0Wz/R7h9ldgtZ1sYhwzOjzOAIfWtBz+8vkwrm9hoNwGPN6S+SikQsGBywsiM0t
+         dd0cZYEHF8fAqR7/ZoNvVBbzOJF7LlQ5u2GA1WkxIjBa19YVuELfoA328ehtk+dznO
+         STSVEwTxPuHA7ltrZAUQ3dx8kTFLvVDLBQ/4GpfH2YJ3rkj0qmNKPIOst9lnodFy0B
+         9EXeB/+gOkAta9gQa7zGQU9hWrV0vjPZ7FYCdUvKZav2eJJwLEzf3Ykxto8zkta9OY
+         wgjEg+fjqdkUwEwvCA7IK8CvIZxMYZ4jQjPVEzuPJf1yyx9Hhb9WS7WWS0x61hfb8+
+         n4pu8lSTrH60Q==
+Date:   Sun, 13 Mar 2022 18:40:38 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: tracing : bootconfig : Early boot config for non intrd systems
+Message-Id: <20220313184038.a82969517f8c0eb0d1ecfcfb@kernel.org>
+In-Reply-To: <20220313164857.cdd7aa7d7977bfff6c91fdff@kernel.org>
+References: <20220307184011.GA2570@pswork>
+        <20220308163600.3109f19854c7b051924f262b@kernel.org>
+        <20220308174829.GA2471@pswork>
+        <20220309170124.82dcfadbcda6f8ab6ed51797@kernel.org>
+        <20220309190651.GA3735@pswork>
+        <20220312155358.d6bc78866f4ca31e9a37e23a@kernel.org>
+        <20220312101524.5d23c258@rorschach.local.home>
+        <20220312101606.41a9fc64@rorschach.local.home>
+        <20220313164857.cdd7aa7d7977bfff6c91fdff@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2022 17:16, Tony Huang wrote:
-> Add iop yaml file for Sunplus SP7021
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
-> ---
-> Changes in v11:
->  - Addressed comments from krzysztof.
-> 
->  .../devicetree/bindings/misc/sunplus,iop.yaml      | 78 ++++++++++++++++++++++
->  MAINTAINERS                                        |  5 ++
->  2 files changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/sunplus,iop.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/sunplus,iop.yaml b/Documentation/devicetree/bindings/misc/sunplus,iop.yaml
-> new file mode 100644
-> index 0000000..ad1c4be
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/sunplus,iop.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Ltd. Co. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/sunplus-iop.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus IOP(8051) controller
-> +
-> +maintainers:
-> +  - Tony Huang <tonyhuang.sunplus@gmail.com>
-> +
-> +description: |
-> +  Processor for I/O control, RTC wake-up procedure management,
-> +  and cooperation with CPU&PMC in power management.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,sp7021-iop
-> +
-> +  reg:
-> +    items:
-> +      - description: IOP registers regions
-> +      - description: PMC registers regions
-> +      - description: MOON0 registers regions
-> +
-> +  reg-names:
-> +    items:
-> +      - const: iop
-> +      - const: iop_pmc
-> +      - const: moon0
-> +
-> +  interrupts:
-> +    items:
-> +      - description: IOP_INT0. IOP to system Interrupt 0.
-> +                     Sent by IOP to system RISC.
-> +      - description: IOP_INT1. IOP to System Interrupt 1.
-> +                     Sent by IOP to system RISC.
-> +
-> +  memory-region:
-> +    maxItems: 1
-> +
-> +  wakeup-gpios:
-> +    description: When the linux kernel system is powered off.
-> +      8051 is always powered. 8051 cand receive external signals
-> +      according to this gpio pin. 8051 receives external signal
-> +      through gpio pin. 8051 can power on linux kernel system.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
+On Sun, 13 Mar 2022 16:48:57 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Why do you have clocks here but not in properties?
+> On Sat, 12 Mar 2022 10:16:06 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > On Sat, 12 Mar 2022 10:15:24 -0500
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > 
+> > > On Sat, 12 Mar 2022 15:53:58 +0900
+> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > 
+> > > > OK, please try below patch. You can embed your bootconfig in the kernel via
+> > > > CONFIG_EMBED_BOOT_CONFIG_FILE.
+> > > > 
+> > > >   
+> > > > >From 7478a8fbfe4669ee61fcb12b85b36d7e36f992ba Mon Sep 17 00:00:00 2001    
+> > > > From: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > Date: Sat, 12 Mar 2022 14:59:30 +0900
+> > > > Subject: [PATCH] bootconfig: Support embedding a bootconfig file in kernel  
+> > > 
+> > > I'm going to try this out, because there was a few times I could have
+> > > used this.
+> > > 
+> > 
+> > Oh, and can you send this as a separate patch so that it triggers my
+> > scripts?
+> 
+> OK, let me clean it up and add a document how to use it.
 
-Best regards,
-Krzysztof
+I found that the current patch causes a build error with allyesconfig.
+I think I need to check CONFIG_EMBED_BOOT_CONFIG_FILE in Makefile and
+copy it to default.bconf file.
+Let me try to fix it.
+
+Thank you,
+
+> 
+> Thank you,
+> 
+> > 
+> > Thanks,
+> > 
+> > -- Steve
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

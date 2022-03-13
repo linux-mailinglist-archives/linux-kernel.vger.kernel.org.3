@@ -2,54 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FE84D775E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 18:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3324D7763
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 18:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiCMRx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 13:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S235225AbiCMR4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 13:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiCMRx6 (ORCPT
+        with ESMTP id S230184AbiCMR4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 13:53:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C9D31900;
-        Sun, 13 Mar 2022 10:52:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=L6L+s5wurYr5ANfsmIXWwamcGVfhyU1GIGdc/AUkZnI=; b=eb3rWG8TfXxGRSyrjFG12E8DO/
-        czhUMs41ehm/mUZQzBNLmEni/8b35FfK2wy239cATn2vHfeyVqzntu9UHVOjZwbzthsqbPpisosnl
-        HeuP/oxt7ZL1gG27i8/19eI/gCjF0jn8IsT7SzKQvBA/YFXxHVWi6lFvV38mp/+FiL+JAg9an4HXZ
-        jneDtDANBbnKU+yIHJ2tp5JbNNeTfU2cKjP1AEgzzaraa0XRYL7fvVoskV5VwZmNNJTjlDeskWDv9
-        +pLgI0ruKN3TaoHpv8E5snaBgDNfD6dOrv/f0O7i2ucZZ8eYPLWKuExQ2KOUAVRIcPYvC5B8XXLQV
-        Hp11uE8A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nTSOV-003NRL-PZ; Sun, 13 Mar 2022 17:52:40 +0000
-Message-ID: <c98c9b7c-a994-d4b4-f8d8-88fd80ad6155@infradead.org>
-Date:   Sun, 13 Mar 2022 10:52:35 -0700
+        Sun, 13 Mar 2022 13:56:09 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695744D9D8;
+        Sun, 13 Mar 2022 10:55:01 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id qx21so29306886ejb.13;
+        Sun, 13 Mar 2022 10:55:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=AtJFAG1rS0UdoKCIw6TlSYmKm66HsiJJug31sCRSQaE=;
+        b=q8b0jFFju004961j2pK36Jp+LiMJf+O598HUNkdFHkPgIJhQuS70MfXWE2/EPlsnMS
+         z8swqTG1aRAhdYfA4C6lW7kXXfLfOjQ1PdVRt9CpPv5cv0J9jfaWGfGjViBh597VDbG+
+         KOPz9T72bULO5tIOj9zCIbpqeUAxsnssVOzG97dvQ2xKXhZizOLWqOM1I6LHLL+PeOry
+         DaQ2jGoA1pGavYbDSv8v19QIycZppH5Ise/w1tc8E3j6kosEdrlSxvbYT9tpOYH3KozA
+         Xsg4MUMekTWZp4X7V3gQA3OUPpb607HX0T1qCvzWTQIUu6jUXwDIkICPU4tGF+hU5X0d
+         W05w==
+X-Gm-Message-State: AOAM530Hocgvn0OieV5z+suyOia34n4Fp6XOpYKe0Lh04Jt7eSxK2Wwl
+        4AL8NSDFtJY9Icmc9FXYAnI=
+X-Google-Smtp-Source: ABdhPJw5qqGwo6Z0GdV1LsOQtY8gC/tR92mv7iE/9TAZx/FptY0VqTQw25xP/lQs3sr5swfcVq/B4A==
+X-Received: by 2002:a17:906:39da:b0:6cf:7f09:a7bc with SMTP id i26-20020a17090639da00b006cf7f09a7bcmr16701242eje.457.1647194099781;
+        Sun, 13 Mar 2022 10:54:59 -0700 (PDT)
+Received: from [192.168.0.152] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm5324319edz.35.2022.03.13.10.54.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Mar 2022 10:54:59 -0700 (PDT)
+Message-ID: <62178934-9b16-c79c-387d-91526f7fe732@kernel.org>
+Date:   Sun, 13 Mar 2022 18:54:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] docs: bootconfig: Add how to embed the bootconfig
- into kernel
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1 8/8] dt-bindings: pinctrl: convert ocelot-pinctrl to
+ YAML format
 Content-Language: en-US
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-References: <164717976871.656425.6189991392886085524.stgit@devnote2>
- <164717979739.656425.17945326639021989871.stgit@devnote2>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <164717979739.656425.17945326639021989871.stgit@devnote2>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20220313152924.61931-1-michael@walle.cc>
+ <20220313152924.61931-9-michael@walle.cc>
+ <869d4fda-e943-1817-17cd-df7b323a1fef@kernel.org>
+ <b5a33a3441f829638740204e0c4dc938@walle.cc>
+In-Reply-To: <b5a33a3441f829638740204e0c4dc938@walle.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,81 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
-
-On 3/13/22 06:56, Masami Hiramatsu wrote:
-> Add a description how to embed the bootconfig file into kernel.
+On 13/03/2022 17:36, Michael Walle wrote:
+> Hi,
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  Documentation/admin-guide/bootconfig.rst |   31 +++++++++++++++++++++++++++---
->  1 file changed, 28 insertions(+), 3 deletions(-)
+> wow, you're fast!
 > 
-> diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-> index a1860fc0ca88..a172c669997a 100644
-> --- a/Documentation/admin-guide/bootconfig.rst
-> +++ b/Documentation/admin-guide/bootconfig.rst
-> @@ -158,9 +158,15 @@ Each key-value pair is shown in each line with following style::
->  Boot Kernel With a Boot Config
->  ==============================
->  
-> -Since the boot configuration file is loaded with initrd, it will be added
-> -to the end of the initrd (initramfs) image file with padding, size,
-> -checksum and 12-byte magic word as below.
-> +There are 2 options to boot the kernel with bootconfig, one is attaching
-> +bootconfig to initrd image, and embedding the kernel itself.
-
-  There are two options to boot the kernel with bootconfig: attaching the
-  bootconfig to the initrd image or embedding it in the kernel itself.
-
-> +
-> +Attaching a Boot Config to Initrd
-> +---------------------------------
-> +
-> +Since the boot configuration file is loaded with initrd by default,
-> +it will be added to the end of the initrd (initramfs) image file with
-> +padding, size, checksum and 12-byte magic word as below.
->  
->  [initrd][bootconfig][padding][size(le32)][checksum(le32)][#BOOTCONFIG\n]
->  
-> @@ -196,6 +202,25 @@ To remove the config from the image, you can use -d option as below::
->  Then add "bootconfig" on the normal kernel command line to tell the
->  kernel to look for the bootconfig at the end of the initrd file.
->  
-> +Embedding a Boot Config into Kernel
-> +-----------------------------------
-> +
-> +If you can not use initrd, you can also embed the bootconfig file to the
-
-                                                                     in the
-
-> +kernel by Kconfig options. In This case, you need to recompile the kernel
-
-                                 this
-
-> +with the following configs::
-> +
-> + COFNIG_EMBED_BOOT_CONFIG=y
-> + CONFIG_EMBED_BOOT_CONFIG_FILE="/PATH/TO/BOOTCONFIG/FILE"
-> +
-> +You need to set the correct path (relative path from kernel build directory
-> +or absolute path) to the ``CONFIG_EMBED_BOOT_CONFIG_FILE`` option.
-> +Then the kernel will embed the bootconfig file as a default bootconfig.
-> +
-> +As same as attaching to initrd, you need ``bootconfig`` option to the
-
-  Just as when attaching the bootconfig to the initrd, you need ``bootconfig`` option to the
-
-> +kernel command line to enable the embedded bootconfig.
-> +
-> +Note that even if you set this option, you can override the embedded
-> +bootconfig by another bootconfig which attached to the initrd.
->  
->  Kernel parameters via Boot Config
->  =================================
+> Am 2022-03-13 16:55, schrieb Krzysztof Kozlowski:
 > 
+>>> +  reg: true
+>>
+>> maxItems
+> 
+> There are up to two address ranges. The second one is only needed for
+> particular controllers (the sparx5 and the lan966x).
+> 
+> Is the following snippet the correct form?
+> 
+>    reg:
+>      items:
+>        - description: Base address
+>        - description: Extended pin configuration registers
+>      minItems: 1
 
-HTH.
+Yes, it's correct. Please also add proper "if:then" under "allOf:" (and
+move such allOf under "required:") which changes minItems to two for
+such controllers, based on compatible.
 
--- 
-~Randy
+Best regards,
+Krzysztof

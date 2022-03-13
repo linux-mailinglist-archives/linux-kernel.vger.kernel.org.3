@@ -2,233 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB88A4D76FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23474D7702
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbiCMQwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S233805AbiCMRAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 13:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbiCMQwj (ORCPT
+        with ESMTP id S231150AbiCMRAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:52:39 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD83798F69;
-        Sun, 13 Mar 2022 09:51:29 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V70i28O_1647190276;
-Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0V70i28O_1647190276)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 14 Mar 2022 00:51:25 +0800
-From:   Wen Yang <simon.wy@alibaba-inc.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
-        Stephane Eranian <eranian@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Wen Yang <wenyang@linux.alibaba.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] perf/x86: reuse scarce pmu counters
-Date:   Mon, 14 Mar 2022 00:50:47 +0800
-Message-Id: <20220313165047.77391-3-simon.wy@alibaba-inc.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20220313165047.77391-1-simon.wy@alibaba-inc.com>
-References: <20220313165047.77391-1-simon.wy@alibaba-inc.com>
+        Sun, 13 Mar 2022 13:00:52 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B80E2C668
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:59:45 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id q11so15657611iod.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jKA+BAzUTFl+hnrRa9zqREom7b/VJAytojV31ApXxMs=;
+        b=Hq45Dc3ilxe+x7mjO5aQoBpqz1qdLzbAKbtDJGuBTXp6RcWN7bL2WbQj+gpT42I+oh
+         4hbZQ68XEcgsBKm9aF22hK2rVllA5qJR6AW7PjDAuyAB63rUI/rIOLl6Ea+K4/QjAYw0
+         W3BGDCrM/KNcGfo7bBYdny2jlgdh1feM2ksg2N42K4ijVSWvuemvV2rnkstKnv68FgQp
+         BUFB1EwjvgfMbHIhDNBmUH3CuAnbo2Xhzf6ApbGMLG2oUXuKi4NxeDLA+/d6v1lkeQ8V
+         mKmjkaHLypNMfr2gr/FcV8iXiqim8EktqOgkyLB34q/tRvyQIhsGwj1z7N93LzGtDGOI
+         YUEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jKA+BAzUTFl+hnrRa9zqREom7b/VJAytojV31ApXxMs=;
+        b=o56fUSLA/tac12N/qgL+EGYNCqAXHOxSbUzdbd0BmfaSGWqUuskeRAyhYOXjBn+zAG
+         MlPKfd9SUclRyIcW+VjL9wtmy+w1lEbvqDbAl2rAfyLUtjM9RXcEFCZj9E63RHcga3ux
+         MGLuf0obS15CMVZhqDKp3hNVdy7ape/6uSDap/PFCOMUw1JlOpc7VjmaL/XvvQf7KX6U
+         64BcN4KxMh6u11NuLsJaKzwz+1DdPJotPhbPkRJMgRqJDHIqtGAA4Kd6CHVXq2wNPRlP
+         12TYcFPrFBLy5YWTJnYuFWwSbS7WrcEUAAL8O/YyW1yOKr0Ek1HaSzFbcvlFE1A7BDHD
+         zsSg==
+X-Gm-Message-State: AOAM531+OVlJlEnAAlCm0YzqVetzoS2LIsbN3cJ3NJ5nCok98bUVN58Z
+        qO3ohzYhVNse2y0gEBBXC6WigZKy7f70Jb8seiM=
+X-Google-Smtp-Source: ABdhPJwr/gg3/MsQUikmJAMYdtrOWiwA9deTGWCWDqlpJQmrK/d9nxW9PDNL/Zb4zgMlss0N4zZsX2t/6xa/DzAQ5wc=
+X-Received: by 2002:a05:6638:d85:b0:317:d2f5:8f1d with SMTP id
+ l5-20020a0566380d8500b00317d2f58f1dmr18097708jaj.117.1647190784476; Sun, 13
+ Mar 2022 09:59:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <57133fafc4d74377a4a08d98e276d58fe4a127dc.1647115974.git.andreyknvl@google.com>
+In-Reply-To: <57133fafc4d74377a4a08d98e276d58fe4a127dc.1647115974.git.andreyknvl@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 13 Mar 2022 17:59:33 +0100
+Message-ID: <CA+fCnZfstj6V8JQJEvt2RfZ3Snc2Gnvo0uOYHqPh4LA=BHDdzw@mail.gmail.com>
+Subject: Re: [PATCH] kasan, scs: collect stack traces from shadow stack
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Florian Mayer <fmayer@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nmi watchdog may permanently consume a fixed counter (*cycles*),
-so when other programs collect *cycles* again, they will occupy a GP.
-Here is a slight optimization: save a generic counter for events that
-are non-sampling type and using a fixed counter.
+On Sat, Mar 12, 2022 at 9:14 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Currently, KASAN always uses the normal stack trace collection routines,
+> which rely on the unwinder, when saving alloc and free stack traces.
+>
+> Instead of invoking the unwinder, collect the stack trace by copying
+> frames from the Shadow Call Stack whenever it is enabled. This reduces
+> boot time by 30% for all KASAN modes when Shadow Call Stack is enabled.
+>
+> To avoid potentially leaking PAC pointer tags, strip them when saving
+> the stack trace.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+>
+> ---
+>
+> Things to consider:
+>
+> We could integrate shadow stack trace collection into kernel/stacktrace.c
+> as e.g. stack_trace_save_shadow(). However, using stack_trace_consume_fn
+> leads to invoking a callback on each saved from, which is undesirable.
+> The plain copy loop is faster.
+>
+> We could add a command line flag to switch between stack trace collection
+> modes. I noticed that Shadow Call Stack might be missing certain frames
+> in stacks originating from a fault that happens in the middle of a
+> function. I am not sure if this case is important to handle though.
+>
+> Looking forward to thoughts and comments.
+>
+> Thanks!
+>
+> ---
+>  mm/kasan/common.c | 36 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 35 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index d9079ec11f31..65a0723370c7 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -9,6 +9,7 @@
+>   *        Andrey Konovalov <andreyknvl@gmail.com>
+>   */
+>
+> +#include <linux/bits.h>
+>  #include <linux/export.h>
+>  #include <linux/init.h>
+>  #include <linux/kasan.h>
+> @@ -21,6 +22,7 @@
+>  #include <linux/printk.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/task_stack.h>
+> +#include <linux/scs.h>
+>  #include <linux/slab.h>
+>  #include <linux/stacktrace.h>
+>  #include <linux/string.h>
+> @@ -30,12 +32,44 @@
+>  #include "kasan.h"
+>  #include "../slab.h"
+>
+> +#ifdef CONFIG_SHADOW_CALL_STACK
+> +
+> +#ifdef CONFIG_ARM64_PTR_AUTH
+> +#define PAC_TAG_RESET(x) (x | GENMASK(63, CONFIG_ARM64_VA_BITS))
+> +#else
+> +#define PAC_TAG_RESET(x) (x)
+> +#endif
+> +
+> +static unsigned int save_shadow_stack(unsigned long *entries,
+> +                                     unsigned int nr_entries)
+> +{
+> +       unsigned long *scs_sp = task_scs_sp(current);
+> +       unsigned long *scs_base = task_scs(current);
+> +       unsigned long *frame;
+> +       unsigned int i = 0;
+> +
+> +       for (frame = scs_sp - 1; frame >= scs_base; frame--) {
+> +               entries[i++] = PAC_TAG_RESET(*frame);
+> +               if (i >= nr_entries)
+> +                       break;
+> +       }
+> +
+> +       return i;
+> +}
+> +#else /* CONFIG_SHADOW_CALL_STACK */
+> +static inline unsigned int save_shadow_stack(unsigned long *entries,
+> +                                       unsigned int nr_entries) { return 0; }
+> +#endif /* CONFIG_SHADOW_CALL_STACK */
+> +
+>  depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+>  {
+>         unsigned long entries[KASAN_STACK_DEPTH];
+>         unsigned int nr_entries;
+>
+> -       nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> +       if (IS_ENABLED(CONFIG_SHADOW_CALL_STACK))
+> +               nr_entries = save_shadow_stack(entries, ARRAY_SIZE(entries));
+> +       else
+> +               nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+>         return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+>  }
+>
+> --
+> 2.25.1
+>
 
-Signed-off-by: Wen Yang <simon.wy@alibaba-inc.com>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: Wen Yang <wenyang@linux.alibaba.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- arch/x86/events/core.c | 45 +++++++++++++++++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index b7f5925..6ddddf1 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -799,6 +799,7 @@ struct perf_sched {
- 	u64			msk_counters;
- 	u64			msk_events;
- 	struct event_constraint	**constraints;
-+	struct perf_event	**events;
- 	struct sched_state	state;
- 	struct sched_state	saved[SCHED_STATES_MAX];
- };
-@@ -846,7 +847,8 @@ static int perf_sched_calc_event(struct event_constraint **constraints,
- /*
-  * Initialize iterator that runs through all events and counters.
-  */
--static void perf_sched_init(struct perf_sched *sched, struct event_constraint **constraints,
-+static void perf_sched_init(struct perf_sched *sched,
-+			    struct perf_event **events, struct event_constraint **constraints,
- 			    int num, int wmin, int wmax, int gpmax, u64 mevt, u64 mcnt)
- {
- 	memset(sched, 0, sizeof(*sched));
-@@ -854,12 +856,13 @@ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **
- 	sched->max_weight	= wmax;
- 	sched->max_gp		= gpmax;
- 	sched->constraints	= constraints;
-+	sched->events		= events;
- 	sched->msk_events   = mevt;
- 	sched->msk_counters = mcnt;
- 
- 	sched->state.weight = perf_sched_calc_weight(constraints, num, wmin, wmax, mcnt);
- 	sched->state.event = perf_sched_calc_event(constraints, num, sched->state.weight, mevt);
--	sched->state.unassigned = num - hweight_long(sched->state.event);
-+	sched->state.unassigned = num - hweight_long(mevt);
- }
- 
- static void perf_sched_save_state(struct perf_sched *sched)
-@@ -896,6 +899,7 @@ static bool perf_sched_restore_state(struct perf_sched *sched)
- static bool __perf_sched_find_counter(struct perf_sched *sched)
- {
- 	struct event_constraint *c;
-+	struct perf_event *e;
- 	int idx;
- 
- 	if (!sched->state.unassigned)
-@@ -905,16 +909,17 @@ static bool __perf_sched_find_counter(struct perf_sched *sched)
- 		return false;
- 
- 	c = sched->constraints[sched->state.event];
-+	e = sched->events[sched->state.event];
- 	/* Prefer fixed purpose counters */
- 	if (c->idxmsk64 & (~0ULL << INTEL_PMC_IDX_FIXED)) {
- 		idx = INTEL_PMC_IDX_FIXED;
- 		for_each_set_bit_from(idx, c->idxmsk, X86_PMC_IDX_MAX) {
- 			u64 mask = BIT_ULL(idx);
- 
--			if (sched->msk_counters & mask)
-+			if ((sched->msk_counters & mask) && is_sampling_event(e))
- 				continue;
- 
--			if (sched->state.used & mask)
-+			if ((sched->state.used & mask) && is_sampling_event(e))
- 				continue;
- 
- 			sched->state.used |= mask;
-@@ -1016,14 +1021,15 @@ static void perf_sched_obtain_used_registers(int *assign, int n, u64 *events, u6
- 	}
- }
- 
--static int __perf_assign_events(struct event_constraint **constraints, int n,
-+static int __perf_assign_events(struct perf_event **events,
-+			struct event_constraint **constraints, int n,
- 			int wmin, int wmax, int gpmax, int *assign)
- {
--	u64 msk_events, msk_counters;
-+	u64 mevt, mcnt;
- 	struct perf_sched sched;
- 
--	perf_sched_obtain_used_registers(assign, n, &msk_events, &msk_counters);
--	perf_sched_init(&sched, constraints, n, wmin, wmax, gpmax, msk_events, msk_counters);
-+	perf_sched_obtain_used_registers(assign, n, &mevt, &mcnt);
-+	perf_sched_init(&sched, events, constraints, n, wmin, wmax, gpmax, mevt, mcnt);
- 
- 	do {
- 		if (!perf_sched_find_counter(&sched))
-@@ -1035,6 +1041,13 @@ static int __perf_assign_events(struct event_constraint **constraints, int n,
- 	return sched.state.unassigned;
- }
- 
-+static bool is_pmc_reuseable(struct perf_event *e,
-+		struct event_constraint *c)
-+{
-+	return c->idxmsk64 & (~0ULL << INTEL_PMC_IDX_FIXED) &&
-+		!is_sampling_event(e);
-+}
-+
- /*
-  * Assign a counter for each event.
-  */
-@@ -1043,12 +1056,13 @@ int perf_assign_events(struct perf_event **event_list,
- 		int wmin, int wmax, int gpmax, int *assign)
- {
- 	struct event_constraint *c;
-+	struct perf_event *e;
- 	struct hw_perf_event *hwc;
- 	u64 used_mask = 0;
- 	int unsched = 0;
- 	int i;
- 
--	memset(assign, -1, n);
-+	memset(assign, -1, n * sizeof(int));
- 
- 	/*
- 	 * fastpath, try to reuse previous register
-@@ -1058,6 +1072,7 @@ int perf_assign_events(struct perf_event **event_list,
- 
- 		hwc = &event_list[i]->hw;
- 		c = constraints[i];
-+		e = event_list[i];
- 
- 		/* never assigned */
- 		if (hwc->idx == -1)
-@@ -1072,8 +1087,10 @@ int perf_assign_events(struct perf_event **event_list,
- 			mask |= mask << 1;
- 
- 		/* not already used */
--		if (used_mask & mask)
--			break;
-+		if (used_mask & mask) {
-+			if (!is_pmc_reuseable(e, c))
-+				break;
-+		}
- 
- 		used_mask |= mask;
- 
-@@ -1083,12 +1100,12 @@ int perf_assign_events(struct perf_event **event_list,
- 
- 	/* slow path */
- 	if (i != n) {
--		unsched = __perf_assign_events(constraints, n,
-+		unsched = __perf_assign_events(event_list, constraints, n,
- 				wmin, wmax, gpmax, assign);
- 
- 		if (unsched) {
--			memset(assign, -1, n);
--			unsched = __perf_assign_events(constraints, n,
-+			memset(assign, -1, n * sizeof(int));
-+			unsched = __perf_assign_events(event_list, constraints, n,
- 					wmin, wmax, gpmax, assign);
- 		}
- 	}
--- 
-1.8.3.1
-
+CC Florian

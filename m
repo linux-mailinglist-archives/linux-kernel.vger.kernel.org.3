@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626DC4D7401
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 10:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455254D7403
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 10:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234167AbiCMJfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 05:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
+        id S234175AbiCMJl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 05:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbiCMJfA (ORCPT
+        with ESMTP id S233001AbiCMJlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 05:35:00 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C43064E1;
-        Sun, 13 Mar 2022 01:33:51 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id y22so15998006eds.2;
-        Sun, 13 Mar 2022 01:33:51 -0800 (PST)
+        Sun, 13 Mar 2022 05:41:25 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3697941F8C;
+        Sun, 13 Mar 2022 01:40:16 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id qa43so27813522ejc.12;
+        Sun, 13 Mar 2022 01:40:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=xbjpHbWCTEfu5WEpcZkMmWqJiCN3FpxdQjPcN2vcHeU=;
-        b=Pa2txRWGc/z4ie9s1JWOiouXhBeE4jsrJHVt7b7qAUdkrKXweR+wuIrCwEO775Q31w
-         B0GnfEbrfU/3OXFSURr0YAYmp/SfnBNjpSerc37OsWdLdVSJgho/p2BHPYDHJMuBu9Jx
-         QSsmClVjtAzZ8JaNUljyT5Zgi5+OffEE5Y7ff189pDLDEpiG4ySsHO2MDTgX6uEjduif
-         3ZKrfumm+Q6ret29Pby4DpMPdkeXEmOsOOuOXbYrwckr3RS+vzkQLfa5S47lS3iKk3kb
-         xM3K2uYeWvD2zEBfz1tC3I69MsY7LYjjH8fNjYOMIGbBT7cJC42UwuehGp0w1uGYQCjx
-         dnOg==
-X-Gm-Message-State: AOAM532kZW2kgk4ZxhAVpn752Lyy7+AmOwYQHDRo2eidtSz2muZkYPi6
-        i3T25thLk/v6XrsEPoWmCSU=
-X-Google-Smtp-Source: ABdhPJxRaBA361McnhNx7Fw7QdiXtxA9xTKDIuMBSdufR7whFHMyXXBYlwC0bykEy6M6hPNGqfaZ7Q==
-X-Received: by 2002:a05:6402:26cf:b0:416:a2bd:de1 with SMTP id x15-20020a05640226cf00b00416a2bd0de1mr16057697edd.306.1647164030026;
-        Sun, 13 Mar 2022 01:33:50 -0800 (PST)
+        bh=uw3lq7vLPxX+iH0m7HFnAo21FTEbg+aY/u5LJQ61UbU=;
+        b=ez+wfinzEQq6ZQgi6TBC3785UJsMprsaguvwk8xCslZSjIb9zWry9XXjsYtwDdc63p
+         iZt3J0dUs5bQ8fAvGCZyTdI/kP9eQUq77KHSe0SgYe3Rr78L9nI5TttAPpKhsUZhv+2I
+         Ydcx8yzQ8Cfm9IhAXyIEASnjh/IRmdtKM/eizCvqgJCKBgmQWEDLx67LIX6hVPdqnqA3
+         bV71owmZxIiAYekH5iXle+l3aNVcCAFzbBkFCe4xBNIQxk1qfzvvwWTME8Ikkssmwx37
+         unYLS8S2LXxUh5Rj5P5jUA2YUHXqk53Peps79Ls2auiocf9f7OfGJ7B98kXvL0FZLxvz
+         v3Sg==
+X-Gm-Message-State: AOAM530soGe7AM/V5SQu2Vdpka0PGzNtYAkSUuqIJsPPLbacPdAmHbjC
+        laemfEKfkm/7CV1a3G6/Sq9H5TkcBMc=
+X-Google-Smtp-Source: ABdhPJxI7CMJ09gJVJiCp7o20L0dz9C5EVkVKl7mxe1+8+1aTf2O7zi++aQJw2BujxPCNSCzCrRphg==
+X-Received: by 2002:a17:907:1c95:b0:6db:6b05:549c with SMTP id nb21-20020a1709071c9500b006db6b05549cmr14466612ejc.651.1647164414570;
+        Sun, 13 Mar 2022 01:40:14 -0800 (PST)
 Received: from [192.168.0.150] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id n19-20020a1709067b5300b006ce36e2f6fdsm5321348ejo.159.2022.03.13.01.33.49
+        by smtp.googlemail.com with ESMTPSA id f26-20020a50ee9a000000b004160c295356sm5928639edr.5.2022.03.13.01.40.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 01:33:49 -0800 (PST)
-Message-ID: <8eb40370-9b33-e97c-a576-18ba23266084@kernel.org>
-Date:   Sun, 13 Mar 2022 10:33:48 +0100
+        Sun, 13 Mar 2022 01:40:14 -0800 (PST)
+Message-ID: <45c40613-fe0a-1a5e-408c-493f4d012aa6@kernel.org>
+Date:   Sun, 13 Mar 2022 10:40:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -93,10 +93,6 @@ On 12/03/2022 17:16, Tony Huang wrote:
 > +%YAML 1.2
 > +---
 > +$id: http://devicetree.org/schemas/misc/sunplus-iop.yaml#
-
-Still wrong path. This would be easily spotted if you test the bindings.
-Please run dt_binding_check. It's a requirement.
-
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
 > +title: Sunplus IOP(8051) controller
@@ -147,32 +143,8 @@ Please run dt_binding_check. It's a requirement.
 > +  - reg
 > +  - reg-names
 > +  - clocks
-> +  - interrupts
-> +  - memory-region
-> +  - wakeup-gpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    iop: iop@9c000400 {
-> +        compatible = "sunplus,sp7021-iop";
-> +        reg = <0x9c000400 0x80>, <0x9c003100 0x80>, <0x9c000000 0x80>;
-> +        reg-names = "iop", "iop_pmc", "moon0";
-> +        clocks = <&clkc 0x14>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <41 IRQ_TYPE_LEVEL_HIGH>, <42 IRQ_TYPE_LEVEL_HIGH>;
-> +        memory-region = <&iop_reserve>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&iop_pins>;
-> +        wakeup-gpios = <&pctl 1 GPIO_ACTIVE_HIGH>;
-> +    };
-> \ No newline at end of file
 
-You have a patch warning here.
+Why do you have clocks here but not in properties?
 
 Best regards,
 Krzysztof

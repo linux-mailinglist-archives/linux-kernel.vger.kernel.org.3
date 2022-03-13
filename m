@@ -2,67 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEC44D76C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44474D76C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbiCMQbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S234993AbiCMQbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 12:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiCMQbG (ORCPT
+        with ESMTP id S231217AbiCMQbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:31:06 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5421FA66
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:29:57 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id p15so29129023ejc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=WBcWHg0MjNRnhnHGAOyvHBEmp+CR73Ntkftw1OgXDJ1ZPgBRyVNFAIQfz4PWT8TYbG
-         z4EGOCDK4GDz4L7qSTOB4zS5+VippG45F9YObS5EwScBNUpdITpvzPUCTEghQdxnZhTA
-         dfJFOZYge9WpE293imqe5Xa9BnDRMdHQ+fy8YXPV522jTdHs1YHOSEAKj3jpg7rU7H4P
-         XLNO+TtLb4LcPU4GFnHPc3gEz86D0NXr0hNQaJ3IoWMX7d9ZPe4xIXNM3ZLNHpijk5Dt
-         hrL8sEWiroehWTiL1VfcqQbijsUs9ruLNoYvkTVk68R1zZTdfatnS4Az3yBOmCcKxK7F
-         v62w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=aIMA/WRlWhYWiHXrMr8M8CJOeRh849erRBId/sqCDhIzgU+8KUkXAbWlu8vgD18owA
-         wcqeBVodtDmPa+SkXViUiIsQFtau/LIsjXJ+QjGVhINpleTPqdP8V2RQp7PSqlgzkD5l
-         uTevSzYdcbevvxHfCHaT5zzixn0YPLjqjBDVne3b8oMVnZ7opGvOzcnOBxVupmEMqZ/c
-         zlKgL7+1v2gIkGjd3S6YUx9RHqY5xI/HPZeyNQUv7TgMu82L3AMh/bRRKgOQra7M/bx7
-         AkbCGaqIb26yoSJUI3WwSgsVfkFsSZNPrMQRTWKYI0zRHeur5wkGQxt6P9wrMliy7+/5
-         Ql7w==
-X-Gm-Message-State: AOAM531XfJ4WBA1RNEMo04UVLrap22X5CzJF3ZeB2qCgGhDkvv5/Z5oT
-        8nLAwjs8sG2bjyFz0AYF4ujNBM0GycBL8o1mnWA=
-X-Google-Smtp-Source: ABdhPJwmwc94+B6FPFPCleCzqWtW22aiaXUXmd9Br7xucxBqoDYZ7p9OCr72Y+4BLuDrxi5LxhJH3Mb6iQubTFm1aQY=
-X-Received: by 2002:a17:906:c053:b0:6b5:fde8:af2 with SMTP id
- bm19-20020a170906c05300b006b5fde80af2mr15846201ejb.642.1647188996139; Sun, 13
- Mar 2022 09:29:56 -0700 (PDT)
+        Sun, 13 Mar 2022 12:31:46 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5CD201AC;
+        Sun, 13 Mar 2022 09:30:38 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 2C07F22238;
+        Sun, 13 Mar 2022 17:30:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647189036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mw7ua8bm47fSMOjBOWnSCPNMt3SK4yr5lqTmvLcR1t4=;
+        b=cF/58OMBU/4htvb/BgKkVeVxAhzy13qrKC37ZZ6qy+Uoyt4WoViG94H5fsPmpxBGr0tezn
+        hIwyc41YjBG9GtN5lCbU7tMN4b4q6+PxVB8qyKxNu5ZQk7KLh9ImY+bq8LwpBxSyZccbPA
+        GmX8asMq/Fmf8gQlBHNvTmZJoy2ml+U=
 MIME-Version: 1.0
-Sender: genemannrattan@gmail.com
-Received: by 2002:ab4:a1ad:0:0:0:0:0 with HTTP; Sun, 13 Mar 2022 09:29:55
- -0700 (PDT)
-From:   Mathew Bowles <mathewbowles2021@gmail.com>
-Date:   Sun, 13 Mar 2022 16:29:55 +0000
-X-Google-Sender-Auth: 9K3NPcbtaPXvXyEfywvJwoE-zYI
-Message-ID: <CAPGCBWFwMJDOzyp7mRNEi9Zf+n5Vbv2TUjogMLESjAhp5G0EGA@mail.gmail.com>
-Subject: Hello,Did you receive my email message
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sun, 13 Mar 2022 17:30:35 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Subject: Re: [PATCH net-next v2 1/3] dt-bindings: net: mscc-miim: add lan966x
+ compatible
+In-Reply-To: <2d35127c-d4ef-6644-289a-5c10bcbbbf84@kernel.org>
+References: <20220313002536.13068-1-michael@walle.cc>
+ <20220313002536.13068-2-michael@walle.cc>
+ <08b89b3f-d0d3-e96f-d1c3-80e8dfd0798f@kernel.org>
+ <d18291ff8d81f03a58900935d92115f2@walle.cc>
+ <2d35127c-d4ef-6644-289a-5c10bcbbbf84@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <145fc079ce8c266b8c2265aacfd3b077@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[adding Horatiu and Kavyasree from Microchip]
 
+Am 2022-03-13 17:10, schrieb Krzysztof Kozlowski:
+> On 13/03/2022 11:47, Michael Walle wrote:
+>> Am 2022-03-13 10:47, schrieb Krzysztof Kozlowski:
+>>> On 13/03/2022 01:25, Michael Walle wrote:
+>>>> The MDIO controller has support to release the internal PHYs from
+>>>> reset
+>>>> by specifying a second memory resource. This is different between 
+>>>> the
+>>>> currently supported SparX-5 and the LAN966x. Add a new compatible to
+>>>> distiguish between these two.
+> 
+> Typo here, BTW.
+> 
+>>>> 
+>>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/net/mscc-miim.txt | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>> 
+>>>> diff --git a/Documentation/devicetree/bindings/net/mscc-miim.txt
+>>>> b/Documentation/devicetree/bindings/net/mscc-miim.txt
+>>>> index 7104679cf59d..a9efff252ca6 100644
+>>>> --- a/Documentation/devicetree/bindings/net/mscc-miim.txt
+>>>> +++ b/Documentation/devicetree/bindings/net/mscc-miim.txt
+>>>> @@ -2,7 +2,7 @@ Microsemi MII Management Controller (MIIM) / MDIO
+>>>>  =================================================
+>>>> 
+>>>>  Properties:
+>>>> -- compatible: must be "mscc,ocelot-miim"
+>>>> +- compatible: must be "mscc,ocelot-miim" or "mscc,lan966x-miim"
+>>> 
+>>> No wildcards, use one, specific compatible.
+>> 
+>> I'm in a kind of dilemma here, have a look yourself:
+>> grep -r "lan966[28x]-" Documentation
+>> 
+>> Should I deviate from the common "name" now? To make things
+>> worse, there was a similar request by Arnd [1]. But the
+>> solution feels like cheating ("lan966x" -> "lan966") ;)
+> 
+> The previous 966x cases were added by one person from Microchip, so he
+> actually might know something. But do you know whether lan966x will
+> cover all current and future designs from Microchip? E.g. lan9669 (if
+> ever made) will be the same? Avoiding wildcard is the easiest, just
+> choose one implementation, e.g. "lan9662".
+
+So if Microchip would review/ack this it would be ok? I don't really
+have a strong opinion, I just want to avoid any inconsistencies. If no
+one from Microchip will answer, I'll use microchip,lan9668-miim.
+
+> Different topic is that all current lan966[28] are from Microchip and
+> you still add Microsemi, even though it was acquired by Microchip.
+> That's an inconsistency which should be rather fixed.
+
+Agreed, that was an oversight by me.
+
+>> On a side note, I understand that there should be no wildcards,
+>> because the compatible should target one specific implementation,
+>> right? But then the codename "ocelot" represents a whole series of
+>> chips. Therefore, names for whole families shouldn't be used neither,
+>> right?
+> 
+> You're not adding "ocelot" now, so it is separate topic. However a
+> compatible like "mscc,ocelot" feels wrong, unless it is used as a
+> fallback (see: git grep 'apple,').
+
+Sure, it was just a question for my understanding, not to make a
+point for a discussion.
+
+-michael

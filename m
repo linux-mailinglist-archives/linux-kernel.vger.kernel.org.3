@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA31D4D7821
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 21:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465D94D7824
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 21:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbiCMUIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 16:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S235539AbiCMUK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 16:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbiCMUIV (ORCPT
+        with ESMTP id S230292AbiCMUKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 16:08:21 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1882A4B426;
-        Sun, 13 Mar 2022 13:07:13 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id g19so12512805pfc.9;
-        Sun, 13 Mar 2022 13:07:13 -0700 (PDT)
+        Sun, 13 Mar 2022 16:10:55 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E049FAD
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 13:09:47 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id o26so12033545pgb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 13:09:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tcuZyofv7oRF8b30riFV2CypFagiRwrqjLETjMU5Up0=;
-        b=TdUKBZe9mlv/TGSrI6f7l5jL0X7FQNS3G8Y+6kjkjAGCi3mOZoWxLr+Y6wVRJWyjLd
-         tXVQw1XEA3/V9USTwFZHAYvgsosAcfVgsih+ioDXVnmxsqO19Tg7s8v32e2JhJrOHl6L
-         Sm6l671o8zlkNVgcnIt1qGxCDd3hs8mksaDpTzIg8aFT9Wt9CRWIA14knnp7O4Tr8Z5F
-         /SWWxZR5WpRTiy4kLcBg5Ht6Que/DUBwnqp00sBCzzwq6cQsNW/JbeNJOIlGn8QofC5i
-         M26uHOKWUe8P8zq6xRF0Woz+P4DrkFgBnAIIppnx50ZiP0IA1BLi59dT5hjFPNYJ0HxR
-         jXFg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=s/L2c/ExU2lRRbbGeHNM0fTyvtWmir/JMQ4lIG+dqPQ=;
+        b=NHshDFyEJcyEiGKm2Xt+OMjFtjqs/nqg17/NmX/5+10JbigfEW7kQoEZs2E80Ezkni
+         ggQQvpqP3G5meFEDXYywi1a1lM6SbmZh+ji46GJy67WZpvfM+oEuVWgP44qAUqNbjYuL
+         JbwTN3qzOElmXWdiGV4hS5/tRu+qsdub3eoBIOl8ZToV6v75mtsqHxCJftMBaBpCLroc
+         G7BAzGXa8O8HkPYJdXLVcYLdvJmNpPLGrIEmJ+y6oThvL1DlxSWFMb9X681aMVkikej/
+         WlW/MhZvXtVGO9CO9b8CNlf4VAwxOc62FXTztBnwKuIkjqxdOhXpMaWiHPP2GhE7HZXq
+         hPZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tcuZyofv7oRF8b30riFV2CypFagiRwrqjLETjMU5Up0=;
-        b=bPZ7V8cAKO+gVNjv9LsUKwcStMT7/bwkd3eEUKFI4a7tm2Rpz8CvACmZMFIpofXnLA
-         fuOKscNMkbPIPBGAjM/EjNQvxNqEJAeJ1Jwx+o1ttLnJNz0GCAM9r/usq26Ec3CggUC1
-         /CdFXBTRyrcRhjfEHmqWcLWy6oVD5NUmZ75eGGL73Ae1t/yPiyekIfUAgLYPmdKM3uHx
-         9diaZy7IJbmv9Y3ptl/3A81IL6D4sIaXRH7H48DPWEhPco2rWJ0ecDB3cuw+QtV02MFo
-         PvDwvMmc0PisK4zLoCx1hnARkF9q9j5HfRqr32wLv68OsoS89cBajF9bBRqxO5Pg7pAU
-         GIgg==
-X-Gm-Message-State: AOAM532Bu8Lo1o91BhUDdNfkOkFUrO/pmYcPb2XHRCUVLPlil7kkIBsb
-        YIK7uyLfgD34xnRjVEO8Eqs=
-X-Google-Smtp-Source: ABdhPJxVDYop0QnOkZ08+FM1z6M5y92ltHBQdtrfbUTmf0XZ0eO+Dw0I2GiROmxqooZk0Ms1YEYsVQ==
-X-Received: by 2002:a63:8441:0:b0:380:5d50:ba71 with SMTP id k62-20020a638441000000b003805d50ba71mr17597308pgd.107.1647202032290;
-        Sun, 13 Mar 2022 13:07:12 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id u12-20020a17090a890c00b001b8efcf8e48sm18856717pjn.14.2022.03.13.13.07.10
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=s/L2c/ExU2lRRbbGeHNM0fTyvtWmir/JMQ4lIG+dqPQ=;
+        b=4ForU1Le7tctN1GI3CZivERVzdiyZtsRYQ0rLOuRkUD45c6ox9nATHdCFTnsPQoRUN
+         f74jxl4JpsCIpYnv/yM/NJyOCg650CK3pVUiOSsVACkBKGJsEz35JDG/duGrQs9cuj2v
+         HxQ6bW8QhiseRbjLx3NCDHu5E04AHIMltcQtKaFIfNTRFVYXmG+EKNeF8X1397B1Y5j4
+         7G0whNJmbhWGPzw6AGlxSe/FmB1JBj8kiueGkqrlGZ97lrWnEhDm76necFSbtoUWzoHS
+         OiUdxpjf4zf8vgOFGnrLFv0S+Upq9yXB3o0BEo7Gpk5mUAfWdj7Hbg4KPX+SFozVqL6n
+         orjw==
+X-Gm-Message-State: AOAM530yWFeBy0GD1cTV+DOaANDtztlGp+xhrODrcXawH/3sZA4gUuzF
+        /aebWwBluOPqCQaxG2e6oOZ3Mg==
+X-Google-Smtp-Source: ABdhPJxCg27sMKMp7nSUM8vluoc736QFCgbEPPs5y8MHcFa4rKL7ROWWo0QzvAc4iwxsjxHh8X/1hA==
+X-Received: by 2002:a05:6a02:208:b0:372:c366:8ff4 with SMTP id bh8-20020a056a02020800b00372c3668ff4mr17009152pgb.76.1647202186271;
+        Sun, 13 Mar 2022 13:09:46 -0700 (PDT)
+Received: from [2620:15c:29:204:1b89:dc90:772c:f65f] ([2620:15c:29:204:1b89:dc90:772c:f65f])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm18849705pfl.135.2022.03.13.13.09.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 13:07:11 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 13:07:09 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Woojung.Huh@microchip.com, linux@armlinux.org.uk,
-        Horatiu.Vultur@microchip.com, Divya.Koppera@microchip.com,
-        netdev@vger.kernel.org, hkallweit1@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Madhuri.Sripada@microchip.com, Manohar.Puri@microchip.com
-Subject: Re: [PATCH net-next 2/3] dt-bindings: net: micrel: Configure latency
- values and timestamping check for LAN8814 phy
-Message-ID: <20220313200709.GD7471@hoboy.vegasvil.org>
-References: <20220308221404.bwhujvsdp253t4g3@soft-dev3-1.localhost>
- <YifoltDp4/Fs+9op@lunn.ch>
- <20220309132443.axyzcsc5kyb26su4@soft-dev3-1.localhost>
- <Yii/9RH67BEjNtLM@shell.armlinux.org.uk>
- <20220309195252.GB9663@hoboy.vegasvil.org>
- <BL0PR11MB291347C0E4699E3B202B96DDE70C9@BL0PR11MB2913.namprd11.prod.outlook.com>
- <20220312024828.GA15046@hoboy.vegasvil.org>
- <Yiz8z3UPqNANa5zA@lunn.ch>
- <20220313024646.GC29538@hoboy.vegasvil.org>
- <Yi4IrO4Qcm1KVMaa@lunn.ch>
+        Sun, 13 Mar 2022 13:09:45 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 13:09:45 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Mel Gorman <mgorman@techsingularity.net>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH] mm/page_alloc: check high-order pages for corruption
+ during PCP operations
+In-Reply-To: <20220310092456.GJ15701@techsingularity.net>
+Message-ID: <7b288234-84ef-db82-3b85-7f921dd3c2f@google.com>
+References: <20220310092456.GJ15701@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yi4IrO4Qcm1KVMaa@lunn.ch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,13 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 04:07:24PM +0100, Andrew Lunn wrote:
-> Anyway, it is clear you don't want the driver doing any correction, so
-> lets stop this discussion.
+On Thu, 10 Mar 2022, Mel Gorman wrote:
 
-Okay.  Just to be clear, as an end user, I've already been burnt by
-well meaning but false corrections in the driver.  As maintainer I
-must advocate for the end users.
+> Eric Dumazet pointed out that commit 44042b449872 ("mm/page_alloc: allow
+> high-order pages to be stored on the per-cpu lists") only checks the head
+> page during PCP refill and allocation operations. This was an oversight
+> and all pages should be checked. This will incur a small performance
+> penalty but it's necessary for correctness.
+> 
+> Fixes: 44042b449872 ("mm/page_alloc: allow high-order pages to be stored on the per-cpu lists")
+> Reported-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Acked-by: Eric Dumazet <edumazet@google.com>
 
-Thanks,
-Richard
+Acked-by: David Rientjes <rientjes@google.com>

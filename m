@@ -2,147 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC724D71EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 01:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34034D71EF
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 01:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbiCMAky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 19:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S233254AbiCMAoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 19:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiCMAkx (ORCPT
+        with ESMTP id S232841AbiCMAoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 19:40:53 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D371081B4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 16:39:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647131986; x=1678667986;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Aa4BYLPM3e9s7FJoeqDIy7N9D7IHonFABafzltXUnvQ=;
-  b=MpRc2D4hlAXME8P40nbpJNa+1ahRKkFmPKNkLZPb9zj4ODiUY/ww78zw
-   KKpVbXTV8EPS7evfA8k8+Kzp1OxBC3zJG1bmtPRbXXUk9UJAnOyU/85xN
-   hi5UeGloc7mgAPHE6i31+9M9erBIkekKx11XsBgxPyu8LYWoCK2hVLW9o
-   TI58sDd4HHTZvmRTleQKv1Sdn5HNJ3zCv1htdovutBtu7TADN9UipU/WO
-   dWaGEYJ+uzq7o8ZLU/5aWQ3Zd+1DIcCBS5VaiYl8xzypIZHaysTT2pB1M
-   0t2d3BV+IqtISKPHAHwuwpzFaV99ZQ1wctNXcHZfLRTq7PxhwTP/nS50W
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="280581717"
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="280581717"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 16:39:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="713291570"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 12 Mar 2022 16:39:44 -0800
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTCGt-0008Q8-R2; Sun, 13 Mar 2022 00:39:43 +0000
-Date:   Sun, 13 Mar 2022 08:38:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:audio/testing 112/167]
- drivers/cpufreq/apple-soc-cpufreq.c:53:12: error: implicit declaration of
- function 'readq_relaxed' is invalid in C99
-Message-ID: <202203130855.uw6cQQRl-lkp@intel.com>
+        Sat, 12 Mar 2022 19:44:18 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AAA10FCB;
+        Sat, 12 Mar 2022 16:43:10 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nTCJk-00ATSa-Ff; Sun, 13 Mar 2022 00:42:40 +0000
+Date:   Sun, 13 Mar 2022 00:42:40 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     John Johansen <john.johansen@canonical.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Christian Brauner <brauner@kernel.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        James Morris <jmorris@namei.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [PATCH v1] fs: Fix inconsistent f_mode
+Message-ID: <Yi0+AMVrzoujuMlm@zeniv-ca.linux.org.uk>
+References: <20220228215935.748017-1-mic@digikod.net>
+ <20220301092232.wh7m3fxbe7hyxmcu@wittgenstein>
+ <f6b63133-d555-a77c-0847-de15a9302283@digikod.net>
+ <CAHC9VhQd3rL-13k0u39Krkdjp2_dtPfgEPxr=kawWUM9FjjOsw@mail.gmail.com>
+ <8d520529-4d3e-4874-f359-0ead9207cead@canonical.com>
+ <CAHC9VhRrjqe1AdZYtjpzLJyBF6FTeQ4EcEwsOd2YMimA5_tzEA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhRrjqe1AdZYtjpzLJyBF6FTeQ4EcEwsOd2YMimA5_tzEA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux audio/testing
-head:   878d09efcd811ce17adb15d9ee32a5b7130320b5
-commit: 97012c133dff8f4ad7de4c8d34cf327567c8e3d8 [112/167] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
-config: arm-buildonly-randconfig-r001-20220313 (https://download.01.org/0day-ci/archive/20220313/202203130855.uw6cQQRl-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 43f668b98e8d87290fc6bbf5ed13c3ab542e3497)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/AsahiLinux/linux/commit/97012c133dff8f4ad7de4c8d34cf327567c8e3d8
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux audio/testing
-        git checkout 97012c133dff8f4ad7de4c8d34cf327567c8e3d8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/cpufreq/
+On Fri, Mar 11, 2022 at 05:15:01PM -0500, Paul Moore wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> The silence on this has been deafening :/  No thoughts on fixing, or
+> not fixing OPEN_FMODE(), Al?
+> 
+> At this point I have to assume OPEN_FMODE() isn't changing so I'm
+> going to go ahead with moving SELinux over to file::f_flags.  Once
+> I've got something working I'll CC the LSM list on the patches in case
+> the other LSMs want to do something similar.  Full disclosure, that
+> might not happen until early-to-mid next week due to the weekend, new
+> kernel expected on Sunday, etc.
 
-All errors (new ones prefixed by >>):
+ENOBUG.  The primary user of that is fdutils; they wanted to be able
+to issue ioctls on a floppy disk drive, with no disk inserted.  Or with
+a disk that has weird formatting (as the matter of fact, some of those
+ioctls are precisely "use such-and-such weird format").
 
->> drivers/cpufreq/apple-soc-cpufreq.c:53:12: error: implicit declaration of function 'readq_relaxed' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           u64 reg = readq_relaxed(priv->reg_base + APPLE_CLUSTER_PSTATE);
-                     ^
->> drivers/cpufreq/apple-soc-cpufreq.c:71:6: error: implicit declaration of function 'readq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (readq_poll_timeout_atomic(priv->reg_base + APPLE_CLUSTER_PSTATE, reg,
-               ^
-   include/linux/iopoll.h:165:28: note: expanded from macro 'readq_poll_timeout_atomic'
-           readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
-                                     ^
->> drivers/cpufreq/apple-soc-cpufreq.c:82:2: error: implicit declaration of function 'writeq_relaxed' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           writeq_relaxed(reg, priv->reg_base + APPLE_CLUSTER_PSTATE);
-           ^
-   3 errors generated.
+A cleaner solution would be to have a separate device node (or sysfs
+file, or...) for that kind of OOB stuff.  However, that's not how it
+had been done way back when, and we are stuck with the existing ABI.
+Namely, "have the lower two bits of flags both set" for "open for
+ioctls only; require MAY_READ|MAY_WRITE on device node, allow
+neither read() nor write() on that descriptor".
 
+I'm not sure if anyone _uses_ fdutils these days.  OTOH, you never
+know what kind of weird setups gets used, and qemu has floppy
+emulation, so we can't even go for "no floppy drive is going to
+be in working condition nowadays".
 
-vim +/readq_relaxed +53 drivers/cpufreq/apple-soc-cpufreq.c
+So I'm afraid that this ABI is going to stay ;-/  It's a long-standing
+wart, from at least '94 if not earlier, it's documented (open(2)) and
+it's used by a package that is shipped at least by debian and ubuntu.
 
-    48	
-    49	static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
-    50	{
-    51		struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-    52		struct apple_cpu_priv *priv = policy->driver_data;
-  > 53		u64 reg = readq_relaxed(priv->reg_base + APPLE_CLUSTER_PSTATE);
-    54		unsigned int pstate = FIELD_GET(APPLE_CLUSTER_PSTATE_DESIRED1, reg);
-    55		unsigned int i;
-    56	
-    57		for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
-    58			if (policy->freq_table[i].driver_data == pstate)
-    59				return policy->freq_table[i].frequency;
-    60	
-    61		dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n", pstate);
-    62		return 0;
-    63	}
-    64	
-    65	static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
-    66	{
-    67		struct apple_cpu_priv *priv = policy->driver_data;
-    68		unsigned int pstate = policy->freq_table[index].driver_data;
-    69		u64 reg;
-    70	
-  > 71		if (readq_poll_timeout_atomic(priv->reg_base + APPLE_CLUSTER_PSTATE, reg,
-    72					      !(reg & APPLE_CLUSTER_PSTATE_BUSY), 2,
-    73					      APPLE_CLUSTER_SWITCH_TIMEOUT)) {
-    74			return -EIO;
-    75		}
-    76	
-    77		reg &= ~(APPLE_CLUSTER_PSTATE_DESIRED1 | APPLE_CLUSTER_PSTATE_DESIRED2);
-    78		reg |= FIELD_PREP(APPLE_CLUSTER_PSTATE_DESIRED1, pstate);
-    79		reg |= FIELD_PREP(APPLE_CLUSTER_PSTATE_DESIRED2, pstate);
-    80		reg |= APPLE_CLUSTER_PSTATE_SET;
-    81	
-  > 82		writeq_relaxed(reg, priv->reg_base + APPLE_CLUSTER_PSTATE);
-    83	
-    84		return 0;
-    85	}
-    86	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+And it's certainly *not* the kind of code anyone sane would want to
+migrate to a replacement ABI, no matter how nice - look through the
+list of utilities in there and imagine what the testing for regressions
+would feel like.

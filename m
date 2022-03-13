@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF464D76EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DB44D76F0
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiCMQht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S234018AbiCMQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 12:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233595AbiCMQhq (ORCPT
+        with ESMTP id S233595AbiCMQjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:37:46 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC422C11F;
-        Sun, 13 Mar 2022 09:36:37 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 2AB3F22238;
-        Sun, 13 Mar 2022 17:36:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647189396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEjq0imQFykd7GI4p10NRKGPfBCDMMpKEt8LIz7yMt0=;
-        b=KQXq5foh3TIjzuxmkMUH+N6td37iTqIQ2xkvE31VcfXQ+LWRwnsquCVudUHZbyWc8fzjMZ
-        xW81Ad/1a//eNJOz6Bgaw/tsDqk1WJeFTVlh3jtNTFtJ6Z5QFd/bTzrowocsnMP7UapBE4
-        wfPagK+PxnXFlwkyUTR5Y8ykQ40AcbQ=
+        Sun, 13 Mar 2022 12:39:10 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A1415A17;
+        Sun, 13 Mar 2022 09:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647189482; x=1678725482;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I6qN1Sg+iqsdbF/CTX0o5V6Hvh5AhvG9qew5bwtGzZI=;
+  b=SnOxWxR7mNTk38MjTjcnHr7ZIfTlCpfTD8rLv9f049r7k0vevhD2ATUU
+   2B9gh3swBl84sUb4/WObkFi0jX37YDOe81kOlqyixNjpe4ETnp312474G
+   4m0TA7fg5hXTTo8BRPkUMiVr7i8Bt97NKljIrYQgXJDvjWpPYT2QO0r1r
+   RB3bQCoaOz/5xGXgaK2iIW3e9e51P+xAUFHJ/JiWaLpncdOJosh3GC1g+
+   YjddtVe03KHWsIovwYc2NKr6rtOHoqizXFBU8u0su3jJYPOa3Wv0+MLiZ
+   k20kIdpqxS9orfEnmaRzWqH4PWSol4FQKOkeX9PmnGjLB4VbRUW9XHHaJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253442975"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="253442975"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 09:38:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="539643470"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 13 Mar 2022 09:38:00 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTREG-00097E-2w; Sun, 13 Mar 2022 16:38:00 +0000
+Date:   Mon, 14 Mar 2022 00:37:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [mchehab-media-next:master 314/316] scripts/Makefile.build:44:
+ drivers/media/platform/nvidia/Makefile: No such file or directory
+Message-ID: <202203140022.R4erbrkI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sun, 13 Mar 2022 17:36:36 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v1 8/8] dt-bindings: pinctrl: convert ocelot-pinctrl to
- YAML format
-In-Reply-To: <869d4fda-e943-1817-17cd-df7b323a1fef@kernel.org>
-References: <20220313152924.61931-1-michael@walle.cc>
- <20220313152924.61931-9-michael@walle.cc>
- <869d4fda-e943-1817-17cd-df7b323a1fef@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <b5a33a3441f829638740204e0c4dc938@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   git://linuxtv.org/mchehab/media-next.git master
+head:   9d8c4cc1be6c37e66662141f1a3ebc8b54cb8dae
+commit: 63533d0167e608fde8c40a7579e6ac22b1ffdfbc [314/316] media: platform: Create vendor/{Makefile,Kconfig} files
+config: arc-randconfig-r043-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140022.R4erbrkI-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add mchehab-media-next git://linuxtv.org/mchehab/media-next.git
+        git fetch --no-tags mchehab-media-next master
+        git checkout 63533d0167e608fde8c40a7579e6ac22b1ffdfbc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-wow, you're fast!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Am 2022-03-13 16:55, schrieb Krzysztof Kozlowski:
+All errors (new ones prefixed by >>):
 
->> +  reg: true
-> 
-> maxItems
+>> scripts/Makefile.build:44: drivers/media/platform/nvidia/Makefile: No such file or directory
+>> make[5]: *** No rule to make target 'drivers/media/platform/nvidia/Makefile'.
+   make[5]: Failed to remake makefile 'drivers/media/platform/nvidia/Makefile'.
 
-There are up to two address ranges. The second one is only needed for
-particular controllers (the sparx5 and the lan966x).
 
-Is the following snippet the correct form?
+vim +44 scripts/Makefile.build
 
-   reg:
-     items:
-       - description: Base address
-       - description: Extended pin configuration registers
-     minItems: 1
+20a468b51325b3 Sam Ravnborg   2006-01-22  40  
+2a691470345a00 Sam Ravnborg   2005-07-25  41  # The filename Kbuild has precedence over Makefile
+db8c1a7b2ca25f Sam Ravnborg   2005-07-27  42  kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+0c53c8e6eb456c Sam Ravnborg   2007-10-14  43  kbuild-file := $(if $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Kbuild,$(kbuild-dir)/Makefile)
+0c53c8e6eb456c Sam Ravnborg   2007-10-14 @44  include $(kbuild-file)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  45  
 
--michael
+:::::: The code at line 44 was first introduced by commit
+:::::: 0c53c8e6eb456cde30f2305421c605713856abc8 kbuild: check for wrong use of CFLAGS
+
+:::::: TO: Sam Ravnborg <sam@neptun.(none)>
+:::::: CC: Sam Ravnborg <sam@neptun.(none)>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887734D7231
+	by mail.lfdr.de (Postfix) with ESMTP id D3E854D7232
 	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 03:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiCMCl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 21:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S233428AbiCMCmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 21:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiCMCl4 (ORCPT
+        with ESMTP id S233385AbiCMCl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 12 Mar 2022 21:41:56 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A637EB3A
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B397EB3E
         for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 18:40:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1647139249; x=1678675249;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3TEMZ6JGrSqCrHXC0AsoypfXwz2WCwrOhrkmqjeajGQ=;
-  b=EshXvxqMmTzGZ3ee2z6gZJsgmk7vvq8scA7iq+6ZqOWvqmLMf3A3p5aM
-   C2JolwuXDseUCH7HxVQNUjad0Abop+i6SuQcaFy9qJ2AbawatN78tR0Le
-   Sn5VWHgJ3WWp0SovntM6+3UErQPq91Ba3/DDVVlUogz+8AJ+Yi/9Yt6za
-   ng2wlTFF8XtS7EgA1+QipfGIEwLF81P9ub8peYg7g7oeceTF6OAB6AGgX
-   GOnWmO4FxV1+53D2UEEGDxpKXkBLHRTfT/ZFgwQ1Z+EjXtGH4RJpacect
-   w1XbyKQcJFFv5D0t3IZ8VALn7jlwQQCSTNfxrUDX4ramH1o1y7rvkUSZ8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="243282932"
+  bh=IfviMtav1mbQ6V8D7kPAXwRYYvcsSKMpDyFUw0UvMzg=;
+  b=QZlny2WmdmsgGZXbBoUX+Y67+m/sCxjRvg5VHlFg3CTDicA0bU1lTMPI
+   eHLNgZq55IhVPx3PsWgnRUM8Gp9jEG5bfQDSwPCAI2CrxLhLcbORIjTtu
+   PmpIDcAgR8kb+gSH4egg1Ymek808tX76jYfOK9kb5O5qgKakFiv/9RX/w
+   +WA5b9+x4Sy65fIuNt1gqD05Cz+PWXg6rcOtqu+a9Eej42UQw0byx+J3c
+   SwROb3EvsFxHbzQLtNiGSFtnwt3x3+R4KoNLEhACCpAt7jVBFvWoWsYgg
+   7gJkgNKytgTwh2jJdqDU2ND5tbVS2fdhxNWOBEwp9RXa9jVUTiZERqApG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="255567528"
 X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="243282932"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 18:40:48 -0800
+   d="scan'208";a="255567528"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2022 18:40:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,177,1643702400"; 
-   d="scan'208";a="645380167"
+   d="scan'208";a="511819082"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Mar 2022 18:40:47 -0800
+  by orsmga002.jf.intel.com with ESMTP; 12 Mar 2022 18:40:47 -0800
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nTEA2-0008Vk-D1; Sun, 13 Mar 2022 02:40:46 +0000
-Date:   Sun, 13 Mar 2022 10:40:39 +0800
+        id 1nTEA2-0008Vm-DN; Sun, 13 Mar 2022 02:40:46 +0000
+Date:   Sun, 13 Mar 2022 10:40:43 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Ahern <dsahern@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [dsahern:vrf-keep-orig-oif 1/2] net/xfrm/xfrm_interface.c:514:64:
- error: too few arguments to function call, expected 7, have 6
-Message-ID: <202203131015.oW2gjrul-lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [dsahern:vrf-keep-orig-oif 1/2] net/xfrm/xfrm_interface.c:514:55:
+ error: incompatible type for argument 6 of 'ip6_update_pmtu'
+Message-ID: <202203131040.XgH7dGI6-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -65,8 +64,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/dsahern/linux vrf-keep-orig-oif
 head:   9830d54a15a0e242fe89180d8e54fe04211abd82
 commit: 038474b9858f889e59d274e2eaea63e2d3bcc00e [1/2] wip - mostly works needs to be simplified
-config: hexagon-randconfig-r032-20220313 (https://download.01.org/0day-ci/archive/20220313/202203131015.oW2gjrul-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220313/202203131040.XgH7dGI6-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -76,23 +75,33 @@ reproduce (this is a W=1 build):
         git checkout 038474b9858f889e59d274e2eaea63e2d3bcc00e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/xfrm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash net/xfrm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> net/xfrm/xfrm_interface.c:514:64: error: too few arguments to function call, expected 7, have 6
-                   ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
-                   ~~~~~~~~~~~~~~~                                              ^
-   include/net/ip6_route.h:185:6: note: 'ip6_update_pmtu' declared here
-   void ip6_update_pmtu(struct sk_buff *skb, struct net *net, __be32 mtu, int oif,
-        ^
-   1 error generated.
+   net/xfrm/xfrm_interface.c: In function 'xfrmi6_err':
+>> net/xfrm/xfrm_interface.c:514:55: error: incompatible type for argument 6 of 'ip6_update_pmtu'
+     514 |                 ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
+         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                                       |
+         |                                                       kuid_t
+   In file included from net/xfrm/xfrm_interface.c:39:
+   include/net/ip6_route.h:186:38: note: expected 'u32' {aka 'unsigned int'} but argument is of type 'kuid_t'
+     186 |                      int l3mdev, u32 mark, kuid_t uid);
+         |                                  ~~~~^~~~
+>> net/xfrm/xfrm_interface.c:514:17: error: too few arguments to function 'ip6_update_pmtu'
+     514 |                 ip6_update_pmtu(skb, net, info, 0, 0, sock_net_uid(net, NULL));
+         |                 ^~~~~~~~~~~~~~~
+   In file included from net/xfrm/xfrm_interface.c:39:
+   include/net/ip6_route.h:185:6: note: declared here
+     185 | void ip6_update_pmtu(struct sk_buff *skb, struct net *net, __be32 mtu, int oif,
+         |      ^~~~~~~~~~~~~~~
 
 
-vim +514 net/xfrm/xfrm_interface.c
+vim +/ip6_update_pmtu +514 net/xfrm/xfrm_interface.c
 
 f203b76d78092f Steffen Klassert 2018-06-12  464  
 f203b76d78092f Steffen Klassert 2018-06-12  465  static int xfrmi6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,

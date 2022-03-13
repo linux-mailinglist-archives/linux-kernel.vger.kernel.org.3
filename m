@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94DF4D77C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9CA4D77C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235414AbiCMTGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 15:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S235432AbiCMTGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 15:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbiCMTGZ (ORCPT
+        with ESMTP id S235374AbiCMTG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 15:06:25 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FFE4ECCD;
-        Sun, 13 Mar 2022 12:05:11 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id m12so17003573edc.12;
-        Sun, 13 Mar 2022 12:05:11 -0700 (PDT)
+        Sun, 13 Mar 2022 15:06:28 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A144F44E;
+        Sun, 13 Mar 2022 12:05:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id p15so29580737ejc.7;
+        Sun, 13 Mar 2022 12:05:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=1tacB+H58ZcVKBVcWE3u+TMM2y65iIDEoWk8hI94hWs=;
-        b=oIxoijt3zP8XJcuwIbWWk0ZqG42rCNQQeUcVB1jEt8bBxPjtkGfQg9/M8oViRsNm+B
-         UUBJywclv0FdRv2179GvV6XB7J7+IR53sDj8HPcvJEt8Gq8XZ+4S9qNlyqBO0uyj9wiS
-         e5M35cfY3VspdpoYskady1uf1jCHAFgg9aW3yallGKLoGM5DcWgx5yMPL6LiHUaNjLP7
-         U7uoBELO3usRmQYxSogIrhtjwX7uzJjXNOkA/T5AmCiifAaNHX/ahQoHf5w6p6uUiue8
-         T7FK5dn55UMJL29KadZHW+/L8v2CmSyMs04wv3u4hofuemnRUekpMUyPnFM6v0rJ6ORL
-         rHTQ==
+        bh=IoxWFtuJ3nVT2cUX5svXBvONnaH4G2IpueNu8SNnBC4=;
+        b=BiGAZe1hOHEPX7XfUXG/4DfXbS6Vuc5pOYn44VqxH2XJ2oebLgFR94zL+DOduoe2Ez
+         YuJ9cKgvLoEJX9q533WT8PdFQpyuKzoD87zcKT2EGjl4X/C9UpWS81dn3BsRSPou9Jsf
+         W94IKo+IIr9Hg6HQiHD8xtmMZ+GQJPCmTat2TISajd+2pZ+DzcC7Tm1DWZNlZeoQXzt9
+         /qBfW1/vX2LumyjVLSCIblTGUjneMmRmMKLOfI2ZOI8PtP6GlI/oZkGswcr1be8y1Rdr
+         ERuj5MHR3J3juNUFrrIJWB2ISIJh9PKdejtlAKuIW4eKTsDk/cFh8PbAcT87tFB6xb7g
+         nuEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1tacB+H58ZcVKBVcWE3u+TMM2y65iIDEoWk8hI94hWs=;
-        b=DnfepViLzqV+0sAQi88b6YSGD2wsPPO9K1qI4HuOCgncVcQmhzLLBHaiFjeitNOaB/
-         oXVzehBfd7cA09h+4ZlwUy+hw1FqT42snQPafDQhnBXj709yIE3Hk8jJSU4PZ4cVlCRy
-         MD8re3Qh21A4RlBt+SDAsWw2nstRbAFJz8CqzxYLjUzuFjpRPFai1QKnoTNP9F40YmmI
-         E0X3UcBJNTFmwG6MGv5odKALtEbKmb5VADTN95fYSJG5EbMz9f/hU31/z/wDAGNIiv3w
-         fkN/r3ePoupskgbRJvLFDhLahwiISLWptARlVhTLMe4eQkUV+TC3Swkg1+L+OLBsCYin
-         FhZw==
-X-Gm-Message-State: AOAM530W62p+NCJOVQOxZZuisVfzdzsZF0x7pr9FoAO25vgM2UtSA7Do
-        Q4ckH6+fIb8jPN4NHiijewc=
-X-Google-Smtp-Source: ABdhPJyoFrdFHVwLiFxDlmnXTecCfhREO4r3X1G0IFC4wJ/LIVm0nWuMjUxBaDl01F4L+FHncaraZQ==
-X-Received: by 2002:a05:6402:40c4:b0:416:3e66:1825 with SMTP id z4-20020a05640240c400b004163e661825mr17473985edb.284.1647198310324;
-        Sun, 13 Mar 2022 12:05:10 -0700 (PDT)
+        bh=IoxWFtuJ3nVT2cUX5svXBvONnaH4G2IpueNu8SNnBC4=;
+        b=ar5lwzwK4qKfO1V8L8g4mr1YYrrZYKLi82QCnYs/4ADULjgs6yk9r+adlySCp6gtle
+         ZabOmYuk+DVr+J4ETPm9MR74WGsJGwEYAyeM42DvzZO4KRCvY10Ne9qWDnx8mBYLnJPZ
+         yzqMnHw+CWRtL4FkgmDppUrytq6ywaNEhd6ofQQYh3fdzu2SM6MXaVMaQiUSZ8ZbbNQl
+         5QNPCJ8JDYfeBHAtZCvj8byWFDGbL689tz5Lb1iPRSVrxdSYZrISAaGlUUwNUKjx9GDj
+         +ZNJ3/OFP6Tmi/+SrcnPNSprIkDhpivnlAMtUL3gwga/ZZUy4kIDpfNOfpnWxEAJHdmF
+         rS3Q==
+X-Gm-Message-State: AOAM531uNzQYO9RyNVDCVQKnV1GN4F/x8afZPns0NgHsZvUs/CiI0KEk
+        vFEnkN7CryxBRg0pidToeC0=
+X-Google-Smtp-Source: ABdhPJzTYcC1+jpKFWl/CYsAgivivxMFORCMPruEdwREu/30BE2L/JwIHpvDUPpSjQkQ/gLcGdrxyw==
+X-Received: by 2002:a17:907:7d8a:b0:6db:3261:d8de with SMTP id oz10-20020a1709077d8a00b006db3261d8demr17156424ejc.239.1647198311397;
+        Sun, 13 Mar 2022 12:05:11 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id n13-20020a170906724d00b006cedd6d7e24sm5856697ejk.119.2022.03.13.12.05.09
+        by smtp.googlemail.com with ESMTPSA id n13-20020a170906724d00b006cedd6d7e24sm5856697ejk.119.2022.03.13.12.05.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 12:05:09 -0700 (PDT)
+        Sun, 13 Mar 2022 12:05:11 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -62,9 +62,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH 08/16] clk: qcom: krait-cc: convert to parent_data API
-Date:   Sun, 13 Mar 2022 20:04:11 +0100
-Message-Id: <20220313190419.2207-9-ansuelsmth@gmail.com>
+Subject: [PATCH 09/16] clk: qcom: krait-cc: drop pr_info and register qsb only if needed
+Date:   Sun, 13 Mar 2022 20:04:12 +0100
+Message-Id: <20220313190419.2207-10-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220313190419.2207-1-ansuelsmth@gmail.com>
 References: <20220313190419.2207-1-ansuelsmth@gmail.com>
@@ -80,268 +80,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modernize the krait-cc driver to parent-data API and refactor to drop
-any use of clk_names. From Documentation all the required clocks should
-be declared in DTS so fw_name can be correctly used to get the parents
-for all the muxes. Name is also declared to save compatibility with old
-implementation. Also fix the parent order of the sec_mux that was wrong
-and incorrectly report the wrong safe parent if it's not hardcoded.
+Drop pr_info and change them to dev_info.
+Register qsb fixed clk only if it's not declared in DTS.
+Also reorganize variable order.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/krait-cc.c | 126 +++++++++++++++++++-----------------
- 1 file changed, 66 insertions(+), 60 deletions(-)
+ drivers/clk/qcom/krait-cc.c | 42 +++++++++++++++++++------------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
-index 4d4b657d33c3..645ad9e8dd73 100644
+index 645ad9e8dd73..50352ff0ac67 100644
 --- a/drivers/clk/qcom/krait-cc.c
 +++ b/drivers/clk/qcom/krait-cc.c
-@@ -69,21 +69,22 @@ static int krait_notifier_register(struct device *dev, struct clk *clk,
- 	return ret;
- }
+@@ -34,9 +34,10 @@ static int krait_notifier_cb(struct notifier_block *nb,
+ 			     unsigned long event,
+ 			     void *data)
+ {
+-	int ret = 0;
+ 	struct krait_mux_clk *mux = container_of(nb, struct krait_mux_clk,
+ 						 clk_nb);
++	int ret = 0;
++
+ 	/* Switch to safe parent */
+ 	if (event == PRE_RATE_CHANGE) {
+ 		mux->old_index = krait_mux_clk_ops.get_parent(&mux->hw);
+@@ -59,7 +60,7 @@ static int krait_notifier_cb(struct notifier_block *nb,
+ static int krait_notifier_register(struct device *dev, struct clk *clk,
+ 				   struct krait_mux_clk *mux)
+ {
+-	int ret = 0;
++	int ret;
  
--static int
-+static struct clk *
+ 	mux->clk_nb.notifier_call = krait_notifier_cb;
+ 	ret = clk_notifier_register(clk, &mux->clk_nb);
+@@ -72,15 +73,15 @@ static int krait_notifier_register(struct device *dev, struct clk *clk,
+ static struct clk *
  krait_add_div(struct device *dev, int id, const char *s, unsigned int offset)
  {
- 	struct krait_div2_clk *div;
-+	static struct clk_parent_data p_data[1];
+-	struct krait_div2_clk *div;
+ 	static struct clk_parent_data p_data[1];
  	struct clk_init_data init = {
--		.num_parents = 1,
-+		.num_parents = ARRAY_SIZE(p_data),
+ 		.num_parents = ARRAY_SIZE(p_data),
  		.ops = &krait_div2_clk_ops,
  		.flags = CLK_SET_RATE_PARENT,
  	};
--	const char *p_names[1];
- 	struct clk *clk;
-+	char *parent_name;
+-	struct clk *clk;
++	struct krait_div2_clk *div;
+ 	char *parent_name;
++	struct clk *clk;
  
  	div = devm_kzalloc(dev, sizeof(*div), GFP_KERNEL);
  	if (!div)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	div->width = 2;
- 	div->shift = 6;
-@@ -93,43 +94,49 @@ krait_add_div(struct device *dev, int id, const char *s, unsigned int offset)
- 
- 	init.name = kasprintf(GFP_KERNEL, "hfpll%s_div", s);
- 	if (!init.name)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
--	init.parent_names = p_names;
--	p_names[0] = kasprintf(GFP_KERNEL, "hfpll%s", s);
--	if (!p_names[0]) {
--		kfree(init.name);
--		return -ENOMEM;
-+	init.parent_data = p_data;
-+	parent_name = kasprintf(GFP_KERNEL, "hfpll%s", s);
-+	if (!parent_name) {
-+		clk = ERR_PTR(-ENOMEM);
-+		goto err_parent_name;
- 	}
- 
-+	p_data[0].fw_name = parent_name;
-+	p_data[0].name = parent_name;
-+
- 	clk = devm_clk_register(dev, &div->hw);
--	kfree(p_names[0]);
-+
-+	kfree(parent_name);
-+err_parent_name:
- 	kfree(init.name);
- 
--	return PTR_ERR_OR_ZERO(clk);
-+	return clk;
- }
- 
--static int
-+static struct clk *
+@@ -119,8 +120,6 @@ static struct clk *
  krait_add_sec_mux(struct device *dev, int id, const char *s,
  		  unsigned int offset, bool unique_aux)
  {
- 	int ret;
- 	struct krait_mux_clk *mux;
--	static const char *sec_mux_list[] = {
--		"acpu_aux",
--		"qsb",
-+	static struct clk_parent_data sec_mux_list[2] = {
-+		{ .name = "qsb", .fw_name = "qsb" },
-+		{},
- 	};
- 	struct clk_init_data init = {
--		.parent_names = sec_mux_list,
-+		.parent_data = sec_mux_list,
- 		.num_parents = ARRAY_SIZE(sec_mux_list),
+-	int ret;
+-	struct krait_mux_clk *mux;
+ 	static struct clk_parent_data sec_mux_list[2] = {
+ 		{ .name = "qsb", .fw_name = "qsb" },
+ 		{},
+@@ -131,8 +130,10 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
  		.ops = &krait_mux_clk_ops,
  		.flags = CLK_SET_RATE_PARENT,
  	};
- 	struct clk *clk;
-+	char *parent_name;
+-	struct clk *clk;
++	struct krait_mux_clk *mux;
+ 	char *parent_name;
++	struct clk *clk;
++	int ret;
  
  	mux = devm_kzalloc(dev, sizeof(*mux), GFP_KERNEL);
  	if (!mux)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	mux->offset = offset;
- 	mux->lpl = id >= 0;
-@@ -141,44 +148,51 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
- 
- 	init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
- 	if (!init.name)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	if (unique_aux) {
--		sec_mux_list[0] = kasprintf(GFP_KERNEL, "acpu%s_aux", s);
--		if (!sec_mux_list[0]) {
-+		parent_name = kasprintf(GFP_KERNEL, "acpu%s_aux", s);
-+		if (!parent_name) {
- 			clk = ERR_PTR(-ENOMEM);
- 			goto err_aux;
- 		}
-+		sec_mux_list[1].fw_name = parent_name;
-+		sec_mux_list[1].name = parent_name;
-+	} else {
-+		sec_mux_list[1].name = "apu_aux";
- 	}
- 
- 	clk = devm_clk_register(dev, &mux->hw);
-+	if (IS_ERR(clk))
-+		goto err_clk;
- 
- 	ret = krait_notifier_register(dev, clk, mux);
- 	if (ret)
--		goto unique_aux;
-+		clk = ERR_PTR(ret);
- 
--unique_aux:
-+err_clk:
- 	if (unique_aux)
--		kfree(sec_mux_list[0]);
-+		kfree(parent_name);
- err_aux:
- 	kfree(init.name);
--	return PTR_ERR_OR_ZERO(clk);
-+	return clk;
- }
- 
- static struct clk *
--krait_add_pri_mux(struct device *dev, int id, const char *s,
--		  unsigned int offset)
-+krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux,
-+		  int id, const char *s, unsigned int offset)
+@@ -182,8 +183,6 @@ static struct clk *
+ krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux,
+ 		  int id, const char *s, unsigned int offset)
  {
- 	int ret;
- 	struct krait_mux_clk *mux;
--	const char *p_names[3];
-+	static struct clk_parent_data p_data[3];
+-	int ret;
+-	struct krait_mux_clk *mux;
+ 	static struct clk_parent_data p_data[3];
  	struct clk_init_data init = {
--		.parent_names = p_names,
--		.num_parents = ARRAY_SIZE(p_names),
-+		.parent_data = p_data,
-+		.num_parents = ARRAY_SIZE(p_data),
+ 		.parent_data = p_data,
+@@ -191,8 +190,10 @@ krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux
  		.ops = &krait_mux_clk_ops,
  		.flags = CLK_SET_RATE_PARENT,
  	};
- 	struct clk *clk;
-+	char *hfpll_name;
+-	struct clk *clk;
++	struct krait_mux_clk *mux;
+ 	char *hfpll_name;
++	struct clk *clk;
++	int ret;
  
  	mux = devm_kzalloc(dev, sizeof(*mux), GFP_KERNEL);
  	if (!mux)
-@@ -196,36 +210,29 @@ krait_add_pri_mux(struct device *dev, int id, const char *s,
- 	if (!init.name)
- 		return ERR_PTR(-ENOMEM);
- 
--	p_names[0] = kasprintf(GFP_KERNEL, "hfpll%s", s);
--	if (!p_names[0]) {
-+	hfpll_name = kasprintf(GFP_KERNEL, "hfpll%s", s);
-+	if (!hfpll_name) {
- 		clk = ERR_PTR(-ENOMEM);
--		goto err_p0;
-+		goto err_hfpll;
- 	}
- 
--	p_names[1] = kasprintf(GFP_KERNEL, "hfpll%s_div", s);
--	if (!p_names[1]) {
--		clk = ERR_PTR(-ENOMEM);
--		goto err_p1;
--	}
-+	p_data[0].fw_name = hfpll_name;
-+	p_data[0].name = hfpll_name;
- 
--	p_names[2] = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
--	if (!p_names[2]) {
--		clk = ERR_PTR(-ENOMEM);
--		goto err_p2;
--	}
-+	p_data[1].hw = __clk_get_hw(hfpll_div);
-+	p_data[2].hw = __clk_get_hw(sec_mux);
- 
- 	clk = devm_clk_register(dev, &mux->hw);
-+	if (IS_ERR(clk))
-+		goto err_clk;
- 
- 	ret = krait_notifier_register(dev, clk, mux);
- 	if (ret)
--		goto err_p3;
--err_p3:
--	kfree(p_names[2]);
--err_p2:
--	kfree(p_names[1]);
--err_p1:
--	kfree(p_names[0]);
--err_p0:
-+		clk = ERR_PTR(ret);
-+
-+err_clk:
-+	kfree(hfpll_name);
-+err_hfpll:
- 	kfree(init.name);
- 	return clk;
- }
-@@ -233,11 +240,10 @@ krait_add_pri_mux(struct device *dev, int id, const char *s,
+@@ -240,10 +241,10 @@ krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux
  /* id < 0 for L2, otherwise id == physical CPU number */
  static struct clk *krait_add_clks(struct device *dev, int id, bool unique_aux)
  {
--	int ret;
++	struct clk *hfpll_div, *sec_mux, *clk;
  	unsigned int offset;
  	void *p = NULL;
  	const char *s;
--	struct clk *clk;
-+	struct clk *hfpll_div, *sec_mux, *clk;
+-	struct clk *hfpll_div, *sec_mux, *clk;
  
  	if (id >= 0) {
  		offset = 0x4501 + (0x1000 * id);
-@@ -249,19 +255,19 @@ static struct clk *krait_add_clks(struct device *dev, int id, bool unique_aux)
- 		s = "_l2";
+@@ -295,20 +296,21 @@ MODULE_DEVICE_TABLE(of, krait_cc_match_table);
+ 
+ static int krait_cc_probe(struct platform_device *pdev)
+ {
++	unsigned long cur_rate, aux_rate;
++	struct clk *l2_pri_mux_clk, *clk;
+ 	struct device *dev = &pdev->dev;
+ 	const struct of_device_id *id;
+-	unsigned long cur_rate, aux_rate;
+-	int cpu;
+-	struct clk *clk;
+ 	struct clk **clks;
+-	struct clk *l2_pri_mux_clk;
++	int cpu;
+ 
+ 	id = of_match_device(krait_cc_match_table, dev);
+ 	if (!id)
+ 		return -ENODEV;
+ 
+ 	/* Rate is 1 because 0 causes problems for __clk_mux_determine_rate */
+-	clk = clk_register_fixed_rate(dev, "qsb", NULL, 0, 1);
++	if (IS_ERR(clk_get(dev, "qsb")))
++		clk = clk_register_fixed_rate(dev, "qsb", NULL, 0, 1);
++
+ 	if (IS_ERR(clk))
+ 		return PTR_ERR(clk);
+ 
+@@ -363,25 +365,25 @@ static int krait_cc_probe(struct platform_device *pdev)
+ 	cur_rate = clk_get_rate(l2_pri_mux_clk);
+ 	aux_rate = 384000000;
+ 	if (cur_rate == 1) {
+-		pr_info("L2 @ QSB rate. Forcing new rate.\n");
++		dev_info(dev, "L2 @ QSB rate. Forcing new rate.\n");
+ 		cur_rate = aux_rate;
+ 	}
+ 	clk_set_rate(l2_pri_mux_clk, aux_rate);
+ 	clk_set_rate(l2_pri_mux_clk, 2);
+ 	clk_set_rate(l2_pri_mux_clk, cur_rate);
+-	pr_info("L2 @ %lu KHz\n", clk_get_rate(l2_pri_mux_clk) / 1000);
++	dev_info(dev, "L2 @ %lu KHz\n", clk_get_rate(l2_pri_mux_clk) / 1000);
+ 	for_each_possible_cpu(cpu) {
+ 		clk = clks[cpu];
+ 		cur_rate = clk_get_rate(clk);
+ 		if (cur_rate == 1) {
+-			pr_info("CPU%d @ QSB rate. Forcing new rate.\n", cpu);
++			dev_info(dev, "CPU%d @ QSB rate. Forcing new rate.\n", cpu);
+ 			cur_rate = aux_rate;
+ 		}
+ 
+ 		clk_set_rate(clk, aux_rate);
+ 		clk_set_rate(clk, 2);
+ 		clk_set_rate(clk, cur_rate);
+-		pr_info("CPU%d @ %lu KHz\n", cpu, clk_get_rate(clk) / 1000);
++		dev_info(dev, "CPU%d @ %lu KHz\n", cpu, clk_get_rate(clk) / 1000);
  	}
  
--	ret = krait_add_div(dev, id, s, offset);
--	if (ret) {
--		clk = ERR_PTR(ret);
-+	hfpll_div = krait_add_div(dev, id, s, offset);
-+	if (IS_ERR(hfpll_div)) {
-+		clk = hfpll_div;
- 		goto err;
- 	}
- 
--	ret = krait_add_sec_mux(dev, id, s, offset, unique_aux);
--	if (ret) {
--		clk = ERR_PTR(ret);
-+	sec_mux = krait_add_sec_mux(dev, id, s, offset, unique_aux);
-+	if (IS_ERR(sec_mux)) {
-+		clk = sec_mux;
- 		goto err;
- 	}
- 
--	clk = krait_add_pri_mux(dev, id, s, offset);
-+	clk = krait_add_pri_mux(dev, hfpll_div, sec_mux, id, s, offset);
- err:
- 	kfree(p);
- 	return clk;
+ 	of_clk_add_provider(dev->of_node, krait_of_get, clks);
 -- 
 2.34.1
 

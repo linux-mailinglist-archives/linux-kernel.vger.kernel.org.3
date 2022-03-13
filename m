@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63834D75C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3464D75C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 15:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234550AbiCMONn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 10:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S234554AbiCMOQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 10:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiCMONl (ORCPT
+        with ESMTP id S231871AbiCMOQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 10:13:41 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149531BEAF;
-        Sun, 13 Mar 2022 07:12:34 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 19so7850618wmy.3;
-        Sun, 13 Mar 2022 07:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mb7PDca+3I5O8BOlO0II3uFS6ORKg+kbdWf9TIxP6CY=;
-        b=ETKsPGKKAJ3tRSNQKgguN8zvUj+K0x8GhMG7KFv+nNSK94YaOumma0fRosLB08nNCo
-         EyXD+4ysbaHq5Vna64YndfQXQYDcB+r6at4PjPf6VrnEJzNplaa1cKBQxqrCN3x3y0gi
-         J+6h3+SQlAaHasRYzdkoEZX1vByp4uLZhw7MLY/Jlr19Jp5LASp7T3kQux5Z5Rq50L51
-         ChiUyisQMtNy3rAhdS+pgrQp4O7KJnv4KOsbvCV+QodA9FvBfR7T08vVIdzU98hLLFYL
-         njn92R1yaf0rChegNntpNj2Yy82HTLYbjZDnqqQXJwtYMrvnujH16vg7acGs/9Akueve
-         s7ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mb7PDca+3I5O8BOlO0II3uFS6ORKg+kbdWf9TIxP6CY=;
-        b=4bRL058itaOYVStCIgEMrCFgaO0WCh/3+Sn7Zb8t7HtXRGPA+V8y1i7ED8gPNlQMQe
-         oGyQzlFpNZ82CqSaoCA+Zle9Nv2G0IeSc1icj1TS9DHJwY31eIw/8C9woWXN9qFPgqBT
-         7XVwZrBDYFr34lQvdVeLN06Tk5ECmwhPeOFKFetSPmNn7He4cnoNBkKECkvC8bVe1fP8
-         jghJ5sp9Y/7O/fAwB4ke8mPhMx1WuNlsTsJ3hN9gP8nloqNnC4MFC+tfefi7GXGI2z+L
-         +t+V3EdlPJFBN88WjpVo+DtIwM9ckTfENxXXiT08zXrjWo5NheRZKspWKrxghPKzRgmp
-         w0iQ==
-X-Gm-Message-State: AOAM532vMWeG6G/obZ0DZEbRYFJSGJ23rqyx0RZ33A8DmS8UJD8yQF8U
-        CKSWg/OgJ89WfJ2NVYKeF6QvbIHYJGw=
-X-Google-Smtp-Source: ABdhPJwgl4zCSyLoWbiJH3eBM899dcFaDThhGF3Y9cQbVSI0HYB8bywhF0pxGJ6ApV1ouL2Jj/gaTg==
-X-Received: by 2002:a05:600c:190e:b0:389:d75e:2a66 with SMTP id j14-20020a05600c190e00b00389d75e2a66mr14286752wmq.124.1647180752658;
-        Sun, 13 Mar 2022 07:12:32 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id n8-20020adf8b08000000b001f046cc8891sm11364972wra.24.2022.03.13.07.12.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 07:12:32 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <be3b3abe-688d-42b3-ed5e-3927538a30cc@redhat.com>
-Date:   Sun, 13 Mar 2022 15:12:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v5 017/104] KVM: TDX: Add helper functions to print
- TDX SEAMCALL error
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        Sun, 13 Mar 2022 10:16:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678D49FF8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 07:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647180900; x=1678716900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZfCMqNdnz7oT+vWM/EyZiN6yIW0Ppad31aIVidoCT5c=;
+  b=My7Z1YHpf6sJeLfXX4XvTV/tN+b75+P5OTlhZjDdZqif78fBwM2FsgSm
+   5qaOSHnrD+cYutlMfzbuWidezMh1FF/aJgk2SaRIjAm7kIf9sKKueqRe9
+   HpgtdsVO5Kk/dUbtJLXeTPT8sUqBVOgPBnzMxs0bJugvDB6mpDOG+apNW
+   0E1itZxEao4QlY6wvgY4Su+HaA0KbadiB+GJnVmUoTv4UGgPnxGLUbDJV
+   2xlQ1qdoVyo7YeqzTWQs0sooztT5v1jH8vuLMSWBXA9cKq2rvReJH7uai
+   YxABa6ceOe+uQU4dzz/mn34iFynxtVgFs2BvWHqf/KjL20PN7VEM39umr
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255824772"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="255824772"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 07:15:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="556038899"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2022 07:14:58 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTOzp-00090o-V2; Sun, 13 Mar 2022 14:14:57 +0000
+Date:   Sun, 13 Mar 2022 22:14:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <7d89296e776b125b75762c040879c16afa7b6da6.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <7d89296e776b125b75762c040879c16afa7b6da6.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Subject: [hare-scsi-devel:tls-upcall.v4 127/156] net/tls/tls_main.c:1062:20:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'size_t' (aka 'unsigned int')
+Message-ID: <202203132251.f1LqIqDZ-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,73 +63,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Add helper functions to print out errors from the TDX module in a uniform
-> manner.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/Makefile        |  2 +-
->   arch/x86/kvm/vmx/seamcall.h  |  2 ++
->   arch/x86/kvm/vmx/tdx_error.c | 22 ++++++++++++++++++++++
->   3 files changed, 25 insertions(+), 1 deletion(-)
->   create mode 100644 arch/x86/kvm/vmx/tdx_error.c
-> 
-> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> index e8f83a7d0dc3..3d6550c73fb5 100644
-> --- a/arch/x86/kvm/Makefile
-> +++ b/arch/x86/kvm/Makefile
-> @@ -24,7 +24,7 @@ kvm-$(CONFIG_KVM_XEN)	+= xen.o
->   kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
->   			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o vmx/main.o
->   kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
-> -kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o vmx/seamcall.o
-> +kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o vmx/seamcall.o vmx/tdx_error.o
->   
->   kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
->   
-> diff --git a/arch/x86/kvm/vmx/seamcall.h b/arch/x86/kvm/vmx/seamcall.h
-> index 604792e9a59f..5ac419cd8e27 100644
-> --- a/arch/x86/kvm/vmx/seamcall.h
-> +++ b/arch/x86/kvm/vmx/seamcall.h
-> @@ -16,6 +16,8 @@ struct tdx_module_output;
->   u64 kvm_seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9, u64 r10,
->   		struct tdx_module_output *out);
->   
-> +void pr_tdx_error(u64 op, u64 error_code, const struct tdx_module_output *out);
-> +
->   #endif /* !__ASSEMBLY__ */
->   
->   #endif	/* CONFIG_INTEL_TDX_HOST */
-> diff --git a/arch/x86/kvm/vmx/tdx_error.c b/arch/x86/kvm/vmx/tdx_error.c
-> new file mode 100644
-> index 000000000000..61ed855d1188
-> --- /dev/null
-> +++ b/arch/x86/kvm/vmx/tdx_error.c
-> @@ -0,0 +1,22 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* functions to record TDX SEAMCALL error */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/bug.h>
-> +
-> +#include "tdx_ops.h"
-> +
-> +void pr_tdx_error(u64 op, u64 error_code, const struct tdx_module_output *out)
-> +{
-> +	if (!out) {
-> +		pr_err_ratelimited("SEAMCALL[%lld] failed: 0x%llx\n",
-> +				op, error_code);
-> +		return;
-> +	}
-> +
-> +	pr_err_ratelimited(
-> +		"SEAMCALL[%lld] failed: 0x%llx "
-> +		"RCX 0x%llx, RDX 0x%llx, R8 0x%llx, R9 0x%llx, R10 0x%llx, R11 0x%llx\n",
-> +		op, error_code,
-> +		out->rcx, out->rdx, out->r8, out->r9, out->r10, out->r11);
-> +}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
+head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
+commit: 97a450fed0d4ce4978d51685dcca85f9e8b71811 [127/156] net/tls: register '.tls' keyring
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220313/202203132251.f1LqIqDZ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=97a450fed0d4ce4978d51685dcca85f9e8b71811
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v4
+        git checkout 97a450fed0d4ce4978d51685dcca85f9e8b71811
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/tls/
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/tls/tls_main.c:1062:20: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                            __func__, src, src_len);
+                                           ^~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   net/tls/tls_main.c:1076:20: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                            __func__, dst, dst_len);
+                                           ^~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   net/tls/tls_main.c:1090:21: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                            __func__, port, port_len);
+                                            ^~~~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   net/tls/tls_main.c:1105:28: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+                    __func__, match_id, id, id_len);
+                                            ^~~~~~
+   include/linux/printk.h:580:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:450:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:422:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +1062 net/tls/tls_main.c
+
+  1013	
+  1014	static bool tls_psk_identity_match(const struct key *key,
+  1015					   const struct key_match_data *match_data)
+  1016	{
+  1017		const char *src = key->description;
+  1018		const char *dst = NULL, *port = NULL, *id = NULL;
+  1019		const char *match_src, *match_dst, *match_port, *match_id;
+  1020		size_t src_len, dst_len, port_len, id_len;
+  1021	
+  1022		dst = strchr(src, ';');
+  1023		id_len = strlen(src);
+  1024		if (dst) {
+  1025			src_len = dst - src;
+  1026			if (!src_len)
+  1027				src = NULL;
+  1028			id_len -= src_len + 1;
+  1029			dst++;
+  1030			port = strchr(dst, ';');
+  1031			if (port) {
+  1032				dst_len = port - dst;
+  1033				if (!dst_len)
+  1034					dst = NULL;
+  1035				id_len -= dst_len + 1;
+  1036				port++;
+  1037				id = strchr(port, ';');
+  1038				if (id) {
+  1039					port_len = id - port;
+  1040					if (!port_len)
+  1041						port = NULL;
+  1042					id_len -= port_len + 1;
+  1043					id++;
+  1044				}
+  1045			}
+  1046		}
+  1047		pr_debug("%s: src %s dst %s port %s\n", __func__, src, dst, port);
+  1048		/* simple string-based IP address matching */
+  1049		/* hare: convert to sockaddr matching */
+  1050		match_src = match_data->raw_data;
+  1051		match_dst = strchr(match_src, ';');
+  1052		/* Parsing error */
+  1053		if (!match_dst) {
+  1054			pr_debug("%s: match dst missing\n", __func__);
+  1055			return false;
+  1056		}
+  1057		match_dst++;
+  1058		pr_debug("%s: match src %s\n", __func__, match_src);
+  1059		if (src && (match_dst - match_src) > 0 &&
+  1060		    memcmp(src, match_src, src_len)) {
+  1061			pr_debug("%s: non-matching src %s len %lu\n",
+> 1062				 __func__, src, src_len);
+  1063				return false;
+  1064		}
+  1065	
+  1066		match_port = strchr(match_dst, ';');
+  1067		if (!match_port) {
+  1068			pr_debug("%s: match port missing\n", __func__);
+  1069			return false;
+  1070		}
+  1071		match_port++;
+  1072		pr_debug("%s: match dst %s\n", __func__, match_dst);
+  1073		if (dst && (match_port - match_dst) > 0 &&
+  1074		    memcmp(dst, match_dst, dst_len)) {
+  1075			pr_debug("%s: non-matching dst %s len %lu\n",
+  1076				 __func__, dst, dst_len);
+  1077			return false;
+  1078		}
+  1079	
+  1080		match_id = strchr(match_port, ';');
+  1081		if (!match_id) {
+  1082			pr_debug("%s: match identity missing\n", __func__);
+  1083			return false;
+  1084		}
+  1085		match_id++;
+  1086		pr_debug("%s: match port %s\n", __func__, match_port);
+  1087		if (port && (match_id - match_port) > 0 &&
+  1088		    memcmp(port, match_port, port_len)) {
+  1089			pr_debug("%s: non-matching port %s len %lu\n",
+  1090				 __func__, port, port_len);
+  1091			return false;
+  1092		}
+  1093	
+  1094		/* No match ID specified: match agains all IDs */
+  1095		if (!match_id || !strlen(match_id)) {
+  1096			pr_debug("%s: match w/ no identity\n", __func__);
+  1097			return true;
+  1098		}
+  1099		/* Match ID specified, but no key ID: no match */
+  1100		if (!id) {
+  1101			pr_debug("%s: no identity to match\n", __func__);
+  1102			return false;
+  1103		}
+  1104		pr_debug("%s: match '%s' '%s' len %lu\n",
+  1105			 __func__, match_id, id, id_len);
+  1106		return !memcmp(id, match_id, id_len);
+  1107	}
+  1108	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

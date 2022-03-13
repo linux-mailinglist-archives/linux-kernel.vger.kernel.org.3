@@ -2,136 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFB94D7582
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 14:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E6B4D7588
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 14:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbiCMNhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 09:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S234045AbiCMNpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 09:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiCMNhA (ORCPT
+        with ESMTP id S231953AbiCMNpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 09:37:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C2E88B32;
-        Sun, 13 Mar 2022 06:35:52 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g20so16411700edw.6;
-        Sun, 13 Mar 2022 06:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zccpOQGxg8zf/WLe0i30SR+gOarK/aak88fI8Ek82bM=;
-        b=C1imkZfR0+iA22h6UvM4AKtVsucnecGU+wrW6CQR32fv6HLYi7X22LWDofpOIEQ8+X
-         2RKicOYjoHqopuDO7688f17Lug1fGWJelIpj0w4AyhNW5YCKERwsrdp+ij5W+VuJMIk0
-         6Rgzv8d3y8AlVRur4PELK8/RoJNzJ/6YiznWRVzIjKchnIAo15L3rOQmQTnVFpULh3KE
-         1MtPWHpS/OF4XOLewG1YkKj4f9X+Z8RETjSmtvO+EXl+Y0t8arzsP7FHds+WP5jwY/Nm
-         xIyMqJLLJSVZRRFRpE1v6MsUHelVWRdBpTgqnJ62amy3Vi5b3CkvgpruS/M417jJTY/n
-         3QNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zccpOQGxg8zf/WLe0i30SR+gOarK/aak88fI8Ek82bM=;
-        b=CoDTkzaxcWzw+VrV01Uv+RGyGGqoGDdVAgxbxY4pHuoHYKKdxj8zZsKu/rrUtloRjw
-         LgziezNbBq/UdGzwVPIMOai6anGfTKfPKGzJgC9+JXVDSB1ZevOiqujF2FB/kHq38Xs+
-         chLu34QvNFi+5wdEXk5lS5v+KBoReoeJ2WvVAYTGz94xT+y+xo0uUrqQUMfM58Woty++
-         ShIYhxc34fMDJZ2eOUOYQH5L59247FdTwGYFvxyZBUjQqCMkxrRTQ3PSxeh4A4eTKoUG
-         ya1eWCQGVmzGKRSaAYn4xeS5XXpXNxvGewSfX2Rh8ol6DL0uMnH/pwL2TEuaXkgcdlPP
-         TdQA==
-X-Gm-Message-State: AOAM53126QOaLgNVnsy5ngkPlSjNFpsmJdBUsXCPOgB0LRqYW1XA4bSk
-        RFKRHSQTci7uCuVtENCr7ETK2PO1ZXQiMWGlvJU=
-X-Google-Smtp-Source: ABdhPJwDaKiA7mZwMjPRFvi46UM+gfZO0wd/+GANR3v6DWT7gfqecoyAxBXxA69E/xnZTICRWH7oGp7Ah33gAsjFXIM=
-X-Received: by 2002:a50:d903:0:b0:416:17b1:8557 with SMTP id
- t3-20020a50d903000000b0041617b18557mr16333836edj.372.1647178551186; Sun, 13
- Mar 2022 06:35:51 -0700 (PDT)
+        Sun, 13 Mar 2022 09:45:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5481EC6B
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 06:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647179040; x=1678715040;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JvKVg4wcPKmea1ASVxtdL9JeUS9CzbdD+MPD6OtB+z4=;
+  b=Dltkmgyfun882SdWh9DaiXUGR3oUmNrIYz+NqSjHI7Exz09WUxb3cEKw
+   KgEn3+hdu58GrnmJIev7dlipe4T5bHrjjHIa/2NViTtxtdLlqhtRulaMu
+   Fqb+5Ps1g8MACIrbI4zGECY+dS/paBfeVhB9WOY3tDMKVNnkkhLPIyfeJ
+   Dk9xA/1zgkk71dy6HCp01P5QPU4H6pDL+7idoX+8jbLNaZ3xTt72EP35X
+   Cj8ybpPmMGwmW2dEtncsli7nJvqZsbPncGEES5plH5xHH8yY/+gY4lYDh
+   0weiqYEYjugz0G/u/DJIaFdqb1x9MxwiE00IUkpanh1ydfOGirtS9yfGD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="255822355"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="255822355"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 06:43:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="515104015"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 06:43:58 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTOVp-0008zp-Jy; Sun, 13 Mar 2022 13:43:57 +0000
+Date:   Sun, 13 Mar 2022 21:43:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v4 127/156] net/tls/tls_main.c:1061:26:
+ warning: format '%lu' expects argument of type 'long unsigned int', but
+ argument 5 has type 'size_t' {aka 'unsigned int'}
+Message-ID: <202203132154.1wXAIs5b-lkp@intel.com>
 MIME-Version: 1.0
-References: <3192BC90-D082-472B-B310-6E09A14A77C6@hust.edu.cn>
- <CAD-N9QUqfq+0UeMjQALUmGpX5xgjS6=BXvsqcXQpJRzhB6hHLw@mail.gmail.com>
- <CAKFNMokdB+Zph-1OyC1-Xnyi93r+yKSusgaEaa=CkuUBttwRZA@mail.gmail.com>
- <CAD-N9QU8-Od3G+-=RHM5K7vR2-4Af+4t=XutJJVdmkKhH7OarA@mail.gmail.com>
- <CAKFNMo=E8mMuY7Et0auH02fOzGKx04k2=LOj8mZJ6a-=J+sPzQ@mail.gmail.com>
- <CAD-N9QWt=d2Vj2bevSzOPL4AWF08_zTyq=hHOcOOROCazNY4_A@mail.gmail.com>
- <CAD-N9QWrBLygN24EC6QLRFF6uf7=PiTRdA4suKqEXJ7tk9aocA@mail.gmail.com>
- <dac7104a-21ac-24f4-6132-e51960fa0b7e@gmail.com> <CAKFNMon3=fFWtuUa1_wDyK9agpCXjbzA8b+rj=OYu=7Gs8nMqQ@mail.gmail.com>
- <7da316f4-aa65-896e-9020-2dfff2bbfc09@gmail.com> <CAKFNMon7cdJ092Ppne_kU6A23pRUb+1tThCkoB2vn0HN-rWUUg@mail.gmail.com>
-In-Reply-To: <CAKFNMon7cdJ092Ppne_kU6A23pRUb+1tThCkoB2vn0HN-rWUUg@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Sun, 13 Mar 2022 21:35:25 +0800
-Message-ID: <CAD-N9QXN_DEmoqTEpFdCp=Gne1O3U=+8WpwjP638wbUn1Vb6hA@mail.gmail.com>
-Subject: Re: Fw:Re: [PATCH] fs: nilfs2: fix memory leak in nilfs sysfs create
- device group
-To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 12:01 AM Ryusuke Konishi
-<konishi.ryusuke@gmail.com> wrote:
->
-> Hi Pavel and Dongliang,
->
-> On Sun, Mar 13, 2022 at 12:16 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> >
-> > Hi Ryusuke,
-> >
-> > On 3/12/22 18:11, Ryusuke Konishi wrote:
-> > >> In case of nilfs_attach_log_writer() error code jumps to
-> > >> failed_checkpoint label and calls destroy_nilfs() which should call
-> > >> nilfs_sysfs_delete_device_group().
-> > >
-> > > nilfs_sysfs_delete_device_group() is called in destroy_nilfs()
-> > > if nilfs->ns_flags has THE_NILFS_INIT flag -- nilfs_init() inline
-> > > function tests this flag.
-> > >
-> > > The flag is set after init_nilfs() succeeded at the beginning of
-> > > nilfs_fill_super() because the set_nilfs_init() inline in init_nilfs() sets it.
-> > >
-> > > So,  nilfs_sysfs_delete_group() seems to be called in case of
-> > > the above failure.   Am I missing something?
-> > >
-> >
-> > Yeah, that's what I mean :) I can't see how reported issue is possible
-> > with current code.
-> >
-> >
-> > Sorry for not being clear
->
-> Understood, thanks for the reply.
->
-> If so,  the case where nilfs_sysfs_create_device_group() itself failed,
-> is suspicious as mentioned in the previous mail.   A possible scenario
-> I guess is :
->
-> - nilfs_sysfs_create_device_group() on the first mount try fails and leaks
->   due to lack of kobject_del() in the error path.
-> - Then, nilfs_sysfs_create_device_group() on the next mount try hits
->   the leak detector at kobject_init_and_add().
->
-> So, if the leak bug is reproducible, I'd like to ask Dongliang to
-> test the effect of the first patch.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
+head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
+commit: 97a450fed0d4ce4978d51685dcca85f9e8b71811 [127/156] net/tls: register '.tls' keyring
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220313/202203132154.1wXAIs5b-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=97a450fed0d4ce4978d51685dcca85f9e8b71811
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v4
+        git checkout 97a450fed0d4ce4978d51685dcca85f9e8b71811
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash net/tls/
 
-If my local syzkaller instance gets a reproducer, I will try to do this.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Regards,
-> Ryusuke Konishi
->
-> >
-> >
-> >
-> > With regards,
-> > Pavel Skripkin
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/kernel.h:20,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from net/tls/tls_main.c:34:
+   net/tls/tls_main.c: In function 'tls_psk_identity_match':
+>> net/tls/tls_main.c:1061:26: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    1061 |                 pr_debug("%s: non-matching src %s len %lu\n",
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:340:21: note: in definition of macro 'pr_fmt'
+     340 | #define pr_fmt(fmt) fmt
+         |                     ^~~
+   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
+     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:574:9: note: in expansion of macro 'dynamic_pr_debug'
+     574 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   net/tls/tls_main.c:1061:17: note: in expansion of macro 'pr_debug'
+    1061 |                 pr_debug("%s: non-matching src %s len %lu\n",
+         |                 ^~~~~~~~
+   net/tls/tls_main.c:1061:57: note: format string is defined here
+    1061 |                 pr_debug("%s: non-matching src %s len %lu\n",
+         |                                                       ~~^
+         |                                                         |
+         |                                                         long unsigned int
+         |                                                       %u
+   In file included from include/linux/kernel.h:20,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from net/tls/tls_main.c:34:
+   net/tls/tls_main.c:1075:26: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    1075 |                 pr_debug("%s: non-matching dst %s len %lu\n",
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:340:21: note: in definition of macro 'pr_fmt'
+     340 | #define pr_fmt(fmt) fmt
+         |                     ^~~
+   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
+     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:574:9: note: in expansion of macro 'dynamic_pr_debug'
+     574 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   net/tls/tls_main.c:1075:17: note: in expansion of macro 'pr_debug'
+    1075 |                 pr_debug("%s: non-matching dst %s len %lu\n",
+         |                 ^~~~~~~~
+   net/tls/tls_main.c:1075:57: note: format string is defined here
+    1075 |                 pr_debug("%s: non-matching dst %s len %lu\n",
+         |                                                       ~~^
+         |                                                         |
+         |                                                         long unsigned int
+         |                                                       %u
+   In file included from include/linux/kernel.h:20,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from net/tls/tls_main.c:34:
+   net/tls/tls_main.c:1089:26: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    1089 |                 pr_debug("%s: non-matching port %s len %lu\n",
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:340:21: note: in definition of macro 'pr_fmt'
+     340 | #define pr_fmt(fmt) fmt
+         |                     ^~~
+   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
+     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:574:9: note: in expansion of macro 'dynamic_pr_debug'
+     574 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   net/tls/tls_main.c:1089:17: note: in expansion of macro 'pr_debug'
+    1089 |                 pr_debug("%s: non-matching port %s len %lu\n",
+         |                 ^~~~~~~~
+   net/tls/tls_main.c:1089:58: note: format string is defined here
+    1089 |                 pr_debug("%s: non-matching port %s len %lu\n",
+         |                                                        ~~^
+         |                                                          |
+         |                                                          long unsigned int
+         |                                                        %u
+   In file included from include/linux/kernel.h:20,
+                    from include/linux/cpumask.h:10,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from net/tls/tls_main.c:34:
+   net/tls/tls_main.c:1104:18: warning: format '%lu' expects argument of type 'long unsigned int', but argument 6 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    1104 |         pr_debug("%s: match '%s' '%s' len %lu\n",
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:340:21: note: in definition of macro 'pr_fmt'
+     340 | #define pr_fmt(fmt) fmt
+         |                     ^~~
+   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
+     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+
+
+vim +1061 net/tls/tls_main.c
+
+  1013	
+  1014	static bool tls_psk_identity_match(const struct key *key,
+  1015					   const struct key_match_data *match_data)
+  1016	{
+  1017		const char *src = key->description;
+  1018		const char *dst = NULL, *port = NULL, *id = NULL;
+  1019		const char *match_src, *match_dst, *match_port, *match_id;
+  1020		size_t src_len, dst_len, port_len, id_len;
+  1021	
+  1022		dst = strchr(src, ';');
+  1023		id_len = strlen(src);
+  1024		if (dst) {
+  1025			src_len = dst - src;
+  1026			if (!src_len)
+  1027				src = NULL;
+  1028			id_len -= src_len + 1;
+  1029			dst++;
+  1030			port = strchr(dst, ';');
+  1031			if (port) {
+  1032				dst_len = port - dst;
+  1033				if (!dst_len)
+  1034					dst = NULL;
+  1035				id_len -= dst_len + 1;
+  1036				port++;
+  1037				id = strchr(port, ';');
+  1038				if (id) {
+  1039					port_len = id - port;
+  1040					if (!port_len)
+  1041						port = NULL;
+  1042					id_len -= port_len + 1;
+  1043					id++;
+  1044				}
+  1045			}
+  1046		}
+  1047		pr_debug("%s: src %s dst %s port %s\n", __func__, src, dst, port);
+  1048		/* simple string-based IP address matching */
+  1049		/* hare: convert to sockaddr matching */
+  1050		match_src = match_data->raw_data;
+  1051		match_dst = strchr(match_src, ';');
+  1052		/* Parsing error */
+  1053		if (!match_dst) {
+  1054			pr_debug("%s: match dst missing\n", __func__);
+  1055			return false;
+  1056		}
+  1057		match_dst++;
+  1058		pr_debug("%s: match src %s\n", __func__, match_src);
+  1059		if (src && (match_dst - match_src) > 0 &&
+  1060		    memcmp(src, match_src, src_len)) {
+> 1061			pr_debug("%s: non-matching src %s len %lu\n",
+  1062				 __func__, src, src_len);
+  1063				return false;
+  1064		}
+  1065	
+  1066		match_port = strchr(match_dst, ';');
+  1067		if (!match_port) {
+  1068			pr_debug("%s: match port missing\n", __func__);
+  1069			return false;
+  1070		}
+  1071		match_port++;
+  1072		pr_debug("%s: match dst %s\n", __func__, match_dst);
+  1073		if (dst && (match_port - match_dst) > 0 &&
+  1074		    memcmp(dst, match_dst, dst_len)) {
+  1075			pr_debug("%s: non-matching dst %s len %lu\n",
+  1076				 __func__, dst, dst_len);
+  1077			return false;
+  1078		}
+  1079	
+  1080		match_id = strchr(match_port, ';');
+  1081		if (!match_id) {
+  1082			pr_debug("%s: match identity missing\n", __func__);
+  1083			return false;
+  1084		}
+  1085		match_id++;
+  1086		pr_debug("%s: match port %s\n", __func__, match_port);
+  1087		if (port && (match_id - match_port) > 0 &&
+  1088		    memcmp(port, match_port, port_len)) {
+  1089			pr_debug("%s: non-matching port %s len %lu\n",
+  1090				 __func__, port, port_len);
+  1091			return false;
+  1092		}
+  1093	
+  1094		/* No match ID specified: match agains all IDs */
+  1095		if (!match_id || !strlen(match_id)) {
+  1096			pr_debug("%s: match w/ no identity\n", __func__);
+  1097			return true;
+  1098		}
+  1099		/* Match ID specified, but no key ID: no match */
+  1100		if (!id) {
+  1101			pr_debug("%s: no identity to match\n", __func__);
+  1102			return false;
+  1103		}
+  1104		pr_debug("%s: match '%s' '%s' len %lu\n",
+  1105			 __func__, match_id, id, id_len);
+  1106		return !memcmp(id, match_id, id_len);
+  1107	}
+  1108	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

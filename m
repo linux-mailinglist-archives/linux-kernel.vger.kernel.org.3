@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465D94D7824
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 21:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417974D782C
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 21:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbiCMUK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 16:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S235554AbiCMUXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 16:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiCMUKz (ORCPT
+        with ESMTP id S230136AbiCMUXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 16:10:55 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E049FAD
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 13:09:47 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id o26so12033545pgb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 13:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=s/L2c/ExU2lRRbbGeHNM0fTyvtWmir/JMQ4lIG+dqPQ=;
-        b=NHshDFyEJcyEiGKm2Xt+OMjFtjqs/nqg17/NmX/5+10JbigfEW7kQoEZs2E80Ezkni
-         ggQQvpqP3G5meFEDXYywi1a1lM6SbmZh+ji46GJy67WZpvfM+oEuVWgP44qAUqNbjYuL
-         JbwTN3qzOElmXWdiGV4hS5/tRu+qsdub3eoBIOl8ZToV6v75mtsqHxCJftMBaBpCLroc
-         G7BAzGXa8O8HkPYJdXLVcYLdvJmNpPLGrIEmJ+y6oThvL1DlxSWFMb9X681aMVkikej/
-         WlW/MhZvXtVGO9CO9b8CNlf4VAwxOc62FXTztBnwKuIkjqxdOhXpMaWiHPP2GhE7HZXq
-         hPZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=s/L2c/ExU2lRRbbGeHNM0fTyvtWmir/JMQ4lIG+dqPQ=;
-        b=4ForU1Le7tctN1GI3CZivERVzdiyZtsRYQ0rLOuRkUD45c6ox9nATHdCFTnsPQoRUN
-         f74jxl4JpsCIpYnv/yM/NJyOCg650CK3pVUiOSsVACkBKGJsEz35JDG/duGrQs9cuj2v
-         HxQ6bW8QhiseRbjLx3NCDHu5E04AHIMltcQtKaFIfNTRFVYXmG+EKNeF8X1397B1Y5j4
-         7G0whNJmbhWGPzw6AGlxSe/FmB1JBj8kiueGkqrlGZ97lrWnEhDm76necFSbtoUWzoHS
-         OiUdxpjf4zf8vgOFGnrLFv0S+Upq9yXB3o0BEo7Gpk5mUAfWdj7Hbg4KPX+SFozVqL6n
-         orjw==
-X-Gm-Message-State: AOAM530yWFeBy0GD1cTV+DOaANDtztlGp+xhrODrcXawH/3sZA4gUuzF
-        /aebWwBluOPqCQaxG2e6oOZ3Mg==
-X-Google-Smtp-Source: ABdhPJxCg27sMKMp7nSUM8vluoc736QFCgbEPPs5y8MHcFa4rKL7ROWWo0QzvAc4iwxsjxHh8X/1hA==
-X-Received: by 2002:a05:6a02:208:b0:372:c366:8ff4 with SMTP id bh8-20020a056a02020800b00372c3668ff4mr17009152pgb.76.1647202186271;
-        Sun, 13 Mar 2022 13:09:46 -0700 (PDT)
-Received: from [2620:15c:29:204:1b89:dc90:772c:f65f] ([2620:15c:29:204:1b89:dc90:772c:f65f])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm18849705pfl.135.2022.03.13.13.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 13:09:45 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 13:09:45 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH] mm/page_alloc: check high-order pages for corruption
- during PCP operations
-In-Reply-To: <20220310092456.GJ15701@techsingularity.net>
-Message-ID: <7b288234-84ef-db82-3b85-7f921dd3c2f@google.com>
-References: <20220310092456.GJ15701@techsingularity.net>
+        Sun, 13 Mar 2022 16:23:17 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90BA7A9B1
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 13:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647202929; x=1678738929;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9YapVSMVKThjCQUu7poc5w6eEUHWTa3pA/0z4XDeDIY=;
+  b=dXM5nfCJ1sgK9gJLeY3/stfABq8GE1GXfMnG9rz622/BaK4uwJDX/kwX
+   bm0GIGcWAz1EJKV+0+GqGbjJGI+azeyuuAzN3Ut9/C/+WYvfV95Pxh2xJ
+   lEeAyHv1RqDtjPfrB9e020eKJ0ZXWMowdeVrqhajZuGc/L+Q2ZQP8Exhw
+   3nX0pRBpN8+cw4IfK72rv/CB7MPygGV3tEwppea2D9j2YdTsOCK/WB9mC
+   2VOw0CCbiV2toBrXqlcHJn7Go4Pf/ur51axWQcn5A9vzCfgIO/y/e+zSI
+   /nO+eFfODndRCyzaVMa6KpoO+MEE4kximVz7kMj0SeP8+dx+wFRh8rYVO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255626718"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="255626718"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 13:22:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="597669843"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Mar 2022 13:22:07 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTUj8-0009FW-Cf; Sun, 13 Mar 2022 20:22:06 +0000
+Date:   Mon, 14 Mar 2022 04:21:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gal Pressman <gal@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
+ prototype for function 'putc'
+Message-ID: <202203140415.rtqGbgJn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022, Mel Gorman wrote:
+Hi Gal,
 
-> Eric Dumazet pointed out that commit 44042b449872 ("mm/page_alloc: allow
-> high-order pages to be stored on the per-cpu lists") only checks the head
-> page during PCP refill and allocation operations. This was an oversight
-> and all pages should be checked. This will incur a small performance
-> penalty but it's necessary for correctness.
-> 
-> Fixes: 44042b449872 ("mm/page_alloc: allow high-order pages to be stored on the per-cpu lists")
-> Reported-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> Acked-by: Eric Dumazet <edumazet@google.com>
+First bad commit (maybe != root cause):
 
-Acked-by: David Rientjes <rientjes@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f0e18b03fcafd8344539101f564ae358950ae892
+commit: 48cec899e357cfb92d022a9c0df6bbe72a7f6951 tcp: Add a stub for sk_defer_free_flush()
+date:   7 weeks ago
+config: mips-randconfig-r016-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140415.rtqGbgJn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=48cec899e357cfb92d022a9c0df6bbe72a7f6951
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 48cec899e357cfb92d022a9c0df6bbe72a7f6951
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for function 'putc' [-Wmissing-prototypes]
+   void putc(char c)
+        ^
+   arch/mips/boot/compressed/uart-16550.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void putc(char c)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
+
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+
+:::::: The code at line 44 was first introduced by commit
+:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

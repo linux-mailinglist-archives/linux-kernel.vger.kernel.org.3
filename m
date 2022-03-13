@@ -2,47 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C1F4D750E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 12:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1AF4D7510
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 12:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbiCML56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 07:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S233083AbiCML6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 07:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiCML5y (ORCPT
+        with ESMTP id S230181AbiCML6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 07:57:54 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112914553E
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 04:56:45 -0700 (PDT)
-Received: from zn.tnic (p5de8e440.dip0.t-ipconnect.de [93.232.228.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 956901EC04F9;
-        Sun, 13 Mar 2022 12:56:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647172598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Bdt/r45E/OY7x64TsV90QsSkjrqS/lCvNHK3HLJeCVI=;
-        b=dvLTlFaAYeZdRHMw313vw58e1/WabPrhrO4nmsijzpiPY6fBv5O6iZptUNBsctSMq328e+
-        X/gcHjxScBP4FbN7yfT/4RhyoB063htWxeZHvz8SdI22oohHd6bncNvDUtLhIe6zlx8YGD
-        4siPK4XOgWtFPe79Lmj2ETExvoSm86E=
-Date:   Sun, 13 Mar 2022 12:56:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     James Jones <linux@theinnocuous.com>
-Cc:     keescook@chromium.org, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86: Remove a.out support
-Message-ID: <Yi3b/GpUuhkI5lv7@zn.tnic>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
- <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
+        Sun, 13 Mar 2022 07:58:30 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8479BE3398;
+        Sun, 13 Mar 2022 04:57:23 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id l18so7881967ioj.2;
+        Sun, 13 Mar 2022 04:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwtHbOYBAHvTkXWaEDlnEeOYsI2vNh0rAunNRD0QW2w=;
+        b=URVBnu/V/NzOS0pCi1fOrZLkvVZYO0O8I1ooqwRtbnYesnTxDcztbz3uF3jeq3u+Bp
+         zUbX/U49xJxe/GgLtq0l7uhNMKD6vVB2HIQp7uPGUykwYWTPYTcfKzQXsu/hP6SCslSr
+         2x+5bH/iSTIUJprlfje1yAOdShsAbt+iJ27lYRH1cadhhOoJTERnlrtBRhf3vJHNBZU6
+         ifqJEvS2xl5nNnlhpGs6PUpUsuN42Wv13r0S2+KOJu/ByY/J0zbR4lpu0bNWlUnerxvF
+         y4Q6MPDHujkAWTMOmuOksDgv6ivHwlr9hqLuwJ7Y1Or611x5oK/A7L2RxU7ATt9ZXv+e
+         5kKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwtHbOYBAHvTkXWaEDlnEeOYsI2vNh0rAunNRD0QW2w=;
+        b=1MRXkmR6IF6z0XyEVr2PFs5qgfm4A6/saw7iEx1apqZDO1OY7Y+Raj8Q/9/ybqQcor
+         On2T4CMO9aVhfxyXLW8nuZ9Ffb1EE39I8Cb/YYmibTP7xrC3zhInOn2arkCjAMakkxvi
+         3LBPFrd7FBGgsgo6nR92uf7oQjW6r8+iD9Xmd5En62bOofe/ewjGfRZCsOBZ/A7KIDgc
+         reNmjMIxg5CZFk6z2TLlnzR1KNxVdojvkycQiYhMlAbby9CqohKBNT1H8VioISsUdS+g
+         HLeiD+MnXw4E+plWwoq5xDaOL3CMeRsOYc4cAc7gwYMPvw5IKf9U+tkF3q/4wArVbP0I
+         Gmhw==
+X-Gm-Message-State: AOAM533AeOXyq//0iLYu8paCu6F5E0gGOh+50DEqRC/0lMf8Tf0exzYF
+        zvWWlW/JcvkqdqXYw09ChhIAwXcfwDo=
+X-Google-Smtp-Source: ABdhPJzzp9rEKtYXk8Nk6/WUlkorAPHLcfAwIzy02wK/SuZGL/dfkKCXYCwqIReq8puHNjyqm+807A==
+X-Received: by 2002:a02:b0d5:0:b0:317:c62c:cbcb with SMTP id w21-20020a02b0d5000000b00317c62ccbcbmr16245029jah.78.1647172642076;
+        Sun, 13 Mar 2022 04:57:22 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:e254:36c5:6684:5681])
+        by smtp.gmail.com with ESMTPSA id u15-20020a056e021a4f00b002c665afb993sm7797918ilv.11.2022.03.13.04.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Mar 2022 04:57:21 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     aford@beaconembedded.com, cstevens@beaconembedded.com,
+        Adam Ford <aford173@gmail.com>,
+        Claude Fillion <Claude.Fillion@mksinst.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: vc5: Enable VC5_HAS_PFD_FREQ_DBL on 5p49v6965
+Date:   Sun, 13 Mar 2022 06:57:04 -0500
+Message-Id: <20220313115704.301718-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,44 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 06:06:26PM +0000, James Jones wrote:
-> > Sorry for taking so long to complain, but I have been meaning to note
-> > that I and a few others are still using a.out. I saw it go by in my
-> > morning Google news skim that this went in, and figured it was now or
-> > never. The use case is running an old set of tools to build programs for
-> > the Atari Jaguar. Namely, Atari's assembler (mac) and linker (aln). The
-> > alternative is running windows versions in dosbox, or using some
-> > replacements that have been developed based on an even older,
-> > less-featureful version of the source code for mac and aln, but which
-> > still haven't managed to add back in all the features needed to build
-> > some programs or use the Atari debugging tools (Also available in a.out
-> > only).
+The 5p49v6965 has a reference clock frequency doubler.
+Enabling it adds versaclock_som.dbl to the clock tree,
+but the output frequency remains correct.
 
-Ok, for my own understanding only: you want to build those tools as
-a.out binaries and run them on x86, correct?
+Suggested-by: Claude Fillion <Claude.Fillion@mksinst.com>
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Because wikipedia says that jaguar thing has a motorola m68k system
-processor and looking at your makefile, you build some ancient gcc with
---target=m68k-aout so where does x86's a.out support come into play
-here?
-
-> > If others are open to it, I can share my small local patches along with
-> > a revert of this change. I'd also like to ask whether much is gained by
-> > deleting this code as far as reducing maintenance burden. It has
-> > survived nearly untouched since the deprecation notice and still works
-> > modulo a broken preprocessor macro in fs/exec.c.
-
-I personally don't mind if you fix it up and take care of it going
-forward, shouldn't be too much of a maintenance overhead - I'd just like
-you to document somewhere in those files what is still using this so
-that when you don't care for that project anymore or you stop needing
-it for whatever reason, we can look up the URL and check whether we can
-remove a.out support then.
-
-Thx.
-
+diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+index e7be3e54b9be..4d190579e874 100644
+--- a/drivers/clk/clk-versaclock5.c
++++ b/drivers/clk/clk-versaclock5.c
+@@ -1211,7 +1211,7 @@ static const struct vc5_chip_info idt_5p49v6965_info = {
+ 	.model = IDT_VC6_5P49V6965,
+ 	.clk_fod_cnt = 4,
+ 	.clk_out_cnt = 5,
+-	.flags = VC5_HAS_BYPASS_SYNC_BIT,
++	.flags = VC5_HAS_BYPASS_SYNC_BIT | VC5_HAS_PFD_FREQ_DBL,
+ };
+ 
+ static const struct i2c_device_id vc5_id[] = {
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,201 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F4C4D78AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 752894D78B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbiCMXKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 19:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
+        id S235658AbiCMXUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 19:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235527AbiCMXKM (ORCPT
+        with ESMTP id S233316AbiCMXUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 19:10:12 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC072DCA;
-        Sun, 13 Mar 2022 16:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647212943; x=1678748943;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GagRgepCLuEWL5bHR27C4LgguPqs7AwWmg+BnQe5UFM=;
-  b=hLx58L/u7JbT9OilYQkRulWe8RBlArOjHNe/ksXa7VTFf5nSS7kJru7/
-   4VXpCBEaUZfsBwma5mCT0UPBSyc06KC9Vv9nnEVe321onF9hGSnyX7QtZ
-   eTRrv2oz2xoF+kusjUjyEVnAyhxfaNI7/HdB0u4D7FbD+/dqjJDEnndIy
-   eSygAJ4M9/bgPTD8kLxgh09X9Ft+oxiWMUGm9OjMJXVo1mgwRkSUUBkRK
-   IhhS17j77GSbnf8BtZDNMXx4rLRkI1wwiTib7amzrVBrgiJ109jG8b7ny
-   fz4F4S0QxFaQUyuON90CK7cQZNaERARCNgMzAZXzSEUhZxvA8DK4ZxJnK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="342330862"
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="342330862"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:09:03 -0700
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="782485839"
-Received: from mvideche-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.251.130.249])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:09:01 -0700
-Message-ID: <18a150fd2e0316b4bae283d244f856494e0dfefd.camel@intel.com>
-Subject: Re: [RFC PATCH v5 010/104] KVM: TDX: Make TDX VM type supported
-From:   Kai Huang <kai.huang@intel.com>
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Date:   Mon, 14 Mar 2022 12:08:59 +1300
-In-Reply-To: <0596db2913da40660e87d5005167c623cee14765.1646422845.git.isaku.yamahata@intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <0596db2913da40660e87d5005167c623cee14765.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sun, 13 Mar 2022 19:20:42 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F2A59A5D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 16:19:32 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q29so11292135pgn.7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 16:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=O+R/kHfFmKvufqO2riNM3OWBvfh7c4oC4bBgk3OU4rs=;
+        b=k3b9zmByTfeqCsDmj2OjLn7GtvpJQ4h7Qdl6jkXZMEccR9nZgcHG8sJDsQDN8z1IVi
+         ROHqfRcFP9KwmTICy7QqoS2veuIAoNtR7q5pLgURwzE3L94HehTh4ezkD3nz/NmCptbt
+         hIXZdwtmlB/KwhUVUArqvsGFDTVSS55RSDzPC5Nur5ejlMgsq1BR305zCkExbqcwOtQW
+         SMN+L5sJmCJUA6wHWg+i305S0OQAvSceAfHUd13zZQGkzPL6pc6guvhRu8DhRDZvPgrM
+         6961UYpKQlA5GHHkQN1zUJHNyOnbzmN4I6j3F6q01O5gBD0VXv0WW1QpHldtWDzLXXWK
+         AmmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O+R/kHfFmKvufqO2riNM3OWBvfh7c4oC4bBgk3OU4rs=;
+        b=B0lba13UM3F5Mga2roNt+1g5ueWrD3+aPMxZu69Gwq7i+Tj4fLgGhflhRGK1qT0h7B
+         6H6/KkHF/028LPuUEXlPvqEoOE5c/kTOO+abWFPODUJ6j8VmN8Dlg6mUnHpDrEszN7+e
+         IZOV+PEuWBsbLaEpZ5iXfMd0JiQ886UwmlX51IBIaQUtOzJ1yL4X7QzuE7ofLkoAV4u4
+         MTiWnSf4c0rRbnn1s+0YdoJeq66h56gEDubo+bxHIBfL7Q7Xjlbq4wRxT2+3DQiDph6S
+         dmvzxl8MRrGsGOYJva7rX0QjWdVWKunMZJG22k2Ar+GDTZ4R85vdQnfTmzDj+HIKpydK
+         USXw==
+X-Gm-Message-State: AOAM5305caMli/04tXz4aq/z3rAnSkAlnyLzcQ9Mf0dcVPxfhnDvX3A7
+        iJYhWlojzA2qvSzIMbGjImAk3w==
+X-Google-Smtp-Source: ABdhPJxFFfe7G0EiRmfWJPZDD5DaUMiZ6TuJl+HtQHVUuPDU05p4QrVBskLCBxlXAnKDFQVqZM8/uQ==
+X-Received: by 2002:aa7:859a:0:b0:4f6:aaa1:832f with SMTP id w26-20020aa7859a000000b004f6aaa1832fmr21060567pfn.9.1647213572064;
+        Sun, 13 Mar 2022 16:19:32 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id p15-20020a056a000b4f00b004f7b71f8bd6sm4199082pfo.47.2022.03.13.16.19.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Mar 2022 16:19:31 -0700 (PDT)
+Message-ID: <5161ed17-5f55-e851-c2e2-5340cc62fa3b@kernel.dk>
+Date:   Sun, 13 Mar 2022 17:19:30 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] pata_parport: add driver (PARIDE replacement)
+Content-Language: en-US
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Tim Waugh <tim@cyberelk.net>,
+        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220312144415.20010-1-linux@zary.sk>
+ <202203132015.18183.linux@zary.sk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <202203132015.18183.linux@zary.sk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On 3/13/22 1:15 PM, Ondrej Zary wrote:
+> On Saturday 12 March 2022 15:44:15 Ondrej Zary wrote:
+>> The pata_parport is a libata-based replacement of the old PARIDE
+>> subsystem - driver for parallel port IDE devices.
+>> It uses the original paride low-level protocol drivers but does not
+>> need the high-level drivers (pd, pcd, pf, pt, pg). The IDE devices
+>> behind parallel port adapters are handled by the ATA layer.
+>>
+>> This will allow paride and its high-level drivers to be removed.
+>>
+>> paride and pata_parport are mutually exclusive because the compiled
+>> protocol drivers are incompatible.
+>>
+>> Tested with Imation SuperDisk LS-120 and HP C4381A (both use EPAT
+>> chip).
+>>
+>> Note: EPP-32 mode is buggy in EPAT - and also in all other protocol
+>> drivers - they don't handle non-multiple-of-4 block transfers
+>> correctly. This causes problems with LS-120 drive.
+>> There is also another bug in EPAT: EPP modes don't work unless a 4-bit
+>> or 8-bit mode is used first (probably some initialization missing?).
+>> Once the device is initialized, EPP works until power cycle.
+>>
+>> So after device power on, you have to:
+>> echo "parport0 epat 0" >/sys/bus/pata_parport/new_device
+>> echo pata_parport.0 >/sys/bus/pata_parport/delete_device
+>> echo "parport0 epat 4" >/sys/bus/pata_parport/new_device
+>> (autoprobe will initialize correctly as it tries the slowest modes
+>> first but you'll get the broken EPP-32 mode)
 > 
-> As first step TDX VM support, return that TDX VM type supported to device
-> model, e.g. qemu.  The callback to create guest TD is vm_init callback for
-> KVM_CREATE_VM.  Add a place holder function and call a function to
-> initialize TDX module on demand because in that callback VMX is enabled by
-> hardware_enable callback (vmx_hardware_enable).
+> Found a bug - the same device can be registered multiple times. Fix
+> will be in v2. But this revealed a bigger problem: pi_connect can
+> sleep (uses parport_claim_or_block) and libata does not like that. Any
+> ideas how to fix this?
 
-Should we put this patch at the end of series until all changes required to run
-TD are introduced?  This patch essentially tells userspace KVM is ready to
-support a TD but actually it's not ready.  And this might also cause bisect
-issue I suppose?
+I think you'd need two things here:
+
+- The blk-mq queue should be registered with BLK_MQ_F_BLOCKING, which
+  will allow blocking off the queue_rq path.
+
+- You need to look at making libata safe wrt calling ata_qc_issue()
+  outside the lock. Should probably be fine if you just gate that on
+  whether or not the queue was setup in blocking mode, as that doesn't
+  currently exist in libata.
 
 -- 
-Thanks,
--Kai
-
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/vmx/main.c    | 24 ++++++++++++++++++++++--
->  arch/x86/kvm/vmx/tdx.c     |  5 +++++
->  arch/x86/kvm/vmx/vmx.c     |  5 -----
->  arch/x86/kvm/vmx/x86_ops.h |  3 ++-
->  4 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index 77da926ee505..8103d1c32cc9 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -5,6 +5,12 @@
->  #include "vmx.h"
->  #include "nested.h"
->  #include "pmu.h"
-> +#include "tdx.h"
-> +
-> +static bool vt_is_vm_type_supported(unsigned long type)
-> +{
-> +	return type == KVM_X86_DEFAULT_VM || tdx_is_vm_type_supported(type);
-> +}
->  
->  static __init int vt_hardware_setup(void)
->  {
-> @@ -19,6 +25,20 @@ static __init int vt_hardware_setup(void)
->  	return 0;
->  }
->  
-> +static int vt_vm_init(struct kvm *kvm)
-> +{
-> +	int ret;
-> +
-> +	if (is_td(kvm)) {
-> +		ret = tdx_module_setup();
-> +		if (ret)
-> +			return ret;
-> +		return -EOPNOTSUPP;	/* Not ready to create guest TD yet. */
-> +	}
-> +
-> +	return vmx_vm_init(kvm);
-> +}
-> +
->  struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.name = "kvm_intel",
->  
-> @@ -29,9 +49,9 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.cpu_has_accelerated_tpr = report_flexpriority,
->  	.has_emulated_msr = vmx_has_emulated_msr,
->  
-> -	.is_vm_type_supported = vmx_is_vm_type_supported,
-> +	.is_vm_type_supported = vt_is_vm_type_supported,
->  	.vm_size = sizeof(struct kvm_vmx),
-> -	.vm_init = vmx_vm_init,
-> +	.vm_init = vt_vm_init,
->  
->  	.vcpu_create = vmx_vcpu_create,
->  	.vcpu_free = vmx_vcpu_free,
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 8adc87ad1807..e8d293a3c11c 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -105,6 +105,11 @@ int tdx_module_setup(void)
->  	return ret;
->  }
->  
-> +bool tdx_is_vm_type_supported(unsigned long type)
-> +{
-> +	return type == KVM_X86_TDX_VM && READ_ONCE(enable_tdx);
-> +}
-> +
->  static int __init __tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
->  {
->  	u32 max_pa;
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 3c7b3f245fee..7838cd177f0e 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7079,11 +7079,6 @@ int vmx_vcpu_create(struct kvm_vcpu *vcpu)
->  	return err;
->  }
->  
-> -bool vmx_is_vm_type_supported(unsigned long type)
-> -{
-> -	return type == KVM_X86_DEFAULT_VM;
-> -}
-> -
->  #define L1TF_MSG_SMT "L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.\n"
->  #define L1TF_MSG_L1D "L1TF CPU bug present and virtualization mitigation disabled, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.\n"
->  
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index f7327bc73be0..78331dbc29f7 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -25,7 +25,6 @@ void vmx_hardware_unsetup(void);
->  int vmx_hardware_enable(void);
->  void vmx_hardware_disable(void);
->  bool report_flexpriority(void);
-> -bool vmx_is_vm_type_supported(unsigned long type);
->  int vmx_vm_init(struct kvm *kvm);
->  int vmx_vcpu_create(struct kvm_vcpu *vcpu);
->  int vmx_vcpu_pre_run(struct kvm_vcpu *vcpu);
-> @@ -130,10 +129,12 @@ void vmx_setup_mce(struct kvm_vcpu *vcpu);
->  #ifdef CONFIG_INTEL_TDX_HOST
->  void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
->  			unsigned int *vcpu_align, unsigned int *vm_size);
-> +bool tdx_is_vm_type_supported(unsigned long type);
->  void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
->  #else
->  static inline void tdx_pre_kvm_init(
->  	unsigned int *vcpu_size, unsigned int *vcpu_align, unsigned int *vm_size) {}
-> +static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
->  static inline void tdx_hardware_setup(struct kvm_x86_ops *x86_ops) {}
->  #endif
->  
-
+Jens Axboe
 

@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D46F4D780A
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20684D780C
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 20:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235482AbiCMTxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 15:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S235495AbiCMTyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 15:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiCMTxb (ORCPT
+        with ESMTP id S229632AbiCMTyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 15:53:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA5C7B572;
-        Sun, 13 Mar 2022 12:52:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9007260A3C;
-        Sun, 13 Mar 2022 19:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64DCC340E8;
-        Sun, 13 Mar 2022 19:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647201143;
-        bh=3YY45948+lUQY17XqnXTmmU1Wh530X/CvV7eUsfsqhU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=HMeEHZcWAimq+XX3e2Ucdlbxn9PVDQlUgPvmjoL88o74cGqdTlYISTpWqDRqMeQEl
-         2b9dylkYug1cFQqnZAICO+QDW+T1aX9Yza/RFUPUH+fjwc6u40Nibfszn2cVC6gSSY
-         9GyeNch1zkZoC1QSMBqL2vLsZuqhSHvIPDjoa0/RyzEmmz66ALFm8yLuixK2C3cM7y
-         lbrkztEPsZx7cz0InHdHQSC0IRkbNCpIOCw4bRYD0KD8rH+TmYHfHJ2UOdrqLBg0C9
-         X4LhqBPxUoi7m1oQVyOlFnN8LZ6hZqY/Nvs8KDUMAPLOelNb+4q/LHtH/MA+rGHLxS
-         hGbRXB1+anYhw==
-Date:   Sun, 13 Mar 2022 14:52:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver OHalloran <oohall@gmail.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Eric Badger <ebadger@purestorage.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v1] PCI/AER: Handle Multi UnCorrectable/Correctable
- errors properly
-Message-ID: <20220313195220.GA436941@bhelgaas>
+        Sun, 13 Mar 2022 15:54:15 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5EC3A5C8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 12:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647201187; x=1678737187;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jEXrgk8GFlMyi/voag3GckUOxld7T+7LnsZHO8rLmtk=;
+  b=PWr1BMT+MGogMYF7DwFjNSA0PoUphTzcWfDHLpOlddAYUTvipM99bTk3
+   TxKRC1Bo9lm138ozg4dMTZM/d7lrIzsVHd5qmXI3sl/MjP8tpiObvoQJJ
+   2P/L77OplldAsL1qjrhntzZ3xgKfO8pkKJsLKGJRXwTN6SYos3bZEoA05
+   MD/WEyGY3tbcsBJN/8+hD/muMlf35TqdzLlzw6eNJb11MR1IY58ecVJQR
+   QYpcxY7hOWneGR5i3yYEFrIHAZ3io53aqBnsfk9DhNoTuFT7hv9KXkZCU
+   bo7HzvTG+zdzWNQ2veW9mA5wOmAUgRk6ZZhlY40zskTOi0FEHwFoYF8zB
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="235842277"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="235842277"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 12:53:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="556102998"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2022 12:53:05 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTUH3-0009Eh-3q; Sun, 13 Mar 2022 19:53:05 +0000
+Date:   Mon, 14 Mar 2022 03:52:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto,fs: fix noderef.cocci warnings
+Message-ID: <20220313195221.GA82451@f7536ca88abf>
+References: <202203140317.0on9b3HF-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220311025807.14664-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <202203140317.0on9b3HF-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,25 +63,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 02:58:07AM +0000, Kuppuswamy Sathyanarayanan wrote:
-> Currently the aer_irq() handler returns IRQ_NONE for cases without bits
-> PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
-> assumption is incorrect.
-> 
-> Consider a scenario where aer_irq() is triggered for a correctable
-> error, and while we process the error and before we clear the error
-> status in "Root Error Status" register, if the same kind of error
-> is triggered again, since aer_irq() only clears events it saw, the
-> multi-bit error is left in tact. This will cause the interrupt to fire
-> again, resulting in entering aer_irq() with just the multi-bit error
-> logged in the "Root Error Status" register.
-> 
-> Repeated AER recovery test has revealed this condition does happen
-> and this prevents any new interrupt from being triggered. Allow to
-> process interrupt even if only multi-correctable (BIT 1) or
-> multi-uncorrectable bit (BIT 3) is set.
-> 
-> Reported-by: Eric Badger <ebadger@purestorage.com>
+From: kernel test robot <lkp@intel.com>
 
-Is there a bug report with any concrete details (dmesg, lspci, etc)
-that we can include here?
+crypto/hkdf.c:94:25-31: ERROR: application of sizeof to pointer
+
+ sizeof when applied to a pointer typed expression gives the size of
+ the pointer
+
+Generated by: scripts/coccinelle/misc/noderef.cocci
+
+Fixes: ea4c6fc32e5e ("crypto,fs: Separate out hkdf_extract() and hkdf_expand()")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v4
+head:   d2416ecdb6b03fc2e4aa40b20cdf919322713224
+commit: ea4c6fc32e5e02a1e4c841f462c3a931b8838f33 [118/156] crypto,fs: Separate out hkdf_extract() and hkdf_expand()
+:::::: branch date: 3 days ago
+:::::: commit date: 5 days ago
+
+ crypto/hkdf.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/crypto/hkdf.c
++++ b/crypto/hkdf.c
+@@ -91,7 +91,7 @@ int hkdf_expand(struct crypto_shash *hma
+ 			if (err)
+ 				goto out;
+ 			memcpy(&okm[i], tmp, okmlen - i);
+-			memzero_explicit(tmp, sizeof(tmp));
++			memzero_explicit(tmp, sizeof(*tmp));
+ 		} else {
+ 			err = crypto_shash_finup(desc, &counter, 1, &okm[i]);
+ 			if (err)

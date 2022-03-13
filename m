@@ -2,97 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBB24D71AB
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 01:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146FD4D71BF
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 01:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiCMAIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Mar 2022 19:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S232110AbiCMAPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Mar 2022 19:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiCMAI3 (ORCPT
+        with ESMTP id S230318AbiCMAPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Mar 2022 19:08:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FB192D1D;
-        Sat, 12 Mar 2022 16:07:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2503E60B61;
-        Sun, 13 Mar 2022 00:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB12C340F6;
-        Sun, 13 Mar 2022 00:07:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZA+IB70V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1647130038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GXGSjcGL/sWzZtj3I0VTrTsu0Q9ZUAzMosKDmjUH3sY=;
-        b=ZA+IB70VO90XIyou+enAfKSzARZNwTTWJDSW9zIsS3kI/6+G0H0cubAEfumDrDFQt8SRQH
-        cBaV6jd10OYY4r7Ir7A2AT74kCSsBzJ/aLnCui8tHdRiM0L+kdHVS49TRVrZEQ0TlJztUd
-        xBb3C6kXFw7o1+AyznboHTpONollml4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7a9170cf (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 13 Mar 2022 00:07:18 +0000 (UTC)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2dbd97f9bfcso129533167b3.9;
-        Sat, 12 Mar 2022 16:07:18 -0800 (PST)
-X-Gm-Message-State: AOAM530xExQZ5N0YvIMXuyF35UVJoGuBUewcr4Bdyw5VpxZEHdX0bG7/
-        GndNxh55/bo5FpNnQNuMfYH2Ve4ij0McKOf/8qA=
-X-Google-Smtp-Source: ABdhPJya95HD0xSAALN3Y3tQgMXP4Hw9AUGY1rwInxIxyG8eNuFvMot7Hg3g+TISpmnI2ncoZoWG0n5GVThbDR8aCXo=
-X-Received: by 2002:a0d:e005:0:b0:2d7:fb79:8f36 with SMTP id
- j5-20020a0de005000000b002d7fb798f36mr14152747ywe.404.1647130036515; Sat, 12
- Mar 2022 16:07:16 -0800 (PST)
+        Sat, 12 Mar 2022 19:15:45 -0500
+Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262B036167
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Mar 2022 16:14:37 -0800 (PST)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id A96AF20452;
+        Sun, 13 Mar 2022 00:14:36 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id DFC4F6000C;
+        Sun, 13 Mar 2022 00:14:34 +0000 (UTC)
+Message-ID: <ef83282cdaaf3717cd64442ea14ce4c5b58b26b1.camel@perches.com>
+Subject: Re: [PATCH 1/5] x86/alternative: simplify DUMP_BYTES macro
+From:   Joe Perches <joe@perches.com>
+To:     Alexey Dobriyan <adobriyan@gmail.com>, x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 12 Mar 2022 16:14:34 -0800
+In-Reply-To: <e9c77d12092a4f048992f67d3fa0cf363b8614d4.camel@perches.com>
+References: <20220311144312.88466-1-adobriyan@gmail.com>
+         <e9c77d12092a4f048992f67d3fa0cf363b8614d4.camel@perches.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-References: <20220306165123.71024-1-Jason@zx2c4.com> <Yi0TA1r81AXh7nP/@sol.localdomain>
-In-Reply-To: <Yi0TA1r81AXh7nP/@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 12 Mar 2022 17:07:05 -0700
-X-Gmail-Original-Message-ID: <CAHmME9rYWyT=t8tU5MZfg6hKUqrz49haKRc51FUC+HjXFGoOdw@mail.gmail.com>
-Message-ID: <CAHmME9rYWyT=t8tU5MZfg6hKUqrz49haKRc51FUC+HjXFGoOdw@mail.gmail.com>
-Subject: Re: [PATCH v2] random: use SipHash as interrupt entropy accumulator
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: s6p8qtricqpmirccbm8yjiq5fhyd9dho
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: DFC4F6000C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/KvNf4V32GdJ6G9fIYnHBb22DHcUWmwvc=
+X-HE-Tag: 1647130474-731585
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On Sat, 2022-03-12 at 08:36 -0800, Joe Perches wrote:
+> On Fri, 2022-03-11 at 17:43 +0300, Alexey Dobriyan wrote:
+> > Avoid zero length check with clever whitespace placement in the format
+> > string.
+> []
+> > diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> []
+> > @@ -66,13 +66,10 @@ do {									\
+> >  	if (unlikely(debug_alternative)) {				\
+> >  		int j;							\
+> >  									\
+> > -		if (!(len))						\
+> > -			break;						\
+> > -									\
+> >  		printk(KERN_DEBUG pr_fmt(fmt), ##args);			\
+> > -		for (j = 0; j < (len) - 1; j++)				\
+> > -			printk(KERN_CONT "%02hhx ", buf[j]);		\
+> > -		printk(KERN_CONT "%02hhx\n", buf[j]);			\
+> > +		for (j = 0; j < (len); j++)				\
+> > +			printk(KERN_CONT " %02hhx", buf[j]);		\
+> > +		printk(KERN_CONT "\n");					\
+> >  	}								\
+> 
+> This could also use %02x and not %02hhx
+> 
+> And MAX_PATCH_LEN is 255 but is that really possible?
+> 
+> Maybe if the actual patch length is always <= 64 this could use
+> 	printk(KERN_CONT "%*ph\n", (int)len, buf);
+> instead and avoid all possible interleaving?
 
-On Sat, Mar 12, 2022 at 2:39 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> On Sun, Mar 06, 2022 at 09:51:23AM -0700, Jason A. Donenfeld wrote:
-> > For this, we make use of SipHash-1-x on 64-bit and HalfSipHash-1-x on
-> > 32-bit, which are already in use in the kernel and achieve the same
-> > performance as the function they replace. It would be nice to do two
-> > rounds, but we don't exactly have the CPU budget handy for that, and one
-> > round alone is already sufficient.
-> >
->
-> I'm a bit confused by the argument here.  It's not SipHash-1-x that's used
-> elsewhere in the kernel, but rather SipHash-2-4.  HalfSipHash-1-3 is used too
+Another possibility would be to raise the arbitrary 64 byte
+limit on %*ph to 256.
+---
+ Documentation/core-api/printk-formats.rst | 6 +++---
+ lib/vsprintf.c                            | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Actually the hsiphash family of functions are aliased to SipHash-1-3 on 64-bit:
+diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
+index 5e89497ba314e..39f787e9b26e1 100644
+--- a/Documentation/core-api/printk-formats.rst
++++ b/Documentation/core-api/printk-formats.rst
+@@ -289,9 +289,9 @@ Raw buffer as a hex string
+ 	%*phD	00-01-02- ... -3f
+ 	%*phN	000102 ... 3f
+ 
+-For printing small buffers (up to 64 bytes long) as a hex string with a
+-certain separator. For larger buffers consider using
+-:c:func:`print_hex_dump`.
++For printing small buffers (up to 256 bytes long) as a hex string with a
++certain separator. For buffers larger than 64 bytes consider using
++:c:func:`print_hex_dump` as its output can be more easily counted.
+ 
+ MAC/FDDI addresses
+ ------------------
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 2a6c767cc2709..be6fa9fab1be8 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -1194,7 +1194,7 @@ char *hex_string(char *buf, char *end, u8 *addr, struct printf_spec spec,
+ 	}
+ 
+ 	if (spec.field_width > 0)
+-		len = min_t(int, spec.field_width, 64);
++		len = min_t(int, spec.field_width, 256);
+ 
+ 	for (i = 0; i < len; ++i) {
+ 		if (buf < end)
 
-/* Note that on 64-bit, we make HalfSipHash1-3 actually be SipHash1-3, for
- * performance reasons. On 32-bit, below, we actually implement HalfSipHash1-3.
- */
 
-> So on 64-bit platforms it now throws away half of the pool.
->
-> It should use 'u8 pool[sizeof(fast_pool->pool)]' to avoid hardcoding a size.
-
-Actually the commit message notes that we intentionally dump half of
-it on 64bit. This is intentional.
-
-Jason

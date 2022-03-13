@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3AD4D74A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD014D7497
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 11:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbiCMKzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 06:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S234512AbiCMKz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 06:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234488AbiCMKyo (ORCPT
+        with ESMTP id S234441AbiCMKyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 06:54:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4071A80B;
-        Sun, 13 Mar 2022 03:53:05 -0700 (PDT)
+        Sun, 13 Mar 2022 06:54:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E750212AA0;
+        Sun, 13 Mar 2022 03:52:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C696460FFA;
-        Sun, 13 Mar 2022 10:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9090C36AEA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 328CC6102C;
+        Sun, 13 Mar 2022 10:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE7DC36AEC;
         Sun, 13 Mar 2022 10:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647168729;
-        bh=SXIXVsi92d7TTgQSfMh1FbNBtB+/BjvkX1VTtXotizw=;
+        bh=ZkNojXzsGEU91eSV3LurH3PSoT6FxXkxfB7Pf4I4UcM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZMNpfwTaqQk9Zq25A29N/K6B8c5COAid1ZPnABf0MEvyq9YSYOekuONniA9p6B41a
-         +8qooFFUo5mrQKln1KIwS0+icW5E/CiEOMr51zUwXyetlhGChSQE7/Y3PkxjBxUDbA
-         lcPtztIfTIdJx5LP7n7RnvR/U0YhH0CFzP6jHEyKuUt5rKa61TKG1Ybdl6u6kcvyzC
-         GsI9QwpDNrhWTMFpvotSUSMHZp9GYYINqLh4JWJmkX20OY6D8KmO+ODYsyF5DGiHMb
-         1HKsWPPjoGxX6C07OqxDAF9O0bjphmPXnYWx+FTmxedokGkJWOCnJ27elMn2zLSld7
-         Dqk7uva2OAn+Q==
+        b=HpawflnX/HroQc7CiHd4ruTMyfiNBBXy7zLlsM0z5we0ijERAkh4itRsWOj2JUR+r
+         6VjrTQvdwj8tvOPeB+hotqpTqvZV3ZpESPlEuvVwTexZwyZiYCXsikXMnX5enVcx7Q
+         ZATXQgrUpTLT3LUrNT4ZEJ99/n3C7V4udHhSq/wSK8FF9LSlMMzoC/21rTV2BA+2+W
+         oHhCUGb2yIxlI2Kg6ajOa4Z8sn/p6Fu0wL/GZlkcZFJdGbG/zuKHNwqpm69UNvMHuJ
+         ryQJv9CxgVbv20fn69rfqotjmjN4nfqizGGyS7X+GF9hf5l+JYYSVI+tIdeihsvZ1P
+         Lh0G/atDPiHOA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTLpX-001I2K-IY; Sun, 13 Mar 2022 11:52:07 +0100
+        id 1nTLpX-001I2O-Jq; Sun, 13 Mar 2022 11:52:07 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Dmitriy Ulitin <ulitin@ispras.ru>,
+        Cai Huoqing <caihuoqing@baidu.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Ming Qian <ming.qian@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 17/24] media: platform: rename stm32/ to sti/stm32/
-Date:   Sun, 13 Mar 2022 11:51:58 +0100
-Message-Id: <dc5be62a56ac19c6f49f4c8432558fd7b0efe7e6.1647167750.git.mchehab@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 18/24] media: platform: rename am437x/ to ti/am437x/
+Date:   Sun, 13 Mar 2022 11:51:59 +0100
+Message-Id: <a7bf6573a6b3b24a81cca441f3eb5c973e82c869.1647167750.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647167750.git.mchehab@kernel.org>
 References: <cover.1647167750.git.mchehab@kernel.org>
@@ -80,7 +71,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename stm32/ to sti/stm32/.
+rename am437x/ to ti/am437x/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -91,89 +82,91 @@ See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@k
  MAINTAINERS                                               | 2 +-
  drivers/media/platform/Kconfig                            | 2 +-
  drivers/media/platform/Makefile                           | 2 +-
- drivers/media/platform/{ => sti}/stm32/Kconfig            | 0
- drivers/media/platform/{ => sti}/stm32/Makefile           | 0
- drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-hw.c   | 0
- drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-regs.h | 0
- drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.c      | 0
- drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.h      | 0
- drivers/media/platform/{ => sti}/stm32/stm32-dcmi.c       | 0
- 10 files changed, 3 insertions(+), 3 deletions(-)
- rename drivers/media/platform/{ => sti}/stm32/Kconfig (100%)
- rename drivers/media/platform/{ => sti}/stm32/Makefile (100%)
- rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-hw.c (100%)
- rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-regs.h (100%)
- rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.c (100%)
- rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.h (100%)
- rename drivers/media/platform/{ => sti}/stm32/stm32-dcmi.c (100%)
+ drivers/media/platform/{ => ti}/am437x/Kconfig            | 0
+ drivers/media/platform/{ => ti}/am437x/Makefile           | 0
+ drivers/media/platform/{ => ti}/am437x/am437x-vpfe.c      | 0
+ drivers/media/platform/{ => ti}/am437x/am437x-vpfe.h      | 0
+ drivers/media/platform/{ => ti}/am437x/am437x-vpfe_regs.h | 0
+ 8 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => ti}/am437x/Kconfig (100%)
+ rename drivers/media/platform/{ => ti}/am437x/Makefile (100%)
+ rename drivers/media/platform/{ => ti}/am437x/am437x-vpfe.c (100%)
+ rename drivers/media/platform/{ => ti}/am437x/am437x-vpfe.h (100%)
+ rename drivers/media/platform/{ => ti}/am437x/am437x-vpfe_regs.h (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 7711a5ea125e..620705e0f043 100644
+index 620705e0f043..a8599cb4091e 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12046,7 +12046,7 @@ L:	linux-media@vger.kernel.org
- S:	Supported
- T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
--F:	drivers/media/platform/stm32/stm32-dcmi.c
-+F:	drivers/media/platform/sti/stm32/stm32-dcmi.c
+@@ -19262,7 +19262,7 @@ S:	Maintained
+ W:	https://linuxtv.org
+ Q:	http://patchwork.linuxtv.org/project/linux-media/list/
+ T:	git git://linuxtv.org/mhadli/v4l-dvb-davinci_devices.git
+-F:	drivers/media/platform/am437x/
++F:	drivers/media/platform/ti/am437x/
  
- MEDIA INPUT INFRASTRUCTURE (V4L/DVB)
- M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+ TI BANDGAP AND THERMAL DRIVER
+ M:	Eduardo Valentin <edubezval@gmail.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index c3594807f8d7..cf373bfbca1b 100644
+index cf373bfbca1b..b3dde9c3cfc4 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -95,7 +95,7 @@ source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
- source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
- source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
+@@ -67,7 +67,6 @@ config VIDEO_MUX
+ 
+ source "drivers/media/platform/allegro-dvt/Kconfig"
+ source "drivers/media/platform/allwinner/Kconfig"
+-source "drivers/media/platform/am437x/Kconfig"
+ source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
+ source "drivers/media/platform/aspeed/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+@@ -97,6 +96,7 @@ source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
  source "drivers/media/platform/sti/Kconfig"
--source "drivers/media/platform/stm32/Kconfig"
-+source "drivers/media/platform/sti/stm32/Kconfig"
+ source "drivers/media/platform/sti/stm32/Kconfig"
  source "drivers/media/platform/ti-vpe/Kconfig"
++source "drivers/media/platform/ti/am437x/Kconfig"
  source "drivers/media/platform/via/Kconfig"
  source "drivers/media/platform/xilinx/Kconfig"
+ 
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 6a766acfbe37..e3dd2331003a 100644
+index e3dd2331003a..a34278911145 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -40,7 +40,7 @@ obj-y += sti/bdisp/
- obj-y += sti/c8sectpfe/
- obj-y += sti/delta/
+@@ -7,7 +7,6 @@
+ # (e. g. LC_ALL=C sort Makefile)
+ obj-y += allegro-dvt/
+ obj-y += allwinner/
+-obj-y += am437x/
+ obj-y += amlogic/meson-ge2d/
+ obj-y += aspeed/
+ obj-y += atmel/
+@@ -42,6 +41,7 @@ obj-y += sti/delta/
  obj-y += sti/hva/
--obj-y += stm32/
-+obj-y += sti/stm32/
+ obj-y += sti/stm32/
  obj-y += ti-vpe/
++obj-y += ti/am437x/
  obj-y += via/
  obj-y += xilinx/
-diff --git a/drivers/media/platform/stm32/Kconfig b/drivers/media/platform/sti/stm32/Kconfig
+ 
+diff --git a/drivers/media/platform/am437x/Kconfig b/drivers/media/platform/ti/am437x/Kconfig
 similarity index 100%
-rename from drivers/media/platform/stm32/Kconfig
-rename to drivers/media/platform/sti/stm32/Kconfig
-diff --git a/drivers/media/platform/stm32/Makefile b/drivers/media/platform/sti/stm32/Makefile
+rename from drivers/media/platform/am437x/Kconfig
+rename to drivers/media/platform/ti/am437x/Kconfig
+diff --git a/drivers/media/platform/am437x/Makefile b/drivers/media/platform/ti/am437x/Makefile
 similarity index 100%
-rename from drivers/media/platform/stm32/Makefile
-rename to drivers/media/platform/sti/stm32/Makefile
-diff --git a/drivers/media/platform/stm32/dma2d/dma2d-hw.c b/drivers/media/platform/sti/stm32/dma2d/dma2d-hw.c
+rename from drivers/media/platform/am437x/Makefile
+rename to drivers/media/platform/ti/am437x/Makefile
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
 similarity index 100%
-rename from drivers/media/platform/stm32/dma2d/dma2d-hw.c
-rename to drivers/media/platform/sti/stm32/dma2d/dma2d-hw.c
-diff --git a/drivers/media/platform/stm32/dma2d/dma2d-regs.h b/drivers/media/platform/sti/stm32/dma2d/dma2d-regs.h
+rename from drivers/media/platform/am437x/am437x-vpfe.c
+rename to drivers/media/platform/ti/am437x/am437x-vpfe.c
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.h b/drivers/media/platform/ti/am437x/am437x-vpfe.h
 similarity index 100%
-rename from drivers/media/platform/stm32/dma2d/dma2d-regs.h
-rename to drivers/media/platform/sti/stm32/dma2d/dma2d-regs.h
-diff --git a/drivers/media/platform/stm32/dma2d/dma2d.c b/drivers/media/platform/sti/stm32/dma2d/dma2d.c
+rename from drivers/media/platform/am437x/am437x-vpfe.h
+rename to drivers/media/platform/ti/am437x/am437x-vpfe.h
+diff --git a/drivers/media/platform/am437x/am437x-vpfe_regs.h b/drivers/media/platform/ti/am437x/am437x-vpfe_regs.h
 similarity index 100%
-rename from drivers/media/platform/stm32/dma2d/dma2d.c
-rename to drivers/media/platform/sti/stm32/dma2d/dma2d.c
-diff --git a/drivers/media/platform/stm32/dma2d/dma2d.h b/drivers/media/platform/sti/stm32/dma2d/dma2d.h
-similarity index 100%
-rename from drivers/media/platform/stm32/dma2d/dma2d.h
-rename to drivers/media/platform/sti/stm32/dma2d/dma2d.h
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/sti/stm32/stm32-dcmi.c
-similarity index 100%
-rename from drivers/media/platform/stm32/stm32-dcmi.c
-rename to drivers/media/platform/sti/stm32/stm32-dcmi.c
+rename from drivers/media/platform/am437x/am437x-vpfe_regs.h
+rename to drivers/media/platform/ti/am437x/am437x-vpfe_regs.h
 -- 
 2.35.1
 

@@ -2,129 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7724D76EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82724D76D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 17:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbiCMQh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 12:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S235025AbiCMQgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 12:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiCMQh0 (ORCPT
+        with ESMTP id S231217AbiCMQgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 12:37:26 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C91F2C11F
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:36:17 -0700 (PDT)
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 22DGZfZD007647
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:35:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 22DGZfZD007647
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1647189342;
-        bh=cl5EZIZji6pwKaRvzWqBIuMA6UDOCMDjUF+UkD+yEIQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=H0/1e5UgD8xsh3QuBpExc4ri+FtKfT3TGYWernbeRHC/JgULZvblrkXGqv0C4q4JB
-         AvohwxzJeAtHzzkc6HyiyAWYG4qFNl0j+y2f7+M8/CYhHDJpIG2ww1h87s5veE3mZ6
-         IPYXWm4vFohSzCSLIIPULQH0V89ZRtv6yDexyj1N6uCSeWZzFTzh4x6w8MpK4GWcpo
-         aJ5aiLaLqcZjHxTyssCJaUb+flKEWfXBIPRw38eXWQJNs+vj8Q+hYCRzFYJSJZ1CU0
-         FWErU+6ZE6sse/4jKuzzQqtRzP79RB0aXxsqJrdMcUnEJNMR775Ujb9C1k6BWWofZk
-         iO0IZAhc8lA7w==
-X-Nifty-SrcIP: [209.85.215.182]
-Received: by mail-pg1-f182.google.com with SMTP id c11so11750507pgu.11
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:35:42 -0700 (PDT)
-X-Gm-Message-State: AOAM532iQ2NSV3/1wIrWdz+cAsEwjzrzoKahxb2MsILMwLYf3m2qTL0d
-        4Jf35VcYDYj8zvAf54gOLH5xq4PM0J5r7cz4nAs=
-X-Google-Smtp-Source: ABdhPJwdwdZcJbTaikr/hlEWY5nr/JVoVODYOoyzNQpQ2GVGzq2BdGvyFDWtMkfHh29UtALrmk7vzfcmIUx1q8f71tY=
-X-Received: by 2002:a63:ce04:0:b0:381:3e22:4e74 with SMTP id
- y4-20020a63ce04000000b003813e224e74mr380242pgf.352.1647189341167; Sun, 13 Mar
- 2022 09:35:41 -0700 (PDT)
+        Sun, 13 Mar 2022 12:36:21 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9EA2C11F
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:35:13 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id ay7so14990283oib.8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 09:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ob4h2d72COnkU3FY3eI+a2UFXuCW1/ScRGHi/UryDqA=;
+        b=TushXGzzRAzyI9MGE9XPNO4vBoxXifNjIKjCnoUkI+mEzZl6CZhW5uEBUDRGoJGHaD
+         yQBQqhTD3jqe3Itl2ih/VYfS2AVqG46q374zGDDL6gBW9JTc2T4zamHj1VeOliVF2mVe
+         Mqmi1px5JxbR15ozq99jBei8hZ++gA42ZIUv22DaY3YHKN7MSH1i0dMTim51IysvPyWn
+         +Gq7wMLMPYLJus5ZwQeaEpMbCZ2JUARUML+mTdMXf95/FsrZn42VmhERTaicPLLP/owq
+         ciqGfh1nxr0ORhDiIRQdbTxVCt0nq6AhVdIEdvPLp0OXeiH7hklifcXG8UdDVkB7o7r7
+         6HBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ob4h2d72COnkU3FY3eI+a2UFXuCW1/ScRGHi/UryDqA=;
+        b=vwoysUMd3axnsohW0aAl+FDjijSvuuA/KOxs8q83xjmEevhrEZsFF3/DXE6qWKIrTO
+         y/vsp7/PM717mtKRByvFPgnFdi6kYPTgB8ggBazAUIfAR++4TFx1bdO4yn9un+ZjFqx5
+         n508eG5eqMstcBTeKNLyR4TJC4Qfw7FqrPLDp4g6wkq12CBSAlU/eTc8B+nt8sWDncH3
+         gvbqnYArj3FMyOsbDHEI5/2XyAGNof+gD8AZxz3JxQkwBFgqGywN1kubZcW0CVl1qUuV
+         yCIusuZr2fAm6d3zK7oLEyMyHmhDw8EFl/zFuU3qhL18SPCG9rZGuNOrKZpAw2xrPbAv
+         94kw==
+X-Gm-Message-State: AOAM531qfIn79x33gwplKGrX3GrAoZIWWg/I9Yh7vwuvdm1MstfQTZWG
+        qs+M6nJyoLnXFVGcGnZ4Aa+wtg==
+X-Google-Smtp-Source: ABdhPJyf3k5XJ/dltTqtkT8q4cm/xQn+rQVTI2+AHnpPI0GfXenHJMCY3JJm9uRIMdQCmtTZS4KxuA==
+X-Received: by 2002:a54:4e81:0:b0:2ec:ae99:e02d with SMTP id c1-20020a544e81000000b002ecae99e02dmr5435442oiy.261.1647189311060;
+        Sun, 13 Mar 2022 09:35:11 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id e3-20020a056870450300b000da5424e4b0sm5514643oao.50.2022.03.13.09.35.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Mar 2022 09:35:10 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 11:35:07 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4 11/11] rpmsg: Fix kfree() of static memory on setting
+ driver_override
+Message-ID: <Yi4dOxArKLNyMFZy@builder.lan>
+References: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com>
+ <20220312132856.65163-12-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <20211030175258.1716178-1-masahiroy@kernel.org> <Yis7Z90qvPz+EcTk@shell.armlinux.org.uk>
-In-Reply-To: <Yis7Z90qvPz+EcTk@shell.armlinux.org.uk>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 14 Mar 2022 01:35:04 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT4k=Cseox6jEunLxU+w=VTQ08c9gdmt6=K2vvvSL49bg@mail.gmail.com>
-Message-ID: <CAK7LNAT4k=Cseox6jEunLxU+w=VTQ08c9gdmt6=K2vvvSL49bg@mail.gmail.com>
-Subject: Re: [PATCH] ARM: decompressor: do not copy source files while building
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     patches@arm.linux.org.uk,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220312132856.65163-12-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 9:07 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Sun, Oct 31, 2021 at 02:52:58AM +0900, Masahiro Yamada wrote:
-> > As commit 7ae4a78daacf ("ARM: 8969/1: decompressor: simplify libfdt
-> > builds") stated, copying source files during the build time may not
-> > end up with as clean code as expected.
-> >
-> > Do similar for the other library files for further cleanups of the
-> > Makefile and .gitignore.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Hi,
->
-> I am now seeing the following every time I run a build:
->
->   GEN     Makefile
->   CALL    .../linux-rmk/scripts/atomic/check-atomics.sh
->   CALL    .../linux-rmk/scripts/checksyscalls.sh
->   CHK     include/generated/compile.h
->   Kernel: arch/arm/boot/Image is ready
->   AS      arch/arm/boot/compressed/lib1funcs.o
->   AS      arch/arm/boot/compressed/ashldi3.o
->   AS      arch/arm/boot/compressed/bswapsdi2.o
->   LD      arch/arm/boot/compressed/vmlinux
->   OBJCOPY arch/arm/boot/zImage
->   Kernel: arch/arm/boot/zImage is ready
->
-> In other words, those three objects are always rebuilt even though
-> they haven't changed.
->
-> I've tried removing the arch/arm/boot/compressed directory in the
-> build tree, but that doesn't make any difference.
->
-> Running with V=2 shows:
->
->   AS      arch/arm/boot/compressed/lib1funcs.o - due to lib1funcs.o not in $(tar
-> gets)
->   AS      arch/arm/boot/compressed/ashldi3.o - due to ashldi3.o not in $(targets)
->   AS      arch/arm/boot/compressed/bswapsdi2.o - due to bswapsdi2.o not in $(targets)
->
-> It looks to me like:
-> OBJS    += lib1funcs.o ashldi3.o bswapsdi2.o
->
-> in your patch should have been added before:
->
-> targets       := vmlinux vmlinux.lds piggy_data piggy.o \
->                  head.o $(OBJS)
->
-> Please confirm.
+On Sat 12 Mar 07:28 CST 2022, Krzysztof Kozlowski wrote:
 
+> The driver_override field from platform driver should not be initialized
+> from static memory (string literal) because the core later kfree() it,
+> for example when driver_override is set via sysfs.
+> 
+> Use dedicated helper to set driver_override properly.
+> 
+> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
+> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Sorry for my late reply.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Yes, you are right.
+Regards,
+Bjorn
 
-OBJS    += lib1funcs.o ashldi3.o bswapsdi2.o
-
-should come before the 'targets' assignment.
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+> ---
+>  drivers/rpmsg/rpmsg_core.c     |  3 ++-
+>  drivers/rpmsg/rpmsg_internal.h | 13 +++++++++++--
+>  drivers/rpmsg/rpmsg_ns.c       | 14 ++++++++++++--
+>  include/linux/rpmsg.h          |  6 ++++--
+>  4 files changed, 29 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index d9e612f4f0f2..6e2bf2742973 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -397,7 +397,8 @@ field##_store(struct device *dev, struct device_attribute *attr,	\
+>  	      const char *buf, size_t sz)				\
+>  {									\
+>  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);		\
+> -	char *new, *old;						\
+> +	const char *old;						\
+> +	char *new;							\
+>  									\
+>  	new = kstrndup(buf, sz, GFP_KERNEL);				\
+>  	if (!new)							\
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index b1245d3ed7c6..31345d6e9a7e 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -92,10 +92,19 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
+>   */
+>  static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
+>  {
+> +	int ret;
+> +
+>  	strcpy(rpdev->id.name, "rpmsg_chrdev");
+> -	rpdev->driver_override = "rpmsg_chrdev";
+> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
+> +				  "rpmsg_chrdev", strlen("rpmsg_chrdev"));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = rpmsg_register_device(rpdev);
+> +	if (ret)
+> +		kfree(rpdev->driver_override);
+>  
+> -	return rpmsg_register_device(rpdev);
+> +	return ret;
+>  }
+>  
+>  #endif
+> diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
+> index 762ff1ae279f..95a51543f5ad 100644
+> --- a/drivers/rpmsg/rpmsg_ns.c
+> +++ b/drivers/rpmsg/rpmsg_ns.c
+> @@ -20,12 +20,22 @@
+>   */
+>  int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
+>  {
+> +	int ret;
+> +
+>  	strcpy(rpdev->id.name, "rpmsg_ns");
+> -	rpdev->driver_override = "rpmsg_ns";
+> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
+> +				  "rpmsg_ns", strlen("rpmsg_ns"));
+> +	if (ret)
+> +		return ret;
+> +
+>  	rpdev->src = RPMSG_NS_ADDR;
+>  	rpdev->dst = RPMSG_NS_ADDR;
+>  
+> -	return rpmsg_register_device(rpdev);
+> +	ret = rpmsg_register_device(rpdev);
+> +	if (ret)
+> +		kfree(rpdev->driver_override);
+> +
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL(rpmsg_ns_register_device);
+>  
+> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+> index 02fa9116cd60..20c8cd1cde21 100644
+> --- a/include/linux/rpmsg.h
+> +++ b/include/linux/rpmsg.h
+> @@ -41,7 +41,9 @@ struct rpmsg_channel_info {
+>   * rpmsg_device - device that belong to the rpmsg bus
+>   * @dev: the device struct
+>   * @id: device id (used to match between rpmsg drivers and devices)
+> - * @driver_override: driver name to force a match
+> + * @driver_override: driver name to force a match; do not set directly,
+> + *                   because core frees it; use driver_set_override() to
+> + *                   set or clear it.
+>   * @src: local address
+>   * @dst: destination address
+>   * @ept: the rpmsg endpoint of this channel
+> @@ -51,7 +53,7 @@ struct rpmsg_channel_info {
+>  struct rpmsg_device {
+>  	struct device dev;
+>  	struct rpmsg_device_id id;
+> -	char *driver_override;
+> +	const char *driver_override;
+>  	u32 src;
+>  	u32 dst;
+>  	struct rpmsg_endpoint *ept;
+> -- 
+> 2.32.0
+> 

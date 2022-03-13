@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482324D74DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 12:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0A14D74CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 12:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbiCMK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 06:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S234460AbiCMK7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 06:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235014AbiCMK63 (ORCPT
+        with ESMTP id S235020AbiCMK63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 13 Mar 2022 06:58:29 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8529B1749FE;
-        Sun, 13 Mar 2022 03:57:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C1117776D;
+        Sun, 13 Mar 2022 03:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647169040; x=1678705040;
+  t=1647169041; x=1678705041;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=82RRYaqdq5m//xBFiiE6/hsoZBDz6vsg38N2TZZZ+hQ=;
-  b=kFFa7Cs+z4qbdY3aEfjhFXadO2mllcztJJ5qC9NkYR/B2Uq3ZK+9K5iW
-   +lyNQWdCK+hA/GUWZnzgN7YjtAlGchQ01An2KiXPtqeQnr6D/Ctj//isg
-   nz+f2vPjrWC5dbehKpXrbtGK2pi9tbteCJSx0nI9jKdHMwyBYx3T3riMj
-   GfDri13OpxhfrYO9GTN5EbBqDD3Hom91atgjkWjxbul6FUIKhSVZKhh9q
-   LJ2pPEUhWOjgULItKIQuB28+II+3sFDaOY0wgEz9wf5Fa3DYTMh6PF83z
-   TsHF/s1qDvTci/6CNcr8qCwECFsFwhI/45EvQZWwzh+4Er9sO5sFqq2ED
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="319086330"
+  bh=LkGpYCVnDBt3WyXwks8kIFpgzT6/MDg8eLb8oYB0Lkk=;
+  b=DGRwBe+t554g7D9ng6nIKhhk12yjTLFL8PkAD+R8XhUkzeOJ4jsvRzvd
+   fMW0UAR7ZXazkrY0SoKNqpvVarpvYoOwB87buyu5gbs0uBqnT6Fedzm9d
+   1fDrkC2MFxUPUXG32otFrmNA4uMtXsj8cesDDg7Yrzwpj9yUqbDIiehe2
+   6kf6h8rE/wp1ttS4jur/700H5+6jQ5zy02An5aM9Mvv6+EaRTdhuilT/2
+   /Xy25rLc+JJ7SyK98ncWqtnz9uoYrVzTXXUhicUWtLJu8/IhjP/uab++x
+   O4nnor+I2sdstJFEU+VePimLehcaaLHHOJWD8Hp/vVlYExLOhkN9cNS1T
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10284"; a="319086331"
 X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="319086330"
+   d="scan'208";a="319086331"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 03:56:09 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 03:56:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
-   d="scan'208";a="713380329"
+   d="scan'208";a="713380333"
 Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2022 03:56:07 -0700
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2022 03:56:09 -0700
 From:   Tianfei Zhang <tianfei.zhang@intel.com>
 To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
         yilun.xu@intel.com, linux-fpga@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, Tianfei zhang <tianfei.zhang@intel.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v5 3/6] fpga: dfl: check released_port_num and num_vfs for legacy model
-Date:   Sun, 13 Mar 2022 06:52:39 -0400
-Message-Id: <20220313105242.1567774-4-tianfei.zhang@intel.com>
+Cc:     corbet@lwn.net, Tianfei zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v5 4/6] fpga: dfl: configure port access mode for afu connected with port
+Date:   Sun, 13 Mar 2022 06:52:40 -0400
+Message-Id: <20220313105242.1567774-5-tianfei.zhang@intel.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220313105242.1567774-1-tianfei.zhang@intel.com>
 References: <20220313105242.1567774-1-tianfei.zhang@intel.com>
@@ -64,53 +63,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tianfei zhang <tianfei.zhang@intel.com>
 
-In OFS legacy model, there is 1:1 mapping for Port device and VF,
-so it need to check the number of released port match the number of
-VFs or not. But in "Multiple VFs per PR slot" model, there is 1:N
-mapping for the Port device and VFs.
+In legacy model, we should set AfuAccessCtrl (Bit 55) in PORTn_OFFSET
+register to switch VF and PF for AFU. But in "multiple VFs per PR slot"
+model, the PF/VF mux hardware unit will statically configure the funciton
+mapping without set the AfuAccessCtrl by software. This patch check the
+port status in dfl_fpga_cdev->flags before configure the port access mode.
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
 ---
- drivers/fpga/dfl.c | 10 ++++++----
- drivers/fpga/dfl.h |  2 ++
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ drivers/fpga/dfl.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index 712c53363fda..b95b29c5c81d 100644
+index b95b29c5c81d..71e0725b6be0 100644
 --- a/drivers/fpga/dfl.c
 +++ b/drivers/fpga/dfl.c
-@@ -1707,11 +1707,13 @@ int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
+@@ -1666,6 +1666,17 @@ static void config_port_access_mode(struct device *fme_dev, int port_id,
+ #define config_port_vf_mode(dev, id) config_port_access_mode(dev, id, true)
+ #define config_port_pf_mode(dev, id) config_port_access_mode(dev, id, false)
  
- 	mutex_lock(&cdev->lock);
- 	/*
--	 * can't turn multiple ports into 1 VF device, only 1 port for 1 VF
--	 * device, so if released port number doesn't match VF device number,
--	 * then reject the request with -EINVAL error code.
-+	 * In the OFS legacy model, it can't turn multiple ports into 1 VF
-+	 * device, because only 1 port conneced to 1 VF device, so if released
-+	 * port number doesn't match VF device number, then reject the request
-+	 * with -EINVAL error code.
- 	 */
--	if (cdev->released_port_num != num_vfs) {
-+	if ((dfl_has_port_connected_afu(cdev) &&
-+	     cdev->released_port_num != num_vfs)) {
- 		ret = -EINVAL;
- 		goto done;
- 	}
-diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-index bc56b7e8c01b..83c2c50975e5 100644
---- a/drivers/fpga/dfl.h
-+++ b/drivers/fpga/dfl.h
-@@ -471,6 +471,8 @@ void dfl_fpga_enum_info_free(struct dfl_fpga_enum_info *info);
- #define DFL_PORT_CONNECT_BITS  MAX_DFL_FPGA_PORT_NUM
- #define DFL_FEAT_PORT_CONNECT_MASK ((1UL << (DFL_PORT_CONNECT_BITS)) - 1)
- 
-+#define dfl_has_port_connected_afu(cdev) ((cdev)->flags & DFL_FEAT_PORT_CONNECT_MASK)
++static int dfl_check_port_connect_afu(struct device *dev, u64 flags)
++{
++	void __iomem *base;
++	int port;
++
++	base = dfl_get_feature_ioaddr_by_id(dev, PORT_FEATURE_ID_HEADER);
++	port = FIELD_GET(PORT_CAP_PORT_NUM, readq(base + PORT_HDR_CAP));
++
++	return flags & dfl_feat_port_connect_afu(port);
++}
 +
  /**
-  * struct dfl_fpga_cdev - container device of DFL based FPGA
+  * dfl_fpga_cdev_config_ports_pf - configure ports to PF access mode
   *
+@@ -1683,7 +1694,9 @@ void dfl_fpga_cdev_config_ports_pf(struct dfl_fpga_cdev *cdev)
+ 		if (device_is_registered(&pdata->dev->dev))
+ 			continue;
+ 
+-		config_port_pf_mode(cdev->fme_dev, pdata->id);
++		/* configure port access mode for AFU connected to Port device */
++		if (dfl_check_port_connect_afu(&pdata->dev->dev, cdev->flags))
++			config_port_pf_mode(cdev->fme_dev, pdata->id);
+ 	}
+ 	mutex_unlock(&cdev->lock);
+ }
+@@ -1722,7 +1735,9 @@ int dfl_fpga_cdev_config_ports_vf(struct dfl_fpga_cdev *cdev, int num_vfs)
+ 		if (device_is_registered(&pdata->dev->dev))
+ 			continue;
+ 
+-		config_port_vf_mode(cdev->fme_dev, pdata->id);
++		/* configure port access mode for AFU connected to Port device */
++		if (dfl_check_port_connect_afu(&pdata->dev->dev, cdev->flags))
++			config_port_vf_mode(cdev->fme_dev, pdata->id);
+ 	}
+ done:
+ 	mutex_unlock(&cdev->lock);
 -- 
 2.26.2
 

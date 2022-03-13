@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710A84D78A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173704D78AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbiCMXCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 19:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S235641AbiCMXDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 19:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiCMXCx (ORCPT
+        with ESMTP id S235529AbiCMXDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 19:02:53 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD9678058;
-        Sun, 13 Mar 2022 16:01:44 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 72E905C0175;
-        Sun, 13 Mar 2022 19:01:42 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 13 Mar 2022 19:01:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; bh=IYDs9sc8CZWwGN2YWUzzkzbqy9h9TzeQqqKGJhDYOyg=; b=VaNMM
-        Y6htFQ1IOtt3JepcdIIILrK8Nrs1VHjfmT4r+I9Pnd2CR/e4FgqNmmmrJtRlOB+/
-        Ad+EBCBSvT1bafkDnfYEEA3YcvowA/rgo3pZEijzaY46ulHg/3CMu/HBce1GiTm5
-        LcRZy8UFPx6I2sm50NugEq6+zQv4PLHgZCvyz8G/eYe8iXMTyPmFfDKBVQe8iPKg
-        r306pNNnt3NqUvYQ0VLb6kKrSG3PWY/6TOCVttdQ5Fe0soA4loRkKGySUNw/7ZKj
-        0bmggydtyAEwIbFtzytJlf9IKiFirx4HpzwqkbOcymBw03UNn1V4JPVfx20VBQH1
-        G6b8F6giVqxak2XNg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=IYDs9sc8CZWwGN2YWUzzkzbqy9h9T
-        zeQqqKGJhDYOyg=; b=btOWXUv+FylGBCjdTzkEvmw7dtHXJOLFVpcMheEt5RzGD
-        G5OtqWBJGwDNkwPDu4aUbX/4WipE7t0v1oRESRwmGelFoF7UxQa55aZEcsebIC/P
-        ixb7J1CjZQWDtt4H0+r/7FX+rjxdg0/9h3LBICbyr61Zqf90VXE+D0HLD37sZuiH
-        O6kc3Qw3VagpQr1C5MwoTe/sRi2Ss8YflBr0ShQNOI8u3RJZOqSZr6F/rN2IxsA6
-        aUgL3s8VLBcRABoTLjNoht3eXLJW1MbVoMcuW/eKLrmYU64ojWHDhQUwWD/KtvvN
-        vgrM7sPbM54AZvPsU7AKwc65F1uxqFoJ9wyV7dKnw==
-X-ME-Sender: <xms:1ncuYkWCfFZm3HTIxg4AhozwPN68LJSuEKPzoW-UWt18jd-1O-ZsHw>
-    <xme:1ncuYomRn-V1_jc2CYh0rjBxb8c0V6Xqvxx0c53Jj8sd_X0JIBqsjdDK3Z0hVhGYv
-    RQY_2qoxeDGZOtnfg>
-X-ME-Received: <xmr:1ncuYoZlXhHuDN2FxIEr2IQsBjtEq7K39_9raHVPFrpqp-DOnkBx1LqBSANpUGYl-znwP6-xdY2QuyjX-fyE6sweIVSVL2uxi14V0X7JcfC0LA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvjedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    fufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihu
-    segugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeifffgledvffeitdeljedvte
-    effeeivdefheeiveevjeduieeigfetieevieffffenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:1ncuYjUK00Sa5zLb-pgByauFxUaAUISX9OPJYvVPzkciS-zBr3SweA>
-    <xmx:1ncuYum6JoTi-zBM5SFibGK_YOj0YgPBqhLzTsLMjlJJMbX-3ecYsw>
-    <xmx:1ncuYoeHHe54oQj3BOM2MG_I_yDOFAAbRrhc4lEUgFNnu7--CqZSyA>
-    <xmx:1ncuYvC94GKVHo2QxTUlQEKUkaxMscssKnv1stOkfT35zcINSvXAYw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 13 Mar 2022 19:01:41 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpftool: Add SPDX identifier to btf-dump-file output
-Date:   Sun, 13 Mar 2022 16:01:26 -0700
-Message-Id: <1d2931e80c03f4d3f7263beaf8f19a4867e9fe32.1647212431.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.35.1
+        Sun, 13 Mar 2022 19:03:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD665AEC0;
+        Sun, 13 Mar 2022 16:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647212553; x=1678748553;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eiRq5fMbn7RSpvxQx4eYqXcJqsy2r8h7OYF/tgMyEFA=;
+  b=nOrJ/nuEidDDDo+s7OcQulHtVm2bg+GI1A8ykO5wBr4Vp8JCu6BRd04w
+   ShdQ/NzmsF6eezDSAP1sTpuxwzxhVKslbwv3Ay9mR1C7w8swVDfxToiOj
+   6b6nk/suKx+7nRh3HSrZWPKzPafi/kvJoYtkPC8boXYW/imeMXJ+DIxrp
+   K35McCiQUUVoJT9HkfdC8T+v+8DX3fOLkIALxHAF5nAi6vYqPqmZW9Q8X
+   4LUvtxGFu8CrFTrztamjgXlmV+CQekOst8F2GgA+6Nb73beCJa7wUdb5w
+   aho3QfbR0Vl/1HVFeRyTjS+KL10379nT1k/JRtvAyXyx3+g096irT0vi3
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255857660"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="255857660"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:02:33 -0700
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="633999176"
+Received: from mvideche-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.251.130.249])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:02:31 -0700
+Message-ID: <be070e537a3c47269aca8e6793b99f024c124446.camel@intel.com>
+Subject: Re: [RFC PATCH v5 007/104] x86/virt/tdx: Add a helper function to
+ return system wide info about TDX module
+From:   Kai Huang <kai.huang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Date:   Mon, 14 Mar 2022 12:02:29 +1300
+In-Reply-To: <989deb94-0046-7f13-aa62-eee0c5db79fc@redhat.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <0a942626c76824cb225995fcb6499fea51113d43.1646422845.git.isaku.yamahata@intel.com>
+         <989deb94-0046-7f13-aa62-eee0c5db79fc@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A concern about potential GPL violations came up at the new $DAYJOB when
-I tried to vendor the vmlinux.h output. The central point was that the
-generated vmlinux.h does not embed a license string -- making the
-licensing of the file non-obvious.
+On Sun, 2022-03-13 at 14:59 +0100, Paolo Bonzini wrote:
+> On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> > Signed-off-by: Isaku Yamahata<isaku.yamahata@intel.com>
+> > ---
+> >   arch/x86/include/asm/tdx.h | 55 ++++++++++++++++++++++++++++++++++++++
+> >   arch/x86/virt/vmx/tdx.c    | 16 +++++++++--
+> >   arch/x86/virt/vmx/tdx.h    | 52 -----------------------------------
+> >   3 files changed, 69 insertions(+), 54 deletions(-)
+> 
+> Patch looks good, but place these definitions in 
+> arch/x86/include/asm/tdx.h already in Kai's series if possible.
+> 
+> Apart from that,
+> 
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> 
+> Paolo
 
-This commit adds a LGPL-2.1 OR BSD-2-Clause SPDX license identifier to
-the generated vmlinux.h output. This is line with what bpftool generates
-in object file skeletons.
+Does it make more sense for me to just include this patch (and couple of other
+patches such as exporting information of TDX KeyIDs) to host kernel support
+series?
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/bpf/bpftool/btf.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index a2c665beda87..fca810a27768 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -425,6 +425,7 @@ static int dump_btf_c(const struct btf *btf,
- 	if (err)
- 		return err;
- 
-+	printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n\n");
- 	printf("#ifndef __VMLINUX_H__\n");
- 	printf("#define __VMLINUX_H__\n");
- 	printf("\n");
 -- 
-2.35.1
-
+Thanks,
+-Kai

@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5897E4D7776
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 19:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DB24D7778
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Mar 2022 19:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbiCMS1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 14:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S235257AbiCMSbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 14:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiCMS1q (ORCPT
+        with ESMTP id S231997AbiCMSbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 14:27:46 -0400
-X-Greylist: delayed 88319 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Mar 2022 11:26:37 PDT
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1E6186EE
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 11:26:37 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 18:26:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theinnocuous.com;
-        s=protonmail; t=1647195994;
-        bh=PhLD6jaumig7eXFjvwaJhL44qHF7KhFQI5+IkPB7YeE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=tGGeHcpTPRJbHRTX1MTNInmSXmWJ7XCHkgG/N/bytrSsDyv4RFBlEiTGSndtBq+Gh
-         m1eG5EUK2aLV0vvu7dR3Q9WQZ6g8iRTHuw7Uos3GX6sIj4A2LL3vfI7gMy97ukY+ys
-         9M72gpia6hKiDIs4npqVL7udLhMWcC8FdoIUrkCM90sStQh8d9ycbKSLTRnbpTfGVQ
-         r+fVk80UH2fTQkrvEa/r+MOc4ZRJB63DzQ4slX7sDlganHgUvCKorNl8xkShaoyirE
-         BP0rBAegfG2Du1OV1OJ1KwbNhQiisatxE+WZOZsUoYeodBPw6dUZfO5mXGSkjEuWGc
-         6TH4YIYSyvnkw==
-To:     Borislav Petkov <bp@alien8.de>
-From:   James Jones <linux@theinnocuous.com>
-Cc:     keescook@chromium.org, x86@kernel.org, linux-kernel@vger.kernel.org
-Reply-To: James Jones <linux@theinnocuous.com>
-Subject: Re: [PATCH] x86: Remove a.out support
-Message-ID: <785a6348-e1c5-7900-78bc-af8b6923cc8a@theinnocuous.com>
-In-Reply-To: <Yi3b/GpUuhkI5lv7@zn.tnic>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com> <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com> <Yi3b/GpUuhkI5lv7@zn.tnic>
+        Sun, 13 Mar 2022 14:31:13 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF03E21E15
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 11:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647196204; x=1678732204;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MQpBwZS3ovPRMMdmYBn8O8BYcS9SoVePQJQO7ECZh5E=;
+  b=B6HBBH6i3ZGiB5BV6T265ozq2pfRPViNQiOFnzv7zXAqeXZ+aGkl7fdl
+   b+9h8SKWxo8XIIH5qthl6PKeolxgl8HX89NqSciFkDOXHCm1DonbStPKa
+   gCuSBZYS9n6vhxjQyk78R1PWeq0ZTTgtzDbJofcwAJBoCyO5B0CXB/oBQ
+   OBX3UFspLnULIKz8Nha7V2PCr0no8rbyCzAEtP5z2iNVoThA9lA8rxWHr
+   YJFYDGjZhPC9+TbVwpcua87qLhXJ6bYb0KcgwvFZ/dkHyPetffguFjM5Y
+   JMrNBNqQukWG7dgAxU0X8Urj3QKlxYqdgbFdaW+/MqHL/9mfC75dz2tq+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="256075837"
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="256075837"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 11:30:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,178,1643702400"; 
+   d="scan'208";a="713468672"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2022 11:30:02 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTSyf-0009Bs-Vh; Sun, 13 Mar 2022 18:30:01 +0000
+Date:   Mon, 14 Mar 2022 02:29:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/mm/nohash/fsl_book3e.c:61:3: sparse: sparse: symbol
+ 'tlbcam_addrs' was not declared. Should it be static?
+Message-ID: <202203140259.PkwZKhTz-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,76 +62,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/22 4:56 AM, Borislav Petkov wrote:
-> On Sat, Mar 12, 2022 at 06:06:26PM +0000, James Jones wrote:
->>> Sorry for taking so long to complain, but I have been meaning to note
->>> that I and a few others are still using a.out. I saw it go by in my
->>> morning Google news skim that this went in, and figured it was now or
->>> never. The use case is running an old set of tools to build programs fo=
-r
->>> the Atari Jaguar. Namely, Atari's assembler (mac) and linker (aln). The
->>> alternative is running windows versions in dosbox, or using some
->>> replacements that have been developed based on an even older,
->>> less-featureful version of the source code for mac and aln, but which
->>> still haven't managed to add back in all the features needed to build
->>> some programs or use the Atari debugging tools (Also available in a.out
->>> only).
->
-> Ok, for my own understanding only: you want to build those tools as
-> a.out binaries and run them on x86, correct?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aad611a868d16cdc16a7d4a764cef955293e47e3
+commit: 44c14509b0dabb909ad1ec28800893ea71762732 powerpc/fsl_booke: Fix setting of exec flag when setting TLBCAMs
+date:   5 months ago
+config: powerpc-randconfig-s031-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140259.PkwZKhTz-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44c14509b0dabb909ad1ec28800893ea71762732
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 44c14509b0dabb909ad1ec28800893ea71762732
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/nohash/
 
-The 'mac' and 'aln' tools are only available as x86 a.out binaries. I
-can't build them. They're in 'jaguar/bin/linux/[aln,mac]' in the
-referenced jaguar-sdk project, along with a few others.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Because wikipedia says that jaguar thing has a motorola m68k system
-> processor and looking at your makefile, you build some ancient gcc with
-> --target=3Dm68k-aout so where does x86's a.out support come into play
-> here?
 
-Sorry for not being clearer. The 'mac' and 'aln' x86 a.out binaries
-generate and consume m68k a.out object files. So if you want to use some
-C code in addition to assembly listings, you'd use this separate m68k
-a.out build of gcc (itself an ELF executable) to compile the C code to
-object files, then link everything with 'aln'.
+sparse warnings: (new ones prefixed by >>)
+>> arch/powerpc/mm/nohash/fsl_book3e.c:61:3: sparse: sparse: symbol 'tlbcam_addrs' was not declared. Should it be static?
+   arch/powerpc/mm/nohash/fsl_book3e.c:63:15: sparse: sparse: symbol 'tlbcam_sz' was not declared. Should it be static?
+>> arch/powerpc/mm/nohash/fsl_book3e.c:277:30: sparse: sparse: Using plain integer as NULL pointer
 
-The real value of 'mac' and 'aln' though isn't their m68k support.
-binutils can assemble and link that, as can the version of 'mac' and
-'aln' that source is available for. These builds of 'mac' also support
-the Jaguar's custom RISC instruction set, allowing you to add this RISC
-code in the same assembly listings as the m68k code using a few
-directives. This version of 'aln' has a few options to support
-Jaguar-specific stuff as well.
+vim +/tlbcam_addrs +61 arch/powerpc/mm/nohash/fsl_book3e.c
 
-This all probably seems absurd now, but note the newest version of these
-tools was released in 1995, when Linux ELF support would have been brand
-new. I don't know when the tools first shipped on Linux, but it would
-have been a few years before that, so a.out would have been the only
-option. It seems some Atari Jaguar developers were rather early Linux
-adopters.
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  53  
+78f622377f7d31 arch/powerpc/mm/fsl_booke_mmu.c Kumar Gala     2010-05-13  54  #define NUM_TLBCAMS	(64)
+78f622377f7d31 arch/powerpc/mm/fsl_booke_mmu.c Kumar Gala     2010-05-13 @55  struct tlbcam TLBCAM[NUM_TLBCAMS];
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  56  
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  57  struct tlbcamrange {
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  58  	unsigned long start;
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  59  	unsigned long limit;
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  60  	phys_addr_t phys;
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26 @61  } tlbcam_addrs[NUM_TLBCAMS];
+14cf11af6cf608 arch/powerpc/mm/fsl_booke_mmu.c Paul Mackerras 2005-09-26  62  
 
->>> If others are open to it, I can share my small local patches along with
->>> a revert of this change. I'd also like to ask whether much is gained by
->>> deleting this code as far as reducing maintenance burden. It has
->>> survived nearly untouched since the deprecation notice and still works
->>> modulo a broken preprocessor macro in fs/exec.c.
->
-> I personally don't mind if you fix it up and take care of it going
-> forward, shouldn't be too much of a maintenance overhead - I'd just like
-> you to document somewhere in those files what is still using this so
-> that when you don't care for that project anymore or you stop needing
-> it for whatever reason, we can look up the URL and check whether we can
-> remove a.out support then.
+:::::: The code at line 61 was first introduced by commit
+:::::: 14cf11af6cf608eb8c23e989ddb17a715ddce109 powerpc: Merge enough to start building in arch/powerpc.
 
-OK, will do. I appreciate the consideration.
+:::::: TO: Paul Mackerras <paulus@samba.org>
+:::::: CC: Paul Mackerras <paulus@samba.org>
 
--James
-
-> Thx.
->
-> --
-> Regards/Gruss,
->      Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

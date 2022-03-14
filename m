@@ -2,146 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559FB4D7C08
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD344D7C0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbiCNHg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 03:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S236722AbiCNHhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 03:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235688AbiCNHgy (ORCPT
+        with ESMTP id S232596AbiCNHhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:36:54 -0400
-X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Mar 2022 00:35:44 PDT
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6BC40E55;
-        Mon, 14 Mar 2022 00:35:44 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 14 Mar
- 2022 15:35:42 +0800
-Received: from [192.168.43.174] (124.64.16.6) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 14 Mar
- 2022 15:35:39 +0800
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Subject: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in zhaoxin
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
-Message-ID: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
-Date:   Mon, 14 Mar 2022 15:35:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 14 Mar 2022 03:37:39 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C1740E53
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 00:36:29 -0700 (PDT)
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B64983F1A8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647243388;
+        bh=iAtSOaeLKxQsN9oiK9IKSKgSGPin9K0zGNTzo54gjLk=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=fW7mgzPlpFdlSxgoPf6Hl9E9FLnWnMQ179nl9GXke2u/9tiptQkHrB5xqbzuM9Uhs
+         Hzhr0HussrdLI7abMsDvL7yBPeuJyxCi5dPIyJUoiyLZ5B1rMRcChfii1pxJTGssNk
+         2DFBYUwnor7hqYy94lI+3fdiBWr2KruND48wM/lLwWdxhM9XLjhZRxGGahuH5Fqp12
+         UZEldJFI3y21PQ1QBWq4ZUr8mUpeP9c56fT6tMAdEurf+sar4qa5Na4DX5fQ0a9Q7h
+         40/4suXF5w1vM/YFEFh9PgkgAATq21x4sGv7UOT7rmzAQqdNydQNpRMlnAGjDY90Cf
+         aFwBRuhHsygrQ==
+Received: by mail-lf1-f72.google.com with SMTP id bq6-20020a056512150600b0044840cccf4bso4394872lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 00:36:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iAtSOaeLKxQsN9oiK9IKSKgSGPin9K0zGNTzo54gjLk=;
+        b=vArBQHZJhjJ0GUVe71Cp+05+DGxhWX2CoUkdvT2HWa/SOSUXgZacdFSt264b3HbfHi
+         m9iUNj4+befydJy2ZjhW98PM1kqSMWsNB7tcwMkHMyv/3WWXA+P83NvvBhumLw43iBkf
+         ifhk8/xhbN6GIlj24/CONnhwnGRJx6sgU6NFsv3VZZ+GuymuV+yasImV/dow8Gb2Xjek
+         C7GoTYrusyz7TKwTxW2WHA0ayQH/Lp6Qgb6GXukDMNTuIxrwu25DTOGeLLn9by6f9Cw2
+         Q9sRfQ+TipsCYVIzRZmtRMNMV1TnNFQN3JiTUK6jArKrQB7e5d9TIilZUH9xL8QXSBgR
+         VSjw==
+X-Gm-Message-State: AOAM533Ovvk/nrtOuah4MsBHxhwsNiSgBaEVqQBu3XGtMBSJcooro7rN
+        qPo9Jpeqf3JpCwKfimAwQ3/+m5Afba2MAv4evVOkpH+IQmY60niS+UpZFvrZeM3tkY4vTHUHMkO
+        wDHOf0iDjdg1bbEuBV7p1LJIAlmWmappiPkF47Jhz/w==
+X-Received: by 2002:a17:907:1614:b0:6db:e3f7:2cb4 with SMTP id hb20-20020a170907161400b006dbe3f72cb4mr255444ejc.435.1647243377971;
+        Mon, 14 Mar 2022 00:36:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJycCN76EHq9M0eAQGZvA10vpA52jlIoM5/wMGxfvQsd+ClzDaAgk2gAPmK0IIzzn0h6WBnHrQ==
+X-Received: by 2002:a17:907:1614:b0:6db:e3f7:2cb4 with SMTP id hb20-20020a170907161400b006dbe3f72cb4mr255415ejc.435.1647243377741;
+        Mon, 14 Mar 2022 00:36:17 -0700 (PDT)
+Received: from [192.168.0.152] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id z21-20020a1709063a1500b006da6436819dsm6448816eje.173.2022.03.14.00.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 00:36:17 -0700 (PDT)
+Message-ID: <143db512-0223-1553-c141-2dc24a23c430@canonical.com>
+Date:   Mon, 14 Mar 2022 08:36:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 3/3] EDAC: nuvoton: Add NPCM memory controller driver
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [124.64.16.6]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Medad Young <medadyoung@gmail.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        ctcchien@nuvoton.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+References: <20220311014245.4612-1-ctcchien@nuvoton.com>
+ <20220311014245.4612-4-ctcchien@nuvoton.com>
+ <1f5e1e49-4ab0-5e06-fa8f-2a11b0fd1df9@canonical.com>
+ <CAHpyw9dHau348qJB6g+fCcKqWByUsRHAGwb_mdUg=hjhW+xNsw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAHpyw9dHau348qJB6g+fCcKqWByUsRHAGwb_mdUg=hjhW+xNsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In zhaoxin platform, some ehci projects will latch a wakeup signal
-internal when plug in a device on port during system S0. This wakeup
-signal will turn on when ehci runtime suspend, which will trigger a
-system control interrupt that will resume ehci back to D0. As no
-device connect, ehci will be set to runtime suspend and turn on the
-internal latched wakeup signal again. It will cause a suspend-resume
-loop and generate system control interrupt continuously.
+On 14/03/2022 06:32, Medad Young wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> 於 2022年3月11日
+> 週五 下午5:15寫道：
+>>
+>> On 11/03/2022 02:42, Medad CChien wrote:
+>>> Add support for Nuvoton NPCM SoC.
+>>>
+>>> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+>>> ---
+>>>  drivers/edac/Kconfig     |   9 +
+>>>  drivers/edac/Makefile    |   1 +
+>>>  drivers/edac/npcm_edac.c | 714 +++++++++++++++++++++++++++++++++++++++
+>>>  3 files changed, 724 insertions(+)
+>>>  create mode 100644 drivers/edac/npcm_edac.c
+>>>
+>>> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+>>> index 58ab63642e72..757e1d160640 100644
+>>> --- a/drivers/edac/Kconfig
+>>> +++ b/drivers/edac/Kconfig
+>>> @@ -539,4 +539,13 @@ config EDAC_DMC520
+>>>         Support for error detection and correction on the
+>>>         SoCs with ARM DMC-520 DRAM controller.
+>>>
+>>> +config EDAC_NPCM
+>>> +     tristate "Nuvoton NPCM DDR Memory Controller"
+>>> +     depends on ARCH_NPCM
+>>
+>> || COMPILE_TEST
+>> (and test if it compiles)
+>>
+>> (...)
+>>
+>>> +
+>>> +MODULE_DEVICE_TABLE(of, npcm_edac_of_match);
+>>> +
+>>> +static int npcm_edac_mc_probe(struct platform_device *pdev)
+>>> +{
+>>> +     const struct npcm_edac_platform_data *npcm_chip;
+>>> +     struct device *dev = &pdev->dev;
+>>> +     struct edac_mc_layer layers[1];
+>>> +     const struct of_device_id *id;
+>>> +     struct priv_data *priv_data;
+>>> +     struct mem_ctl_info *mci;
+>>> +     struct resource *res;
+>>> +     void __iomem *reg;
+>>> +     int ret = -ENODEV;
+>>> +     int irq;
+>>> +
+>>> +     id = of_match_device(npcm_edac_of_match, &pdev->dev);
+>>> +     if (!id)
+>>> +             return -ENODEV;
+>>
+>> Why do you need it? How such case is even possible?
+> this driver is used for two nuvoton SOCs, one is NPCM845 and the other
+> is NPCM750
 
-Fixed this issue by clear wakeup signal latched in ehci internal when
-ehci resume callback is called.
+Yes and how NULL can happen for OF-only driver? Unless I missed
+something and this is not an OF-only driver? Do you allow any other
+matching methods?
 
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
----
-  drivers/usb/host/ehci-hcd.c | 26 ++++++++++++++++++++++++++
-  drivers/usb/host/ehci-pci.c |  4 ++++
-  drivers/usb/host/ehci.h     |  1 +
-  3 files changed, 31 insertions(+)
-
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index 3d82e0b..e4840ef 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -1103,6 +1103,30 @@ static void ehci_remove_device(struct usb_hcd 
-*hcd, struct usb_device *udev)
-
-  #ifdef CONFIG_PM
-
-+/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
-+static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
-+{
-+       u32 __iomem     *reg = &ehci->regs->port_status[4];
-+       u32     t1 = ehci_readl(ehci, reg);
-+
-+       t1 &= (u32)~0xf0000;
-+       t1 |= PORT_TEST_FORCE;
-+       ehci_writel(ehci, t1, reg);
-+       t1 = ehci_readl(ehci, reg);
-+       msleep(1);
-+       t1 &= (u32)~0xf0000;
-+       ehci_writel(ehci, t1, reg);
-+       ehci_readl(ehci, reg);
-+       msleep(1);
-+       t1 = ehci_readl(ehci, reg);
-+       ehci_writel(ehci, t1 | PORT_CSC, reg);
-+       ehci_readl(ehci, reg);
-+       udelay(500);
-+       t1 = ehci_readl(ehci, &ehci->regs->status);
-+       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
-+       ehci_readl(ehci, &ehci->regs->status);
-+}
-+
-  /* suspend/resume, section 4.3 */
-
-  /* These routines handle the generic parts of controller suspend/resume */
-@@ -1154,6 +1178,8 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
-         if (ehci->shutdown)
-                 return 0;               /* Controller is dead */
-
-+       if (ehci->zx_wakeup_clear == 1)
-+               ehci_zx_wakeup_clear(ehci);
-         /*
-          * If CF is still set and reset isn't forced
-          * then we maintained suspend power.
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index e87cf3a..a5e27de 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
-                         ehci->has_synopsys_hc_bug = 1;
-                 }
-                 break;
-+       case PCI_VENDOR_ID_ZHAOXIN:
-+               if (pdev->device == 0x3104 && (pdev->revision & 0xf0) == 
-0x90)
-+                       ehci->zx_wakeup_clear = 1;
-+               break;
-         }
-
-         /* optional debug port, normally in the first BAR */
-diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-index fdd073c..712fdd0 100644
---- a/drivers/usb/host/ehci.h
-+++ b/drivers/usb/host/ehci.h
-@@ -220,6 +220,7 @@ struct ehci_hcd {                   /* one per 
-controller */
-         unsigned                imx28_write_fix:1; /* For Freescale 
-i.MX28 */
-         unsigned                spurious_oc:1;
-         unsigned                is_aspeed:1;
-+       unsigned                zx_wakeup_clear:1;
-
-         /* required for usb32 quirk */
-         #define OHCI_CTRL_HCFS          (3 << 6)
--- 
-2.7.4
+Best regards,
+Krzysztof

@@ -2,103 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2584D7F4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5294D7F55
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238041AbiCNKAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
+        id S238080AbiCNKBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236723AbiCNKAd (ORCPT
+        with ESMTP id S232273AbiCNKBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:00:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018B413FA7;
-        Mon, 14 Mar 2022 02:59:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id yy13so32634922ejb.2;
-        Mon, 14 Mar 2022 02:59:23 -0700 (PDT)
+        Mon, 14 Mar 2022 06:01:45 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6001719C28;
+        Mon, 14 Mar 2022 03:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PsQNFBWA1EYlWL3JRbf/rtOCOkamxrVDSuDVIjgIR4o=;
-        b=Odt8+9N/t1UJqOHii0oFmoTGa0XVGEaSk0m+Opd7PNjwmGiA19Z3+Z0YGXQAhHm6Io
-         9qJBRjGF9EW/BnKor8o6eob+8rCP5x6u9/lmIyJZiUPx/U9Hvs6/T/OzsMWy/gwM4aZy
-         lY/IadiLCsMmVCyEzhI6q6utFcl/f8X3tWz+cwrRyJ6Dlb4+08dS4ITreAlbPVfRKWxV
-         KDvk+QZB27zthh5VrdbjK30KUSYA6sYWJIzCmZ7UVc51+SzRjhTdh8RnUTU+WiH36JMq
-         YNVuyQj4NLs2/lzzq+I+U7CAh27sAf0W5EU/2bMHbSLSOnbVoE9frKv593Oci6iE9fuh
-         0b9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PsQNFBWA1EYlWL3JRbf/rtOCOkamxrVDSuDVIjgIR4o=;
-        b=mIc51MuHaFDs0D1ls5P1qxH3YRQ0D1cB6AuO1copwsuoXk7D4BIXsD7s2g8e7dl6oT
-         Up3mN98BXqpO06zt1s27xx6V8x8btcQN6btQlt6gkiOZsml0aVstOfxw2CLEdO8+bC+b
-         5oo3zsNl6+TBjGj1KzNWBzYd96a4//HPGrSmQKz4CKOYdcYkknKheYLvztLawfkNEr/5
-         9p8n5RnoBQhJjZKqlXNIcsyjIlwIFnqjOA9HDyiYlOZbuZpfrsXSMg+qmtDwwFJvPttw
-         fuA/yFLfBSRUVFJI6JBfd/nr52AZBzzsWzbgvJHDz/ObIvsCOYP3CDXKS58ZQj5LpGPN
-         HAxg==
-X-Gm-Message-State: AOAM531Ld7wx9dYpks8JA9JSsvOQLuwoPQ7yHd7UK+P6uktfhi2vgSbG
-        +vCsGlxX99+jmk3t4BM6i6w=
-X-Google-Smtp-Source: ABdhPJzXCHhNgZJb8D0D1qr9Mm4UXShFVL/kE231KCbkM3J6kKbxUDbSJgKYRl7pYdyLICPzW3Bsmw==
-X-Received: by 2002:a17:906:9704:b0:6da:aa98:d459 with SMTP id k4-20020a170906970400b006daaa98d459mr18549838ejx.294.1647251962463;
-        Mon, 14 Mar 2022 02:59:22 -0700 (PDT)
-Received: from NB2240.irisgmbh.local (p200300c3af44a500646b36c3c097229d.dip0.t-ipconnect.de. [2003:c3:af44:a500:646b:36c3:c097:229d])
-        by smtp.gmail.com with ESMTPSA id gv9-20020a170906f10900b006d7128b2e6fsm6598648ejb.162.2022.03.14.02.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 02:59:21 -0700 (PDT)
-From:   Ian Dannapel <iansdannapel@gmail.com>
-To:     linux@rempel-privat.de
-Cc:     kernel@pengutronix.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael.Glembotzki@iris-sensing.com,
-        Erik.Schumacher@iris-sensing.com,
-        Ian Dannapel <iansdannapel@gmail.com>
-Subject: [PATCH] i2c: imx: remove unnecessary delay at startup
-Date:   Mon, 14 Mar 2022 10:59:18 +0100
-Message-Id: <20220314095918.50014-1-iansdannapel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647252035; x=1678788035;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=LeMnOhM+GEPGEkeVg5rUIbVD4CakRFa9JprrFWKhPWQ=;
+  b=N2oKZ6vMTbK/q+580dyLoe6PGyApoWwIk3xU3hCC+ZsKOx2y3OSD+UZu
+   m+/yxrFmDQOhuPVXm9ob55gUJP34p9ANUdqENJB+jSbA/m6oi8dwJfZm+
+   T0H1IlAJrbErrqBdnuwmiTQc6H1p8LxPUqcBp01YxBQwIfXYJWh8HUBpH
+   s=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Mar 2022 03:00:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 03:00:34 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Mar 2022 03:00:33 -0700
+Received: from hu-ylal-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Mar 2022 03:00:30 -0700
+From:   Yogesh Lal <quic_ylal@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <quic_sibis@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Yogesh Lal <quic_ylal@quicinc.com>
+Subject: [PATCH] remoteproc: qcom: pas: Add elf64 support to coredump
+Date:   Mon, 14 Mar 2022 15:30:13 +0530
+Message-ID: <1647252013-7794-1-git-send-email-quic_ylal@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-a delay on the startup of the i2c imx controller is not required or defined in the specs.
-By removing it, the user can see a latency decrease from up to 150μs in communication.
-Additional info: https://lore.kernel.org/all/20220304132037.GA15901@pengutronix.de/
+Add support to use elf64 coredumps to remote processors.
 
-Signed-off-by: Ian S. Dannapel <iansdannapel@gmail.com>
+Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
 ---
- drivers/i2c/busses/i2c-imx.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/remoteproc/qcom_q6v5_pas.c | 67 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 64 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 3576b63a6c03..019dda5301df 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -602,12 +602,6 @@ static int i2c_imx_start(struct imx_i2c_struct *i2c_imx, bool atomic)
- 	imx_i2c_write_reg(i2c_imx->hwdata->i2sr_clr_opcode, i2c_imx, IMX_I2C_I2SR);
- 	imx_i2c_write_reg(i2c_imx->hwdata->i2cr_ien_opcode, i2c_imx, IMX_I2C_I2CR);
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 1ae47cc..58c335e 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -34,6 +34,7 @@ struct adsp_data {
+ 	const char *firmware_name;
+ 	int pas_id;
+ 	unsigned int minidump_id;
++	bool uses_elf64;
+ 	bool has_aggre2_clk;
+ 	bool auto_boot;
  
--	/* Wait controller to be stable */
--	if (atomic)
--		udelay(50);
--	else
--		usleep_range(50, 150);
--
- 	/* Start I2C transaction */
- 	temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
- 	temp |= I2CR_MSTA;
+@@ -450,7 +451,11 @@ static int adsp_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	rproc->auto_boot = desc->auto_boot;
+-	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
++
++	if (desc->uses_elf64)
++		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
++	else
++		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+ 
+ 	adsp = (struct qcom_adsp *)rproc->priv;
+ 	adsp->dev = &pdev->dev;
+@@ -617,6 +622,24 @@ static const struct adsp_data sm8350_adsp_resource = {
+ 	.ssctl_id = 0x14,
+ };
+ 
++static const struct adsp_data sm8450_adsp_resource = {
++	.crash_reason_smem = 423,
++	.firmware_name = "adsp.mdt",
++	.pas_id = 1,
++	.uses_elf64 = true,
++	.has_aggre2_clk = false,
++	.auto_boot = true,
++	.proxy_pd_names = (char*[]){
++		"lcx",
++		"lmx",
++		NULL
++	},
++	.load_state = "adsp",
++	.ssr_name = "lpass",
++	.sysmon_name = "adsp",
++	.ssctl_id = 0x14,
++};
++
+ static const struct adsp_data msm8996_adsp_resource = {
+ 		.crash_reason_smem = 423,
+ 		.firmware_name = "adsp.mdt",
+@@ -721,6 +744,24 @@ static const struct adsp_data sm8350_cdsp_resource = {
+ 	.ssctl_id = 0x17,
+ };
+ 
++static const struct adsp_data sm8450_cdsp_resource = {
++	.crash_reason_smem = 601,
++	.firmware_name = "cdsp.mdt",
++	.pas_id = 18,
++	.uses_elf64 = true,
++	.has_aggre2_clk = false,
++	.auto_boot = true,
++	.proxy_pd_names = (char*[]){
++		"cx",
++		"mxc",
++		NULL
++	},
++	.load_state = "cdsp",
++	.ssr_name = "cdsp",
++	.sysmon_name = "cdsp",
++	.ssctl_id = 0x17,
++};
++
+ static const struct adsp_data mpss_resource_init = {
+ 	.crash_reason_smem = 421,
+ 	.firmware_name = "modem.mdt",
+@@ -755,6 +796,25 @@ static const struct adsp_data sc8180x_mpss_resource = {
+ 	.ssctl_id = 0x12,
+ };
+ 
++static const struct adsp_data sm8450_mpss_resource = {
++	.crash_reason_smem = 421,
++	.firmware_name = "modem.mdt",
++	.pas_id = 4,
++	.minidump_id = 3,
++	.uses_elf64 = true,
++	.has_aggre2_clk = false,
++	.auto_boot = false,
++	.proxy_pd_names = (char*[]){
++		"cx",
++		"mss",
++		NULL
++	},
++	.load_state = "modem",
++	.ssr_name = "mpss",
++	.sysmon_name = "modem",
++	.ssctl_id = 0x12,
++};
++
+ static const struct adsp_data slpi_resource_init = {
+ 		.crash_reason_smem = 424,
+ 		.firmware_name = "slpi.mdt",
+@@ -879,10 +939,11 @@ static const struct of_device_id adsp_of_match[] = {
+ 	{ .compatible = "qcom,sm8350-cdsp-pas", .data = &sm8350_cdsp_resource},
+ 	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm8350_slpi_resource},
+ 	{ .compatible = "qcom,sm8350-mpss-pas", .data = &mpss_resource_init},
+-	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8350_adsp_resource},
+-	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
++	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8450_adsp_resource},
++	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8450_cdsp_resource},
+ 	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
+ 	{ .compatible = "qcom,sm8450-mpss-pas", .data = &mpss_resource_init},
++	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, adsp_of_match);
 -- 
-2.25.1
+2.7.4
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89784D848A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B3C4D82AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241733AbiCNMZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S240571AbiCNMGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242538AbiCNMTI (ORCPT
+        with ESMTP id S229979AbiCNMFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:19:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF134F475;
-        Mon, 14 Mar 2022 05:14:20 -0700 (PDT)
+        Mon, 14 Mar 2022 08:05:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A1114004;
+        Mon, 14 Mar 2022 05:02:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9920CB80DF9;
-        Mon, 14 Mar 2022 12:14:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9525C340ED;
-        Mon, 14 Mar 2022 12:14:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD8EF61298;
+        Mon, 14 Mar 2022 12:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6649C340EC;
+        Mon, 14 Mar 2022 12:02:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260057;
-        bh=m8jRNaz/jrCc7HEoFVxnZs1a2N3/lU3a7CW7j0amyek=;
+        s=korg; t=1647259328;
+        bh=mdDHg2z5cqERmmM8M2jduxHMSN8p3o1lU+HcDbiVjn4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l6R/OGQYu/cZ8nnPElkE7Kp5KzKNXJ5qcozwrJejaTfa+yfxCkgrE9MbrEwqkeoov
-         WVuLNFSdAI+HMNCJv65ScIqNp1kKvIxy9/yJbbMroIXkPFNRUep+XZIHs6iFimff2X
-         haUl0R6jj+cilX9B5XyMsSCLhqQUqSGx6VcLZAtA=
+        b=Rp2Y/eAmleORap4t3gCGAWPMonkpa1OHH+/A/Sx713PRdHl8GtpZyXwncGV9uUVpD
+         AGjhudf3sdDWz4BOSwz9/s+VGw5fKnizxCTRIsNiiLy428NxGUWwocp2V5cXG2BEOd
+         F/HtyQLjDMqtofo/xYYaeC1R+yqAsBDLZiZj/I6w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 043/121] net: marvell: prestera: Add missing of_node_put() in prestera_switch_set_base_mac_addr
-Date:   Mon, 14 Mar 2022 12:53:46 +0100
-Message-Id: <20220314112745.329830316@linuxfoundation.org>
+        stable@vger.kernel.org, Rong Chen <rong.chen@amlogic.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.10 54/71] mmc: meson: Fix usage of meson_mmc_post_req()
+Date:   Mon, 14 Mar 2022 12:53:47 +0100
+Message-Id: <20220314112739.442781304@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Rong Chen <rong.chen@amlogic.com>
 
-[ Upstream commit c9ffa3e2bc451816ce0295e40063514fabf2bd36 ]
+commit f0d2f15362f02444c5d7ffd5a5eb03e4aa54b685 upstream.
 
-This node pointer is returned by of_find_compatible_node() with
-refcount incremented. Calling of_node_put() to aovid the refcount leak.
+Currently meson_mmc_post_req() is called in meson_mmc_request() right
+after meson_mmc_start_cmd(). This could lead to DMA unmapping before the request
+is actually finished.
 
-Fixes: 501ef3066c89 ("net: marvell: prestera: Add driver for Prestera family ASIC devices")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To fix, don't call meson_mmc_post_req() until meson_mmc_request_done().
+
+Signed-off-by: Rong Chen <rong.chen@amlogic.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Fixes: 79ed05e329c3 ("mmc: meson-gx: add support for descriptor chain mode")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220216124239.4007667-1-rong.chen@amlogic.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/marvell/prestera/prestera_main.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/meson-gx-mmc.c |   15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-index c687dc9aa973..36c5b1eba30d 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-@@ -553,6 +553,7 @@ static int prestera_switch_set_base_mac_addr(struct prestera_switch *sw)
- 		dev_info(prestera_dev(sw), "using random base mac address\n");
- 	}
- 	of_node_put(base_mac_np);
-+	of_node_put(np);
+--- a/drivers/mmc/host/meson-gx-mmc.c
++++ b/drivers/mmc/host/meson-gx-mmc.c
+@@ -173,6 +173,8 @@ struct meson_host {
+ 	int irq;
  
- 	return prestera_hw_switch_mac_set(sw, sw->base_mac);
+ 	bool vqmmc_enabled;
++	bool needs_pre_post_req;
++
+ };
+ 
+ #define CMD_CFG_LENGTH_MASK GENMASK(8, 0)
+@@ -652,6 +654,8 @@ static void meson_mmc_request_done(struc
+ 	struct meson_host *host = mmc_priv(mmc);
+ 
+ 	host->cmd = NULL;
++	if (host->needs_pre_post_req)
++		meson_mmc_post_req(mmc, mrq, 0);
+ 	mmc_request_done(host->mmc, mrq);
  }
--- 
-2.34.1
-
+ 
+@@ -869,7 +873,7 @@ static int meson_mmc_validate_dram_acces
+ static void meson_mmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
+ {
+ 	struct meson_host *host = mmc_priv(mmc);
+-	bool needs_pre_post_req = mrq->data &&
++	host->needs_pre_post_req = mrq->data &&
+ 			!(mrq->data->host_cookie & SD_EMMC_PRE_REQ_DONE);
+ 
+ 	/*
+@@ -885,22 +889,19 @@ static void meson_mmc_request(struct mmc
+ 		}
+ 	}
+ 
+-	if (needs_pre_post_req) {
++	if (host->needs_pre_post_req) {
+ 		meson_mmc_get_transfer_mode(mmc, mrq);
+ 		if (!meson_mmc_desc_chain_mode(mrq->data))
+-			needs_pre_post_req = false;
++			host->needs_pre_post_req = false;
+ 	}
+ 
+-	if (needs_pre_post_req)
++	if (host->needs_pre_post_req)
+ 		meson_mmc_pre_req(mmc, mrq);
+ 
+ 	/* Stop execution */
+ 	writel(0, host->regs + SD_EMMC_START);
+ 
+ 	meson_mmc_start_cmd(mmc, mrq->sbc ?: mrq->cmd);
+-
+-	if (needs_pre_post_req)
+-		meson_mmc_post_req(mmc, mrq, 0);
+ }
+ 
+ static void meson_mmc_read_resp(struct mmc_host *mmc, struct mmc_command *cmd)
 
 

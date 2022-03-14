@@ -2,172 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202E34D8AE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2EC4D8AE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235715AbiCNRgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S243474AbiCNRhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbiCNRgL (ORCPT
+        with ESMTP id S243330AbiCNRhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:36:11 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9C2659B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:35:00 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id s25so28474466lfs.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8A3cxPbkf5/imDcGfqUsgEkAZ/Yq4pAldU3s8K2mQzc=;
-        b=tfX+LbUtQWULAhzeWtmsYWPMAURZzqdsjSM/aDGl+qglrfZ5bNzfGleMtHFaTt3jZv
-         3UyQ5yndXqQ8IyXR6tjdhKwpYv9aaculLUgdA6PMil4v28IhdiEX2uhZI0KYNH460tQ6
-         GKcfKXGVcGVxcLcjPvKm3Y+xr7jKp0lTmNP15knWHThq1yVvN8ocGYyB/el//U+71WsO
-         9kxkVPpZ6bjpiPklFVZMRSxBgbjd89SZz6rNYPQo0Uto/u5sjUUJwJwIeOikglGO6VNE
-         lvYLAnfBrGRNUOM81j19C9LApg+tiwD55XcFvJbf4tDEynsa5BMJpjgefQARvNRiNVXn
-         Zf9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8A3cxPbkf5/imDcGfqUsgEkAZ/Yq4pAldU3s8K2mQzc=;
-        b=SssiOr4v1twNh3mvOQHBQP8fIfXQk6gXjEEjQQO/FZb1HAGqCrcKPxb/RlIF9TW9D6
-         ZeCvRHN8Nci96aN8hS/fDtQuo4S4Mb0vWk+Xq3Z844CUCnKj7fdte2BkJ0qSqXsZjLN2
-         Gh6AnaAPxjCcZrntYga9fpo/YN2vmwUcY8sO//O/xSXGwrnhO0722axy5h7j11IDd/XS
-         i1zJApLyb4s4wgeTq7WY2eV8L1W+hWNs9tdEJ72aV15Xut49r666rnoKU86Lv5/CXVsG
-         p1v+nXf7dGr6mO0yITQqeRedkWLuhIzHP+x9EMIWb6pNLEZlnkzas9qQ1uyIUElPbwLa
-         G+zQ==
-X-Gm-Message-State: AOAM530RXbVNdvS5iIKJzuTJ1THwsTa3a2lxNi127lfgKoDYOabCHWiE
-        Qc3MKkRshfydpGU+RymPGJpnL2jImOfkRGKLyE1cow==
-X-Google-Smtp-Source: ABdhPJwyJUQnuBymc31Rm47cQ/NdVZrkI9p8VQjPdQxJrZbxv7kE4yinBibZy7OcE53BDtGYf0q134NUBFysmwbOxgc=
-X-Received: by 2002:a19:ca07:0:b0:448:7eab:f1a with SMTP id
- a7-20020a19ca07000000b004487eab0f1amr7790394lfg.456.1647279294144; Mon, 14
- Mar 2022 10:34:54 -0700 (PDT)
+        Mon, 14 Mar 2022 13:37:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B2C9FC1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:35:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2500BB80EA8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3E3C340E9;
+        Mon, 14 Mar 2022 17:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647279351;
+        bh=23aGtBZ+roTpnSTpxgU+DVYehJCSbai+m5P8j3ght4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aS96RNBHOWtZ2Oa9UTMul1NAoszWh1lDejKFfG3GocyL5aZTUWWXW3pyaKmjckJY/
+         Nf2GH2QdHuP5ms3Ad4coPZ2kz05CVoVxdfsKhYkBp7IT7pTY9juZZlbtJl/51nDBHx
+         wIj3Uuy2qQfXCLJCO07Aq/FhqA806LDolCnAIkAc=
+Date:   Mon, 14 Mar 2022 18:35:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     Forest Bond <forest@alittletooquiet.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] staging: vt6656: Remove unused 5GHz support
+Message-ID: <Yi9868MQr4CQLgIV@kroah.com>
+References: <cover.1646935331.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-33-brijesh.singh@amd.com> <CAMkAt6pO0xZb2pye-VEKdFQ_dYFgLA21fkYmnYPTWo8mzPrKDQ@mail.gmail.com>
- <20220310212504.2kt6sidexljh2s6p@amd.com> <YiuBqZnjEUyMfBMu@suse.de>
-In-Reply-To: <YiuBqZnjEUyMfBMu@suse.de>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 14 Mar 2022 11:34:42 -0600
-Message-ID: <CAMkAt6r==_=U4Ha6ZTmii-JL3htJ3-dD4tc+QBqN7dVt711N2A@mail.gmail.com>
-Subject: Re: [PATCH v12 32/46] x86/compressed/64: Add support for SEV-SNP
- CPUID table in #VC handlers
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Michael Roth <michael.roth@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1646935331.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 10:06 AM Joerg Roedel <jroedel@suse.de> wrote:
->
-> On Thu, Mar 10, 2022 at 03:25:04PM -0600, Michael Roth wrote:
-> > Joerg, do you have more background on that? Would it make sense, outsid=
-e
-> > of this series, to change it to a terminate? Maybe with a specific set
-> > of error codes for ES_{OK,UNSUPPORTED,VMM_ERROR,DECODE_FAILED}?
->
-> This seems to be a left over from development of the SEV-ES guest
-> patch-set. I wanted to see whether the VM crashed due to a triple fault
-> or an error in the #VC handler. The halt loop can be replaced by
-> termination request now.
->
-> > > I am still working on why the early_printk()s in that function are no=
-t
-> > > working, it seems that they lead to a different halt.
-> >
-> > I don't see a different halt. They just don't seem to print anything.
-> > (keep in mind you still need to advance the IP or else the guest is
-> > still gonna end up spinning here, even if you're removing the halt loop
-> > for testing purposes)
->
-> The early_printks() also cause #VC exceptions, and if that handling is
-> broken for some reason nothing will be printed.
->
-> >
-> > > working, it seems that they lead to a different halt. Have you tested
-> > > any of those error paths manually? For example if you set your CPUID
-> > > bits to explicitly fail here do you see the expected printks?
-> >
-> > I think at that point in the code, when the XSAVE stuff is setup, the
-> > console hasn't been enabled yet, so messages would get buffered until t=
-hey
-> > get flushed later (which won't happen since there's halt loop after). I
-> > know in some cases devs will dump the log buffer from memory instead to=
- get
-> > at the error messages for early failures. (Maybe that's also why Joerg
-> > decided to use a halt loop there instead of terminating?)
->
-> It is hard to dump the log-buffer from encrypted memory :) But I
-> remember having seen messages from these early_printks under SEV-ES for
-> different bugs. Not sure why they don't appear in this situation.
->
-> > So maybe reworking the error handling in handle_vc_boot_ghcb() to use
-> > sev_es_terminate() might be warranted, but probably worth checking with
-> > Joerg first, and should be done as a separate series since it is not
-> > SNP-related.
->
-> I am fine with this change.
+On Thu, Mar 10, 2022 at 07:54:02PM +0100, Philipp Hortmann wrote:
+> vt6655 (PCI) and vt6656 (USB) do only support 2.4GHz band and not 5GHz band.
+> Both drivers do allow only one vendor id and device id.
+> So no other devices are covered by those drivers.
+> Because of this the following priv->rf_type cannot occure:
+> RF_AIROHA7230
+> RF_VT3342A0
+> 
+> ---
+> Tested with vt6656 on mini PCIe card (connected over USB)
+> which is using rf_type: RF_VT3226D0 (2.4GHz only)
+> Tested with vt6656 as USB Plugin Module
+> which is using rf_type: RF_AL2230S (2.4GHz only)
+> In order to combine vt665x infrastructure it is important
+> that vt6655 is also not using this code. (Patch already provided)
+> vt6655 on mini PCI Module is using
+> rf_type: RF_AIROHA (2.4GHz only)
+> 
+> Philipp Hortmann (5):
+>   staging: vt6656: Remove unused rf_type in channel.c
+>   staging: vt6656: Remove unused rf_type in baseband.c
+>   staging: vt6656: Remove unused rf_type in rf.c; top level
+>   staging: vt6656: Remove unused rf_type in rf.c; unused variables
+>   staging: vt6656: Remove unused rf_type in card.c
+> 
+>  drivers/staging/vt6656/baseband.c |  16 +-
+>  drivers/staging/vt6656/card.c     |  16 --
+>  drivers/staging/vt6656/channel.c  |  96 +------
+>  drivers/staging/vt6656/rf.c       | 413 +-----------------------------
+>  4 files changed, 10 insertions(+), 531 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+> 
 
-I'll send a patch out for that.
+If you could send follow-on patchs for the kernel test bot warnings,
+that would be great.
 
-I was also thinking about adding a vcpu run exit reason for
-termination. It would be nice to get a more informative exit reason
-than -EINVAL in userspace. Thoughts?
+thanks,
 
->
-> Regards,
->
-> --
-> J=C3=B6rg R=C3=B6del
-> jroedel@suse.de
->
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5
-> 90409 N=C3=BCrnberg
-> Germany
->
-> (HRB 36809, AG N=C3=BCrnberg)
-> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
->
+greg k-h

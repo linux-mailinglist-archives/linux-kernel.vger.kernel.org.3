@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF9F4D78D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 00:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE20F4D78E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 01:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbiCMXuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 19:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S235725AbiCNASA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 20:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235718AbiCMXrz (ORCPT
+        with ESMTP id S231932AbiCNAR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 19:47:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232D564C7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 16:46:45 -0700 (PDT)
+        Sun, 13 Mar 2022 20:17:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69AFCE5
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 17:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647215205; x=1678751205;
+  t=1647217007; x=1678753007;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wMf00R80cVF9qHEEHx61TQwqkfmpJ3tk31BJz9qEcok=;
-  b=a6vzues0T1oEWS6nQDX+qrbdGvgfE0ESPGK4xIzSX+/acngcNslSijSV
-   polp7waZxiaexoO4b4tNK0KYmYqMZEDhCvfIEpl26CgzY464ZpvbY31Ea
-   VqTKRW7gVrLlqURVpvRU/sNfjHfLO2SYnp+UwODDzb/yy0EWlzrmpAsIX
-   v1BS+uTrvk+UtWMMsXJJHFkmWRAn6x3eiHcA4ANOuZ7i+tRn8tFIKzVNK
-   wBfGmHBWOB0MDP7/VqKL60BF70S5935BIChTyf4Huo2HLnCPFBuLtjr9Y
-   sHTIYbtpC2HjO47y+DYHSObO83mHOYxASyo6cM+yCuuVe5bPf7zOuGX4W
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255637274"
+  bh=WSe+c+6P2a21motfagDGkpUQ39t36USC4TWbIOevwHE=;
+  b=Jr10ue9plCVgxjrQfghew2+LdlXKq9gLgdPuMpNuF1tR6bSbM6rNRsVZ
+   ndO66nhQStcHa5QZMJKcoLVpxnorGbcO53+TSaO1dR8x0Cy32lCkOyw0N
+   /aYkZxYrKExgWRbYaeoypn0t23YZ1rzKkm3kdH8bVhaqP8pgi4eWCAq/M
+   VrN4sjkolDyIzvt3EtmZug3IA48L62TfwDP561bDxRB0DTM17G5j9Bsap
+   HTKyBVgUfXzaU3HV94IVy9yCoeS6MIoVbH6Aij/zSuv4bzn2sThLz6rQp
+   y2VHaWLkbdcDsHxb3s0k2nhrMZJGDkRbo2WmgI7AHhB9hTHXPkIAy8Ft6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="236511843"
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="255637274"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 16:46:44 -0700
+   d="scan'208";a="236511843"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 17:16:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="515207768"
+   d="scan'208";a="579929084"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 16:46:43 -0700
+  by orsmga001.jf.intel.com with ESMTP; 13 Mar 2022 17:16:45 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nTXv8-0009OV-ES; Sun, 13 Mar 2022 23:46:42 +0000
-Date:   Mon, 14 Mar 2022 07:45:42 +0800
+        id 1nTYOC-0009Pf-PD; Mon, 14 Mar 2022 00:16:44 +0000
+Date:   Mon, 14 Mar 2022 08:16:13 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: [toke:xdp-queueing-03 7/9] include/linux/bpf.h:2064:9: warning:
- incompatible pointer to integer conversion returning 'void *' from a
- function with result type 'int'
-Message-ID: <202203140739.otiRAMwr-lkp@intel.com>
+Subject: [toke:xdp-queueing-03 2/9] net/packet/af_packet.c:1448: undefined
+ reference to `__umoddi3'
+Message-ID: <202203140800.8pr81INh-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,83 +64,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
 head:   3e7f25d58b1bfd5ad623678bf9e11f27c98a8094
-commit: 28d9ca982b9ae96bcad2bee81647ba18ae049a69 [7/9] bpf: Enable direct packet access for dequeue packets
-config: hexagon-randconfig-r045-20220313 (https://download.01.org/0day-ci/archive/20220314/202203140739.otiRAMwr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0467eb2cb7654c15ae366967ef35093c5724c416)
+commit: 1cc16c4489cbf066b09942ea224e6dc9ac6a46ac [2/9] bpf: Use 64-bit return value for bpf_prog_run
+config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220314/202203140800.8pr81INh-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=1cc16c4489cbf066b09942ea224e6dc9ac6a46ac
         git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
         git fetch --no-tags toke xdp-queueing-03
-        git checkout 28d9ca982b9ae96bcad2bee81647ba18ae049a69
+        git checkout 1cc16c4489cbf066b09942ea224e6dc9ac6a46ac
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/core/sock.c:133:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EINVAL);
-                  ^~~~~~~~~~~~~~~~
-   1 warning generated.
---
-   In file included from net/core/dev.c:95:
->> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EINVAL);
-                  ^~~~~~~~~~~~~~~~
-   net/core/dev.c:5011:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
-   sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
-   ^
-   net/core/dev.c:5160:19: warning: unused function 'nf_ingress' [-Wunused-function]
-   static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
-                     ^
-   3 warnings generated.
---
-   In file included from net/core/filter.c:38:
-   In file included from include/linux/skmsg.h:7:
->> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EINVAL);
-                  ^~~~~~~~~~~~~~~~
->> net/core/filter.c:9720:14: warning: incompatible integer to pointer conversion assigning to 'struct btf *' from 'int' [-Wint-conversion]
-           btf_vmlinux = bpf_get_btf_vmlinux();
-                       ^ ~~~~~~~~~~~~~~~~~~~~~
-   net/core/filter.c:9848:14: warning: incompatible integer to pointer conversion assigning to 'struct btf *' from 'int' [-Wint-conversion]
-           btf_vmlinux = bpf_get_btf_vmlinux();
-                       ^ ~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
---
-   In file included from net/core/net-traces.c:35:
-   In file included from include/trace/events/tcp.h:12:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:2064:9: warning: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
-           return ERR_PTR(-EINVAL);
-                  ^~~~~~~~~~~~~~~~
-   In file included from net/core/net-traces.c:50:
-   In file included from include/trace/events/neigh.h:255:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:873:
-   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
-                   struct in6_addr *pin6;
-                                    ^
-   2 warnings generated.
+   ld: net/packet/af_packet.o: in function `fanout_demux_bpf':
+>> net/packet/af_packet.c:1448: undefined reference to `__umoddi3'
 
 
-vim +2064 include/linux/bpf.h
+vim +1448 net/packet/af_packet.c
 
-  2061	
-  2062	static inline bpf_get_btf_vmlinux(void)
-  2063	{
-> 2064		return ERR_PTR(-EINVAL);
-  2065	}
-  2066	
+2d36097d26b599 Neil Horman        2014-01-22  1437  
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1438  static unsigned int fanout_demux_bpf(struct packet_fanout *f,
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1439  				     struct sk_buff *skb,
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1440  				     unsigned int num)
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1441  {
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1442  	struct bpf_prog *prog;
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1443  	unsigned int ret = 0;
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1444  
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1445  	rcu_read_lock();
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1446  	prog = rcu_dereference(f->bpf_prog);
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1447  	if (prog)
+ff936a04e5f28b Alexei Starovoitov 2015-10-07 @1448  		ret = bpf_prog_run_clear_cb(prog, skb) % num;
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1449  	rcu_read_unlock();
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1450  
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1451  	return ret;
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1452  }
+47dceb8ecdc1c3 Willem de Bruijn   2015-08-14  1453  
+
+:::::: The code at line 1448 was first introduced by commit
+:::::: ff936a04e5f28b7e0455be0e7fa91334f89e4b44 bpf: fix cb access in socket filter programs
+
+:::::: TO: Alexei Starovoitov <ast@plumgrid.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
 0-DAY CI Kernel Test Service

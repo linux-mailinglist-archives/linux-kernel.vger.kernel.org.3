@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5634D82A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4594D839B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238216AbiCNMGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S237518AbiCNMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240556AbiCNMFU (ORCPT
+        with ESMTP id S242292AbiCNMJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:05:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8BB47AF3;
-        Mon, 14 Mar 2022 05:02:33 -0700 (PDT)
+        Mon, 14 Mar 2022 08:09:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A111D26558;
+        Mon, 14 Mar 2022 05:07:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 836A2612FB;
-        Mon, 14 Mar 2022 12:02:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851D1C340E9;
-        Mon, 14 Mar 2022 12:02:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2E92B80DED;
+        Mon, 14 Mar 2022 12:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CF0C340E9;
+        Mon, 14 Mar 2022 12:06:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259351;
-        bh=jSQBdgjmG/0puOUtBTQLeaUF/iDNY/kxEsrAKEP7R2Y=;
+        s=korg; t=1647259616;
+        bh=i7xv0jglIHn4FUUINh7I6a5MJYZqrXrWYxEtF5hnFLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s1SbI+Wj+UyFgzxrwXqoo0z8wsXP5WF1oR2w9l/dWrj7tS77yz4hlKr469KGzwFNV
-         ZgDV1lpQ7tmVKzPcyXVtZiEH8Y+wDemrOCOQ3fypKgVZl8SP3ToRavyJOlxrCXwARZ
-         YuODNLWJqqV5dSNTeL2VtsMnUqFHxhZqgOLKK//s=
+        b=gsP2ODDZfTww0d0Op/XUZl0cVg45FWqxFjfxbNuXZuFsE02yAvmqBPoaOyqanExn1
+         pWAvY/DRJNldsSqENMGWBs230Ni3+CAVL1b9syghAqSrYKD9O++SPOCkBKoE+UMDEU
+         SCB4VHnJZOPpO1yHG6Mb4Zu2GdvQXK21pypj5L5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 59/71] watch_queue, pipe: Free watchqueue state after clearing pipe ring
+        stable@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 050/110] net: bcmgenet: Dont claim WOL when its not available
 Date:   Mon, 14 Mar 2022 12:53:52 +0100
-Message-Id: <20220314112739.582363593@linuxfoundation.org>
+Message-Id: <20220314112744.433400772@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Jeremy Linton <jeremy.linton@arm.com>
 
-commit db8facfc9fafacefe8a835416a6b77c838088f8b upstream.
+[ Upstream commit 00b022f8f876a3a036b0df7f971001bef6398605 ]
 
-In free_pipe_info(), free the watchqueue state after clearing the pipe
-ring as each pipe ring descriptor has a release function, and in the
-case of a notification message, this is watch_queue_pipe_buf_release()
-which tries to mark the allocation bitmap that was previously released.
+Some of the bcmgenet platforms don't correctly support WOL, yet
+ethtool returns:
 
-Fix this by moving the put of the pipe's ref on the watch queue to after
-the ring has been cleared.  We still need to call watch_queue_clear()
-before doing that to make sure that the pipe is disconnected from any
-notification sources first.
+"Supports Wake-on: gsf"
 
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-by: Jann Horn <jannh@google.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+which is false.
+
+Ideally if there isn't a wol_irq, or there is something else that
+keeps the device from being able to wakeup it should display:
+
+"Supports Wake-on: d"
+
+This patch checks whether the device can wakup, before using the
+hard-coded supported flags. This corrects the ethtool reporting, as
+well as the WOL configuration because ethtool verifies that the mode
+is supported before attempting it.
+
+Fixes: c51de7f3976b ("net: bcmgenet: add Wake-on-LAN support code")
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Tested-by: Peter Robinson <pbrobinson@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220310045535.224450-1-jeremy.linton@arm.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/pipe.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -830,10 +830,8 @@ void free_pipe_info(struct pipe_inode_in
- 	int i;
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
+index e31a5a397f11..f55d9d9c01a8 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
+@@ -40,6 +40,13 @@
+ void bcmgenet_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
+ {
+ 	struct bcmgenet_priv *priv = netdev_priv(dev);
++	struct device *kdev = &priv->pdev->dev;
++
++	if (!device_can_wakeup(kdev)) {
++		wol->supported = 0;
++		wol->wolopts = 0;
++		return;
++	}
  
- #ifdef CONFIG_WATCH_QUEUE
--	if (pipe->watch_queue) {
-+	if (pipe->watch_queue)
- 		watch_queue_clear(pipe->watch_queue);
--		put_watch_queue(pipe->watch_queue);
--	}
- #endif
- 
- 	(void) account_pipe_buffers(pipe->user, pipe->nr_accounted, 0);
-@@ -843,6 +841,10 @@ void free_pipe_info(struct pipe_inode_in
- 		if (buf->ops)
- 			pipe_buf_release(pipe, buf);
- 	}
-+#ifdef CONFIG_WATCH_QUEUE
-+	if (pipe->watch_queue)
-+		put_watch_queue(pipe->watch_queue);
-+#endif
- 	if (pipe->tmp_page)
- 		__free_page(pipe->tmp_page);
- 	kfree(pipe->bufs);
+ 	wol->supported = WAKE_MAGIC | WAKE_MAGICSECURE | WAKE_FILTER;
+ 	wol->wolopts = priv->wolopts;
+-- 
+2.34.1
+
 
 

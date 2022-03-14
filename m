@@ -2,152 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECBA4D7FD2
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7C04D7FD3
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238549AbiCNK3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S238541AbiCNK3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238542AbiCNK3O (ORCPT
+        with ESMTP id S238533AbiCNK3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:29:14 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2934C3CA46
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:28:05 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KHCRK61gZz9sRn;
-        Mon, 14 Mar 2022 11:27:57 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NoXnbGICbYvd; Mon, 14 Mar 2022 11:27:57 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KHCRJ4w30z9sRv;
-        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 92E918B76E;
-        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 08cDasFjybrG; Mon, 14 Mar 2022 11:27:56 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5F17C8B76C;
-        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22EARlau4139729
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 11:27:47 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22EARkGF4139723;
-        Mon, 14 Mar 2022 11:27:46 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org
-Subject: [PATCH v1 2/2] static_call: Remove __DEFINE_STATIC_CALL macro
-Date:   Mon, 14 Mar 2022 11:27:36 +0100
-Message-Id: <329074f92d96e3220ebe15da7bbe2779beee31eb.1647253456.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <1e0a61a88f52a460f62a58ffc2a5f847d1f7d9d8.1647253456.git.christophe.leroy@csgroup.eu>
-References: <1e0a61a88f52a460f62a58ffc2a5f847d1f7d9d8.1647253456.git.christophe.leroy@csgroup.eu>
+        Mon, 14 Mar 2022 06:29:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C4C3C4AB;
+        Mon, 14 Mar 2022 03:28:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAF4560F40;
+        Mon, 14 Mar 2022 10:27:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71863C340E9;
+        Mon, 14 Mar 2022 10:27:43 +0000 (UTC)
+Message-ID: <9f9d3bcf-6adc-c6c4-663d-0bdabc8adb67@xs4all.nl>
+Date:   Mon, 14 Mar 2022 11:27:41 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1647253655; l=2642; s=20211009; h=from:subject:message-id; bh=54TTsQ4t1JOmGYJlgGxKSjtdyf3fR5FYcb6fhFV8Vwk=; b=b3TZEaNwVxdPSvoAngCH+wbAAfSlwKl0Fu4CX9Mq5jNSznvYeHtWb3Kq9TL7K87DOkk/v55AQoYc lDZuL07CCmYBdMpTjJrxO5IoCFlZYUKFeOVT8Ale/l5ZrNnZTFrI
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v4 1/2] media: v4l2-ctrls: Add intra-refresh type control
+Content-Language: en-US
+To:     quic_dikshita@quicinc.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
+        stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
+        quic_majja@quicinc.com, quic_jdas@quicinc.com
+References: <1647252574-30451-1-git-send-email-quic_dikshita@quicinc.com>
+ <1647252574-30451-2-git-send-email-quic_dikshita@quicinc.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <1647252574-30451-2-git-send-email-quic_dikshita@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only DEFINE_STATIC_CALL use __DEFINE_STATIC_CALL macro now when
-CONFIG_HAVE_STATIC_CALL is selected.
 
-Only keep __DEFINE_STATIC_CALL() for the generic fallback, and
-also use it to implement DEFINE_STATIC_CALL_NULL() in that case.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/linux/static_call.h | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+On 3/14/22 11:09, quic_dikshita@quicinc.com wrote:
+> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> 
+> Add a control to set intra-refresh type.
+> 
+> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> ---
+>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 22 ++++++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
+>  include/uapi/linux/v4l2-controls.h                 |  5 +++++
+>  3 files changed, 36 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 4cd7c54..1539cd5 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -1180,6 +1180,28 @@ enum v4l2_mpeg_video_h264_entropy_mode -
+>      is set to non zero value.
+>      Applicable to H264, H263 and MPEG4 encoder.
+>  
+> +``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE (enum)``
+> +
+> +enum v4l2_mpeg_video_intra_refresh_period_type -
+> +    Sets the type of intra refresh. The period to refresh
+> +    the whole frame is specified by V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
+> +    Note that if this control is not present, then it is undefined what
+> +    refresh type is used and it is up to the drive to decide.
 
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index 3c50b0fdda16..df53bed9d71f 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -180,13 +180,13 @@ extern int static_call_text_reserved(void *start, void *end);
- 
- extern long __static_call_return0(void);
- 
--#define __DEFINE_STATIC_CALL(name, _func, _func_init)			\
-+#define DEFINE_STATIC_CALL(name, _func)					\
- 	DECLARE_STATIC_CALL(name, _func);				\
- 	struct static_call_key STATIC_CALL_KEY(name) = {		\
--		.func = _func_init,					\
-+		.func = _func,						\
- 		.type = 1,						\
- 	};								\
--	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func_init)
-+	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func)
- 
- #define DEFINE_STATIC_CALL_NULL(name, _func)				\
- 	DECLARE_STATIC_CALL(name, _func);				\
-@@ -225,12 +225,12 @@ extern long __static_call_return0(void);
- 
- static inline int static_call_init(void) { return 0; }
- 
--#define __DEFINE_STATIC_CALL(name, _func, _func_init)			\
-+#define DEFINE_STATIC_CALL(name, _func)					\
- 	DECLARE_STATIC_CALL(name, _func);				\
- 	struct static_call_key STATIC_CALL_KEY(name) = {		\
--		.func = _func_init,					\
-+		.func = _func,						\
- 	};								\
--	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func_init)
-+	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func)
- 
- #define DEFINE_STATIC_CALL_NULL(name, _func)				\
- 	DECLARE_STATIC_CALL(name, _func);				\
-@@ -292,11 +292,11 @@ static inline long __static_call_return0(void)
- 		.func = _func_init,					\
- 	}
- 
-+#define DEFINE_STATIC_CALL(name, _func)					\
-+	__DEFINE_STATIC_CALL(name, _func, _func)
-+
- #define DEFINE_STATIC_CALL_NULL(name, _func)				\
--	DECLARE_STATIC_CALL(name, _func);				\
--	struct static_call_key STATIC_CALL_KEY(name) = {		\
--		.func = NULL,						\
--	}
-+	__DEFINE_STATIC_CALL(name, _func, NULL)
- 
- #define DEFINE_STATIC_CALL_RET0(name, _func)				\
- 	__DEFINE_STATIC_CALL(name, _func, __static_call_return0)
-@@ -341,7 +341,4 @@ static inline int static_call_text_reserved(void *start, void *end)
- 
- #endif /* CONFIG_HAVE_STATIC_CALL */
- 
--#define DEFINE_STATIC_CALL(name, _func)					\
--	__DEFINE_STATIC_CALL(name, _func, _func)
--
- #endif /* _LINUX_STATIC_CALL_H */
--- 
-2.35.1
+drive -> driver
 
+> +    Applicable to H264 and HEVC encoders. Possible values are:
+> +
+> +.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM``
+> +      - The whole frame is completely refreshed randomly
+> +      after the specified period.
+> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC``
+> +      - The whole frame MBs are completely refreshed in cyclic order
+> +      after the specified period.
+> +
+>  ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
+>      Intra macroblock refresh period. This sets the period to refresh
+>      the whole frame. In other words, this defines the number of frames
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> index 54ca4e6..3089e50 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+> @@ -572,6 +572,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+>  		"VBV/CPB Limit",
+>  		NULL,
+>  	};
+> +	static const char * const intra_refresh_period_type[] = {
+> +		"Random",
+> +		"Cyclic",
+> +		NULL,
+> +	};
+>  
+>  	switch (id) {
+>  	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
+> @@ -705,6 +710,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+>  		return hevc_start_code;
+>  	case V4L2_CID_CAMERA_ORIENTATION:
+>  		return camera_orientation;
+> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
+> +		return intra_refresh_period_type;
+>  	default:
+>  		return NULL;
+>  	}
+> @@ -834,6 +841,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+>  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
+>  	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
+>  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
+> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:	return "Intra Refresh Priod Type";
+
+Priod -> Period
+
+>  	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
+>  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
+>  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
+> @@ -1360,6 +1368,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+>  	case V4L2_CID_STATELESS_H264_DECODE_MODE:
+>  	case V4L2_CID_STATELESS_H264_START_CODE:
+>  	case V4L2_CID_CAMERA_ORIENTATION:
+> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
+>  		*type = V4L2_CTRL_TYPE_MENU;
+>  		break;
+>  	case V4L2_CID_LINK_FREQ:
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> index c8e0f84..e7df4c5 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -443,6 +443,11 @@ enum v4l2_mpeg_video_multi_slice_mode {
+>  #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
+>  #define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
+>  #define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
+> +#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE	(V4L2_CID_CODEC_BASE+237)
+> +enum v4l2_mpeg_video_intra_refresh_period_type {
+> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM	= 0,
+> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC	= 1,
+> +};
+>  
+>  /* CIDs for the MPEG-2 Part 2 (H.262) codec */
+>  #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
+
+After fixing these two typos you can add my:
+
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+
+I assume that Stanimir will merge this together with patch 2/2.
+
+Regards,
+
+	Hans

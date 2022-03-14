@@ -2,149 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8F74D8585
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD544D8589
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbiCNM5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S238619AbiCNM6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237850AbiCNM5e (ORCPT
+        with ESMTP id S238131AbiCNM6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:57:34 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664FC11C01;
-        Mon, 14 Mar 2022 05:56:24 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22ECqOeG023233;
-        Mon, 14 Mar 2022 13:55:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=o7DLEGbn0m+Yf0ajxTQI9LUdN6ayif82HxrORI3/zPw=;
- b=ptAvzdZnvqcpeS2PDnklWB3v/ez3fNfkh3g3Z7aR5+00MBXL3VPW5+UHTV8aidd3OQcS
- Z/STudGkYuvCr3dsPWD/JK7cDN2+/KQq+1A6kBI5lXF1dCRZS7DOMsk2x/4nvUCW+Tfj
- zqSIVujCFi8NVYUeGcr3oQOsLJVF3zmw1BebZYU713dVCSfTp+mz2t/9UN2h6thJvY+b
- NtmJLzhpjsB4EJU1gBGULkWG80iHbHj1WhaCWuksY7NMhOKHTlcbciRgZbpdXKsTQaPp
- q6Vabum8yYah1+e4MC+0maMTKVO3xahkQkgpnQbxY8dsUF+sZv1JIlJo8t+DT6fpunMw Fg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et63h011g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 13:55:57 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C32C810002A;
-        Mon, 14 Mar 2022 13:55:56 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BA61D21ED50;
-        Mon, 14 Mar 2022 13:55:56 +0100 (CET)
-Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 14 Mar 2022 13:55:56
- +0100
-From:   Yann Gautier <yann.gautier@foss.st.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>,
-        Yann Gautier <yann.gautier@foss.st.com>
-Subject: [PATCH v2] mmc: mmci: manage MMC_PM_KEEP_POWER per variant config
-Date:   Mon, 14 Mar 2022 13:55:54 +0100
-Message-ID: <20220314125554.190574-1-yann.gautier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220314095225.53563-1-yann.gautier@foss.st.com>
-References: <20220314095225.53563-1-yann.gautier@foss.st.com>
+        Mon, 14 Mar 2022 08:58:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0EE11A3E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647262629; x=1678798629;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=N+rue5gtSfzTxtTiqEDZ4Rh44H4UqnVTpwdh67a7NTg=;
+  b=lpJsjyfbXeReylfxMuPu7BhsE0g3po0MyvIJUAki6Z3RyH15Q6+/4Xrs
+   bf3a6bt4im/YAHBFaglpIX+NcgF312oxF4T67jAnGW82OYvcgIGNrh1n2
+   Ri4k0Qx1S+9MS04UR2AkzFN4V0RGTjg/7347ndGtpEnloSsFiCDFqjhc/
+   29qslv6X7biKi+fGbaB/Q7WtZAYm0IZx8V1XpX+dXzyJyW3UMhRnFtzY8
+   bA5J1s+9WBLcj9nOe63WGNqDRzcCfSORPq7J1vABzWk/2NXoXGjy0siQM
+   9weKCVAws//goErNn6glepxtpDGFD8RXuwtOO9/clQNDfubqqoUhUdKNH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="236620988"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="236620988"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 05:57:08 -0700
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="515412926"
+Received: from junhongo-mobl.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.249.192.94])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 05:57:01 -0700
+Date:   Mon, 14 Mar 2022 20:56:57 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>
+Subject: Re: [PATCH v2][RFC] sched/fair: Change SIS_PROP to search idle CPU
+ based on sum of util_avg
+Message-ID: <20220314125657.GA30418@chenyu5-mobl1>
+References: <20220310005228.11737-1-yu.c.chen@intel.com>
+ <444bfebb-ac1c-42b9-58f5-332780e749f7@bytedance.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_04,2022-03-14_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <444bfebb-ac1c-42b9-58f5-332780e749f7@bytedance.com>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a disable_keep_power field in variant_data struct. The
-MMC_PM_KEEP_POWER flag will be enabled if disable_keep_power is not set.
-It is only set to true for stm32_sdmmc variants.
-
-The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
-It doesn't correctly support low power on this board. The Wifi chip
-awaits an always-on regulator, but it was connected to v3v3 which is off
-in low-power sequence. MMC_PM_KEEP_POWER should then be disabled.
-
-The flag can still be enabled through DT property:
-keep-power-in-suspend.
-
-Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
----
-Update in v2:
-Reword commit message to better explain the issue.
-
-Resend the patch alone. It was previoulsy in a series [1] for which the
-other patches will be reworked.
-
-[1] https://lore.kernel.org/lkml/20220304135134.47827-1-yann.gautier@foss.st.com/
-
- drivers/mmc/host/mmci.c | 5 ++++-
- drivers/mmc/host/mmci.h | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-index 45b8608c935c..0e2f2f5d6a52 100644
---- a/drivers/mmc/host/mmci.c
-+++ b/drivers/mmc/host/mmci.c
-@@ -274,6 +274,7 @@ static struct variant_data variant_stm32_sdmmc = {
- 	.busy_detect		= true,
- 	.busy_detect_flag	= MCI_STM32_BUSYD0,
- 	.busy_detect_mask	= MCI_STM32_BUSYD0ENDMASK,
-+	.disable_keep_power	= true,
- 	.init			= sdmmc_variant_init,
- };
+Hi Abel,
+On Mon, Mar 14, 2022 at 12:53:54PM +0800, Abel Wu wrote:
+> Hi Chen,
+> 
+> 在 3/10/22 8:52 AM, Chen Yu 写道:
+> > [Problem Statement]
+> > Currently select_idle_cpu() uses the percpu average idle time to
+> > estimate the total LLC domain idle time, and calculate the number
+> > of CPUs to be scanned. This might be inconsistent because idle time
+> > of a CPU does not necessarily correlate with idle time of a domain.
+> > As a result, the load could be underestimated and causes over searching
+> > when the system is very busy.
+> > 
+> > The following histogram is the time spent in select_idle_cpu(),
+> > when running 224 instance of netperf on a system with 112 CPUs
+> > per LLC domain:
+> > 
+> > @usecs:
+> > [0]                  533 |                                                    |
+> > [1]                 5495 |                                                    |
+> > [2, 4)             12008 |                                                    |
+> > [4, 8)            239252 |                                                    |
+> > [8, 16)          4041924 |@@@@@@@@@@@@@@                                      |
+> > [16, 32)        12357398 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+> > [32, 64)        14820255 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > [64, 128)       13047682 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       |
+> > [128, 256)       8235013 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@                        |
+> > [256, 512)       4507667 |@@@@@@@@@@@@@@@                                     |
+> > [512, 1K)        2600472 |@@@@@@@@@                                           |
+> > [1K, 2K)          927912 |@@@                                                 |
+> > [2K, 4K)          218720 |                                                    |
+> > [4K, 8K)           98161 |                                                    |
+> > [8K, 16K)          37722 |                                                    |
+> > [16K, 32K)          6715 |                                                    |
+> > [32K, 64K)           477 |                                                    |
+> > [64K, 128K)            7 |                                                    |
+> > 
+> > netperf latency:
+> > =======
+> > case            	load    	    Lat_99th	    std%
+> > TCP_RR          	thread-224	      257.39	(  0.21)
+> > UDP_RR          	thread-224	      242.83	(  6.29)
+> > 
+> > The netperf 99th latency(usec) above is comparable with the time spent in
+> > select_idle_cpu(). That is to say, when the system is overloaded, searching
+> > for idle CPU could be a bottleneck.
+> > 
+> > [Proposal]
+> > The main idea is to replace percpu average idle time with the domain
+> > based metric. Choose average CPU utilization(util_avg) as the candidate.
+> > In general, the number of CPUs to be scanned should be inversely
+> > proportional to the sum of util_avg in this domain. That is, the lower
+> > the util_avg is, the more select_idle_cpu() should scan for idle CPU,
+> > and vice versa. The benefit of choosing util_avg is that, it is a metric
+> > of accumulated historic activity, which seems to be more accurate than
+> > instantaneous metrics(such as rq->nr_running).
+> > 
+> > Furthermore, borrow the util_avg from periodic load balance,
+> > which could offload the overhead of select_idle_cpu().
+> > 
+> > According to last discussion[1], introduced the linear function
+> > for experimental purpose:
+> 
+> It would be better if you can prove it's a linear model by the
+> SIS efficiency statistics :)
+>
+Thanks for your comments!
  
-@@ -301,6 +302,7 @@ static struct variant_data variant_stm32_sdmmcv2 = {
- 	.busy_detect		= true,
- 	.busy_detect_flag	= MCI_STM32_BUSYD0,
- 	.busy_detect_mask	= MCI_STM32_BUSYD0ENDMASK,
-+	.disable_keep_power	= true,
- 	.init			= sdmmc_variant_init,
- };
- 
-@@ -2172,7 +2174,8 @@ static int mmci_probe(struct amba_device *dev,
- 	host->stop_abort.flags = MMC_RSP_R1B | MMC_CMD_AC;
- 
- 	/* We support these PM capabilities. */
--	mmc->pm_caps |= MMC_PM_KEEP_POWER;
-+	if (!variant->disable_keep_power)
-+		mmc->pm_caps |= MMC_PM_KEEP_POWER;
- 
- 	/*
- 	 * We can do SGIO
-diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
-index e1a9b96a3396..2cad1ef9766a 100644
---- a/drivers/mmc/host/mmci.h
-+++ b/drivers/mmc/host/mmci.h
-@@ -361,6 +361,7 @@ struct variant_data {
- 	u32			opendrain;
- 	u8			dma_lli:1;
- 	u32			stm32_idmabsize_mask;
-+	u8			disable_keep_power:1;
- 	void (*init)(struct mmci_host *host);
- };
- 
--- 
-2.25.1
+Good point, the SIS efficiency could be used to verify if the real
+search number fitting this linear mode well, I'll collect this statistics.
+But TBH I'm not sure whether there is a convergent/accurate mapping
+between the sum of util_avg and the number of CPUs to be scanned(unless we use
+sum_util/pelt_scan_cost to approach it). Choosing a model seems to always be a
+heuristic search policy.
+> > 
+> > f(x) = a - bx
+> > 
+> >       llc_size
+> > x = \Sum      util_avg[cpu] / llc_cpu_capacity
+> >       1
+> > f(x) is the number of CPUs to be scanned, x is the sum util_avg.
+> > To decide a and b, the following condition should be met:
+> > 
+> > [1] f(0) = llc_size
+> > [2] f(x) = 4,  x >= 50%
+> > 
+> > +	 * newidle balance.
+> > +	 */
+> > +	if (env->idle == CPU_NEWLY_IDLE || env->sd->span_weight != llc_size)
+> 
+> So nr_scan will probably be updated at llc-domain-lb-interval, which
+> is llc_size milliseconds. Since load can be varied a lot during such
+> a period, would this brought accuracy issues?
+>
+I agree there might be delay in reflecting the latest utilization.
+The sum_util calculated by periodic load balance after 112ms would be
+decay to about 0.5 * 0.5 * 0.5 * 0.7 = 8.75%.
+But consider that this is a server platform, I have an impression that
+the CPU utilization jitter during a small period of time is not a regular
+scenario? It seems to be a trade-off. Checking the util_avg in newidle
+load balance path would be more frequent, but it also brings overhead -
+multiple CPUs write/read the per-LLC shared variable and introduces cache
+false sharing. But to make this more robust, maybe we can add time interval
+control in newidle load balance too.
 
+thanks,
+Chenyu
+
+
+> Best regards
+> Abel

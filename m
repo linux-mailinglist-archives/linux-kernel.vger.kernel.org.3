@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C97F4D8218
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8446A4D83AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbiCNMAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S241646AbiCNMSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240016AbiCNL5y (ORCPT
+        with ESMTP id S242101AbiCNMJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:57:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7968CDECF;
-        Mon, 14 Mar 2022 04:56:44 -0700 (PDT)
+        Mon, 14 Mar 2022 08:09:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF04024BF8;
+        Mon, 14 Mar 2022 05:06:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32327B80DC2;
-        Mon, 14 Mar 2022 11:56:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6571EC340EC;
-        Mon, 14 Mar 2022 11:56:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E759612FD;
+        Mon, 14 Mar 2022 12:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED76EC340ED;
+        Mon, 14 Mar 2022 12:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259002;
-        bh=BxB5mmRZXkePyvGp3InA7vMTjJDsDYTbvSyMWQC9K5k=;
+        s=korg; t=1647259583;
+        bh=ch4D18rnxIrYNmJUCXmQxy+VD/VhstF+pdh7cobO6P8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dsWUGxBktu+KN1wh1KmitaRZz2XCJo4R4cWFZU1Nz/HZTThk6ZhyXQoySsK0kh8kj
-         iQP8Q9FFIHgrBCNo0knVieGggWmG7H+3C3NbWes3/N9y+Fmpje/4AkbbSJOfUDobyn
-         jrl+Yk2OVmYpQMbokYUI+IRaceezP0VclAs6yUCQ=
+        b=epFosccXFbjUY0y8+EjU1m0y/HDx+sjTkKtio5MqJ0DJ8YyxniuIvS903cUNm8nL6
+         97fJo0xV/WBA4hUCrFaR+Z+HBUhWolNWI5Kj6TY5qC7kktqP9R1F0uSMqaz0WCctBD
+         FnlKvpLmdEZ8JHgZWFwGKRWNWC7orko47L2p3rsk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Paul Durrant <paul@xen.org>,
-        Michael Brown <mbrown@fensystems.co.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 24/43] Revert "xen-netback: Check for hotplug-status existence before watching"
+        stable@vger.kernel.org, Grzegorz Siwik <grzegorz.siwik@intel.com>,
+        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.15 033/110] ice: Fix curr_link_speed advertised speed
 Date:   Mon, 14 Mar 2022 12:53:35 +0100
-Message-Id: <20220314112735.097061304@linuxfoundation.org>
+Message-Id: <20220314112743.961788194@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,62 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+From: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
 
-[ Upstream commit e8240addd0a3919e0fd7436416afe9aa6429c484 ]
+[ Upstream commit ad35ffa252af67d4cc7c744b9377a2b577748e3f ]
 
-This reverts commit 2afeec08ab5c86ae21952151f726bfe184f6b23d.
+Change curr_link_speed advertised speed, due to
+link_info.link_speed is not equal phy.curr_user_speed_req.
+Without this patch it is impossible to set advertised
+speed to same as link_speed.
 
-The reasoning in the commit was wrong - the code expected to setup the
-watch even if 'hotplug-status' didn't exist. In fact, it relied on the
-watch being fired the first time - to check if maybe 'hotplug-status' is
-already set to 'connected'. Not registering a watch for non-existing
-path (which is the case if hotplug script hasn't been executed yet),
-made the backend not waiting for the hotplug script to execute. This in
-turns, made the netfront think the interface is fully operational, while
-in fact it was not (the vif interface on xen-netback side might not be
-configured yet).
+Testing Hints: Try to set advertised speed
+to 25G only with 25G default link (use ethtool -s 0x80000000)
 
-This was a workaround for 'hotplug-status' erroneously being removed.
-But since that is reverted now, the workaround is not necessary either.
-
-More discussion at
-https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@ipxe.org/T/#u
-
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Reviewed-by: Paul Durrant <paul@xen.org>
-Reviewed-by: Michael Brown <mbrown@fensystems.co.uk>
-Link: https://lore.kernel.org/r/20220222001817.2264967-2-marmarek@invisiblethingslab.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 48cb27f2fd18 ("ice: Implement handlers for ethtool PHY/link operations")
+Signed-off-by: Grzegorz Siwik <grzegorz.siwik@intel.com>
+Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/xen-netback/xenbus.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
-index 0fe0fbd83ce4..44e353dd2ba1 100644
---- a/drivers/net/xen-netback/xenbus.c
-+++ b/drivers/net/xen-netback/xenbus.c
-@@ -980,15 +980,11 @@ static void connect(struct backend_info *be)
- 	xenvif_carrier_on(be->vif);
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+index c451cf401e63..38c2d9a5574a 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+@@ -2275,7 +2275,7 @@ ice_set_link_ksettings(struct net_device *netdev,
+ 		goto done;
+ 	}
  
- 	unregister_hotplug_status_watch(be);
--	if (xenbus_exists(XBT_NIL, dev->nodename, "hotplug-status")) {
--		err = xenbus_watch_pathfmt(dev, &be->hotplug_status_watch,
--					   NULL, hotplug_status_changed,
--					   "%s/%s", dev->nodename,
--					   "hotplug-status");
--		if (err)
--			goto err;
-+	err = xenbus_watch_pathfmt(dev, &be->hotplug_status_watch, NULL,
-+				   hotplug_status_changed,
-+				   "%s/%s", dev->nodename, "hotplug-status");
-+	if (!err)
- 		be->have_hotplug_status_watch = 1;
--	}
+-	curr_link_speed = pi->phy.link_info.link_speed;
++	curr_link_speed = pi->phy.curr_user_speed_req;
+ 	adv_link_speed = ice_ksettings_find_adv_link_speed(ks);
  
- 	netif_tx_wake_all_queues(be->vif->dev);
- 
+ 	/* If speed didn't get set, set it to what it currently is.
 -- 
 2.34.1
 

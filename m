@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEC94D8F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF94D8F1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245412AbiCNVvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 17:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S245417AbiCNVzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 17:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbiCNVvj (ORCPT
+        with ESMTP id S235932AbiCNVzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 17:51:39 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA6344C7;
-        Mon, 14 Mar 2022 14:50:29 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id r11so20014918ioh.10;
-        Mon, 14 Mar 2022 14:50:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=CGEh5iCMps2XS5R44sd7XPYTqLJq0sP1C+L9zYhWYlI=;
-        b=8Kv9xUNbCfhsRri5gbSrC9Tr0i+26T5SBixQtEQn4UxEtcfJWK7+RH37pbAVk+9RxM
-         ES5X3FAP4FDgUGJ+B0iQ9hteG9DtcfwQ3fkKLk1EOO+tN99KaFq9+9gLLJT3/G1Rg/yc
-         r2B1OYK9pRinkxZyVSC6gKj35TllfhPP+NXIbVu7Ky+Tfxdvbtmm4k9zTiP+Pa8CWOZH
-         MqojTJp1Osa9eca4/r/G9MFkQcX7EBWfsRIQHudS+W0PHzesNzDuGE4Iwkk2a1mEY8iT
-         j9s+7aLS+1iJJpfQqEqE4xnXU5Y/au1l2tOUUr49T7C92xhnZSpr1ZYgERAf+SXsZ3vM
-         50jQ==
-X-Gm-Message-State: AOAM530Rlusdxn7t130DM1fknv7n7IqalCB9FAtJ2xk+RUo02nBNAoaT
-        /c22A12SPOaNxL+ZUApQLw==
-X-Google-Smtp-Source: ABdhPJweO3VWhgxdwP7gQ1lIiOQaKbWSgKSaZY/XLgS/m78dLb5ar/Nckf4Npe8/Eq4Iw9CzsqdXRQ==
-X-Received: by 2002:a02:bb8c:0:b0:317:b015:1998 with SMTP id g12-20020a02bb8c000000b00317b0151998mr21388886jan.134.1647294628516;
-        Mon, 14 Mar 2022 14:50:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id c12-20020a056e02058c00b002c63f71c7dbsm9137733ils.56.2022.03.14.14.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 14:50:27 -0700 (PDT)
-Received: (nullmailer pid 623447 invoked by uid 1000);
-        Mon, 14 Mar 2022 21:50:24 -0000
-Date:   Mon, 14 Mar 2022 15:50:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: Re: [PATCH v6 3/6] ARM: dts: spear13xx: Fix sata node name
-Message-ID: <Yi+4oN5xuS2pq0ru@robh.at.kernel.org>
-References: <20220311210357.222830-1-linux@fw-web.de>
- <20220311210357.222830-4-linux@fw-web.de>
- <20220314034940.rxkgue2kllnqhucp@vireshk-i7>
- <trinity-0f1389c2-6d2b-4499-a2fc-3cb93f4d09cb-1647272336831@3c-app-gmx-bap56>
+        Mon, 14 Mar 2022 17:55:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05B135DD0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:53:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 274F46135E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 21:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EB5C340E9;
+        Mon, 14 Mar 2022 21:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647294828;
+        bh=QDOU3spVqdpsvf3p9pseTP+NSIdd5DYDKvSNKCwGzW4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=B679eC4f8RA5kqmFnEQCHQP4gvmFpWWq+Ilj1vxGUuIinGAEna9umrZDACtJY6iOd
+         Fa0y49+p6iqarq5CTdfwC+ujQmTVwLnh8zmLGbnMTcgdpaSm5tlOLwY5j8Rj1tQ+lf
+         45SZZa9/mvqvluPaMU2MaY2jTEuiwkg15DceBXc2WAjvkA6vqRqwW/uvLYOP3rhyh6
+         J0HFyVCuAlbS/G9ngim1O8a+YMB0EjwHbKLzvsPFv3briJspSjBYHfxL5zkiID/4zw
+         Si4HN8j7ka2WeOIUy4ZbaXJeewovsgw8MY4T1Tx4g5dOx5RZV5GBUa3DFstbZtf2zD
+         zfipzdG9XHUKg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1DB075C023F; Mon, 14 Mar 2022 14:53:48 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 14:53:48 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 2/3] preempt/dynamic: Introduce preempt mode accessors
+Message-ID: <20220314215348.GA4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220314133738.269522-1-frederic@kernel.org>
+ <20220314133738.269522-3-frederic@kernel.org>
+ <CANpmjNPqY65ZYLFukgp779pHbiRH05yns+G7Z36QdWwrQp1WOQ@mail.gmail.com>
+ <20220314200641.GV4285@paulmck-ThinkPad-P17-Gen-1>
+ <CANpmjNMsyb9aOqcvUUMLbkyHiE9ZieBigU1XqBXgtYz_O00y3g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <trinity-0f1389c2-6d2b-4499-a2fc-3cb93f4d09cb-1647272336831@3c-app-gmx-bap56>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CANpmjNMsyb9aOqcvUUMLbkyHiE9ZieBigU1XqBXgtYz_O00y3g@mail.gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,33 +67,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 04:38:56PM +0100, Frank Wunderlich wrote:
-> Hi,
-> 
-> thanks for for checking the spear-patch.
-> 
-> > Gesendet: Montag, 14. März 2022 um 04:49 Uhr
-> > Von: "Viresh Kumar" <viresh.kumar@linaro.org>
+On Mon, Mar 14, 2022 at 09:34:26PM +0100, Marco Elver wrote:
+> On Mon, 14 Mar 2022 at 21:06, Paul E. McKenney <paulmck@kernel.org> wrote:
 > >
-> > On 11-03-22, 22:03, Frank Wunderlich wrote:
-> > > From: Frank Wunderlich <frank-w@public-files.de>
-> > > 
-> > > After converting the binding to yaml the node name does
-> > > not match the standard pattern, change it.
-> > > 
-> > > arch/arm/boot/dts/spear1340-evb.dt.yaml: ahci@b1000000:
-> > > $nodename:0: 'ahci@b1000000' does not match '^sata(@.*)?$'
-> > > 	From schema: Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > > 
-> > > Fixes: 07658d9a659b ("SPEAr13xx: Add dts and dtsi files")
-> > 
-> > I don't think this is correct. The above patch is correct. The first
-> > patch in this series changes the names and that's where things break.
+> > On Mon, Mar 14, 2022 at 03:44:39PM +0100, Marco Elver wrote:
+> > > On Mon, 14 Mar 2022 at 14:37, Frederic Weisbecker <frederic@kernel.org> wrote:
+> > > >
+> > > > From: Valentin Schneider <valentin.schneider@arm.com>
+> > > >
+> > > > CONFIG_PREEMPT{_NONE, _VOLUNTARY} designate either:
+> > > > o The build-time preemption model when !PREEMPT_DYNAMIC
+> > > > o The default boot-time preemption model when PREEMPT_DYNAMIC
+> > > >
+> > > > IOW, using those on PREEMPT_DYNAMIC kernels is meaningless - the actual
+> > > > model could have been set to something else by the "preempt=foo" cmdline
+> > > > parameter.
+> > > >
+> > > > Introduce a set of helpers to determine the actual preemption mode used by
+> > > > the live kernel.
+> > > >
+> > > > Suggested-by: Marco Elver <elver@google.com>
+> > > > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> > > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> > > > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > > > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > > ---
+> > > >  include/linux/sched.h | 16 ++++++++++++++++
+> > > >  kernel/sched/core.c   | 11 +++++++++++
+> > > >  2 files changed, 27 insertions(+)
+> > > >
+> > > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > > index 508b91d57470..d348e886e4d0 100644
+> > > > --- a/include/linux/sched.h
+> > > > +++ b/include/linux/sched.h
+> > > > @@ -2096,6 +2096,22 @@ static inline void cond_resched_rcu(void)
+> > > >  #endif
+> > > >  }
+> > > >
+> > > > +#ifdef CONFIG_PREEMPT_DYNAMIC
+> > > > +
+> > > > +extern bool preempt_mode_none(void);
+> > > > +extern bool preempt_mode_voluntary(void);
+> > > > +extern bool preempt_mode_full(void);
+> > > > +
+> > > > +#else
+> > > > +
+> > > > +#define preempt_mode_none() IS_ENABLED(CONFIG_PREEMPT_NONE)
+> > > > +#define preempt_mode_voluntary() IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY)
+> > > > +#define preempt_mode_full() IS_ENABLED(CONFIG_PREEMPT)
+> > > > +
+> > >
+> > > Shame this was somehow forgotten.
+> > > There was a v3 of this patch that fixed a bunch of things (e.g. making
+> > > these proper functions so all builds error if accidentally used in
+> > > #if).
+> > >
+> > > https://lore.kernel.org/lkml/20211112185203.280040-3-valentin.schneider@arm.com/
+> > >
+> > > Is it also possible to take all the rest of that series (all 4
+> > > patches) from Valentin?
+> >
+> > Me, I am assuming that #2/3 is an experimental test so that I am able
+> > to easily whack this series over the head with rcutorture.  ;-)
 > 
-> it's right that my binding will break it, but the nodes are not named the right way.
-> And i used the commit that introduces the wrong node-names.
-> Maybe fixes-tag is wrong in this case.
+> I might be out of the loop here. All I can add is that any issues that
+> are a consequence of the preempt mode accessors are only testable if
+> the preemption model is actually changed at runtime and AFAIK
+> rcutorture doesn't do that. But as noted, this patch wasn't the latest
+> version and there were issues with it fixed by Valentin's latest v3
+> (from November, but had never been picked up anywhere).
 
-I'm pretty sure Viresh just meant the Fixes tag is not right.
+I will be marking 2/3 "EXP" to prevent myself from accidentally sending
+it upstream.
 
-Rob
+But longer term, maybe I should pick up Valentin's series.
+
+This stuff is v5.19 at the earliest, so not (yet) urgent.
+
+							Thanx, Paul

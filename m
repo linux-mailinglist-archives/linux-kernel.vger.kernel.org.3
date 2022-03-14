@@ -2,156 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156B64D888F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2624D8896
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242770AbiCNPwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S242786AbiCNPyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbiCNPws (ORCPT
+        with ESMTP id S242775AbiCNPyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:52:48 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1732192BB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:51:37 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id n19so27914830lfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GO6DO22NyOz74pRKEaDBeavTF5IzNMteCDkoxNllIjs=;
-        b=C+MtGX9CMvggkG1qaBzQ7cD7DzChnpKOxlIfkKuGP5QvXmw69IBulUXax1WvA1adD3
-         ddIMSnABoXDU2in9nYP4VXGeuIrxOGyP6u6nm81HlypZko7oyfWnQWOi4xdB4H3fDGO3
-         Au802GbTgksVMv+cI84WSDkhpI8RES1YS8dJ8KGY3NLhIZnrsA1z+nPcJLmWiScSPsOQ
-         3xbzgxQM9hrQSglBU6iUTGp07lNUv+EQWD0ji/zAJAA1vFeNcWq8GVWFu+Fz4KubEVoh
-         Dd7tMx7xJDYZu5277JvRIlAepC2jprlPO74GXQEACdusmjs0E41lmYPnq5mrtWNg7giG
-         NlTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GO6DO22NyOz74pRKEaDBeavTF5IzNMteCDkoxNllIjs=;
-        b=ShddOidZJ6g5PaAhWNNPzHXQOp/J5sW9UQ9Kb8zyfpiB8+jBtAuT140zwelHUaFoT8
-         6VxtPZ4UmuNe1zI2BE4+FhyEoU5jjxZWCunxeW9u1cwbSo094e9qL4ZpHwFDiEen3xDz
-         8JtlaNGKB8PGJ4UcmCzWvQh3gfxrpplfqwu2KBBdTDymvsSl1NXQLipPhVGgEBlIMqt0
-         Y2I5vUV1Qba4j4oBGqFaBK5LilTrrrSk1c9t1SPUp4jz/gTjWuQbeNfAYjuT0fO+M6Kp
-         YvQj22T0qHHwVE+dNzkvK1wddjxPn7rPolarCnby1XEOVcgP3KwnvNCDeS0WxpqFA5WR
-         w9eg==
-X-Gm-Message-State: AOAM5300JpZ34nCQoaKZAh0Sbh10q7agqG4qYGcXqNOe5hgM3NfVo+en
-        7/x2DOmLKz13rdSZ6v+sa59BjKkvc3PfoSijdx70VQ==
-X-Google-Smtp-Source: ABdhPJx1ExVE9qufvJAbY8tN7OfqPeyUdY8cYDJaBjP79yF9JHq/eJYG89IfJxx7LaUUQS2SzHYyxnTDJwTT8d7GQQ4=
-X-Received: by 2002:a05:6512:e98:b0:448:8053:d34a with SMTP id
- bi24-20020a0565120e9800b004488053d34amr7045193lfb.680.1647273095785; Mon, 14
- Mar 2022 08:51:35 -0700 (PDT)
+        Mon, 14 Mar 2022 11:54:05 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B4213D57;
+        Mon, 14 Mar 2022 08:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=YPjKuh1WORHuHsKRyd3ugLDmy9mAtje1baZB7sPm6bI=; b=l4gH9/ZN8SbfjmV4CN5o82JaT5
+        RIPRxKdoZgmtGb8Te5bhMN6pjAqiYEoemzQGtAhKuVPJ/O9DDyTbM/mwglTioZCvjg3r2RS3XYvxD
+        GfpQloC7ECWbdUn4uL5dZLNxp5vgpX/DNfL39Ewc87QYKUC63IT5BykHy2ohcC9rXerjZeBDMWo1n
+        ZDZPwgBgX4Ewi61W514MXRKmd+6EuwtCVSL5zETo4vQMTXfwmX4rMcYSooSIz2DaFzm4AItL+BjVq
+        5VexDwM1iQG8ywFr6ZGc/nkvAsZ2+aGDfBZsCQEEvSLOZT6Tb4TrpYY2/gqdyeWMl5aliQXgDvU1y
+        Q4HOPpmQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nTmzt-000tJu-BG; Mon, 14 Mar 2022 15:52:37 +0000
+Message-ID: <617e1903-fd21-3394-0e27-cd514c32f89b@infradead.org>
+Date:   Mon, 14 Mar 2022 08:52:30 -0700
 MIME-Version: 1.0
-References: <20201211141656.24915-1-mw@semihalf.com> <CAPDyKFqsSO+f9iG8vccwXZXDDNHgLEg7bfUe-KfHn2C-ZnOU4A@mail.gmail.com>
- <20220314154033.4x74zscayee32rrj@pali>
-In-Reply-To: <20220314154033.4x74zscayee32rrj@pali>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Mon, 14 Mar 2022 16:51:25 +0100
-Message-ID: <CAPv3WKc4MFeLgnJMWx=YNT5Ta5yi6fVhb4f-Rf211FTEmkvyog@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-xenon: fix 1.8v regulator stabilization
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Ziji Hu <huziji@marvell.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Kostya Porotchkin <kostap@marvell.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        "# 4.0+" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] docs/scheduler: Introduce the doc of load average
+Content-Language: en-US
+To:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Huaixin Chang <changhuaixin@linux.alibaba.com>,
+        Beata Michalska <beata.michalska@arm.com>,
+        Chun-Hung Tseng <henrybear327@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        Yiwei Lin <s921975628@gmail.com>
+References: <20220314084759.9849-1-juitse.huang@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220314084759.9849-1-juitse.huang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
 
 
-pon., 14 mar 2022 o 16:40 Pali Roh=C3=A1r <pali@kernel.org> napisa=C5=82(a)=
-:
->
-> On Monday 11 January 2021 19:06:24 Ulf Hansson wrote:
-> > On Fri, 11 Dec 2020 at 15:17, Marcin Wojtas <mw@semihalf.com> wrote:
-> > >
-> > > From: Alex Leibovich <alexl@marvell.com>
-> > >
-> > > Automatic Clock Gating is a feature used for the power
-> > > consumption optimisation. It turned out that
-> > > during early init phase it may prevent the stable voltage
-> > > switch to 1.8V - due to that on some platfroms an endless
-> > > printout in dmesg can be observed:
-> > > "mmc1: 1.8V regulator output did not became stable"
-> > > Fix the problem by disabling the ACG at very beginning
-> > > of the sdhci_init and let that be enabled later.
-> > >
-> > > Fixes: 3a3748dba881 ("mmc: sdhci-xenon: Add Marvell Xenon SDHC core f=
-unctionality")
-> > > Signed-off-by: Alex Leibovich <alexl@marvell.com>
-> > > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> > > Cc: stable@vger.kernel.org
-> >
-> > Applied for fixes (by fixing the typos), thanks!
->
-> Hello!
->
-> Is not this patch address same issue which was fixed by patch which was
-> merged earlier?
->
-> bb32e1987bc5 ("mmc: sdhci-xenon: fix annoying 1.8V regulator warning")
-> https://lore.kernel.org/linux-mmc/CAPDyKFqAsvgAjfL-c9ukFNWeGJmufQosR2Eg9S=
-KjXMVpNitdkA@mail.gmail.com/
->
+On 3/14/22 01:47, Jui-Tse Huang wrote:
+> The load average is one of a common as well as easy observed statistic
+> provied by Linux, but still not well documented, which makes the numbers
+> that users observes from the output of top, htop or other system
+> monitoring application are only numbers. This patch gives a discussion
+> on how Linux calculates the load average as well as what metrics are
+> concerned while calculating the load average.
+> 
+> The discussion flow is divided into several parts:
+> 1. The expression used to get the load average.
+> 2. Why Linux choose such average method from the other.
+> 2. The meaning of each term in the expression.
+> 3. The metrics, that is, the type of tasks that will be covered in the
+>    calculation.
+> 4. A brief explanation over the fixed-point nubmer since the weights
+>    defined in the Linux kernel are based on it.
+> 
+> Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+> Signed-off-by: Yiwei Lin <s921975628@gmail.com>
+> Co-Developed-by: Yiwei Lin <s921975628@gmail.com>
+> 
+> ---
+> v1 -> v2:
+>     fix typo: '$cat /proc/laodavg' -> '$cat /proc/loadavg'
+> 
+>  Documentation/scheduler/index.rst        |  1 +
+>  Documentation/scheduler/load-average.rst | 77 ++++++++++++++++++++++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 Documentation/scheduler/load-average.rst
+> 
+> diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
+> index 88900aabdbf7..bdc779b4190f 100644
+> --- a/Documentation/scheduler/index.rst
+> +++ b/Documentation/scheduler/index.rst
+> @@ -17,6 +17,7 @@ Linux Scheduler
+>      sched-nice-design
+>      sched-rt-group
+>      sched-stats
+> +    load-average
+>  
+>      text_files
+>  
+> diff --git a/Documentation/scheduler/load-average.rst b/Documentation/scheduler/load-average.rst
+> new file mode 100644
+> index 000000000000..589320ee1cd7
+> --- /dev/null
+> +++ b/Documentation/scheduler/load-average.rst
+> @@ -0,0 +1,77 @@
+> +============
+> +Load Average
+> +============
+> +
+> +Load average is a basic statistic provided by almost all operating systems that
+> +aims to report the usage of system hardware resources. In Linux kernel, the
+> +load average is calculated via the following expression::
+> +
+> +                / 0                                      , if t = 0
+> +    load_{t} = |
+> +                \ laod_{t - 1} * exp + active * (1 - exp), otherwise
 
-This indeed look similar. This fix was originally developed for CN913x
-platform without the mentioned patch (I'm wondering if it would also
-suffice to fix A3k board's problem). Anyway, I don't think we have an
-issue here, as everything seems to work fine on top of mainline Linux
-with both changes.
+                     load_
 
-Best regards,
-Marcin
+> +
+> +The expression represents the exponential moving average of the historical
+> +loading of the system. There are several reasons that Linux kernel chooses
+> +exponential moving average from other similar average equations such as simple
+> +moving average or cumulative moving average:
+> +
+> +#. The exponential moving average consumes fixed memory space, while the simple
+> +   moving average has O(n) space complexity where n is the number of timeslice
 
-> > Kind regards
-> > Uffe
-> >
-> >
-> > > ---
-> > >  drivers/mmc/host/sdhci-xenon.c | 7 ++++++-
-> > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-=
-xenon.c
-> > > index c67611fdaa8a..4b05f6fdefb4 100644
-> > > --- a/drivers/mmc/host/sdhci-xenon.c
-> > > +++ b/drivers/mmc/host/sdhci-xenon.c
-> > > @@ -168,7 +168,12 @@ static void xenon_reset_exit(struct sdhci_host *=
-host,
-> > >         /* Disable tuning request and auto-retuning again */
-> > >         xenon_retune_setup(host);
-> > >
-> > > -       xenon_set_acg(host, true);
-> > > +       /*
-> > > +        * The ACG should be turned off at the early init time, in or=
-der
-> > > +        * to solve a possile issues with the 1.8V regulator stabiliz=
-ation.
-> > > +        * The feature is enabled in later stage.
-> > > +        */
-> > > +       xenon_set_acg(host, false);
-> > >
-> > >         xenon_set_sdclk_off_idle(host, sdhc_id, false);
-> > >
-> > > --
-> > > 2.29.0
-> > >
+                                                                        timeslices
+
+> +   within a given interval.
+> +#. The exponential moving average not only applies a higher weight to the most
+> +   recent record but also declines the weight exponentially, which makes the
+> +   resulting load average reflect the situation of the current system. Neither
+> +   the simple moving average nor cumulative moving average has this feature.
+> +
+> +In the expression, the load_{t} in the expression indicates the calculated load
+
+Don't need the second             "in the expression" above.
+
+> +average at the given time t.
+> +The active is the most recent recorded system load. In Linux, the system load
+> +means the number of tasks in the state of TASK_RUNNING or TASK_UNINTERRUPTIBLE
+> +of the entire system. Tasks with TASK_UNINTERRUPTIBLE state are usually waiting
+> +for disk I/O or holding an uninterruptible lock, which is considered as a part
+> +of system resource, thus, Linux kernel covers them while calculating the load
+> +average.
+> +The exp means the weight applied to the previous report of load average, while
+> +(1 - exp) is the weight applied to the most recently recorded system load.
+> +There are three different weights defined in the Linux kernel, in
+> +include/linux/sched/loadavg.h, to perform statistics in various timescales::
+> +
+> +    // include/linux/sched/loadavg.h
+> +    ...
+> +    #define EXP_1    1884    /* 1/exp(5sec/1min) as fixed-point */
+> +    #define EXP_5    2014    /* 1/exp(5sec/5min) */
+> +    #define EXP_15   2037    /* 1/exp(5sec/15min) */
+> +    ...
+> +
+> +According to the expression shown on the top of this page, the weight (exp)
+> +controls how much of the last load load_{t - 1} will take place in the
+> +calculation of current load, while (1 - exp) is the weight applied to the most
+> +recent record of system load active.
+> +
+> +Due to the security issue, the weights are defined as fixed-point numbers based
+> +on the unsigned integer rather than floating-pointing numbers. The introduction
+> +of the fixed-point number keeps the FPU away from the calculation process. Since
+> +the precession of the fixed-point used in the Linux kernel is 11 bits, a
+> +fixed-point can be converted to a floating-point by dividing it by 2048, as the
+> +expression shown below::
+
+              shows below::
+or
+  as in the expressions shown below::
+
+> +
+> +    EXP_1  = 1884 / 2048 = 0.919922
+> +    EXP_5  = 2014 / 2048 = 0.983398
+> +    EXP_15 = 2037 / 2048 = 0.994629
+> +
+> +Which indicates the weights applied to active are::
+> +
+> +    (1 - EXP_1)  = (1 - 0.919922) = 0.080078
+> +    (1 - EXP_5)  = (1 - 0.983398) = 0.016602
+> +    (1 - EXP_15) = (1 - 0.994629) = 0.005371
+> +
+> +The load average will be updated every 5 seconds. Each time the scheduler_tick()
+> +be called, the function calc_global_load_tick() will also be invoked, which
+> +makes the active of each CPU core be calculated and be merged globally, finally,
+
+                                                                 globally. Finally,
+
+> +the load average will be updated with that global active.
+> +
+> +As a user, the load average can be observed via top, htop, or other system
+> +monitor application, or more directly, by the following command::
+> +
+> +    $ cat /proc/loadavg
+> +
+
+thanks.
+-- 
+~Randy

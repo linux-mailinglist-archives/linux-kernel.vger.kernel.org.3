@@ -2,705 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A014D7B76
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3494D7B75
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiCNHXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 03:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S233427AbiCNHWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 03:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236594AbiCNHWv (ORCPT
+        with ESMTP id S235155AbiCNHWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:22:51 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBC940A05
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 00:21:40 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KH7JM0kFvz9sSj;
-        Mon, 14 Mar 2022 08:21:39 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eSI6Yl1P128V; Mon, 14 Mar 2022 08:21:39 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KH7JL6g8Qz9sRy;
-        Mon, 14 Mar 2022 08:21:38 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D49DD8B76C;
-        Mon, 14 Mar 2022 08:21:38 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id AwS7bkgAsUzu; Mon, 14 Mar 2022 08:21:38 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B0FE18B763;
-        Mon, 14 Mar 2022 08:21:38 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22E7LVGU4076021
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 08:21:31 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22E7LVEi4076020;
-        Mon, 14 Mar 2022 08:21:31 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org
-Subject: [PATCH] static_call: Don't make __static_call_return0 static
+        Mon, 14 Mar 2022 03:22:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39A240933;
+        Mon, 14 Mar 2022 00:21:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 755B9B80CD7;
+        Mon, 14 Mar 2022 07:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8245C340F4;
+        Mon, 14 Mar 2022 07:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647242495;
+        bh=cmodLFZPuWoM/tYXSod9U1Ip4syNnDutYRJzhdbZAmM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lMesE4T6Eo5luaxvASTR+ZVE800zgPs/O7rXOZbAx1TbVwaxOx7xGESJK4AuiXqnv
+         kaZAryZdghW2xyFAK+nc8HeGvUDpDr8cIRImrz9916Web5WBNixFPb6e5qW4raai4e
+         ReE+XHhToQBSszfNRwVV9szg1OtlTsl7xhfmQT88=
 Date:   Mon, 14 Mar 2022 08:21:30 +0100
-Message-Id: <b301796066e4fdd45c50c9e202d36a43688eb78e.1647242388.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Daniel Suchy <danny@danysek.cz>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rafael.richter@gin.de" <rafael.richter@gin.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: patch problem - mv88e6xxx: flush switchdev FDB workqueue
+Message-ID: <Yi7s+vh3GBTVtDN2@kroah.com>
+References: <ccf51795-5821-203d-348e-295aabbdc735@danysek.cz>
+ <20220313141030.ztwhuhfwxjfzi5nb@skbuf>
+ <Yi7i+pebGu0NoIsF@kroah.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1647242488; l=16935; s=20211009; h=from:subject:message-id; bh=hPop2zMeJgQ5bSTtkNihK5RsDPzLKD1UMst8NVklAfg=; b=WnsUMvi9PRBBD0MMzG6B4fW3N/ZoNA23PCwv+SYCcnw+bznahQKO30aiH3ykPT82MR8P0rB1ym7D 2SLr1rpKBGJkujqg0oh56ySgBoZOop5x++MtKdW4jSQ4c4daLOkh
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yi7i+pebGu0NoIsF@kroah.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-System.map shows that vmlinux contains several instances of
-__static_call_return0():
+On Mon, Mar 14, 2022 at 07:38:50AM +0100, gregkh@linuxfoundation.org wrote:
+> On Sun, Mar 13, 2022 at 02:10:31PM +0000, Vladimir Oltean wrote:
+> > Hi Daniel,
+> > 
+> > On Sun, Mar 13, 2022 at 03:03:07PM +0100, Daniel Suchy wrote:
+> > > Hello,
+> > > 
+> > > I noticed boot problems on my Turris Omnia (with Marvell 88E6176 switch
+> > > chip) after "net: dsa: mv88e6xxx: flush switchdev FDB workqueue before
+> > > removing VLAN" commit https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=2566a89b9e163b2fcd104d6005e0149f197b8a48
+> > > 
+> > > Within logs I catched hung kernel tasks (see below), at least first is
+> > > related to DSA subsystem.
+> > > 
+> > > When I revert this patch, everything works as expected and without any
+> > > issues.
+> > > 
+> > > In my setup, I have few vlans on affected switch (i'm using ifupdown2 v3.0
+> > > with iproute2 5.16 for configuration).
+> > > 
+> > > It seems your this patch introduces some new problem (at least for 5.15
+> > > kernels). I suggest revert this patch.
+> > > 
+> > > - Daniel
+> > 
+> > Oh wow, I'm terribly sorry. Yes, this patch shouldn't have been
+> > backported to kernel 5.15 and below, but I guess I missed the
+> > backport notification email and forgot to tell Greg about this.
+> > Patch "net: dsa: mv88e6xxx: flush switchdev FDB workqueue before
+> > removing VLAN" needs to be immediately reverted from these trees.
+> > 
+> > Greg, to avoid this from happening in the future, would something like
+> > this work? Is this parsed in some way?
+> > 
+> > Depends-on: 0faf890fc519 ("net: dsa: drop rtnl_lock from dsa_slave_switchdev_event_work") # which first appeared in v5.16
+> 
+> The "Fixes:" tag will solve this, please just use that in the future.
 
-	c0004fc0 t __static_call_return0
-	c0011518 t __static_call_return0
-	c00d8160 t __static_call_return0
+Ah, you did have a fixes tag here, so then use the way to say "you also
+need to add another patch here" by adding the sha to the line for the
+stable tree:
+	cc: stable@vger.kernel.org # 0faf890fc519
 
-arch_static_call_transform() uses the middle one to check whether we are
-setting a call to __static_call_return0 or not:
+So, should I just backport that commit instead?  The "Fixes:" line says
+this needs to be backported to 4.14, which is why I added it to these
+trees.
 
-	c0011520 <arch_static_call_transform>:
-	c0011520:       3d 20 c0 01     lis     r9,-16383	<== r9 =  0xc001 << 16
-	c0011524:       39 29 15 18     addi    r9,r9,5400	<== r9 += 0x1518
-	c0011528:       7c 05 48 00     cmpw    r5,r9		<== r9 has value 0xc0011518 here
+thanks,
 
-So if static_call_update() is called with one of the other instances of
-__static_call_return0(), arch_static_call_transform() won't recognise it.
-
-In order to work properly, global single instance of __static_call_return0() is required.
-
-Fixes: 3f2a8fc4b15d ("static_call/x86: Add __static_call_return0()")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/linux/static_call.h                   |   5 +-
- kernel/Makefile                               |   3 +-
- kernel/static_call.c                          | 542 ------------------
- .../{static_call.c => static_call_inline.c}   |   5 -
- 4 files changed, 3 insertions(+), 552 deletions(-)
- copy kernel/{static_call.c => static_call_inline.c} (99%)
-
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index 3e56a9751c06..fcc5b48989b3 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -248,10 +248,7 @@ static inline int static_call_text_reserved(void *start, void *end)
- 	return 0;
- }
- 
--static inline long __static_call_return0(void)
--{
--	return 0;
--}
-+extern long __static_call_return0(void);
- 
- #define EXPORT_STATIC_CALL(name)					\
- 	EXPORT_SYMBOL(STATIC_CALL_KEY(name));				\
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 56f4ee97f328..a18d169732d2 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -113,7 +113,8 @@ obj-$(CONFIG_CPU_PM) += cpu_pm.o
- obj-$(CONFIG_BPF) += bpf/
- obj-$(CONFIG_KCSAN) += kcsan/
- obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
--obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call.o
-+obj-$(CONFIG_HAVE_STATIC_CALL) += static_call.o
-+obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call_inline.o
- obj-$(CONFIG_CFI_CLANG) += cfi.o
- 
- obj-$(CONFIG_PERF_EVENTS) += events/
-diff --git a/kernel/static_call.c b/kernel/static_call.c
-index 43ba0b1e0edb..43dbc438044e 100644
---- a/kernel/static_call.c
-+++ b/kernel/static_call.c
-@@ -1,548 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <linux/init.h>
--#include <linux/static_call.h>
--#include <linux/bug.h>
--#include <linux/smp.h>
--#include <linux/sort.h>
--#include <linux/slab.h>
--#include <linux/module.h>
--#include <linux/cpu.h>
--#include <linux/processor.h>
--#include <asm/sections.h>
--
--extern struct static_call_site __start_static_call_sites[],
--			       __stop_static_call_sites[];
--extern struct static_call_tramp_key __start_static_call_tramp_key[],
--				    __stop_static_call_tramp_key[];
--
--static bool static_call_initialized;
--
--/* mutex to protect key modules/sites */
--static DEFINE_MUTEX(static_call_mutex);
--
--static void static_call_lock(void)
--{
--	mutex_lock(&static_call_mutex);
--}
--
--static void static_call_unlock(void)
--{
--	mutex_unlock(&static_call_mutex);
--}
--
--static inline void *static_call_addr(struct static_call_site *site)
--{
--	return (void *)((long)site->addr + (long)&site->addr);
--}
--
--static inline unsigned long __static_call_key(const struct static_call_site *site)
--{
--	return (long)site->key + (long)&site->key;
--}
--
--static inline struct static_call_key *static_call_key(const struct static_call_site *site)
--{
--	return (void *)(__static_call_key(site) & ~STATIC_CALL_SITE_FLAGS);
--}
--
--/* These assume the key is word-aligned. */
--static inline bool static_call_is_init(struct static_call_site *site)
--{
--	return __static_call_key(site) & STATIC_CALL_SITE_INIT;
--}
--
--static inline bool static_call_is_tail(struct static_call_site *site)
--{
--	return __static_call_key(site) & STATIC_CALL_SITE_TAIL;
--}
--
--static inline void static_call_set_init(struct static_call_site *site)
--{
--	site->key = (__static_call_key(site) | STATIC_CALL_SITE_INIT) -
--		    (long)&site->key;
--}
--
--static int static_call_site_cmp(const void *_a, const void *_b)
--{
--	const struct static_call_site *a = _a;
--	const struct static_call_site *b = _b;
--	const struct static_call_key *key_a = static_call_key(a);
--	const struct static_call_key *key_b = static_call_key(b);
--
--	if (key_a < key_b)
--		return -1;
--
--	if (key_a > key_b)
--		return 1;
--
--	return 0;
--}
--
--static void static_call_site_swap(void *_a, void *_b, int size)
--{
--	long delta = (unsigned long)_a - (unsigned long)_b;
--	struct static_call_site *a = _a;
--	struct static_call_site *b = _b;
--	struct static_call_site tmp = *a;
--
--	a->addr = b->addr  - delta;
--	a->key  = b->key   - delta;
--
--	b->addr = tmp.addr + delta;
--	b->key  = tmp.key  + delta;
--}
--
--static inline void static_call_sort_entries(struct static_call_site *start,
--					    struct static_call_site *stop)
--{
--	sort(start, stop - start, sizeof(struct static_call_site),
--	     static_call_site_cmp, static_call_site_swap);
--}
--
--static inline bool static_call_key_has_mods(struct static_call_key *key)
--{
--	return !(key->type & 1);
--}
--
--static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
--{
--	if (!static_call_key_has_mods(key))
--		return NULL;
--
--	return key->mods;
--}
--
--static inline struct static_call_site *static_call_key_sites(struct static_call_key *key)
--{
--	if (static_call_key_has_mods(key))
--		return NULL;
--
--	return (struct static_call_site *)(key->type & ~1);
--}
--
--void __static_call_update(struct static_call_key *key, void *tramp, void *func)
--{
--	struct static_call_site *site, *stop;
--	struct static_call_mod *site_mod, first;
--
--	cpus_read_lock();
--	static_call_lock();
--
--	if (key->func == func)
--		goto done;
--
--	key->func = func;
--
--	arch_static_call_transform(NULL, tramp, func, false);
--
--	/*
--	 * If uninitialized, we'll not update the callsites, but they still
--	 * point to the trampoline and we just patched that.
--	 */
--	if (WARN_ON_ONCE(!static_call_initialized))
--		goto done;
--
--	first = (struct static_call_mod){
--		.next = static_call_key_next(key),
--		.mod = NULL,
--		.sites = static_call_key_sites(key),
--	};
--
--	for (site_mod = &first; site_mod; site_mod = site_mod->next) {
--		bool init = system_state < SYSTEM_RUNNING;
--		struct module *mod = site_mod->mod;
--
--		if (!site_mod->sites) {
--			/*
--			 * This can happen if the static call key is defined in
--			 * a module which doesn't use it.
--			 *
--			 * It also happens in the has_mods case, where the
--			 * 'first' entry has no sites associated with it.
--			 */
--			continue;
--		}
--
--		stop = __stop_static_call_sites;
--
--		if (mod) {
--#ifdef CONFIG_MODULES
--			stop = mod->static_call_sites +
--			       mod->num_static_call_sites;
--			init = mod->state == MODULE_STATE_COMING;
--#endif
--		}
--
--		for (site = site_mod->sites;
--		     site < stop && static_call_key(site) == key; site++) {
--			void *site_addr = static_call_addr(site);
--
--			if (!init && static_call_is_init(site))
--				continue;
--
--			if (!kernel_text_address((unsigned long)site_addr)) {
--				/*
--				 * This skips patching built-in __exit, which
--				 * is part of init_section_contains() but is
--				 * not part of kernel_text_address().
--				 *
--				 * Skipping built-in __exit is fine since it
--				 * will never be executed.
--				 */
--				WARN_ONCE(!static_call_is_init(site),
--					  "can't patch static call site at %pS",
--					  site_addr);
--				continue;
--			}
--
--			arch_static_call_transform(site_addr, NULL, func,
--						   static_call_is_tail(site));
--		}
--	}
--
--done:
--	static_call_unlock();
--	cpus_read_unlock();
--}
--EXPORT_SYMBOL_GPL(__static_call_update);
--
--static int __static_call_init(struct module *mod,
--			      struct static_call_site *start,
--			      struct static_call_site *stop)
--{
--	struct static_call_site *site;
--	struct static_call_key *key, *prev_key = NULL;
--	struct static_call_mod *site_mod;
--
--	if (start == stop)
--		return 0;
--
--	static_call_sort_entries(start, stop);
--
--	for (site = start; site < stop; site++) {
--		void *site_addr = static_call_addr(site);
--
--		if ((mod && within_module_init((unsigned long)site_addr, mod)) ||
--		    (!mod && init_section_contains(site_addr, 1)))
--			static_call_set_init(site);
--
--		key = static_call_key(site);
--		if (key != prev_key) {
--			prev_key = key;
--
--			/*
--			 * For vmlinux (!mod) avoid the allocation by storing
--			 * the sites pointer in the key itself. Also see
--			 * __static_call_update()'s @first.
--			 *
--			 * This allows architectures (eg. x86) to call
--			 * static_call_init() before memory allocation works.
--			 */
--			if (!mod) {
--				key->sites = site;
--				key->type |= 1;
--				goto do_transform;
--			}
--
--			site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
--			if (!site_mod)
--				return -ENOMEM;
--
--			/*
--			 * When the key has a direct sites pointer, extract
--			 * that into an explicit struct static_call_mod, so we
--			 * can have a list of modules.
--			 */
--			if (static_call_key_sites(key)) {
--				site_mod->mod = NULL;
--				site_mod->next = NULL;
--				site_mod->sites = static_call_key_sites(key);
--
--				key->mods = site_mod;
--
--				site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
--				if (!site_mod)
--					return -ENOMEM;
--			}
--
--			site_mod->mod = mod;
--			site_mod->sites = site;
--			site_mod->next = static_call_key_next(key);
--			key->mods = site_mod;
--		}
--
--do_transform:
--		arch_static_call_transform(site_addr, NULL, key->func,
--				static_call_is_tail(site));
--	}
--
--	return 0;
--}
--
--static int addr_conflict(struct static_call_site *site, void *start, void *end)
--{
--	unsigned long addr = (unsigned long)static_call_addr(site);
--
--	if (addr <= (unsigned long)end &&
--	    addr + CALL_INSN_SIZE > (unsigned long)start)
--		return 1;
--
--	return 0;
--}
--
--static int __static_call_text_reserved(struct static_call_site *iter_start,
--				       struct static_call_site *iter_stop,
--				       void *start, void *end, bool init)
--{
--	struct static_call_site *iter = iter_start;
--
--	while (iter < iter_stop) {
--		if (init || !static_call_is_init(iter)) {
--			if (addr_conflict(iter, start, end))
--				return 1;
--		}
--		iter++;
--	}
--
--	return 0;
--}
--
--#ifdef CONFIG_MODULES
--
--static int __static_call_mod_text_reserved(void *start, void *end)
--{
--	struct module *mod;
--	int ret;
--
--	preempt_disable();
--	mod = __module_text_address((unsigned long)start);
--	WARN_ON_ONCE(__module_text_address((unsigned long)end) != mod);
--	if (!try_module_get(mod))
--		mod = NULL;
--	preempt_enable();
--
--	if (!mod)
--		return 0;
--
--	ret = __static_call_text_reserved(mod->static_call_sites,
--			mod->static_call_sites + mod->num_static_call_sites,
--			start, end, mod->state == MODULE_STATE_COMING);
--
--	module_put(mod);
--
--	return ret;
--}
--
--static unsigned long tramp_key_lookup(unsigned long addr)
--{
--	struct static_call_tramp_key *start = __start_static_call_tramp_key;
--	struct static_call_tramp_key *stop = __stop_static_call_tramp_key;
--	struct static_call_tramp_key *tramp_key;
--
--	for (tramp_key = start; tramp_key != stop; tramp_key++) {
--		unsigned long tramp;
--
--		tramp = (long)tramp_key->tramp + (long)&tramp_key->tramp;
--		if (tramp == addr)
--			return (long)tramp_key->key + (long)&tramp_key->key;
--	}
--
--	return 0;
--}
--
--static int static_call_add_module(struct module *mod)
--{
--	struct static_call_site *start = mod->static_call_sites;
--	struct static_call_site *stop = start + mod->num_static_call_sites;
--	struct static_call_site *site;
--
--	for (site = start; site != stop; site++) {
--		unsigned long s_key = __static_call_key(site);
--		unsigned long addr = s_key & ~STATIC_CALL_SITE_FLAGS;
--		unsigned long key;
--
--		/*
--		 * Is the key is exported, 'addr' points to the key, which
--		 * means modules are allowed to call static_call_update() on
--		 * it.
--		 *
--		 * Otherwise, the key isn't exported, and 'addr' points to the
--		 * trampoline so we need to lookup the key.
--		 *
--		 * We go through this dance to prevent crazy modules from
--		 * abusing sensitive static calls.
--		 */
--		if (!kernel_text_address(addr))
--			continue;
--
--		key = tramp_key_lookup(addr);
--		if (!key) {
--			pr_warn("Failed to fixup __raw_static_call() usage at: %ps\n",
--				static_call_addr(site));
--			return -EINVAL;
--		}
--
--		key |= s_key & STATIC_CALL_SITE_FLAGS;
--		site->key = key - (long)&site->key;
--	}
--
--	return __static_call_init(mod, start, stop);
--}
--
--static void static_call_del_module(struct module *mod)
--{
--	struct static_call_site *start = mod->static_call_sites;
--	struct static_call_site *stop = mod->static_call_sites +
--					mod->num_static_call_sites;
--	struct static_call_key *key, *prev_key = NULL;
--	struct static_call_mod *site_mod, **prev;
--	struct static_call_site *site;
--
--	for (site = start; site < stop; site++) {
--		key = static_call_key(site);
--		if (key == prev_key)
--			continue;
--
--		prev_key = key;
--
--		for (prev = &key->mods, site_mod = key->mods;
--		     site_mod && site_mod->mod != mod;
--		     prev = &site_mod->next, site_mod = site_mod->next)
--			;
--
--		if (!site_mod)
--			continue;
--
--		*prev = site_mod->next;
--		kfree(site_mod);
--	}
--}
--
--static int static_call_module_notify(struct notifier_block *nb,
--				     unsigned long val, void *data)
--{
--	struct module *mod = data;
--	int ret = 0;
--
--	cpus_read_lock();
--	static_call_lock();
--
--	switch (val) {
--	case MODULE_STATE_COMING:
--		ret = static_call_add_module(mod);
--		if (ret) {
--			WARN(1, "Failed to allocate memory for static calls");
--			static_call_del_module(mod);
--		}
--		break;
--	case MODULE_STATE_GOING:
--		static_call_del_module(mod);
--		break;
--	}
--
--	static_call_unlock();
--	cpus_read_unlock();
--
--	return notifier_from_errno(ret);
--}
--
--static struct notifier_block static_call_module_nb = {
--	.notifier_call = static_call_module_notify,
--};
--
--#else
--
--static inline int __static_call_mod_text_reserved(void *start, void *end)
--{
--	return 0;
--}
--
--#endif /* CONFIG_MODULES */
--
--int static_call_text_reserved(void *start, void *end)
--{
--	bool init = system_state < SYSTEM_RUNNING;
--	int ret = __static_call_text_reserved(__start_static_call_sites,
--			__stop_static_call_sites, start, end, init);
--
--	if (ret)
--		return ret;
--
--	return __static_call_mod_text_reserved(start, end);
--}
--
--int __init static_call_init(void)
--{
--	int ret;
--
--	if (static_call_initialized)
--		return 0;
--
--	cpus_read_lock();
--	static_call_lock();
--	ret = __static_call_init(NULL, __start_static_call_sites,
--				 __stop_static_call_sites);
--	static_call_unlock();
--	cpus_read_unlock();
--
--	if (ret) {
--		pr_err("Failed to allocate memory for static_call!\n");
--		BUG();
--	}
--
--	static_call_initialized = true;
--
--#ifdef CONFIG_MODULES
--	register_module_notifier(&static_call_module_nb);
--#endif
--	return 0;
--}
--early_initcall(static_call_init);
- 
- long __static_call_return0(void)
- {
- 	return 0;
- }
--
--#ifdef CONFIG_STATIC_CALL_SELFTEST
--
--static int func_a(int x)
--{
--	return x+1;
--}
--
--static int func_b(int x)
--{
--	return x+2;
--}
--
--DEFINE_STATIC_CALL(sc_selftest, func_a);
--
--static struct static_call_data {
--      int (*func)(int);
--      int val;
--      int expect;
--} static_call_data [] __initdata = {
--      { NULL,   2, 3 },
--      { func_b, 2, 4 },
--      { func_a, 2, 3 }
--};
--
--static int __init test_static_call_init(void)
--{
--      int i;
--
--      for (i = 0; i < ARRAY_SIZE(static_call_data); i++ ) {
--	      struct static_call_data *scd = &static_call_data[i];
--
--              if (scd->func)
--                      static_call_update(sc_selftest, scd->func);
--
--              WARN_ON(static_call(sc_selftest)(scd->val) != scd->expect);
--      }
--
--      return 0;
--}
--early_initcall(test_static_call_init);
--
--#endif /* CONFIG_STATIC_CALL_SELFTEST */
-diff --git a/kernel/static_call.c b/kernel/static_call_inline.c
-similarity index 99%
-copy from kernel/static_call.c
-copy to kernel/static_call_inline.c
-index 43ba0b1e0edb..dc5665b62814 100644
---- a/kernel/static_call.c
-+++ b/kernel/static_call_inline.c
-@@ -499,11 +499,6 @@ int __init static_call_init(void)
- }
- early_initcall(static_call_init);
- 
--long __static_call_return0(void)
--{
--	return 0;
--}
--
- #ifdef CONFIG_STATIC_CALL_SELFTEST
- 
- static int func_a(int x)
--- 
-2.34.1
-
+greg k-h

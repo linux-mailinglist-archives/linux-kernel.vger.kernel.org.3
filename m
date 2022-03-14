@@ -2,147 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0224D8E74
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6994D8E7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241025AbiCNUvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S245157AbiCNUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234806AbiCNUvi (ORCPT
+        with ESMTP id S232355AbiCNUxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:51:38 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAA63C49A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:50:27 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so500637pjl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O2sXHURm0NoY8IkGl4zp8hYr0GiRSSumlHJx+8DBDR8=;
-        b=VhtWPU5hfae5y3UUUMJ53v9z+E9cDVJIzdnbdhqMLcZjn/y1tL1g4Ip4yO+C4Fok2K
-         bkA2PkP51EJHCCddXQKObdt27Fru7/62k24TcydvfkiIVLHPqli3aLjUtpSqhf6fdvm8
-         1tdvjT2lcpLsz9HkJYzRiUDg0oCZ5KAIkOCZllpiAF6fb+esenRjlDpqT7+FW9d7AchY
-         mGVomHGFT+saFC/IwCLVOpGVGM13KdQCU94o195Z/wWPW30GzVIhaRLhaD0BjuDsiejE
-         24QuSkzXgDPKVuG/LFy/ynbPOQDZfiRQ0Ri1H2+DhkMdX+72GpsZkfJDWYWMHLKiSbnT
-         /mxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2sXHURm0NoY8IkGl4zp8hYr0GiRSSumlHJx+8DBDR8=;
-        b=3vsInfFwLCHj8nGxSRiaXM671OdkrWd96q1j+B7fxECB2dr8PM2RKtDPrBlGFdY8ta
-         o8HozaupAaLHw7e0LcqdlzZwPzmI5tyubML7rcC84S1AFi7uJh7VRNS0kgSNH/9z9w6Y
-         3VgVa8fC1ny/vvo7G91loAo5tPQboF5eFFFpw2A4f5DmRviRz6Q94duKmvHPPFwhxYfc
-         7JqLbnhw1/kD5pejCSGzGNEKgVzgxsdcT1R4YBLIsH8al0zvTfZkJ3GhE2G/YCQ6/bQK
-         qljh7O8gYsQ3F9PpUzKWNYl/B+6Mt9VK/ju11VzuzjPS4/XekM76Ecd/L3kxOwMtQXEg
-         Fe0g==
-X-Gm-Message-State: AOAM530HvZhfXG86Yj/qXZ8pUowkgfnLJUD/+g2U6iwXaZSh5d3uUCk5
-        oR9DWVnrzhRTw7/wCDcrgnEfWaADXwxwGMGC1p9OTA==
-X-Google-Smtp-Source: ABdhPJyzK/9bpWo87K7yVfuQDVxjAiaa0iHolmeQz5FZjuIEWLouKzJgJxd/xUTCLfio9rCn6T0zucx/Bsw9kuMKEmc=
-X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
- d22-20020a170902729600b0014b4bc60e81mr25125235pll.132.1647291026682; Mon, 14
- Mar 2022 13:50:26 -0700 (PDT)
+        Mon, 14 Mar 2022 16:53:41 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E830C3C49D;
+        Mon, 14 Mar 2022 13:52:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHTHv6cqNz4xLS;
+        Tue, 15 Mar 2022 07:52:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647291148;
+        bh=NISpoazxsKwRguXZIjrnG0lamu2pUld0Zkdo0rjoqYk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LyDsUBqwKYV6b49+tZU6iqzcgZE80bmQDpjgBghwvptrLLiJvPJYBnS2zkdcwfNfC
+         Ut4txEI6TQsAbwYkPFYk+5Zs5VGiQ1USynUiIqwX86iRlNLXUHjVoScAZG7tAOb6ai
+         b9ZXsZHEHhuJSqYIzy8dfGjwl1FDgH3L5edeTn0Z1tu/FrTHd32rztZpurTRuNXQAI
+         CuiGZigrATDEPKdVYn50OC3um5Ey3WnJuIR8iExVnvqLj7Xi1Iz/zaLI9GcO6pB4Z9
+         y1+GuHxmXLTlvImH1nhNaPx4RxFKspKGSOT23FTyx0OmFOV/0ZRONdeTV/DxWyTni7
+         oq9+SCJ56fSyQ==
+Date:   Tue, 15 Mar 2022 07:52:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
+ tree
+Message-ID: <20220315075224.73b6dbeb@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220302082718.32268-1-songmuchun@bytedance.com>
- <20220302082718.32268-6-songmuchun@bytedance.com> <CAPcyv4hsMWe1AreVVhGJD-St3FGtGBMeA-BX7XbA_kVX97tw4Q@mail.gmail.com>
- <CAMZfGtUmhcryboPdRC7ZhWVuV3TX0rLcKUxhvamAGbHUoATaow@mail.gmail.com>
-In-Reply-To: <CAMZfGtUmhcryboPdRC7ZhWVuV3TX0rLcKUxhvamAGbHUoATaow@mail.gmail.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 14 Mar 2022 13:50:16 -0700
-Message-ID: <CAPcyv4gdP+FSsQW2+W3+NKNGnM3fAfF3d=ZxuCDc+r_AnRBCUg@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] dax: fix missing writeprotect the pte entry
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Hugh Dickins <hughd@google.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LoiWDiCizKSAQLTb.QkGf7Z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 1:06 AM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Thu, Mar 10, 2022 at 8:59 AM Dan Williams <dan.j.williams@intel.com> wrote:
-> >
-> > On Wed, Mar 2, 2022 at 12:30 AM Muchun Song <songmuchun@bytedance.com> wrote:
-> > >
-> > > Currently dax_mapping_entry_mkclean() fails to clean and write protect
-> > > the pte entry within a DAX PMD entry during an *sync operation. This
-> > > can result in data loss in the following sequence:
-> > >
-> > >   1) process A mmap write to DAX PMD, dirtying PMD radix tree entry and
-> > >      making the pmd entry dirty and writeable.
-> > >   2) process B mmap with the @offset (e.g. 4K) and @length (e.g. 4K)
-> > >      write to the same file, dirtying PMD radix tree entry (already
-> > >      done in 1)) and making the pte entry dirty and writeable.
-> > >   3) fsync, flushing out PMD data and cleaning the radix tree entry. We
-> > >      currently fail to mark the pte entry as clean and write protected
-> > >      since the vma of process B is not covered in dax_entry_mkclean().
-> > >   4) process B writes to the pte. These don't cause any page faults since
-> > >      the pte entry is dirty and writeable. The radix tree entry remains
-> > >      clean.
-> > >   5) fsync, which fails to flush the dirty PMD data because the radix tree
-> > >      entry was clean.
-> > >   6) crash - dirty data that should have been fsync'd as part of 5) could
-> > >      still have been in the processor cache, and is lost.
-> >
-> > Excellent description.
-> >
-> > >
-> > > Just to use pfn_mkclean_range() to clean the pfns to fix this issue.
-> >
-> > So the original motivation for CONFIG_FS_DAX_LIMITED was for archs
-> > that do not have spare PTE bits to indicate pmd_devmap(). So this fix
-> > can only work in the CONFIG_FS_DAX_LIMITED=n case and in that case it
-> > seems you can use the current page_mkclean_one(), right?
->
-> I don't know the history of CONFIG_FS_DAX_LIMITED.
-> page_mkclean_one() need a struct page associated with
-> the pfn,  do the struct pages exist when CONFIG_FS_DAX_LIMITED
-> and ! FS_DAX_PMD?
+--Sig_/LoiWDiCizKSAQLTb.QkGf7Z
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-CONFIG_FS_DAX_LIMITED was created to preserve some DAX use for S390
-which does not have CONFIG_ARCH_HAS_PTE_DEVMAP. Without PTE_DEVMAP
-then get_user_pages() for DAX mappings fails.
+Hi all,
 
-To your question, no, there are no pages at all in the
-CONFIG_FS_DAX_LIMITED=y case. So page_mkclean_one() could only be
-deployed for PMD mappings, but I think it is reasonable to just
-disable PMD mappings for the CONFIG_FS_DAX_LIMITED=y case.
+Commit
 
-Going forward the hope is to remove the ARCH_HAS_PTE_DEVMAP
-requirement for DAX, and use PTE_SPECIAL for the S390 case. However,
-that still wants to have 'struct page' availability as an across the
-board requirement.
+  ab9466f3294b ("media: platform: re-structure TI drivers")
 
-> If yes, I think you are right. But I don't
-> see this guarantee. I am not familiar with DAX code, so what am
-> I missing here?
+is missing a Signed-off-by from its committer.
 
-Perhaps I missed a 'struct page' dependency? I thought the bug you are
-fixing only triggers in the presence of PMDs. The
-CONFIG_FS_DAX_LIMITED=y case can still use the current "page-less"
-mkclean path for PTEs.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LoiWDiCizKSAQLTb.QkGf7Z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIvqwgACgkQAVBC80lX
+0GzYZwf/RcdnLcksJvqozKJNwEpz6gaCMa5zSptahbkXOfmfKf9iign2mEdy+dRa
+5krvZZjnGhjT3wkcYSnw7j7anSAIbgTp6OuazY3ltp1sFksh59Aq+oc9bAwxvY9j
+7ZBB2Bco+/Qh9UkJjY+fprHlD+iQGTeIFuvbB5hfXfM14gwjjFE9Bt9qQqv8SpYA
+rTy17gOR6bX0ERJd8ROLng8wC56oqWR/t+Uav2hxhkI3R0wYwLQoYbqYl8K4kkqF
+8ei/AA6dt1ORx1pAiqinr892L00IMTT/yOrFIq9st2mZTspQNYmIbHUjmtaVG5NP
+nPWW0Lon9JvqovaduWgRWPOGKakQJA==
+=pdg9
+-----END PGP SIGNATURE-----
+
+--Sig_/LoiWDiCizKSAQLTb.QkGf7Z--

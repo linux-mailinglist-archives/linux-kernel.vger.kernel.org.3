@@ -2,188 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371164D8AC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DA94D8ACE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243341AbiCNR2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S243404AbiCNR37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiCNR2O (ORCPT
+        with ESMTP id S229899AbiCNR36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:28:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA293EBB7;
-        Mon, 14 Mar 2022 10:27:03 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KHNj61xD6z67L0F;
-        Tue, 15 Mar 2022 01:25:30 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 14 Mar 2022 18:27:00 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Mar 2022 17:27:00 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Mon, 14 Mar 2022 17:26:59 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>
-Subject: RE: [PATCH v9 0/9] vfio/hisilicon: add ACC live migration driver
-Thread-Topic: [PATCH v9 0/9] vfio/hisilicon: add ACC live migration driver
-Thread-Index: AQHYMx05i/r2eazEYUSmGD9dldyyTay/KQYA
-Date:   Mon, 14 Mar 2022 17:26:59 +0000
-Message-ID: <df217839a41b47dc94ef201dfe379e4e@huawei.com>
-References: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
-In-Reply-To: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.89.194]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 14 Mar 2022 13:29:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28529BF73;
+        Mon, 14 Mar 2022 10:28:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE6FAB80E84;
+        Mon, 14 Mar 2022 17:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B47C340E9;
+        Mon, 14 Mar 2022 17:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647278925;
+        bh=4eD0cVEjg/hqa/+sA+6q+5ginR+jlqXMwv3B2EDkCA0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pjDW3ZznjOfTG+xMS5wEsbUxR+f8RYQTLTVeD14vejLpeUdjAdD4stPFEywHyoUnA
+         YDvqx50aXw/Vw3wOH3N1Asv/tZ0kTac7t1Y6zDQYf34iB7WBhU2QGFkNOwhxRUxBLm
+         dyf/LjA8ooEfyFubslh0lSpkrokIbpV274+EK0rI=
+Date:   Mon, 14 Mar 2022 18:28:41 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] staging: fbtft: Consider type of init sequence
+ values in fbtft_init_display()
+Message-ID: <Yi97SaQdudVfKV9W@kroah.com>
+References: <20220304193414.88006-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220304193414.88006-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQWxleCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTaGFtZWVy
-YWxpIEtvbG90aHVtIFRob2RpDQo+IFNlbnQ6IDA4IE1hcmNoIDIwMjIgMTg6NDkNCj4gVG86IGt2
-bUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4
-LWNyeXB0b0B2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGxpbnV4LXBjaUB2Z2VyLmtlcm5lbC5vcmc7
-IGFsZXgud2lsbGlhbXNvbkByZWRoYXQuY29tOyBqZ2dAbnZpZGlhLmNvbTsNCj4gY29odWNrQHJl
-ZGhhdC5jb207IG1ndXJ0b3ZveUBudmlkaWEuY29tOyB5aXNoYWloQG52aWRpYS5jb207DQo+IGtl
-dmluLnRpYW5AaW50ZWwuY29tOyBMaW51eGFybSA8bGludXhhcm1AaHVhd2VpLmNvbT47IGxpdWxv
-bmdmYW5nDQo+IDxsaXVsb25nZmFuZ0BodWF3ZWkuY29tPjsgWmVuZ3RhbyAoQikgPHByaW1lLnpl
-bmdAaGlzaWxpY29uLmNvbT47DQo+IEpvbmF0aGFuIENhbWVyb24gPGpvbmF0aGFuLmNhbWVyb25A
-aHVhd2VpLmNvbT47IFdhbmd6aG91IChCKQ0KPiA8d2FuZ3pob3UxQGhpc2lsaWNvbi5jb20+DQo+
-IFN1YmplY3Q6IFtQQVRDSCB2OSAwLzldIHZmaW8vaGlzaWxpY29uOiBhZGQgQUNDIGxpdmUgbWln
-cmF0aW9uIGRyaXZlcg0KPiANCj4gSGksDQo+IA0KPiBUaGlzIHNlcmllcyBhdHRlbXB0cyB0byBh
-ZGQgdmZpbyBsaXZlIG1pZ3JhdGlvbiBzdXBwb3J0IGZvciBIaVNpbGljb24NCj4gQUNDIFZGIGRl
-dmljZXMgYmFzZWQgb24gdGhlIG5ldyB2MiBtaWdyYXRpb24gcHJvdG9jb2wgZGVmaW5pdGlvbiBh
-bmQNCj4gbWx4NSB2OSBzZXJpZXMgZGlzY3Vzc2VkIGhlcmVbMF0uDQo+IA0KPiB2OCAtLT4gdjkN
-Cj4gwqAtIEFkZGVkIGFja3MgYnkgV2FuZ3pob3UvTG9uZ2ZhbmcvWWVrYWkNCj4gwqAtIEFkZGVk
-IFItYnkgdGFncyBieSBKYXNvbi4NCj4gwqAtIEFkZHJlc3NlZCBjb21tZW50c8KgYnkgQWxleCBv
-biB2OC4NCj4gwqAtIEZpeGVkIHRoZSBwZl9xdWV1ZSBwb2ludGVyIGFzc2lnbm1lbnQgZXJyb3Ig
-aW4gcGF0Y2ggIzguDQo+IMKgLSBBZGRyZXNzZWTCoGNvbW1lbnRzIGZyb20gS2V2aW4sDQo+ICDC
-oCDCoC1VcGRhdGVkIHBhdGNoICM1IGNvbW1pdCBsb2cgbXNnIHdpdGggYSBjbGFyaWZpY2F0aW9u
-IHRoYXQgVkYNCj4gwqAgwqAgwqBtaWdyYXRpb24gQkFSIGFzc2lnbm1lbnQgaXMgZmluZSBpZiBt
-aWdyYXRpb24gc3VwcG9ydCBpcyBub3QgdGhlcmUuDQo+ICDCoCDCoC1BZGRlZCBRTSBkZXNjcmlw
-dGlvbiB0byBwYXRjaCAjOCBjb21taXQgbXNnLg0KDQpIb3BlIHRoZXJlIGlzIG5vdGhpbmcgcGVu
-ZGluZyBmb3IgdGhpcyBzZXJpZXMgbm93IHRvIG1ha2UgaXQgdG8gbmV4dC4NCkkga25vdyBhY2sg
-ZnJvbSBCam9ybiBpcyBzdGlsbCBwZW5kaW5nIGZvciBwYXRjaCAjMywgYW5kIEkgaGF2ZQ0Kc2Vu
-dCBhIHBpbmcgbGFzdCB3ZWVrIGFuZCBhbHNvIENDZCBoaW0gb24gdGhhdCBwYXRjaC4NCg0KUGxl
-YXNlIGxldCBtZSBrbm93IGlmIHRoZXJlIGlzIGFueXRoaW5nIEkgbWlzc2VkLiANCg0KVGhhbmtz
-LA0KU2hhbWVlcg0KDQoNCj4gDQo+IFRoaXMgaXMgc2FuaXR5IHRlc3RlZCBvbiBhIEhpU2lsaWNv
-biBwbGF0Zm9ybSB1c2luZyB0aGUgUWVtdSBicmFuY2gNCj4gcHJvdmlkZWQgaGVyZVsxXS4NCj4g
-DQo+IFBsZWFzZSB0YWtlIGEgbG9vayBhbmQgbGV0IG1lIGtub3cgeW91ciBmZWVkYmFjay4NCj4g
-DQo+IFRoYW5rcywNCj4gU2hhbWVlcg0KPiBbMF0NCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-a3ZtLzIwMjIwMjI0MTQyMDI0LjE0NzY1My0xLXlpc2hhaWhAbnZpZGlhLmNvbS8NCj4gWzFdIGh0
-dHBzOi8vZ2l0aHViLmNvbS9qZ3VudGhvcnBlL3FlbXUvY29tbWl0cy92ZmlvX21pZ3JhdGlvbl92
-Mg0KPiANCj4gdjcgLS0+IHY4DQo+IMKgLSBEcm9wcGVkIFBSRV9DT1BZIHN1cHBvcnQgYW5kIGVh
-cmx5wqBjb21wYXRpYmlsaXR5IGNoZWNraW5nIGJhc2VkIG9uDQo+ICAgIHRoZSBkaXNjdXNzaW9u
-IGhlcmVbMV0uDQo+IMKgLSBBZGRyZXNzZWTCoGNvbW1lbnRzwqBmcm9tIEpvaG4sIEphc29uICYg
-QWxleCAoVGhhbmtzISkuDQo+IA0KPiB2NiAtLT4gdjcNCj4gwqAtUmVuYW1lZCBNSUdfUFJFQ09Q
-WSBpb2N0bCBuYW1lIGFuZCBzdHJ1Y3QgbmFtZS4gVXBkYXRlZCBpb2N0bA0KPiBkZXNjcmlwdGlv
-bnMNCj4gwqAgcmVnYXJkaW5nIGlvY3RsIHZhbGlkaXR5IChwYXRjaCAjNykuDQo+IC0gQWRyZXNz
-ZWQgY29tbWVudHMgZnJvbSBKYXNvbiBhbmQgQWxleCBvbiBQUkVfQ09QWSByZWFkKCkgYW5kIGlv
-Y3RsKCkgZm5zDQo+ICAgKHBhdGNoICM5KS4NCj4gLSBNb3ZlZCBvbmx5IFZGIFBDSSBpZHMgdG8g
-cGNpX2lkcy5oKHBhdGNoICMzKS4NCj4gDQo+IHY1IC0tPiB2Ng0KPiAgLVJlcG9ydCBQUkVfQ09Q
-WSBzdXBwb3J0IGFuZCB1c2UgdGhhdCBmb3IgZWFybHkgY29tcGF0aWJpbGl0eSBjaGVjaw0KPiAg
-IGJldHdlZW4gc3JjIGFuZCBkc3QgZGV2aWNlcy4NCj4gIC1Gb3IgZ2VuZXJpYyBQUkVfQ09QWSBz
-dXBwb3J0LCBpbmNsdWRlZCBwYXRjaCAjNyBmcm9tIEphc29uKFRoYW5rcyEpLg0KPiAgLUFkZHJl
-c3NlZCBjb21tZW50cyBmcm9tIEFsZXgoVGhhbmtzISkuDQo+ICAtQWRkZWQgdGhlIFFNIHN0YXRl
-IHJlZ2lzdGVyIHVwZGF0ZSB0byBRTSBkcml2ZXIocGF0Y2ggIzgpIHNpbmNlIHRoYXQNCj4gICBp
-cyBiZWluZyB1c2VkIGluIG1pZ3JhdGlvbiBkcml2ZXIgdG8gZGVjaWRlIHdoZXRoZXIgdGhlIGRl
-dmljZSBpcw0KPiAgIHJlYWR5IHRvIHNhdmUgdGhlIHN0YXRlLg0KPiANCj4gUkZDdjQgLS0+IHY1
-DQo+ICAgLSBEcm9wcGVkIFJGQyB0YWcgYXMgdjIgbWlncmF0aW9uIEFQSXMgYXJlIG1vcmUgc3Rh
-YmxlIG5vdy4NCj4gICAtIEFkZHJlc3NlZCByZXZpZXcgY29tbWVudHMgZnJvbSBKYXNvbiBhbmQg
-QWxleCAoVGhhbmtzISkuDQo+IA0KPiB2MyAtLT4gUkZDdjQNCj4gLUJhc2VkIG9uIG1pZ3JhdGlv
-biB2MiBwcm90b2NvbCBhbmQgbWx4NSB2NyBzZXJpZXMuDQo+IC1BZGRlZCBSRkMgdGFnIGFnYWlu
-IGFzIG1pZ3JhdGlvbiB2MiBwcm90b2NvbCBpcyBzdGlsbCB1bmRlciBkaXNjdXNzaW9uLg0KPiAt
-QWRkZWQgbmV3IHBhdGNoICM2IHRvIHJldHJpZXZlIHRoZSBQRiBRTSBkYXRhLg0KPiAtUFJFX0NP
-UFkgY29tcGF0aWJpbGl0eSBjaGVjayBpcyBub3cgZG9uZSBhZnRlciB0aGUgbWlncmF0aW9uIGRh
-dGENCj4gwqB0cmFuc2Zlci4gVGhpcyBpcyBub3QgaWRlYWwgYW5kIG5lZWRzIGRpc2N1c3Npb24u
-DQo+IA0KPiBSRkMgdjIgLS0+IHYzDQo+IMKgLURyb3BwZWQgUkZDIHRhZyBhcyB0aGUgdmZpb19w
-Y2lfY29yZSBzdWJzeXN0ZW0gZnJhbWV3b3JrIGlzIG5vdw0KPiDCoCBwYXJ0IG9mIDUuMTUtcmMx
-Lg0KPiDCoC1BZGRlZCBvdmVycmlkZSBtZXRob2RzIGZvciB2ZmlvX2RldmljZV9vcHMgcmVhZC93
-cml0ZS9tbWFwIGNhbGxzDQo+IMKgIHRvIGxpbWl0IHRoZSBhY2Nlc3Mgd2l0aGluIHRoZSBmdW5j
-dGlvbmFsIHJlZ2lzdGVyIHNwYWNlLg0KPiDCoC1QYXRjaGVzIDEgdG8gMyBhcmUgY29kZSByZWZh
-Y3RvcmluZyB0byBtb3ZlIHRoZSBjb21tb24gQUNDIFFNDQo+IMKgIGRlZmluaXRpb25zIGFuZCBo
-ZWFkZXIgYXJvdW5kLg0KPiANCj4gUkZDdjEgLS0+IFJGQ3YyDQo+IA0KPiDCoC1BZGRzIGEgbmV3
-IHZlbmRvci1zcGVjaWZpYyB2ZmlvX3BjaSBkcml2ZXIoaGlzaS1hY2MtdmZpby1wY2kpDQo+IMKg
-IGZvciBIaVNpbGljb24gQUNDIFZGIGRldmljZXMgYmFzZWQgb24gdGhlIG5ldyB2ZmlvLXBjaS1j
-b3JlDQo+IMKgIGZyYW1ld29yayBwcm9wb3NhbC4NCj4gDQo+IMKgLVNpbmNlIEhpU2lsaWNvbiBB
-Q0MgVkYgZGV2aWNlIE1NSU8gc3BhY2UgY29udGFpbnMgYm90aCB0aGUNCj4gwqAgZnVuY3Rpb25h
-bCByZWdpc3RlciBzcGFjZSBhbmQgbWlncmF0aW9uIGNvbnRyb2wgcmVnaXN0ZXIgc3BhY2UsDQo+
-IMKgIG92ZXJyaWRlIHRoZSB2ZmlvX2RldmljZV9vcHMgaW9jdGwgbWV0aG9kIHRvIHJlcG9ydCBv
-bmx5IHRoZQ0KPiDCoCBmdW5jdGlvbmFsIHNwYWNlIHRvIFZNcy4NCj4gDQo+IMKgLUZvciBhIHN1
-Y2Nlc3NmdWwgbWlncmF0aW9uLCB3ZSBzdGlsbCBuZWVkIGFjY2VzcyB0byBWRiBkZXYNCj4gwqAg
-ZnVuY3Rpb25hbCByZWdpc3RlciBzcGFjZSBtYWlubHkgdG8gcmVhZCB0aGUgc3RhdHVzIHJlZ2lz
-dGVycy4NCj4gwqAgQnV0IGFjY2Vzc2luZyB0aGVzZSB3aGlsZSB0aGUgR3Vlc3QgdkNQVXMgYXJl
-IHJ1bm5pbmcgbWF5IGxlYXZlDQo+IMKgIGEgc2VjdXJpdHkgaG9sZS4gVG8gYXZvaWQgYW55IHBv
-dGVudGlhbCBzZWN1cml0eSBpc3N1ZXMsIHdlDQo+IMKgIG1hcC91bm1hcCB0aGUgTU1JTyByZWdp
-b25zIG9uIGEgbmVlZCBiYXNpcyBhbmQgaXMgc2FmZSB0byBkbyBzby4NCj4gwqAgKFBsZWFzZSBz
-ZWUgaGlzaV9hY2NfdmZfaW9yZW1hcC91bm1hcCgpIGZucyBpbiBwYXRjaCAjNCkuDQo+IA0KPiDC
-oC1Ecm9wcGVkIGRlYnVnZnMgc3VwcG9ydCBmb3Igbm93Lg0KPiDCoC1Vc2VzIGNvbW1vbiBRTSBm
-dW5jdGlvbnMgZm9yIG1haWxib3ggYWNjZXNzKHBhdGNoICMzKS4NCj4gDQo+IExvbmdmYW5nIExp
-dSAoMyk6DQo+ICAgY3J5cHRvOiBoaXNpbGljb24vcW06IE1vdmUgZmV3IGRlZmluaXRpb25zIHRv
-IGNvbW1vbiBoZWFkZXINCj4gICBjcnlwdG86IGhpc2lsaWNvbi9xbTogU2V0IHRoZSBWRiBRTSBz
-dGF0ZSByZWdpc3Rlcg0KPiAgIGhpc2lfYWNjX3ZmaW9fcGNpOiBBZGQgc3VwcG9ydCBmb3IgVkZJ
-TyBsaXZlIG1pZ3JhdGlvbg0KPiANCj4gU2hhbWVlciBLb2xvdGh1bSAoNik6DQo+ICAgY3J5cHRv
-OiBoaXNpbGljb24vcW06IE1vdmUgdGhlIFFNIGhlYWRlciB0byBpbmNsdWRlL2xpbnV4DQo+ICAg
-aGlzaV9hY2NfcW06IE1vdmUgVkYgUENJIGRldmljZSBJRHMgdG8gY29tbW9uIGhlYWRlcg0KPiAg
-IGhpc2lfYWNjX3ZmaW9fcGNpOiBhZGQgbmV3IHZmaW9fcGNpIGRyaXZlciBmb3IgSGlTaWxpY29u
-IEFDQyBkZXZpY2VzDQo+ICAgaGlzaV9hY2NfdmZpb19wY2k6IFJlc3RyaWN0IGFjY2VzcyB0byBW
-RiBkZXYgQkFSMiBtaWdyYXRpb24gcmVnaW9uDQo+ICAgaGlzaV9hY2NfdmZpb19wY2k6IEFkZCBo
-ZWxwZXIgdG8gcmV0cmlldmUgdGhlIHN0cnVjdCBwY2lfZHJpdmVyDQo+ICAgaGlzaV9hY2NfdmZp
-b19wY2k6IFVzZSBpdHMgb3duIFBDSSByZXNldF9kb25lIGVycm9yIGhhbmRsZXINCj4gDQo+ICBN
-QUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICA3ICsNCj4g
-IGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9ocHJlL2hwcmUuaCAgICAgICAgICB8ICAgIDIgKy0N
-Cj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9ocHJlL2hwcmVfbWFpbi5jICAgICB8ICAgMTkg
-Ky0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9xbS5jICAgICAgICAgICAgICAgICB8ICAg
-NjggKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9zZWMyL3NlYy5oICAgICAgICAgICB8
-ICAgIDIgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9zZWMyL3NlY19tYWluLmMgICAg
-ICB8ICAgMjEgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9zZ2wuYyAgICAgICAgICAg
-ICAgICB8ICAgIDIgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi96aXAvemlwLmggICAg
-ICAgICAgICB8ICAgIDIgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi96aXAvemlwX21h
-aW4uYyAgICAgICB8ICAgMTcgKy0NCj4gIGRyaXZlcnMvdmZpby9wY2kvS2NvbmZpZyAgICAgICAg
-ICAgICAgICAgICAgICB8ICAgIDIgKw0KPiAgZHJpdmVycy92ZmlvL3BjaS9NYWtlZmlsZSAgICAg
-ICAgICAgICAgICAgICAgIHwgICAgMiArDQo+ICBkcml2ZXJzL3ZmaW8vcGNpL2hpc2lsaWNvbi9L
-Y29uZmlnICAgICAgICAgICAgfCAgIDE1ICsNCj4gIGRyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29u
-L01ha2VmaWxlICAgICAgICAgICB8ICAgIDQgKw0KPiAgLi4uL3ZmaW8vcGNpL2hpc2lsaWNvbi9o
-aXNpX2FjY192ZmlvX3BjaS5jICAgIHwgMTMyNiArKysrKysrKysrKysrKysrKw0KPiAgLi4uL3Zm
-aW8vcGNpL2hpc2lsaWNvbi9oaXNpX2FjY192ZmlvX3BjaS5oICAgIHwgIDExNiArKw0KPiAgLi4u
-L3FtLmggPT4gaW5jbHVkZS9saW51eC9oaXNpX2FjY19xbS5oICAgICAgIHwgICA0OSArDQo+ICBp
-bmNsdWRlL2xpbnV4L3BjaV9pZHMuaCAgICAgICAgICAgICAgICAgICAgICAgfCAgICAzICsNCj4g
-IDE3IGZpbGVzIGNoYW5nZWQsIDE1OTEgaW5zZXJ0aW9ucygrKSwgNjYgZGVsZXRpb25zKC0pDQo+
-ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy92ZmlvL3BjaS9oaXNpbGljb24vS2NvbmZpZw0K
-PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29uL01ha2VmaWxl
-DQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy92ZmlvL3BjaS9oaXNpbGljb24vaGlzaV9h
-Y2NfdmZpb19wY2kuYw0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdmZpby9wY2kvaGlz
-aWxpY29uL2hpc2lfYWNjX3ZmaW9fcGNpLmgNCj4gIHJlbmFtZSBkcml2ZXJzL2NyeXB0by9oaXNp
-bGljb24vcW0uaCA9PiBpbmNsdWRlL2xpbnV4L2hpc2lfYWNjX3FtLmggKDg3JSkNCj4gDQo+IC0t
-DQo+IDIuMjUuMQ0KDQo=
+On Fri, Mar 04, 2022 at 09:34:14PM +0200, Andy Shevchenko wrote:
+> In the fbtft_init_display() the init sequence is printed for
+> the debug purposes. Unfortunately the current code doesn't take
+> into account that values in the buffer are of the s16 type.
+> 
+> Consider that and replace the printing code with fbtft_par_dbg_hex()
+> call.
+> 
+> Fixes: b888897014a9 ("staging/fbtft: Remove all strcpy() uses")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/staging/fbtft/fbtft-core.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
+> index 4a35347b3020..b28a059ad3b4 100644
+> --- a/drivers/staging/fbtft/fbtft-core.c
+> +++ b/drivers/staging/fbtft/fbtft-core.c
+> @@ -1035,10 +1035,9 @@ int fbtft_init_display(struct fbtft_par *par)
+>  			for (j = 0; par->init_sequence[i + 1 + j] >= 0; j++)
+>  				;
+>  
+> -			fbtft_par_dbg(DEBUG_INIT_DISPLAY, par,
+> -				      "init: write(0x%02X) %*ph\n",
+> -				      par->init_sequence[i], j,
+> -				      &par->init_sequence[i + 1]);
+> +			fbtft_par_dbg_hex(DEBUG_INIT_DISPLAY, par, par->info->device,
+> +					  s16, &par->init_sequence[i + 1], j,
+> +					  "init: write(0x%02X)", par->init_sequence[i]);
+>  
+>  			/* Write */
+>  			j = 0;
+> -- 
+> 2.34.1
+> 
+> 
+
+Any reason you didn't test build this?
+
+drivers/staging/fbtft/fbtft-core.c: In function ‘fbtft_init_display’:
+drivers/staging/fbtft/fbtft-core.c:1038:48: error: passing argument 3 of ‘fbtft_dbg_hex’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+ 1038 |                                           s16, &par->init_sequence[i + 1], j,
+      |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/staging/fbtft/fbtft.h:441:50: note: in definition of macro ‘fbtft_par_dbg_hex’
+  441 |                 fbtft_dbg_hex(dev, sizeof(type), buf,\
+      |                                                  ^~~
+drivers/staging/fbtft/fbtft-core.c:52:26: note: expected ‘void *’ but argument is of type ‘const s16 *’ {aka ‘const short int *’}
+   52 |                    void *buf, size_t len, const char *fmt, ...)
+      |                    ~~~~~~^~~
+  LD [M]  drivers/staging/gdm724x/gdmulte.o
+cc1: all warnings being treated as errors

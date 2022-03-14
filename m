@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A244D885B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589124D8861
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242663AbiCNPlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S242685AbiCNPms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242670AbiCNPlt (ORCPT
+        with ESMTP id S242645AbiCNPmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:41:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5566443F7;
-        Mon, 14 Mar 2022 08:40:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA2E61274;
-        Mon, 14 Mar 2022 15:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6E9C340E9;
-        Mon, 14 Mar 2022 15:40:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647272437;
-        bh=N1ifLpIgpRyYM2X3kH35gK6SnVXZ+nbBy9A+jPeXgNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uD5H4O6+coUBFsCf4fK4LZgvjR2Cd3aTCyXWAd6DT5oWoApFckalq34tQJW0fctXG
-         IeCvu+s2eI00ZjmcPTHcNyJh386gwZH72RtkGRCqg/PwQ84CoZF3VGxIG2awuWkl/X
-         snPWL9Erf/iijlopvkbv3ImsSKDpeWGUYHQJOOiBbNMlSJFy+lMTMsT8OjMXHoTHsp
-         6YPKSfns04BKVKiNaBCx5vHoQ9Imbzjm0WX/5fyq7ORmbXnY7v1cinOnwpjWiKLtxt
-         su8Bcm0BZy9Og2Z3yWu6rumprqgU/wer2q2R7DvAjSRXZ7FnY3K01hj07h2scUdTmS
-         XKZ2PMSDiyWIg==
-Received: by pali.im (Postfix)
-        id E242E824; Mon, 14 Mar 2022 16:40:33 +0100 (CET)
-Date:   Mon, 14 Mar 2022 16:40:33 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Ziji Hu <huziji@marvell.com>,
-        Adrian Hunter <adrian.hunter@intel.com>, jaz@semihalf.com,
-        tn@semihalf.com, Kostya Porotchkin <kostap@marvell.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        "# 4.0+" <stable@vger.kernel.org>
-Subject: Re: [PATCH] mmc: sdhci-xenon: fix 1.8v regulator stabilization
-Message-ID: <20220314154033.4x74zscayee32rrj@pali>
-References: <20201211141656.24915-1-mw@semihalf.com>
- <CAPDyKFqsSO+f9iG8vccwXZXDDNHgLEg7bfUe-KfHn2C-ZnOU4A@mail.gmail.com>
+        Mon, 14 Mar 2022 11:42:44 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B373DDE6;
+        Mon, 14 Mar 2022 08:41:33 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id k25so18651159iok.8;
+        Mon, 14 Mar 2022 08:41:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rY4lnGX91BSkoxPaQ5SCRaMmjihX3PZ5V3Bm/1QXiHs=;
+        b=pIap1mXobAw2rz8ZxcNEp9Z/KkzxSXkOoNrA8dW3e4PfN8pnZVO1vHfrrMoXOpXNqR
+         VyaPvcPYJxir8i3XjRH6XLTmovk2/QNuvSMCBzo+MtomXW76ER/9bVufL+I6WQY3uDy3
+         IwPwmkMB7rU/XbljrGbzH/KyxCaFflaBoY72FTaWcYmVs1MtXooloXb4xWLtkJt8WRLo
+         YZK6wFUHmLj7zx+2oB8SpyjvVtVj2HADtSEdt6DZbbpiFCfMgEzBlEWPXvUFvtBUit+T
+         RvQsmTQwM3c9lP9NMihogtfwvXUbAC2yzqOxeBQeTMOXjUU+aqnGk+TBpXxlqdilrn5d
+         KS1g==
+X-Gm-Message-State: AOAM53220aD9DT/+HnIdqaLyFBDKPZPi7cNRxlc4zRYhYsFXzAAptvA7
+        VCpCKqwTIVBFU/HHKAA//Q==
+X-Google-Smtp-Source: ABdhPJytlg8Rd17SG2Xpxxb2QPBALLGcdAVJUaxLHiJr4h8bQywp8afLDDXcpMLP4g+TKe2OqcmrJw==
+X-Received: by 2002:a05:6638:35a0:b0:31a:d42:1dd with SMTP id v32-20020a05663835a000b0031a0d4201ddmr3098236jal.95.1647272492898;
+        Mon, 14 Mar 2022 08:41:32 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id k15-20020a92c24f000000b002c79ec214f9sm2189432ilo.30.2022.03.14.08.41.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 08:41:32 -0700 (PDT)
+Received: (nullmailer pid 104552 invoked by uid 1000);
+        Mon, 14 Mar 2022 15:41:28 -0000
+Date:   Mon, 14 Mar 2022 09:41:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v6 0/6] Add sata nodes to rk356x
+Message-ID: <Yi9iKBr7pPUuzg15@robh.at.kernel.org>
+References: <20220311210357.222830-1-linux@fw-web.de>
+ <05309a59-85cd-2434-6435-6fd956fa75d6@opensource.wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqsSO+f9iG8vccwXZXDDNHgLEg7bfUe-KfHn2C-ZnOU4A@mail.gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <05309a59-85cd-2434-6435-6fd956fa75d6@opensource.wdc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,61 +77,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 11 January 2021 19:06:24 Ulf Hansson wrote:
-> On Fri, 11 Dec 2020 at 15:17, Marcin Wojtas <mw@semihalf.com> wrote:
-> >
-> > From: Alex Leibovich <alexl@marvell.com>
-> >
-> > Automatic Clock Gating is a feature used for the power
-> > consumption optimisation. It turned out that
-> > during early init phase it may prevent the stable voltage
-> > switch to 1.8V - due to that on some platfroms an endless
-> > printout in dmesg can be observed:
-> > "mmc1: 1.8V regulator output did not became stable"
-> > Fix the problem by disabling the ACG at very beginning
-> > of the sdhci_init and let that be enabled later.
-> >
-> > Fixes: 3a3748dba881 ("mmc: sdhci-xenon: Add Marvell Xenon SDHC core functionality")
-> > Signed-off-by: Alex Leibovich <alexl@marvell.com>
-> > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> > Cc: stable@vger.kernel.org
+On Sat, Mar 12, 2022 at 05:00:53PM +0900, Damien Le Moal wrote:
+> On 3/12/22 06:03, Frank Wunderlich wrote:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> > 
+> > This Series converts the binding for ahci-platform to yaml and adds
+> > sata nodes to rockchip rk356x device trees.
 > 
-> Applied for fixes (by fixing the typos), thanks!
-
-Hello!
-
-Is not this patch address same issue which was fixed by patch which was
-merged earlier?
-
-bb32e1987bc5 ("mmc: sdhci-xenon: fix annoying 1.8V regulator warning")
-https://lore.kernel.org/linux-mmc/CAPDyKFqAsvgAjfL-c9ukFNWeGJmufQosR2Eg9SKjXMVpNitdkA@mail.gmail.com/
-
-> Kind regards
-> Uffe
+> Rob,
 > 
-> 
-> > ---
-> >  drivers/mmc/host/sdhci-xenon.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
-> > index c67611fdaa8a..4b05f6fdefb4 100644
-> > --- a/drivers/mmc/host/sdhci-xenon.c
-> > +++ b/drivers/mmc/host/sdhci-xenon.c
-> > @@ -168,7 +168,12 @@ static void xenon_reset_exit(struct sdhci_host *host,
-> >         /* Disable tuning request and auto-retuning again */
-> >         xenon_retune_setup(host);
-> >
-> > -       xenon_set_acg(host, true);
-> > +       /*
-> > +        * The ACG should be turned off at the early init time, in order
-> > +        * to solve a possile issues with the 1.8V regulator stabilization.
-> > +        * The feature is enabled in later stage.
-> > +        */
-> > +       xenon_set_acg(host, false);
-> >
-> >         xenon_set_sdclk_off_idle(host, sdhc_id, false);
-> >
-> > --
-> > 2.29.0
-> >
+> I saw you took patches 1, 4 and 5. What about the others ? Are you
+> taking them or should I take them through the ATA tree ?
+
+It's all dts changes, so they should go via the sub-arch trees.
+
+Rob

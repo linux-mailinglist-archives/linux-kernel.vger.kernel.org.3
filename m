@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE074D8200
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 129664D8342
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240091AbiCNL7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S241033AbiCNMMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbiCNL6c (ORCPT
+        with ESMTP id S242660AbiCNMKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:58:32 -0400
+        Mon, 14 Mar 2022 08:10:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211519FCB;
-        Mon, 14 Mar 2022 04:57:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C66D31531;
+        Mon, 14 Mar 2022 05:09:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BF65B80DE2;
-        Mon, 14 Mar 2022 11:57:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0066C340E9;
-        Mon, 14 Mar 2022 11:57:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A4CBB80DF3;
+        Mon, 14 Mar 2022 12:09:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23928C340E9;
+        Mon, 14 Mar 2022 12:09:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259039;
-        bh=B8JxXUMJP+tNVavWWNPa8zbI+2kLLFF+NYvVybtvMdw=;
+        s=korg; t=1647259758;
+        bh=08Tqei4Z8WFHO1qIRIw00Kq9v5Z7hksfudfirAx5M+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1FKTlre9OQiZPTE77rWUgSHo45imUkMYjtskrU6uwSoYx8gnyXr01oNAUN7TZXdYc
-         WpgJP/1dWQ9+tlvshYBkiCMcstCBf85Chq2A8ZwqRYYT3+D2U9UZvc+ap1I2dRDd4B
-         hZDRGqeXYdl8T9F7k0ehL/nDhhmUxVgQHdmiCwFg=
+        b=npNaCh1KGWidY6SExVtM3DVemAdKEtlDi9sSRH4jS8Cwtw+37KOKr0HMzx3mqRB5n
+         S4BW72Pxkqq4Fv37wYHgKUHycu40uzMN52rqlAGDCDwJ7qpaXhBLvXkN9oaFOoZOQ/
+         GwQAuVSGmYoM/ey082qoQwBhOpuJ3zritq0/UhIE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott McNutt <scott.mcnutt@siriusxm.com>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 32/43] net: macb: Fix lost RX packet wakeup race in NAPI receive
+        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
+        Eran Ben Elisha <eranbe@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 041/110] net/mlx5: Fix a race on command flush flow
 Date:   Mon, 14 Mar 2022 12:53:43 +0100
-Message-Id: <20220314112735.321761412@linuxfoundation.org>
+Message-Id: <20220314112744.184811656@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,81 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Moshe Shemesh <moshe@nvidia.com>
 
-commit 0bf476fc3624e3a72af4ba7340d430a91c18cd67 upstream.
+[ Upstream commit 063bd355595428750803d8736a9bb7c8db67d42d ]
 
-There is an oddity in the way the RSR register flags propagate to the
-ISR register (and the actual interrupt output) on this hardware: it
-appears that RSR register bits only result in ISR being asserted if the
-interrupt was actually enabled at the time, so enabling interrupts with
-RSR bits already set doesn't trigger an interrupt to be raised. There
-was already a partial fix for this race in the macb_poll function where
-it checked for RSR bits being set and re-triggered NAPI receive.
-However, there was a still a race window between checking RSR and
-actually enabling interrupts, where a lost wakeup could happen. It's
-necessary to check again after enabling interrupts to see if RSR was set
-just prior to the interrupt being enabled, and re-trigger receive in that
-case.
+Fix a refcount use after free warning due to a race on command entry.
+Such race occurs when one of the commands releases its last refcount and
+frees its index and entry while another process running command flush
+flow takes refcount to this command entry. The process which handles
+commands flush may see this command as needed to be flushed if the other
+process released its refcount but didn't release the index yet. Fix it
+by adding the needed spin lock.
 
-This issue was noticed in a point-to-point UDP request-response protocol
-which periodically saw timeouts or abnormally high response times due to
-received packets not being processed in a timely fashion. In many
-applications, more packets arriving, including TCP retransmissions, would
-cause the original packet to be processed, thus masking the issue.
+It fixes the following warning trace:
 
-Fixes: 02f7a34f34e3 ("net: macb: Re-enable RX interrupt only when RX is done")
-Cc: stable@vger.kernel.org
-Co-developed-by: Scott McNutt <scott.mcnutt@siriusxm.com>
-Signed-off-by: Scott McNutt <scott.mcnutt@siriusxm.com>
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 11 PID: 540311 at lib/refcount.c:25 refcount_warn_saturate+0x80/0xe0
+...
+RIP: 0010:refcount_warn_saturate+0x80/0xe0
+...
+Call Trace:
+ <TASK>
+ mlx5_cmd_trigger_completions+0x293/0x340 [mlx5_core]
+ mlx5_cmd_flush+0x3a/0xf0 [mlx5_core]
+ enter_error_state+0x44/0x80 [mlx5_core]
+ mlx5_fw_fatal_reporter_err_work+0x37/0xe0 [mlx5_core]
+ process_one_work+0x1be/0x390
+ worker_thread+0x4d/0x3d0
+ ? rescuer_thread+0x350/0x350
+ kthread+0x141/0x160
+ ? set_kthread_struct+0x40/0x40
+ ret_from_fork+0x1f/0x30
+ </TASK>
+
+Fixes: 50b2412b7e78 ("net/mlx5: Avoid possible free of command entry while timeout comp handler")
+Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
+Reviewed-by: Eran Ben Elisha <eranbe@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/cadence/macb_main.c |   25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/cmd.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1283,7 +1283,14 @@ static int macb_poll(struct napi_struct
- 	if (work_done < budget) {
- 		napi_complete_done(napi, work_done);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
+index 00f63fbfe9b4..e06a6104e91f 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
+@@ -130,11 +130,8 @@ static int cmd_alloc_index(struct mlx5_cmd *cmd)
  
--		/* Packets received while interrupts were disabled */
-+		/* RSR bits only seem to propagate to raise interrupts when
-+		 * interrupts are enabled at the time, so if bits are already
-+		 * set due to packets received while interrupts were disabled,
-+		 * they will not cause another interrupt to be generated when
-+		 * interrupts are re-enabled.
-+		 * Check for this case here. This has been seen to happen
-+		 * around 30% of the time under heavy network load.
-+		 */
- 		status = macb_readl(bp, RSR);
- 		if (status) {
- 			if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
-@@ -1291,6 +1298,22 @@ static int macb_poll(struct napi_struct
- 			napi_reschedule(napi);
- 		} else {
- 			queue_writel(queue, IER, bp->rx_intr_mask);
+ static void cmd_free_index(struct mlx5_cmd *cmd, int idx)
+ {
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&cmd->alloc_lock, flags);
++	lockdep_assert_held(&cmd->alloc_lock);
+ 	set_bit(idx, &cmd->bitmask);
+-	spin_unlock_irqrestore(&cmd->alloc_lock, flags);
+ }
+ 
+ static void cmd_ent_get(struct mlx5_cmd_work_ent *ent)
+@@ -144,17 +141,21 @@ static void cmd_ent_get(struct mlx5_cmd_work_ent *ent)
+ 
+ static void cmd_ent_put(struct mlx5_cmd_work_ent *ent)
+ {
++	struct mlx5_cmd *cmd = ent->cmd;
++	unsigned long flags;
 +
-+			/* In rare cases, packets could have been received in
-+			 * the window between the check above and re-enabling
-+			 * interrupts. Therefore, a double-check is required
-+			 * to avoid losing a wakeup. This can potentially race
-+			 * with the interrupt handler doing the same actions
-+			 * if an interrupt is raised just after enabling them,
-+			 * but this should be harmless.
-+			 */
-+			status = macb_readl(bp, RSR);
-+			if (unlikely(status)) {
-+				queue_writel(queue, IDR, bp->rx_intr_mask);
-+				if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
-+					queue_writel(queue, ISR, MACB_BIT(RCOMP));
-+				napi_schedule(napi);
-+			}
- 		}
++	spin_lock_irqsave(&cmd->alloc_lock, flags);
+ 	if (!refcount_dec_and_test(&ent->refcnt))
+-		return;
++		goto out;
+ 
+ 	if (ent->idx >= 0) {
+-		struct mlx5_cmd *cmd = ent->cmd;
+-
+ 		cmd_free_index(cmd, ent->idx);
+ 		up(ent->page_queue ? &cmd->pages_sem : &cmd->sem);
  	}
  
+ 	cmd_free_ent(ent);
++out:
++	spin_unlock_irqrestore(&cmd->alloc_lock, flags);
+ }
+ 
+ static struct mlx5_cmd_layout *get_inst(struct mlx5_cmd *cmd, int idx)
+-- 
+2.34.1
+
 
 

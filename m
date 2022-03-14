@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0CB4D8445
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E49E04D84E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241833AbiCNMXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S244372AbiCNMb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241131AbiCNMQF (ORCPT
+        with ESMTP id S243677AbiCNMVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:16:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCEB3464A;
-        Mon, 14 Mar 2022 05:11:51 -0700 (PDT)
+        Mon, 14 Mar 2022 08:21:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46F63614B;
+        Mon, 14 Mar 2022 05:16:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11255B80DFB;
-        Mon, 14 Mar 2022 12:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74180C340E9;
-        Mon, 14 Mar 2022 12:11:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B89660C72;
+        Mon, 14 Mar 2022 12:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DA8C340E9;
+        Mon, 14 Mar 2022 12:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259908;
-        bh=xlF0zVmafoR0uanVI4UamdWKtIxsBLEAJoBaZ0jV1NM=;
+        s=korg; t=1647260198;
+        bh=wKepa4VZBNA7+1tHrTub0cf2Vg7PKMogZSVkDZHOF1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0+GnAndS6jo9iMi2vhL94IO5Y1Rh4kB7GZftv+hAWrYK7Oqz/dAVqA8lrY3vXh6LJ
-         9XBFU1+f65hdT4cQPKigyzXi1da8xTTC3Hqt8Yt/FjgRyqkXiQWb/n+nwr9o/LDf5C
-         2zg2cIGE9j7AufdN9wyP498rLy1j2Dm30H6godWA=
+        b=k9A7IK5Gtgd9j7bxIaC8kwJIPvKDPm2MQxifYBS4tco/3dC3XG7oCMMkttcoRQGqV
+         lBN0tLkTaz5LWk12pMdgfETryPX7zM5uYx5zJEMET/MZxtZR6/xmGyKBkXmkg31Gbh
+         w0+FdNe1Oeujunm+X4sphEGA0Bn/ITz831SXXnZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH 5.15 084/110] arm64: dts: marvell: armada-37xx: Remap IO space to bus address 0x0
-Date:   Mon, 14 Mar 2022 12:54:26 +0100
-Message-Id: <20220314112745.374958362@linuxfoundation.org>
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 084/121] selftest/vm: fix map_fixed_noreplace test failure
+Date:   Mon, 14 Mar 2022 12:54:27 +0100
+Message-Id: <20220314112746.464174635@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +59,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 
-commit a1cc1697bb56cdf880ad4d17b79a39ef2c294bc9 upstream.
+[ Upstream commit f39c58008dee7ab5fc94c3f1995a21e886801df0 ]
 
-Legacy and old PCI I/O based cards do not support 32-bit I/O addressing.
+On the latest RHEL the test fails due to executable mapped at 256MB
+address
 
-Since commit 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from
-'ranges' DT property") kernel can set different PCIe address on CPU and
-different on the bus for the one A37xx address mapping without any firmware
-support in case the bus address does not conflict with other A37xx mapping.
+     # ./map_fixed_noreplace
+    mmap() @ 0x10000000-0x10050000 p=0xffffffffffffffff result=File exists
+    10000000-10010000 r-xp 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
+    10010000-10020000 r--p 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
+    10020000-10030000 rw-p 00010000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
+    10029b90000-10029bc0000 rw-p 00000000 00:00 0                            [heap]
+    7fffbb510000-7fffbb750000 r-xp 00000000 fd:04 24534                      /usr/lib64/libc.so.6
+    7fffbb750000-7fffbb760000 r--p 00230000 fd:04 24534                      /usr/lib64/libc.so.6
+    7fffbb760000-7fffbb770000 rw-p 00240000 fd:04 24534                      /usr/lib64/libc.so.6
+    7fffbb780000-7fffbb7a0000 r--p 00000000 00:00 0                          [vvar]
+    7fffbb7a0000-7fffbb7b0000 r-xp 00000000 00:00 0                          [vdso]
+    7fffbb7b0000-7fffbb800000 r-xp 00000000 fd:04 24514                      /usr/lib64/ld64.so.2
+    7fffbb800000-7fffbb810000 r--p 00040000 fd:04 24514                      /usr/lib64/ld64.so.2
+    7fffbb810000-7fffbb820000 rw-p 00050000 fd:04 24514                      /usr/lib64/ld64.so.2
+    7fffd93f0000-7fffd9420000 rw-p 00000000 00:00 0                          [stack]
+    Error: couldn't map the space we need for the test
 
-So remap I/O space to the bus address 0x0 to enable support for old legacy
-I/O port based cards which have hardcoded I/O ports in low address space.
+Fix this by finding a free address using mmap instead of hardcoding
+BASE_ADDRESS.
 
-Note that DDR on A37xx is mapped to bus address 0x0. And mapping of I/O
-space can be set to address 0x0 too because MEM space and I/O space are
-separate and so do not conflict.
-
-Remapping IO space on Turris Mox to different address is not possible to
-due bootloader bug.
-
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Fixes: 76f6386b25cc ("arm64: dts: marvell: Add Aardvark PCIe support for Armada 3700")
-Cc: stable@vger.kernel.org # 64f160e19e92 ("PCI: aardvark: Configure PCIe resources from 'ranges' DT property")
-Cc: stable@vger.kernel.org # 514ef1e62d65 ("arm64: dts: marvell: armada-37xx: Extend PCIe MEM space")
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20220217083417.373823-1-aneesh.kumar@linux.ibm.com
+Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Jann Horn <jannh@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts |    7 ++++++-
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi           |    2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ .../selftests/vm/map_fixed_noreplace.c        | 49 ++++++++++++++-----
+ 1 file changed, 37 insertions(+), 12 deletions(-)
 
---- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-+++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-@@ -139,7 +139,9 @@
- 	/*
- 	 * U-Boot port for Turris Mox has a bug which always expects that "ranges" DT property
- 	 * contains exactly 2 ranges with 3 (child) address cells, 2 (parent) address cells and
--	 * 2 size cells and also expects that the second range starts at 16 MB offset. If these
-+	 * 2 size cells and also expects that the second range starts at 16 MB offset. Also it
-+	 * expects that first range uses same address for PCI (child) and CPU (parent) cells (so
-+	 * no remapping) and that this address is the lowest from all specified ranges. If these
- 	 * conditions are not met then U-Boot crashes during loading kernel DTB file. PCIe address
- 	 * space is 128 MB long, so the best split between MEM and IO is to use fixed 16 MB window
- 	 * for IO and the rest 112 MB (64+32+16) for MEM, despite that maximal IO size is just 64 kB.
-@@ -148,6 +150,9 @@
- 	 * https://source.denx.de/u-boot/u-boot/-/commit/cb2ddb291ee6fcbddd6d8f4ff49089dfe580f5d7
- 	 * https://source.denx.de/u-boot/u-boot/-/commit/c64ac3b3185aeb3846297ad7391fc6df8ecd73bf
- 	 * https://source.denx.de/u-boot/u-boot/-/commit/4a82fca8e330157081fc132a591ebd99ba02ee33
-+	 * Bug related to requirement of same child and parent addresses for first range is fixed
-+	 * in U-Boot version 2022.04 by following commit:
-+	 * https://source.denx.de/u-boot/u-boot/-/commit/1fd54253bca7d43d046bba4853fe5fafd034bc17
+diff --git a/tools/testing/selftests/vm/map_fixed_noreplace.c b/tools/testing/selftests/vm/map_fixed_noreplace.c
+index d91bde511268..eed44322d1a6 100644
+--- a/tools/testing/selftests/vm/map_fixed_noreplace.c
++++ b/tools/testing/selftests/vm/map_fixed_noreplace.c
+@@ -17,9 +17,6 @@
+ #define MAP_FIXED_NOREPLACE 0x100000
+ #endif
+ 
+-#define BASE_ADDRESS	(256ul * 1024 * 1024)
+-
+-
+ static void dump_maps(void)
+ {
+ 	char cmd[32];
+@@ -28,18 +25,46 @@ static void dump_maps(void)
+ 	system(cmd);
+ }
+ 
++static unsigned long find_base_addr(unsigned long size)
++{
++	void *addr;
++	unsigned long flags;
++
++	flags = MAP_PRIVATE | MAP_ANONYMOUS;
++	addr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
++	if (addr == MAP_FAILED) {
++		printf("Error: couldn't map the space we need for the test\n");
++		return 0;
++	}
++
++	if (munmap(addr, size) != 0) {
++		printf("Error: couldn't map the space we need for the test\n");
++		return 0;
++	}
++	return (unsigned long)addr;
++}
++
+ int main(void)
+ {
++	unsigned long base_addr;
+ 	unsigned long flags, addr, size, page_size;
+ 	char *p;
+ 
+ 	page_size = sysconf(_SC_PAGE_SIZE);
+ 
++	//let's find a base addr that is free before we start the tests
++	size = 5 * page_size;
++	base_addr = find_base_addr(size);
++	if (!base_addr) {
++		printf("Error: couldn't map the space we need for the test\n");
++		return 1;
++	}
++
+ 	flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE;
+ 
+ 	// Check we can map all the areas we need below
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 5 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 
+@@ -60,7 +85,7 @@ int main(void)
+ 	printf("unmap() successful\n");
+ 
+ 	errno = 0;
+-	addr = BASE_ADDRESS + page_size;
++	addr = base_addr + page_size;
+ 	size = 3 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -80,7 +105,7 @@ int main(void)
+ 	 *     +4 |  free  | new
  	 */
- 	#address-cells = <3>;
- 	#size-cells = <2>;
---- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-@@ -497,7 +497,7 @@
- 			 * (totaling 127 MiB) for MEM.
- 			 */
- 			ranges = <0x82000000 0 0xe8000000   0 0xe8000000   0 0x07f00000   /* Port 0 MEM */
--				  0x81000000 0 0xefff0000   0 0xefff0000   0 0x00010000>; /* Port 0 IO */
-+				  0x81000000 0 0x00000000   0 0xefff0000   0 0x00010000>; /* Port 0 IO */
- 			interrupt-map-mask = <0 0 0 7>;
- 			interrupt-map = <0 0 0 1 &pcie_intc 0>,
- 					<0 0 0 2 &pcie_intc 1>,
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 5 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -101,7 +126,7 @@ int main(void)
+ 	 *     +4 |  free  |
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS + (2 * page_size);
++	addr = base_addr + (2 * page_size);
+ 	size = page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -121,7 +146,7 @@ int main(void)
+ 	 *     +4 |  free  | new
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS + (3 * page_size);
++	addr = base_addr + (3 * page_size);
+ 	size = 2 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -141,7 +166,7 @@ int main(void)
+ 	 *     +4 |  free  |
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 2 * page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -161,7 +186,7 @@ int main(void)
+ 	 *     +4 |  free  |
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -181,7 +206,7 @@ int main(void)
+ 	 *     +4 |  free  |  new
+ 	 */
+ 	errno = 0;
+-	addr = BASE_ADDRESS + (4 * page_size);
++	addr = base_addr + (4 * page_size);
+ 	size = page_size;
+ 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
+ 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
+@@ -192,7 +217,7 @@ int main(void)
+ 		return 1;
+ 	}
+ 
+-	addr = BASE_ADDRESS;
++	addr = base_addr;
+ 	size = 5 * page_size;
+ 	if (munmap((void *)addr, size) != 0) {
+ 		dump_maps();
+-- 
+2.34.1
+
 
 

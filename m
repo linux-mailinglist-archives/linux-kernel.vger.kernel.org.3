@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89714D83B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17B84D8361
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242364AbiCNMS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S241271AbiCNMNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242473AbiCNMKD (ORCPT
+        with ESMTP id S242484AbiCNMKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 08:10:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7708F193F3;
-        Mon, 14 Mar 2022 05:08:29 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4EC2018A;
+        Mon, 14 Mar 2022 05:08:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D27896130F;
-        Mon, 14 Mar 2022 12:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38A7C340E9;
-        Mon, 14 Mar 2022 12:08:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7A0FDCE1268;
+        Mon, 14 Mar 2022 12:08:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFB24C340EC;
+        Mon, 14 Mar 2022 12:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259708;
-        bh=/gwCmlsi5Q06s9CqoiM/ulAmAa9EkDtF9xcqhREj8NM=;
+        s=korg; t=1647259713;
+        bh=vIPXqAjDyhWI4A6J1UsnGGCoO+/UCR49RtAaOfr2sCw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EZ2kAYsZWn5pGBpEMTOGlyOGug1JtEFIp1uW7+pqTdKtyHXafWNyZGzTY/34kQlZj
-         6WwLccZ+5+JHLgo2SLT7gQxITSzk021s6Prgs3SMrzFid3GWp/KtBSZMFOfIsy+4/r
-         husk1lPFUwdw4+oooPQ5x/wjqqTmQQ1qk/MV/E6c=
+        b=hQNJMXYk3pmXMOo2MDQawVqGY0V7xiWkAXA0S10EC56zwqoa1P4d9E3xBEU1DtKru
+         5aUOHPH8deDZsnTpWZHvIxCQULdplPic/uooXOgrkkE3bR+TXCtgBmztBh6puSWi6c
+         dSo+xHRq1n2pp+UaE57RXI6Lhle03BEmmizYEuhg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        stable@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 070/110] tracing: Ensure trace buffer is at least 4096 bytes large
-Date:   Mon, 14 Mar 2022 12:54:12 +0100
-Message-Id: <20220314112744.989605523@linuxfoundation.org>
+Subject: [PATCH 5.15 071/110] tracing/osnoise: Make osnoise_main to sleep for microseconds
+Date:   Mon, 14 Mar 2022 12:54:13 +0100
+Message-Id: <20220314112745.017200899@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
 References: <20220314112743.029192918@linuxfoundation.org>
@@ -55,56 +56,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Schnelle <svens@linux.ibm.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-[ Upstream commit 7acf3a127bb7c65ff39099afd78960e77b2ca5de ]
+[ Upstream commit dd990352f01ee9a6c6eee152e5d11c021caccfe4 ]
 
-Booting the kernel with 'trace_buf_size=1' give a warning at
-boot during the ftrace selftests:
+osnoise's runtime and period are in the microseconds scale, but it is
+currently sleeping in the millisecond's scale. This behavior roots in the
+usage of hwlat as the skeleton for osnoise.
 
-[    0.892809] Running postponed tracer tests:
-[    0.892893] Testing tracer function:
-[    0.901899] Callback from call_rcu_tasks_trace() invoked.
-[    0.983829] Callback from call_rcu_tasks_rude() invoked.
-[    1.072003] .. bad ring buffer .. corrupted trace buffer ..
-[    1.091944] Callback from call_rcu_tasks() invoked.
-[    1.097695] PASSED
-[    1.097701] Testing dynamic ftrace: .. filter failed count=0 ..FAILED!
-[    1.353474] ------------[ cut here ]------------
-[    1.353478] WARNING: CPU: 0 PID: 1 at kernel/trace/trace.c:1951 run_tracer_selftest+0x13c/0x1b0
+Make osnoise to sleep in the microseconds scale. Also, move the sleep to
+a specialized function.
 
-Therefore enforce a minimum of 4096 bytes to make the selftest pass.
+Link: https://lkml.kernel.org/r/302aa6c7bdf2d131719b22901905e9da122a11b2.1645197336.git.bristot@kernel.org
 
-Link: https://lkml.kernel.org/r/20220214134456.1751749-1-svens@linux.ibm.com
-
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ kernel/trace/trace_osnoise.c | 53 ++++++++++++++++++++++--------------
+ 1 file changed, 32 insertions(+), 21 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 86fb77c2ace5..01002656f1ae 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1496,10 +1496,12 @@ static int __init set_buf_size(char *str)
- 	if (!str)
- 		return 0;
- 	buf_size = memparse(str, &str);
--	/* nr_entries can not be zero */
--	if (buf_size == 0)
--		return 0;
--	trace_buf_size = buf_size;
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 65a518649997..fc491d0aee5a 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -1249,6 +1249,37 @@ static int run_osnoise(void)
+ static struct cpumask osnoise_cpumask;
+ static struct cpumask save_cpumask;
+ 
++/*
++ * osnoise_sleep - sleep until the next period
++ */
++static void osnoise_sleep(void)
++{
++	u64 interval;
++	ktime_t wake_time;
++
++	mutex_lock(&interface_lock);
++	interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
++	mutex_unlock(&interface_lock);
++
 +	/*
-+	 * nr_entries can not be zero and the startup
-+	 * tests require some buffer space. Therefore
-+	 * ensure we have at least 4096 bytes of buffer.
++	 * differently from hwlat_detector, the osnoise tracer can run
++	 * without a pause because preemption is on.
 +	 */
-+	trace_buf_size = max(4096UL, buf_size);
- 	return 1;
- }
- __setup("trace_buf_size=", set_buf_size);
++	if (!interval) {
++		/* Let synchronize_rcu_tasks() make progress */
++		cond_resched_tasks_rcu_qs();
++		return;
++	}
++
++	wake_time = ktime_add_us(ktime_get(), interval);
++	__set_current_state(TASK_INTERRUPTIBLE);
++
++	while (schedule_hrtimeout_range(&wake_time, 0, HRTIMER_MODE_ABS)) {
++		if (kthread_should_stop())
++			break;
++	}
++}
++
+ /*
+  * osnoise_main - The osnoise detection kernel thread
+  *
+@@ -1257,30 +1288,10 @@ static struct cpumask save_cpumask;
+  */
+ static int osnoise_main(void *data)
+ {
+-	u64 interval;
+ 
+ 	while (!kthread_should_stop()) {
+-
+ 		run_osnoise();
+-
+-		mutex_lock(&interface_lock);
+-		interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
+-		mutex_unlock(&interface_lock);
+-
+-		do_div(interval, USEC_PER_MSEC);
+-
+-		/*
+-		 * differently from hwlat_detector, the osnoise tracer can run
+-		 * without a pause because preemption is on.
+-		 */
+-		if (interval < 1) {
+-			/* Let synchronize_rcu_tasks() make progress */
+-			cond_resched_tasks_rcu_qs();
+-			continue;
+-		}
+-
+-		if (msleep_interruptible(interval))
+-			break;
++		osnoise_sleep();
+ 	}
+ 
+ 	return 0;
 -- 
 2.34.1
 

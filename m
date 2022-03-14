@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6264D9001
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFAA4D9004
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343563AbiCNXDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 19:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S1343567AbiCNXGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 19:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238795AbiCNXD3 (ORCPT
+        with ESMTP id S235753AbiCNXGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 19:03:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148513A5E7;
-        Mon, 14 Mar 2022 16:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647298938; x=1678834938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t7C/pcYibGXzuw1c7KT4Go7pZLQBu1j2wb9INd1xCZM=;
-  b=TXWzrIinVGabdNU8yziLIBVl0joTOxV+usC9itSaefyR8RrDrxozn2ru
-   OvhOkD/LkL5U4BakdXJJA9mCSw3uMvgVODaUaoKqT7jRurobZwwGtBhHi
-   vkqaB7JN91VGExDTfI5kvnUrZaKFd11cS4rHwGf0jKAuFSCP3fwYBF/RA
-   5hI39HtmS48lkCNZykQAHLjlXc6gOWzKiNtIdaXxnHpvhvKzhYee+9Nqd
-   WCnuVmhiRH6QA4L5LQPCZmHgwEFZ7UCD/DJR+wJ1wtM3hNFLSN3i4ReY8
-   zzlYTT2Vp5dIMhamZGIMap7apFZaVyim0+4e/qmb3nZqrFQZHVSKxHqeG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236769721"
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="236769721"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:02:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="515638274"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 16:02:13 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTthc-000AJg-BB; Mon, 14 Mar 2022 23:02:12 +0000
-Date:   Tue, 15 Mar 2022 07:02:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Darren Hart <darren@os.amperecomputing.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] arch_topology: Swap MC & CLS SD mask if MC weight==1 &
-Message-ID: <202203150659.T51bnDgz-lkp@intel.com>
-References: <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
+        Mon, 14 Mar 2022 19:06:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BBA39BBC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:05:02 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 373E91F41076
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647299101;
+        bh=ImDNs5MtGaf4nSstH8zkCM28WFaVLQuyemCzF6ZQYJo=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=PlTxBut6TmpI+QxoNKeujpyLENjWdEye6aX+0N+6F2/DOWqvfg/tBGqHA5BBm8CI4
+         X/PEtRzXZbpIxQNXOSP+0W9ebTMWRTU7FAozYDi8ZeHs8Pa3NHe1IO7b5XESYewp/3
+         GoZvmtJx24jW14SESqm1+Qc+1KUVLhEtSav5/rG9qCfIWP/ESK2kgphI2niv0mRLUJ
+         HjKo+pGO2RWRRyDFe5aGiYvn5ZaPBT9ucMsNDNUw7+Pu9wMG38u3xcjKqRnJ4Cqs6e
+         AVsQv0/1Hzo0rUYayD7AR2j34doPgXwjvp0uZwPU3GY7LcDH0SBNkYOtsnhai7Hozz
+         jqwDJ8iUNBe1Q==
+Message-ID: <64959ce1-15f0-59f5-a6f8-4258019e5a4b@collabora.com>
+Date:   Tue, 15 Mar 2022 02:04:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v1 0/5] Add memory shrinker to VirtIO-GPU DRM driver
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Rob Clark <robdclark@chromium.org>
+References: <20220308131725.60607-1-dmitry.osipenko@collabora.com>
+ <CAF6AEGt=aVJ9nR+Wv+bJEFZrn-cNOSNXG1TaJr=Cx-FTgutwKA@mail.gmail.com>
+ <d2290971-ea22-8203-631e-b896c76a994b@collabora.com>
+ <CAF6AEGuR8B6z+z=VFQ6y01wbboYS_qpkghD1GYdLES_RZOW1wA@mail.gmail.com>
+ <42facae5-8f2c-9c1f-5144-4ebb99c798bd@collabora.com>
+ <CAF6AEGtebAbWhkvrxzi4UBLdv2LJPQVPBzH-sXcACs7cxznQ8A@mail.gmail.com>
+ <05e1fe61-1c29-152f-414b-cd6a44525af0@collabora.com>
+ <CAF6AEGvf81epGOs7Zh4WK-7mkXRApO2p-h4g8dTuk4xtc1HOeg@mail.gmail.com>
+ <285bf619-8c05-f2f4-3aeb-e013fba8754a@collabora.com>
+In-Reply-To: <285bf619-8c05-f2f4-3aeb-e013fba8754a@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,81 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dietmar,
+On 3/10/22 01:43, Dmitry Osipenko wrote:
+>> I think that, given virgl uses host storage, guest shrinker should be
+>> still useful.. so I think continue with this series.
+> Guest shrinker indeed will be useful for virgl today. I was already
+> questioning why virgl needs both host and guest storages, maybe it will
+> move to a host-only storage approach in the future.
+> 
+> I think the variant with the timer expiration actually could be
+> interesting to try because it should allow host to purge its VM BOs by
+> itself, preventing host OOMs.
 
-I love your patch! Perhaps something to improve:
+While I was working on shrinker v2, I noticed that host-side allocation
+may take a significant time. So I decided to defer implementation of my
+idea of using timer-based expiration for host-only BOs. I'll need to
+examine it more.
 
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on v5.17-rc8 next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+>> For host shrinker, I'll have to look more at when crosvm triggers
+>> balloon inflation.  I could still go the MADV:WILLNEED_REPLACE
+>> approach instead, which does have the advantage of host kernel not
+>> relying on host userspace or vm having a chance to run in order to
+>> release pages.  The downside (perhaps?) is it would be more specific
+>> to virtgpu-native-context and less so to virgl or venus (but I guess
+>> there doesn't currently exist a way for madvise to be useful for vk
+>> drivers).
+> I'll also take a look at what CrOS does, maybe it has some interesting
+> ideas.
 
-url:    https://github.com/0day-ci/linux/commits/Dietmar-Eggemann/arch_topology-Swap-MC-CLS-SD-mask-if-MC-weight-1/20220315-004742
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 4a248f85b3dd8e010ff8335755c927130e9b0764
-config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150659.T51bnDgz-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7528fb2ea1e30038ee1dcc48df9d413502977895
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Dietmar-Eggemann/arch_topology-Swap-MC-CLS-SD-mask-if-MC-weight-1/20220315-004742
-        git checkout 7528fb2ea1e30038ee1dcc48df9d413502977895
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/base/
+I looked at CrOS kernel and crosvm, and haven't noticed anything special
+there in regards to purging GPU's memory of VM on host-side memory
+pressure. If you'll find something, then please let me know.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I sent out v2 of the shrinker series, but missed to CC you on it by
+accident, please find it here [1].
 
-All warnings (new ones prefixed by >>):
-
->> drivers/base/arch_topology.c:617:23: warning: no previous prototype for function '_cpu_coregroup_mask' [-Wmissing-prototypes]
-   const struct cpumask *_cpu_coregroup_mask(int cpu)
-                         ^
-   drivers/base/arch_topology.c:617:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   const struct cpumask *_cpu_coregroup_mask(int cpu)
-         ^
-   static 
->> drivers/base/arch_topology.c:634:23: warning: no previous prototype for function '_cpu_clustergroup_mask' [-Wmissing-prototypes]
-   const struct cpumask *_cpu_clustergroup_mask(int cpu)
-                         ^
-   drivers/base/arch_topology.c:634:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   const struct cpumask *_cpu_clustergroup_mask(int cpu)
-         ^
-   static 
-   2 warnings generated.
-
-
-vim +/_cpu_coregroup_mask +617 drivers/base/arch_topology.c
-
-   616	
- > 617	const struct cpumask *_cpu_coregroup_mask(int cpu)
-   618	{
-   619		const cpumask_t *core_mask = cpumask_of_node(cpu_to_node(cpu));
-   620	
-   621		/* Find the smaller of NUMA, core or LLC siblings */
-   622		if (cpumask_subset(&cpu_topology[cpu].core_sibling, core_mask)) {
-   623			/* not numa in package, lets use the package siblings */
-   624			core_mask = &cpu_topology[cpu].core_sibling;
-   625		}
-   626		if (cpu_topology[cpu].llc_id != -1) {
-   627			if (cpumask_subset(&cpu_topology[cpu].llc_sibling, core_mask))
-   628				core_mask = &cpu_topology[cpu].llc_sibling;
-   629		}
-   630	
-   631		return core_mask;
-   632	}
-   633	
- > 634	const struct cpumask *_cpu_clustergroup_mask(int cpu)
-   635	{
-   636		return &cpu_topology[cpu].cluster_sibling;
-   637	}
-   638	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[1]
+https://lore.kernel.org/dri-devel/20220314224253.236359-1-dmitry.osipenko@collabora.com/T/#t

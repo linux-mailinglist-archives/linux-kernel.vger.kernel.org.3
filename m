@@ -2,213 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2C44D8799
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77944D879B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242132AbiCNPBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S242227AbiCNPBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241779AbiCNPBb (ORCPT
+        with ESMTP id S242172AbiCNPBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:01:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D962143AC5;
-        Mon, 14 Mar 2022 08:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2FF73CE12A9;
-        Mon, 14 Mar 2022 15:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D987C340E9;
-        Mon, 14 Mar 2022 15:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647270017;
-        bh=rfJsA3C/y0C9z8QvqykY1O2UQhiiKE2k5cHvMF4mbS8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=P1PqQG5LNTXtf8/ZawbuY5QU+HVWiYsFbYQ1dP0xd5HUffrVCyzLoM2FVAiyULZtU
-         J/usr8pSGntv73iUepM1ifHO6qHK0OOShH2flnmyXtBHRQdrgDXOiRkn9CfAMd5VwK
-         62TKuiyRzhkOptJof3JOv/GS1fCJhdaogHxLqfN8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.19 00/29] 4.19.235-rc2 review
-Date:   Mon, 14 Mar 2022 16:00:14 +0100
-Message-Id: <20220314145920.247358804@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 14 Mar 2022 11:01:47 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB0D42EE0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:00:37 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id dr20so34020315ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e8ChMeHs1gmArfnucgpkriuVOR26Jb1zf4qNR9jue60=;
+        b=Xd/JQTW04jQNywrqYP3ucQ6KfNXrwza1nGJ6jTukKmXJ1Cn3i0sAVWlZKb/0+Z7Njj
+         xFAWrE0ddX7bb/jhdWrcXzXTM3rfFXX+PybSmlM0ln4gv9ayJdHT9DMJZzUrHBzMrXo5
+         pM2RfaF+i6hlfsRSYOTGUjcBJLnPvOsjYJKsQU4q8LJjJSwacytbJ3BMl0GmozKz3oMC
+         rbDak6pg0eeqkhU9v9Ey5kpE8kR6xbM6y8DlL3qPeBsLT3YUdbGYEFKjXWiZ22T0n6Pi
+         LxPg92IuvA+6KUvn3ZO5vt46SR2UErahQBKvNLsg/OE+UCZBD9otRkfNlJjyWrfE3v3f
+         uZqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e8ChMeHs1gmArfnucgpkriuVOR26Jb1zf4qNR9jue60=;
+        b=gfuJLrAGLTaiBSAc9pz5/yt+BMQ6mbjfMIKE0OYR4GPkpEICANminipMwSSMkq2n2L
+         U1YL4tuuHrPSKJEMwJNEwqd8RRKgnhRU8FA4hK+b/72OgA3TygDGNIcj+pRqjMdZ06MN
+         eiI95GVrYL6A4me4ofTJeTWqj5FPn62vAaEwzWszCmr0uZ1woWiz88vzMwHCa1AUO+55
+         jh/7hvqsy3p3lGuDnhWcx/OiMhOD/kKfqoP29+xJb0hVBZsrXrYG622ALy4k3QOUP5Bt
+         XwudxAxzibVgtvp5avwhf/W+VP+3xRWSWn9N9skb+Ym+zQfxDVLUK5xDplumY40SGZwB
+         Wt8w==
+X-Gm-Message-State: AOAM530mMuaeK7cHa8H3LAa7aKSwJkVbTzQtvjOB90dyfWdTfjNyQSpc
+        C5QdFqEjzxLPRY4ZDRCO0WQOCGUqemNVA9QBGHA6ozEXGtA9PA==
+X-Google-Smtp-Source: ABdhPJwdFe0t2HsEEZcogZOm9gFXReWaBWaHDIAOvvNYYjPfz0IM/StIEZscbYv3gVHaGZSMQOCbu2/0KiWRTaeM3u4=
+X-Received: by 2002:a17:906:6a24:b0:6db:ad7b:9066 with SMTP id
+ qw36-20020a1709066a2400b006dbad7b9066mr12474492ejc.697.1647270028467; Mon, 14
+ Mar 2022 08:00:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.235-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.235-rc2
-X-KernelTest-Deadline: 2022-03-16T14:59+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310150905.1.Ie0a005d7a763d501e03b7abe8ee968ca99d23282@changeid>
+In-Reply-To: <20220310150905.1.Ie0a005d7a763d501e03b7abe8ee968ca99d23282@changeid>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 14 Mar 2022 16:00:17 +0100
+Message-ID: <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Drop CONFIG_DEBUG_GPIO
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.235 release.
-There are 29 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On Fri, Mar 11, 2022 at 12:09 AM Brian Norris <briannorris@chromium.org> wrote:
+>
+> CONFIG_DEBUG_GPIO has existed since the introduction of gpiolib, but its
+> Kconfig description and motivation seem to have been off-base for quite
+> some time.
+>
+> Description: it says nothing about enabling extra printk()s. But -DDEBUG
+> does just that; it turns on every dev_dbg()/pr_debug() that would
+> otherwise be silent.
+>
+> Purpose: might_sleep() and WARN_ON() should have very low overhead, and
+> anyway, there's a separate CONFIG_DEBUG_ATOMIC_SLEEP for the
+> might_sleep() overhead.
+>
+> Additionally, the conflated purpose (extra debug checks, and extra
+> printing) makes for a mixed bag for users. In particular, some drivers
+> can be extra-spammy with -DDEBUG -- e.g., with the Rockchip GPIO driver
+> getting moved out of drivers/pinctrl/ in commit 936ee2675eee
+> ("gpio/rockchip: add driver for rockchip gpio"), now some dev_dbg()
+> calls are enabled in its IRQ handler.
+>
+> Altogether, it seems like CONFIG_DEBUG_GPIO isn't serving any good
+> purpose and should just be removed. It can be supplanted by dynamic
+> debug (which post-dates gpiolib) and atomic-debug facilities.
+>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+>
 
-Responses should be made by Wed, 16 Mar 2022 14:59:12 +0000.
-Anything received after that time might be too late.
+I like it. It's true we don't see many of those DEBUG constructs
+anymore nowadays and overhead for might_sleep() and WARN_ON() is
+negligible.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.235-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-and the diffstat can be found below.
+Applied, thanks!
 
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.235-rc2
-
-Valentin Schneider <valentin.schneider@arm.com>
-    ia64: ensure proper NUMA distance and possible map initialization
-
-Dietmar Eggemann <dietmar.eggemann@arm.com>
-    sched/topology: Fix sched_domain_topology_level alloc in sched_init_numa()
-
-Valentin Schneider <valentin.schneider@arm.com>
-    sched/topology: Make sched_init_numa() use a set for the deduplicating sort
-
-Qu Wenruo <wqu@suse.com>
-    btrfs: unlock newly allocated extent buffer after error
-
-Josh Triplett <josh@joshtriplett.org>
-    ext4: add check to prevent attempting to resize an fs with sparse_super2
-
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-    ARM: fix Thumb2 regression with Spectre BHB
-
-Michael S. Tsirkin <mst@redhat.com>
-    virtio: acknowledge all features before access
-
-Michael S. Tsirkin <mst@redhat.com>
-    virtio: unexport virtio_finalize_features
-
-Emil Renner Berthing <kernel@esmil.dk>
-    riscv: Fix auipc+jalr relocation range checks
-
-Robert Hancock <robert.hancock@calian.com>
-    net: macb: Fix lost RX packet wakeup race in NAPI receive
-
-Dan Carpenter <dan.carpenter@oracle.com>
-    staging: gdm724x: fix use after free in gdm_lte_rx()
-
-Randy Dunlap <rdunlap@infradead.org>
-    ARM: Spectre-BHB: provide empty stub for non-config
-
-Mike Kravetz <mike.kravetz@oracle.com>
-    selftests/memfd: clean up mapping in mfd_fail_write
-
-Sven Schnelle <svens@linux.ibm.com>
-    tracing: Ensure trace buffer is at least 4096 bytes large
-
-Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-    Revert "xen-netback: Check for hotplug-status existence before watching"
-
-Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-    Revert "xen-netback: remove 'hotplug-status' once it has served its purpose"
-
-suresh kumar <suresh2514@gmail.com>
-    net-sysfs: add check for netdevice being present to speed_show
-
-Eric Dumazet <edumazet@google.com>
-    sctp: fix kernel-infoleak for SCTP sockets
-
-Clément Léger <clement.leger@bootlin.com>
-    net: phy: DP83822: clear MISR2 register to disable interrupts
-
-Miaoqian Lin <linmq006@gmail.com>
-    gianfar: ethtool: Fix refcount leak in gfar_get_ts_info
-
-Mark Featherston <mark@embeddedTS.com>
-    gpio: ts4900: Do not set DAT and OE together
-
-Pavel Skripkin <paskripkin@gmail.com>
-    NFC: port100: fix use-after-free in port100_send_complete
-
-Mohammad Kabat <mohammadkab@nvidia.com>
-    net/mlx5: Fix size field in bufferx_reg struct
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: Fix NULL pointer dereference in ax25_kill_by_device
-
-Jiasheng Jiang <jiasheng@iscas.ac.cn>
-    net: ethernet: lpc_eth: Handle error for clk_enable
-
-Jiasheng Jiang <jiasheng@iscas.ac.cn>
-    net: ethernet: ti: cpts: Handle error for clk_enable
-
-Miaoqian Lin <linmq006@gmail.com>
-    ethernet: Fix error handling in xemaclite_of_probe
-
-Tom Rix <trix@redhat.com>
-    qed: return status of qed_iov_get_link
-
-Jia-Ju Bai <baijiaju1990@gmail.com>
-    net: qlogic: check the return value of dma_alloc_coherent() in qed_vf_hw_prepare()
-
-
--------------
-
-Diffstat:
-
- Makefile                                         |  4 +-
- arch/arm/include/asm/spectre.h                   |  6 ++
- arch/arm/kernel/entry-armv.S                     |  4 +-
- arch/ia64/kernel/acpi.c                          |  7 +-
- arch/riscv/kernel/module.c                       | 21 +++--
- drivers/gpio/gpio-ts4900.c                       | 24 ++++--
- drivers/net/ethernet/cadence/macb_main.c         | 25 +++++-
- drivers/net/ethernet/freescale/gianfar_ethtool.c |  1 +
- drivers/net/ethernet/nxp/lpc_eth.c               |  5 +-
- drivers/net/ethernet/qlogic/qed/qed_sriov.c      | 18 +++--
- drivers/net/ethernet/qlogic/qed/qed_vf.c         |  7 ++
- drivers/net/ethernet/ti/cpts.c                   |  4 +-
- drivers/net/ethernet/xilinx/xilinx_emaclite.c    |  4 +-
- drivers/net/phy/dp83822.c                        |  2 +-
- drivers/net/xen-netback/xenbus.c                 | 13 ++--
- drivers/nfc/port100.c                            |  2 +
- drivers/staging/gdm724x/gdm_lte.c                |  5 +-
- drivers/virtio/virtio.c                          | 40 +++++-----
- fs/btrfs/extent-tree.c                           |  1 +
- fs/ext4/resize.c                                 |  5 ++
- include/linux/mlx5/mlx5_ifc.h                    |  4 +-
- include/linux/topology.h                         |  1 +
- include/linux/virtio.h                           |  1 -
- include/linux/virtio_config.h                    |  3 +-
- kernel/sched/topology.c                          | 99 ++++++++++++------------
- kernel/trace/trace.c                             | 10 ++-
- net/ax25/af_ax25.c                               |  7 ++
- net/core/net-sysfs.c                             |  2 +-
- net/sctp/diag.c                                  |  9 +--
- tools/testing/selftests/memfd/memfd_test.c       |  1 +
- 30 files changed, 212 insertions(+), 123 deletions(-)
-
-
+Bart

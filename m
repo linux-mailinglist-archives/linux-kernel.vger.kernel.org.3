@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8426A4D7988
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2824D798A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbiCNC7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 22:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S236032AbiCNDAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 23:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiCNC7H (ORCPT
+        with ESMTP id S230378AbiCNDAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 22:59:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3886A13FAA;
-        Sun, 13 Mar 2022 19:57:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE68360EF1;
-        Mon, 14 Mar 2022 02:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6115CC340E8;
-        Mon, 14 Mar 2022 02:57:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647226675;
-        bh=sUvovzaZJoG+yizqPaKgLqreLAazgl8KCNeOLDMDe1o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=afTdPDF4ams4pjpHMmW8JXbJ40ptGJ51tcQL8V8uMVDUvC2FYOKP/pNPPJFDOukyY
-         Um39fT+a54a6YIJozc/vTH3am6SBxgX+uC0ncWaUJnxJhv5XMpz9ztzBXpKpg6k3Ro
-         SpjhDC8r4Qnsu+wlQdxbT5ekT9v134Y/dUSDVzU3PdV4oGKLafBHpKY/7I1VygLPts
-         uGg6ahIgDq8hE3P7UaXFiaEXzhSt7z77NkX+krq09wK0FM1U1eH0S2UrVXlUiVlgF0
-         iR5NwLcBQ2kRfaM5m6A94ptpJmHn3AdKzQUugeUHzl+51Zp9UUKjf7yBUBcQQWK3LN
-         NEEMqcQnWLBfw==
-Date:   Mon, 14 Mar 2022 04:58:51 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
+        Sun, 13 Mar 2022 23:00:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D4B17071;
+        Sun, 13 Mar 2022 19:59:44 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KH1SS1dd6zfYsV;
+        Mon, 14 Mar 2022 10:58:16 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 14 Mar 2022 10:59:41 +0800
+Subject: Re: [PATCH v2 2/3] mm/memory-failure.c: avoid calling
+ invalidate_inode_page() with unexpected pages
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
         "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nathaniel@profian.com
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <Yi6va4dCaljiQ1WQ@iki.fi>
-References: <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com>
- <YhLhoMFPyOFZ2fsX@iki.fi>
- <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <YimWaAqEnXHbLdjh@iki.fi>
- <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
- <Yis8LV99mORcLYs6@iki.fi>
- <Yis9rA8uC/0bmWCF@iki.fi>
- <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com>
- <Yi6tPLLt9Q+ailQ3@iki.fi>
- <Yi6tinbF+Y7a66eQ@iki.fi>
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
+References: <20220312074613.4798-1-linmiaohe@huawei.com>
+ <20220312074613.4798-3-linmiaohe@huawei.com>
+ <20220313234157.GB3010057@hori.linux.bs1.fc.nec.co.jp>
+ <8aa7cdd9-8104-2fea-879d-61519f6489d1@huawei.com>
+ <20220314025034.GA3061370@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <219aeec6-5ff6-5101-8192-13b9f761e7c9@huawei.com>
+Date:   Mon, 14 Mar 2022 10:59:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yi6tinbF+Y7a66eQ@iki.fi>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220314025034.GA3061370@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
-> On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
-> > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
-> > 
-> > > I saw Haitao's note that EMODPE requires "Read access permitted by enclave".
-> > > This motivates that EMODPR->PROT_NONE should not be allowed since it would
-> > > not be possible to relax permissions (run EMODPE) after that. Even so, I
-> > > also found in the SDM that EACCEPT has the note "Read access permitted
-> > > by enclave". That seems to indicate that EMODPR->PROT_NONE is not practical
-> > > from that perspective either since the enclave will not be able to
-> > > EACCEPT the change. Does that match your understanding?
-> > 
-> > Yes, PROT_NONE should not be allowed.
-> > 
-> > This is however the real problem.
-> > 
-> > The current kernel patch set has inconsistent API and EMODPR ioctl is
-> > simply unacceptable. It  also requires more concurrency management from
-> > user space run-time, which would be heck a lot easier to do in the kernel.
-> > 
-> > If you really want EMODPR as ioctl, then for consistencys sake, then EAUG
-> > should be too. Like this when things go opposite directions, this patch set
-> > plain and simply will not work out.
-> > 
-> > I would pick EAUG's strategy from these two as it requires half the back
-> > calls to host from an enclave. I.e. please combine mprotect() and EMODPR,
-> > either in the #PF handler or as part of mprotect(), which ever suits you
-> > best.
-> > 
-> > I'll try demonstrate this with two examples.
-> > 
-> > mmap() could go something like this() (simplified):
-> > 1. Execution #UD's to SYSCALL.
-> > 2. Host calls enclave's mmap() handler with mmap() parameters.
-> > 3. Enclave up-calls host's mmap().
-> > 4. Loops the range with EACCEPTCOPY.
-> > 
-> > mprotect() has to be done like this:
-> > 1. Execution #UD's to SYSCALL.
-> > 2. Host calls enclave's mprotect() handler.
-> > 3. Enclave up-calls host's mprotect().
-> > 4. Enclave up-calls host's ioctl() to SGX_IOC_ENCLAVE_PERMISSIONS.
-> > 3. Loops the range with EACCEPT.
->   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   5. Loops the range with EACCEPT + EMODPE.
+On 2022/3/14 10:50, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, Mar 14, 2022 at 09:58:49AM +0800, Miaohe Lin wrote:
+>> On 2022/3/14 7:41, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>> On Sat, Mar 12, 2022 at 03:46:12PM +0800, Miaohe Lin wrote:
+>>>> Since commit 042c4f32323b ("mm/truncate: Inline invalidate_complete_page()
+>>>
+>>> This commit ID does not exist in mainline (or in the latest mmotm?),
+>>> so you can't use it in patch description.  Could you update this part?
+>>>
+>>
+>> This commit is in the mmotm but not in mainline yet:
+>>
+>> commit 042c4f32323beb28146c658202d3e69899e4f245
+>> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+>> Date:   Sat Feb 12 15:27:42 2022 -0500
+>>
+>>     mm/truncate: Inline invalidate_complete_page() into its one caller
+>>
+>>     invalidate_inode_page() is the only caller of invalidate_complete_page()
+>>     and inlining it reveals that the first check is unnecessary (because we
+>>     hold the page locked, and we just retrieved the mapping from the page).
+>>     Actually, it does make a difference, in that tail pages no longer fail
+>>     at this check, so it's now possible to remove a tail page from a mapping.
+>>
+>>     Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>     Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+>>     Reviewed-by: Christoph Hellwig <hch@lst.de>
+>>
+>> Am I "not" supposed to use this commit id as it's not "stable" now?
 > 
-> > This is just terrible IMHO. I hope these examples bring some insight.
+> No, it's not stable yet. In whatever way you get the above commit (I guess
+> you get it from https://github.com/hnaz/linux-mm), all acked mm-related
+> patches are sent to Linus by Andrew *by email*, so the eventual commit IDs
+> should be determined when they are applied to mainline.
+> 
 
-E.g. in Enarx we have to add a special up-call (so called enarxcall in
-intermediate that we call sallyport, which provides shared buffer to
-communicate with the enclave) just for reseting the range with PROT_READ.
-Feel very redundant, adds ugly cruft and is completely opposite strategy to
-what you've chosen to do with EAUG, which is I think correct choice as far
-as API is concerned.
+Many thanks for your explanation. (I get this commit id from linux-next tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git)
+So I should remember always to get the commit id from mainline.
 
-BR, Jarkko
+Thanks again. :)
+
+> Thanks,
+> Naoya Horiguchi
+> 
+

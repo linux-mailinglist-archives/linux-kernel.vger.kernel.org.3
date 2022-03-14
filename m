@@ -2,250 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89FD4D7AA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB054D7AA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbiCNGFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 02:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
+        id S236323AbiCNGFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 02:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiCNGFS (ORCPT
+        with ESMTP id S236314AbiCNGFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 02:05:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60D05E0DE
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647237847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2XWjbqYvqLIcliuu04CPptAo3wxpLIB8KYTjyLRm6Co=;
-        b=b957BwVgMAX529zRUk62js2uw9oTrwCMyhYNP4vOjryb4a4DiXEHpVf9+y1UCdsUIqVwq0
-        1syFwW34/qvcEwj+Kkl4XvoPBQys5+7ti0/sE8Ul1xXZUxT2ImgXSv9krM9F+F4pIoKJpz
-        4PD3aVSvEOYs3M03oRvcq1w2dzH5Glw=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-GR9YhiqkPnqj9gy3-_LkTw-1; Mon, 14 Mar 2022 02:04:06 -0400
-X-MC-Unique: GR9YhiqkPnqj9gy3-_LkTw-1
-Received: by mail-pf1-f197.google.com with SMTP id z194-20020a627ecb000000b004f6db380a59so8880237pfc.19
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:04:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2XWjbqYvqLIcliuu04CPptAo3wxpLIB8KYTjyLRm6Co=;
-        b=f3UwF82wsK+wxROIbi851yI202hpsfJQmKhM8INrW/oyeauv94hHC98ZcaI1zVbxMt
-         kZL/zEEtyvbsN//oNIhv8eQCa6THXY9o/ZQJ0yLvZHdDM6waued5NJv0D+KlQ1nhbq0P
-         0++wD5nzNBgJmU9nvuTriS1WLn8znu0P8e0gjpLJSgsNPq00ZOvaABG3q6UDDLQZyM4B
-         NOZWOB4qBro9IQ1MdHAk18YM54QHlzOaOpkygln4V0BZI9WTiVkX6nhI95iJ+4H7huV6
-         Phlg276RMNzxYM7/98J4e49ySsjhg5rRMXLpel6gXuT41Vy+S+e2VIWw5nAf9j2ThGWH
-         RVgQ==
-X-Gm-Message-State: AOAM532r3ekpYH9ZBXZSDc5T/GGTziwxXB0tN8ecm6CW+Bg9KjU/G+R6
-        ex9htXQgQ7Ua5J+AJTZMEKgeW8wjyHTIflLLBwRQrBHk1tCYCDWLj6Gs9UcSLqIi1WOGBoCsj4Z
-        ye7/tir1ldnBAC/bEpvxjhQV7
-X-Received: by 2002:a63:7e43:0:b0:374:75ce:4d80 with SMTP id o3-20020a637e43000000b0037475ce4d80mr18764258pgn.589.1647237844680;
-        Sun, 13 Mar 2022 23:04:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzO7HvxYfUJ+fU3+y7Rq7dQeKdgwueK3KHb/k4WgR6BCnKo7nRgyKt6rA8fOZWbZufNvs0EAQ==
-X-Received: by 2002:a63:7e43:0:b0:374:75ce:4d80 with SMTP id o3-20020a637e43000000b0037475ce4d80mr18764244pgn.589.1647237844397;
-        Sun, 13 Mar 2022 23:04:04 -0700 (PDT)
-Received: from [10.72.13.210] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id t8-20020aa79468000000b004f764340d8bsm17045588pfq.92.2022.03.13.23.04.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Mar 2022 23:04:03 -0700 (PDT)
-Message-ID: <7f7553d0-2217-6122-227a-a3bfd5706ac5@redhat.com>
-Date:   Mon, 14 Mar 2022 14:03:58 +0800
+        Mon, 14 Mar 2022 02:05:32 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2097.outbound.protection.outlook.com [40.107.92.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FA711167
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:04:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XFm+2dJRQsLEOf3mjTuusYttKWlBvq+ar3jBpkt8yW9VnY5lXXeSsKh2kfpsl3+DVJICCAEuQ8T7/mWz287wE8pC/8oWyNNAEI/5CzZ6tlnpNskKGh/umXQA8mAqcL+LwxivG4X0QpHQEs5st03kUb54iSm07gb4Xb0fB/twOQU1wEhZX9bA6YmYdgc6XgZYMX1BgnBRRis45z9GwEVMiGRcO3mEw1ew2Om4KaAILroSWI/JW6tGygu+iwvyaPN5aiokxw1ohahR14Q752kU4tHM5OxffzgCtPvDBRDR3YoYbTJE0a/khJOdWsptb8Z5fPn6lshDcCE5cNCtlJ+QWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/1EWuJCYgkEn7BWZMXXvwk512lxER99LoaJFjH5Vsp0=;
+ b=VT7h2QiVI4iFxWzqcJEQFKG4vChK8hlIYQGXo+RvWkPtyyrHC868SNWdDgsZuHuMaX9T9yaZPTEJeFG5/9Ae/4ytz0m1upttFxxk6BQTqOd+VVpLwTUz8RqUQ2rsZR+hEc2g5nyv13jkMgWV4dn/SV0c8Ty9joQH+ubOrPQUg6tmT/+h8+ySQZCXG83TMWIvzd3t41vyW9D0Pn8yOWZJB77SQFL4Y/m/SGsOMK+NZVLiT8/4k4s0i1VbldIm7ED86UXqg3Hy2oV/NSDBXY+EFQBMarxu2csnO+aoXEZyQO52Jzw8CDVUPqWJ3Tm9WtjV5/HW8AOJD+88C38XWAI2Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/1EWuJCYgkEn7BWZMXXvwk512lxER99LoaJFjH5Vsp0=;
+ b=F0i4C7mUdKgjvu6+7tDG4OYTLiQ0m7Yk23H3nEM9+DxJu0idzfZqxhnDYBMUTu4BDLroaMC7mxN4CNhvsYWbzibqHjK6CyIqPC918uIDZUkInCWhu1JSJi2m/yJqMEnhO4TfDjv2YWeiFOlGVmfSs9ddYReWlS3+WI3Ruc3dEZo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by BN8PR04MB5651.namprd04.prod.outlook.com (2603:10b6:408:73::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Mon, 14 Mar
+ 2022 06:04:19 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5061.028; Mon, 14 Mar 2022
+ 06:04:19 +0000
+Date:   Mon, 14 Mar 2022 14:04:11 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, qwen@analogixsemi.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mliu@analogixsemi.com, hsinyi@chromium.org, bliang@analogixsemi.com
+Subject: Re: [PATCH v2] drm/bridge: anx7625: Fix not correct get property
+ counts
+Message-ID: <20220314060411.GA1456403@anxtwsw-Precision-3640-Tower>
+References: <20220311103525.1431890-1-xji@analogixsemi.com>
+ <Yis0KXVqZokrkoP7@ravnborg.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yis0KXVqZokrkoP7@ravnborg.org>
+X-ClientProxiedBy: HK2PR02CA0218.apcprd02.prod.outlook.com
+ (2603:1096:201:20::30) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH v2 2/2] vdpa: support exposing the count of vqs to
- userspace
-Content-Language: en-US
-To:     "Longpeng(Mike)" <longpeng2@huawei.com>, mst@redhat.com,
-        sgarzare@redhat.com, stefanha@redhat.com
-Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        arei.gonglei@huawei.com, yechuan@huawei.com,
-        huangzhichao@huawei.com, gdawar@xilinx.com
-References: <20220310072051.2175-1-longpeng2@huawei.com>
- <20220310072051.2175-3-longpeng2@huawei.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220310072051.2175-3-longpeng2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: efa4340b-464d-43be-9e23-08da05807a38
+X-MS-TrafficTypeDiagnostic: BN8PR04MB5651:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR04MB5651E5E032F128CF97F33195C70F9@BN8PR04MB5651.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gni6gJJJDQHK9VnipZLR8t1PUY5a22KnPih1psIuSjFL2PerUCMjUOhNkHhsL7DmihvL3n5Mm2Ujr3h5xvFD2mTSaNA7LZnJxq1OyC+w6ThiwLP3Xwl3UM7JJRoSMQ1yNEmq7zTXg1/7fySy0d8qdL+y33ylwM6I3dE69ECqCVoQSNxhQlsU7USwzVWoEe1Qppqe5D3IwbQQsbf6upu+tjiiorEpI95FZW+wTFGTfYUcDf+ZyDw2NW8z+1SuOp+zHDnZRH9eH4ZwbNTBkq7FrouUd2/0Yf5yKxcYZw7u7fmIdqNhfoJIBV4KF5fxe3Zf6wrzYXUiFRzD1qsUBO666lpc1Al5YDq1vaH8Pwv98YHUNHJv5W8NA+gCxFOJLG8X9Q0JsENoFjwJ9LHNJqN607yHD8OdcI6/WRat4MSphCoEgq52WYNxW2Ll7qWkbeWjEo7sjTv+R7gF8utR1B3g9ZAkNlc5qHTGpyz8m+nvKxP1vMHMJ76NAhEqHbjS7EufSCG4CaOjxyohEGGQZMU8NUKt/fPzOUHswBIWhvyIQUkIhW3+lSH282WFTQXhv9b+SPRC/lyRM5TH8fbW563vKsNWvUdYVyDn9wS45elACAlPmp9+b0KBCOTtCqBbKEQNdGQwg26ov52+Lt4VwbgSz2qIIx8rRkAHqIgMDFEv9MagED2ovgEpMcL4VFX+Ya5P6drZ1ZZ2VKoY7sUPO72oSQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(26005)(186003)(8676002)(66476007)(66556008)(4326008)(38100700002)(38350700002)(52116002)(55236004)(66946007)(8936002)(6666004)(6486002)(54906003)(1076003)(6916009)(508600001)(6506007)(86362001)(316002)(6512007)(9686003)(5660300002)(7416002)(33716001)(107886003)(33656002)(83380400001)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+dBXQ3uRzmG+QYRdtpBdPeAoGWmelgqwe4twqZD8Yr56kmEIR46mD3TMp2T1?=
+ =?us-ascii?Q?Slx7C7fvdKEFTccRZPXeR01olvWJQtU8fpn6iEfOqZXyPaZuwPFNGWKPVWtr?=
+ =?us-ascii?Q?pk3rKbqlZhtIbUf3hKCD3rgEJnZz1kVoPqti1GSJQgyA+E2dcViRfNclXzvw?=
+ =?us-ascii?Q?Y0ILnINYjQprBfIovwJg5v4YLnzqJY7sQirC7jejfp/VexKOLQyX/YUAZXIQ?=
+ =?us-ascii?Q?B/55nqowFMMuS9CHaFrvCZxecjPTxqYJIkb4qHmQ2pZ/8UD6e5iDhEd/t7JB?=
+ =?us-ascii?Q?2MtP+04SyCXsyrz5qPZq0hTsSzV3XNj4myfd4ESjxK6zNsJfKr+6XlFgs7fL?=
+ =?us-ascii?Q?uw+0EA3/eF3RIeMWlpcnd48qARof0NxEnmwBmACStvU4A/ivdLm/wHIjpsx4?=
+ =?us-ascii?Q?MkSXEhQwkVEDRwMZpMNAlBPPM3a4MndM2uKlj4zEQoQ+j8c9ogoR4IJ5dpsm?=
+ =?us-ascii?Q?jyZj9xKg5sj8XBpvJ0q6VdO7tGL7LWvHmMPutXrJpADzOmXpjkBij6YekYNc?=
+ =?us-ascii?Q?Nctudu8hrLll7tvojE0QRvpNGdA/dMZA5qMWkcgSE0ZRrz7WJXEz8pWiBjJA?=
+ =?us-ascii?Q?PRyEzYcUMi0YOzEdQONrHdLUV4Vzlo2u2bvUl/By0+zG7MknFuaTRbup91oM?=
+ =?us-ascii?Q?kFyGpnl/emVHuzxiMWhvCz+9/xDS8P7Px3uHVMBBrCFoCOtfSGN08gUEwqho?=
+ =?us-ascii?Q?ZuZoUGNQixFvCWkdYB5pmxi7P3HtmH+YBzfloSt5rQMG28ZDEu98UvFxK8HF?=
+ =?us-ascii?Q?vvvWkPhY15VYiSYoUaD1eXjQa1aP5DVPBb9AClUNk70f+E5OlhKYmB8omvHH?=
+ =?us-ascii?Q?HCLkDZxivAZhnXCXj6IC0LP+tkRiq6mXQfMEy3g3hTt9OY2uMyCpnupDBtFL?=
+ =?us-ascii?Q?UKdA4d9taW6sekzOR4fM4w9GOK44+NZzQfUiSWqA0Ihhp0s5uRlq+vKQ4Ctn?=
+ =?us-ascii?Q?tdCs+TgJRC6ygKL5wK3ornfIuD8obUK7o6L3ZN5Z097jIrZb5fgAHO1EupXX?=
+ =?us-ascii?Q?hk7/nj9lJ+r3y9uHuhb6als2K2Zlky2Z1nT8OqrZsOrbkYhBjPwC406pKIyO?=
+ =?us-ascii?Q?b6ytAbomtyQNru72wvP2VS2W1WKS385WMQdG/LV6gRLvwfhybjGErvllnYo0?=
+ =?us-ascii?Q?9e9+J93A3h7FRJtSeNPEK6/y8LINB3BXAnAukpUMp29m7BbvdeX3ms8ihk2I?=
+ =?us-ascii?Q?8MsSMsNUR4VoYVaK7Q0tknoye8OPjadi9AlcXHCeIYYBSiMKFVMbxJMFx6ce?=
+ =?us-ascii?Q?aOZsXzOxJZpIxPLfRxlMvTktjfzUxCaEm5kiUfBSyhMQAnzoQU4SAPwC90/m?=
+ =?us-ascii?Q?oYY2SzvF1cMFiee4tPmTyG3DixampCsKamCSnGiLRQhUyWdkr1eFjCn29rfQ?=
+ =?us-ascii?Q?Xw3KTBeBenEJjc/+DCmfKUIcNTGQlzb1P1XbaqF8WTINGyG2rorOdbjyHtMZ?=
+ =?us-ascii?Q?n61eHM5YZZrJcWFpzqfd8Km2VAgiHIrq?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efa4340b-464d-43be-9e23-08da05807a38
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2022 06:04:19.3329
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R4PZSTeDL5sOuUGUIGtJwMmJtzr8cXQBeOn+epnAOVrecMofrvaN8AH3oDpydipOmsn8wNCFmEeyUHmTo5ZJCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR04MB5651
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 11, 2022 at 12:36:09PM +0100, Sam Ravnborg wrote:
+> Hi Xin.
+> 
+> On Fri, Mar 11, 2022 at 06:35:25PM +0800, Xin Ji wrote:
+> > The property length which returns from "of_get_property", it means array
+> > bytes count if the property has prefix as "/bits/ 8". The driver should
+> > call function "of_property_read_u8_array" to get correct array value.
+> > 
+> > Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > 
+> > ---
+> > V1 -> V2: Fix Sam comment, use of_property_read_u8_array to get array
+> > value
+> > ---
+> >  drivers/gpu/drm/bridge/analogix/anx7625.c | 8 ++++----
+> >  drivers/gpu/drm/bridge/analogix/anx7625.h | 4 ++--
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index c6a9a02ed762..628cbf769141 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -1598,8 +1598,8 @@ static int anx7625_get_swing_setting(struct device *dev,
+> >  			num_regs = DP_TX_SWING_REG_CNT;
+> >  
+> >  		pdata->dp_lane0_swing_reg_cnt = num_regs;
+> > -		of_property_read_u32_array(dev->of_node, "analogix,lane0-swing",
+> > -					   pdata->lane0_reg_data, num_regs);
+> > +		of_property_read_u8_array(dev->of_node, "analogix,lane0-swing",
+> > +					  pdata->lane0_reg_data, num_regs);
+> 
+> The current implementation do a two step approach. First is find the
+> number of elements and then read the elements.
+> The number of elements is only used to limit what is read.
+> 
+> I suggest to use:
+> 
+> of_property_read_u8_array(dev->of_node, "analogix,lane0-swing",
+> 			  pdata->lane0_reg_data, DP_TX_SWING_REG_CNT);
+> 
+> Then you a guaranteed to read at maximum DP_TX_SWING_REG_CNT entries.
+> And as the number of elements is not stored anywhere that should be fine.
+> 
+> This looks simpler and matches what we for example do in
+> drivers/gpu/drm/arm/malidp_drv.c - the only user in gpu/ of
+> of_property_read_u8_array().
+Hi Sam, the property is variable, so need two steps to approach, first
+to get the property length, then to read the elements (the property
+length may between 1 to DP_TX_SWING_REG_CNT). If directly to read the
+element, I cannot exactly know how many registers need by configred.
 
-在 2022/3/10 下午3:20, Longpeng(Mike) 写道:
-> From: Longpeng <longpeng2@huawei.com>
->
-> - GET_VQS_COUNT: the count of virtqueues that exposed
->
-> And change vdpa_device.nvqs and vhost_vdpa.nvqs to use u32.
-
-
-Patch looks good, a nit is that we'd better use a separate patch for the 
-u32 converting.
-
-Thanks
-
-
->
-> Signed-off-by: Longpeng <longpeng2@huawei.com>
-> ---
->   drivers/vdpa/vdpa.c        |  6 +++---
->   drivers/vhost/vdpa.c       | 23 +++++++++++++++++++----
->   include/linux/vdpa.h       |  6 +++---
->   include/uapi/linux/vhost.h |  3 +++
->   4 files changed, 28 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 1ea5254..2b75c00 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -232,7 +232,7 @@ static int vdpa_name_match(struct device *dev, const void *data)
->   	return (strcmp(dev_name(&vdev->dev), data) == 0);
->   }
->   
-> -static int __vdpa_register_device(struct vdpa_device *vdev, int nvqs)
-> +static int __vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
->   {
->   	struct device *dev;
->   
-> @@ -257,7 +257,7 @@ static int __vdpa_register_device(struct vdpa_device *vdev, int nvqs)
->    *
->    * Return: Returns an error when fail to add device to vDPA bus
->    */
-> -int _vdpa_register_device(struct vdpa_device *vdev, int nvqs)
-> +int _vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
->   {
->   	if (!vdev->mdev)
->   		return -EINVAL;
-> @@ -274,7 +274,7 @@ int _vdpa_register_device(struct vdpa_device *vdev, int nvqs)
->    *
->    * Return: Returns an error when fail to add to vDPA bus
->    */
-> -int vdpa_register_device(struct vdpa_device *vdev, int nvqs)
-> +int vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
->   {
->   	int err;
->   
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 605c7ae..69b3f05 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -42,7 +42,7 @@ struct vhost_vdpa {
->   	struct device dev;
->   	struct cdev cdev;
->   	atomic_t opened;
-> -	int nvqs;
-> +	u32 nvqs;
->   	int virtio_id;
->   	int minor;
->   	struct eventfd_ctx *config_ctx;
-> @@ -158,7 +158,8 @@ static long vhost_vdpa_set_status(struct vhost_vdpa *v, u8 __user *statusp)
->   	struct vdpa_device *vdpa = v->vdpa;
->   	const struct vdpa_config_ops *ops = vdpa->config;
->   	u8 status, status_old;
-> -	int ret, nvqs = v->nvqs;
-> +	u32 nvqs = v->nvqs;
-> +	int ret;
->   	u16 i;
->   
->   	if (copy_from_user(&status, statusp, sizeof(status)))
-> @@ -369,6 +370,16 @@ static long vhost_vdpa_get_config_size(struct vhost_vdpa *v, u32 __user *argp)
->   	return 0;
->   }
->   
-> +static long vhost_vdpa_get_vqs_count(struct vhost_vdpa *v, u32 __user *argp)
-> +{
-> +	struct vdpa_device *vdpa = v->vdpa;
-> +
-> +	if (copy_to_user(argp, &vdpa->nvqs, sizeof(vdpa->nvqs)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
->   static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
->   				   void __user *argp)
->   {
-> @@ -509,6 +520,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
->   	case VHOST_VDPA_GET_CONFIG_SIZE:
->   		r = vhost_vdpa_get_config_size(v, argp);
->   		break;
-> +	case VHOST_VDPA_GET_VQS_COUNT:
-> +		r = vhost_vdpa_get_vqs_count(v, argp);
-> +		break;
->   	default:
->   		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
->   		if (r == -ENOIOCTLCMD)
-> @@ -965,7 +979,8 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
->   	struct vhost_vdpa *v;
->   	struct vhost_dev *dev;
->   	struct vhost_virtqueue **vqs;
-> -	int nvqs, i, r, opened;
-> +	int r, opened;
-> +	u32 i, nvqs;
->   
->   	v = container_of(inode->i_cdev, struct vhost_vdpa, cdev);
->   
-> @@ -1018,7 +1033,7 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
->   
->   static void vhost_vdpa_clean_irq(struct vhost_vdpa *v)
->   {
-> -	int i;
-> +	u32 i;
->   
->   	for (i = 0; i < v->nvqs; i++)
->   		vhost_vdpa_unsetup_vq_irq(v, i);
-> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> index a526919..8943a20 100644
-> --- a/include/linux/vdpa.h
-> +++ b/include/linux/vdpa.h
-> @@ -83,7 +83,7 @@ struct vdpa_device {
->   	unsigned int index;
->   	bool features_valid;
->   	bool use_va;
-> -	int nvqs;
-> +	u32 nvqs;
->   	struct vdpa_mgmt_dev *mdev;
->   };
->   
-> @@ -338,10 +338,10 @@ struct vdpa_device *__vdpa_alloc_device(struct device *parent,
->   				       dev_struct, member)), name, use_va), \
->   				       dev_struct, member)
->   
-> -int vdpa_register_device(struct vdpa_device *vdev, int nvqs);
-> +int vdpa_register_device(struct vdpa_device *vdev, u32 nvqs);
->   void vdpa_unregister_device(struct vdpa_device *vdev);
->   
-> -int _vdpa_register_device(struct vdpa_device *vdev, int nvqs);
-> +int _vdpa_register_device(struct vdpa_device *vdev, u32 nvqs);
->   void _vdpa_unregister_device(struct vdpa_device *vdev);
->   
->   /**
-> diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
-> index bc74e95..5d99e7c 100644
-> --- a/include/uapi/linux/vhost.h
-> +++ b/include/uapi/linux/vhost.h
-> @@ -154,4 +154,7 @@
->   /* Get the config size */
->   #define VHOST_VDPA_GET_CONFIG_SIZE	_IOR(VHOST_VIRTIO, 0x79, __u32)
->   
-> +/* Get the count of all virtqueues */
-> +#define VHOST_VDPA_GET_VQS_COUNT	_IOR(VHOST_VIRTIO, 0x80, __u32)
-> +
->   #endif
-
+Thanks,
+Xin
+> 
+> 
+> 	Sam

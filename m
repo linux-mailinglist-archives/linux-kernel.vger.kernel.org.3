@@ -2,343 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486434D7C47
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA50B4D7CDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236822AbiCNH47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 03:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S237318AbiCNIAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbiCNH45 (ORCPT
+        with ESMTP id S236997AbiCNH5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:56:57 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0D6366A4;
-        Mon, 14 Mar 2022 00:55:48 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id qx21so31834966ejb.13;
-        Mon, 14 Mar 2022 00:55:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=7uGV18oizWLr5M9hNvuH458elS6tvqvRS3zfK+O9Pvs=;
-        b=T+add/xGtdcHBT8c+ZZXA9Rh+lOhTyzLxhtNnEorkFQ1S0fuEyyZpxucs5aqL1xyYJ
-         N17PL8KvksTNL4/OIqI6Md6Ed5NAlPwF9sCilO/dJTKc+p5rOFWUPj6G4nNL2McGQ6Rt
-         pAIeUXTRyCvolJbSgHRgLXADebkmimraWq5uvydxIf83boUzkQCu5wymK7M4j0Q7ZDXM
-         jKDiCUomQdKaPLwwUYiUk7LeWPSPvB3LAudlHjYsdwXcS/pgjy/TzIJsABOxWPGGGtAA
-         zeUKq4U93NN57km2Ecpz0qhpRChMlq5FaOjzzJi6Ne+2aCCSDgQnjFpaSv3kf2jEWE7V
-         nBnQ==
-X-Gm-Message-State: AOAM5321dLpkJCdgrAJLBnWWQo4yrUi8cTAhcRVjESGDBAzWlRunJU1w
-        5y3Uq0lqFX4eduFO7GyIE1g=
-X-Google-Smtp-Source: ABdhPJxgj6Znqvqof2TeF3HPCVXcS02HnKtHNTq/DZOr3E4eP8wBCaS8v/p1mW50UD5xEHIJsoiJXQ==
-X-Received: by 2002:a17:907:7f1d:b0:6da:74b1:fd65 with SMTP id qf29-20020a1709077f1d00b006da74b1fd65mr18109532ejc.72.1647244546274;
-        Mon, 14 Mar 2022 00:55:46 -0700 (PDT)
-Received: from [192.168.0.152] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id zk1-20020a17090733c100b006dab4a41df8sm6301310ejb.111.2022.03.14.00.55.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 00:55:45 -0700 (PDT)
-Message-ID: <e4ed4b50-c16f-5c46-7d64-f5b2f36f8f44@kernel.org>
-Date:   Mon, 14 Mar 2022 08:55:44 +0100
+        Mon, 14 Mar 2022 03:57:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C22D41635;
+        Mon, 14 Mar 2022 00:56:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08C88611D8;
+        Mon, 14 Mar 2022 07:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA90C341E9;
+        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647244563;
+        bh=CIyk8zpMRzPK9nsaSTMJyaLpucZ2VlGYmTmnjaHqays=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=saDUPraGjQ/LiKuqLqNK6+mZe6RZsFE0xol3ng/m+MnEIrzd74XyAqG1d0y8piH1u
+         UidUws7Tau7Hd7OempdpmE0skFNG+pS2Y8Tdaz1V9XcFONG+8BWmKhpW7zh98wPZo0
+         ACjQvjzhgo9A8SFNyHrlwCGURiD1OXRprii2FZimA9E6gJzMFBHo4yWPzhXnoYV/r4
+         RnTCnCeZkIZIJ6OcyTfV6MscD4jOrOnT9+vOIjgds53oxs771nV+HkWn2mmcOnhhkS
+         AwRGxh8eqI87jugbsBAXlz30PVCb6QA42ibkwVcqNaqADcwh29PXKIsUN0lDgRJ1+/
+         FodCwYh7P5mDQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nTfYe-001kXb-I4; Mon, 14 Mar 2022 08:56:00 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 53/64] media: platform: rename s5p-g2d/ to samsung/s5p-g2d/
+Date:   Mon, 14 Mar 2022 08:55:45 +0100
+Message-Id: <9fde68f5ac51ae5ea9ae740876d6090945c8efe6.1647242579.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
+References: <cover.1647242578.git.mchehab@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v11 2/2] misc: Add iop driver for Sunplus SP7021
-Content-Language: en-US
-To:     =?UTF-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
-        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-References: <cover.1647095774.git.tonyhuang.sunplus@gmail.com>
- <07f507a84a9e39d3cd8393f41d1292c250e07642.1647095774.git.tonyhuang.sunplus@gmail.com>
- <00362767-080a-aa7f-672f-22b83ab35e61@kernel.org>
- <42f5f710077b40d7b6fde45789f46732@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <42f5f710077b40d7b6fde45789f46732@sphcmbx02.sunplus.com.tw>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 07:08, Tony Huang 黃懷厚 wrote:
-> Dear Krzysztof:
-> 
->> On 12/03/2022 17:16, Tony Huang wrote:
->>> This driver is load 8051 bin code.
->>> The IOP core is DQ8051, so also named IOP8051.
->>> Need Install DQ8051, The DQ8051 bin file generated by keil C.
->>> We will provide users with 8051 normal and power off source code.
->>> Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/
->>>
->> How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source-
->>> files-for-IOP
->>> Users can follow the operation steps to generate normal.bin and
->>> poweroff.bin.
->>> Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338
->>> /26.+IOP8051 26.5?How To Create 8051 bin file
->>>
->>> PMC in power management purpose:
->>> Add sp_iop_poweroff() function. pm_power_off=sp_iop_poweroff.
->>> When the power off command is executed.
->>> The 8051 has a register(DEF_PWR_EN_0=0) to control the power-on and
->>> power-off of the system.
->>>
->>> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
->>> ---
->>> Changes in v11:
->>>  - Addressed comments from Arnd Bergmann.
->>
->> How did you address Arnd's comments about splitting the driver to proper
->> parts? drivers/clk and drivers/power/reset?
->>
-> 
-> drivers/clk : SP7021 system has clock device driver (clk-sp7021.c).		
-> So I set the IOP clock through the following function.		
-> clk_prepare_enable(iop->iopclk);		
-> clk_disable_unprepare(iop->iopclk);		
-> 		
-> drivers/power/reset : SP7021 system does not have a power off device driver.
+As the end goal is to have platform drivers split by vendor,
+rename s5p-g2d/ to samsung/s5p-g2d/.
 
-What does it mean? The feedback was to split clk and reset features to
-separate drivers and I still see only two patches here with a misc
-driver. So how is his comments addressed? You did not reply in that thread.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-> 
->>>  - Addressed comments from krzysztof.
->>>
->>>  MAINTAINERS                |   1 +
->>>  drivers/misc/Kconfig       |  23 +++
->>>  drivers/misc/Makefile      |   1 +
->>>  drivers/misc/sunplus_iop.c | 411
->>> +++++++++++++++++++++++++++++++++++++++++++++
->>
->> The driver looks like SoC specific driver. Why did you put it in drivers/misc/,
->> not in usual place - drivers/soc/?
-> 
-> 8051 is designed for processing I/O events, like receiving IR signal from remote controller, 		
-> taking care of power on or off requests from RTC, or other hardware events of external peripherals 		
-> even when power of main system is off.
-> So I put it in drivers/misc.
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
-Is IOP8061 a separate device? Your datasheet is saying its embedded in
-SP7021 SoC, so it is a soc driver. This does not fit misc driver
-description (a "strange device") but a SoC driver description.
+ MAINTAINERS                                             | 2 +-
+ drivers/media/platform/Kconfig                          | 2 +-
+ drivers/media/platform/Makefile                         | 2 +-
+ drivers/media/platform/{ => samsung}/s5p-g2d/Kconfig    | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/Makefile   | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d-hw.c   | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d-regs.h | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d.c      | 0
+ drivers/media/platform/{ => samsung}/s5p-g2d/g2d.h      | 0
+ 9 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/Kconfig (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/Makefile (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d-hw.c (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d-regs.h (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d.c (100%)
+ rename drivers/media/platform/{ => samsung}/s5p-g2d/g2d.h (100%)
 
-> 
->> sp_iop_poweroff is still here.
-> 
-> sp_iop_poweroff(): SP7021 system does not have a power off device driver.
-> 				I have to put it here.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8ce4894699cc..4c4be0d7ec14 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2616,7 +2616,7 @@ M:	Łukasz Stelmach <l.stelmach@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+-F:	drivers/media/platform/s5p-g2d/
++F:	drivers/media/platform/samsung/s5p-g2d/
+ 
+ ARM/SAMSUNG S5P SERIES HDMI CEC SUBSYSTEM SUPPORT
+ M:	Marek Szyprowski <m.szyprowski@samsung.com>
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index b371c0b258d1..aef7c35b2215 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -88,12 +88,12 @@ source "drivers/media/platform/omap3isp/Kconfig"
+ source "drivers/media/platform/qcom/Kconfig"
+ source "drivers/media/platform/renesas/Kconfig"
+ source "drivers/media/platform/rockchip/Kconfig"
+-source "drivers/media/platform/s5p-g2d/Kconfig"
+ source "drivers/media/platform/s5p-jpeg/Kconfig"
+ source "drivers/media/platform/s5p-mfc/Kconfig"
+ source "drivers/media/platform/samsung/exynos-gsc/Kconfig"
+ source "drivers/media/platform/samsung/exynos4-is/Kconfig"
+ source "drivers/media/platform/samsung/s3c-camif/Kconfig"
++source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
+ source "drivers/media/platform/sti/Kconfig"
+ source "drivers/media/platform/stm32/Kconfig"
+ source "drivers/media/platform/ti-vpe/Kconfig"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index c3dfe40b2def..a5a068e18492 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -30,12 +30,12 @@ obj-y += qcom/venus/
+ obj-y += renesas/
+ obj-y += rockchip/rga/
+ obj-y += rockchip/rkisp1/
+-obj-y += s5p-g2d/
+ obj-y += s5p-jpeg/
+ obj-y += s5p-mfc/
+ obj-y += samsung/exynos-gsc/
+ obj-y += samsung/exynos4-is/
+ obj-y += samsung/s3c-camif/
++obj-y += samsung/s5p-g2d/
+ obj-y += sti/bdisp/
+ obj-y += sti/c8sectpfe/
+ obj-y += sti/delta/
+diff --git a/drivers/media/platform/s5p-g2d/Kconfig b/drivers/media/platform/samsung/s5p-g2d/Kconfig
+similarity index 100%
+rename from drivers/media/platform/s5p-g2d/Kconfig
+rename to drivers/media/platform/samsung/s5p-g2d/Kconfig
+diff --git a/drivers/media/platform/s5p-g2d/Makefile b/drivers/media/platform/samsung/s5p-g2d/Makefile
+similarity index 100%
+rename from drivers/media/platform/s5p-g2d/Makefile
+rename to drivers/media/platform/samsung/s5p-g2d/Makefile
+diff --git a/drivers/media/platform/s5p-g2d/g2d-hw.c b/drivers/media/platform/samsung/s5p-g2d/g2d-hw.c
+similarity index 100%
+rename from drivers/media/platform/s5p-g2d/g2d-hw.c
+rename to drivers/media/platform/samsung/s5p-g2d/g2d-hw.c
+diff --git a/drivers/media/platform/s5p-g2d/g2d-regs.h b/drivers/media/platform/samsung/s5p-g2d/g2d-regs.h
+similarity index 100%
+rename from drivers/media/platform/s5p-g2d/g2d-regs.h
+rename to drivers/media/platform/samsung/s5p-g2d/g2d-regs.h
+diff --git a/drivers/media/platform/s5p-g2d/g2d.c b/drivers/media/platform/samsung/s5p-g2d/g2d.c
+similarity index 100%
+rename from drivers/media/platform/s5p-g2d/g2d.c
+rename to drivers/media/platform/samsung/s5p-g2d/g2d.c
+diff --git a/drivers/media/platform/s5p-g2d/g2d.h b/drivers/media/platform/samsung/s5p-g2d/g2d.h
+similarity index 100%
+rename from drivers/media/platform/s5p-g2d/g2d.h
+rename to drivers/media/platform/samsung/s5p-g2d/g2d.h
+-- 
+2.35.1
 
-This should be rather in a reset driver, not in a misc one. What is your
-plan for this driver? You described the hardware and judging by it,
-there will be quite a lot of separate features so it's reasonable to
-split the driver into separate logical elements. However keeping all in
-the same place would be ok, if you do not plan to add any more features.
-This would mean the driver will handle *only* reset and FW loading.
-
-> 
->>>  4 files changed, 436 insertions(+)
->>>  create mode 100644 drivers/misc/sunplus_iop.c
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS index d64c8ed..c282e95 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -18246,6 +18246,7 @@ SUNPLUS IOP DRIVER
->>>  M:	Tony Huang <tonyhuang.sunplus@gmail.com>
->>>  S:	Maintained
->>>  F:	Documentation/devicetree/bindings/misc/sunplus,iop.yaml
->>> +F:	drivers/misc/sunplus_iop.c
->>>
->>>  SUPERH
->>>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->>> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig index
->>> 0f5a49f..e5f32d8 100644
->>> --- a/drivers/misc/Kconfig
->>> +++ b/drivers/misc/Kconfig
->>> @@ -470,6 +470,29 @@ config HISI_HIKEY_USB
->>>  	  switching between the dual-role USB-C port and the USB-A host ports
->>>  	  using only one USB controller.
->>>
->>> +config SUNPLUS_IOP
->>> +	tristate "Sunplus IOP support"
->>> +	default ARCH_SUNPLUS
->>> +	help
->>> +	  This driver is load 8051 bin code.
->>> +	  The IOP core is DQ8051, so also named IOP8051.
->>> +	  Need Install DQ8051, The DQ8051 bin file generated by keil C.
->>> +	  We will provide users with 8051 normal and power off source code.
->>> +	  Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/
->>> +
->> How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source-
->> files-for-IOP
->>> +	  Users can follow the operation steps to generate normal.bin and
->> poweroff.bin.
->>> +	  Path:
->> https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338/26.+IOP8051
->>> +	  26.5?How To Create 8051 bin file
->>> +
->>> +	  PMC in power management purpose:
->>> +	  Add sp_iop_poweroff() function. pm_power_off=sp_iop_poweroff.
->>> +	  When the power off command is executed.
->>> +	  The 8051 has a register(DEF_PWR_EN_0=0) to control the power-on
->> and
->>> +	  power-off of the system.
->>> +
->>> +	  This driver can also be built as a module.  If so, the module
->>> +	  will be called sunplus_iop.
->>> +
->>>  source "drivers/misc/c2port/Kconfig"
->>>  source "drivers/misc/eeprom/Kconfig"
->>>  source "drivers/misc/cb710/Kconfig"
->>> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile index
->>> a086197..eafeab6 100644
->>> --- a/drivers/misc/Makefile
->>> +++ b/drivers/misc/Makefile
->>> @@ -52,6 +52,7 @@ obj-$(CONFIG_DW_XDATA_PCIE)	+= dw-xdata-pcie.o
->>>  obj-$(CONFIG_PCI_ENDPOINT_TEST)	+= pci_endpoint_test.o
->>>  obj-$(CONFIG_OCXL)		+= ocxl/
->>>  obj-$(CONFIG_BCM_VK)		+= bcm-vk/
->>> +obj-$(CONFIG_SUNPLUS_IOP)	+= sunplus_iop.o
->>>  obj-y				+= cardreader/
->>>  obj-$(CONFIG_PVPANIC)   	+= pvpanic/
->>>  obj-$(CONFIG_HABANA_AI)		+= habanalabs/
->>> diff --git a/drivers/misc/sunplus_iop.c b/drivers/misc/sunplus_iop.c
->>> new file mode 100644 index 0000000..5bdce5e
->>> --- /dev/null
->>> +++ b/drivers/misc/sunplus_iop.c
->>> @@ -0,0 +1,411 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * The IOP driver for Sunplus SP7021
->>> + *
->>> + * Copyright (C) 2021 Sunplus Technology Inc.
->>> + *
->>> + * All Rights Reserved.
->>> + */
->>> +#include <linux/clk.h>
->>> +#include <linux/delay.h>
->>> +#include <linux/dma-mapping.h>
->>> +#include <linux/firmware.h>
->>> +#include <linux/iopoll.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of_platform.h>
->>> +#include <linux/of_address.h>
->>> +#include <linux/of_gpio.h>
->>> +
->>> +/* IOP register offset */
->>> +#define IOP_CONTROL	0x00
->>> +#define IOP_DATA0	0x20
->>> +#define IOP_DATA1	0x24
->>> +#define IOP_DATA2	0x28
->>> +#define IOP_DATA3	0x2c
->>> +#define IOP_DATA4	0x30
->>> +#define IOP_DATA5	0x34
->>> +#define IOP_DATA6	0x38
->>> +#define IOP_DATA7	0x3c
->>> +#define IOP_DATA8	0x40
->>> +#define IOP_DATA9	0x44
->>> +#define IOP_DATA10	0x48
->>> +#define IOP_DATA11	0x4c
->>> +#define IOP_BASE_ADR_L	0x50
->>> +#define IOP_BASE_ADR_H	0x54
->>> +
->>> +/* PMC register offset */
->>> +#define IOP_PMC_TIMER		0x00
->>> +#define IOP_PMC_CTRL		0x04
->>> +#define IOP_XTAL27M_PASSWORD_I	0x08
->>> +#define IOP_XTAL27M_PASSWORD_II	0x0c
->>> +#define IOP_XTAL32K_PASSWORD_I	0x10
->>> +#define IOP_XTAL32K_PASSWORD_II	0x14
->>> +#define IOP_CLK27M_PASSWORD_I	0x18
->>> +#define IOP_CLK27M_PASSWORD_II	0x1c
->>> +#define IOP_PMC_TIMER2		0x20
->>> +
->>> +/* Max size of poweroff.bin that can be received */ #define
->>> +POWEROFF_CODE_MAX_SIZE 0x4000
->>> +
->>> +/* 8051 informs linux kerenl. 8051 has been switched to poweroff.bin code.
->> */
->>> +#define IOP_READY	0x0004
->>> +#define RISC_READY	0x0008
->>> +
->>> +/* System linux kernel tells 8051 which  gpio pin to wake-up through. */
->>> +#define WAKEUP_PIN	0xFE02
->>> +
->>> +/*
->>> + * There are 3 power domains in SP7021, AO domain, IOP domain,
->>> + * Default domain. Default domain is linux kernel system.
->>> + * System linux kernel tells 8051 to execute power off.
->>> + */
->>> +#define DEFAULT_DOMAIN_POWEROFF	0x5331 /* AO&IOP domain on,
->> Default domain off */
->>> +#define DEFAULT_AND_IOP_DOMAIN_POWEROFF	0x5333 /* AO domain
->> on, IOP&Default domain off */
->>> +
->>> +struct sp_iop {
->>> +	struct device *dev;
->>> +	struct clk *iopclk;
->>> +	struct reset_control *rstc;
->>> +	void __iomem *iop_regs;
->>> +	void __iomem *pmc_regs;
->>> +	void __iomem *moon0_regs;
->>> +	int irq;
->>> +	int gpio_wakeup;
->>> +	resource_size_t iop_mem_start;
->>> +	resource_size_t iop_mem_size;
->>> +	unsigned char bin_code_mode;
->>> +};
->>> +
->>> +static struct sp_iop *iop_poweroff;
->>> +
->>> +static void sp_iop_load_normal_code(struct sp_iop *iop) {
->>> +	const struct firmware *fw;
->>> +	void __iomem *iop_kernel_base;
->>> +	unsigned int reg, err;
->>> +
->>> +	err = request_firmware(&fw, "normal.bin", iop->dev);
->>> +	if (err)
->>> +		dev_err(iop->dev, "get bin file error\n");
->>> +
->>> +	iop_kernel_base = ioremap(iop->iop_mem_start, fw->size);
->>> +	memset(iop_kernel_base, 0, fw->size);
->>> +	memcpy(iop_kernel_base, fw->data, fw->size);
->>> +	release_firmware(fw);
->>> +
->>> +	clk_prepare_enable(iop->iopclk);
->>
->> where do you disable the clock?
-> 
-> I will add disable clock in sp_iop_remove().				
-> Below is my modification				
-> static int sp_iop_remove(struct platform_device *pdev)				
-> {				
-> 	struct sp_iop *iop = iop_poweroff;			
-> 	pm_power_off = NULL;			
-> 	clk_disable_unprepare(iop->iopclk);			
-> 				
-> 	return 0;			
-> }				
-
-How is it balanced then? remove() is symmetric to probe() but you did
-not enable clocks in the probe(). Instead you enable the clocks each
-time in load_normal_code() and load_poweroff_code().
-
-This does not seem right at all.
-
-Best regards,
-Krzysztof

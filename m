@@ -2,167 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111634D872D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4D94D872F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240191AbiCNOpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 10:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S240349AbiCNOqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 10:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiCNOpr (ORCPT
+        with ESMTP id S229983AbiCNOq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 10:45:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187441BE9D;
-        Mon, 14 Mar 2022 07:44:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A988B80D38;
-        Mon, 14 Mar 2022 14:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C396C340E9;
-        Mon, 14 Mar 2022 14:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647269074;
-        bh=UnunP4eX9Tyb4P5pAj81z5/19bGk3OIFv/pkt4kWZPA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=E3HMzu4aUAEa/07h7JHqT3EZzEGwocWB7huRIQrMcQ6OD31MTixQfyMOUh9VVvh69
-         OFBk8E9El8VdprcJwMAIF6J/EOqiI+UccvZFxLiQFgEtM/kxn6iV++UixEMK7vyBjo
-         6/za/xyr9a5LGCtRLumy4MU1QmRqQK4l5owHsQfUqFBD6U5AAdAeoFoV6QkALB5Eid
-         QUM0+FSlHy6NC+SllL66tRvNkvIQIGqUYoN0hiKXxG629SpEmcFRwy2Iu2O8veMjgv
-         m+QvAje5ZgEsUjTPzaaCgzdDtS0Ogi2vgHKHjM+2mxoWupFOeYpJghohqCISZNoYH1
-         uHJ8gFLSGs7hw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nTlw0-00ENlh-A9; Mon, 14 Mar 2022 14:44:32 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, Rob Herring <robh@kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        dann frazier <dann.frazier@canonical.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        stable@vger.kernel.org
-Subject: [PATCH] PCI: xgene: Revert "PCI: xgene: Use inbound resources for setup"
-Date:   Mon, 14 Mar 2022 14:44:29 +0000
-Message-Id: <20220314144429.1947610-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Mar 2022 10:46:27 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E388336161
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:45:16 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e186so31198969ybc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eHOFQ6OeVmD5xAvxpdkiIICSQ9CsKQewCdMWT4MvmNM=;
+        b=kJ2uFEbx/7+tJLn5CVdvf9BPKnzVRSwuYgvF7viFcSPIUz7HUSA1mNd1ZM1h2sHaIM
+         PRb5ABgceN5cePC4kA4HLqxKxF07gHa1kwZcrH/kiFPVMlCvXQE0pJ7porGFuohzhEAC
+         KMa9cCAOMaJRNI4Tt+KhUuBnIjCjHBe7i3Y8GCzwaSmx2oenNP7ygHFRwM0M7WPmQvVf
+         788+H8YLDF+McFmOhGYp8rHyhQG2PWJxOzHOHO2Vv6/EgLEB1s6MxIPog7GL6mpVW8eT
+         oOFvfCC8tv6RUGXESVkTiyCA8yiVF7wg691tbs2LBPCEmzU5YnLqbXCkPz1oq6rv+hF9
+         7Erg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eHOFQ6OeVmD5xAvxpdkiIICSQ9CsKQewCdMWT4MvmNM=;
+        b=gHZWPLWDFaAIV3oejMqjRkFOraoNIFuu9EJHFI4jqt8ZsH+N4FTpz2LBjcX9VS1RtD
+         YRZqeDEpALITR4aJydkgPm9h+hw8fKoN+KgX6uVxirWJ3ClMBd87qVgTcyqoIKg9tznG
+         XpoVD0a3wtkI8dJfy1j6mBOsvis1aTbG+qqm7KL6pGQ1IKg0sStlAUb+2eTtgX94K7bS
+         jhvBYR0c2hAX1wwiSxZTRU1oGUzJrndw3sdqc4nwGuckrkeAWMo3M0OQaY6oHkGGIbvp
+         2RC9MlffKxPk7j9db8AZ9fDJ05rlM4mVTERmVVcBpaqYGLqWeA7JM4/2ApM3zvnBbMse
+         zVqQ==
+X-Gm-Message-State: AOAM530NCF43H//fOzWDwtRAKo2PyxhvaJjl7Xz8ZGA3VyuGHFhh7bS0
+        Xi4KcefE235J7qPAjc1FkWZPqntxGQIFhtdRHW6Hwg==
+X-Google-Smtp-Source: ABdhPJymjMuY2O/Ot9G/D3+o0FONpz7ABu4KFyvOcryH1Xdx2fEN383eY9Hdw++IOrTPgNoOwBMa7cVOlHHRcrcwAT0=
+X-Received: by 2002:a25:d50c:0:b0:627:660c:1874 with SMTP id
+ r12-20020a25d50c000000b00627660c1874mr17976243ybe.625.1647269115342; Mon, 14
+ Mar 2022 07:45:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@android.com, robh@kernel.org, toan@os.amperecomputing.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, stgraber@ubuntu.com, dann.frazier@canonical.com, regressions@leemhuis.info, stable@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220314133738.269522-1-frederic@kernel.org> <20220314133738.269522-3-frederic@kernel.org>
+In-Reply-To: <20220314133738.269522-3-frederic@kernel.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 14 Mar 2022 15:44:39 +0100
+Message-ID: <CANpmjNPqY65ZYLFukgp779pHbiRH05yns+G7Z36QdWwrQp1WOQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] preempt/dynamic: Introduce preempt mode accessors
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
-killed PCIe on my XGene-1 box (a Mustang board). The machine itself
-is still alive, but half of its storage (over NVMe) is gone, and the
-NVMe driver just times out.
+On Mon, 14 Mar 2022 at 14:37, Frederic Weisbecker <frederic@kernel.org> wrote:
+>
+> From: Valentin Schneider <valentin.schneider@arm.com>
+>
+> CONFIG_PREEMPT{_NONE, _VOLUNTARY} designate either:
+> o The build-time preemption model when !PREEMPT_DYNAMIC
+> o The default boot-time preemption model when PREEMPT_DYNAMIC
+>
+> IOW, using those on PREEMPT_DYNAMIC kernels is meaningless - the actual
+> model could have been set to something else by the "preempt=foo" cmdline
+> parameter.
+>
+> Introduce a set of helpers to determine the actual preemption mode used by
+> the live kernel.
+>
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> ---
+>  include/linux/sched.h | 16 ++++++++++++++++
+>  kernel/sched/core.c   | 11 +++++++++++
+>  2 files changed, 27 insertions(+)
+>
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 508b91d57470..d348e886e4d0 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -2096,6 +2096,22 @@ static inline void cond_resched_rcu(void)
+>  #endif
+>  }
+>
+> +#ifdef CONFIG_PREEMPT_DYNAMIC
+> +
+> +extern bool preempt_mode_none(void);
+> +extern bool preempt_mode_voluntary(void);
+> +extern bool preempt_mode_full(void);
+> +
+> +#else
+> +
+> +#define preempt_mode_none() IS_ENABLED(CONFIG_PREEMPT_NONE)
+> +#define preempt_mode_voluntary() IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY)
+> +#define preempt_mode_full() IS_ENABLED(CONFIG_PREEMPT)
+> +
 
-Note that this machine boots with a device tree provided by the
-UEFI firmware (2016 vintage), which could well be non conformant
-with the spec, hence the breakage.
+Shame this was somehow forgotten.
+There was a v3 of this patch that fixed a bunch of things (e.g. making
+these proper functions so all builds error if accidentally used in
+#if).
 
-With the patch reverted, the box boots 5.17-rc8 with flying colors.
+https://lore.kernel.org/lkml/20211112185203.280040-3-valentin.schneider@arm.com/
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Toan Le <toan@os.amperecomputing.com>
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Krzysztof Wilczyński <kw@linux.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Stéphane Graber <stgraber@ubuntu.com>
-Cc: dann frazier <dann.frazier@canonical.com>
-Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: stable@vger.kernel.org>
----
- drivers/pci/controller/pci-xgene.c | 33 ++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 11 deletions(-)
+Is it also possible to take all the rest of that series (all 4
+patches) from Valentin?
 
-diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-index 0d5acbfc7143..aa41ceaf031f 100644
---- a/drivers/pci/controller/pci-xgene.c
-+++ b/drivers/pci/controller/pci-xgene.c
-@@ -479,28 +479,27 @@ static int xgene_pcie_select_ib_reg(u8 *ib_reg_mask, u64 size)
- }
- 
- static void xgene_pcie_setup_ib_reg(struct xgene_pcie *port,
--				    struct resource_entry *entry,
--				    u8 *ib_reg_mask)
-+				    struct of_pci_range *range, u8 *ib_reg_mask)
- {
- 	void __iomem *cfg_base = port->cfg_base;
- 	struct device *dev = port->dev;
- 	void __iomem *bar_addr;
- 	u32 pim_reg;
--	u64 cpu_addr = entry->res->start;
--	u64 pci_addr = cpu_addr - entry->offset;
--	u64 size = resource_size(entry->res);
-+	u64 cpu_addr = range->cpu_addr;
-+	u64 pci_addr = range->pci_addr;
-+	u64 size = range->size;
- 	u64 mask = ~(size - 1) | EN_REG;
- 	u32 flags = PCI_BASE_ADDRESS_MEM_TYPE_64;
- 	u32 bar_low;
- 	int region;
- 
--	region = xgene_pcie_select_ib_reg(ib_reg_mask, size);
-+	region = xgene_pcie_select_ib_reg(ib_reg_mask, range->size);
- 	if (region < 0) {
- 		dev_warn(dev, "invalid pcie dma-range config\n");
- 		return;
- 	}
- 
--	if (entry->res->flags & IORESOURCE_PREFETCH)
-+	if (range->flags & IORESOURCE_PREFETCH)
- 		flags |= PCI_BASE_ADDRESS_MEM_PREFETCH;
- 
- 	bar_low = pcie_bar_low_val((u32)cpu_addr, flags);
-@@ -531,13 +530,25 @@ static void xgene_pcie_setup_ib_reg(struct xgene_pcie *port,
- 
- static int xgene_pcie_parse_map_dma_ranges(struct xgene_pcie *port)
- {
--	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(port);
--	struct resource_entry *entry;
-+	struct device_node *np = port->node;
-+	struct of_pci_range range;
-+	struct of_pci_range_parser parser;
-+	struct device *dev = port->dev;
- 	u8 ib_reg_mask = 0;
- 
--	resource_list_for_each_entry(entry, &bridge->dma_ranges)
--		xgene_pcie_setup_ib_reg(port, entry, &ib_reg_mask);
-+	if (of_pci_dma_range_parser_init(&parser, np)) {
-+		dev_err(dev, "missing dma-ranges property\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Get the dma-ranges from DT */
-+	for_each_of_pci_range(&parser, &range) {
-+		u64 end = range.cpu_addr + range.size - 1;
- 
-+		dev_dbg(dev, "0x%08x 0x%016llx..0x%016llx -> 0x%016llx\n",
-+			range.flags, range.cpu_addr, end, range.pci_addr);
-+		xgene_pcie_setup_ib_reg(port, &range, &ib_reg_mask);
-+	}
- 	return 0;
- }
- 
--- 
-2.34.1
-
+Thanks,
+-- Marco

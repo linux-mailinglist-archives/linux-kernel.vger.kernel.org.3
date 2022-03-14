@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE654D7969
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 888324D796B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235910AbiCNClk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 22:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S235875AbiCNCnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 22:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbiCNCla (ORCPT
+        with ESMTP id S235923AbiCNCm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 22:41:30 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB2E205E0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 19:40:21 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id s207so15899283oie.11
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 19:40:21 -0700 (PDT)
+        Sun, 13 Mar 2022 22:42:59 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D55B205E2;
+        Sun, 13 Mar 2022 19:41:50 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id r12so12349886pla.1;
+        Sun, 13 Mar 2022 19:41:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=KRSZ9fAkZ9+khL23FiwcGxPfmyeYInX7tr5JzmTG8U8=;
-        b=MsndYsoWrluuiKeCV3DQYcLlvem6pDqTGbAppvwE9u8DlhBWcGPN0rCo5SdVFtvySW
-         Ek8+Dp/d70wInRnoZuOUGgaraSoEUHbIFaxdGgH+0d980KgQ42KGxlYGC8t2gEGUFIKF
-         frDl4WhWKdZ7V4Fe8JORLglkoCOH7vgLTmXEDbkDaKb1JcSYmBk8bednIlfagc8rmqAR
-         DL01bDnpMWinrsTyhuU+9q0OA6JKgiyXAHiEwxLgjV+gOJXDNbNYgwgyTweYYfdlTXPg
-         PW7X9kgyLlfvOpD9djf5Y2mpbEQQ12xSrWjsCkzn57GmORZ3Xy8f6Z/ivwgbHxIqul0U
-         IwCA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xMR3gdW7BLrew3/OAPNy28mUhLn0EbRf6Sq9j+wj9Fw=;
+        b=P7wFRUrDfFkCmt8FoW2Dewmyt2jkHRvZcCqB+ziLG+MUNvZ/HDu7Im6tTo9WgQtwyH
+         9Fu1CqctAi+raak0lF/M6yuPt3YzhHekqZwMivR2Mr/X6UHRRpDhqzxa2tQyjSyPTn7I
+         NVKShBZMhv7pUBubSXT1V9B4/QK+7p6v+THXg3um3JXgKbBek/dqM7tA6vlFypviMLij
+         Sp7GThydf5VHYYg78Pr0mOIr2gw/0ZuCb6dSOlte12SP7jU+pklsQ9VZFQ8PWUIdej2M
+         YVXrAqt15hSXbX/Z6XtuKFi9KU61y+6nAx01YvJ3kAniubPNAjxpqzQGRLtyJ3Aj4c2z
+         FV/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=KRSZ9fAkZ9+khL23FiwcGxPfmyeYInX7tr5JzmTG8U8=;
-        b=QTGxtOS3c0fPaTIZVG9M8wg9DFJNxIAx30FdTJD+eu/mTdJ92+3tKdt14/H4XSxrgZ
-         cFtFpPHoAqUnlzATP9tSnW0jLfUXhkkft2DiqNZN6pgxPDhOO6Cue0obMzx2uHodsyAH
-         PdTXFpz3CBbykNacfYC7O6JZb6/vykCt3xiT2Noj3heWqft8OPaan7DYh9EXgfiWjlN7
-         kKFarHOOREax45mo70ECkghSKW9+nAPJ9Ail2O6443gi2agZb8FZqF+/gKa1hFrwrZEx
-         yMkyjGd0YMxOsyWlqxaQXPlYIgLf+xEbliGPt0bgsyzd4Cif3Mq4wHR0FjctfeA5Mf27
-         1QfA==
-X-Gm-Message-State: AOAM531gDr9clR+xiLcfzci0XwsOPfQebbQkuDtwvKVo9IMm6X10KNac
-        iXHAZ1J1MFg22W9bb+bgYa4FLYyeSdak0g==
-X-Google-Smtp-Source: ABdhPJygtiUvnnpLH2CXHwWsVzHmAOm+dLzcz6lIHCweHCHqGdezh44LTVMNucUyHdzrF8/JtdXlcQ==
-X-Received: by 2002:a05:6808:2189:b0:2da:b59:3acb with SMTP id be9-20020a056808218900b002da0b593acbmr19899022oib.112.1647225620516;
-        Sun, 13 Mar 2022 19:40:20 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id n11-20020a9d710b000000b005af4ceeaac1sm6905945otj.37.2022.03.13.19.40.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xMR3gdW7BLrew3/OAPNy28mUhLn0EbRf6Sq9j+wj9Fw=;
+        b=5Oryze7ygYGz87SCet455CQyoVuHqsDDW0c9v9PIcmRTETVWl3rWRId3ScPhmmmasb
+         /oJPaKV3RhlXmwaXiVyBwGmtzzqzOsT/UkV8vK723hYcVBFO6cb6QmnvE0N0B2VcbA5W
+         FoEI06wfyQBCnHUCznzEKIAiiqxBrjq1jNEmDOd3bjwN7FkesFUrEulhu2eaWBpIhzdL
+         Lk25CpiVumBLjc/4ZDqCYyiwaxTzLoJf6Ic6GHAdwp3e6V2OkC2BfpYkg991cDhWZJsp
+         q/Yv/xeecXQZJXnM5sOasyL7R+3aKUPR0ll4Juw0tx9Gs/eKsOaJKjsBlpRMoiOurloo
+         dshw==
+X-Gm-Message-State: AOAM5300A+a8uxvOOOyXiLDFYMmyqEei05OoiCxMOyW35eeLRco+o8A2
+        6uvX7Kflh7WpK7aVC0TTJzy85Mlalg0=
+X-Google-Smtp-Source: ABdhPJzF1ibfmKhO0gwm/jTPkr3fjZadUySO8H9OHB/KxL5rlkFfeBw48zSfDTRQHpU+H2vuOvrHcQ==
+X-Received: by 2002:a17:90b:3a91:b0:1bf:261e:7773 with SMTP id om17-20020a17090b3a9100b001bf261e7773mr33798841pjb.155.1647225709702;
+        Sun, 13 Mar 2022 19:41:49 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056a001a0c00b004e1307b249csm18055684pfv.69.2022.03.13.19.41.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 19:40:19 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 19:40:08 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Miaohe Lin <linmiaohe@huawei.com>
-cc:     akpm@linux-foundation.org, Herbert.van.den.Bergh@oracle.com,
-        chris.mason@oracle.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/mlock: fix potential imbalanced rlimit ucounts
- adjustment
-In-Reply-To: <20220310132417.41189-1-linmiaohe@huawei.com>
-Message-ID: <268b3146-2963-15b6-6d6-95a96853314@google.com>
-References: <20220310132417.41189-1-linmiaohe@huawei.com>
+        Sun, 13 Mar 2022 19:41:48 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     kuba@kernel.org
+Cc:     cgel.zte@gmail.com, chi.minghao@zte.com.cn, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        sebastian.hesselbarth@gmail.com, zealci@zte.com.cn
+Subject: [PATCH V3] net: mv643xx_eth: use platform_get_irq() instead of platform_get_resource()
+Date:   Mon, 14 Mar 2022 02:41:44 +0000
+Message-Id: <20220314024144.2112308-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220311082051.783b7c0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20220311082051.783b7c0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +72,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022, Miaohe Lin wrote:
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-> user_shm_lock forgets to set allowed to 0 when get_ucounts fails. So
-> the later user_shm_unlock might do the extra dec_rlimit_ucounts. Fix
-> this by resetting allowed to 0.
-> 
-> Fixes: 5ed44a401ddf ("do not limit locked memory when RLIMIT_MEMLOCK is RLIM_INFINITY")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+It is not recommened to use platform_get_resource(pdev, IORESOURCE_IRQ)
+for requesting IRQ's resources any more, as they can be not ready yet in
+case of DT-booting.
 
-NAK.  user_shm_lock() remembers to declare "int allowed = 0" on entry.
+platform_get_irq() instead is a recommended way for getting IRQ even if
+it was not retrieved earlier.
 
-> ---
->  mm/mlock.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index 29372c0eebe5..efd2dd2943de 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -733,6 +733,7 @@ int user_shm_lock(size_t size, struct ucounts *ucounts)
->  	}
->  	if (!get_ucounts(ucounts)) {
->  		dec_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
-> +		allowed = 0;
->  		goto out;
->  	}
->  	allowed = 1;
-> -- 
-> 2.23.0
-> 
-> 
-> 
+It also makes code simpler because we're getting "int" value right away
+and no conversion from resource to int is required.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+v1->v2:
+  - Add a space after "net:".
+  - Use WARN_ON instead of BUG_ON.
+v2->v3:
+  - Release some operations.
+
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index c31cbbae0eca..d75cf9097c7a 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -3092,8 +3092,7 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
+ 	struct mv643xx_eth_private *mp;
+ 	struct net_device *dev;
+ 	struct phy_device *phydev = NULL;
+-	struct resource *res;
+-	int err;
++	int err, irq;
+ 
+ 	pd = dev_get_platdata(&pdev->dev);
+ 	if (pd == NULL) {
+@@ -3189,9 +3188,14 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
+ 	timer_setup(&mp->rx_oom, oom_timer_wrapper, 0);
+ 
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	BUG_ON(!res);
+-	dev->irq = res->start;
++	irq = platform_get_irq(pdev, 0);
++	if (WARN_ON(irq < 0)) {
++		if (!IS_ERR(mp->clk))
++			clk_disable_unprepare(mp->clk);
++		free_netdev(dev);
++		return irq;
++	}
++	dev->irq = irq;
+ 
+ 	dev->netdev_ops = &mv643xx_eth_netdev_ops;
+ 
+-- 
+2.25.1
+

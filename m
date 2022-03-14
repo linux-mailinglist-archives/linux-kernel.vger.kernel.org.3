@@ -2,216 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D034D8A9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A06ED4D8A9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243215AbiCNRPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S243299AbiCNRP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243205AbiCNRPP (ORCPT
+        with ESMTP id S243216AbiCNRPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:15:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BAAD34B94
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647278041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iAONPV5TRI2rOpqSpmMyMB9BD5aXa/UL7zZiN1WaZes=;
-        b=Iv8yu3xc9cCQ+qBG50MiYFM0yD/JlfG1vuvaHCfkX9Mu5ZprzGUdgTsHrl9mT7E9RJz2cU
-        qCYAP6F9kXTrgvNwLDAM5touw8YlCH5iCyfDKGAQ6qrUKgeAOhncM81PGbfnsumpyZ5kjJ
-        oIPJi6pO5XKioD3BfRv5a7h1/neJK/g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-P_wDxSrRPp6dCESNi80gBQ-1; Mon, 14 Mar 2022 13:14:00 -0400
-X-MC-Unique: P_wDxSrRPp6dCESNi80gBQ-1
-Received: by mail-wm1-f70.google.com with SMTP id h206-20020a1c21d7000000b003552c13626cso9911734wmh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:14:00 -0700 (PDT)
+        Mon, 14 Mar 2022 13:15:21 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75B036174;
+        Mon, 14 Mar 2022 10:14:07 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id qt6so35502288ejb.11;
+        Mon, 14 Mar 2022 10:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nomxyX/nf6tg6i6cYpzqiNmpO6v6wzTTCFLNxhUrHBg=;
+        b=Rww5aDsJbQu6V9hwVMpUr3trbIjTtJH8jVP87FvM3n6pJUTwzDLArtmE6F+LdMlIVk
+         2aDugPTYUySXjA1Vd5awPuQXx2DF03lDkXLud8TLGg0o5+I+I7MQxbVplsIeKLGqlaUR
+         dwliUn3HXldHvX8mpiHgvBTcO1S3psyB6/dV009lDETEsLA4xr2XhrxnpVd0Efrc6e7z
+         3Y2HU8KoJ+JzzzUtyELegUpHFduPiZarnd+UbEWGFghmq1nL0pC9XiZ3tkuYqvmr50KQ
+         sFwQnpdZbI8UdeJ7SnjjhPPGPc8YI90Jfr5trivk1xCanYTF6YC0p5nN1HgRjyaC8IlS
+         WxuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=iAONPV5TRI2rOpqSpmMyMB9BD5aXa/UL7zZiN1WaZes=;
-        b=XjifD3Y7rx9J44iBb3s8zj8grE+oZRiAjYZtXX8ij0s4WBm2dRGr2m+t6sKcAkmVKV
-         z2Fs1mmI4QhETJczm6HwXwLbBygtnd4vX/pdsrQzuJGVfRI22HO2XIy/lJN3YjfIBPtE
-         r5S/VCyOLuI6jHBXkbmgJCZ4idYKI/7f9zuCvZ3hDEguv/uGPRvKAOfT3DtjEc/cdyL1
-         VqaP7ctuaByOXG/uNTlenRxTNiqjZiVEXFDWubH9AsUkcLYYuUzDnTWhym0ArDAwKd9S
-         mHqoAvF9kh4VZCqQZpMhule5XRdeBSz1Ww5nR+IMNGb904sx9+OAI4Ap1MnInDlAO5s/
-         gt2w==
-X-Gm-Message-State: AOAM532332+UoI5cOb62VtCJXWzZnzJuqhsREAvHCLZWYSKtDqVAd6mm
-        OO1A+wdJ+atC+NhmxmMoDilifSOwGiLSrJJ4PZg38+mVW7ykGsIXP+N06IdHxOeMSmmNsQOXxea
-        2gGYpf/5/XKEA/6h5DVyAXT6M
-X-Received: by 2002:a05:600c:3509:b0:389:f7f9:7b9d with SMTP id h9-20020a05600c350900b00389f7f97b9dmr183471wmq.4.1647278039381;
-        Mon, 14 Mar 2022 10:13:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyMlXe0JZo7IsQjOotU0ZRoQURVItzZT4okfGXuvey2OHb8WQ8UwWZCgbE8CFf15963Z28pvQ==
-X-Received: by 2002:a05:600c:3509:b0:389:f7f9:7b9d with SMTP id h9-20020a05600c350900b00389f7f97b9dmr183453wmq.4.1647278039145;
-        Mon, 14 Mar 2022 10:13:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:9a00:b2c1:8682:b807:e870? (p200300cbc7049a00b2c18682b807e870.dip0.t-ipconnect.de. [2003:cb:c704:9a00:b2c1:8682:b807:e870])
-        by smtp.gmail.com with ESMTPSA id s17-20020adfbc11000000b001f023d197b8sm14086221wrg.68.2022.03.14.10.13.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 10:13:58 -0700 (PDT)
-Message-ID: <1623cd68-8437-9404-f183-153741bbf84c@redhat.com>
-Date:   Mon, 14 Mar 2022 18:13:57 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nomxyX/nf6tg6i6cYpzqiNmpO6v6wzTTCFLNxhUrHBg=;
+        b=QgMdw98lMPMFlEXot+e+c36/uzv8JZMPyaGD2SKaxmV+z/JMkOoLRz0QMSPIk6YJsB
+         l5TqGZ2mY1Lxv/oEojAZrvYKSJXL7L3pHZlpZD4f3G9rKIZaqlzs77hTkT/LGW7uzNMN
+         X+Ij5OTzPvkBY9hdYLpeGOtaH7oKDYV4KHmQg5W4wYTMr6QaZohY2Cdq12JUxYgOXDcw
+         Dk/joTqo2jJGqC6Zg2yCmUTS7m6iYdAHl8a29M/l8/sEBt37sW8cEiGzwiNLD8GVG5O/
+         yMF6VSyrYH/t4HEFT6brLbp1c8Cf+3Gdcwlbm9+VTkezj0q2PeddLumxPQXdKLbStU7A
+         7tpQ==
+X-Gm-Message-State: AOAM5322YD62I1CqxoGpAdaNgebPbQ93H95Gp9djOzJLYPXNCF5dqb4B
+        r4RhFcr5eNyogveqBv2WWNI=
+X-Google-Smtp-Source: ABdhPJxxxFCiGTyKv9avS6wHvb750L41lutuQRDu+6yh9EYEXnn+E9i0WAMwevJPOxNJETlBe9CS0w==
+X-Received: by 2002:a17:907:7d91:b0:6d7:a1e:a47a with SMTP id oz17-20020a1709077d9100b006d70a1ea47amr20518326ejc.116.1647278046188;
+        Mon, 14 Mar 2022 10:14:06 -0700 (PDT)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id z15-20020a170906240f00b006d703ca573fsm6916685eja.85.2022.03.14.10.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 10:14:05 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 19:14:04 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v3 net-next 11/14] net: dsa: Handle MST state changes
+Message-ID: <20220314171404.s2erbwcb36tsmy2o@skbuf>
+References: <20220314095231.3486931-1-tobias@waldekranz.com>
+ <20220314095231.3486931-12-tobias@waldekranz.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-References: <20220311183656.1911811-1-zi.yan@sent.com>
- <20220311183656.1911811-3-zi.yan@sent.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v7 2/5] mm: page_isolation: check specified range for
- unmovable pages
-In-Reply-To: <20220311183656.1911811-3-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314095231.3486931-12-tobias@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.03.22 19:36, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
+On Mon, Mar 14, 2022 at 10:52:28AM +0100, Tobias Waldekranz wrote:
+> Add the usual trampoline functionality from the generic DSA layer down
+> to the drivers for MST state changes.
 > 
-> Enable set_migratetype_isolate() to check specified sub-range for
-> unmovable pages during isolation. Page isolation is done
-> at max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) granularity, but not all
-> pages within that granularity are intended to be isolated. For example,
-> alloc_contig_range(), which uses page isolation, allows ranges without
-> alignment. This commit makes unmovable page check only look for
-> interesting pages, so that page isolation can succeed for any
-> non-overlapping ranges.
+> When a state changes to disabled/blocking/listening, make sure to fast
+> age any dynamic entries in the affected VLANs (those controlled by the
+> MSTI in question).
 > 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 > ---
->  include/linux/page-isolation.h | 10 ++++++++
->  mm/page_alloc.c                | 13 +---------
->  mm/page_isolation.c            | 47 +++++++++++++++++++++-------------
->  3 files changed, 40 insertions(+), 30 deletions(-)
+>  include/net/dsa.h  |  3 +++
+>  net/dsa/dsa_priv.h |  2 ++
+>  net/dsa/port.c     | 67 +++++++++++++++++++++++++++++++++++++++++++---
+>  net/dsa/slave.c    |  6 +++++
+>  4 files changed, 74 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/linux/page-isolation.h b/include/linux/page-isolation.h
-> index e14eddf6741a..eb4a208fe907 100644
-> --- a/include/linux/page-isolation.h
-> +++ b/include/linux/page-isolation.h
-> @@ -15,6 +15,16 @@ static inline bool is_migrate_isolate(int migratetype)
->  {
->  	return migratetype == MIGRATE_ISOLATE;
+> diff --git a/include/net/dsa.h b/include/net/dsa.h
+> index 1ddaa2cc5842..a171e7cdb3fe 100644
+> --- a/include/net/dsa.h
+> +++ b/include/net/dsa.h
+> @@ -945,7 +945,10 @@ struct dsa_switch_ops {
+>  				     struct dsa_bridge bridge);
+>  	void	(*port_stp_state_set)(struct dsa_switch *ds, int port,
+>  				      u8 state);
+> +	int	(*port_mst_state_set)(struct dsa_switch *ds, int port,
+> +				      const struct switchdev_mst_state *state);
+>  	void	(*port_fast_age)(struct dsa_switch *ds, int port);
+> +	void	(*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 vid);
+>  	int	(*port_pre_bridge_flags)(struct dsa_switch *ds, int port,
+>  					 struct switchdev_brport_flags flags,
+>  					 struct netlink_ext_ack *extack);
+> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+> index d90b4cf0c9d2..2ae8996cf7c8 100644
+> --- a/net/dsa/dsa_priv.h
+> +++ b/net/dsa/dsa_priv.h
+> @@ -215,6 +215,8 @@ static inline struct net_device *dsa_master_find_slave(struct net_device *dev,
+>  void dsa_port_set_tag_protocol(struct dsa_port *cpu_dp,
+>  			       const struct dsa_device_ops *tag_ops);
+>  int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age);
+> +int dsa_port_set_mst_state(struct dsa_port *dp,
+> +			   const struct switchdev_mst_state *state);
+>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy);
+>  int dsa_port_enable(struct dsa_port *dp, struct phy_device *phy);
+>  void dsa_port_disable_rt(struct dsa_port *dp);
+> diff --git a/net/dsa/port.c b/net/dsa/port.c
+> index f6a822d854cc..223681e03321 100644
+> --- a/net/dsa/port.c
+> +++ b/net/dsa/port.c
+> @@ -30,12 +30,11 @@ static int dsa_port_notify(const struct dsa_port *dp, unsigned long e, void *v)
+>  	return dsa_tree_notify(dp->ds->dst, e, v);
 >  }
-> +static inline unsigned long pfn_max_align_down(unsigned long pfn)
-> +{
-> +	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
+>  
+> -static void dsa_port_notify_bridge_fdb_flush(const struct dsa_port *dp)
+> +static void dsa_port_notify_bridge_fdb_flush(const struct dsa_port *dp, u16 vid)
+>  {
+>  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
+>  	struct switchdev_notifier_fdb_info info = {
+> -		/* flush all VLANs */
+> -		.vid = 0,
+> +		.vid = vid,
+>  	};
+>  
+>  	/* When the port becomes standalone it has already left the bridge.
+> @@ -57,7 +56,39 @@ static void dsa_port_fast_age(const struct dsa_port *dp)
+>  
+>  	ds->ops->port_fast_age(ds, dp->index);
+>  
+> -	dsa_port_notify_bridge_fdb_flush(dp);
+
+Could you please migrate the "flush all VLANs" comment here?
+
+> +	dsa_port_notify_bridge_fdb_flush(dp, 0);
 > +}
 > +
-> +static inline unsigned long pfn_max_align_up(unsigned long pfn)
+> +static void dsa_port_vlan_fast_age(const struct dsa_port *dp, u16 vid)
 > +{
-> +	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
+> +	struct dsa_switch *ds = dp->ds;
+> +
+> +	if (!ds->ops->port_vlan_fast_age)
+> +		return;
+> +
+> +	ds->ops->port_vlan_fast_age(ds, dp->index, vid);
+> +
+> +	dsa_port_notify_bridge_fdb_flush(dp, vid);
 > +}
 > +
->  #else
->  static inline bool has_isolate_pageblock(struct zone *zone)
->  {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 6de57d058d3d..680580a40a35 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -8937,16 +8937,6 @@ void *__init alloc_large_system_hash(const char *tablename,
+> +static void dsa_port_msti_fast_age(const struct dsa_port *dp, u16 msti)
+> +{
+> +	unsigned long *vids;
+> +	int vid;
+> +
+> +	vids = bitmap_zalloc(VLAN_N_VID, 0);
+> +	if (!vids)
+> +		return;
+
+As discussed, I think you can/should use DECLARE_BITMAP().
+
+> +
+> +	if (br_mst_get_info(dsa_port_bridge_dev_get(dp), msti, vids))
+> +		goto out_free;
+> +
+> +	for_each_set_bit(vid, vids, VLAN_N_VID) {
+> +		dsa_port_vlan_fast_age(dp, vid);
+
+This has an error propagation path to user space, since just user space
+sets it via IFLA_BRIDGE_MST_ENTRY_STATE, does it not?
+So could we actually propagate an error all the way from
+ds->ops->port_vlan_fast_age to the mstpd daemon?
+
+> +	}
+> +
+> +out_free:
+> +	kfree(vids);
 >  }
 >  
->  #ifdef CONFIG_CONTIG_ALLOC
-> -static unsigned long pfn_max_align_down(unsigned long pfn)
-> -{
-> -	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
-> -}
-> -
-> -static unsigned long pfn_max_align_up(unsigned long pfn)
-> -{
-> -	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
-> -}
-> -
->  #if defined(CONFIG_DYNAMIC_DEBUG) || \
->  	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE))
->  /* Usage: See admin-guide/dynamic-debug-howto.rst */
-> @@ -9091,8 +9081,7 @@ int alloc_contig_range(unsigned long start, unsigned long end,
->  	 * put back to page allocator so that buddy can use them.
->  	 */
+>  static bool dsa_port_can_configure_learning(struct dsa_port *dp)
+> @@ -118,6 +149,32 @@ static void dsa_port_set_state_now(struct dsa_port *dp, u8 state,
+>  		pr_err("DSA: failed to set STP state %u (%d)\n", state, err);
+>  }
 >  
-> -	ret = start_isolate_page_range(pfn_max_align_down(start),
-> -				       pfn_max_align_up(end), migratetype, 0);
-> +	ret = start_isolate_page_range(start, end, migratetype, 0);
->  	if (ret)
->  		return ret;
->  
-> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
-> index b34f1310aeaa..e0afc3ee8cf9 100644
-> --- a/mm/page_isolation.c
-> +++ b/mm/page_isolation.c
-> @@ -16,7 +16,8 @@
->  #include <trace/events/page_isolation.h>
->  
->  /*
-> - * This function checks whether pageblock includes unmovable pages or not.
-> + * This function checks whether pageblock within [start_pfn, end_pfn) includes
-> + * unmovable pages or not.
->   *
->   * PageLRU check without isolation or lru_lock could race so that
->   * MIGRATE_MOVABLE block might include unmovable pages. And __PageMovable
-> @@ -29,11 +30,14 @@
->   *
->   */
->  static struct page *has_unmovable_pages(struct zone *zone, struct page *page,
-> -				 int migratetype, int flags)
-> +				 int migratetype, int flags,
-> +				 unsigned long start_pfn, unsigned long end_pfn)
->  {
-> -	unsigned long iter = 0;
-> -	unsigned long pfn = page_to_pfn(page);
-> -	unsigned long offset = pfn % pageblock_nr_pages;
-> +	unsigned long first_pfn = max(page_to_pfn(page), start_pfn);
-> +	unsigned long pfn = first_pfn;
-> +	unsigned long last_pfn = min(ALIGN(pfn + 1, pageblock_nr_pages), end_pfn);
+> +int dsa_port_set_mst_state(struct dsa_port *dp,
+> +			   const struct switchdev_mst_state *state)
+> +{
+> +	struct dsa_switch *ds = dp->ds;
+> +	int err;
 > +
-> +	page = pfn_to_page(pfn);
-
-I think we should get rid of the page argument completely. The caller
-should pass in a reasonable [start_pfn, end_pfn) range, and to any
-necessary fixups to the range outside of this function.
-
-The goal should be to have
-
-pfn = start_pfn
-
-and replacing last_pfn by end_pfn.
-
-
-Ideally we'd end up with "This function checks whether the range
-[start_pfn, end_pfn) contains unmovable pages or not."
-
-
-What would be missing to achieve that?
-
--- 
-Thanks,
-
-David / dhildenb
+> +	if (!ds->ops->port_mst_state_set)
+> +		return -EOPNOTSUPP;
+> +
+> +	err = ds->ops->port_mst_state_set(ds, dp->index, state);
+> +	if (err)
+> +		return err;
+> +
+> +	if (dp->learning) {
+> +		switch (state->state) {
+> +		case BR_STATE_DISABLED:
+> +		case BR_STATE_BLOCKING:
+> +		case BR_STATE_LISTENING:
+> +			dsa_port_msti_fast_age(dp, state->msti);
+> +			break;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy)
+>  {
+>  	struct dsa_switch *ds = dp->ds;
+> @@ -748,6 +805,8 @@ int dsa_port_mst_enable(struct dsa_port *dp, bool on,
+>  		return 0;
+>  
+>  	if (!(ds->ops->vlan_msti_set &&
+> +	      ds->ops->port_mst_state_set &&
+> +	      ds->ops->port_vlan_fast_age &&
+>  	      dsa_port_can_configure_learning(dp))) {
+>  		NL_SET_ERR_MSG_MOD(extack, "Hardware does not support MST");
+>  		return -EINVAL;
+> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> index cd2c57de9592..106b177ad1eb 100644
+> --- a/net/dsa/slave.c
+> +++ b/net/dsa/slave.c
+> @@ -450,6 +450,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
+>  
+>  		ret = dsa_port_set_state(dp, attr->u.stp_state, true);
+>  		break;
+> +	case SWITCHDEV_ATTR_ID_PORT_MST_STATE:
+> +		if (!dsa_port_offloads_bridge_port(dp, attr->orig_dev))
+> +			return -EOPNOTSUPP;
+> +
+> +		ret = dsa_port_set_mst_state(dp, &attr->u.mst_state);
+> +		break;
+>  	case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
+>  		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
+>  			return -EOPNOTSUPP;
+> -- 
+> 2.25.1
+> 
 

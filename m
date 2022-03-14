@@ -2,176 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349D94D7E4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39024D7E51
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbiCNJNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S237846AbiCNJPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237975AbiCNJNE (ORCPT
+        with ESMTP id S231921AbiCNJPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:13:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22914433B5;
-        Mon, 14 Mar 2022 02:11:54 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KH9dq1k19zcb1j;
-        Mon, 14 Mar 2022 17:06:55 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Mar 2022 17:11:50 +0800
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Mar 2022 17:11:50 +0800
-Message-ID: <aa25447a-f6ff-2ff2-72e9-3bbab1d430e9@huawei.com>
-Date:   Mon, 14 Mar 2022 17:11:50 +0800
+        Mon, 14 Mar 2022 05:15:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A5A3ED36;
+        Mon, 14 Mar 2022 02:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647249280; x=1678785280;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QegVvWDmTK9SMt8wg/WFpqT3Mlvx5z2zQ2x0dvzullA=;
+  b=DfJQGDyRZX5AJb2GfkeCIR5aNcbDLQRzK+PS5OtfGD/WFPkCWp7NxxwY
+   AE/o3A45dc7oRgPf0f8YB6rEfhVhdDHFDYKvKZXu9oSRSE40ZrqeD9f9c
+   1KrbO0c1sHe4INiH9EythpAeG2jRd1uHrgjRWUF4rNPPv4sn7BK0Bt1u4
+   8OooW6ode8VkRynS6GaWbj3oY0J0Xpf+7q0R/Wdo2WvDkEulGYAqDzVjO
+   PzBgcH2r+/pC5+QSmEdfWqgaMpLvEkFiJhvHnWKtHkHmF3W8OpX/J8ABr
+   E8vEt/pP2rMyHuVRblrmhXY6ivrnRIMTLRdOEIvp9ydm3fSranaYc1VcV
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="243422940"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="243422940"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:14:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="556322449"
+Received: from srafikbh-mobl1.gar.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.54.232])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:14:36 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/1] Fix 8250 XON/XOFF for DMA-capable devices
+Date:   Mon, 14 Mar 2022 11:14:31 +0200
+Message-Id: <20220314091432.4288-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH 4.19 01/34] cgroup/cpuset: Fix a race between
- cpuset_attach() and cpu hotplug
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-References: <20220228172207.090703467@linuxfoundation.org>
- <20220228172208.566431934@linuxfoundation.org>
- <20220308151232.GA21752@blackbody.suse.cz> <Yi73dKB10LBTGb+S@kroah.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <Yi73dKB10LBTGb+S@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+DMA-capable 8250 was not properly taking XON/XOFF into account
+right since it was introduced in 2013. There was no attempt to
+send x_char out at all which is fixed by this patch.
 
+After making this fix, it was further reported by Gilles Buloz
+that also rx side fails to work as expected if the receiving
+side is not reading from tty. I took look into that issue and
+and determined that XOFF char gets stuck in an intermediate
+buffer until enough data can be processed in receive_buf().
+So it's not very useful from flow control perspective :-). While
+the problem is more likely to occur with DMA, the code does not
+look robust and the problem can likely occur also w/o DMA.
 
-在 2022/3/14 16:06, Greg Kroah-Hartman 写道:
-> On Tue, Mar 08, 2022 at 04:12:32PM +0100, Michal Koutný wrote:
->> Hello.
->>
->> On Mon, Feb 28, 2022 at 06:24:07PM +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->>> [...]
->>>      cpuset_attach()				cpu hotplug
->>>     ---------------------------            ----------------------
->>>     down_write(cpuset_rwsem)
->>>     guarantee_online_cpus() // (load cpus_attach)
->>> 					sched_cpu_deactivate
->>> 					  set_cpu_active()
->>> 					  // will change cpu_active_mask
->>>     set_cpus_allowed_ptr(cpus_attach)
->>>       __set_cpus_allowed_ptr_locked()
->>>        // (if the intersection of cpus_attach and
->>>          cpu_active_mask is empty, will return -EINVAL)
->>>     up_write(cpuset_rwsem)
->>> [...]
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -1528,6 +1528,7 @@ static void cpuset_attach(struct cgroup_
->>>  	cgroup_taskset_first(tset, &css);
->>>  	cs = css_cs(css);
->>>  
->>> +	cpus_read_lock();
->>>  	mutex_lock(&cpuset_mutex);
->>
->> This backport (and possible older kernels) looks suspicious since it comes
->> before commit d74b27d63a8b ("cgroup/cpuset: Change cpuset_rwsem and
->> hotplug lock order") v5.4-rc1~176^2~30 when the locking order was:
->> cpuset lock, cpus lock.
->>
->> At the same time it also comes before commit 710da3c8ea7d ("sched/core:
->> Prevent race condition between cpuset and __sched_setscheduler()")
->> v5.4-rc1~176^2~27 when neither __sched_setscheduler() cared and this
->> race is similar. (The swapped locking may still conflict with
->> rebuild_sched_domains() before d74b27d63a8b.)
-> 
-> Thanks for noticing this.  What do you recommend to do to resolve this?
-> 
-> thanks,
-> 
+I was thinking of fixing the rx side issue by adding lookahead.
+The most natural place to call lookahead handler would seem
+to be from flush_to_ldisc() in the case when receive_buf() does
+not eat all characters that were passed to it. Does anybody have
+other opinions on how it should be fixed?
 
-hi, Please review the following patch to fix it.
+Ilpo Järvinen (1):
+  serial: 8250: fix XOFF/XON sending when DMA is used
 
-thanks.
+ drivers/tty/serial/8250/8250_dma.c  | 11 ++++++++++-
+ drivers/tty/serial/8250/8250_port.c |  4 +---
+ drivers/tty/serial/serial_core.c    | 14 ++++++++++++++
+ include/linux/serial_core.h         |  2 ++
+ 4 files changed, 27 insertions(+), 4 deletions(-)
 
-patch:
+-- 
+2.30.2
 
-[PATCH] cpuset: Fix unsafe lock order between cpuset lock and cpus lock
-
-The backport commit 4eec5fe1c680a ("cgroup/cpuset: Fix a race
-between cpuset_attach() and cpu hotplug") looks suspicious since
-it comes before commit d74b27d63a8b ("cgroup/cpuset: Change
-cpuset_rwsem and hotplug lock order") v5.4-rc1~176^2~30 when
-the locking order was: cpuset lock, cpus lock.
-
-Fix it with the correct locking order and reduce the cpus locking
-range because only set_cpus_allowed_ptr() needs the protection of
-cpus lock.
-
-Fixes: 4eec5fe1c680a ("cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug")
-Reported-by: Michal Koutný <mkoutny@suse.com>
-Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
----
- kernel/cgroup/cpuset.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index d43d25acc..4e1c4232e 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1528,9 +1528,13 @@ static void cpuset_attach(struct cgroup_taskset *tset)
-        cgroup_taskset_first(tset, &css);
-        cs = css_cs(css);
-
--       cpus_read_lock();
-        mutex_lock(&cpuset_mutex);
-
-+       /*
-+        * It should hold cpus lock because a cpu offline event can
-+        * cause set_cpus_allowed_ptr() failed.
-+        */
-+       cpus_read_lock();
-        /* prepare for attach */
-        if (cs == &top_cpuset)
-                cpumask_copy(cpus_attach, cpu_possible_mask);
-@@ -1549,6 +1553,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
-                cpuset_change_task_nodemask(task, &cpuset_attach_nodemask_to);
-                cpuset_update_task_spread_flag(cs, task);
-        }
-+       cpus_read_unlock();
-
-        /*
-         * Change mm for all threadgroup leaders. This is expensive and may
-@@ -1584,7 +1589,6 @@ static void cpuset_attach(struct cgroup_taskset *tset)
-                wake_up(&cpuset_attach_wq);
-
-        mutex_unlock(&cpuset_mutex);
--       cpus_read_unlock();
- }
-
- /* The various types of files and directories in a cpuset file system */
---
-2.18.0
-
-
-
-
-> greg k-h
-> .
-> 

@@ -2,42 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AE54D883C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BE94D8841
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242580AbiCNPgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S240302AbiCNPiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiCNPgj (ORCPT
+        with ESMTP id S232412AbiCNPiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:36:39 -0400
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F29D443C5;
-        Mon, 14 Mar 2022 08:35:29 -0700 (PDT)
-Received: from smtpclient.apple (p5b3d2183.dip0.t-ipconnect.de [91.61.33.131])
-        by mail.holtmann.org (Postfix) with ESMTPSA id C19FACECC5;
-        Mon, 14 Mar 2022 16:35:28 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH] Bluetooth: btrtl: Add support for RTL8852B
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220314065422.1446-1-max.chou@realtek.com>
-Date:   Mon, 14 Mar 2022 16:35:28 +0100
-Cc:     Alex Lu <alex_lu@realsil.com.cn>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
+        Mon, 14 Mar 2022 11:38:20 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825EB3F887
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:37:10 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id r127so13030345qke.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fireburn-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0elgh052PSKRgUoeTnvN0bWDvw6A8anfaBt8OXlPQ1Y=;
+        b=IyDJx9FYLxq0/OFsl6PjULq1hPM856m5NjEgas6tyzwW95iNX23GcmcSfTJao1Fs/h
+         tEtyXRs5sajz8UhQzmJCrvnbMP7lrCkmfqVXyx57DLKwk4PFK0RvlBIsiR/94g0I7C5A
+         YrnmAurs8ZyiwcDO763iE4Nv7FSddrIfqLH+28Ije3Ai5heLz+OwouI0bqjK4GIIGWai
+         MTsTx3GdhUHVPdnjITT9f0PKJUHfKt2sEuZ5Aur/ejjH+qKT/4cd6c/WW8NOPmmTLXgw
+         izFMebbzzUX0tj8pI8aAt+aXqwLiX40VKiFbdvc6SUYsmPf/GGGio/meEWEfa6Q5ya6T
+         7vIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0elgh052PSKRgUoeTnvN0bWDvw6A8anfaBt8OXlPQ1Y=;
+        b=IrNOlZPQx3DFIZ44iq4u436F+0QJt9Ubmds9da+zx4AGVHkrjd7PcJPYU7yrpcvfV0
+         kE2MJ/XDHjezRvLAppBfSzfUd8Xk1pqZrPP3Kisw4TNfLPNknzoNvPbZ/WOa4ILr58/N
+         Kj7Y2ZiwnyT0XEt1jZ3pD/PwO1cz8RGCXo2W0k8PFShmb0KDbII4a1z9ezzzqJzACLV+
+         xKvRvL9JfHrT0YfUlkXALQp6M7z7OMyECexwS48mTCyrVtXJGCH6wGFSbZPEGmCY+9If
+         GkkRJW63Bx86iXtt1kDCBla9/8SflYibMM83GeoLJKjERxzTkCm2Paw5zraCcDCemSQV
+         5hGA==
+X-Gm-Message-State: AOAM531sQGt6ha1CKpPs2Debxc5WG/MEEu17D1CYfsxcubfrUSBjuUCl
+        Bl08W4x9kzNj9BfrQbba6kBsIZKxWTDs0yeFLsn+Qg==
+X-Google-Smtp-Source: ABdhPJyTloUkN91Q7ZAlujMEv/38sKubt4ooFXq30iFcN33LD+RPW78EKqagwBPZqPZIqDQ7wmDhXrXxN16GxBT1U60=
+X-Received: by 2002:a05:620a:1902:b0:5f1:8f5d:b0f2 with SMTP id
+ bj2-20020a05620a190200b005f18f5db0f2mr15068195qkb.60.1647272229548; Mon, 14
+ Mar 2022 08:37:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220312164550.1810665-1-mike@fireburn.co.uk> <61E2F921-2006-4E9A-AAFF-47371CBC5FCD@holtmann.org>
+In-Reply-To: <61E2F921-2006-4E9A-AAFF-47371CBC5FCD@holtmann.org>
+From:   Mike Lothian <mike@fireburn.co.uk>
+Date:   Mon, 14 Mar 2022 15:36:57 +0000
+Message-ID: <CAHbf0-GWcz85r4GEzmySFJ1n4iqeDTAm5H_Njs0FEpBs1hkJHw@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: hci_event: Remove excessive bluetooth warning
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
         Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, hildawu@realtek.com,
-        karenhsu@realtek.com, kidman@realtek.com
-Content-Transfer-Encoding: 7bit
-Message-Id: <FBE41BF1-B1CA-4649-98BF-F12222996E4B@holtmann.org>
-References: <20220314065422.1446-1-max.chou@realtek.com>
-To:     Max Chou <max.chou@realtek.com>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        BlueZ <linux-bluetooth@vger.kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,19 +71,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+On Mon, 14 Mar 2022 at 15:32, Marcel Holtmann <marcel@holtmann.org> wrote:
+>
+> Hi Mike,
+>
+> > Fixes: 3e54c5890c87a ("Bluetooth: hci_event: Use of a function table to=
+ handle HCI events")
+> > Signed-off-by: Mike Lothian <mike@fireburn.co.uk>
+> > ---
+> > net/bluetooth/hci_event.c | 8 --------
+> > 1 file changed, 8 deletions(-)
+> >
+> > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> > index fc30f4c03d29..aa57fccd2e47 100644
+> > --- a/net/bluetooth/hci_event.c
+> > +++ b/net/bluetooth/hci_event.c
+> > @@ -6818,14 +6818,6 @@ static void hci_event_func(struct hci_dev *hdev,=
+ u8 event, struct sk_buff *skb,
+> >               return;
+> >       }
+> >
+> > -     /* Just warn if the length is over max_len size it still be
+> > -      * possible to partially parse the event so leave to callback to
+> > -      * decide if that is acceptable.
+> > -      */
+> > -     if (skb->len > ev->max_len)
+> > -             bt_dev_warn(hdev, "unexpected event 0x%2.2x length: %u > =
+%u",
+> > -                         event, skb->len, ev->max_len);
+> > -
+>
+> which event type is this? You need to have a commit message giving detail=
+s. I am also pretty sure that this is broken hardware and we can go for rat=
+elimited version, but the warning is justified if the hardware is stupid. I=
+f our table is wrong, we fix the table, but not just silence an unpleasant =
+warning.
+>
+> Regards
+>
+> Marcel
+>
 
-> Add the support for RTL8852B BT controller on USB interface.
-> The necessary firmware file will be submitted to linux-firmware.
-> 
-> Signed-off-by: Max Chou <max.chou@realtek.com>
-> ---
-> drivers/bluetooth/btrtl.c | 13 +++++++++++++
-> 1 file changed, 13 insertions(+)
+Hi Marcel
 
-the patch has been applied to bluetooth-next tree.
+I noticed it had already been fixed in "Bluetooth: hci_event: Fix
+HCI_EV_VENDOR max_len"
 
-Regards
+I've replied to that patch asking if it can be added to stable, would
+be nice to get this into 5.17.0 before next week
 
-Marcel
+Cheers
 
+Mike

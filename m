@@ -2,132 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06844D7E48
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A224D7E45
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237943AbiCNJLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
+        id S237894AbiCNJKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237900AbiCNJKf (ORCPT
+        with ESMTP id S237847AbiCNJKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:10:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05758433BB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:09:24 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22E8CiGe016403;
-        Mon, 14 Mar 2022 09:09:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=H/Mn6HRsNMhv+bwCByeF0mc91VKpGPpT7Vj7Y41dm4s=;
- b=Jqtg2OJKTCOFoIj5pAa472dsohGGqKuMdU+J8nWOCjRGbw2SIXjiFtL+vVQvelGzxaHG
- sbvRdojUtJQHGReXSy7cutbiNss15BSydRLQ2JrZ4bIsqIK3ElzwcRJktyKO1o4neDFq
- /Vpa4agSDU4MWKBuHf99DUkWJ6S8qXnNCQqhq2hT6rDpNOZ8nxeiVV3srWCMqX/1Vo8S
- 3vqmkikdRyh7ypiEno9uWxQOM09R+8Qnrv5gzStOlNHnpSun1balpFwDjY67n+lLZk+E
- E0E/2JdE1yxvtSx/sZNVqontccmRZ9xYR/XHtPBoplIO8+9lQV0xRNPW0YbUlnfB/3Pb hQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3es56gx0rj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 09:09:17 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22E8ik7m026680;
-        Mon, 14 Mar 2022 09:09:16 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3es56gx0r1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 09:09:16 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22E97MC0010143;
-        Mon, 14 Mar 2022 09:09:15 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3erk58k6vg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 09:09:14 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22E99EJR36438466
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Mar 2022 09:09:14 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EDEEA5A6B;
-        Mon, 14 Mar 2022 09:09:11 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 79FF4A5B26;
-        Mon, 14 Mar 2022 09:09:08 +0000 (GMT)
-Received: from [9.43.4.195] (unknown [9.43.4.195])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Mar 2022 09:09:08 +0000 (GMT)
-Message-ID: <222c1c94-bc9a-a253-f408-937d02512151@linux.vnet.ibm.com>
-Date:   Mon, 14 Mar 2022 14:39:07 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa node
- changes its N_CPU state
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220310120749.23077-1-osalvador@suse.de>
- <20220310183951.cb713c6ae926ea6ea8489a71@linux-foundation.org>
- <c3b12235-b0ee-c5c5-b876-e96519786503@intel.com>
-From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
-In-Reply-To: <c3b12235-b0ee-c5c5-b876-e96519786503@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: J4Xk-0LqknNImNWTwo8-VSyS0boIhyBQ
-X-Proofpoint-GUID: E0o5cit5g5tOz2AZZP5nCnAz9zyJR39e
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 14 Mar 2022 05:10:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AB74163E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:09:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B58D81F37E;
+        Mon, 14 Mar 2022 09:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647248950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oZDKu+JBJDRVsjqZYqekmRzMv+/i6U7EN7Ysg+sQ8Do=;
+        b=uCIdH4BgAQYuFlIehJjxgpckcXdbzP9TWuNWzBGP+N/RRevDvG/kHMeXZOeaCOqWUMPBlM
+        wOXxv+fnpkWi6wmnjC5RxJ9+YiuGCKZ7XHwwtmsHVsLwXJ92sV+nAd5JMxbWrJ4Y0E8jLH
+        z+M5f0awEFv/yEnFwo0N+oZeo+VrQWA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647248950;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oZDKu+JBJDRVsjqZYqekmRzMv+/i6U7EN7Ysg+sQ8Do=;
+        b=ikGXtBGXunHXXi0s0Q+HKW7DKieChDD1m6bmplssi6BL3UTDT5malijRsZ2nkNS2XR/t/1
+        wpN+37ragpwEMZCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F77C13ADA;
+        Mon, 14 Mar 2022 09:09:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8XeQFjYGL2K5YgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 14 Mar 2022 09:09:10 +0000
+Message-ID: <b3575a73-384c-e0da-1db9-bad2aec053c4@suse.cz>
+Date:   Mon, 14 Mar 2022 10:09:10 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_02,2022-03-11_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 adultscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 impostorscore=0 clxscore=1011 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203140059
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [mm/page_alloc] 8212a964ee: vm-scalability.throughput 30.5%
+ improvement
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        0day robot <lkp@intel.com>, Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Tang, Feng" <feng.tang@intel.com>, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, Eric Dumazet <eric.dumazet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>
+References: <20220312154321.GC1189@xsang-OptiPlex-9020>
+ <15307f8a-c202-75d8-1361-dae0146df734@suse.cz>
+ <CANn89i+fM0k+=Qw0M0fso1f-Ya8--5+==gtcWqCpo=Gu-ca1Ow@mail.gmail.com>
+ <8f499c76-68cb-a2c3-01fd-c8759e2fd317@suse.cz>
+ <CANn89iJwBe4+C8KP--c_9O6QE_Tou+1Z0+ugtuniG-06nzxPmg@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CANn89iJwBe4+C8KP--c_9O6QE_Tou+1Z0+ugtuniG-06nzxPmg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/13/22 22:10, Eric Dumazet wrote:
+> On Sun, Mar 13, 2022 at 1:29 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>
+>> On 3/13/22 00:26, Eric Dumazet wrote:
+>> > On Sat, Mar 12, 2022 at 10:59 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>> >>
+>> >> On 3/12/22 16:43, kernel test robot wrote:
+>> >>>
+>> >>>
+>> >>> Greeting,
+>> >>>
+>> >>> FYI, we noticed a 30.5% improvement of vm-scalability.throughput due to commit:
+>> >>>
+>> >>>
+>> >>> commit: 8212a964ee020471104e34dce7029dec33c218a9 ("Re: [PATCH v2] mm/page_alloc: call check_new_pages() while zone spinlock is not held")
+>> >>> url: https://github.com/0day-ci/linux/commits/Mel-Gorman/Re-PATCH-v2-mm-page_alloc-call-check_new_pages-while-zone-spinlock-is-not-held/20220309-203504
+>> >>> patch link: https://lore.kernel.org/lkml/20220309123245.GI15701@techsingularity.net
+>> >>
+>> >> Heh, that's weird. I would expect some improvement from Eric's patch,
+>> >> but this seems to be actually about Mel's "mm/page_alloc: check
+>> >> high-order pages for corruption during PCP operations" applied directly
+>> >> on 5.17-rc7 per the github url above. This was rather expected to make
+>> >> performance worse if anything, so maybe the improvement is due to some
+>> >> unexpected side-effect of different inlining decisions or cache alignment...
+>> >>
+>> >
+>> > I doubt this has anything to do with inlining or cache alignment.
+>> >
+>> > I am not familiar with the benchmark, but its name
+>> > (anon-w-rand-hugetlb) hints at hugetlb ?
+>> >
+>> > After Mel fix, we go over 512 'struct page' to perform sanity checks,
+>> > thus loading into cpu caches the 512 cache lines.
+>>
+>> Ah, that's true.
+>>
+>> > This caching is done while no lock is held.
+>>
+>> But I don't think this is. The test was AFAICS done without your patch,
+>> so the lock is still held in rmqueue(). And it's also held in
+>> rmqueue_bulk() -> check_pcp_refill().
+> 
+> Note that Mel patch  touches both check_pcp_refill() and check_new_pcp()
+> 
+> __rmqueue_pcplist() definitely calls check_new_pcp() while the zone
+> spinlock is _not_ held.
 
-On 11/03/22 22:40, Dave Hansen wrote:
-> On 3/10/22 18:39, Andrew Morton wrote:
->> On Thu, 10 Mar 2022 13:07:49 +0100 Oscar Salvador <osalvador@suse.de> wrote:
->>> We do already have two CPU callbacks (vmstat_cpu_online() and vmstat_cpu_dead())
->>> that check exactly that, so get rid of the CPU callbacks in
->>> migrate_on_reclaim_init() and only call set_migration_target_nodes() from
->>> vmstat_cpu_{dead,online}() whenever a numa node change its N_CPU state.
->> What I'm not getting here (as so often happens) is a sense of how badly
->> this affects our users.  Does anyone actually hotplug frequently enough
->> to care?
-> I asked Abhishek about this a bit here:
->
->> https://lore.kernel.org/all/4e8067e1-0574-c9d2-9d6c-d676d32071bd@linux.vnet.ibm.com/
-> It sounded to me like there are ppc users who convert their systems from
-> SMT=1 to SMT=8.  I'd guess that they want to do this as a side-channel
-> mitigation because ppc has been dealing with the same basic issues as
-> those of us over in x86 land.  The increase in time (20s->36s) would be
-> noticeable and probably slightly annoying to a human waiting on it.
->
-> I'd love to hear more details on this from Abhishek, like whether end
-> users do this as opposed to IBM's kernel developers.  But, it does sound
-> deserving of a stable@ tag to me.
-Yes, end users also use this, especially on large systems, might want
-to switch between SMT=1, SMT=4 and SMT=8.
-And this is also usable for dynamic LPAR operations.
-As Dave pointed out, this increase in time while manageable and just
-noticeable on smaller systems, can be very clearly observed as the
-systems become larger.
+Yes, but the checking from check_new_pcp() is active only with
+CONFIG_DEBUG_VM or enabled debug_pagealloc, which were both disabled in the
+robot's report.
+
+> Note that it is possible to defer calls to check_pcp_refill after the
+> spinlock is released.
+> 
+> Untested patch:
+
+I'll check the latest posting.

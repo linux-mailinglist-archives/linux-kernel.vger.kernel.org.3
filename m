@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385814D835A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A504D81FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237282AbiCNMOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S239966AbiCNL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240808AbiCNMHz (ORCPT
+        with ESMTP id S240137AbiCNL6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:07:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021725C6B;
-        Mon, 14 Mar 2022 05:03:57 -0700 (PDT)
+        Mon, 14 Mar 2022 07:58:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2FB65DA;
+        Mon, 14 Mar 2022 04:57:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1606061260;
-        Mon, 14 Mar 2022 12:03:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24589C340E9;
-        Mon, 14 Mar 2022 12:03:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C72260FF3;
+        Mon, 14 Mar 2022 11:57:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69988C340EC;
+        Mon, 14 Mar 2022 11:57:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259436;
-        bh=wKepa4VZBNA7+1tHrTub0cf2Vg7PKMogZSVkDZHOF1U=;
+        s=korg; t=1647259023;
+        bh=boM+X7Jtz7xEMxABclzXsyS0I01CPMFAo2H06POull4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=StUlOs4WxPnNxmZbMBLl/PwrEMDFhAwREe0f+M2E7fbeUXaoy19NpXwhtEaVppwTB
-         RWqXy9GUQaxSZX5CpiLMZXys7r2VYfRr1Z3wQEhL2JyKnNMFAa+tRT54Kq+jFd5E3B
-         5llyd4x3nG9yoDd9mTybYtG5o2InHP/wTCsTKKQs=
+        b=Xziltt+wAcGFP9SuI8BN6fBf6kWHxitrlACPlZJ4rsrRoyTrTt0O3nCe87SIfFO5i
+         u+BfgitpxZ10kyd0IYhyGp8RwL/59MzKZFrtW+p91plE9m953CE7pHsLOEv47Uxzj+
+         QyHywmqwruCp80ed94T3x6GcbgkD20cRFtT7bvL0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 47/71] selftest/vm: fix map_fixed_noreplace test failure
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.4 29/43] ARM: Spectre-BHB: provide empty stub for non-config
 Date:   Mon, 14 Mar 2022 12:53:40 +0100
-Message-Id: <20220314112739.247985601@linuxfoundation.org>
+Message-Id: <20220314112735.237801373@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,181 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit f39c58008dee7ab5fc94c3f1995a21e886801df0 ]
+commit 68453767131a5deec1e8f9ac92a9042f929e585d upstream.
 
-On the latest RHEL the test fails due to executable mapped at 256MB
-address
+When CONFIG_GENERIC_CPU_VULNERABILITIES is not set, references
+to spectre_v2_update_state() cause a build error, so provide an
+empty stub for that function when the Kconfig option is not set.
 
-     # ./map_fixed_noreplace
-    mmap() @ 0x10000000-0x10050000 p=0xffffffffffffffff result=File exists
-    10000000-10010000 r-xp 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
-    10010000-10020000 r--p 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
-    10020000-10030000 rw-p 00010000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
-    10029b90000-10029bc0000 rw-p 00000000 00:00 0                            [heap]
-    7fffbb510000-7fffbb750000 r-xp 00000000 fd:04 24534                      /usr/lib64/libc.so.6
-    7fffbb750000-7fffbb760000 r--p 00230000 fd:04 24534                      /usr/lib64/libc.so.6
-    7fffbb760000-7fffbb770000 rw-p 00240000 fd:04 24534                      /usr/lib64/libc.so.6
-    7fffbb780000-7fffbb7a0000 r--p 00000000 00:00 0                          [vvar]
-    7fffbb7a0000-7fffbb7b0000 r-xp 00000000 00:00 0                          [vdso]
-    7fffbb7b0000-7fffbb800000 r-xp 00000000 fd:04 24514                      /usr/lib64/ld64.so.2
-    7fffbb800000-7fffbb810000 r--p 00040000 fd:04 24514                      /usr/lib64/ld64.so.2
-    7fffbb810000-7fffbb820000 rw-p 00050000 fd:04 24514                      /usr/lib64/ld64.so.2
-    7fffd93f0000-7fffd9420000 rw-p 00000000 00:00 0                          [stack]
-    Error: couldn't map the space we need for the test
+Fixes this build error:
 
-Fix this by finding a free address using mmap instead of hardcoding
-BASE_ADDRESS.
+  arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
+  proc-v7-bugs.c:(.text+0x52): undefined reference to `spectre_v2_update_state'
+  arm-linux-gnueabi-ld: proc-v7-bugs.c:(.text+0x82): undefined reference to `spectre_v2_update_state'
 
-Link: https://lkml.kernel.org/r/20220217083417.373823-1-aneesh.kumar@linux.ibm.com
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Jann Horn <jannh@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Russell King <rmk+kernel@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../selftests/vm/map_fixed_noreplace.c        | 49 ++++++++++++++-----
- 1 file changed, 37 insertions(+), 12 deletions(-)
+ arch/arm/include/asm/spectre.h |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/map_fixed_noreplace.c b/tools/testing/selftests/vm/map_fixed_noreplace.c
-index d91bde511268..eed44322d1a6 100644
---- a/tools/testing/selftests/vm/map_fixed_noreplace.c
-+++ b/tools/testing/selftests/vm/map_fixed_noreplace.c
-@@ -17,9 +17,6 @@
- #define MAP_FIXED_NOREPLACE 0x100000
- #endif
+--- a/arch/arm/include/asm/spectre.h
++++ b/arch/arm/include/asm/spectre.h
+@@ -25,7 +25,13 @@ enum {
+ 	SPECTRE_V2_METHOD_LOOP8 = BIT(__SPECTRE_V2_METHOD_LOOP8),
+ };
  
--#define BASE_ADDRESS	(256ul * 1024 * 1024)
--
--
- static void dump_maps(void)
- {
- 	char cmd[32];
-@@ -28,18 +25,46 @@ static void dump_maps(void)
- 	system(cmd);
- }
++#ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
+ void spectre_v2_update_state(unsigned int state, unsigned int methods);
++#else
++static inline void spectre_v2_update_state(unsigned int state,
++					   unsigned int methods)
++{}
++#endif
  
-+static unsigned long find_base_addr(unsigned long size)
-+{
-+	void *addr;
-+	unsigned long flags;
-+
-+	flags = MAP_PRIVATE | MAP_ANONYMOUS;
-+	addr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
-+	if (addr == MAP_FAILED) {
-+		printf("Error: couldn't map the space we need for the test\n");
-+		return 0;
-+	}
-+
-+	if (munmap(addr, size) != 0) {
-+		printf("Error: couldn't map the space we need for the test\n");
-+		return 0;
-+	}
-+	return (unsigned long)addr;
-+}
-+
- int main(void)
- {
-+	unsigned long base_addr;
- 	unsigned long flags, addr, size, page_size;
- 	char *p;
+ int spectre_bhb_update_vectors(unsigned int method);
  
- 	page_size = sysconf(_SC_PAGE_SIZE);
- 
-+	//let's find a base addr that is free before we start the tests
-+	size = 5 * page_size;
-+	base_addr = find_base_addr(size);
-+	if (!base_addr) {
-+		printf("Error: couldn't map the space we need for the test\n");
-+		return 1;
-+	}
-+
- 	flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE;
- 
- 	// Check we can map all the areas we need below
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 5 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 
-@@ -60,7 +85,7 @@ int main(void)
- 	printf("unmap() successful\n");
- 
- 	errno = 0;
--	addr = BASE_ADDRESS + page_size;
-+	addr = base_addr + page_size;
- 	size = 3 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -80,7 +105,7 @@ int main(void)
- 	 *     +4 |  free  | new
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 5 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -101,7 +126,7 @@ int main(void)
- 	 *     +4 |  free  |
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS + (2 * page_size);
-+	addr = base_addr + (2 * page_size);
- 	size = page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -121,7 +146,7 @@ int main(void)
- 	 *     +4 |  free  | new
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS + (3 * page_size);
-+	addr = base_addr + (3 * page_size);
- 	size = 2 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -141,7 +166,7 @@ int main(void)
- 	 *     +4 |  free  |
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 2 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -161,7 +186,7 @@ int main(void)
- 	 *     +4 |  free  |
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -181,7 +206,7 @@ int main(void)
- 	 *     +4 |  free  |  new
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS + (4 * page_size);
-+	addr = base_addr + (4 * page_size);
- 	size = page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -192,7 +217,7 @@ int main(void)
- 		return 1;
- 	}
- 
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 5 * page_size;
- 	if (munmap((void *)addr, size) != 0) {
- 		dump_maps();
--- 
-2.34.1
-
 
 

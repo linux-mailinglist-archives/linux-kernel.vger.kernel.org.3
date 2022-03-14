@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BD74D7E09
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB844D7E0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237775AbiCNJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S236743AbiCNJDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237788AbiCNJCT (ORCPT
+        with ESMTP id S234191AbiCNJDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:02:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBC342A32;
-        Mon, 14 Mar 2022 02:01:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id DEE661F43B23
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647248461;
-        bh=oPfRK2FlwSAxSpdbLvSWmWhgfzN2gWEN45IqscDe+ks=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MgZCFoLmTFJGMbknh/8pjSR/JiUHD+6YaHFhKIVmrBhpIBcBYt9IFSW5i0ncGVp+m
-         JKf2Nlu29xtCS2ueo+4WCVabQN40X3r9W24iLPvekAJoTnETCwpdr0gY5qp6dtnM7i
-         OsJboo2zNhr6vAcf/S7SRi+dHu4PpAPnZGYJ4+cGjachXrtMBZRx96IhZzx2P3nBj5
-         vmkj/8C3nd3ynT4TF5rKLD/cNy7rpXt/BIxBhLfdwtHPpFyZvMfdvoRV0B6M9ZSFzN
-         +nV/waCUpEP/IjqvwAnt4pdWqr/1d16RM4i1DrSWEuX8bW782zjK3j11qjarOUbIRE
-         h3KWww5Xz6WMw==
-Message-ID: <db4d4b19-0c44-0bad-3544-01237bbb6c07@collabora.com>
-Date:   Mon, 14 Mar 2022 10:00:58 +0100
+        Mon, 14 Mar 2022 05:03:21 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E5242496
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:02:12 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id u61so29302114ybi.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Byqz2GoD0sDlfuOO9lpy5lpnIgz5skrfhYEx26GgvRw=;
+        b=MByXomfy+YrzBOpuB1tqPl/0Rc7biiSzSvF0GgX/aBdSQ3ysGKPfQc3hMdmK5ZA/Er
+         PwyZo6szruMKUwJNm+wq90gUDejGwOTwccXAARch1vAN8yS9tN7C+Vcia4i0hLjXMRXW
+         H/rpKBNQP1MjXTky1MiFbJ2YdKOHcTAmQAQP2wqsV0ViCJYYC//AQa00P0YG8g8keWZL
+         5/aEseu8E4JWTu72CgLYhb8v0djwUCg847TwY/e7ireaeGpsYZUs/G4QHAuHe3QBAPyY
+         4Yo3nucDMeYBjVq3OxfFIxipGKi7bTyeeAJgO810YZRtsg3wjl+odb7HFhK0U540mWXT
+         EnnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Byqz2GoD0sDlfuOO9lpy5lpnIgz5skrfhYEx26GgvRw=;
+        b=lQk6bWqXAfiJ+bnV5i00BDnRbqJ+QxcWcBGss8/lPHpWNqPvX8d3JgqygJzzyjZJkr
+         78QBDl6OfTRv8SNLUXAV0E/VFhsbB4c3TYoRaRF32ebyzUWslDrl8yJG/Tl+mZGgRjJE
+         1I5myoKTUL1byGbNePbNT2DP6Of+0y2bnHTG65FQiT+5vCXWJog45uSX3QnYA1X6sLkI
+         ULZJOkd6wzPAzKKRPj6KSxhiqNNwFJ+TPFPXFRWhN1lp1ND6GQNhIBvvysMEMBOJKdtF
+         yFHbtDqMKPfG0sYx4rH50WTs7hr9/F7APrL4+S06GuQG2YsokZKfpAc1U58iiP/e9tSa
+         u3Sw==
+X-Gm-Message-State: AOAM532mbeyIDEBxtwVx36vbQh/HUyvumWU2DE0x3iPTBOWL75KfZf4P
+        WZf7/fbpTKo75QGRGDguwE2nOswf/KDdQR5B3uj8sg==
+X-Google-Smtp-Source: ABdhPJyQvfsiPK2itmFY+vfJgdvNLVKBJNh17H1B8vR87w+ogUdtktDGCySh+IMTi2iremEjtFbQkCoJFI65eI8YCRM=
+X-Received: by 2002:a25:5090:0:b0:628:b76b:b9d3 with SMTP id
+ e138-20020a255090000000b00628b76bb9d3mr16939803ybb.128.1647248531337; Mon, 14
+ Mar 2022 02:02:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 4/5] ASoC: mediatek: mt8195: add machine driver with
- mt6359, max98390 and rt5682
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        tiwai@suse.com, robh+dt@kernel.org, matthias.bgg@gmail.com
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aaronyu@google.com,
-        yc.hung@mediatek.com
-References: <20220308072435.22460-1-trevor.wu@mediatek.com>
- <20220308072435.22460-5-trevor.wu@mediatek.com>
- <e812796f-6b9b-fe9d-50a7-b681d7b174fd@collabora.com>
- <5fafa7d8a23fbdce82272529d817816f42c4ac37.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <5fafa7d8a23fbdce82272529d817816f42c4ac37.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
+ <YikByJteDEtKi4Xv@shell.armlinux.org.uk> <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
+ <Yinwq3Z9l0selLLS@shell.armlinux.org.uk> <Yin2jQqW+pUWJZ7E@shell.armlinux.org.uk>
+ <CAMj1kXGkUJ=-4oA4GvBZNK94A1MrZ7UwKDN_tJRgwq8KF06VmA@mail.gmail.com>
+ <CA+G9fYvEANOMekjvtu7agdVYQ_b8OMtxQdyAV2JT_vMdBU3VRA@mail.gmail.com>
+ <CAMj1kXEVVZTKX_86bbTfLpFuDriV0-uwCMgSKDP+dzcD1L4XCw@mail.gmail.com>
+ <CA+G9fYuO-sy+sZnhSz=A7Xm0LdSp2AT+7jCKLB33tZzK4izj3g@mail.gmail.com>
+ <CAMj1kXGb_0FNU7capJEDWTZF2OegmZyBphhH8GuNqL7+YYLjZQ@mail.gmail.com> <Yip3GJDbJIYNeg44@shell.armlinux.org.uk>
+In-Reply-To: <Yip3GJDbJIYNeg44@shell.armlinux.org.uk>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 14 Mar 2022 14:31:59 +0530
+Message-ID: <CA+G9fYsjK7z3VUgaOcs+cCCQWNsXW58pbDqruev6ANLdcswF1g@mail.gmail.com>
+Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,112 +81,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/03/22 17:18, Trevor Wu ha scritto:
-> On Thu, 2022-03-10 at 16:21 +0100, AngeloGioacchino Del Regno wrote:
->> Il 08/03/22 08:24, Trevor Wu ha scritto:
->>> This patch adds support for mt8195 board with mt6359, max98390 and
->>> rt5682.
->>>
->>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
->>
->> Hello Trevor,
->> thanks for the patch! However, there's something to improve...
->>
->>> ---
->>>    sound/soc/mediatek/Kconfig                    |   16 +
->>>    sound/soc/mediatek/mt8195/Makefile            |    5 +
->>>    .../mt8195/mt8195-mt6359-max98390-rt5682.c    | 1058
->>> +++++++++++++++++
->>>    3 files changed, 1079 insertions(+)
->>>    create mode 100644 sound/soc/mediatek/mt8195/mt8195-mt6359-
->>> max98390-rt5682.c
->>>    
->>>
-> 
-> [...]
->>> +
->>> +static const struct snd_soc_dapm_widget
->>> +	mt8195_mt6359_max98390_rt5682_widgets[] = {
->>> +	SND_SOC_DAPM_SPK("Left Speaker", NULL),
->>> +	SND_SOC_DAPM_SPK("Right Speaker", NULL),
->>> +	SND_SOC_DAPM_HP("Headphone Jack", NULL),
->>
->> We can at least partially reuse existing UCM2 configuration if you
->> slightly change the names for these controls.
->>
-> 
-> I don't know what the UCM2 configuration means.
-> Could you give me more information?
-> 
+Hi  Ard and Russell,
 
-UCM == Use Case Manager;
-In short, it's userspace (alsa-lib) configuration for sound cards, allowing
-to configure the various mixers for various usecases (speaker/headphone/HDMI
-playback, headset/internal microphone, etc).
+Your three patches applied and tested on x15 tested by Daniel and reported
+kernel crash did not find it after multiple iterations.
 
-Check this GitHub repository for more information:
-https://github.com/alsa-project/alsa-ucm-conf/tree/master/ucm2
+ARM: unwind: set frame.pc correctly for current-thread unwinding
+ARM: entry: fix unwinder problems caused by IRQ stacks
+ARM: Revert "unwind: dump exception stack from calling frame"
 
-> 
->> Specifically, MAX98090 (yes I know it's a different codec) has names
->> "Speaker Left", "Speaker Right" instead, we will be able to at least
->> partially reuse these (or get uniform naming, which is still good).
->> As for the "Headphone Jack", it's simply "Headphone".
->>
->> Please note that the actual control names in userspace will be,
->> exactly,
->>
->> "Speaker Left Switch", "Speaker Right Switch",
->> "Headphone Left Switch", "Headphone Right Switch"...
->>
->> ....where "Switch" gets automatically appended because of the control
->> type.
->>
->>> +	SND_SOC_DAPM_MIC("Headset Mic", NULL),
->>
->> This "Headset Mic" name is fine.
->>
->>> +	SND_SOC_DAPM_MIXER(SOF_DMA_DL2, SND_SOC_NOPM, 0, 0, NULL, 0),
->>> +	SND_SOC_DAPM_MIXER(SOF_DMA_DL3, SND_SOC_NOPM, 0, 0, NULL, 0),
->>> +	SND_SOC_DAPM_MIXER(SOF_DMA_UL4, SND_SOC_NOPM, 0, 0, NULL, 0),
->>> +	SND_SOC_DAPM_MIXER(SOF_DMA_UL5, SND_SOC_NOPM, 0, 0, NULL, 0),
->>> +};
->>> +
-> [...]
->>> +
->>> +static struct snd_soc_dai_link
->>> mt8195_mt6359_max98390_rt5682_dai_links[] = {
->>
->>
->> ... again, different name, same contents ...
->>
->>
->> And I won't go on repeating the same thing over and over again.
->> I think that the best idea here is to either create a mt8195-mt6359-
->> rt5682-common.c
->> file, or to rename the others to something else and get them all in
->> the same file.
->>
->>
->> Regards,
->> Angelo
-> 
-> Hi Angelo,
-> 
-> Thanks for your review.
-> Please forgive me for deleting some comments above.
-> I totally agree that most code can be reused.
-> I will try revising and merging all mt8195 machine drivers in a file.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-No worries. Looking forward to see the next version.
-Thank you!
+Build url:
+https://builds.tuxbuild.com/26DZbOeAxshMvtU2FhS3Fytr7NS/
 
-Regards,
-Angelo
+vmlinux: https://builds.tuxbuild.com/26DZbOeAxshMvtU2FhS3Fytr7NS/vmlinux.xz
+zImage: https://builds.tuxbuild.com/26DZbOeAxshMvtU2FhS3Fytr7NS/zImage
+System.map: https://builds.tuxbuild.com/26DZbOeAxshMvtU2FhS3Fytr7NS/System.map
 
-> 
-> Thanks,
-> Trevor
-> 
+LAVA test jobs ran on x15 device:
+https://lkft.validation.linaro.org/scheduler/job/4702341
+https://lkft.validation.linaro.org/scheduler/job/4702344
+https://lkft.validation.linaro.org/scheduler/job/4702348
+https://lkft.validation.linaro.org/scheduler/job/4702350
+https://lkft.validation.linaro.org/scheduler/job/4702352
+https://lkft.validation.linaro.org/scheduler/job/4702354
 
-
+- Naresh

@@ -2,132 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEAE4D87F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC864D87FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240349AbiCNPWl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Mar 2022 11:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S240878AbiCNPXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239722AbiCNPWg (ORCPT
+        with ESMTP id S231531AbiCNPXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:22:36 -0400
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22FE8140F1;
-        Mon, 14 Mar 2022 08:21:25 -0700 (PDT)
-Received: from smtpclient.apple (p5b3d2183.dip0.t-ipconnect.de [91.61.33.131])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 3F406CECC5;
-        Mon, 14 Mar 2022 16:21:24 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH] Bluetooth: btrtl: btmrvl: Fix firmware filename for rtl
- chipset
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220311032620.28362-1-tangmeng@uniontech.com>
-Date:   Mon, 14 Mar 2022 16:21:23 +0100
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
+        Mon, 14 Mar 2022 11:23:45 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B736D140D7;
+        Mon, 14 Mar 2022 08:22:34 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nTmWm-0006nk-I1; Mon, 14 Mar 2022 16:22:32 +0100
+Message-ID: <a8a62dd3-fe45-9745-f332-9815ecef52f7@leemhuis.info>
+Date:   Mon, 14 Mar 2022 16:22:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] PCI: xgene: Revert "PCI: xgene: Use inbound resources for
+ setup"
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <6FCDA0C9-59CD-44F1-B31A-27DDB7FB8D25@holtmann.org>
-References: <20220311032620.28362-1-tangmeng@uniontech.com>
-To:     Meng Tang <tangmeng@uniontech.com>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Cc:     kernel-team@android.com, Rob Herring <robh@kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
+        dann frazier <dann.frazier@canonical.com>,
+        stable@vger.kernel.org
+References: <20220314144429.1947610-1-maz@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220314144429.1947610-1-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1647271354;1d5d7c18;
+X-HE-SMSGID: 1nTmWm-0006nk-I1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Meng,
-
-> Firmware for rtl chipset is as part of the linux-firmware repository
-> in dir linux-firmware/rtl_bt. Today, the rtl8761a_config,
-> rtl8821a_config, rtl8723b_config and rtl8723bs_config files are used
-> in btrtl, but it doesn't actually exist, which causes errors like:
+On 14.03.22 15:44, Marc Zyngier wrote:
+> Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> killed PCIe on my XGene-1 box (a Mustang board). The machine itself
+> is still alive, but half of its storage (over NVMe) is gone, and the
+> NVMe driver just times out.
 > 
-> bluetooth: Direct firmware load for rtl_bt/rtl8821a_config.bin
->           failed with error -2
+> Note that this machine boots with a device tree provided by the
+> UEFI firmware (2016 vintage), which could well be non conformant
+> with the spec, hence the breakage.
 > 
-> According to the files in the rtl_bt directory in the Linux firmware,
-> fixes the driver to load correct firmware file for rtl.
+> With the patch reverted, the box boots 5.17-rc8 with flying colors.
 > 
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-> ---
-> drivers/bluetooth/btrtl.c | 13 +++++--------
-> 1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-> index c2030f7e25b4..e3cfe0dff07d 100644
-> --- a/drivers/bluetooth/btrtl.c
-> +++ b/drivers/bluetooth/btrtl.c
-> @@ -88,14 +88,14 @@ static const struct id_table ic_id_table[] = {
-> 	  .config_needed = true,
-> 	  .has_rom_version = true,
-> 	  .fw_name  = "rtl_bt/rtl8723bs_fw.bin",
-> -	  .cfg_name = "rtl_bt/rtl8723bs_config" },
-> +	  .cfg_name = "rtl_bt/rtl8723bs_config-OBDA8723" },
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Toan Le <toan@os.amperecomputing.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Krzysztof Wilczyński <kw@linux.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Stéphane Graber <stgraber@ubuntu.com>
+> Cc: dann frazier <dann.frazier@canonical.com>
+> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
 
-this change is not explained.
+Feel free to drop me there. But could you please instead add a 'Link:'
+tag pointing to the report for anyone wanting to look into the backstory
+in the future, as explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'? E.g. like this:
 
-> 
-> 	/* 8723B */
-> 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xb, 0x6, HCI_USB),
-> 	  .config_needed = false,
-> 	  .has_rom_version = true,
-> 	  .fw_name  = "rtl_bt/rtl8723b_fw.bin",
-> -	  .cfg_name = "rtl_bt/rtl8723b_config" },
-> +	  .cfg_name = NULL },
+"Link: https://lore.kernel.org/r/Yf2wTLjmcRj%2BAbDv@xps13.dannf/"
 
-.config_needed is set to false. Then we better use a request_firmware version where the existence of the file is optional.
+FWIW, I care for another reason: I'm tracking this regression with
+regzbot, my regression tracking bot. Proper "Link:" tags allow the bot
+to connect regression reports with fixes being posted or applied to
+resolve the regression -- which makes regression tracking a whole lot
+easier.
 
-And even if we wanted to remove it (which would make the .config_needed obsolute), we are not doing a NULL assignment, we just remove the line.
+While at it, let me tell regzbot about this thread:
+#regzbot ^backmonitor:
+https://lore.kernel.org/r/Yf2wTLjmcRj%2BAbDv@xps13.dannf/
 
-> 
-> 	/* 8723D */
-> 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
-> @@ -116,7 +116,7 @@ static const struct id_table ic_id_table[] = {
-> 	  .config_needed = false,
-> 	  .has_rom_version = true,
-> 	  .fw_name  = "rtl_bt/rtl8821a_fw.bin",
-> -	  .cfg_name = "rtl_bt/rtl8821a_config" },
-> +	  .cfg_name = NULL },
-> 
-> 	/* 8821C */
-> 	{ IC_INFO(RTL_ROM_LMP_8821A, 0xc, 0x8, HCI_USB),
-> @@ -131,7 +131,7 @@ static const struct id_table ic_id_table[] = {
-> 	  .config_needed = false,
-> 	  .has_rom_version = true,
-> 	  .fw_name  = "rtl_bt/rtl8761a_fw.bin",
-> -	  .cfg_name = "rtl_bt/rtl8761a_config" },
-> +	  .cfg_name = NULL },
-> 
-> 	/* 8761B */
-> 	{ IC_INFO(RTL_ROM_LMP_8761A, 0xb, 0xa, HCI_UART),
-> @@ -921,15 +921,12 @@ MODULE_VERSION(VERSION);
-> MODULE_LICENSE("GPL");
-> MODULE_FIRMWARE("rtl_bt/rtl8723a_fw.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8723b_fw.bin");
-> -MODULE_FIRMWARE("rtl_bt/rtl8723b_config.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8723bs_fw.bin");
-> -MODULE_FIRMWARE("rtl_bt/rtl8723bs_config.bin");
-> +MODULE_FIRMWARE("rtl_bt/rtl8723bs_config-OBDA8723.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
-> -MODULE_FIRMWARE("rtl_bt/rtl8761a_config.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8821a_fw.bin");
-> -MODULE_FIRMWARE("rtl_bt/rtl8821a_config.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8822b_fw.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8822b_config.bin");
-> MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
+> Cc: stable@vger.kernel.org>
 
-Regards
+Typo, missing a "<"
 
-Marcel
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

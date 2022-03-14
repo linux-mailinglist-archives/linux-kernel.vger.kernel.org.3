@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6354D83AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0779B4D8209
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241727AbiCNMSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S233313AbiCNL7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242221AbiCNMJo (ORCPT
+        with ESMTP id S240030AbiCNL65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2318C50B04;
-        Mon, 14 Mar 2022 05:06:54 -0700 (PDT)
+        Mon, 14 Mar 2022 07:58:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291FB1C122;
+        Mon, 14 Mar 2022 04:57:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABEB76130C;
-        Mon, 14 Mar 2022 12:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2EAC340EC;
-        Mon, 14 Mar 2022 12:06:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE6A6B80DEA;
+        Mon, 14 Mar 2022 11:57:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF87C36AF7;
+        Mon, 14 Mar 2022 11:57:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259597;
-        bh=YeTe//0SAgavio9Xw86XZZ+I6TczDnfWm8tRimdCf7o=;
+        s=korg; t=1647259054;
+        bh=9DTrj1+o5tcpK00hHoateH8FLQi3sJXMkP1YP3PrzME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yRkdJVa1Qv/ZNWSZsiTwP1k38v/cmLT+TNXrMJpGsgp6S1jkpTDFxbpLwquk+l1MV
-         5Iom95mdcBrl5jrGgB9z8GEHZfvz+qrZ6luwAGvVjnjbssgFYVO3qraX8yWn/wGT9r
-         vFU5QqWe73JSaeNk2nunLCvDYpcmOrWmj7AvpicM=
+        b=fea7wMDnXoNUOAMn/G1vSSzDplnOpAsxGIPImQWUIOPsbGB6q5lYtDqggUOeS/RLs
+         SV0PVoA41gWnG+LW0rnd10RIsoc5sWMrn+hYF9FtEDHgXwD/BiANzwyIJTLBVsPJj4
+         8w4WEig3tVUe3zORGYl/YA3z1zCrng0iRBskVa58=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 045/110] selftests: pmtu.sh: Kill nettest processes launched in subshell.
+        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Subject: [PATCH 5.4 36/43] virtio: unexport virtio_finalize_features
 Date:   Mon, 14 Mar 2022 12:53:47 +0100
-Message-Id: <20220314112744.295152342@linuxfoundation.org>
+Message-Id: <20220314112735.433393587@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: Michael S. Tsirkin <mst@redhat.com>
 
-[ Upstream commit 94a4a4fe4c696413932eed8bdec46574de9576b8 ]
+commit 838d6d3461db0fdbf33fc5f8a69c27b50b4a46da upstream.
 
-When using "run_cmd <command> &", then "$!" refers to the PID of the
-subshell used to run <command>, not the command itself. Therefore
-nettest_pids actually doesn't contain the list of the nettest commands
-running in the background. So cleanup() can't kill them and the nettest
-processes run until completion (fortunately they have a 5s timeout).
+virtio_finalize_features is only used internally within virtio.
+No reason to export it.
 
-Fix this by defining a new command for running processes in the
-background, for which "$!" really refers to the PID of the command run.
-
-Also, double quote variables on the modified lines, to avoid shellcheck
-warnings.
-
-Fixes: ece1278a9b81 ("selftests: net: add ESP-in-UDP PMTU test")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/pmtu.sh | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/virtio/virtio.c |    3 +--
+ include/linux/virtio.h  |    1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-index 2e8972573d91..694732e4b344 100755
---- a/tools/testing/selftests/net/pmtu.sh
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -374,6 +374,16 @@ run_cmd() {
- 	return $rc
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -167,7 +167,7 @@ void virtio_add_status(struct virtio_dev
  }
+ EXPORT_SYMBOL_GPL(virtio_add_status);
  
-+run_cmd_bg() {
-+	cmd="$*"
-+
-+	if [ "$VERBOSE" = "1" ]; then
-+		printf "    COMMAND: %s &\n" "${cmd}"
-+	fi
-+
-+	$cmd 2>&1 &
-+}
-+
- # Find the auto-generated name for this namespace
- nsname() {
- 	eval echo \$NS_$1
-@@ -670,10 +680,10 @@ setup_nettest_xfrm() {
- 	[ ${1} -eq 6 ] && proto="-6" || proto=""
- 	port=${2}
- 
--	run_cmd ${ns_a} nettest ${proto} -q -D -s -x -p ${port} -t 5 &
-+	run_cmd_bg "${ns_a}" nettest "${proto}" -q -D -s -x -p "${port}" -t 5
- 	nettest_pids="${nettest_pids} $!"
- 
--	run_cmd ${ns_b} nettest ${proto} -q -D -s -x -p ${port} -t 5 &
-+	run_cmd_bg "${ns_b}" nettest "${proto}" -q -D -s -x -p "${port}" -t 5
- 	nettest_pids="${nettest_pids} $!"
+-int virtio_finalize_features(struct virtio_device *dev)
++static int virtio_finalize_features(struct virtio_device *dev)
+ {
+ 	int ret = dev->config->finalize_features(dev);
+ 	unsigned status;
+@@ -188,7 +188,6 @@ int virtio_finalize_features(struct virt
+ 	}
+ 	return 0;
  }
+-EXPORT_SYMBOL_GPL(virtio_finalize_features);
  
--- 
-2.34.1
-
+ static int virtio_dev_probe(struct device *_d)
+ {
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -135,7 +135,6 @@ void virtio_break_device(struct virtio_d
+ void virtio_config_changed(struct virtio_device *dev);
+ void virtio_config_disable(struct virtio_device *dev);
+ void virtio_config_enable(struct virtio_device *dev);
+-int virtio_finalize_features(struct virtio_device *dev);
+ #ifdef CONFIG_PM_SLEEP
+ int virtio_device_freeze(struct virtio_device *dev);
+ int virtio_device_restore(struct virtio_device *dev);
 
 

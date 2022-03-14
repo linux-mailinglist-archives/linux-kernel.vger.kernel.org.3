@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA754D8229
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4761A4D84D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240020AbiCNMBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S243539AbiCNMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240161AbiCNMAf (ORCPT
+        with ESMTP id S242866AbiCNMTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:00:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF73488BC;
-        Mon, 14 Mar 2022 04:58:38 -0700 (PDT)
+        Mon, 14 Mar 2022 08:19:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEAA50B37;
+        Mon, 14 Mar 2022 05:14:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20CB66129D;
-        Mon, 14 Mar 2022 11:58:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9D9C340E9;
-        Mon, 14 Mar 2022 11:58:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3A42608C4;
+        Mon, 14 Mar 2022 12:14:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01E7C340EC;
+        Mon, 14 Mar 2022 12:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259116;
-        bh=icEDEpDgLSl7wJF0aO509gDlWKyVm8JZ8orC63osoE4=;
+        s=korg; t=1647260085;
+        bh=YeTe//0SAgavio9Xw86XZZ+I6TczDnfWm8tRimdCf7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OJaCjJZ+g+5ZUdWSdOVqyc0iDTsFsZXV6u73S9vs8hgZL75PVemVA9rVu/hm+T2Rs
-         SyLejICFP3f9HFfmCoQ8/jrjUMX+WaVj5LCdFhJfZ+d8t2iB2fujIu4l7gordhrUkm
-         XyXIeeajjBIIvo3lpTifZYzVkqZoocN48SNu11dM=
+        b=j9aoYKLPn2xkkXddZ3CmF1F2TQEj+xao1TZrJEwJ69UWh9tIpH1K+MqYRjjEzffiO
+         69+RlnODEaL1IZ7Piq2fyFp+3M/F2KTsUQO5tOmZOktQB05mG/Ln8CO7YSSvabMAF0
+         8znOhQKsKTtDkKV5hi89grMkCePjl4Stxo17qDxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Borislav Petkov <bp@suse.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Liam Merwick <liam.merwick@oracle.com>
-Subject: [PATCH 5.4 43/43] KVM: SVM: Dont flush cache if hardware enforces cache coherency across encryption domains
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 051/121] selftests: pmtu.sh: Kill nettest processes launched in subshell.
 Date:   Mon, 14 Mar 2022 12:53:54 +0100
-Message-Id: <20220314112735.628330783@linuxfoundation.org>
+Message-Id: <20220314112745.550881854@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krish Sadhukhan <krish.sadhukhan@oracle.com>
+From: Guillaume Nault <gnault@redhat.com>
 
-commit e1ebb2b49048c4767cfa0d8466f9c701e549fa5e upstream.
+[ Upstream commit 94a4a4fe4c696413932eed8bdec46574de9576b8 ]
 
-In some hardware implementations, coherency between the encrypted and
-unencrypted mappings of the same physical page in a VM is enforced. In
-such a system, it is not required for software to flush the VM's page
-from all CPU caches in the system prior to changing the value of the
-C-bit for the page.
+When using "run_cmd <command> &", then "$!" refers to the PID of the
+subshell used to run <command>, not the command itself. Therefore
+nettest_pids actually doesn't contain the list of the nettest commands
+running in the background. So cleanup() can't kill them and the nettest
+processes run until completion (fortunately they have a 5s timeout).
 
-So check that bit before flushing the cache.
+Fix this by defining a new command for running processes in the
+background, for which "$!" really refers to the PID of the command run.
 
-Signed-off-by: Krish Sadhukhan <krish.sadhukhan@oracle.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-Link: https://lkml.kernel.org/r/20200917212038.5090-4-krish.sadhukhan@oracle.com
-[ The linux-5.4.y stable branch does not have the Linux 5.7 refactoring commit
-  eaf78265a4ab ("KVM: SVM: Move SEV code to separate file") so the
-  change was manually applied to sev_clflush_pages() in arch/x86/kvm/svm.c. ]
-Signed-off-by: Liam Merwick <liam.merwick@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Also, double quote variables on the modified lines, to avoid shellcheck
+warnings.
+
+Fixes: ece1278a9b81 ("selftests: net: add ESP-in-UDP PMTU test")
+Signed-off-by: Guillaume Nault <gnault@redhat.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/svm.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/pmtu.sh | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/svm.c
-+++ b/arch/x86/kvm/svm.c
-@@ -1904,7 +1904,8 @@ static void sev_clflush_pages(struct pag
- 	uint8_t *page_virtual;
- 	unsigned long i;
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 2e8972573d91..694732e4b344 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -374,6 +374,16 @@ run_cmd() {
+ 	return $rc
+ }
  
--	if (npages == 0 || pages == NULL)
-+	if (this_cpu_has(X86_FEATURE_SME_COHERENT) || npages == 0 ||
-+	    pages == NULL)
- 		return;
++run_cmd_bg() {
++	cmd="$*"
++
++	if [ "$VERBOSE" = "1" ]; then
++		printf "    COMMAND: %s &\n" "${cmd}"
++	fi
++
++	$cmd 2>&1 &
++}
++
+ # Find the auto-generated name for this namespace
+ nsname() {
+ 	eval echo \$NS_$1
+@@ -670,10 +680,10 @@ setup_nettest_xfrm() {
+ 	[ ${1} -eq 6 ] && proto="-6" || proto=""
+ 	port=${2}
  
- 	for (i = 0; i < npages; i++) {
+-	run_cmd ${ns_a} nettest ${proto} -q -D -s -x -p ${port} -t 5 &
++	run_cmd_bg "${ns_a}" nettest "${proto}" -q -D -s -x -p "${port}" -t 5
+ 	nettest_pids="${nettest_pids} $!"
+ 
+-	run_cmd ${ns_b} nettest ${proto} -q -D -s -x -p ${port} -t 5 &
++	run_cmd_bg "${ns_b}" nettest "${proto}" -q -D -s -x -p "${port}" -t 5
+ 	nettest_pids="${nettest_pids} $!"
+ }
+ 
+-- 
+2.34.1
+
 
 

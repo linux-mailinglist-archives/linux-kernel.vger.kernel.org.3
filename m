@@ -2,109 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CD04D8ADC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202E34D8AE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243426AbiCNRfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S235715AbiCNRgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbiCNRfm (ORCPT
+        with ESMTP id S234321AbiCNRgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:35:42 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BDD64CC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647279271; x=1678815271;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=12lARnYOdXgROXbSS+MaZkOzon+mKD5Cl18LhAsiZuk=;
-  b=jNah4waudrkzUajrLcN3tOYWew4h4kksKfLO3fds9QW+ex0tiNjr1Y3T
-   9k3RrwBwe3HMhr2DxnkjmONMK9XWwCgRspPBBMbpe5VeUT6AkZQaJzUrD
-   VP8lFIEXhPvY8QakqavZ0Scslbze1Ap3uNyR9UXGEKVT/pHby/FgWNBqw
-   xooLb/R7OgSAIqIRjypoNHkkIf2QUmrpO0aKcReiXCjFtAwsltxG+pOO7
-   OJuDe51rJMK7pp4bKvxJIbajiO5THlPAFzEm1NRT8hFwumwFq3bYiWnnV
-   kRitiSIe6ermPTcDgFClAHTe6anY2abv+cLlJ3HMg7uFvJPzffdkhwhaF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="316816632"
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="316816632"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 10:34:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="497700406"
-Received: from schen9-mobl.amr.corp.intel.com ([10.251.31.89])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 10:34:30 -0700
-Message-ID: <87541edf7b46c1475f73cf464a9edca932f65da5.camel@linux.intel.com>
-Subject: Re: [PATCH v2][RFC] sched/fair: Change SIS_PROP to search idle CPU
- based on sum of util_avg
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>, Abel Wu <wuyun.abel@bytedance.com>
-Cc:     linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Len Brown <len.brown@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>
-Date:   Mon, 14 Mar 2022 10:34:30 -0700
-In-Reply-To: <20220314125657.GA30418@chenyu5-mobl1>
-References: <20220310005228.11737-1-yu.c.chen@intel.com>
-         <444bfebb-ac1c-42b9-58f5-332780e749f7@bytedance.com>
-         <20220314125657.GA30418@chenyu5-mobl1>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Mon, 14 Mar 2022 13:36:11 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9C2659B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:35:00 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id s25so28474466lfs.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8A3cxPbkf5/imDcGfqUsgEkAZ/Yq4pAldU3s8K2mQzc=;
+        b=tfX+LbUtQWULAhzeWtmsYWPMAURZzqdsjSM/aDGl+qglrfZ5bNzfGleMtHFaTt3jZv
+         3UyQ5yndXqQ8IyXR6tjdhKwpYv9aaculLUgdA6PMil4v28IhdiEX2uhZI0KYNH460tQ6
+         GKcfKXGVcGVxcLcjPvKm3Y+xr7jKp0lTmNP15knWHThq1yVvN8ocGYyB/el//U+71WsO
+         9kxkVPpZ6bjpiPklFVZMRSxBgbjd89SZz6rNYPQo0Uto/u5sjUUJwJwIeOikglGO6VNE
+         lvYLAnfBrGRNUOM81j19C9LApg+tiwD55XcFvJbf4tDEynsa5BMJpjgefQARvNRiNVXn
+         Zf9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8A3cxPbkf5/imDcGfqUsgEkAZ/Yq4pAldU3s8K2mQzc=;
+        b=SssiOr4v1twNh3mvOQHBQP8fIfXQk6gXjEEjQQO/FZb1HAGqCrcKPxb/RlIF9TW9D6
+         ZeCvRHN8Nci96aN8hS/fDtQuo4S4Mb0vWk+Xq3Z844CUCnKj7fdte2BkJ0qSqXsZjLN2
+         Gh6AnaAPxjCcZrntYga9fpo/YN2vmwUcY8sO//O/xSXGwrnhO0722axy5h7j11IDd/XS
+         i1zJApLyb4s4wgeTq7WY2eV8L1W+hWNs9tdEJ72aV15Xut49r666rnoKU86Lv5/CXVsG
+         p1v+nXf7dGr6mO0yITQqeRedkWLuhIzHP+x9EMIWb6pNLEZlnkzas9qQ1uyIUElPbwLa
+         G+zQ==
+X-Gm-Message-State: AOAM530RXbVNdvS5iIKJzuTJ1THwsTa3a2lxNi127lfgKoDYOabCHWiE
+        Qc3MKkRshfydpGU+RymPGJpnL2jImOfkRGKLyE1cow==
+X-Google-Smtp-Source: ABdhPJwyJUQnuBymc31Rm47cQ/NdVZrkI9p8VQjPdQxJrZbxv7kE4yinBibZy7OcE53BDtGYf0q134NUBFysmwbOxgc=
+X-Received: by 2002:a19:ca07:0:b0:448:7eab:f1a with SMTP id
+ a7-20020a19ca07000000b004487eab0f1amr7790394lfg.456.1647279294144; Mon, 14
+ Mar 2022 10:34:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-33-brijesh.singh@amd.com> <CAMkAt6pO0xZb2pye-VEKdFQ_dYFgLA21fkYmnYPTWo8mzPrKDQ@mail.gmail.com>
+ <20220310212504.2kt6sidexljh2s6p@amd.com> <YiuBqZnjEUyMfBMu@suse.de>
+In-Reply-To: <YiuBqZnjEUyMfBMu@suse.de>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 14 Mar 2022 11:34:42 -0600
+Message-ID: <CAMkAt6r==_=U4Ha6ZTmii-JL3htJ3-dD4tc+QBqN7dVt711N2A@mail.gmail.com>
+Subject: Re: [PATCH v12 32/46] x86/compressed/64: Add support for SEV-SNP
+ CPUID table in #VC handlers
+To:     Joerg Roedel <jroedel@suse.de>
+Cc:     Michael Roth <michael.roth@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-14 at 20:56 +0800, Chen Yu wrote:
-> 
-> > 
-> > So nr_scan will probably be updated at llc-domain-lb-interval, which
-> > is llc_size milliseconds. Since load can be varied a lot during such
-> > a period, would this brought accuracy issues?
-> > 
-> I agree there might be delay in reflecting the latest utilization.
-> The sum_util calculated by periodic load balance after 112ms would be
-> decay to about 0.5 * 0.5 * 0.5 * 0.7 = 8.75%.
-> But consider that this is a server platform, I have an impression that
-> the CPU utilization jitter during a small period of time is not a regular
-> scenario? It seems to be a trade-off. Checking the util_avg in newidle
-> load balance path would be more frequent, but it also brings overhead -
-> multiple CPUs write/read the per-LLC shared variable and introduces cache
-> false sharing. But to make this more robust, maybe we can add time interval
-> control in newidle load balance too.
-> 
-> 
+On Fri, Mar 11, 2022 at 10:06 AM Joerg Roedel <jroedel@suse.de> wrote:
+>
+> On Thu, Mar 10, 2022 at 03:25:04PM -0600, Michael Roth wrote:
+> > Joerg, do you have more background on that? Would it make sense, outsid=
+e
+> > of this series, to change it to a terminate? Maybe with a specific set
+> > of error codes for ES_{OK,UNSUPPORTED,VMM_ERROR,DECODE_FAILED}?
+>
+> This seems to be a left over from development of the SEV-ES guest
+> patch-set. I wanted to see whether the VM crashed due to a triple fault
+> or an error in the #VC handler. The halt loop can be replaced by
+> termination request now.
+>
+> > > I am still working on why the early_printk()s in that function are no=
+t
+> > > working, it seems that they lead to a different halt.
+> >
+> > I don't see a different halt. They just don't seem to print anything.
+> > (keep in mind you still need to advance the IP or else the guest is
+> > still gonna end up spinning here, even if you're removing the halt loop
+> > for testing purposes)
+>
+> The early_printks() also cause #VC exceptions, and if that handling is
+> broken for some reason nothing will be printed.
+>
+> >
+> > > working, it seems that they lead to a different halt. Have you tested
+> > > any of those error paths manually? For example if you set your CPUID
+> > > bits to explicitly fail here do you see the expected printks?
+> >
+> > I think at that point in the code, when the XSAVE stuff is setup, the
+> > console hasn't been enabled yet, so messages would get buffered until t=
+hey
+> > get flushed later (which won't happen since there's halt loop after). I
+> > know in some cases devs will dump the log buffer from memory instead to=
+ get
+> > at the error messages for early failures. (Maybe that's also why Joerg
+> > decided to use a halt loop there instead of terminating?)
+>
+> It is hard to dump the log-buffer from encrypted memory :) But I
+> remember having seen messages from these early_printks under SEV-ES for
+> different bugs. Not sure why they don't appear in this situation.
+>
+> > So maybe reworking the error handling in handle_vc_boot_ghcb() to use
+> > sev_es_terminate() might be warranted, but probably worth checking with
+> > Joerg first, and should be done as a separate series since it is not
+> > SNP-related.
+>
+> I am fine with this change.
 
-Also the idea is we allow ourselves to be non-optimal in terms of
-scheduling for the short term variations.  But we want to make sure that if
-there's a long term trend in the load behavior, the scheduler should
-adjust for that.  I think if you see high utilization and CPUs are
-all close to fully busy for quite a while, that is a long term trend 
-that overwhelms any short load jitters.
+I'll send a patch out for that.
 
-Tim
+I was also thinking about adding a vcpu run exit reason for
+termination. It would be nice to get a more informative exit reason
+than -EINVAL in userspace. Thoughts?
 
+>
+> Regards,
+>
+> --
+> J=C3=B6rg R=C3=B6del
+> jroedel@suse.de
+>
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5
+> 90409 N=C3=BCrnberg
+> Germany
+>
+> (HRB 36809, AG N=C3=BCrnberg)
+> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
+>

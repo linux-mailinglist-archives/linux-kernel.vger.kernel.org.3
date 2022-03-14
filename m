@@ -2,145 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4194D80A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338864D80A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238898AbiCNL1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S238913AbiCNL2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238912AbiCNL1L (ORCPT
+        with ESMTP id S238923AbiCNL1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:27:11 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF44A3B280
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:26:01 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b8so14262550pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:26:01 -0700 (PDT)
+        Mon, 14 Mar 2022 07:27:54 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8C13B02A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:26:45 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id v14so8474594qta.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=o+I3gcydvpgsmI9xrJbonqfw/abZjMM8fb3Nm3LnnaY=;
-        b=pq+bojTShDrNULnHGc2tXu0mQO7B8YiI0O5rAp52/+6qkCZPTNAMbw5xoo6QdjIS70
-         5f9bG5x/Mh7C04Ui7xfIfIEDlGySlwtDu4HJqDLOrEtmesalv8Whydt89mFX6MUyINsY
-         fE91wFTBExhWtgjYmJBE7PetbeUkIxhe5dODcWwACMZD8l9Q12GVqdjGeJBk8NYC/EtR
-         sJiLsg6QlcAQXPqq7Vi4diQlPTwwek4KG01GI7+wG0SMDz1N5W8tRGjw9/nQfMM3Cw/W
-         jQo67ypirRrcCBysyJ6/4EcuvYwNPl+xJHOa3HpPzf4yhsJXPYj1SEdre/29iSzeNK/y
-         Zbhw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qzk10DvAB5A/QOhSA/kyBz6hfYECeRPeiHyb0l8866U=;
+        b=b9YaILZnVp5xmDz/CUgSW/HQSfEyJhILm4mTULr5G/t5w+gdBg5SUi52ZaaVABwmOO
+         a9UTROuWEpiKAS5b65mRUzdjFZIhAbSi48TUuo0eLickx5z7TU27lcVdI7CpkZUq+Mym
+         wB0V5QhRKim6xmZOvnVcNi3P08QQf2AJsFoMWOzVHLSnLBFEbkngG9EyyzpDA9dxChkZ
+         97HZG/KzUAQAOI/oT+olEuhBse919xWeKpfDeVdchf5tMCRHDksE+eedSoj7JJvUa9q5
+         VxFAd/yxJnDwzk8TCQDz59j/54dV9cs1fdb5Obbk5YExZrbmcm/W/dBiiBxIa4ry67cf
+         /7bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=o+I3gcydvpgsmI9xrJbonqfw/abZjMM8fb3Nm3LnnaY=;
-        b=HOVp6nh1XO0rwZkvDmE00AyzwTMbqb0vvKrcy32FALeuR+jCCIceU2BMnKouI6evkt
-         +3F2O9Bg6ZZRZRSfbKdR23Fwoodjvtjh3ylMHgqd2ApWaR0fv7NF6nFkmKvT0+zw0J8L
-         t+eBC6LYPu+E3n0Qu5oVzKRvYUmsJX3jvvaekrG9labLbik7Xz0PeYzKv8YnYojk1Kyl
-         IG7bilnrvf8Lb5mprDo1wHuCZZmAMUsMZxg6/Wwq/IgNPnJbB9WfUPNMslT7t1aGUl9k
-         bHlpQgozp4baCyNz0dvg7VimbdRR9KzaqVJjYwUKNzyGAhaJWkyScrJUaNT1r9zfL1M/
-         yoCQ==
-X-Gm-Message-State: AOAM532vxVseA9/0h1/ObjjHoTgcBU27qzmyu4a3hzqtJ9gWWpXlDtt+
-        YEVKAvapXoM1sS7fsNCIeBp5f8oIjIPi6BQJ+Kk=
-X-Google-Smtp-Source: ABdhPJyVSK8GHgVSt6s5fJFM0Q75z+o93j5EUPjPPSuXmSEnRXPVMQ5JJdD/pp1A6fCl5z4/daL16w==
-X-Received: by 2002:a17:902:f70a:b0:153:88c7:774 with SMTP id h10-20020a170902f70a00b0015388c70774mr1013596plo.166.1647257161117;
-        Mon, 14 Mar 2022 04:26:01 -0700 (PDT)
-Received: from [192.168.1.102] ([45.250.64.116])
-        by smtp.gmail.com with ESMTPSA id i11-20020a63bf4b000000b00380d3454c38sm13381561pgo.13.2022.03.14.04.25.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 04:26:00 -0700 (PDT)
-Message-ID: <bf27518d-4990-8b0e-c6ea-26a658ce2e54@gmail.com>
-Date:   Mon, 14 Mar 2022 16:55:55 +0530
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qzk10DvAB5A/QOhSA/kyBz6hfYECeRPeiHyb0l8866U=;
+        b=zE5QZE5JI7yGI4cGmomAL1i4CPY5cIBV8ME4zauuUkEa+78JaPWS34uuCFXgSF404f
+         X1wHWqrAGHyCHeHUjH3zbxZqfqSmtlqcd/lwBNbqAqOwS3wX/McD3TCn5kOVFWMVe+Bp
+         S2Q+d9/9Rydr/2GgNO+u4HGWD9tJYT+owGUNNiA2emugHlEFlZuxzsKVF8sv1M5yJUZa
+         aHCUdCxIgPUpU4ASp2tqj7Qfd+LakI3EvGINyEoeX329MJ1fdEu1pPtb4yix4fzQo9Bt
+         OI6futq3dS3VROQh458Ca4heNYCI/jL36wmqbfV5Djvg+JkwxQgQwwZ6acWy613Fu09h
+         ENsQ==
+X-Gm-Message-State: AOAM5334kkUNPXZyxOTsBMKzvZ8NabHBp07oYfnKDhYi7cAymhX8TP82
+        YM7qLek9IlqVNkTY7AFhrU3ib5vbUxoiGiZ637Q=
+X-Google-Smtp-Source: ABdhPJxpHx3FMNLwIo8rwaL5f91jfexLZjKl4MtGS4wAhRHpDG1O1uHJZzSGQVrLljZ6Zuz4yIjgAZLFttHs3c+0H34=
+X-Received: by 2002:a05:622a:c7:b0:2de:6f63:27a9 with SMTP id
+ p7-20020a05622a00c700b002de6f6327a9mr18270559qtw.608.1647257204553; Mon, 14
+ Mar 2022 04:26:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] staging: android: ashmem: Declared file operation with
- const keyword Warning found by checkpatch.pl script.
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20220312204128.3942-1-shaikhkamal2012@gmail.com>
- <303ed0c8-8e2c-51a4-a4da-be973a25cdec@gmail.com>
-From:   shaikh kamaluddin <shaikhkamal2012@gmail.com>
-In-Reply-To: <303ed0c8-8e2c-51a4-a4da-be973a25cdec@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:ad4:596f:0:0:0:0:0 with HTTP; Mon, 14 Mar 2022 04:26:44
+ -0700 (PDT)
+Reply-To: michellegoodman45@gmail.com
+From:   Michelle Goodman <michellegoodman358@gmail.com>
+Date:   Mon, 14 Mar 2022 11:26:44 +0000
+Message-ID: <CAAnwc9uRViKft2yJw94XKyru0bo-evbsn6w5EMY1Eqi3xAjPeQ@mail.gmail.com>
+Subject: Danke
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:82a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [michellegoodman45[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [michellegoodman358[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [michellegoodman358[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/2022 3:13 AM, Pavel Skripkin wrote:
-> Hi Shaikh,
-> 
-> On 3/12/22 23:41, shaikh kamal wrote:
->> Signed-off-by: shaikh kamal <shaikhkamal2012@gmail.com>
->> ---
->>   drivers/staging/android/ashmem.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/android/ashmem.c 
->> b/drivers/staging/android/ashmem.c
->> index ddbde3f8430e..4c6b420fbf4d 100644
->> --- a/drivers/staging/android/ashmem.c
->> +++ b/drivers/staging/android/ashmem.c
->> @@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file *file, 
->> unsigned long addr,
->>   static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
->>   {
->> -    static struct file_operations vmfile_fops;
->> +    static const struct file_operations vmfile_fops;
->>       struct ashmem_area *asma = file->private_data;
->>       int ret = 0;
-> 
-> Are you sure this patch compiles? vmfile_fops is overrided few lines below
-> 
-> odd checkpatch.pl warning...
-> 
-> 
-> 
-> 
-> With regards,
-> Pavel Skripkin
-
-Thank you,yes vmfile_fops is overrided in below code.
-Building the kernel - make -j4,
-drivers/staging/android/ashmem.c: In function ‘ashmem_mmap’:
-drivers/staging/android/ashmem.c:431:16: error: assignment of read-only 
-variable ‘vmfile_fops’
-     vmfile_fops = *vmfile->f_op;
-                 ^
-drivers/staging/android/ashmem.c:432:21: error: assignment of member 
-‘mmap’ in read-only object
-     vmfile_fops.mmap = ashmem_vmfile_mmap;
-                      ^
-drivers/staging/android/ashmem.c:433:34: error: assignment of member 
-‘get_unmapped_area’ in read-only object
-     vmfile_fops.get_unmapped_area =
-                                   ^
-scripts/Makefile.build:288: recipe for target 
-'drivers/staging/android/ashmem.o' failed
-make[3]: *** [drivers/staging/android/ashmem.o] Error 1
-scripts/Makefile.build:550: recipe for target 'drivers/staging/android' 
-failed
-make[2]: *** [drivers/staging/android] Error 2
-scripts/Makefile.build:550: recipe for target 'drivers/staging' failed
-make[1]: *** [drivers/staging] Error 2
-Makefile:1831: recipe for target 'drivers' failed
-
-
-Thanks & Regards,
-Shaikh Kamaluddin
+Hallo, bitte antworten Sie mir, wenn Sie meine E-Mail gelesen haben
+Danke
+Michelle

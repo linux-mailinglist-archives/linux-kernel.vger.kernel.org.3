@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58B74D8249
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36FA4D84CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240183AbiCNMC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
+        id S243157AbiCNMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240227AbiCNMCA (ORCPT
+        with ESMTP id S241952AbiCNMSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:02:00 -0400
+        Mon, 14 Mar 2022 08:18:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C3B49F8D;
-        Mon, 14 Mar 2022 04:59:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4A039811;
+        Mon, 14 Mar 2022 05:13:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E62FEB80DEE;
-        Mon, 14 Mar 2022 11:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0E1C36AE2;
-        Mon, 14 Mar 2022 11:59:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9002B80DFB;
+        Mon, 14 Mar 2022 12:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D1CC340EC;
+        Mon, 14 Mar 2022 12:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259171;
-        bh=VM6X274W0Wr5DIKP2FKOnktiZ+KuYhPqpw5G1T/twVY=;
+        s=korg; t=1647259990;
+        bh=FqpALfqcNa6EdMdvrr0CBCpp7kSW2XO976p/OpdCGBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zQ7vQbCxG2htyoZelnCnSiLZqDXKbCojBK35L00jFkvGkmW3dVbx/H6CRL2Z+1gR3
-         FWIKt8knGgr3uXa7+ehwvoCEE/KRkru3G8t/qjRGE3vxmiiSuMHbieB+OvpLETdT4D
-         HEp9BuQAstQi7odbSDl3U1OFFHhiKLiyxQIR/sNQ=
+        b=FsSelRC70yOFyyaVbfhPWSl5BMERyC9tY/3BeBrgactstsySp1OnNoqRguX9/pCnc
+         6/M9BYrHnDcATd3NclHytwjfpJgn983r3iXDEadLHWBimPf/3bVIDENmWkSiRe8DQZ
+         EGgFP4jFs9zAxcBaIaJocuwa/A1TGIDBJ0ez9T20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
-        Tony Brelinski <tonyx.brelinski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 19/71] ice: Remove unnecessary checker loop
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 009/121] HID: vivaldi: fix sysfs attributes leak
 Date:   Mon, 14 Mar 2022 12:53:12 +0100
-Message-Id: <20220314112738.469709253@linuxfoundation.org>
+Message-Id: <20220314112744.385427545@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit fd3dc1655eda6173566d56eaeb54f27ab4c9e33c ]
+[ Upstream commit cc71d37fd1f11e0495b1cf580909ebea37eaa886 ]
 
-The loop checking for PF VSI doesn't make any sense. The VSI type
-backing the netdev passed to ice_set_link_ksettings will always be
-of type ICE_PF_VSI. Remove it.
+The driver creates the top row map sysfs attribute in input_configured()
+method; unfortunately we do not have a callback that is executed when HID
+interface is unbound, thus we are leaking these sysfs attributes, for
+example when device is disconnected.
 
-Signed-off-by: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
-Tested-by: Tony Brelinski <tonyx.brelinski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+To fix it let's switch to managed version of adding sysfs attributes which
+will ensure that they are destroyed when the driver is unbound.
+
+Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Tested-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_ethtool.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ drivers/hid/hid-vivaldi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index be02f8f4d854..300fd5d0ff32 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -2189,8 +2189,8 @@ ice_set_link_ksettings(struct net_device *netdev,
- 	struct ethtool_link_ksettings safe_ks, copy_ks;
- 	struct ice_aqc_get_phy_caps_data *abilities;
- 	u8 autoneg, timeout = TEST_SET_BITS_TIMEOUT;
--	u16 adv_link_speed, curr_link_speed, idx;
- 	struct ice_aqc_set_phy_cfg_data config;
-+	u16 adv_link_speed, curr_link_speed;
- 	struct ice_pf *pf = np->vsi->back;
- 	struct ice_port_info *p;
- 	u8 autoneg_changed = 0;
-@@ -2205,14 +2205,6 @@ ice_set_link_ksettings(struct net_device *netdev,
- 	if (!p)
- 		return -EOPNOTSUPP;
+diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
+index 576518e704ee..d57ec1767037 100644
+--- a/drivers/hid/hid-vivaldi.c
++++ b/drivers/hid/hid-vivaldi.c
+@@ -143,7 +143,7 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
+ static int vivaldi_input_configured(struct hid_device *hdev,
+ 				    struct hid_input *hidinput)
+ {
+-	return sysfs_create_group(&hdev->dev.kobj, &input_attribute_group);
++	return devm_device_add_group(&hdev->dev, &input_attribute_group);
+ }
  
--	/* Check if this is LAN VSI */
--	ice_for_each_vsi(pf, idx)
--		if (pf->vsi[idx]->type == ICE_VSI_PF) {
--			if (np->vsi != pf->vsi[idx])
--				return -EOPNOTSUPP;
--			break;
--		}
--
- 	if (p->phy.media_type != ICE_MEDIA_BASET &&
- 	    p->phy.media_type != ICE_MEDIA_FIBER &&
- 	    p->phy.media_type != ICE_MEDIA_BACKPLANE &&
+ static const struct hid_device_id vivaldi_table[] = {
 -- 
 2.34.1
 

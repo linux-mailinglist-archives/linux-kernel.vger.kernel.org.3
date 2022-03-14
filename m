@@ -2,51 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4495E4D7D75
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3303B4D7D7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbiCNISi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S237652AbiCNIVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiCNISh (ORCPT
+        with ESMTP id S237369AbiCNIVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:18:37 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A19B3EF05
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:17:27 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id u25-20020a5d8199000000b006421bd641bbso11778896ion.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:17:27 -0700 (PDT)
+        Mon, 14 Mar 2022 04:21:40 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097FE3EF23
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:20:30 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id h11so20679771ljb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=0jsGDZGuE1wFeDgrRVvKz3gMkQvG2OtkGgkBW7bJIIY=;
+        b=SzgtULj3Rl6JojXcMunC64uc+o+TjwdnMSkBlloSVDnK5jPfszaNn21wkMHEK/ITNa
+         yiZY0GzFsJZtjWswmSdhnjRams5TUswISNTAwjR2cUpwGpnJwkHfTH/JXY9U9HLdYmjp
+         QMqTNlhF5/LGN9hfHybecV8wonADSuwQ0smkLc/4EFHBZVFCwNUDkvZ2VXlB6rhMocoK
+         VNpqDUOWAotRn/RnW8sXBrEfkv1TER0RrYutQ0FkZ82KSw6QFPwU2sVgk7CIOTLlr39H
+         2LQ/c25FuJzeRB85Jp0UJDl7epcDBXFGEwiBPqNgGawRFG88sUdJ4mhZOWx9mT2V/g9s
+         heDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=QteVMReY+Pe/hdBa+IV+wFqcX7jlUZ75N7BHg5eqI+Y=;
-        b=ry2lLr25o164oTd3OkOoe3FBdOsM4sMzjZ0jBygKwOjLfOHrID6XCZsIHczYWdvcKT
-         BPUW0fxDwEJwQxUmzcUol+bwRccU3AcOzjiMZSX4CaLzgNS4Glij7Mv128VjJ+X7z//N
-         SjujQ7q2YlePghOZObjCT6EkoQsBXnH0nFTY9gZI2bfcy7IrKONA+Qg3Yy2i/OGmw2G+
-         BdMLuYJBkH1B5JlbSvPFu6H/wa2YkGDHbYUyPrRs3eM9qH5Q4Nx+Qt3CIrQ/4hAZ/DCG
-         bfMOl6jt55+nKwcrfbeIjGGKQcvbwQrG4PFNp2/vRJpNNqzAP2rsy3+V1yq+X9Rc0SIJ
-         NOOw==
-X-Gm-Message-State: AOAM531/U+3pc3IY5nvxDvXrEFFMJzdayjtjN98bwJp0KqUdvGuJi/Pd
-        dYh0nlZCTvgGvrbG0+hWk41D5hiO5MHj464ufmj8SUJwY09l
-X-Google-Smtp-Source: ABdhPJw5/i2qmkjyzfDtsuwoNGzecJ+zB8QhKcmQFD2WAA6uTcN+AFujqiu2TO2TUKSOE3amkIn2njdeMLc4y+MWdrC3m7DH6bru
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0jsGDZGuE1wFeDgrRVvKz3gMkQvG2OtkGgkBW7bJIIY=;
+        b=6/dt/5BaS82hcg+RsfEEEKh6aZVSTtkx/Tqkhb98odzQHcmNsQ84VKTbLub3F6yiME
+         4tglSY+NiaiV1cHHlI3s96XiZI0kiBaXQP/HM6T/+R/wcb0PbaqPEzfk385aiabjoB+K
+         RyHy+0Q8ATJi44BRFdQHWrJtxOfwvoxko7kExU6McWyv38tcx04DepevAJCEueOO5kp8
+         zOvG+8m6naFpD6msDTJvggCJKii23yGj1SffTrBkl/yabxeBg4flFeZNsNA1odFxGDtp
+         jxhr+Ji87iKyfcMrNPhykrsVj1l+Zht9pJaEdS7qUvs+3vspurL4mf//fTC/k6/f72BT
+         L7aQ==
+X-Gm-Message-State: AOAM532TzU2gCl2epgWDVBzeNNN+4fueK9LLkZCVo2FcmIz/UIcUc+3d
+        kI3U/bxrj3XUzZPVTRSArlDh9x/xgMaHPA==
+X-Google-Smtp-Source: ABdhPJzS/POZUDP6+CYrgOXdz6HjJeNcuxARNO8TOkiRP249gvnf2SkXE8Ah7YjoekbbvAGqtJdJgw==
+X-Received: by 2002:a05:651c:243:b0:247:eb1b:939d with SMTP id x3-20020a05651c024300b00247eb1b939dmr13654168ljn.250.1647246028276;
+        Mon, 14 Mar 2022 01:20:28 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u13-20020a056512094d00b0043e6c108925sm3140943lft.136.2022.03.14.01.20.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 01:20:27 -0700 (PDT)
+Message-ID: <169795c1-607e-ee60-7ac7-538ed888bedf@linaro.org>
+Date:   Mon, 14 Mar 2022 11:20:21 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2387:b0:314:7ce4:1be8 with SMTP id
- q7-20020a056638238700b003147ce41be8mr20308521jat.286.1647245846823; Mon, 14
- Mar 2022 01:17:26 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 01:17:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008ec53005da294fe9@google.com>
-Subject: [syzbot] kernel panic: corrupted stack end in rtnl_newlink
-From:   syzbot <syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 12/16] clk: qcom: clk-krait: add 8064 errata workaround
+Content-Language: en-GB
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20220313190419.2207-1-ansuelsmth@gmail.com>
+ <20220313190419.2207-13-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220313190419.2207-13-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,101 +85,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 13/03/2022 22:04, Ansuel Smith wrote:
+> Add 8064 errata workaround where the sec_src clock gating needs to be
 
-syzbot found the following issue on:
+Could you please be more specific whether the errata applies only to the 
+ipq8064 or to the apq8064 too? 8064 is not specific enough.
 
-HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=17fe80c5700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
-dashboard link: https://syzkaller.appspot.com/bug?extid=0600986d88e2d4d7ebb8
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
+> disabled during switching. To enable this set disable_sec_src_gating in
+> the mux struct.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>   drivers/clk/qcom/clk-krait.c | 16 ++++++++++++++++
+>   drivers/clk/qcom/clk-krait.h |  1 +
+>   drivers/clk/qcom/krait-cc.c  |  1 +
+>   3 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
+> index d8af281eba0e..82fe7031e1f4 100644
+> --- a/drivers/clk/qcom/clk-krait.c
+> +++ b/drivers/clk/qcom/clk-krait.c
+> @@ -18,13 +18,23 @@
+>   static DEFINE_SPINLOCK(krait_clock_reg_lock);
+>   
+>   #define LPL_SHIFT	8
+> +#define SECCLKAGD	BIT(4)
+> +
+>   static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
+>   {
+>   	unsigned long flags;
+>   	u32 regval;
+>   
+>   	spin_lock_irqsave(&krait_clock_reg_lock, flags);
+> +
+>   	regval = krait_get_l2_indirect_reg(mux->offset);
+> +
+> +	/* 8064 Errata: disable sec_src clock gating during switch. */
+> +	if (mux->disable_sec_src_gating) {
+> +		regval |= SECCLKAGD;
+> +		krait_set_l2_indirect_reg(mux->offset, regval);
+> +	}
+> +
+>   	regval &= ~(mux->mask << mux->shift);
+>   	regval |= (sel & mux->mask) << mux->shift;
+>   	if (mux->lpl) {
+> @@ -33,6 +43,12 @@ static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
+>   	}
+>   	krait_set_l2_indirect_reg(mux->offset, regval);
+>   
+> +	/* 8064 Errata: re-enabled sec_src clock gating. */
 
-Unfortunately, I don't have any reproducer for this issue yet.
+And here too
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com
-
-Kernel panic - not syncing: corrupted stack end detected inside scheduler
-CPU: 0 PID: 2049 Comm: syz-executor.0 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
-[<ffffffff83166fa8>] panic+0x24a/0x634 kernel/panic.c:233
-[<ffffffff831a688a>] schedule_debug kernel/sched/core.c:5541 [inline]
-[<ffffffff831a688a>] schedule+0x0/0x14c kernel/sched/core.c:6187
-[<ffffffff831a6b00>] preempt_schedule_common+0x4e/0xde kernel/sched/core.c:6462
-[<ffffffff831a6bc4>] preempt_schedule+0x34/0x36 kernel/sched/core.c:6487
-[<ffffffff831afd78>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
-[<ffffffff831afd78>] _raw_spin_unlock_irqrestore+0x8c/0x98 kernel/locking/spinlock.c:194
-[<ffffffff80b09fdc>] __debug_check_no_obj_freed lib/debugobjects.c:1002 [inline]
-[<ffffffff80b09fdc>] debug_check_no_obj_freed+0x14c/0x24a lib/debugobjects.c:1023
-[<ffffffff80410994>] free_pages_prepare mm/page_alloc.c:1358 [inline]
-[<ffffffff80410994>] free_pcp_prepare+0x24e/0x45e mm/page_alloc.c:1404
-[<ffffffff804142fe>] free_unref_page_prepare mm/page_alloc.c:3325 [inline]
-[<ffffffff804142fe>] free_unref_page+0x6a/0x31e mm/page_alloc.c:3404
-[<ffffffff8041471e>] free_the_page mm/page_alloc.c:706 [inline]
-[<ffffffff8041471e>] __free_pages+0xe2/0x112 mm/page_alloc.c:5474
-[<ffffffff8046d728>] __free_slab+0x122/0x27c mm/slub.c:2028
-[<ffffffff8046d8ce>] free_slab mm/slub.c:2043 [inline]
-[<ffffffff8046d8ce>] discard_slab+0x4c/0x7a mm/slub.c:2049
-[<ffffffff8046deec>] __unfreeze_partials+0x16a/0x18e mm/slub.c:2536
-[<ffffffff8046e006>] put_cpu_partial+0xf6/0x162 mm/slub.c:2612
-[<ffffffff8046d0ec>] __slab_free+0x166/0x29c mm/slub.c:3378
-[<ffffffff8047258c>] do_slab_free mm/slub.c:3497 [inline]
-[<ffffffff8047258c>] ___cache_free+0x17c/0x354 mm/slub.c:3516
-[<ffffffff8047692e>] qlink_free mm/kasan/quarantine.c:157 [inline]
-[<ffffffff8047692e>] qlist_free_all+0x7c/0x132 mm/kasan/quarantine.c:176
-[<ffffffff80476ed4>] kasan_quarantine_reduce+0x14c/0x1c8 mm/kasan/quarantine.c:283
-[<ffffffff804742b2>] __kasan_slab_alloc+0x5c/0x98 mm/kasan/common.c:446
-[<ffffffff8046fa8a>] kasan_slab_alloc include/linux/kasan.h:260 [inline]
-[<ffffffff8046fa8a>] slab_post_alloc_hook mm/slab.h:732 [inline]
-[<ffffffff8046fa8a>] slab_alloc_node mm/slub.c:3230 [inline]
-[<ffffffff8046fa8a>] slab_alloc mm/slub.c:3238 [inline]
-[<ffffffff8046fa8a>] __kmalloc+0x156/0x318 mm/slub.c:4420
-[<ffffffff82bde908>] kmalloc include/linux/slab.h:586 [inline]
-[<ffffffff82bde908>] kzalloc include/linux/slab.h:715 [inline]
-[<ffffffff82bde908>] fib_create_info+0xade/0x2d8e net/ipv4/fib_semantics.c:1464
-[<ffffffff82becedc>] fib_table_insert+0x1a0/0xebe net/ipv4/fib_trie.c:1224
-[<ffffffff82bd1222>] fib_magic+0x3f4/0x438 net/ipv4/fib_frontend.c:1087
-[<ffffffff82bd6178>] fib_add_ifaddr+0xd2/0x2e2 net/ipv4/fib_frontend.c:1109
-[<ffffffff82bd66ea>] fib_netdev_event+0x362/0x4b0 net/ipv4/fib_frontend.c:1466
-[<ffffffff800aac84>] notifier_call_chain+0xb8/0x188 kernel/notifier.c:84
-[<ffffffff800aad7e>] raw_notifier_call_chain+0x2a/0x38 kernel/notifier.c:392
-[<ffffffff8271d086>] call_netdevice_notifiers_info+0x9e/0x10c net/core/dev.c:1919
-[<ffffffff827422c8>] call_netdevice_notifiers_extack net/core/dev.c:1931 [inline]
-[<ffffffff827422c8>] call_netdevice_notifiers net/core/dev.c:1945 [inline]
-[<ffffffff827422c8>] __dev_notify_flags+0x108/0x1fa net/core/dev.c:8179
-[<ffffffff827436f6>] dev_change_flags+0x9c/0xba net/core/dev.c:8215
-[<ffffffff82767e16>] do_setlink+0x5d6/0x21c4 net/core/rtnetlink.c:2729
-[<ffffffff8276a6a2>] __rtnl_newlink+0x99e/0xfa0 net/core/rtnetlink.c:3412
-[<ffffffff8276ad04>] rtnl_newlink+0x60/0x8c net/core/rtnetlink.c:3527
-[<ffffffff8276b46c>] rtnetlink_rcv_msg+0x338/0x9a0 net/core/rtnetlink.c:5592
-[<ffffffff8296ded2>] netlink_rcv_skb+0xf8/0x2be net/netlink/af_netlink.c:2494
-[<ffffffff827624f4>] rtnetlink_rcv+0x26/0x30 net/core/rtnetlink.c:5610
-[<ffffffff8296cbcc>] netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
-[<ffffffff8296cbcc>] netlink_unicast+0x40e/0x5fe net/netlink/af_netlink.c:1343
-[<ffffffff8296d29c>] netlink_sendmsg+0x4e0/0x994 net/netlink/af_netlink.c:1919
-[<ffffffff826d264e>] sock_sendmsg_nosec net/socket.c:705 [inline]
-[<ffffffff826d264e>] sock_sendmsg+0xa0/0xc4 net/socket.c:725
-[<ffffffff826d7026>] __sys_sendto+0x1f2/0x2e0 net/socket.c:2040
-[<ffffffff826d7152>] __do_sys_sendto net/socket.c:2052 [inline]
-[<ffffffff826d7152>] sys_sendto+0x3e/0x52 net/socket.c:2048
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-SMP: stopping secondary CPUs
-Rebooting in 86400 seconds..
+> +	if (mux->disable_sec_src_gating) {
+> +		regval &= ~SECCLKAGD;
+> +		krait_set_l2_indirect_reg(mux->offset, regval);
+> +	}
+> +
+>   	/* Wait for switch to complete. */
+>   	mb();
+>   	udelay(1);
+> diff --git a/drivers/clk/qcom/clk-krait.h b/drivers/clk/qcom/clk-krait.h
+> index 9120bd2f5297..f930538c539e 100644
+> --- a/drivers/clk/qcom/clk-krait.h
+> +++ b/drivers/clk/qcom/clk-krait.h
+> @@ -15,6 +15,7 @@ struct krait_mux_clk {
+>   	u8		safe_sel;
+>   	u8		old_index;
+>   	bool		reparent;
+> +	bool		disable_sec_src_gating;
+>   
+>   	struct clk_hw	hw;
+>   	struct notifier_block   clk_nb;
+> diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
+> index 1bdc89c097e6..533a770332be 100644
+> --- a/drivers/clk/qcom/krait-cc.c
+> +++ b/drivers/clk/qcom/krait-cc.c
+> @@ -154,6 +154,7 @@ krait_add_sec_mux(struct device *dev, struct clk *qsb, int id,
+>   	mux->shift = 2;
+>   	mux->parent_map = sec_mux_map;
+>   	mux->hw.init = &init;
+> +	mux->disable_sec_src_gating = true;
+>   
+>   	init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
+>   	if (!init.name)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+With best wishes
+Dmitry

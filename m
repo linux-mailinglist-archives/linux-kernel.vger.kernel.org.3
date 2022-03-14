@@ -2,64 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D994D8A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB714D8A79
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242743AbiCNRHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
+        id S241937AbiCNRI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiCNRHo (ORCPT
+        with ESMTP id S234467AbiCNRIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B843D1E0;
-        Mon, 14 Mar 2022 10:06:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E636960EC2;
-        Mon, 14 Mar 2022 17:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE00C340F6;
-        Mon, 14 Mar 2022 17:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647277593;
-        bh=b5KqwGPnPJ2Wxx5ei7xs9QzEWR2eFF5OtzPwOfg/g3c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NYqyFud6Qys2Y45RnMrhQ9idoXT4YYCqZZWLI7CsSSmjywk5IAXvJPhfRtzao6lWg
-         xEH+wNk90L3zCJUZX2qrLbgq7kS3e8yBU8h5VD9OqkwJ7KUMlHQHOz8ZVEfT0z9YvV
-         M+pMgtP6LJRDQUkAT220zlM2FLoW+VarKhLaDItXD2fCTiBghIt/7vPLHYmEPgjHFV
-         9yqHJMpcIBprvCHDqMFusggflKHKHcC5t0IQkjVVRYyRzRsyRbhPtqk4g7cVjSGWVj
-         fYngQBORAdlHvxyoYaxMkU8iBCK4m1+dVDWrJET3L+DzI7jy0Q6EtW3NsMYZiXvNSm
-         hYdcSQ/P9riEw==
-Date:   Mon, 14 Mar 2022 10:06:30 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/30] drivers: net: packetengines: fix typos in
- comments
-Message-ID: <20220314100630.0ee93704@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220314115354.144023-13-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-        <20220314115354.144023-13-Julia.Lawall@inria.fr>
+        Mon, 14 Mar 2022 13:08:55 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5788C3DA58
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:07:44 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e24so25026970wrc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I9gjU0x/PgdM8bvtL6SwyLtmlqm3fb9Iulm2fPDe870=;
+        b=TDH+vn8MRDd0TIB/7sTaTIjyrSXs8HnE41Pah2MUMlSNzgrfQ07BlDrRt6vnV9JeF/
+         RAWJ1UkMrKFqkzQiiuZsik44O39eSmBjZ/Z0Nxr6go34gwnOlZ7Ocq/eSGzObW4s6hAk
+         pgR/q2kn736c/MTokUaliD8FOZ8zTosL3VNsOoT1c/fv+Y/lg4bXIp8Zcku0zjJlrY64
+         OWXit4bmUsIXP1MjuvvbYNu5lMsMWpfkEt7UlsGPcmiLIfqn/Xh65eL6h9/L9yURmFxi
+         2KUh12l/KKOJ7r0Jvvaq7WFBa4alT8MiNUNfvkD5HmQbLUmb+GtN1TCdrrQXLhaUEzq7
+         NSqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I9gjU0x/PgdM8bvtL6SwyLtmlqm3fb9Iulm2fPDe870=;
+        b=u/jmOdzSXwPFEBHujcARI3gw1VecbtOKCjKIrh2Xpke55rlROLQ6eZZCIxsRmc2BFV
+         Qd+PmAkv7ATT1sp4BNfTRR0RAN+KdRM7gKe2G+u+/56gsrDuDr1pzfbScpAydU+ryG5w
+         vxsH5l6UjQQl5X26vuQc8p6MKzI+pItcs/N35SFrWD9PZ2ScCbhGS4sliOnNIAVvK22b
+         6liQVYT0eEWOE7/J5sE8tn5bgSEwREOY1YBnoz6HeLdWEFmQu81uc9l5Oc8mowyklQuE
+         07pq7Md5SWqVDMY3lSZmqiLISzV0j+Gm+tE2HOcuVXgon297/rybrpuLjARWeRLjs1TV
+         KBPA==
+X-Gm-Message-State: AOAM532L4IeuQYgwuFU4aG/hNA1ULf2rBKUffbaK54HCPOG5XVlqrZsE
+        OSx7tYh9NbBRnXVbF5zrNSe+3Jl65UAsnLNW8vPViQ==
+X-Google-Smtp-Source: ABdhPJx1lcNmqCv85hlXRj7qoj+pc07cQQmq4rWlMg08lDktFz47BLCOP1mr2/KTpAMc+M3aq8bmx8xnegsS0Y2U0DU=
+X-Received: by 2002:adf:e6c7:0:b0:1ed:9f7c:c99e with SMTP id
+ y7-20020adfe6c7000000b001ed9f7cc99emr16863843wrm.0.1647277662677; Mon, 14 Mar
+ 2022 10:07:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk>
+In-Reply-To: <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 14 Mar 2022 10:07:31 -0700
+Message-ID: <CA+khW7g+T2sAkP1aycmts_82JKWgYk5Y0ZJp+EvjFUyNY8W_5w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 12:53:36 +0100 Julia Lawall wrote:
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
+Hello Al,
 
-FWIW it would be easier to process the patches if they were posted
-individually, there are no dependencies here.
+On Fri, Mar 11, 2022 at 7:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Fri, Feb 25, 2022 at 03:43:31PM -0800, Hao Luo wrote:
+> > This patch allows bpf_syscall prog to perform some basic filesystem
+> > operations: create, remove directories and unlink files. Three bpf
+> > helpers are added for this purpose. When combined with the following
+> > patches that allow pinning and getting bpf objects from bpf prog,
+> > this feature can be used to create directory hierarchy in bpffs that
+> > help manage bpf objects purely using bpf progs.
+> >
+> > The added helpers subject to the same permission checks as their syscall
+> > version. For example, one can not write to a read-only file system;
+> > The identity of the current process is checked to see whether it has
+> > sufficient permission to perform the operations.
+> >
+> > Only directories and files in bpffs can be created or removed by these
+> > helpers. But it won't be too hard to allow these helpers to operate
+> > on files in other filesystems, if we want.
+>
+> In which contexts can those be called?
+>
+
+In a sleepable context. The plan is to introduce a certain tracepoints
+as sleepable, a program that attaches to sleepable tracepoints is
+allowed to call these functions. In particular, the first sleepable
+tracepoint introduced in this patchset is one at the end of
+cgroup_mkdir(). Do you have any advices?
+
+> > +BPF_CALL_2(bpf_rmdir, const char *, pathname, int, pathname_sz)
+> > +{
+> > +     struct user_namespace *mnt_userns;
+> > +     struct path parent;
+> > +     struct dentry *dentry;
+> > +     int err;
+> > +
+> > +     if (pathname_sz <= 1 || pathname[pathname_sz - 1])
+> > +             return -EINVAL;
+> > +
+> > +     err = kern_path(pathname, 0, &parent);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     if (!bpf_path_is_bpf_dir(&parent)) {
+> > +             err = -EPERM;
+> > +             goto exit1;
+> > +     }
+> > +
+> > +     err = mnt_want_write(parent.mnt);
+> > +     if (err)
+> > +             goto exit1;
+> > +
+> > +     dentry = kern_path_locked(pathname, &parent);
+>
+> This can't be right.  Ever.  There is no promise whatsoever
+> that these two lookups will resolve to the same place.
+>
+> > +BPF_CALL_2(bpf_unlink, const char *, pathname, int, pathname_sz)
+> > +{
+> > +     struct user_namespace *mnt_userns;
+> > +     struct path parent;
+> > +     struct dentry *dentry;
+> > +     struct inode *inode = NULL;
+> > +     int err;
+> > +
+> > +     if (pathname_sz <= 1 || pathname[pathname_sz - 1])
+> > +             return -EINVAL;
+> > +
+> > +     err = kern_path(pathname, 0, &parent);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     err = mnt_want_write(parent.mnt);
+> > +     if (err)
+> > +             goto exit1;
+> > +
+> > +     dentry = kern_path_locked(pathname, &parent);
+> > +     if (IS_ERR(dentry)) {
+> > +             err = PTR_ERR(dentry);
+> > +             goto exit2;
+> > +     }
+>
+> Ditto.  NAK; if you want to poke into fs/namei.c guts, do it right.
+> Or at least discuss that on fsdevel.  As it is, it's completely broken.
+> It's racy *and* it blatantly leaks both vfsmount and dentry references.
+>
+> NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
+
+Thanks Al for taking a look. Actually, there is a simpler approach:
+can we export two functions in namei.c that wrap call to do_mkdirat
+and do_unlinkat, but take a kernel string as pathname? Then these two
+bpf helpers can use them, don't have to be this complicated. Does this
+sound good to you?
+
+Thanks!

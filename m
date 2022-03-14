@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BCF4D848C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040E94D838D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239507AbiCNM0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S240874AbiCNMQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242598AbiCNMTM (ORCPT
+        with ESMTP id S242232AbiCNMJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:19:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2216B4F9EF;
-        Mon, 14 Mar 2022 05:14:27 -0700 (PDT)
+        Mon, 14 Mar 2022 08:09:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09ECE50B0E;
+        Mon, 14 Mar 2022 05:06:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF0B960929;
-        Mon, 14 Mar 2022 12:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D146EC340E9;
-        Mon, 14 Mar 2022 12:14:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB58E61319;
+        Mon, 14 Mar 2022 12:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0120AC340E9;
+        Mon, 14 Mar 2022 12:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260064;
-        bh=KUwoJ+aTAQfk5BmOfdhM8TL8CSOLD574ZxlIMzJKcjQ=;
+        s=korg; t=1647259600;
+        bh=YfpmRIDi6jRVe/IYxm/SbOg5cyruW3iEv4Tg+KggpLQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yj0qTNV75ovmesLm5HPjPcrrJJz3JyO9N8KZmogM+JBkE6Q9EMfb+5BTjF6FCS6pq
-         vvAQCxv8s4rLohCTpzbA6DLeSXFu8QuE4IiasvXsbAVQVe/LSGCIfckboKZCKBOA8Q
-         XO09W3tvU+/7cBreDO06vLG5dNNxlmgLuCpelk1o=
+        b=10/UpRbBENrQtegLjmJMzXe+vq4yBqTi4VYzrVssHNfEKdJId/ElWShL8DgNnx3+t
+         kZ/ZQvdQMJZeG2XHzthft12TDX7N8rBQ7T/IhQZ373tlRVOM+yY6t9rXB5Mr+KLc/q
+         Yg+NU54Gao8ve6rq7bL1eyu0UfPRPdD6herUJ36c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mohammad Kabat <mohammadkab@nvidia.com>,
-        Moshe Shemesh <moshe@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Mark Featherston <mark@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 045/121] net/mlx5: Fix size field in bufferx_reg struct
+Subject: [PATCH 5.15 046/110] gpio: ts4900: Do not set DAT and OE together
 Date:   Mon, 14 Mar 2022 12:53:48 +0100
-Message-Id: <20220314112745.384656219@linuxfoundation.org>
+Message-Id: <20220314112744.322917468@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohammad Kabat <mohammadkab@nvidia.com>
+From: Mark Featherston <mark@embeddedTS.com>
 
-[ Upstream commit ac77998b7ac3044f0509b097da9637184598980d ]
+[ Upstream commit 03fe003547975680fdb9ff5ab0e41cb68276c4f2 ]
 
-According to HW spec the field "size" should be 16 bits
-in bufferx register.
+This works around an issue with the hardware where both OE and
+DAT are exposed in the same register. If both are updated
+simultaneously, the harware makes no guarantees that OE or DAT
+will actually change in any given order and may result in a
+glitch of a few ns on a GPIO pin when changing direction and value
+in a single write.
 
-Fixes: e281682bf294 ("net/mlx5_core: HW data structs/types definitions cleanup")
-Signed-off-by: Mohammad Kabat <mohammadkab@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Setting direction to input now only affects OE bit. Setting
+direction to output updates DAT first, then OE.
+
+Fixes: 9c6686322d74 ("gpio: add Technologic I2C-FPGA gpio support")
+Signed-off-by: Mark Featherston <mark@embeddedTS.com>
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/mlx5/mlx5_ifc.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpio/gpio-ts4900.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
-index fbaab440a484..58a60e46c319 100644
---- a/include/linux/mlx5/mlx5_ifc.h
-+++ b/include/linux/mlx5/mlx5_ifc.h
-@@ -9875,8 +9875,8 @@ struct mlx5_ifc_bufferx_reg_bits {
- 	u8         reserved_at_0[0x6];
- 	u8         lossy[0x1];
- 	u8         epsb[0x1];
--	u8         reserved_at_8[0xc];
--	u8         size[0xc];
-+	u8         reserved_at_8[0x8];
-+	u8         size[0x10];
+diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
+index d885032cf814..d918d2df4de2 100644
+--- a/drivers/gpio/gpio-ts4900.c
++++ b/drivers/gpio/gpio-ts4900.c
+@@ -1,7 +1,7 @@
+ /*
+  * Digital I/O driver for Technologic Systems I2C FPGA Core
+  *
+- * Copyright (C) 2015 Technologic Systems
++ * Copyright (C) 2015, 2018 Technologic Systems
+  * Copyright (C) 2016 Savoir-Faire Linux
+  *
+  * This program is free software; you can redistribute it and/or
+@@ -55,19 +55,33 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
+ {
+ 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
  
- 	u8         xoff_threshold[0x10];
- 	u8         xon_threshold[0x10];
+-	/*
+-	 * This will clear the output enable bit, the other bits are
+-	 * dontcare when this is cleared
++	/* Only clear the OE bit here, requires a RMW. Prevents potential issue
++	 * with OE and data getting to the physical pin at different times.
+ 	 */
+-	return regmap_write(priv->regmap, offset, 0);
++	return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
+ }
+ 
+ static int ts4900_gpio_direction_output(struct gpio_chip *chip,
+ 					unsigned int offset, int value)
+ {
+ 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
++	unsigned int reg;
+ 	int ret;
+ 
++	/* If changing from an input to an output, we need to first set the
++	 * proper data bit to what is requested and then set OE bit. This
++	 * prevents a glitch that can occur on the IO line
++	 */
++	regmap_read(priv->regmap, offset, &reg);
++	if (!(reg & TS4900_GPIO_OE)) {
++		if (value)
++			reg = TS4900_GPIO_OUT;
++		else
++			reg &= ~TS4900_GPIO_OUT;
++
++		regmap_write(priv->regmap, offset, reg);
++	}
++
+ 	if (value)
+ 		ret = regmap_write(priv->regmap, offset, TS4900_GPIO_OE |
+ 							 TS4900_GPIO_OUT);
 -- 
 2.34.1
 

@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD9A4D86E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD984D86F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiCNOWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 10:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S234181AbiCNObQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 10:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236288AbiCNOWO (ORCPT
+        with ESMTP id S231239AbiCNObO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 10:22:14 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635951C136;
-        Mon, 14 Mar 2022 07:21:05 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22ED7CTq006007;
-        Mon, 14 Mar 2022 14:21:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=vBin87u2Lp+yi/bIq2Z97IiIZZj6IztrcwtfbmwWMDQ=;
- b=pQeNhBH+A5tbUjhK0zA3hBAvlfKKlLc2S6lRLDtzc6WUjUORnyNxlh7w5Pgr1KMQRwt1
- +l6490fBv6VWM7oH0kurGPCl5HuwRwP/FoNj8dU35uNNeG2+b1whEclJLpg/u4thoosf
- nmxxB2tMvxBrJNkLBE+EtFTvosFoIMBX6pGbWOxPAkDY0+lDF4+1ukX3tm9GADJ5xhKj
- qh4SYF0sL4DDlwbbqvsSgJVwXWaqJXz6zmWV6bsfmcWDLalNaShX4Z1UPEJgylcaNW77
- gpyxlg5wv/Tu1U9A5V0oNACFgfA3bffRFkejefVOA9GhxH7XVQWNpj8AjR4qpqdPbzla +A== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3et6a6tfck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 14:21:04 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22EE7Ewc005330;
-        Mon, 14 Mar 2022 14:21:02 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3erk58kr36-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 14:21:02 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22EEKx0L26804566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Mar 2022 14:20:59 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3380E520C6;
-        Mon, 14 Mar 2022 14:20:59 +0000 (GMT)
-Received: from localhost (unknown [9.43.35.46])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E867652199;
-        Mon, 14 Mar 2022 14:20:47 +0000 (GMT)
-Date:   Mon, 14 Mar 2022 19:50:46 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     fstests@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4/053: Add support for testing mb_optimize_scan
-Message-ID: <20220314142030.aigttj2likaqtz2c@riteshh-domain>
-References: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vk8ee9gjL8yshLkJ1Lh5A5pMkGxm1-0p
-X-Proofpoint-ORIG-GUID: vk8ee9gjL8yshLkJ1Lh5A5pMkGxm1-0p
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 14 Mar 2022 10:31:14 -0400
+X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Mar 2022 07:30:03 PDT
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7081F2C66A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:30:03 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.197.31])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 573663F7E1;
+        Mon, 14 Mar 2022 14:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647267791;
+        bh=dYP9n+9ZiLQtINhhSZR+LCQtgVyYHHqH/JL5P9eptWA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=m6AFUwQGWaBaGC+cdpSpajath+yktgZlTUEC9UMrSq26IIRj5EOcgVwC47Cyx9pGv
+         7IySM5xswIv8Hy1OfIqpGOO4ZviewW9315zLKX9yKG6NR023rwUfNyfQNDeDxuj9hC
+         J8V7s0rqYfUt8ITwdCVb2eoWyCCwMttbcG4OJ5FyeEsFFgqTmHS3j6vWDEZlBPE7Xp
+         On0RjeNTD2Vh3ykWYaLMvEChH05lyUs9dbrB8vAzEzbwddbu+4ZfuuXszho8bc8gGZ
+         HYZJes9g3WIlOxDIRgJgoioDN3+bjhe7E2UbXV4Zd4GNJ6kvkZcrA9evSk0QPHgGaZ
+         S5bWVXRZ3DTzQ==
+From:   Andy Chi <andy.chi@canonical.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     andy.chi@canonical.com
+Subject: [PATCH] ALSA: hda/realtek: fix right sounds and mute/micmute LEDs for HP machines
+Date:   Mon, 14 Mar 2022 22:21:19 +0800
+Message-Id: <20220314142122.71602-1-andy.chi@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_08,2022-03-14_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 phishscore=0 bulkscore=0 mlxscore=0 adultscore=0
- clxscore=1011 suspectscore=0 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203140089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,46 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/14 04:02PM, Ojaswin Mujoo wrote:
-> Add support to test the mb_optimize_scan mount option.
-> Since its value is not reflected in the "options" file in proc,
-> use "mb_structs_summary" to verify its value.
+* The HP ProBook 440/450 and EliteBook 640/650 are
+  using ALC236 codec which used 0x02 to control mute LED
+  and 0x01 to control micmute LED. Therefore, add a quirk to make it works.
 
-Yes, I think we can do this. Thanks for identifying it.
+Signed-off-by: Andy Chi <andy.chi@canonical.com>
+---
+ sound/pci/hda/patch_realtek.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index c34b4888978b..4650ef9110d6 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9017,6 +9017,10 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8992, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x103c, 0x8994, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x103c, 0x8995, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x89a4, "HP ProBook 440 G9", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x89a6, "HP ProBook 450 G9", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x89ac, "HP EliteBook 640 G9", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x89ae, "HP EliteBook 650 G9", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x89c3, "Zbook Studio G9", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x89c6, "Zbook Fury 17 G9", ALC245_FIXUP_CS35L41_SPI_2),
+ 	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+-- 
+2.25.1
 
-Overall the patch looks good to me. Feel free to add
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
-
-> ---
->  tests/ext4/053 | 21 ++++++++++++---------
->  1 file changed, 12 insertions(+), 9 deletions(-)
-
-<Some stats>
-
-I ran this test of yours with and w/o your kernel fix for this mount option,
-which is now sitting in ext4 dev tree [1].
-
-<with kernel fix>
-ext4/053 173s ...  147s
-Ran: ext4/053
-Passed all 1 tests
-
-<w/o kernel fix>
-ext4/053 173s ... [failed, exit status 2]- output mismatch (see /home/qemu/work/tools/xfstests-dev/results//ext4_4k/ext4/053.out.bad)
-    --- tests/ext4/053.out      2022-01-03 11:50:08.671463501 +0530
-    +++ /home/qemu/work/tools/xfstests-dev/results//ext4_4k/ext4/053.out.bad    2022-03-14 18:26:12.290610687 +0530
-    @@ -1,2 +1,4 @@
-     QA output created by 053
-     Silence is golden.
-    +mounting ext3 "mb_optimize_scan=1" checking "mb_optimize_scan=1" (not found) FAILED
-    +mounting ext4 "mb_optimize_scan=1" checking "mb_optimize_scan=1" (not found) FAILED
-    ...
-    (Run 'diff -u /home/qemu/work/tools/xfstests-dev/tests/ext4/053.out /home/qemu/work/tools/xfstests-dev/results//ext4_4k/ext4/053.out.bad'  to see the entire diff)
-Ran: ext4/053
-Failures: ext4/053
-Failed 1 of 1 tests
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git/commit/?h=dev&id=27b38686a3bb601db48901dbc4e2fc5d77ffa2c1

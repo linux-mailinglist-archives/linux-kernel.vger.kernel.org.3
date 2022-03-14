@@ -2,87 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9804D8C9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 20:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADAE4D8C9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 20:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243568AbiCNToI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 15:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S244145AbiCNToQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 15:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237637AbiCNToF (ORCPT
+        with ESMTP id S242632AbiCNToK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 15:44:05 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFECA12740;
-        Mon, 14 Mar 2022 12:42:52 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:35::5f6])
+        Mon, 14 Mar 2022 15:44:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8175D140AE;
+        Mon, 14 Mar 2022 12:42:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 208D3383;
-        Mon, 14 Mar 2022 19:42:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 208D3383
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1647286972; bh=P0am7+6ONv8srDuV3nhbMZv7Ei+fkCW5So00KOZ3y4k=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=CNSONnFzpJL/drzfeL9vAGg5ekM5pjqrwWukXo7E2t2Ct1c8dudCTWXnffE7DOY0w
-         CzFH4b9l5ZGvETC3wZ78qWyfVSM76hbfSMCIoaBXErV9XlIeE6j94uYBWCq7j2sIZ/
-         6wgRLIfNUXEDa9xmRh7eRKk6y0ppJ3cP9cuoR8ffk2dScQE+aD68kkMeYi1eDNW3mZ
-         IKCAU8vE4UD/jdkKCzVzPB0c3xmPETPqh5lpOwqm8/nieuxW7XeivEWlNTIGatWSPS
-         lXZi7Bof4T4bcqIEYNm4eV4o5+SdKy83xBNIfr+GO/3V1/7Ev2YYuc0UoqO8ZNpkso
-         870pLCWvVe12A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        alex.williamson@redhat.com, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        yishaih@nvidia.com, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2] vfio-pci: Provide reviewers and acceptance criteria
- for vendor drivers
-In-Reply-To: <164728518026.40450.7442813673746870904.stgit@omen>
-References: <164728518026.40450.7442813673746870904.stgit@omen>
-Date:   Mon, 14 Mar 2022 13:42:51 -0600
-Message-ID: <87pmmoxqv8.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0D7AB80F79;
+        Mon, 14 Mar 2022 19:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B83C340E9;
+        Mon, 14 Mar 2022 19:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647286975;
+        bh=T+QpWCtYV8reizq0fYMHhwsVHRCeIp0TbwXXvGhjNnw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=FCJ7MK7M70y/GMBTD3D8cIxOlVmH02z+fUKmkJZW7lCzhe+7xfGXIXmlAtS/noGYD
+         R1k52pXbbkgB0vPrCVRs8o1Ga0bCxv1lRCm8R04kFGq91k0gUKlv1i7Ma6xQIm+/2d
+         jHsnEh0IqqAQWLjaRnVQ/NkDdVwr95YGwApBbuZFL5n4BeL2jJ754euDN70W9RDh3d
+         JrTObi0pffXd6Jf6yeMmnGWHgcz7NAbZ0RSzBLWpuzwild8JtlHJhhlH/20ilLCS05
+         jdOMypmL97LHzRVA8vAZlXr7RhCn9cD4V78leE+IWYxHzG6/RKCbyaCnLpcrGo4B3D
+         wmx2Wx2ACj0PQ==
+Date:   Mon, 14 Mar 2022 14:42:53 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, micklorain@protonmail.com
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+Message-ID: <20220314194253.GA515821@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314101448.90074-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alex Williamson <alex.williamson@redhat.com> writes:
+On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
+> Enable the respective quirk as it's done for other ATI devices on this chipset,
+> 
+> Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
 
-> Vendor or device specific extensions for devices exposed to userspace
-> through the vfio-pci-core library open both new functionality and new
-> risks.  Here we attempt to provided formalized requirements and
-> expectations to ensure that future drivers both collaborate in their
-> interaction with existing host drivers, as well as receive additional
-> reviews from community members with experience in this area.
->
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: Yishai Hadas <yishaih@nvidia.com>
-> Cc: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> Cc: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+This is interesting because there must be a TON of these AMD/ATI SB600
+USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
+appeared in v5.9.
+
+So why would we only get a report now, in February 2022?  Is there
+some change more recent than 306c54d0edb6 that exposed this problem?
+
+> BugLink: https://lore.kernel.org/all/20200702143045.23429-1-andriy.shevchenko@linux.intel.com/
+> Reported-by: micklorain@protonmail.com
+> Tested-by: micklorain@protonmail.com
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-
-One thing...
-
->  .../vfio/vfio-pci-vendor-driver-acceptance.rst     |   35 ++++++++++++++++++++
->  MAINTAINERS                                        |   10 ++++++
->  2 files changed, 45 insertions(+)
-
-If you add a new RST file, you need to add it to an index.rst somewhere
-so that it becomes part of the kernel docs build.
-
-Also, though: can we avoid creating a new top-level documentation
-directory for just this file?  It seems like it would logically be a
-part of the maintainers guide (Documentation/maintainer) ... ?
-
-Thanks,
-
-jon
+>  drivers/pci/quirks.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 65f7f6b0576c..cc6a87a32b62 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -3041,6 +3041,13 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_BROADCOM,
+>  			PCI_DEVICE_ID_TIGON3_5715S,
+>  			quirk_msi_intx_disable_bug);
+>  
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4386, quirk_msi_intx_disable_bug);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4387, quirk_msi_intx_disable_bug);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4388, quirk_msi_intx_disable_bug);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4389, quirk_msi_intx_disable_bug);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438a, quirk_msi_intx_disable_bug);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438b, quirk_msi_intx_disable_bug);
+> +
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4390,
+>  			quirk_msi_intx_disable_ati_bug);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4391,
+> -- 
+> 2.35.1
+> 

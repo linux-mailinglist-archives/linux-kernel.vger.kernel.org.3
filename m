@@ -2,145 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400CE4D79ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27364D79F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbiCNEiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 00:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S233750AbiCNEqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 00:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiCNEiH (ORCPT
+        with ESMTP id S233024AbiCNEq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 00:38:07 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4316B6592
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:36:58 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id BB60B19E0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:36:57 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id TcS1nx5WIdx86TcS1nvtfB; Sun, 13 Mar 2022 23:36:57 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TPMJ1EhsFnNaIQ2r4ew3lUN+ygZdnSd9hmHS3o56OHo=; b=r/H41ZX15ieWhGnDNOloEgnOv5
-        CRQpcovtgeun9GkyVBYU/12GwMCTjSbyC99rFwU4HTV/+QJcZoIvo75GcyUHZ43gYLOQfVrf9PuIi
-        OyxRhcfaJRJNnnt8UjG9InJFGHANH2dgvWAprJDiw3tYTgl+Qji0ohMKwx2z8XHSFj4tMJiyC1Qev
-        o69URwaUIsA7P8RUVVxQmvN/Kmuayd8bsLmalPJY6+35Uli9q+msHOtvOUpgClTsDbgLRsv7aeX7z
-        FpkW0SQMJ2gNH7tKtqhuhIlZ28vLka64fjCV96pafmb+eZ8ymCQelfnU4xXktoTzML1gVGd0d06Rn
-        h8vSMOvg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54246)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nTcS1-001k4n-59; Mon, 14 Mar 2022 04:36:57 +0000
-Message-ID: <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
-Date:   Sun, 13 Mar 2022 21:36:55 -0700
+        Mon, 14 Mar 2022 00:46:28 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873D013D6F
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:45:19 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id e27-20020a056602045b00b00645bd576184so11517777iov.3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:45:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=lU/XIXKZn4F9zm+7igwJpi8XQqygtgEUGB9afzywV84=;
+        b=uDrI5c0JqjLsSqsbmqpZooxJ2bFSscZRu4kt2RZjYpNZ4K6y1xxrQDpRyJtezwq2Oh
+         f8eaPOYA0GWnQOVN2cINlFQgJ4DyaBfg8r2KYuMHTXwDkRSodKkS2dNKipCuS3CsdmY4
+         B3xbqkv6YyFlGBV8FUk8OUA2GzVsk7Nj8r9z4sFAYa2cLPvYAfgBawAHUBCge6JMlrHb
+         gW7ct+Tb7F8oNbs7ybd35ZQ78g1rsZel9MLyz7zVO4SKuOnYlDFt1RF5pxMS7Z0DpXky
+         SNbMk3eoo554MQ+x1PocnHW5QFkOUUwkaEqWEqkpwNLF21wYdGTllpsSu2ScYJ8EJ8xx
+         hd7w==
+X-Gm-Message-State: AOAM5309vkz272T85h7Ss4iD2LKW7fWnXLwnpl2wLfWwO/77Q1J9IN3g
+        HlyGSoo+7C6MDMyzFH/M77DGsWAJzIqh7dxCUV6y/LaqpCtA
+X-Google-Smtp-Source: ABdhPJyhmOxjYABwFXVuB/sdOK1y3ea0X8uCodi46W0+sHCqZF1fF2n2DiFaKEB3fjEHxcO1Dfqi0Cr4unV5Lq/qN3OsEE2nxa0X
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs
- entry
-Content-Language: en-US
-To:     Brandon Wyman <bjwyman@gmail.com>, Joel Stanley <joel@jms.id.au>,
-        openbmc@lists.ozlabs.org, Eddie James <eajames@linux.ibm.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220311181014.3448936-1-bjwyman@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220311181014.3448936-1-bjwyman@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nTcS1-001k4n-59
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54246
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:fd0c:0:b0:645:d261:ba25 with SMTP id
+ c12-20020a6bfd0c000000b00645d261ba25mr18103925ioi.124.1647233118924; Sun, 13
+ Mar 2022 21:45:18 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 21:45:18 -0700
+In-Reply-To: <00000000000099c4ca05da07e42f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ea753505da2658d5@google.com>
+Subject: Re: [syzbot] possible deadlock in blkdev_put (3)
+From:   syzbot <syzbot+6479585dfd4dedd3f7e1@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, hch@lst.de, jack@suse.cz,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        penguin-kernel@I-love.SAKURA.ne.jp, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/22 10:10, Brandon Wyman wrote:
-> Add a clear_faults write-only debugfs entry for the ibm-cffps device
-> driver.
-> 
-> Certain IBM power supplies require clearing some latched faults in order
-> to indicate that the fault has indeed been observed/noticed.
-> 
+syzbot has found a reproducer for the following issue on:
 
-That is insufficient, sorry. Please provide the affected power supplies as
-well as the affected faults, and confirm that the problem still exists
-in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
-includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
-bits after read").
+HEAD commit:    f0e18b03fcaf Merge tag 'x86_urgent_for_v5.17_rc8' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1547fb03700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
+dashboard link: https://syzkaller.appspot.com/bug?extid=6479585dfd4dedd3f7e1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1704bd29700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f78d41700000
 
-Thanks,
-Guenter
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6479585dfd4dedd3f7e1@syzkaller.appspotmail.com
 
-> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
-> ---
-> V1 -> V2: Explain why this change is needed
-> 
->   drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> index e3294a1a54bb..3f02dde02a4b 100644
-> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> @@ -67,6 +67,7 @@ enum {
->   	CFFPS_DEBUGFS_CCIN,
->   	CFFPS_DEBUGFS_FW,
->   	CFFPS_DEBUGFS_ON_OFF_CONFIG,
-> +	CFFPS_DEBUGFS_CLEAR_FAULTS,
->   	CFFPS_DEBUGFS_NUM_ENTRIES
->   };
->   
-> @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
->   		if (rc)
->   			return rc;
->   
-> +		rc = 1;
-> +		break;
-> +	case CFFPS_DEBUGFS_CLEAR_FAULTS:
-> +		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
-> +		if (rc < 0)
-> +			return rc;
-> +
->   		rc = 1;
->   		break;
->   	default:
-> @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
->   	debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
->   			    &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
->   			    &ibm_cffps_fops);
-> +	debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
-> +			    &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
-> +			    &ibm_cffps_fops);
->   
->   	return 0;
->   }
+======================================================
+WARNING: possible circular locking dependency detected
+5.17.0-rc7-syzkaller-00241-gf0e18b03fcaf #0 Not tainted
+------------------------------------------------------
+udevd/3652 is trying to acquire lock:
+ffff888018c7a938 ((wq_completion)loop0){+.+.}-{0:0}, at: flush_workqueue+0xe1/0x13a0 kernel/workqueue.c:2824
+
+but task is already holding lock:
+ffff88801a0fa918 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0x99/0x950 block/bdev.c:902
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #6 (&disk->open_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
+       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
+       blkdev_get_by_dev.part.0+0x40e/0xc70 block/bdev.c:804
+       blkdev_get_by_dev+0x6b/0x80 block/bdev.c:847
+       swsusp_check+0x97/0x420 kernel/power/swap.c:1526
+       software_resume.part.0+0x102/0x1f0 kernel/power/hibernate.c:979
+       software_resume kernel/power/hibernate.c:86 [inline]
+       resume_store+0x161/0x190 kernel/power/hibernate.c:1181
+       kobj_attr_store+0x50/0x80 lib/kobject.c:856
+       sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+       kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:296
+       call_write_iter include/linux/fs.h:2074 [inline]
+       new_sync_write+0x431/0x660 fs/read_write.c:503
+       vfs_write+0x7cd/0xae0 fs/read_write.c:590
+       ksys_write+0x12d/0x250 fs/read_write.c:643
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #5 (system_transition_mutex/1){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
+       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
+       software_resume.part.0+0x19/0x1f0 kernel/power/hibernate.c:934
+       software_resume kernel/power/hibernate.c:86 [inline]
+       resume_store+0x161/0x190 kernel/power/hibernate.c:1181
+       kobj_attr_store+0x50/0x80 lib/kobject.c:856
+       sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+       kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:296
+       call_write_iter include/linux/fs.h:2074 [inline]
+       new_sync_write+0x431/0x660 fs/read_write.c:503
+       vfs_write+0x7cd/0xae0 fs/read_write.c:590
+       ksys_write+0x12d/0x250 fs/read_write.c:643
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #4 (&of->mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
+       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
+       kernfs_seq_start+0x47/0x470 fs/kernfs/file.c:112
+       seq_read_iter+0x2c6/0x1280 fs/seq_file.c:225
+       kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241
+       call_read_iter include/linux/fs.h:2068 [inline]
+       new_sync_read+0x429/0x6e0 fs/read_write.c:400
+       vfs_read+0x35c/0x600 fs/read_write.c:481
+       ksys_read+0x12d/0x250 fs/read_write.c:619
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #3 (&p->lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
+       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
+       seq_read_iter+0xdf/0x1280 fs/seq_file.c:182
+       call_read_iter include/linux/fs.h:2068 [inline]
+       generic_file_splice_read+0x45b/0x6d0 fs/splice.c:311
+       do_splice_to+0x1bf/0x250 fs/splice.c:796
+       splice_direct_to_actor+0x2c2/0x8c0 fs/splice.c:870
+       do_splice_direct+0x1b3/0x280 fs/splice.c:979
+       do_sendfile+0xaf2/0x1250 fs/read_write.c:1245
+       __do_sys_sendfile64 fs/read_write.c:1310 [inline]
+       __se_sys_sendfile64 fs/read_write.c:1296 [inline]
+       __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #2 (sb_writers#3){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1722 [inline]
+       sb_start_write include/linux/fs.h:1792 [inline]
+       file_start_write include/linux/fs.h:2937 [inline]
+       lo_write_bvec drivers/block/loop.c:243 [inline]
+       lo_write_simple drivers/block/loop.c:266 [inline]
+       do_req_filebacked drivers/block/loop.c:495 [inline]
+       loop_handle_cmd drivers/block/loop.c:1852 [inline]
+       loop_process_work+0x1499/0x1db0 drivers/block/loop.c:1892
+       process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+       kthread+0x2e9/0x3a0 kernel/kthread.c:377
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+-> #1 ((work_completion)(&lo->rootcg_work)){+.+.}-{0:0}:
+       process_one_work+0x91b/0x1650 kernel/workqueue.c:2283
+       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+       kthread+0x2e9/0x3a0 kernel/kthread.c:377
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+-> #0 ((wq_completion)loop0){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3063 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3186 [inline]
+       validate_chain kernel/locking/lockdep.c:3801 [inline]
+       __lock_acquire+0x2ad4/0x56c0 kernel/locking/lockdep.c:5027
+       lock_acquire kernel/locking/lockdep.c:5639 [inline]
+       lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+       flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
+       drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2992
+       destroy_workqueue+0x71/0x800 kernel/workqueue.c:4429
+       __loop_clr_fd+0x1ab/0xe20 drivers/block/loop.c:1124
+       lo_release+0x1ac/0x1f0 drivers/block/loop.c:1756
+       blkdev_put_whole block/bdev.c:689 [inline]
+       blkdev_put+0x2de/0x950 block/bdev.c:944
+       blkdev_close+0x6a/0x80 block/fops.c:517
+       __fput+0x286/0x9f0 fs/file_table.c:317
+       task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+       tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+       exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+       exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+       syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+       do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+other info that might help us debug this:
+
+Chain exists of:
+  (wq_completion)loop0 --> system_transition_mutex/1 --> &disk->open_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&disk->open_mutex);
+                               lock(system_transition_mutex/1);
+                               lock(&disk->open_mutex);
+  lock((wq_completion)loop0);
+
+ *** DEADLOCK ***
+
+1 lock held by udevd/3652:
+ #0: ffff88801a0fa918 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0x99/0x950 block/bdev.c:902
+
+stack backtrace:
+CPU: 0 PID: 3652 Comm: udevd Not tainted 5.17.0-rc7-syzkaller-00241-gf0e18b03fcaf #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2143
+ check_prev_add kernel/locking/lockdep.c:3063 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3186 [inline]
+ validate_chain kernel/locking/lockdep.c:3801 [inline]
+ __lock_acquire+0x2ad4/0x56c0 kernel/locking/lockdep.c:5027
+ lock_acquire kernel/locking/lockdep.c:5639 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+ flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
+ drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2992
+ destroy_workqueue+0x71/0x800 kernel/workqueue.c:4429
+ __loop_clr_fd+0x1ab/0xe20 drivers/block/loop.c:1124
+ lo_release+0x1ac/0x1f0 drivers/block/loop.c:1756
+ blkdev_put_whole block/bdev.c:689 [inline]
+ blkdev_put+0x2de/0x950 block/bdev.c:944
+ blkdev_close+0x6a/0x80 block/fops.c:517
+ __fput+0x286/0x9f0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f0ca7b90fc3
+Code: 48 ff ff ff b8 ff ff ff ff e9 3e ff ff ff 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007ffcf6cd76d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 00007f0ca7a396a8 RCX: 00007f0ca7b90fc3
+RDX: 000000000000001c RSI: 00007ffcf6cd6ed8 RDI: 0000000000000008
+RBP: 0000564a5512feb0 R08: 0000000000000007 R09: 0000564a55126a00
+R10: 0000000002423870 R11: 0000000000000246 R12: 0000000000000002
+R13: 0000564a55116f80 R14: 0000000000000008 R15: 0000564a550e82c0
+ </TASK>
+I/O error, dev loop0, sector 0 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+I/O error, dev loop0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+Buffer I/O error on dev loop0, logical block 0, async page read
 

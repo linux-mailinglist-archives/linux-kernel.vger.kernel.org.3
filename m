@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08AA4D89D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D223E4D89DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244160AbiCNQi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S243676AbiCNQiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243201AbiCNQgc (ORCPT
+        with ESMTP id S243126AbiCNQgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:36:32 -0400
+        Mon, 14 Mar 2022 12:36:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F057717E1D;
-        Mon, 14 Mar 2022 09:35:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2295C13DF3;
+        Mon, 14 Mar 2022 09:35:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB6061457;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 901BC61414;
         Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5EBC36B1A;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1391C36B1C;
         Mon, 14 Mar 2022 16:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647275707;
-        bh=vmos0iyNbaBKZtzqzREGWwgvll3yIiNPkPm2h5IziVI=;
+        bh=HBH1DclUQBbMV92/Z7EzE7rotCUoC5aTPr/ADW851Zk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oCHmFZf7PzyJ2dg3XhS4PbL7KEFjAcNO1Wd2edI1+OKpplCQreySBxUKpbyLd8CNB
-         RQV7ENFUSzaR5SpclnPKFIisDzME4tPih16gLBnswOvVk0i7+L7XdgTtPAc1RyFuaq
-         GnXc478ZGBqwdkOLRc9q+2EuP9PvSFvsieAuO2Y7y1Pl9M8j8BE5XV0gvyXdIqFxu/
-         cevCaXl8/dkYxULB9KJNc2SOpwzKiFD4i7supta1fK8FewuKJoHU92VyH7CtJdlBF/
-         XpuAQ/EkdbcpQ/iKA3+lX6B9dwDoaOanI743y7j/P14nLnRO+Jrp2YPr8KIuP0lrWw
-         A7y6JCrtsz44Q==
+        b=dkLGAJFobZTP2F+6TOappqPOssnq5wOBalo39xZ86GWO55UMn4mmFBkdYzPG9Hhyt
+         YAzWyROIXx0CNpvP4P8V2JTeNmKvplLcRq0NyLHfjWBUf26tHizNFxMsWKhPy5hAhH
+         VAu5KhILjhED+xLIUHpJC+oz+WVYiW1Mh93CxqJVv/djcU9mhiwLpF4e+Lv7D43uZr
+         OR8P1rwjLP76DaVnSFvLIGaKL3aoBD2tYz7NFDUm2yt46FF9dduYCew/ggFhvVZqgB
+         HE5Cemf/Kbo+/Jn5QThqH1PKgNcKwv8+CODLI9FnVMpeZ2llVakcJY6vEo8YCG/6rR
+         /ZCFb3KMBwsJg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTnez-001wxj-Gp; Mon, 14 Mar 2022 17:35:05 +0100
+        id 1nTnez-001wxn-IV; Mon, 14 Mar 2022 17:35:05 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -45,9 +45,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH v2 25/67] media: platform: s5p-g2d: move config to its own file
-Date:   Mon, 14 Mar 2022 17:34:20 +0100
-Message-Id: <a8564f46d85686015fca90bcc6ad53d16ff9d27a.1647274406.git.mchehab@kernel.org>
+Subject: [PATCH v2 26/67] media: platform: hva: move config to its own file
+Date:   Mon, 14 Mar 2022 17:34:21 +0100
+Message-Id: <d62e8531e4c3dd4bbe7223ebb2766157a3b1ee61.1647274406.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -65,7 +65,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-s5p-g2d-specific config stuff on a separate Kconfig file.
+hva-specific config stuff on a separate Kconfig file.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -73,57 +73,89 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig         | 11 +----------
- drivers/media/platform/s5p-g2d/Kconfig | 11 +++++++++++
- 2 files changed, 12 insertions(+), 10 deletions(-)
- create mode 100644 drivers/media/platform/s5p-g2d/Kconfig
+ drivers/media/platform/Kconfig         | 28 +-------------------------
+ drivers/media/platform/sti/hva/Kconfig | 26 ++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+), 27 deletions(-)
+ create mode 100644 drivers/media/platform/sti/hva/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 9fe01afd4145..0b88c36e8a83 100644
+index 0b88c36e8a83..9408096a365e 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -60,6 +60,7 @@ source "drivers/media/platform/qcom/venus/Kconfig"
- source "drivers/media/platform/aspeed/Kconfig"
+@@ -61,6 +61,7 @@ source "drivers/media/platform/aspeed/Kconfig"
  source "drivers/media/platform/rockchip/rga/Kconfig"
  source "drivers/media/platform/s3c-camif/Kconfig"
-+source "drivers/media/platform/s5p-g2d/Kconfig"
+ source "drivers/media/platform/s5p-g2d/Kconfig"
++source "drivers/media/platform/sti/hva/Kconfig"
  
  config VIDEO_MUX
  	tristate "Video Multiplexer"
-@@ -154,16 +155,6 @@ config VIDEO_MEM2MEM_DEINTERLACE
+@@ -186,33 +187,6 @@ config VIDEO_STI_BDISP
  	help
- 	    Generic deinterlacing V4L2 driver.
+ 	  This v4l2 mem2mem driver is a 2D blitter for STMicroelectronics SoC.
  
--config VIDEO_SAMSUNG_S5P_G2D
--	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
+-config VIDEO_STI_HVA
+-	tristate "STMicroelectronics HVA multi-format video encoder V4L2 driver"
 -	depends on V4L_MEM2MEM_DRIVERS
 -	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+-	depends on ARCH_STI || COMPILE_TEST
 -	select VIDEOBUF2_DMA_CONTIG
 -	select V4L2_MEM2MEM_DEV
 -	help
--	  This is a v4l2 driver for Samsung S5P and EXYNOS4 G2D
--	  2d graphics accelerator.
- 
- config VIDEO_SAMSUNG_S5P_JPEG
- 	tristate "Samsung S5P/Exynos3250/Exynos4 JPEG codec driver"
-diff --git a/drivers/media/platform/s5p-g2d/Kconfig b/drivers/media/platform/s5p-g2d/Kconfig
+-	  This V4L2 driver enables HVA (Hardware Video Accelerator) multi-format
+-	  video encoder of STMicroelectronics SoC, allowing hardware encoding of
+-	  raw uncompressed formats in various compressed video bitstreams format.
+-
+-	  To compile this driver as a module, choose M here:
+-	  the module will be called st-hva.
+-
+-config VIDEO_STI_HVA_DEBUGFS
+-	bool "Export STMicroelectronics HVA internals in debugfs"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_STI_HVA
+-	depends on DEBUG_FS
+-	help
+-	  Select this to see information about the internal state and the last
+-	  operation of STMicroelectronics HVA multi-format video encoder in
+-	  debugfs.
+-
+-	  Choose N unless you know you need this.
+-
+ config VIDEO_STI_DELTA
+ 	tristate "STMicroelectronics DELTA multi-format video decoder V4L2 driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/sti/hva/Kconfig b/drivers/media/platform/sti/hva/Kconfig
 new file mode 100644
-index 000000000000..9bc9d90a666a
+index 000000000000..5651667bcc54
 --- /dev/null
-+++ b/drivers/media/platform/s5p-g2d/Kconfig
-@@ -0,0 +1,11 @@
-+config VIDEO_SAMSUNG_S5P_G2D
-+	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
++++ b/drivers/media/platform/sti/hva/Kconfig
+@@ -0,0 +1,26 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config VIDEO_STI_HVA
++	tristate "STMicroelectronics HVA multi-format video encoder V4L2 driver"
 +	depends on V4L_MEM2MEM_DRIVERS
 +	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
++	depends on ARCH_STI || COMPILE_TEST
 +	select VIDEOBUF2_DMA_CONTIG
 +	select V4L2_MEM2MEM_DEV
 +	help
-+	  This is a v4l2 driver for Samsung S5P and EXYNOS4 G2D
-+	  2d graphics accelerator.
++	  This V4L2 driver enables HVA (Hardware Video Accelerator) multi-format
++	  video encoder of STMicroelectronics SoC, allowing hardware encoding of
++	  raw uncompressed formats in various compressed video bitstreams format.
 +
++	  To compile this driver as a module, choose M here:
++	  the module will be called st-hva.
++
++config VIDEO_STI_HVA_DEBUGFS
++	bool "Export STMicroelectronics HVA internals in debugfs"
++	depends on VIDEO_STI_HVA
++	depends on DEBUG_FS
++	help
++	  Select this to see information about the internal state and the last
++	  operation of STMicroelectronics HVA multi-format video encoder in
++	  debugfs.
++
++	  Choose N unless you know you need this.
 -- 
 2.35.1
 

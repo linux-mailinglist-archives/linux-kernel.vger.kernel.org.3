@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2B24D8392
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DA04D848F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbiCNMRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S241335AbiCNMZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241991AbiCNMJa (ORCPT
+        with ESMTP id S241813AbiCNMSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:30 -0400
+        Mon, 14 Mar 2022 08:18:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CD0506CC;
-        Mon, 14 Mar 2022 05:06:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CFF264D;
+        Mon, 14 Mar 2022 05:13:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A56456130F;
-        Mon, 14 Mar 2022 12:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCFCC340EC;
-        Mon, 14 Mar 2022 12:06:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3256F6139D;
+        Mon, 14 Mar 2022 12:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41515C340ED;
+        Mon, 14 Mar 2022 12:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259567;
-        bh=695fRFK6UBQw7psiftcrXBRwm5OsrMkS7yjsQnbHR+Y=;
+        s=korg; t=1647259984;
+        bh=x8ZDC68Cp5usz1aT+VE2TNb5XMwJpsLwMUxX0tjgTFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qLhO/bnZ23ZIiRWMnB/NKB0fcGW+VSPFOvFj6OiUivLgoUZ0ugTaipkM0RWG8Im4D
-         fwclWewOBvpzoyYd9AvcJpa8TZ9QX7ZBfeLJwVysfW9w9aldxz88RNXGoubvI8q4br
-         +TxilyZuolZ9mG0S+w3U50jKi6QlIyvkJ40CCF9I=
+        b=tjrT8N7SqCWf/cFCIQzloXGbB4Sely2ZWWF2fuxsLe3XvALJtx+OQ+vuL629SH71H
+         nwx5jqti+curogXwprtzgCWhINC59m0mtuXncPRQyUKx8tYbGpuWODnDyrRyhKMXAp
+         oMwzXuez8hbthfssfx1GMuap4JObzWGgjZtQ/VSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 007/110] clk: qcom: dispcc: Update the transition delay for MDSS GDSC
-Date:   Mon, 14 Mar 2022 12:53:09 +0100
-Message-Id: <20220314112743.237916469@linuxfoundation.org>
+Subject: [PATCH 5.16 007/121] clk: qcom: dispcc: Update the transition delay for MDSS GDSC
+Date:   Mon, 14 Mar 2022 12:53:10 +0100
+Message-Id: <20220314112744.330030133@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -128,7 +128,7 @@ index 4ef4ae231794..ad596d567f6a 100644
  		.name = "disp_cc_mdss_core_gdsc",
  	},
 diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-index bf9ffe1a1cf4..73c5feea9818 100644
+index 566fdfa0a15b..db9379634fb2 100644
 --- a/drivers/clk/qcom/dispcc-sm8250.c
 +++ b/drivers/clk/qcom/dispcc-sm8250.c
 @@ -1,6 +1,6 @@
@@ -139,7 +139,7 @@ index bf9ffe1a1cf4..73c5feea9818 100644
   */
  
  #include <linux/clk-provider.h>
-@@ -1125,6 +1125,9 @@ static struct clk_branch disp_cc_mdss_vsync_clk = {
+@@ -1126,6 +1126,9 @@ static struct clk_branch disp_cc_mdss_vsync_clk = {
  
  static struct gdsc mdss_gdsc = {
  	.gdscr = 0x3000,

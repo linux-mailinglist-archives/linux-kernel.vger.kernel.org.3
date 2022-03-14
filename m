@@ -2,143 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25284D8B09
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE0F4D8B12
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242994AbiCNRrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S237905AbiCNRuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238425AbiCNRrO (ORCPT
+        with ESMTP id S241870AbiCNRuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:47:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E891BF5F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647279963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YEJG0IObRkUr69r2f7J23FXjPgRCTJSeRdoCwh8LUrA=;
-        b=FjY3WnLXJFEGZDsR8GU0MH+aJTMb8Tq2Lj2HHQRn+Pg8zKBFJccv7hQBEZMtCT5huAtUOV
-        cdMvdK/DXjUfXd/MH8vDS0SRYezuxElCpkG02S6N4zTZofIyKUQzEPbdqQsZRy06L7v7+t
-        LZVe3T23HOOzC9STZ2KyQ43zAM2+uhA=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-P9QDZGrLPk2rNMTIWU-GZA-1; Mon, 14 Mar 2022 13:46:02 -0400
-X-MC-Unique: P9QDZGrLPk2rNMTIWU-GZA-1
-Received: by mail-il1-f197.google.com with SMTP id 5-20020a056e0211a500b002c6552a9c5fso9692696ilj.22
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:46:01 -0700 (PDT)
+        Mon, 14 Mar 2022 13:50:44 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D99D13F10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:49:34 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 25so23045070ljv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=EaUHmdZ87qFbfpgGvP+lfvqYtgcNelL/CAyS1EJnQ2E=;
+        b=EUR11CPUMpXhpTUHlXB0wXqPyg2vosIXnDxkyMIW8eIBMcXoDugOkIa+FJDSk7xz/0
+         6cb5Ezxi+FSbss/jEWINb2mZrZXDkBYYHeH7sgRFtinc9T6V89ZoL6lXzOt+WT1hxK6L
+         Nr6+W03u/HnJ0a3SugQQCvKPtuhQy9WCvQm9i7uNYimE8gJ2zg7pN1xhJ1HYZmKBGpUf
+         ZnetaLPDEV1Mv5Oh+Tud8iLVyIDx1Ohjo82lOonXsv+YWGpIenOcDW/nxq7fItJg4NlB
+         8efECk198MOGYApyVBDh3xi13Nl57E6k5PdAFy7iEVNsPzK6SeLCu6XhnOrFb2mRoVQg
+         Bf4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YEJG0IObRkUr69r2f7J23FXjPgRCTJSeRdoCwh8LUrA=;
-        b=QlF4i5VzBPWyQjM9Pl/gVBa/duhUwzOtMHGn53EKiLmNctz+9UQ2qHRTgQx5Mx2JLb
-         +z9V+1BCKf+6PWXA6dgs/381THYBF+GcZ1I557d3CTC48uQd+duaQDNaQ784AtTSlywt
-         hwRMCUwzEMtDD5ozRhmt4C0vXaNC07iegHNuyLM9uOGRotCvbii3GqCymaNTv1+wqh9E
-         93Jyiax+Ue3MBTKnhVGkmvxVQcMlq4mfU87P7W27ItvVQ18D7X946WkWUW4GphNSesrZ
-         gWM4+m9mVxEabvM71+1ga1We6oYhtqgxC1EWKNMvZxUCxxk3cD5BNISIPP8cH+i3O7hT
-         CW1Q==
-X-Gm-Message-State: AOAM531H5KrQ6tlpo31YnWf79Ar01chCleEpQVyEtK1uScLCJEfmWW1K
-        exF3lvukbCEjyH6kiOFw/4W0cisEyFx1mIy/HzA7Dc/z8vkSEeY9J8UovlAYBxs20RQAvE0jFDP
-        PZFhOAa6tAjwDz+RCVkhAKTSS
-X-Received: by 2002:a05:6602:3c5:b0:613:8644:591c with SMTP id g5-20020a05660203c500b006138644591cmr20675142iov.161.1647279961389;
-        Mon, 14 Mar 2022 10:46:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxZJJA4WojvmGdmtZ74f1wNxVgekXaAUaGHvuviIsQF6/0w1VCSMfKnNrXxBYkfIXxrO2Rn+w==
-X-Received: by 2002:a05:6602:3c5:b0:613:8644:591c with SMTP id g5-20020a05660203c500b006138644591cmr20675084iov.161.1647279960174;
-        Mon, 14 Mar 2022 10:46:00 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id b2-20020a923402000000b002c25b16552fsm9227068ila.14.2022.03.14.10.45.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 10:45:59 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 11:45:58 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v9 0/9] vfio/hisilicon: add ACC live migration driver
-Message-ID: <20220314114558.2cdd57fc.alex.williamson@redhat.com>
-In-Reply-To: <df217839a41b47dc94ef201dfe379e4e@huawei.com>
-References: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
-        <df217839a41b47dc94ef201dfe379e4e@huawei.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=EaUHmdZ87qFbfpgGvP+lfvqYtgcNelL/CAyS1EJnQ2E=;
+        b=d7/zPc3c6yp0bu4As/mXwxCKpaBFeGVy6SXBjaTIQF2A5syYHepr9GYgHYgjM5RVXx
+         DzivtrTW6VCeVkeYSEjoQN+JtLhONrcl+RXq3o4oPQMF9l2mArNxEfUGzWJz5asHE77V
+         A3kSWOBPoeI77aY1OLp0ND5W3ZVXZXX4OQ63eCP9JH2D4ix5qkX6QLen2h+0Q7s2fSVP
+         yBjHCTxL9EQqw1deNowuycyk2RtSiaC627DcJyaeoDP1lYJhxEbbWch3/8M12tpyaclc
+         WxUGgfZfwrLd2SeVYs94Ge9vyd9swW/cbmaR26LdkJYJQXqB8LMEK2WWOoeTq5nD8SLI
+         q50g==
+X-Gm-Message-State: AOAM530HXO1AreoS2vKiYg0GD9iQB+DbvAAqx5gmnZF4DrQTdU8WFqJD
+        r/yd3zHz3k0Co3gy5vkHzYmqOHbkJ8RKuGi5hBQ=
+X-Google-Smtp-Source: ABdhPJz7IMJnBbK+pvnUC4L7dKw71SQklsjidlV+zJsFMzfavVN1MqeCZAIAS/RAvRSM34JphGLhpbmbiRUwzXqt74k=
+X-Received: by 2002:a2e:a554:0:b0:247:b65e:74c2 with SMTP id
+ e20-20020a2ea554000000b00247b65e74c2mr14924417ljn.328.1647280171683; Mon, 14
+ Mar 2022 10:49:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Received: by 2002:ab3:6289:0:0:0:0:0 with HTTP; Mon, 14 Mar 2022 10:49:30
+ -0700 (PDT)
+Reply-To: db.bankdirecttg@gmail.com
+From:   "db.bankdirecttg@gmail.com" <mdialo008@gmail.com>
+Date:   Mon, 14 Mar 2022 17:49:30 +0000
+Message-ID: <CAFmzXQSS0F5agY4an4y4ic5sJLwx0VDVRD-CHYr+-RNcyDjWaQ@mail.gmail.com>
+Subject: Hello
+To:     mdialo008@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        NAME_EMAIL_DIFF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 17:26:59 +0000
-Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com> wrote:
+--=20
+Irod=C3=A1nk el=C3=A9rhet=C5=91s=C3=A9ge: 2554 Road Of Kpalime Face Pharmac=
+y Bet, Lome, Gulf.
 
-> Hi Alex,
->=20
-> > -----Original Message-----
-> > From: Shameerali Kolothum Thodi
-> > Sent: 08 March 2022 18:49
-> > To: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-crypto@vger.kernel.org
-> > Cc: linux-pci@vger.kernel.org; alex.williamson@redhat.com; jgg@nvidia.c=
-om;
-> > cohuck@redhat.com; mgurtovoy@nvidia.com; yishaih@nvidia.com;
-> > kevin.tian@intel.com; Linuxarm <linuxarm@huawei.com>; liulongfang
-> > <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
-> > Jonathan Cameron <jonathan.cameron@huawei.com>; Wangzhou (B)
-> > <wangzhou1@hisilicon.com>
-> > Subject: [PATCH v9 0/9] vfio/hisilicon: add ACC live migration driver
-> >=20
-> > Hi,
-> >=20
-> > This series attempts to add vfio live migration support for HiSilicon
-> > ACC VF devices based on the new v2 migration protocol definition and
-> > mlx5 v9 series discussed here[0].
-> >=20
-> > v8 --> v9
-> > =C2=A0- Added acks by Wangzhou/Longfang/Yekai
-> > =C2=A0- Added R-by tags by Jason.
-> > =C2=A0- Addressed comments=C2=A0by Alex on v8.
-> > =C2=A0- Fixed the pf_queue pointer assignment error in patch #8.
-> > =C2=A0- Addressed=C2=A0comments from Kevin,
-> >  =C2=A0 =C2=A0-Updated patch #5 commit log msg with a clarification tha=
-t VF
-> > =C2=A0 =C2=A0 =C2=A0migration BAR assignment is fine if migration suppo=
-rt is not there.
-> >  =C2=A0 =C2=A0-Added QM description to patch #8 commit msg. =20
->=20
-> Hope there is nothing pending for this series now to make it to next.
-> I know ack from Bjorn is still pending for patch #3, and I have
-> sent a ping last week and also CCd him on that patch.
->=20
-> Please let me know if there is anything I missed.=20
+Ez a WU bank igazgat=C3=B3ja =C3=A9rtes=C3=ADti =C3=96nt arr=C3=B3l, hogy a=
+ Nemzetk=C3=B6zi
+Valutaalap (IMF) 850 000,00 USD k=C3=A1rt=C3=A9r=C3=ADt=C3=A9st fizet =C3=
+=96nnek, mert
+megtal=C3=A1lta az =C3=96n e-mail c=C3=ADm=C3=A9t a csal=C3=A1s =C3=A1ldoza=
+tainak list=C3=A1j=C3=A1n. Hajland=C3=B3
+vagy venni ezt az alapot vagy sem?
 
-Hi Shameer,
+V=C3=A1rjuk s=C3=BCrg=C5=91s h=C3=ADr=C3=A9t.
 
-Nothing still pending from my end, as soon as we can get an ack on
-patch #3 and barring issues in the interim, I'll merge it.  Thanks,
-
-Alex
-
+Tisztelettel
+  Tony Albert
+  BANKIGAZGAT=C3=93
+Vegye fel a kapcsolatot a Whatsappal, +22892905783

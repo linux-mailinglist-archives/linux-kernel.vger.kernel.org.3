@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2C24D8439
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6591D4D84BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241666AbiCNMXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S242115AbiCNM26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241156AbiCNMOs (ORCPT
+        with ESMTP id S243615AbiCNMVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:14:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A48C3ED1B;
-        Mon, 14 Mar 2022 05:11:36 -0700 (PDT)
+        Mon, 14 Mar 2022 08:21:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A4C35245;
+        Mon, 14 Mar 2022 05:16:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FDE1612FC;
-        Mon, 14 Mar 2022 12:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FE8C340EC;
-        Mon, 14 Mar 2022 12:11:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFF1A60C72;
+        Mon, 14 Mar 2022 12:16:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8FB1C340E9;
+        Mon, 14 Mar 2022 12:16:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259892;
-        bh=Wsxqznz+IquJ0SiSvvBnpxlHeNi7tUeAdIQmNX7KyFY=;
+        s=korg; t=1647260187;
+        bh=eGzBZgdQcdiSVjCSR4mr2bCxnxn8WjIU+tGN2s5k9VE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XlI6bVD4C1pN5MlJJkUCrlE1DgmH0khNpNGtLgA8o7wuPnfcZY5TspMHQ1gfhKq1d
-         OaQqyXDTwhTwCr1yUdHYLNegP6Q1+y7XV8jQrAbt1y2/yQZxcMitEaN1ICzXbgb+Sm
-         +ro6RGqhIOX2IlFGInH6qyLXjoOIw4ew1UBbiWh8=
+        b=f09BhJCcXZ9KMjsvHGI3XJ2usBKb485inFmZ63aHb9jecpFudQ1QErNlHeAQvWT9d
+         wLI6Fsj4LZk5V2FB9lIPfMV5qHu5GGrOm3us0goL1lkWK+8toLOvKhhC0Chh9J8foX
+         T3yWctBmOPJrakHLkf0t0sPFCEXT2g3fSdBPbPfw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rong Chen <rong.chen@amlogic.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.15 081/110] mmc: meson: Fix usage of meson_mmc_post_req()
-Date:   Mon, 14 Mar 2022 12:54:23 +0100
-Message-Id: <20220314112745.291836765@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 081/121] tracing: Ensure trace buffer is at least 4096 bytes large
+Date:   Mon, 14 Mar 2022 12:54:24 +0100
+Message-Id: <20220314112746.382534123@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Chen <rong.chen@amlogic.com>
+From: Sven Schnelle <svens@linux.ibm.com>
 
-commit f0d2f15362f02444c5d7ffd5a5eb03e4aa54b685 upstream.
+[ Upstream commit 7acf3a127bb7c65ff39099afd78960e77b2ca5de ]
 
-Currently meson_mmc_post_req() is called in meson_mmc_request() right
-after meson_mmc_start_cmd(). This could lead to DMA unmapping before the request
-is actually finished.
+Booting the kernel with 'trace_buf_size=1' give a warning at
+boot during the ftrace selftests:
 
-To fix, don't call meson_mmc_post_req() until meson_mmc_request_done().
+[    0.892809] Running postponed tracer tests:
+[    0.892893] Testing tracer function:
+[    0.901899] Callback from call_rcu_tasks_trace() invoked.
+[    0.983829] Callback from call_rcu_tasks_rude() invoked.
+[    1.072003] .. bad ring buffer .. corrupted trace buffer ..
+[    1.091944] Callback from call_rcu_tasks() invoked.
+[    1.097695] PASSED
+[    1.097701] Testing dynamic ftrace: .. filter failed count=0 ..FAILED!
+[    1.353474] ------------[ cut here ]------------
+[    1.353478] WARNING: CPU: 0 PID: 1 at kernel/trace/trace.c:1951 run_tracer_selftest+0x13c/0x1b0
 
-Signed-off-by: Rong Chen <rong.chen@amlogic.com>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-Fixes: 79ed05e329c3 ("mmc: meson-gx: add support for descriptor chain mode")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220216124239.4007667-1-rong.chen@amlogic.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Therefore enforce a minimum of 4096 bytes to make the selftest pass.
+
+Link: https://lkml.kernel.org/r/20220214134456.1751749-1-svens@linux.ibm.com
+
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/meson-gx-mmc.c |   15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ kernel/trace/trace.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/drivers/mmc/host/meson-gx-mmc.c
-+++ b/drivers/mmc/host/meson-gx-mmc.c
-@@ -173,6 +173,8 @@ struct meson_host {
- 	int irq;
- 
- 	bool vqmmc_enabled;
-+	bool needs_pre_post_req;
-+
- };
- 
- #define CMD_CFG_LENGTH_MASK GENMASK(8, 0)
-@@ -663,6 +665,8 @@ static void meson_mmc_request_done(struc
- 	struct meson_host *host = mmc_priv(mmc);
- 
- 	host->cmd = NULL;
-+	if (host->needs_pre_post_req)
-+		meson_mmc_post_req(mmc, mrq, 0);
- 	mmc_request_done(host->mmc, mrq);
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 24683115eade..5816ad79cce8 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -1472,10 +1472,12 @@ static int __init set_buf_size(char *str)
+ 	if (!str)
+ 		return 0;
+ 	buf_size = memparse(str, &str);
+-	/* nr_entries can not be zero */
+-	if (buf_size == 0)
+-		return 0;
+-	trace_buf_size = buf_size;
++	/*
++	 * nr_entries can not be zero and the startup
++	 * tests require some buffer space. Therefore
++	 * ensure we have at least 4096 bytes of buffer.
++	 */
++	trace_buf_size = max(4096UL, buf_size);
+ 	return 1;
  }
- 
-@@ -880,7 +884,7 @@ static int meson_mmc_validate_dram_acces
- static void meson_mmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
- {
- 	struct meson_host *host = mmc_priv(mmc);
--	bool needs_pre_post_req = mrq->data &&
-+	host->needs_pre_post_req = mrq->data &&
- 			!(mrq->data->host_cookie & SD_EMMC_PRE_REQ_DONE);
- 
- 	/*
-@@ -896,22 +900,19 @@ static void meson_mmc_request(struct mmc
- 		}
- 	}
- 
--	if (needs_pre_post_req) {
-+	if (host->needs_pre_post_req) {
- 		meson_mmc_get_transfer_mode(mmc, mrq);
- 		if (!meson_mmc_desc_chain_mode(mrq->data))
--			needs_pre_post_req = false;
-+			host->needs_pre_post_req = false;
- 	}
- 
--	if (needs_pre_post_req)
-+	if (host->needs_pre_post_req)
- 		meson_mmc_pre_req(mmc, mrq);
- 
- 	/* Stop execution */
- 	writel(0, host->regs + SD_EMMC_START);
- 
- 	meson_mmc_start_cmd(mmc, mrq->sbc ?: mrq->cmd);
--
--	if (needs_pre_post_req)
--		meson_mmc_post_req(mmc, mrq, 0);
- }
- 
- static void meson_mmc_read_resp(struct mmc_host *mmc, struct mmc_command *cmd)
+ __setup("trace_buf_size=", set_buf_size);
+-- 
+2.34.1
+
 
 

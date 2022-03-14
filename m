@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D1D4D850B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDD14D850A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245100AbiCNMcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S245035AbiCNMcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243927AbiCNMVY (ORCPT
+        with ESMTP id S243928AbiCNMVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 08:21:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885F013CE3;
-        Mon, 14 Mar 2022 05:18:30 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7CD13CE4;
+        Mon, 14 Mar 2022 05:18:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D20460DBB;
-        Mon, 14 Mar 2022 12:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5E9C340E9;
-        Mon, 14 Mar 2022 12:18:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E024FB80DF4;
+        Mon, 14 Mar 2022 12:18:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4518FC340E9;
+        Mon, 14 Mar 2022 12:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260309;
-        bh=q+lhG1LbNNKewQbXq+2r/4a0Q5Up4I/iuuciJ9Y6sGM=;
+        s=korg; t=1647260314;
+        bh=Mqf59jWgVyICVi1MOdIXW8LT3afhn1KB7de9lEOHhq4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fkvkhLruCmAGlcmSZHYckWMyCt8KkM1oCvo46Fos0ltRUSDJ7WnNq33jFgMJG3yDO
-         Xr8KHp5ay/nZmr4mZ2OcxFm5z72QbBPiiZdLl+XWxDizGUzGDSZ3Xi/+hM61ZcvNyH
-         JXzGX5sKzjEoqPUaCu+CTEgcLxad9HcaUzwdzmHY=
+        b=DPPgU9HgfYMsQQo8goeLKvlkmNzwKe5AJtrkMXsbxfh5FROg0IeXtWtrjxNCtXVGd
+         qvAT7QVv6uPhMSBroR731fguPPRn3OIypWmwH5HW5+6Xp2ymbZEH5sVrP0Jv8Thx/X
+         VpSUrc5zFlSOjUFkfOCLd68/jqzNaZpsdGWQZTBQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Lin Ma <linma@zju.edu.cn>,
+        stable@vger.kernel.org, suresh kumar <suresh2514@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 071/121] drivers: hamradio: 6pack: fix UAF bug caused by mod_timer()
-Date:   Mon, 14 Mar 2022 12:54:14 +0100
-Message-Id: <20220314112746.104980888@linuxfoundation.org>
+Subject: [PATCH 5.16 072/121] net-sysfs: add check for netdevice being present to speed_show
+Date:   Mon, 14 Mar 2022 12:54:15 +0100
+Message-Id: <20220314112746.132053856@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
 References: <20220314112744.120491875@linuxfoundation.org>
@@ -56,87 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: suresh kumar <suresh2514@gmail.com>
 
-[ Upstream commit efe4186e6a1b54bf38b9e05450d43b0da1fd7739 ]
+[ Upstream commit 4224cfd7fb6523f7a9d1c8bb91bb5df1e38eb624 ]
 
-When a 6pack device is detaching, the sixpack_close() will act to cleanup
-necessary resources. Although del_timer_sync() in sixpack_close()
-won't return if there is an active timer, one could use mod_timer() in
-sp_xmit_on_air() to wake up timer again by calling userspace syscall such
-as ax25_sendmsg(), ax25_connect() and ax25_ioctl().
+When bringing down the netdevice or system shutdown, a panic can be
+triggered while accessing the sysfs path because the device is already
+removed.
 
-This unexpected waked handler, sp_xmit_on_air(), realizes nothing about
-the undergoing cleanup and may still call pty_write() to use driver layer
-resources that have already been released.
+    [  755.549084] mlx5_core 0000:12:00.1: Shutdown was called
+    [  756.404455] mlx5_core 0000:12:00.0: Shutdown was called
+    ...
+    [  757.937260] BUG: unable to handle kernel NULL pointer dereference at           (null)
+    [  758.031397] IP: [<ffffffff8ee11acb>] dma_pool_alloc+0x1ab/0x280
 
-One of the possible race conditions is shown below:
+    crash> bt
+    ...
+    PID: 12649  TASK: ffff8924108f2100  CPU: 1   COMMAND: "amsd"
+    ...
+     #9 [ffff89240e1a38b0] page_fault at ffffffff8f38c778
+        [exception RIP: dma_pool_alloc+0x1ab]
+        RIP: ffffffff8ee11acb  RSP: ffff89240e1a3968  RFLAGS: 00010046
+        RAX: 0000000000000246  RBX: ffff89243d874100  RCX: 0000000000001000
+        RDX: 0000000000000000  RSI: 0000000000000246  RDI: ffff89243d874090
+        RBP: ffff89240e1a39c0   R8: 000000000001f080   R9: ffff8905ffc03c00
+        R10: ffffffffc04680d4  R11: ffffffff8edde9fd  R12: 00000000000080d0
+        R13: ffff89243d874090  R14: ffff89243d874080  R15: 0000000000000000
+        ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+    #10 [ffff89240e1a39c8] mlx5_alloc_cmd_msg at ffffffffc04680f3 [mlx5_core]
+    #11 [ffff89240e1a3a18] cmd_exec at ffffffffc046ad62 [mlx5_core]
+    #12 [ffff89240e1a3ab8] mlx5_cmd_exec at ffffffffc046b4fb [mlx5_core]
+    #13 [ffff89240e1a3ae8] mlx5_core_access_reg at ffffffffc0475434 [mlx5_core]
+    #14 [ffff89240e1a3b40] mlx5e_get_fec_caps at ffffffffc04a7348 [mlx5_core]
+    #15 [ffff89240e1a3bb0] get_fec_supported_advertised at ffffffffc04992bf [mlx5_core]
+    #16 [ffff89240e1a3c08] mlx5e_get_link_ksettings at ffffffffc049ab36 [mlx5_core]
+    #17 [ffff89240e1a3ce8] __ethtool_get_link_ksettings at ffffffff8f25db46
+    #18 [ffff89240e1a3d48] speed_show at ffffffff8f277208
+    #19 [ffff89240e1a3dd8] dev_attr_show at ffffffff8f0b70e3
+    #20 [ffff89240e1a3df8] sysfs_kf_seq_show at ffffffff8eedbedf
+    #21 [ffff89240e1a3e18] kernfs_seq_show at ffffffff8eeda596
+    #22 [ffff89240e1a3e28] seq_read at ffffffff8ee76d10
+    #23 [ffff89240e1a3e98] kernfs_fop_read at ffffffff8eedaef5
+    #24 [ffff89240e1a3ed8] vfs_read at ffffffff8ee4e3ff
+    #25 [ffff89240e1a3f08] sys_read at ffffffff8ee4f27f
+    #26 [ffff89240e1a3f50] system_call_fastpath at ffffffff8f395f92
 
-      (USE)                      |      (FREE)
-ax25_sendmsg()                   |
- ax25_queue_xmit()               |
-  ...                            |
-  sp_xmit()                      |
-   sp_encaps()                   | sixpack_close()
-    sp_xmit_on_air()             |  del_timer_sync(&sp->tx_t)
-     mod_timer(&sp->tx_t,...)    |  ...
-                                 |  unregister_netdev()
-                                 |  ...
-     (wait a while)              | tty_release()
-                                 |  tty_release_struct()
-                                 |   release_tty()
-    sp_xmit_on_air()             |    tty_kref_put(tty_struct) //FREE
-     pty_write(tty_struct) //USE |    ...
+    crash> net_device.state ffff89443b0c0000
+      state = 0x5  (__LINK_STATE_START| __LINK_STATE_NOCARRIER)
 
-The corresponding fail log is shown below:
-===============================================================
-BUG: KASAN: use-after-free in __run_timers.part.0+0x170/0x470
-Write of size 8 at addr ffff88800a652ab8 by task swapper/2/0
-...
-Call Trace:
-  ...
-  queue_work_on+0x3f/0x50
-  pty_write+0xcd/0xe0pty_write+0xcd/0xe0
-  sp_xmit_on_air+0xb2/0x1f0
-  call_timer_fn+0x28/0x150
-  __run_timers.part.0+0x3c2/0x470
-  run_timer_softirq+0x3b/0x80
-  __do_softirq+0xf1/0x380
-  ...
+To prevent this scenario, we also make sure that the netdevice is present.
 
-This patch reorders the del_timer_sync() after the unregister_netdev()
-to avoid UAF bugs. Because the unregister_netdev() is well synchronized,
-it flushs out any pending queues, waits the refcount of net_device
-decreases to zero and removes net_device from kernel. There is not any
-running routines after executing unregister_netdev(). Therefore, we could
-not arouse timer from userspace again.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Lin Ma <linma@zju.edu.cn>
+Signed-off-by: suresh kumar <suresh2514@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hamradio/6pack.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/core/net-sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/hamradio/6pack.c b/drivers/net/hamradio/6pack.c
-index 8a19a06b505d..ff2bb3d80fac 100644
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -668,11 +668,11 @@ static void sixpack_close(struct tty_struct *tty)
- 	 */
- 	netif_stop_queue(sp->dev);
+diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+index d7f9ee830d34..9e5657f63245 100644
+--- a/net/core/net-sysfs.c
++++ b/net/core/net-sysfs.c
+@@ -213,7 +213,7 @@ static ssize_t speed_show(struct device *dev,
+ 	if (!rtnl_trylock())
+ 		return restart_syscall();
  
-+	unregister_netdev(sp->dev);
-+
- 	del_timer_sync(&sp->tx_t);
- 	del_timer_sync(&sp->resync_t);
+-	if (netif_running(netdev)) {
++	if (netif_running(netdev) && netif_device_present(netdev)) {
+ 		struct ethtool_link_ksettings cmd;
  
--	unregister_netdev(sp->dev);
--
- 	/* Free all 6pack frame buffers after unreg. */
- 	kfree(sp->rbuff);
- 	kfree(sp->xbuff);
+ 		if (!__ethtool_get_link_ksettings(netdev, &cmd))
 -- 
 2.34.1
 

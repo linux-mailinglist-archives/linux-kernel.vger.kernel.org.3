@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FEA4D8F98
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A304D8F97
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245653AbiCNWgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 18:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S245641AbiCNWgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 18:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245643AbiCNWgX (ORCPT
+        with ESMTP id S237216AbiCNWgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 18:36:23 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B905C3207B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:35:12 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so22273963ooj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GmDLKBrRipGnc7l3tDB+5DfeG4oY5ivAq5+t1BERDT0=;
-        b=L3qOmjWQ1MWVtgiZMAiP3nZ2hTnJAmm2jnoq0xYkNh5MapEGfF3GFG64HSjRwbgIHb
-         TYvNa3SGykb76Jk/YwioYxw9nq3lYO3tS/V950JAHkbFzcJHp+opL6VI4PKZlyTjcszW
-         /VKjv6ZOc6XQKS31KzRYN1cIwNkwQVLpsaaYw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GmDLKBrRipGnc7l3tDB+5DfeG4oY5ivAq5+t1BERDT0=;
-        b=1GKal7X5ndPNsQ0sHU/Q6CWGqG+TVP6A/IGl/qlgLijpV7Mcu2viS8JWfkgT9KqaSd
-         fdVafrT2baw6EJ47umRkI2FDALg0gWIf/MOHt9uhkc3VdZjkMUvrsf539dOExjxwQL8e
-         23TiQ6JBKLTEQDik41JY/7CVltAspa+/vF5Hlc5flicIHBwShrky6N5Ee090A1Z8m6Ps
-         aTh75n72ave5yHVZ4P/jS15Mypq68cYX2x6tftHygl2hyXVid7UnOY6k8KXAgigeaS7G
-         zgAvawnXZTc3ab3/1519WELMPyiaGNzLRyU9crMVpciOu6nMfpkZF1dxMFwi/MPgxBKL
-         Xx0A==
-X-Gm-Message-State: AOAM5313yjswCNBrBVPsyJfAIqQSfmC6ebsaIWfI8nxlxCxggCLP6Y9H
-        ZDUUYDd2aOZ15OPY9murr897AJ4N56ivOA==
-X-Google-Smtp-Source: ABdhPJyYZbKZMHMhLGp+jn2daSqT8tvefAhwmsBYTVa7AhnWWfec/pRznOjGuvboaCVeIPN0rJwL7w==
-X-Received: by 2002:a05:6870:e989:b0:da:c099:7939 with SMTP id r9-20020a056870e98900b000dac0997939mr532085oao.206.1647297311783;
-        Mon, 14 Mar 2022 15:35:11 -0700 (PDT)
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com. [209.85.161.54])
-        by smtp.gmail.com with ESMTPSA id bb15-20020a056820160f00b0032404d7a88esm4856885oob.27.2022.03.14.15.35.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 15:35:11 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id p10-20020a056820044a00b00320d7d4af22so4374436oou.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:35:10 -0700 (PDT)
-X-Received: by 2002:a05:6870:f104:b0:da:b3f:2b62 with SMTP id
- k4-20020a056870f10400b000da0b3f2b62mr459367oac.257.1647297310247; Mon, 14 Mar
- 2022 15:35:10 -0700 (PDT)
+        Mon, 14 Mar 2022 18:36:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ACF30F73
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:35:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D8C6140C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BC4C340E9;
+        Mon, 14 Mar 2022 22:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647297304;
+        bh=hbsjHiLQ5g+4nDSjuI4RnOLjrnPpRYYdrxZhXbxfh3o=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fAGJa7jO/QZRtaMpck6eVyC47pTxDnID33LYKFxdVZ70KBD8v42ysyfKAw0nX32fo
+         O+JabTjjeQqKroVmhfICVTyzVTEd4n4dKAKN+BJfFw++ebJqrbA1Rx6A7W7MMpQY5i
+         FrduoPAwWMvd0L0r2Hj7QCSs5TqKge4vloxnBlG39VKiygIdcQq27qABr4m39yDbvS
+         U8GdSQichZyU82J5M9UdiN6upesZ8vi+357wvaSHWbMjAJplu5UTlHwLOkRE9DiBRO
+         nZl+RngXipWUOkxWEwKgcfgMCtPmQKDy2mvVE2rK0P+evgNOnwgegqI585BOopjYhp
+         OwhY/CHu2sp5w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 507E85C023F; Mon, 14 Mar 2022 15:35:04 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 15:35:04 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 0/3] rcu: synchronize_rcu[_expedited]() related fixes
+Message-ID: <20220314223504.GA1150279@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220314133738.269522-1-frederic@kernel.org>
+ <20220314202610.GW4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-References: <20220310150905.1.Ie0a005d7a763d501e03b7abe8ee968ca99d23282@changeid>
- <CAMRc=McbY6vK_M9fP7Hzg8LE9ANOZKN49hmBFn92YFH+2ToM8w@mail.gmail.com> <CACRpkdb-W10YAQff_dTUL7B-DH01Z9nn7cE71Zv5xjALtDGQ1g@mail.gmail.com>
-In-Reply-To: <CACRpkdb-W10YAQff_dTUL7B-DH01Z9nn7cE71Zv5xjALtDGQ1g@mail.gmail.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Mon, 14 Mar 2022 15:34:55 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXOOzECbCBoehKjmFjLTtsssk9AH1NabA=FSRvoVWp8KMQ@mail.gmail.com>
-Message-ID: <CA+ASDXOOzECbCBoehKjmFjLTtsssk9AH1NabA=FSRvoVWp8KMQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Drop CONFIG_DEBUG_GPIO
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220314202610.GW4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,29 +65,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 3:23 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Mon, Mar 14, 2022 at 4:00 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > I like it. It's true we don't see many of those DEBUG constructs
-> > anymore nowadays and overhead for might_sleep() and WARN_ON() is
-> > negligible.
->
-> I agree.  I have something similar for pinctrl, maybe that needs to
-> go too.
+On Mon, Mar 14, 2022 at 01:26:10PM -0700, Paul E. McKenney wrote:
+> On Mon, Mar 14, 2022 at 02:37:35PM +0100, Frederic Weisbecker wrote:
+> > 
+> > A few fixes especially for expedited GP polling causing a stall on TREE07,
+> > as reported by Paul.
+> > 
+> > We may still want to optimize start_poll_synchronize_rcu_expedited() on
+> > UP-no-preempt but I think Paul may be implying this while doing other
+> > fixes.
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+> > 	rcu/dev
+> > 
+> > HEAD: 6e5fd7e614fd5c8f0fffeaa140b7ea697bfeb096
+> > 
+> > Thanks,
+> > 	Frederic
+> 
+> I have pulled these in for review and testing, thank you!!!  I have
+> started a ~90-minute test and will let you know how that goes.
 
-Huh, yeah, CONFIG_DEBUG_PINCTRL does look awfully similar, and I just
-didn't notice because we don't happen to have it enabled for Chromium
-kernels. We happen to have CONFIG_DEBUG_GPIO enabled though, and the
-"new" rockchip-gpio log messages triggered me :)
+And TREE05 doesn't like this much.  I get too-short grace periods.
+TREE05 is unusual in being the one with the kernel build with
+CONFIG_PREEMPT_NONE=y but also with CONFIG_PREEMPT_DYNAMIC=n.
 
-I guess one difference is that CONFIG_DEBUG_PINCTRL is almost
-exclusively (aside from some renesas drivers?) about extra logging and
-less about interesting checks that one might want to enable in more
-general settings. So it's a clearer call to make that people generally
-want it disabled.
+Running tests of the commits individually.
 
-In other words, a -DDEBUG construct in itself isn't necessarily
-terrible (even if it's a little redundant with dynamic debug?), if
-it's not conflated with stuff that might be more generally useful.
+							Thanx, Paul
 
-Regards,
-Brian
+> > ---
+> > 
+> > Frederic Weisbecker (2):
+> >       rcu: Fix expedited GP polling against UP/no-preempt environment
+> 
+> I have some concerns with this one due to the fact that it acquires locks
+> in cases where the old code would not.  (I did have problems with this
+> in both recent SRCU changes and the normal-grace-period counterpart to
+> this series.)
+> 
+> But let's see what rcutorture and kbuild test robot think about it.
+> 
+> >       rcu: Fix preemption mode check on synchronize_rcu[_expedited]()
+> 
+> This one looks good.
+> 
+> > Valentin Schneider (1):
+> >       preempt/dynamic: Introduce preempt mode accessors
+> 
+> I am guessing that this one is a compact placeholder for my convenience
+> (in which case thank you!).  I will be marking it "EXP" on my next rebase.
+> 
+> 							Thanx, Paul
+> 
+> >  include/linux/sched.h | 16 +++++++++++++++
+> >  kernel/rcu/tree.c     |  2 +-
+> >  kernel/rcu/tree_exp.h | 57 +++++++++++++++++++++++++++++++--------------------
+> >  kernel/sched/core.c   | 11 ++++++++++
+> >  4 files changed, 63 insertions(+), 23 deletions(-)

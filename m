@@ -2,128 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C9E4D878B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9389A4D878D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241550AbiCNPAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        id S241599AbiCNPAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiCNPAI (ORCPT
+        with ESMTP id S232280AbiCNPAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:00:08 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280CA3C73B;
-        Mon, 14 Mar 2022 07:58:58 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id d10so34591186eje.10;
-        Mon, 14 Mar 2022 07:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OYV4LpH4D3agxsG3V7VyzstSf+lDz7EM5vQa2UkEP7w=;
-        b=MOiHh0CsD3q+iNPxoPSXwT3iZzcB0ZcSFhKkrzBOMCkYSu7aKHbORB3emZtHnfBxYu
-         v3dtH3qbNNm3Vi2nNIdfDrruOItemfOdVViSojC3sXZBM1YHKxbEtvfbb13NoFonpDil
-         IMh6xGHEWuHI6yHyAYaLWJkI7K9IMXYWhHoYorlQAxEoMYom6ad0diEKR+HMICp5/tEX
-         SP3kbCzP1qFzW5bV2gCgiYpimaqSn+c0SXq0O5OG3Pn4HJErrjdswwuRLYvwS0X1z5bL
-         EajKTJDzTYBnw5lZVuhQzYCm25RotqH7PSMdw/AryMk6NHNJaUvcvC/z1eXwAlUn3UGi
-         JdKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OYV4LpH4D3agxsG3V7VyzstSf+lDz7EM5vQa2UkEP7w=;
-        b=swIuAx7KOFv/+ED1jBOiCK8IO/0Mf0xjOveXMJGo1CdMBm2ZXyyFGUAJ5XYXLc+nrf
-         kBnU6UC4dA8pKFYAqTCA2jliXZE4dB2eHBH3j7Uch3guNtkPJ9jtjmo1VdcpkkRrNK86
-         KsExMbWWI7unzS8XgRftVmu0Zbf0ERnywLaSGut1TuaNxfEeRCywaUVATq7gajIlILFI
-         35kkgI8f9SGlNhyg5OzTD+nPTpPa67OllKj3oMB0xkvrGGW+sb79InwqR9mLCzwS4Yrp
-         /vbmMPf+8adp8BSYNn/AsvEaqDXIS/7G6DtPfeu7jGldXeTJG1eTfJA9+z7N7QyjSJ01
-         37cQ==
-X-Gm-Message-State: AOAM531kHk+LSLgLco9oXACCrWb+GJhCwHgCfZYbKasGmQmsZHoMiuyS
-        wvzW81DhCFDB2KQ7iMSC+AU=
-X-Google-Smtp-Source: ABdhPJwEXXJr7N8/UGnBPerXHkgdsTRUxrmYmjgrx1ZKylhRSvtZpmHi617uiUE4yKGd6/6FaDkQcw==
-X-Received: by 2002:a17:907:2cc6:b0:6db:7e92:e36 with SMTP id hg6-20020a1709072cc600b006db7e920e36mr18090693ejc.329.1647269936492;
-        Mon, 14 Mar 2022 07:58:56 -0700 (PDT)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id a1-20020aa7d901000000b00416217c99bcsm8157560edr.65.2022.03.14.07.58.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 07:58:56 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 16:58:54 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v3 net-next 03/14] net: bridge: mst: Support setting and
- reporting MST port states
-Message-ID: <20220314145854.shtnvetounjfnu4e@skbuf>
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
- <20220314095231.3486931-4-tobias@waldekranz.com>
+        Mon, 14 Mar 2022 11:00:50 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB92F419B5;
+        Mon, 14 Mar 2022 07:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vXKkXDbED7M3BWB+wPrKSrCS9R2wouzreerqWBT0T0k=; b=ZeJJ0Dq/0uSZYlG1mlawxZ5pdN
+        4YKofYC9jXWAD8OKnZ6MD5O2Q7RU4xao84q0SPnyE8chhrkf3jHJBh0NgYq84Sw1Z1HxemXMUgwWe
+        GcU5fqQRiAK2Y8huReqxwheNlyAiLCuOpnyp8nKnxI02QA0mzzVg4OpsyvXd0pPXln6D8lhBgXxVl
+        NxgSTCh2/ARaku4b1OM/sQceNmtht2cbwVwXwO34+b6Wjy1f62apVDcQDYSsh0rsmO3x0useBGZes
+        lY8QAFuzzeqpOBPVlsXTY4uQJw6qDg3NWiqMljRX9HJpQA+Y1iPIQhT0VbcjcxwCjjkx7gTOrtqJm
+        JVafiIsQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nTmA9-000sJS-Fu; Mon, 14 Mar 2022 14:59:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 18AEC3003BC;
+        Mon, 14 Mar 2022 15:59:06 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EABB930413243; Mon, 14 Mar 2022 15:59:05 +0100 (CET)
+Date:   Mon, 14 Mar 2022 15:59:05 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
+        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        masahiroy@kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
+References: <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
+ <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+ <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net>
+ <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+ <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
+ <20220312154407.GF28057@worktop.programming.kicks-ass.net>
+ <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
+ <20220313085214.GK28057@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314095231.3486931-4-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220313085214.GK28057@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:52:20AM +0100, Tobias Waldekranz wrote:
-> +int br_mst_fill_info(struct sk_buff *skb, struct net_bridge_vlan_group *vg)
-> +{
-> +	struct net_bridge_vlan *v;
-> +	struct nlattr *nest;
-> +	unsigned long *seen;
-> +	int err = 0;
-> +
-> +	seen = bitmap_zalloc(VLAN_N_VID, 0);
+On Sun, Mar 13, 2022 at 09:52:14AM +0100, Peter Zijlstra wrote:
+> On Sat, Mar 12, 2022 at 05:33:39PM -0800, Alexei Starovoitov wrote:
+> > During the build with gcc 8.5 I see:
+> > 
+> > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > .ibt_endbr_seal, skipping
+> > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > .orc_unwind section, skipping
+> >   LD [M]  crypto/async_tx/async_xor.ko
+> >   LD [M]  crypto/authenc.ko
+> > make[3]: *** [../scripts/Makefile.modfinal:61:
+> > arch/x86/crypto/crc32c-intel.ko] Error 255
+> > make[3]: *** Waiting for unfinished jobs....
+> > 
+> > but make clean cures it.
+> > I suspect it's some missing makefile dependency.
+> 
+> Yes, I recently ran into it; I've been trying to kick Makefile into
+> submission but have not had success yet. Will try again on Monday.
+> 
+> Problem appears to be that it will re-link .ko even though .o hasn't
+> changed, resulting in duplicate objtool runs. I've been trying to have
+> makefile generate .o.objtool empty file to serve as dependency marker to
+> avoid doing second objtool run, but like said, no luck yet.
 
-I see there is precedent in the bridge driver for using dynamic
-allocation as opposed to on-stack declaration using DECLARE_BITMAP().
-I imagine this isn't just to be "heapsters", but why?
+Masahiro-san, I'm trying the below, but afaict it's not working because
+the rule for the .o file itself:
 
-I don't have a very good sense of how much on-stack memory is too much
-(a lot probably depends on the expected depth of the call stack too, and here it
-doesn't appear to be too deep), but I see that mlxsw_sp_bridge_vxlan_vlan_is_valid()
-has a DECLARE_BITMAP(vlans, VLAN_N_VID) too.
+$(multi-obj-m): FORCE
+	$(call if_changed,link_multi-m)
 
-The comment applies for callers of br_mst_get_info() too.
+will in fact update the timestamp of the .o file, even if if_changed
+nops out the cmd. Concequently all rules that try to use if_changed with
+this .o file as a dependency will find it newer and run anyway.
 
-> +	if (!seen)
-> +		return -ENOMEM;
-> +
-> +	list_for_each_entry(v, &vg->vlan_list, vlist) {
-> +		if (test_bit(v->brvlan->msti, seen))
-> +			continue;
-> +
-> +		nest = nla_nest_start_noflag(skb, IFLA_BRIDGE_MST_ENTRY);
-> +		if (!nest ||
-> +		    nla_put_u16(skb, IFLA_BRIDGE_MST_ENTRY_MSTI, v->brvlan->msti) ||
-> +		    nla_put_u8(skb, IFLA_BRIDGE_MST_ENTRY_STATE, v->state)) {
-> +			err = -EMSGSIZE;
-> +			break;
-> +		}
-> +		nla_nest_end(skb, nest);
-> +
-> +		set_bit(v->brvlan->msti, seen);
-> +	}
-> +
-> +	kfree(seen);
-> +	return err;
-> +}
+
+remake -x output of a fs/f2fs/ module (re)build:
+
+     Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.o' does not exist.
+    Must remake target 'fs/f2fs/f2fs.o'.
+../scripts/Makefile.build:454: target 'fs/f2fs/f2fs.o' does not exist
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+:
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    Successfully remade target file 'fs/f2fs/f2fs.o'.
+   Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.mod'.
+   Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.mod' does not exist.
+  Must remake target 'fs/f2fs/f2fs.mod'.
+../scripts/Makefile.build:281: update target 'fs/f2fs/f2fs.mod' due to: fs/f2fs/f2fs.o
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+set -e;   { echo  fs/f2fs/dir.o fs/f2fs/file.o fs/f2fs/inode.o fs/f2fs/namei.o fs/f2fs/hash.o fs/f2fs/super.o fs/f2fs/inline.o fs/f2fs/checkpoint.o fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node.o fs/f2fs/segment.o fs/f2fs/recovery.o fs/f2fs/shrinker.o fs/f2fs/extent_cache.o fs/f2fs/sysfs.o fs/f2fs/debug.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2fs/iostat.o;  echo; } > fs/f2fs/f2fs.mod; printf '%s\n' 'cmd_fs/f2fs/f2fs.mod := { echo  fs/f2fs/dir.o fs/f2fs/file.o fs/f2fs/inode.o fs/f2fs/namei.o fs/f2fs/hash.o fs/f2fs/super.o fs/f2fs/inline.o fs/f2fs/checkpoint.o fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node.o fs/f2fs/segment.o fs/f2fs/recovery.o fs/f2fs/shrinker.o fs/f2fs/extent_cache.o fs/f2fs/sysfs.o fs/f2fs/debug.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2fs/iostat.o;  echo; } > fs/f2fs/f2fs.mod' > fs/f2fs/.f2fs.mod.cmd
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  Successfully remade target file 'fs/f2fs/f2fs.mod'.
+   Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.objtool'.
+   Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.objtool' does not exist.
+  Must remake target 'fs/f2fs/f2fs.objtool'.
+../scripts/Makefile.build:287: update target 'fs/f2fs/f2fs.objtool' due to: fs/f2fs/f2fs.o
+##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+set -e;   { echo fs/f2fs/f2fs.o  ; ./tools/objtool/objtool orc generate  --module  --lto --ibt  --no-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/f2fs.objtool; printf '%s\n' 'cmd_fs/f2fs/f2fs.objtool := { echo fs/f2fs/f2fs.o  ; ./tools/objtool/objtool orc generate  --module  --lto --ibt  --no-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/f2fs.objtool' > fs/f2fs/.f2fs.objtool.cmd
+##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+fs/f2fs/f2fs.o: warning: objtool: file already has .static_call_sites section, skipping
+fs/f2fs/f2fs.o: warning: objtool: file already has .ibt_endbr_seal, skipping
+fs/f2fs/f2fs.o: warning: objtool: file already has .orc_unwind section, skipping
+../scripts/Makefile.build:286: *** [fs/f2fs/f2fs.objtool] error 255
+
+
+Where we can see that we don't re-generate f2fs.o (empty command), but
+then we do re-generate f2fs.mod because f2fs.o is newer and the same
+happens for the new f2fs.objtool.
+
+Help?
+
+---
+Index: linux-2.6/scripts/Makefile.build
+===================================================================
+--- linux-2.6.orig/scripts/Makefile.build
++++ linux-2.6/scripts/Makefile.build
+@@ -92,6 +92,10 @@ ifdef CONFIG_LTO_CLANG
+ targets-for-modules += $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)))
+ endif
+ 
++ifdef CONFIG_X86_KERNEL_IBT
++targets-for-modules += $(patsubst %.o, %.objtool, $(filter %.o, $(obj-m)))
++endif
++
+ ifdef need-modorder
+ targets-for-modules += $(obj)/modules.order
+ endif
+@@ -276,6 +280,12 @@ cmd_mod = { \
+ $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
+ 	$(call if_changed,mod)
+ 
++cmd_objtool_mod =							\
++	{ echo $< $(cmd_objtool) ; } > $@
++
++$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
++	$(call if_changed,objtool_mod)
++
+ quiet_cmd_cc_lst_c = MKLST   $@
+       cmd_cc_lst_c = $(CC) $(c_flags) -g -c -o $*.o $< && \
+ 		     $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
+Index: linux-2.6/scripts/Makefile.lib
+===================================================================
+--- linux-2.6.orig/scripts/Makefile.lib
++++ linux-2.6/scripts/Makefile.lib
+@@ -552,9 +552,8 @@ objtool_args =								\
+ 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+ 	$(if $(CONFIG_SLS), --sls)
+ 
+-cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+-cmd_objtool_mod = $(if $(objtool-enabled), $(objtool) $(objtool_args) $(@:.ko=.o) ; )
+-cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
++cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(@:.objtool=.o))
++cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$(@:.objtool=.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+ 
+ endif # CONFIG_STACK_VALIDATION
+ 
+@@ -575,8 +574,8 @@ $(obj)/%.o: objtool-enabled :=
+ 
+ # instead run objtool on the module as a whole, right before
+ # the final link pass with the linker script.
+-%.ko: objtool-enabled = y
+-%.ko: part-of-module := y
++$(obj)/%.objtool: objtool-enabled = y
++$(obj)/%.objtool: part-of-module := y
+ 
+ else
+ 
+Index: linux-2.6/scripts/Makefile.modfinal
+===================================================================
+--- linux-2.6.orig/scripts/Makefile.modfinal
++++ linux-2.6/scripts/Makefile.modfinal
+@@ -32,7 +32,6 @@ ARCH_POSTLINK := $(wildcard $(srctree)/a
+ 
+ quiet_cmd_ld_ko_o = LD [M]  $@
+       cmd_ld_ko_o +=							\
+-	$(cmd_objtool_mod)						\
+ 	$(LD) -r $(KBUILD_LDFLAGS)					\
+ 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
+ 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\

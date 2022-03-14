@@ -2,180 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4B24D8E8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 900E44D8E8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245224AbiCNVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 17:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S245236AbiCNVNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 17:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235370AbiCNVNE (ORCPT
+        with ESMTP id S235370AbiCNVNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 17:13:04 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A694FD28
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:11:53 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id x15so25950646wru.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:11:53 -0700 (PDT)
+        Mon, 14 Mar 2022 17:13:07 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2763DA66;
+        Mon, 14 Mar 2022 14:11:57 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id s8so16141079pfk.12;
+        Mon, 14 Mar 2022 14:11:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=algolia.com; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=w+42UXCNtAJ9TGLf2A5cmkfyu32cpXBmuZcjtlmKWJM=;
-        b=h/numXueNH979gadCe+KzmYSaDCK5rcefpMQgJuahYkpNRnOX09QntgacPyzicZF3E
-         KRl9VkiNCCUeKCtQXSFQhyYJzOhewjj/SEajVtr688ttT0ECTEvjzvJcL3GjekMf3tk9
-         lAmpPtfNc7SXLLa+njjpI2uT3Ht5AcFIKHrGY=
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Y4FlVNs2QdYZ1hne9SFHL7s6tiC0DTzsD4q8fehyHAk=;
+        b=KCpsYH6/c6Jp29jpMKE4KyHqYxxKhJaIadavFbMEYpu2qfW6zFbq5MkfuHiWME/0Jq
+         zb+pv1ToRhrXK5AZZqXoUMoSq9L1TEMtw46pX0XoZJ8Vbc5iOUIHZRBLz5yE7G9GXZt4
+         7jdkA2kVOlAyrHRx00gUZgQTZBK3mO/2w5Njl/aZN51oWB6IldRHTnjgsI8s03wyyeEr
+         LBOC/WzarxZN4+pn1VH1Sfnx76D27goRmK9f2WEAYM+53ooBDwyromWLVgVMWR5Y/eUQ
+         FTJ3hBq7Ag/UZnMUO6aOOfHp15fjDhr0jCeNK8kXsUlInS2oGTcFWP19+erNNtoobpVu
+         g+ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=w+42UXCNtAJ9TGLf2A5cmkfyu32cpXBmuZcjtlmKWJM=;
-        b=QFUxWM9O5Ur7idPeBqwkKvxsmL8kBsoZ7JxD0urOHWBV7zLGjX6sc7CRWbdskri193
-         psUDn/FcYiiOIY9XPbsTbmk+WV9Rmw//OQFxBKZS2yk0+PIzPaONpXf9HRWNWbCzYcJp
-         OVPz7Y3iUMgV7q33K3HvFG3S0urLuss3A/gC4EiMj4I7LgVlnoLE71A43A5wh0B0VFbN
-         TvvK7Zpo5BDkuHK/lEqre3hottDcyieUtannNngQ0TfN3ppMP+45wyt96UWlCvwUjgLn
-         lP8Vam6axryUa2apKxQODmSXcHm2hoLxHiFGk8BJz1CZ0GrwQ0kRfeeNRMLbTdOJubdB
-         JMwA==
-X-Gm-Message-State: AOAM530yMzpp1MB/r60G0CbzTru4MIZ4sFVpbxotqScq0Ry5u2mi3B7H
-        az4n25TyCJHzRB9F0EvnTot1W5z9vNpMyw==
-X-Google-Smtp-Source: ABdhPJzuQfk/7tfTzPzLwD+eWx12+yu5LILm2C/cqXTReUV/J/EMlCxItFP0C0L0S0jL2o4sxbhGBw==
-X-Received: by 2002:adf:ed0c:0:b0:1f0:63a5:36aa with SMTP id a12-20020adfed0c000000b001f063a536aamr17823912wro.588.1647292311832;
-        Mon, 14 Mar 2022 14:11:51 -0700 (PDT)
-Received: from xavier-xps ([2a01:e0a:830:d971:cc11:3255:8bf2:4a49])
-        by smtp.gmail.com with ESMTPSA id e20-20020adfa454000000b001f01a14dce8sm14346782wra.97.2022.03.14.14.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 14:11:51 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 22:11:50 +0100
-From:   Xavier Roche <xavier.roche@algolia.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Xavier Roche <xavier.roche@algolia.com>, linux-mm@kvack.org
-Subject: [PATCH v4] tmpfs: support for file creation time
-Message-ID: <20220314211150.GA123458@xavier-xps>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Y4FlVNs2QdYZ1hne9SFHL7s6tiC0DTzsD4q8fehyHAk=;
+        b=ocVAwPvF+8BbrBH8JLJgfeNcnSoP6mjoCqee0SoeV6Z5ux0tm4St0GCsWlfP+bPlMj
+         ckHJPYaTDX52sPlU5hep3PmfYzAHEwrgEpjseGczfIe+LoVNwu2KmxcJ6EOdMXoLk2iG
+         ogiPqbKlws3TGw3yRHQ3GwIEFuX2SDHsoikbSJr8Hdb2XNSnEW+XJgWUCB3NJ+goXOPT
+         7SoKxoBWm7AuNRSGLqEdCj0bVOwIukKxd8LNeAYIlmDuuobKjIxbKVob4kvqMQ0JSECk
+         diC/FJWXHyFlc7wiwEP3ek1OOxh1m0wGKFWpS8PNYXNIdjOt4BUpNuKG/GhC0BuqN988
+         Qsjg==
+X-Gm-Message-State: AOAM531N94feSrZZHjzwMXMPfHtYwRYF4aMJ3/x+dShTx4fLhBuSvbGU
+        Wei4v+UNy20f+Bro4A+YOHI=
+X-Google-Smtp-Source: ABdhPJwjO6+KuWIBJz0ZWJ/b8scvSG2dIKVsqBfV6hSwW83HBbtmn+CbWdYH5QClaSHMCOsYGjyOKQ==
+X-Received: by 2002:a63:874a:0:b0:37c:7fab:50fe with SMTP id i71-20020a63874a000000b0037c7fab50femr21406280pge.93.1647292316827;
+        Mon, 14 Mar 2022 14:11:56 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id g6-20020a056a001a0600b004f7bd56cc08sm6866624pfv.123.2022.03.14.14.11.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 14:11:56 -0700 (PDT)
+Subject: Re: [PATCH 5.4 00/43] 5.4.185-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220314112734.415677317@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <6ff98fb1-4850-f6c1-ac15-72aca681882f@gmail.com>
+Date:   Mon, 14 Mar 2022 14:11:52 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various filesystems (including ext4) now support file creation time.
-This patch adds such support for tmpfs-based filesystems.
+On 3/14/22 4:53 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.185 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.185-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Note that using shmem_getattr() on other file types than regular requires
-that shmem_is_huge() check type, to stop incorrect HPAGE_PMD_SIZE blksize.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Signed-off-by: Xavier Roche <xavier.roche@algolia.com>
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Tested-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Xavier Roche <xavier.roche@algolia.com>
-Tested-by: Sylvain Bellone <sylvain.bellone@algolia.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Reported-by: Xavier Grand <xavier.grand@algolia.com>
-Cc: Xavier Roche <xavier.roche@algolia.com>
-Cc: Jean Delvare <jdelvare@suse.de>
-Link: https://lore.kernel.org/lkml/b954973a-b8d1-cab8-63bd-6ea8063de3@google.com/
----
- include/linux/shmem_fs.h |  1 +
- mm/shmem.c               | 16 +++++++++++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index e65b80ed09e7..ab51d3cd39bd 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -24,6 +24,7 @@ struct shmem_inode_info {
- 	struct shared_policy	policy;		/* NUMA memory alloc policy */
- 	struct simple_xattrs	xattrs;		/* list of xattrs */
- 	atomic_t		stop_eviction;	/* hold when working on inode */
-+	struct timespec64	i_crtime;	/* file creation time */
- 	struct inode		vfs_inode;
- };
- 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index a09b29ec2b45..f8205b2b0322 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -476,6 +476,8 @@ bool shmem_is_huge(struct vm_area_struct *vma,
- {
- 	loff_t i_size;
- 
-+	if (!S_ISREG(inode->i_mode))
-+		return false;
- 	if (shmem_huge == SHMEM_HUGE_DENY)
- 		return false;
- 	if (vma && ((vma->vm_flags & VM_NOHUGEPAGE) ||
-@@ -1061,6 +1063,12 @@ static int shmem_getattr(struct user_namespace *mnt_userns,
- 	if (shmem_is_huge(NULL, inode, 0))
- 		stat->blksize = HPAGE_PMD_SIZE;
- 
-+	if (request_mask & STATX_BTIME) {
-+		stat->result_mask |= STATX_BTIME;
-+		stat->btime.tv_sec = info->i_crtime.tv_sec;
-+		stat->btime.tv_nsec = info->i_crtime.tv_nsec;
-+	}
-+
- 	return 0;
- }
- 
-@@ -1854,9 +1862,6 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
- 		return 0;
- 	}
- 
--	/* Never use a huge page for shmem_symlink() */
--	if (S_ISLNK(inode->i_mode))
--		goto alloc_nohuge;
- 	if (!shmem_is_huge(vma, inode, index))
- 		goto alloc_nohuge;
- 
-@@ -2265,6 +2270,7 @@ static struct inode *shmem_get_inode(struct super_block *sb, const struct inode
- 		atomic_set(&info->stop_eviction, 0);
- 		info->seals = F_SEAL_SEAL;
- 		info->flags = flags & VM_NORESERVE;
-+		info->i_crtime = inode->i_mtime;
- 		INIT_LIST_HEAD(&info->shrinklist);
- 		INIT_LIST_HEAD(&info->swaplist);
- 		simple_xattrs_init(&info->xattrs);
-@@ -3196,6 +3202,7 @@ static ssize_t shmem_listxattr(struct dentry *dentry, char *buffer, size_t size)
- #endif /* CONFIG_TMPFS_XATTR */
- 
- static const struct inode_operations shmem_short_symlink_operations = {
-+	.getattr	= shmem_getattr,
- 	.get_link	= simple_get_link,
- #ifdef CONFIG_TMPFS_XATTR
- 	.listxattr	= shmem_listxattr,
-@@ -3203,6 +3210,7 @@ static const struct inode_operations shmem_short_symlink_operations = {
- };
- 
- static const struct inode_operations shmem_symlink_inode_operations = {
-+	.getattr	= shmem_getattr,
- 	.get_link	= shmem_get_link,
- #ifdef CONFIG_TMPFS_XATTR
- 	.listxattr	= shmem_listxattr,
-@@ -3790,6 +3798,7 @@ static const struct inode_operations shmem_inode_operations = {
- 
- static const struct inode_operations shmem_dir_inode_operations = {
- #ifdef CONFIG_TMPFS
-+	.getattr	= shmem_getattr,
- 	.create		= shmem_create,
- 	.lookup		= simple_lookup,
- 	.link		= shmem_link,
-@@ -3811,6 +3820,7 @@ static const struct inode_operations shmem_dir_inode_operations = {
- };
- 
- static const struct inode_operations shmem_special_inode_operations = {
-+	.getattr	= shmem_getattr,
- #ifdef CONFIG_TMPFS_XATTR
- 	.listxattr	= shmem_listxattr,
- #endif
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
-
+Florian

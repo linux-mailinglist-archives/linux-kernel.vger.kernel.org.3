@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F364D84C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BDC4D8480
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242333AbiCNM3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S237507AbiCNM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243864AbiCNMVU (ORCPT
+        with ESMTP id S242559AbiCNMTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:20 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A369CEF;
-        Mon, 14 Mar 2022 05:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FJ5wXrhL/9ylQnMvdM2Q4vFxfquXxlOyQHpUBbVVNgI=;
-  b=a3jhw+wo/Cs8m0TeWfe+JUWEyIsLOIAuZ+eUSQ/fY1nkQeScgGRbVVDX
-   Y/WQfE3t4AAGmGm7CwfaPzKr4JZeP1e/7BOTm4hxIDSf9lP03Pj6cEyhv
-   7gd50CPjNwFMpGcf26wvWl/Xn8HrwUP+ftNfv8ZuM9a2EnFliHV4CSk4t
-   w=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997357"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     kernel-janitors@vger.kernel.org, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 23/30] drm/amdgpu/dc: fix typos in comments
+        Mon, 14 Mar 2022 08:19:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76BC4F9CF;
+        Mon, 14 Mar 2022 05:14:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73A25608C4;
+        Mon, 14 Mar 2022 12:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F68C340E9;
+        Mon, 14 Mar 2022 12:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647260060;
+        bh=bXKA+GTpOM+Bd5cpEsUpd3Dxw+oPiBeu+W5ii1xo3ZU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VGy6THRm3eGeR0qez/DGgoXx+A4fMKmYCgJm5KGT/wCsDZ1wcjg+CZEJ8ni3CzksB
+         6VtqVHGsS3RUUDcxrtvcouJ3NWPFy2zOQLP9S4pM8VYMIo/OJoW81WdpuF+a+nDekO
+         Mjs4QeUYzBVlWfllJzVjY/g/t/58wzypnZVImDEk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Thomas Osterried <thomas@osterried.de>,
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 044/121] ax25: Fix NULL pointer dereference in ax25_kill_by_device
 Date:   Mon, 14 Mar 2022 12:53:47 +0100
-Message-Id: <20220314115354.144023-24-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112745.357139303@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+[ Upstream commit 71171ac8eb34ce7fe6b3267dce27c313ab3cb3ac ]
 
+When two ax25 devices attempted to establish connection, the requester use ax25_create(),
+ax25_bind() and ax25_connect() to initiate connection. The receiver use ax25_rcv() to
+accept connection and use ax25_create_cb() in ax25_rcv() to create ax25_cb, but the
+ax25_cb->sk is NULL. When the receiver is detaching, a NULL pointer dereference bug
+caused by sock_hold(sk) in ax25_kill_by_device() will happen. The corresponding
+fail log is shown below:
+
+===============================================================
+BUG: KASAN: null-ptr-deref in ax25_device_event+0xfd/0x290
+Call Trace:
+...
+ax25_device_event+0xfd/0x290
+raw_notifier_call_chain+0x5e/0x70
+dev_close_many+0x174/0x220
+unregister_netdevice_many+0x1f7/0xa60
+unregister_netdevice_queue+0x12f/0x170
+unregister_netdev+0x13/0x20
+mkiss_close+0xcd/0x140
+tty_ldisc_release+0xc0/0x220
+tty_release_struct+0x17/0xa0
+tty_release+0x62d/0x670
+...
+
+This patch add condition check in ax25_kill_by_device(). If s->sk is
+NULL, it will goto if branch to kill device.
+
+Fixes: 4e0f718daf97 ("ax25: improve the incomplete fix to avoid UAF and NPD bugs")
+Reported-by: Thomas Osterried <thomas@osterried.de>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/bios/command_table.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/ax25/af_ax25.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/command_table.c b/drivers/gpu/drm/amd/display/dc/bios/command_table.c
-index ad13e4e36d77..0e36cd800fc9 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/command_table.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/command_table.c
-@@ -456,7 +456,7 @@ static enum bp_result transmitter_control_v2(
- 		if ((CONNECTOR_ID_DUAL_LINK_DVII == connector_id) ||
- 				(CONNECTOR_ID_DUAL_LINK_DVID == connector_id))
- 			/* on INIT this bit should be set according to the
--			 * phisycal connector
-+			 * physical connector
- 			 * Bit0: dual link connector flag
- 			 * =0 connector is single link connector
- 			 * =1 connector is dual link connector
-@@ -468,7 +468,7 @@ static enum bp_result transmitter_control_v2(
- 				cpu_to_le16((uint8_t)cntl->connector_obj_id.id);
- 		break;
- 	case TRANSMITTER_CONTROL_SET_VOLTAGE_AND_PREEMPASIS:
--		/* votage swing and pre-emphsis */
-+		/* voltage swing and pre-emphsis */
- 		params.asMode.ucLaneSel = (uint8_t)cntl->lane_select;
- 		params.asMode.ucLaneSet = (uint8_t)cntl->lane_settings;
- 		break;
-@@ -2120,7 +2120,7 @@ static enum bp_result program_clock_v5(
- 	memset(&params, 0, sizeof(params));
- 	if (!bp->cmd_helper->clock_source_id_to_atom(
- 			bp_params->pll_id, &atom_pll_id)) {
--		BREAK_TO_DEBUGGER(); /* Invalid Inpute!! */
-+		BREAK_TO_DEBUGGER(); /* Invalid Input!! */
- 		return BP_RESULT_BADINPUT;
- 	}
- 
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 44a8730c26ac..00bb087c2ca8 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -87,6 +87,13 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
+ 			sk = s->sk;
++			if (!sk) {
++				spin_unlock_bh(&ax25_list_lock);
++				s->ax25_dev = NULL;
++				ax25_disconnect(s, ENETUNREACH);
++				spin_lock_bh(&ax25_list_lock);
++				goto again;
++			}
+ 			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
+-- 
+2.34.1
+
+
 

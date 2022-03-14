@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F894D843F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79C04D8444
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241694AbiCNMXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S241746AbiCNMXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240974AbiCNMOy (ORCPT
+        with ESMTP id S241165AbiCNMPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:14:54 -0400
+        Mon, 14 Mar 2022 08:15:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B59C483A3;
-        Mon, 14 Mar 2022 05:11:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54C633A30;
+        Mon, 14 Mar 2022 05:11:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F6E661314;
-        Mon, 14 Mar 2022 12:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D8EC340EC;
-        Mon, 14 Mar 2022 12:11:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC2E6135F;
+        Mon, 14 Mar 2022 12:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB9DC340E9;
+        Mon, 14 Mar 2022 12:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259897;
-        bh=+iu3YEJGg0Ei9nx0UmPyifith2WwxThQTTrvu8AqV/c=;
+        s=korg; t=1647259903;
+        bh=TBDJK16kFd2upjhzw3U9Q3kmrcZse9TAUeChV4SpIHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u2uTBAYGIqIkbiIVxlI1aq0s61zFb4NEPBEffXwKuY0OT2QCt5wv7eZ2PECRz1ZK1
-         tTi2B3br5lst+IP8bOeaqCz6D+fjBSubFyYORWEHzFXVIXzZbbSyE87eEMc00AeEdj
-         lMFGcX3gmb9zDpm+RyPCw/vSp8GSoDgtAl3tI55A=
+        b=y5nBG5CD5szrX0Ax9s290WhU0fDVHL8u4IssCnPjHh5gQpkkyGUjDOZmPbOOccWaV
+         iGyStNnyLvptVfxqZjvrFreWHYeyFJ6EzPdS2TGIpiZfw311wPQ50b2SJ43HdVoRwb
+         vRatGDO/bXZFKAFDeFkXumTBEJ2L3+kUyE5XIFik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Emil Renner Berthing <kernel@esmil.dk>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 082/110] riscv: Fix auipc+jalr relocation range checks
-Date:   Mon, 14 Mar 2022 12:54:24 +0100
-Message-Id: <20220314112745.319490791@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.15 083/110] tracing/osnoise: Force quiescent states while tracing
+Date:   Mon, 14 Mar 2022 12:54:25 +0100
+Message-Id: <20220314112745.346824548@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
 References: <20220314112743.029192918@linuxfoundation.org>
@@ -54,100 +57,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
+From: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 
-commit 0966d385830de3470b7131db8e86c0c5bc9c52dc upstream.
+commit caf4c86bf136845982c5103b2661751b40c474c0 upstream.
 
-RISC-V can do PC-relative jumps with a 32bit range using the following
-two instructions:
+At the moment running osnoise on a nohz_full CPU or uncontested FIFO
+priority and a PREEMPT_RCU kernel might have the side effect of
+extending grace periods too much. This will entice RCU to force a
+context switch on the wayward CPU to end the grace period, all while
+introducing unwarranted noise into the tracer. This behaviour is
+unavoidable as overly extending grace periods might exhaust the system's
+memory.
 
-	auipc	t0, imm20	; t0 = PC + imm20 * 2^12
-	jalr	ra, t0, imm12	; ra = PC + 4, PC = t0 + imm12
+This same exact problem is what extended quiescent states (EQS) were
+created for, conversely, rcu_momentary_dyntick_idle() emulates them by
+performing a zero duration EQS. So let's make use of it.
 
-Crucially both the 20bit immediate imm20 and the 12bit immediate imm12
-are treated as two's-complement signed values. For this reason the
-immediates are usually calculated like this:
+In the common case rcu_momentary_dyntick_idle() is fairly inexpensive:
+atomically incrementing a local per-CPU counter and doing a store. So it
+shouldn't affect osnoise's measurements (which has a 1us granularity),
+so we'll call it unanimously.
 
-	imm20 = (offset + 0x800) >> 12
-	imm12 = offset & 0xfff
+The uncommon case involve calling rcu_momentary_dyntick_idle() after
+having the osnoise process:
 
-..where offset is the signed offset from the auipc instruction. When
-the 11th bit of offset is 0 the addition of 0x800 doesn't change the top
-20 bits and imm12 considered positive. When the 11th bit is 1 the carry
-of the addition by 0x800 means imm20 is one higher, but since imm12 is
-then considered negative the two's complement representation means it
-all cancels out nicely.
+ - Receive an expedited quiescent state IPI with preemption disabled or
+   during an RCU critical section. (activates rdp->cpu_no_qs.b.exp
+   code-path).
 
-However, this addition by 0x800 (2^11) means an offset greater than or
-equal to 2^31 - 2^11 would overflow so imm20 is considered negative and
-result in a backwards jump. Similarly the lower range of offset is also
-moved down by 2^11 and hence the true 32bit range is
+ - Being preempted within in an RCU critical section and having the
+   subsequent outermost rcu_read_unlock() called with interrupts
+   disabled. (t->rcu_read_unlock_special.b.blocked code-path).
 
-	[-2^31 - 2^11, 2^31 - 2^11)
+Neither of those are possible at the moment, and are unlikely to be in
+the future given the osnoise's loop design. On top of this, the noise
+generated by the situations described above is unavoidable, and if not
+exposed by rcu_momentary_dyntick_idle() will be eventually seen in
+subsequent rcu_read_unlock() calls or schedule operations.
 
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Fixes: e2c0cdfba7f6 ("RISC-V: User-facing API")
+Link: https://lkml.kernel.org/r/20220307180740.577607-1-nsaenzju@redhat.com
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Fixes: bce29ac9ce0b ("trace: Add osnoise tracer")
+Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kernel/module.c |   21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ kernel/trace/trace_osnoise.c |   20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
---- a/arch/riscv/kernel/module.c
-+++ b/arch/riscv/kernel/module.c
-@@ -13,6 +13,19 @@
- #include <linux/pgtable.h>
- #include <asm/sections.h>
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -1196,6 +1196,26 @@ static int run_osnoise(void)
+ 		}
  
-+/*
-+ * The auipc+jalr instruction pair can reach any PC-relative offset
-+ * in the range [-2^31 - 2^11, 2^31 - 2^11)
-+ */
-+static bool riscv_insn_valid_32bit_offset(ptrdiff_t val)
-+{
-+#ifdef CONFIG_32BIT
-+	return true;
-+#else
-+	return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
-+#endif
-+}
+ 		/*
++		 * In some cases, notably when running on a nohz_full CPU with
++		 * a stopped tick PREEMPT_RCU has no way to account for QSs.
++		 * This will eventually cause unwarranted noise as PREEMPT_RCU
++		 * will force preemption as the means of ending the current
++		 * grace period. We avoid this problem by calling
++		 * rcu_momentary_dyntick_idle(), which performs a zero duration
++		 * EQS allowing PREEMPT_RCU to end the current grace period.
++		 * This call shouldn't be wrapped inside an RCU critical
++		 * section.
++		 *
++		 * Note that in non PREEMPT_RCU kernels QSs are handled through
++		 * cond_resched()
++		 */
++		if (IS_ENABLED(CONFIG_PREEMPT_RCU)) {
++			local_irq_disable();
++			rcu_momentary_dyntick_idle();
++			local_irq_enable();
++		}
 +
- static int apply_r_riscv_32_rela(struct module *me, u32 *location, Elf_Addr v)
- {
- 	if (v != (u32)v) {
-@@ -95,7 +108,7 @@ static int apply_r_riscv_pcrel_hi20_rela
- 	ptrdiff_t offset = (void *)v - (void *)location;
- 	s32 hi20;
- 
--	if (offset != (s32)offset) {
-+	if (!riscv_insn_valid_32bit_offset(offset)) {
- 		pr_err(
- 		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
- 		  me->name, (long long)v, location);
-@@ -197,10 +210,9 @@ static int apply_r_riscv_call_plt_rela(s
- 				       Elf_Addr v)
- {
- 	ptrdiff_t offset = (void *)v - (void *)location;
--	s32 fill_v = offset;
- 	u32 hi20, lo12;
- 
--	if (offset != fill_v) {
-+	if (!riscv_insn_valid_32bit_offset(offset)) {
- 		/* Only emit the plt entry if offset over 32-bit range */
- 		if (IS_ENABLED(CONFIG_MODULE_SECTIONS)) {
- 			offset = module_emit_plt_entry(me, v);
-@@ -224,10 +236,9 @@ static int apply_r_riscv_call_rela(struc
- 				   Elf_Addr v)
- {
- 	ptrdiff_t offset = (void *)v - (void *)location;
--	s32 fill_v = offset;
- 	u32 hi20, lo12;
- 
--	if (offset != fill_v) {
-+	if (!riscv_insn_valid_32bit_offset(offset)) {
- 		pr_err(
- 		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
- 		  me->name, (long long)v, location);
++		/*
+ 		 * For the non-preemptive kernel config: let threads runs, if
+ 		 * they so wish.
+ 		 */
 
 

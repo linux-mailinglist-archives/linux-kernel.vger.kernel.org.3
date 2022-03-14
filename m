@@ -2,250 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DCB4D8DA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2614D8DAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244807AbiCNUAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S244841AbiCNUDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236350AbiCNUAn (ORCPT
+        with ESMTP id S244814AbiCNUDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:00:43 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BDB3EA82
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 12:59:33 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id j29so11834391ila.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 12:59:33 -0700 (PDT)
+        Mon, 14 Mar 2022 16:03:13 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2773EA8B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc1ce31261so140806677b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KhNnP/oPOEf+AzAoi7FbFVFnff3zDauVn+R3czZgO30=;
-        b=XLvy0a2P3yr/7QgZ7XMz4vy53ApIYN+UaK82GHgDQ3xtEeRMJaOGOuG2NBzVDDsczs
-         gElxMFyo00E2THZcl/7wUoIInd0phepsqCVLF4ktfce/OL5We+yjBBwq4+/KbnAKdDs/
-         i8i11DhG4zSg8SmvsE6lTDr23OlmYpe8CEYCatPaheYkh6KcW0E8x2Z67gNTMyClFDkF
-         6y/NDv4N5ePxfgJCTLgrZm0Np/Cv+5hx1cxjqXiMcHyJ+Jgz73ZPg9D9AlK8u1TpnnRo
-         M2dAkMParYP6FpJ1TqAN3Cl34l4/84E3t5Nn6+esqE2OtgU7+1jhwXzua3n1hSeHJ18n
-         HhnQ==
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=xEuR5NAbPKTc90nTUG2UpVDsPT4/g7gJ4EIuKy2M61Y=;
+        b=ry7DrS+DzmCoBuS+N3t8KJPneqxZpyjWKhm0hi4UrJVtWocUiLGratH7dA7vGH64X7
+         Qg/sE6ZP+ZQuX6cKWQqNcZW6E9FfL8kpyZVAoWnG+B5DO6fQiwivmN8fNnXVY0N6Ixvf
+         bMOIdm00KmvyWI9+z3twtaJ6QG9adpXzf7D7r2LWmUXxnDLf73lL12Lok43SuXanyQop
+         KBwSkd7sD4mFizm5xQ53F43xhYn9dXjcZk0+drkMZbmDDYN3Y4hmCBytmO7wv8ywRXdB
+         b8p8OtiKMvR67lAOiIZx034Nf/fJoa1ZehmUA2wp5KusaqdbU77O+LKpVeykEIpNS6GY
+         fuZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KhNnP/oPOEf+AzAoi7FbFVFnff3zDauVn+R3czZgO30=;
-        b=JSuZ9t78POApg4lY828h8rwXSQ9MBxZf+Q4FfZtr8iy7y7kqTyd2gwiZduOzeCmANO
-         1Cj07o94bf2sL5LIFyTHAkv+HELl+oGBaoyLbCH/hzVVMijHn44h34kP9Jcm5eS0wln0
-         hUQYbmzL/s5Vz3IbCBzD82VRipkUFKDHKeJbp3SYzli1wYqsrpYngB+kbQAsfXs5HRni
-         Oad87p056GC3zm5l6XfMNLPfrWEZr1gVSgI1WWZJiQswj8yPTtM3KF3F7NalLVD6ittk
-         uruPsQ7jbXlaiLFlcTigA3RgDp1vZ22kHXq5p5y9I2clPOyVNFlC5W962MABv6BASrCG
-         Bxnw==
-X-Gm-Message-State: AOAM530eWzc/V0hy7z/RmvV0LDoB9PTRTSjVK6+Ys8r8+Tfqcsz0xU8e
-        EbftbsXOVPcGFtB99iI91I95vw==
-X-Google-Smtp-Source: ABdhPJz/yPGOPSHTvHZXLM/c6Q7JI6z6lCmpGsm8deY68JVPwct+uxdlkutPxjPpDeKxc+BLSWOk9A==
-X-Received: by 2002:a92:c088:0:b0:2c7:9421:3c7b with SMTP id h8-20020a92c088000000b002c794213c7bmr9146321ile.280.1647287972235;
-        Mon, 14 Mar 2022 12:59:32 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id r15-20020a056e0219cf00b002c77a3f2a85sm6286928ill.6.2022.03.14.12.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 12:59:31 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 19:59:28 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=xEuR5NAbPKTc90nTUG2UpVDsPT4/g7gJ4EIuKy2M61Y=;
+        b=MQ40vQq4dAjabs25QcUVjaBpMwEGpvrBG6u39qZz0aI3EwUEmgh91IWLQZtbcwjw8F
+         lvf9Grj4gsnUyo7dwfTK2+g1YPXStY523V/zEWa+RLfyqROxFjuuIzDBBLBgPrYXqxgY
+         SXeS5uDwdRem+sCgurXxC/8S7ZBm7dF2arsU5fNuPLxlYu3VlWfRN1h1sXBVzA/lYLas
+         qHBgicwzOcnzqWyOxRZaBRWH4N7ycQ8J72YOpYXApjo7cn3d2f+8c+Exfzei9cJOkiFZ
+         3dKSckmVWj6qewCXjZ+sFv56jtz6Yl2jlojbotu9mqwS/rgnqLp+v00jEwLzz9eF8KH4
+         mVMw==
+X-Gm-Message-State: AOAM532Bz2CCZhYNxADhVtpfPJ+EHYhT5fDn5JQtdp3hNl9WQZVpEEkf
+        N2PfgDr5L5lNgJFccWA3ygskVxpywyOLFXBuDw==
+X-Google-Smtp-Source: ABdhPJxifXiV2IwBShgAldnOtAN44f4qB6zmnPyH/IJw/7BkXZPOJKxYCtAxbJk4yN0V7cgS+dlxUhTFe/JmaJ6gOg==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:500a:9ac2:e73e:69e3])
+ (user=kaleshsingh job=sendgmr) by 2002:a25:7b85:0:b0:628:beb3:d877 with SMTP
+ id w127-20020a257b85000000b00628beb3d877mr19510073ybc.8.1647288122059; Mon,
+ 14 Mar 2022 13:02:02 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 13:01:09 -0700
+Message-Id: <20220314200148.2695206-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH v6 0/8] KVM: arm64: Hypervisor stack enhancements
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        tabba@google.com, surenb@google.com, kernel-team@android.com,
+        Kalesh Singh <kaleshsingh@google.com>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Scull <ascull@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v4 07/13] KVM: arm64: Add vendor hypervisor firmware
- register
-Message-ID: <Yi+eoHWYgt6A5z+1@google.com>
-References: <20220224172559.4170192-1-rananta@google.com>
- <20220224172559.4170192-8-rananta@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224172559.4170192-8-rananta@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 05:25:53PM +0000, Raghavendra Rao Ananta wrote:
-> Introduce the firmware register to hold the vendor specific
-> hypervisor service calls (owner value 6) as a bitmap. The
-> bitmap represents the features that'll be enabled for the
-> guest, as configured by the user-space. Currently, this
-> includes support only for Precision Time Protocol (PTP),
-> represented by bit-0.
-> 
-> The register is also added to the kvm_arm_vm_scope_fw_regs[]
-> list as it maintains its state per-VM.
-> 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->  arch/arm64/include/asm/kvm_host.h |  2 ++
->  arch/arm64/include/uapi/asm/kvm.h |  4 ++++
->  arch/arm64/kvm/guest.c            |  1 +
->  arch/arm64/kvm/hypercalls.c       | 22 +++++++++++++++++++++-
->  include/kvm/arm_hypercalls.h      |  3 +++
->  5 files changed, 31 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 318148b69279..d999456c4604 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
->   *
->   * @hvc_std_bmap: Bitmap of standard secure service calls
->   * @hvc_std_hyp_bmap: Bitmap of standard hypervisor service calls
-> + * @hvc_vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
->   */
->  struct kvm_hvc_desc {
->  	u64 hvc_std_bmap;
->  	u64 hvc_std_hyp_bmap;
-> +	u64 hvc_vendor_hyp_bmap;
->  };
->  
->  struct kvm_arch {
-> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> index 9a2caead7359..ed470bde13d8 100644
-> --- a/arch/arm64/include/uapi/asm/kvm.h
-> +++ b/arch/arm64/include/uapi/asm/kvm.h
-> @@ -299,6 +299,10 @@ struct kvm_arm_copy_mte_tags {
->  #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME		BIT(0)
->  #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX	0       /* Last valid bit */
->  
-> +#define KVM_REG_ARM_VENDOR_HYP_BMAP		KVM_REG_ARM_FW_BMAP_REG(2)
-> +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP		BIT(0)
-> +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX	0       /* Last valid bit */
-> +
->  /* SVE registers */
->  #define KVM_REG_ARM64_SVE		(0x15 << KVM_REG_ARM_COPROC_SHIFT)
->  
-> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> index c42426d6137e..fc3656f91aed 100644
-> --- a/arch/arm64/kvm/guest.c
-> +++ b/arch/arm64/kvm/guest.c
-> @@ -67,6 +67,7 @@ static const u64 kvm_arm_vm_scope_fw_regs[] = {
->  	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
->  	KVM_REG_ARM_STD_BMAP,
->  	KVM_REG_ARM_STD_HYP_BMAP,
-> +	KVM_REG_ARM_VENDOR_HYP_BMAP,
->  };
->  
->  /**
-> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> index ebc0cc26cf2e..5c5098c8f1f9 100644
-> --- a/arch/arm64/kvm/hypercalls.c
-> +++ b/arch/arm64/kvm/hypercalls.c
-> @@ -79,6 +79,9 @@ static bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
->  	case ARM_SMCCC_HV_PV_TIME_ST:
->  		return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_hyp_bmap,
->  					KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
-> +	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
-> +		return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_vendor_hyp_bmap,
-> +					KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
->  	default:
->  		/* By default, allow the services that aren't listed here */
->  		return true;
-> @@ -162,7 +165,14 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
->  		break;
->  	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
->  		val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
-> -		val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
-> +
-> +		/*
-> +		 * The feature bits exposed to user-space doesn't include
-> +		 * ARM_SMCCC_KVM_FUNC_FEATURES. However, we expose this to
-> +		 * the guest as bit-0. Hence, left-shift the user-space
-> +		 * exposed bitmap by 1 to accommodate this.
-> +		 */
-> +		val[0] |= hvc_desc->hvc_vendor_hyp_bmap << 1;
+Hi all,
 
-Having an off-by-one difference between the userspace and guest
-representations of this bitmap seems like it could be a source of bugs
-in the future. Its also impossible for the guest to completely hide the
-vendor range if it so chooses.
+This is v6 of the nVHE hypervisor stack enhancements. Addresses some
+refactoring/cleanup and documentation improvments from Stephen,
+and rebased on 5.17-rc8.
 
-Why not tie ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID and
-ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID to BIT(0)? PTP would then
-become BIT(1).
+Previous versions can be found at:
+v5: https://lore.kernel.org/r/20220307184935.1704614-1-kaleshsingh@google.com/
+v4: https://lore.kernel.org/r/20220225033548.1912117-1-kaleshsingh@google.com/
+v3: https://lore.kernel.org/r/20220224051439.640768-1-kaleshsingh@google.com/
+v2: https://lore.kernel.org/r/20220222165212.2005066-1-kaleshsingh@google.com/
+v1: https://lore.kernel.org/r/20220210224220.4076151-1-kaleshsingh@google.com/
 
->  		break;
->  	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
->  		kvm_ptp_get_time(vcpu, val);
-> @@ -188,6 +198,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
->  	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
->  	KVM_REG_ARM_STD_BMAP,
->  	KVM_REG_ARM_STD_HYP_BMAP,
-> +	KVM_REG_ARM_VENDOR_HYP_BMAP,
->  };
->  
->  void kvm_arm_init_hypercalls(struct kvm *kvm)
-> @@ -196,6 +207,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
->  
->  	hvc_desc->hvc_std_bmap = ARM_SMCCC_STD_FEATURES;
->  	hvc_desc->hvc_std_hyp_bmap = ARM_SMCCC_STD_HYP_FEATURES;
-> +	hvc_desc->hvc_vendor_hyp_bmap = ARM_SMCCC_VENDOR_HYP_FEATURES;
->  }
->  
->  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
-> @@ -285,6 +297,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->  	case KVM_REG_ARM_STD_HYP_BMAP:
->  		val = READ_ONCE(hvc_desc->hvc_std_hyp_bmap);
->  		break;
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> +		val = READ_ONCE(hvc_desc->hvc_vendor_hyp_bmap);
-> +		break;
->  	default:
->  		return -ENOENT;
->  	}
-> @@ -311,6 +326,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
->  		fw_reg_bmap = &hvc_desc->hvc_std_hyp_bmap;
->  		fw_reg_features = ARM_SMCCC_STD_HYP_FEATURES;
->  		break;
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> +		fw_reg_bmap = &hvc_desc->hvc_vendor_hyp_bmap;
-> +		fw_reg_features = ARM_SMCCC_VENDOR_HYP_FEATURES;
-> +		break;
->  	default:
->  		return -ENOENT;
->  	}
-> @@ -416,6 +435,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->  		return 0;
->  	case KVM_REG_ARM_STD_BMAP:
->  	case KVM_REG_ARM_STD_HYP_BMAP:
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
->  		return kvm_arm_set_fw_reg_bmap(vcpu, reg_id, val);
->  	default:
->  		return -ENOENT;
-> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
-> index a1cb6e839c74..91be758ca58e 100644
-> --- a/include/kvm/arm_hypercalls.h
-> +++ b/include/kvm/arm_hypercalls.h
-> @@ -12,6 +12,9 @@
->  #define ARM_SMCCC_STD_HYP_FEATURES \
->  	GENMASK_ULL(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
->  
-> +#define ARM_SMCCC_VENDOR_HYP_FEATURES \
-> +	GENMASK_ULL(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
-> +
->  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
->  
->  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
-> -- 
-> 2.35.1.473.g83b2b277ed-goog
-> 
+The previous cover letter has been copied below for convenience.
+
+Thanks,
+Kalesh
+
+-----
+
+This series is based on 5.17-rc8 and adds the following stack features to
+the KVM nVHE hypervisor:
+
+== Hyp Stack Guard Pages ==
+
+Based on the technique used by arm64 VMAP_STACK to detect overflow.
+i.e. the stack is aligned such that the 'stack shift' bit of any valid
+SP is 1. The 'stack shift' bit can be tested in the exception entry to
+detect overflow without corrupting GPRs.
+
+== Hyp Stack Unwinder ==
+
+The unwinding and dumping of the hyp stack is not enabled by default and
+depends on CONFIG_NVHE_EL2_DEBUG to avoid potential information leaks.
+
+When CONFIG_NVHE_EL2_DEBUG is enabled the host stage 2 protection is
+disabled, allowing the host to read the hypervisor stack pages and unwind
+the stack from EL1. This allows us to print the hypervisor stacktrace
+before panicking the host; as shown below.
+
+Example call trace:
+
+[   98.916444][  T426] kvm [426]: nVHE hyp panic at: [<ffffffc0096156fc>] __kvm_nvhe_overflow_stack+0x8/0x34!
+[   98.918360][  T426] nVHE HYP call trace:
+[   98.918692][  T426] kvm [426]: [<ffffffc009615aac>] __kvm_nvhe_cpu_prepare_nvhe_panic_info+0x4c/0x68
+[   98.919545][  T426] kvm [426]: [<ffffffc0096159a4>] __kvm_nvhe_hyp_panic+0x2c/0xe8
+[   98.920107][  T426] kvm [426]: [<ffffffc009615ad8>] __kvm_nvhe_hyp_panic_bad_stack+0x10/0x10
+[   98.920665][  T426] kvm [426]: [<ffffffc009610a4c>] __kvm_nvhe___kvm_hyp_host_vector+0x24c/0x794
+[   98.921292][  T426] kvm [426]: [<ffffffc009615718>] __kvm_nvhe_overflow_stack+0x24/0x34
+. . .
+
+[   98.973382][  T426] kvm [426]: [<ffffffc009615718>] __kvm_nvhe_overflow_stack+0x24/0x34
+[   98.973816][  T426] kvm [426]: [<ffffffc0096152f4>] __kvm_nvhe___kvm_vcpu_run+0x38/0x438
+[   98.974255][  T426] kvm [426]: [<ffffffc009616f80>] __kvm_nvhe_handle___kvm_vcpu_run+0x1c4/0x364
+[   98.974719][  T426] kvm [426]: [<ffffffc009616928>] __kvm_nvhe_handle_trap+0xa8/0x130
+[   98.975152][  T426] kvm [426]: [<ffffffc009610064>] __kvm_nvhe___host_exit+0x64/0x64
+[   98.975588][  T426] ---- end of nVHE HYP call trace ----
+
+
+
+
+Kalesh Singh (8):
+  KVM: arm64: Introduce hyp_alloc_private_va_range()
+  KVM: arm64: Introduce pkvm_alloc_private_va_range()
+  KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
+  KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
+  KVM: arm64: Detect and handle hypervisor stack overflows
+  KVM: arm64: Add hypervisor overflow stack
+  KVM: arm64: Unwind and dump nVHE HYP stacktrace
+  KVM: arm64: Symbolize the nVHE HYP backtrace
+
+ arch/arm64/include/asm/kvm_asm.h     |  21 +++
+ arch/arm64/include/asm/kvm_mmu.h     |   4 +
+ arch/arm64/include/asm/stacktrace.h  |  12 ++
+ arch/arm64/kernel/stacktrace.c       | 210 ++++++++++++++++++++++++---
+ arch/arm64/kvm/Kconfig               |   5 +-
+ arch/arm64/kvm/arm.c                 |  41 +++++-
+ arch/arm64/kvm/handle_exit.c         |  16 +-
+ arch/arm64/kvm/hyp/include/nvhe/mm.h |   6 +-
+ arch/arm64/kvm/hyp/nvhe/host.S       |  29 ++++
+ arch/arm64/kvm/hyp/nvhe/hyp-main.c   |  18 ++-
+ arch/arm64/kvm/hyp/nvhe/mm.c         |  78 ++++++----
+ arch/arm64/kvm/hyp/nvhe/setup.c      |  31 +++-
+ arch/arm64/kvm/hyp/nvhe/switch.c     |  30 +++-
+ arch/arm64/kvm/mmu.c                 |  70 ++++++---
+ scripts/kallsyms.c                   |   2 +-
+ 15 files changed, 477 insertions(+), 96 deletions(-)
+
+
+base-commit: 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
+-- 
+2.35.1.723.g4982287a31-goog
+

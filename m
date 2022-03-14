@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DFD4D8571
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3046F4D82A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236401AbiCNMuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S240636AbiCNMGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236869AbiCNMry (ORCPT
+        with ESMTP id S240456AbiCNMFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:47:54 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BBB377F1;
-        Mon, 14 Mar 2022 05:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M9spczh/Q2CKy8sMPxzQoXDaExSwQXf/vtHnX1TW0y0=;
-  b=JWnavQwdiW+E6NAcxa3wyUKgIVR+UCaJGE5YAkPfKZtGey9O/SI36evj
-   d+SVjeyrAeMgnizhu4vffjSJlsafhVrIqYgsE/RuHNYaSxDD05aGLpJO8
-   r1q6tOpvTLJABZtZ/UcZ3ItWN2ER1A7GJ1vVFzo81Db16EirVNqPVeMRT
-   U=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997360"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Harald Freudenberger <freude@linux.ibm.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 26/30] s390/pkey: fix typos in comments
+        Mon, 14 Mar 2022 08:05:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540F129C9D;
+        Mon, 14 Mar 2022 05:02:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D245661251;
+        Mon, 14 Mar 2022 12:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95170C340E9;
+        Mon, 14 Mar 2022 12:02:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647259340;
+        bh=rA8MUk+qgPUNyTczyuKioG02Uku9lVWVFXwdv1WelmY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Yd05pkl9fy5jhgdBb2wtZRFxa6NuK0bPODPnuA923C/UVHGZiGoLBw/amwPMlGDg/
+         fw5XEzLHmDuh32v4HZ+D51ln0bq5x1GniqI1x6w031WJcAt6/N8G4gHfVLYUjDUEyr
+         b2EW/2z7ooSOFWEYyzEQuBu1yor/yBrFTQ09ORN8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Subject: [PATCH 5.10 57/71] virtio: unexport virtio_finalize_features
 Date:   Mon, 14 Mar 2022 12:53:50 +0100
-Message-Id: <20220314115354.144023-27-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112739.527237169@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Michael S. Tsirkin <mst@redhat.com>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+commit 838d6d3461db0fdbf33fc5f8a69c27b50b4a46da upstream.
 
+virtio_finalize_features is only used internally within virtio.
+No reason to export it.
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/s390/crypto/pkey_api.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/virtio/virtio.c |    3 +--
+ include/linux/virtio.h  |    1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/s390/crypto/pkey_api.c b/drivers/s390/crypto/pkey_api.c
-index cf23ce1b1146..7f69ca695fc2 100644
---- a/drivers/s390/crypto/pkey_api.c
-+++ b/drivers/s390/crypto/pkey_api.c
-@@ -155,7 +155,7 @@ static int pkey_skey2pkey(const u8 *key, struct pkey_protkey *pkey)
- 	/*
- 	 * The cca_xxx2protkey call may fail when a card has been
- 	 * addressed where the master key was changed after last fetch
--	 * of the mkvp into the cache. Try 3 times: First witout verify
-+	 * of the mkvp into the cache. Try 3 times: First without verify
- 	 * then with verify and last round with verify and old master
- 	 * key verification pattern match not ignored.
- 	 */
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -167,7 +167,7 @@ void virtio_add_status(struct virtio_dev
+ }
+ EXPORT_SYMBOL_GPL(virtio_add_status);
+ 
+-int virtio_finalize_features(struct virtio_device *dev)
++static int virtio_finalize_features(struct virtio_device *dev)
+ {
+ 	int ret = dev->config->finalize_features(dev);
+ 	unsigned status;
+@@ -203,7 +203,6 @@ int virtio_finalize_features(struct virt
+ 	}
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(virtio_finalize_features);
+ 
+ static int virtio_dev_probe(struct device *_d)
+ {
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -135,7 +135,6 @@ void virtio_break_device(struct virtio_d
+ void virtio_config_changed(struct virtio_device *dev);
+ void virtio_config_disable(struct virtio_device *dev);
+ void virtio_config_enable(struct virtio_device *dev);
+-int virtio_finalize_features(struct virtio_device *dev);
+ #ifdef CONFIG_PM_SLEEP
+ int virtio_device_freeze(struct virtio_device *dev);
+ int virtio_device_restore(struct virtio_device *dev);
+
 

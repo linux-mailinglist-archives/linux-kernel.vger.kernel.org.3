@@ -2,440 +2,515 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415E94D7FFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDD54D8001
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238625AbiCNKjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
+        id S237962AbiCNKk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238606AbiCNKjB (ORCPT
+        with ESMTP id S234281AbiCNKkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:39:01 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DF713DF3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:37:50 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id yy13so32861014ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MZp7gpnQ9sDMK3u9FGLF0DtfQSh/r7kXG58Sm7tKpYY=;
-        b=saLhr5vFxCZrsjEj3zox8KF0Jb1MMbflR64Kb4l4U4tzSm3yiiVkIu+uDJS5QATHiw
-         +lz3GSqr1atOyRu9wMyJSddeuHQfuT51ZKhx5MXqEaQwuT4mU0EpDw/EZf0OKtxz77k9
-         E1u92oMbVLni/4nwkwlmgAPyRXb2sJAeOYNkMiqFVWgHeTD/7FDa+CcVqS+dsCMaYNmZ
-         8vcD5L0hbgAhMnwckDw9FbuSlEXGVYKADhUqOsrUuhlNxZ8L+K0y1SDQUcZM3MCyD+M4
-         iDbXJ+YTY706sAufKQi8A9tZU7mX/5UGDJ9gg8pL1zaHxP1Y+57GunLctJxM6ahtSYqU
-         ojfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MZp7gpnQ9sDMK3u9FGLF0DtfQSh/r7kXG58Sm7tKpYY=;
-        b=tkYvvmS6+XMXnXV6TdmHaAgyn3rg/XFvYPtHWUR8vgCLa8yn74sl+UETP/QXZiBHiP
-         vILdIYOEg/8yYKyotPn7Tz5osl9MF1q77GVoQudunQCYNrrQn48zpaN4SUkuvwZc0W/Y
-         jjczJ9N0aWJXgSIdeGfhDbAi/OTtioHn6XaAW/8flRolY8CNpgx3aJTVU/9TrorW+URs
-         UrsrYeNvOgsVvCIRZut8lObYhPE3KAVc9AfKZboPeOALw/zPPos85SP7YK4G1wFKqqA+
-         l1+DLPIMix1kohtuUfR4QJjuobnJylM2gY0zWmPlFGJ9q5i2h0JND64UzhOtE1jwrmkJ
-         xkBw==
-X-Gm-Message-State: AOAM532Gg9qQPTEcEzepbNtGAKKfyNbEiKit12OZn+A3yGhqLOgQlTSe
-        Yw7jwyhR6M6vGAy37O9CpBGHuQ==
-X-Google-Smtp-Source: ABdhPJwBzilczZqjxRl2tocXjpfILbiCNUlThUkPEV5lBZ6+4VrjKX37ZNnHET3BIlhwSTB67FQbBg==
-X-Received: by 2002:a17:906:3adb:b0:6b7:876c:d11b with SMTP id z27-20020a1709063adb00b006b7876cd11bmr17836590ejd.250.1647254268847;
-        Mon, 14 Mar 2022 03:37:48 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id cc20-20020a0564021b9400b00412f2502469sm7694617edb.23.2022.03.14.03.37.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 03:37:48 -0700 (PDT)
-Message-ID: <d16cb4b7-a1bf-2e96-0b59-2c4c37b2fdd3@blackwall.org>
-Date:   Mon, 14 Mar 2022 12:37:46 +0200
+        Mon, 14 Mar 2022 06:40:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131815A0B;
+        Mon, 14 Mar 2022 03:39:15 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 6EA791F43C62
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647254354;
+        bh=EUbmJON90sDQrR2mXhuO1QBu4eKg32Jxdq/pCeygcfc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Rsg8jgWiDFfVzbxCVIhHFNK0MisMROZJS9K0NONEg/QBiaHGVEsNk2oj4vbCSPnBg
+         vuKcrTBbMBOVd8iz6QGTGuma4rtXAiKIWvmzwf3y6F5pXnWQNa97m/k3FDtR+wVxq6
+         tEzZahIEmlmSf7MSA+t3CZqmVOOyM9fvAArbvfTzBc/jnLtVjZE7LDtsBW7EK6X09c
+         82zSjWS/1RWIVVwvgxQNlRyc4ndrkKmge3tPxkFUaN26EPeUsJEE3P8vdo0xcK4yGX
+         thPs8E341juDwEiK/GKcDsxsz74tlxUGLqJFQi4cbk5K0QaUSE+7AOkJhmqrNxkAWT
+         SjA051EyfLMCA==
+Message-ID: <3c7c6e67-072c-6377-05bd-1b5baa579666@collabora.com>
+Date:   Mon, 14 Mar 2022 11:39:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 net-next 03/14] net: bridge: mst: Support setting and
- reporting MST port states
+ Thunderbird/91.5.1
+Subject: Re: [v3 10/19] ASoC: mediatek: mt8186: support tdm in platform driver
 Content-Language: en-US
-To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
- <20220314095231.3486931-4-tobias@waldekranz.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220314095231.3486931-4-tobias@waldekranz.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org,
+        robh+dt@kernel.org
+Cc:     aaronyu@google.com, matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        tzungbi@google.com, julianbraha@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220313151023.21229-1-jiaxin.yu@mediatek.com>
+ <20220313151023.21229-11-jiaxin.yu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220313151023.21229-11-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 11:52, Tobias Waldekranz wrote:
-> Make it possible to change the port state in a given MSTI by extending
-> the bridge port netlink interface (RTM_SETLINK on PF_BRIDGE).The
-> proposed iproute2 interface would be:
+Il 13/03/22 16:10, Jiaxin Yu ha scritto:
+> Add mt8186 tdm dai driver.
 > 
->     bridge mst set dev <PORT> msti <MSTI> state <STATE>
-> 
-> Current states in all applicable MSTIs can also be dumped via a
-> corresponding RTM_GETLINK. The proposed iproute interface looks like
-> this:
-> 
-> $ bridge mst
-> port              msti
-> vb1               0
-> 		    state forwarding
-> 		  100
-> 		    state disabled
-> vb2               0
-> 		    state forwarding
-> 		  100
-> 		    state forwarding
-> 
-> The preexisting per-VLAN states are still valid in the MST
-> mode (although they are read-only), and can be queried as usual if one
-> is interested in knowing a particular VLAN's state without having to
-> care about the VID to MSTI mapping (in this example VLAN 20 and 30 are
-> bound to MSTI 100):
-> 
-> $ bridge -d vlan
-> port              vlan-id
-> vb1               10
-> 		    state forwarding mcast_router 1
-> 		  20
-> 		    state disabled mcast_router 1
-> 		  30
-> 		    state disabled mcast_router 1
-> 		  40
-> 		    state forwarding mcast_router 1
-> vb2               10
-> 		    state forwarding mcast_router 1
-> 		  20
-> 		    state forwarding mcast_router 1
-> 		  30
-> 		    state forwarding mcast_router 1
-> 		  40
-> 		    state forwarding mcast_router 1
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
 > ---
-
-Hi Tobias,
-A few comments below..
-
->  include/uapi/linux/if_bridge.h |  17 ++++++
->  include/uapi/linux/rtnetlink.h |   1 +
->  net/bridge/br_mst.c            | 105 +++++++++++++++++++++++++++++++++
->  net/bridge/br_netlink.c        |  32 +++++++++-
->  net/bridge/br_private.h        |  15 +++++
->  5 files changed, 169 insertions(+), 1 deletion(-)
+>   sound/soc/mediatek/mt8186/mt8186-dai-tdm.c | 695 +++++++++++++++++++++
+>   1 file changed, 695 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
 > 
-> diff --git a/include/uapi/linux/if_bridge.h b/include/uapi/linux/if_bridge.h
-> index f60244b747ae..879dfaef8da0 100644
-> --- a/include/uapi/linux/if_bridge.h
-> +++ b/include/uapi/linux/if_bridge.h
-> @@ -122,6 +122,7 @@ enum {
->  	IFLA_BRIDGE_VLAN_TUNNEL_INFO,
->  	IFLA_BRIDGE_MRP,
->  	IFLA_BRIDGE_CFM,
-> +	IFLA_BRIDGE_MST,
->  	__IFLA_BRIDGE_MAX,
->  };
->  #define IFLA_BRIDGE_MAX (__IFLA_BRIDGE_MAX - 1)
-> @@ -453,6 +454,21 @@ enum {
->  
->  #define IFLA_BRIDGE_CFM_CC_PEER_STATUS_MAX (__IFLA_BRIDGE_CFM_CC_PEER_STATUS_MAX - 1)
->  
-> +enum {
-> +	IFLA_BRIDGE_MST_UNSPEC,
-> +	IFLA_BRIDGE_MST_ENTRY,
-> +	__IFLA_BRIDGE_MST_MAX,
+> diff --git a/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+> new file mode 100644
+> index 000000000000..52acc5f6e147
+> --- /dev/null
+> +++ b/sound/soc/mediatek/mt8186/mt8186-dai-tdm.c
+> @@ -0,0 +1,695 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// MediaTek ALSA SoC Audio DAI TDM Control
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +// Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> +
+> +#include <linux/regmap.h>
+> +#include <sound/pcm_params.h>
+> +
+> +#include "mt8186-afe-clk.h"
+> +#include "mt8186-afe-common.h"
+> +#include "mt8186-afe-gpio.h"
+> +#include "mt8186-interconnection.h"
+> +
+> +#define TDM_HD_EN_W_NAME "TDM_HD_EN"
+> +#define TDM_MCLK_EN_W_NAME "TDM_MCLK_EN"
+> +#define MTK_AFE_TDM_KCONTROL_NAME "TDM_HD_Mux"
+> +
+> +struct mtk_afe_tdm_priv {
+> +	unsigned int id;
+> +	unsigned int rate; /* for determine which apll to use */
+> +	unsigned int bck_invert;
+> +	unsigned int lck_invert;
+> +	unsigned int lrck_width;
+> +	unsigned int mclk_id;
+> +	unsigned int mclk_multiple; /* according to sample rate */
+> +	unsigned int mclk_rate;
+> +	unsigned int mclk_apll;
+> +	unsigned int tdm_mode;
+> +	unsigned int data_mode;
+> +	unsigned int slave_mode;
+> +	unsigned int low_jitter_en;
 > +};
-> +#define IFLA_BRIDGE_MST_MAX (__IFLA_BRIDGE_MST_MAX - 1)
 > +
 > +enum {
-> +	IFLA_BRIDGE_MST_ENTRY_UNSPEC,
-> +	IFLA_BRIDGE_MST_ENTRY_MSTI,
-> +	IFLA_BRIDGE_MST_ENTRY_STATE,
-> +	__IFLA_BRIDGE_MST_ENTRY_MAX,
+> +	TDM_IN_I2S = 0,
+> +	TDM_IN_LJ = 1,
+> +	TDM_IN_RJ = 2,
+> +	TDM_IN_DSP_A = 4,
+> +	TDM_IN_DSP_B = 5,
 > +};
-> +#define IFLA_BRIDGE_MST_ENTRY_MAX (__IFLA_BRIDGE_MST_ENTRY_MAX - 1)
 > +
->  struct bridge_stp_xstats {
->  	__u64 transition_blk;
->  	__u64 transition_fwd;
-> @@ -786,4 +802,5 @@ enum {
->  	__BRIDGE_QUERIER_MAX
->  };
->  #define BRIDGE_QUERIER_MAX (__BRIDGE_QUERIER_MAX - 1)
+> +enum {
+> +	TDM_DATA_ONE_PIN = 0,
+> +	TDM_DATA_MULTI_PIN,
+> +};
 > +
-
-stray new line
-
->  #endif /* _UAPI_LINUX_IF_BRIDGE_H */
-> diff --git a/include/uapi/linux/rtnetlink.h b/include/uapi/linux/rtnetlink.h
-> index 51530aade46e..83849a37db5b 100644
-> --- a/include/uapi/linux/rtnetlink.h
-> +++ b/include/uapi/linux/rtnetlink.h
-> @@ -817,6 +817,7 @@ enum {
->  #define RTEXT_FILTER_MRP	(1 << 4)
->  #define RTEXT_FILTER_CFM_CONFIG	(1 << 5)
->  #define RTEXT_FILTER_CFM_STATUS	(1 << 6)
-> +#define RTEXT_FILTER_MST	(1 << 7)
->  
->  /* End of information exported to user level */
->  
-> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
-> index 78ef5fea4d2b..df65aa7701c1 100644
-> --- a/net/bridge/br_mst.c
-> +++ b/net/bridge/br_mst.c
-> @@ -124,3 +124,108 @@ int br_mst_set_enabled(struct net_bridge *br, bool on,
->  	br_opt_toggle(br, BROPT_MST_ENABLED, on);
->  	return 0;
->  }
+> +enum {
+> +	TDM_BCK_NON_INV = 0,
+> +	TDM_BCK_INV = 1,
+> +};
 > +
-> +int br_mst_fill_info(struct sk_buff *skb, struct net_bridge_vlan_group *vg)
-
-const vg
-
+> +enum {
+> +	TDM_LCK_NON_INV = 0,
+> +	TDM_LCK_INV = 1,
+> +};
+> +
+> +static unsigned int get_tdm_lrck_width(snd_pcm_format_t format,
+> +				       unsigned int mode)
 > +{
-> +	struct net_bridge_vlan *v;
-
-const v
-
-> +	struct nlattr *nest;
-> +	unsigned long *seen;
-> +	int err = 0;
+> +	if (mode == TDM_IN_DSP_A || mode == TDM_IN_DSP_B)
+> +		return 0;
 > +
-> +	seen = bitmap_zalloc(VLAN_N_VID, 0);
-> +	if (!seen)
-> +		return -ENOMEM;
-> +
-> +	list_for_each_entry(v, &vg->vlan_list, vlist) {
-> +		if (test_bit(v->brvlan->msti, seen))
-> +			continue;
-> +
-> +		nest = nla_nest_start_noflag(skb, IFLA_BRIDGE_MST_ENTRY);
-> +		if (!nest ||
-> +		    nla_put_u16(skb, IFLA_BRIDGE_MST_ENTRY_MSTI, v->brvlan->msti) ||
-> +		    nla_put_u8(skb, IFLA_BRIDGE_MST_ENTRY_STATE, v->state)) {
-> +			err = -EMSGSIZE;
-> +			break;
-> +		}
-> +		nla_nest_end(skb, nest);
-> +
-> +		set_bit(v->brvlan->msti, seen);
-
-__set_bit()
-
-> +	}
-> +
-> +	kfree(seen);
-> +	return err;
+> +	return snd_pcm_format_physical_width(format) - 1;
 > +}
 > +
-> +static const struct nla_policy br_mst_nl_policy[IFLA_BRIDGE_MST_ENTRY_MAX + 1] = {
-> +	[IFLA_BRIDGE_MST_ENTRY_MSTI] = NLA_POLICY_RANGE(NLA_U16,
-> +						   1, /* 0 reserved for CST */
-> +						   VLAN_N_VID - 1),
-> +	[IFLA_BRIDGE_MST_ENTRY_STATE] = NLA_POLICY_RANGE(NLA_U8,
-> +						    BR_STATE_DISABLED,
-> +						    BR_STATE_BLOCKING),
+> +static unsigned int get_tdm_ch_fixup(unsigned int channels)
+> +{
+> +	if (channels > 4)
+> +		return 8;
+> +	else if (channels > 2)
+> +		return 4;
+> +
+> +	return 2;
+> +}
+> +
+> +static unsigned int get_tdm_ch_per_sdata(unsigned int mode,
+> +					 unsigned int channels)
+> +{
+> +	if (mode == TDM_IN_DSP_A || mode == TDM_IN_DSP_B)
+> +		return get_tdm_ch_fixup(channels);
+> +
+> +	return 2;
+> +}
+> +
+> +enum {
+> +	SUPPLY_SEQ_APLL,
+> +	SUPPLY_SEQ_TDM_MCK_EN,
+> +	SUPPLY_SEQ_TDM_HD_EN,
+> +	SUPPLY_SEQ_TDM_EN,
 > +};
 > +
-> +static int br_mst_parse_one(struct net_bridge_port *p,
-> +			    const struct nlattr *attr,
-> +			    struct netlink_ext_ack *extack)
+> +static int get_tdm_id_by_name(const char *name)
 > +{
-
-I'd either set the state after parsing, so this function just does what it
-says (parse) or I'd rename it.
-
-> +	struct nlattr *tb[IFLA_BRIDGE_MST_ENTRY_MAX + 1];
-> +	u16 msti;
-> +	u8 state;
-> +	int err;
+> +	return MT8186_DAI_TDM_IN;
+> +}
 > +
-> +	err = nla_parse_nested(tb, IFLA_BRIDGE_MST_ENTRY_MAX, attr,
-> +			       br_mst_nl_policy, extack);
-> +	if (err)
-> +		return err;
+> +static int mtk_tdm_en_event(struct snd_soc_dapm_widget *w,
+> +			    struct snd_kcontrol *kcontrol,
+> +			    int event)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
 > +
-> +	if (!tb[IFLA_BRIDGE_MST_ENTRY_MSTI]) {
-> +		NL_SET_ERR_MSG_MOD(extack, "MSTI not specified");
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
 > +		return -EINVAL;
 > +	}
 > +
-> +	if (!tb[IFLA_BRIDGE_MST_ENTRY_STATE]) {
-> +		NL_SET_ERR_MSG_MOD(extack, "State not specified");
-> +		return -EINVAL;
+> +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x\n",
+> +		__func__, w->name, event);
+> +
+> +	switch (event) {
+> +	case SND_SOC_DAPM_PRE_PMU:
+> +		mt8186_afe_gpio_request(afe->dev, true, tdm_priv->id, 0);
+> +		break;
+> +	case SND_SOC_DAPM_POST_PMD:
+> +		mt8186_afe_gpio_request(afe->dev, false, tdm_priv->id, 0);
+> +		break;
+> +	default:
+> +		break;
 > +	}
 > +
-> +	msti = nla_get_u16(tb[IFLA_BRIDGE_MST_ENTRY_MSTI]);
-> +	state = nla_get_u8(tb[IFLA_BRIDGE_MST_ENTRY_STATE]);
-> +
-> +	br_mst_set_state(p, msti, state);
 > +	return 0;
 > +}
 > +
-> +int br_mst_parse(struct net_bridge_port *p, struct nlattr *mst_attr,
-> +		 struct netlink_ext_ack *extack)
-
-This doesn't just parse though, it also sets the state. Please rename it to
-something more appropriate.
-
-const mst_attr
-
+> +static int mtk_tdm_mck_en_event(struct snd_soc_dapm_widget *w,
+> +				struct snd_kcontrol *kcontrol,
+> +				int event)
 > +{
-> +	struct nlattr *attr;
-> +	int err, msts = 0;
-> +	int rem;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
 > +
-> +	if (!br_opt_get(p->br, BROPT_MST_ENABLED)) {
-> +		NL_SET_ERR_MSG_MOD(extack, "Can't modify MST state when MST is disabled");
-> +		return -EBUSY;
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return -EINVAL;
 > +	}
 > +
-> +	nla_for_each_nested(attr, mst_attr, rem) {
-> +		switch (nla_type(attr)) {
-> +		case IFLA_BRIDGE_MST_ENTRY:
-> +			err = br_mst_parse_one(p, attr, extack);
-> +			break;
-> +		default:
-> +			continue;
-> +		}
+> +	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
+> +		__func__, w->name, event, dai_id);
 > +
-> +		msts++;
-> +		if (err)
-> +			break;
+> +	switch (event) {
+> +	case SND_SOC_DAPM_PRE_PMU:
+> +		mt8186_mck_enable(afe, tdm_priv->mclk_id, tdm_priv->mclk_rate);
+> +		break;
+> +	case SND_SOC_DAPM_POST_PMD:
+> +		tdm_priv->mclk_rate = 0;
+> +		mt8186_mck_disable(afe, tdm_priv->mclk_id);
+> +		break;
+> +	default:
+> +		break;
 > +	}
 > +
-> +	if (!msts) {
-> +		NL_SET_ERR_MSG_MOD(extack, "Found no MST entries to process");
-> +		err = -EINVAL;
-> +	}
-> +
-> +	return err;
-> +}
-> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
-> index 7d4432ca9a20..d2b4550f30d6 100644
-> --- a/net/bridge/br_netlink.c
-> +++ b/net/bridge/br_netlink.c
-> @@ -485,7 +485,8 @@ static int br_fill_ifinfo(struct sk_buff *skb,
->  			   RTEXT_FILTER_BRVLAN_COMPRESSED |
->  			   RTEXT_FILTER_MRP |
->  			   RTEXT_FILTER_CFM_CONFIG |
-> -			   RTEXT_FILTER_CFM_STATUS)) {
-> +			   RTEXT_FILTER_CFM_STATUS |
-> +			   RTEXT_FILTER_MST)) {
->  		af = nla_nest_start_noflag(skb, IFLA_AF_SPEC);
->  		if (!af)
->  			goto nla_put_failure;
-> @@ -564,7 +565,28 @@ static int br_fill_ifinfo(struct sk_buff *skb,
->  		nla_nest_end(skb, cfm_nest);
->  	}
->  
-> +	if ((filter_mask & RTEXT_FILTER_MST) &&
-> +	    br_opt_get(br, BROPT_MST_ENABLED) && port) {
-> +		struct net_bridge_vlan_group *vg = nbp_vlan_group(port);
-
-const vg
-
-> +		struct nlattr *mst_nest;
-> +		int err;
-> +
-> +		if (!vg || !vg->num_vlans)
-> +			goto done;
-> +
-> +		mst_nest = nla_nest_start(skb, IFLA_BRIDGE_MST);
-> +		if (!mst_nest)
-> +			goto nla_put_failure;
-> +
-> +		err = br_mst_fill_info(skb, vg);
-> +		if (err)
-> +			goto nla_put_failure;
-> +
-> +		nla_nest_end(skb, mst_nest);
-> +	}
-> +
-
-I think you should also update br_get_link_af_size_filtered() to account for the
-new dump attributes based on the filter. I'd adjust vinfo_sz based on the filter
-flag.
-
->  done:
-> +
->  	if (af)
->  		nla_nest_end(skb, af);
->  	nlmsg_end(skb, nlh);
-> @@ -803,6 +825,14 @@ static int br_afspec(struct net_bridge *br,
->  			if (err)
->  				return err;
->  			break;
-> +		case IFLA_BRIDGE_MST:
-> +			if (cmd != RTM_SETLINK || !p)
-> +				return -EINVAL;
-
-These are two different errors, please set extack appropriately
-for each error.
-
-> +
-> +			err = br_mst_parse(p, attr, extack);
-> +			if (err)
-> +				return err;
-> +			break;
->  		}
->  	}
->  
-> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-> index b907d389b63a..08d82578bd97 100644
-> --- a/net/bridge/br_private.h
-> +++ b/net/bridge/br_private.h
-> @@ -1783,6 +1783,9 @@ int br_mst_vlan_set_msti(struct net_bridge_vlan *v, u16 msti);
->  void br_mst_vlan_init_state(struct net_bridge_vlan *v);
->  int br_mst_set_enabled(struct net_bridge *br, bool on,
->  		       struct netlink_ext_ack *extack);
-> +int br_mst_fill_info(struct sk_buff *skb, struct net_bridge_vlan_group *vg);
-> +int br_mst_parse(struct net_bridge_port *p, struct nlattr *mst_attr,
-> +		 struct netlink_ext_ack *extack);
->  #else
->  static inline bool br_mst_is_enabled(struct net_bridge *br)
->  {
-> @@ -1791,6 +1794,18 @@ static inline bool br_mst_is_enabled(struct net_bridge *br)
->  
->  static inline void br_mst_set_state(struct net_bridge_port *p,
->  				    u16 msti, u8 state) {}
-> +static inline int br_mst_fill_info(struct sk_buff *skb,
-> +				   struct net_bridge_vlan_group *vg)
-> +{
-> +	return -EOPNOTSUPP;
+> +	return 0;
 > +}
 > +
-> +static inline int br_mst_parse(struct net_bridge_port *p,
-> +			       struct nlattr *mst_attr,
-> +			       struct netlink_ext_ack *extack)
+> +/* dai component */
+> +/* tdm virtual mux to output widget */
+> +static const char * const tdm_mux_map[] = {
+> +	"Normal", "Dummy_Widget",
+> +};
+> +
+> +static int tdm_mux_map_value[] = {
+> +	0, 1,
+> +};
+> +
+> +static SOC_VALUE_ENUM_SINGLE_AUTODISABLE_DECL(tdm_mux_map_enum,
+> +					      SND_SOC_NOPM,
+> +					      0,
+> +					      1,
+> +					      tdm_mux_map,
+> +					      tdm_mux_map_value);
+> +
+> +static const struct snd_kcontrol_new tdm_in_mux_control =
+> +	SOC_DAPM_ENUM("TDM In Select", tdm_mux_map_enum);
+> +
+> +static const struct snd_soc_dapm_widget mtk_dai_tdm_widgets[] = {
+> +	SND_SOC_DAPM_CLOCK_SUPPLY("aud_tdm_clk"),
+> +
+> +	SND_SOC_DAPM_SUPPLY_S("TDM_EN", SUPPLY_SEQ_TDM_EN,
+> +			      ETDM_IN1_CON0, ETDM_IN1_CON0_REG_ETDM_IN_EN_SFT,
+> +			      0, mtk_tdm_en_event,
+> +			      SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
+> +	/* tdm hd en */
+> +	SND_SOC_DAPM_SUPPLY_S(TDM_HD_EN_W_NAME, SUPPLY_SEQ_TDM_HD_EN,
+> +			      ETDM_IN1_CON2, ETDM_IN1_CON2_REG_CLOCK_SOURCE_SEL_SFT,
+> +			      0, NULL,
+> +			      SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
+> +
+> +	SND_SOC_DAPM_SUPPLY_S(TDM_MCLK_EN_W_NAME, SUPPLY_SEQ_TDM_MCK_EN,
+> +			      SND_SOC_NOPM, 0, 0,
+> +			      mtk_tdm_mck_en_event,
+> +			      SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
+> +
+> +	SND_SOC_DAPM_INPUT("TDM_DUMMY_IN"),
+> +
+> +	SND_SOC_DAPM_MUX("TDM_In_Mux",
+> +			 SND_SOC_NOPM, 0, 0, &tdm_in_mux_control),
+> +};
+> +
+> +static int mtk_afe_tdm_mclk_connect(struct snd_soc_dapm_widget *source,
+> +				    struct snd_soc_dapm_widget *sink)
 > +{
-> +	return -EOPNOTSUPP;
+> +	struct snd_soc_dapm_widget *w = sink;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return 0;
+> +	}
+> +
+> +	return (tdm_priv->mclk_rate > 0) ? 1 : 0;
 > +}
->  #endif
->  
->  struct nf_br_ops {
+> +
+> +static int mtk_afe_tdm_mclk_apll_connect(struct snd_soc_dapm_widget *source,
+> +					 struct snd_soc_dapm_widget *sink)
+> +{
+> +	struct snd_soc_dapm_widget *w = sink;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +	int cur_apll;
+> +
+> +	/* which apll */
+> +	cur_apll = mt8186_get_apll_by_name(afe, source->name);
+> +
+> +	return (tdm_priv->mclk_apll == cur_apll) ? 1 : 0;
+> +}
+> +
+> +static int mtk_afe_tdm_hd_connect(struct snd_soc_dapm_widget *source,
+> +				  struct snd_soc_dapm_widget *sink)
+> +{
+> +	struct snd_soc_dapm_widget *w = sink;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return 0;
+> +	}
+> +
+> +	return tdm_priv->low_jitter_en;
+> +}
+> +
+> +static int mtk_afe_tdm_apll_connect(struct snd_soc_dapm_widget *source,
+> +				    struct snd_soc_dapm_widget *sink)
+> +{
+> +	struct snd_soc_dapm_widget *w = sink;
+> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(w->name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +	int cur_apll;
+> +	int tdm_need_apll;
+> +
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return 0;
+> +	}
+> +
+> +	/* which apll */
+> +	cur_apll = mt8186_get_apll_by_name(afe, source->name);
+> +
+> +	/* choose APLL from tdm rate */
+> +	tdm_need_apll = mt8186_get_apll_by_rate(afe, tdm_priv->rate);
+> +
+> +	return (tdm_need_apll == cur_apll) ? 1 : 0;
+> +}
+> +
+> +/* low jitter control */
+> +static const char * const mt8186_tdm_hd_str[] = {
+> +	"Normal", "Low_Jitter"
+> +};
+> +
+> +static const struct soc_enum mt8186_tdm_enum[] = {
+> +	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(mt8186_tdm_hd_str),
+> +			    mt8186_tdm_hd_str),
+> +};
+> +
+> +static int mt8186_tdm_hd_get(struct snd_kcontrol *kcontrol,
+> +			     struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(kcontrol->id.name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ucontrol->value.integer.value[0] = tdm_priv->low_jitter_en;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt8186_tdm_hd_set(struct snd_kcontrol *kcontrol,
+> +			     struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
+> +	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int dai_id = get_tdm_id_by_name(kcontrol->id.name);
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[dai_id];
+> +	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
+> +	int hd_en;
+> +
+> +	if (ucontrol->value.enumerated.item[0] >= e->items)
+> +		return -EINVAL;
+> +
+> +	hd_en = ucontrol->value.integer.value[0];
+> +
+> +	dev_dbg(afe->dev, "%s(), kcontrol name %s, hd_en %d\n",
+> +		__func__, kcontrol->id.name, hd_en);
+> +
+> +	if (!tdm_priv) {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	tdm_priv->low_jitter_en = hd_en;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct snd_kcontrol_new mtk_dai_tdm_controls[] = {
+> +	SOC_ENUM_EXT(MTK_AFE_TDM_KCONTROL_NAME, mt8186_tdm_enum[0],
+> +		     mt8186_tdm_hd_get, mt8186_tdm_hd_set),
+> +};
+> +
+> +static const struct snd_soc_dapm_route mtk_dai_tdm_routes[] = {
+> +	{"TDM IN", NULL, "aud_tdm_clk"},
+> +	{"TDM IN", NULL, "TDM_EN"},
+> +	{"TDM IN", NULL, TDM_HD_EN_W_NAME, mtk_afe_tdm_hd_connect},
+> +	{TDM_HD_EN_W_NAME, NULL, APLL1_W_NAME, mtk_afe_tdm_apll_connect},
+> +	{TDM_HD_EN_W_NAME, NULL, APLL2_W_NAME, mtk_afe_tdm_apll_connect},
+> +
+> +	{"TDM IN", NULL, TDM_MCLK_EN_W_NAME, mtk_afe_tdm_mclk_connect},
+> +	{TDM_MCLK_EN_W_NAME, NULL, APLL1_W_NAME, mtk_afe_tdm_mclk_apll_connect},
+> +	{TDM_MCLK_EN_W_NAME, NULL, APLL2_W_NAME, mtk_afe_tdm_mclk_apll_connect},
+> +
+> +	/* allow tdm on without codec on */
+> +	{"TDM IN", NULL, "TDM_In_Mux"},
+> +	{"TDM_In_Mux", "Dummy_Widget", "TDM_DUMMY_IN"},
+> +};
+> +
+> +/* dai ops */
+> +static int mtk_dai_tdm_cal_mclk(struct mtk_base_afe *afe,
+> +				struct mtk_afe_tdm_priv *tdm_priv,
+> +				int freq)
+> +{
+> +	int apll;
+> +	int apll_rate;
+> +
+> +	apll = mt8186_get_apll_by_rate(afe, freq);
+> +	apll_rate = mt8186_get_apll_rate(afe, apll);
+> +
+> +	if (!freq || freq > apll_rate) {
+> +		dev_err(afe->dev,
+> +			"%s(), freq(%d Hz) invalid\n", __func__, freq);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (apll_rate % freq != 0) {
+> +		dev_err(afe->dev,
+> +			"%s(), APLL cannot generate %d Hz", __func__, freq);
+> +		return -EINVAL;
+> +	}
+> +
+> +	tdm_priv->mclk_rate = freq;
+> +	tdm_priv->mclk_apll = apll;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_dai_tdm_hw_params(struct snd_pcm_substream *substream,
+> +				 struct snd_pcm_hw_params *params,
+> +				 struct snd_soc_dai *dai)
+> +{
+> +	struct mtk_base_afe *afe = snd_soc_dai_get_drvdata(dai);
+> +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> +	int tdm_id = dai->id;
+> +	struct mtk_afe_tdm_priv *tdm_priv = afe_priv->dai_priv[tdm_id];
+> +	unsigned int tdm_mode = tdm_priv->tdm_mode;
+> +	unsigned int data_mode = tdm_priv->data_mode;
+> +	unsigned int rate = params_rate(params);
+> +	unsigned int channels = params_channels(params);
+> +	snd_pcm_format_t format = params_format(params);
+> +	unsigned int bit_width =
+> +		snd_pcm_format_physical_width(format);
+> +	unsigned int tdm_channels = (data_mode == TDM_DATA_ONE_PIN) ?
+> +		get_tdm_ch_per_sdata(tdm_mode, channels) : 2;
+> +	unsigned int lrck_width =
+> +		get_tdm_lrck_width(format, tdm_mode);
+> +	unsigned int tdm_con = 0;
+> +	bool slave_mode = tdm_priv->slave_mode;
+> +	bool lrck_inv = tdm_priv->lck_invert;
+> +	bool bck_inv = tdm_priv->bck_invert;
+> +	unsigned int tran_rate;
+> +	unsigned int tran_relatch_rate;
+> +
+> +	if (tdm_priv)
+> +		tdm_priv->rate = rate;
+> +	else {
+> +		dev_err(afe->dev, "%s(), tdm_priv == NULL", __func__);
+> +		return -EINVAL;
+> +	}
 
+This can be simpler:
+
+	if (!tdm_priv) {
+		dev_err ....
+		return -EINVAL;
+	}
+
+	tdm_priv->rate = rate;
+
+...with that fixed:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

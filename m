@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682574D8162
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DF04D8147
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239542AbiCNLlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S239496AbiCNLlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239237AbiCNLkv (ORCPT
+        with ESMTP id S239250AbiCNLk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:40:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85DC488B5;
-        Mon, 14 Mar 2022 04:38:35 -0700 (PDT)
+        Mon, 14 Mar 2022 07:40:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958AB48E54;
+        Mon, 14 Mar 2022 04:38:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CF49B80DC9;
-        Mon, 14 Mar 2022 11:38:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D13EC340E9;
-        Mon, 14 Mar 2022 11:38:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B080B80D96;
+        Mon, 14 Mar 2022 11:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7167FC340E9;
+        Mon, 14 Mar 2022 11:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647257911;
-        bh=boM+X7Jtz7xEMxABclzXsyS0I01CPMFAo2H06POull4=;
+        s=korg; t=1647257915;
+        bh=2z3sHLbs3i+JwZqjq1YXDQcvL9PzzebynVKwSZ/U2TA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MdepRaIf0O2jCKEu5IpNWgJNL82mCYJSq0N4+b2JiWaEhUVSENevhKT7ThzQVyLTq
-         qT3ApsN1HVGHl4z8pFTUMhbbNQRzhz1F4TwpBGm7B+j2vSU0p2cp/hAIxRdqnGAaYA
-         nYdCXNMMVlYuvpyl0OCwNZDKAfgdapI65OMjK/MY=
+        b=SSou5CLfHwjKsWhP9K9nuvL4xODnV/TZgS9lP1JctNxW7mDSb/YdSWrqheWavTGxy
+         8OmSXqH/8kHJSQK+rhzyLJ4v18M8DujwRhTvUU5J6YmsjtaSecmvZzUIUyn3djZIQg
+         q8uCoN93JJagXWiVRTyvD2x5JFfQkZDL3W9/qGJo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.19 18/30] ARM: Spectre-BHB: provide empty stub for non-config
-Date:   Mon, 14 Mar 2022 12:34:36 +0100
-Message-Id: <20220314112732.302323192@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 4.19 19/30] staging: gdm724x: fix use after free in gdm_lte_rx()
+Date:   Mon, 14 Mar 2022 12:34:37 +0100
+Message-Id: <20220314112732.330374679@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112731.785042288@linuxfoundation.org>
 References: <20220314112731.785042288@linuxfoundation.org>
@@ -58,49 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 68453767131a5deec1e8f9ac92a9042f929e585d upstream.
+commit fc7f750dc9d102c1ed7bbe4591f991e770c99033 upstream.
 
-When CONFIG_GENERIC_CPU_VULNERABILITIES is not set, references
-to spectre_v2_update_state() cause a build error, so provide an
-empty stub for that function when the Kconfig option is not set.
+The netif_rx_ni() function frees the skb so we can't dereference it to
+save the skb->len.
 
-Fixes this build error:
-
-  arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
-  proc-v7-bugs.c:(.text+0x52): undefined reference to `spectre_v2_update_state'
-  arm-linux-gnueabi-ld: proc-v7-bugs.c:(.text+0x82): undefined reference to `spectre_v2_update_state'
-
-Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 61e121047645 ("staging: gdm7240: adding LTE USB driver")
+Cc: stable <stable@vger.kernel.org>
 Reported-by: kernel test robot <lkp@intel.com>
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: patches@armlinux.org.uk
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220228074331.GA13685@kili
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/include/asm/spectre.h |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/staging/gdm724x/gdm_lte.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/arch/arm/include/asm/spectre.h
-+++ b/arch/arm/include/asm/spectre.h
-@@ -25,7 +25,13 @@ enum {
- 	SPECTRE_V2_METHOD_LOOP8 = BIT(__SPECTRE_V2_METHOD_LOOP8),
- };
+--- a/drivers/staging/gdm724x/gdm_lte.c
++++ b/drivers/staging/gdm724x/gdm_lte.c
+@@ -76,14 +76,15 @@ static void tx_complete(void *arg)
  
-+#ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
- void spectre_v2_update_state(unsigned int state, unsigned int methods);
-+#else
-+static inline void spectre_v2_update_state(unsigned int state,
-+					   unsigned int methods)
-+{}
-+#endif
+ static int gdm_lte_rx(struct sk_buff *skb, struct nic *nic, int nic_type)
+ {
+-	int ret;
++	int ret, len;
  
- int spectre_bhb_update_vectors(unsigned int method);
++	len = skb->len + ETH_HLEN;
+ 	ret = netif_rx_ni(skb);
+ 	if (ret == NET_RX_DROP) {
+ 		nic->stats.rx_dropped++;
+ 	} else {
+ 		nic->stats.rx_packets++;
+-		nic->stats.rx_bytes += skb->len + ETH_HLEN;
++		nic->stats.rx_bytes += len;
+ 	}
  
+ 	return 0;
 
 

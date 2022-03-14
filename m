@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7493E4D8FFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6264D9001
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245333AbiCNXBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 19:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S1343563AbiCNXDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 19:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244106AbiCNXBb (ORCPT
+        with ESMTP id S238795AbiCNXD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 19:01:31 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8963A700
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:00:21 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id u61so33832428ybi.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vtDcT5z/zOjELlEB+1PPduUIkALhPYNoY9W8GQomtbs=;
-        b=PyO/XVliY6V4NENnF2DcL84cE5yDo9pbbhfOtfq/cK25CY6sBZkEJvC/nhGgx8u5RM
-         DoYksyhQqsu6K5UgB3vr6o+dgRWiItLa2eBGQx0GmIISMy22T1LlpaZf4VN8EmH7l8if
-         5GcGvHi+9DFANUMaA7WfN+g7Od/4ku35n/MacF/gFqq7QoZ2rGu/SewE28Lz8JKxY1xl
-         cjE8846iiL5xwkcZJpc50ZIbSIIK1DcYaFIkJtsslhCWreQhXAXWmnZu+JNJerdaOttA
-         i0m/vAjQEg0Ehi3Cs5PR/QvD7LeQMfE2OZwmYnLMc5B9gYU2BLQxhROfOv4UD4C3jm9F
-         gHqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vtDcT5z/zOjELlEB+1PPduUIkALhPYNoY9W8GQomtbs=;
-        b=y/cf0eSTNpfm9DMw4NbYSRprImmqnBtj1CLEuuSJF0pBTj9q3p5Yfxqn8iMEuQfeXb
-         09kLf1pJpzsHi3fSpFLQ/CsSz/2hIbmL5G8JahuahjZ3Z0sRDbh1shT8MtAaAVPAJiqf
-         k/BylDjG39CV+iSr0ZUvgYalEgSF+qIH/tm7mqfiUKB8YwbazfodwlOnDD+NRgt0gcHg
-         Og8ahXRJb2rmX/LbTyp5BiAE8EF46HEUO5zMjyX9WNSasSgiXSjJpN1lIozyKX3Qi/cm
-         GPYmXxK6W10+DBmfY/06veLLR0jnYNQa4mvMQqOdR0sk/1AwkNcabI4tLEtNjgAi4a23
-         x87A==
-X-Gm-Message-State: AOAM531UARt5erpyF83ReHkMBbyZyhb75WtrysH0RPNO2jPEo7EyHPsJ
-        bGmRA1w/WIEEZwU801tHYjgegP+UjaoJdCP+tAA9kg==
-X-Google-Smtp-Source: ABdhPJxBywpdgyKw2iiV/IBhtzBu9ILRrt7epLS26WRGCxr0bE8vshhfJQFLs4JkzgjEWhASPOS2Jqdn6UeCcQKFNzE=
-X-Received: by 2002:a25:e710:0:b0:633:67d3:7264 with SMTP id
- e16-20020a25e710000000b0063367d37264mr3154733ybh.291.1647298820471; Mon, 14
- Mar 2022 16:00:20 -0700 (PDT)
+        Mon, 14 Mar 2022 19:03:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148513A5E7;
+        Mon, 14 Mar 2022 16:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647298938; x=1678834938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=t7C/pcYibGXzuw1c7KT4Go7pZLQBu1j2wb9INd1xCZM=;
+  b=TXWzrIinVGabdNU8yziLIBVl0joTOxV+usC9itSaefyR8RrDrxozn2ru
+   OvhOkD/LkL5U4BakdXJJA9mCSw3uMvgVODaUaoKqT7jRurobZwwGtBhHi
+   vkqaB7JN91VGExDTfI5kvnUrZaKFd11cS4rHwGf0jKAuFSCP3fwYBF/RA
+   5hI39HtmS48lkCNZykQAHLjlXc6gOWzKiNtIdaXxnHpvhvKzhYee+9Nqd
+   WCnuVmhiRH6QA4L5LQPCZmHgwEFZ7UCD/DJR+wJ1wtM3hNFLSN3i4ReY8
+   zzlYTT2Vp5dIMhamZGIMap7apFZaVyim0+4e/qmb3nZqrFQZHVSKxHqeG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236769721"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="236769721"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:02:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="515638274"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 16:02:13 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTthc-000AJg-BB; Mon, 14 Mar 2022 23:02:12 +0000
+Date:   Tue, 15 Mar 2022 07:02:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Darren Hart <darren@os.amperecomputing.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <Catalin.Marinas@arm.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] arch_topology: Swap MC & CLS SD mask if MC weight==1 &
+Message-ID: <202203150659.T51bnDgz-lkp@intel.com>
+References: <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
 MIME-Version: 1.0
-References: <20220309144138.360482-1-arnd@kernel.org> <20220309144138.360482-2-arnd@kernel.org>
- <27250b4e-cf04-0dab-d658-bb472face5ea@arm.com> <CAK8P3a20ccBbAwgVkq3n6tMehFH4YEyzquTkF3V=nJ46Tk4ePg@mail.gmail.com>
- <CACRpkdbxico4SDottfB9Z8PHsXKG4fNA6G0XNyuaY+LObOovuw@mail.gmail.com> <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
-In-Reply-To: <CAK8P3a02a-+k=ChdT_Lg=xvHYZ4WTb-Efu7aQq-yBP1Gn37TgA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 15 Mar 2022 00:00:09 +0100
-Message-ID: <CACRpkdbQo4nzAVTrt-UKfkOYnm=pQwaitq3TtqUmCAXS_6EnBA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ARM: remove support for NOMMU ARMv4/v5
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,31 +77,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 10:23 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> On Thu, Mar 10, 2022 at 2:22 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+Hi Dietmar,
 
-> > Just delete these, I do have these CPU tiles around but they are so obscure
-> > and I never got around to even testing to boot them.
->
-> Right, of course you couldn't boot test them because it has been
-> impossible to even select them in Kconfig for years.
+I love your patch! Perhaps something to improve:
 
-Correct, I mean never got around to the whole cycle of "let's make this
-thing boot" and then stumbling over things like that :D
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on v5.17-rc8 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> I've added
-> a patch to completely remove the five v4/v5 NOMMU cores now,
-> will send that later.
+url:    https://github.com/0day-ci/linux/commits/Dietmar-Eggemann/arch_topology-Swap-MC-CLS-SD-mask-if-MC-weight-1/20220315-004742
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 4a248f85b3dd8e010ff8335755c927130e9b0764
+config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150659.T51bnDgz-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7528fb2ea1e30038ee1dcc48df9d413502977895
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Dietmar-Eggemann/arch_topology-Swap-MC-CLS-SD-mask-if-MC-weight-1/20220315-004742
+        git checkout 7528fb2ea1e30038ee1dcc48df9d413502977895
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/base/
 
-Excellent.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> There are five more cores that are only referenced by mach-integrator
-> that are supposed to work (922T, 1020, 1020E, 1022, 1026). Have you
-> ever tested those, or should we consider removing them as well?
+All warnings (new ones prefixed by >>):
 
-Not the 10xx variants, but 920T and 922T I have tested and I
-still have the tiles, while my favourite tile that is usually fitted is
-ARM926EJ-S.
+>> drivers/base/arch_topology.c:617:23: warning: no previous prototype for function '_cpu_coregroup_mask' [-Wmissing-prototypes]
+   const struct cpumask *_cpu_coregroup_mask(int cpu)
+                         ^
+   drivers/base/arch_topology.c:617:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   const struct cpumask *_cpu_coregroup_mask(int cpu)
+         ^
+   static 
+>> drivers/base/arch_topology.c:634:23: warning: no previous prototype for function '_cpu_clustergroup_mask' [-Wmissing-prototypes]
+   const struct cpumask *_cpu_clustergroup_mask(int cpu)
+                         ^
+   drivers/base/arch_topology.c:634:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   const struct cpumask *_cpu_clustergroup_mask(int cpu)
+         ^
+   static 
+   2 warnings generated.
 
-Yours,
-Linus Walleij
+
+vim +/_cpu_coregroup_mask +617 drivers/base/arch_topology.c
+
+   616	
+ > 617	const struct cpumask *_cpu_coregroup_mask(int cpu)
+   618	{
+   619		const cpumask_t *core_mask = cpumask_of_node(cpu_to_node(cpu));
+   620	
+   621		/* Find the smaller of NUMA, core or LLC siblings */
+   622		if (cpumask_subset(&cpu_topology[cpu].core_sibling, core_mask)) {
+   623			/* not numa in package, lets use the package siblings */
+   624			core_mask = &cpu_topology[cpu].core_sibling;
+   625		}
+   626		if (cpu_topology[cpu].llc_id != -1) {
+   627			if (cpumask_subset(&cpu_topology[cpu].llc_sibling, core_mask))
+   628				core_mask = &cpu_topology[cpu].llc_sibling;
+   629		}
+   630	
+   631		return core_mask;
+   632	}
+   633	
+ > 634	const struct cpumask *_cpu_clustergroup_mask(int cpu)
+   635	{
+   636		return &cpu_topology[cpu].cluster_sibling;
+   637	}
+   638	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

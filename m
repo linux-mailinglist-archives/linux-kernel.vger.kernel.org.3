@@ -2,259 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9514D7F6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C904D7F6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238325AbiCNKJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S238330AbiCNKJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiCNKJY (ORCPT
+        with ESMTP id S231854AbiCNKJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:09:24 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8443E1704B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:08:09 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 606303F1A1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647252488;
-        bh=+r4tw3AIRRBCkpVG/g0AlJLi4SN41rvsicv4GMS6cfQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=OK20dovGnDlpL81vjd1FpO75ZE7eKWCDRVyBNbgm6MoBBEp7h3lij5QlxI9V7KwMX
-         wxGYZ2Z2u5biU0h6t7VmcqyFlt2CKLVm+qfGDOVsOZ8Wf7Y5FD4PExWt+gqHnQCtok
-         QkLCdjlojQWECMbiRhoOfchA1IP22/4r37c4AveGmNygpLVngFG9qiiGjCdfWpBi4I
-         YHjBChLfBwfObAv7WH84jOjMLcn5TI8oKB7GrUSp5yR5kKDSfSs058TJ1mSz/LUAJf
-         Oa6CK7lOxhftB4UNtV5Hb6ehtSly8PikJFnyrRrfzw37Uz/H/E2NFIYjpJhkW+u2Bq
-         WGSNLhoATetBg==
-Received: by mail-ej1-f70.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so7718828eje.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:08:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+r4tw3AIRRBCkpVG/g0AlJLi4SN41rvsicv4GMS6cfQ=;
-        b=Xr00dxQ+ISuPolo9f+QDj+v0oRuW+feKUJdBFMEIsyOsijVFwGzFwMpRD5Q++/CIBc
-         9hWwOrCNElnMtLA2p9702eZVGOdZAPanAivkcyOO6FKm4s2+OxbhF6eZ7mpbIxn1iyaQ
-         K0oTODRxMiuH4HO9OylCk4x0pu2Nc8EDgaOQP/qyjhOER78VV5H0mETwna2jYsGYjFd8
-         D5slfDjNtsgVpvSH7j5YE2ZNd4gZm0R7Ub3Sqb4fxBx88F/RIOoQ/M8LFAuDZiKj1Oj3
-         kiYCX0Pm09jf+TBcl4ODEUXdbrCnhQpvNevaZGzLRksF84iDZONvnA5FGuEnL23NIDai
-         7SjQ==
-X-Gm-Message-State: AOAM532uoBuYd5hIBx6we/cOj3NNjnhxrwy9vZd4ZDWzDlw92IKNrBnN
-        nm3n/BQM/k0DaO7YKQgkUfmClkl5MGOuEQQ3A08UeznuEwfCLPqyuh4877GUwG0Gv06xMAmFawU
-        4dc4kTUZ4ADQ7JDGPIHwBHIFTXCpWQO1cdt57OW9nDA==
-X-Received: by 2002:a17:906:280b:b0:6ce:f3c7:688f with SMTP id r11-20020a170906280b00b006cef3c7688fmr18204831ejc.468.1647252487968;
-        Mon, 14 Mar 2022 03:08:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzI3ZzFyIAPUEjWu3adeD7O9BLeA6APF0933yAfK5HzcfK0RO66XgNxL4F3sH+IGjsRiB8sDw==
-X-Received: by 2002:a17:906:280b:b0:6ce:f3c7:688f with SMTP id r11-20020a170906280b00b006cef3c7688fmr18204802ejc.468.1647252487681;
-        Mon, 14 Mar 2022 03:08:07 -0700 (PDT)
-Received: from [192.168.0.152] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id k7-20020aa7c047000000b004132d3b60aasm7616899edo.78.2022.03.14.03.08.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 03:08:07 -0700 (PDT)
-Message-ID: <b45b3b7e-e1c0-79b6-81c0-53c70427dd10@canonical.com>
-Date:   Mon, 14 Mar 2022 11:08:05 +0100
+        Mon, 14 Mar 2022 06:09:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158071704C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647252519; x=1678788519;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BcmmMpXQborg+/AoJTWaQW8xaUtZNy1RLYwKrihUj9c=;
+  b=mfAWzQvALyomguhqcOHvRd4g8MO56Wbwo/Zhn2PmgAmv9mIV4uCChdAa
+   0GmHF7mdlz91Q4BkHPAjHP/6mh4sp2fKXE7RL0k3U77MxYx/Yzpd+d8td
+   /WcnSEN6NgG6zfuGwihxHeG6772kIqolaB7nI7/ndhL+SHM6maADKkXF/
+   P4jssiz7M6y2+ydAgerD6AIQLxH2nrFbmq6IqWMjyn3KKkzspfJOFmd2O
+   xTWCyQJvMvQZ4ZpXnVGfdB+ErcuendAo+tBpf90PlAKG3mlMmdjEpgK29
+   FnLGtWkR1d/emcUi205TH+A5eo+gowA2gKwAqjdYN9Ca0ytAkVX4H9Ka+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253545699"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="253545699"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 03:08:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="515363760"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 03:08:36 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nThcy-0009mo-8e; Mon, 14 Mar 2022 10:08:36 +0000
+Date:   Mon, 14 Mar 2022 18:08:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcin Szycik <marcin.szycik@linux.intel.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending 65/109]
+ drivers/net/ethernet/intel/ice/ice_switch.c:5568 ice_find_dummy_packet()
+ warn: inconsistent indenting
+Message-ID: <202203141819.R8xopRXM-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com
-References: <1646288011-32242-1-git-send-email-quic_c_sanm@quicinc.com>
- <1646288011-32242-2-git-send-email-quic_c_sanm@quicinc.com>
- <b793195b-1d3d-63b2-19d2-72ae2aec8c0f@canonical.com>
- <20220314032952.GA27561@hu-pkondeti-hyd.qualcomm.com>
- <f1621a67-a0ff-f111-c4da-9401924e7f4a@canonical.com>
- <20220314081613.GA28402@hu-pkondeti-hyd.qualcomm.com>
- <c88396f4-4cfe-d375-1dcd-b34a6496cb06@canonical.com>
- <20220314094054.GB28402@hu-pkondeti-hyd.qualcomm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220314094054.GB28402@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 10:40, Pavan Kondeti wrote:
-> Hi Krzysztof,
-> 
-> Thanks for your suggestions and guidance on this.
-> 
-> On Mon, Mar 14, 2022 at 09:36:02AM +0100, Krzysztof Kozlowski wrote:
->> On 14/03/2022 09:16, Pavan Kondeti wrote:
->>> Hi Krzysztof,
->>>
->>> On Mon, Mar 14, 2022 at 08:39:57AM +0100, Krzysztof Kozlowski wrote:
->>>> On 14/03/2022 04:29, Pavan Kondeti wrote:
->>>>> Hi Krzysztof,
->>>>>
->>>>> On Thu, Mar 03, 2022 at 04:59:22PM +0100, Krzysztof Kozlowski wrote:
->>>>>> On 03/03/2022 07:13, Sandeep Maheswaram wrote:
->>>>>>> Add device tree bindings for SNPS phy tuning parameters.
->>>>>>>
->>>>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>>>>>> ---
->>>>>>>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 125 +++++++++++++++++++++
->>>>>>>  1 file changed, 125 insertions(+)
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>>>>> index 0dfe691..227c097 100644
->>>>>>> --- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
->>>>>>> @@ -50,6 +50,131 @@ properties:
->>>>>>>    vdda33-supply:
->>>>>>>      description: phandle to the regulator 3.3V supply node.
->>>>>>>  
->>>>>>> +  qcom,hs-disconnect:
->>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>>>> +    description:
->>>>>>> +      This adjusts the voltage level for the threshold used to
->>>>>>> +      detect a disconnect event at the host. Possible values are.
->>>>>>
->>>>>> ':', instead of full stop.
->>>>>>
->>>>>>> +      7 -> +21.56%
->>>>>>> +      6 -> +17.43%
->>>>>>> +      5 -> +13.32%
->>>>>>> +      4 -> +9.73%
->>>>>>> +      3 -> +6.3
->>>>>>> +      2 -> +3.17%
->>>>>>> +      1 -> 0, Design default%
->>>>>>
->>>>>> Use "default:" instead. Here and in other places.
->>>>>>
->>>>>>> +      0 -> -2.72%
->>>>>>
->>>>>> In current form this should be an enum... but actually current form is
->>>>>> wrong. You should not store register values in DT. What if next version
->>>>>> of hardware has a different meaning of these values?
->>>>>>
->>>>>> Instead, you should store here meaningful values, not register values.
->>>>>>
->>>>>
->>>>> Thanks for the feedback.
->>>>>
->>>>> The values in % really makes the tuning easy. People look at the eye diagram
->>>>> and decided whether to increase/decrease the margin. The absolute values
->>>>> may not be that useful. All we need is an "adjustment" here. The databook
->>>>> it self does not give any absolute values.
->>>>>
->>>>> I agree to the "enum" suggestion which we have been following for the
->>>>> qusb2 driver already. 
->>>>>
->>>>> The values have not changed in the last 5 years for this hardware block, so
->>>>> defining enums for the % values would be really helpful. 
->>>>
->>>> I did not say you cannot store here percentages. Quite opposite - store
->>>> here the percentages. Just do not store register value. No. Please read
->>>> my comment again - meaningful values are needed.
->>>>
->>>
->>> IIUC, you are asking us to come up with a meaningful values to encode the
->>> percentage values. However, all the % increments are not linear, so we can't
->>> come up with {min, max} scheme. Lets take an example of hostdisconnect
->>> threshold.
->>>
->>> As per the data book,
->>>
->>> +      7 -> +21.56%
->>> +      6 -> +17.43%
->>> +      5 -> +13.32%
->>> +      4 -> +9.73%
->>> +      3 -> +6.3
->>> +      2 -> +3.17%
->>> +      1 -> 0, Design default%
->>> +      0 -> -2.72%
->>>
->>> so how do we give meaningful values here? Does the below scheme make sense
->>> to you?
->>
->> By "meaningful value" I mean something which has a understandable
->> meaning to reader of this code or to hardware designer. For example
->> percentage values or some units (ms, ns, Hz, mA, mV). The value used in
->> register is not meaningful in that way to us because it has a meaning
->> only to the hardware block. Storing register values is more difficult to
->> read later, non-portable and non-scalable.
->>
->>>
->>> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_NEG_2P72	(-272)
->>> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_DEFAULT	0
->>> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_3P17	317
->>> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_6P3	63
->>
->> This is some define in driver, does not look related to bindings.
->>
->>> In the driver, we have a mapping (which can be per SoC if required in future)
->>> that takes these values and convert to the correct values for a given
->>> register.
->>
->> You focus on driver but I am talking here only about bindings.
-> 
-> I was saying we define those defines in include/dt-bindings/phy/... header and
-> use it in the device tree and as well in the driver.
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+head:   451837c0788abda8deb4df8850b510f414b7fc33
+commit: 9a225f81f540f65225e4b820e303d40d9e747e78 [65/109] ice: Support GTP-U and GTP-C offload in switchdev
+config: riscv-randconfig-m031-20220313 (https://download.01.org/0day-ci/archive/20220314/202203141819.R8xopRXM-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
 
-Ah, I did not get it. That's not the solution for this case. defines in
-dt-bindings are for constants which already can be in DT, e.g. IDs. Your
-register values should not be stored in DT.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
->>
->> What could be the meaningful value? Percentage could work. You have
->> there a negative value, so I wonder what type of percentage is it? What
->> is the formula?
-> 
-> I just multiplied by 100 since device tree has no support for floating (as per
-> my knowledge). The negative value represents it lowers the disconnect
-> threshold by 2.72% of the default value. if it makes sense, we could also
-> start from 0 like below.
+smatch warnings:
+drivers/net/ethernet/intel/ice/ice_switch.c:5568 ice_find_dummy_packet() warn: inconsistent indenting
 
-ok
+vim +5568 drivers/net/ethernet/intel/ice/ice_switch.c
 
-> 
-> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_NEG_2P72_PCT 0
-> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_DEFAULT	1
-> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_3P17_PCT	2
-> #define QCOM_SNPS_FEMTO_HS_DISCONNECT_6P3_PCT	3
-> 
-> The driver can have a table to map these bindings. This looks much better
-> than those x100 formula values.
+  5496	
+  5497	/**
+  5498	 * ice_find_dummy_packet - find dummy packet
+  5499	 *
+  5500	 * @lkups: lookup elements or match criteria for the advanced recipe, one
+  5501	 *	   structure per protocol header
+  5502	 * @lkups_cnt: number of protocols
+  5503	 * @tun_type: tunnel type
+  5504	 * @pkt: dummy packet to fill according to filter match criteria
+  5505	 * @pkt_len: packet length of dummy packet
+  5506	 * @offsets: pointer to receive the pointer to the offsets for the packet
+  5507	 */
+  5508	static void
+  5509	ice_find_dummy_packet(struct ice_adv_lkup_elem *lkups, u16 lkups_cnt,
+  5510			      enum ice_sw_tunnel_type tun_type,
+  5511			      const u8 **pkt, u16 *pkt_len,
+  5512			      const struct ice_dummy_pkt_offsets **offsets)
+  5513	{
+  5514		bool inner_tcp = false, inner_udp = false, outer_ipv6 = false;
+  5515		bool vlan = false, inner_ipv6 = false, gtp_no_pay = false;
+  5516		u16 i;
+  5517	
+  5518		for (i = 0; i < lkups_cnt; i++) {
+  5519			if (lkups[i].type == ICE_UDP_ILOS)
+  5520				inner_udp = true;
+  5521			else if (lkups[i].type == ICE_TCP_IL)
+  5522				inner_tcp = true;
+  5523			else if (lkups[i].type == ICE_IPV6_OFOS)
+  5524				outer_ipv6 = true;
+  5525			else if (lkups[i].type == ICE_VLAN_OFOS)
+  5526				vlan = true;
+  5527			else if (lkups[i].type == ICE_ETYPE_OL &&
+  5528				 lkups[i].h_u.ethertype.ethtype_id ==
+  5529					cpu_to_be16(ICE_IPV6_ETHER_ID) &&
+  5530				 lkups[i].m_u.ethertype.ethtype_id ==
+  5531					cpu_to_be16(0xFFFF))
+  5532				outer_ipv6 = true;
+  5533			else if (lkups[i].type == ICE_ETYPE_IL &&
+  5534				 lkups[i].h_u.ethertype.ethtype_id ==
+  5535					cpu_to_be16(ICE_IPV6_ETHER_ID) &&
+  5536				 lkups[i].m_u.ethertype.ethtype_id ==
+  5537					cpu_to_be16(0xFFFF))
+  5538				inner_ipv6 = true;
+  5539			else if (lkups[i].type == ICE_IPV6_IL)
+  5540				inner_ipv6 = true;
+  5541			else if (lkups[i].type == ICE_GTP_NO_PAY)
+  5542				gtp_no_pay = true;
+  5543		}
+  5544	
+  5545		if (tun_type == ICE_SW_TUN_GTPU) {
+  5546			if (outer_ipv6) {
+  5547				if (gtp_no_pay) {
+  5548					*pkt = dummy_ipv6_gtp_packet;
+  5549					*pkt_len = sizeof(dummy_ipv6_gtp_packet);
+  5550					*offsets = dummy_ipv6_gtp_no_pay_packet_offsets;
+  5551				} else if (inner_ipv6) {
+  5552					if (inner_udp) {
+  5553						*pkt = dummy_ipv6_gtpu_ipv6_udp_packet;
+  5554						*pkt_len = sizeof(dummy_ipv6_gtpu_ipv6_udp_packet);
+  5555						*offsets = dummy_ipv6_gtpu_ipv6_udp_packet_offsets;
+  5556					} else {
+  5557						*pkt = dummy_ipv6_gtpu_ipv6_tcp_packet;
+  5558						*pkt_len = sizeof(dummy_ipv6_gtpu_ipv6_tcp_packet);
+  5559						*offsets = dummy_ipv6_gtpu_ipv6_tcp_packet_offsets;
+  5560					}
+  5561				} else {
+  5562					if (inner_udp) {
+  5563						*pkt = dummy_ipv6_gtpu_ipv4_udp_packet;
+  5564						*pkt_len = sizeof(dummy_ipv6_gtpu_ipv4_udp_packet);
+  5565						*offsets = dummy_ipv6_gtpu_ipv4_udp_packet_offsets;
+  5566					} else {
+  5567						*pkt = dummy_ipv6_gtpu_ipv4_tcp_packet;
+> 5568					*pkt_len = sizeof(dummy_ipv6_gtpu_ipv4_tcp_packet);
+  5569						*offsets = dummy_ipv6_gtpu_ipv4_tcp_packet_offsets;
+  5570					}
+  5571				}
+  5572			} else {
+  5573				if (gtp_no_pay) {
+  5574					*pkt = dummy_ipv4_gtpu_ipv4_packet;
+  5575					*pkt_len = sizeof(dummy_ipv4_gtpu_ipv4_packet);
+  5576					*offsets = dummy_ipv4_gtp_no_pay_packet_offsets;
+  5577				} else if (inner_ipv6) {
+  5578					if (inner_udp) {
+  5579						*pkt = dummy_ipv4_gtpu_ipv6_udp_packet;
+  5580						*pkt_len = sizeof(dummy_ipv4_gtpu_ipv6_udp_packet);
+  5581						*offsets = dummy_ipv4_gtpu_ipv6_udp_packet_offsets;
+  5582					} else {
+  5583						*pkt = dummy_ipv4_gtpu_ipv6_tcp_packet;
+  5584						*pkt_len = sizeof(dummy_ipv4_gtpu_ipv6_tcp_packet);
+  5585						*offsets = dummy_ipv4_gtpu_ipv6_tcp_packet_offsets;
+  5586					}
+  5587				} else {
+  5588					if (inner_udp) {
+  5589						*pkt = dummy_ipv4_gtpu_ipv4_udp_packet;
+  5590						*pkt_len = sizeof(dummy_ipv4_gtpu_ipv4_udp_packet);
+  5591						*offsets = dummy_ipv4_gtpu_ipv4_udp_packet_offsets;
+  5592					} else {
+  5593						*pkt = dummy_ipv4_gtpu_ipv4_tcp_packet;
+  5594						*pkt_len = sizeof(dummy_ipv4_gtpu_ipv4_tcp_packet);
+  5595						*offsets = dummy_ipv4_gtpu_ipv4_tcp_packet_offsets;
+  5596					}
+  5597				}
+  5598			}
+  5599			return;
+  5600		}
+  5601	
+  5602		if (tun_type == ICE_SW_TUN_GTPC) {
+  5603			if (outer_ipv6) {
+  5604				*pkt = dummy_ipv6_gtp_packet;
+  5605				*pkt_len = sizeof(dummy_ipv6_gtp_packet);
+  5606				*offsets = dummy_ipv6_gtp_no_pay_packet_offsets;
+  5607			} else {
+  5608				*pkt = dummy_ipv4_gtpu_ipv4_packet;
+  5609				*pkt_len = sizeof(dummy_ipv4_gtpu_ipv4_packet);
+  5610				*offsets = dummy_ipv4_gtp_no_pay_packet_offsets;
+  5611			}
+  5612			return;
+  5613		}
+  5614	
+  5615		if (tun_type == ICE_SW_TUN_NVGRE) {
+  5616			if (inner_tcp && inner_ipv6) {
+  5617				*pkt = dummy_gre_ipv6_tcp_packet;
+  5618				*pkt_len = sizeof(dummy_gre_ipv6_tcp_packet);
+  5619				*offsets = dummy_gre_ipv6_tcp_packet_offsets;
+  5620				return;
+  5621			}
+  5622			if (inner_tcp) {
+  5623				*pkt = dummy_gre_tcp_packet;
+  5624				*pkt_len = sizeof(dummy_gre_tcp_packet);
+  5625				*offsets = dummy_gre_tcp_packet_offsets;
+  5626				return;
+  5627			}
+  5628			if (inner_ipv6) {
+  5629				*pkt = dummy_gre_ipv6_udp_packet;
+  5630				*pkt_len = sizeof(dummy_gre_ipv6_udp_packet);
+  5631				*offsets = dummy_gre_ipv6_udp_packet_offsets;
+  5632				return;
+  5633			}
+  5634			*pkt = dummy_gre_udp_packet;
+  5635			*pkt_len = sizeof(dummy_gre_udp_packet);
+  5636			*offsets = dummy_gre_udp_packet_offsets;
+  5637			return;
+  5638		}
+  5639	
+  5640		if (tun_type == ICE_SW_TUN_VXLAN ||
+  5641		    tun_type == ICE_SW_TUN_GENEVE) {
+  5642			if (inner_tcp && inner_ipv6) {
+  5643				*pkt = dummy_udp_tun_ipv6_tcp_packet;
+  5644				*pkt_len = sizeof(dummy_udp_tun_ipv6_tcp_packet);
+  5645				*offsets = dummy_udp_tun_ipv6_tcp_packet_offsets;
+  5646				return;
+  5647			}
+  5648			if (inner_tcp) {
+  5649				*pkt = dummy_udp_tun_tcp_packet;
+  5650				*pkt_len = sizeof(dummy_udp_tun_tcp_packet);
+  5651				*offsets = dummy_udp_tun_tcp_packet_offsets;
+  5652				return;
+  5653			}
+  5654			if (inner_ipv6) {
+  5655				*pkt = dummy_udp_tun_ipv6_udp_packet;
+  5656				*pkt_len = sizeof(dummy_udp_tun_ipv6_udp_packet);
+  5657				*offsets = dummy_udp_tun_ipv6_udp_packet_offsets;
+  5658				return;
+  5659			}
+  5660			*pkt = dummy_udp_tun_udp_packet;
+  5661			*pkt_len = sizeof(dummy_udp_tun_udp_packet);
+  5662			*offsets = dummy_udp_tun_udp_packet_offsets;
+  5663			return;
+  5664		}
+  5665	
+  5666		if (inner_udp && !outer_ipv6) {
+  5667			if (vlan) {
+  5668				*pkt = dummy_vlan_udp_packet;
+  5669				*pkt_len = sizeof(dummy_vlan_udp_packet);
+  5670				*offsets = dummy_vlan_udp_packet_offsets;
+  5671				return;
+  5672			}
+  5673			*pkt = dummy_udp_packet;
+  5674			*pkt_len = sizeof(dummy_udp_packet);
+  5675			*offsets = dummy_udp_packet_offsets;
+  5676			return;
+  5677		} else if (inner_udp && outer_ipv6) {
+  5678			if (vlan) {
+  5679				*pkt = dummy_vlan_udp_ipv6_packet;
+  5680				*pkt_len = sizeof(dummy_vlan_udp_ipv6_packet);
+  5681				*offsets = dummy_vlan_udp_ipv6_packet_offsets;
+  5682				return;
+  5683			}
+  5684			*pkt = dummy_udp_ipv6_packet;
+  5685			*pkt_len = sizeof(dummy_udp_ipv6_packet);
+  5686			*offsets = dummy_udp_ipv6_packet_offsets;
+  5687			return;
+  5688		} else if ((inner_tcp && outer_ipv6) || outer_ipv6) {
+  5689			if (vlan) {
+  5690				*pkt = dummy_vlan_tcp_ipv6_packet;
+  5691				*pkt_len = sizeof(dummy_vlan_tcp_ipv6_packet);
+  5692				*offsets = dummy_vlan_tcp_ipv6_packet_offsets;
+  5693				return;
+  5694			}
+  5695			*pkt = dummy_tcp_ipv6_packet;
+  5696			*pkt_len = sizeof(dummy_tcp_ipv6_packet);
+  5697			*offsets = dummy_tcp_ipv6_packet_offsets;
+  5698			return;
+  5699		}
+  5700	
+  5701		if (vlan) {
+  5702			*pkt = dummy_vlan_tcp_packet;
+  5703			*pkt_len = sizeof(dummy_vlan_tcp_packet);
+  5704			*offsets = dummy_vlan_tcp_packet_offsets;
+  5705		} else {
+  5706			*pkt = dummy_tcp_packet;
+  5707			*pkt_len = sizeof(dummy_tcp_packet);
+  5708			*offsets = dummy_tcp_packet_offsets;
+  5709		}
+  5710	}
+  5711	
 
-Again mention driver how he can map it. I mostly don't care about the
-driver. :)
-
-I think we are getting around the problem, so to emphasize again: do not
-store register values in the bindings/DT but its meaning, so in your
-case most likely percentages (or permille or ratio or some other value).
-
-
-Best regards,
-Krzysztof
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

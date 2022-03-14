@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8CD4D7E85
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358A94D7E8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238029AbiCNJ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
+        id S238076AbiCNJ3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbiCNJ33 (ORCPT
+        with ESMTP id S237982AbiCNJ3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:29:29 -0400
+        Mon, 14 Mar 2022 05:29:31 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65D43EF18;
-        Mon, 14 Mar 2022 02:28:20 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 09:28:18 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94B3F8AB;
+        Mon, 14 Mar 2022 02:28:21 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 09:28:19 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647250099;
+        s=2020; t=1647250100;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=raYoc9SCPSq75ju1wtLpLgCMnDitnGTN5nsf2dGzIwg=;
-        b=g3UJRN8W5Wiic5VrT5/N+KNl1srwtTNuFXIY2Jw30QREW7D8+U0nkaCZE4PUjTyoDZWsIn
-        K57u1ADso6U1wZFgXbxJxyKWC+I9Km0Cr+pGu/a5qD/D07D1uJx/hC0b3B8EeVuYwBvPh0
-        AUOwTgxA+tpP517kyLsrwOGebeoGvUILz7cy9e1+1HQ5a6MHVxQAusD94pVbq6aOQCh/3V
-        quPaTH34ml+0wdD7HddjuApIZN4KraI1OpDobcGZH4zQ7bXP4zeALrHylwrn/pzk9V6oH0
-        ySzBobtLsfPzHOCQpPsqXkM2JJp/1oaIzWajT4qbi3NyZ0IXITudACzwXU/EBw==
+        bh=JQiVHaFzav7HcxV1PnBHQU2vB7sMtXYWohR6/yhkIQA=;
+        b=PTKscyzG5rfszLunE162DPMkbq3xBE2SQqHJvCr9LXrWTWgprmjuuhNr5FAT7azNXH7tLT
+        CXSo5V2P/GxYxln0c58vFoV7iI1EDM9WnzbrzlC3Wisv5PHQWe3RifDEhfyXF/jco58SUq
+        ntRA5of/nPQM5HOOyfbozxCeBP4cbL07ZDwa6k8C7MeOvp6ovMKdSiOMb9naOee+yP4NXj
+        CHubYxwKwN7kNYvkdGULeUT/JFCTKSUsb1luzJTbovks6nUS3PbQyOcUrHpXMubKlxTgie
+        B3pcuYpLoScUIFf+162qLtlwQcWsSUF0ZIC8oQck0ksEAzEeSrzwM3iG7A8qIQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647250099;
+        s=2020e; t=1647250100;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=raYoc9SCPSq75ju1wtLpLgCMnDitnGTN5nsf2dGzIwg=;
-        b=FDThq3fyGApIf9giJMDR6Gtq97AM3jwZq0CTPRyVMdF9p8UvSWHdyJoNtKN7ZPZu4jvol4
-        kXYztH9iFtikR5Dg==
-From:   "tip-bot2 for Guillaume Ranquet" <tip-bot2@linutronix.de>
+        bh=JQiVHaFzav7HcxV1PnBHQU2vB7sMtXYWohR6/yhkIQA=;
+        b=ahW3zuPicYF0HEjd7399d7z80S2d6bsBFpwVMFxf17Y7Y8J1P292NxUcvqPkyxWxi47RIs
+        BF3pxVDbiU7XFLCw==
+From:   "tip-bot2 for Claudiu Beznea" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/timer-of: Check return value
- of of_iomap in timer_of_base_init()
-Cc:     Guillaume Ranquet <granquet@baylibre.com>,
+Subject: [tip: timers/core] clocksource/drivers/timer-microchip-pit64b: Use
+ 5MHz for clockevent
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307172656.4836-1-granquet@baylibre.com>
-References: <20220307172656.4836-1-granquet@baylibre.com>
+In-Reply-To: <20220304133601.2404086-4-claudiu.beznea@microchip.com>
+References: <20220304133601.2404086-4-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Message-ID: <164725009835.16921.6234638844182639632.tip-bot2@tip-bot2>
+Message-ID: <164725009936.16921.9315404177053448675.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,43 +68,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     4467b8bad2401794fb89a0268c8c8257180bf60f
-Gitweb:        https://git.kernel.org/tip/4467b8bad2401794fb89a0268c8c8257180bf60f
-Author:        Guillaume Ranquet <granquet@baylibre.com>
-AuthorDate:    Mon, 07 Mar 2022 18:26:56 +01:00
+Commit-ID:     389e3bff69b4341b42779833063c7b462a6e6d42
+Gitweb:        https://git.kernel.org/tip/389e3bff69b4341b42779833063c7b462a6e6d42
+Author:        Claudiu Beznea <claudiu.beznea@microchip.com>
+AuthorDate:    Fri, 04 Mar 2022 15:35:58 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 07 Mar 2022 19:21:25 +01:00
+CommitterDate: Mon, 07 Mar 2022 18:27:34 +01:00
 
-clocksource/drivers/timer-of: Check return value of of_iomap in timer_of_base_init()
+clocksource/drivers/timer-microchip-pit64b: Use 5MHz for clockevent
 
-of_base->base can either be iomapped using of_io_request_and_map() or
-of_iomap() depending whether or not an of_base->name has been set.
+Use 5MHz clock for clockevent timers. This increases timer's
+resolution.
 
-Thus check of_base->base against NULL as of_iomap() does not return a
-PTR_ERR() in case of error.
-
-Fixes: 9aea417afa6b ("clocksource/drivers/timer-of: Don't request the resource by name")
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-Link: https://lore.kernel.org/r/20220307172656.4836-1-granquet@baylibre.com
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220304133601.2404086-4-claudiu.beznea@microchip.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/timer-of.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clocksource/timer-microchip-pit64b.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clocksource/timer-of.c b/drivers/clocksource/timer-of.c
-index 529cc6a..c3f54d9 100644
---- a/drivers/clocksource/timer-of.c
-+++ b/drivers/clocksource/timer-of.c
-@@ -157,9 +157,9 @@ static __init int timer_of_base_init(struct device_node *np,
- 	of_base->base = of_base->name ?
- 		of_io_request_and_map(np, of_base->index, of_base->name) :
- 		of_iomap(np, of_base->index);
--	if (IS_ERR(of_base->base)) {
--		pr_err("Failed to iomap (%s)\n", of_base->name);
--		return PTR_ERR(of_base->base);
-+	if (IS_ERR_OR_NULL(of_base->base)) {
-+		pr_err("Failed to iomap (%s:%s)\n", np->name, of_base->name);
-+		return of_base->base ? PTR_ERR(of_base->base) : -ENOMEM;
+diff --git a/drivers/clocksource/timer-microchip-pit64b.c b/drivers/clocksource/timer-microchip-pit64b.c
+index 790d2c9..abce83d 100644
+--- a/drivers/clocksource/timer-microchip-pit64b.c
++++ b/drivers/clocksource/timer-microchip-pit64b.c
+@@ -42,8 +42,7 @@
+ #define MCHP_PIT64B_LSBMASK		GENMASK_ULL(31, 0)
+ #define MCHP_PIT64B_PRES_TO_MODE(p)	(MCHP_PIT64B_MR_PRES & ((p) << 8))
+ #define MCHP_PIT64B_MODE_TO_PRES(m)	((MCHP_PIT64B_MR_PRES & (m)) >> 8)
+-#define MCHP_PIT64B_DEF_CS_FREQ		5000000UL	/* 5 MHz */
+-#define MCHP_PIT64B_DEF_CE_FREQ		32768		/* 32 KHz */
++#define MCHP_PIT64B_DEF_FREQ		5000000UL	/* 5 MHz */
+ 
+ #define MCHP_PIT64B_NAME		"pit64b"
+ 
+@@ -418,7 +417,6 @@ static int __init mchp_pit64b_init_clkevt(struct mchp_pit64b_timer *timer,
+ static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
+ 					    bool clkevt)
+ {
+-	u32 freq = clkevt ? MCHP_PIT64B_DEF_CE_FREQ : MCHP_PIT64B_DEF_CS_FREQ;
+ 	struct mchp_pit64b_timer timer;
+ 	unsigned long clk_rate;
+ 	u32 irq = 0;
+@@ -446,7 +444,7 @@ static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
  	}
  
- 	return 0;
+ 	/* Initialize mode (prescaler + SGCK bit). To be used at runtime. */
+-	ret = mchp_pit64b_init_mode(&timer, freq);
++	ret = mchp_pit64b_init_mode(&timer, MCHP_PIT64B_DEF_FREQ);
+ 	if (ret)
+ 		goto irq_unmap;
+ 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ABA4D82BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EA74D84AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240423AbiCNMHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S241323AbiCNM1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240645AbiCNMHP (ORCPT
+        with ESMTP id S243062AbiCNMUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:07:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208F2237D2;
-        Mon, 14 Mar 2022 05:03:29 -0700 (PDT)
+        Mon, 14 Mar 2022 08:20:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890D152E7F;
+        Mon, 14 Mar 2022 05:15:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 70477CE1269;
-        Mon, 14 Mar 2022 12:03:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56E8C340ED;
-        Mon, 14 Mar 2022 12:03:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35AF0B80DFE;
+        Mon, 14 Mar 2022 12:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97881C340E9;
+        Mon, 14 Mar 2022 12:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259405;
-        bh=M8ax33quUGmZY4WEvx5nH5KNIApyPzylG8aYXe9hmrg=;
+        s=korg; t=1647260114;
+        bh=rg6mB/XZeyc4/94kQYCm4veWrHrTIgQhki3atHfiu7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2rDjuS9qALkvtndk7dyM85glRuO2/KJOh6XDN7tmbsdl6SR7qTDw20ndbsSDxt6qe
-         9U0XP5wdICQEnlRJrV39C/jo08p42Twqp5MBJ3d/qfWWy2D+Z1HaEMR8qEHZ1OA37+
-         Pc1rGX9LqcGlDGYztAYQytS+y1LkVg9iSvja/2lw=
+        b=h1pwZmq+Oq06Y8NK2aCCFOpm2qJ6z9FDg1sId+PDiRjHZl4xZg04e8up+jCKbdT8m
+         urlhV+uRteOGFH4GiarMO02YutuV/VTHtPgedkAgEpoILM1tA9sBRoBbIQN+BnxaGo
+         JDZLWwP93ViJqF7GqRV2osLBTB5LoD+b2713ByPE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.10 69/71] ext4: add check to prevent attempting to resize an fs with sparse_super2
+        stable@vger.kernel.org, Erico Nunes <nunes.erico@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 059/121] net: phy: meson-gxl: improve link-up behavior
 Date:   Mon, 14 Mar 2022 12:54:02 +0100
-Message-Id: <20220314112739.869914303@linuxfoundation.org>
+Message-Id: <20220314112745.772714489@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Triplett <josh@joshtriplett.org>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-commit b1489186cc8391e0c1e342f9fbc3eedf6b944c61 upstream.
+[ Upstream commit 2c87c6f9fbddc5b84d67b2fa3f432fcac6d99d93 ]
 
-The in-kernel ext4 resize code doesn't support filesystem with the
-sparse_super2 feature. It fails with errors like this and doesn't finish
-the resize:
-EXT4-fs (loop0): resizing filesystem from 16640 to 7864320 blocks
-EXT4-fs warning (device loop0): verify_reserved_gdb:760: reserved GDT 2 missing grp 1 (32770)
-EXT4-fs warning (device loop0): ext4_resize_fs:2111: error (-22) occurred during file system resize
-EXT4-fs (loop0): resized filesystem to 2097152
+Sometimes the link comes up but no data flows. This patch fixes
+this behavior. It's not clear what's the root cause of the issue.
 
-To reproduce:
-mkfs.ext4 -b 4096 -I 256 -J size=32 -E resize=$((256*1024*1024)) -O sparse_super2 ext4.img 65M
-truncate -s 30G ext4.img
-mount ext4.img /mnt
-python3 -c 'import fcntl, os, struct ; fd = os.open("/mnt", os.O_RDONLY | os.O_DIRECTORY) ; fcntl.ioctl(fd, 0x40086610, struct.pack("Q", 30 * 1024 * 1024 * 1024 // 4096), False) ; os.close(fd)'
-dmesg | tail
-e2fsck ext4.img
+According to the tests one other link-up issue remains.
+In very rare cases the link isn't even reported as up.
 
-The userspace resize2fs tool has a check for this case: it checks if the
-filesystem has sparse_super2 set and if the kernel provides
-/sys/fs/ext4/features/sparse_super2. However, the former check requires
-manually reading and parsing the filesystem superblock.
-
-Detect this case in ext4_resize_begin and error out early with a clear
-error message.
-
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
-Link: https://lore.kernel.org/r/74b8ae78405270211943cd7393e65586c5faeed1.1623093259.git.josh@joshtriplett.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 84c8f773d2dc ("net: phy: meson-gxl: remove the use of .ack_callback()")
+Tested-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Link: https://lore.kernel.org/r/e3473452-a1f9-efcf-5fdd-02b6f44c3fcd@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/resize.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/phy/meson-gxl.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/fs/ext4/resize.c
-+++ b/fs/ext4/resize.c
-@@ -74,6 +74,11 @@ int ext4_resize_begin(struct super_block
- 		return -EPERM;
- 	}
+diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
+index c49062ad72c6..73f7962a37d3 100644
+--- a/drivers/net/phy/meson-gxl.c
++++ b/drivers/net/phy/meson-gxl.c
+@@ -243,7 +243,13 @@ static irqreturn_t meson_gxl_handle_interrupt(struct phy_device *phydev)
+ 	    irq_status == INTSRC_ENERGY_DETECT)
+ 		return IRQ_HANDLED;
  
-+	if (ext4_has_feature_sparse_super2(sb)) {
-+		ext4_msg(sb, KERN_ERR, "Online resizing not supported with sparse_super2");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	if (test_and_set_bit_lock(EXT4_FLAGS_RESIZING,
- 				  &EXT4_SB(sb)->s_ext4_flags))
- 		ret = -EBUSY;
+-	phy_trigger_machine(phydev);
++	/* Give PHY some time before MAC starts sending data. This works
++	 * around an issue where network doesn't come up properly.
++	 */
++	if (!(irq_status & INTSRC_LINK_DOWN))
++		phy_queue_state_machine(phydev, msecs_to_jiffies(100));
++	else
++		phy_trigger_machine(phydev);
+ 
+ 	return IRQ_HANDLED;
+ }
+-- 
+2.34.1
+
 
 

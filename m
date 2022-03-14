@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2FD4D8950
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5546F4D897C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243203AbiCNQgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S243338AbiCNQgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239299AbiCNQgU (ORCPT
+        with ESMTP id S241579AbiCNQgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:36:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A1212AD8;
+        Mon, 14 Mar 2022 12:36:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A7D13CDA;
         Mon, 14 Mar 2022 09:35:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED83FB80E8B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5307B61408;
         Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25585C36AF6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B332C36AF8;
         Mon, 14 Mar 2022 16:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647275707;
-        bh=sXJuJQYKqLYf39YNSUgip7Wa3mHlGlhoST+rVohYj24=;
+        bh=LHNcmeSc3A8U/jLJYft1p8OBLZ8iq+GHKbgMSlSokLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oSBzKqr4pPXPtOdXm0Mb2OCc+C991QKSS5n14dXgbekEVLfU/ydUvGIgl0jEca6ZR
-         QnZKlmk2L5khFIFD1Mpy9SwAC0Gk+HqP+16b0zMdHy1Uyswm2R2BIq6G2s9cPH7lPi
-         WG99oNbV04NtOS8GjdtYfI3EeTNungiYD6ji8n/EYQ4ju8pjejBBezR/aL/3O08Xz0
-         w/FTfzwTSk25oHXbwyhnGCjXFS4iQMesOrmBpEQNew+TxBbByec1uMnRlpkSCU/2JK
-         4J+C9j8rmEvje76aPcBQjk325CeLcAfmowS1epz3zBrtmsXJZAEMLI1MT1N5C7pWE5
-         84mXGy02pol/Q==
+        b=aVJDt1z/7IAtsmP3VVOLEBI9AvsLUgoqCaAbsDuPV+4gJbHPrDZjsnDnmEqhdhVv0
+         7xB4J+2sMxwQMlCH53ouX2t/PO+82NKs2/sqZJPRxIPCIt4ivjuhvv0SCVBJAvSoOj
+         Zzd86oZtD/6WTjDooUhKrKG4ouJW06BYaTVHz85fJsd9vpO1waaWpnJE8xzwvNaxeo
+         VwUC2V1mDxaiOavM4QP0tJ7TH0FpKaoe3kVnAOkWYYbfOgvQUDN3OjD1+JHVeDTM8s
+         jHy6OgYzIacrVFv18uECO+4c1Sf/PI0pRQoeLi936TX6BzlqfbUoOXjK+VwYuxl6u/
+         WUfvUfrPMfgXA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTney-001wwt-TT; Mon, 14 Mar 2022 17:35:04 +0100
+        id 1nTney-001wwx-VW; Mon, 14 Mar 2022 17:35:04 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -43,12 +43,12 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH v2 12/67] media: platform: amphion: move config to its own file
-Date:   Mon, 14 Mar 2022 17:34:07 +0100
-Message-Id: <52b3a219dd4ab46b2b8ba7af5648f6e1e026f876.1647274406.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v2 13/67] media: platform: coda: move config to its own file
+Date:   Mon, 14 Mar 2022 17:34:08 +0100
+Message-Id: <d205d312b1bb86956776cd77fc4e7d6fa626f371.1647274406.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -66,85 +66,79 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-amphion-specific config stuff on a separate Kconfig file.
+coda-specific config stuff on a separate Kconfig file.
 
-Reviewed-by: Shijie Qin <shijie.qin@nxp.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig         | 21 +--------------------
- drivers/media/platform/amphion/Kconfig | 20 ++++++++++++++++++++
- 2 files changed, 21 insertions(+), 20 deletions(-)
- create mode 100644 drivers/media/platform/amphion/Kconfig
+ drivers/media/platform/Kconfig      | 18 +-----------------
+ drivers/media/platform/coda/Kconfig | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+), 17 deletions(-)
+ create mode 100644 drivers/media/platform/coda/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 25e5ae27210d..060d6264dea4 100644
+index 060d6264dea4..0bf9dd5da845 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -40,6 +40,7 @@ source "drivers/media/platform/marvell-ccic/Kconfig"
- 
- source "drivers/media/platform/via/Kconfig"
- 
-+source "drivers/media/platform/amphion/Kconfig"
+@@ -43,6 +43,7 @@ source "drivers/media/platform/via/Kconfig"
+ source "drivers/media/platform/amphion/Kconfig"
  source "drivers/media/platform/cadence/Kconfig"
  
++source "drivers/media/platform/coda/Kconfig"
  source "drivers/media/platform/davinci/Kconfig"
-@@ -524,26 +525,6 @@ config VIDEO_TEGRA_VDE
- 	   Support for the NVIDIA Tegra video decoder unit.
- 	   To compile this driver as a module choose m here.
  
--config VIDEO_AMPHION_VPU
--	tristate "Amphion VPU (Video Processing Unit) Codec IP"
+ source "drivers/media/platform/omap/Kconfig"
+@@ -178,23 +179,6 @@ config VIDEO_TI_CAL_MC
+ 
+ # Mem2mem drivers
+ 
+-config VIDEO_CODA
+-	tristate "Chips&Media Coda multi-standard codec IP"
 -	depends on V4L_MEM2MEM_DRIVERS
--	depends on ARCH_MXC || COMPILE_TEST
--	depends on MEDIA_SUPPORT
--	depends on VIDEO_DEV
--	depends on VIDEO_V4L2
--	select MEDIA_CONTROLLER
--	select V4L2_MEM2MEM_DEV
+-	depends on VIDEO_DEV && VIDEO_V4L2 && OF && (ARCH_MXC || COMPILE_TEST)
+-	select SRAM
 -	select VIDEOBUF2_DMA_CONTIG
 -	select VIDEOBUF2_VMALLOC
+-	select V4L2_JPEG_HELPER
+-	select V4L2_MEM2MEM_DEV
+-	select GENERIC_ALLOCATOR
 -	help
--	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
--	  Windsor is encoder that supports H.264, and Malone is decoder
--	  that supports H.264, HEVC, and other video formats.
--	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
--	  It accelerates encoding and decoding operations on
--	  various NXP SoCs.
--	  To compile this driver as a module choose m here.
+-	   Coda is a range of video codec IPs that supports
+-	   H.264, MPEG-4, and other video formats.
 -
- # TI VIDEO PORT Helper Modules
- # These will be selected by VPE and VIP
- config VIDEO_TI_VPDMA
-diff --git a/drivers/media/platform/amphion/Kconfig b/drivers/media/platform/amphion/Kconfig
+-config VIDEO_IMX_VDOA
+-	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
+-
+ config VIDEO_MEDIATEK_JPEG
+ 	tristate "Mediatek JPEG Codec driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+diff --git a/drivers/media/platform/coda/Kconfig b/drivers/media/platform/coda/Kconfig
 new file mode 100644
-index 000000000000..13899649f766
+index 000000000000..ae495fd7b25a
 --- /dev/null
-+++ b/drivers/media/platform/amphion/Kconfig
-@@ -0,0 +1,20 @@
++++ b/drivers/media/platform/coda/Kconfig
+@@ -0,0 +1,17 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_AMPHION_VPU
-+	tristate "Amphion VPU (Video Processing Unit) Codec IP"
++config VIDEO_CODA
++	tristate "Chips&Media Coda multi-standard codec IP"
 +	depends on V4L_MEM2MEM_DRIVERS
-+	depends on ARCH_MXC || COMPILE_TEST
-+	depends on MEDIA_SUPPORT
-+	depends on VIDEO_DEV
-+	depends on VIDEO_V4L2
-+	select MEDIA_CONTROLLER
-+	select V4L2_MEM2MEM_DEV
++	depends on VIDEO_DEV && VIDEO_V4L2 && OF && (ARCH_MXC || COMPILE_TEST)
++	select SRAM
 +	select VIDEOBUF2_DMA_CONTIG
 +	select VIDEOBUF2_VMALLOC
++	select V4L2_JPEG_HELPER
++	select V4L2_MEM2MEM_DEV
++	select GENERIC_ALLOCATOR
 +	help
-+	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
-+	  Windsor is encoder that supports H.264, and Malone is decoder
-+	  that supports H.264, HEVC, and other video formats.
-+	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
-+	  It accelerates encoding and decoding operations on
-+	  various NXP SoCs.
-+	  To compile this driver as a module choose m here.
++	   Coda is a range of video codec IPs that supports
++	   H.264, MPEG-4, and other video formats.
++
++config VIDEO_IMX_VDOA
++	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
 -- 
 2.35.1
 

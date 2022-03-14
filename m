@@ -2,158 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B044D88F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CE64D88FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242941AbiCNQWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S242966AbiCNQXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241710AbiCNQWp (ORCPT
+        with ESMTP id S236138AbiCNQXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:22:45 -0400
-X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Mar 2022 09:21:35 PDT
-Received: from sender4-of-o53.zoho.com (sender4-of-o53.zoho.com [136.143.188.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E915912A8A;
-        Mon, 14 Mar 2022 09:21:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1647274883; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=mx2smIOGeo5ZjY9eOcc/bCGdqHmQUFR59CYhROKVr38Nz2LvTY2tlis1je8oqqd0yKOSOFIb3ccss3/zksRXDdKtAaOBo/XLyWQhKc0FI7PRZRUokt/E+aIaO2UpJtn/Jc9cWCIQjfKdC3m2Hs3FsvkoWmMtC9tuSTWyaiOAWL4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1647274883; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=exLHJy/o8u0v5+P+IbvaTX55kBTxm+CYnLzbshyskLQ=; 
-        b=iu4CwdmaeduL2TpUU/4fmKpgv8MJPLw2fzJSYQWr8mAlm8rCvRkNK66DdfEJZm91T/tobqETRn5aHHl1E93mkmUiQO5P4CQ0lVuaGa/HncCx5cAnlJrVARbX7KtCYMeLLfEiPaSCv97zYhpzKcFmzP6e6C5OdAkU2OZ1jFJo+tY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=anirudhrb.com;
-        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
-        dmarc=pass header.from=<mail@anirudhrb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1647274883;
-        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
-        h=Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-        bh=exLHJy/o8u0v5+P+IbvaTX55kBTxm+CYnLzbshyskLQ=;
-        b=Kp+VnZ/0dusGp1M2OtccWhO6EKsLdjYBJFIL/BZh8jjtp9YNmAP+tnXWoYmaAUKN
-        woajBDaQEecsACvn6Cbb+hH5wnmXnCikCQ98aMfwNtGyIiDPLHnWWG4AW0DC9hwsn8G
-        aNrn8rPwsei/avKj+9tmYYtJK3Lht9mc2R/UUizw=
-Received: from anirudhrb.com (49.207.221.223 [49.207.221.223]) by mx.zohomail.com
-        with SMTPS id 1647274843303560.9949108171496; Mon, 14 Mar 2022 09:20:43 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 21:50:36 +0530
-From:   Anirudh Rayabharam <mail@anirudhrb.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, jasowang@redhat.com
-Subject: Re: [PATCH 5.16 017/121] vhost: fix hung thread due to erroneous
- iotlb entries
-Message-ID: <Yi9rVI7AhOnkBIx2@anirudhrb.com>
-References: <20220314112744.120491875@linuxfoundation.org>
- <20220314112744.608703877@linuxfoundation.org>
+        Mon, 14 Mar 2022 12:23:02 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210F5140A1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:21:50 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id h2so10891556pfh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qALLnaCSSKUHcfprNAAItch631Ge5KfRQPx2pUNLQTQ=;
+        b=H7D/n0JbKj9EjOt8JtzKTXMQH0CNTpYB4I8wApB4Rmv61PHXEWj9mIPqgO05ZTyBRV
+         gGQOTLYfGzzw1FdftrzkIh6XmORv26rbqjicyHqSgwyZQEb8kvdu+uMfyc1qS98htKOL
+         qldzP/g9QTFXumZOPLV1iMBVFyiv24zQIs4wc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qALLnaCSSKUHcfprNAAItch631Ge5KfRQPx2pUNLQTQ=;
+        b=vfXg+6RYTaebVTaQg7YzeovFu3En5Oh3vyLQSLkUBMoq1t5Ih+MG5/UbPh0LAWCBpb
+         XDBdbzX11TeLUDnGOvFs4DCQObd4uebJl9vpTVyc7thwgpZycFDDzzfm5QQxPLNaM8kD
+         lepONsheo/LA5f63v2mB2v8bNXNRJgbYoKfdz4XpmNF/9xxR8wwCLJmERe7hS4QmHBDu
+         lsO03cJo0eEoTQMaYOgIT62X1iAuOcw23I0cLz1ewFYjbAgjuA79DY2Z+VrByOHrnwKI
+         UAlh174e1zFt/vUTls7rf9bX7A/AecXkZA3PhHkCgk/Uqq8Qfr53MIvHjerQ1fSANZHj
+         wOFw==
+X-Gm-Message-State: AOAM531Lsp6k+fJt3XfZNCVwMRselDluEJyV++u3E4pJf1xnwvHcd8g2
+        LeziRtqc7z7hnPYWRUArDgUNVA==
+X-Google-Smtp-Source: ABdhPJywlNfTDHCbCn7W5tk/3WvfHJOH4isiXUJsYK3fHzRwOBGDMLdgv9KHuQlVH/xNrUex2nFbYw==
+X-Received: by 2002:a65:6091:0:b0:35e:d274:5f54 with SMTP id t17-20020a656091000000b0035ed2745f54mr20676714pgu.200.1647274910285;
+        Mon, 14 Mar 2022 09:21:50 -0700 (PDT)
+Received: from ebps (cpe-75-80-179-40.san.res.rr.com. [75.80.179.40])
+        by smtp.gmail.com with ESMTPSA id c3-20020a056a00248300b004f6f729e485sm21916449pfv.127.2022.03.14.09.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 09:21:49 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 09:21:46 -0700
+From:   Eric Badger <ebadger@purestorage.com>
+To:     "Raj, Ashok" <ashok.raj@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver OHalloran <oohall@gmail.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v1] PCI/AER: Handle Multi UnCorrectable/Correctable
+ errors properly
+Message-ID: <20220314162146.GA1439451@ebps>
+References: <20220311025807.14664-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220313195220.GA436941@bhelgaas>
+ <20220313214314.GD182809@otc-nc-03>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314112744.608703877@linuxfoundation.org>
-X-ZohoMailClient: External
+In-Reply-To: <20220313214314.GD182809@otc-nc-03>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 12:53:20PM +0100, Greg Kroah-Hartman wrote:
-> From: Anirudh Rayabharam <mail@anirudhrb.com>
+On Sun, Mar 13, 2022 at 02:43:14PM -0700, Raj, Ashok wrote:
+> On Sun, Mar 13, 2022 at 02:52:20PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Mar 11, 2022 at 02:58:07AM +0000, Kuppuswamy Sathyanarayanan wrote:
+> > > Currently the aer_irq() handler returns IRQ_NONE for cases without bits
+> > > PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
+> > > assumption is incorrect.
+> > > 
+> > > Consider a scenario where aer_irq() is triggered for a correctable
+> > > error, and while we process the error and before we clear the error
+> > > status in "Root Error Status" register, if the same kind of error
+> > > is triggered again, since aer_irq() only clears events it saw, the
+> > > multi-bit error is left in tact. This will cause the interrupt to fire
+> > > again, resulting in entering aer_irq() with just the multi-bit error
+> > > logged in the "Root Error Status" register.
+> > > 
+> > > Repeated AER recovery test has revealed this condition does happen
+> > > and this prevents any new interrupt from being triggered. Allow to
+> > > process interrupt even if only multi-correctable (BIT 1) or
+> > > multi-uncorrectable bit (BIT 3) is set.
+> > > 
+> > > Reported-by: Eric Badger <ebadger@purestorage.com>
+> > 
+> > Is there a bug report with any concrete details (dmesg, lspci, etc)
+> > that we can include here?
 > 
-> [ Upstream commit e2ae38cf3d91837a493cb2093c87700ff3cbe667 ]
+> Eric might have more details to add when he collected numerous logs to get
+> to the timeline of the problem. The test was to stress the links with an
+> automated power off, this will result in some eDPC UC error followed by
+> link down. The recovery worked fine for several cycles and suddenly there
+> were no more interrupts. A manual rescan on pci would probe and device is
+> operational again.
 
-This breaks batching of IOTLB messages. [1] fixes it but hasn't landed in
-Linus' tree yet.
+The problem was originally discovered while performing a looping hot plug
+test. At hot remove time, one or more corrected errors usually appeared:
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=linux-next&id=95932ab2ea07b79cdb33121e2f40ccda9e6a73b5
+[256236.078151] pcieport 0000:89:02.0: AER: Corrected error received: 0000:89:02.0
+[256236.078154] pcieport 0000:89:02.0: AER: PCIe Bus Error: severity=Corrected, type=Physical Layer, (Receiver ID)
+[256236.088606] pcieport 0000:89:02.0: AER:   device [8086:347a] error status/mask=00000001/00000000
+[256236.097857] pcieport 0000:89:02.0: AER:    [ 0] RxErr                 
+[256236.152622] pcieport 0000:89:02.0: pciehp: Slot(400): Link Down
+[256236.152623] pcieport 0000:89:02.0: pciehp: Slot(400): Card not present
+[256236.152631] pcieport 0000:89:02.0: DPC: containment event, status:0x1f01 source:0x0000
+[256236.152632] pcieport 0000:89:02.0: DPC: unmasked uncorrectable error detected reason 0 ext_reason 0
+[256236.152634] pcieport 0000:89:02.0: AER: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
+[256236.164207] pcieport 0000:89:02.0: AER:   device [8086:347a] error status/mask=00000020/00100000
+[256236.173464] pcieport 0000:89:02.0: AER:    [ 5] SDES                   (First)
+[256236.278407] pci 0000:8a:00.0: Removing from iommu group 32
+[256237.500837] pcieport 0000:89:02.0: Data Link Layer Link Active not set in 1000 msec
+[256237.500842] pcieport 0000:89:02.0: link reset at upstream device 0000:89:02.0 failed
+[256237.500865] pcieport 0000:89:02.0: AER: Device recovery failed
 
-    - Anirudh.
-> 
-> In vhost_iotlb_add_range_ctx(), range size can overflow to 0 when
-> start is 0 and last is ULONG_MAX. One instance where it can happen
-> is when userspace sends an IOTLB message with iova=size=uaddr=0
-> (vhost_process_iotlb_msg). So, an entry with size = 0, start = 0,
-> last = ULONG_MAX ends up in the iotlb. Next time a packet is sent,
-> iotlb_access_ok() loops indefinitely due to that erroneous entry.
-> 
-> 	Call Trace:
-> 	 <TASK>
-> 	 iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
-> 	 vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
-> 	 vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
-> 	 vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
-> 	 kthread+0x2e9/0x3a0 kernel/kthread.c:377
-> 	 ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> 	 </TASK>
-> 
-> Reported by syzbot at:
-> 	https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
-> 
-> To fix this, do two things:
-> 
-> 1. Return -EINVAL in vhost_chr_write_iter() when userspace asks to map
->    a range with size 0.
-> 2. Fix vhost_iotlb_add_range_ctx() to handle the range [0, ULONG_MAX]
->    by splitting it into two entries.
-> 
-> Fixes: 0bbe30668d89e ("vhost: factor out IOTLB")
-> Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-> Link: https://lore.kernel.org/r/20220305095525.5145-1-mail@anirudhrb.com
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/vhost/iotlb.c | 11 +++++++++++
->  drivers/vhost/vhost.c |  5 +++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
-> index 670d56c879e5..40b098320b2a 100644
-> --- a/drivers/vhost/iotlb.c
-> +++ b/drivers/vhost/iotlb.c
-> @@ -57,6 +57,17 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
->  	if (last < start)
->  		return -EFAULT;
->  
-> +	/* If the range being mapped is [0, ULONG_MAX], split it into two entries
-> +	 * otherwise its size would overflow u64.
-> +	 */
-> +	if (start == 0 && last == ULONG_MAX) {
-> +		u64 mid = last / 2;
-> +
-> +		vhost_iotlb_add_range_ctx(iotlb, start, mid, addr, perm, opaque);
-> +		addr += mid + 1;
-> +		start = mid + 1;
-> +	}
-> +
->  	if (iotlb->limit &&
->  	    iotlb->nmaps == iotlb->limit &&
->  	    iotlb->flags & VHOST_IOTLB_FLAG_RETIRE) {
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 59edb5a1ffe2..55475fd59fb7 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -1170,6 +1170,11 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
->  		goto done;
->  	}
->  
-> +	if (msg.size == 0) {
-> +		ret = -EINVAL;
-> +		goto done;
-> +	}
-> +
->  	if (dev->msg_handler)
->  		ret = dev->msg_handler(dev, &msg);
->  	else
-> -- 
-> 2.34.1
-> 
-> 
-> 
+The problematic case arose when 2 corrected errors arrived in a sequence like this:
+
+1. Correctable error triggered, bit 0 (ERR_COR) set in Root Error Status,
+   which now has value 0x1.
+2. aer_irq() triggered, reads Root Error Status, finds value 0x1.
+3. Second correctable error triggered, bit 1 (multiple ERR_COR) set in Root
+   Error Status, which now has value 0x3.
+4. aer_irq() writes back 0x1 to Root Error Status, which now has value 0x2.
+5. aer_irq() triggered again due to the second error, but, finding value 0x2
+   in Root Error Status, takes no action. Future interrupts are now inhibited.
+  
+My observation on Intel Icelake is that a new AER interrupt will be generated
+when one writes to Root Error Status but other bits remain set. I concluded
+this based on testing with ACPI EINJ and a hack like this:
+
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index 9fa1f97e5b27..5c9bbbe7887b 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -1196,6 +1196,10 @@ static irqreturn_t aer_irq(int irq, void *context)
+ 	struct aer_err_source e_src = {};
+ 
+ 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
++
++	pci_dbg(pdev->port, "Root Error Status: %04x\n", e_src.status);
++	return IRQ_NONE;
++
+ 	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
+ 		return IRQ_NONE;
+ 
+And then running these commands:
+
+    # Prep injection data for a correctable error.
+    $ cd /sys/kernel/debug/apei/einj
+    $ echo 0x00000040 > error_type
+    $ echo 0x4 > flags
+    $ echo 0x891000 > param4
+    
+    # Root Error Status is initially clear
+    $ setpci -s 89:02.0 ECAP0001+0x30.w
+    0000
+    
+    # Inject one error
+    $ echo 1 > error_inject
+    
+    # Interrupt received
+    [  285.526275] pcieport 0000:89:02.0: AER: Root Error Status 0001
+    
+    # Inject another error
+    $ echo 1 > error_inject
+    
+    # No interrupt received, but "multiple ERR_COR" is now set
+    $ setpci -s 89:02.0 ECAP0001+0x30.w
+    0003
+    
+    # Wait for a while, then clear ERR_COR. A new interrupt immediately fires.
+    $ setpci -s 89:02.0 ECAP0001+0x30.w=0x1
+    [  354.596748] pcieport 0000:89:02.0: AER: Root Error Status 0002
+
+
+I've tried to track down some different hardware to confirm this behavior, but
+haven't found any that can run this test.
+
+My reading of the PCIe 5.0 spec, section "6.2.4.1.2 Interrupt Generation"
+doesn't seem to describe the behavior I saw on Icelake.
+
+	If a Root Port or Root Complex Event Collector is enabled for
+	edge-triggered interrupt signaling using MSI or MSI-X, an interrupt
+	message must be sent every time the logical AND of the following
+	conditions transitions from FALSE to TRUE:
+	...
+    At least one Error Reporting Enable bit in the Root Error Command
+    register and its associated error Messages Received bit in the Root
+    Error Status register are both set to 1b.
+
+This section of the spec seems to say that, if Root Error Status sees the
+sequence of values described above (0x1->0x3->0x2), only one interrupt would
+be generated, since there was no FALSE to TRUE transition at 0x3->0x2.  So you
+would need something analogous to:
+
+8edf5332c3934 ("PCI: pciehp: Fix MSI interrupt race")
+
+However, this seems not to be the case for Icelake.
+
+Cheers,
+Eric

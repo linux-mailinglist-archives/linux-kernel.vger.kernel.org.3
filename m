@@ -2,221 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1121C4D7DB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DCA4D7DBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiCNImN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S235340AbiCNIoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiCNImM (ORCPT
+        with ESMTP id S231531AbiCNIoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:42:12 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C11D3C485;
-        Mon, 14 Mar 2022 01:41:00 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22E8W6Gm026719;
-        Mon, 14 Mar 2022 09:40:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=myxRaXF7Vh1hom2EyP1oBMMoYj0tzQQHrP5Q5LaW5eM=;
- b=EulMrCmsuYdRv3+6aAPzwPbanFQYssovU29+YmWql1Xd7KLulmm444ZtM2n+rScohaNh
- hk7poVuAV6A+9ZbVViSghmAnfWQAyub7N9KJHwXobIoYKB3Lk0XRtrYdkFkMEY1aKLTE
- 8ZpN39lIS2vxvjfRyXk03Az6CQ1MWNMmBaOjDYfs3fk/vnsbSKpe64QLxV5IX6t4vjBj
- iiN0rtM68wJLpTnUjDl6pZKdvAkheHrO0LfOcuMdLZe/mGdqWruzbm+OsppVG56RAuaC
- RBzrO7G+VGwJWGWLa+aPj8xBbztlIPNXIlMJyxuB75peAhNKAmuPvcPcjXEQCAAABaHL ww== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3erhtp13pc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 09:40:02 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DB1E010002A;
-        Mon, 14 Mar 2022 09:39:56 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8ECFA2132C8;
-        Mon, 14 Mar 2022 09:39:56 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 14 Mar
- 2022 09:39:56 +0100
-Date:   Mon, 14 Mar 2022 09:39:42 +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Dmitriy Ulitin <ulitin@ispras.ru>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH 17/24] media: platform: rename stm32/ to sti/stm32/
-Message-ID: <20220314083942.GA526468@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Dmitriy Ulitin <ulitin@ispras.ru>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <cover.1647167750.git.mchehab@kernel.org>
- <dc5be62a56ac19c6f49f4c8432558fd7b0efe7e6.1647167750.git.mchehab@kernel.org>
+        Mon, 14 Mar 2022 04:44:18 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A211C2D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:43:08 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id l10so8863145wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h8sJyHrz9MSFv6aQ5rNLhY6H2EgY9rxFKZSrrjXt/DA=;
+        b=SFQws5dWS5IMGrfAnDPxae+Am8l7I6/hNpKN2OmjbEYBGOqYImlF1vqLR1AWOKjxuz
+         Y3SmnYVN3rl4rC4EoSP+NPG+5KWZz++GAzeOoGAbPT/KVHXn4ANsb5wfn5v3kGdtF/ZJ
+         64EyjWFnJczi6FbxWHPRo3MnjGRwix9kCikrysBaeN1/ylzG2nUNblB3tW3v/OKTS6xt
+         gCceRq2GOmUuCVyDsRt62GwnhO3ZZLyEg6TLLo0DIi2fWEIRL1kSiGcyV/KP1hV5Ur/m
+         w9PIORH6GoAPa2fq9IRxdWhZhrnbnpECthh2qm72hq+KeXISV48tviEmpezl7l3KW+gs
+         s/OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h8sJyHrz9MSFv6aQ5rNLhY6H2EgY9rxFKZSrrjXt/DA=;
+        b=KNFj/zkslZHodhgwQZpV7enN5pA5nQs4wtCj9h9mD3vEDnYg2Kfqq8d0rtFKD3wz/F
+         DORdT7+xRpNaaFHXKGNfWaottWNoQM+2+W7JKqXJ0qTrocssnzAgFs14bbLcf3wWDWnR
+         /LfjwhSgEoTgrM7jLAxWjAAOe8gRYMRZBmxum+LRpIISCqgN1IYiHffAWsDwBHCt7Cg8
+         NZCiODoTNgZXEqKhMQHu558rq+Ro4ckXWaEpyFEAdqvTNLigRtSB+XkzgISK4QQ+Tzms
+         86LT2tAqflEcrq9nBal+3potAc0f34Os+EN01bhbuLQd1/rRzwSffAVt8KVpnzqe+uDU
+         4jqw==
+X-Gm-Message-State: AOAM533llFqBHR0nt7m03nMbFidgT6BChWWZr12LuQHFE/eRzryyFo37
+        nyy4ZtdCGQWao4/vg7GrS3hG9g==
+X-Google-Smtp-Source: ABdhPJzc9uprjBGpnv4mgjX60WyBxgufdLW4uQZcYLKXmRnyMUHGBSCkV5UyRJf8/ADueYqZriWJIQ==
+X-Received: by 2002:a05:600c:4249:b0:385:a7bc:b37 with SMTP id r9-20020a05600c424900b00385a7bc0b37mr24170451wmm.185.1647247386565;
+        Mon, 14 Mar 2022 01:43:06 -0700 (PDT)
+Received: from joneslee.c.googlers.com.com (205.215.190.35.bc.googleusercontent.com. [35.190.215.205])
+        by smtp.gmail.com with ESMTPSA id v14-20020adfd18e000000b0020373e5319asm13416678wrc.103.2022.03.14.01.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 01:43:06 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org, mst@redhat.com, jasowang@redhat.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH 1/1] vhost: Protect the virtqueue from being cleared whilst still in use
+Date:   Mon, 14 Mar 2022 08:43:02 +0000
+Message-Id: <20220314084302.2933167-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <dc5be62a56ac19c6f49f4c8432558fd7b0efe7e6.1647167750.git.mchehab@kernel.org>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_02,2022-03-11_02,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+vhost_vsock_handle_tx_kick() already holds the mutex during its call
+to vhost_get_vq_desc().  All we have to do here is take the same lock
+during virtqueue clean-up and we mitigate the reported issues.
 
-I don't think stm32 should be put within the sti platform folder.
-sti and stm32 are 2 different platforms from ST Microelectronics.
-STi refers to the platform with SoCs such as STiH407/STiH410 and STiH418
-while stm32 are all STM32 ones. Those two platforms aren't related.
-What about having a folder stmicro or stmicroelectronics (too long
-probably :D) with the 2 folders sti and stm32 into it ?
+Also WARN() as a precautionary measure.  The purpose of this is to
+capture possible future race conditions which may pop up over time.
 
-Alain
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/vhost/vhost.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Sun, Mar 13, 2022 at 11:51:58AM +0100, Mauro Carvalho Chehab wrote:
-> As the end goal is to have platform drivers split by vendor,
-> rename stm32/ to sti/stm32/.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@kernel.org/
-> 
->  MAINTAINERS                                               | 2 +-
->  drivers/media/platform/Kconfig                            | 2 +-
->  drivers/media/platform/Makefile                           | 2 +-
->  drivers/media/platform/{ => sti}/stm32/Kconfig            | 0
->  drivers/media/platform/{ => sti}/stm32/Makefile           | 0
->  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-hw.c   | 0
->  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-regs.h | 0
->  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.c      | 0
->  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.h      | 0
->  drivers/media/platform/{ => sti}/stm32/stm32-dcmi.c       | 0
->  10 files changed, 3 insertions(+), 3 deletions(-)
->  rename drivers/media/platform/{ => sti}/stm32/Kconfig (100%)
->  rename drivers/media/platform/{ => sti}/stm32/Makefile (100%)
->  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-hw.c (100%)
->  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-regs.h (100%)
->  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.c (100%)
->  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.h (100%)
->  rename drivers/media/platform/{ => sti}/stm32/stm32-dcmi.c (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7711a5ea125e..620705e0f043 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12046,7 +12046,7 @@ L:	linux-media@vger.kernel.org
->  S:	Supported
->  T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-> -F:	drivers/media/platform/stm32/stm32-dcmi.c
-> +F:	drivers/media/platform/sti/stm32/stm32-dcmi.c
->  
->  MEDIA INPUT INFRASTRUCTURE (V4L/DVB)
->  M:	Mauro Carvalho Chehab <mchehab@kernel.org>
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index c3594807f8d7..cf373bfbca1b 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -95,7 +95,7 @@ source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
->  source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
->  source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
->  source "drivers/media/platform/sti/Kconfig"
-> -source "drivers/media/platform/stm32/Kconfig"
-> +source "drivers/media/platform/sti/stm32/Kconfig"
->  source "drivers/media/platform/ti-vpe/Kconfig"
->  source "drivers/media/platform/via/Kconfig"
->  source "drivers/media/platform/xilinx/Kconfig"
-> diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-> index 6a766acfbe37..e3dd2331003a 100644
-> --- a/drivers/media/platform/Makefile
-> +++ b/drivers/media/platform/Makefile
-> @@ -40,7 +40,7 @@ obj-y += sti/bdisp/
->  obj-y += sti/c8sectpfe/
->  obj-y += sti/delta/
->  obj-y += sti/hva/
-> -obj-y += stm32/
-> +obj-y += sti/stm32/
->  obj-y += ti-vpe/
->  obj-y += via/
->  obj-y += xilinx/
-> diff --git a/drivers/media/platform/stm32/Kconfig b/drivers/media/platform/sti/stm32/Kconfig
-> similarity index 100%
-> rename from drivers/media/platform/stm32/Kconfig
-> rename to drivers/media/platform/sti/stm32/Kconfig
-> diff --git a/drivers/media/platform/stm32/Makefile b/drivers/media/platform/sti/stm32/Makefile
-> similarity index 100%
-> rename from drivers/media/platform/stm32/Makefile
-> rename to drivers/media/platform/sti/stm32/Makefile
-> diff --git a/drivers/media/platform/stm32/dma2d/dma2d-hw.c b/drivers/media/platform/sti/stm32/dma2d/dma2d-hw.c
-> similarity index 100%
-> rename from drivers/media/platform/stm32/dma2d/dma2d-hw.c
-> rename to drivers/media/platform/sti/stm32/dma2d/dma2d-hw.c
-> diff --git a/drivers/media/platform/stm32/dma2d/dma2d-regs.h b/drivers/media/platform/sti/stm32/dma2d/dma2d-regs.h
-> similarity index 100%
-> rename from drivers/media/platform/stm32/dma2d/dma2d-regs.h
-> rename to drivers/media/platform/sti/stm32/dma2d/dma2d-regs.h
-> diff --git a/drivers/media/platform/stm32/dma2d/dma2d.c b/drivers/media/platform/sti/stm32/dma2d/dma2d.c
-> similarity index 100%
-> rename from drivers/media/platform/stm32/dma2d/dma2d.c
-> rename to drivers/media/platform/sti/stm32/dma2d/dma2d.c
-> diff --git a/drivers/media/platform/stm32/dma2d/dma2d.h b/drivers/media/platform/sti/stm32/dma2d/dma2d.h
-> similarity index 100%
-> rename from drivers/media/platform/stm32/dma2d/dma2d.h
-> rename to drivers/media/platform/sti/stm32/dma2d/dma2d.h
-> diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/sti/stm32/stm32-dcmi.c
-> similarity index 100%
-> rename from drivers/media/platform/stm32/stm32-dcmi.c
-> rename to drivers/media/platform/sti/stm32/stm32-dcmi.c
-> -- 
-> 2.35.1
-> 
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 59edb5a1ffe28..bbaff6a5e21b8 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -693,6 +693,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+ 	int i;
+ 
+ 	for (i = 0; i < dev->nvqs; ++i) {
++		mutex_lock(&dev->vqs[i]->mutex);
+ 		if (dev->vqs[i]->error_ctx)
+ 			eventfd_ctx_put(dev->vqs[i]->error_ctx);
+ 		if (dev->vqs[i]->kick)
+@@ -700,6 +701,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+ 		if (dev->vqs[i]->call_ctx.ctx)
+ 			eventfd_ctx_put(dev->vqs[i]->call_ctx.ctx);
+ 		vhost_vq_reset(dev, dev->vqs[i]);
++		mutex_unlock(&dev->vqs[i]->mutex);
+ 	}
+ 	vhost_dev_free_iovecs(dev);
+ 	if (dev->log_ctx)
+-- 
+2.35.1.723.g4982287a31-goog
+

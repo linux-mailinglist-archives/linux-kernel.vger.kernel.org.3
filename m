@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A5C4D831E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A914D81D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240912AbiCNMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
+        id S239831AbiCNL4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241351AbiCNMIi (ORCPT
+        with ESMTP id S238323AbiCNL4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:38 -0400
+        Mon, 14 Mar 2022 07:56:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BCC4C439;
-        Mon, 14 Mar 2022 05:05:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C76D65C1;
+        Mon, 14 Mar 2022 04:55:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04E8B612FF;
-        Mon, 14 Mar 2022 12:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36201C36AE2;
-        Mon, 14 Mar 2022 12:04:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0CA560FF3;
+        Mon, 14 Mar 2022 11:55:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DABBC340E9;
+        Mon, 14 Mar 2022 11:55:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259500;
-        bh=RsFZTWnfjmpT6i3ems5I0UMcIWdeQ2t770YuUzve0og=;
+        s=korg; t=1647258928;
+        bh=X4C+EAnv+5PsvS5bhnuMIuDGUfEfKplyG40If4A0F78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AI2ClrVzUm7PoJ+nbbAVOgtfO77fOOnlikKtpcLhjfe9IVnFppojHJ6t2BDWZvZlw
-         f1gWAjI0mWudXl3p17SVPW+CWi93xcuikiXsm9iXI1cODZIhbTb0f9YDI6sLVosxm8
-         9yNEfNX82P0w0vV7WS2Jbqa8Vu79/f9BLN43UmKo=
+        b=PMPXsoK9M12Pgol0cpmzTlJ6ziuF7APLLLiRqapZgpQWjxbzPHRv9mnnimfx/RGRm
+         HT3Z+sKWI/MdipDf95GhPYsqdRsOS9wu0nvZzyzqN5foVZBKkgLALA1ARrKuggEftX
+         C79oja/LDVVDwJATgjAwmZv1JRmnOvxYO9hVpPU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, valis <sec@valis.email>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Thomas Osterried <thomas@osterried.de>,
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 020/110] esp: Fix possible buffer overflow in ESP transformation
+Subject: [PATCH 5.4 11/43] ax25: Fix NULL pointer dereference in ax25_kill_by_device
 Date:   Mon, 14 Mar 2022 12:53:22 +0100
-Message-Id: <20220314112743.599549873@linuxfoundation.org>
+Message-Id: <20220314112734.736241254@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,90 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steffen Klassert <steffen.klassert@secunet.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit ebe48d368e97d007bfeb76fcb065d6cfc4c96645 ]
+[ Upstream commit 71171ac8eb34ce7fe6b3267dce27c313ab3cb3ac ]
 
-The maximum message size that can be send is bigger than
-the  maximum site that skb_page_frag_refill can allocate.
-So it is possible to write beyond the allocated buffer.
+When two ax25 devices attempted to establish connection, the requester use ax25_create(),
+ax25_bind() and ax25_connect() to initiate connection. The receiver use ax25_rcv() to
+accept connection and use ax25_create_cb() in ax25_rcv() to create ax25_cb, but the
+ax25_cb->sk is NULL. When the receiver is detaching, a NULL pointer dereference bug
+caused by sock_hold(sk) in ax25_kill_by_device() will happen. The corresponding
+fail log is shown below:
 
-Fix this by doing a fallback to COW in that case.
+===============================================================
+BUG: KASAN: null-ptr-deref in ax25_device_event+0xfd/0x290
+Call Trace:
+...
+ax25_device_event+0xfd/0x290
+raw_notifier_call_chain+0x5e/0x70
+dev_close_many+0x174/0x220
+unregister_netdevice_many+0x1f7/0xa60
+unregister_netdevice_queue+0x12f/0x170
+unregister_netdev+0x13/0x20
+mkiss_close+0xcd/0x140
+tty_ldisc_release+0xc0/0x220
+tty_release_struct+0x17/0xa0
+tty_release+0x62d/0x670
+...
 
-v2:
+This patch add condition check in ax25_kill_by_device(). If s->sk is
+NULL, it will goto if branch to kill device.
 
-Avoid get get_order() costs as suggested by Linus Torvalds.
-
-Fixes: cac2661c53f3 ("esp4: Avoid skb_cow_data whenever possible")
-Fixes: 03e2a30f6a27 ("esp6: Avoid skb_cow_data whenever possible")
-Reported-by: valis <sec@valis.email>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Fixes: 4e0f718daf97 ("ax25: improve the incomplete fix to avoid UAF and NPD bugs")
+Reported-by: Thomas Osterried <thomas@osterried.de>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/esp.h | 2 ++
- net/ipv4/esp4.c   | 5 +++++
- net/ipv6/esp6.c   | 5 +++++
- 3 files changed, 12 insertions(+)
+ net/ax25/af_ax25.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/net/esp.h b/include/net/esp.h
-index 9c5637d41d95..90cd02ff77ef 100644
---- a/include/net/esp.h
-+++ b/include/net/esp.h
-@@ -4,6 +4,8 @@
- 
- #include <linux/skbuff.h>
- 
-+#define ESP_SKB_FRAG_MAXSIZE (PAGE_SIZE << SKB_FRAG_PAGE_ORDER)
-+
- struct ip_esp_hdr;
- 
- static inline struct ip_esp_hdr *ip_esp_hdr(const struct sk_buff *skb)
-diff --git a/net/ipv4/esp4.c b/net/ipv4/esp4.c
-index e1b1d080e908..70e6c87fbe3d 100644
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -446,6 +446,7 @@ int esp_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info *
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
-+	unsigned int allocsz;
- 
- 	/* this is non-NULL only with TCP/UDP Encapsulation */
- 	if (x->encap) {
-@@ -455,6 +456,10 @@ int esp_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info *
- 			return err;
- 	}
- 
-+	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
-+	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+		goto cow;
-+
- 	if (!skb_cloned(skb)) {
- 		if (tailen <= skb_tailroom(skb)) {
- 			nfrags = 1;
-diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
-index 883b53fd7846..b7b573085bd5 100644
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -483,6 +483,7 @@ int esp6_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
-+	unsigned int allocsz;
- 
- 	if (x->encap) {
- 		int err = esp6_output_encap(x, skb, esp);
-@@ -491,6 +492,10 @@ int esp6_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info
- 			return err;
- 	}
- 
-+	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
-+	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+		goto cow;
-+
- 	if (!skb_cloned(skb)) {
- 		if (tailen <= skb_tailroom(skb)) {
- 			nfrags = 1;
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 184af6da0def..093b73c454d2 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -87,6 +87,13 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
+ 			sk = s->sk;
++			if (!sk) {
++				spin_unlock_bh(&ax25_list_lock);
++				s->ax25_dev = NULL;
++				ax25_disconnect(s, ENETUNREACH);
++				spin_lock_bh(&ax25_list_lock);
++				goto again;
++			}
+ 			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
 -- 
 2.34.1
 

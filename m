@@ -2,112 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6304D7AD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684124D7AD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiCNGfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 02:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S236420AbiCNGhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 02:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbiCNGfM (ORCPT
+        with ESMTP id S234712AbiCNGhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 02:35:12 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DC41EAC3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:34:02 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bi12so31602673ejb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tMMg4WQQYlz0uot7pHseP3erwI/+QvE1essU4518DNQ=;
-        b=gHGaWW+9zdx2nMhyavqLvN3yhv++kdYLXpo/3qlRp6v9TA/jvXDcieX0V6rAEzmFD/
-         sdHgZPbpv6nyznR1knnrJ16mS69yajty7YEc1k+MOOHTcVQen1AtRojdZJH3WJkadKKc
-         eWDMjp6Z/FWIByWVEqyyBMMLs3uZmrnK2Q19fonFmY7S9MsBeQe+aIn+Mv9jKoaIoP9I
-         /Bn8dm/L3ctnb/giKcVeZ38wBYMny4jhyARp0I9nTVs5AVcxoPsCGjRe+IqGenJV2GhG
-         r+pL8nZg2klImb67nZDx5VE5K0qOaS+CKqIRv4NlODq0SL1YdcpzoIksjfdtSkwdqiCi
-         THgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tMMg4WQQYlz0uot7pHseP3erwI/+QvE1essU4518DNQ=;
-        b=NaWl9PSX7CXFx/4f6LiUckBIt81n2H4+OFBwdcUqw5RVh+i0+Clcjm5yXJ8mSP7leo
-         bi6z972Msriz7Qrwbk/3zq/EivtXJjwbEkKOob9Acdg2Qv8GOIb4VUMHujOtRlyzJrdD
-         HH0U7MxCasLCIbYFrzuIZKyWoFRqlXUcAMJ1dcPPr7RhuW9wiOymUjBufeI3AwY/z9sg
-         1quGJ1ONw9P3CdG2+kmpvxBcYa9RC3M/kSI6Y+pSLk8WKmmY8hhwvhc7sDDsKmXM3yGP
-         /j+eL63BAwiFdsPiR6DlPmChCFLRD2c/hyZ4Y7PBYFcZlJCfAWveMLMqBtcxV5aYDogN
-         6z8w==
-X-Gm-Message-State: AOAM5329UUXJl6XEcnGrp2OsUjco2jzHPkJDa1NU1uJplhsRMOCzf1ya
-        1o9g6japE/32ayMrqZFjw9JAfQ==
-X-Google-Smtp-Source: ABdhPJysJtjJNO/ccMll0pR1WCkbv7gByjW//bPYmXSPWvEeSpDddoRTUmHZzhqpZw9r3SuCmsPdrA==
-X-Received: by 2002:a17:907:96a8:b0:6db:4c68:1393 with SMTP id hd40-20020a17090796a800b006db4c681393mr17226489ejc.87.1647239640969;
-        Sun, 13 Mar 2022 23:34:00 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id e18-20020a50ec92000000b0041852b30c9esm4286696edr.27.2022.03.13.23.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 23:34:00 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 14:33:53 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Ali Saidi <alisaidi@amazon.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, benh@kernel.crashing.org,
-        german.gomez@arm.com, james.clark@arm.com, john.garry@huawei.com,
-        jolsa@kernel.org, kjain@linux.ibm.com, lihuafei1@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org, yao.jin@linux.intel.com
-Subject: Re: [PATCH v2 2/2] perf mem: Support HITM for when mem_lvl_num is
- used
-Message-ID: <20220314063353.GB163961@leoy-ThinkPad-X240s>
-References: <20220313124427.GB143848@leoy-ThinkPad-X240s>
- <20220313191933.26621-1-alisaidi@amazon.com>
+        Mon, 14 Mar 2022 02:37:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B335B3DA62;
+        Sun, 13 Mar 2022 23:36:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C82DB80D31;
+        Mon, 14 Mar 2022 06:36:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1DBC340E9;
+        Mon, 14 Mar 2022 06:35:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647239759;
+        bh=aVbMMJ1VfcBoCh49NksJD25dn7TRfZkkdfsctr9Rksk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aru3va/n2U+njsRxdLOvUFJlsAvi5y8kJNpNjBf92aPhJdBJWJRsZVYqGKMzAIg0O
+         z8aWP5tMyjJ1506b1I4jkA36MDxAvIc0i37dPntESDwCVPzNAdzKyxo8VoMlF59ZDc
+         7riUO/IBWVgf3FFmdsdhI1NSgaYjrI8YkdP9qysU=
+Date:   Mon, 14 Mar 2022 07:35:49 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "A. Wilcox" <awilfox@adelielinux.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [BUG] arm64/m1: Accessing SYS_ID_AA64ISAR2_EL1 causes early boot
+ failure on 5.15.28, 5.16.14, 5.17
+Message-ID: <Yi7iRSHaFGsYup1p@kroah.com>
+References: <32EA0FE1-5254-4A41-B684-AA2DEC021110@adelielinux.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220313191933.26621-1-alisaidi@amazon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <32EA0FE1-5254-4A41-B684-AA2DEC021110@adelielinux.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 07:19:33PM +0000, Ali Saidi wrote:
-
-[...]
-
-> > > > +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L4)) {
-> > >
-> > > According to a comment in the previous patch, using L4 is specific to Neoverse, right?
-> > > 
-> > > Maybe we need to distinguish the Neoverse case from the generic one here as well
-> > > 
-> > > if (is_neoverse)
-> > > // treat L4 as llc
-> > > else
-> > > // treat L3 as llc
-> > 
-> > I personally think it's not good idea to distinguish platforms in the decoding code.
+On Sun, Mar 13, 2022 at 10:59:01PM -0500, A. Wilcox wrote:
+> Hello,
 > 
-> I agree here. The more we talk about this, the more I'm wondering if we're
-> spending too much code solving a problem that doesn't exist. I know of no
-> Neoverse systems that actually have 4 cache levels, they all actually have three
-> even though it's technically possible to have four.  I have some doubts anyone
-> will actually build four levels of cache and perhaps the most prudent path here
-> is to assume only three levels (and adjust the previous patch) until someone 
-> actually produces a system with four levels instead of a lot of code that is
-> never actually exercised?
+> I’ve been testing kernel updates for the Adélie Linux distribution’s ARM64 port using a Parallels VM on a MacBook Pro (13-inch, M1, 2020).  When the kernel attempts to access SYS_ID_AA64ISAR2_EL1, it causes a fault as seen here booting 5.17.0-rc8:
+> 
+> 
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410f0000]
+> [    0.000000] Linux version 5.17.0-rc8-easy (awilcox@adelie-m1) (gcc (Adelie 8.3.0) 8.3.0, GNU ld (GNU Binutils) 2.32) #1 SMP Sun Mar 13 22:19:54 CDT 2022
+> [    0.000000] Machine model: Parallels ARM Virtual Machine
+> [    0.000000] earlycon: pl11 at MMIO 0x0000000002110000 (options '')
+> [    0.000000] printk: bootconsole [pl11] enabled
+> [    0.000000] efi: EFI v2.70 by EDK II
+> [    0.000000] ------------[ cut here ]------------
+> [    0.000000] kernel BUG at arch/arm64/kernel/traps.c:498!
+> [    0.000000] Internal error: Oops - BUG: 0 [#1] SMP
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.17.0-rc8-easy #1
+> [    0.000000] Hardware name: Parallels ARM Virtual Machine (DT)
+> [    0.000000] pstate: 004000c5 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.000000] pc : do_undefinstr+0x4d0/0x5b0
+> [    0.000000] lr : do_undefinstr+0x21c/0x5b0
+> [    0.000000] sp : ffff800009763c00
+> [    0.000000] x29: ffff800009763c00 x28: ffff800009773680 x27: ffff8000093d0108
+> [    0.000000] x26: 0000000000000000 x25: ffff8000093d0108 x24: ffff8000091e5098
+> [    0.000000] x23: 00000000404000c5 x22: ffff8000080805e8 x21: 0000000138cfd000
+> [    0.000000] x20: ffff800009763c90 x19: ffff8000091e5098 x18: 0000000000000010
+> [    0.000000] x17: 000000000000036f x16: 0000000000014000 x15: 0000000400000000
+> [    0.000000] x14: 000000000000036f x13: 0000000400000000 x12: 000000000000036f
+> [    0.000000] x11: 0000000400000000 x10: 00000000005b0000 x9 : 000000013fa50000
+> [    0.000000] x8 : 0000000400000000 x7 : 0000000000000003 x6 : 0000000000000000
+> [    0.000000] x5 : 0000000000000000 x4 : ffff800009911108 x3 : 0000000000000000
+> [    0.000000] x2 : ffff800009775ac0 x1 : ffff800009911108 x0 : 00000000404000c5
+> [    0.000000] Call trace:
+> [    0.000000]  do_undefinstr+0x4d0/0x5b0
+> [    0.000000]  el1_undef+0x2c/0x48
+> [    0.000000]  el1h_64_sync_handler+0x8c/0xd0
+> [    0.000000]  el1h_64_sync+0x78/0x7c
+> [    0.000000]  __cpuinfo_store_cpu+0x70/0x230
+> [    0.000000]  cpuinfo_store_boot_cpu+0x28/0x54
+> [    0.000000]  smp_prepare_boot_cpu+0x2c/0x38
+> [    0.000000]  start_kernel+0x490/0x918
+> [    0.000000]  __primary_switched+0xc0/0xc8
+> [    0.000000] Code: 54fff641 17ffffa6 a9025bf5 f9001bf7 (d4210000) 
+> [    0.000000] ---[ end trace 0000000000000000 ]---
+> 
+> 
+> Disabling the access of SYS_ID_AA64ISAR2_EL1 in __cpuinfo_store_cpu causes failure a bit later on; this trace is taken from a 5.15.28 tree:
+> 
+> 
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410f0000]
+> [    0.000000] Linux version 5.15.28-mc1-easy (awilcox@adelie-m1) (gcc (Adelie 8.3.0) 8.3.0, GNU ld (GNU Binutils) 2.32) #1 SMP Sun Mar 13 21:17:53 CDT 2022
+> [    0.000000] Machine model: Parallels ARM Virtual Machine
+> [    0.000000] earlycon: pl11 at MMIO 0x0000000002110000 (options '')
+> [    0.000000] printk: bootconsole [pl11] enabled
+> [    0.000000] efi: EFI v2.70 by EDK II
+> [    0.000000] ------------[ cut here ]------------
+> [    0.000000] kernel BUG at arch/arm64/kernel/traps.c:498!
+> [    0.000000] Internal error: Oops - BUG: 0 [#1] SMP
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.28-mc1-easy #1
+> [    0.000000] Hardware name: Parallels ARM Virtual Machine (DT)
+> [    0.000000] pstate: 004000c5 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    0.000000] pc : do_undefinstr+0x4d0/0x5b0
+> [    0.000000] lr : do_undefinstr+0x21c/0x5b0
+> [    0.000000] sp : ffff8000097b3b30
+> [    0.000000] x29: ffff8000097b3b30 x28: ffff8000097c3740 x27: 0000000000000020
+> [    0.000000] x26: ffff800008e737b8 x25: ffff80000995f540 x24: ffff8000092595d8
+> [    0.000000] x23: 00000000804000c5 x22: ffff800008126340 x21: 0000000138d6b000
+> [    0.000000] x20: ffff8000097b3bc0 x19: ffff800009258b58 x18: 0000000000000010
+> [    0.000000] x17: 000000000000036f x16: 0000000000014000 x15: 0000000000000025
+> [    0.000000] x14: ffff8000097b3a40 x13: 00000000ffffffea x12: ffff800009808ea8
+> [    0.000000] x11: 0000000000000003 x10: ffff8000097fce68 x9 : ffff8000097fcec0
+> [    0.000000] x8 : 000000000000bfe8 x7 : c0000000fffff7ff x6 : 0000000000000001
+> [    0.000000] x5 : 0000000000000000 x4 : ffff80000995f108 x3 : 0000000000000000
+> [    0.000000] x2 : ffff8000097c5b38 x1 : ffff80000995f108 x0 : 00000000804000c5
+> [    0.000000] Call trace:
+> [    0.000000]  do_undefinstr+0x4d0/0x5b0
+> [    0.000000]  el1_undef+0x2c/0x48
+> [    0.000000]  el1h_64_sync_handler+0x8c/0xd0
+> [    0.000000]  el1h_64_sync+0x78/0x7c
+> [    0.000000]  is_spectre_bhb_affected+0x38/0xb8
+> [    0.000000]  update_cpu_capabilities+0x74/0x128
+> [    0.000000]  init_cpu_features+0x250/0x274
+> [    0.000000]  cpuinfo_store_boot_cpu+0x48/0x54
+> [    0.000000]  smp_prepare_boot_cpu+0x2c/0x38
+> [    0.000000]  start_kernel+0x4c0/0x948
+> [    0.000000]  __primary_switched+0xbc/0xc4
+> [    0.000000] Code: 54fff641 17ffffa6 a9025bf5 f9001bf7 (d4210000) 
+> [    0.000000] lrng_drng: ChaCha20 core initialized with first seeding
+> [    0.000000] ---[ end trace 921bf73327f0869a ]—
+> 
+> 
+> This is because detection of the clearbhb instruction support requires accessing SYS_ID_AA64ISAR2_EL1.  Commenting out the two uses of supports_clearbhb in the kernel now yields a successful boot.
+> 
+> Qemu developers seem to have found this issue as well[1] when trying to boot 5.17 using HVF, the Apple Hypervisor Framework.  This seems to be some sort of platform quirk on M1, or at least in HVF on M1.  I’m not sure what the best workaround would be for this.  SYS_ID_AA64ISAR2_EL1 seems to be something added in ARMv8.7, so perhaps access to it could be gated on that.  
+> 
+> Unfortunately, this code was just added to 5.15.28 and 5.16.14, so stable no longer boots on Parallels VM on M1.  I am unsure if this affects physical boot on Apple M1 or not.
 
-I am not right person to say L4 cache is not implemented in Neoverse
-platforms; my guess for a "System cache" data source might be L3 or
-L4 and it is a implementation dependent.  Maybe German or Arm mates
-could confirm for this.
+What commit causes this problem?  It sounds like you narrowed this down
+already, right?
 
-Thanks,
-Leo
+thanks,
+
+greg k-h

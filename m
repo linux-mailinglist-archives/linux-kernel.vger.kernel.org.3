@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27FF4D8C8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 20:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E174D8C91
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 20:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244070AbiCNTl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 15:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S244096AbiCNTmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 15:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbiCNTl0 (ORCPT
+        with ESMTP id S232288AbiCNTmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 15:41:26 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9793C727
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 12:40:16 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id z10so7066495uaa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 12:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=guCX3nepl02itBKERgjQxl7FRNYnFxACGK874K3emrE=;
-        b=Fj+VO0VE6gpgSlruSTL1zv09M3nNgGEpH5dRIzVwNjGKv8MjbIttxCimCrjuoaMevf
-         DPyXIyavf35LjxaJRvO+GBwKy5WWNcZe3B51wVfTIknXAElwXowyAyAdFxmRHSJICDoc
-         9DFNP6Pl19q5BtgmrO1WEXu849Rgrcz34UMHPJ/7K0ZO/WzUfW1nb0LwLXRmujtvwDJ/
-         8mh5lH5aIVLkUtENDF9KUYLhBdqDBK//WX3+Mr8AJKO7INWoYcGwTcOVKE8Sx0iz5zzQ
-         +Z7KF8PMZzhlWYUrlFqfhh//QMq9piRYZvuNwjb5qCuQbGGl74NL2JfD22P07qPpIy5P
-         19IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=guCX3nepl02itBKERgjQxl7FRNYnFxACGK874K3emrE=;
-        b=Hn+DroYcuqMsDon/WG9PF9aerylNKY67+uQE2Cr7ph2hwVTtkBk+PGzLyBWYVNpJa6
-         lTg/jgPPXk4AGyWX4lXu/dIARfuXylXoPbZSNPX3o4qEj4vq1gWNszRbHMyS7s4hd1ab
-         jTKRh26NCmdbCNitRoZ4JzALy2tRnSKhSbB5lHwrYkfzX8NIb8ZzuK1MX+M5i0FM6yVd
-         mNsFB8eDhZPPgbTF/IBjJ1YC+dTAC7R0Nsr1oFtiwuzu/ogIY/fZJ+r5RaQ877y9uOCf
-         TEFdd64WGotvfVQlg8iv3TEgI+baGCLxc0UrlOIPdvClorb2UqW5uf3+DUSjktup/nUx
-         GY1Q==
-X-Gm-Message-State: AOAM530BgQU4hiErZkE+eQQvOlAIP7l5mwc8Xg+7yOI4ZO/Cdu24KRm5
-        Y+Uw+Q9dYolbC++p3Y+3hYh39Js9jxGiXDYsSbg=
-X-Google-Smtp-Source: ABdhPJxbPX205fH+LcJJubXq3Oyu9UCp+9JhYObNMAN+dtxS3KjMfUBEMg2legQQjUQLP222EcTD9zclt8C98LT+q0o=
-X-Received: by 2002:ab0:546:0:b0:34c:3f39:4cb6 with SMTP id
- 64-20020ab00546000000b0034c3f394cb6mr9642190uax.31.1647286814144; Mon, 14 Mar
- 2022 12:40:14 -0700 (PDT)
+        Mon, 14 Mar 2022 15:42:00 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB513C731;
+        Mon, 14 Mar 2022 12:40:49 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7A6D0C0002;
+        Mon, 14 Mar 2022 19:40:45 +0000 (UTC)
+Message-ID: <1a185332-3693-2750-fef2-f6938bbc8500@ovn.org>
+Date:   Mon, 14 Mar 2022 20:40:43 +0100
 MIME-Version: 1.0
-Received: by 2002:a59:d6c4:0:b0:299:f3b0:5679 with HTTP; Mon, 14 Mar 2022
- 12:40:13 -0700 (PDT)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <okoriemartins632@gmail.com>
-Date:   Mon, 14 Mar 2022 20:40:13 +0100
-Message-ID: <CAFgZtcc=jSQUEN-pZHYw_t85UEULPeDCsiT_uXtrC_Oyk=G3Vg@mail.gmail.com>
-Subject: DARLEHENSANGEBOT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:92f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [clmloans9[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [okoriemartins632[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [okoriemartins632[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     i.maximets@ovn.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Toms Atteka <cpp.code.lv@gmail.com>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Maor Dickman <maord@nvidia.com>
+Content-Language: en-US
+To:     Roi Dayan <roid@nvidia.com>, Aaron Conole <aconole@redhat.com>
+References: <20220309222033.3018976-1-i.maximets@ovn.org>
+ <f7ty21hir5v.fsf@redhat.com>
+ <44eeb550-3310-d579-91cc-ec18b59966d2@nvidia.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [PATCH net-next v2] net: openvswitch: fix uAPI incompatibility
+ with existing user space
+In-Reply-To: <44eeb550-3310-d579-91cc-ec18b59966d2@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hallo
+On 3/14/22 19:33, Roi Dayan wrote:
+> 
+> 
+> On 2022-03-10 8:44 PM, Aaron Conole wrote:
+>> Ilya Maximets <i.maximets@ovn.org> writes:
+>>
+>>> Few years ago OVS user space made a strange choice in the commit [1]
+>>> to define types only valid for the user space inside the copy of a
+>>> kernel uAPI header.  '#ifndef __KERNEL__' and another attribute was
+>>> added later.
+>>>
+>>> This leads to the inevitable clash between user space and kernel types
+>>> when the kernel uAPI is extended.  The issue was unveiled with the
+>>> addition of a new type for IPv6 extension header in kernel uAPI.
+>>>
+>>> When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to the
+>>> older user space application, application tries to parse it as
+>>> OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message as
+>>> malformed.  Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied along with
+>>> every IPv6 packet that goes to the user space, IPv6 support is fully
+>>> broken.
+>>>
+>>> Fixing that by bringing these user space attributes to the kernel
+>>> uAPI to avoid the clash.  Strictly speaking this is not the problem
+>>> of the kernel uAPI, but changing it is the only way to avoid breakage
+>>> of the older user space applications at this point.
+>>>
+>>> These 2 types are explicitly rejected now since they should not be
+>>> passed to the kernel.  Additionally, OVS_KEY_ATTR_TUNNEL_INFO moved
+>>> out from the '#ifdef __KERNEL__' as there is no good reason to hide
+>>> it from the userspace.  And it's also explicitly rejected now, because
+>>> it's for in-kernel use only.
+>>>
+>>> Comments with warnings were added to avoid the problem coming back.
+>>>
+>>> (1 << type) converted to (1ULL << type) to avoid integer overflow on
+>>> OVS_KEY_ATTR_IPV6_EXTHDRS, since it equals 32 now.
+>>>
+>>>   [1] beb75a40fdc2 ("userspace: Switching of L3 packets in L2 pipeline")
+>>>
+>>> Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extension header support")
+>>> Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d8a0cad8a5f@nvidia.com
+>>> Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295bfd6521b0068b4cd12f6de507c
+>>> Reported-by: Roi Dayan <roid@nvidia.com>
+>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>> ---
+>>
+>> Acked-by: Aaron Conole <aconole@redhat.com>
+>>
+> 
+> 
+> 
+> I got to check traffic with the fix and I do get some traffic
+> but something is broken. I didn't investigate much but the quick
+> test shows me rules are not offloaded and dumping ovs rules gives
+> error like this
+> 
+> recirc_id(0),in_port(enp8s0f0_1),ct_state(-trk),eth(),eth_type(0x86dd),ipv6(frag=no)(bad key length 2, expected -1)(00 00/(bad mask length 2, expected -1)(00 00), packets:2453, bytes:211594, used:0.004s, flags:S., actions:ct,recirc(0x2)
 
-Ben=C3=B6tigen Sie finanzielle Hilfe? Wir bieten Darlehen zu einem
-niedrigen Zinssatz von 2% an. Wenn Sie an irgendeiner Art von Darlehen
-interessiert sind, kontaktieren Sie uns mit den untenstehenden Angaben
-f=C3=BCr weitere Einzelheiten.
+Such a dump is expected, because kernel parses fields that current
+userspace doesn't understand, and at the same time OVS by design is
+using kernel provided key/mask while installing datapath rules, IIRC.
+It should be possible to make these dumps a bit more friendly though.
 
-Vollst=C3=A4ndiger Name:
-Land:Germany
-Ben=C3=B6tigte Menge:
-Dauer:
-Handynummer:
+For the offloading not working, see my comment in the v2 patch email
+I sent (top email of this thread).  In short, it's a problem in user
+space and it can not be fixed from the kernel side, unless we revert
+IPv6 extension header support and never add any new types, which is
+unreasonable.  I didn't test any actual offloading, but I had a
+successful run of 'make check-offloads' with my quick'n'dirty fix from
+the top email.
+
+Since we're here:
+
+Toms, do you plan to submit user space patches for this feature?
+
+Best regards, Ilya Maximets.

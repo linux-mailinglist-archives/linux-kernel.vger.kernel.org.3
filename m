@@ -2,149 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EF94D8F1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFA24D8F1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245417AbiCNVzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 17:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58326 "EHLO
+        id S240055AbiCNV7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 17:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235932AbiCNVzA (ORCPT
+        with ESMTP id S238329AbiCNV7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 17:55:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05B135DD0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:53:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 274F46135E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 21:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EB5C340E9;
-        Mon, 14 Mar 2022 21:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647294828;
-        bh=QDOU3spVqdpsvf3p9pseTP+NSIdd5DYDKvSNKCwGzW4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=B679eC4f8RA5kqmFnEQCHQP4gvmFpWWq+Ilj1vxGUuIinGAEna9umrZDACtJY6iOd
-         Fa0y49+p6iqarq5CTdfwC+ujQmTVwLnh8zmLGbnMTcgdpaSm5tlOLwY5j8Rj1tQ+lf
-         45SZZa9/mvqvluPaMU2MaY2jTEuiwkg15DceBXc2WAjvkA6vqRqwW/uvLYOP3rhyh6
-         J0HFyVCuAlbS/G9ngim1O8a+YMB0EjwHbKLzvsPFv3briJspSjBYHfxL5zkiID/4zw
-         Si4HN8j7ka2WeOIUy4ZbaXJeewovsgw8MY4T1Tx4g5dOx5RZV5GBUa3DFstbZtf2zD
-         zfipzdG9XHUKg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1DB075C023F; Mon, 14 Mar 2022 14:53:48 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 14:53:48 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 2/3] preempt/dynamic: Introduce preempt mode accessors
-Message-ID: <20220314215348.GA4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220314133738.269522-1-frederic@kernel.org>
- <20220314133738.269522-3-frederic@kernel.org>
- <CANpmjNPqY65ZYLFukgp779pHbiRH05yns+G7Z36QdWwrQp1WOQ@mail.gmail.com>
- <20220314200641.GV4285@paulmck-ThinkPad-P17-Gen-1>
- <CANpmjNMsyb9aOqcvUUMLbkyHiE9ZieBigU1XqBXgtYz_O00y3g@mail.gmail.com>
+        Mon, 14 Mar 2022 17:59:05 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759C4DF0B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:57:53 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id r22so23952996ljd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=7IKZuz89EQxHr0lzR2wMsnneD6Fn93b3bGH8OU7Rsk4=;
+        b=Elrte59wDxxlsyUKi60alLHpFbkKHSESMcuNcLQOHw7cJCSfDJAAsmg6ttUGjf6bxy
+         vpETVsH4lj8JmmBa3Rpol3LstZo7c+MOghyPI4Gg1y9XSWwnlCvLFhr/ZHV2lWOAOrpZ
+         VR3zquWUI/oaYZmAnOoMOCZ1yq6EQeDeafzGTSvqE4XX0HuA5puEfjbGREi0eJoOUvJ9
+         RSTxmMVOQnoBGryxQd0MzQ5r2UXB+5sobYA7bnZl7+7gaDsTZb029cB2Osmr58n9+IH+
+         3gPyTx46C41TBw28fkPR4oR9Xq3PDIFzdRkmA72a8LtYafaT+v070GbmUENXmYEK2PCA
+         y52A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=7IKZuz89EQxHr0lzR2wMsnneD6Fn93b3bGH8OU7Rsk4=;
+        b=GUA3okfs2LCLd2WoYxlpQnQP+3+mfwZtgGXrPL0oAXkPbefoYiQX8mVAeJwhYH3Dqo
+         JU0unl2IikBeQswQSn54Kf6+MLTPj51FRORxyzoMgHe0URQyTA1xQerKJV1ta5PXXyuy
+         g9vk0n8UnC7oZH1r5NJzRnkr33KcIk2r1E/dtVEGrHDs3B6Rayma/NTDcC+8zwZz+Wy0
+         72B2UBm4gbWm6IfB24c9Tcrkzl32S7NrQAaWgt8Ik/Epm2l3Zm33X/Hg/s3ijVrcJS2T
+         p3SJzeDqJCs2mPTEcmlchULZVvLrYV3dwJWxK2a9LEUbsD0ChkiEn+PJlm1bzmp0Qwby
+         BxTg==
+X-Gm-Message-State: AOAM530jvfFdcCcA5wo/i51G509h8lyO9SLSWuAb7ZqoBgeuPsbZzeMZ
+        t4qB65N5IQC0BXyMPtv3lTFF5g==
+X-Google-Smtp-Source: ABdhPJxr4eQ/sL6hM4NaXA+2EsRIPT6b6IXnyWD6/NEEY9mzQ6GkjhSWBsy9HebyNPGGCh5u/oe6xg==
+X-Received: by 2002:a05:651c:1a07:b0:247:e39d:e34c with SMTP id by7-20020a05651c1a0700b00247e39de34cmr15167013ljb.355.1647295071534;
+        Mon, 14 Mar 2022 14:57:51 -0700 (PDT)
+Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
+        by smtp.gmail.com with ESMTPSA id s6-20020a2e98c6000000b0024803f88994sm4106393ljj.79.2022.03.14.14.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 14:57:50 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v3 net-next 14/14] net: dsa: mv88e6xxx: MST Offloading
+In-Reply-To: <20220314162716.fm4tpkdi4b4ak3th@skbuf>
+References: <20220314095231.3486931-1-tobias@waldekranz.com>
+ <20220314095231.3486931-15-tobias@waldekranz.com>
+ <20220314162716.fm4tpkdi4b4ak3th@skbuf>
+Date:   Mon, 14 Mar 2022 22:57:48 +0100
+Message-ID: <87k0cwkxib.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNMsyb9aOqcvUUMLbkyHiE9ZieBigU1XqBXgtYz_O00y3g@mail.gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 09:34:26PM +0100, Marco Elver wrote:
-> On Mon, 14 Mar 2022 at 21:06, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Mon, Mar 14, 2022 at 03:44:39PM +0100, Marco Elver wrote:
-> > > On Mon, 14 Mar 2022 at 14:37, Frederic Weisbecker <frederic@kernel.org> wrote:
-> > > >
-> > > > From: Valentin Schneider <valentin.schneider@arm.com>
-> > > >
-> > > > CONFIG_PREEMPT{_NONE, _VOLUNTARY} designate either:
-> > > > o The build-time preemption model when !PREEMPT_DYNAMIC
-> > > > o The default boot-time preemption model when PREEMPT_DYNAMIC
-> > > >
-> > > > IOW, using those on PREEMPT_DYNAMIC kernels is meaningless - the actual
-> > > > model could have been set to something else by the "preempt=foo" cmdline
-> > > > parameter.
-> > > >
-> > > > Introduce a set of helpers to determine the actual preemption mode used by
-> > > > the live kernel.
-> > > >
-> > > > Suggested-by: Marco Elver <elver@google.com>
-> > > > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-> > > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > > > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > > > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > > > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > > > ---
-> > > >  include/linux/sched.h | 16 ++++++++++++++++
-> > > >  kernel/sched/core.c   | 11 +++++++++++
-> > > >  2 files changed, 27 insertions(+)
-> > > >
-> > > > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > > > index 508b91d57470..d348e886e4d0 100644
-> > > > --- a/include/linux/sched.h
-> > > > +++ b/include/linux/sched.h
-> > > > @@ -2096,6 +2096,22 @@ static inline void cond_resched_rcu(void)
-> > > >  #endif
-> > > >  }
-> > > >
-> > > > +#ifdef CONFIG_PREEMPT_DYNAMIC
-> > > > +
-> > > > +extern bool preempt_mode_none(void);
-> > > > +extern bool preempt_mode_voluntary(void);
-> > > > +extern bool preempt_mode_full(void);
-> > > > +
-> > > > +#else
-> > > > +
-> > > > +#define preempt_mode_none() IS_ENABLED(CONFIG_PREEMPT_NONE)
-> > > > +#define preempt_mode_voluntary() IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY)
-> > > > +#define preempt_mode_full() IS_ENABLED(CONFIG_PREEMPT)
-> > > > +
-> > >
-> > > Shame this was somehow forgotten.
-> > > There was a v3 of this patch that fixed a bunch of things (e.g. making
-> > > these proper functions so all builds error if accidentally used in
-> > > #if).
-> > >
-> > > https://lore.kernel.org/lkml/20211112185203.280040-3-valentin.schneider@arm.com/
-> > >
-> > > Is it also possible to take all the rest of that series (all 4
-> > > patches) from Valentin?
-> >
-> > Me, I am assuming that #2/3 is an experimental test so that I am able
-> > to easily whack this series over the head with rcutorture.  ;-)
-> 
-> I might be out of the loop here. All I can add is that any issues that
-> are a consequence of the preempt mode accessors are only testable if
-> the preemption model is actually changed at runtime and AFAIK
-> rcutorture doesn't do that. But as noted, this patch wasn't the latest
-> version and there were issues with it fixed by Valentin's latest v3
-> (from November, but had never been picked up anywhere).
+On Mon, Mar 14, 2022 at 18:27, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Mon, Mar 14, 2022 at 10:52:31AM +0100, Tobias Waldekranz wrote:
+>> Allocate a SID in the STU for each MSTID in use by a bridge and handle
+>> the mapping of MSTIDs to VLANs using the SID field of each VTU entry.
+>> 
+>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>> ---
+>>  drivers/net/dsa/mv88e6xxx/chip.c | 251 ++++++++++++++++++++++++++++++-
+>>  drivers/net/dsa/mv88e6xxx/chip.h |  13 ++
+>>  2 files changed, 257 insertions(+), 7 deletions(-)
+>> 
+>> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+>> index c14a62aa6a6c..c23dbf37aeec 100644
+>> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+>> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+>> @@ -1667,24 +1667,32 @@ static int mv88e6xxx_pvt_setup(struct mv88e6xxx_chip *chip)
+>>  	return 0;
+>>  }
+>>  
+>> -static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
+>> +static void mv88e6xxx_port_fast_age_fid(struct mv88e6xxx_chip *chip, int port,
+>> +					u16 fid)
+>>  {
+>> -	struct mv88e6xxx_chip *chip = ds->priv;
+>>  	int err;
+>>  
+>> -	if (dsa_to_port(ds, port)->lag)
+>> +	if (dsa_to_port(chip->ds, port)->lag)
+>>  		/* Hardware is incapable of fast-aging a LAG through a
+>>  		 * regular ATU move operation. Until we have something
+>>  		 * more fancy in place this is a no-op.
+>>  		 */
+>>  		return;
+>>  
+>> -	mv88e6xxx_reg_lock(chip);
+>> -	err = mv88e6xxx_g1_atu_remove(chip, 0, port, false);
+>> -	mv88e6xxx_reg_unlock(chip);
+>> +	err = mv88e6xxx_g1_atu_remove(chip, fid, port, false);
+>>  
+>>  	if (err)
+>> -		dev_err(ds->dev, "p%d: failed to flush ATU\n", port);
+>> +		dev_err(chip->ds->dev, "p%d: failed to flush ATU (FID %u)\n",
+>> +			port, fid);
+>> +}
+>> +
+>> +static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
+>> +{
+>> +	struct mv88e6xxx_chip *chip = ds->priv;
+>> +
+>> +	mv88e6xxx_reg_lock(chip);
+>> +	mv88e6xxx_port_fast_age_fid(chip, port, 0);
+>> +	mv88e6xxx_reg_unlock(chip);
+>>  }
+>>  
+>>  static int mv88e6xxx_vtu_setup(struct mv88e6xxx_chip *chip)
+>> @@ -1818,6 +1826,159 @@ static int mv88e6xxx_stu_setup(struct mv88e6xxx_chip *chip)
+>>  	return mv88e6xxx_stu_loadpurge(chip, &stu);
+>>  }
+>>  
+>> +static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, u8 *sid)
+>> +{
+>> +	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
+>> +	struct mv88e6xxx_mst *mst;
+>> +
+>> +	set_bit(0, busy);
+>
+> __set_bit
+>
 
-I will be marking 2/3 "EXP" to prevent myself from accidentally sending
-it upstream.
+Ack
 
-But longer term, maybe I should pick up Valentin's series.
+>> +
+>> +	list_for_each_entry(mst, &chip->msts, node) {
+>> +		set_bit(mst->stu.sid, busy);
+>> +	}
+>
+> Up to you, but parentheses are generally not used for single-line blocks.
+>
 
-This stuff is v5.19 at the earliest, so not (yet) urgent.
+Ack
 
-							Thanx, Paul
+>> +
+>> +	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
+>> +
+>> +	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
+>> +}
+>> +
+>> +static int mv88e6xxx_mst_put(struct mv88e6xxx_chip *chip, u8 sid)
+>> +{
+>> +	struct mv88e6xxx_mst *mst, *tmp;
+>> +	int err;
+>> +
+>> +	if (!sid)
+>> +		return 0;
+>
+> Very minor nitpick: since mv88e6xxx_mst_put already checks this, could
+> you drop the "!sid" check from callers?
+
+Dropping
+
+>> +
+>> +	list_for_each_entry_safe(mst, tmp, &chip->msts, node) {
+>> +		if (mst->stu.sid != sid)
+>> +			continue;
+>> +
+>> +		if (!refcount_dec_and_test(&mst->refcnt))
+>> +			return 0;
+>> +
+>> +		mst->stu.valid = false;
+>> +		err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
+>> +		if (err)
+>
+> Should we bother with a refcount_set(&mst->refcount, 1) on error?
+
+We might as well. Thanks.
+
+>> +			return err;
+>> +
+>> +		list_del(&mst->node);
+>> +		kfree(mst);
+>> +		return 0;
+>> +	}
+>> +
+>> +	return -ENOENT;
+>> +}
+>> +
+>> +static int mv88e6xxx_mst_get(struct mv88e6xxx_chip *chip, struct net_device *br,
+>> +			     u16 msti, u8 *sid)
+>> +{
+>> +	struct mv88e6xxx_mst *mst;
+>> +	int err, i;
+>> +
+>> +	if (!mv88e6xxx_has_stu(chip)) {
+>> +		err = -EOPNOTSUPP;
+>> +		goto err;
+>> +	}
+>> +
+>> +	if (!msti) {
+>> +		*sid = 0;
+>> +		return 0;
+>> +	}
+>> +
+>> +	list_for_each_entry(mst, &chip->msts, node) {
+>> +		if (mst->br == br && mst->msti == msti) {
+>> +			refcount_inc(&mst->refcnt);
+>> +			*sid = mst->stu.sid;
+>> +			return 0;
+>> +		}
+>> +	}
+>> +
+>> +	err = mv88e6xxx_sid_get(chip, sid);
+>> +	if (err)
+>> +		goto err;
+>> +
+>> +	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
+>> +	if (!mst) {
+>> +		err = -ENOMEM;
+>> +		goto err;
+>> +	}
+>> +
+>> +	INIT_LIST_HEAD(&mst->node);
+>> +	refcount_set(&mst->refcnt, 1);
+>> +	mst->br = br;
+>> +	mst->msti = msti;
+>> +	mst->stu.valid = true;
+>> +	mst->stu.sid = *sid;
+>> +
+>> +	/* The bridge starts out all ports in the disabled state. But
+>> +	 * a STU state of disabled means to go by the port-global
+>> +	 * state. So we set all user port's initial state to blocking,
+>> +	 * to match the bridge's behavior.
+>> +	 */
+>> +	for (i = 0; i < mv88e6xxx_num_ports(chip); i++)
+>> +		mst->stu.state[i] = dsa_is_user_port(chip->ds, i) ?
+>> +			MV88E6XXX_PORT_CTL0_STATE_BLOCKING :
+>> +			MV88E6XXX_PORT_CTL0_STATE_DISABLED;
+>> +
+>> +	err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
+>> +	if (err)
+>> +		goto err_free;
+>> +
+>> +	list_add_tail(&mst->node, &chip->msts);
+>> +	return 0;
+>> +
+>> +err_free:
+>> +	kfree(mst);
+>> +err:
+>> +	return err;
+>> +}
+>> +
+>> +static int mv88e6xxx_port_mst_state_set(struct dsa_switch *ds, int port,
+>> +					const struct switchdev_mst_state *st)
+>> +{
+>> +	struct dsa_port *dp = dsa_to_port(ds, port);
+>> +	struct mv88e6xxx_chip *chip = ds->priv;
+>> +	struct mv88e6xxx_mst *mst;
+>> +	u8 state;
+>> +	int err;
+>> +
+>> +	if (!mv88e6xxx_has_stu(chip))
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	switch (st->state) {
+>> +	case BR_STATE_DISABLED:
+>> +	case BR_STATE_BLOCKING:
+>> +	case BR_STATE_LISTENING:
+>> +		state = MV88E6XXX_PORT_CTL0_STATE_BLOCKING;
+>> +		break;
+>> +	case BR_STATE_LEARNING:
+>> +		state = MV88E6XXX_PORT_CTL0_STATE_LEARNING;
+>> +		break;
+>> +	case BR_STATE_FORWARDING:
+>> +		state = MV88E6XXX_PORT_CTL0_STATE_FORWARDING;
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	list_for_each_entry(mst, &chip->msts, node) {
+>> +		if (mst->br == dsa_port_bridge_dev_get(dp) &&
+>> +		    mst->msti == st->msti) {
+>> +			if (mst->stu.state[port] == state)
+>> +				return 0;
+>> +
+>> +			mst->stu.state[port] = state;
+>> +			mv88e6xxx_reg_lock(chip);
+>> +			err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
+>> +			mv88e6xxx_reg_unlock(chip);
+>> +			return err;
+>> +		}
+>> +	}
+>> +
+>> +	return -ENOENT;
+>> +}
+>> +
+>>  static int mv88e6xxx_port_check_hw_vlan(struct dsa_switch *ds, int port,
+>>  					u16 vid)
+>>  {
+>> @@ -2437,6 +2598,12 @@ static int mv88e6xxx_port_vlan_leave(struct mv88e6xxx_chip *chip,
+>>  	if (err)
+>>  		return err;
+>>  
+>> +	if (!vlan.valid && vlan.sid) {
+>> +		err = mv88e6xxx_mst_put(chip, vlan.sid);
+>> +		if (err)
+>> +			return err;
+>> +	}
+>> +
+>>  	return mv88e6xxx_g1_atu_remove(chip, vlan.fid, port, false);
+>>  }
+>>  
+>> @@ -2482,6 +2649,72 @@ static int mv88e6xxx_port_vlan_del(struct dsa_switch *ds, int port,
+>>  	return err;
+>>  }
+>>  
+>> +static void mv88e6xxx_port_vlan_fast_age(struct dsa_switch *ds, int port, u16 vid)
+>> +{
+>> +	struct mv88e6xxx_chip *chip = ds->priv;
+>> +	struct mv88e6xxx_vtu_entry vlan;
+>> +	int err;
+>> +
+>> +	mv88e6xxx_reg_lock(chip);
+>> +
+>> +	err = mv88e6xxx_vtu_get(chip, vid, &vlan);
+>> +	if (err)
+>> +		goto unlock;
+>> +
+>> +	mv88e6xxx_port_fast_age_fid(chip, port, vlan.fid);
+>> +
+>> +unlock:
+>> +	mv88e6xxx_reg_unlock(chip);
+>> +
+>> +	if (err)
+>> +		dev_err(ds->dev, "p%d: failed to flush ATU in VID %u\n",
+>> +			port, vid);
+>
+> This error message actually corresponds to an mv88e6xxx_vtu_get() error,
+> so the message is kind of incorrect. mv88e6xxx_port_fast_age_fid(),
+> whose error code isn't propagated here, has its own "failed to flush ATU"
+> error message.
+
+Not sure I agree. If this fails, the symptom will be lingering dynamic
+entries in the affected VLAN. In that case I think the current message,
+or something similar, will make it as easy as possible to establish a
+correlation.
+
+Yes, it failed because the VTU get op failed, but that is more of an
+internal affair in the driver.
+
+Anyway, it's a moot point, because I think we should just allow the
+error to bubble up to userspace instead - as you suggested in 11/14.
+
+>> +}
+>
+> Otherwise this looks pretty good.
+
+Careful now, don't spoil me :)

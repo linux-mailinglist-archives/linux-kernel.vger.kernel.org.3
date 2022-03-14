@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C384D861F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593694D8623
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241966AbiCNNl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 09:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S242003AbiCNNmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236169AbiCNNl0 (ORCPT
+        with ESMTP id S241979AbiCNNmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 09:41:26 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F076145AE0;
-        Mon, 14 Mar 2022 06:40:16 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id e22so12505717qvf.9;
-        Mon, 14 Mar 2022 06:40:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RWUj/v7KabELU72fthxfijtXtCwC8AT21SzbTAGRY78=;
-        b=oUPANsHfvXHj3m6YkLFp+zxukzi+N6+Cxt8fA/b2n+z88+UONEU2WVg7+PihBCfNZU
-         RQbp/9dt2RlEuVj0IWeeAuIzuj1N1SiG632CCQEPtbDQ+BKX6jmDNeMbDx86C2yx2muO
-         X6rWVQsp5TzKyqvlSKG0JSfqZ6hesN0uOeMpPJMnre6l1gduBTSGpAmjCrxmOO25wcdB
-         7Q0vJq1VXJv+yYsCQpMdSklz54Eok369mfaweDHz+2EBsSzI05oOr9pMGD4ylcqhakaQ
-         5Ov30/1oVm+Evefbt7/W7oyo/RJ7hBzDw9agTSh2QQTlT3j9i/wtilOyw8CxmiMRx7Ya
-         veYw==
-X-Gm-Message-State: AOAM531OlwM5UZr/XZ18LIOAEOyCMyMvoX2L4M0+f3T7O52uVcqioIzK
-        /DGpUOTi6aNNu/SokYpkVKA0ax3jfStV8w==
-X-Google-Smtp-Source: ABdhPJxcF1qJphNhzPbEb+TXUYhEid4TJJVmOOY+HapVx6MygWgBNSvpLf7n88T1vedFlCG5zYxuiQ==
-X-Received: by 2002:a05:6214:5082:b0:435:911f:1bc1 with SMTP id kk2-20020a056214508200b00435911f1bc1mr17584086qvb.128.1647265215777;
-        Mon, 14 Mar 2022 06:40:15 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id y16-20020a37e310000000b00648c706dda1sm7877602qki.6.2022.03.14.06.40.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 06:40:14 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id w16so30757111ybi.12;
-        Mon, 14 Mar 2022 06:40:14 -0700 (PDT)
-X-Received: by 2002:a25:dfd3:0:b0:629:24ff:eab0 with SMTP id
- w202-20020a25dfd3000000b0062924ffeab0mr17526653ybg.613.1647265213864; Mon, 14
- Mar 2022 06:40:13 -0700 (PDT)
+        Mon, 14 Mar 2022 09:42:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48FDBC16;
+        Mon, 14 Mar 2022 06:41:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BCC1ED1;
+        Mon, 14 Mar 2022 06:41:25 -0700 (PDT)
+Received: from [10.57.21.234] (unknown [10.57.21.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 394C03F7D7;
+        Mon, 14 Mar 2022 06:41:24 -0700 (PDT)
+Message-ID: <8529a647-6127-539f-20ba-271be293fe2f@arm.com>
+Date:   Mon, 14 Mar 2022 13:41:22 +0000
 MIME-Version: 1.0
-References: <20220131201225.2324984-1-javierm@redhat.com> <20220131201225.2324984-3-javierm@redhat.com>
-In-Reply-To: <20220131201225.2324984-3-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Mar 2022 14:40:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWPQrErbMZ4wJPgROY7XOnKGvimNFg8JpiyuWqz2a3Gzw@mail.gmail.com>
-Message-ID: <CAMuHMdWPQrErbMZ4wJPgROY7XOnKGvimNFg8JpiyuWqz2a3Gzw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] drm/format-helper: Add drm_fb_gray8_to_mono_reversed()
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
+Content-Language: en-US
+To:     Kant Fan <kant@allwinnertech.com>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "supporter:THERMAL" <rafael@kernel.org>,
+        "supporter:THERMAL" <daniel.lezcano@linaro.org>
+References: <20220312045922.9779-1-kant@allwinnertech.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220312045922.9779-1-kant@allwinnertech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+Hi Kant,
 
-On Mon, Jan 31, 2022 at 9:12 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> Add support to convert 8-bit grayscale to reversed monochrome for drivers
-> that control monochromatic displays, that only have 1 bit per pixel depth.
->
-> This helper function was based on repaper_gray8_to_mono_reversed() from
-> the drivers/gpu/drm/tiny/repaper.c driver.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+On 3/12/22 04:59, Kant Fan wrote:
+> Fix access illegal address problem in following condition:
+> There are muti devfreq cooling devices in system, some of them has
+> em model but other does not, energy model ops such as state2power will
+> append to global devfreq_cooling_ops when the cooling device with
+> em model register. It makes the cooling device without em model
+> also use devfreq_cooling_ops after appending when register later by
+> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+> 
+> IPA governor regards the cooling devices without em model as a power actor
+> because they also have energy model ops, and will access illegal address
+> at dfc->em_pd when execute cdev->ops->get_requested_power,
+> cdev->ops->state2power or cdev->ops->power2state.
+> 
+> Signed-off-by: Kant Fan <kant@allwinnertech.com>
 
-> --- a/drivers/gpu/drm/drm_format_helper.c
-> +++ b/drivers/gpu/drm/drm_format_helper.c
-> @@ -584,3 +584,38 @@ int drm_fb_blit_toio(void __iomem *dst, unsigned int dst_pitch, uint32_t dst_for
->         return -EINVAL;
->  }
->  EXPORT_SYMBOL(drm_fb_blit_toio);
+Thank you for finding this issue. This was also an issue since the
+beginning of that code. The modified global ops after first registration
+which went through, was also previously there. Thus, we would need two
+different patches for stable kernels.
+
+For this one, please add the tag:
+Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model 
+and use EM")
+
+This patch would also go via stable tree for kernels v5.11+
+Please read the process how to send a patch which will be merged to the
+stable tree.
+
+There will be a need to create another patch(es) for stable kernels with
+Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+In those kernels also the global ops is modified and might not support
+properly many cooling devices. It's present in other stable kernels:
+v5.10 and older
+
+> ---
+>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>   1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+> index 4310cb342a9f..d38a80adec73 100644
+> --- a/drivers/thermal/devfreq_cooling.c
+> +++ b/drivers/thermal/devfreq_cooling.c
+> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>   	struct thermal_cooling_device *cdev;
+>   	struct device *dev = df->dev.parent;
+>   	struct devfreq_cooling_device *dfc;
+> +	struct thermal_cooling_device_ops *ops;
+>   	char *name;
+>   	int err, num_opps;
+>   
+> -	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+> -	if (!dfc)
+> +	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
+> +	if (!ops)
+>   		return ERR_PTR(-ENOMEM);
+>   
+> +	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+> +	if (!dfc) {
+> +		err = -ENOMEM;
+> +		goto free_ops;
+> +	}
 > +
-> +/**
-> + * drm_fb_gray8_to_mono_reversed - Convert grayscale to reversed monochrome
-> + * @dst: reversed monochrome destination buffer
+>   	dfc->devfreq = df;
+>   
+>   	dfc->em_pd = em_pd_get(dev);
+>   	if (dfc->em_pd) {
+> -		devfreq_cooling_ops.get_requested_power =
+> +		ops->get_requested_power =
+>   			devfreq_cooling_get_requested_power;
+> -		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+> -		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
+> +		ops->state2power = devfreq_cooling_state2power;
+> +		ops->power2state = devfreq_cooling_power2state;
+>   
+>   		dfc->power_ops = dfc_power;
+>   
+> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>   	if (!name)
+>   		goto remove_qos_req;
+>   
+> -	cdev = thermal_of_cooling_device_register(np, name, dfc,
+> -						  &devfreq_cooling_ops);
+> +	cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+>   	kfree(name);
+>   
+>   	if (IS_ERR(cdev)) {
+> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>   	kfree(dfc->freq_table);
+>   free_dfc:
+>   	kfree(dfc);
+> +free_ops:
+> +	kfree(ops);
+>   
+>   	return ERR_PTR(err);
+>   }
+> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+>   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>   {
+>   	struct devfreq_cooling_device *dfc;
+> +	const struct thermal_cooling_device_ops *ops;
+>   	struct device *dev;
+>   
+>   	if (IS_ERR_OR_NULL(cdev))
+>   		return;
+>   
+> +	ops = cdev->ops;
+>   	dfc = cdev->devdata;
+>   	dev = dfc->devfreq->dev.parent;
+>   
+> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>   
+>   	kfree(dfc->freq_table);
+>   	kfree(dfc);
+> +	kfree(ops);
+>   }
+>   EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
 
-What's the meaning of "reversed"?
-During the last few days, I've been balancing between (a) "reverse
-video" and (b) "reverse bit order", but none of them seems to be true.
-
-(a) The code maps 0-127 to 0 and 8-255 to 1, which just reduces from
-    256 to 2 grayscale levels, without inversion. The result is also
-    white-on-black on my ssd130x OLED.
-(b) On little-endian, the CFB drawops use little-endian bit order,
-    which is what ends up in "byte" in the code below.
-
-> + * @src: 8-bit grayscale source buffer
-> + * @clip: Clip rectangle area to copy
-> + *
-> + * DRM doesn't have native monochrome or grayscale support.
-> + * Such drivers can announce the commonly supported XR24 format to userspace
-> + * and use drm_fb_xrgb8888_to_gray8() to convert to grayscale and then this
-> + * helper function to convert to the native format.
-> + */
-> +void drm_fb_gray8_to_mono_reversed(void *dst, void *src, const struct drm_rect *clip)
-> +{
-> +       size_t width = drm_rect_width(clip);
-> +       size_t height = drm_rect_width(clip);
-> +
-> +       u8 *mono = dst, *gray8 = src;
-> +       unsigned int y, xb, i;
-> +
-> +       for (y = 0; y < height; y++)
-> +               for (xb = 0; xb < width / 8; xb++) {
-> +                       u8 byte = 0x00;
-> +
-> +                       for (i = 0; i < 8; i++) {
-> +                               int x = xb * 8 + i;
-> +
-> +                               byte >>= 1;
-> +                               if (gray8[y * width + x] >> 7)
-> +                                       byte |= BIT(7);
-> +                       }
-> +                       *mono++ = byte;
-> +               }
-> +}
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+The fix looks good.

@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB714D8A79
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0254D8A84
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241937AbiCNRI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S242948AbiCNRJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbiCNRIz (ORCPT
+        with ESMTP id S243128AbiCNRJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:08:55 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5788C3DA58
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:07:44 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e24so25026970wrc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:07:44 -0700 (PDT)
+        Mon, 14 Mar 2022 13:09:06 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2BDDFB8;
+        Mon, 14 Mar 2022 10:07:52 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a8so35508274ejc.8;
+        Mon, 14 Mar 2022 10:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I9gjU0x/PgdM8bvtL6SwyLtmlqm3fb9Iulm2fPDe870=;
-        b=TDH+vn8MRDd0TIB/7sTaTIjyrSXs8HnE41Pah2MUMlSNzgrfQ07BlDrRt6vnV9JeF/
-         RAWJ1UkMrKFqkzQiiuZsik44O39eSmBjZ/Z0Nxr6go34gwnOlZ7Ocq/eSGzObW4s6hAk
-         pgR/q2kn736c/MTokUaliD8FOZ8zTosL3VNsOoT1c/fv+Y/lg4bXIp8Zcku0zjJlrY64
-         OWXit4bmUsIXP1MjuvvbYNu5lMsMWpfkEt7UlsGPcmiLIfqn/Xh65eL6h9/L9yURmFxi
-         2KUh12l/KKOJ7r0Jvvaq7WFBa4alT8MiNUNfvkD5HmQbLUmb+GtN1TCdrrQXLhaUEzq7
-         NSqw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B8S5CePBfzrVCN/ZCs2BTxWuc9mvMQ9JoCGkKm6n008=;
+        b=JddOuH6IACYyaa/tIi4d1gXpCB3xrMraVpH2XUdtQatNapgahGumBtAtcfu0gaVfVf
+         mqwtx4llIbo3SomPBbJgGPUwYvfaXGOcOuGqqdMcc3d7qAd3n8Spg43A2ZbenDG2kxUK
+         9wPgmy2V+kw43rle8itGKuJXYe0FlZyFrvytPNB1wnw+Xlz5qlgPor6K1RjsGVP/bxzo
+         9rMg+ElMLBhrj+uAhZe9zjrtNgObr+hLPHBFSIp2EppxsdglnssMcYq5P164i2ivBBSi
+         3ldreuPWdV1810u6wrWU5cX0f579X/uLvA76/Mvsl/F58Kt5u+LPXK/SVz8780uLM75Q
+         ffZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I9gjU0x/PgdM8bvtL6SwyLtmlqm3fb9Iulm2fPDe870=;
-        b=u/jmOdzSXwPFEBHujcARI3gw1VecbtOKCjKIrh2Xpke55rlROLQ6eZZCIxsRmc2BFV
-         Qd+PmAkv7ATT1sp4BNfTRR0RAN+KdRM7gKe2G+u+/56gsrDuDr1pzfbScpAydU+ryG5w
-         vxsH5l6UjQQl5X26vuQc8p6MKzI+pItcs/N35SFrWD9PZ2ScCbhGS4sliOnNIAVvK22b
-         6liQVYT0eEWOE7/J5sE8tn5bgSEwREOY1YBnoz6HeLdWEFmQu81uc9l5Oc8mowyklQuE
-         07pq7Md5SWqVDMY3lSZmqiLISzV0j+Gm+tE2HOcuVXgon297/rybrpuLjARWeRLjs1TV
-         KBPA==
-X-Gm-Message-State: AOAM532L4IeuQYgwuFU4aG/hNA1ULf2rBKUffbaK54HCPOG5XVlqrZsE
-        OSx7tYh9NbBRnXVbF5zrNSe+3Jl65UAsnLNW8vPViQ==
-X-Google-Smtp-Source: ABdhPJx1lcNmqCv85hlXRj7qoj+pc07cQQmq4rWlMg08lDktFz47BLCOP1mr2/KTpAMc+M3aq8bmx8xnegsS0Y2U0DU=
-X-Received: by 2002:adf:e6c7:0:b0:1ed:9f7c:c99e with SMTP id
- y7-20020adfe6c7000000b001ed9f7cc99emr16863843wrm.0.1647277662677; Mon, 14 Mar
- 2022 10:07:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B8S5CePBfzrVCN/ZCs2BTxWuc9mvMQ9JoCGkKm6n008=;
+        b=xFW+T0SyDX2vqqhTLP8Ae78rbT8d75K3R8TatHp6uw7n86YqOFdeBvq4Ihmg7PK90s
+         sxItAiCezic/ZDRYmyXZxmZAeEfyOhkmnlK54SNaYvSkywrf2e8kUqPgD2RABbAOYdea
+         P9Dk69yyVekKnmEpCkVu+Qmcw2VxdS1+wfE3NybuCBtf7tTjbjYHIOMv4H1pdy9CFM9K
+         Qnvmx6bqLG0RXv8AvUtU0dguCsZtD0NLP61UylD4jR0yItUsUn7OT7KAdBYrRqWeMtVv
+         BPh7od2IQ/mMqb0gwL2ZM9CSc89eJEuIJvComQnLQmnbVEuuYFdsPO8gV2hQRbNjbwKt
+         XPKQ==
+X-Gm-Message-State: AOAM533Vje7NmMKL66bWngvuocFAIWFhqcY1/ueWAOeSWoq8P0QbvYC5
+        Cv/SF71wyNfbJ4QAhwUFk94=
+X-Google-Smtp-Source: ABdhPJzfk/wrcwCi8JX2pmOKMrdjei5CfYv8dgjn6RSGi90CG3GPik3sk3XCPGonC3haROHhc+j8FA==
+X-Received: by 2002:a17:906:9b85:b0:6db:ab80:7924 with SMTP id dd5-20020a1709069b8500b006dbab807924mr12533799ejc.160.1647277666339;
+        Mon, 14 Mar 2022 10:07:46 -0700 (PDT)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id uz4-20020a170907118400b006dab1ea6e3asm7021586ejb.51.2022.03.14.10.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 10:07:45 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 19:07:44 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v3 net-next 10/14] net: dsa: Pass VLAN MSTI migration
+ notifications to driver
+Message-ID: <20220314170744.ugirixeq5t7ddcgo@skbuf>
+References: <20220314095231.3486931-1-tobias@waldekranz.com>
+ <20220314095231.3486931-11-tobias@waldekranz.com>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
- <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk>
-In-Reply-To: <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 14 Mar 2022 10:07:31 -0700
-Message-ID: <CA+khW7g+T2sAkP1aycmts_82JKWgYk5Y0ZJp+EvjFUyNY8W_5w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
- for prog_bpf_syscall
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314095231.3486931-11-tobias@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,99 +84,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Al,
+On Mon, Mar 14, 2022 at 10:52:27AM +0100, Tobias Waldekranz wrote:
+> Add the usual trampoline functionality from the generic DSA layer down
+> to the drivers for VLAN MSTI migrations.
+> 
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
 
-On Fri, Mar 11, 2022 at 7:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Fri, Feb 25, 2022 at 03:43:31PM -0800, Hao Luo wrote:
-> > This patch allows bpf_syscall prog to perform some basic filesystem
-> > operations: create, remove directories and unlink files. Three bpf
-> > helpers are added for this purpose. When combined with the following
-> > patches that allow pinning and getting bpf objects from bpf prog,
-> > this feature can be used to create directory hierarchy in bpffs that
-> > help manage bpf objects purely using bpf progs.
-> >
-> > The added helpers subject to the same permission checks as their syscall
-> > version. For example, one can not write to a read-only file system;
-> > The identity of the current process is checked to see whether it has
-> > sufficient permission to perform the operations.
-> >
-> > Only directories and files in bpffs can be created or removed by these
-> > helpers. But it won't be too hard to allow these helpers to operate
-> > on files in other filesystems, if we want.
->
-> In which contexts can those be called?
->
-
-In a sleepable context. The plan is to introduce a certain tracepoints
-as sleepable, a program that attaches to sleepable tracepoints is
-allowed to call these functions. In particular, the first sleepable
-tracepoint introduced in this patchset is one at the end of
-cgroup_mkdir(). Do you have any advices?
-
-> > +BPF_CALL_2(bpf_rmdir, const char *, pathname, int, pathname_sz)
-> > +{
-> > +     struct user_namespace *mnt_userns;
-> > +     struct path parent;
-> > +     struct dentry *dentry;
-> > +     int err;
-> > +
-> > +     if (pathname_sz <= 1 || pathname[pathname_sz - 1])
-> > +             return -EINVAL;
-> > +
-> > +     err = kern_path(pathname, 0, &parent);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     if (!bpf_path_is_bpf_dir(&parent)) {
-> > +             err = -EPERM;
-> > +             goto exit1;
-> > +     }
-> > +
-> > +     err = mnt_want_write(parent.mnt);
-> > +     if (err)
-> > +             goto exit1;
-> > +
-> > +     dentry = kern_path_locked(pathname, &parent);
->
-> This can't be right.  Ever.  There is no promise whatsoever
-> that these two lookups will resolve to the same place.
->
-> > +BPF_CALL_2(bpf_unlink, const char *, pathname, int, pathname_sz)
-> > +{
-> > +     struct user_namespace *mnt_userns;
-> > +     struct path parent;
-> > +     struct dentry *dentry;
-> > +     struct inode *inode = NULL;
-> > +     int err;
-> > +
-> > +     if (pathname_sz <= 1 || pathname[pathname_sz - 1])
-> > +             return -EINVAL;
-> > +
-> > +     err = kern_path(pathname, 0, &parent);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     err = mnt_want_write(parent.mnt);
-> > +     if (err)
-> > +             goto exit1;
-> > +
-> > +     dentry = kern_path_locked(pathname, &parent);
-> > +     if (IS_ERR(dentry)) {
-> > +             err = PTR_ERR(dentry);
-> > +             goto exit2;
-> > +     }
->
-> Ditto.  NAK; if you want to poke into fs/namei.c guts, do it right.
-> Or at least discuss that on fsdevel.  As it is, it's completely broken.
-> It's racy *and* it blatantly leaks both vfsmount and dentry references.
->
-> NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
-
-Thanks Al for taking a look. Actually, there is a simpler approach:
-can we export two functions in namei.c that wrap call to do_mkdirat
-and do_unlinkat, but take a kernel string as pathname? Then these two
-bpf helpers can use them, don't have to be this complicated. Does this
-sound good to you?
-
-Thanks!
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

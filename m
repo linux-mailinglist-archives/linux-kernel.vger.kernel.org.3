@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C054D8721
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8074D871E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240170AbiCNOoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 10:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S239999AbiCNOoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 10:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238554AbiCNOoG (ORCPT
+        with ESMTP id S234850AbiCNOoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 10:44:06 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8FD2657;
-        Mon, 14 Mar 2022 07:42:56 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id r2so18430576iod.9;
-        Mon, 14 Mar 2022 07:42:56 -0700 (PDT)
+        Mon, 14 Mar 2022 10:44:04 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8E82649;
+        Mon, 14 Mar 2022 07:42:53 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id b16so18507734ioz.3;
+        Mon, 14 Mar 2022 07:42:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=ZFm3098Qq38ZihocmoyjymWLRXt7L5rX0Wix1tDlZKI=;
-        b=7XCQEwPqbLm5tVah6hX9ZlYpSUfbq7s9t1GRlAWDlOfwQZxwH/yzmW6slLpGKUurL8
-         qou+/KHhapWzDM4MIHyzqGSE0x5S8tR4B/bOsAVDIbolpI/7/bj+lRGb0b8ZtYkXS1Zx
-         IY7MdBp4Srg+KIyT5EF21LR81ZlTf34u1xr8Fgg9OQIJGkPiCAYF0lNCMdKtwkdabGNa
-         c+4E1oK8nkJ1vehfZeYTm9oWDuqoTIJ/+Y1iZ/LHI3q3A/SAOTU1jMvLRSZ9XttD2pr9
-         EC++C/iZdgBs0Uq/zrhc7YwBli5+kkXiO+0ZmnUck8rqTPPk4thPRFxE1oLrPnUDQ/50
-         yVvA==
-X-Gm-Message-State: AOAM530/bxXQ4Sqy/ZUGxbVRnKQa0dNEobHsQlGhImkJBUEfVvoxblYX
-        wifZ93gP4PCeQU9vfPL6NL/S00Fb6w==
-X-Google-Smtp-Source: ABdhPJyQaBTGAIetjdRf6giyx6SU7LHoFADIdsRp3lXRCDkqAdzyIb0mzuwjvoX1KW3dUpVp8++XJA==
-X-Received: by 2002:a02:6910:0:b0:319:4f4c:eede with SMTP id e16-20020a026910000000b003194f4ceedemr20591642jac.301.1647268976134;
-        Mon, 14 Mar 2022 07:42:56 -0700 (PDT)
+        bh=P6i4RU/tPZze8eL4r7T4d4lTaUlhqOICZTOabmzGqJo=;
+        b=1J1+B4FOMG7i6YAoYNLXAW9PNAiCiFocpokkyj98SKTZ9Xq0luPQSTumhqsG93ypbt
+         jg89FhT+V6lyM7D8n/MMBLdlurzn7ZOBmT1Vna8yFbucWYKYmoGlt2tTHHZSovKWnksr
+         /bpRPvSqT13aMlr+H3mOxlPYQnjMGaQnjwOomM+FA3gs+VfDxUrTbAr0J2ksiQ+j6K/q
+         TvV2UP7wEXQjqjLxamdDgTVPN68W41L1nTK4El6oLycanqIoLrbAho+FgTEpb0jp1Hwd
+         rrCMk6vHMjFmYaeVVkoV0IbQBQj1fw34Mv4qy1KY3E9lr4hCtpZeVdY1EXbG7MaRP2rm
+         wSyw==
+X-Gm-Message-State: AOAM533SntIRzdE6uvq4uc6E495i5M0kWHMJBnM4Vx6L4bG8LKnrKrT5
+        pGUbW5634Gh8gxWVM9uxqw==
+X-Google-Smtp-Source: ABdhPJx1W+IucDCrXQADrUIvGLf3h0+168Y/wjXCtVEGvr+Aigd/pJ+Wk1AuIprhiK1BehyvzdFPtw==
+X-Received: by 2002:a05:6638:1405:b0:30d:69cd:f44 with SMTP id k5-20020a056638140500b0030d69cd0f44mr20485674jad.208.1647268972747;
+        Mon, 14 Mar 2022 07:42:52 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id a4-20020a5d9544000000b00640a6eb6e1esm8957167ios.53.2022.03.14.07.42.53
+        by smtp.gmail.com with ESMTPSA id p4-20020a92d284000000b002c64436fa71sm9071631ilp.72.2022.03.14.07.42.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 07:42:55 -0700 (PDT)
-Received: (nullmailer pid 12511 invoked by uid 1000);
+        Mon, 14 Mar 2022 07:42:51 -0700 (PDT)
+Received: (nullmailer pid 12506 invoked by uid 1000);
         Mon, 14 Mar 2022 14:42:49 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>
-In-Reply-To: <20220313190419.2207-17-ansuelsmth@gmail.com>
-References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-17-ansuelsmth@gmail.com>
-Subject: Re: [PATCH 16/16] dt-bindings: arm: msm: Convert kpss driver Documentation to yaml
+To:     Tony Huang <tonyhuang.sunplus@gmail.com>
+Cc:     tony.huang@sunplus.com, derek.kiernan@xilinx.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, dragan.cvetic@xilinx.com,
+        arnd@arndb.de, krzysztof.kozlowski@canonical.com,
+        gregkh@linuxfoundation.org, wells.lu@sunplus.com
+In-Reply-To: <c0ef91adc0af9fedca2791e4006009fabfdfef2c.1647095774.git.tonyhuang.sunplus@gmail.com>
+References: <cover.1647095774.git.tonyhuang.sunplus@gmail.com> <c0ef91adc0af9fedca2791e4006009fabfdfef2c.1647095774.git.tonyhuang.sunplus@gmail.com>
+Subject: Re: [PATCH v11 1/2] dt-bindings: misc: Add iop yaml file for Sunplus SP7021
 Date:   Mon, 14 Mar 2022 08:42:49 -0600
-Message-Id: <1647268969.336967.12510.nullmailer@robh.at.kernel.org>
+Message-Id: <1647268969.313741.12505.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -67,34 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Mar 2022 20:04:19 +0100, Ansuel Smith wrote:
-> Convert kpss-acc and kpss-gcc Documentation to yaml. Fix multiple
-> Documentation error and provide additional example for kpss-gcc-v2.
+On Sun, 13 Mar 2022 00:16:04 +0800, Tony Huang wrote:
+> Add iop yaml file for Sunplus SP7021
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
 > ---
->  .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
->  .../bindings/arm/msm/qcom,kpss-acc.yaml       | 97 +++++++++++++++++++
->  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
->  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 62 ++++++++++++
->  4 files changed, 159 insertions(+), 93 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
->  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
->  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
->  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> Changes in v11:
+>  - Addressed comments from krzysztof.
+> 
+>  .../devicetree/bindings/misc/sunplus,iop.yaml      | 78 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 ++
+>  2 files changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/sunplus,iop.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml:62:4: [error] no new line character at the end of file (new-line-at-end-of-file)
+./Documentation/devicetree/bindings/misc/sunplus,iop.yaml:78:7: [error] no new line character at the end of file (new-line-at-end-of-file)
 
 dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/misc/sunplus,iop.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/misc/sunplus,iop.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/sunplus,iop.example.dt.yaml: iop@9c000400: 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/misc/sunplus,iop.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1604836
+See https://patchwork.ozlabs.org/patch/1604673
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

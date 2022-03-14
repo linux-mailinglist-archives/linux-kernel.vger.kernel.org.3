@@ -2,71 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794B84D88AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC274D88AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242864AbiCNQBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        id S242856AbiCNQCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242855AbiCNQBb (ORCPT
+        with ESMTP id S233379AbiCNQCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:01:31 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D544F45AC2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:00:18 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DC40A60009;
-        Mon, 14 Mar 2022 16:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647273617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U7JMJ3IGrvjpk6NF5wRwGwuqyAr6wjfBK4Y8SNwWwXY=;
-        b=DHj+dTmQDZXD4QdZsrsie1/2jyNYv6uXwCE/A5sF5WClrZlXCJsPtU1NgPjUhlgVk6IFyr
-        yrBXdaSwOXEzs/fENNwDsWfKvb3cF3AU8idiJzKMulujWreUcz/HdAhzNOXtG4rE7d5VWY
-        Tc29ck41TBlCjB48lRRd7iyVL6gO2qDxXTBfDVPY+x1wQ/mK5jzCDKh+TYQLhbEbxitsX3
-        ZuxtuKv6/16INB3Ow6iKZq2TgTD2NdiEaCB13p84Cj+wX0y3o7bHSJkZFcm7Ejyi60rYIi
-        MvkTBF+aJ2cz99UCUrd6CTEH3HZzaRFXTrzli4EDBA/QNG80MhN7RfDlsHguuw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Yihao Han <hanyihao@vivo.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Heiko Stuebner <heiko@sntech.de>, Zou Wei <zou_wei@huawei.com>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-Subject: Re: [PATCH] mtd: rawnand: rockchip: fix platform_get_irq.cocci warning
-Date:   Mon, 14 Mar 2022 17:00:13 +0100
-Message-Id: <20220314160013.77534-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220303123431.3170-1-hanyihao@vivo.com>
-References: 
-MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'fba6eb4fc4e6819d9684d378ace339c4212d5ce1'
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Mar 2022 12:02:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9504842EF3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:00:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44132B80E70
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE44CC340E9;
+        Mon, 14 Mar 2022 16:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647273646;
+        bh=mrNTqCZNGm0dXUZ6GZZLiepeMciRLBnpCYtQiRjv/R4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T+lYPkbEc0E5P0WZJEb/or4gx7sdBPhepGht7YVGDAzvgROg9fEZnYa3dmaWd1yo4
+         fqPYc5JDQyCw8Ao3Ywp7gkaxNGKJNtEmk/f9m5ARWTpVjKI1r0nvZR+TH4/JD3ZU7o
+         isI+4lxxsmUckn9bmBxRYP2rtzdnUoWr8SBNgKo3zFUK5TIPVQspVpMBl1PCw2p3js
+         QmtCSKQInJG2vgHE0HQFhHYsvsjzqgy8Gr1fo/lfVxt14tJrZGIL29AD/f6n9e+Ce/
+         snqlgHPEqjPghNhjnWKbcYCvEtwGUaxzQGVLtGIRNeDP5hxsYjqgl4C8uysgZE4gOg
+         7XdtYxUvSCIHQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nTn7k-00EOqL-Dc; Mon, 14 Mar 2022 16:00:44 +0000
+Date:   Mon, 14 Mar 2022 16:00:44 +0000
+Message-ID: <87ilsgzfpv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        David Decotigny <ddecotig@google.com>
+Subject: Re: [PATCH] genirq/msi: Shutdown managed interrupts with unsatifiable affinities
+In-Reply-To: <87sfrkftbl.ffs@tglx>
+References: <20220307190625.254426-1-maz@kernel.org>
+        <87sfrkftbl.ffs@tglx>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, linux-kernel@vger.kernel.org, john.garry@huawei.com, ddecotig@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-03 at 12:34:27 UTC, Yihao Han wrote:
-> Remove dev_err() messages after platform_get_irq*() failures.
-> platform_get_irq() already prints an error.
+On Mon, 14 Mar 2022 15:27:10 +0000,
+Thomas Gleixner <tglx@linutronix.de> wrote:
 > 
-> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+> On Mon, Mar 07 2022 at 19:06, Marc Zyngier wrote:
+> > When booting with maxcpus=<small number>, interrupt controllers
+> > such as the GICv3 ITS may not be able to satisfy the affinity of
+> > some managed interrupts, as some of the HW resources are simply
+> > not available.
 > 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> This is also true if you have offlined lots of CPUs, right?
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Not quite. If you offline the CPUs, the interrupts will be placed in
+the shutdown state as expected, having initially transitioned via an
+activation state with an online CPU. The issue here is with the
+initial activation of the interrupt, which currently happens even if
+no matching CPU is present.
 
-Miquel
+> 
+> > In order to deal with this, do not try to activate such interrupt
+> > if there is no online CPU capable of handling it. Instead, place
+> > it in shutdown state. Once a capable CPU shows up, it will be
+> > activated.
+> >
+> > Reported-by: John Garry <john.garry@huawei.com>
+> > Reported-by: David Decotigny <ddecotig@google.com>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  kernel/irq/msi.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+> > index 2bdfce5edafd..aa84ce84c2ec 100644
+> > --- a/kernel/irq/msi.c
+> > +++ b/kernel/irq/msi.c
+> > @@ -818,6 +818,18 @@ static int msi_init_virq(struct irq_domain *domain, int virq, unsigned int vflag
+> >  		irqd_clr_can_reserve(irqd);
+> >  		if (vflags & VIRQ_NOMASK_QUIRK)
+> >  			irqd_set_msi_nomask_quirk(irqd);
+> > +
+> > +		/*
+> > +		 * If the interrupt is managed but no CPU is available
+> > +		 * to service it, shut it down until better times.
+> > +		 */
+> > +		if ((vflags & VIRQ_ACTIVATE) &&
+> > +		    irqd_affinity_is_managed(irqd) &&
+> > +		    !cpumask_intersects(irq_data_get_affinity_mask(irqd),
+> > +					cpu_online_mask)) {
+> > +			    irqd_set_managed_shutdown(irqd);
+> 
+> Hrm. Why is this in the !CAN_RESERVE path and not before the actual
+> activation call?
+
+VIRQ_CAN_RESERVE can only happen as a consequence of
+GENERIC_IRQ_RESERVATION_MODE, which only exists on x86. Given that x86
+is already super careful not to activate an interrupt that is not
+immediately required, I though we could avoid putting this check on
+that path.
+
+But if I got the above wrong (which is, let's face it, extremely
+likely), I'm happy to kick it down the road next to the activation
+call.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

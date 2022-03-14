@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660FD4D7E97
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B914D7EA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbiCNJaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S238023AbiCNJan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbiCNJ3r (ORCPT
+        with ESMTP id S238034AbiCNJ3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 05:29:47 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC943EF0;
-        Mon, 14 Mar 2022 02:28:29 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 09:28:27 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9B63527A;
+        Mon, 14 Mar 2022 02:28:30 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 09:28:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647250108;
+        s=2020; t=1647250109;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8TMzalIRHv2xmi+kniv+zWAvVC30QB2FiFE/xTXAcOA=;
-        b=q0QImK5ljTEz4oogxLhbEB+6SeBo4LQTMLos66oKnQko0klOZXAmwmqLRdfom0ksEh7Djt
-        hOzFQXOHvOmEy7KRXvaPIc4ou4ZVSwi4rP9xm+b0MqC8boZiv6gMHCcZQGGCcUsx5bQ0Rt
-        nusYJkH+hDSNs1QD+GgswR6YLo3KWpN7HMmxcZU44haRrjFBjYRQfMlTBikVs3yIc3d8AR
-        +RIGs388hmdfDZG8Icll3tbPF8TZcPb6FAyO3WrggeqfAxjlr0mFmXu+lxqt4Gban8qL0y
-        MtDnrpfeps3HFosUrspMeSpPRqSbvdGDZN6nJtzmVkZj5hbimrmdhLl+vb9ZDw==
+        bh=UbEI+i1ivALBIfpj7UkIC6yTADjTScQ2xKx34kea2QU=;
+        b=XH9c3/LWFRNwVsj3Oq6r/Gyazx85BgBad4cHLidwQe0g748qK5rD+EXG3VKvD/ZkUZ5wgt
+        pVlk+qKyto4I5yFf4+4N+Xq6kkm5wYjJkF0ApxRFOZiIAie+y3w09+2LGTnCS/sWQo0AXE
+        QUn745e42+NXzladxhOPvoa2vzbtFIGZOFrfdpcBsYcWesNXvU+1wk+MsB0P/8UFVA4qFZ
+        AFYiEAd5hvqYoZ3BbHx9ep00cXIUXS3J8++DLCIETObvPTk2VBbA0rICa/jUHd25Fh8NZR
+        qArNaHxXtlewf36iTXxwqzx7m2Z5ell/BHjyDxU+kZCsuhoJq4Xk+LGOsFlSbg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647250108;
+        s=2020e; t=1647250109;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8TMzalIRHv2xmi+kniv+zWAvVC30QB2FiFE/xTXAcOA=;
-        b=ukzsmkNN51vC51ZxfRGNFBLUnvvPWbLW2+pUzM/Xet1ASB7jq3NRDhA0Zm2r7W8JKKBOqK
-        U0cM1InWGLaxlEBA==
-From:   "tip-bot2 for Alim Akhtar" <tip-bot2@linutronix.de>
+        bh=UbEI+i1ivALBIfpj7UkIC6yTADjTScQ2xKx34kea2QU=;
+        b=aoBzFI64KM8glWfbU+bfPXiRu3V7E0d2iIG7PIAuukYTN7zfSfI/MDAVSTAH7mL8nCra9J
+        ckF5iRdZSbJvttCw==
+From:   "tip-bot2 for Krzysztof Kozlowski" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/exynos_mct: Remove mct
- interrupt index enum
+Subject: [tip: timers/core] clocksource/drivers/exynos_mct: Handle DTS with
+ higher number of interrupts
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220221174547.26176-1-alim.akhtar@samsung.com>
-References: <20220221174547.26176-1-alim.akhtar@samsung.com>
+In-Reply-To: <20220220103815.135380-1-krzysztof.kozlowski@canonical.com>
+References: <20220220103815.135380-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Message-ID: <164725010743.16921.13475123967852849541.tip-bot2@tip-bot2>
+Message-ID: <164725010846.16921.7067111417542311406.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,65 +69,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     dfc597c9bca9b4447820a59fe86526f016be1458
-Gitweb:        https://git.kernel.org/tip/dfc597c9bca9b4447820a59fe86526f016be1458
-Author:        Alim Akhtar <alim.akhtar@samsung.com>
-AuthorDate:    Mon, 21 Feb 2022 23:15:45 +05:30
+Commit-ID:     ab8da93dc06d82f464c47ab30e6c75190702f369
+Gitweb:        https://git.kernel.org/tip/ab8da93dc06d82f464c47ab30e6c75190702f369
+Author:        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+AuthorDate:    Sun, 20 Feb 2022 11:38:15 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Mon, 07 Mar 2022 18:27:22 +01:00
 
-clocksource/drivers/exynos_mct: Remove mct interrupt index enum
+clocksource/drivers/exynos_mct: Handle DTS with higher number of interrupts
 
-MCT driver define an enum which list global and local timer's
-irq index. Most of them are not used but MCT_G0_IRQ and
-MCT_L0_IRQ and these two are at a fixed offset/index.
-Get rid of this enum and use a #define for the used irq index.
+The driver statically defines maximum number of interrupts it can
+handle, however it does not respect that limit when configuring them.
+When provided with a DTS with more interrupts than assumed, the driver
+will overwrite static array mct_irqs leading to silent memory
+corruption.
 
-No functional changes expected.
+Validate the interrupts coming from DTS to avoid this.  This does not
+change the fact that such DTS might not boot at all, because it is
+simply incompatible, however at least some warning will be printed.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220221174547.26176-1-alim.akhtar@samsung.com
+Fixes: 36ba5d527e95 ("ARM: EXYNOS: add device tree support for MCT controller driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Link: https://lore.kernel.org/r/20220220103815.135380-1-krzysztof.kozlowski@canonical.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/exynos_mct.c | 22 ++++++----------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
+ drivers/clocksource/exynos_mct.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index 03782b3..341ee47 100644
+index 6db3d55..03782b3 100644
 --- a/drivers/clocksource/exynos_mct.c
 +++ b/drivers/clocksource/exynos_mct.c
-@@ -60,27 +60,17 @@
- #define MCT_CLKEVENTS_RATING		350
- #endif
+@@ -541,6 +541,11 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
+ 	 * irqs are specified.
+ 	 */
+ 	nr_irqs = of_irq_count(np);
++	if (nr_irqs > ARRAY_SIZE(mct_irqs)) {
++		pr_err("exynos-mct: too many (%d) interrupts configured in DT\n",
++			nr_irqs);
++		nr_irqs = ARRAY_SIZE(mct_irqs);
++	}
+ 	for (i = MCT_L0_IRQ; i < nr_irqs; i++)
+ 		mct_irqs[i] = irq_of_parse_and_map(np, i);
  
-+/* There are four Global timers starting with 0 offset */
-+#define MCT_G0_IRQ	0
-+/* Local timers count starts after global timer count */
-+#define MCT_L0_IRQ	4
-+#define MCT_NR_IRQS	12
-+
- enum {
- 	MCT_INT_SPI,
- 	MCT_INT_PPI
- };
+@@ -553,11 +558,14 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
+ 		     mct_irqs[MCT_L0_IRQ], err);
+ 	} else {
+ 		for_each_possible_cpu(cpu) {
+-			int mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
++			int mct_irq;
+ 			struct mct_clock_event_device *pcpu_mevt =
+ 				per_cpu_ptr(&percpu_mct_tick, cpu);
  
--enum {
--	MCT_G0_IRQ,
--	MCT_G1_IRQ,
--	MCT_G2_IRQ,
--	MCT_G3_IRQ,
--	MCT_L0_IRQ,
--	MCT_L1_IRQ,
--	MCT_L2_IRQ,
--	MCT_L3_IRQ,
--	MCT_L4_IRQ,
--	MCT_L5_IRQ,
--	MCT_L6_IRQ,
--	MCT_L7_IRQ,
--	MCT_NR_IRQS,
--};
--
- static void __iomem *reg_base;
- static unsigned long clk_rate;
- static unsigned int mct_int_type;
+ 			pcpu_mevt->evt.irq = -1;
++			if (MCT_L0_IRQ + cpu >= ARRAY_SIZE(mct_irqs))
++				break;
++			mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
+ 
+ 			irq_set_status_flags(mct_irq, IRQ_NOAUTOEN);
+ 			if (request_irq(mct_irq,

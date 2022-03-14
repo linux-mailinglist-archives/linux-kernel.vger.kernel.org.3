@@ -2,176 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003604D8E65
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DAC4D8E68
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245126AbiCNUnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S245149AbiCNUpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245120AbiCNUnO (ORCPT
+        with ESMTP id S245120AbiCNUpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:43:14 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AE63B031
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:42:03 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 8E06222175;
-        Mon, 14 Mar 2022 21:42:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647290521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w84Z0F8O1Ah3HQhNPWrjd7zOfg1YqIIcdK9x95xpU6U=;
-        b=hv5JGuPxRouNQNoH+0+wxjsYB02EVe+pSNl4g1F42+yvvEl8zCsr6uQ2c1COo9qlskVbuY
-        VB/GTUQapSH8jy0LMTEREEPA3aSXWcslBhqbjFv+voeD1STzAesYZUCS1wzuv77Z+e0iWn
-        CgRDRdYJRfqWTou0o5AsouYCMjaJsmY=
+        Mon, 14 Mar 2022 16:45:20 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A63E38BE0;
+        Mon, 14 Mar 2022 13:44:10 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id s42so16081344pfg.0;
+        Mon, 14 Mar 2022 13:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SjnxbE8lZQqadUpE7R641a/N8kIbPtJjoIDhn73vJKs=;
+        b=jJ12l8435niXaD/TcwpgZuueLErmLpXnMPknwdE6bfHSoVzG/ij7pOG+t0c2cEIs1L
+         AlVEOicwdiSTYxhW1UhvSWxHrzdu7nPrqCIDY0vKnffnC67Jo74YvJX5FcoS+go8W7lf
+         yPpJrr8DDcj5MRmc5Rih+KPRAXG35X4j1po2fwSWoCEOX0QrOqkl7h/I5JXhHaB63VLc
+         mzFvtJmabIZ1HarDSFe72fovRdvd0E9saOKZiQkJrFq0fHtb7pJl7Ui0Yp87YRvrweWZ
+         tSP7Ey/Ecj+OoKK+qR06kvzh1n+ez0MwyuNnQxolt8PXmBtEqHYlUOVGF6gIHFyM4Z3m
+         A9wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SjnxbE8lZQqadUpE7R641a/N8kIbPtJjoIDhn73vJKs=;
+        b=F2HQBsq5vCrYmKuMsc/IHpThJBQ3+5fOxAsLlB4xmbmlg8Bt1WIMo706CWf0aLnWpv
+         QIODwDKnpWodDQN5TzTfh/9hTeI8XpdBv61TD4nn9lvQmF5M48kolpWUCbyT9B5o6i/v
+         pKEH+H10RaOgZIrzK6mtcgnie+EdvwdMveyRiqWy+P4gHzkoKTMPiRi/5S/bDeGwaPQF
+         XHzdmYtrdQ94z46QzNqzyJjmrTHYfOMX/QhNLqUijbjNmWR5tcumtGNU2Dg3RDGjouOf
+         9Y7GjLr+RJ///i/60o4tdPmAnmZCS9cjKXLDaMRLT7OHYivyH55Q1ONkHrWcvy7zmwou
+         hIkA==
+X-Gm-Message-State: AOAM533vmbXME7OQTNv8IgwUrxXaDVnRVgRe9I/v7QtZaqFx6mGDTHkf
+        BHE+p9nfDatuvsnUtjBc01Y=
+X-Google-Smtp-Source: ABdhPJwlDuF/nG7u16gbtCXhTvkxcLXzhFA1pFYowzXN38RqwjQ23vbelIF6AdDNbaoADxvnwg5F2g==
+X-Received: by 2002:a62:ee08:0:b0:4f6:b522:ca with SMTP id e8-20020a62ee08000000b004f6b52200camr25507997pfi.48.1647290649472;
+        Mon, 14 Mar 2022 13:44:09 -0700 (PDT)
+Received: from localhost ([103.4.221.252])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a030300b001c17851b6a1sm376177pje.28.2022.03.14.13.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 13:44:08 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 02:14:02 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        joao@overdrivepizza.com, hjl.tools@gmail.com,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <20220314204402.rpd5hqzzev4ugtdt@apollo>
+References: <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
+ <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+ <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net>
+ <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+ <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
+ <20220312154407.GF28057@worktop.programming.kicks-ass.net>
+ <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 14 Mar 2022 21:42:01 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor.Ambarus@microchip.com
-Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, heiko.thiery@gmail.com
-Subject: Re: [PATCH v1] mtd: spi-nor: unset quad_enable if SFDP doesn't
- specify it
-In-Reply-To: <91393780-1521-09b7-8dea-14c65e18b37e@microchip.com>
-References: <20220304185137.3376011-1-michael@walle.cc>
- <7f339d0c-5ca9-261c-a545-d4ebf3bda140@microchip.com>
- <92cde38c-d398-44f4-26f8-ef4919f5944e@microchip.com>
- <7f947928e7189f98eb950828990b3920@walle.cc>
- <91393780-1521-09b7-8dea-14c65e18b37e@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0cf8dbbf4ad005abd3db825fb257dedd@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-09 05:49, schrieb Tudor.Ambarus@microchip.com:
-> On 3/7/22 20:56, Michael Walle wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the content is safe
->> 
->> Am 2022-03-07 10:23, schrieb Tudor.Ambarus@microchip.com:
->>> On 3/7/22 09:12, Tudor.Ambarus@microchip.com wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
->>>> know
->>>> the content is safe
->>>> 
->>>> On 3/4/22 20:51, Michael Walle wrote:
->>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
->>>>> know the content is safe
->>>>> 
->>>>> While the first version of JESD216 specify the opcode for 4 bit I/O
->>>>> accesses, it lacks information on how to actually enable this mode.
->>>>> 
->>>>> For now, the one set in spi_nor_init_default_params() will be used.
->>>>> But this one is likely wrong for some flashes, in particular the
->>>>> Macronix MX25L12835F. Thus we need to clear the enable method when
->>>>> parsing the SFDP. Flashes with such an SFDP revision will have to 
->>>>> use
->>>>> a
->>>>> flash (and SFDP revision) specific fixup.
->>>>> 
->>>>> This might break quad I/O for some flashes which relied on the
->>>>> spi_nor_sr2_bit1_quad_enable() that was formerly set. If your 
->>>>> bisect
->>>>> turns up this commit, you'll probably have to set the proper
->>>>> quad_enable method in a post_bfpt() fixup for your flash.
->>>>> 
->>>> 
->>>> Right, I meant adding a paragraph such as the one from above.
->>>> 
->>>>> Signed-off-by: Michael Walle <michael@walle.cc>
->>>>> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
->>>>> ---
->>>>> changes since RFC:
->>>>>  - reworded commit message
->>>>>  - added comment about post_bfpt hook
->>>>> 
->>>>> Tudor, I'm not sure what you meant with
->>>>>   Maybe you can update the commit message and explain why would 
->>>>> some
->>>>>   flashes fail to enable quad mode, similar to what I did.
->>>>> 
->>>>> It doesn't work because the wrong method is chosen? ;)
->>>>> 
->>>>>  drivers/mtd/spi-nor/sfdp.c | 11 ++++++++++-
->>>>>  1 file changed, 10 insertions(+), 1 deletion(-)
->>>>> 
->>>>> diff --git a/drivers/mtd/spi-nor/sfdp.c 
->>>>> b/drivers/mtd/spi-nor/sfdp.c
->>>>> index a5211543d30d..6bba9b601846 100644
->>>>> --- a/drivers/mtd/spi-nor/sfdp.c
->>>>> +++ b/drivers/mtd/spi-nor/sfdp.c
->>>>> @@ -549,6 +549,16 @@ static int spi_nor_parse_bfpt(struct spi_nor
->>>>> *nor,
->>>>>         map->uniform_erase_type = map->uniform_region.offset &
->>>>>                                   SNOR_ERASE_TYPE_MASK;
->>>>> 
->>>>> +       /*
->>>>> +        * The first JESD216 revision doesn't specify a method to
->>>>> enable
->>>>> +        * quad mode. spi_nor_init_default_params() will set a 
->>>>> legacy
->>>>> +        * default method to enable quad mode. We have to disable 
->>>>> it
->>>>> +        * again.
->>>>> +        * Flashes with this JESD216 revision need to set the
->>>>> quad_enable
->>>>> +        * method in their post_bfpt() fixup if they want to use 
->>>>> quad
->>>>> I/O.
->>>>> +        */
->>>> 
->>>> Great. Looks good to me. I'll change the subject to "mtd: spi-nor:
->>>> sfdp:"
->>>> when applying.
->>> 
->>> As we talked on the meeting, we can instead move the default quad 
->>> mode
->>> init
->>> to the deprecated way of initializing the params, or/and to where
->>> SKIP_SFDP
->>> is used. This way you'll no longer need to clear it here.
->> 
->> Mh, I just had a look and I'm not sure it will work there,
->> because in the deprecated way, the SFDP is still parsed and
->> thus we might still have the wrong enable method for flashes
->> which don't have PARSE_SFDP set.
-> 
-> Moving the default quad_enable method to spi_nor_no_sfdp_init_params(),
-> thus also for spi_nor_init_params_deprecated() because it calls
-> spi_nor_no_sfdp_init_params(), will not change the behavior for the
-> deprecated way of initializing the params, isn't it?
+On Sun, Mar 13, 2022 at 07:03:39AM IST, Alexei Starovoitov wrote:
+> On Sat, Mar 12, 2022 at 7:44 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Fri, Mar 11, 2022 at 09:09:38AM -0800, Alexei Starovoitov wrote:
+> > > On Fri, Mar 11, 2022 at 2:40 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > >
+> > > > On Thu, Mar 10, 2022 at 05:29:11PM +0100, Peter Zijlstra wrote:
+> > > >
+> > > > > This seems to cure most of the rest. I'm still seeing one failure:
+> > > > >
+> > > > > libbpf: prog 'connect_v4_prog': BPF program load failed: Invalid argument
+> > > > > libbpf: failed to load program 'connect_v4_prog'
+> > > > > libbpf: failed to load object './connect4_prog.o'
+> > > > > test_fexit_bpf2bpf_common:FAIL:tgt_prog_load unexpected error: -22 (errno 22)
+> > > > > #48/4 fexit_bpf2bpf/func_replace_verify:FAIL
+> > > >
+> > > >
+> > > > Hmm, with those two patches on I get:
+> > > >
+> > > > root@tigerlake:/usr/src/linux-2.6/tgl-build# ./test_progs -t fexit
+> > > > #46 fentry_fexit:OK
+> > > > #48 fexit_bpf2bpf:OK
+> > > > #49 fexit_sleep:OK
+> > > > #50 fexit_stress:OK
+> > > > #51 fexit_test:OK
+> > > > Summary: 5/9 PASSED, 0 SKIPPED, 0 FAILED
+> > > >
+> > > > On the tigerlake, I suppose I'm doing something wrong on the other
+> > > > machine because there it's even failing on the pre-ibt kernel image.
+> > > >
+> > > > I'll go write up changelogs and stick these on.
+> > >
+> > > What is the latest branch I can use to test it?
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
+> >
+> > that also include bpf-next. Thanks!
+>
+> Looks better.
+> During the build with gcc 8.5 I see:
+>
+> arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> .ibt_endbr_seal, skipping
+> arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> .orc_unwind section, skipping
+>   LD [M]  crypto/async_tx/async_xor.ko
+>   LD [M]  crypto/authenc.ko
+> make[3]: *** [../scripts/Makefile.modfinal:61:
+> arch/x86/crypto/crc32c-intel.ko] Error 255
+> make[3]: *** Waiting for unfinished jobs....
+>
+> but make clean cures it.
+> I suspect it's some missing makefile dependency.
+>
+> and:
+> vmlinux.o: warning: objtool: ksys_unshare()+0x626: unreachable instruction
+> which stays even after make clean.
+>
+> The rcu "false positive" is still there that causes
+> sporadic hangs during the boot.
+>
+> The test_progs shows:
+> Summary: 228/1122 PASSED, 4 SKIPPED, 6 FAILED
+> (when I remove one test)
+>
+> That test is actually crashing the kernel:
+> ./test_progs -t mod_race
+> [   39.202593] bpf_testmod: loading out-of-tree module taints kernel.
+> [   39.303142] general protection fault, probably for non-canonical
+> address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN PTI
+> [   39.304610] KASAN: null-ptr-deref in range
+> [0x0000000000000000-0x0000000000000007]
+> [   39.305514] CPU: 9 PID: 1599 Comm: test_progs Tainted: G
+> O      5.17.0-rc7-02525-g5dd5efb53cf1 #4
+> [   39.306675] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+> [   39.308036] RIP: 0010:do_init_module+0x9/0x6f0
+> [   39.308583] Code: fe ff ff e8 59 13 46 00 e9 7f fe ff ff e8 4f 13
+> 46 00 e9 49 fe ff ff 66 2e 0f 1f 84 00 00 00 00 00 e8 cb 8d eb 1e 48
+> b8 00 00 <00> 00 00 fc ff df 41 57 49 89 ff 48 c7 c7 20 f6 5c 84 48 89
+> fa 41
+> [   39.310815] RSP: 0018:ffff88810f7e7aa0 EFLAGS: 00010282
+> [   39.311450] RAX: dffffc0000000000 RBX: 0000000000000009 RCX: ffffffff81283b16
+> [   39.312253] RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffffa0224c00
+> [   39.313031] RBP: ffff88810f7e7ac8 R08: 0000000000000000 R09: fffffbfff0b4d557
+> [   39.313813] R10: ffffffff85a6aab7 R11: fffffbfff0b4d556 R12: ffff88811171f518
+> [   39.314591] R13: dffffc0000000000 R14: ffffffffa0224c00 R15: ffff88810f7e7e50
+> [   39.315374] FS:  00007f8e1b981700(0000) GS:ffff8881f6a80000(0000)
+> knlGS:0000000000000000
+> [   39.316293] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   39.316984] CR2: 00007fdf39350ff0 CR3: 000000011952e006 CR4: 00000000003706e0
+> [   39.317860] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   39.318680] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   39.319467] Call Trace:
+> [   39.319744]  <TASK>
+> [   39.319982]  bpf_trampoline_6442471603_0+0x32/0x1000
+> [   39.320537]  do_init_module+0x5/0x6f0
+> [   39.320945]  load_module+0x77c0/0x9c00
+> [   39.321376]  ? module_frob_arch_sections+0x20/0x20
+> [   39.321892]  ? ima_post_read_file+0x161/0x180
+> [   39.322392]  ? ima_read_file+0x140/0x140
+> [   39.322827]  ? security_kernel_post_read_file+0x55/0xb0
+> [   39.323406]  ? __x64_sys_fsconfig+0x630/0x630
+> [   39.323889]  ? fput_many+0x1e/0x120
+> [   39.324285]  ? __do_sys_finit_module+0xf3/0x150
+> [   39.324822]  __do_sys_finit_module+0xf3/0x150
+> [   39.325311]  ? __ia32_sys_init_module+0xb0/0xb0
+> [   39.325826]  ? rcu_read_lock_held_common+0xe/0xa0
+> [   39.326349]  ? rcu_read_lock_sched_held+0x5a/0xc0
+> [   39.326869]  ? rcu_read_lock_bh_held+0xa0/0xa0
+> [   39.327362]  ? file_open_root+0x1f0/0x1f0
+> [   39.327812]  ? syscall_trace_enter.isra.17+0x184/0x250
+> [   39.328411]  do_syscall_64+0x38/0x80
+> [   39.328812]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> The test was designed to check whether the kernel bug is fixed.
+> If not it would crash the kernel.
+>
+> Kumar,
+> you've added that test.
+> Could you please take a look at why it is crashing in Peter's tree?
 
-What do you mean? The behavior is not changed and the bug is not
-fixed for the flashes which use the deprecated way. It will get
-overwritten by the spi_nor_parse_sfdp call in
-spi_nor_sfdp_init_params_deprecated().
+The crash does not seem to be resurfacing the bug, AFAICT.
 
-> A more reason
-> to use PARSE_SFDP/SKIP_SFDP, we'll get rid of the deprecated params
-> init at some point.
-> 
-> No new fixes for spi_nor_init_params_deprecated().
+[ Note: I have no experience with trampoline code or IBT so what follows might
+	be incorrect. ]
 
-Hm, so we deliberately won't fix known bugs there? I'm not sure
-I'd agree here. Esp. because it is hard to debug and might even
-depend on non-volatile state of the flash.
+In case of fexit and fmod_ret, we call original function (but skip
+X86_PATCH_SIZE bytes), with ENDBR we must also skip those 4 bytes, but in some
+cases like bpf_fentry_test1, for which this test has fmod_ret prog, compiler
+(gcc 11) emits endbr64, but not for do_init_module, for which we do fexit.
 
--michael
+This means for do_init_module module, orig_call += X86_PATCH_SIZE +
+ENDBR_INSN_SIZE would skip more bytes than needed to emit call to original
+function, which explains why I was seeing crash in the middle of
+'mov edx, 0x10' instruction.
+
+The diff below fixes the problem for me, and allows the test to pass.
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index b98e1c95bcc4..760c9a3c075f 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2031,11 +2031,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+
+        ip_off = stack_size;
+
+-       if (flags & BPF_TRAMP_F_SKIP_FRAME)
++       if (flags & BPF_TRAMP_F_SKIP_FRAME) {
+                /* skip patched call instruction and point orig_call to actual
+                 * body of the kernel function.
+                 */
+-               orig_call += X86_PATCH_SIZE + ENDBR_INSN_SIZE;
++               if (is_endbr(*(u32 *)orig_call))
++                       orig_call += ENDBR_INSN_SIZE;
++               orig_call += X86_PATCH_SIZE;
++       }
+
+        prog = image;
+
+--
+Kartikeya

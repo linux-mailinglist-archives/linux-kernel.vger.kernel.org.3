@@ -2,120 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155F34D84F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 331EE4D850F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245517AbiCNMdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S241893AbiCNMen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243941AbiCNMVZ (ORCPT
+        with ESMTP id S241682AbiCNM1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:25 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D49E13D24;
-        Mon, 14 Mar 2022 05:19:08 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id v14so8582827qta.2;
-        Mon, 14 Mar 2022 05:19:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MVYKucc+mwxRpju7dONX1SpktjTFhTUwy2wjrEfefyQ=;
-        b=n0shuxfyOM8Zda4w8ipEKK8UObmHK3LmrpQ3t+xg0Jj9XkRebEcQhgE9fw4MBbnLRh
-         pcXjvEMVUy+fsgwGqDSA/XrcoUoaFK7DSJfCjCkxVQ+VxWzg6KvCrnORuBMqI97dYnQh
-         7trdl8csfaPCjXopD89hVBdF4f4O69mgHijQ/8+R2Pr213wbGRVi8zC0nDWicljzZNsA
-         i1NS1jI6UZXAnXJLSKxkNzT7Jst8xmZR0j5bIt4L/e24ey/nFEMEoyk3+kbKzLcjVvmp
-         hcbWOiG6OGFGSdBCQG39mMosO9kof/QEQa5rhdcE1y3sk5qMX+mneuZ9HIFYMuWv01pj
-         Pmqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MVYKucc+mwxRpju7dONX1SpktjTFhTUwy2wjrEfefyQ=;
-        b=EpLXBbZ5lfwgJ3Up+vS4ki2FabbFLgJGSkqnWO/6gMA49sVbSuZJNjtaellw4pCu+M
-         g4B1SFxfuUoJJ6WmP5kJ2kcq6uVIGxUGdgeMtBO+RFOKpVlIjpRLYJas/G3QKt1AWzSS
-         Ae+PQ69X0rqdBYiXrAeaL7Oak/orIXngbeBSIXJCBOBamc3Twbo1pvHYtVY1p0YRMTk/
-         FdjqauiPXAUuplchTgDm/pMbU09y3U3719z78Oqr6n1maIhB5VOvLIMcgCMz0a2vx/8Z
-         AG2WztMMQXUEIs214Rt4OCh5RrSId7F7Q3x4TWjjSbi7ifr34kSVSeknIiptxyccDFGm
-         vK0g==
-X-Gm-Message-State: AOAM5336NWIYFDksY8s0cWy7Fx6b7hqxyPG5fYXz9Os7rysP76A9RJGZ
-        ZA0c/2IzDaii0BgVN46mQG5BOiGU2Dk=
-X-Google-Smtp-Source: ABdhPJxSZ4mzrAEulUGO1qJ/XWF06fSdwlNNmz59bevtMoPaToPh7VyN3clT9vrfsUBK5u285uPDhg==
-X-Received: by 2002:a05:622a:40e:b0:2e1:d4cc:88bb with SMTP id n14-20020a05622a040e00b002e1d4cc88bbmr3180031qtx.595.1647260347262;
-        Mon, 14 Mar 2022 05:19:07 -0700 (PDT)
-Received: from localhost.localdomain (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm2945349qtx.58.2022.03.14.05.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 05:19:06 -0700 (PDT)
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-serial@vger.kernel.org
-Subject: [PATCH v2 1/3] serial: 8250_fintek: Finish support for the F81865
-Date:   Mon, 14 Mar 2022 08:18:56 -0400
-Message-Id: <20220314121856.10112-1-twoerner@gmail.com>
-X-Mailer: git-send-email 2.35.1.455.g1a4874565f
+        Mon, 14 Mar 2022 08:27:19 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B40C46152;
+        Mon, 14 Mar 2022 05:21:40 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22ECKJ1M026169;
+        Mon, 14 Mar 2022 13:20:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=kW1aXwzAxV2OLtkXdpyvfaQAMdSGkHxK0NAJMN1QqM8=;
+ b=IgWAUET0aS/wdTiEr7ToHsOaL7jJizPwf2lECqC+0NcoIhqCXATZpGgN+C/iyAGdWRYY
+ 3WyWDAXs04JUbNOKi8kMct7IU6+Yydwrnxkms3ik+mZftGwrRtn4rJ4IYcsOu0ybfXYu
+ gT+yVnPoy8mkwnjUOd9zkUzOw/NN8XmRdqdOaAvYIZeyuGABV7EQIM7xntDRQaCS7zL6
+ YdzlUDY74mVENTxJX/58ZWHEmXkGy+RSJtimqjLws4QbhwWs07fShNN5Ds+KGlRWhu1o
+ 5dkn/uaDggvGxwhgi6+knfbNx9ea70oR8V5Ems4S5kFYENAYonVCzp66l3uPRAPZDY/3 Aw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et5mg801y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Mar 2022 13:20:34 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1364C100048;
+        Mon, 14 Mar 2022 13:20:34 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0A43721E678;
+        Mon, 14 Mar 2022 13:20:34 +0100 (CET)
+Received: from [10.201.21.172] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 14 Mar
+ 2022 13:20:33 +0100
+Message-ID: <cfeeaa0e-7d52-9267-d46f-62eb91363b60@foss.st.com>
+Date:   Mon, 14 Mar 2022 13:20:32 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RESEND] mmc: mmci: manage MMC_PM_KEEP_POWER per variant
+ config
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Grzegorz Szymaszek <gszymaszek@short.pl>
+References: <20220314095225.53563-1-yann.gautier@foss.st.com>
+ <CAPDyKFqObiC2fwZJ_0JArbVhnFZHV6bA0XJg0diwPgmRx1Bntg@mail.gmail.com>
+From:   Yann Gautier <yann.gautier@foss.st.com>
+In-Reply-To: <CAPDyKFqObiC2fwZJ_0JArbVhnFZHV6bA0XJg0diwPgmRx1Bntg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-14_04,2022-03-14_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver only partially supports the F81865 device. The UART portions of
-this SuperIO chip behave very similarly to the UART of the F81866, except
-that the F81866 has 128-byte FIFOs whereas the F81865 has 16-byte FIFOs,
-and the IRQ configuration is different. Therefore fill out the support for
-the F81865 in the places where it is missing.
+On 3/14/22 12:17, Ulf Hansson wrote:
+> On Mon, 14 Mar 2022 at 10:53, Yann Gautier <yann.gautier@foss.st.com> wrote:
+>>
+>> Add a disable_keep_power field in variant_data struct. The
+>> MMC_PM_KEEP_POWER flag will be enabled if disable_keep_power is not set.
+>> It is only set to true for stm32_sdmmc variants.
+>>
+>> The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
+>> It doesn't correctly support low power, and we need to unbind the wifi
+>> driver before a suspend sequence. But the wifi chip firmware is then
+>> lost, and the communication with SDIO fails if MMC_PM_KEEP_POWER is
+>> enabled.
+> 
+> So the platform supports to maintain the power for the embedded wifi
+> chip during system suspend, but the SDIO func driver (for the WiFi
+> chip) doesn't implement its part correctly. Did I get that right?
+> 
+> In that case, it sounds to me like we should try to fix the support
+> for power management in the SDIO func driver instead, no?
+> I am happy to help with guidance/review if that is needed. What SDIO
+> func driver is this about?
+> 
+> Kind regards
+> Uffe
+> 
 
-Tested at 1500000 baud on the iEi NANO-PV-D5251-R10 board.
+Hi Ulf,
 
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
----
- drivers/tty/serial/8250/8250_fintek.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+I blindly pushed the patch without rechecking it.
+I rephrased it in our downstream to better explain the issue:
 
-diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-index 251f0018ae8c..47b15d2d9901 100644
---- a/drivers/tty/serial/8250/8250_fintek.c
-+++ b/drivers/tty/serial/8250/8250_fintek.c
-@@ -63,7 +63,12 @@
- #define F81216_LDN_HIGH	0x4
- 
- /*
-- * F81866/966 registers
-+ * F81866/865/966 registers
-+ *
-+ * The UART portion of the F81865 functions very similarly to the UART
-+ * portion of the F81866, so there's no need to duplicate all the #defines
-+ * etc. The only differences are: the F81866 has 128-byte FIFOs whereas the
-+ * F81865 has 16-byte FIFOs, and the IRQ configuration is different.
-  *
-  * The IRQ setting mode of F81866/966 is not the same with F81216 series.
-  *	Level/Low: IRQ_MODE0:0, IRQ_MODE1:0
-@@ -316,6 +321,7 @@ static void fintek_8250_set_termios(struct uart_port *port,
- 		break;
- 	case CHIP_ID_F81966:
- 	case CHIP_ID_F81866:
-+	case CHIP_ID_F81865:
- 		reg = F81866_UART_CLK;
- 		break;
- 	default:
-@@ -363,6 +369,7 @@ static void fintek_8250_set_termios_handler(struct uart_8250_port *uart)
- 	case CHIP_ID_F81216H:
- 	case CHIP_ID_F81966:
- 	case CHIP_ID_F81866:
-+	case CHIP_ID_F81865:
- 		uart->port.set_termios = fintek_8250_set_termios;
- 		break;
- 
--- 
-2.35.1.455.g1a4874565f
+The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
+It doesn't correctly support low power on this board. The Wifi chip
+awaits an always-on regulator, but it was connected to v3v3 which is off
+in low-power sequence. MMC_PM_KEEP_POWER should then be disabled.
+
+If it's OK for you, I'll resend the patch with the updated commit message.
+
+Best regards,
+Yann
+
+>> The flag can still be enabled through DT property: keep-power-in-suspend.
+>>
+>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+>> ---
+>> Resend the patch alone. It was previoulsy in a series [1] for which the
+>> other patches will be reworked.
+>>
+>> [1] https://lore.kernel.org/lkml/20220304135134.47827-1-yann.gautier@foss.st.com/
+>>
+>>   drivers/mmc/host/mmci.c | 5 ++++-
+>>   drivers/mmc/host/mmci.h | 1 +
+>>   2 files changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
+>> index 45b8608c935c..0e2f2f5d6a52 100644
+>> --- a/drivers/mmc/host/mmci.c
+>> +++ b/drivers/mmc/host/mmci.c
+>> @@ -274,6 +274,7 @@ static struct variant_data variant_stm32_sdmmc = {
+>>          .busy_detect            = true,
+>>          .busy_detect_flag       = MCI_STM32_BUSYD0,
+>>          .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
+>> +       .disable_keep_power     = true,
+>>          .init                   = sdmmc_variant_init,
+>>   };
+>>
+>> @@ -301,6 +302,7 @@ static struct variant_data variant_stm32_sdmmcv2 = {
+>>          .busy_detect            = true,
+>>          .busy_detect_flag       = MCI_STM32_BUSYD0,
+>>          .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
+>> +       .disable_keep_power     = true,
+>>          .init                   = sdmmc_variant_init,
+>>   };
+>>
+>> @@ -2172,7 +2174,8 @@ static int mmci_probe(struct amba_device *dev,
+>>          host->stop_abort.flags = MMC_RSP_R1B | MMC_CMD_AC;
+>>
+>>          /* We support these PM capabilities. */
+>> -       mmc->pm_caps |= MMC_PM_KEEP_POWER;
+>> +       if (!variant->disable_keep_power)
+>> +               mmc->pm_caps |= MMC_PM_KEEP_POWER;
+>>
+>>          /*
+>>           * We can do SGIO
+>> diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
+>> index e1a9b96a3396..2cad1ef9766a 100644
+>> --- a/drivers/mmc/host/mmci.h
+>> +++ b/drivers/mmc/host/mmci.h
+>> @@ -361,6 +361,7 @@ struct variant_data {
+>>          u32                     opendrain;
+>>          u8                      dma_lli:1;
+>>          u32                     stm32_idmabsize_mask;
+>> +       u8                      disable_keep_power:1;
+>>          void (*init)(struct mmci_host *host);
+>>   };
+>>
+>> --
+>> 2.25.1
+>>
 

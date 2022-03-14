@@ -2,182 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331EE4D850F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6C14D850E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241893AbiCNMen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S241974AbiCNMdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241682AbiCNM1T (ORCPT
+        with ESMTP id S241252AbiCNMV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:27:19 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B40C46152;
-        Mon, 14 Mar 2022 05:21:40 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22ECKJ1M026169;
-        Mon, 14 Mar 2022 13:20:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=kW1aXwzAxV2OLtkXdpyvfaQAMdSGkHxK0NAJMN1QqM8=;
- b=IgWAUET0aS/wdTiEr7ToHsOaL7jJizPwf2lECqC+0NcoIhqCXATZpGgN+C/iyAGdWRYY
- 3WyWDAXs04JUbNOKi8kMct7IU6+Yydwrnxkms3ik+mZftGwrRtn4rJ4IYcsOu0ybfXYu
- gT+yVnPoy8mkwnjUOd9zkUzOw/NN8XmRdqdOaAvYIZeyuGABV7EQIM7xntDRQaCS7zL6
- YdzlUDY74mVENTxJX/58ZWHEmXkGy+RSJtimqjLws4QbhwWs07fShNN5Ds+KGlRWhu1o
- 5dkn/uaDggvGxwhgi6+knfbNx9ea70oR8V5Ems4S5kFYENAYonVCzp66l3uPRAPZDY/3 Aw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et5mg801y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 13:20:34 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1364C100048;
-        Mon, 14 Mar 2022 13:20:34 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0A43721E678;
-        Mon, 14 Mar 2022 13:20:34 +0100 (CET)
-Received: from [10.201.21.172] (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 14 Mar
- 2022 13:20:33 +0100
-Message-ID: <cfeeaa0e-7d52-9267-d46f-62eb91363b60@foss.st.com>
-Date:   Mon, 14 Mar 2022 13:20:32 +0100
+        Mon, 14 Mar 2022 08:21:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 922FF1CFF0;
+        Mon, 14 Mar 2022 05:20:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3D9713D5;
+        Mon, 14 Mar 2022 05:20:42 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8207E3F99C;
+        Mon, 14 Mar 2022 05:20:41 -0700 (PDT)
+Message-ID: <faea4c0c-e20b-c043-6f74-95af8177e8bd@arm.com>
+Date:   Mon, 14 Mar 2022 12:20:36 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RESEND] mmc: mmci: manage MMC_PM_KEEP_POWER per variant
- config
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>
-References: <20220314095225.53563-1-yann.gautier@foss.st.com>
- <CAPDyKFqObiC2fwZJ_0JArbVhnFZHV6bA0XJg0diwPgmRx1Bntg@mail.gmail.com>
-From:   Yann Gautier <yann.gautier@foss.st.com>
-In-Reply-To: <CAPDyKFqObiC2fwZJ_0JArbVhnFZHV6bA0XJg0diwPgmRx1Bntg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_04,2022-03-14_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
+Content-Language: en-GB
+To:     Vladimir Zapolskiy <vz@mleia.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
+ <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
+ <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
+ <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
+ <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
+ <dc599cae-7245-73dc-8050-14ec6c1336b8@arm.com>
+ <f497fb65-3568-cda2-f086-2275b50daf4b@mleia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <f497fb65-3568-cda2-f086-2275b50daf4b@mleia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/22 12:17, Ulf Hansson wrote:
-> On Mon, 14 Mar 2022 at 10:53, Yann Gautier <yann.gautier@foss.st.com> wrote:
+On 2022-03-14 11:50, Vladimir Zapolskiy wrote:
+> On 3/14/22 1:43 PM, Robin Murphy wrote:
+>> On 2022-03-11 14:07, Vladimir Zapolskiy wrote:
+>>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
+>>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> 
+>>>> wrote:
+>>>>>
+>>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
+>>>>>> PL022 binding require two clocks to be defined but lpc platform 
+>>>>>> doesn't
+>>>>>> comply with bindings and define only one clock i.e apb_pclk.
+>>>>>>
+>>>>>> Update spi clocks and clocks-names property by adding appropriate 
+>>>>>> clock
+>>>>>> reference to make it compliant with bindings.
+>>>>>>
+>>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
+>>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+>>>>>> ---
+>>>>>> v2:
+>>>>>> - New patch with similar changeset
+>>>>>> - Send to soc ML
+>>>>>>
+>>>>>>     arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
+>>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> index c87066d6c995..30958e02d5e2 100644
+>>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
+>>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
+>>>>>>                                 compatible = "arm,pl022",
+>>>>>> "arm,primecell";
+>>>>>>                                 reg = <0x20084000 0x1000>;
+>>>>>>                                 interrupts = <20 
+>>>>>> IRQ_TYPE_LEVEL_HIGH>;
+>>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
+>>>>>> -                             clock-names = "apb_pclk";
+>>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>,
+>>>>>> <&clk LPC32XX_CLK_SSP0>;
+>>>>>> +                             clock-names = "sspclk", "apb_pclk";
+>>>>>
+>>>>> In fact I'm uncertain if it is the right change, could it happen that
+>>>>> the commit
+>>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema")
+>>>>> sets a wrong
+>>>>> schema pattern?
+>>>>
+>>>> Good pointm this doesn't quite seem right: it is unlikely that the
+>>>> same clock
+>>>> is used for both the SPI bus and the APB bus.
+>>>>
+>>>>> Apparently just one clock is wanted on all observed platforms and
+>>>>> cases, this
+>>>>> is implicitly confirmed by clock handling in the
+>>>>> drivers/spi/spi-pl022.c :
+>>>>>
+>>>>>           pl022->clk = devm_clk_get(&adev->dev, NULL);
+>>>>>
+>>>>> So, I would vote to fix the device tree bindings schema.
+>>>>
+>>>> Isn't this just using the wrong name? The name of the macro
+>>>> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
+>>>> rather than the APB clock, so we only need to change clock-names
+>>>> property here and leave it unchanged otherwise.
+>>>
+>>> Yes, the name is wrong, here I'm ready to take the blame:
+>>>
+>>> Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device
+>>> nodes")
+>>>
+>>> Noteworthy the commit above presets the same clock name to other 
+>>> PrimeCell
+>>> controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x 
+>>> (SD),
+>>> plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in 
+>>> fact.
+>>>
+>>> On LPC32xx the bus clock source and function clock source for SSP is 
+>>> HCLK.
+>>>
+>>> My guess is that the misnamed "apb_pclk" migrated into the schema from
+>>> the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
+>>> firstly fix the schema by removing "apb_pclk" clock. It will leave 
+>>> just one
+>>> clock, so "clock-names" property can be set as optional, and the drop
+>>> the property from the lpc32xx.dtsi.
 >>
->> Add a disable_keep_power field in variant_data struct. The
->> MMC_PM_KEEP_POWER flag will be enabled if disable_keep_power is not set.
->> It is only set to true for stm32_sdmmc variants.
+>> No, "apb_pclk" is part of the common AMBA binding, and is required by
+>> the "arm,primecell" compatible. You won't (usually) find it referenced
+>> in drivers because it's dealt with by amba_get_enable_pclk() via
+>> amba_probe().
 >>
->> The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
->> It doesn't correctly support low power, and we need to unbind the wifi
->> driver before a suspend sequence. But the wifi chip firmware is then
->> lost, and the communication with SDIO fails if MMC_PM_KEEP_POWER is
->> enabled.
 > 
-> So the platform supports to maintain the power for the embedded wifi
-> chip during system suspend, but the SDIO func driver (for the WiFi
-> chip) doesn't implement its part correctly. Did I get that right?
-> 
-> In that case, it sounds to me like we should try to fix the support
-> for power management in the SDIO func driver instead, no?
-> I am happy to help with guidance/review if that is needed. What SDIO
-> func driver is this about?
-> 
-> Kind regards
-> Uffe
-> 
+> Thank you, it explains, why "apb_pclk" is required for all PrimeCell
+> controllers on the SoC. Nevertheless, in commit 93898eb775e5 it was
+> misidentified with the sspclk clock, the latter one is the only clock
+> explicitly utilized by the driver in 2015 and till today. Fixes in dts
+> files should be preceded by a fix in the driver.
 
-Hi Ulf,
+There's nothing to fix in the driver, though. In fact it can only be 
+working today because the Linux driver isn't very strict and simply 
+assumes that the first clock entry is SSPCLK *without* considering its 
+name (other consumers of the binding might be stricter; I don't know), 
+and because presumably the HCLK happens to be enabled already anyway. 
+Changing the driver behaviour would only stand to cause functional 
+regressions.
 
-I blindly pushed the patch without rechecking it.
-I rephrased it in our downstream to better explain the issue:
+There are effectively two bugs in the DTS here, firstly that it only has 
+one clock entry when it should have two, and secondly that the clock 
+entry which *is* present has the wrong name (or the wrong clock 
+specifier, depending on how you look at it). Kuldeep's patch merely 
+fixes the first one by fully describing the way it's currently working 
+in practice, so it's really just a choice of whether to treat "respect 
+the binding" and "describe the hardware correctly" as separate issues 
+and have a follow-up patch to correctly reference HCLK as the second 
+clock, or whether they're trivial enough to squash together.
 
-The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
-It doesn't correctly support low power on this board. The Wifi chip
-awaits an always-on regulator, but it was connected to v3v3 which is off
-in low-power sequence. MMC_PM_KEEP_POWER should then be disabled.
-
-If it's OK for you, I'll resend the patch with the updated commit message.
-
-Best regards,
-Yann
-
->> The flag can still be enabled through DT property: keep-power-in-suspend.
->>
->> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
->> ---
->> Resend the patch alone. It was previoulsy in a series [1] for which the
->> other patches will be reworked.
->>
->> [1] https://lore.kernel.org/lkml/20220304135134.47827-1-yann.gautier@foss.st.com/
->>
->>   drivers/mmc/host/mmci.c | 5 ++++-
->>   drivers/mmc/host/mmci.h | 1 +
->>   2 files changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
->> index 45b8608c935c..0e2f2f5d6a52 100644
->> --- a/drivers/mmc/host/mmci.c
->> +++ b/drivers/mmc/host/mmci.c
->> @@ -274,6 +274,7 @@ static struct variant_data variant_stm32_sdmmc = {
->>          .busy_detect            = true,
->>          .busy_detect_flag       = MCI_STM32_BUSYD0,
->>          .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
->> +       .disable_keep_power     = true,
->>          .init                   = sdmmc_variant_init,
->>   };
->>
->> @@ -301,6 +302,7 @@ static struct variant_data variant_stm32_sdmmcv2 = {
->>          .busy_detect            = true,
->>          .busy_detect_flag       = MCI_STM32_BUSYD0,
->>          .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
->> +       .disable_keep_power     = true,
->>          .init                   = sdmmc_variant_init,
->>   };
->>
->> @@ -2172,7 +2174,8 @@ static int mmci_probe(struct amba_device *dev,
->>          host->stop_abort.flags = MMC_RSP_R1B | MMC_CMD_AC;
->>
->>          /* We support these PM capabilities. */
->> -       mmc->pm_caps |= MMC_PM_KEEP_POWER;
->> +       if (!variant->disable_keep_power)
->> +               mmc->pm_caps |= MMC_PM_KEEP_POWER;
->>
->>          /*
->>           * We can do SGIO
->> diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
->> index e1a9b96a3396..2cad1ef9766a 100644
->> --- a/drivers/mmc/host/mmci.h
->> +++ b/drivers/mmc/host/mmci.h
->> @@ -361,6 +361,7 @@ struct variant_data {
->>          u32                     opendrain;
->>          u8                      dma_lli:1;
->>          u32                     stm32_idmabsize_mask;
->> +       u8                      disable_keep_power:1;
->>          void (*init)(struct mmci_host *host);
->>   };
->>
->> --
->> 2.25.1
->>
-
+Robin.

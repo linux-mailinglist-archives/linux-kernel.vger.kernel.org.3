@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76A14D8020
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BE74D8029
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238666AbiCNKpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S238650AbiCNKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238586AbiCNKpM (ORCPT
+        with ESMTP id S237651AbiCNKqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:45:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E824BC28
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:44:01 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-405-xB69G3nOOuef7tBQjIgr_Q-1; Mon, 14 Mar 2022 10:43:59 +0000
-X-MC-Unique: xB69G3nOOuef7tBQjIgr_Q-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 14 Mar 2022 10:43:58 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 14 Mar 2022 10:43:58 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dmitry Vyukov' <dvyukov@google.com>,
-        syzbot <syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: RE: [syzbot] kernel panic: corrupted stack end in rtnl_newlink
-Thread-Topic: [syzbot] kernel panic: corrupted stack end in rtnl_newlink
-Thread-Index: AQHYN4MkQzi6nDqsbUGqHyChCsNTUKy+sQcw
-Date:   Mon, 14 Mar 2022 10:43:58 +0000
-Message-ID: <fb12b19d57c34928895e0faa8067f64c@AcuMS.aculab.com>
-References: <0000000000008ec53005da294fe9@google.com>
- <CACT4Y+YXzBGuj4mn2fnBWw4szbb4MsAvNScbyNXi1S21MXm8ig@mail.gmail.com>
- <CACT4Y+a1AvU4ZA3BXPpQMQ15A2T0CT_mrNTXv0NttJ0B06fH=w@mail.gmail.com>
-In-Reply-To: <CACT4Y+a1AvU4ZA3BXPpQMQ15A2T0CT_mrNTXv0NttJ0B06fH=w@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 14 Mar 2022 06:46:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5015A1E3C3;
+        Mon, 14 Mar 2022 03:45:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3EDC31F41E94
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647254703;
+        bh=j588M5zB/9t7D4ivjAn/3OXlaIV0VdQg6MdXm4IofKk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Zk8FhjIpdGaMPLwBRGovJ8HzZIFKyOryuzdJ4lhXvVF1S7EC3W1O+6oudNWxJWXkm
+         vs5koGvEsgQRb0F+l9de2Guee/Aq44N6hZ8NK92crkLMMwLqHMl56tS2K4nArbraU6
+         ULrKVlWcEEfR8GB+SZfUgjYsq7iGEyKelmJNQAzqe1Be+gFlGobagf97SqCOAzENwN
+         8gM9f7LVM33AK8Zq4sN2BpE1BLo+DC043tHTjIc/uWbbxQVf0zhxKrm2gXjGvUfJqu
+         R5EiuzwOgRjSsyGd1CV8N4PoRA+G7laLxzSL5ccNBr4+C/8KVEeQqUScJQUrfoN1+C
+         hcl4AWu6OL+KA==
+Message-ID: <d13b7bb3-989c-55eb-c7b9-41836ccb95a9@collabora.com>
+Date:   Mon, 14 Mar 2022 11:44:58 +0100
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 1
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [v3 15/19] ASoC: mediatek: mt8186: add machine driver with
+ mt6366, da7219 and max98357
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org,
+        robh+dt@kernel.org
+Cc:     aaronyu@google.com, matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        tzungbi@google.com, julianbraha@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220313151023.21229-1-jiaxin.yu@mediatek.com>
+ <20220313151023.21229-16-jiaxin.yu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220313151023.21229-16-jiaxin.yu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRG1pdHJ5IFZ5dWtvdg0KPiBTZW50OiAxNCBNYXJjaCAyMDIyIDA5OjA5DQo+IA0KPiBP
-biBNb24sIDE0IE1hciAyMDIyIGF0IDA5OjIyLCBEbWl0cnkgVnl1a292IDxkdnl1a292QGdvb2ds
-ZS5jb20+IHdyb3RlOg0KPiA+DQo+ID4gT24gTW9uLCAxNCBNYXIgMjAyMiBhdCAwOToxNywgc3l6
-Ym90DQo+ID4gPHN5emJvdCswNjAwOTg2ZDg4ZTJkNGQ3ZWJiOEBzeXprYWxsZXIuYXBwc3BvdG1h
-aWwuY29tPiB3cm90ZToNCj4gPiA+DQo+ID4gPiBIZWxsbywNCj4gPiA+DQo+ID4gPiBzeXpib3Qg
-Zm91bmQgdGhlIGZvbGxvd2luZyBpc3N1ZSBvbjoNCj4gPiA+DQo+ID4gPiBIRUFEIGNvbW1pdDog
-ICAgMDk2NmQzODU4MzBkIHJpc2N2OiBGaXggYXVpcGMramFsciByZWxvY2F0aW9uIHJhbmdlIGNo
-ZWNrcw0KPiA+ID4gZ2l0IHRyZWU6ICAgICAgIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20v
-bGludXgva2VybmVsL2dpdC9yaXNjdi9saW51eC5naXQgZml4ZXMNCj4gPiA+IGNvbnNvbGUgb3V0
-cHV0OiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L2xvZy50eHQ/eD0xN2ZlODBjNTcw
-MDAwMA0KPiA+ID4ga2VybmVsIGNvbmZpZzogIGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNwb3QuY29t
-L3gvLmNvbmZpZz94PTYyOTVkNjc1OTEwNjQ5MjENCj4gPiA+IGRhc2hib2FyZCBsaW5rOiBodHRw
-czovL3N5emthbGxlci5hcHBzcG90LmNvbS9idWc/ZXh0aWQ9MDYwMDk4NmQ4OGUyZDRkN2ViYjgN
-Cj4gPiA+IGNvbXBpbGVyOiAgICAgICByaXNjdjY0LWxpbnV4LWdudS1nY2MgKERlYmlhbiAxMC4y
-LjEtNikgMTAuMi4xIDIwMjEwMTEwLCBHTlUgbGQgKEdOVSBCaW51dGlscyBmb3INCj4gRGViaWFu
-KSAyLjM1LjINCj4gPiA+IHVzZXJzcGFjZSBhcmNoOiByaXNjdjY0DQo+ID4NCj4gPiArbGludXgt
-cmlzY3YNCj4gPg0KPiA+IFJpc2N2IG5lZWRzIHRvIGluY3JlYXNlIHN0YWNrIHNpemUgdW5kZXIg
-S0FTQU4uDQo+ID4gSSB3aWxsIHNlbmQgYSBwYXRjaC4NCg0KV2l0aCB2bWFsbG9jKCllZCBzdGFj
-a3MgaXMgaXQgcG9zc2libGUgdG8gYWxsb2NhdGUgYW4gZXh0cmEgcGFnZQ0Kb2YgS1ZBIHRoYXQg
-aXNuJ3QgYmFja2VkIGJ5IG1lbW9yeSBhcyBhICdndWFyZCBwYWdlJyBzbyB0aGF0DQpzdGFjayBv
-dmVyZmxvdyBmYXVsdHMgaW1tZWRpYXRlbHk/DQoNClByb2JhYmx5IHdvcnRoIGVuZm9yY2luZyBm
-b3IgS0FTQU4gYnVpbGRzIHdoZXJlIHRoZSBjb21waWxlcnMNCmhhdmUgYSBuYXN0eSBoYWJpdCBv
-ZiB1c2luZyBsb3QgbW9yZSBzdGFjayBzcGFjZSB0aGF0IG1pZ2h0DQpiZSBleHBlY3RlZC4NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+Il 13/03/22 16:10, Jiaxin Yu ha scritto:
+> Add support for mt8186 board with mt6366, da7219 and max98357.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> ---
+>   .../mt8186/mt8186-mt6366-da7219-max98357.c    | 924 ++++++++++++++++++
+>   1 file changed, 924 insertions(+)
+>   create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
+> 
 
+Hello Jiaxin,
+
+I see some duplication between this one and the mt6366-rt1019-rt5682s....
+....for this reason, I would propose to split out the MT6366 bits into a
+common file, something like mt8186-mt6366-common.c, as to reduce the duplication.
+
+If it is expected to see MT8186 machines with DA7219 or MAX98357, then it'd be a
+good idea to also do something about preventively commonizing these ones, like
+it is being done in ... MT8192, if I remember correctly.
+
+Regards,
+Angelo

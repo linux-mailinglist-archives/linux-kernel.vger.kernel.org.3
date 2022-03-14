@@ -2,204 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D554D7DD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 653D24D7DD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbiCNIuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S236863AbiCNIvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiCNIt4 (ORCPT
+        with ESMTP id S229613AbiCNIvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:49:56 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34BB1400F;
-        Mon, 14 Mar 2022 01:48:45 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so10475014pjb.3;
-        Mon, 14 Mar 2022 01:48:45 -0700 (PDT)
+        Mon, 14 Mar 2022 04:51:10 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52F51A3AD
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:50:00 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r128-20020a1c4486000000b0038a12987e21so255951wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:50:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WbMnsuV/WjCVgNHAAhwwQM/BhzDcEyxYmkQ9AWEx0BI=;
-        b=bxThCbIpNeDgqjkFCkbfhRkEALDTWe1csTnrolRMgdog4jnm1bH22CRZna/bQgdFKp
-         1sW1dMPVhsdRfj0VpQqquI3cp7HB6Y1b/3TpsLYBeMYWbTkUjxSgMEFRdl5BOy7bvVub
-         TCtRcbFNERpH4UdbXnj4EkSdge2Rcd+oDdPT6odeNXvies7/Qjs7EioxKajx294l3bIC
-         DkTIHXgGWrYvdfe83M1AqfZR6Z1rZygMxFUTRBG/su6fFwiDz42y+oZ5zPN+vZ3A/7X6
-         /TTmPVV5mxwz2j+K8ajtR0Tc25GRqSyXIWNpRaavtzvWD+HVT1cUksniqqbEcOlD2XpS
-         6eaw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ZkMBpAgcdIdxzeU26849eUUSSeeFFj2Wo/UieMy9a9E=;
+        b=x2GtjV48948gQDq1yJMOuI5V8cHDoZ+NUWL+IZNPDR/YiOXjiqHSD4FF2/yDvuiWzM
+         j8t+jjPiVKmAaKYp6SDWuREY3KZZK9eYKo6upQfYzZOC5jLOvTSWXc9rt5nkde3y3BtQ
+         iEoNaZ14dtyFfuNQHT1ngjOfPNoGNPefVxzmAmiO0+Ak8ZfOr8Rfml1n7gaBfYajXuVn
+         BwZ0UVXqxzIEJNHbKX5uRMF2fqCbOx0SLb0x7vvKBHiIjqpbmK/Cd2uTMEWPiviLbKdu
+         aEoWamrAdm40+sZs8BZpEdrxldqvF2Wyyxc/cdDJLPPhhFZMvh/4+7ky6KVRcL8M49kX
+         S+0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WbMnsuV/WjCVgNHAAhwwQM/BhzDcEyxYmkQ9AWEx0BI=;
-        b=pl8m3bNcJbFbANxbs9hvpX56RgJb/B80payT7h8XOY+Wh4AjDnhTGDGptvDzOMc0IR
-         2o+PXegqYOOiPo0zQDDe9TFu1vaRejfXCftk7tTpP0VZahGuiLKMxs/FqyZ0pvrk24LM
-         QAWymR0Mwi2LBmS/ajiIlDVzqPNG6zh3gPuy7Sym78gIuDxpdvcHskm15Wvy9418qnif
-         WhdDM1S0+U4KRuitkNSv/tzfJXIIylogHbcrg4w9KePjvrfdTQnIpmoQUHtKPLZBTIEI
-         OgbGIF4XCh0VrugYrHsF26+rwz4B7HccRGw3xoDRHPbRSSaC4YJX+yeib81soH9wnsiZ
-         FznQ==
-X-Gm-Message-State: AOAM533ceT9xMM6bKm/aojDiU7lCRBFG7l8Vnz7+FbeliPewBe8bw4Er
-        xY8uXWScQf6dLXuxZ66mr24=
-X-Google-Smtp-Source: ABdhPJyr2nILvPxagHGAFHs0MUGvuIVd6mr/DBlvo6qTVtXtTLACOTTBI/7QXIAYJI7qpOYF+7clWQ==
-X-Received: by 2002:a17:90a:6508:b0:1be:d59c:1f10 with SMTP id i8-20020a17090a650800b001bed59c1f10mr23905491pjj.229.1647247725315;
-        Mon, 14 Mar 2022 01:48:45 -0700 (PDT)
-Received: from localhost.localdomain ([2001:288:7001:2708:503c:a5f3:4f9d:fb88])
-        by smtp.gmail.com with ESMTPSA id y13-20020a056a00180d00b004f733bc57e5sm18798479pfa.192.2022.03.14.01.48.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ZkMBpAgcdIdxzeU26849eUUSSeeFFj2Wo/UieMy9a9E=;
+        b=16Bg9UZ++1Nh0g4jHPuHOTCgeHykx76r1Qp6JXYySPihZKtSsuDiCVItJ2fUasyiKU
+         L+pp9WCA0ghVPtZdP9d5FgV8iWYb6KTrL7SupMf+RB3p8Jf5R4rkzA2s7/84/4Rpx5G7
+         6WcjBU0SX1cBCJ+i4wnsJ1PxHLNcHYJk6FOoGDPZw5TgFHYtgN1lSS8Kifh7aO1nNxM8
+         PQl1FnqMXLt1pYzDcAAjXU6JhgMOnNOHseUvystYCVpXnPW1kkOk19pPHEjkownarzYj
+         83M8VUZiuxmbiaOdfrPx8QEal332KKIyno3k5a8lrHsSLqEOuFY9O7ZY3fIPVMQmto9C
+         qW/g==
+X-Gm-Message-State: AOAM530gKXhVXzDNi9C/S4j3NpofShTovesEStNGH+XiV05YSBTWQ0wk
+        xEiXHm44twN3BZGIxD0MJiL8Ug==
+X-Google-Smtp-Source: ABdhPJy0ZU6gwldc++XxxPShUhL3YrniIs6Tew8W4NqYNKucwN0jJcXVR8VAeuOEYjUb88cr/orFsw==
+X-Received: by 2002:a05:600c:3556:b0:389:f440:50e6 with SMTP id i22-20020a05600c355600b00389f44050e6mr10479672wmq.159.1647247799313;
+        Mon, 14 Mar 2022 01:49:59 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f7-20020a0560001a8700b00203c23e55e0sm1012672wry.78.2022.03.14.01.49.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 01:48:44 -0700 (PDT)
-From:   Jui-Tse Huang <juitse.huang@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Beata Michalska <beata.michalska@arm.com>,
-        Chun-Hung Tseng <henrybear327@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        Yiwei Lin <s921975628@gmail.com>
-Subject: [PATCH v2] docs/scheduler: Introduce the doc of load average
-Date:   Mon, 14 Mar 2022 16:47:59 +0800
-Message-Id: <20220314084759.9849-1-juitse.huang@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Mar 2022 01:49:58 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 08:49:57 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: ab8500: clean up definitions in header after
+ debugfs removal
+Message-ID: <Yi8BtWlhWjiUOADk@google.com>
+References: <20220311145209.17346-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220311145209.17346-1-lukas.bulwahn@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The load average is one of a common as well as easy observed statistic
-provied by Linux, but still not well documented, which makes the numbers
-that users observes from the output of top, htop or other system
-monitoring application are only numbers. This patch gives a discussion
-on how Linux calculates the load average as well as what metrics are
-concerned while calculating the load average.
+On Fri, 11 Mar 2022, Lukas Bulwahn wrote:
 
-The discussion flow is divided into several parts:
-1. The expression used to get the load average.
-2. Why Linux choose such average method from the other.
-2. The meaning of each term in the expression.
-3. The metrics, that is, the type of tasks that will be covered in the
-   calculation.
-4. A brief explanation over the fixed-point nubmer since the weights
-   defined in the Linux kernel are based on it.
+> Commit 3d4d1266597c ("mfd: ab8500: Drop debugfs module") removes the config
+> AB8500_DEBUG in drivers/mfd/Kconfig, but missed a reference to this config
+> in include/linux/mfd/abx500/ab8500.h.
+> 
+> The functions ab8500_dump_all_banks() and ab8500_debug_register_interrupt()
+> in the ab8500 header, previously with definitions conditioned on
+> AB8500_DEBUG, are now completely needless to define and handle at all.
+> 
+> The function ab8500_debug_register_interrupt() is not used at all and can
+> just be removed.
+> 
+> The function ab8500_dump_all_banks() is just registered in the abx500_ops
+> struct in the dump_all_banks field, but this is then not further referenced
+> anywhere else at all. So, safely drop the dump_all_banks field from
+> abx500_ops and delete the ab8500_dump_all_banks() definition.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Linus, Lee, please pick this clean-up on top of the commit above.
+> 
+>  drivers/mfd/ab8500-core.c         | 3 +--
+>  include/linux/mfd/abx500.h        | 1 -
+>  include/linux/mfd/abx500/ab8500.h | 9 ---------
+>  3 files changed, 1 insertion(+), 12 deletions(-)
+> 
+> diff --git a/drivers/mfd/ab8500-core.c b/drivers/mfd/ab8500-core.c
+> index 6a059270acdc..9049030a0c82 100644
+> --- a/drivers/mfd/ab8500-core.c
+> +++ b/drivers/mfd/ab8500-core.c
+> @@ -328,8 +328,7 @@ static struct abx500_ops ab8500_ops = {
+>  	.set_register_page = NULL,
+>  	.mask_and_set_register = ab8500_mask_and_set_register,
+>  	.event_registers_startup_state_get = NULL,
+> -	.startup_irq_enabled = NULL,
+> -	.dump_all_banks = ab8500_dump_all_banks,
+> +	.startup_irq_enabled = NULL
 
-Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
-Signed-off-by: Yiwei Lin <s921975628@gmail.com>
-Co-Developed-by: Yiwei Lin <s921975628@gmail.com>
+Leave the ',' in please.  It will save on churn.
 
----
-v1 -> v2:
-    fix typo: '$cat /proc/laodavg' -> '$cat /proc/loadavg'
 
- Documentation/scheduler/index.rst        |  1 +
- Documentation/scheduler/load-average.rst | 77 ++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
- create mode 100644 Documentation/scheduler/load-average.rst
+>  };
+>  
+>  static void ab8500_irq_lock(struct irq_data *data)
+> diff --git a/include/linux/mfd/abx500.h b/include/linux/mfd/abx500.h
+> index 7f07cfe44753..507e3d2f062f 100644
+> --- a/include/linux/mfd/abx500.h
+> +++ b/include/linux/mfd/abx500.h
+> @@ -63,7 +63,6 @@ struct abx500_ops {
+>  	int (*mask_and_set_register) (struct device *, u8, u8, u8, u8);
+>  	int (*event_registers_startup_state_get) (struct device *, u8 *);
+>  	int (*startup_irq_enabled) (struct device *, unsigned int);
+> -	void (*dump_all_banks) (struct device *);
+>  };
+>  
+>  int abx500_register_ops(struct device *core_dev, struct abx500_ops *ops);
+> diff --git a/include/linux/mfd/abx500/ab8500.h b/include/linux/mfd/abx500/ab8500.h
+> index 302a330c5c84..42fd5da7d8a7 100644
+> --- a/include/linux/mfd/abx500/ab8500.h
+> +++ b/include/linux/mfd/abx500/ab8500.h
+> @@ -503,13 +503,4 @@ static inline int is_ab9540_2p0_or_earlier(struct ab8500 *ab)
+>  
+>  void ab8500_override_turn_on_stat(u8 mask, u8 set);
+>  
+> -#ifdef CONFIG_AB8500_DEBUG
+> -extern int prcmu_abb_read(u8 slave, u8 reg, u8 *value, u8 size);
+> -void ab8500_dump_all_banks(struct device *dev);
+> -void ab8500_debug_register_interrupt(int line);
+> -#else
+> -static inline void ab8500_dump_all_banks(struct device *dev) {}
+> -static inline void ab8500_debug_register_interrupt(int line) {}
+> -#endif
+> -
+>  #endif /* MFD_AB8500_H */
 
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index 88900aabdbf7..bdc779b4190f 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -17,6 +17,7 @@ Linux Scheduler
-     sched-nice-design
-     sched-rt-group
-     sched-stats
-+    load-average
- 
-     text_files
- 
-diff --git a/Documentation/scheduler/load-average.rst b/Documentation/scheduler/load-average.rst
-new file mode 100644
-index 000000000000..589320ee1cd7
---- /dev/null
-+++ b/Documentation/scheduler/load-average.rst
-@@ -0,0 +1,77 @@
-+============
-+Load Average
-+============
-+
-+Load average is a basic statistic provided by almost all operating systems that
-+aims to report the usage of system hardware resources. In Linux kernel, the
-+load average is calculated via the following expression::
-+
-+                / 0                                      , if t = 0
-+    load_{t} = |
-+                \ laod_{t - 1} * exp + active * (1 - exp), otherwise
-+
-+The expression represents the exponential moving average of the historical
-+loading of the system. There are several reasons that Linux kernel chooses
-+exponential moving average from other similar average equations such as simple
-+moving average or cumulative moving average:
-+
-+#. The exponential moving average consumes fixed memory space, while the simple
-+   moving average has O(n) space complexity where n is the number of timeslice
-+   within a given interval.
-+#. The exponential moving average not only applies a higher weight to the most
-+   recent record but also declines the weight exponentially, which makes the
-+   resulting load average reflect the situation of the current system. Neither
-+   the simple moving average nor cumulative moving average has this feature.
-+
-+In the expression, the load_{t} in the expression indicates the calculated load
-+average at the given time t.
-+The active is the most recent recorded system load. In Linux, the system load
-+means the number of tasks in the state of TASK_RUNNING or TASK_UNINTERRUPTIBLE
-+of the entire system. Tasks with TASK_UNINTERRUPTIBLE state are usually waiting
-+for disk I/O or holding an uninterruptible lock, which is considered as a part
-+of system resource, thus, Linux kernel covers them while calculating the load
-+average.
-+The exp means the weight applied to the previous report of load average, while
-+(1 - exp) is the weight applied to the most recently recorded system load.
-+There are three different weights defined in the Linux kernel, in
-+include/linux/sched/loadavg.h, to perform statistics in various timescales::
-+
-+    // include/linux/sched/loadavg.h
-+    ...
-+    #define EXP_1    1884    /* 1/exp(5sec/1min) as fixed-point */
-+    #define EXP_5    2014    /* 1/exp(5sec/5min) */
-+    #define EXP_15   2037    /* 1/exp(5sec/15min) */
-+    ...
-+
-+According to the expression shown on the top of this page, the weight (exp)
-+controls how much of the last load load_{t - 1} will take place in the
-+calculation of current load, while (1 - exp) is the weight applied to the most
-+recent record of system load active.
-+
-+Due to the security issue, the weights are defined as fixed-point numbers based
-+on the unsigned integer rather than floating-pointing numbers. The introduction
-+of the fixed-point number keeps the FPU away from the calculation process. Since
-+the precession of the fixed-point used in the Linux kernel is 11 bits, a
-+fixed-point can be converted to a floating-point by dividing it by 2048, as the
-+expression shown below::
-+
-+    EXP_1  = 1884 / 2048 = 0.919922
-+    EXP_5  = 2014 / 2048 = 0.983398
-+    EXP_15 = 2037 / 2048 = 0.994629
-+
-+Which indicates the weights applied to active are::
-+
-+    (1 - EXP_1)  = (1 - 0.919922) = 0.080078
-+    (1 - EXP_5)  = (1 - 0.983398) = 0.016602
-+    (1 - EXP_15) = (1 - 0.994629) = 0.005371
-+
-+The load average will be updated every 5 seconds. Each time the scheduler_tick()
-+be called, the function calc_global_load_tick() will also be invoked, which
-+makes the active of each CPU core be calculated and be merged globally, finally,
-+the load average will be updated with that global active.
-+
-+As a user, the load average can be observed via top, htop, or other system
-+monitor application, or more directly, by the following command::
-+
-+    $ cat /proc/loadavg
-+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

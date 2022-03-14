@@ -2,151 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9C94D88EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933984D88F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242941AbiCNQTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S242951AbiCNQUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242939AbiCNQTd (ORCPT
+        with ESMTP id S242939AbiCNQUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:19:33 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319C510FF1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:18:22 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id yy13so35214331ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:18:22 -0700 (PDT)
+        Mon, 14 Mar 2022 12:20:48 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AA81260E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:19:37 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id w12so28071289lfr.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=geh31JjmgNWx5ruklOlb9OcIoz6waTuVoRaSRs47BzU=;
-        b=Enq2pfXD4718fUK1qGIYNzfxh6gLp6gYvWlpoOX+opsFjk4MlAM5woUkcazkOTCoah
-         CkuadOpxvrqyp9o+WuSg21I7x88nHviuCrwrDEbwCJ5jjC4/77X42nYCyZb2NjmeI4Wd
-         Goaugm3+OtW7+zdBF9p8swNUc4SiOmEJWItPcH6RptjIIlvoO2yeAQUppyY7H1+StldH
-         wlTHvsBwCk9Z7SUCGWry29PDB9LBhFoLYUKkCeC4/87SEwJzf1erdLyqJQIny7BsMekI
-         ivaonQQOwnez1vOaIeaYHYbEeaMLVUwUc1bSEf8eaufczMIecqDPqzs4yZUWtenZlmgf
-         ByQw==
+        bh=OsECqUsoFbbzLH0Glzdoc8bZjT2HULO2MIfNHDFqJyA=;
+        b=LNjQS6fhFXL6+0Ws1dM0xnINDZ8mmTVQ2RwKMMjOJBPWzeK1YXviahNsjFU/2iejlX
+         PBRRO++wNXfwbZmBpH2JA2VRg/oqwY4eGIzvugO2LmcXPYuxTwv9zIg7OGZvL70LGYMM
+         7kgHlYifWQhri7stVCGqvSnFL1n27UsH11PWXw5PUdUklMgknPOYHDSLarcQ9p2egX99
+         g/yqJlh+Zgw/P1AUcztcZIia35ccQc9IO05H17vsP1iT5MXDFql58WW3rHL2auUr1PgU
+         kwlvDuQtjSPFHns2twncXXuCgFSdE4ciGj/e2ZxJ/wG5IeIZSCCY0zeihaDpTO25kNcE
+         wDfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=geh31JjmgNWx5ruklOlb9OcIoz6waTuVoRaSRs47BzU=;
-        b=4037Loj0RsH/mQ/PfRQZzLs3lgUuSH3QbfeGoCdJS8p4cax1xWbfK+fo28XW1rokk5
-         ALPtzcPyJ/KX4D7XcZ88ZcYgo0tGBXQm1dkRWIimZ67xQTAKRu6ZhliQtZxNyDNqX4mO
-         qfoO3uHTUVypA1uVN0VV/UqO5N+B1QD3fqKanIMOiwMCG7JkJc3U7dup/+bG6us6d3So
-         QrcG/wa4rCtlY/u9I7RbXSzubuCXxZEU7gnE4ypLamGrgRGkbPT/Z6lfu+KboWrP7ImX
-         nnYUDGSYbBaNX5yKiD2sBy6GNeDuUnG1g5JUwLCdofkGaK93HwwcLKQwY6eGGeBcD7Ls
-         yfdg==
-X-Gm-Message-State: AOAM532tduftVw6vuLS+SVN7A/F0AUdUN40beXxUijQhHPXkOXGvzV79
-        GXy7aSr69i9fn6ux80k8j/g6SiqW8dRNkaBT8223qg==
-X-Google-Smtp-Source: ABdhPJyJXWUIWeE0eLsn9QkFhL/gxlpQinKhevG1+ViqzjPGziTURcXeGN4fpJf9R/seHpCB5DB/xt8SuiOV4BG2dF4=
-X-Received: by 2002:a17:906:2811:b0:6ce:eacf:5210 with SMTP id
- r17-20020a170906281100b006ceeacf5210mr19888730ejc.618.1647274700471; Mon, 14
- Mar 2022 09:18:20 -0700 (PDT)
+        bh=OsECqUsoFbbzLH0Glzdoc8bZjT2HULO2MIfNHDFqJyA=;
+        b=J/0RXn4ZjMUunkvZszJC7Ds94i+Q4+sg5xpduCPML0CsyooBUNTVE9zpNSYCDP5K5n
+         NsLk8+CiI9JmGBM5jM1QHZyD0KognYS+ACCMTf248lZbTjHe/lp0eiSe0SEsKivaeAyf
+         4GCX0yWyYKMf0XLCVtRvzrx6/yTRvJFWjyRMBwj0N8J8mTLkG8SaWY7FnLksfPn8v4lr
+         DLQAdkqE2I1hTQsPjaKuzM6jfuiVnUpS92B/wvKxua4CrJNtXyw2aHbPHoRqvu4I+NRS
+         7eDPcC/VISrPsJ5naWGEE426XuocIr7Xo0AsYV7tmj4Ctx5rWIOTWvYwbum5i9TL5Ued
+         gi+A==
+X-Gm-Message-State: AOAM533Akv3lSjwupWyT/Si3OUwcqUS42F2NFhxFYvnE9fndOtZogW89
+        2AGYImODV7WlPO78oe7X8plV/iyYiXUYZtgclE5vSw==
+X-Google-Smtp-Source: ABdhPJwk3xNnA6dfC1g0ptmBYgkfInoa7C7kBHyEF0x5FY61Ih07fZy+W0JFH+UDq+hbdLjVNRcSaCjWxMtaZiBArZ4=
+X-Received: by 2002:a05:6512:12c4:b0:448:6d12:4434 with SMTP id
+ p4-20020a05651212c400b004486d124434mr9966501lfg.71.1647274775103; Mon, 14 Mar
+ 2022 09:19:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com>
-In-Reply-To: <d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 14 Mar 2022 09:18:08 -0700
-Message-ID: <CABXOdTcdgSSVTXDN0DjB+-2K+H76_YJeFrue_MFJmBkZQZu7JQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests, x86: fix how check_cc.sh is being invoked
-To:     kernelci@groups.io,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220314095225.53563-1-yann.gautier@foss.st.com>
+ <20220314125554.190574-1-yann.gautier@foss.st.com> <CAPDyKFruN9Xwk4uqFumwBdcn4SjKQcSQVBbALa3kVxY4mVzOnQ@mail.gmail.com>
+ <9e4fbf6a-1309-3aee-fcb0-be7c2c683892@foss.st.com>
+In-Reply-To: <9e4fbf6a-1309-3aee-fcb0-be7c2c683892@foss.st.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 14 Mar 2022 17:18:58 +0100
+Message-ID: <CAPDyKFq2Du1UWpvRFpVF_qL65SP0DfEV872U9Xe-9i7xKxXhqg@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: mmci: manage MMC_PM_KEEP_POWER per variant config
+To:     Yann Gautier <yann.gautier@foss.st.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Grzegorz Szymaszek <gszymaszek@short.pl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 2:05 AM Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
+On Mon, 14 Mar 2022 at 15:34, Yann Gautier <yann.gautier@foss.st.com> wrote:
 >
-> The $(CC) variable used in Makefiles could contain several arguments
-> such as "ccache gcc".  These need to be passed as a single string to
-> check_cc.sh, otherwise only the first argument will be used as the
-> compiler command.  Without quotes, the $(CC) variable is passed as
-> distinct arguments which causes the script to fail to build trivial
-> programs.
+> On 3/14/22 14:03, Ulf Hansson wrote:
+> > On Mon, 14 Mar 2022 at 13:56, Yann Gautier <yann.gautier@foss.st.com> wrote:
+> >>
+> >> Add a disable_keep_power field in variant_data struct. The
+> >> MMC_PM_KEEP_POWER flag will be enabled if disable_keep_power is not set.
+> >> It is only set to true for stm32_sdmmc variants.
+> >>
+> >> The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
+> >> It doesn't correctly support low power on this board. The Wifi chip
+> >> awaits an always-on regulator, but it was connected to v3v3 which is off
+> >> in low-power sequence. MMC_PM_KEEP_POWER should then be disabled.
+> >
+> > Just to make sure I get this correct.
+> >
+> > Why can't the regulator stay on during system suspend? The point is,
+> > we don't need an always on regulator to cope with this.
+> >
+> > Kind regards
+> > Uffe
 >
-> Fix this by adding quotes around $(CC) when calling check_cc.sh to
-> pass the whole string as a single argument to the script even if it
-> has several words such as "ccache gcc".
+> Hi Ulf,
 >
-> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-> Tested-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> This v3v3 regulator powers most of the devices on this board. So we need
+> to switch it off to gain power in suspend mode.
 
-Reviewed-by: Guenter Roeck <groeck@google.com>
+I see. Thanks for sharing that information.
 
-> ---
->
-> Notes:
->     v2: rebase and drop changes in check_cc.sh
->
->  tools/testing/selftests/vm/Makefile  | 6 +++---
->  tools/testing/selftests/x86/Makefile | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index fbccdda93629..213f6a57d7f6 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -54,9 +54,9 @@ TEST_GEN_FILES += split_huge_page_test
->  TEST_GEN_FILES += ksm_tests
->
->  ifeq ($(MACHINE),x86_64)
-> -CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
-> -CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
-> -CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
-> +CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-> +CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
-> +CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
->
->  override TARGETS := protection_keys
->  BINARIES_32 := $(TARGETS:%=%_32)
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index 8a1f62ab3c8e..53df7d3893d3 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -6,9 +6,9 @@ include ../lib.mk
->  .PHONY: all all_32 all_64 warn_32bit_failure clean
->
->  UNAME_M := $(shell uname -m)
-> -CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
-> -CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
-> -CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-> +CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
-> +CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
-> +CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
->
->  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
->                         check_initial_reg_state sigreturn iopl ioperm \
-> --
-> 2.30.2
+The MMC_PM_KEEP_POWER flag is there to describe what is supported by
+the platform/host. It doesn't mean that the card *must* stay powered
+on during system suspend. Instead that depends on whether system
+wakeup for the SDIO/WiFi is supported too - and if that is enabled by
+userspace. If not, the regulator will be turned off for the SDIO card
+during system suspend.
+
+Assuming the regulator is implemented as a proper regulator and can
+remain on during system suspend, the right thing would be to keep the
+MMC_PM_KEEP_POWER flag around.
+
+Kind regards
+Uffe
+
 >
 >
+> Yann
 >
-> ------------
-> Groups.io Links: You receive all messages sent to this group.
-> View/Reply Online (#1448): https://groups.io/g/kernelci/message/1448
-> Mute This Topic: https://groups.io/mt/89707412/955378
-> Group Owner: kernelci+owner@groups.io
-> Unsubscribe: https://groups.io/g/kernelci/unsub [groeck@google.com]
-> ------------
->
+> >
+> >>
+> >> The flag can still be enabled through DT property:
+> >> keep-power-in-suspend.
+> >>
+> >> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+> >> ---
+> >> Update in v2:
+> >> Reword commit message to better explain the issue.
+> >>
+> >> Resend the patch alone. It was previoulsy in a series [1] for which the
+> >> other patches will be reworked.
+> >>
+> >> [1] https://lore.kernel.org/lkml/20220304135134.47827-1-yann.gautier@foss.st.com/
+> >>
+> >>   drivers/mmc/host/mmci.c | 5 ++++-
+> >>   drivers/mmc/host/mmci.h | 1 +
+> >>   2 files changed, 5 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
+> >> index 45b8608c935c..0e2f2f5d6a52 100644
+> >> --- a/drivers/mmc/host/mmci.c
+> >> +++ b/drivers/mmc/host/mmci.c
+> >> @@ -274,6 +274,7 @@ static struct variant_data variant_stm32_sdmmc = {
+> >>          .busy_detect            = true,
+> >>          .busy_detect_flag       = MCI_STM32_BUSYD0,
+> >>          .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
+> >> +       .disable_keep_power     = true,
+> >>          .init                   = sdmmc_variant_init,
+> >>   };
+> >>
+> >> @@ -301,6 +302,7 @@ static struct variant_data variant_stm32_sdmmcv2 = {
+> >>          .busy_detect            = true,
+> >>          .busy_detect_flag       = MCI_STM32_BUSYD0,
+> >>          .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
+> >> +       .disable_keep_power     = true,
+> >>          .init                   = sdmmc_variant_init,
+> >>   };
+> >>
+> >> @@ -2172,7 +2174,8 @@ static int mmci_probe(struct amba_device *dev,
+> >>          host->stop_abort.flags = MMC_RSP_R1B | MMC_CMD_AC;
+> >>
+> >>          /* We support these PM capabilities. */
+> >> -       mmc->pm_caps |= MMC_PM_KEEP_POWER;
+> >> +       if (!variant->disable_keep_power)
+> >> +               mmc->pm_caps |= MMC_PM_KEEP_POWER;
+> >>
+> >>          /*
+> >>           * We can do SGIO
+> >> diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
+> >> index e1a9b96a3396..2cad1ef9766a 100644
+> >> --- a/drivers/mmc/host/mmci.h
+> >> +++ b/drivers/mmc/host/mmci.h
+> >> @@ -361,6 +361,7 @@ struct variant_data {
+> >>          u32                     opendrain;
+> >>          u8                      dma_lli:1;
+> >>          u32                     stm32_idmabsize_mask;
+> >> +       u8                      disable_keep_power:1;
+> >>          void (*init)(struct mmci_host *host);
+> >>   };
+> >>
+> >> --
+> >> 2.25.1
+> >>
 >

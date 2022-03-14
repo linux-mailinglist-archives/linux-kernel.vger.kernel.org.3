@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BC34D882F
+	by mail.lfdr.de (Postfix) with ESMTP id 3C83F4D882E
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242533AbiCNPfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S242577AbiCNPft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240734AbiCNPfZ (ORCPT
+        with ESMTP id S242545AbiCNPfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:35:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2911EC5C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:34:14 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nTmhd-0006ou-Cw; Mon, 14 Mar 2022 16:33:45 +0100
-Message-ID: <7f1e4cbd-2d02-2345-493b-68ded3357f26@pengutronix.de>
-Date:   Mon, 14 Mar 2022 16:33:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [EXT] Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface
- for blob generator
-Content-Language: en-US
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Gstir <david@sigma-star.at>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Richard Weinberger <richard@nod.at>,
-        James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Sumit Garg <sumit.garg@linaro.org>,
+        Mon, 14 Mar 2022 11:35:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4693521267;
+        Mon, 14 Mar 2022 08:34:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8861E612B3;
+        Mon, 14 Mar 2022 15:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E602CC340EE;
+        Mon, 14 Mar 2022 15:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647272058;
+        bh=Bnod0IaDodE5BPjyT8EujzYwnAusdu53AQQMt9y+ho0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t73gaSIorFbG9uLRYGMqM/SKSnxBXcquakW7oZSLnr5fn/xbNlsCcEZUc3nUf5wEg
+         h86fWkK9Mnr72d+gKXGBvnXJLii41dy44LTzrSUbwNdE3o2Di/+Ey50oC0PK5nmKvp
+         BQprk6DEzypkv4Pt5ukLAnIKwDGPd50xPB0Yft5cKc+1BoZGEFv9Fv18e0onClDcSm
+         jVP543t8JjYbhewEHMtmHfU0I5Mv+3Ih/lC5tCXtQAqChKb95MY2dI3jskRNa8di9z
+         ah7gQD3sLQgiM8QaAZfYd4HbsGiIvglUI5BGm4rE6FlehO6CuYu43MIiUI/PwfGMUJ
+         ayOONeHPot1Rw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nTmi7-00EOSv-HQ; Mon, 14 Mar 2022 15:34:15 +0000
+Date:   Mon, 14 Mar 2022 15:34:15 +0000
+Message-ID: <87k0cwzgy0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
- <20220222195819.2313913-5-a.fatoum@pengutronix.de> <YhZVmBy3/nWbqf+/@iki.fi>
- <a8cb99e0-fe01-2234-9839-fea28ca09f6d@pengutronix.de>
- <DU2PR04MB863084B70239A69E4DE9D65B953E9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <DU2PR04MB863084B70239A69E4DE9D65B953E9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>,
+        Zhiqiang Hou <Zhiqiang.Hou@nxp.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2 devicetree] Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address cells"
+In-Reply-To: <CAL_JsqLuD97y=rqRRUw5owvoetLh926ebkmMdGut+gyqTS5hWQ@mail.gmail.com>
+References: <20211214135852.2934670-1-vladimir.oltean@nxp.com>
+        <CAL_JsqLuD97y=rqRRUw5owvoetLh926ebkmMdGut+gyqTS5hWQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robh+dt@kernel.org, vladimir.oltean@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org, leoyang.li@nxp.com, biwen.li@nxp.com, Zhiqiang.Hou@nxp.com, kurt@linutronix.de, linux@rasmusvillemoes.dk, arnd@arndb.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Pankaj,
-
-On 25.02.22 13:20, Pankaj Gupta wrote:
->>>> +static u32 *caam_blob_alloc_desc(size_t keymod_len) {
->>>> +    size_t len;
->>>> +
->>>> +    /* header + (key mod immediate) + 2x pointers + op */
->>>> +    len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 +
->>>> + CAAM_PTR_SZ_MAX) + 4;
->>>
->>> Nit: the amount of magic numbers is overwhelming here. I neither
->>> understand the statement nor how that comment should help me to
->> understand it.
->>
->> header              =  4
->> (key mod immediate) = (4 + ALIGN(keymod_len, 4))
->> 2x pointer          =  2 * (4 + 4 + CAAM_PTR_SZ_MAX)
->> op                  =  4
+On Mon, 14 Mar 2022 15:15:15 +0000,
+Rob Herring <robh+dt@kernel.org> wrote:
 > 
-> Instead of the function caam_blob_alloc_desc(), it will be great if the caller functions caam_encap_blob()/caam_encap_blob (), could add local array:
-> uint32_t desc[CAAM_DESC_BYTES_MAX];
+> On Tue, Dec 14, 2021 at 6:59 AM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+> > Therefore, the premise of the patch being reverted here is invalid.
+> > It doesn't matter whether the driver, in its non-standard use of the
+> > property, complies to the standard format or not, since this property
+> > isn't expected to be used for interrupt translation by the core.
+> 
+> I disagree. The non-standard part is that 'interrupt-map' translation
+> is not transparent. 'interrupt-map' that can't be parsed in the
+> standard way is just wrong, and I imagine was never the intention
+> here. We simply cannot have platforms defining their own format for
+> standard properties.
 
-I just looked into this and placing desc on stack is not possible
-as it is used for DMA inside caam_jr_enqueue().
+That ship sailed a long while ago. We have a list of offenders, and we
+can make sure we don't get additional ones.
 
-Cheers,
-Ahmad
+> Reverting this will cause dtc warnings now (IIRC) and just kicks the
+> can down the road. Reverting is fine for now (I gave Arnd the okay on
+> IRC), but I think the parsing will need to be updated to honor
+> #address-cells and detect an old DT (probably by looking at the total
+> size of 'interrupt-map') and mark that change for stable. That would
+> only leave a new dt with an old kernel without stable updates broken.
+> Seems unlikely a device is getting firmware updates, but not OS
+> updates.
 
+Being able to rollback firmware and OS independently is important. The
+tooling can be taught about the broken instances, which should be
+enough.  Adding to the parsing only makes things harder to maintain,
+for no real gain.
+
+	M.
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Without deviation from the norm, progress is not possible.

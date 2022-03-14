@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75F54D8291
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915004D8553
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240559AbiCNMFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S237127AbiCNMtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbiCNMFM (ORCPT
+        with ESMTP id S239079AbiCNMr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:05:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163EC48E63;
-        Mon, 14 Mar 2022 05:01:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE163B80D24;
-        Mon, 14 Mar 2022 12:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37588C340E9;
-        Mon, 14 Mar 2022 12:01:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259308;
-        bh=boM+X7Jtz7xEMxABclzXsyS0I01CPMFAo2H06POull4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KaiH0DvOCCuqzvwMkIqIZDF2szQD6YGpn+ZfYTNUUhXSl2krau84AZ2X1OBmyNbWS
-         fTUqyvFXZOhbgzcZU27qEYBrqUfabStmWnYstpRHZkCyeXWEWqNMIOyW8gskW/pCtA
-         2zcbRwRzDEKSnRE+CY6E4sQ61DL1oU06CuMmZ0Wo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 49/71] ARM: Spectre-BHB: provide empty stub for non-config
+        Mon, 14 Mar 2022 08:47:58 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD9D3A1B1;
+        Mon, 14 Mar 2022 05:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=NDrGo4abYpLAI+P7k95QOThXiOM+RKCCrwYJwOgjGuk=;
+  b=JvCBrmkRS2Be5Cq+4L5jGHxiyfvhd38YOxsm258OFYB5zUZ65bOsd/hp
+   h4+nZyWbTzEaQ8+FBA3T/JlmL9Mv60Xytjsk2axJsqSqygao4LeNGDOTO
+   pZcowuUKbcQDpSUoqv5CtT7wkOjtYhBMSBzx0z9EF3YvVZBIc40C4dguF
+   A=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997351"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel-janitors@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 18/30] devres: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:42 +0100
-Message-Id: <20220314112739.303528393@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-19-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-commit 68453767131a5deec1e8f9ac92a9042f929e585d upstream.
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-When CONFIG_GENERIC_CPU_VULNERABILITIES is not set, references
-to spectre_v2_update_state() cause a build error, so provide an
-empty stub for that function when the Kconfig option is not set.
-
-Fixes this build error:
-
-  arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
-  proc-v7-bugs.c:(.text+0x52): undefined reference to `spectre_v2_update_state'
-  arm-linux-gnueabi-ld: proc-v7-bugs.c:(.text+0x82): undefined reference to `spectre_v2_update_state'
-
-Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: patches@armlinux.org.uk
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/include/asm/spectre.h |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/base/devres.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/arm/include/asm/spectre.h
-+++ b/arch/arm/include/asm/spectre.h
-@@ -25,7 +25,13 @@ enum {
- 	SPECTRE_V2_METHOD_LOOP8 = BIT(__SPECTRE_V2_METHOD_LOOP8),
- };
+diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+index eaa9a5cd1db9..864d0b3f566e 100644
+--- a/drivers/base/devres.c
++++ b/drivers/base/devres.c
+@@ -692,7 +692,7 @@ EXPORT_SYMBOL_GPL(devres_release_group);
  
-+#ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
- void spectre_v2_update_state(unsigned int state, unsigned int methods);
-+#else
-+static inline void spectre_v2_update_state(unsigned int state,
-+					   unsigned int methods)
-+{}
-+#endif
+ /*
+  * Custom devres actions allow inserting a simple function call
+- * into the teadown sequence.
++ * into the teardown sequence.
+  */
  
- int spectre_bhb_update_vectors(unsigned int method);
+ struct action_devres {
+@@ -916,7 +916,7 @@ void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
  
-
+ 	/*
+ 	 * We can copy the memory contents after releasing the lock as we're
+-	 * no longer modyfing the list links.
++	 * no longer modifying the list links.
+ 	 */
+ 	memcpy(new_dr->data, old_dr->data,
+ 	       total_old_size - offsetof(struct devres, data));
 

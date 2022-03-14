@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7F04D7E08
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BD74D7E09
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbiCNJCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
+        id S237775AbiCNJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237762AbiCNJCB (ORCPT
+        with ESMTP id S237788AbiCNJCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:02:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5774841304;
-        Mon, 14 Mar 2022 02:00:47 -0700 (PDT)
-X-UUID: f6acf2d3845b4d58951db39f070bb373-20220314
-X-UUID: f6acf2d3845b4d58951db39f070bb373-20220314
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1627696787; Mon, 14 Mar 2022 17:00:41 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 14 Mar 2022 17:00:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Mar
- 2022 17:00:35 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Mar 2022 17:00:35 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <matthias.bgg@gmail.com>,
-        <robh+dt@kernel.org>
-CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <jassisinghbrar@gmail.com>, <fparent@baylibre.com>,
-        <yongqiang.niu@mediatek.com>, <hsinyi@chromium.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH V7 5/5] drm/mediatek: add display support for MT8186
-Date:   Mon, 14 Mar 2022 17:00:33 +0800
-Message-ID: <20220314090033.25773-6-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220314090033.25773-1-rex-bc.chen@mediatek.com>
-References: <20220314090033.25773-1-rex-bc.chen@mediatek.com>
+        Mon, 14 Mar 2022 05:02:19 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBC342A32;
+        Mon, 14 Mar 2022 02:01:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id DEE661F43B23
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647248461;
+        bh=oPfRK2FlwSAxSpdbLvSWmWhgfzN2gWEN45IqscDe+ks=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MgZCFoLmTFJGMbknh/8pjSR/JiUHD+6YaHFhKIVmrBhpIBcBYt9IFSW5i0ncGVp+m
+         JKf2Nlu29xtCS2ueo+4WCVabQN40X3r9W24iLPvekAJoTnETCwpdr0gY5qp6dtnM7i
+         OsJboo2zNhr6vAcf/S7SRi+dHu4PpAPnZGYJ4+cGjachXrtMBZRx96IhZzx2P3nBj5
+         vmkj/8C3nd3ynT4TF5rKLD/cNy7rpXt/BIxBhLfdwtHPpFyZvMfdvoRV0B6M9ZSFzN
+         +nV/waCUpEP/IjqvwAnt4pdWqr/1d16RM4i1DrSWEuX8bW782zjK3j11qjarOUbIRE
+         h3KWww5Xz6WMw==
+Message-ID: <db4d4b19-0c44-0bad-3544-01237bbb6c07@collabora.com>
+Date:   Mon, 14 Mar 2022 10:00:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 4/5] ASoC: mediatek: mt8195: add machine driver with
+ mt6359, max98390 and rt5682
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        tiwai@suse.com, robh+dt@kernel.org, matthias.bgg@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aaronyu@google.com,
+        yc.hung@mediatek.com
+References: <20220308072435.22460-1-trevor.wu@mediatek.com>
+ <20220308072435.22460-5-trevor.wu@mediatek.com>
+ <e812796f-6b9b-fe9d-50a7-b681d7b174fd@collabora.com>
+ <5fafa7d8a23fbdce82272529d817816f42c4ac37.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <5fafa7d8a23fbdce82272529d817816f42c4ac37.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,95 +61,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.com>
+Il 12/03/22 17:18, Trevor Wu ha scritto:
+> On Thu, 2022-03-10 at 16:21 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 08/03/22 08:24, Trevor Wu ha scritto:
+>>> This patch adds support for mt8195 board with mt6359, max98390 and
+>>> rt5682.
+>>>
+>>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+>>
+>> Hello Trevor,
+>> thanks for the patch! However, there's something to improve...
+>>
+>>> ---
+>>>    sound/soc/mediatek/Kconfig                    |   16 +
+>>>    sound/soc/mediatek/mt8195/Makefile            |    5 +
+>>>    .../mt8195/mt8195-mt6359-max98390-rt5682.c    | 1058
+>>> +++++++++++++++++
+>>>    3 files changed, 1079 insertions(+)
+>>>    create mode 100644 sound/soc/mediatek/mt8195/mt8195-mt6359-
+>>> max98390-rt5682.c
+>>>    
+>>>
+> 
+> [...]
+>>> +
+>>> +static const struct snd_soc_dapm_widget
+>>> +	mt8195_mt6359_max98390_rt5682_widgets[] = {
+>>> +	SND_SOC_DAPM_SPK("Left Speaker", NULL),
+>>> +	SND_SOC_DAPM_SPK("Right Speaker", NULL),
+>>> +	SND_SOC_DAPM_HP("Headphone Jack", NULL),
+>>
+>> We can at least partially reuse existing UCM2 configuration if you
+>> slightly change the names for these controls.
+>>
+> 
+> I don't know what the UCM2 configuration means.
+> Could you give me more information?
+> 
 
-Add mmsys driver data and compatible for MT8186 in mtk_drm_drv.c.
+UCM == Use Case Manager;
+In short, it's userspace (alsa-lib) configuration for sound cards, allowing
+to configure the various mixers for various usecases (speaker/headphone/HDMI
+playback, headset/internal microphone, etc).
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 33 ++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Check this GitHub repository for more information:
+https://github.com/alsa-project/alsa-ucm-conf/tree/master/ucm2
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 247c6ff277ef..c5f88295b434 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -158,6 +158,24 @@ static const enum mtk_ddp_comp_id mt8183_mtk_ddp_ext[] = {
- 	DDP_COMPONENT_DPI0,
- };
- 
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_main[] = {
-+	DDP_COMPONENT_OVL0,
-+	DDP_COMPONENT_RDMA0,
-+	DDP_COMPONENT_COLOR0,
-+	DDP_COMPONENT_CCORR,
-+	DDP_COMPONENT_AAL0,
-+	DDP_COMPONENT_GAMMA,
-+	DDP_COMPONENT_POSTMASK0,
-+	DDP_COMPONENT_DITHER,
-+	DDP_COMPONENT_DSI0,
-+};
-+
-+static const enum mtk_ddp_comp_id mt8186_mtk_ddp_ext[] = {
-+	DDP_COMPONENT_OVL_2L0,
-+	DDP_COMPONENT_RDMA1,
-+	DDP_COMPONENT_DPI0,
-+};
-+
- static const enum mtk_ddp_comp_id mt8192_mtk_ddp_main[] = {
- 	DDP_COMPONENT_OVL0,
- 	DDP_COMPONENT_OVL_2L0,
-@@ -221,6 +239,13 @@ static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data = {
- 	.ext_len = ARRAY_SIZE(mt8183_mtk_ddp_ext),
- };
- 
-+static const struct mtk_mmsys_driver_data mt8186_mmsys_driver_data = {
-+	.main_path = mt8186_mtk_ddp_main,
-+	.main_len = ARRAY_SIZE(mt8186_mtk_ddp_main),
-+	.ext_path = mt8186_mtk_ddp_ext,
-+	.ext_len = ARRAY_SIZE(mt8186_mtk_ddp_ext),
-+};
-+
- static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
- 	.main_path = mt8192_mtk_ddp_main,
- 	.main_len = ARRAY_SIZE(mt8192_mtk_ddp_main),
-@@ -461,6 +486,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8183-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
-+	{ .compatible = "mediatek,mt8186-disp-mutex",
-+	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8192-disp-mutex",
- 	  .data = (void *)MTK_DISP_MUTEX },
- 	{ .compatible = "mediatek,mt8173-disp-od",
-@@ -509,12 +536,16 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8186-dpi",
-+	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt2701-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8173-dsi",
- 	  .data = (void *)MTK_DSI },
- 	{ .compatible = "mediatek,mt8183-dsi",
- 	  .data = (void *)MTK_DSI },
-+	{ .compatible = "mediatek,mt8186-dsi",
-+	  .data = (void *)MTK_DSI },
- 	{ }
- };
- 
-@@ -531,6 +562,8 @@ static const struct of_device_id mtk_drm_of_ids[] = {
- 	  .data = &mt8173_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8183-mmsys",
- 	  .data = &mt8183_mmsys_driver_data},
-+	{ .compatible = "mediatek,mt8186-mmsys",
-+	  .data = &mt8186_mmsys_driver_data},
- 	{ .compatible = "mediatek,mt8192-mmsys",
- 	  .data = &mt8192_mmsys_driver_data},
- 	{ }
--- 
-2.31.0
+> 
+>> Specifically, MAX98090 (yes I know it's a different codec) has names
+>> "Speaker Left", "Speaker Right" instead, we will be able to at least
+>> partially reuse these (or get uniform naming, which is still good).
+>> As for the "Headphone Jack", it's simply "Headphone".
+>>
+>> Please note that the actual control names in userspace will be,
+>> exactly,
+>>
+>> "Speaker Left Switch", "Speaker Right Switch",
+>> "Headphone Left Switch", "Headphone Right Switch"...
+>>
+>> ....where "Switch" gets automatically appended because of the control
+>> type.
+>>
+>>> +	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+>>
+>> This "Headset Mic" name is fine.
+>>
+>>> +	SND_SOC_DAPM_MIXER(SOF_DMA_DL2, SND_SOC_NOPM, 0, 0, NULL, 0),
+>>> +	SND_SOC_DAPM_MIXER(SOF_DMA_DL3, SND_SOC_NOPM, 0, 0, NULL, 0),
+>>> +	SND_SOC_DAPM_MIXER(SOF_DMA_UL4, SND_SOC_NOPM, 0, 0, NULL, 0),
+>>> +	SND_SOC_DAPM_MIXER(SOF_DMA_UL5, SND_SOC_NOPM, 0, 0, NULL, 0),
+>>> +};
+>>> +
+> [...]
+>>> +
+>>> +static struct snd_soc_dai_link
+>>> mt8195_mt6359_max98390_rt5682_dai_links[] = {
+>>
+>>
+>> ... again, different name, same contents ...
+>>
+>>
+>> And I won't go on repeating the same thing over and over again.
+>> I think that the best idea here is to either create a mt8195-mt6359-
+>> rt5682-common.c
+>> file, or to rename the others to something else and get them all in
+>> the same file.
+>>
+>>
+>> Regards,
+>> Angelo
+> 
+> Hi Angelo,
+> 
+> Thanks for your review.
+> Please forgive me for deleting some comments above.
+> I totally agree that most code can be reused.
+> I will try revising and merging all mt8195 machine drivers in a file.
+
+No worries. Looking forward to see the next version.
+Thank you!
+
+Regards,
+Angelo
+
+> 
+> Thanks,
+> Trevor
+> 
+
 

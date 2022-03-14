@@ -2,88 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A2D4D8501
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADFD4D822F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242472AbiCNMaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
+        id S240201AbiCNMAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243869AbiCNMVV (ORCPT
+        with ESMTP id S240042AbiCNMAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:21 -0400
-X-Greylist: delayed 1408 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Mar 2022 05:17:30 PDT
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFCF1030;
-        Mon, 14 Mar 2022 05:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TstykKkU8UiYmac2M4JtdidjM5ToasXW3oJnVLqn9vc=;
-  b=uZzqcfNxXJOrnqiHy4dxBPEniXBeG9MHrl0ZszKiBL28QGGlpwFHTMjF
-   loVpcgV/rW9yM/CyACnLPSer0B4BmLiaeINYnwYmVfsjN8moHt0A+kD0z
-   +zUVg7IyX0JWs0U1lX5a8D9OyAhUqXLaK8QS62Xj/Adbc3xtMZRueg8OR
-   8=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997361"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Wolfgang Grandegger <wg@grandegger.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 27/30] can: ucan: fix typos in comments
+        Mon, 14 Mar 2022 08:00:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF135FAE;
+        Mon, 14 Mar 2022 04:58:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA9F86125F;
+        Mon, 14 Mar 2022 11:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6351C340ED;
+        Mon, 14 Mar 2022 11:58:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647259103;
+        bh=o/ZljB33tbEyw/3OJ4/rKpj5QYTr4X7wpW6V8xR5JkE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ym+VmX/jc992mP4SkMuxx+OpqdLQ4r6t2gg8BV+gGB+QkJlduRdLrG0t1lhleftWr
+         Fb203RFWArTSpAGaZu3WNzB/rZPXT5Poxro0eMhmPQx+zQHTBg86U7GjVD509h/VcK
+         nPgWMEHi94sUivrFZO1K2OoS29S2bPvfWyFLuT4c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: [PATCH 5.4 40/43] x86/cpufeatures: Mark two free bits in word 3
 Date:   Mon, 14 Mar 2022 12:53:51 +0100
-Message-Id: <20220314115354.144023-28-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112735.544396815@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Borislav Petkov <bp@suse.de>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+commit fbd5969d1ff2598143d6a6fbc9491a9e40ab9b82 upstream.
 
+... so that they get reused when needed.
+
+No functional changes.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20200604104150.2056-1-bp@alien8.de
+Signed-off-by: Liam Merwick <liam.merwick@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/ucan.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/cpufeatures.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-index c7c41d1fd038..5ae0d7c017cc 100644
---- a/drivers/net/can/usb/ucan.c
-+++ b/drivers/net/can/usb/ucan.c
-@@ -1392,7 +1392,7 @@ static int ucan_probe(struct usb_interface *intf,
- 	 * Stage 3 for the final driver initialisation.
- 	 */
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -96,6 +96,7 @@
+ #define X86_FEATURE_SYSCALL32		( 3*32+14) /* "" syscall in IA32 userspace */
+ #define X86_FEATURE_SYSENTER32		( 3*32+15) /* "" sysenter in IA32 userspace */
+ #define X86_FEATURE_REP_GOOD		( 3*32+16) /* REP microcode works well */
++/* free					( 3*32+17) */
+ #define X86_FEATURE_LFENCE_RDTSC	( 3*32+18) /* "" LFENCE synchronizes RDTSC */
+ #define X86_FEATURE_ACC_POWER		( 3*32+19) /* AMD Accumulated Power Mechanism */
+ #define X86_FEATURE_NOPL		( 3*32+20) /* The NOPL (0F 1F) instructions */
+@@ -107,6 +108,7 @@
+ #define X86_FEATURE_EXTD_APICID		( 3*32+26) /* Extended APICID (8 bits) */
+ #define X86_FEATURE_AMD_DCM		( 3*32+27) /* AMD multi-node processor */
+ #define X86_FEATURE_APERFMPERF		( 3*32+28) /* P-State hardware coordination feedback capability (APERF/MPERF MSRs) */
++/* free					( 3*32+29) */
+ #define X86_FEATURE_NONSTOP_TSC_S3	( 3*32+30) /* TSC doesn't stop in S3 state */
+ #define X86_FEATURE_TSC_KNOWN_FREQ	( 3*32+31) /* TSC has known frequency */
  
--	/* Prepare Memory for control transferes */
-+	/* Prepare Memory for control transfers */
- 	ctl_msg_buffer = devm_kzalloc(&udev->dev,
- 				      sizeof(union ucan_ctl_payload),
- 				      GFP_KERNEL);
-@@ -1526,7 +1526,7 @@ static int ucan_probe(struct usb_interface *intf,
- 	ret = ucan_device_request_in(up, UCAN_DEVICE_GET_FW_STRING, 0,
- 				     sizeof(union ucan_ctl_payload));
- 	if (ret > 0) {
--		/* copy string while ensuring zero terminiation */
-+		/* copy string while ensuring zero termination */
- 		strncpy(firmware_str, up->ctl_msg_buffer->raw,
- 			sizeof(union ucan_ctl_payload));
- 		firmware_str[sizeof(union ucan_ctl_payload)] = '\0';
+
 

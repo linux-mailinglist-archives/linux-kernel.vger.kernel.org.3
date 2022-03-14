@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DCD4D8493
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240E44D81C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241443AbiCNMZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S239785AbiCNLzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241968AbiCNMSh (ORCPT
+        with ESMTP id S239713AbiCNLzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:18:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F1641FAC;
-        Mon, 14 Mar 2022 05:13:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A49336097A;
-        Mon, 14 Mar 2022 12:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B276C340E9;
-        Mon, 14 Mar 2022 12:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260004;
-        bh=iFsjWznm3SrnPCRqCcEAQ2tUS6+ySlC58zxri+CXmAQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eNQLQu85Spn8kqRiIR9ebr6CzWR4Eaa8IxqXYNzMS/GORwmcYPMyVzbTUbnCBpTwa
-         37ev6uNhXkPJ5F6h+HlkmlF02Mwqu8aPK/uJo/IP7K8ZTZNKANNP0x5a8X/7c/USVs
-         +ExDthwkI3m+Qjx8QogGY/USDPsffog4ykZcqcew=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 030/121] drm/sun4i: mixer: Fix P010 and P210 format numbers
+        Mon, 14 Mar 2022 07:55:16 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3207365BB;
+        Mon, 14 Mar 2022 04:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2bPo/ehC6PvjvjHbIR6MD5i0BWWQ35nkkz07QKW4GuI=;
+  b=ZgoJ9URYLWs39A25c89pC542rz7dKzDlLsyDrSbpIvlorWVFiRRx1OSL
+   Fs/xWAZCor1/YPzDgIfbcR7Zz5Q3pk+uzxOOCZ1kw+wZN6xvyOkVMKYwP
+   JosB127WUZlHPXUXn0FJiWi2847qJ6DN+AO3eJaBzEjVm00mDrPeDdeq2
+   Q=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997342"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Shunqian Zheng <zhengsq@rock-chips.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 09/30] media: i2c: ov5695: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:33 +0100
-Message-Id: <20220314112744.971337865@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-10-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@gmail.com>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit 9470c29faa91c804aa04de4c10634bf02462bfa5 ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-It turns out that DE3 manual has inverted YUV and YVU format numbers for
-P010 and P210. Invert them.
-
-This was tested by playing video decoded to P010 and additionally
-confirmed by looking at BSP driver source.
-
-Fixes: 169ca4b38932 ("drm/sun4i: Add separate DE3 VI layer formats")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220228181436.1424550-1-jernej.skrabec@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/sun4i/sun8i_mixer.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/i2c/ov5695.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h b/drivers/gpu/drm/sun4i/sun8i_mixer.h
-index 145833a9d82d..5b3fbee18671 100644
---- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
-+++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
-@@ -111,10 +111,10 @@
- /* format 13 is semi-planar YUV411 VUVU */
- #define SUN8I_MIXER_FBFMT_YUV411	14
- /* format 15 doesn't exist */
--/* format 16 is P010 YVU */
--#define SUN8I_MIXER_FBFMT_P010_YUV	17
--/* format 18 is P210 YVU */
--#define SUN8I_MIXER_FBFMT_P210_YUV	19
-+#define SUN8I_MIXER_FBFMT_P010_YUV	16
-+/* format 17 is P010 YVU */
-+#define SUN8I_MIXER_FBFMT_P210_YUV	18
-+/* format 19 is P210 YVU */
- /* format 20 is packed YVU444 10-bit */
- /* format 21 is packed YUV444 10-bit */
+diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+index 439385938a51..910309783885 100644
+--- a/drivers/media/i2c/ov5695.c
++++ b/drivers/media/i2c/ov5695.c
+@@ -1122,7 +1122,7 @@ static int ov5695_set_ctrl(struct v4l2_ctrl *ctrl)
  
--- 
-2.34.1
-
-
+ 	switch (ctrl->id) {
+ 	case V4L2_CID_EXPOSURE:
+-		/* 4 least significant bits of expsoure are fractional part */
++		/* 4 least significant bits of exposure are fractional part */
+ 		ret = ov5695_write_reg(ov5695->client, OV5695_REG_EXPOSURE,
+ 				       OV5695_REG_VALUE_24BIT, ctrl->val << 4);
+ 		break;
 

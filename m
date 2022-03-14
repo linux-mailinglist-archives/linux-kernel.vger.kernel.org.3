@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4568F4D8491
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6E44D84C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237312AbiCNMZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S242312AbiCNM3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242521AbiCNMTH (ORCPT
+        with ESMTP id S243862AbiCNMVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:19:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075804F460;
-        Mon, 14 Mar 2022 05:14:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4321B80DBF;
-        Mon, 14 Mar 2022 12:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB52C340EC;
-        Mon, 14 Mar 2022 12:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260054;
-        bh=sFF5kOSFIYhuLY8fRw2uLPZeHATbtnDGZk9fWhUpgkM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mYdWbMfR6t75m9eXoAGAbMWzO78jR5g/1IDIlX8Fi1pTVw0eDCUTDGLK/sgV0XxqK
-         IVgGd81MNau1DqFDPE9Z0YKiwnQUQYzMeYHQr4JdGtyjHYL9MSA4M9C3B4W6LnzuFB
-         +90YgCHhAlWGhMRw1sXD49HP4/xPzitbxBra386k=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 042/121] net: ethernet: lpc_eth: Handle error for clk_enable
+        Mon, 14 Mar 2022 08:21:20 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9936C62;
+        Mon, 14 Mar 2022 05:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+QWaBDYxADvSsUY8qg5wOXMDHzBy5XuwKndW6k+z53c=;
+  b=iDNSBE41Nm8OgSBkPg8VbFTfqyui2cAsU7o3PiVl53qcCApFjm+i7YSj
+   upsrgeoeFoBN1ZYs54zq0bBgKLl6U2FOfYXTJkFFxMXfEI0xd1OD8f5QN
+   UsLDj5JRueFP/s6Wq0yCUcYpitC754Kyju23WQGbo2lgD/DiJmcrqq/wI
+   M=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997355"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 21/30] spi: sun4i: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:45 +0100
-Message-Id: <20220314112745.302151330@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-22-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit 2169b79258c8be803d2595d6456b1e77129fe154 ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
-
-Fixes: b7370112f519 ("lpc32xx: Added ethernet driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/nxp/lpc_eth.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-sun4i.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/nxp/lpc_eth.c b/drivers/net/ethernet/nxp/lpc_eth.c
-index bc39558fe82b..756f97dce85b 100644
---- a/drivers/net/ethernet/nxp/lpc_eth.c
-+++ b/drivers/net/ethernet/nxp/lpc_eth.c
-@@ -1471,6 +1471,7 @@ static int lpc_eth_drv_resume(struct platform_device *pdev)
- {
- 	struct net_device *ndev = platform_get_drvdata(pdev);
- 	struct netdata_local *pldat;
-+	int ret;
- 
- 	if (device_may_wakeup(&pdev->dev))
- 		disable_irq_wake(ndev->irq);
-@@ -1480,7 +1481,9 @@ static int lpc_eth_drv_resume(struct platform_device *pdev)
- 			pldat = netdev_priv(ndev);
- 
- 			/* Enable interface clock */
--			clk_enable(pldat->clk);
-+			ret = clk_enable(pldat->clk);
-+			if (ret)
-+				return ret;
- 
- 			/* Reset and initialize */
- 			__lpc_eth_reset(pldat);
--- 
-2.34.1
-
-
+diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
+index 1fdfc6e6691d..6000d0761206 100644
+--- a/drivers/spi/spi-sun4i.c
++++ b/drivers/spi/spi-sun4i.c
+@@ -280,7 +280,7 @@ static int sun4i_spi_transfer_one(struct spi_master *master,
+ 	 * SPI_CLK = MOD_CLK / (2 ^ (cdr + 1))
+ 	 * Or we can use CDR2, which is calculated with the formula:
+ 	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
+-	 * Wether we use the former or the latter is set through the
++	 * Whether we use the former or the latter is set through the
+ 	 * DRS bit.
+ 	 *
+ 	 * First try CDR2, and if we can't reach the expected
 

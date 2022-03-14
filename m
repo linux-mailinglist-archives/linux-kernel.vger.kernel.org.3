@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6338E4D8389
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 038854D8257
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiCNMQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S240288AbiCNMDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241198AbiCNMI0 (ORCPT
+        with ESMTP id S240336AbiCNMCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B5C4A3FF;
-        Mon, 14 Mar 2022 05:04:42 -0700 (PDT)
+        Mon, 14 Mar 2022 08:02:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944F548E7B;
+        Mon, 14 Mar 2022 05:00:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2E0AB80DEC;
-        Mon, 14 Mar 2022 12:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A41C340E9;
-        Mon, 14 Mar 2022 12:04:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6579C61260;
+        Mon, 14 Mar 2022 12:00:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FA4C340ED;
+        Mon, 14 Mar 2022 12:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259479;
-        bh=Xye6heKwh6ZUwm+0VaxNUczYGaicbyE6jQr771iX0G4=;
+        s=korg; t=1647259200;
+        bh=HsN3ea+pGBixgNb6E6XkYeexSxxETtROPScpPCIEJhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HR6U1gACVCnJToVRqx2f0hkqS7sDge6v+BNkbZj6PAQ3fLcvkSMx0StyWRTbwQ5my
-         lb43aeaasJMaClRFjc91oMvwbn+rZu2mlDEQ88xBTGbtm9R3vuxEqPIGPiAc0BisJs
-         cuZndSoLLwGN8fnkDNS5AAXhAtP3rYE1kGzoJwVU=
+        b=hNRlma8HSQ4S7bvQqTVF1A3d8CV2XBPIX64Ir2Vuc3jQ2DyGeZwU5FnwARfNwnU34
+         SW0J0hNbKIf5jvfszucP9vR8Wunt9t7aAar4g9J5F1Ae6DBYzvvPC8H99fGZMOhvmj
+         26L7bogT6FHddQ08UX00NXZ90/P7+LZ+XZKFKD2U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 016/110] virtio-blk: Dont use MAX_DISCARD_SEGMENTS if max_discard_seg is zero
+Subject: [PATCH 5.10 25/71] net: ethernet: lpc_eth: Handle error for clk_enable
 Date:   Mon, 14 Mar 2022 12:53:18 +0100
-Message-Id: <20220314112743.488986408@linuxfoundation.org>
+Message-Id: <20220314112738.637983827@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit dacc73ed0b88f1a787ec20385f42ca9dd9eddcd0 ]
+[ Upstream commit 2169b79258c8be803d2595d6456b1e77129fe154 ]
 
-Currently the value of max_discard_segment will be set to
-MAX_DISCARD_SEGMENTS (256) with no basis in hardware if device
-set 0 to max_discard_seg in configuration space. It's incorrect
-since the device might not be able to handle such large descriptors.
-To fix it, let's follow max_segments restrictions in this case.
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-Fixes: 1f23816b8eb8 ("virtio_blk: add discard and write zeroes support")
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Link: https://lore.kernel.org/r/20220304100058.116-1-xieyongji@bytedance.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: b7370112f519 ("lpc32xx: Added ethernet driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/virtio_blk.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/nxp/lpc_eth.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-index 303caf2d17d0..f538bc9dce7d 100644
---- a/drivers/block/virtio_blk.c
-+++ b/drivers/block/virtio_blk.c
-@@ -859,9 +859,15 @@ static int virtblk_probe(struct virtio_device *vdev)
+diff --git a/drivers/net/ethernet/nxp/lpc_eth.c b/drivers/net/ethernet/nxp/lpc_eth.c
+index 9e098e40fb1c..a9a9bf2e065a 100644
+--- a/drivers/net/ethernet/nxp/lpc_eth.c
++++ b/drivers/net/ethernet/nxp/lpc_eth.c
+@@ -1468,6 +1468,7 @@ static int lpc_eth_drv_resume(struct platform_device *pdev)
+ {
+ 	struct net_device *ndev = platform_get_drvdata(pdev);
+ 	struct netdata_local *pldat;
++	int ret;
  
- 		virtio_cread(vdev, struct virtio_blk_config, max_discard_seg,
- 			     &v);
-+
-+		/*
-+		 * max_discard_seg == 0 is out of spec but we always
-+		 * handled it.
-+		 */
-+		if (!v)
-+			v = sg_elems - 2;
- 		blk_queue_max_discard_segments(q,
--					       min_not_zero(v,
--							    MAX_DISCARD_SEGMENTS));
-+					       min(v, MAX_DISCARD_SEGMENTS));
+ 	if (device_may_wakeup(&pdev->dev))
+ 		disable_irq_wake(ndev->irq);
+@@ -1477,7 +1478,9 @@ static int lpc_eth_drv_resume(struct platform_device *pdev)
+ 			pldat = netdev_priv(ndev);
  
- 		blk_queue_flag_set(QUEUE_FLAG_DISCARD, q);
- 	}
+ 			/* Enable interface clock */
+-			clk_enable(pldat->clk);
++			ret = clk_enable(pldat->clk);
++			if (ret)
++				return ret;
+ 
+ 			/* Reset and initialize */
+ 			__lpc_eth_reset(pldat);
 -- 
 2.34.1
 

@@ -2,736 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C454D8ACA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371164D8AC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243396AbiCNR2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243343AbiCNR2P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S243341AbiCNR2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 14 Mar 2022 13:28:15 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694533ED18;
-        Mon, 14 Mar 2022 10:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647278825; x=1678814825;
-  h=from:to:cc:subject:date:message-id;
-  bh=yR+rzzS69/aH63uGMTTRTabR+tFjx1GWz/W6W/5SRpM=;
-  b=j0jZHfw76h7xGVT2A/4UBuc8wyQL373zXs2am79q5nHu/fpLtHV/Ux3g
-   1/yhqsWkWBRk9DkJ7FQoQ2Y+geB6oxOHwfih/CWHS+wXn0c2/sbBtey4+
-   uGpizQT+kjw75fTi6ciXzaxkqqv4X+RbKyXp6Mtv8Bip2acRwCXrIj2Aq
-   4=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 14 Mar 2022 10:27:04 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Mar 2022 10:27:01 -0700
-X-QCInternal: smtphost
-Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Mar 2022 22:56:48 +0530
-Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id F27B04E3B; Mon, 14 Mar 2022 22:56:46 +0530 (IST)
-From:   Vinod Polimera <quic_vpolimer@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dmitry.baryshkov@linaro.org, dianders@chromium.org,
-        quic_kalyant@quicinc.com
-Subject: [PATCH v3] drm/msm/disp/dpu1: add inline rotation support for sc7280 target
-Date:   Mon, 14 Mar 2022 22:56:43 +0530
-Message-Id: <1647278803-24611-1-git-send-email-quic_vpolimer@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234685AbiCNR2O (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 14 Mar 2022 13:28:14 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA293EBB7;
+        Mon, 14 Mar 2022 10:27:03 -0700 (PDT)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KHNj61xD6z67L0F;
+        Tue, 15 Mar 2022 01:25:30 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 14 Mar 2022 18:27:00 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 14 Mar 2022 17:27:00 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Mon, 14 Mar 2022 17:26:59 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>
+CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "kevin.tian@intel.com" <kevin.tian@intel.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>,
+        Linuxarm <linuxarm@huawei.com>
+Subject: RE: [PATCH v9 0/9] vfio/hisilicon: add ACC live migration driver
+Thread-Topic: [PATCH v9 0/9] vfio/hisilicon: add ACC live migration driver
+Thread-Index: AQHYMx05i/r2eazEYUSmGD9dldyyTay/KQYA
+Date:   Mon, 14 Mar 2022 17:26:59 +0000
+Message-ID: <df217839a41b47dc94ef201dfe379e4e@huawei.com>
+References: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
+In-Reply-To: <20220308184902.2242-1-shameerali.kolothum.thodi@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.89.194]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Some DPU versions support inline rot90. It is supported only for
-limited amount of UBWC formats.
-- There are two versions of inline rotators, v1 (present on sm8250 and
-sm7250) and v2 (sc7280). These versions differ in the list of supported
-formats and in the scaler possibilities.
-
-Changes in RFC:
-- Rebase changes to the latest code base.
-- Append rotation config variables with v2 and
-remove unused variables.(Dmitry)
-- Move pixel_ext setup separately from scaler3 config.(Dmitry)
-- Add 270 degree rotation to supported rotation list.(Dmitry)
-
-Changes in V2:
-- Remove unused macros and fix indentation.
-- Add check if 90 rotation is supported and
-add supported rotations to rot_cfg.
-
-Changes in V3:
-- Fix indentation.
-- Move rot_supported to sspp capabilities. (Dmitry)
-- Config pixel_ext based on src_h/src_w directly. (Dmitry)
-- Misc changes.
-
-Co-developed-by: Kalyan Thota <quic_kalyant@quicinc.com>
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
----
- arch/arm64/configs/defconfig                   |   4 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 218 +++++++++++++++----------
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  18 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c      | 119 +++++++++++---
- drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h      |   2 +
- 5 files changed, 253 insertions(+), 108 deletions(-)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 040420b..3bd91f7 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -696,7 +696,7 @@ CONFIG_VIDEO_RCAR_DRIF=m
- CONFIG_VIDEO_IMX219=m
- CONFIG_VIDEO_OV5640=m
- CONFIG_VIDEO_OV5645=m
--CONFIG_DRM=m
-+CONFIG_DRM=y
- CONFIG_DRM_I2C_NXP_TDA998X=m
- CONFIG_DRM_MALI_DISPLAY=m
- CONFIG_DRM_NOUVEAU=m
-@@ -721,7 +721,7 @@ CONFIG_DRM_SUN4I=m
- CONFIG_DRM_SUN6I_DSI=m
- CONFIG_DRM_SUN8I_DW_HDMI=m
- CONFIG_DRM_SUN8I_MIXER=m
--CONFIG_DRM_MSM=m
-+CONFIG_DRM_MSM=y
- CONFIG_DRM_TEGRA=m
- CONFIG_DRM_PANEL_BOE_TV101WUM_NL6=m
- CONFIG_DRM_PANEL_LVDS=m
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index a4fe77c..f591e63 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -35,6 +35,9 @@
- 	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
- 	BIT(DPU_SSPP_CDP) | BIT(DPU_SSPP_EXCL_RECT))
- 
-+#define VIG_SC7280_MASK \
-+	(VIG_SC7180_MASK | BIT(DPU_SSPP_INLINE_ROTATION))
-+
- #define DMA_SDM845_MASK \
- 	(BIT(DPU_SSPP_SRC) | BIT(DPU_SSPP_QOS) | BIT(DPU_SSPP_QOS_8LVL) |\
- 	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
-@@ -203,6 +206,11 @@ static const uint32_t plane_formats_yuv[] = {
- 	DRM_FORMAT_YVU420,
- };
- 
-+static const u32 rotation_v2_formats[] = {
-+	DRM_FORMAT_NV12,
-+	/* TODO add formats after validation */
-+};
-+
- /*************************************************************
-  * DPU sub blocks config
-  *************************************************************/
-@@ -642,8 +650,7 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
-  *************************************************************/
- 
- /* SSPP common configuration */
--
--#define _VIG_SBLK(num, sdma_pri, qseed_ver) \
-+#define _VIG_SBLK(num, sdma_pri, qseed_ver, rot_cfg) \
- 	{ \
- 	.maxdwnscale = MAX_DOWNSCALE_RATIO, \
- 	.maxupscale = MAX_UPSCALE_RATIO, \
-@@ -660,6 +667,7 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
- 	.num_formats = ARRAY_SIZE(plane_formats_yuv), \
- 	.virt_format_list = plane_formats, \
- 	.virt_num_formats = ARRAY_SIZE(plane_formats), \
-+	.rotation_cfg = rot_cfg, \
- 	}
- 
- #define _DMA_SBLK(num, sdma_pri) \
-@@ -676,22 +684,28 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
- 	}
- 
- static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =
--				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3, NULL);
- static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =
--				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3, NULL);
- static const struct dpu_sspp_sub_blks msm8998_vig_sblk_2 =
--				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3, NULL);
- static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =
--				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3, NULL);
-+
-+static const struct dpu_rotation_cfg dpu_rot_sc7280_cfg_v2 = {
-+	.rot_maxheight = 1088,
-+	.rot_num_formats = ARRAY_SIZE(rotation_v2_formats),
-+	.rot_format_list = rotation_v2_formats,
-+};
- 
- static const struct dpu_sspp_sub_blks sdm845_vig_sblk_0 =
--				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3, NULL);
- static const struct dpu_sspp_sub_blks sdm845_vig_sblk_1 =
--				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3, NULL);
- static const struct dpu_sspp_sub_blks sdm845_vig_sblk_2 =
--				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3, NULL);
- static const struct dpu_sspp_sub_blks sdm845_vig_sblk_3 =
--				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3);
-+				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3, NULL);
- 
- static const struct dpu_sspp_sub_blks sdm845_dma_sblk_0 = _DMA_SBLK("8", 1);
- static const struct dpu_sspp_sub_blks sdm845_dma_sblk_1 = _DMA_SBLK("9", 2);
-@@ -699,7 +713,7 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_2 = _DMA_SBLK("10", 3);
- static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
- 
- #define SSPP_BLK(_name, _id, _base, _features, \
--		_sblk, _xinid, _type, _clkctrl) \
-+		_sblk, _xinid, _type, _clkctrl, _rotsupported) \
- 	{ \
- 	.name = _name, .id = _id, \
- 	.base = _base, .len = 0x1c8, \
-@@ -707,98 +721,134 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
- 	.sblk = &_sblk, \
- 	.xin_id = _xinid, \
- 	.type = _type, \
--	.clk_ctrl = _clkctrl \
-+	.clk_ctrl = _clkctrl, \
-+	.rot_supported = _rotsupported \
- 	}
- 
- static const struct dpu_sspp_cfg msm8998_sspp[] = {
--	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_MSM8998_MASK,
--		msm8998_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
--	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_MSM8998_MASK,
--		msm8998_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
--	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_MSM8998_MASK,
--		msm8998_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
--	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_MSM8998_MASK,
--		msm8998_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
--	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_MSM8998_MASK,
--		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
--	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_MSM8998_MASK,
--		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
--	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_MSM8998_MASK,
--		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
--	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_MSM8998_MASK,
--		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-+	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK, sdm845_vig_sblk_0,
-+		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK, sdm845_vig_sblk_1,
-+		4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK, sdm845_vig_sblk_2,
-+		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK, sdm845_vig_sblk_3,
-+		12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
-+		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
-+		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
-+		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
-+		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- };
- 
- static const struct dpu_sspp_cfg sdm845_sspp[] = {
--	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK,
--		sdm845_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
--	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK,
--		sdm845_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
--	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK,
--		sdm845_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
--	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK,
--		sdm845_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
--	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
--		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
--	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
--		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
--	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
--	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-+	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK, sdm845_vig_sblk_0,
-+		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK, sdm845_vig_sblk_1,
-+		4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK, sdm845_vig_sblk_2,
-+		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK, sdm845_vig_sblk_3,
-+		12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
-+		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
-+		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
-+		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
-+		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- };
- 
- static const struct dpu_sspp_sub_blks sc7180_vig_sblk_0 =
--				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4);
-+				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4, NULL);
-+
-+static const struct dpu_sspp_sub_blks sc7280_vig_sblk_0 =
-+				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4, &dpu_rot_sc7280_cfg_v2);
- 
- static const struct dpu_sspp_cfg sc7180_sspp[] = {
--	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
--		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
--	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
--		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
--	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
--	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-+	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK, sc7180_vig_sblk_0,
-+		0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
-+		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,	sdm845_dma_sblk_1,
-+		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
-+		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- };
- 
- static const struct dpu_sspp_sub_blks sm8250_vig_sblk_0 =
--				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE);
-+				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE, NULL);
- static const struct dpu_sspp_sub_blks sm8250_vig_sblk_1 =
--				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE);
-+				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE, NULL);
- static const struct dpu_sspp_sub_blks sm8250_vig_sblk_2 =
--				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE);
-+				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE, NULL);
- static const struct dpu_sspp_sub_blks sm8250_vig_sblk_3 =
--				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE);
-+				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE, NULL);
- 
- static const struct dpu_sspp_cfg sm8250_sspp[] = {
--	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SM8250_MASK,
--		sm8250_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
--	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SM8250_MASK,
--		sm8250_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
--	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SM8250_MASK,
--		sm8250_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
--	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SM8250_MASK,
--		sm8250_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
--	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
--		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
--	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
--		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
--	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
--	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-+	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SM8250_MASK, sm8250_vig_sblk_0,
-+		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SM8250_MASK, sm8250_vig_sblk_1,
-+		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SM8250_MASK, sm8250_vig_sblk_2,
-+		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SM8250_MASK, sm8250_vig_sblk_3,
-+		12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
-+		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
-+		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
-+		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
-+		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- };
- 
- static const struct dpu_sspp_cfg sc7280_sspp[] = {
--	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
--		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
--	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
--		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
--	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
--	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
--		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-+	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7280_MASK, sc7280_vig_sblk_0,
-+		0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_MASK |
-+		DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
-+		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,	sdm845_dma_sblk_1,
-+		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
-+	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
-+		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- };
- 
- 
-@@ -820,9 +870,11 @@ static const struct dpu_sspp_sub_blks qcm2290_dma_sblk_0 = _DMA_SBLK("8", 1);
- 
- static const struct dpu_sspp_cfg qcm2290_sspp[] = {
- 	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_QCM2290_MASK,
--		 qcm2290_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
-+		qcm2290_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- 	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
--		 qcm2290_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
-+		qcm2290_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
-+		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
- };
- 
- /*************************************************************
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index b85b24b..d009d83 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -112,6 +112,7 @@ enum {
-  * @DPU_SSPP_TS_PREFILL      Supports prefill with traffic shaper
-  * @DPU_SSPP_TS_PREFILL_REC1 Supports prefill with traffic shaper multirec
-  * @DPU_SSPP_CDP             Supports client driven prefetch
-+ * @DPU_SSPP_INLINE_ROTATION Support inline rotation
-  * @DPU_SSPP_MAX             maximum value
-  */
- enum {
-@@ -132,6 +133,7 @@ enum {
- 	DPU_SSPP_TS_PREFILL,
- 	DPU_SSPP_TS_PREFILL_REC1,
- 	DPU_SSPP_CDP,
-+	DPU_SSPP_INLINE_ROTATION,
- 	DPU_SSPP_MAX
- };
- 
-@@ -315,6 +317,18 @@ struct dpu_qos_lut_tbl {
- };
- 
- /**
-+ * struct dpu_rotation_cfg - define inline rotation config
-+ * @rot_maxheight: max pre rotated height allowed for rotation
-+ * @rot_num_formats: number of elements in @rot_format_list
-+ * @rot_format_list: list of supported rotator formats
-+ */
-+struct dpu_rotation_cfg {
-+	u32 rot_maxheight;
-+	size_t rot_num_formats;
-+	const u32 *rot_format_list;
-+};
-+
-+/**
-  * struct dpu_caps - define DPU capabilities
-  * @max_mixer_width    max layer mixer line width support.
-  * @max_mixer_blendstages max layer mixer blend stages or
-@@ -369,6 +383,7 @@ struct dpu_caps {
-  * @num_formats: Number of supported formats
-  * @virt_format_list: Pointer to list of supported formats for virtual planes
-  * @virt_num_formats: Number of supported formats for virtual planes
-+ * @dpu_rotation_cfg: inline rotation configuration
-  */
- struct dpu_sspp_sub_blks {
- 	u32 creq_vblank;
-@@ -390,6 +405,7 @@ struct dpu_sspp_sub_blks {
- 	u32 num_formats;
- 	const u32 *virt_format_list;
- 	u32 virt_num_formats;
-+	const struct dpu_rotation_cfg *rotation_cfg;
- };
- 
- /**
-@@ -492,6 +508,7 @@ struct dpu_ctl_cfg {
-  * @xin_id:            bus client identifier
-  * @clk_ctrl           clock control identifier
-  * @type               sspp type identifier
-+ * @rot_supported      allowed rotations
-  */
- struct dpu_sspp_cfg {
- 	DPU_HW_BLK_INFO;
-@@ -499,6 +516,7 @@ struct dpu_sspp_cfg {
- 	u32 xin_id;
- 	enum dpu_clk_ctrl_type clk_ctrl;
- 	u32 type;
-+	u32 rot_supported;
- };
- 
- /**
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-index 6565682..ab959b2 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-@@ -528,11 +528,19 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
- 		struct dpu_plane_state *pstate,
- 		uint32_t src_w, uint32_t src_h, uint32_t dst_w, uint32_t dst_h,
- 		struct dpu_hw_scaler3_cfg *scale_cfg,
--		struct dpu_hw_pixel_ext *pixel_ext,
- 		const struct dpu_format *fmt,
- 		uint32_t chroma_subsmpl_h, uint32_t chroma_subsmpl_v)
- {
- 	uint32_t i;
-+	bool inline_rotation = pstate->rotation & DRM_MODE_ROTATE_90;
-+
-+	/*
-+	 * For inline rotation cases, scaler config is post-rotation,
-+	 * so swap the dimensions here. However, pixel extension will
-+	 * need pre-rotation settings.
-+	 */
-+	if (inline_rotation)
-+		swap(src_w, src_h);
- 
- 	scale_cfg->phase_step_x[DPU_SSPP_COMP_0] =
- 		mult_frac((1 << PHASE_STEP_SHIFT), src_w, dst_w);
-@@ -571,11 +579,6 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
- 			scale_cfg->preload_x[i] = DPU_QSEED3_DEFAULT_PRELOAD_H;
- 			scale_cfg->preload_y[i] = DPU_QSEED3_DEFAULT_PRELOAD_V;
- 		}
--
--		pixel_ext->num_ext_pxls_top[i] =
--			scale_cfg->src_height[i];
--		pixel_ext->num_ext_pxls_left[i] =
--			scale_cfg->src_width[i];
- 	}
- 	if (!(DPU_FORMAT_IS_YUV(fmt)) && (src_h == dst_h)
- 		&& (src_w == dst_w))
-@@ -591,6 +594,24 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
- 	scale_cfg->enable = 1;
- }
- 
-+static void _dpu_plane_setup_pixel_ext(struct dpu_hw_scaler3_cfg *scale_cfg,
-+				struct dpu_hw_pixel_ext *pixel_ext,
-+				uint32_t src_w, uint32_t src_h,
-+				uint32_t chroma_subsmpl_h, uint32_t chroma_subsmpl_v)
-+{
-+	int i;
-+
-+	for (i = 0; i < DPU_MAX_PLANES; i++) {
-+		if (i == DPU_SSPP_COMP_1_2 || i == DPU_SSPP_COMP_2) {
-+			src_w /= chroma_subsmpl_h;
-+			src_h /= chroma_subsmpl_v;
-+		}
-+
-+		pixel_ext->num_ext_pxls_top[i] = src_h;
-+		pixel_ext->num_ext_pxls_left[i] = src_w;
-+	}
-+}
-+
- static const struct dpu_csc_cfg dpu_csc_YUV2RGB_601L = {
- 	{
- 		/* S15.16 format */
-@@ -665,7 +686,12 @@ static void _dpu_plane_setup_scaler(struct dpu_plane *pdpu,
- 			drm_rect_height(&pipe_cfg->src_rect),
- 			drm_rect_width(&pipe_cfg->dst_rect),
- 			drm_rect_height(&pipe_cfg->dst_rect),
--			&scaler3_cfg, &pixel_ext, fmt,
-+			&scaler3_cfg, fmt,
-+			info->hsub, info->vsub);
-+
-+	/* configure pixel extension based on scalar config */
-+	_dpu_plane_setup_pixel_ext(&scaler3_cfg, &pixel_ext,
-+			drm_rect_width(&pipe_cfg->src_rect), drm_rect_height(&pipe_cfg->src_rect),
- 			info->hsub, info->vsub);
- 
- 	if (pdpu->pipe_hw->ops.setup_pe)
-@@ -956,6 +982,41 @@ static bool dpu_plane_validate_src(struct drm_rect *src,
- 		drm_rect_equals(fb_rect, src);
- }
- 
-+static int dpu_plane_check_inline_rotation(struct dpu_plane *pdpu,
-+						const struct dpu_sspp_sub_blks *sblk,
-+						struct drm_rect src, const struct dpu_format *fmt)
-+{
-+	bool found = false;
-+	size_t i, num_formats;
-+	const u32 *supported_formats;
-+
-+	if (drm_rect_width(&src) > sblk->rotation_cfg->rot_maxheight) {
-+		DPU_DEBUG_PLANE(pdpu, "invalid height for inline rot:%d max:%d\n",
-+				src.y2, sblk->rotation_cfg->rot_maxheight);
-+		return -EINVAL;
-+	}
-+
-+	supported_formats = sblk->rotation_cfg->rot_format_list;
-+	num_formats = sblk->rotation_cfg->rot_num_formats;
-+
-+	for (i = 0; i < num_formats; i++) {
-+		/* check for valid formats supported by inline rotation */
-+		if (fmt->base.pixel_format == supported_formats[i] &&
-+			DPU_FORMAT_IS_UBWC(fmt)) {
-+			found = true;
-+			break;
-+		}
-+	}
-+
-+	if (!found || !num_formats) {
-+		DPU_DEBUG_PLANE(pdpu, "supported_format not found num: %zu\n",
-+				num_formats);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int dpu_plane_atomic_check(struct drm_plane *plane,
- 				  struct drm_atomic_state *state)
- {
-@@ -968,15 +1029,18 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
- 	const struct dpu_format *fmt;
- 	struct drm_rect src, dst, fb_rect = { 0 };
- 	uint32_t min_src_size, max_linewidth;
-+	unsigned int rotation = 0;
-+	const struct dpu_sspp_cfg *pipe_hw_caps = pdpu->pipe_hw->cap;
-+	const struct dpu_sspp_sub_blks *sblk = pdpu->pipe_hw->cap->sblk;
- 
- 	if (new_plane_state->crtc)
- 		crtc_state = drm_atomic_get_new_crtc_state(state,
- 							   new_plane_state->crtc);
- 
--	min_scale = FRAC_16_16(1, pdpu->pipe_hw->cap->sblk->maxupscale);
-+	min_scale = FRAC_16_16(1, sblk->maxupscale);
- 	ret = drm_atomic_helper_check_plane_state(new_plane_state, crtc_state,
- 						  min_scale,
--						  pdpu->pipe_hw->cap->sblk->maxdwnscale << 16,
-+						  sblk->maxdwnscale << 16,
- 						  true, true);
- 	if (ret) {
- 		DPU_DEBUG_PLANE(pdpu, "Check plane state failed (%d)\n", ret);
-@@ -1002,8 +1066,8 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
- 	min_src_size = DPU_FORMAT_IS_YUV(fmt) ? 2 : 1;
- 
- 	if (DPU_FORMAT_IS_YUV(fmt) &&
--		(!(pdpu->pipe_hw->cap->features & DPU_SSPP_SCALER) ||
--		 !(pdpu->pipe_hw->cap->features & DPU_SSPP_CSC_ANY))) {
-+		(!(pipe_hw_caps->features & DPU_SSPP_SCALER) ||
-+		 !(pipe_hw_caps->features & DPU_SSPP_CSC_ANY))) {
- 		DPU_DEBUG_PLANE(pdpu,
- 				"plane doesn't have scaler/csc for yuv\n");
- 		return -EINVAL;
-@@ -1036,6 +1100,17 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
- 		return -E2BIG;
- 	}
- 
-+	rotation = drm_rotation_simplify(new_plane_state->rotation,
-+					pipe_hw_caps->rot_supported);
-+
-+	if ((pipe_hw_caps->features & BIT(DPU_SSPP_INLINE_ROTATION)) &&
-+		rotation & DRM_MODE_ROTATE_90) {
-+		ret = dpu_plane_check_inline_rotation(pdpu, sblk, src, fmt);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	pstate->rotation = rotation;
- 	pstate->needs_qos_remap = drm_atomic_crtc_needs_modeset(crtc_state);
- 
- 	return 0;
-@@ -1151,21 +1226,18 @@ static void dpu_plane_sspp_atomic_update(struct drm_plane *plane)
- 				pstate->multirect_mode);
- 
- 	if (pdpu->pipe_hw->ops.setup_format) {
--		unsigned int rotation;
--
-+		unsigned int rotation = pstate->rotation;
- 		src_flags = 0x0;
- 
--		rotation = drm_rotation_simplify(state->rotation,
--						 DRM_MODE_ROTATE_0 |
--						 DRM_MODE_REFLECT_X |
--						 DRM_MODE_REFLECT_Y);
--
- 		if (rotation & DRM_MODE_REFLECT_X)
- 			src_flags |= DPU_SSPP_FLIP_LR;
- 
- 		if (rotation & DRM_MODE_REFLECT_Y)
- 			src_flags |= DPU_SSPP_FLIP_UD;
- 
-+		if (rotation & DRM_MODE_ROTATE_90)
-+			src_flags |= DPU_SSPP_ROT_90;
-+
- 		/* update format */
- 		pdpu->pipe_hw->ops.setup_format(pdpu->pipe_hw, fmt, src_flags,
- 				pstate->multirect_index);
-@@ -1463,6 +1535,8 @@ struct drm_plane *dpu_plane_init(struct drm_device *dev,
- 	int zpos_max = DPU_ZPOS_MAX;
- 	uint32_t num_formats;
- 	int ret = -EINVAL;
-+	unsigned int supported_rotations = DRM_MODE_ROTATE_0 |
-+			DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_X | DRM_MODE_REFLECT_Y;
- 
- 	/* create and zero local structure */
- 	pdpu = kzalloc(sizeof(*pdpu), GFP_KERNEL);
-@@ -1530,12 +1604,11 @@ struct drm_plane *dpu_plane_init(struct drm_device *dev,
- 			BIT(DRM_MODE_BLEND_PREMULTI) |
- 			BIT(DRM_MODE_BLEND_COVERAGE));
- 
-+	if (pdpu->pipe_hw->cap->features & BIT(DPU_SSPP_INLINE_ROTATION))
-+		supported_rotations |= DRM_MODE_ROTATE_90 | DRM_MODE_ROTATE_270;
-+
- 	drm_plane_create_rotation_property(plane,
--			DRM_MODE_ROTATE_0,
--			DRM_MODE_ROTATE_0 |
--			DRM_MODE_ROTATE_180 |
--			DRM_MODE_REFLECT_X |
--			DRM_MODE_REFLECT_Y);
-+		    DRM_MODE_ROTATE_0, supported_rotations);
- 
- 	drm_plane_enable_fb_damage_clips(plane);
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
-index 50781e2..e146310 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
-@@ -26,6 +26,7 @@
-  * @plane_fetch_bw: calculated BW per plane
-  * @plane_clk: calculated clk per plane
-  * @needs_dirtyfb: whether attached CRTC needs pixel data explicitly flushed
-+ * @rotation: simplified drm rotation hint
-  */
- struct dpu_plane_state {
- 	struct drm_plane_state base;
-@@ -40,6 +41,7 @@ struct dpu_plane_state {
- 	u64 plane_clk;
- 
- 	bool needs_dirtyfb;
-+	unsigned int rotation;
- };
- 
- /**
--- 
-2.7.4
-
+SGkgQWxleCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTaGFtZWVy
+YWxpIEtvbG90aHVtIFRob2RpDQo+IFNlbnQ6IDA4IE1hcmNoIDIwMjIgMTg6NDkNCj4gVG86IGt2
+bUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4
+LWNyeXB0b0B2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGxpbnV4LXBjaUB2Z2VyLmtlcm5lbC5vcmc7
+IGFsZXgud2lsbGlhbXNvbkByZWRoYXQuY29tOyBqZ2dAbnZpZGlhLmNvbTsNCj4gY29odWNrQHJl
+ZGhhdC5jb207IG1ndXJ0b3ZveUBudmlkaWEuY29tOyB5aXNoYWloQG52aWRpYS5jb207DQo+IGtl
+dmluLnRpYW5AaW50ZWwuY29tOyBMaW51eGFybSA8bGludXhhcm1AaHVhd2VpLmNvbT47IGxpdWxv
+bmdmYW5nDQo+IDxsaXVsb25nZmFuZ0BodWF3ZWkuY29tPjsgWmVuZ3RhbyAoQikgPHByaW1lLnpl
+bmdAaGlzaWxpY29uLmNvbT47DQo+IEpvbmF0aGFuIENhbWVyb24gPGpvbmF0aGFuLmNhbWVyb25A
+aHVhd2VpLmNvbT47IFdhbmd6aG91IChCKQ0KPiA8d2FuZ3pob3UxQGhpc2lsaWNvbi5jb20+DQo+
+IFN1YmplY3Q6IFtQQVRDSCB2OSAwLzldIHZmaW8vaGlzaWxpY29uOiBhZGQgQUNDIGxpdmUgbWln
+cmF0aW9uIGRyaXZlcg0KPiANCj4gSGksDQo+IA0KPiBUaGlzIHNlcmllcyBhdHRlbXB0cyB0byBh
+ZGQgdmZpbyBsaXZlIG1pZ3JhdGlvbiBzdXBwb3J0IGZvciBIaVNpbGljb24NCj4gQUNDIFZGIGRl
+dmljZXMgYmFzZWQgb24gdGhlIG5ldyB2MiBtaWdyYXRpb24gcHJvdG9jb2wgZGVmaW5pdGlvbiBh
+bmQNCj4gbWx4NSB2OSBzZXJpZXMgZGlzY3Vzc2VkIGhlcmVbMF0uDQo+IA0KPiB2OCAtLT4gdjkN
+Cj4gwqAtIEFkZGVkIGFja3MgYnkgV2FuZ3pob3UvTG9uZ2ZhbmcvWWVrYWkNCj4gwqAtIEFkZGVk
+IFItYnkgdGFncyBieSBKYXNvbi4NCj4gwqAtIEFkZHJlc3NlZCBjb21tZW50c8KgYnkgQWxleCBv
+biB2OC4NCj4gwqAtIEZpeGVkIHRoZSBwZl9xdWV1ZSBwb2ludGVyIGFzc2lnbm1lbnQgZXJyb3Ig
+aW4gcGF0Y2ggIzguDQo+IMKgLSBBZGRyZXNzZWTCoGNvbW1lbnRzIGZyb20gS2V2aW4sDQo+ICDC
+oCDCoC1VcGRhdGVkIHBhdGNoICM1IGNvbW1pdCBsb2cgbXNnIHdpdGggYSBjbGFyaWZpY2F0aW9u
+IHRoYXQgVkYNCj4gwqAgwqAgwqBtaWdyYXRpb24gQkFSIGFzc2lnbm1lbnQgaXMgZmluZSBpZiBt
+aWdyYXRpb24gc3VwcG9ydCBpcyBub3QgdGhlcmUuDQo+ICDCoCDCoC1BZGRlZCBRTSBkZXNjcmlw
+dGlvbiB0byBwYXRjaCAjOCBjb21taXQgbXNnLg0KDQpIb3BlIHRoZXJlIGlzIG5vdGhpbmcgcGVu
+ZGluZyBmb3IgdGhpcyBzZXJpZXMgbm93IHRvIG1ha2UgaXQgdG8gbmV4dC4NCkkga25vdyBhY2sg
+ZnJvbSBCam9ybiBpcyBzdGlsbCBwZW5kaW5nIGZvciBwYXRjaCAjMywgYW5kIEkgaGF2ZQ0Kc2Vu
+dCBhIHBpbmcgbGFzdCB3ZWVrIGFuZCBhbHNvIENDZCBoaW0gb24gdGhhdCBwYXRjaC4NCg0KUGxl
+YXNlIGxldCBtZSBrbm93IGlmIHRoZXJlIGlzIGFueXRoaW5nIEkgbWlzc2VkLiANCg0KVGhhbmtz
+LA0KU2hhbWVlcg0KDQoNCj4gDQo+IFRoaXMgaXMgc2FuaXR5IHRlc3RlZCBvbiBhIEhpU2lsaWNv
+biBwbGF0Zm9ybSB1c2luZyB0aGUgUWVtdSBicmFuY2gNCj4gcHJvdmlkZWQgaGVyZVsxXS4NCj4g
+DQo+IFBsZWFzZSB0YWtlIGEgbG9vayBhbmQgbGV0IG1lIGtub3cgeW91ciBmZWVkYmFjay4NCj4g
+DQo+IFRoYW5rcywNCj4gU2hhbWVlcg0KPiBbMF0NCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+a3ZtLzIwMjIwMjI0MTQyMDI0LjE0NzY1My0xLXlpc2hhaWhAbnZpZGlhLmNvbS8NCj4gWzFdIGh0
+dHBzOi8vZ2l0aHViLmNvbS9qZ3VudGhvcnBlL3FlbXUvY29tbWl0cy92ZmlvX21pZ3JhdGlvbl92
+Mg0KPiANCj4gdjcgLS0+IHY4DQo+IMKgLSBEcm9wcGVkIFBSRV9DT1BZIHN1cHBvcnQgYW5kIGVh
+cmx5wqBjb21wYXRpYmlsaXR5IGNoZWNraW5nIGJhc2VkIG9uDQo+ICAgIHRoZSBkaXNjdXNzaW9u
+IGhlcmVbMV0uDQo+IMKgLSBBZGRyZXNzZWTCoGNvbW1lbnRzwqBmcm9tIEpvaG4sIEphc29uICYg
+QWxleCAoVGhhbmtzISkuDQo+IA0KPiB2NiAtLT4gdjcNCj4gwqAtUmVuYW1lZCBNSUdfUFJFQ09Q
+WSBpb2N0bCBuYW1lIGFuZCBzdHJ1Y3QgbmFtZS4gVXBkYXRlZCBpb2N0bA0KPiBkZXNjcmlwdGlv
+bnMNCj4gwqAgcmVnYXJkaW5nIGlvY3RsIHZhbGlkaXR5IChwYXRjaCAjNykuDQo+IC0gQWRyZXNz
+ZWQgY29tbWVudHMgZnJvbSBKYXNvbiBhbmQgQWxleCBvbiBQUkVfQ09QWSByZWFkKCkgYW5kIGlv
+Y3RsKCkgZm5zDQo+ICAgKHBhdGNoICM5KS4NCj4gLSBNb3ZlZCBvbmx5IFZGIFBDSSBpZHMgdG8g
+cGNpX2lkcy5oKHBhdGNoICMzKS4NCj4gDQo+IHY1IC0tPiB2Ng0KPiAgLVJlcG9ydCBQUkVfQ09Q
+WSBzdXBwb3J0IGFuZCB1c2UgdGhhdCBmb3IgZWFybHkgY29tcGF0aWJpbGl0eSBjaGVjaw0KPiAg
+IGJldHdlZW4gc3JjIGFuZCBkc3QgZGV2aWNlcy4NCj4gIC1Gb3IgZ2VuZXJpYyBQUkVfQ09QWSBz
+dXBwb3J0LCBpbmNsdWRlZCBwYXRjaCAjNyBmcm9tIEphc29uKFRoYW5rcyEpLg0KPiAgLUFkZHJl
+c3NlZCBjb21tZW50cyBmcm9tIEFsZXgoVGhhbmtzISkuDQo+ICAtQWRkZWQgdGhlIFFNIHN0YXRl
+IHJlZ2lzdGVyIHVwZGF0ZSB0byBRTSBkcml2ZXIocGF0Y2ggIzgpIHNpbmNlIHRoYXQNCj4gICBp
+cyBiZWluZyB1c2VkIGluIG1pZ3JhdGlvbiBkcml2ZXIgdG8gZGVjaWRlIHdoZXRoZXIgdGhlIGRl
+dmljZSBpcw0KPiAgIHJlYWR5IHRvIHNhdmUgdGhlIHN0YXRlLg0KPiANCj4gUkZDdjQgLS0+IHY1
+DQo+ICAgLSBEcm9wcGVkIFJGQyB0YWcgYXMgdjIgbWlncmF0aW9uIEFQSXMgYXJlIG1vcmUgc3Rh
+YmxlIG5vdy4NCj4gICAtIEFkZHJlc3NlZCByZXZpZXcgY29tbWVudHMgZnJvbSBKYXNvbiBhbmQg
+QWxleCAoVGhhbmtzISkuDQo+IA0KPiB2MyAtLT4gUkZDdjQNCj4gLUJhc2VkIG9uIG1pZ3JhdGlv
+biB2MiBwcm90b2NvbCBhbmQgbWx4NSB2NyBzZXJpZXMuDQo+IC1BZGRlZCBSRkMgdGFnIGFnYWlu
+IGFzIG1pZ3JhdGlvbiB2MiBwcm90b2NvbCBpcyBzdGlsbCB1bmRlciBkaXNjdXNzaW9uLg0KPiAt
+QWRkZWQgbmV3IHBhdGNoICM2IHRvIHJldHJpZXZlIHRoZSBQRiBRTSBkYXRhLg0KPiAtUFJFX0NP
+UFkgY29tcGF0aWJpbGl0eSBjaGVjayBpcyBub3cgZG9uZSBhZnRlciB0aGUgbWlncmF0aW9uIGRh
+dGENCj4gwqB0cmFuc2Zlci4gVGhpcyBpcyBub3QgaWRlYWwgYW5kIG5lZWRzIGRpc2N1c3Npb24u
+DQo+IA0KPiBSRkMgdjIgLS0+IHYzDQo+IMKgLURyb3BwZWQgUkZDIHRhZyBhcyB0aGUgdmZpb19w
+Y2lfY29yZSBzdWJzeXN0ZW0gZnJhbWV3b3JrIGlzIG5vdw0KPiDCoCBwYXJ0IG9mIDUuMTUtcmMx
+Lg0KPiDCoC1BZGRlZCBvdmVycmlkZSBtZXRob2RzIGZvciB2ZmlvX2RldmljZV9vcHMgcmVhZC93
+cml0ZS9tbWFwIGNhbGxzDQo+IMKgIHRvIGxpbWl0IHRoZSBhY2Nlc3Mgd2l0aGluIHRoZSBmdW5j
+dGlvbmFsIHJlZ2lzdGVyIHNwYWNlLg0KPiDCoC1QYXRjaGVzIDEgdG8gMyBhcmUgY29kZSByZWZh
+Y3RvcmluZyB0byBtb3ZlIHRoZSBjb21tb24gQUNDIFFNDQo+IMKgIGRlZmluaXRpb25zIGFuZCBo
+ZWFkZXIgYXJvdW5kLg0KPiANCj4gUkZDdjEgLS0+IFJGQ3YyDQo+IA0KPiDCoC1BZGRzIGEgbmV3
+IHZlbmRvci1zcGVjaWZpYyB2ZmlvX3BjaSBkcml2ZXIoaGlzaS1hY2MtdmZpby1wY2kpDQo+IMKg
+IGZvciBIaVNpbGljb24gQUNDIFZGIGRldmljZXMgYmFzZWQgb24gdGhlIG5ldyB2ZmlvLXBjaS1j
+b3JlDQo+IMKgIGZyYW1ld29yayBwcm9wb3NhbC4NCj4gDQo+IMKgLVNpbmNlIEhpU2lsaWNvbiBB
+Q0MgVkYgZGV2aWNlIE1NSU8gc3BhY2UgY29udGFpbnMgYm90aCB0aGUNCj4gwqAgZnVuY3Rpb25h
+bCByZWdpc3RlciBzcGFjZSBhbmQgbWlncmF0aW9uIGNvbnRyb2wgcmVnaXN0ZXIgc3BhY2UsDQo+
+IMKgIG92ZXJyaWRlIHRoZSB2ZmlvX2RldmljZV9vcHMgaW9jdGwgbWV0aG9kIHRvIHJlcG9ydCBv
+bmx5IHRoZQ0KPiDCoCBmdW5jdGlvbmFsIHNwYWNlIHRvIFZNcy4NCj4gDQo+IMKgLUZvciBhIHN1
+Y2Nlc3NmdWwgbWlncmF0aW9uLCB3ZSBzdGlsbCBuZWVkIGFjY2VzcyB0byBWRiBkZXYNCj4gwqAg
+ZnVuY3Rpb25hbCByZWdpc3RlciBzcGFjZSBtYWlubHkgdG8gcmVhZCB0aGUgc3RhdHVzIHJlZ2lz
+dGVycy4NCj4gwqAgQnV0IGFjY2Vzc2luZyB0aGVzZSB3aGlsZSB0aGUgR3Vlc3QgdkNQVXMgYXJl
+IHJ1bm5pbmcgbWF5IGxlYXZlDQo+IMKgIGEgc2VjdXJpdHkgaG9sZS4gVG8gYXZvaWQgYW55IHBv
+dGVudGlhbCBzZWN1cml0eSBpc3N1ZXMsIHdlDQo+IMKgIG1hcC91bm1hcCB0aGUgTU1JTyByZWdp
+b25zIG9uIGEgbmVlZCBiYXNpcyBhbmQgaXMgc2FmZSB0byBkbyBzby4NCj4gwqAgKFBsZWFzZSBz
+ZWUgaGlzaV9hY2NfdmZfaW9yZW1hcC91bm1hcCgpIGZucyBpbiBwYXRjaCAjNCkuDQo+IA0KPiDC
+oC1Ecm9wcGVkIGRlYnVnZnMgc3VwcG9ydCBmb3Igbm93Lg0KPiDCoC1Vc2VzIGNvbW1vbiBRTSBm
+dW5jdGlvbnMgZm9yIG1haWxib3ggYWNjZXNzKHBhdGNoICMzKS4NCj4gDQo+IExvbmdmYW5nIExp
+dSAoMyk6DQo+ICAgY3J5cHRvOiBoaXNpbGljb24vcW06IE1vdmUgZmV3IGRlZmluaXRpb25zIHRv
+IGNvbW1vbiBoZWFkZXINCj4gICBjcnlwdG86IGhpc2lsaWNvbi9xbTogU2V0IHRoZSBWRiBRTSBz
+dGF0ZSByZWdpc3Rlcg0KPiAgIGhpc2lfYWNjX3ZmaW9fcGNpOiBBZGQgc3VwcG9ydCBmb3IgVkZJ
+TyBsaXZlIG1pZ3JhdGlvbg0KPiANCj4gU2hhbWVlciBLb2xvdGh1bSAoNik6DQo+ICAgY3J5cHRv
+OiBoaXNpbGljb24vcW06IE1vdmUgdGhlIFFNIGhlYWRlciB0byBpbmNsdWRlL2xpbnV4DQo+ICAg
+aGlzaV9hY2NfcW06IE1vdmUgVkYgUENJIGRldmljZSBJRHMgdG8gY29tbW9uIGhlYWRlcg0KPiAg
+IGhpc2lfYWNjX3ZmaW9fcGNpOiBhZGQgbmV3IHZmaW9fcGNpIGRyaXZlciBmb3IgSGlTaWxpY29u
+IEFDQyBkZXZpY2VzDQo+ICAgaGlzaV9hY2NfdmZpb19wY2k6IFJlc3RyaWN0IGFjY2VzcyB0byBW
+RiBkZXYgQkFSMiBtaWdyYXRpb24gcmVnaW9uDQo+ICAgaGlzaV9hY2NfdmZpb19wY2k6IEFkZCBo
+ZWxwZXIgdG8gcmV0cmlldmUgdGhlIHN0cnVjdCBwY2lfZHJpdmVyDQo+ICAgaGlzaV9hY2NfdmZp
+b19wY2k6IFVzZSBpdHMgb3duIFBDSSByZXNldF9kb25lIGVycm9yIGhhbmRsZXINCj4gDQo+ICBN
+QUlOVEFJTkVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICA3ICsNCj4g
+IGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9ocHJlL2hwcmUuaCAgICAgICAgICB8ICAgIDIgKy0N
+Cj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9ocHJlL2hwcmVfbWFpbi5jICAgICB8ICAgMTkg
+Ky0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9xbS5jICAgICAgICAgICAgICAgICB8ICAg
+NjggKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9zZWMyL3NlYy5oICAgICAgICAgICB8
+ICAgIDIgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9zZWMyL3NlY19tYWluLmMgICAg
+ICB8ICAgMjEgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi9zZ2wuYyAgICAgICAgICAg
+ICAgICB8ICAgIDIgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi96aXAvemlwLmggICAg
+ICAgICAgICB8ICAgIDIgKy0NCj4gIGRyaXZlcnMvY3J5cHRvL2hpc2lsaWNvbi96aXAvemlwX21h
+aW4uYyAgICAgICB8ICAgMTcgKy0NCj4gIGRyaXZlcnMvdmZpby9wY2kvS2NvbmZpZyAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgIDIgKw0KPiAgZHJpdmVycy92ZmlvL3BjaS9NYWtlZmlsZSAgICAg
+ICAgICAgICAgICAgICAgIHwgICAgMiArDQo+ICBkcml2ZXJzL3ZmaW8vcGNpL2hpc2lsaWNvbi9L
+Y29uZmlnICAgICAgICAgICAgfCAgIDE1ICsNCj4gIGRyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29u
+L01ha2VmaWxlICAgICAgICAgICB8ICAgIDQgKw0KPiAgLi4uL3ZmaW8vcGNpL2hpc2lsaWNvbi9o
+aXNpX2FjY192ZmlvX3BjaS5jICAgIHwgMTMyNiArKysrKysrKysrKysrKysrKw0KPiAgLi4uL3Zm
+aW8vcGNpL2hpc2lsaWNvbi9oaXNpX2FjY192ZmlvX3BjaS5oICAgIHwgIDExNiArKw0KPiAgLi4u
+L3FtLmggPT4gaW5jbHVkZS9saW51eC9oaXNpX2FjY19xbS5oICAgICAgIHwgICA0OSArDQo+ICBp
+bmNsdWRlL2xpbnV4L3BjaV9pZHMuaCAgICAgICAgICAgICAgICAgICAgICAgfCAgICAzICsNCj4g
+IDE3IGZpbGVzIGNoYW5nZWQsIDE1OTEgaW5zZXJ0aW9ucygrKSwgNjYgZGVsZXRpb25zKC0pDQo+
+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy92ZmlvL3BjaS9oaXNpbGljb24vS2NvbmZpZw0K
+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdmZpby9wY2kvaGlzaWxpY29uL01ha2VmaWxl
+DQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy92ZmlvL3BjaS9oaXNpbGljb24vaGlzaV9h
+Y2NfdmZpb19wY2kuYw0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdmZpby9wY2kvaGlz
+aWxpY29uL2hpc2lfYWNjX3ZmaW9fcGNpLmgNCj4gIHJlbmFtZSBkcml2ZXJzL2NyeXB0by9oaXNp
+bGljb24vcW0uaCA9PiBpbmNsdWRlL2xpbnV4L2hpc2lfYWNjX3FtLmggKDg3JSkNCj4gDQo+IC0t
+DQo+IDIuMjUuMQ0KDQo=

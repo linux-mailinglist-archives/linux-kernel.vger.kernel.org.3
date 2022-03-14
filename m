@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075BE4D7D71
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4495E4D7D75
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbiCNIRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
+        id S237644AbiCNISi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiCNIRi (ORCPT
+        with ESMTP id S234599AbiCNISh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:17:38 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142742B25C;
-        Mon, 14 Mar 2022 01:16:28 -0700 (PDT)
-X-UUID: 6a5bb6c471d04ddf9b8f9838f4c1c4fc-20220314
-X-UUID: 6a5bb6c471d04ddf9b8f9838f4c1c4fc-20220314
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 995635809; Mon, 14 Mar 2022 16:16:24 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 14 Mar 2022 16:16:23 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Mar
- 2022 16:16:23 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 14 Mar 2022 16:16:22 +0800
-Message-ID: <9671f38a0e22d70fba77d1e35520c2a16c93d119.camel@mediatek.com>
-Subject: Re: [RESEND V6 0/5] add display support for MediaTek SoC MT8186
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <airlied@linux.ie>,
-        <jassisinghbrar@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <yongqiang.niu@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <fparent@baylibre.com>, <linux-mediatek@lists.infradead.org>,
-        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 14 Mar 2022 16:16:17 +0800
-In-Reply-To: <bf6c9d9270f54fe7baff62998498c1a75a69f723.camel@mediatek.com>
-References: <20220303065725.23384-1-rex-bc.chen@mediatek.com>
-         <bf6c9d9270f54fe7baff62998498c1a75a69f723.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 14 Mar 2022 04:18:37 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A19B3EF05
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:17:27 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id u25-20020a5d8199000000b006421bd641bbso11778896ion.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:17:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=QteVMReY+Pe/hdBa+IV+wFqcX7jlUZ75N7BHg5eqI+Y=;
+        b=ry2lLr25o164oTd3OkOoe3FBdOsM4sMzjZ0jBygKwOjLfOHrID6XCZsIHczYWdvcKT
+         BPUW0fxDwEJwQxUmzcUol+bwRccU3AcOzjiMZSX4CaLzgNS4Glij7Mv128VjJ+X7z//N
+         SjujQ7q2YlePghOZObjCT6EkoQsBXnH0nFTY9gZI2bfcy7IrKONA+Qg3Yy2i/OGmw2G+
+         BdMLuYJBkH1B5JlbSvPFu6H/wa2YkGDHbYUyPrRs3eM9qH5Q4Nx+Qt3CIrQ/4hAZ/DCG
+         bfMOl6jt55+nKwcrfbeIjGGKQcvbwQrG4PFNp2/vRJpNNqzAP2rsy3+V1yq+X9Rc0SIJ
+         NOOw==
+X-Gm-Message-State: AOAM531/U+3pc3IY5nvxDvXrEFFMJzdayjtjN98bwJp0KqUdvGuJi/Pd
+        dYh0nlZCTvgGvrbG0+hWk41D5hiO5MHj464ufmj8SUJwY09l
+X-Google-Smtp-Source: ABdhPJw5/i2qmkjyzfDtsuwoNGzecJ+zB8QhKcmQFD2WAA6uTcN+AFujqiu2TO2TUKSOE3amkIn2njdeMLc4y+MWdrC3m7DH6bru
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Received: by 2002:a05:6638:2387:b0:314:7ce4:1be8 with SMTP id
+ q7-20020a056638238700b003147ce41be8mr20308521jat.286.1647245846823; Mon, 14
+ Mar 2022 01:17:26 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 01:17:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008ec53005da294fe9@google.com>
+Subject: [syzbot] kernel panic: corrupted stack end in rtnl_newlink
+From:   syzbot <syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,84 +54,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+Hello,
 
-On Mon, 2022-03-14 at 14:30 +0800, Rex-BC Chen wrote:
-> Hello Chun-Kuang,
-> 
-> Do I need to rebase this series to your branch mediatek-drm-fixes and
-> send next version?
+syzbot found the following issue on:
 
-That's good.
+HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=17fe80c5700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
+dashboard link: https://syzkaller.appspot.com/bug?extid=0600986d88e2d4d7ebb8
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
 
-Regards,
-CK
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> 
-> BRs,
-> Rex
-> 
-> On Thu, 2022-03-03 at 14:57 +0800, Rex-BC Chen wrote:
-> > v6:
-> > 1. Remove mmsys patches which are accepted.
-> > 2. Fix error of dt-binding.
-> > 
-> > v5:
-> > 1. Add binding patch of aal for MT8183.
-> > 2. Revise enum to const.
-> > 3. Change to use enum for mutex.
-> > 4. Remove patches which are accepted by maintainers. (mmsys and
-> > mutex)
-> > 
-> > v4:
-> > 1. Remove binding of dsi and dpi.
-> > 2. Revise aal binding.
-> > 3. Fix indention in [4/5].
-> > 
-> > v3:
-> > 1. Modify display binding based on mtk display binding patch. ([1])
-> > 2. Remove patch: drm/mediatek: separate postmask component from
-> > mtk_disp_drv.c
-> > 3. Remove compatible of 8186 ovl because we can re-use compatible
-> > of
-> > 8192 for 8186.
-> > 4. Fix issue of space before tab on mutex patch.
-> > 
-> > [1]: 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/commit/?h=mediatek-drm-next&id=4ed545e7d10049b5492afc184e61a67e478a2cfd__;!!CTRNKA9wMg0ARbw!wkqxkeKHyS9CpOeGc9hmbilFWKk7g6fyeckortZrr_qhtb7VTP8zMYcuaYjw_w$
-> >  
-> > 
-> > v2:
-> > 1. Add binding documentation for mmsys, mutex and mtk_display.
-> > 2. Remove duplicated definition of postmask registers on
-> > mtk_drm_drv.
-> > 3. Add disp_ovl support for MT8186.
-> > 4. Add detailed commit messages.
-> > 
-> > Rex-BC Chen (4):
-> >   dt-bindings: display: mediatek: add aal binding for MT8183
-> >   dt-bindings: display: mediatek: revise enum to const
-> >   dt-bindings: display: mediatek: change to use enum for mutex
-> >   dt-bindings: display: mediatek: add MT8186 SoC binding
-> > 
-> > Yongqiang Niu (1):
-> >   drm/mediatek: add display support for MT8186
-> > 
-> >  .../display/mediatek/mediatek,aal.yaml        |  7 +++-
-> >  .../display/mediatek/mediatek,ccorr.yaml      |  5 ++-
-> >  .../display/mediatek/mediatek,color.yaml      |  7 ++--
-> >  .../display/mediatek/mediatek,dither.yaml     |  4 +--
-> >  .../display/mediatek/mediatek,gamma.yaml      |  4 +--
-> >  .../display/mediatek/mediatek,mutex.yaml      | 25 ++++++--------
-> >  .../display/mediatek/mediatek,ovl-2l.yaml     |  4 +++
-> >  .../display/mediatek/mediatek,ovl.yaml        |  8 +++--
-> >  .../display/mediatek/mediatek,postmask.yaml   |  4 +++
-> >  .../display/mediatek/mediatek,rdma.yaml       |  7 ++--
-> >  drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 33
-> > +++++++++++++++++++
-> >  11 files changed, 76 insertions(+), 32 deletions(-)
-> > 
-> 
-> 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com
 
+Kernel panic - not syncing: corrupted stack end detected inside scheduler
+CPU: 0 PID: 2049 Comm: syz-executor.0 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
+Hardware name: riscv-virtio,qemu (DT)
+Call Trace:
+[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
+[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
+[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
+[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
+[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
+[<ffffffff83166fa8>] panic+0x24a/0x634 kernel/panic.c:233
+[<ffffffff831a688a>] schedule_debug kernel/sched/core.c:5541 [inline]
+[<ffffffff831a688a>] schedule+0x0/0x14c kernel/sched/core.c:6187
+[<ffffffff831a6b00>] preempt_schedule_common+0x4e/0xde kernel/sched/core.c:6462
+[<ffffffff831a6bc4>] preempt_schedule+0x34/0x36 kernel/sched/core.c:6487
+[<ffffffff831afd78>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+[<ffffffff831afd78>] _raw_spin_unlock_irqrestore+0x8c/0x98 kernel/locking/spinlock.c:194
+[<ffffffff80b09fdc>] __debug_check_no_obj_freed lib/debugobjects.c:1002 [inline]
+[<ffffffff80b09fdc>] debug_check_no_obj_freed+0x14c/0x24a lib/debugobjects.c:1023
+[<ffffffff80410994>] free_pages_prepare mm/page_alloc.c:1358 [inline]
+[<ffffffff80410994>] free_pcp_prepare+0x24e/0x45e mm/page_alloc.c:1404
+[<ffffffff804142fe>] free_unref_page_prepare mm/page_alloc.c:3325 [inline]
+[<ffffffff804142fe>] free_unref_page+0x6a/0x31e mm/page_alloc.c:3404
+[<ffffffff8041471e>] free_the_page mm/page_alloc.c:706 [inline]
+[<ffffffff8041471e>] __free_pages+0xe2/0x112 mm/page_alloc.c:5474
+[<ffffffff8046d728>] __free_slab+0x122/0x27c mm/slub.c:2028
+[<ffffffff8046d8ce>] free_slab mm/slub.c:2043 [inline]
+[<ffffffff8046d8ce>] discard_slab+0x4c/0x7a mm/slub.c:2049
+[<ffffffff8046deec>] __unfreeze_partials+0x16a/0x18e mm/slub.c:2536
+[<ffffffff8046e006>] put_cpu_partial+0xf6/0x162 mm/slub.c:2612
+[<ffffffff8046d0ec>] __slab_free+0x166/0x29c mm/slub.c:3378
+[<ffffffff8047258c>] do_slab_free mm/slub.c:3497 [inline]
+[<ffffffff8047258c>] ___cache_free+0x17c/0x354 mm/slub.c:3516
+[<ffffffff8047692e>] qlink_free mm/kasan/quarantine.c:157 [inline]
+[<ffffffff8047692e>] qlist_free_all+0x7c/0x132 mm/kasan/quarantine.c:176
+[<ffffffff80476ed4>] kasan_quarantine_reduce+0x14c/0x1c8 mm/kasan/quarantine.c:283
+[<ffffffff804742b2>] __kasan_slab_alloc+0x5c/0x98 mm/kasan/common.c:446
+[<ffffffff8046fa8a>] kasan_slab_alloc include/linux/kasan.h:260 [inline]
+[<ffffffff8046fa8a>] slab_post_alloc_hook mm/slab.h:732 [inline]
+[<ffffffff8046fa8a>] slab_alloc_node mm/slub.c:3230 [inline]
+[<ffffffff8046fa8a>] slab_alloc mm/slub.c:3238 [inline]
+[<ffffffff8046fa8a>] __kmalloc+0x156/0x318 mm/slub.c:4420
+[<ffffffff82bde908>] kmalloc include/linux/slab.h:586 [inline]
+[<ffffffff82bde908>] kzalloc include/linux/slab.h:715 [inline]
+[<ffffffff82bde908>] fib_create_info+0xade/0x2d8e net/ipv4/fib_semantics.c:1464
+[<ffffffff82becedc>] fib_table_insert+0x1a0/0xebe net/ipv4/fib_trie.c:1224
+[<ffffffff82bd1222>] fib_magic+0x3f4/0x438 net/ipv4/fib_frontend.c:1087
+[<ffffffff82bd6178>] fib_add_ifaddr+0xd2/0x2e2 net/ipv4/fib_frontend.c:1109
+[<ffffffff82bd66ea>] fib_netdev_event+0x362/0x4b0 net/ipv4/fib_frontend.c:1466
+[<ffffffff800aac84>] notifier_call_chain+0xb8/0x188 kernel/notifier.c:84
+[<ffffffff800aad7e>] raw_notifier_call_chain+0x2a/0x38 kernel/notifier.c:392
+[<ffffffff8271d086>] call_netdevice_notifiers_info+0x9e/0x10c net/core/dev.c:1919
+[<ffffffff827422c8>] call_netdevice_notifiers_extack net/core/dev.c:1931 [inline]
+[<ffffffff827422c8>] call_netdevice_notifiers net/core/dev.c:1945 [inline]
+[<ffffffff827422c8>] __dev_notify_flags+0x108/0x1fa net/core/dev.c:8179
+[<ffffffff827436f6>] dev_change_flags+0x9c/0xba net/core/dev.c:8215
+[<ffffffff82767e16>] do_setlink+0x5d6/0x21c4 net/core/rtnetlink.c:2729
+[<ffffffff8276a6a2>] __rtnl_newlink+0x99e/0xfa0 net/core/rtnetlink.c:3412
+[<ffffffff8276ad04>] rtnl_newlink+0x60/0x8c net/core/rtnetlink.c:3527
+[<ffffffff8276b46c>] rtnetlink_rcv_msg+0x338/0x9a0 net/core/rtnetlink.c:5592
+[<ffffffff8296ded2>] netlink_rcv_skb+0xf8/0x2be net/netlink/af_netlink.c:2494
+[<ffffffff827624f4>] rtnetlink_rcv+0x26/0x30 net/core/rtnetlink.c:5610
+[<ffffffff8296cbcc>] netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+[<ffffffff8296cbcc>] netlink_unicast+0x40e/0x5fe net/netlink/af_netlink.c:1343
+[<ffffffff8296d29c>] netlink_sendmsg+0x4e0/0x994 net/netlink/af_netlink.c:1919
+[<ffffffff826d264e>] sock_sendmsg_nosec net/socket.c:705 [inline]
+[<ffffffff826d264e>] sock_sendmsg+0xa0/0xc4 net/socket.c:725
+[<ffffffff826d7026>] __sys_sendto+0x1f2/0x2e0 net/socket.c:2040
+[<ffffffff826d7152>] __do_sys_sendto net/socket.c:2052 [inline]
+[<ffffffff826d7152>] sys_sendto+0x3e/0x52 net/socket.c:2048
+[<ffffffff80005716>] ret_from_syscall+0x0/0x2
+SMP: stopping secondary CPUs
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

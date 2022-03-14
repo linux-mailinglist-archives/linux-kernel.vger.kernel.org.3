@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896CC4D7C80
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AF94D7C68
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237012AbiCNH55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 03:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S236901AbiCNH5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 03:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbiCNH5U (ORCPT
+        with ESMTP id S236829AbiCNH5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:57:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B454132E;
-        Mon, 14 Mar 2022 00:56:04 -0700 (PDT)
+        Mon, 14 Mar 2022 03:57:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD93E41326;
+        Mon, 14 Mar 2022 00:56:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 48BC1CE10A8;
-        Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A552C340FF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44F9F61189;
+        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A620C34100;
         Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244561;
-        bh=VhAg2DfM0V2K14kbMfszpRD01j0X/tOtJyqq+0ZzfTQ=;
+        bh=Bp6Zi0uLRwIJ9TX4TDGOxTDzXrysbBE+l/1fy838lIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MqPzFTvwI/J5A6ZK3SyklVYGaEAfi2arw0IlQFllhPJpDkjqbm+2bJMFAatGk3hWw
-         x3hPhGxuwayNnhWv7xb+m4Ma2eH8WLi7LK/mVLvzvDmMQJuFxIrd3NPnzc77vDhS8F
-         uE7zLL2ecMD6NhWkDYVSsH+wLZJONUdbh0iSsb2qHi5oxaqKo1on1En2MghLAp0hY1
-         kpmHfNJtA0aOxV/t6UZvlxCAUPQckYAvl0smIm8x6GBtQWHpTmjHzrdEndA/ANRjTT
-         A6vdZObFTEkTYqNsryB1mAgIaNiksYK1cKBYuzNNQ6A6Ix9tqBEQz75g28JRO2tvG0
-         pf4Nlk9e2EsMg==
+        b=sD/Y7kT5ZHPPG/i99u0IhuqRHCEUwELaH797D24MqInQCQMqQLZlRjcH4DXKs6osm
+         Mi3p/9tlphk+7vrUkmpcROHLuye4rhqT2f6p5C3Dvr0vqZJ/PcinQ2yaWKiVWmQ1xP
+         XCpxmX3lYF4bfVDcjWOYr+8DEXh61R5c35gWtHLRBAul8E+J5QPCd8XHGZ+5ulnKxB
+         CViXWKHoLW1szXwOxApNGV///PkOUa7AHx/7G5AOjUT7fhcVDwsCnCsNKVaQPR8M9v
+         bAZ1BdAiYQjJJoBLDc5+/Sw/GWvgJWvexyMmBdNjAgT5GatiVj2qv3jSmC94d/byic
+         9wmfzoK2VOkgg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYc-001kUt-Qo; Mon, 14 Mar 2022 08:55:58 +0100
+        id 1nTfYc-001kUx-Rx; Mon, 14 Mar 2022 08:55:58 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -43,13 +43,11 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Ming Qian <ming.qian@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 11/64] media: platform: allegro-dvt: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:03 +0100
-Message-Id: <0d5e1aaa9afee08c4d04259f5498912149306a8f.1647242579.git.mchehab@kernel.org>
+Subject: [PATCH 12/64] media: platform: amphion: move config to its own file
+Date:   Mon, 14 Mar 2022 08:55:04 +0100
+Message-Id: <68710ee0228721833e3da88c2cd89e9f0c763a80.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -67,76 +65,85 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-allegro-dvt-specific config stuff on a separate Kconfig file.
+amphion-specific config stuff on a separate Kconfig file.
 
+Reviewed-by: Shijie Qin <shijie.qin@nxp.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig             | 17 +----------------
- drivers/media/platform/allegro-dvt/Kconfig | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+), 16 deletions(-)
- create mode 100644 drivers/media/platform/allegro-dvt/Kconfig
+ drivers/media/platform/Kconfig         | 21 +--------------------
+ drivers/media/platform/amphion/Kconfig | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+), 20 deletions(-)
+ create mode 100644 drivers/media/platform/amphion/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index b6650caecf45..25e5ae27210d 100644
+index 25e5ae27210d..060d6264dea4 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -29,6 +29,7 @@ config V4L_MEM2MEM_DRIVERS
- 	  to capture and output drivers, which use memory buffers for just
- 	  one of those.
+@@ -40,6 +40,7 @@ source "drivers/media/platform/marvell-ccic/Kconfig"
  
-+source "drivers/media/platform/allegro-dvt/Kconfig"
- source "drivers/media/platform/nxp/Kconfig"
+ source "drivers/media/platform/via/Kconfig"
  
- source "drivers/media/platform/renesas/Kconfig"
-@@ -176,22 +177,6 @@ config VIDEO_TI_CAL_MC
++source "drivers/media/platform/amphion/Kconfig"
+ source "drivers/media/platform/cadence/Kconfig"
  
- # Mem2mem drivers
+ source "drivers/media/platform/davinci/Kconfig"
+@@ -524,26 +525,6 @@ config VIDEO_TEGRA_VDE
+ 	   Support for the NVIDIA Tegra video decoder unit.
+ 	   To compile this driver as a module choose m here.
  
--config VIDEO_ALLEGRO_DVT
--	tristate "Allegro DVT Video IP Core"
+-config VIDEO_AMPHION_VPU
+-	tristate "Amphion VPU (Video Processing Unit) Codec IP"
 -	depends on V4L_MEM2MEM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on ARCH_ZYNQMP || COMPILE_TEST
+-	depends on ARCH_MXC || COMPILE_TEST
+-	depends on MEDIA_SUPPORT
+-	depends on VIDEO_DEV
+-	depends on VIDEO_V4L2
+-	select MEDIA_CONTROLLER
 -	select V4L2_MEM2MEM_DEV
 -	select VIDEOBUF2_DMA_CONTIG
--	select REGMAP_MMIO
+-	select VIDEOBUF2_VMALLOC
 -	help
--	  Support for the encoder video IP core by Allegro DVT. This core is
--	  found for example on the Xilinx ZynqMP SoC in the EV family and is
--	  called VCU in the reference manual.
+-	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
+-	  Windsor is encoder that supports H.264, and Malone is decoder
+-	  that supports H.264, HEVC, and other video formats.
+-	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
+-	  It accelerates encoding and decoding operations on
+-	  various NXP SoCs.
+-	  To compile this driver as a module choose m here.
 -
--	  To compile this driver as a module, choose M here: the module
--	  will be called allegro.
--
- config VIDEO_CODA
- 	tristate "Chips&Media Coda multi-standard codec IP"
- 	depends on V4L_MEM2MEM_DRIVERS
-diff --git a/drivers/media/platform/allegro-dvt/Kconfig b/drivers/media/platform/allegro-dvt/Kconfig
+ # TI VIDEO PORT Helper Modules
+ # These will be selected by VPE and VIP
+ config VIDEO_TI_VPDMA
+diff --git a/drivers/media/platform/amphion/Kconfig b/drivers/media/platform/amphion/Kconfig
 new file mode 100644
-index 000000000000..dd528e9d0958
+index 000000000000..13899649f766
 --- /dev/null
-+++ b/drivers/media/platform/allegro-dvt/Kconfig
-@@ -0,0 +1,16 @@
++++ b/drivers/media/platform/amphion/Kconfig
+@@ -0,0 +1,20 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_ALLEGRO_DVT
-+	tristate "Allegro DVT Video IP Core"
++config VIDEO_AMPHION_VPU
++	tristate "Amphion VPU (Video Processing Unit) Codec IP"
 +	depends on V4L_MEM2MEM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on ARCH_ZYNQMP || COMPILE_TEST
++	depends on ARCH_MXC || COMPILE_TEST
++	depends on MEDIA_SUPPORT
++	depends on VIDEO_DEV
++	depends on VIDEO_V4L2
++	select MEDIA_CONTROLLER
 +	select V4L2_MEM2MEM_DEV
 +	select VIDEOBUF2_DMA_CONTIG
-+	select REGMAP_MMIO
++	select VIDEOBUF2_VMALLOC
 +	help
-+	  Support for the encoder video IP core by Allegro DVT. This core is
-+	  found for example on the Xilinx ZynqMP SoC in the EV family and is
-+	  called VCU in the reference manual.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called allegro.
++	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
++	  Windsor is encoder that supports H.264, and Malone is decoder
++	  that supports H.264, HEVC, and other video formats.
++	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
++	  It accelerates encoding and decoding operations on
++	  various NXP SoCs.
++	  To compile this driver as a module choose m here.
 -- 
 2.35.1
 

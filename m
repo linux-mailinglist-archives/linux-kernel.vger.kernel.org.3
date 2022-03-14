@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F8E4D80BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B9E4D80BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238933AbiCNLdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S238945AbiCNLd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238922AbiCNLdC (ORCPT
+        with ESMTP id S238922AbiCNLdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:33:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03B1A41F9F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:31:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BA0A106F;
-        Mon, 14 Mar 2022 04:31:52 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D0E13F99C;
-        Mon, 14 Mar 2022 04:31:50 -0700 (PDT)
-Message-ID: <c6766e6e-3c90-f0e6-86b3-4afdf41fbbb1@arm.com>
-Date:   Mon, 14 Mar 2022 11:31:45 +0000
+        Mon, 14 Mar 2022 07:33:54 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72CF1F62E;
+        Mon, 14 Mar 2022 04:32:44 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id z4so13470904pgh.12;
+        Mon, 14 Mar 2022 04:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=92cFP1Q6pigG4NDAij7XXlgfkxnBaSgKOySsdGgapv0=;
+        b=Qzb+b30IWzZ8yT1D98WbHHtNLsv83jEdHMCsP9EUJAF1by8QgRAwP2LL6Md6iu6Vur
+         D4YMsevNUJ9EWCWod8CxNb5P4B/STl64lixHUrWLWnHhgg2vyIBkZzjB6oR1S52/1WG3
+         lRvn28f43NvQuK8BkLpJUuq47vCPZIABxwGtaSaMw4qyWlHY+7fxuNUGASnVgepIOBha
+         JTvr2BBuDsdYaCeTk5xUMhoTX6Z/rVzRq4AjBear/aASTqJdYM+AkUNhGbpW9inxInLo
+         PPgOYeomYhGIOurDyymwO7Sa2GggnoluJOUanXBxjnh0h5p7t5lUP0PTFjpIxZdF41mV
+         pUhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=92cFP1Q6pigG4NDAij7XXlgfkxnBaSgKOySsdGgapv0=;
+        b=eU98wAdHpv9bsnRFD2MqZzL5ItkVAItumcf+VXo3DBZZJhypHwMzYs7CoOZ9rRdCBV
+         yh1Zjw/m98uQkBSzpVaa7ycB6FXQhqfzUkmh2WbHTmRE9o3V8trp8OWn/4b/6SgBJ8Sz
+         cPs1rJxsXPp/9wzn1LkPa1TdAKT4abq0r+euTiWYbgnL8FZJbDynJvzKdGElw7xzK81u
+         jXNeyJrOjhqpMwFFR+p3LCB9gdUHuO21KBVJgbKeWXv+qA9ZHyLKFKkFsdG6fhdK5ac7
+         guJFtiX35oqTiypSySM38h5FF0pEBsvIW0zWebKtPd/d9RabftstscWVgWcTYpUIkAYq
+         zLTA==
+X-Gm-Message-State: AOAM530CkibfHHrPJEJ+s01DXdLVdU31IV3sfPjqvJBtKVnxXfQoBBmN
+        VIixO7k9jnOUQG4FxBi9sQM=
+X-Google-Smtp-Source: ABdhPJyi7Hh/JYtt3JY7Nf9mWH2uKnG7FDRGWWlHs6RzovzxGkZu9vokk/51i02aWNKfEJZi+jVOKQ==
+X-Received: by 2002:a05:6a00:319e:b0:4f6:dedb:6c52 with SMTP id bj30-20020a056a00319e00b004f6dedb6c52mr23293271pfb.31.1647257564320;
+        Mon, 14 Mar 2022 04:32:44 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.118])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm2645197pfc.98.2022.03.14.04.32.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 04:32:43 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     dsahern@kernel.org, kuba@kernel.org
+Cc:     davem@davemloft.net, rostedt@goodmis.org, mingo@redhat.com,
+        yoshfuji@linux-ipv6.org, imagedong@tencent.com,
+        edumazet@google.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, alobakin@pm.me, dongli.zhang@oracle.com,
+        pabeni@redhat.com, maze@google.com, aahringo@redhat.com,
+        weiwan@google.com, yangbo.lu@nxp.com, fw@strlen.de,
+        tglx@linutronix.de, rpalethorpe@suse.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next 0/3] net: icmp: add skb drop reasons to icmp
+Date:   Mon, 14 Mar 2022 19:32:22 +0800
+Message-Id: <20220314113225.151959-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/bridge: synopsys/dw-hdmi: set cec clock rate
-Content-Language: en-GB
-To:     Peter Geis <pgwipeout@gmail.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Pierre-Hugues Husson <phh@phh.me>,
-        Archit Taneja <architt@codeaurora.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220126202427.3047814-1-pgwipeout@gmail.com>
- <3AFD1DD4-AF0A-4ECC-B4F5-E6BD6B9F1BB7@gmail.com>
- <CAMdYzYq06QSmFAwCuTmBYy4LfQAQDxzx2PGc8HOB1iEjxXHGyg@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMdYzYq06QSmFAwCuTmBYy4LfQAQDxzx2PGc8HOB1iEjxXHGyg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,77 +75,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-13 12:56, Peter Geis wrote:
-> On Sun, Mar 13, 2022 at 6:13 AM Piotr Oniszczuk
-> <piotr.oniszczuk@gmail.com> wrote:
->>
->>
->>
->>> Wiadomość napisana przez Peter Geis <pgwipeout@gmail.com> w dniu 26.01.2022, o godz. 21:24:
->>>
->>> The hdmi-cec clock must be 32khz in order for cec to work correctly.
->>> Ensure after enabling the clock we set it in order for the hardware to
->>> work as expected.
->>> Warn on failure, in case this is a static clock that is slighty off.
->>> Fixes hdmi-cec support on Rockchip devices.
->>>
->>> Fixes: ebe32c3e282a ("drm/bridge: synopsys/dw-hdmi: Enable cec clock")
->>>
->>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
->>> ---
->>> drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 7 +++++++
->>> 1 file changed, 7 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>> index 54d8fdad395f..1a96da60e357 100644
->>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>> @@ -48,6 +48,9 @@
->>>
->>> #define HDMI14_MAX_TMDSCLK    340000000
->>>
->>> +/* HDMI CEC needs a clock rate of 32khz */
->>> +#define HDMI_CEC_CLK_RATE    32768
->>> +
->>> enum hdmi_datamap {
->>>        RGB444_8B = 0x01,
->>>        RGB444_10B = 0x03,
->>> @@ -3347,6 +3350,10 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
->>>                                ret);
->>>                        goto err_iahb;
->>>                }
->>> +
->>> +             ret = clk_set_rate(hdmi->cec_clk, HDMI_CEC_CLK_RATE);
->>> +             if (ret)
->>> +                     dev_warn(hdmi->dev, "Cannot set HDMI cec clock rate: %d\n", ret);
->>>        }
->>>
->>>        /* Product and revision IDs */
->>> --
->>> 2.25.1
->>>
->>>
->>> _______________________________________________
->>> Linux-rockchip mailing list
->>> Linux-rockchip@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-rockchip
->>
->> Peter,
->>
->> On my 5.17-rc7 with applied rk356x VOP2 v8 series - this patch makes CEC working on rk3566.
->> Unfortunately it breaks working ok CEC on rk3399 rockpi-4b.
->>
->> Reverting this patch brings back CEC on rk3399 - but rk3366 becomes with non working CEC
->>
->> I'm not sure how to move forward with this....
-> 
-> I was worried about that, thanks for testing it.
-> Can you send me the cec_clk rate before and after this patch?
+From: Menglong Dong <imagedong@tencent.com>
 
-Hmm, looks like there might be a bug in the RK3399 clock driver - 
-although it's treated as having mux_pll_p as parents, according to the 
-public TRM the CEC clock appears unique in being backwards compared to 
-every other mux of those two inputs. I'm now tempted to test this on my 
-board tonight and see if I can see 24MHz on the CEC pin... :)
+In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()"),
+we added the support of reporting the reasons of skb drops to kfree_skb
+tracepoint. And in this series patches, reasons for skb drops are added
+to ICMP protocol.
 
-Robin.
+In order to report the reasons of skb drops in 'sock_queue_rcv_skb()',
+the function 'sock_queue_rcv_skb_reason()' is introduced in the 1th
+patch, which is used in the 2th patch.
+
+In the 2th patch, we add skb drop reasons to ping_queue_rcv_skb().
+
+In the 3th patch, we make ICMP message handler functions return drop
+reasons, which means we change the return type of 'handler()' in
+'struct icmp_control' from 'bool' to 'enum skb_drop_reason'. This
+changed its original intention, as 'false' means failure, but
+'SKB_NOT_DROPPED_YET', which is 0, means success now. Therefore, we
+have to change all usages of these handler. Following "handler" functions
+are involved:
+
+icmp_unreach()
+icmp_redirect()
+icmp_echo()
+icmp_timestamp()
+icmp_discard()
+
+And following drop reasons are added(what they mean can be see
+in the document for them):
+
+SKB_DROP_REASON_ICMP_CSUM
+SKB_DROP_REASON_ICMP_TYPE
+SKB_DROP_REASON_ICMP_BROADCAST
+
+Menglong Dong (3):
+  net: sock: introduce sock_queue_rcv_skb_reason()
+  net: icmp: add skb drop reasons to ping_queue_rcv_skb()
+  net: icmp: add reasons of the skb drops to icmp protocol
+
+ include/linux/skbuff.h     |  5 +++
+ include/net/ping.h         |  2 +-
+ include/net/sock.h         |  9 ++++-
+ include/trace/events/skb.h |  3 ++
+ net/core/sock.c            | 30 ++++++++++++---
+ net/ipv4/icmp.c            | 75 ++++++++++++++++++++++----------------
+ net/ipv4/ping.c            | 21 ++++++-----
+ net/ipv6/icmp.c            | 24 +++++++-----
+ 8 files changed, 112 insertions(+), 57 deletions(-)
+
+-- 
+2.35.1
+

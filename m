@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB614D7E34
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084C04D7E46
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237838AbiCNJJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S237888AbiCNJKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237751AbiCNJJs (ORCPT
+        with ESMTP id S237862AbiCNJKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:09:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D2237A23;
-        Mon, 14 Mar 2022 02:08:37 -0700 (PDT)
+        Mon, 14 Mar 2022 05:10:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CA542A3F;
+        Mon, 14 Mar 2022 02:09:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78905B80D55;
-        Mon, 14 Mar 2022 09:08:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF8EC340E9;
-        Mon, 14 Mar 2022 09:08:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57980612C5;
+        Mon, 14 Mar 2022 09:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73166C340E9;
+        Mon, 14 Mar 2022 09:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647248915;
-        bh=JzzzQoL0GbYCQzlYz/yEZ+EV3sEjDtQ9rE0YeOlbuRI=;
+        s=k20201202; t=1647248953;
+        bh=BPBQ/VX/IKiPRs7Ob5fSE29vKLC3yU2YLakDP89mHZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AH1VJFY9xqpt3O7fLoRfBGbg99R9/1TFlUYe3QA670YX1+RT0QP4PuDBh6T7yim2z
-         Ye93+atkQQAG20CMmgILWf9969/w+IdjWGPP17ob88d1apCN+5eH40TXBPDfsyIC7i
-         jgsK0f/oujLD+fSZFsNrywJUtPGSdk+PXV5xQVB3DYRWmg6H4YvjZqjMJEUbnWoxV7
-         Gu1u0RXLgGo7ot16z/nqmae7aO2zkS5AajlU4+VRyQx+0bF8F499dz/3EdzZIX5Kux
-         n5mFZ5m8LFf79XL0e29PAYZOoikbNq0qjTFkW4OTK8Lk9oGa4LUHToa85143Gj6VYv
-         VS3ZB11T+a8wQ==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2 1/3] bootconfig: Check the checksum before removing the bootconfig from initrd
-Date:   Mon, 14 Mar 2022 18:08:31 +0900
-Message-Id: <164724891101.731226.10764834379284738438.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164724890153.731226.1478494969800777757.stgit@devnote2>
-References: <164724890153.731226.1478494969800777757.stgit@devnote2>
-User-Agent: StGit/0.19
+        b=ETYSt4+U9c7/RZqN6mHOmvsGzCGnG16moR79KAnpnCrFmzzafmX1XftSNExR5AeIQ
+         V516NQZdClgvufQXPFKeAZxzy1WVVNhqUqmcKFBJuDGz95M5LKx4W2VYEqXbNC2R2A
+         RECVht+dJ91yOqT8rtVwjpffsf/b5Ba//UZcBFp21aKmmI6euBUtdtrCzmDboimvRP
+         sdVJhZd4AbcZTTtqURUgfl1divs2bNMUbb7qPkXn2XSEhagnqmbEOOxgCctluyQFls
+         12gpc9w0hk0MiHM2+C5hUMOf22L3x1Kie9a4BoFkQeN6Y5vUue1nvseMgg+rBUzscg
+         hqsyEv86fzbLQ==
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, tzungbi@kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/5] platform/chrome: cros_kbd_led_backlight: separate ACPI backend
+Date:   Mon, 14 Mar 2022 17:08:32 +0800
+Message-Id: <20220314090835.3822093-3-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+In-Reply-To: <20220314090835.3822093-1-tzungbi@kernel.org>
+References: <20220314090835.3822093-1-tzungbi@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,86 +54,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the bootconfig's checksum before removing the bootcinfig data
-from initrd to avoid modifying initrd by mistake.
-This will also simplifies the get_boot_config_from_initrd() interface.
+cros_kbd_led_backlight uses ACPI_KEYBOARD_BACKLIGHT_WRITE and
+ACPI_KEYBOARD_BACKLIGHT_READ for setting and getting the brightness
+respectively.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Separate ACPI operations as an independent option for preparing the
+driver to support other backends.
+
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- init/main.c |   22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+Changes from v1:
+- Update email address accordingly.
+- Use CONFIG_ACPI guard per "kernel test robot <lkp@intel.com>" reported an
+  unused variable issue.
 
-diff --git a/init/main.c b/init/main.c
-index 65fa2e41a9c0..421050be5039 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -265,7 +265,7 @@ static int __init loglevel(char *str)
- early_param("loglevel", loglevel);
+ drivers/platform/chrome/Kconfig               |  8 +-
+ .../platform/chrome/cros_kbd_led_backlight.c  | 93 ++++++++++++++++---
+ 2 files changed, 87 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index ccc23d8686e8..3f74679a556c 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -128,7 +128,7 @@ config CROS_EC_PROTO
  
- #ifdef CONFIG_BLK_DEV_INITRD
--static void * __init get_boot_config_from_initrd(u32 *_size, u32 *_csum)
-+static void * __init get_boot_config_from_initrd(u32 *_size)
+ config CROS_KBD_LED_BACKLIGHT
+ 	tristate "Backlight LED support for Chrome OS keyboards"
+-	depends on LEDS_CLASS && ACPI
++	depends on LEDS_CLASS
+ 	help
+ 	  This option enables support for the keyboard backlight LEDs on
+ 	  select Chrome OS systems.
+@@ -136,6 +136,12 @@ config CROS_KBD_LED_BACKLIGHT
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called cros_kbd_led_backlight.
+ 
++config CROS_KBD_LED_BACKLIGHT_ACPI
++	bool "ChromeOS keyboard backlight ACPI backend"
++	depends on ACPI && CROS_KBD_LED_BACKLIGHT
++	help
++	  ChromeOS keyboard backlight ACPI backend.
++
+ config CROS_EC_CHARDEV
+ 	tristate "ChromeOS EC miscdevice"
+ 	depends on MFD_CROS_EC_DEV
+diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
+index f9587a562bb7..e26d1d4cd801 100644
+--- a/drivers/platform/chrome/cros_kbd_led_backlight.c
++++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
+@@ -13,6 +13,33 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
++/**
++ * struct keyboard_led_drvdata - keyboard LED driver data.
++ * @init:			Init function.
++ * @brightness_get:		Get LED brightness level.
++ * @brightness_set:		Set LED brightness level.  Must not sleep.
++ * @brightness_set_blocking:	Set LED brightness level.  It can block the
++ *				caller for the time required for accessing a
++ *				LED device register
++ * @max_brightness:		Maximum brightness.
++ *
++ * See struct led_classdev in include/linux/leds.h for more details.
++ */
++struct keyboard_led_drvdata {
++	int (*init)(struct platform_device *pdev);
++
++	enum led_brightness (*brightness_get)(struct led_classdev *led_cdev);
++
++	void (*brightness_set)(struct led_classdev *led_cdev,
++			       enum led_brightness brightness);
++	int (*brightness_set_blocking)(struct led_classdev *led_cdev,
++				       enum led_brightness brightness);
++
++	enum led_brightness max_brightness;
++};
++
++#if IS_ENABLED(CONFIG_CROS_KBD_LED_BACKLIGHT_ACPI)
++
+ /* Keyboard LED ACPI Device must be defined in firmware */
+ #define ACPI_KEYBOARD_BACKLIGHT_DEVICE	"\\_SB.KBLT"
+ #define ACPI_KEYBOARD_BACKLIGHT_READ	ACPI_KEYBOARD_BACKLIGHT_DEVICE ".KBQC"
+@@ -20,8 +47,8 @@
+ 
+ #define ACPI_KEYBOARD_BACKLIGHT_MAX		100
+ 
+-static void keyboard_led_set_brightness(struct led_classdev *cdev,
+-					enum led_brightness brightness)
++static void keyboard_led_set_brightness_acpi(struct led_classdev *cdev,
++					     enum led_brightness brightness)
  {
- 	u32 size, csum;
- 	char *data;
-@@ -299,17 +299,20 @@ static void * __init get_boot_config_from_initrd(u32 *_size, u32 *_csum)
- 		return NULL;
+ 	union acpi_object param;
+ 	struct acpi_object_list input;
+@@ -40,7 +67,7 @@ static void keyboard_led_set_brightness(struct led_classdev *cdev,
+ }
+ 
+ static enum led_brightness
+-keyboard_led_get_brightness(struct led_classdev *cdev)
++keyboard_led_get_brightness_acpi(struct led_classdev *cdev)
+ {
+ 	unsigned long long brightness;
+ 	acpi_status status;
+@@ -56,12 +83,10 @@ keyboard_led_get_brightness(struct led_classdev *cdev)
+ 	return brightness;
+ }
+ 
+-static int keyboard_led_probe(struct platform_device *pdev)
++static int keyboard_led_init_acpi(struct platform_device *pdev)
+ {
+-	struct led_classdev *cdev;
+ 	acpi_handle handle;
+ 	acpi_status status;
+-	int error;
+ 
+ 	/* Look for the keyboard LED ACPI Device */
+ 	status = acpi_get_handle(ACPI_ROOT_OBJECT,
+@@ -73,15 +98,55 @@ static int keyboard_led_probe(struct platform_device *pdev)
+ 		return -ENXIO;
  	}
  
-+	if (xbc_calc_checksum(data, size) != csum) {
-+		pr_err("bootconfig checksum failed\n");
-+		return NULL;
++	return 0;
++}
++
++static const struct keyboard_led_drvdata keyboard_led_drvdata_acpi = {
++	.init = keyboard_led_init_acpi,
++	.brightness_set = keyboard_led_set_brightness_acpi,
++	.brightness_get = keyboard_led_get_brightness_acpi,
++	.max_brightness = ACPI_KEYBOARD_BACKLIGHT_MAX,
++};
++
++#else /* IS_ENABLED(CONFIG_CROS_KBD_LED_BACKLIGHT_ACPI) */
++
++static int keyboard_led_init_acpi_null(struct platform_device *pdev)
++{
++	return -EOPNOTSUPP;
++}
++
++static const struct keyboard_led_drvdata keyboard_led_drvdata_acpi = {
++	.init = keyboard_led_init_acpi_null,
++};
++
++#endif /* IS_ENABLED(CONFIG_CROS_KBD_LED_BACKLIGHT_ACPI) */
++
++static int keyboard_led_probe(struct platform_device *pdev)
++{
++	struct led_classdev *cdev;
++	const struct keyboard_led_drvdata *drvdata;
++	int error;
++
++	drvdata = acpi_device_get_match_data(&pdev->dev);
++	if (!drvdata)
++		return -EINVAL;
++
++	if (drvdata->init) {
++		error = drvdata->init(pdev);
++		if (error)
++			return error;
 +	}
 +
- 	/* Remove bootconfig from initramfs/initrd */
- 	initrd_end = (unsigned long)data;
- 	if (_size)
- 		*_size = size;
--	if (_csum)
--		*_csum = csum;
+ 	cdev = devm_kzalloc(&pdev->dev, sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return -ENOMEM;
  
- 	return data;
- }
- #else
--static void * __init get_boot_config_from_initrd(u32 *_size, u32 *_csum)
-+static void * __init get_boot_config_from_initrd(u32 *_size)
- {
- 	return NULL;
- }
-@@ -408,12 +411,12 @@ static void __init setup_boot_config(void)
- 	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
- 	const char *msg;
- 	int pos;
--	u32 size, csum;
-+	u32 size;
- 	char *data, *err;
- 	int ret;
+ 	cdev->name = "chromeos::kbd_backlight";
+-	cdev->max_brightness = ACPI_KEYBOARD_BACKLIGHT_MAX;
+ 	cdev->flags |= LED_CORE_SUSPENDRESUME;
+-	cdev->brightness_set = keyboard_led_set_brightness;
+-	cdev->brightness_get = keyboard_led_get_brightness;
++	cdev->max_brightness = drvdata->max_brightness;
++	cdev->brightness_set = drvdata->brightness_set;
++	cdev->brightness_set_blocking = drvdata->brightness_set_blocking;
++	cdev->brightness_get = drvdata->brightness_get;
  
- 	/* Cut out the bootconfig data even if we have no bootconfig option */
--	data = get_boot_config_from_initrd(&size, &csum);
-+	data = get_boot_config_from_initrd(&size);
- 
- 	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
- 	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-@@ -437,11 +440,6 @@ static void __init setup_boot_config(void)
- 		return;
- 	}
- 
--	if (xbc_calc_checksum(data, size) != csum) {
--		pr_err("bootconfig checksum failed\n");
--		return;
--	}
--
- 	ret = xbc_init(data, size, &msg, &pos);
- 	if (ret < 0) {
- 		if (pos < 0)
-@@ -470,7 +468,7 @@ static void __init exit_boot_config(void)
- static void __init setup_boot_config(void)
- {
- 	/* Remove bootconfig data from initrd */
--	get_boot_config_from_initrd(NULL, NULL);
-+	get_boot_config_from_initrd(NULL);
+ 	error = devm_led_classdev_register(&pdev->dev, cdev);
+ 	if (error)
+@@ -90,16 +155,18 @@ static int keyboard_led_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
- static int __init warn_bootconfig(char *str)
+-static const struct acpi_device_id keyboard_led_id[] = {
+-	{ "GOOG0002", 0 },
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id keyboard_led_acpi_match[] = {
++	{ "GOOG0002", (kernel_ulong_t)&keyboard_led_drvdata_acpi },
+ 	{ }
+ };
+-MODULE_DEVICE_TABLE(acpi, keyboard_led_id);
++MODULE_DEVICE_TABLE(acpi, keyboard_led_acpi_match);
++#endif
+ 
+ static struct platform_driver keyboard_led_driver = {
+ 	.driver		= {
+ 		.name	= "chromeos-keyboard-leds",
+-		.acpi_match_table = ACPI_PTR(keyboard_led_id),
++		.acpi_match_table = ACPI_PTR(keyboard_led_acpi_match),
+ 	},
+ 	.probe		= keyboard_led_probe,
+ };
+-- 
+2.35.1.723.g4982287a31-goog
 

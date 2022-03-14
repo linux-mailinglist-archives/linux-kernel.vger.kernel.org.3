@@ -2,123 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F4A4D8853
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027BE4D8854
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242615AbiCNPku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S242634AbiCNPk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiCNPks (ORCPT
+        with ESMTP id S242619AbiCNPku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:40:48 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73712B1BF;
-        Mon, 14 Mar 2022 08:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1647272337;
-        bh=0hiQdLYzzJrthQHxIhtX0qW9S2gMLh89hdfAM3B+VpA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=M0/CkdUgHniD7my+WJFaXS8on2DZoU1UHIumjJY5/RLve9LM0/8rrNW21QQAz90xK
-         slsFpODg4S9QyM78LqFlRSM9d/S6hOM/0x25yyct1wRenI+dYZ2Bqr7D5zwaichfKl
-         iRRF6kPJmt5FQyFDrn3184Z0XUlQOsMH7LGNrK8c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.151.147] ([217.61.151.147]) by web-mail.gmx.net
- (3c-app-gmx-bap56.server.lan [172.19.172.126]) (via HTTP); Mon, 14 Mar 2022
- 16:38:56 +0100
+        Mon, 14 Mar 2022 11:40:50 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A7A2B1BF;
+        Mon, 14 Mar 2022 08:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647272380; x=1678808380;
+  h=to:cc:subject:references:date:mime-version:
+   content-transfer-encoding:from:message-id:in-reply-to;
+  bh=Mu8Q0p1RLEfyaYx1a20uH10PLs/a7FuK8GEKxzLijI0=;
+  b=lupF+Bq+WkQ92PlhTAltzjQhhC0SOCWz/9a6z95Od3HxwHym5gtSCQyW
+   5tC1WjxAKMC9GzXf+KE6GcgVBXc300OPoRxoUoXIMUytCx9ygAWNWeoef
+   hmqSbjgI1TNZxsUpCbie9XCREmZP/574iaJ0+C04m65QGsez+8ZaqFgbE
+   7qlF1yy1oHZyB1syYbaHAzlyqREZ5Phi59bt9oFuG6qTOcYX5rAkfyK0H
+   cvhS/4txSTGTlp0PUmYShF7lEPjt3nfC2gk6EpR+fm68iOaV6aia2vi1J
+   rS5kqQsWfRMOYTdklP6vRpAl5KzYtV7B0sTzboovJSMvnX0Vflw2jHuzi
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="238233488"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="238233488"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 08:39:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="556474339"
+Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.255.37.182])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 14 Mar 2022 08:39:37 -0700
+Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
+To:     "Reinette Chatre" <reinette.chatre@intel.com>,
+        "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc:     "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        nathaniel@profian.com
+Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
+ permissions
+References: <4ce06608b5351f65f4e6bc6fc87c88a71215a2e7.1644274683.git.reinette.chatre@intel.com> <YhLhoMFPyOFZ2fsX@iki.fi> <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com> <YimWaAqEnXHbLdjh@iki.fi> <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net> <Yis8LV99mORcLYs6@iki.fi> <Yis9rA8uC/0bmWCF@iki.fi> <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com> <Yi6tPLLt9Q+ailQ3@iki.fi> <Yi6tinbF+Y7a66eQ@iki.fi> <Yi6va4dCaljiQ1WQ@iki.fi>
+Date:   Mon, 14 Mar 2022 10:39:36 -0500
 MIME-Version: 1.0
-Message-ID: <trinity-0f1389c2-6d2b-4499-a2fc-3cb93f4d09cb-1647272336831@3c-app-gmx-bap56>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Aw: Re: [PATCH v6 3/6] ARM: dts: spear13xx: Fix sata node name
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 14 Mar 2022 16:38:56 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220314034940.rxkgue2kllnqhucp@vireshk-i7>
-References: <20220311210357.222830-1-linux@fw-web.de>
- <20220311210357.222830-4-linux@fw-web.de>
- <20220314034940.rxkgue2kllnqhucp@vireshk-i7>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:gLht/1WascKmAkHg0tigkfra0fk/gYur/IiTTMyyGSmcqwrhVynoTW1YUGql3lgRW5ger
- mr12NMylEOhVVALt80u84ZjKVBJ7oI7WqUrWb/y/OBKCMtUra5ihwbKArSFZ48al4xvyGvZIatZc
- qPw+YSSsjtiAU9rOy1BerK6PqUP/yOza87QD0B6s53j7t/F2lFW3Xe7UrjmcriDTvRkmKWtJCMrF
- ySC9cjsPCU5IlctIX9DIy8McWyMOmjjQe4/7EhuseuCN1qDetJTTTaqHNqOjmCc+Ov6wkDwHIS5u
- sE=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:P7tFke7m43c=:1oXfuKyenANOYRAc66LkBH
- cVYLR8BkFV9yGq6h5Cit41aVWt3DcoBXnFIcJzt1mTDjAe0DmxngO8L6jeCoPRsolhVm0ZtSu
- IdXGjL8mhV7xFv3XH+TkMigzy+9ztqKB2ZZ+Bdlg4voJlHu0mWpUEj5xXR9p7sZ1Yu0kp+zdm
- K0Z+UhFD99hfNjsenukQ6dmMw7EduTiM2v5jkLSzSEk41v9P/kDsegjxrq9EI1LSBYNmeWOvk
- DcO4bCa7B0Y9goU/p3td+VEvFyQozMa2fFFR3jsXad+J0NsuRQ2KCvdA5xwRPOm76n22IkL7x
- RYYMVS/ts8/S5g/jBZrpBQSSXdv9TfPbxgucfhI7MkYneu29nmTQEv3r7nmlrbzlDMUUZ9AJ6
- J3n78jqaduZ2tTtOpCUL6ZDLDSR++qiM/WKSzO5vJyZc/BVdb3NPUl6vWb7K4UMopvzMEGzon
- Jv6F49GZ7lAdSsw1U/vM+gcSuBbbPtkQPBsSBqzrF/Wu+j++/g3/ll2jcGnahhojK0tO5bCa2
- 3uDUdamaugIC/X9BUzS0JqakB2Z2PULqJlphjCuRzw9xPk0BLZUPDAy4L/0LAubmtqtactreL
- J5KqriwpQm3aZvR/3OG6DL/dA2uvtR8mPktV5DgJ8K92+SkDHfW+KUjeGGE88GiFsu/A0dqMC
- 5xrpYuuveosYcslnNHfV6W7AXDlmgUDbVSW7mmX/7C4lObY0ZugyXUBxLvEXN/f22vk+E+Xlg
- kUULzqwqxwAlZxSRBHp1UPfO5ZlLJ9CuCoVoNHaSvYSwzpquEJqx2TgEJiiuFQ3DrzCKyzqW4
- TrU16gE
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+From:   "Haitao Huang" <haitao.huang@linux.intel.com>
+Organization: Intel Corp
+Message-ID: <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net>
+In-Reply-To: <Yi6va4dCaljiQ1WQ@iki.fi>
+User-Agent: Opera Mail/1.0 (Win32)
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Jarkko
 
-thanks for for checking the spear-patch=2E
+On Sun, 13 Mar 2022 21:58:51 -0500, Jarkko Sakkinen <jarkko@kernel.org>  
+wrote:
 
-> Gesendet: Montag, 14=2E M=C3=A4rz 2022 um 04:49 Uhr
-> Von: "Viresh Kumar" <viresh=2Ekumar@linaro=2Eorg>
+> On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
+>> On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
+>> > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
+>> >
+>> > > I saw Haitao's note that EMODPE requires "Read access permitted by  
+>> enclave".
+>> > > This motivates that EMODPR->PROT_NONE should not be allowed since  
+>> it would
+>> > > not be possible to relax permissions (run EMODPE) after that. Even  
+>> so, I
+>> > > also found in the SDM that EACCEPT has the note "Read access  
+>> permitted
+>> > > by enclave". That seems to indicate that EMODPR->PROT_NONE is not  
+>> practical
+>> > > from that perspective either since the enclave will not be able to
+>> > > EACCEPT the change. Does that match your understanding?
+>> >
+>> > Yes, PROT_NONE should not be allowed.
+>> >
+>> > This is however the real problem.
+>> >
+>> > The current kernel patch set has inconsistent API and EMODPR ioctl is
+>> > simply unacceptable. It  also requires more concurrency management  
+>> from
+>> > user space run-time, which would be heck a lot easier to do in the  
+>> kernel.
+>> >
+>> > If you really want EMODPR as ioctl, then for consistencys sake, then  
+>> EAUG
+>> > should be too. Like this when things go opposite directions, this  
+>> patch set
+>> > plain and simply will not work out.
+>> >
+>> > I would pick EAUG's strategy from these two as it requires half the  
+>> back
+>> > calls to host from an enclave. I.e. please combine mprotect() and  
+>> EMODPR,
+>> > either in the #PF handler or as part of mprotect(), which ever suits  
+>> you
+>> > best.
+>> >
+>> > I'll try demonstrate this with two examples.
+>> >
+>> > mmap() could go something like this() (simplified):
+>> > 1. Execution #UD's to SYSCALL.
+>> > 2. Host calls enclave's mmap() handler with mmap() parameters.
+>> > 3. Enclave up-calls host's mmap().
+>> > 4. Loops the range with EACCEPTCOPY.
+>> >
+>> > mprotect() has to be done like this:
+>> > 1. Execution #UD's to SYSCALL.
+>> > 2. Host calls enclave's mprotect() handler.
+>> > 3. Enclave up-calls host's mprotect().
+>> > 4. Enclave up-calls host's ioctl() to SGX_IOC_ENCLAVE_PERMISSIONS.
+
+I assume up-calls here are ocalls as we call them in our implementation,  
+which are the calls enclave make to untrusted side via EEXIT.
+
+If so, can your implementation combine this two up-calls into one, then  
+host side just do ioctl() and mprotect to kernel? If so, would that  
+address your concern about extra up-calls?
+
+
+>> > 3. Loops the range with EACCEPT.
+>>   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>   5. Loops the range with EACCEPT + EMODPE.
+>>
+>> > This is just terrible IMHO. I hope these examples bring some insight.
 >
-> On 11-03-22, 22:03, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files=2Ede>
-> >=20
-> > After converting the binding to yaml the node name does
-> > not match the standard pattern, change it=2E
-> >=20
-> > arch/arm/boot/dts/spear1340-evb=2Edt=2Eyaml: ahci@b1000000:
-> > $nodename:0: 'ahci@b1000000' does not match '^sata(@=2E*)?$'
-> > 	From schema: Documentation/devicetree/bindings/ata/ahci-platform=2Eya=
-ml
-> >=20
-> > Fixes: 07658d9a659b ("SPEAr13xx: Add dts and dtsi files")
->=20
-> I don't think this is correct=2E The above patch is correct=2E The first
-> patch in this series changes the names and that's where things break=2E
+> E.g. in Enarx we have to add a special up-call (so called enarxcall in
+> intermediate that we call sallyport, which provides shared buffer to
+> communicate with the enclave) just for reseting the range with PROT_READ.
+> Feel very redundant, adds ugly cruft and is completely opposite strategy  
+> to
+> what you've chosen to do with EAUG, which is I think correct choice as  
+> far
+> as API is concerned.
 
-it's right that my binding will break it, but the nodes are not named the =
-right way=2E
-And i used the commit that introduces the wrong node-names=2E
-Maybe fixes-tag is wrong in this case=2E
+The problem with EMODPR on #PF is that kernel needs to know what  
+permissions requested from enclave at the time of #PF. So enclave has to  
+make at least one call to kernel (again via ocall in our case, I assume  
+up-call in your case) to make the change.
 
-> I think you could have added these patches before changing to yaml and
-> then nothing would ever have broken=2E
->=20
-> Since this isn't a big deal anyway, I think you can just drop the
-> Fixes tag here, and other dts patches you have=2E
+Enclave runtime may not know the permissions until upper layer application  
+code (JIT or some kind of code loader) make the decision to change it. And  
+the ocalls/up-calls can only be done at that time, not upfront, like mmap  
+that is only used to reserve ranges.
 
-regards Frank
+I also see this model as consistent to what kernel does for regular memory  
+mappings: adding physical pages on #PF or pre-fault and changing PTE  
+permissions only after mprotect is called.
+
+I would agree/prefer mprotect and the ioctl() for EMODPR be combined, but  
+Reinette pointed out some issues above on managing VMAs and handling  
+errors in that approach.
+
+BR
+Haitao

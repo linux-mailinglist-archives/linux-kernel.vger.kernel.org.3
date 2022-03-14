@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C424D81D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C766A4D8331
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239889AbiCNL5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S241447AbiCNMNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239841AbiCNL45 (ORCPT
+        with ESMTP id S241434AbiCNMIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:56:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1990AE44;
-        Mon, 14 Mar 2022 04:55:38 -0700 (PDT)
+        Mon, 14 Mar 2022 08:08:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17F34D9F6;
+        Mon, 14 Mar 2022 05:05:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B8B26123C;
-        Mon, 14 Mar 2022 11:55:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C058CC340E9;
-        Mon, 14 Mar 2022 11:55:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42D87B80DF2;
+        Mon, 14 Mar 2022 12:05:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CFAC340ED;
+        Mon, 14 Mar 2022 12:05:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647258937;
-        bh=uxRqkDKVyWKsiFeWFpHm+0f93z5WEk1dKRzymym8nL4=;
+        s=korg; t=1647259510;
+        bh=PLkxFWAuJPB2flzQRtes2vC27qTt7IiTYtVEtYcftUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xguu5s+s3kJbg3R+5IckyCe0eWQ9ZENzvyuUfmFpUh05c+pwKQw/pa46XWkf4Z8tg
-         DCrU2VfmKqqMMDsWc5KmGR2kjYDwUd6YCeRNraOoryGRxFOaQJLoh3Eemta/Ca91hi
-         Yvz9YwaAGKiXhaNi8e1HUxyBlKFD7QdL1gkD83vU=
+        b=f2ozqY7Z9DSR+4rNhcRKBPuyvLp+aHcTkv3KULo9sTQQpcyYYjAyY1Iebvbpum0+r
+         Azs6MWciFtVKnq6Lyyd61BXQz3lpq25vdry/q+fhY/edUKMrosS2FukJTqiia7KLJZ
+         YX3GEx7CTKENT9xoT4162ddgZY8ugFBzDYIaiB/s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
-        Eran Ben Elisha <eranbe@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 13/43] net/mlx5: Fix a race on command flush flow
-Date:   Mon, 14 Mar 2022 12:53:24 +0100
-Message-Id: <20220314112734.791652369@linuxfoundation.org>
+Subject: [PATCH 5.15 023/110] smsc95xx: Ignore -ENODEV errors when device is unplugged
+Date:   Mon, 14 Mar 2022 12:53:25 +0100
+Message-Id: <20220314112743.683391099@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,90 +55,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Shemesh <moshe@nvidia.com>
+From: Fabio Estevam <festevam@denx.de>
 
-[ Upstream commit 063bd355595428750803d8736a9bb7c8db67d42d ]
+[ Upstream commit c70c453abcbf3ecbaadd4c3236a5119b8da365cf ]
 
-Fix a refcount use after free warning due to a race on command entry.
-Such race occurs when one of the commands releases its last refcount and
-frees its index and entry while another process running command flush
-flow takes refcount to this command entry. The process which handles
-commands flush may see this command as needed to be flushed if the other
-process released its refcount but didn't release the index yet. Fix it
-by adding the needed spin lock.
+According to Documentation/driver-api/usb/URB.rst when a device
+is unplugged usb_submit_urb() returns -ENODEV.
 
-It fixes the following warning trace:
+This error code propagates all the way up to usbnet_read_cmd() and
+usbnet_write_cmd() calls inside the smsc95xx.c driver during
+Ethernet cable unplug, unbind or reboot.
 
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 11 PID: 540311 at lib/refcount.c:25 refcount_warn_saturate+0x80/0xe0
-...
-RIP: 0010:refcount_warn_saturate+0x80/0xe0
-...
-Call Trace:
- <TASK>
- mlx5_cmd_trigger_completions+0x293/0x340 [mlx5_core]
- mlx5_cmd_flush+0x3a/0xf0 [mlx5_core]
- enter_error_state+0x44/0x80 [mlx5_core]
- mlx5_fw_fatal_reporter_err_work+0x37/0xe0 [mlx5_core]
- process_one_work+0x1be/0x390
- worker_thread+0x4d/0x3d0
- ? rescuer_thread+0x350/0x350
- kthread+0x141/0x160
- ? set_kthread_struct+0x40/0x40
- ret_from_fork+0x1f/0x30
- </TASK>
+This causes the following errors to be shown on reboot, for example:
 
-Fixes: 50b2412b7e78 ("net/mlx5: Avoid possible free of command entry while timeout comp handler")
-Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
-Reviewed-by: Eran Ben Elisha <eranbe@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+ci_hdrc ci_hdrc.1: remove, state 1
+usb usb2: USB disconnect, device number 1
+usb 2-1: USB disconnect, device number 2
+usb 2-1.1: USB disconnect, device number 3
+smsc95xx 2-1.1:1.0 eth1: unregister 'smsc95xx' usb-ci_hdrc.1-1.1, smsc95xx USB 2.0 Ethernet
+smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
+smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
+smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
+smsc95xx 2-1.1:1.0 eth1: hardware isn't capable of remote wakeup
+usb 2-1.4: USB disconnect, device number 4
+ci_hdrc ci_hdrc.1: USB bus 2 deregistered
+ci_hdrc ci_hdrc.0: remove, state 4
+usb usb1: USB disconnect, device number 1
+ci_hdrc ci_hdrc.0: USB bus 1 deregistered
+imx2-wdt 30280000.watchdog: Device shutdown: Expect reboot!
+reboot: Restarting system
+
+Ignore the -ENODEV errors inside __smsc95xx_mdio_read() and
+__smsc95xx_phy_wait_not_busy() and do not print error messages
+when -ENODEV is returned.
+
+Fixes: a049a30fc27c ("net: usb: Correct PHY handling of smsc95xx")
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/cmd.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/net/usb/smsc95xx.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-index 1a7aa078f351..6c7b364d0bf0 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-@@ -130,11 +130,8 @@ static int cmd_alloc_index(struct mlx5_cmd *cmd)
- 
- static void cmd_free_index(struct mlx5_cmd *cmd, int idx)
- {
--	unsigned long flags;
--
--	spin_lock_irqsave(&cmd->alloc_lock, flags);
-+	lockdep_assert_held(&cmd->alloc_lock);
- 	set_bit(idx, &cmd->bitmask);
--	spin_unlock_irqrestore(&cmd->alloc_lock, flags);
- }
- 
- static void cmd_ent_get(struct mlx5_cmd_work_ent *ent)
-@@ -144,17 +141,21 @@ static void cmd_ent_get(struct mlx5_cmd_work_ent *ent)
- 
- static void cmd_ent_put(struct mlx5_cmd_work_ent *ent)
- {
-+	struct mlx5_cmd *cmd = ent->cmd;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&cmd->alloc_lock, flags);
- 	if (!refcount_dec_and_test(&ent->refcnt))
--		return;
-+		goto out;
- 
- 	if (ent->idx >= 0) {
--		struct mlx5_cmd *cmd = ent->cmd;
--
- 		cmd_free_index(cmd, ent->idx);
- 		up(ent->page_queue ? &cmd->pages_sem : &cmd->sem);
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 026e7487c45b..eb0d325e92b7 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -84,9 +84,10 @@ static int __must_check __smsc95xx_read_reg(struct usbnet *dev, u32 index,
+ 	ret = fn(dev, USB_VENDOR_REQUEST_READ_REGISTER, USB_DIR_IN
+ 		 | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 		 0, index, &buf, 4);
+-	if (unlikely(ret < 0)) {
+-		netdev_warn(dev->net, "Failed to read reg index 0x%08x: %d\n",
+-			    index, ret);
++	if (ret < 0) {
++		if (ret != -ENODEV)
++			netdev_warn(dev->net, "Failed to read reg index 0x%08x: %d\n",
++				    index, ret);
+ 		return ret;
  	}
  
- 	cmd_free_ent(ent);
-+out:
-+	spin_unlock_irqrestore(&cmd->alloc_lock, flags);
+@@ -116,7 +117,7 @@ static int __must_check __smsc95xx_write_reg(struct usbnet *dev, u32 index,
+ 	ret = fn(dev, USB_VENDOR_REQUEST_WRITE_REGISTER, USB_DIR_OUT
+ 		 | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 		 0, index, &buf, 4);
+-	if (unlikely(ret < 0))
++	if (ret < 0 && ret != -ENODEV)
+ 		netdev_warn(dev->net, "Failed to write reg index 0x%08x: %d\n",
+ 			    index, ret);
+ 
+@@ -159,6 +160,9 @@ static int __must_check __smsc95xx_phy_wait_not_busy(struct usbnet *dev,
+ 	do {
+ 		ret = __smsc95xx_read_reg(dev, MII_ADDR, &val, in_pm);
+ 		if (ret < 0) {
++			/* Ignore -ENODEV error during disconnect() */
++			if (ret == -ENODEV)
++				return 0;
+ 			netdev_warn(dev->net, "Error reading MII_ACCESS\n");
+ 			return ret;
+ 		}
+@@ -194,7 +198,8 @@ static int __smsc95xx_mdio_read(struct usbnet *dev, int phy_id, int idx,
+ 	addr = mii_address_cmd(phy_id, idx, MII_READ_ | MII_BUSY_);
+ 	ret = __smsc95xx_write_reg(dev, MII_ADDR, addr, in_pm);
+ 	if (ret < 0) {
+-		netdev_warn(dev->net, "Error writing MII_ADDR\n");
++		if (ret != -ENODEV)
++			netdev_warn(dev->net, "Error writing MII_ADDR\n");
+ 		goto done;
+ 	}
+ 
+@@ -206,7 +211,8 @@ static int __smsc95xx_mdio_read(struct usbnet *dev, int phy_id, int idx,
+ 
+ 	ret = __smsc95xx_read_reg(dev, MII_DATA, &val, in_pm);
+ 	if (ret < 0) {
+-		netdev_warn(dev->net, "Error reading MII_DATA\n");
++		if (ret != -ENODEV)
++			netdev_warn(dev->net, "Error reading MII_DATA\n");
+ 		goto done;
+ 	}
+ 
+@@ -214,6 +220,10 @@ static int __smsc95xx_mdio_read(struct usbnet *dev, int phy_id, int idx,
+ 
+ done:
+ 	mutex_unlock(&dev->phy_mutex);
++
++	/* Ignore -ENODEV error during disconnect() */
++	if (ret == -ENODEV)
++		return 0;
+ 	return ret;
  }
  
- static struct mlx5_cmd_layout *get_inst(struct mlx5_cmd *cmd, int idx)
+@@ -235,7 +245,8 @@ static void __smsc95xx_mdio_write(struct usbnet *dev, int phy_id,
+ 	val = regval;
+ 	ret = __smsc95xx_write_reg(dev, MII_DATA, val, in_pm);
+ 	if (ret < 0) {
+-		netdev_warn(dev->net, "Error writing MII_DATA\n");
++		if (ret != -ENODEV)
++			netdev_warn(dev->net, "Error writing MII_DATA\n");
+ 		goto done;
+ 	}
+ 
+@@ -243,7 +254,8 @@ static void __smsc95xx_mdio_write(struct usbnet *dev, int phy_id,
+ 	addr = mii_address_cmd(phy_id, idx, MII_WRITE_ | MII_BUSY_);
+ 	ret = __smsc95xx_write_reg(dev, MII_ADDR, addr, in_pm);
+ 	if (ret < 0) {
+-		netdev_warn(dev->net, "Error writing MII_ADDR\n");
++		if (ret != -ENODEV)
++			netdev_warn(dev->net, "Error writing MII_ADDR\n");
+ 		goto done;
+ 	}
+ 
 -- 
 2.34.1
 

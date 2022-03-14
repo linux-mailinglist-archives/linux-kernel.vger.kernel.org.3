@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6904D88AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794B84D88AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242850AbiCNQB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S242864AbiCNQBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242851AbiCNQB0 (ORCPT
+        with ESMTP id S242855AbiCNQBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:01:26 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B67457AE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:00:12 -0700 (PDT)
+        Mon, 14 Mar 2022 12:01:31 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D544F45AC2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:00:18 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1C66E200007;
-        Mon, 14 Mar 2022 16:00:00 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id DC40A60009;
+        Mon, 14 Mar 2022 16:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647273609;
+        t=1647273617;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RcTeCSqjA30WWQNMW0gHvtlkhVvj5befvu9dAIyBttU=;
-        b=B3nDZWQVGuyP1Y3ap+c4EWjrDmdWvX8VY3+6+D+TakX+BJqXi+ruTobaxoPh89pSmzaNH0
-        HRhifMCrSb86dmLoektCYPhJ4Dm3i4NxrjRTtCMhs9zXjIMk9vM4ewaUyU1kAAvxj0au5M
-        5rbUeel2PKMPi4nYXEWbdDg6yXQjmrPzsZxN5MGGFwKsldw08gg7azlJqupljA3dFTiLuD
-        ryvwCRz4cxxzg5ipzsfitngFji5p1b9ilNDjmsMhf9AjLsTFKRM+0rSYCpwSUTtVo3/13h
-        dfdOOE9Y8ps4LSPsSnB+AwFR7/1ejT/q8S4LmQwEU2xATS+nCGBSgg9BGIDczg==
+        bh=U7JMJ3IGrvjpk6NF5wRwGwuqyAr6wjfBK4Y8SNwWwXY=;
+        b=DHj+dTmQDZXD4QdZsrsie1/2jyNYv6uXwCE/A5sF5WClrZlXCJsPtU1NgPjUhlgVk6IFyr
+        yrBXdaSwOXEzs/fENNwDsWfKvb3cF3AU8idiJzKMulujWreUcz/HdAhzNOXtG4rE7d5VWY
+        Tc29ck41TBlCjB48lRRd7iyVL6gO2qDxXTBfDVPY+x1wQ/mK5jzCDKh+TYQLhbEbxitsX3
+        ZuxtuKv6/16INB3Ow6iKZq2TgTD2NdiEaCB13p84Cj+wX0y3o7bHSJkZFcm7Ejyi60rYIi
+        MvkTBF+aJ2cz99UCUrd6CTEH3HZzaRFXTrzli4EDBA/QNG80MhN7RfDlsHguuw==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Xin Xiong <xiongx18@fudan.edu.cn>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
+To:     Yihao Han <hanyihao@vivo.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, Zou Wei <zou_wei@huawei.com>,
         linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: Re: [PATCH v4] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
-Date:   Mon, 14 Mar 2022 17:00:00 +0100
-Message-Id: <20220314160000.77465-1-miquel.raynal@bootlin.com>
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com
+Subject: Re: [PATCH] mtd: rawnand: rockchip: fix platform_get_irq.cocci warning
+Date:   Mon, 14 Mar 2022 17:00:13 +0100
+Message-Id: <20220314160013.77534-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220304085330.3610-1-xiongx18@fudan.edu.cn>
+In-Reply-To: <20220303123431.3170-1-hanyihao@vivo.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'fecbd4a317c95d73c849648c406bcf1b6a0ec1cf'
+X-linux-mtd-patch-commit: b'fba6eb4fc4e6819d9684d378ace339c4212d5ce1'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-04 at 08:53:32 UTC, Xin Xiong wrote:
-> The reference counting issue happens in several error handling paths
-> on a refcounted object "nc->dmac". In these paths, the function simply
-> returns the error code, forgetting to balance the reference count of
-> "nc->dmac", increased earlier by dma_request_channel(), which may
-> cause refcount leaks.
+On Thu, 2022-03-03 at 12:34:27 UTC, Yihao Han wrote:
+> Remove dev_err() messages after platform_get_irq*() failures.
+> platform_get_irq() already prints an error.
 > 
-> Fix it by decrementing the refcount of specific object in those error
-> paths.
+> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
 > 
-> Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-> Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-> Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-> Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 

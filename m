@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1F54D825F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC4F4D8477
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240312AbiCNMD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S241280AbiCNMYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240455AbiCNMCx (ORCPT
+        with ESMTP id S241067AbiCNMR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:02:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FBD48E7A;
-        Mon, 14 Mar 2022 05:00:19 -0700 (PDT)
+        Mon, 14 Mar 2022 08:17:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F090E4925E;
+        Mon, 14 Mar 2022 05:12:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFFA3B80DF5;
-        Mon, 14 Mar 2022 11:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D41C340E9;
-        Mon, 14 Mar 2022 11:59:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD9161387;
+        Mon, 14 Mar 2022 12:12:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E291C340F6;
+        Mon, 14 Mar 2022 12:12:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259196;
-        bh=JNgz7aOmQOURe9AXh8w879yMAAPClIIjiSnyCIm1RY0=;
+        s=korg; t=1647259940;
+        bh=VOh4WZWDHbvl0DVM0VCouT/2UyXl+kHCC7NlZIFYlBw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EBuIOa26GEvgm/DWEtxha6Gdz2j8WhYr5lvBKfVOYDiZ0AbxoqcGG+bzI45D+m6lB
-         h3Ptkd6tvAogDhJNBNuoS3ctgAvMEuVKjjIhWhXXkHSZ58adR0paAD100g+jmpDou9
-         6HsZU6GCXkfw1OQIKvBVjc/KuD5T3gH/xT/nXTTY=
+        b=wMQpgGnJWp8345qD7boJaxDiNLiEG+DReKyzRBLp/UHAo28OMBWnieGbliXV1uQwJ
+         MzLEPh5ooT6Unos4Ifw1ImloD3J8ew4jvSO2PG6vkUD7mbr+uGWosa5upaHQMNT1a4
+         6KgVaM/YiZRLBCR00Dt6LSDRTrvNeEMwZW2sGRtM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 24/71] net: ethernet: ti: cpts: Handle error for clk_enable
+Subject: [PATCH 5.16 014/121] vduse: Fix returning wrong type in vduse_domain_alloc_iova()
 Date:   Mon, 14 Mar 2022 12:53:17 +0100
-Message-Id: <20220314112738.610318939@linuxfoundation.org>
+Message-Id: <20220314112744.524268764@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +58,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit 6babfc6e6fab068018c36e8f6605184b8c0b349d ]
+[ Upstream commit b9d102dafec6af1c07b610faf0a6d4e8aee14ae0 ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+This fixes the following smatch warnings:
 
-Fixes: 8a2c9a5ab4b9 ("net: ethernet: ti: cpts: rework initialization/deinitialization")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+drivers/vdpa/vdpa_user/iova_domain.c:305 vduse_domain_alloc_iova() warn: should 'iova_pfn << shift' be a 64 bit type?
+
+Fixes: 8c773d53fb7b ("vduse: Implement an MMU-based software IOTLB")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Link: https://lore.kernel.org/r/20220121083940.102-1-xieyongji@bytedance.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/ti/cpts.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/vdpa/vdpa_user/iova_domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ti/cpts.c b/drivers/net/ethernet/ti/cpts.c
-index 43222a34cba0..f9514518700e 100644
---- a/drivers/net/ethernet/ti/cpts.c
-+++ b/drivers/net/ethernet/ti/cpts.c
-@@ -568,7 +568,9 @@ int cpts_register(struct cpts *cpts)
- 	for (i = 0; i < CPTS_MAX_EVENTS; i++)
- 		list_add(&cpts->pool_data[i].list, &cpts->pool);
+diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
+index 1daae2608860..0678c2514197 100644
+--- a/drivers/vdpa/vdpa_user/iova_domain.c
++++ b/drivers/vdpa/vdpa_user/iova_domain.c
+@@ -302,7 +302,7 @@ vduse_domain_alloc_iova(struct iova_domain *iovad,
+ 		iova_len = roundup_pow_of_two(iova_len);
+ 	iova_pfn = alloc_iova_fast(iovad, iova_len, limit >> shift, true);
  
--	clk_enable(cpts->refclk);
-+	err = clk_enable(cpts->refclk);
-+	if (err)
-+		return err;
+-	return iova_pfn << shift;
++	return (dma_addr_t)iova_pfn << shift;
+ }
  
- 	cpts_write32(cpts, CPTS_EN, control);
- 	cpts_write32(cpts, TS_PEND_EN, int_enable);
+ static void vduse_domain_free_iova(struct iova_domain *iovad,
 -- 
 2.34.1
 

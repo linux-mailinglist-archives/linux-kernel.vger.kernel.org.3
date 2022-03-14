@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D2B4D8FCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F414D8FC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343505AbiCNWpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 18:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S245757AbiCNWpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 18:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245734AbiCNWpX (ORCPT
+        with ESMTP id S245730AbiCNWpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 18:45:23 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B063933E9D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:44:11 -0700 (PDT)
+        Mon, 14 Mar 2022 18:45:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAB733EB2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:44:13 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 1860E1F42F1E
+        with ESMTPSA id 92C0E1F42F1F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647297850;
-        bh=x9ELuT5l87DnnSxAfWp7rgapLQDyu7nCQiypyxue8IM=;
+        s=mail; t=1647297852;
+        bh=chUCxgrXxxLP18r48yk/BRUcyw0NU6neGfKRFCcPg+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C6N++5nfqRD0boSbFJxQcOnXA9/pCYptAUc8bZa2zby8TB7CKKiTR3X+qp+B3yfDk
-         9zgtO/1mqB05Zua/kKRTOJ460ClV0HwLDLKvn6jIf+njMGkZiWUq8GZsKsLDjAI9L6
-         Lzswb9elaeqRVq6zrt9nx2D0F1nqI60oNfBygabp9P0HH3nZffZgiECPGDlitz3lVk
-         3nJOj0Rg1RVHiekjvmrYPJ/BFtu+H3EeKe3BEWPljIn/PnLD/xTRiKQE/8i74rwoEy
-         KTNqxJpN9NgwwSg2zl+tOttLTd25iYCkbephf90vr2I+77nqtXJqGvumSbFa86dsNC
-         YBW381Vt+wgUg==
+        b=n6u+BcOSzxReYDlBivMmtSD9VeErrWx/vStT244llJdalsWwkCCjcHbUKX/OWlSZ/
+         Oy+Spx20aH8mxRwbVhoGqAA83CZL6gOxePHBo3ps2BLM9nVRw3X1jDRrH82b7kymXd
+         4900Hrkbjjq5AmbyEFHcnvITzvB7+5aNt0nt9VlPuuxX3B4izwDUUIWWuiLhOlHKNu
+         1amkAhvCnmWy8E7FycZEFLksO28KJlH0XDlfueTOQIoBM1LIDLUz1J3I+LxYqokeo0
+         w42+kmqxRLUMU7kqqJpPq3e8y93LufREAgD6X1QjMZZkqpFUsZoIKWh+oRUfwaM0Tx
+         ux6kyxH/obUAA==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
         Gurchetan Singh <gurchetansingh@chromium.org>,
@@ -47,9 +47,9 @@ Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         Dmitry Osipenko <digetx@gmail.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH v2 1/8] drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling
-Date:   Tue, 15 Mar 2022 01:42:46 +0300
-Message-Id: <20220314224253.236359-2-dmitry.osipenko@collabora.com>
+Subject: [PATCH v2 2/8] drm/virtio: Check whether transferred 2D BO is shmem
+Date:   Tue, 15 Mar 2022 01:42:47 +0300
+Message-Id: <20220314224253.236359-3-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
 References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
@@ -65,33 +65,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_gem_shmem_get_sg_table() never ever returned NULL on error. Correct
-the error handling to avoid crash on OOM.
+Transferred 2D BO always must be a shmem BO. Add check for that to prevent
+NULL dereference if userspace passes a VRAM BO.
 
-Cc: stable@vger.kernel.org
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/virtio/virtgpu_object.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/virtio/virtgpu_vq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
-index f293e6ad52da..bea7806a3ae3 100644
---- a/drivers/gpu/drm/virtio/virtgpu_object.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_object.c
-@@ -168,9 +168,11 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
- 	 * since virtio_gpu doesn't support dma-buf import from other devices.
- 	 */
- 	shmem->pages = drm_gem_shmem_get_sg_table(&bo->base);
--	if (!shmem->pages) {
-+	ret = PTR_ERR(shmem->pages);
-+	if (ret) {
- 		drm_gem_shmem_unpin(&bo->base);
--		return -EINVAL;
-+		shmem->pages = NULL;
-+		return ret;
- 	}
+diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
+index 7c052efe8836..2edf31806b74 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_vq.c
++++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
+@@ -595,7 +595,7 @@ void virtio_gpu_cmd_transfer_to_host_2d(struct virtio_gpu_device *vgdev,
+ 	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+ 	struct virtio_gpu_object_shmem *shmem = to_virtio_gpu_shmem(bo);
  
- 	if (use_dma_api) {
+-	if (use_dma_api)
++	if (virtio_gpu_is_shmem(bo) && use_dma_api)
+ 		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
+ 					    shmem->pages, DMA_TO_DEVICE);
+ 
 -- 
 2.35.1
 

@@ -2,106 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0AC4D85D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9114D85EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbiCNNZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 09:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S236711AbiCNNbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 09:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiCNNZB (ORCPT
+        with ESMTP id S233166AbiCNNbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 09:25:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7AF11141
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 06:23:49 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KHHJY0J4NzfYxD;
-        Mon, 14 Mar 2022 21:22:21 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Mar 2022 21:23:47 +0800
-Received: from [127.0.0.1] (10.174.177.249) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 14 Mar
- 2022 21:23:46 +0800
-Subject: Re: [PATCH] md: remove unused dm_thin_remove_block()
-From:   Zhiqiang Liu <liuzhiqiang26@huawei.com>
-To:     <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>
-CC:     <dm-devel@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linfeilong <linfeilong@huawei.com>,
-        lixiaokeng <lixiaokeng@huawei.com>,
-        wuguanghao <wuguanghao3@huawei.com>, <liuzhiqiang26@huawei.com>
-References: <b0ec028e-bc9e-f705-9674-ffc4a01ee2f0@huawei.com>
-Message-ID: <4b7e5e2c-a847-4e40-1f23-de71753fe9e8@huawei.com>
-Date:   Mon, 14 Mar 2022 21:23:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Mon, 14 Mar 2022 09:31:43 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B7A13D73;
+        Mon, 14 Mar 2022 06:30:32 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id q4so12660482qki.11;
+        Mon, 14 Mar 2022 06:30:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7ESmoGYKvForOfgnFNNl3bul8J0TvzMfyrdSY3ncE6E=;
+        b=uO+Um3ZMkaOLd27w4397t+Fkci9z8p3BGpG5jW0zNEyNevdQQ3tfMYRQx9pNG+RhSO
+         QAsxZlkwXCeoTcUeUAe1swxy98G/HDfoZh//jGFz/JX6ZKfggiHzqsgI+1hKpkYMkCLA
+         Xq1e6uM7YUAZmXhnNKlGjDNL+YA4lkbjb05Rb4WQ+9jzlcWCsd7NdS5v+Yovyyq+B6Xt
+         HauZd5YXzbkC71oZgaILvTVBcKFwPBMBzjYNbXUuvK4uP/8H+VVg4nMW9Y/R9aeqq3o0
+         wjayk+HwknTMqAXIUBrL3IFro1AQ69neLCqIjCTYulhrVSLFgMyMk2CNKgUWwxUTlhEO
+         vUpw==
+X-Gm-Message-State: AOAM530oWWKWLE09SRWpWTbka181do3MQbbMp7Uj40CiL+jDxlcKW9b/
+        XefFAtyX4Fne666Zy+onTgYoCxKduszn7w==
+X-Google-Smtp-Source: ABdhPJzO94wE27iqfcTwnmSWUlJLQydrjBgOPb1Wr0PywBgDqz56YNMacz/XufAKVIYWUsYJQWs5Aw==
+X-Received: by 2002:a05:620a:4085:b0:67b:315b:a09f with SMTP id f5-20020a05620a408500b0067b315ba09fmr14881685qko.334.1647264631247;
+        Mon, 14 Mar 2022 06:30:31 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac87d48000000b002e1c6faae9csm5564977qtb.28.2022.03.14.06.30.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 06:30:30 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2db2add4516so163661667b3.1;
+        Mon, 14 Mar 2022 06:30:30 -0700 (PDT)
+X-Received: by 2002:a0d:f1c7:0:b0:2db:d2bc:be11 with SMTP id
+ a190-20020a0df1c7000000b002dbd2bcbe11mr18928111ywf.62.1647264630398; Mon, 14
+ Mar 2022 06:30:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <b0ec028e-bc9e-f705-9674-ffc4a01ee2f0@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.177.249]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1646683502.git.geert@linux-m68k.org> <8d3c0cc370b0214244b01a64c588e5e506531716.1646683502.git.geert@linux-m68k.org>
+In-Reply-To: <8d3c0cc370b0214244b01a64c588e5e506531716.1646683502.git.geert@linux-m68k.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Mar 2022 14:30:18 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVq19wpA_7nKKTm-G2EmK3cMxxP6nbR_u=vkazqCZ=KhQ@mail.gmail.com>
+Message-ID: <CAMuHMdVq19wpA_7nKKTm-G2EmK3cMxxP6nbR_u=vkazqCZ=KhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] drm/fourcc: Add DRM_FORMAT_C[124]
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-friendly ping..
+On Mon, Mar 7, 2022 at 9:53 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> Introduce fourcc codes for color-indexed frame buffer formats with two,
+> four, and sixteen colors, and provide a mapping from bit per pixel and
+> depth to fourcc codes.
+>
+> As the number of bits per pixel is less than eight, these rely on proper
+> block handling for the calculation of bits per pixel and pitch.
+>
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-On 2022/2/16 14:37, Zhiqiang Liu wrote:
-> dm_thin_remove_block() is no longer unused, just remove it.
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -99,7 +99,10 @@ extern "C" {
+>  #define DRM_FORMAT_INVALID     0
 >
-> Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
-> ---
->  drivers/md/dm-thin-metadata.c | 12 ------------
->  drivers/md/dm-thin-metadata.h |  1 -
->  2 files changed, 13 deletions(-)
+>  /* color index */
+> -#define DRM_FORMAT_C8          fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
+> +#define DRM_FORMAT_C1          fourcc_code('C', '1', ' ', ' ') /* [7:0] C0:C1:C2:C3:C4:C5:C6:C7 1:1:1:1:1:1:1:1 eight pixels/byte */
+> +#define DRM_FORMAT_C2          fourcc_code('C', '2', ' ', ' ') /* [7:0] C0:C1:C2:C3 2:2:2:2 four pixels/byte */
+> +#define DRM_FORMAT_C4          fourcc_code('C', '4', ' ', ' ') /* [7:0] C0:C1 4:4 two pixels/byte */
+> +#define DRM_FORMAT_C8          fourcc_code('C', '8', ' ', ' ') /* [7:0] C 8 one pixel/byte */
 >
-> diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
-> index 1a96a07cbf44..986a2dc9a686 100644
-> --- a/drivers/md/dm-thin-metadata.c
-> +++ b/drivers/md/dm-thin-metadata.c
-> @@ -1740,18 +1740,6 @@ static int __remove_range(struct dm_thin_device *td, dm_block_t begin, dm_block_
->  	return dm_btree_insert(&pmd->tl_info, pmd->root, keys, &value, &pmd->root);
->  }
->
-> -int dm_thin_remove_block(struct dm_thin_device *td, dm_block_t block)
-> -{
-> -	int r = -EINVAL;
-> -
-> -	pmd_write_lock(td->pmd);
-> -	if (!td->pmd->fail_io)
-> -		r = __remove(td, block);
-> -	pmd_write_unlock(td->pmd);
-> -
-> -	return r;
-> -}
-> -
->  int dm_thin_remove_range(struct dm_thin_device *td,
->  			 dm_block_t begin, dm_block_t end)
->  {
-> diff --git a/drivers/md/dm-thin-metadata.h b/drivers/md/dm-thin-metadata.h
-> index 7ef56bd2a7e3..4d7a2caf21d9 100644
-> --- a/drivers/md/dm-thin-metadata.h
-> +++ b/drivers/md/dm-thin-metadata.h
-> @@ -166,7 +166,6 @@ int dm_pool_alloc_data_block(struct dm_pool_metadata *pmd, dm_block_t *result);
->  int dm_thin_insert_block(struct dm_thin_device *td, dm_block_t block,
->  			 dm_block_t data_block);
->
-> -int dm_thin_remove_block(struct dm_thin_device *td, dm_block_t block);
->  int dm_thin_remove_range(struct dm_thin_device *td,
->  			 dm_block_t begin, dm_block_t end);
->
+>  /* 8 bpp Red */
+>  #define DRM_FORMAT_R8          fourcc_code('R', '8', ' ', ' ') /* [7:0] R */
 
+After replying to Ilia's comment[1], I realized the CFB drawing
+operations use native byte and bit ordering, unless
+FBINFO_FOREIGN_ENDIAN is set.
+While Amiga, Atari, and Sun-3 use big-endian bit ordering,
+e.g. Acorn VIDC[2] uses little endian, and SH7760[3] is configurable
+(sh7760fb configures ordering to match host order).
+BTW, ssd130{7fb,x}_update_rect() both assume little-endian, so I
+guess they are broken on big-endian.
+Fbtest uses big-endian bit ordering, so < 8 bpp is probably broken
+on little-endian.
+
+Hence the above should become:
+
+    #define DRM_FORMAT_C1          fourcc_code('C', '1', ' ', ' ') /*
+[7:0] C7:C6:C5:C4:C3:C2:C1:C0 1:1:1:1:1:1:1:1 eight pixels/byte */
+    #define DRM_FORMAT_C2          fourcc_code('C', '2', ' ', ' ') /*
+[7:0] C3:C2:C1:C0 2:2:2:2 four pixels/byte */
+    #define DRM_FORMAT_C4          fourcc_code('C', '4', ' ', ' ') /*
+[7:0] C1:C0 4:4 two pixels/byte */
+
+The same changes should be made for DRM_FORMAT_[RD][124].
+
+The fbdev emulation code should gain support for these with and without
+DRM_FORMAT_BIG_ENDIAN, the latter perhaps only on big-endian platforms?
+
+[1] https://lore.kernel.org/r/CAKb7UvgEdm9U=+RyRwL0TGRfA_Qc7NbhCWoZOft2DKdXggtKYw@mail.gmail.com/
+[2] See p.30 of the VIDC datasheet
+    http://chrisacorns.computinghistory.org.uk/docs/Acorn/Misc/Acorn_VIDC_Datasheet.pdf
+[3] See p.1178 of the SH7660 datasheet
+    https://datasheet.octopart.com/HD6417760BL200AV-Renesas-datasheet-14105759.pdf
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

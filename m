@@ -2,101 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CA14D8615
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A294D8617
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241899AbiCNNjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 09:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S241878AbiCNNjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 09:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241865AbiCNNjO (ORCPT
+        with ESMTP id S241982AbiCNNj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 09:39:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359ADBC2D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 06:38:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 394676118A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:38:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC3EC340F4;
-        Mon, 14 Mar 2022 13:37:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647265080;
-        bh=nF/6Lmz1r80SPWKXpwqXTgYh6Kwp/g/JtR3krTnNLFA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kMt8EzGg6jjebnIXApidbamvN96dj89DXDxybsVMYWVpADdfqZbMgK0L+NMXH6ljc
-         OnNS/oOBBYEsOrwFaa4cJ9hMH+TJioRwBbSCvL7CSdNyAVPS60mFZ2gykQhicQDPhr
-         vRJ68rfOoJs1ItVfSLXQCSDfefnMzthgHhsuQtil8owAw2MFLchrEhDbzS5zC+0Efb
-         qe1PBnzYW4TTqkEQzIASN/T6X5STNDdu9xRev2pnakFlHYzFBHRM5p/4dOuwxn7GA+
-         ZXh6mdpwVeS4V0sAkfw0MVr5rMDxnoIrYhoDbc+ZuddUqj5VW4H95khNFu39k2PcqK
-         CcxeH9K2aE2Mw==
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH 3/3] rcu: Fix preemption mode check on synchronize_rcu[_expedited]()
-Date:   Mon, 14 Mar 2022 14:37:38 +0100
-Message-Id: <20220314133738.269522-4-frederic@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220314133738.269522-1-frederic@kernel.org>
-References: <20220314133738.269522-1-frederic@kernel.org>
+        Mon, 14 Mar 2022 09:39:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F059B193E1;
+        Mon, 14 Mar 2022 06:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647265095; x=1678801095;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AHI/JJbTZfROueDYE5RJAT/7Do58iIUYLmMbqYg/tQ8=;
+  b=CfpeUVkdInDWP5qerM1qYWEf1aC3bK/zmCJ+IN0efb+/6TYqptEvY5lu
+   kYIyPHk1rDQVo9399MccZz1F5xDE2KickKnOQ6QWcTV0KbYq6HVz+ufGi
+   Cu8U1zvjav3qbocW3YTyA3xRiloPThCOIskTTyuzP1J3D4AbqgaPAuokp
+   9B7R5YE0vIKS7uRgxGYfDtQic9e4jeZkdWoqqIlZoWR/znLRuJiweZUOw
+   5srauU9ZYBpmptR9HdjARK/MSAFSx12FpQgA1PfftCEqpIQGuDrBALvWU
+   SZB57B/XTUvhtGo4WxFXccpJ30I2/MxI5KpHGa7HJ1bIdk9DJBfvCTNL1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="235975176"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="235975176"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 06:38:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="515427504"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 06:38:12 -0700
+Message-ID: <f394b9fd-443b-953c-3c4b-596ae4348a58@intel.com>
+Date:   Mon, 14 Mar 2022 15:38:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH V2] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
+Content-Language: en-US
+To:     Ben Chuang <benchuanggli@gmail.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greg.tu@genesyslogic.com.tw, ben.chuang@genesyslogic.com.tw,
+        SeanHY.Chen@genesyslogic.com.tw, hl.liu@genesyslogic.com.tw,
+        Kevin Chang <kevin.chang@lcfuturecenter.com>
+References: <20220307090009.1386876-1-benchuanggli@gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220307090009.1386876-1-benchuanggli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An early check on synchronize_rcu[_expedited]() tries to determine if
-the current CPU is in UP mode on an SMP no-preempt kernel, in which case
-there is no need to start a grace period since the current assumed
-quiescent state is all we need.
+On 07/03/2022 11:00, Ben Chuang wrote:
+> From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> 
+> Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
+> gated of upstream port can be enabled. GL9763E has an auxiliary power
+> so it keep states in runtime suspend. In runtime resume, PLL is enabled
+> and waits for it to stabilize.
+> 
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
 
-However the preemption mode doesn't take into account the boot selected
-preemption mode under CONFIG_PREEMPT_DYNAMIC=y, missing a possible
-early return if the running flavour is "none" or "voluntary".
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Use the shiny new preempt mode accessors to fix this.
-
-Reported-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
----
- kernel/rcu/tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index d2db709f83d9..8fe2f9843139 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3769,7 +3769,7 @@ static int rcu_blocking_is_gp(void)
- {
- 	int ret;
- 
--	if (IS_ENABLED(CONFIG_PREEMPTION))
-+	if (preempt_mode_full() || preempt_mode_rt())
- 		return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
- 	might_sleep();  /* Check for RCU read-side critical section. */
- 	preempt_disable();
--- 
-2.25.1
+> ---
+> Changes in v2:
+> * modify commit messages
+> * Use read_poll_timeout() instead of while loop
+> ---
+>  drivers/mmc/host/sdhci-pci-gli.c | 47 ++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 97035d77c18c..c854c8db32e4 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/mmc/mmc.h>
+>  #include <linux/delay.h>
+>  #include <linux/of.h>
+> +#include <linux/iopoll.h>
+>  #include "sdhci.h"
+>  #include "sdhci-pci.h"
+>  #include "cqhci.h"
+> @@ -873,6 +874,47 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
+>  	pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
+>  }
+>  
+> +#ifdef CONFIG_PM
+> +static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
+> +{
+> +	struct sdhci_pci_slot *slot = chip->slots[0];
+> +	struct sdhci_host *host = slot->host;
+> +	u16 clock;
+> +
+> +	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> +	clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
+> +	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
+> +{
+> +	struct sdhci_pci_slot *slot = chip->slots[0];
+> +	struct sdhci_host *host = slot->host;
+> +	u16 clock;
+> +
+> +	clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> +
+> +	clock |= SDHCI_CLOCK_PLL_EN;
+> +	clock &= ~SDHCI_CLOCK_INT_STABLE;
+> +	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+> +
+> +	/* Wait max 150 ms */
+> +	if (read_poll_timeout(sdhci_readw, clock, (clock & SDHCI_CLOCK_INT_STABLE),
+> +			      1000, 150000, false, host, SDHCI_CLOCK_CONTROL)) {
+> +		pr_err("%s: PLL clock never stabilised.\n",
+> +		       mmc_hostname(host->mmc));
+> +		sdhci_dumpregs(host);
+> +	}
+> +
+> +	clock |= SDHCI_CLOCK_CARD_EN;
+> +	sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+>  static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
+>  {
+>  	struct pci_dev *pdev = slot->chip->pdev;
+> @@ -982,6 +1024,11 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
+>  #ifdef CONFIG_PM_SLEEP
+>  	.resume		= sdhci_cqhci_gli_resume,
+>  	.suspend	= sdhci_cqhci_gli_suspend,
+> +#endif
+> +#ifdef CONFIG_PM
+> +	.runtime_suspend = gl9763e_runtime_suspend,
+> +	.runtime_resume  = gl9763e_runtime_resume,
+> +	.allow_runtime_pm = true,
+>  #endif
+>  	.add_host       = gl9763e_add_host,
+>  };
 

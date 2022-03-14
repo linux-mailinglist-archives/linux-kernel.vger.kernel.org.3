@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4B94D8273
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401894D84A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240259AbiCNMEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S241503AbiCNM1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240571AbiCNMDS (ORCPT
+        with ESMTP id S241394AbiCNMSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:03:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5944B1CC;
-        Mon, 14 Mar 2022 05:00:28 -0700 (PDT)
+        Mon, 14 Mar 2022 08:18:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EF04B43F;
+        Mon, 14 Mar 2022 05:12:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6B6061297;
-        Mon, 14 Mar 2022 12:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45DEBC36AE2;
-        Mon, 14 Mar 2022 12:00:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3E5612FF;
+        Mon, 14 Mar 2022 12:12:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8383C340E9;
+        Mon, 14 Mar 2022 12:12:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259208;
-        bh=MHA8YOPQlBUsZgSMVgP9mywMOxsMIm/wsGfEcOTyA18=;
+        s=korg; t=1647259949;
+        bh=moZZ85LDf9khSYKSwiQkuRWcmP/GMvfFbmMPYnMwabY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r4hZpa4/CCDvlzRpkPZWdwg05TgLdyInf8jOjZngO/L5fhon7P0E0RL85AMRve90s
-         2Mfo5wBUL+d6I66qjFbkNYQJJPYqaQeYpIBlkP0yceY6hYhsH0fpUI2Co8W1FlyTsl
-         MUsDKxlgoks2kx6073eM37p1vW2ki3L0//AyKcfw=
+        b=EOQ1oZFiHkYsoWGSWW13nnqAky9EaFQf1KPWLS79lUp1hbSgl65xasfmXMGqfnSrd
+         XkNFgLtYi55smHkeYo37Kz2hxcQvJ/l26kdNgIPfmJ45DJERTnXoBn+VthQrAQGQqO
+         n7rEMmS+O04vZOJfyLuRBVyJHkCGoZbjAzGmV/T8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Osterried <thomas@osterried.de>,
-        Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 26/71] ax25: Fix NULL pointer dereference in ax25_kill_by_device
+Subject: [PATCH 5.16 016/121] mISDN: Fix memory leak in dsp_pipeline_build()
 Date:   Mon, 14 Mar 2022 12:53:19 +0100
-Message-Id: <20220314112738.665790643@linuxfoundation.org>
+Message-Id: <20220314112744.580635482@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-[ Upstream commit 71171ac8eb34ce7fe6b3267dce27c313ab3cb3ac ]
+[ Upstream commit c6a502c2299941c8326d029cfc8a3bc8a4607ad5 ]
 
-When two ax25 devices attempted to establish connection, the requester use ax25_create(),
-ax25_bind() and ax25_connect() to initiate connection. The receiver use ax25_rcv() to
-accept connection and use ax25_create_cb() in ax25_rcv() to create ax25_cb, but the
-ax25_cb->sk is NULL. When the receiver is detaching, a NULL pointer dereference bug
-caused by sock_hold(sk) in ax25_kill_by_device() will happen. The corresponding
-fail log is shown below:
+dsp_pipeline_build() allocates dup pointer by kstrdup(cfg),
+but then it updates dup variable by strsep(&dup, "|").
+As a result when it calls kfree(dup), the dup variable contains NULL.
 
-===============================================================
-BUG: KASAN: null-ptr-deref in ax25_device_event+0xfd/0x290
-Call Trace:
-...
-ax25_device_event+0xfd/0x290
-raw_notifier_call_chain+0x5e/0x70
-dev_close_many+0x174/0x220
-unregister_netdevice_many+0x1f7/0xa60
-unregister_netdevice_queue+0x12f/0x170
-unregister_netdev+0x13/0x20
-mkiss_close+0xcd/0x140
-tty_ldisc_release+0xc0/0x220
-tty_release_struct+0x17/0xa0
-tty_release+0x62d/0x670
-...
+Found by Linux Driver Verification project (linuxtesting.org) with SVACE.
 
-This patch add condition check in ax25_kill_by_device(). If s->sk is
-NULL, it will goto if branch to kill device.
-
-Fixes: 4e0f718daf97 ("ax25: improve the incomplete fix to avoid UAF and NPD bugs")
-Reported-by: Thomas Osterried <thomas@osterried.de>
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Fixes: 960366cf8dbb ("Add mISDN DSP")
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ax25/af_ax25.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/isdn/mISDN/dsp_pipeline.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index 23bd26057a82..9e0eef7fe9ad 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -87,6 +87,13 @@ static void ax25_kill_by_device(struct net_device *dev)
- 	ax25_for_each(s, &ax25_list) {
- 		if (s->ax25_dev == ax25_dev) {
- 			sk = s->sk;
-+			if (!sk) {
-+				spin_unlock_bh(&ax25_list_lock);
-+				s->ax25_dev = NULL;
-+				ax25_disconnect(s, ENETUNREACH);
-+				spin_lock_bh(&ax25_list_lock);
-+				goto again;
-+			}
- 			sock_hold(sk);
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
+diff --git a/drivers/isdn/mISDN/dsp_pipeline.c b/drivers/isdn/mISDN/dsp_pipeline.c
+index e11ca6bbc7f4..c3b2c99b5cd5 100644
+--- a/drivers/isdn/mISDN/dsp_pipeline.c
++++ b/drivers/isdn/mISDN/dsp_pipeline.c
+@@ -192,7 +192,7 @@ void dsp_pipeline_destroy(struct dsp_pipeline *pipeline)
+ int dsp_pipeline_build(struct dsp_pipeline *pipeline, const char *cfg)
+ {
+ 	int found = 0;
+-	char *dup, *tok, *name, *args;
++	char *dup, *next, *tok, *name, *args;
+ 	struct dsp_element_entry *entry, *n;
+ 	struct dsp_pipeline_entry *pipeline_entry;
+ 	struct mISDN_dsp_element *elem;
+@@ -203,10 +203,10 @@ int dsp_pipeline_build(struct dsp_pipeline *pipeline, const char *cfg)
+ 	if (!list_empty(&pipeline->list))
+ 		_dsp_pipeline_destroy(pipeline);
+ 
+-	dup = kstrdup(cfg, GFP_ATOMIC);
++	dup = next = kstrdup(cfg, GFP_ATOMIC);
+ 	if (!dup)
+ 		return 0;
+-	while ((tok = strsep(&dup, "|"))) {
++	while ((tok = strsep(&next, "|"))) {
+ 		if (!strlen(tok))
+ 			continue;
+ 		name = strsep(&tok, "(");
 -- 
 2.34.1
 

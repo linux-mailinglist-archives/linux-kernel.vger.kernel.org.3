@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC4F4D8477
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6338E4D8389
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241280AbiCNMYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S234622AbiCNMQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241067AbiCNMR3 (ORCPT
+        with ESMTP id S241198AbiCNMI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:17:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F090E4925E;
-        Mon, 14 Mar 2022 05:12:21 -0700 (PDT)
+        Mon, 14 Mar 2022 08:08:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B5C4A3FF;
+        Mon, 14 Mar 2022 05:04:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD9161387;
-        Mon, 14 Mar 2022 12:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E291C340F6;
-        Mon, 14 Mar 2022 12:12:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2E0AB80DEC;
+        Mon, 14 Mar 2022 12:04:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A41C340E9;
+        Mon, 14 Mar 2022 12:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259940;
-        bh=VOh4WZWDHbvl0DVM0VCouT/2UyXl+kHCC7NlZIFYlBw=;
+        s=korg; t=1647259479;
+        bh=Xye6heKwh6ZUwm+0VaxNUczYGaicbyE6jQr771iX0G4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wMQpgGnJWp8345qD7boJaxDiNLiEG+DReKyzRBLp/UHAo28OMBWnieGbliXV1uQwJ
-         MzLEPh5ooT6Unos4Ifw1ImloD3J8ew4jvSO2PG6vkUD7mbr+uGWosa5upaHQMNT1a4
-         6KgVaM/YiZRLBCR00Dt6LSDRTrvNeEMwZW2sGRtM=
+        b=HR6U1gACVCnJToVRqx2f0hkqS7sDge6v+BNkbZj6PAQ3fLcvkSMx0StyWRTbwQ5my
+         lb43aeaasJMaClRFjc91oMvwbn+rZu2mlDEQ88xBTGbtm9R3vuxEqPIGPiAc0BisJs
+         cuZndSoLLwGN8fnkDNS5AAXhAtP3rYE1kGzoJwVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
+        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 014/121] vduse: Fix returning wrong type in vduse_domain_alloc_iova()
-Date:   Mon, 14 Mar 2022 12:53:17 +0100
-Message-Id: <20220314112744.524268764@linuxfoundation.org>
+Subject: [PATCH 5.15 016/110] virtio-blk: Dont use MAX_DISCARD_SEGMENTS if max_discard_seg is zero
+Date:   Mon, 14 Mar 2022 12:53:18 +0100
+Message-Id: <20220314112743.488986408@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,37 +57,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit b9d102dafec6af1c07b610faf0a6d4e8aee14ae0 ]
+[ Upstream commit dacc73ed0b88f1a787ec20385f42ca9dd9eddcd0 ]
 
-This fixes the following smatch warnings:
+Currently the value of max_discard_segment will be set to
+MAX_DISCARD_SEGMENTS (256) with no basis in hardware if device
+set 0 to max_discard_seg in configuration space. It's incorrect
+since the device might not be able to handle such large descriptors.
+To fix it, let's follow max_segments restrictions in this case.
 
-drivers/vdpa/vdpa_user/iova_domain.c:305 vduse_domain_alloc_iova() warn: should 'iova_pfn << shift' be a 64 bit type?
-
-Fixes: 8c773d53fb7b ("vduse: Implement an MMU-based software IOTLB")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: 1f23816b8eb8 ("virtio_blk: add discard and write zeroes support")
 Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Link: https://lore.kernel.org/r/20220121083940.102-1-xieyongji@bytedance.com
+Link: https://lore.kernel.org/r/20220304100058.116-1-xieyongji@bytedance.com
 Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vdpa/vdpa_user/iova_domain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/block/virtio_blk.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-index 1daae2608860..0678c2514197 100644
---- a/drivers/vdpa/vdpa_user/iova_domain.c
-+++ b/drivers/vdpa/vdpa_user/iova_domain.c
-@@ -302,7 +302,7 @@ vduse_domain_alloc_iova(struct iova_domain *iovad,
- 		iova_len = roundup_pow_of_two(iova_len);
- 	iova_pfn = alloc_iova_fast(iovad, iova_len, limit >> shift, true);
+diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+index 303caf2d17d0..f538bc9dce7d 100644
+--- a/drivers/block/virtio_blk.c
++++ b/drivers/block/virtio_blk.c
+@@ -859,9 +859,15 @@ static int virtblk_probe(struct virtio_device *vdev)
  
--	return iova_pfn << shift;
-+	return (dma_addr_t)iova_pfn << shift;
- }
+ 		virtio_cread(vdev, struct virtio_blk_config, max_discard_seg,
+ 			     &v);
++
++		/*
++		 * max_discard_seg == 0 is out of spec but we always
++		 * handled it.
++		 */
++		if (!v)
++			v = sg_elems - 2;
+ 		blk_queue_max_discard_segments(q,
+-					       min_not_zero(v,
+-							    MAX_DISCARD_SEGMENTS));
++					       min(v, MAX_DISCARD_SEGMENTS));
  
- static void vduse_domain_free_iova(struct iova_domain *iovad,
+ 		blk_queue_flag_set(QUEUE_FLAG_DISCARD, q);
+ 	}
 -- 
 2.34.1
 

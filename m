@@ -2,168 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9253B4D865D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7214D866A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242071AbiCNOD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 10:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S242114AbiCNOG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 10:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242065AbiCNODT (ORCPT
+        with ESMTP id S233045AbiCNOG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 10:03:19 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9A6369DC;
-        Mon, 14 Mar 2022 07:02:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0V7BHX-8_1647266523;
-Received: from 192.168.193.163(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V7BHX-8_1647266523)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 14 Mar 2022 22:02:04 +0800
-Message-ID: <4bd3432c-4ee4-3f5f-2c20-6e5da3362726@linux.alibaba.com>
-Date:   Mon, 14 Mar 2022 07:02:03 -0700
+        Mon, 14 Mar 2022 10:06:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB2C6557;
+        Mon, 14 Mar 2022 07:05:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D458EB80D41;
+        Mon, 14 Mar 2022 14:05:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99548C340E9;
+        Mon, 14 Mar 2022 14:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647266713;
+        bh=IsAAYV3WUOlv8+MoKeOWEm/Ep7g4LUqQIqxERqeOzOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gH9sHxFxQkL2kjJ/SRfXSq+ZYnmM737KrfOnm3TpuCcB1eu6TD+MxIKEyqnZVhZkC
+         w985PD0sc9xUKAlbrAYQcXwI01Tos9JlrRQ/0aegEmhYRPgsoTiB52ANbFJfC/e4jQ
+         ytdFlfNiNuy8sSjBrcGd+qtkpgTy77PKSDUQcwY4=
+Date:   Mon, 14 Mar 2022 15:05:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 4.19 00/30] 4.19.235-rc1 review
+Message-ID: <Yi9LlP+x2swdsrbE@kroah.com>
+References: <20220314112731.785042288@linuxfoundation.org>
+ <0ac87017-362d-33e2-eace-3407e0891a94@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4 2/2] lkdtm: Add Shadow Call Stack tests
-Content-Language: en-US
-To:     catalin.marinas@arm.com, will@kernel.org, keescook@chromium.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, shuah@kernel.org, mark.rutland@arm.com,
-        ojeda@kernel.org, akpm@linux-foundation.org, elver@google.com,
-        luc.vanoostenryck@gmail.com, samitolvanen@google.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org
-References: <20220303074339.86337-1-ashimida@linux.alibaba.com>
- <20220314135329.80621-1-ashimida@linux.alibaba.com>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <20220314135329.80621-1-ashimida@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0ac87017-362d-33e2-eace-3407e0891a94@nvidia.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/14/22 06:53, Dan Li wrote:
-> Add tests for SCS (Shadow Call Stack) based backward CFI.
+On Mon, Mar 14, 2022 at 01:58:12PM +0000, Jon Hunter wrote:
+> Hi Greg,
 > 
-> +
-> +#ifdef CONFIG_ARM64
-> +/*
-> + * This function is used to modify its return address. The PAC needs to be turned
-> + * off here to ensure that the modification of the return address will not be blocked.
-> + */
-> +static noinline __no_ptrauth
-> +void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +
-> +/* Function with __noscs attribute attempts to modify its return address. */
-> +static noinline __no_ptrauth __noscs
-> +void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr)
-> +{
-> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
-> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
-> +
-> +	/* Make sure we've found the right place on the stack before writing it. */
-> +	if (*ret_addr == expected)
-> +		*ret_addr = addr;
-> +}
-> +#else
-> +static inline void lkdtm_noscs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +static inline void lkdtm_scs_set_lr(unsigned long *expected, unsigned long *addr) { }
-> +#endif
-> +
-> +static volatile unsigned int force_label;
-> +
-> +/*
-> + * This first checks whether a function with the __noscs attribute under
-> + * the current platform can directly modify its return address, and if so,
-> + * checks whether scs takes effect.
-> + */
-> +void __no_optimize lkdtm_CFI_BACKWARD_SHADOW(void)
-> +{
-> +	void *array[] = {&&unexpected, &&expected, &&good_scs, &&bad_scs};
-> +
-> +	if (force_label && (force_label < sizeof(array))) {
-> +		/*
-> +		 * Call them with "NULL" first to avoid
-> +		 * arguments being treated as constants in -02.
-> +		 */
-> +		lkdtm_noscs_set_lr(NULL, NULL);
-> +		lkdtm_scs_set_lr(NULL, NULL);
-> +		goto *array[force_label];
-> +	}
-> +
-> +	/* Keep labels in scope to avoid compiler warnings. */
-> +	do {
-> +		/* Verify the "normal" condition of LR corruption working. */
-> +		pr_info("Trying to corrupt lr in a function without scs protection ...\n");
-> +		lkdtm_noscs_set_lr(&&unexpected, &&expected);
-> +
-> +unexpected:
-Hi, Kees,
+> On 14/03/2022 11:34, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 4.19.235 release.
+> > There are 30 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.kernel.org%2Fpub%2Flinux%2Fkernel%2Fv4.x%2Fstable-review%2Fpatch-4.19.235-rc1.gz&amp;data=04%7C01%7Cjonathanh%40nvidia.com%7C4c0c664e42044e5bd8a208da05af4c30%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637828547981871505%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=xF4hLHeQMZiCVtbZX2jXwWYGz30QY84EzlbqHLPUZSs%3D&amp;reserved=0
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> > -------------
+> > Pseudo-Shortlog of commits:
+> 
+> ...
+> 
+> > James Morse <james.morse@arm.com>
+> >      KVM: arm64: Reset PMC_EL0 to avoid a panic() on systems with no PMU
+> 
+> 
+> The above is causing the following build error for ARM64 ...
+> 
+> arch/arm64/kvm/sys_regs.c: In function ‘reset_pmcr’:
+> arch/arm64/kvm/sys_regs.c:624:3: error: implicit declaration of function ‘vcpu_sys_reg’ [-Werror=implicit-function-declaration]
+>    vcpu_sys_reg(vcpu, PMCR_EL0) = 0;
+>    ^~~~~~~~~~~~
+> arch/arm64/kvm/sys_regs.c:624:32: error: lvalue required as left operand of assignment
+>    vcpu_sys_reg(vcpu, PMCR_EL0) = 0;
+> 
 
-With the default -O2, this code tests fine in gcc 11/clang 12, but
-doesn't work in gcc 7.5.0. In 7.5.0, the generated code is as follows:
+Is this also broken in Linus's tree?
 
-  bl      ffff8000088335c0 <lkdtm_noscs_set_lr>
-  nop     						      ## return address of lkdtm_noscs_set_lr
-  adrp    x0, ffff80000962b000 <kallsyms_token_index+0xe5908>  ## address of "&&unexpected"
+thanks,
 
-The address of "&&unexpected" is still not guaranteed to always be the
-same as the return address of lkdtm_noscs_set_lr, so I had to add
-__no_optimize attribute here.
-
-The code compiled under __no_optimize in above versions works fine, but
-I saw the following description in the gcc user manual:
-
-"You may not use this mechanism to jump to code in a different function.
-If you do that, totally unpredictable things happen."
-
-So there might be some risk here that we might not be able to run this
-test case stably across all compiler versions, probably we still have to
-use two test cases to complete this.
-
-link: https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/Labels-as-Values.html#Labels-as-Values
-
-Thanks,
-Dan.
-
-> +		/*
-> +		 * If lr cannot be modified, the following check is meaningless,
-> +		 * returns directly.
-> +		 */
-> +		pr_err("XPASS: Unexpectedly survived lr corruption without scs?!\n");
-> +		break;
-> +
-> +expected:
-> +		pr_info("ok: lr corruption redirected without scs.\n");
-> +
-> +		/* Verify that SCS is in effect. */
-> +		pr_info("Trying to corrupt lr in a function with scs protection ...\n");
-> +		lkdtm_scs_set_lr(&&good_scs, &&bad_scs);
-> +
-> +good_scs:
-> +		pr_info("ok: scs takes effect.\n");
-> +		break;
-> +
-> +bad_scs:
-> +		pr_err("FAIL: return address rewritten!\n");
-> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
-> +	} while (0);
-> +}
+greg k-h

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C766A4D8331
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2714D84D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241447AbiCNMNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S243253AbiCNMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241434AbiCNMIn (ORCPT
+        with ESMTP id S242729AbiCNMTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17F34D9F6;
-        Mon, 14 Mar 2022 05:05:13 -0700 (PDT)
+        Mon, 14 Mar 2022 08:19:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F22950049;
+        Mon, 14 Mar 2022 05:14:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42D87B80DF2;
-        Mon, 14 Mar 2022 12:05:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CFAC340ED;
-        Mon, 14 Mar 2022 12:05:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D52CA60B19;
+        Mon, 14 Mar 2022 12:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4DEC340EC;
+        Mon, 14 Mar 2022 12:14:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259510;
-        bh=PLkxFWAuJPB2flzQRtes2vC27qTt7IiTYtVEtYcftUM=;
+        s=korg; t=1647260076;
+        bh=NpB9lD05+lxXqHn0huSyZfBLfH7o5TypdNrGMja0yvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f2ozqY7Z9DSR+4rNhcRKBPuyvLp+aHcTkv3KULo9sTQQpcyYYjAyY1Iebvbpum0+r
-         Azs6MWciFtVKnq6Lyyd61BXQz3lpq25vdry/q+fhY/edUKMrosS2FukJTqiia7KLJZ
-         YX3GEx7CTKENT9xoT4162ddgZY8ugFBzDYIaiB/s=
+        b=uBdeGiSePD7jqgeGUeZve9UZtf2DdwdjM6L6dQmJ8dc0z064dfpu6s81lIiy/DH6x
+         3JwpfyGJ0l5isA4xmKlG1tsmzpKGT1/AEVs4xsOy6AwEMS2nsUmB7iEUzMmhlbms4W
+         wf7lsBjVG377pQHsoVQCsaRbh1+9nRvANf0QMVVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 023/110] smsc95xx: Ignore -ENODEV errors when device is unplugged
+Subject: [PATCH 5.16 022/121] net: qlogic: check the return value of dma_alloc_coherent() in qed_vf_hw_prepare()
 Date:   Mon, 14 Mar 2022 12:53:25 +0100
-Message-Id: <20220314112743.683391099@linuxfoundation.org>
+Message-Id: <20220314112744.748629071@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,139 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit c70c453abcbf3ecbaadd4c3236a5119b8da365cf ]
+[ Upstream commit e0058f0fa80f6e09c4d363779c241c45a3c56b94 ]
 
-According to Documentation/driver-api/usb/URB.rst when a device
-is unplugged usb_submit_urb() returns -ENODEV.
+The function dma_alloc_coherent() in qed_vf_hw_prepare() can fail, so
+its return value should be checked.
 
-This error code propagates all the way up to usbnet_read_cmd() and
-usbnet_write_cmd() calls inside the smsc95xx.c driver during
-Ethernet cable unplug, unbind or reboot.
-
-This causes the following errors to be shown on reboot, for example:
-
-ci_hdrc ci_hdrc.1: remove, state 1
-usb usb2: USB disconnect, device number 1
-usb 2-1: USB disconnect, device number 2
-usb 2-1.1: USB disconnect, device number 3
-smsc95xx 2-1.1:1.0 eth1: unregister 'smsc95xx' usb-ci_hdrc.1-1.1, smsc95xx USB 2.0 Ethernet
-smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
-smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
-smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
-smsc95xx 2-1.1:1.0 eth1: Failed to read reg index 0x00000114: -19
-smsc95xx 2-1.1:1.0 eth1: Error reading MII_ACCESS
-smsc95xx 2-1.1:1.0 eth1: __smsc95xx_mdio_read: MII is busy
-smsc95xx 2-1.1:1.0 eth1: hardware isn't capable of remote wakeup
-usb 2-1.4: USB disconnect, device number 4
-ci_hdrc ci_hdrc.1: USB bus 2 deregistered
-ci_hdrc ci_hdrc.0: remove, state 4
-usb usb1: USB disconnect, device number 1
-ci_hdrc ci_hdrc.0: USB bus 1 deregistered
-imx2-wdt 30280000.watchdog: Device shutdown: Expect reboot!
-reboot: Restarting system
-
-Ignore the -ENODEV errors inside __smsc95xx_mdio_read() and
-__smsc95xx_phy_wait_not_busy() and do not print error messages
-when -ENODEV is returned.
-
-Fixes: a049a30fc27c ("net: usb: Correct PHY handling of smsc95xx")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
+Fixes: 1408cc1fa48c ("qed: Introduce VFs")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/smsc95xx.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/qlogic/qed/qed_vf.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 026e7487c45b..eb0d325e92b7 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -84,9 +84,10 @@ static int __must_check __smsc95xx_read_reg(struct usbnet *dev, u32 index,
- 	ret = fn(dev, USB_VENDOR_REQUEST_READ_REGISTER, USB_DIR_IN
- 		 | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 		 0, index, &buf, 4);
--	if (unlikely(ret < 0)) {
--		netdev_warn(dev->net, "Failed to read reg index 0x%08x: %d\n",
--			    index, ret);
-+	if (ret < 0) {
-+		if (ret != -ENODEV)
-+			netdev_warn(dev->net, "Failed to read reg index 0x%08x: %d\n",
-+				    index, ret);
- 		return ret;
- 	}
- 
-@@ -116,7 +117,7 @@ static int __must_check __smsc95xx_write_reg(struct usbnet *dev, u32 index,
- 	ret = fn(dev, USB_VENDOR_REQUEST_WRITE_REGISTER, USB_DIR_OUT
- 		 | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 		 0, index, &buf, 4);
--	if (unlikely(ret < 0))
-+	if (ret < 0 && ret != -ENODEV)
- 		netdev_warn(dev->net, "Failed to write reg index 0x%08x: %d\n",
- 			    index, ret);
- 
-@@ -159,6 +160,9 @@ static int __must_check __smsc95xx_phy_wait_not_busy(struct usbnet *dev,
- 	do {
- 		ret = __smsc95xx_read_reg(dev, MII_ADDR, &val, in_pm);
- 		if (ret < 0) {
-+			/* Ignore -ENODEV error during disconnect() */
-+			if (ret == -ENODEV)
-+				return 0;
- 			netdev_warn(dev->net, "Error reading MII_ACCESS\n");
- 			return ret;
- 		}
-@@ -194,7 +198,8 @@ static int __smsc95xx_mdio_read(struct usbnet *dev, int phy_id, int idx,
- 	addr = mii_address_cmd(phy_id, idx, MII_READ_ | MII_BUSY_);
- 	ret = __smsc95xx_write_reg(dev, MII_ADDR, addr, in_pm);
- 	if (ret < 0) {
--		netdev_warn(dev->net, "Error writing MII_ADDR\n");
-+		if (ret != -ENODEV)
-+			netdev_warn(dev->net, "Error writing MII_ADDR\n");
- 		goto done;
- 	}
- 
-@@ -206,7 +211,8 @@ static int __smsc95xx_mdio_read(struct usbnet *dev, int phy_id, int idx,
- 
- 	ret = __smsc95xx_read_reg(dev, MII_DATA, &val, in_pm);
- 	if (ret < 0) {
--		netdev_warn(dev->net, "Error reading MII_DATA\n");
-+		if (ret != -ENODEV)
-+			netdev_warn(dev->net, "Error reading MII_DATA\n");
- 		goto done;
- 	}
- 
-@@ -214,6 +220,10 @@ static int __smsc95xx_mdio_read(struct usbnet *dev, int phy_id, int idx,
- 
- done:
- 	mutex_unlock(&dev->phy_mutex);
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.c b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+index 597cd9cd57b5..7b0e390c0b07 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_vf.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+@@ -513,6 +513,9 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
+ 						    p_iov->bulletin.size,
+ 						    &p_iov->bulletin.phys,
+ 						    GFP_KERNEL);
++	if (!p_iov->bulletin.p_virt)
++		goto free_pf2vf_reply;
 +
-+	/* Ignore -ENODEV error during disconnect() */
-+	if (ret == -ENODEV)
-+		return 0;
- 	return ret;
- }
+ 	DP_VERBOSE(p_hwfn, QED_MSG_IOV,
+ 		   "VF's bulletin Board [%p virt 0x%llx phys 0x%08x bytes]\n",
+ 		   p_iov->bulletin.p_virt,
+@@ -552,6 +555,10 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
  
-@@ -235,7 +245,8 @@ static void __smsc95xx_mdio_write(struct usbnet *dev, int phy_id,
- 	val = regval;
- 	ret = __smsc95xx_write_reg(dev, MII_DATA, val, in_pm);
- 	if (ret < 0) {
--		netdev_warn(dev->net, "Error writing MII_DATA\n");
-+		if (ret != -ENODEV)
-+			netdev_warn(dev->net, "Error writing MII_DATA\n");
- 		goto done;
- 	}
+ 	return rc;
  
-@@ -243,7 +254,8 @@ static void __smsc95xx_mdio_write(struct usbnet *dev, int phy_id,
- 	addr = mii_address_cmd(phy_id, idx, MII_WRITE_ | MII_BUSY_);
- 	ret = __smsc95xx_write_reg(dev, MII_ADDR, addr, in_pm);
- 	if (ret < 0) {
--		netdev_warn(dev->net, "Error writing MII_ADDR\n");
-+		if (ret != -ENODEV)
-+			netdev_warn(dev->net, "Error writing MII_ADDR\n");
- 		goto done;
- 	}
- 
++free_pf2vf_reply:
++	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
++			  sizeof(union pfvf_tlvs),
++			  p_iov->pf2vf_reply, p_iov->pf2vf_reply_phys);
+ free_vf2pf_request:
+ 	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
+ 			  sizeof(union vfpf_tlvs),
 -- 
 2.34.1
 

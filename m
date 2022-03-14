@@ -2,160 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074954D7E15
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DC14D7E13
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237806AbiCNJE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S237762AbiCNJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237765AbiCNJEy (ORCPT
+        with ESMTP id S235593AbiCNJEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:04:54 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43D0344CC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:03:44 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id j17so22796191wrc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:03:44 -0700 (PDT)
+        Mon, 14 Mar 2022 05:04:50 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14E531DED
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:03:37 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id s11so13697948pfu.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mJsuvDfEgbFAv2twfqdlbxVBvJIL07keRfhXHhiCGs0=;
-        b=Oay8URlUWrpzor5sypkcQla6be9eR0wRHPoF0u7G615sFYRw+zoabq8t48IApxdx2M
-         bOrpCT1TejItAS+HCyV9z9oMMrRKKCy3I+HfTQv7lnClu4t4UdC/Vbe2n7Qe9pQadvXj
-         4clRy6CZZZZ6RYzUj1AbwuTGUL6DsZFb+5ZI0CGbonWLpi1j+5hSqTsOKfGkesztJYff
-         Q0qgLgzQFTjQ1i/NifCt/D3dboRN39JDoezeuE0Ih54eSJwPjQH+JUQ8GiuPCobo57dx
-         EuqGjHvOOfgbsCp2pkl7f6DfnXDM5554cdN7/solkr6P0fnid+I4wZueC+oVw8hHmV7c
-         2+bw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FGhuM+Ul8ivfECgpMOf+uI9At4u/thxxxtZts2/cwIo=;
+        b=jtuwA3otb+JEQeCtC5sFp76yUkFebNN67sz4Sd7Rz63tG5UuGaEOgjnNzrMGibzxgH
+         B7jkx2iMfTNCvYp/0laSPFWrAXnu+7LGe7JoBDXpIYuUfSkDJAKC+snFugRnBMJozOMR
+         EQgyaY2h9FX1R8v61Xc6Jerr2aqR0LkPusphMhUQecCREi0g41YKRvJqTq+ZpSan9KMm
+         OSF+l64S6MYJxIPJtmxsoA8Nu5RydZkgPrkVB+7lvXtiPyfVnmEd57WsHjLcfALSqZCk
+         ZxACblfSesJaiiPrgtr4njAkxFfj4RRD+oFRbQVgqoxHXRkbI9Zm8GyGUrAYoMCJuzIT
+         1MdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mJsuvDfEgbFAv2twfqdlbxVBvJIL07keRfhXHhiCGs0=;
-        b=mwqg8bHbBQsNYppdF8isiJjDJn2r9NhFVcEIMZGSG255Ttckotcz0gFu9167mPZQUh
-         LksuqUy9VhqCMeh87DSbxSJzqk1LgFZ4qw6APvMbFRKLfph5VTxsg6Q4e6bmof6iXvtW
-         rLGpRCrhQ8Di5tZw05hBsxmJJGJ5kwp3cd+T9b88fl3sNsLoRBLfi/+XPy0CrRpl3qba
-         Ru/A1IoXRVV6ZGiUi2tG07vHa56pIh0QZQqH+gB7pHzi4euAqWU8MWLe5WUqqtxUnVr/
-         8RRSEXCOyZ9PjBSEXMKdPtP9rpx892deHt1WbQupX5vrXlAQYyPhyGKNef3ZO6C1Ep7D
-         6/1A==
-X-Gm-Message-State: AOAM5310g6bXdWXkD/wv62x5YNPF4efiI+n3FhjYgkRdN5z3Jr2ouoMu
-        9+aTiBGrYO6fvyLg3ejMIgraSJUXkZqnkg==
-X-Google-Smtp-Source: ABdhPJzqhyWIhdw/+agPQiJAJhQRIc6T5qspCJsIkjm3/RCegi/FEFJnXs4wWJPLuRflEZ4Igg9GRw==
-X-Received: by 2002:adf:9f11:0:b0:1f0:728c:8fac with SMTP id l17-20020adf9f11000000b001f0728c8facmr16091191wrf.245.1647248623136;
-        Mon, 14 Mar 2022 02:03:43 -0700 (PDT)
-Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id f13-20020adff8cd000000b001f03439743fsm12862775wrq.75.2022.03.14.02.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 02:03:42 -0700 (PDT)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
-Cc:     wsa@kernel.org, upstream@semihalf.com, jsd@semihalf.com
-Subject: [PATCH v3 -next] i2c: designware: Remove code duplication
-Date:   Mon, 14 Mar 2022 10:03:23 +0100
-Message-Id: <20220314090323.272071-1-jsd@semihalf.com>
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FGhuM+Ul8ivfECgpMOf+uI9At4u/thxxxtZts2/cwIo=;
+        b=lziHe7pGqP/n19UbHgEomC1n0nC1R3VMWZ9P8YRNHFF7feVnYTgn38kkHtXTQpwpJW
+         BjaqW8OEzOXrevdVAHdyO/lZKS9ja7lRKppiCUKUAlltUZr0CThuidpS+moQoGHvU1s7
+         tUmFWNQFEIinJzxvLa9fv0ULmEb8dGoLRI7I+Ns5W8I8nUtIoZdS0aRgKGx0WIpt1NEb
+         VtTgjRvXRoxwSOKqItDTe3ZFoIY+7mG1oToy82dd0NohQkrgakP/twaiybXmz6uXCojj
+         PgJjoW6eatpt0Kc09AYBEwlE5hQzFp3gJ88LFa+EvMrUWJOwhDZElyJZO/GZudzrQnrW
+         iKmw==
+X-Gm-Message-State: AOAM530k5/2OXshbBE91WOoE1T1wfsSyQAxh5CkFkf2l6zl/DtD68dnj
+        Zc1bHK5NsDvJfNm8s8anflyoECJbt6raKLrahViisx44/79haA==
+X-Google-Smtp-Source: ABdhPJxGuJ+973f0F6J0wdUQG+sd71F7QlJJrClPl/UMGq8eoJPqhJOYvQrNx0WvcwhkIp9nytb8KwDRO+YQMsJRwes=
+X-Received: by 2002:a63:174f:0:b0:381:2bb3:2661 with SMTP id
+ 15-20020a63174f000000b003812bb32661mr6760596pgx.197.1647248617345; Mon, 14
+ Mar 2022 02:03:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220301194830.3557578-1-jens.wiklander@linaro.org> <20220301194830.3557578-3-jens.wiklander@linaro.org>
+In-Reply-To: <20220301194830.3557578-3-jens.wiklander@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 14 Mar 2022 14:33:26 +0530
+Message-ID: <CAFA6WYNj_onTOtETKTLTGG6=GYHMDvty90KftLkfEz_v7nZx9w@mail.gmail.com>
+Subject: Re: [PATCH 2/3] optee: add FF-A capability OPTEE_FFA_SEC_CAP_ARG_OFFSET
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code by moving common part to one function.
+On Wed, 2 Mar 2022 at 01:18, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>
+> Adds the secure capability OPTEE_FFA_SEC_CAP_ARG_OFFSET to indicate that
+> OP-TEE with FF-A can support an argument struct at a non-zero offset into
+> a passed shared memory object.
+>
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-v2->v3:
-* Rebase on top of -next (v2 couldn't be applied cleanly)
-v1->v2:
-* Add kudos for Andy who suggested this change
-* Get rid of extra function and move common code to psp_send_i2c_req
-* Update commit message and commit title
-  (was "i2c:designware: Add helper to remove redundancy")
- drivers/i2c/busses/i2c-designware-amdpsp.c | 35 ++++++++++------------
- 1 file changed, 15 insertions(+), 20 deletions(-)
+It isn't clear to me why FF-A ABI requires this capability.
+shm->offset should be honoured by default, if it isn't then it's a
+bug. AFAIK, FF-A is currently still in its early stages so it
+shouldn't be that hard to fix bugs in the ABI.
 
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 3844695e6bf3..9b37f2b95abc 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -214,17 +214,28 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
- 				PSP_I2C_REQ_RETRY_DELAY_US,
- 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
- 				0, req);
--	if (ret)
-+	if (ret) {
-+		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
-+			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
-+			"release" : "acquire");
- 		goto cleanup;
-+	}
- 
- 	ret = status;
--	if (ret)
-+	if (ret) {
-+		dev_err(psp_i2c_dev, "PSP communication error\n");
- 		goto cleanup;
-+	}
- 
- 	dev_dbg(psp_i2c_dev, "Request accepted by PSP after %ums\n",
- 		jiffies_to_msecs(jiffies - start));
- 
- cleanup:
-+	if (ret) {
-+		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
-+		psp_i2c_mbox_fail = true;
-+	}
-+
- 	kfree(req);
- 	return ret;
- }
-@@ -249,16 +260,8 @@ static int psp_acquire_i2c_bus(void)
- 	}
- 
- 	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
--	if (status) {
--		if (status == -ETIMEDOUT)
--			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
--		else
--			dev_err(psp_i2c_dev, "PSP communication error\n");
--
--		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
--		psp_i2c_mbox_fail = true;
-+	if (status)
- 		goto cleanup;
--	}
- 
- 	psp_i2c_sem_acquired = jiffies;
- 	psp_i2c_access_count++;
-@@ -294,16 +297,8 @@ static void psp_release_i2c_bus(void)
- 
- 	/* Send a release command to PSP */
- 	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
--	if (status) {
--		if (status == -ETIMEDOUT)
--			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
--		else
--			dev_err(psp_i2c_dev, "PSP communication error\n");
--
--		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
--		psp_i2c_mbox_fail = true;
-+	if (status)
- 		goto cleanup;
--	}
- 
- 	dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
- 		jiffies_to_msecs(jiffies - psp_i2c_sem_acquired));
--- 
-2.35.1.723.g4982287a31-goog
+-Sumit
 
+> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> ---
+>  drivers/tee/optee/ffa_abi.c   | 17 +++++++++++++++--
+>  drivers/tee/optee/optee_ffa.h | 12 +++++++++++-
+>  2 files changed, 26 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> index 7686f7020616..cc863aaefcd9 100644
+> --- a/drivers/tee/optee/ffa_abi.c
+> +++ b/drivers/tee/optee/ffa_abi.c
+> @@ -615,12 +615,21 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
+>                 .data0 = OPTEE_FFA_YIELDING_CALL_WITH_ARG,
+>                 .data1 = (u32)shm->sec_world_id,
+>                 .data2 = (u32)(shm->sec_world_id >> 32),
+> -               .data3 = shm->offset,
+> +               .data3 = 0,
+>         };
+>         struct optee_msg_arg *arg;
+>         unsigned int rpc_arg_offs;
+>         struct optee_msg_arg *rpc_arg;
+>
+> +       /*
+> +        * The shared memory object has to start on a page when passed as
+> +        * an argument struct. This is also what the shm pool allocator
+> +        * returns, but check this before calling secure world to catch
+> +        * eventual errors early in case something changes.
+> +        */
+> +       if (shm->offset)
+> +               return -EINVAL;
+> +
+>         arg = tee_shm_get_va(shm, 0);
+>         if (IS_ERR(arg))
+>                 return PTR_ERR(arg);
+> @@ -678,6 +687,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
+>
+>  static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
+>                                     const struct ffa_dev_ops *ops,
+> +                                   u32 *sec_caps,
+>                                     unsigned int *rpc_param_count)
+>  {
+>         struct ffa_send_direct_data data = { OPTEE_FFA_EXCHANGE_CAPABILITIES };
+> @@ -694,6 +704,7 @@ static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
+>         }
+>
+>         *rpc_param_count = (u8)data.data1;
+> +       *sec_caps = data.data2;
+>
+>         return true;
+>  }
+> @@ -777,6 +788,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>         struct tee_device *teedev;
+>         struct tee_context *ctx;
+>         struct optee *optee;
+> +       u32 sec_caps;
+>         int rc;
+>
+>         ffa_ops = ffa_dev_ops_get(ffa_dev);
+> @@ -788,7 +800,8 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+>         if (!optee_ffa_api_is_compatbile(ffa_dev, ffa_ops))
+>                 return -EINVAL;
+>
+> -       if (!optee_ffa_exchange_caps(ffa_dev, ffa_ops, &rpc_param_count))
+> +       if (!optee_ffa_exchange_caps(ffa_dev, ffa_ops, &sec_caps,
+> +                                    &rpc_param_count))
+>                 return -EINVAL;
+>
+>         optee = kzalloc(sizeof(*optee), GFP_KERNEL);
+> diff --git a/drivers/tee/optee/optee_ffa.h b/drivers/tee/optee/optee_ffa.h
+> index ee3a03fc392c..97266243deaa 100644
+> --- a/drivers/tee/optee/optee_ffa.h
+> +++ b/drivers/tee/optee/optee_ffa.h
+> @@ -81,8 +81,16 @@
+>   *                   as the second MSG arg struct for
+>   *                   OPTEE_FFA_YIELDING_CALL_WITH_ARG.
+>   *        Bit[31:8]: Reserved (MBZ)
+> - * w5-w7: Note used (MBZ)
+> + * w5:   Bitfield of secure world capabilities OPTEE_FFA_SEC_CAP_* below,
+> + *       unused bits MBZ.
+> + * w6-w7: Not used (MBZ)
+> + */
+> +/*
+> + * Secure world supports giving an offset into the argument shared memory
+> + * object, see also OPTEE_FFA_YIELDING_CALL_WITH_ARG
+>   */
+> +#define OPTEE_FFA_SEC_CAP_ARG_OFFSET   BIT(0)
+> +
+>  #define OPTEE_FFA_EXCHANGE_CAPABILITIES OPTEE_FFA_BLOCKING_CALL(2)
+>
+>  /*
+> @@ -112,6 +120,8 @@
+>   *       OPTEE_MSG_GET_ARG_SIZE(num_params) follows a struct optee_msg_arg
+>   *       for RPC, this struct has reserved space for the number of RPC
+>   *       parameters as returned by OPTEE_FFA_EXCHANGE_CAPABILITIES.
+> + *       MBZ unless the bit OPTEE_FFA_SEC_CAP_ARG_OFFSET is received with
+> + *       OPTEE_FFA_EXCHANGE_CAPABILITIES.
+>   * w7:    Not used (MBZ)
+>   * Resume from RPC. Register usage:
+>   * w3:    Service ID, OPTEE_FFA_YIELDING_CALL_RESUME
+> --
+> 2.31.1
+>

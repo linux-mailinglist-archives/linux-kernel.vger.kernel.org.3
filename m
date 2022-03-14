@@ -2,158 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA7C4D81E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D624D8277
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239963AbiCNL5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S240328AbiCNMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbiCNL5A (ORCPT
+        with ESMTP id S240638AbiCNMDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:57:00 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A160AE49
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:55:50 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id e2so13290497pls.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KTvK/tAz5DZFZ3Kzshxhj1MZq5011xDi3PnkIqV+z7Y=;
-        b=C2AHHDQQIiqrD/AwF/0JYGpuDv/xfIZDqkvxnaWi3sP8ONj8vNrzZsswi3ZIpJ+atv
-         c4aQYR/L+VWpc3jNAuazuTGI1s+Gu3YaSUvn1GBt9vq061wX1vvTfvbwBsgWzIqUqF2u
-         VXnbR+ayVV/2uPqmMSSphKMTaG63mfArsORumeDbc5fPOM8du8WxRKq9qH25iec6OrW6
-         KGKPkT/T346K0rFucth/rJv2+8Cgvho0IUBLgNrz4okICFCzrfpuM+4LetNIpBxkqAyx
-         Ykw2cSuPT1nr8rjrG1fx1Z+NcXRKcEq92Cz8r8Y/lks9NuHfVa7Qy/b8sweuqMD9DceY
-         ENZA==
+        Mon, 14 Mar 2022 08:03:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1DF14B407
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647259197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=DTumIzkUVMCDvmMhaJUDyMiG+aNJUlziXvFqILOQYsI=;
+        b=Fx8sD/JbdyLzP94A+V1xfdOotmYcIHm5ISvnQ1T6ndEogXzV7TyfCtDPGRf0p6VsegfNy3
+        bsIYugzTUMz0IuHNj+aJqTOdh7hc3YIRq0GfcMbMz2X9Lov5XQZX8WQYcB7+3myGY8KD6t
+        oMsYqiKDn0QvQOa0h6KBhlk3n/P0HXs=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-93-Y-JefBWWPk6yX7A-kJ9QrQ-1; Mon, 14 Mar 2022 07:59:56 -0400
+X-MC-Unique: Y-JefBWWPk6yX7A-kJ9QrQ-1
+Received: by mail-wr1-f70.google.com with SMTP id h11-20020a5d430b000000b001f01a35a86fso4268343wrq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:59:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KTvK/tAz5DZFZ3Kzshxhj1MZq5011xDi3PnkIqV+z7Y=;
-        b=sFolmx2Eh8iDONjaVWCV6/Dg0leX5YHi3jL7hxqC2HdwEJxzhkPZbwlvelyirTKDfw
-         1S64/mB3XILZk7EHyO7pW5EswFLf95KPJUCVDHqUWsi8+ty5Gz7WcFlV32ys/hljkp5D
-         02wFuvKyHEXZfORP7fRzVrWThW4ymOynw5KR73tXUxsMnscQRNURvagItc9KB+mzfZRw
-         elStYO+UrHswmRbdVZP8L7iHMBg1tIBVVEcKKLfm36aYrqy95MtflE249HZLt3OlzlNT
-         W1eQpN4nSVaA9yZXlHDUjxPOA6U3PAyLWBxTAfFoyXWetu1XUEi/5cC5c7q3UQM4qKmK
-         E/Bw==
-X-Gm-Message-State: AOAM532iNr1fSFTAMJustp1katUeCC2netPxmQL2aBJwEqOKcfZo7PaL
-        12/pYxplyhEfe+otXceM0mc=
-X-Google-Smtp-Source: ABdhPJyGcMgUVAsUijvdWNO1aFsGNt8yUNTBb7lptKjjJfkHLhF0x1sLyDOu+xd+UFiijxixlot6JA==
-X-Received: by 2002:a17:903:183:b0:151:af32:890d with SMTP id z3-20020a170903018300b00151af32890dmr23648983plg.0.1647258949670;
-        Mon, 14 Mar 2022 04:55:49 -0700 (PDT)
-Received: from [192.168.1.102] ([45.250.64.116])
-        by smtp.gmail.com with ESMTPSA id m12-20020a17090a2c0c00b001bc4cf0107esm17348655pjd.53.2022.03.14.04.55.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 04:55:49 -0700 (PDT)
-Message-ID: <3ee0dda3-d80b-4058-49e7-88ceb6426459@gmail.com>
-Date:   Mon, 14 Mar 2022 17:25:43 +0530
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=DTumIzkUVMCDvmMhaJUDyMiG+aNJUlziXvFqILOQYsI=;
+        b=ZuzIMK4S4jQhVwN/J9SqY90hKt3y5tuYd0Le1uhWwYXFxrqBwl/jQoVXdqpMkptwFS
+         6Oj+X3HSMgbrbgf7B8jPw90usbnC2GqNKWT0c6rN4NoM/3NGRcQaboIbOQCaAbed3rI/
+         jtOOiDAD3LXjsuVCIuS8uXQnrbn6wcIYjCfiCJjD5Z8i+TG357CMOnwZgDdQ+2CBRryL
+         52Cn69QN/ytePuL6nlP2FJMWU1vdgXi4X3VW/inJfef5a84roThCsXZddMEewoSn+zFP
+         p+RlZybliiRWlLdXZNfkE2yBhqefOqnXPs5cH1synY9r8UD6QxbCW9ig3zdSZWHFkLSl
+         LLgA==
+X-Gm-Message-State: AOAM530SbCxrnhCknzC4Clg6wjmk8OeoQa4IVIVZfWNCdqyb5BnFLupD
+        rNMiLrqz/LaPrT7L4jmDVizqMJcWhplq7s31OQRqcDUP5GNuozguYohCaPJV1hRAfgDxJJQ40iq
+        XLh57b3v/y9QYsS/m0WpiTeIN
+X-Received: by 2002:a05:600c:4f09:b0:389:cf43:eaf8 with SMTP id l9-20020a05600c4f0900b00389cf43eaf8mr17160220wmq.201.1647259194497;
+        Mon, 14 Mar 2022 04:59:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzp7ZJAVv6i97GoEYXJTrh4j1WEgqWNchpszO38kLqkQtDsjqJCu3h0XIEDXpnWhcBdQ3hpYw==
+X-Received: by 2002:a05:600c:4f09:b0:389:cf43:eaf8 with SMTP id l9-20020a05600c4f0900b00389cf43eaf8mr17160208wmq.201.1647259194258;
+        Mon, 14 Mar 2022 04:59:54 -0700 (PDT)
+Received: from redhat.com ([2.55.183.53])
+        by smtp.gmail.com with ESMTPSA id w6-20020a5d6806000000b002036515dda7sm13416882wru.33.2022.03.14.04.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 04:59:53 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 07:59:51 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        elic@nvidia.com, jasowang@redhat.com, mail@anirudhrb.com,
+        mst@redhat.com
+Subject: [GIT PULL] virtio: a last minute regression fix
+Message-ID: <20220314075951-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] staging: android: ashmem: Declared file operation with
- const keyword Warning found by checkpatch.pl script.
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOl?= =?UTF-8?Q?g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20220312204128.3942-1-shaikhkamal2012@gmail.com>
- <303ed0c8-8e2c-51a4-a4da-be973a25cdec@gmail.com>
- <bf27518d-4990-8b0e-c6ea-26a658ce2e54@gmail.com> <Yi8oFtMxfTkPF8/h@kroah.com>
-From:   shaikh kamaluddin <shaikhkamal2012@gmail.com>
-In-Reply-To: <Yi8oFtMxfTkPF8/h@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mutt-Fcc: =sent
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/2022 5:03 PM, Greg Kroah-Hartman wrote:
-> On Mon, Mar 14, 2022 at 04:55:55PM +0530, shaikh kamaluddin wrote:
->> On 3/13/2022 3:13 AM, Pavel Skripkin wrote:
->>> Hi Shaikh,
->>>
->>> On 3/12/22 23:41, shaikh kamal wrote:
->>>> Signed-off-by: shaikh kamal <shaikhkamal2012@gmail.com>
->>>> ---
->>>>    drivers/staging/android/ashmem.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/staging/android/ashmem.c
->>>> b/drivers/staging/android/ashmem.c
->>>> index ddbde3f8430e..4c6b420fbf4d 100644
->>>> --- a/drivers/staging/android/ashmem.c
->>>> +++ b/drivers/staging/android/ashmem.c
->>>> @@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file
->>>> *file, unsigned long addr,
->>>>    static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
->>>>    {
->>>> -    static struct file_operations vmfile_fops;
->>>> +    static const struct file_operations vmfile_fops;
->>>>        struct ashmem_area *asma = file->private_data;
->>>>        int ret = 0;
->>>
->>> Are you sure this patch compiles? vmfile_fops is overrided few lines below
->>>
->>> odd checkpatch.pl warning...
->>>
->>>
->>>
->>>
->>> With regards,
->>> Pavel Skripkin
->>
->> Thank you,yes vmfile_fops is overrided in below code.
->> Building the kernel - make -j4,
->> drivers/staging/android/ashmem.c: In function ‘ashmem_mmap’:
->> drivers/staging/android/ashmem.c:431:16: error: assignment of read-only
->> variable ‘vmfile_fops’
->>      vmfile_fops = *vmfile->f_op;
->>                  ^
->> drivers/staging/android/ashmem.c:432:21: error: assignment of member ‘mmap’
->> in read-only object
->>      vmfile_fops.mmap = ashmem_vmfile_mmap;
->>                       ^
->> drivers/staging/android/ashmem.c:433:34: error: assignment of member
->> ‘get_unmapped_area’ in read-only object
->>      vmfile_fops.get_unmapped_area =
->>                                    ^
->> scripts/Makefile.build:288: recipe for target
->> 'drivers/staging/android/ashmem.o' failed
->> make[3]: *** [drivers/staging/android/ashmem.o] Error 1
->> scripts/Makefile.build:550: recipe for target 'drivers/staging/android'
->> failed
->> make[2]: *** [drivers/staging/android] Error 2
->> scripts/Makefile.build:550: recipe for target 'drivers/staging' failed
->> make[1]: *** [drivers/staging] Error 2
->> Makefile:1831: recipe for target 'drivers' failed
-> 
-> As always, it is expected that when you submit a change to the kernel,
-> at the very least you have test-built it to ensure that it does not
-> break the build.  Please remember to do this next time.
-> 
-> thanks,
-> 
-> greg k-h
+The following changes since commit 3dd7d135e75cb37c8501ba02977332a2a487dd39:
 
+  tools/virtio: handle fallout from folio work (2022-03-06 06:06:50 -0500)
 
-Thank you, I will do that.
+are available in the Git repository at:
 
-Regards,
-Shaikh Kamaluddin
+  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+
+for you to fetch changes up to 95932ab2ea07b79cdb33121e2f40ccda9e6a73b5:
+
+  vhost: allow batching hint without size (2022-03-10 08:12:04 -0500)
+
+----------------------------------------------------------------
+virtio: a last minute regression fix
+
+I thought we did a lot of testing, but a regression still
+managed to sneak in. The fix seems trivial.
+
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+
+----------------------------------------------------------------
+Jason Wang (1):
+      vhost: allow batching hint without size
+
+ drivers/vhost/vhost.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+

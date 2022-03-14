@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34C24D7CF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B60A4D7CCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237395AbiCNIBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S237102AbiCNH7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 03:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236811AbiCNH5t (ORCPT
+        with ESMTP id S236969AbiCNH5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 03:57:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C73041609;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6A641613;
         Mon, 14 Mar 2022 00:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C0CA611A6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D36611C2;
         Mon, 14 Mar 2022 07:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7907C341D3;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BCEC341D6;
         Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244561;
-        bh=2U8aTKa34RibPN+qYN5jqh/sklMFMlcnaycXqtFcGnU=;
+        bh=6vh0NW6pE/2yG8lmami/Y4MhdJpgdS+SQOdsp7VPBLE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WfSJDhQvqZiLDSlQQ8GmCB5e66/danVVbnJaz469/5iHc7SNJ1KsmltVnq06la8a2
-         PBkCb+yMhNYNipno5tKmUn0pNb2XNu/9tRMAFsFQD6Ps4vM8vuP2njH/83VrbSaFGw
-         svLmUbgirg4HyxM6sqnR8AI3zIoD2h0a3MEjxHVCliTx3aYaOvwLHE3TU6xsUOpAT7
-         AQ66/7H+ePeALyZC1q9mh6jdwM8ZCG199FgsGisrmxN80UmZz1MMb7GJfTZ2efem63
-         4AtvEBJFCwfZcaxlShhUq7aY6WSH33ak6F5GH1ccEaVPO4haW27C4+VvrnoU29lqcs
-         fhiv/mGLtcB2Q==
+        b=bR6mhUN/1sdixB4g8PBmSz93GIE2zz8DNt362WNv2pGGNfHosVbyjtIVG65C7pej7
+         5gZay5vLuOq5IJykWfNw9rKns2ef0HsX+m5VGbRlC52W4a+Xmz7l5V3qIOdCZ8hviG
+         JXnhMjMbTDpCKHTCI4hdI8SRymT7Asn6G3Bt0BjgGR2D0WEXhefzehOgL2FTydgnDL
+         79Lh+/+S827bz4dq4CII03IZe5lGGTybKz/2ZB1xFTVM4/14Ky+ejx0Jomp95zYP02
+         nsX0UWeVukTse8rQLp0ihXRNU8YaPhL1dmN+ZOOG1eGtt9zdS+/t3u9gILbAmkLXlY
+         NlMIC2R6uyLPw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYd-001kW7-Hf; Mon, 14 Mar 2022 08:55:59 +0100
+        id 1nTfYd-001kWB-Iq; Mon, 14 Mar 2022 08:55:59 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -42,15 +42,12 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH 30/64] media: platform: vde: move config to its own file
-Date:   Mon, 14 Mar 2022 08:55:22 +0100
-Message-Id: <0a7199a8bf4f31da0281e3578138c78ddadbd5fc.1647242579.git.mchehab@kernel.org>
+        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 31/64] media: platform: ti-vpe: move config to its own file
+Date:   Mon, 14 Mar 2022 08:55:23 +0100
+Message-Id: <12666f5d61d1232d17721f97d4cbe84a33bb4534.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
@@ -68,80 +65,172 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to better organize the platform/Kconfig, place
-vde-specific config stuff on a separate Kconfig file.
+ti-vpe-specific config stuff on a separate Kconfig file.
 
-Acked-by: Dmitry Osipenko <digetx@gmail.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig           | 19 +------------------
- drivers/media/platform/tegra/vde/Kconfig | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+), 18 deletions(-)
- create mode 100644 drivers/media/platform/tegra/vde/Kconfig
+ drivers/media/platform/Kconfig        | 60 +-------------------------
+ drivers/media/platform/ti-vpe/Kconfig | 62 +++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 59 deletions(-)
+ create mode 100644 drivers/media/platform/ti-vpe/Kconfig
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 224ebe4f5348..b0acbf3ccb69 100644
+index b0acbf3ccb69..228881ae0d22 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -65,6 +65,7 @@ source "drivers/media/platform/sti/hva/Kconfig"
- source "drivers/media/platform/stm32/Kconfig"
+@@ -66,6 +66,7 @@ source "drivers/media/platform/stm32/Kconfig"
  source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
  source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
-+source "drivers/media/platform/tegra/vde/Kconfig"
+ source "drivers/media/platform/tegra/vde/Kconfig"
++source "drivers/media/platform/ti-vpe/Kconfig"
  
  config VIDEO_MUX
  	tristate "Video Multiplexer"
-@@ -232,24 +233,6 @@ config VIDEO_TI_VPE_DEBUG
- 	help
- 	  Enable debug messages on VPE driver.
+@@ -106,33 +107,6 @@ source "drivers/media/platform/xilinx/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
  
--config VIDEO_TEGRA_VDE
--	tristate "NVIDIA Tegra Video Decoder Engine driver"
--	depends on V4L_MEM2MEM_DRIVERS
--	depends on ARCH_TEGRA || COMPILE_TEST
+-config VIDEO_TI_CAL
+-	tristate "TI CAL (Camera Adaptation Layer) driver"
+-	depends on V4L_PLATFORM_DRIVERS
 -	depends on VIDEO_DEV && VIDEO_V4L2
--	select DMA_SHARED_BUFFER
--	select IOMMU_IOVA
 -	select MEDIA_CONTROLLER
--	select MEDIA_CONTROLLER_REQUEST_API
--	select SRAM
+-	select VIDEO_V4L2_SUBDEV_API
+-	depends on SOC_DRA7XX || ARCH_K3 || COMPILE_TEST
 -	select VIDEOBUF2_DMA_CONTIG
--	select VIDEOBUF2_DMA_SG
--	select V4L2_H264
--	select V4L2_MEM2MEM_DEV
+-	select V4L2_FWNODE
 -	help
--	   Support for the NVIDIA Tegra video decoder unit.
--	   To compile this driver as a module choose m here.
+-	  Support for the TI CAL (Camera Adaptation Layer) block
+-	  found on DRA72X SoC.
+-	  In TI Technical Reference Manual this module is referred as
+-	  Camera Interface Subsystem (CAMSS).
 -
- # TI VIDEO PORT Helper Modules
- # These will be selected by VPE and VIP
- config VIDEO_TI_VPDMA
-diff --git a/drivers/media/platform/tegra/vde/Kconfig b/drivers/media/platform/tegra/vde/Kconfig
+-config VIDEO_TI_CAL_MC
+-	bool "Media Controller centric mode by default"
+-	depends on VIDEO_TI_CAL
+-	default n
+-	help
+-	  Enables Media Controller centric mode by default.
+-
+-	  If set, CAL driver will start in Media Controller mode by
+-	  default. Note that this behavior can be overridden via
+-	  module parameter 'mc_api'.
+-
+-
+ # Mem2mem drivers
+ 
+ config VIDEO_MEM2MEM_DEINTERLACE
+@@ -212,37 +186,5 @@ config VIDEO_STI_DELTA_DRIVER
+ 	select V4L2_MEM2MEM_DEV
+ 	select RPMSG
+ 
+-config VIDEO_TI_VPE
+-	tristate "TI VPE (Video Processing Engine) driver"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on SOC_DRA7XX || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	select VIDEO_TI_VPDMA
+-	select VIDEO_TI_SC
+-	select VIDEO_TI_CSC
+-	help
+-	  Support for the TI VPE(Video Processing Engine) block
+-	  found on DRA7XX SoC.
+-
+-config VIDEO_TI_VPE_DEBUG
+-	bool "VPE debug messages"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_TI_VPE
+-	help
+-	  Enable debug messages on VPE driver.
+-
+-# TI VIDEO PORT Helper Modules
+-# These will be selected by VPE and VIP
+-config VIDEO_TI_VPDMA
+-	tristate
+-
+-config VIDEO_TI_SC
+-	tristate
+-
+-config VIDEO_TI_CSC
+-	tristate
+-
+ # DVB platform drivers
+ source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+diff --git a/drivers/media/platform/ti-vpe/Kconfig b/drivers/media/platform/ti-vpe/Kconfig
 new file mode 100644
-index 000000000000..584b78d8d66c
+index 000000000000..a9ee0189f2f2
 --- /dev/null
-+++ b/drivers/media/platform/tegra/vde/Kconfig
-@@ -0,0 +1,17 @@
-+config VIDEO_TEGRA_VDE
-+	tristate "NVIDIA Tegra Video Decoder Engine driver"
-+	depends on V4L_MEM2MEM_DRIVERS
-+	depends on ARCH_TEGRA || COMPILE_TEST
++++ b/drivers/media/platform/ti-vpe/Kconfig
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++# TI VIDEO PORT Helper Modules
++# These will be selected by VPE and VIP
++config VIDEO_TI_VPDMA
++	tristate
++
++config VIDEO_TI_SC
++	tristate
++
++config VIDEO_TI_CSC
++	tristate
++
++# V4L drivers
++
++config VIDEO_TI_CAL
++	tristate "TI CAL (Camera Adaptation Layer) driver"
 +	depends on VIDEO_DEV && VIDEO_V4L2
-+	select DMA_SHARED_BUFFER
-+	select IOMMU_IOVA
++	depends on V4L_PLATFORM_DRIVERS
 +	select MEDIA_CONTROLLER
-+	select MEDIA_CONTROLLER_REQUEST_API
-+	select SRAM
++	select VIDEO_V4L2_SUBDEV_API
++	depends on SOC_DRA7XX || ARCH_K3 || COMPILE_TEST
 +	select VIDEOBUF2_DMA_CONTIG
-+	select VIDEOBUF2_DMA_SG
-+	select V4L2_H264
-+	select V4L2_MEM2MEM_DEV
++	select V4L2_FWNODE
 +	help
-+	   Support for the NVIDIA Tegra video decoder unit.
-+	   To compile this driver as a module choose m here.
++	  Support for the TI CAL (Camera Adaptation Layer) block
++	  found on DRA72X SoC.
++	  In TI Technical Reference Manual this module is referred as
++	  Camera Interface Subsystem (CAMSS).
++
++config VIDEO_TI_CAL_MC
++	bool "Media Controller centric mode by default"
++	depends on VIDEO_TI_CAL
++	default n
++	help
++	  Enables Media Controller centric mode by default.
++
++	  If set, CAL driver will start in Media Controller mode by
++	  default. Note that this behavior can be overridden via
++	  module parameter 'mc_api'.
++
++# Mem2mem drivers
++
++config VIDEO_TI_VPE
++	tristate "TI VPE (Video Processing Engine) driver"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on SOC_DRA7XX || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	select VIDEO_TI_VPDMA
++	select VIDEO_TI_SC
++	select VIDEO_TI_CSC
++	help
++	  Support for the TI VPE(Video Processing Engine) block
++	  found on DRA7XX SoC.
++
++config VIDEO_TI_VPE_DEBUG
++	bool "VPE debug messages"
++	depends on VIDEO_TI_VPE
++	help
++	  Enable debug messages on VPE driver.
 -- 
 2.35.1
 

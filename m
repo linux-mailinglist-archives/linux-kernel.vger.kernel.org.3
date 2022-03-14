@@ -2,113 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF544D83B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8EE4D81C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242123AbiCNMSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S239788AbiCNLzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242392AbiCNMJz (ORCPT
+        with ESMTP id S239730AbiCNLzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58D56404;
-        Mon, 14 Mar 2022 05:07:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 744B5B80DED;
-        Mon, 14 Mar 2022 12:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9096C340EC;
-        Mon, 14 Mar 2022 12:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259668;
-        bh=dQE9AN0W3xhOOojm4d6cc0ZVs/VcgoMmZFSyfL9v3+8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2H3d7uU+57Zd59ZIej/qiKmal169BeekIH6tY1uFdYkQmbuOszYGvDNcgTacdPzFQ
-         Ax6HMtCuQp5s0XFKJpUpBrnbn/MBsjT20w6aGvRwD+5kAmVOXx+IMRWQUG8lkqbfFK
-         ly2uVu5Uit+gXjAO4u4XjISlHEhHm5GggT0irB8o=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 035/110] tipc: fix incorrect order of state message data sanity check
+        Mon, 14 Mar 2022 07:55:24 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC0065D5;
+        Mon, 14 Mar 2022 04:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PTwOcgm2slbmg9VL7iVtoVa9+P+qCUypTT7BxbCACEc=;
+  b=MBne6/9eSWzHJJv1CzvQEflUBhYI5DdP9CaBpGjCMvDcLoHbnQ4MEshV
+   VUpNuvPV1eKLCIDT1VulXc8zYkVXuWspnvNwcqhpiqHwfXZxJzmdx42FJ
+   70uWnBON0BfBSw0iGr7irSvTDsi1H8f2ledzsBuaM+fuIVqaF4TAJ1CsP
+   Q=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997346"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     kernel-janitors@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 13/30] UBI: block: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:37 +0100
-Message-Id: <20220314112744.017934814@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-14-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit c79fcc27be90b308b3fa90811aefafdd4078668c ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-When receiving a state message, function tipc_link_validate_msg()
-is called to validate its header portion. Then, its data portion
-is validated before it can be accessed correctly. However, current
-data sanity  check is done after the message header is accessed to
-update some link variables.
-
-This commit fixes this issue by moving the data sanity check to
-the beginning of state message handling and right after the header
-sanity check.
-
-Fixes: 9aa422ad3266 ("tipc: improve size validations for received domain records")
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
-Link: https://lore.kernel.org/r/20220308021200.9245-1-tung.q.nguyen@dektech.com.au
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/link.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/mtd/ubi/block.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/tipc/link.c b/net/tipc/link.c
-index 4e7936d9b442..115a4a7950f5 100644
---- a/net/tipc/link.c
-+++ b/net/tipc/link.c
-@@ -2285,6 +2285,11 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
- 		break;
+diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+index a78fdf3b30f7..d32768f7fe5c 100644
+--- a/drivers/mtd/ubi/block.c
++++ b/drivers/mtd/ubi/block.c
+@@ -441,7 +441,7 @@ int ubiblock_create(struct ubi_volume_info *vi)
  
- 	case STATE_MSG:
-+		/* Validate Gap ACK blocks, drop if invalid */
-+		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
-+		if (glen > dlen)
-+			break;
-+
- 		l->rcv_nxt_state = msg_seqno(hdr) + 1;
- 
- 		/* Update own tolerance if peer indicates a non-zero value */
-@@ -2310,10 +2315,6 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
- 			break;
- 		}
- 
--		/* Receive Gap ACK blocks from peer if any */
--		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
--		if(glen > dlen)
--			break;
- 		tipc_mon_rcv(l->net, data + glen, dlen - glen, l->addr,
- 			     &l->mon_state, l->bearer_id);
- 
--- 
-2.34.1
-
-
+ 	/*
+ 	 * Create one workqueue per volume (per registered block device).
+-	 * Rembember workqueues are cheap, they're not threads.
++	 * Remember workqueues are cheap, they're not threads.
+ 	 */
+ 	dev->wq = alloc_workqueue("%s", 0, 0, gd->disk_name);
+ 	if (!dev->wq) {
 

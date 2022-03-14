@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B564D7E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1F84D7E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238098AbiCNJaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S238197AbiCNJa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiCNJ3f (ORCPT
+        with ESMTP id S237997AbiCNJ3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:29:35 -0400
+        Mon, 14 Mar 2022 05:29:36 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E343527A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D837841639;
         Mon, 14 Mar 2022 02:28:26 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 09:28:23 -0000
+Date:   Mon, 14 Mar 2022 09:28:24 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647250104;
+        s=2020; t=1647250105;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lbX4guq10C4WbgjPFGR3cSWHkRW9v5h6QvXycrYx3bs=;
-        b=W6SejkfzyqzbYt4BGVcAuC0bxVydl1mxspI84A48zhyJ/WOiCQqDEXTovJJd4qnG9iLYtt
-        c9w9O6N3MplRfOwOkIk8/mYgZ/z2NNL3auRFMkeeOnjkcK57Qy1/rz9RtLNo82K3fWEnys
-        75IIdEeTyGLeMTPJlfJ3ftah9R0mQhPS7p5+B6l7nKs/aPps0XiZ520ghC+Za5lvzu1jCn
-        zc3vraDt1qpAjeRFdFSR0b5g18ugw1quptDPrtx5pMdzYrYNQ/C7BdkN8DIem3+3ZrMx5G
-        0Vd8WFqhav333fx3qISF0utc4vrzPNzp1oA9dTDyMRR8LbvactM7+ckTu+B5yA==
+        bh=LoGXifgXBugWKhZJEY5Vgd4JoXXcESKZroQeRhqACbE=;
+        b=SSlqdCETTNWRBgVWIa46TPZaBPx7+zJLzq9iFJqOtkz4hEU/G340Szdlmu+c3erFxuHojj
+        PQhwiEow1S/P92o82g6DcF4nxnhL9p3snI8gl6Q0+7YB5MpwZhm10mH2a1twYrGjQXMirS
+        hAokUE75wddOlW0DRwgPQrh8N2VAU1ZNjh2Mq/MrT1HmSs2GgxOGe8MryEGEl99iJuxymo
+        tSJr9oiAwxGYo3SoSEtgHN+5fW2cZegGuZwnycKDjx3BJPDg0jg6qHEqr2ZpAxXpQRn1dE
+        Klb67Qq3kNRq8lZZfx7x0X7l2hHe+JEVDX3sYYLa/NfA84O2eIymyH4U69weuA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647250104;
+        s=2020e; t=1647250105;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lbX4guq10C4WbgjPFGR3cSWHkRW9v5h6QvXycrYx3bs=;
-        b=uM1DMt1UNn6wElWYAix9Ejr5BY/sH5sV95dYVFB3V9DDtvw5YbNX0VB5gQ5uhC2FGnKgRg
-        0p+lJ2h5L7p17xCw==
-From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
+        bh=LoGXifgXBugWKhZJEY5Vgd4JoXXcESKZroQeRhqACbE=;
+        b=67b0qBbbGOa9Qxp4kThR0u9zCxyjlw+HRXbSwNDJlbKMYQYf8XMka6mfqnQBECxXXv8WdX
+        bO0fo0RL15NjlHCA==
+From:   "tip-bot2 for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/imx-tpm: Move
- tpm_read_sched_clock() under CONFIG_ARM
-Cc:     Nathan Chancellor <nathan@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+Subject: [tip: timers/core] clocksource/drivers/arm_arch_timer: Use event
+ stream scaling when available
+Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220303184212.2356245-1-nathan@kernel.org>
-References: <20220303184212.2356245-1-nathan@kernel.org>
+In-Reply-To: <20220203170502.2694422-1-maz@kernel.org>
+References: <20220203170502.2694422-1-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164725010341.16921.1444597331705749005.tip-bot2@tip-bot2>
+Message-ID: <164725010442.16921.3179930344257099426.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,49 +68,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     bf127df3cceada8693888fc86a3121c38ef25701
-Gitweb:        https://git.kernel.org/tip/bf127df3cceada8693888fc86a3121c38ef25701
-Author:        Nathan Chancellor <nathan@kernel.org>
-AuthorDate:    Thu, 03 Mar 2022 11:42:12 -07:00
+Commit-ID:     8c4b810a87005eb46564a48a69b5b255e515fa62
+Gitweb:        https://git.kernel.org/tip/8c4b810a87005eb46564a48a69b5b255e515fa62
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Thu, 03 Feb 2022 17:05:02 
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Mon, 07 Mar 2022 18:27:22 +01:00
 
-clocksource/drivers/imx-tpm: Move tpm_read_sched_clock() under CONFIG_ARM
+clocksource/drivers/arm_arch_timer: Use event stream scaling when available
 
-When building this driver for an architecture other than ARCH=arm:
+With FEAT_ECV and the 1GHz counter, it is pretty likely that the
+event stream divider doesn't fit in the field that holds the
+divider value (we only have 4 bits to describe counter bits [15:0]
 
-  drivers/clocksource/timer-imx-tpm.c:78:20: error: unused function 'tpm_read_sched_clock' [-Werror,-Wunused-function]
-  static u64 notrace tpm_read_sched_clock(void)
-                     ^
-  1 error generated.
+Thankfully, FEAT_ECV also provides a scaling mechanism to switch
+the field to cover counter bits [23:8] instead.
 
-Move the function definition under the existing CONFIG_ARM section so
-there is no more warning.
+Enable this on arm64 when ECV is available (32bit doesn't have
+any detection infrastructure and is unlikely to be run on an
+ARMv8.6 system anyway).
 
-Fixes: 10720e120e2b ("clocksource/drivers/imx-tpm: Exclude sched clock for ARM64")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Link: https://lore.kernel.org/r/20220303184212.2356245-1-nathan@kernel.org
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20220203170502.2694422-1-maz@kernel.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/timer-imx-tpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clocksource/arm_arch_timer.c | 13 +++++++++++--
+ include/clocksource/arm_arch_timer.h |  1 +
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clocksource/timer-imx-tpm.c b/drivers/clocksource/timer-imx-tpm.c
-index 60cefc2..bd64a8a 100644
---- a/drivers/clocksource/timer-imx-tpm.c
-+++ b/drivers/clocksource/timer-imx-tpm.c
-@@ -73,12 +73,12 @@ static unsigned long tpm_read_current_timer(void)
- {
- 	return tpm_read_counter();
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index 1ecd52f..9ab8221 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -880,10 +880,19 @@ static void __arch_timer_setup(unsigned type,
+ 	clockevents_config_and_register(clk, arch_timer_rate, 0xf, max_delta);
  }
--#endif
  
- static u64 notrace tpm_read_sched_clock(void)
+-static void arch_timer_evtstrm_enable(int divider)
++static void arch_timer_evtstrm_enable(unsigned int divider)
  {
- 	return tpm_read_counter();
- }
+ 	u32 cntkctl = arch_timer_get_cntkctl();
+ 
++#ifdef CONFIG_ARM64
++	/* ECV is likely to require a large divider. Use the EVNTIS flag. */
++	if (cpus_have_const_cap(ARM64_HAS_ECV) && divider > 15) {
++		cntkctl |= ARCH_TIMER_EVT_INTERVAL_SCALE;
++		divider -= 8;
++	}
 +#endif
++
++	divider = min(divider, 15U);
+ 	cntkctl &= ~ARCH_TIMER_EVT_TRIGGER_MASK;
+ 	/* Set the divider and enable virtual event stream */
+ 	cntkctl |= (divider << ARCH_TIMER_EVT_TRIGGER_SHIFT)
+@@ -912,7 +921,7 @@ static void arch_timer_configure_evtstream(void)
+ 		lsb++;
  
- static int tpm_set_next_event(unsigned long delta,
- 				struct clock_event_device *evt)
+ 	/* enable event stream */
+-	arch_timer_evtstrm_enable(max(0, min(lsb, 15)));
++	arch_timer_evtstrm_enable(max(0, lsb));
+ }
+ 
+ static void arch_counter_set_user_access(void)
+diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_arch_timer.h
+index e715bdb..057c896 100644
+--- a/include/clocksource/arm_arch_timer.h
++++ b/include/clocksource/arm_arch_timer.h
+@@ -56,6 +56,7 @@ enum arch_timer_spi_nr {
+ #define ARCH_TIMER_EVT_TRIGGER_MASK	(0xF << ARCH_TIMER_EVT_TRIGGER_SHIFT)
+ #define ARCH_TIMER_USR_VT_ACCESS_EN	(1 << 8) /* virtual timer registers */
+ #define ARCH_TIMER_USR_PT_ACCESS_EN	(1 << 9) /* physical timer registers */
++#define ARCH_TIMER_EVT_INTERVAL_SCALE	(1 << 17) /* EVNTIS in the ARMv8 ARM */
+ 
+ #define ARCH_TIMER_EVT_STREAM_PERIOD_US	100
+ #define ARCH_TIMER_EVT_STREAM_FREQ				\

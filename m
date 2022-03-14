@@ -2,238 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F3F4D81FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDF94D854F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239946AbiCNL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S235860AbiCNMtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240106AbiCNL6K (ORCPT
+        with ESMTP id S238201AbiCNMr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:58:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E722B65DA;
-        Mon, 14 Mar 2022 04:56:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58B23B80DC2;
-        Mon, 14 Mar 2022 11:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50914C340EC;
-        Mon, 14 Mar 2022 11:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259017;
-        bh=wKepa4VZBNA7+1tHrTub0cf2Vg7PKMogZSVkDZHOF1U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jcfN1b6LHpn0q45lvocAn37pxq9BTkRsxWYAwpDx8d3wa1vQy9Rd1LJTlEAJRp1G5
-         zjgzwsjDfS5IPSpYvhnkMQGKsZbgNpFKpui7nqkN29VbPPy7J8FsyYVoffDaHz2sIW
-         Ew1D/Q1B7gJ/gbedzYpMyFC2ZLaPZ/CYxHInwiko=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 27/43] selftest/vm: fix map_fixed_noreplace test failure
-Date:   Mon, 14 Mar 2022 12:53:38 +0100
-Message-Id: <20220314112735.182130720@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 14 Mar 2022 08:47:57 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978233917E;
+        Mon, 14 Mar 2022 05:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hkSvYg+QhqgFZs/M00yfIFpfr0WP6sk4OF7YMdOXfzM=;
+  b=cAIVo/VSoFJ93ordGoT7KpoGY4itLt7GuKTgBDMzcvn0vvhHNiXO85XV
+   NKck4K9KZuU/STC8Z4bOBtD9EQ93cvGlW+vLZ+lyBlTaAv8HJznQqu8Zo
+   SXP2YNagNcNJMD4treHXZzuintqxmGcTq9yGWrB7/SCXoT5Tm/iEkZmXz
+   Q=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997348"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Andy Gross <agross@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 15/30] clk: qcom: sm6125-gcc: fix typos in comments
+Date:   Mon, 14 Mar 2022 12:53:39 +0100
+Message-Id: <20220314115354.144023-16-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit f39c58008dee7ab5fc94c3f1995a21e886801df0 ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-On the latest RHEL the test fails due to executable mapped at 256MB
-address
-
-     # ./map_fixed_noreplace
-    mmap() @ 0x10000000-0x10050000 p=0xffffffffffffffff result=File exists
-    10000000-10010000 r-xp 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
-    10010000-10020000 r--p 00000000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
-    10020000-10030000 rw-p 00010000 fd:04 34905657                           /root/rpmbuild/BUILD/kernel-5.14.0-56.el9/linux-5.14.0-56.el9.ppc64le/tools/testing/selftests/vm/map_fixed_noreplace
-    10029b90000-10029bc0000 rw-p 00000000 00:00 0                            [heap]
-    7fffbb510000-7fffbb750000 r-xp 00000000 fd:04 24534                      /usr/lib64/libc.so.6
-    7fffbb750000-7fffbb760000 r--p 00230000 fd:04 24534                      /usr/lib64/libc.so.6
-    7fffbb760000-7fffbb770000 rw-p 00240000 fd:04 24534                      /usr/lib64/libc.so.6
-    7fffbb780000-7fffbb7a0000 r--p 00000000 00:00 0                          [vvar]
-    7fffbb7a0000-7fffbb7b0000 r-xp 00000000 00:00 0                          [vdso]
-    7fffbb7b0000-7fffbb800000 r-xp 00000000 fd:04 24514                      /usr/lib64/ld64.so.2
-    7fffbb800000-7fffbb810000 r--p 00040000 fd:04 24514                      /usr/lib64/ld64.so.2
-    7fffbb810000-7fffbb820000 rw-p 00050000 fd:04 24514                      /usr/lib64/ld64.so.2
-    7fffd93f0000-7fffd9420000 rw-p 00000000 00:00 0                          [stack]
-    Error: couldn't map the space we need for the test
-
-Fix this by finding a free address using mmap instead of hardcoding
-BASE_ADDRESS.
-
-Link: https://lkml.kernel.org/r/20220217083417.373823-1-aneesh.kumar@linux.ibm.com
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Jann Horn <jannh@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/vm/map_fixed_noreplace.c        | 49 ++++++++++++++-----
- 1 file changed, 37 insertions(+), 12 deletions(-)
+ drivers/clk/qcom/gcc-sm6125.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/map_fixed_noreplace.c b/tools/testing/selftests/vm/map_fixed_noreplace.c
-index d91bde511268..eed44322d1a6 100644
---- a/tools/testing/selftests/vm/map_fixed_noreplace.c
-+++ b/tools/testing/selftests/vm/map_fixed_noreplace.c
-@@ -17,9 +17,6 @@
- #define MAP_FIXED_NOREPLACE 0x100000
- #endif
+diff --git a/drivers/clk/qcom/gcc-sm6125.c b/drivers/clk/qcom/gcc-sm6125.c
+index 431b55bb0d2f..cf3af88d4021 100644
+--- a/drivers/clk/qcom/gcc-sm6125.c
++++ b/drivers/clk/qcom/gcc-sm6125.c
+@@ -4151,7 +4151,7 @@ static int gcc_sm6125_probe(struct platform_device *pdev)
  
--#define BASE_ADDRESS	(256ul * 1024 * 1024)
--
--
- static void dump_maps(void)
- {
- 	char cmd[32];
-@@ -28,18 +25,46 @@ static void dump_maps(void)
- 	system(cmd);
- }
- 
-+static unsigned long find_base_addr(unsigned long size)
-+{
-+	void *addr;
-+	unsigned long flags;
-+
-+	flags = MAP_PRIVATE | MAP_ANONYMOUS;
-+	addr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
-+	if (addr == MAP_FAILED) {
-+		printf("Error: couldn't map the space we need for the test\n");
-+		return 0;
-+	}
-+
-+	if (munmap(addr, size) != 0) {
-+		printf("Error: couldn't map the space we need for the test\n");
-+		return 0;
-+	}
-+	return (unsigned long)addr;
-+}
-+
- int main(void)
- {
-+	unsigned long base_addr;
- 	unsigned long flags, addr, size, page_size;
- 	char *p;
- 
- 	page_size = sysconf(_SC_PAGE_SIZE);
- 
-+	//let's find a base addr that is free before we start the tests
-+	size = 5 * page_size;
-+	base_addr = find_base_addr(size);
-+	if (!base_addr) {
-+		printf("Error: couldn't map the space we need for the test\n");
-+		return 1;
-+	}
-+
- 	flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE;
- 
- 	// Check we can map all the areas we need below
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 5 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 
-@@ -60,7 +85,7 @@ int main(void)
- 	printf("unmap() successful\n");
- 
- 	errno = 0;
--	addr = BASE_ADDRESS + page_size;
-+	addr = base_addr + page_size;
- 	size = 3 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -80,7 +105,7 @@ int main(void)
- 	 *     +4 |  free  | new
+ 	/*
+ 	 * Enable DUAL_EDGE mode for MCLK RCGs
+-	 * This is requierd to enable MND divider mode
++	 * This is required to enable MND divider mode
  	 */
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 5 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -101,7 +126,7 @@ int main(void)
- 	 *     +4 |  free  |
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS + (2 * page_size);
-+	addr = base_addr + (2 * page_size);
- 	size = page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -121,7 +146,7 @@ int main(void)
- 	 *     +4 |  free  | new
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS + (3 * page_size);
-+	addr = base_addr + (3 * page_size);
- 	size = 2 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -141,7 +166,7 @@ int main(void)
- 	 *     +4 |  free  |
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 2 * page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -161,7 +186,7 @@ int main(void)
- 	 *     +4 |  free  |
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -181,7 +206,7 @@ int main(void)
- 	 *     +4 |  free  |  new
- 	 */
- 	errno = 0;
--	addr = BASE_ADDRESS + (4 * page_size);
-+	addr = base_addr + (4 * page_size);
- 	size = page_size;
- 	p = mmap((void *)addr, size, PROT_NONE, flags, -1, 0);
- 	printf("mmap() @ 0x%lx-0x%lx p=%p result=%m\n", addr, addr + size, p);
-@@ -192,7 +217,7 @@ int main(void)
- 		return 1;
- 	}
- 
--	addr = BASE_ADDRESS;
-+	addr = base_addr;
- 	size = 5 * page_size;
- 	if (munmap((void *)addr, size) != 0) {
- 		dump_maps();
--- 
-2.34.1
-
-
+ 	regmap_update_bits(regmap, 0x51004, 0x3000, 0x2000);
+ 	regmap_update_bits(regmap, 0x51020, 0x3000, 0x2000);
 

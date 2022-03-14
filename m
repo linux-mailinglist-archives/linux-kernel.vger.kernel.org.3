@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F364D8486
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95034D8569
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241301AbiCNM0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
+        id S237582AbiCNMte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242407AbiCNMTA (ORCPT
+        with ESMTP id S239275AbiCNMr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:19:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28E04D9ED;
-        Mon, 14 Mar 2022 05:14:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EC1060B07;
-        Mon, 14 Mar 2022 12:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49B1C340EC;
-        Mon, 14 Mar 2022 12:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260047;
-        bh=dQE9AN0W3xhOOojm4d6cc0ZVs/VcgoMmZFSyfL9v3+8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qcgWxYdqd6vJdglzaxXKqYNY0CKazuwen7c8lDQZb36cMclFTLGonNAaMHXVEVdAS
-         CGlbkIKSgcAxbo1minO5cLmz53QuCu1Ol5vH5wmc064qpeJwtIHS0CM9NflN4TFYgX
-         u2vUSFmStnHPR6tNrr0qKAqCLh40jpBUCgdSGX1c=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
+        Mon, 14 Mar 2022 08:47:58 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955BD3A1A2;
+        Mon, 14 Mar 2022 05:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+hYUu2G/bq68s9f2SGkYZi4xlcaxcWwYD94UHu9GgRY=;
+  b=p9GC6OpXJFvaT9UgALjpX+KCc0W9t9BgRzlCd4QoDwR4er5TD0eMzJXf
+   DzriE/66opaOKETRTPjE9OG0m7KC1tMUXl7LiKztQkRo8CQrgGKYtj8jC
+   QkOqFsWa0Hcrkc3qfiXAVUjObxEM1YZHFPRQ9Qi9fLqe470ItuvysdJfW
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997352"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     kernel-janitors@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 040/121] tipc: fix incorrect order of state message data sanity check
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 19/30] rtlwifi: rtl8821ae: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:43 +0100
-Message-Id: <20220314112745.247266147@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-20-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit c79fcc27be90b308b3fa90811aefafdd4078668c ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-When receiving a state message, function tipc_link_validate_msg()
-is called to validate its header portion. Then, its data portion
-is validated before it can be accessed correctly. However, current
-data sanity  check is done after the message header is accessed to
-update some link variables.
-
-This commit fixes this issue by moving the data sanity check to
-the beginning of state message handling and right after the header
-sanity check.
-
-Fixes: 9aa422ad3266 ("tipc: improve size validations for received domain records")
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
-Link: https://lore.kernel.org/r/20220308021200.9245-1-tung.q.nguyen@dektech.com.au
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/link.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/tipc/link.c b/net/tipc/link.c
-index 4e7936d9b442..115a4a7950f5 100644
---- a/net/tipc/link.c
-+++ b/net/tipc/link.c
-@@ -2285,6 +2285,11 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
- 		break;
+diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c
+index f6bff0ebd6b0..f3fe16798c59 100644
+--- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c
++++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c
+@@ -872,7 +872,7 @@ static void rtl8821ae_dm_false_alarm_counter_statistics(struct ieee80211_hw *hw)
+ 	else
+ 		falsealm_cnt->cnt_all = falsealm_cnt->cnt_ofdm_fail;
  
- 	case STATE_MSG:
-+		/* Validate Gap ACK blocks, drop if invalid */
-+		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
-+		if (glen > dlen)
-+			break;
-+
- 		l->rcv_nxt_state = msg_seqno(hdr) + 1;
+-	/*reset OFDM FA coutner*/
++	/*reset OFDM FA counter*/
+ 	rtl_set_bbreg(hw, ODM_REG_OFDM_FA_RST_11AC, BIT(17), 1);
+ 	rtl_set_bbreg(hw, ODM_REG_OFDM_FA_RST_11AC, BIT(17), 0);
+ 	/* reset CCK FA counter*/
+@@ -1464,7 +1464,7 @@ void rtl8812ae_dm_txpower_tracking_callback_thermalmeter(
+ 	const u8 *delta_swing_table_idx_tup_b;
+ 	const u8 *delta_swing_table_idx_tdown_b;
  
- 		/* Update own tolerance if peer indicates a non-zero value */
-@@ -2310,10 +2315,6 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
- 			break;
- 		}
+-	/*2. Initilization ( 7 steps in total )*/
++	/*2. Initialization ( 7 steps in total )*/
+ 	rtl8812ae_get_delta_swing_table(hw,
+ 		&delta_swing_table_idx_tup_a,
+ 		&delta_swing_table_idx_tdown_a,
+@@ -2502,7 +2502,7 @@ static void rtl8821ae_dm_check_edca_turbo(struct ieee80211_hw *hw)
+ 	rtlpriv->dm.dbginfo.num_non_be_pkt = 0;
  
--		/* Receive Gap ACK blocks from peer if any */
--		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
--		if(glen > dlen)
--			break;
- 		tipc_mon_rcv(l->net, data + glen, dlen - glen, l->addr,
- 			     &l->mon_state, l->bearer_id);
- 
--- 
-2.34.1
-
-
+ 	/*===============================
+-	 * list paramter for different platform
++	 * list parameter for different platform
+ 	 *===============================
+ 	 */
+ 	pb_is_cur_rdl_state = &rtlpriv->dm.is_cur_rdlstate;
 

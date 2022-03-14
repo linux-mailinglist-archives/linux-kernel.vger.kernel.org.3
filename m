@@ -2,842 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6C94D8E46
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FDA4D8E49
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242988AbiCNUiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S244575AbiCNUje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiCNUiV (ORCPT
+        with ESMTP id S231499AbiCNUjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:38:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA1E3A709
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:37:08 -0700 (PDT)
+        Mon, 14 Mar 2022 16:39:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC9713F55
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:38:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25BFE61202
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 20:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F76BC340E9;
-        Mon, 14 Mar 2022 20:37:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9E1FB8103C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 20:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B0EC340EE;
+        Mon, 14 Mar 2022 20:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647290226;
-        bh=GtYj7ABqtV2B4h46zYXoSeQD4GwI+Ub5eJP2hein7fM=;
+        s=k20201202; t=1647290294;
+        bh=3B5zk1e9i/6TzLA/BHFyXd4e5bNFbjdQCR91zitfjUE=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dbNkgH/OH7YEXLUY6cXUtz2x53wHRQIg89RwTEif3Zd3tq4qFKu4hGW1lESpE/8mi
-         FXDL3BbBbnSvfJIDk5qfOkx65+QCEPeRkD5dxfzGEuKtCqa7gbzYBzkFYLUdJc2Y08
-         a+7RNMrdxfrCGnCYNzJK88/JQfLZ9DXCxeCeFh57K6++W9xgBwJ5KGdJrtpuStB2EW
-         b4IeyYxFbOdIUCgLUaT0ca3zy4NjrDeXKpE14bXy74PJMErPS/eX5nqlTN58EWEpI0
-         c5sg4yqZY7w8vF4Ezh1E+Najr15zvGkNtcDBxMwkRcVpmMcqFcbCt8RTy35Y/q/zEJ
-         z54Ydl5FM759w==
+        b=VeulYAIbaAnDzNBOfIgAQuTPjLys5cLp7rBNCoH/qH5f66rk7YdjT5lVyWHejzKgf
+         HST/ENJzgkHfdSpeuD0OcZDApBbHUzEB/o1BZPOG/pVrGpdoIAYm3rt2RI0Xz0iQ4w
+         rKjWgJ+cOJiBmXG0SaJuYQfrIDjOT5iesNXVKGbocTiOkjzBjK0QpTDsjRPP/oc1qo
+         BdpcOF5RQLvo8tFbJmoAfW70C8YgnbJCE3S/yu+I5zYbSslJStO9/WEY8WHIaF2rYt
+         kk49PRpb2d8DPDx2SACqYQBmmlvHfEicDzHn9Z4MOrN9Y3R/rR7mWbcZ1/xiFZNAjQ
+         XP4Tu90tEhypw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2A05A5C4162; Mon, 14 Mar 2022 13:37:06 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 13:37:06 -0700
+        id 388285C4162; Mon, 14 Mar 2022 13:38:14 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 13:38:14 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     kernel test robot <oliver.sang@intel.com>
 Cc:     lkp@lists.01.org, lkp@intel.com,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [EXP rcutorture]  556d8afe4a: BUG:workqueue_lockup-pool
-Message-ID: <20220314203706.GY4285@paulmck-ThinkPad-P17-Gen-1>
+Subject: Re: [fixup! EXP srcu]  7bf8d644f8:
+ WARNING:at_kernel/rcu/srcutree.c:#process_srcu
+Message-ID: <20220314203814.GZ4285@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20220313124950.GA14898@xsang-OptiPlex-9020>
+References: <20220312155919.GD1189@xsang-OptiPlex-9020>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220313124950.GA14898@xsang-OptiPlex-9020>
+In-Reply-To: <20220312155919.GD1189@xsang-OptiPlex-9020>
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 08:49:50PM +0800, kernel test robot wrote:
-> 
-> Hi Paul,
-> 
-> we reported this commit as "[EXP rcutorture]  cd7bd64af5: BUG:workqueue_lockup-pool"
-> last month.
-> 
-> at that time, you requested us to test
-> 25c0b105b7ba ("EXP rcu: Add polled expedited grace-period primitives")
-> and we confirmed the issue gone on this commit.
-> 
-> however, now we found this commit is already in linux-next/master,
-> but the issue seems still exists.
-> 
-> and we found the "EXP rcu: Add polled expedited grace-period primitives" is
-> actually the parent of this commit.
-> 
-> * 556d8afe4a779 EXP rcutorture: Test polled expedited grace-period primitives
-> * 6227afdc95e49 EXP rcu: Add polled expedited grace-period primitives
-> 
-> and since the issue still exists in lastest linux-next/master, so we report
-> this again for your information.
+On Sat, Mar 12, 2022 at 11:59:19PM +0800, kernel test robot wrote:
 > 
 > 
 > Greeting,
 > 
 > FYI, we noticed the following commit (built with gcc-9):
 > 
-> commit: 556d8afe4a779f41dfc8fa373993a88e43f1c5dc ("EXP rcutorture: Test polled expedited grace-period primitives")
-> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+> commit: 7bf8d644f869260f63eaaedebabdd2054f59ecc4 ("fixup! EXP srcu: Check for too many zero-delay srcu_reschedule() calls")
+> https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.03.01a
 > 
-> in testcase: rcutorture
-> version: 
-> with following parameters:
-> 
-> 	runtime: 300s
-> 	test: default
-> 	torture_type: rcu
-> 
-> test-description: rcutorture is rcutorture kernel module load/unload test.
-> test-url: https://www.kernel.org/doc/Documentation/RCU/torture.txt
-> 
+> in testcase: boot
 > 
 > on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
 > 
 > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-
-There are some fixes in flight for something matching this.  I was not
-seeing it earlier because I had not yet adjusted the rcutorture scenarios
-to account for CONFIG_PREEMPT_DYNAMIC=y being the default.  With that
-now changed, I can reproduce this easily.
-
-So the current -rcu "dev" branch might have this fixed, but I wouldn't
-bet on it.  ;-)
-
-Thank you for your testing efforts!
-
-								Thanx, Paul
-
-> +--------------------------------------------------+------------+------------+
-> |                                                  | 6227afdc95 | 556d8afe4a |
-> +--------------------------------------------------+------------+------------+
-> | boot_successes                                   | 10         | 4          |
-> | boot_failures                                    | 0          | 6          |
-> | BUG:workqueue_lockup-pool                        | 0          | 6          |
-> | INFO:task_blocked_for_more_than#seconds          | 0          | 6          |
-> | Kernel_panic-not_syncing:hung_task:blocked_tasks | 0          | 6          |
-> +--------------------------------------------------+------------+------------+
+> 
 > 
 > 
 > If you fix the issue, kindly add following tag
 > Reported-by: kernel test robot <oliver.sang@intel.com>
 > 
 > 
-> [  408.705502][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 338s!
-> [  408.706448][    C1] Showing busy workqueues and worker pools:
-> [  408.707057][    C1] workqueue events: flags=0x0
-> [  408.707553][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  408.707613][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  408.707984][    C1] workqueue events_unbound: flags=0x2
-> [  408.711681][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  408.711733][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  408.711871][    C1] workqueue events_power_efficient: flags=0x80
-> [  408.714333][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  408.714384][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  408.716530][    C1] workqueue rcu_gp: flags=0x8
-> [  408.716915][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  408.716964][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  408.717002][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  408.717069][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  408.719169][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  408.719220][    C1]     pending: vmstat_update
-> [  408.719267][    C1] workqueue cgroup_destroy: flags=0x0
-> [  408.720719][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  408.720775][    C1]     pending: css_killed_work_fn
-> [  408.720808][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  408.720969][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  408.723813][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  408.723858][    C1]     pending: addrconf_verify_work
-> [  408.723897][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=338s workers=3 idle: 23 36
-> [  408.723947][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  438.914180][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 368s!
-> [  438.915000][    C1] Showing busy workqueues and worker pools:
-> [  438.915495][    C1] workqueue events: flags=0x0
-> [  438.915869][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  438.915918][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  438.916204][    C1] workqueue events_unbound: flags=0x2
-> [  438.919292][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  438.919334][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  438.919451][    C1] workqueue events_power_efficient: flags=0x80
-> [  438.921618][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  438.921676][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  438.921825][    C1] workqueue rcu_gp: flags=0x8
-> [  438.923936][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  438.923981][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  438.924018][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  438.924077][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  438.925910][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  438.925947][    C1]     pending: vmstat_update
-> [  438.925979][    C1] workqueue cgroup_destroy: flags=0x0
-> [  438.926981][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  438.927014][    C1]     pending: css_killed_work_fn
-> [  438.927034][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  438.927140][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  438.929584][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  438.929631][    C1]     pending: addrconf_verify_work
-> [  438.929677][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=368s workers=3 idle: 23 36
-> [  438.929734][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  469.121528][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 399s!
-> [  469.122375][    C1] Showing busy workqueues and worker pools:
-> [  469.122940][    C1] workqueue events: flags=0x0
-> [  469.123375][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  469.123443][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  469.126663][    C1] workqueue events_unbound: flags=0x2
-> [  469.127113][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  469.127162][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  469.127286][    C1] workqueue events_power_efficient: flags=0x80
-> [  469.129649][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  469.129693][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  469.129817][    C1] workqueue rcu_gp: flags=0x8
-> [  469.131968][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  469.132021][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  469.132064][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  469.132132][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  469.134219][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  469.134275][    C1]     pending: vmstat_update
-> [  469.134323][    C1] workqueue cgroup_destroy: flags=0x0
-> [  469.135788][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  469.135843][    C1]     pending: css_killed_work_fn
-> [  469.135877][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  469.136035][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  469.138818][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  469.138876][    C1]     pending: addrconf_verify_work
-> [  469.138928][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=399s workers=3 idle: 23 36
-> [  469.138999][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  499.329506][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 429s!
-> [  499.330360][    C1] Showing busy workqueues and worker pools:
-> [  499.330933][    C1] workqueue events: flags=0x0
-> [  499.331287][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  499.331332][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  499.334522][    C1] workqueue events_unbound: flags=0x2
-> [  499.334966][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  499.334999][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  499.335119][    C1] workqueue events_power_efficient: flags=0x80
-> [  499.337451][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  499.337512][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  499.339525][    C1] workqueue rcu_gp: flags=0x8
-> [  499.339915][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  499.339967][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  499.340008][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  499.340073][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  499.342140][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  499.342197][    C1]     pending: vmstat_update
-> [  499.342244][    C1] workqueue cgroup_destroy: flags=0x0
-> [  499.343789][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  499.343843][    C1]     pending: css_killed_work_fn
-> [  499.343877][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  499.344041][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  499.346756][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  499.346813][    C1]     pending: addrconf_verify_work
-> [  499.346866][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=429s workers=3 idle: 23 36
-> [  499.346933][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  529.537551][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 459s!
-> [  529.538415][    C1] Showing busy workqueues and worker pools:
-> [  529.538982][    C1] workqueue events: flags=0x0
-> [  529.539387][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  529.539447][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  529.542641][    C1] workqueue events_unbound: flags=0x2
-> [  529.543117][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=5/512 refcnt=8
-> [  529.543154][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  529.543254][    C1]     pending: toggle_allocation_gate
-> [  529.543280][    C1] workqueue events_power_efficient: flags=0x80
-> [  529.546120][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  529.546177][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  529.546344][    C1] workqueue rcu_gp: flags=0x8
-> [  529.548606][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  529.548662][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  529.548704][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  529.548767][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  529.550856][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  529.550912][    C1]     pending: vmstat_update
-> [  529.550969][    C1] workqueue cgroup_destroy: flags=0x0
-> [  529.552552][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  529.552608][    C1]     pending: css_killed_work_fn
-> [  529.552641][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  529.552804][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  529.555564][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  529.555620][    C1]     pending: addrconf_verify_work
-> [  529.555671][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=459s workers=3 idle: 23 36
-> [  529.555739][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  559.746304][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 489s!
-> [  559.747235][    C1] Showing busy workqueues and worker pools:
-> [  559.747797][    C1] workqueue events: flags=0x0
-> [  559.748212][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  559.748262][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  559.751350][    C1] workqueue events_unbound: flags=0x2
-> [  559.751813][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  559.751860][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  559.751984][    C1] workqueue events_power_efficient: flags=0x80
-> [  559.754423][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  559.754481][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  559.756567][    C1] workqueue rcu_gp: flags=0x8
-> [  559.756967][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  559.757012][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  559.757049][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  559.757108][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  559.759130][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  559.759182][    C1]     pending: vmstat_update
-> [  559.759228][    C1] workqueue cgroup_destroy: flags=0x0
-> [  559.760711][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  559.760768][    C1]     pending: css_killed_work_fn
-> [  559.760802][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  559.760967][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  559.763732][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  559.763789][    C1]     pending: addrconf_verify_work
-> [  559.763837][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=489s workers=3 idle: 23 36
-> [  559.763906][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  589.953507][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 519s!
-> [  589.954311][    C1] Showing busy workqueues and worker pools:
-> [  589.954843][    C1] workqueue events: flags=0x0
-> [  589.955222][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  589.955276][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  589.958545][    C1] workqueue events_unbound: flags=0x2
-> [  589.959008][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  589.959055][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  589.959183][    C1] workqueue events_power_efficient: flags=0x80
-> [  589.961591][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  589.961640][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  589.961788][    C1] workqueue rcu_gp: flags=0x8
-> [  589.963963][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  589.964015][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  589.964056][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  589.964123][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  589.966276][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  589.966332][    C1]     pending: vmstat_update
-> [  589.966379][    C1] workqueue cgroup_destroy: flags=0x0
-> [  589.967806][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  589.967856][    C1]     pending: css_killed_work_fn
-> [  589.967888][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  589.968037][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  589.970821][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  589.970879][    C1]     pending: addrconf_verify_work
-> [  589.970930][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=519s workers=3 idle: 23 36
-> [  589.970998][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  620.161550][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 550s!
-> [  620.162374][    C1] Showing busy workqueues and worker pools:
-> [  620.162952][    C1] workqueue events: flags=0x0
-> [  620.163356][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  620.163429][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  620.166742][    C1] workqueue events_unbound: flags=0x2
-> [  620.167203][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  620.167247][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  620.167384][    C1] workqueue events_power_efficient: flags=0x80
-> [  620.169800][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  620.169855][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  620.170007][    C1] workqueue rcu_gp: flags=0x8
-> [  620.172416][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  620.172466][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  620.172506][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  620.174272][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  620.174791][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  620.174850][    C1]     pending: vmstat_update
-> [  620.174900][    C1] workqueue cgroup_destroy: flags=0x0
-> [  620.176449][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  620.176511][    C1]     pending: css_killed_work_fn
-> [  620.176545][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  620.178995][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  620.179458][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  620.179508][    C1]     pending: addrconf_verify_work
-> [  620.180619][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=550s workers=3 idle: 23 36
-> [  620.180678][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  650.369599][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 580s!
-> [  650.370205][    C1] Showing busy workqueues and worker pools:
-> [  650.370772][    C1] workqueue events: flags=0x0
-> [  650.371192][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  650.371248][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  650.374574][    C1] workqueue events_unbound: flags=0x2
-> [  650.375046][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  650.375094][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  650.375217][    C1] workqueue events_power_efficient: flags=0x80
-> [  650.377523][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  650.377581][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  650.377756][    C1] workqueue rcu_gp: flags=0x8
-> [  650.379967][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  650.380011][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  650.380044][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  650.380097][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  650.382130][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  650.382185][    C1]     pending: vmstat_update
-> [  650.382231][    C1] workqueue cgroup_destroy: flags=0x0
-> [  650.383783][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  650.383834][    C1]     pending: css_killed_work_fn
-> [  650.383864][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  650.384013][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  650.386562][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  650.386618][    C1]     pending: addrconf_verify_work
-> [  650.386671][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=580s workers=3 idle: 23 36
-> [  650.386739][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  680.578270][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 610s!
-> [  680.579223][    C1] Showing busy workqueues and worker pools:
-> [  680.579757][    C1] workqueue events: flags=0x0
-> [  680.580171][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  680.580229][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  680.583530][    C1] workqueue events_unbound: flags=0x2
-> [  680.583987][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=5/512 refcnt=8
-> [  680.584033][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  680.584152][    C1]     pending: toggle_allocation_gate
-> [  680.584184][    C1] workqueue events_power_efficient: flags=0x80
-> [  680.587166][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  680.587219][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  680.587389][    C1] workqueue rcu_gp: flags=0x8
-> [  680.589740][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  680.589793][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  680.589834][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  680.589900][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  680.592043][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  680.592096][    C1]     pending: vmstat_update
-> [  680.592143][    C1] workqueue cgroup_destroy: flags=0x0
-> [  680.593720][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  680.593780][    C1]     pending: css_killed_work_fn
-> [  680.593816][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  680.593991][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  680.596853][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  680.596933][    C1]     pending: addrconf_verify_work
-> [  680.596981][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=610s workers=3 idle: 23 36
-> [  680.597046][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  710.785506][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 640s!
-> [  710.786354][    C1] Showing busy workqueues and worker pools:
-> [  710.786896][    C1] workqueue events: flags=0x0
-> [  710.787277][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  710.787331][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  710.790604][    C1] workqueue events_unbound: flags=0x2
-> [  710.791083][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  710.791133][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  710.791267][    C1] workqueue events_power_efficient: flags=0x80
-> [  710.793708][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  710.793765][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  710.793934][    C1] workqueue rcu_gp: flags=0x8
-> [  710.796240][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  710.796294][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  710.796335][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  710.796403][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  710.798676][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  710.798728][    C1]     pending: vmstat_update
-> [  710.798775][    C1] workqueue cgroup_destroy: flags=0x0
-> [  710.800268][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  710.800324][    C1]     pending: css_killed_work_fn
-> [  710.800357][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  710.802827][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  710.803289][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  710.803345][    C1]     pending: addrconf_verify_work
-> [  710.803396][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=640s workers=3 idle: 23 36
-> [  710.803461][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  740.993516][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 670s!
-> [  740.994427][    C1] Showing busy workqueues and worker pools:
-> [  740.994975][    C1] workqueue events: flags=0x0
-> [  740.995387][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  740.995432][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  740.998508][    C1] workqueue events_unbound: flags=0x2
-> [  740.998989][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  740.999055][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  740.999175][    C1] workqueue events_power_efficient: flags=0x80
-> [  741.001710][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  741.001765][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  741.001922][    C1] workqueue rcu_gp: flags=0x8
-> [  741.004173][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  741.004223][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  741.004262][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  741.004326][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  741.006403][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  741.006456][    C1]     pending: vmstat_update
-> [  741.007516][    C1] workqueue cgroup_destroy: flags=0x0
-> [  741.007988][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  741.008042][    C1]     pending: css_killed_work_fn
-> [  741.008072][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  741.008235][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  741.011076][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  741.011131][    C1]     pending: addrconf_verify_work
-> [  741.011181][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=671s workers=3 idle: 23 36
-> [  741.011244][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  771.201509][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 701s!
-> [  771.202368][    C1] Showing busy workqueues and worker pools:
-> [  771.202945][    C1] workqueue events: flags=0x0
-> [  771.203355][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  771.203416][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  771.206775][    C1] workqueue events_unbound: flags=0x2
-> [  771.207260][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  771.207307][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  771.207427][    C1] workqueue events_power_efficient: flags=0x80
-> [  771.209848][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  771.209909][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  771.210088][    C1] workqueue rcu_gp: flags=0x8
-> [  771.212125][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  771.212181][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  771.212224][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  771.212292][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  771.214339][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  771.214392][    C1]     pending: vmstat_update
-> [  771.214437][    C1] workqueue cgroup_destroy: flags=0x0
-> [  771.215926][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  771.215987][    C1]     pending: css_killed_work_fn
-> [  771.216019][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  771.216189][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  771.219053][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  771.219323][    C1]     pending: addrconf_verify_work
-> [  771.219374][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=701s workers=3 idle: 23 36
-> [  771.219439][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  801.410329][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 731s!
-> [  801.411198][    C1] Showing busy workqueues and worker pools:
-> [  801.411729][    C1] workqueue events: flags=0x0
-> [  801.412126][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  801.412180][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  801.415504][    C1] workqueue events_unbound: flags=0x2
-> [  801.415971][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  801.416019][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  801.416144][    C1] workqueue events_power_efficient: flags=0x80
-> [  801.418610][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  801.418667][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  801.418822][    C1] workqueue rcu_gp: flags=0x8
-> [  801.421028][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  801.421073][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  801.421109][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  801.421163][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  801.423291][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  801.423347][    C1]     pending: vmstat_update
-> [  801.423394][    C1] workqueue cgroup_destroy: flags=0x0
-> [  801.424904][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  801.424956][    C1]     pending: css_killed_work_fn
-> [  801.424988][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  801.425154][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  801.427954][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  801.428011][    C1]     pending: addrconf_verify_work
-> [  801.428064][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=731s workers=3 idle: 23 36
-> [  801.428134][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  831.617538][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 761s!
-> [  831.618345][    C1] Showing busy workqueues and worker pools:
-> [  831.618921][    C1] workqueue events: flags=0x0
-> [  831.619320][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  831.619380][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  831.622661][    C1] workqueue events_unbound: flags=0x2
-> [  831.623135][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  831.623191][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  831.623337][    C1] workqueue events_power_efficient: flags=0x80
-> [  831.626041][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  831.626122][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  831.626316][    C1] workqueue rcu_gp: flags=0x8
-> [  831.628626][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  831.628682][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  831.628728][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  831.628798][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  831.631035][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  831.631098][    C1]     pending: vmstat_update
-> [  831.631150][    C1] workqueue cgroup_destroy: flags=0x0
-> [  831.632675][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  831.632731][    C1]     pending: css_killed_work_fn
-> [  831.632765][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  831.632955][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  831.635610][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  831.635653][    C1]     pending: addrconf_verify_work
-> [  831.635692][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=761s workers=3 idle: 23 36
-> [  831.635744][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  861.825544][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 791s!
-> [  861.826418][    C1] Showing busy workqueues and worker pools:
-> [  861.826963][    C1] workqueue events: flags=0x0
-> [  861.827374][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  861.827418][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  861.830571][    C1] workqueue events_unbound: flags=0x2
-> [  861.831021][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  861.831067][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  861.831190][    C1] workqueue events_power_efficient: flags=0x80
-> [  861.833611][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  861.833668][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  861.833838][    C1] workqueue rcu_gp: flags=0x8
-> [  861.836085][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  861.836128][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  861.836165][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  861.836223][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  861.838322][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  861.838376][    C1]     pending: vmstat_update
-> [  861.838423][    C1] workqueue cgroup_destroy: flags=0x0
-> [  861.840003][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  861.840062][    C1]     pending: css_killed_work_fn
-> [  861.840120][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  861.840255][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  861.842948][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  861.842999][    C1]     pending: addrconf_verify_work
-> [  861.843048][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=791s workers=3 idle: 23 36
-> [  861.843118][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  892.033547][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 822s!
-> [  892.034444][    C1] Showing busy workqueues and worker pools:
-> [  892.035014][    C1] workqueue events: flags=0x0
-> [  892.035425][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  892.035485][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  892.038781][    C1] workqueue events_unbound: flags=0x2
-> [  892.039243][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=5/512 refcnt=8
-> [  892.039288][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  892.039406][    C1]     pending: toggle_allocation_gate
-> [  892.039437][    C1] workqueue events_power_efficient: flags=0x80
-> [  892.042420][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  892.042482][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  892.044566][    C1] workqueue rcu_gp: flags=0x8
-> [  892.044969][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  892.045018][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  892.045057][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  892.045123][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  892.047297][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  892.047355][    C1]     pending: vmstat_update
-> [  892.047402][    C1] workqueue cgroup_destroy: flags=0x0
-> [  892.048963][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  892.049035][    C1]     pending: css_killed_work_fn
-> [  892.049067][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  892.049230][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  892.052055][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  892.052118][    C1]     pending: addrconf_verify_work
-> [  892.052176][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=822s workers=3 idle: 23 36
-> [  892.052252][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  922.242347][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 852s!
-> [  922.243300][    C1] Showing busy workqueues and worker pools:
-> [  922.243812][    C1] workqueue events: flags=0x0
-> [  922.244216][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  922.244262][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  922.247381][    C1] workqueue events_unbound: flags=0x2
-> [  922.247877][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  922.247927][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  922.248053][    C1] workqueue events_power_efficient: flags=0x80
-> [  922.250508][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  922.250553][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  922.250689][    C1] workqueue rcu_gp: flags=0x8
-> [  922.252888][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  922.252939][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  922.252979][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  922.253044][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  922.255182][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  922.255232][    C1]     pending: vmstat_update
-> [  922.255277][    C1] workqueue cgroup_destroy: flags=0x0
-> [  922.256691][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  922.256749][    C1]     pending: css_killed_work_fn
-> [  922.256784][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  922.256969][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  922.259659][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  922.259713][    C1]     pending: addrconf_verify_work
-> [  922.259760][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=852s workers=3 idle: 23 36
-> [  922.259823][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [  952.449517][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 882s!
-> [  952.450408][    C1] Showing busy workqueues and worker pools:
-> [  952.450995][    C1] workqueue events: flags=0x0
-> [  952.451428][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  952.451489][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  952.454524][    C1] workqueue events_unbound: flags=0x2
-> [  952.455011][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  952.455061][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  952.455195][    C1] workqueue events_power_efficient: flags=0x80
-> [  952.457674][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  952.457730][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  952.457880][    C1] workqueue rcu_gp: flags=0x8
-> [  952.460158][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  952.460205][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  952.460240][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  952.460303][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  952.462396][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  952.462444][    C1]     pending: vmstat_update
-> [  952.463534][    C1] workqueue cgroup_destroy: flags=0x0
-> [  952.464021][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  952.464080][    C1]     pending: css_killed_work_fn
-> [  952.464113][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  952.464280][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  952.467161][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  952.467222][    C1]     pending: addrconf_verify_work
-> [  952.467275][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=882s workers=3 idle: 23 36
-> [  952.467347][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> [  982.657536][    C1] BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 912s!
-> [  982.658425][    C1] Showing busy workqueues and worker pools:
-> [  982.659004][    C1] workqueue events: flags=0x0
-> [  982.659421][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> [  982.659480][    C1]     pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> [  982.662894][    C1] workqueue events_unbound: flags=0x2
-> [  982.663394][    C1]   pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> [  982.663445][    C1]     in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> [  982.665500][    C1] workqueue events_power_efficient: flags=0x80
-> [  982.665994][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> [  982.666044][    C1]     pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> [  982.666181][    C1] workqueue rcu_gp: flags=0x8
-> [  982.668550][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> [  982.668597][    C1]     in-flight: 179:sync_rcu_do_polled_gp
-> [  982.668634][    C1]     pending: sync_rcu_do_polled_gp, process_srcu
-> [  982.668695][    C1] workqueue mm_percpu_wq: flags=0x8
-> [  982.670910][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> [  982.670971][    C1]     pending: vmstat_update
-> [  982.671020][    C1] workqueue cgroup_destroy: flags=0x0
-> [  982.672512][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> [  982.672559][    C1]     pending: css_killed_work_fn
-> [  982.672587][    C1]     inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> [  982.672740][    C1] workqueue ipv6_addrconf: flags=0x40008
-> [  982.675414][    C1]   pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> [  982.675466][    C1]     pending: addrconf_verify_work
-> [  982.676570][    C1] pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=912s workers=3 idle: 23 36
-> [  982.676637][    C1] pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> [ 1004.162318][   T29] INFO: task systemd:1 blocked for more than 491 seconds.
-> [ 1004.163047][   T29]       Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> [ 1004.163690][   T29] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [ 1004.164413][   T29] task:systemd         state:D stack:    0 pid:    1 ppid:     0 flags:0x00004000
-> [ 1004.165227][   T29] Call Trace:
-> [ 1004.165552][   T29]  <TASK>
-> [ 1004.165808][ T29] __schedule (kernel/sched/core.c:4986 kernel/sched/core.c:6296) 
-> [ 1004.166207][ T29] ? usleep_range_state (kernel/time/timer.c:1843) 
-> [ 1004.166670][ T29] schedule (arch/x86/include/asm/preempt.h:85 (discriminator 1) kernel/sched/core.c:6370 (discriminator 1)) 
-> [ 1004.167044][ T29] schedule_timeout (kernel/time/timer.c:1858) 
-> [ 1004.167498][ T29] ? hlock_class (kernel/locking/lockdep.c:199) 
-> [ 1004.167918][ T29] ? write_comp_data (kernel/kcov.c:221) 
-> [ 1004.168370][ T29] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:438 kernel/locking/lockdep.c:4293 kernel/locking/lockdep.c:4244) 
-> [ 1004.168962][ T29] ? _raw_spin_unlock_irq (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 include/linux/spinlock_api_smp.h:159 kernel/locking/spinlock.c:202) 
-> [ 1004.169435][ T29] __wait_for_common (kernel/sched/completion.c:86 kernel/sched/completion.c:106) 
-> [ 1004.169915][ T29] __flush_work (kernel/workqueue.c:3095) 
-> [ 1004.170331][ T29] ? flush_workqueue_prep_pwqs (kernel/workqueue.c:2660) 
-> [ 1004.170926][ T29] ? __wait_for_common (kernel/sched/completion.c:74 kernel/sched/completion.c:106) 
-> [ 1004.171397][ T29] ? inotify_poll (fs/notify/inotify/inotify_user.c:288) 
-> [ 1004.171855][ T29] fsnotify_destroy_group (fs/notify/group.c:84 (discriminator 1)) 
-> [ 1004.172348][ T29] ? __sanitizer_cov_trace_pc (kernel/kcov.c:200) 
-> [ 1004.172852][ T29] ? locks_remove_file (fs/locks.c:2620) 
-> [ 1004.173300][ T29] ? inotify_poll (fs/notify/inotify/inotify_user.c:288) 
-> [ 1004.173722][ T29] inotify_release (fs/notify/inotify/inotify_user.c:297) 
-> [ 1004.174143][ T29] __fput (fs/file_table.c:312) 
-> [ 1004.174545][ T29] task_work_run (kernel/task_work.c:166 (discriminator 1)) 
-> [ 1004.175001][ T29] exit_to_user_mode_prepare (include/linux/tracehook.h:197 kernel/entry/common.c:175 kernel/entry/common.c:207) 
-> [ 1004.175548][ T29] syscall_exit_to_user_mode (kernel/entry/common.c:126 kernel/entry/common.c:302) 
-> [ 1004.176065][ T29] do_syscall_64 (arch/x86/entry/common.c:87) 
-> [ 1004.176511][ T29] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
-> [ 1004.177062][   T29] RIP: 0033:0x7fa39f4f7b54
-> [ 1004.177438][   T29] RSP: 002b:00007fffb0b4d7d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> [ 1004.178185][   T29] RAX: 0000000000000000 RBX: 0000000000000017 RCX: 00007fa39f4f7b54
-> [ 1004.178867][   T29] RDX: 00007fa39f5c8ca0 RSI: 0000000000000000 RDI: 0000000000000017
-> [ 1004.179606][   T29] RBP: 00007fa39e3468c0 R08: 00000000000000ef R09: 00007fa3a13f2060
-> [ 1004.180297][   T29] R10: 0000000000000007 R11: 0000000000000246 R12: 0000000000000000
-> [ 1004.181006][   T29] R13: 00007fffb0b4d890 R14: 0000000000000001 R15: 00007fa39f6e3a8e
-> [ 1004.181724][   T29]  </TASK>
-> [ 1004.182001][   T29] INFO: task kworker/u4:1:9 blocked for more than 491 seconds.
-> [ 1004.182640][   T29]       Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> [ 1004.183221][   T29] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [ 1004.183958][   T29] task:kworker/u4:1    state:D stack:    0 pid:    9 ppid:     2 flags:0x00004000
-> [ 1004.184769][   T29] Workqueue: events_unbound fsnotify_connector_destroy_workfn
-> [ 1004.185432][   T29] Call Trace:
-> [ 1004.185753][   T29]  <TASK>
-> [ 1004.186042][ T29] __schedule (kernel/sched/core.c:4986 kernel/sched/core.c:6296) 
-> [ 1004.186441][ T29] ? to_kthread (kernel/kthread.c:77 (discriminator 3)) 
-> [ 1004.186867][ T29] ? usleep_range_state (kernel/time/timer.c:1843) 
-> [ 1004.187313][ T29] schedule (arch/x86/include/asm/preempt.h:85 (discriminator 1) kernel/sched/core.c:6370 (discriminator 1)) 
-> [ 1004.187713][ T29] schedule_timeout (kernel/time/timer.c:1858) 
-> [ 1004.188141][ T29] ? mark_held_locks (kernel/locking/lockdep.c:4206) 
-> [ 1004.188598][ T29] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:438 kernel/locking/lockdep.c:4293 kernel/locking/lockdep.c:4244) 
-> [ 1004.189130][ T29] ? _raw_spin_unlock_irq (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 include/linux/spinlock_api_smp.h:159 kernel/locking/spinlock.c:202) 
-> [ 1004.189611][ T29] __wait_for_common (kernel/sched/completion.c:86 kernel/sched/completion.c:106) 
-> [ 1004.190073][ T29] __synchronize_srcu (kernel/rcu/srcutree.c:1154) 
-> [ 1004.190574][ T29] ? rcu_tasks_pregp_step (kernel/rcu/update.c:367) 
-> [ 1004.191049][ T29] ? __wait_for_common (kernel/sched/completion.c:74 kernel/sched/completion.c:106) 
-> [ 1004.191549][ T29] fsnotify_connector_destroy_workfn (fs/notify/mark.c:165) 
-> [ 1004.192112][ T29] process_one_work (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 include/linux/jump_label.h:266 include/linux/jump_label.h:276 include/trace/events/workqueue.h:108 kernel/workqueue.c:2312) 
-> [ 1004.192605][ T29] worker_thread (include/linux/list.h:292 kernel/workqueue.c:2455) 
-> [ 1004.193020][ T29] ? rescuer_thread (kernel/workqueue.c:2397) 
-> [ 1004.193452][ T29] kthread (kernel/kthread.c:377) 
-> [ 1004.193834][ T29] ? kthread_complete_and_exit (kernel/kthread.c:332) 
-> [ 1004.194326][ T29] ret_from_fork (arch/x86/entry/entry_64.S:301) 
-> [ 1004.194768][   T29]  </TASK>
-> [ 1004.195061][   T29] INFO: task kworker/u4:2:40 blocked for more than 491 seconds.
-> [ 1004.195713][   T29]       Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> [ 1004.196309][   T29] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [ 1004.197064][   T29] task:kworker/u4:2    state:D stack:    0 pid:   40 ppid:     2 flags:0x00004000
-> [ 1004.197887][   T29] Workqueue: events_unbound fsnotify_mark_destroy_workfn
-> [ 1004.198529][   T29] Call Trace:
-> [ 1004.198816][   T29]  <TASK>
-> [ 1004.199095][ T29] __schedule (kernel/sched/core.c:4986 kernel/sched/core.c:6296) 
-> [ 1004.199524][ T29] ? to_kthread (kernel/kthread.c:77 (discriminator 3)) 
-> [ 1004.199911][ T29] ? usleep_range_state (kernel/time/timer.c:1843) 
-> [ 1004.200369][ T29] schedule (arch/x86/include/asm/preempt.h:85 (discriminator 1) kernel/sched/core.c:6370 (discriminator 1)) 
-> [ 1004.200769][ T29] schedule_timeout (kernel/time/timer.c:1858) 
-> [ 1004.201213][ T29] ? mark_held_locks (kernel/locking/lockdep.c:4206) 
-> [ 1004.201689][ T29] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:438 kernel/locking/lockdep.c:4293 kernel/locking/lockdep.c:4244) 
-> [ 1004.202245][ T29] ? _raw_spin_unlock_irq (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 include/linux/spinlock_api_smp.h:159 kernel/locking/spinlock.c:202) 
-> [ 1004.202716][ T29] __wait_for_common (kernel/sched/completion.c:86 kernel/sched/completion.c:106) 
-> [ 1004.203170][ T29] __synchronize_srcu (kernel/rcu/srcutree.c:1154) 
-> [ 1004.203638][ T29] ? rcu_tasks_pregp_step (kernel/rcu/update.c:367) 
-> [ 1004.204121][ T29] ? __wait_for_common (kernel/sched/completion.c:74 kernel/sched/completion.c:106) 
-> [ 1004.204625][ T29] fsnotify_mark_destroy_workfn (fs/notify/mark.c:866) 
-> [ 1004.205153][ T29] process_one_work (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 include/linux/jump_label.h:266 include/linux/jump_label.h:276 include/trace/events/workqueue.h:108 kernel/workqueue.c:2312) 
-> [ 1004.205643][ T29] worker_thread (include/linux/list.h:292 kernel/workqueue.c:2455) 
-> [ 1004.206080][ T29] ? rescuer_thread (kernel/workqueue.c:2397) 
-> [ 1004.206559][ T29] kthread (kernel/kthread.c:377) 
-> [ 1004.206931][ T29] ? kthread_complete_and_exit (kernel/kthread.c:332) 
-> [ 1004.207426][ T29] ret_from_fork (arch/x86/entry/entry_64.S:301) 
-> [ 1004.207878][   T29]  </TASK>
-> [ 1004.208180][   T29] INFO: task rmmod:1812 blocked for more than 491 seconds.
-> [ 1004.208797][   T29]       Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> [ 1004.209395][   T29] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [ 1004.210155][   T29] task:rmmod           state:D stack:    0 pid: 1812 ppid:   508 flags:0x00004000
-> [ 1004.210953][   T29] Call Trace:
-> [ 1004.211243][   T29]  <TASK>
-> [ 1004.211532][ T29] __schedule (kernel/sched/core.c:4986 kernel/sched/core.c:6296) 
-> [ 1004.211961][ T29] ? usleep_range_state (kernel/time/timer.c:1843) 
-> [ 1004.212427][ T29] schedule (arch/x86/include/asm/preempt.h:85 (discriminator 1) kernel/sched/core.c:6370 (discriminator 1)) 
-> [ 1004.212846][ T29] schedule_timeout (kernel/time/timer.c:1858) 
-> [ 1004.213296][ T29] ? hlock_class (kernel/locking/lockdep.c:199) 
-> [ 1004.213723][ T29] ? write_comp_data (kernel/kcov.c:221) 
-> [ 1004.214161][ T29] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:438 kernel/locking/lockdep.c:4293 kernel/locking/lockdep.c:4244) 
-> [ 1004.214723][ T29] ? _raw_spin_unlock_irq (arch/x86/include/asm/irqflags.h:45 arch/x86/include/asm/irqflags.h:80 include/linux/spinlock_api_smp.h:159 kernel/locking/spinlock.c:202) 
-> [ 1004.215223][ T29] __wait_for_common (kernel/sched/completion.c:86 kernel/sched/completion.c:106) 
-> [ 1004.215702][ T29] kthread_stop (kernel/kthread.c:710) 
-> [ 1004.216129][ T29] _torture_stop_kthread (kernel/torture.c:956 (discriminator 3)) torture
-> [ 1004.216618][ T29] rcu_torture_cleanup (kernel/rcu/rcutorture.c:2995) rcutorture
-> [ 1004.217140][ T29] ? prepare_to_wait_exclusive (kernel/sched/wait.c:415) 
-> [ 1004.217667][ T29] __x64_sys_delete_module (kernel/module.c:969 kernel/module.c:912 kernel/module.c:912) 
-> [ 1004.218150][ T29] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:438 kernel/locking/lockdep.c:4293 kernel/locking/lockdep.c:4244) 
-> [ 1004.218695][ T29] do_syscall_64 (arch/x86/entry/common.c:67 arch/x86/entry/common.c:80) 
-> [ 1004.219103][ T29] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
-> [ 1004.219635][   T29] RIP: 0033:0x7f93a158add7
-> [ 1004.220037][   T29] RSP: 002b:00007ffd6aef9048 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
-> [ 1004.220804][   T29] RAX: ffffffffffffffda RBX: 00007f93a3179900 RCX: 00007f93a158add7
-> [ 1004.221533][   T29] RDX: 000000000000000a RSI: 0000000000000800 RDI: 00007f93a3179968
-> [ 1004.222218][   T29] RBP: 0000000000000000 R08: 00007ffd6aef7fc1 R09: 0000000000000000
-> [ 1004.222940][   T29] R10: 00007f93a15fcae0 R11: 0000000000000206 R12: 00007ffd6aef9270
-> [ 1004.223624][   T29] R13: 00007ffd6aefadfc R14: 00007f93a3179260 R15: 00007f93a3179900
-> [ 1004.224302][   T29]  </TASK>
-> [ 1004.224593][   T29]
-> [ 1004.224593][   T29] Showing all locks held in the system:
-> [ 1004.225166][   T29] 2 locks held by kworker/u4:1/9:
-> [ 1004.225587][ T29] #0: ffff9b4480051548 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work (kernel/workqueue.c:2278) 
-> [ 1004.226554][ T29] #1: ffff9b448016fe78 (connector_reaper_work){+.+.}-{0:0}, at: process_one_work (kernel/workqueue.c:2278) 
-> [ 1004.227509][   T29] 1 lock held by khungtaskd/29:
-> [ 1004.227914][ T29] #0: ffffffffbaddd460 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire (include/linux/rcupdate.h:267) 
-> [ 1004.228845][   T29] 2 locks held by kworker/u4:2/40:
-> [ 1004.229296][ T29] #0: ffff9b4480051548 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work (kernel/workqueue.c:2278) 
-> [ 1004.230227][ T29] #1: ffff9b4480c93e78 ((reaper_work).work){+.+.}-{0:0}, at: process_one_work (kernel/workqueue.c:2278) 
-> [ 1004.231129][   T29] 2 locks held by kworker/1:2/179:
-> [ 1004.231578][   T29] 1 lock held by in:imklog/431:
-> [ 1004.231981][   T29] 1 lock held by dmesg/440:
-> [ 1004.232337][   T29]
-> [ 1004.232570][   T29] =============================================
-> [ 1004.232570][   T29]
-> [ 1004.233244][   T29] Kernel panic - not syncing: hung_task: blocked tasks
-> [ 1004.233796][   T29] CPU: 1 PID: 29 Comm: khungtaskd Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> [ 1004.234584][   T29] Call Trace:
-> [ 1004.234898][   T29]  <TASK>
-> [ 1004.235182][ T29] dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4)) 
-> [ 1004.235600][ T29] panic (kernel/panic.c:251) 
-> [ 1004.235952][ T29] ? _printk (kernel/printk/printk.c:2270) 
-> [ 1004.236313][ T29] ? watchdog (kernel/hung_task.c:216 kernel/hung_task.c:369) 
-> [ 1004.236698][ T29] watchdog (kernel/hung_task.c:370) 
-> [ 1004.237098][ T29] ? rcu_read_unlock (init/main.c:1291) 
-> [ 1004.237530][ T29] kthread (kernel/kthread.c:377) 
-> [ 1004.237898][ T29] ? kthread_complete_and_exit (kernel/kthread.c:332) 
-> [ 1004.238409][ T29] ret_from_fork (arch/x86/entry/entry_64.S:301) 
-> [ 1004.238815][   T29]  </TASK>
-> [ 1004.239265][   T29] Kernel Offset: 0x38200000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [ 27.088275][ T42] WARNING: CPU: 1 PID: 42 at kernel/rcu/srcutree.c:1555 process_srcu (kernel/rcu/srcutree.c:1555 (discriminator 3)) 
+> [   27.089252][   T42] Modules linked in: libata(+) serio_raw i2c_piix4 parport_pc(+) parport ip_tables
+> [   27.090253][   T42] CPU: 1 PID: 42 Comm: kworker/1:1 Not tainted 5.17.0-rc1-00191-g7bf8d644f869 #1
+> [   27.091212][   T42] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+> [   27.092176][   T42] Workqueue: rcu_gp process_srcu
+> [ 27.092718][ T42] RIP: 0010:process_srcu (kernel/rcu/srcutree.c:1555 (discriminator 3)) 
+> [ 27.093653][ T42] Code: 6b f8 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 91 02 00 00 48 8b 43 f8 31 f6 48 83 f8 32 0f 86 02 fe ff ff <0f> 0b e9 fb fd ff ff 4c 8d b3 58 ff ff ff 48 b8 00 00 00 00 00 fc
+
+I had a feeling that the simple fix wasn't going to cut it, so thank you
+for finding a scenario that proves that to be the case.  Fix in progress,
+to be folded into the original with attribution.
+
+							Thanx, Paul
+
+> All code
+> ========
+>    0:	6b f8 48             	imul   $0x48,%eax,%edi
+>    3:	b8 00 00 00 00       	mov    $0x0,%eax
+>    8:	00 fc                	add    %bh,%ah
+>    a:	ff                   	(bad)  
+>    b:	df 48 c1             	fisttps -0x3f(%rax)
+>    e:	ea                   	(bad)  
+>    f:	03 80 3c 02 00 0f    	add    0xf00023c(%rax),%eax
+>   15:	85 91 02 00 00 48    	test   %edx,0x48000002(%rcx)
+>   1b:	8b 43 f8             	mov    -0x8(%rbx),%eax
+>   1e:	31 f6                	xor    %esi,%esi
+>   20:	48 83 f8 32          	cmp    $0x32,%rax
+>   24:	0f 86 02 fe ff ff    	jbe    0xfffffffffffffe2c
+>   2a:*	0f 0b                	ud2    		<-- trapping instruction
+>   2c:	e9 fb fd ff ff       	jmpq   0xfffffffffffffe2c
+>   31:	4c 8d b3 58 ff ff ff 	lea    -0xa8(%rbx),%r14
+>   38:	48                   	rex.W
+>   39:	b8 00 00 00 00       	mov    $0x0,%eax
+>   3e:	00 fc                	add    %bh,%ah
+> 
+> Code starting with the faulting instruction
+> ===========================================
+>    0:	0f 0b                	ud2    
+>    2:	e9 fb fd ff ff       	jmpq   0xfffffffffffffe02
+>    7:	4c 8d b3 58 ff ff ff 	lea    -0xa8(%rbx),%r14
+>    e:	48                   	rex.W
+>    f:	b8 00 00 00 00       	mov    $0x0,%eax
+>   14:	00 fc                	add    %bh,%ah
+> [   27.095572][   T42] RSP: 0018:ffffc90000187dc0 EFLAGS: 00010202
+> [   27.096261][   T42] RAX: 0000000000000033 RBX: ffffffffa068dfc0 RCX: ffffffff9dd83100
+> [   27.097146][   T42] RDX: 1ffffffff40d1bf7 RSI: 0000000000000000 RDI: ffffffffa068df30
+> [   27.098030][   T42] RBP: ffffffffa068dfb8 R08: 0000000000000001 R09: fffff52000030fae
+> [   27.098890][   T42] R10: ffffc90000187d6f R11: fffff52000030fad R12: ffffffffa068dea0
+> [   27.099740][   T42] R13: 0000000000000033 R14: ffff88839d651418 R15: ffff88839d73bf05
+> [   27.100590][   T42] FS:  0000000000000000(0000) GS:ffff88839d700000(0000) knlGS:0000000000000000
+> [   27.101533][   T42] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   27.102210][   T42] CR2: 00007f9796b58e21 CR3: 000000015b4a8000 CR4: 00000000000406e0
+> [   27.103063][   T42] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   27.103906][   T42] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   27.104753][   T42] Call Trace:
+> [   27.105166][   T42]  <TASK>
+> [ 27.105569][ T42] process_one_work (arch/x86/include/asm/jump_label.h:27 include/linux/jump_label.h:212 include/trace/events/workqueue.h:108 kernel/workqueue.c:2312) 
+> [ 27.106123][ T42] worker_thread (include/linux/list.h:292 kernel/workqueue.c:2455) 
+> [ 27.106626][ T42] ? __kthread_parkme (arch/x86/include/asm/bitops.h:207 (discriminator 4) include/asm-generic/bitops/instrumented-non-atomic.h:135 (discriminator 4) kernel/kthread.c:271 (discriminator 4)) 
+> [ 27.107199][ T42] ? schedule (arch/x86/include/asm/bitops.h:207 (discriminator 1) include/asm-generic/bitops/instrumented-non-atomic.h:135 (discriminator 1) include/linux/thread_info.h:118 (discriminator 1) include/linux/sched.h:2132 (discriminator 1) kernel/sched/core.c:6371 (discriminator 1)) 
+> [ 27.107696][ T42] ? process_one_work (kernel/workqueue.c:2397) 
+> [ 27.108282][ T42] ? process_one_work (kernel/workqueue.c:2397) 
+> [ 27.108855][ T42] kthread (kernel/kthread.c:377) 
+> [ 27.109331][ T42] ? kthread_complete_and_exit (kernel/kthread.c:332) 
+> [ 27.109923][ T42] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> [   27.110421][   T42]  </TASK>
+> [   27.110802][   T42] ---[ end trace 0000000000000000 ]---
+> [  OK  ] Listening on D-Bus System Message Bus Socket.
+> [  OK  ] Reached target Sockets.
+> [  OK  ] Reached target Basic System.
+> Starting LSB: OpenIPMI Driver init script...
+> Starting Login Service...
+> [   27.155875][  T198] libata version 3.00 loaded.
+> [  OK  ] Started Regular background program processing daemon.
+> [   27.267833][  T190] ACPI: bus type drm_connector registered
+> Starting System Logging Service...
+> [   27.305186][  T198] ata_piix 0000:00:01.1: version 2.13
+> [  OK  ] Started Daily apt download activities.
+> [  OK  ] Started Daily apt upgrade and clean activities.
+> [   27.318846][  T198] scsi host0: ata_piix
+> [  OK  ] Reached target Timers.
+> [  OK  ] Started D-Bus System Message Bus.
+> [   27.338455][  T198] scsi host1: ata_piix
+> [   27.339842][  T198] ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xc040 irq 14
+> [   27.340920][  T198] ata2: PATA max MWDMA2 cmd 0x170 ctl 0x376 bmdma 0xc048 irq 15
+> [  OK  ] Started Helper to synchronize boot up for ifupdown.
+> [   27.410826][  T191] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+> [   27.502464][  T223] ata2: found unknown device (class 0)
+> [   27.503902][  T223] ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+> [   27.523776][  T168] scsi 1:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+> Starting Raise network interfaces...
+> [   27.663689][  T235] IPMI message handler: version 39.2
+> Starting LSB: Load kernel image with kexec...
+> [  OK  ] Started Login Service.
+> [   27.689420][  T235] ipmi device interface
+> [  OK  ] Started LSB: Load kernel image with kexec.
+> [  OK  ] Started Raise network interfaces.
+> [  OK  ] Reached target Network.
+> [   27.776957][  T190] bochs-drm 0000:00:02.0: vgaarb: deactivate vga console
+> [   27.795582][  T190] Console: switching to colour dummy device 80x25
+> Starting /etc/rc.local Compatibility...
+> [   27.810246][  T256] ipmi_si: IPMI System Interface driver
+> [   27.814584][  T256] ipmi_si: Unable to find any System Interface(s)
+> Starting LKP bootstrap...
+> [   27.825386][  T190] [drm] Found bochs VGA, ID 0xb0c0.
+> [   27.825838][  T190] [drm] Framebuffer size 16384 kB @ 0xfd000000, mmio @ 0xfebf0000.
+> [   27.721831] rc.local[257]: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/lkp/lkp/src/bin
+> Starting Permit User Sessions...
+> [   27.858471][  T183] ppdev: user-space parallel port driver
+> [   27.771982] rc.local[257]: /lkp/lkp/src/bin/lkp-setup-rootfs: 78: /lkp/lkp/src/bin/lkp-setup-rootfs: cannot create /sys/devices/system/cpu/microcode/reload: Directory nonexistent
+> [   27.930434][  T190] [drm] Initialized bochs-drm 1.0.0 20130925 for 0000:00:02.0 on minor 0
+> Starting OpenBSD Secure Shell server...
+> [  OK  ] Started /etc/rc.local Compatibility.
+> [   28.047199][  T190] fbcon: bochs-drmdrmfb (fb0) is primary device
+> [   28.067849][  T190] Console: switching to colour frame buffer device 128x48
+> [   28.085384][  T190] bochs-drm 0000:00:02.0: [drm] fb0: bochs-drmdrmfb frame buffer device
+> [  OK  ] Started Permit User Sessions.
+> [  OK  ] Started Getty on tty1.
+> [  OK  ] Reached target Login Prompts.
+> [FAILED] Failed to start LSB: OpenIPMI Driver init script.
+> See 'systemctl status openipmi.service' for details.
+> [   28.164355][  T196] scsi 1:0:0:0: Attached scsi generic sg0 type 5
+> [   28.214927][  T196] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+> [   28.215719][  T196] cdrom: Uniform CD-ROM driver Revision: 3.20
+> [   28.238808][  T196] sr 1:0:0:0: Attached scsi CD-ROM sr0
+> LKP: ttyS0: 265: Kernel tests: Boot OK!
+> LKP: ttyS0: 265: HOSTNAME vm-snb-157, MAC 52:54:00:12:34:56, kernel 5.17.0-rc1-00191-g7bf8d644f869 1
+> LKP: ttyS0: 265:  /lkp/lkp/src/bin/run-lkp /lkp/jobs/scheduled/vm-snb-157/boot-1-debian-10.4-x86_64-20200603.cgz-7bf8d644f869260f63eaaedebabdd2054f59ecc4-20220310-128355-1v2pw5f-8.yaml
+> [   29.609090][    C1] random: crng init done
+> [   29.609649][    C1] random: 7 urandom warning(s) missed due to ratelimiting
+> [  OK  ] Started OpenBSD Secure Shell server.
+> [   41.804947][  T280] LKP: stdout: 265: Kernel tests: Boot OK!
+> [   41.804970][  T280]
+> LKP: ttyS0: 265: LKP: rebooting forcely
+> [   43.635670][  T265] sysrq: Emergency Sync
+> [   43.636317][   T52] Emergency Sync complete
+> [   43.636892][  T265] sysrq: Resetting
 > 
 > Kboot worker: lkp-worker57
-> Elapsed time: 1020
+> Elapsed time: 60
 > 
 > kvm=(
 > qemu-system-x86_64
 > -enable-kvm
 > -cpu SandyBridge
 > -kernel $kernel
-> -initrd initrd-vm-snb-67.cgz
+> -initrd initrd-vm-snb-157.cgz
 > -m 16384
 > -smp 2
 > -device e1000,netdev=net0
@@ -850,30 +239,13 @@ Thank you for your testing efforts!
 > -serial stdio
 > -display none
 > -monitor null
-> )
-> 
-> append=(
-> ip=::::vm-snb-67::dhcp
-> root=/dev/ram0
-> RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3
-> BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77
-> branch=linux-devel/devel-hourly-20220304-094445
-> job=/job-script
-> user=lkp
-> ARCH=x86_64
-> kconfig=x86_64-randconfig-a012-20210928
-> commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc
-> vmalloc=128M
-> initramfs_async=0
-> page_owner=on
-> max_uptime=2100
 > 
 > 
 > To reproduce:
 > 
 >         # build kernel
 > 	cd linux
-> 	cp config-5.17.0-rc1-00111-g556d8afe4a77 .config
+> 	cp config-5.17.0-rc1-00191-g7bf8d644f869 .config
 > 	make HOSTCC=gcc-9 CC=gcc-9 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
 > 	make HOSTCC=gcc-9 CC=gcc-9 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
 > 	cd <mod-install-dir>
@@ -915,6 +287,7 @@ Thank you for your testing efforts!
 > CONFIG_CC_HAS_ASM_GOTO=y
 > CONFIG_CC_HAS_ASM_INLINE=y
 > CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
+> CONFIG_CONSTRUCTORS=y
 > CONFIG_IRQ_WORK=y
 > CONFIG_BUILDTIME_TABLE_SORT=y
 > CONFIG_THREAD_INFO_IN_TASK=y
@@ -925,7 +298,6 @@ Thank you for your testing efforts!
 > CONFIG_INIT_ENV_ARG_LIMIT=32
 > # CONFIG_COMPILE_TEST is not set
 > # CONFIG_WERROR is not set
-> # CONFIG_UAPI_HEADER_TEST is not set
 > CONFIG_LOCALVERSION=""
 > CONFIG_LOCALVERSION_AUTO=y
 > CONFIG_BUILD_SALT=""
@@ -936,8 +308,8 @@ Thank you for your testing efforts!
 > CONFIG_HAVE_KERNEL_LZO=y
 > CONFIG_HAVE_KERNEL_LZ4=y
 > CONFIG_HAVE_KERNEL_ZSTD=y
-> # CONFIG_KERNEL_GZIP is not set
-> CONFIG_KERNEL_BZIP2=y
+> CONFIG_KERNEL_GZIP=y
+> # CONFIG_KERNEL_BZIP2 is not set
 > # CONFIG_KERNEL_LZMA is not set
 > # CONFIG_KERNEL_XZ is not set
 > # CONFIG_KERNEL_LZO is not set
@@ -945,12 +317,14 @@ Thank you for your testing efforts!
 > # CONFIG_KERNEL_ZSTD is not set
 > CONFIG_DEFAULT_INIT=""
 > CONFIG_DEFAULT_HOSTNAME="(none)"
-> # CONFIG_SYSVIPC is not set
+> CONFIG_SWAP=y
+> CONFIG_SYSVIPC=y
+> CONFIG_SYSVIPC_SYSCTL=y
 > CONFIG_POSIX_MQUEUE=y
 > CONFIG_POSIX_MQUEUE_SYSCTL=y
-> # CONFIG_WATCH_QUEUE is not set
-> # CONFIG_CROSS_MEMORY_ATTACH is not set
-> CONFIG_USELIB=y
+> CONFIG_WATCH_QUEUE=y
+> CONFIG_CROSS_MEMORY_ATTACH=y
+> # CONFIG_USELIB is not set
 > CONFIG_AUDIT=y
 > CONFIG_HAVE_ARCH_AUDITSYSCALL=y
 > CONFIG_AUDITSYSCALL=y
@@ -965,15 +339,16 @@ Thank you for your testing efforts!
 > CONFIG_GENERIC_IRQ_MIGRATION=y
 > CONFIG_GENERIC_IRQ_INJECTION=y
 > CONFIG_HARDIRQS_SW_RESEND=y
-> CONFIG_GENERIC_IRQ_CHIP=y
 > CONFIG_IRQ_DOMAIN=y
-> CONFIG_IRQ_SIM=y
 > CONFIG_IRQ_DOMAIN_HIERARCHY=y
+> CONFIG_GENERIC_MSI_IRQ=y
+> CONFIG_GENERIC_MSI_IRQ_DOMAIN=y
+> CONFIG_IRQ_MSI_IOMMU=y
 > CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR=y
 > CONFIG_GENERIC_IRQ_RESERVATION_MODE=y
 > CONFIG_IRQ_FORCED_THREADING=y
 > CONFIG_SPARSE_IRQ=y
-> CONFIG_GENERIC_IRQ_DEBUGFS=y
+> # CONFIG_GENERIC_IRQ_DEBUGFS is not set
 > # end of IRQ subsystem
 > 
 > CONFIG_CLOCKSOURCE_WATCHDOG=y
@@ -993,10 +368,12 @@ Thank you for your testing efforts!
 > CONFIG_TICK_ONESHOT=y
 > CONFIG_NO_HZ_COMMON=y
 > # CONFIG_HZ_PERIODIC is not set
-> CONFIG_NO_HZ_IDLE=y
-> # CONFIG_NO_HZ_FULL is not set
+> # CONFIG_NO_HZ_IDLE is not set
+> CONFIG_NO_HZ_FULL=y
+> CONFIG_CONTEXT_TRACKING=y
+> # CONFIG_CONTEXT_TRACKING_FORCE is not set
 > CONFIG_NO_HZ=y
-> # CONFIG_HIGH_RES_TIMERS is not set
+> CONFIG_HIGH_RES_TIMERS=y
 > CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=100
 > # end of Timers subsystem
 > 
@@ -1007,8 +384,13 @@ Thank you for your testing efforts!
 > #
 > # BPF subsystem
 > #
-> # CONFIG_BPF_SYSCALL is not set
-> # CONFIG_BPF_JIT is not set
+> CONFIG_BPF_SYSCALL=y
+> CONFIG_BPF_JIT=y
+> CONFIG_BPF_JIT_ALWAYS_ON=y
+> CONFIG_BPF_JIT_DEFAULT_ON=y
+> CONFIG_BPF_UNPRIV_DEFAULT_OFF=y
+> # CONFIG_BPF_PRELOAD is not set
+> # CONFIG_BPF_LSM is not set
 > # end of BPF subsystem
 > 
 > CONFIG_PREEMPT_VOLUNTARY_BUILD=y
@@ -1022,12 +404,16 @@ Thank you for your testing efforts!
 > #
 > # CPU/Task time and stats accounting
 > #
-> CONFIG_TICK_CPU_ACCOUNTING=y
-> # CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set
-> # CONFIG_IRQ_TIME_ACCOUNTING is not set
+> CONFIG_VIRT_CPU_ACCOUNTING=y
+> CONFIG_VIRT_CPU_ACCOUNTING_GEN=y
+> CONFIG_IRQ_TIME_ACCOUNTING=y
+> CONFIG_HAVE_SCHED_AVG_IRQ=y
 > CONFIG_BSD_PROCESS_ACCT=y
 > CONFIG_BSD_PROCESS_ACCT_V3=y
-> # CONFIG_TASKSTATS is not set
+> CONFIG_TASKSTATS=y
+> CONFIG_TASK_DELAY_ACCT=y
+> CONFIG_TASK_XACCT=y
+> CONFIG_TASK_IO_ACCOUNTING=y
 > # CONFIG_PSI is not set
 > # end of CPU/Task time and stats accounting
 > 
@@ -1046,12 +432,13 @@ Thank you for your testing efforts!
 > CONFIG_TASKS_TRACE_RCU=y
 > CONFIG_RCU_STALL_COMMON=y
 > CONFIG_RCU_NEED_SEGCBLIST=y
+> CONFIG_RCU_NOCB_CPU=y
 > # end of RCU Subsystem
 > 
 > CONFIG_BUILD_BIN2C=y
 > CONFIG_IKCONFIG=y
 > CONFIG_IKCONFIG_PROC=y
-> CONFIG_IKHEADERS=y
+> # CONFIG_IKHEADERS is not set
 > CONFIG_LOG_BUF_SHIFT=20
 > CONFIG_LOG_CPU_MAX_BUF_SHIFT=12
 > CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
@@ -1069,36 +456,43 @@ Thank you for your testing efforts!
 > CONFIG_CC_HAS_INT128=y
 > CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
 > CONFIG_ARCH_SUPPORTS_INT128=y
+> CONFIG_NUMA_BALANCING=y
+> CONFIG_NUMA_BALANCING_DEFAULT_ENABLED=y
 > CONFIG_CGROUPS=y
 > CONFIG_PAGE_COUNTER=y
 > CONFIG_MEMCG=y
+> CONFIG_MEMCG_SWAP=y
 > CONFIG_MEMCG_KMEM=y
+> CONFIG_BLK_CGROUP=y
+> CONFIG_CGROUP_WRITEBACK=y
 > CONFIG_CGROUP_SCHED=y
 > CONFIG_FAIR_GROUP_SCHED=y
 > CONFIG_CFS_BANDWIDTH=y
-> # CONFIG_RT_GROUP_SCHED is not set
+> CONFIG_RT_GROUP_SCHED=y
 > CONFIG_CGROUP_PIDS=y
 > CONFIG_CGROUP_RDMA=y
-> # CONFIG_CGROUP_FREEZER is not set
-> # CONFIG_CGROUP_HUGETLB is not set
+> CONFIG_CGROUP_FREEZER=y
+> CONFIG_CGROUP_HUGETLB=y
 > CONFIG_CPUSETS=y
 > CONFIG_PROC_PID_CPUSET=y
 > CONFIG_CGROUP_DEVICE=y
 > CONFIG_CGROUP_CPUACCT=y
 > CONFIG_CGROUP_PERF=y
-> CONFIG_CGROUP_MISC=y
-> CONFIG_CGROUP_DEBUG=y
+> CONFIG_CGROUP_BPF=y
+> # CONFIG_CGROUP_MISC is not set
+> # CONFIG_CGROUP_DEBUG is not set
+> CONFIG_SOCK_CGROUP_DATA=y
 > CONFIG_NAMESPACES=y
-> # CONFIG_UTS_NS is not set
-> # CONFIG_TIME_NS is not set
+> CONFIG_UTS_NS=y
+> CONFIG_TIME_NS=y
 > CONFIG_IPC_NS=y
 > CONFIG_USER_NS=y
-> # CONFIG_PID_NS is not set
+> CONFIG_PID_NS=y
 > CONFIG_NET_NS=y
-> # CONFIG_CHECKPOINT_RESTORE is not set
+> CONFIG_CHECKPOINT_RESTORE=y
 > CONFIG_SCHED_AUTOGROUP=y
 > # CONFIG_SYSFS_DEPRECATED is not set
-> # CONFIG_RELAY is not set
+> CONFIG_RELAY=y
 > CONFIG_BLK_DEV_INITRD=y
 > CONFIG_INITRAMFS_SOURCE=""
 > CONFIG_RD_GZIP=y
@@ -1109,23 +503,25 @@ Thank you for your testing efforts!
 > CONFIG_RD_LZ4=y
 > CONFIG_RD_ZSTD=y
 > # CONFIG_BOOT_CONFIG is not set
-> # CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE is not set
-> CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
+> # CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
 > CONFIG_LD_ORPHAN_WARN=y
 > CONFIG_SYSCTL=y
+> CONFIG_HAVE_UID16=y
 > CONFIG_SYSCTL_EXCEPTION_TRACE=y
 > CONFIG_HAVE_PCSPKR_PLATFORM=y
-> CONFIG_EXPERT=y
+> # CONFIG_EXPERT is not set
+> CONFIG_UID16=y
 > CONFIG_MULTIUSER=y
 > CONFIG_SGETMASK_SYSCALL=y
-> # CONFIG_SYSFS_SYSCALL is not set
+> CONFIG_SYSFS_SYSCALL=y
 > CONFIG_FHANDLE=y
 > CONFIG_POSIX_TIMERS=y
 > CONFIG_PRINTK=y
 > CONFIG_BUG=y
 > CONFIG_ELF_CORE=y
-> # CONFIG_PCSPKR_PLATFORM is not set
-> # CONFIG_BASE_FULL is not set
+> CONFIG_PCSPKR_PLATFORM=y
+> CONFIG_BASE_FULL=y
 > CONFIG_FUTEX=y
 > CONFIG_FUTEX_PI=y
 > CONFIG_EPOLL=y
@@ -1147,32 +543,29 @@ Thank you for your testing efforts!
 > CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
 > CONFIG_KCMP=y
 > CONFIG_RSEQ=y
-> # CONFIG_DEBUG_RSEQ is not set
-> CONFIG_EMBEDDED=y
+> # CONFIG_EMBEDDED is not set
 > CONFIG_HAVE_PERF_EVENTS=y
-> CONFIG_PERF_USE_VMALLOC=y
-> CONFIG_PC104=y
+> CONFIG_GUEST_PERF_EVENTS=y
 > 
 > #
 > # Kernel Performance Events And Counters
 > #
 > CONFIG_PERF_EVENTS=y
-> CONFIG_DEBUG_PERF_USE_VMALLOC=y
+> # CONFIG_DEBUG_PERF_USE_VMALLOC is not set
 > # end of Kernel Performance Events And Counters
 > 
-> # CONFIG_VM_EVENT_COUNTERS is not set
-> # CONFIG_SLUB_DEBUG is not set
+> CONFIG_VM_EVENT_COUNTERS=y
+> CONFIG_SLUB_DEBUG=y
 > # CONFIG_COMPAT_BRK is not set
 > # CONFIG_SLAB is not set
 > CONFIG_SLUB=y
-> # CONFIG_SLOB is not set
 > CONFIG_SLAB_MERGE_DEFAULT=y
 > CONFIG_SLAB_FREELIST_RANDOM=y
 > # CONFIG_SLAB_FREELIST_HARDENED is not set
 > CONFIG_SHUFFLE_PAGE_ALLOCATOR=y
 > CONFIG_SLUB_CPU_PARTIAL=y
 > CONFIG_SYSTEM_DATA_VERIFICATION=y
-> # CONFIG_PROFILING is not set
+> CONFIG_PROFILING=y
 > CONFIG_TRACEPOINTS=y
 > # end of General setup
 > 
@@ -1188,8 +581,10 @@ Thank you for your testing efforts!
 > CONFIG_ARCH_MMAP_RND_BITS_MAX=32
 > CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MIN=8
 > CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=16
+> CONFIG_GENERIC_ISA_DMA=y
 > CONFIG_GENERIC_BUG=y
 > CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y
+> CONFIG_ARCH_MAY_HAVE_PC_FDC=y
 > CONFIG_GENERIC_CALIBRATE_DELAY=y
 > CONFIG_ARCH_HAS_CPU_RELAX=y
 > CONFIG_ARCH_HAS_FILTER_PGPROT=y
@@ -1198,6 +593,8 @@ Thank you for your testing efforts!
 > CONFIG_ARCH_SUSPEND_POSSIBLE=y
 > CONFIG_ARCH_WANT_GENERAL_HUGETLB=y
 > CONFIG_AUDIT_ARCH=y
+> CONFIG_KASAN_SHADOW_OFFSET=0xdffffc0000000000
+> CONFIG_HAVE_INTEL_TXT=y
 > CONFIG_X86_64_SMP=y
 > CONFIG_ARCH_SUPPORTS_UPROBES=y
 > CONFIG_FIX_EARLYCON_MEM=y
@@ -1209,28 +606,33 @@ Thank you for your testing efforts!
 > #
 > CONFIG_SMP=y
 > CONFIG_X86_FEATURE_NAMES=y
-> # CONFIG_X86_X2APIC is not set
-> # CONFIG_X86_MPPARSE is not set
-> CONFIG_GOLDFISH=y
-> # CONFIG_RETPOLINE is not set
-> CONFIG_X86_CPU_RESCTRL=y
-> # CONFIG_X86_EXTENDED_PLATFORM is not set
-> # CONFIG_X86_INTEL_LPSS is not set
+> CONFIG_X86_X2APIC=y
+> CONFIG_X86_MPPARSE=y
+> # CONFIG_GOLDFISH is not set
+> CONFIG_RETPOLINE=y
+> # CONFIG_X86_CPU_RESCTRL is not set
+> CONFIG_X86_EXTENDED_PLATFORM=y
+> # CONFIG_X86_NUMACHIP is not set
+> # CONFIG_X86_VSMP is not set
+> CONFIG_X86_UV=y
+> # CONFIG_X86_GOLDFISH is not set
+> # CONFIG_X86_INTEL_MID is not set
+> CONFIG_X86_INTEL_LPSS=y
 > # CONFIG_X86_AMD_PLATFORM_DEVICE is not set
-> CONFIG_IOSF_MBI=m
-> CONFIG_IOSF_MBI_DEBUG=y
+> CONFIG_IOSF_MBI=y
+> # CONFIG_IOSF_MBI_DEBUG is not set
 > CONFIG_X86_SUPPORTS_MEMORY_FAILURE=y
 > # CONFIG_SCHED_OMIT_FRAME_POINTER is not set
 > CONFIG_HYPERVISOR_GUEST=y
 > CONFIG_PARAVIRT=y
 > # CONFIG_PARAVIRT_DEBUG is not set
-> # CONFIG_PARAVIRT_SPINLOCKS is not set
+> CONFIG_PARAVIRT_SPINLOCKS=y
 > CONFIG_X86_HV_CALLBACK_VECTOR=y
 > # CONFIG_XEN is not set
 > CONFIG_KVM_GUEST=y
 > CONFIG_ARCH_CPUIDLE_HALTPOLL=y
 > # CONFIG_PVH is not set
-> # CONFIG_PARAVIRT_TIME_ACCOUNTING is not set
+> CONFIG_PARAVIRT_TIME_ACCOUNTING=y
 > CONFIG_PARAVIRT_CLOCK=y
 > # CONFIG_JAILHOUSE_GUEST is not set
 > # CONFIG_ACRN_GUEST is not set
@@ -1248,15 +650,15 @@ Thank you for your testing efforts!
 > CONFIG_X86_DEBUGCTLMSR=y
 > CONFIG_IA32_FEAT_CTL=y
 > CONFIG_X86_VMX_FEATURE_NAMES=y
-> CONFIG_PROCESSOR_SELECT=y
 > CONFIG_CPU_SUP_INTEL=y
-> # CONFIG_CPU_SUP_AMD is not set
-> # CONFIG_CPU_SUP_HYGON is not set
-> # CONFIG_CPU_SUP_CENTAUR is not set
-> # CONFIG_CPU_SUP_ZHAOXIN is not set
+> CONFIG_CPU_SUP_AMD=y
+> CONFIG_CPU_SUP_HYGON=y
+> CONFIG_CPU_SUP_CENTAUR=y
+> CONFIG_CPU_SUP_ZHAOXIN=y
 > CONFIG_HPET_TIMER=y
 > CONFIG_HPET_EMULATE_RTC=y
-> # CONFIG_DMI is not set
+> CONFIG_DMI=y
+> # CONFIG_GART_IOMMU is not set
 > CONFIG_MAXSMP=y
 > CONFIG_NR_CPUS_RANGE_BEGIN=8192
 > CONFIG_NR_CPUS_RANGE_END=8192
@@ -1270,55 +672,81 @@ Thank you for your testing efforts!
 > CONFIG_X86_IO_APIC=y
 > CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=y
 > CONFIG_X86_MCE=y
-> # CONFIG_X86_MCELOG_LEGACY is not set
-> # CONFIG_X86_MCE_INTEL is not set
+> CONFIG_X86_MCELOG_LEGACY=y
+> CONFIG_X86_MCE_INTEL=y
+> # CONFIG_X86_MCE_AMD is not set
+> CONFIG_X86_MCE_THRESHOLD=y
 > CONFIG_X86_MCE_INJECT=m
 > 
 > #
 > # Performance monitoring
 > #
-> # CONFIG_PERF_EVENTS_INTEL_UNCORE is not set
+> CONFIG_PERF_EVENTS_INTEL_UNCORE=m
 > CONFIG_PERF_EVENTS_INTEL_RAPL=m
-> # CONFIG_PERF_EVENTS_INTEL_CSTATE is not set
+> CONFIG_PERF_EVENTS_INTEL_CSTATE=m
+> # CONFIG_PERF_EVENTS_AMD_POWER is not set
+> CONFIG_PERF_EVENTS_AMD_UNCORE=y
 > # end of Performance monitoring
 > 
+> CONFIG_X86_16BIT=y
+> CONFIG_X86_ESPFIX64=y
 > CONFIG_X86_VSYSCALL_EMULATION=y
 > CONFIG_X86_IOPL_IOPERM=y
-> CONFIG_I8K=y
-> # CONFIG_MICROCODE is not set
-> CONFIG_X86_MSR=m
+> CONFIG_I8K=m
+> CONFIG_MICROCODE=y
+> CONFIG_MICROCODE_INTEL=y
+> # CONFIG_MICROCODE_AMD is not set
+> CONFIG_MICROCODE_OLD_INTERFACE=y
+> CONFIG_X86_MSR=y
 > CONFIG_X86_CPUID=y
 > CONFIG_X86_5LEVEL=y
 > CONFIG_X86_DIRECT_GBPAGES=y
-> CONFIG_X86_CPA_STATISTICS=y
-> # CONFIG_NUMA is not set
+> # CONFIG_X86_CPA_STATISTICS is not set
+> # CONFIG_AMD_MEM_ENCRYPT is not set
+> CONFIG_NUMA=y
+> # CONFIG_AMD_NUMA is not set
+> CONFIG_X86_64_ACPI_NUMA=y
+> CONFIG_NUMA_EMU=y
+> CONFIG_NODES_SHIFT=10
 > CONFIG_ARCH_SPARSEMEM_ENABLE=y
 > CONFIG_ARCH_SPARSEMEM_DEFAULT=y
 > CONFIG_ARCH_SELECT_MEMORY_MODEL=y
+> # CONFIG_ARCH_MEMORY_PROBE is not set
+> CONFIG_ARCH_PROC_KCORE_TEXT=y
 > CONFIG_ILLEGAL_POINTER_VALUE=0xdead000000000000
-> # CONFIG_X86_CHECK_BIOS_CORRUPTION is not set
-> # CONFIG_MTRR is not set
+> CONFIG_X86_PMEM_LEGACY_DEVICE=y
+> CONFIG_X86_PMEM_LEGACY=m
+> CONFIG_X86_CHECK_BIOS_CORRUPTION=y
+> # CONFIG_X86_BOOTPARAM_MEMORY_CORRUPTION_CHECK is not set
+> CONFIG_MTRR=y
+> CONFIG_MTRR_SANITIZER=y
+> CONFIG_MTRR_SANITIZER_ENABLE_DEFAULT=1
+> CONFIG_MTRR_SANITIZER_SPARE_REG_NR_DEFAULT=1
+> CONFIG_X86_PAT=y
+> CONFIG_ARCH_USES_PG_UNCACHED=y
 > CONFIG_ARCH_RANDOM=y
 > CONFIG_X86_SMAP=y
 > CONFIG_X86_UMIP=y
-> # CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
-> # CONFIG_X86_INTEL_TSX_MODE_OFF is not set
-> CONFIG_X86_INTEL_TSX_MODE_ON=y
+> CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=y
+> CONFIG_X86_INTEL_TSX_MODE_OFF=y
+> # CONFIG_X86_INTEL_TSX_MODE_ON is not set
 > # CONFIG_X86_INTEL_TSX_MODE_AUTO is not set
-> CONFIG_X86_SGX=y
-> # CONFIG_EFI is not set
+> # CONFIG_X86_SGX is not set
+> CONFIG_EFI=y
+> CONFIG_EFI_STUB=y
+> CONFIG_EFI_MIXED=y
 > # CONFIG_HZ_100 is not set
 > # CONFIG_HZ_250 is not set
 > # CONFIG_HZ_300 is not set
 > CONFIG_HZ_1000=y
 > CONFIG_HZ=1000
+> CONFIG_SCHED_HRTICK=y
 > CONFIG_KEXEC=y
 > CONFIG_KEXEC_FILE=y
 > CONFIG_ARCH_HAS_KEXEC_PURGATORY=y
-> CONFIG_KEXEC_SIG=y
-> # CONFIG_KEXEC_SIG_FORCE is not set
-> CONFIG_KEXEC_BZIMAGE_VERIFY_SIG=y
+> # CONFIG_KEXEC_SIG is not set
 > CONFIG_CRASH_DUMP=y
+> CONFIG_KEXEC_JUMP=y
 > CONFIG_PHYSICAL_START=0x1000000
 > CONFIG_RELOCATABLE=y
 > CONFIG_RANDOMIZE_BASE=y
@@ -1326,17 +754,19 @@ Thank you for your testing efforts!
 > CONFIG_PHYSICAL_ALIGN=0x200000
 > CONFIG_DYNAMIC_MEMORY_LAYOUT=y
 > CONFIG_RANDOMIZE_MEMORY=y
-> CONFIG_RANDOMIZE_MEMORY_PHYSICAL_PADDING=0x0
+> CONFIG_RANDOMIZE_MEMORY_PHYSICAL_PADDING=0xa
 > CONFIG_HOTPLUG_CPU=y
 > CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
-> CONFIG_DEBUG_HOTPLUG_CPU0=y
+> # CONFIG_DEBUG_HOTPLUG_CPU0 is not set
+> # CONFIG_COMPAT_VDSO is not set
 > CONFIG_LEGACY_VSYSCALL_EMULATE=y
 > # CONFIG_LEGACY_VSYSCALL_XONLY is not set
 > # CONFIG_LEGACY_VSYSCALL_NONE is not set
 > # CONFIG_CMDLINE_BOOL is not set
-> # CONFIG_MODIFY_LDT_SYSCALL is not set
+> CONFIG_MODIFY_LDT_SYSCALL=y
 > # CONFIG_STRICT_SIGALTSTACK_SIZE is not set
 > CONFIG_HAVE_LIVEPATCH=y
+> CONFIG_LIVEPATCH=y
 > # end of Processor type and features
 > 
 > CONFIG_ARCH_HAS_ADD_PAGES=y
@@ -1345,33 +775,44 @@ Thank you for your testing efforts!
 > #
 > # Power management and ACPI options
 > #
-> # CONFIG_SUSPEND is not set
+> CONFIG_ARCH_HIBERNATION_HEADER=y
+> CONFIG_SUSPEND=y
+> CONFIG_SUSPEND_FREEZER=y
+> CONFIG_HIBERNATE_CALLBACKS=y
+> CONFIG_HIBERNATION=y
+> CONFIG_HIBERNATION_SNAPSHOT_DEV=y
+> CONFIG_PM_STD_PARTITION=""
+> CONFIG_PM_SLEEP=y
+> CONFIG_PM_SLEEP_SMP=y
+> # CONFIG_PM_AUTOSLEEP is not set
+> # CONFIG_PM_WAKELOCKS is not set
 > CONFIG_PM=y
 > CONFIG_PM_DEBUG=y
 > # CONFIG_PM_ADVANCED_DEBUG is not set
+> # CONFIG_PM_TEST_SUSPEND is not set
+> CONFIG_PM_SLEEP_DEBUG=y
+> # CONFIG_PM_TRACE_RTC is not set
 > CONFIG_PM_CLK=y
 > # CONFIG_WQ_POWER_EFFICIENT_DEFAULT is not set
-> CONFIG_ENERGY_MODEL=y
+> # CONFIG_ENERGY_MODEL is not set
 > CONFIG_ARCH_SUPPORTS_ACPI=y
 > CONFIG_ACPI=y
 > CONFIG_ACPI_LEGACY_TABLES_LOOKUP=y
 > CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC=y
 > CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT=y
-> CONFIG_ACPI_TABLE_LIB=y
-> CONFIG_ACPI_DEBUGGER=y
-> CONFIG_ACPI_DEBUGGER_USER=y
+> # CONFIG_ACPI_DEBUGGER is not set
 > CONFIG_ACPI_SPCR_TABLE=y
 > # CONFIG_ACPI_FPDT is not set
 > CONFIG_ACPI_LPIT=y
+> CONFIG_ACPI_SLEEP=y
 > CONFIG_ACPI_REV_OVERRIDE_POSSIBLE=y
-> CONFIG_ACPI_EC_DEBUGFS=y
-> # CONFIG_ACPI_AC is not set
-> CONFIG_ACPI_BATTERY=m
-> CONFIG_ACPI_BUTTON=m
-> CONFIG_ACPI_TINY_POWER_BUTTON=m
-> CONFIG_ACPI_TINY_POWER_BUTTON_SIGNAL=38
+> CONFIG_ACPI_EC_DEBUGFS=m
+> CONFIG_ACPI_AC=y
+> CONFIG_ACPI_BATTERY=y
+> CONFIG_ACPI_BUTTON=y
 > CONFIG_ACPI_VIDEO=m
-> CONFIG_ACPI_FAN=m
+> CONFIG_ACPI_FAN=y
+> CONFIG_ACPI_TAD=m
 > CONFIG_ACPI_DOCK=y
 > CONFIG_ACPI_CPU_FREQ_PSS=y
 > CONFIG_ACPI_PROCESSOR_CSTATE=y
@@ -1380,27 +821,42 @@ Thank you for your testing efforts!
 > CONFIG_ACPI_PROCESSOR=y
 > CONFIG_ACPI_IPMI=m
 > CONFIG_ACPI_HOTPLUG_CPU=y
-> CONFIG_ACPI_PROCESSOR_AGGREGATOR=y
-> CONFIG_ACPI_THERMAL=m
+> CONFIG_ACPI_PROCESSOR_AGGREGATOR=m
+> CONFIG_ACPI_THERMAL=y
+> CONFIG_ACPI_PLATFORM_PROFILE=m
 > CONFIG_ARCH_HAS_ACPI_TABLE_UPGRADE=y
 > CONFIG_ACPI_TABLE_UPGRADE=y
-> CONFIG_ACPI_DEBUG=y
+> # CONFIG_ACPI_DEBUG is not set
 > CONFIG_ACPI_PCI_SLOT=y
 > CONFIG_ACPI_CONTAINER=y
+> CONFIG_ACPI_HOTPLUG_MEMORY=y
 > CONFIG_ACPI_HOTPLUG_IOAPIC=y
-> CONFIG_ACPI_SBS=y
-> # CONFIG_ACPI_HED is not set
+> CONFIG_ACPI_SBS=m
+> CONFIG_ACPI_HED=y
 > # CONFIG_ACPI_CUSTOM_METHOD is not set
-> # CONFIG_ACPI_REDUCED_HARDWARE_ONLY is not set
+> CONFIG_ACPI_BGRT=y
+> CONFIG_ACPI_NFIT=m
+> # CONFIG_NFIT_SECURITY_DEBUG is not set
+> CONFIG_ACPI_NUMA=y
+> # CONFIG_ACPI_HMAT is not set
 > CONFIG_HAVE_ACPI_APEI=y
 > CONFIG_HAVE_ACPI_APEI_NMI=y
-> # CONFIG_ACPI_APEI is not set
+> CONFIG_ACPI_APEI=y
+> CONFIG_ACPI_APEI_GHES=y
+> CONFIG_ACPI_APEI_PCIEAER=y
+> CONFIG_ACPI_APEI_MEMORY_FAILURE=y
+> CONFIG_ACPI_APEI_EINJ=m
+> # CONFIG_ACPI_APEI_ERST_DEBUG is not set
 > # CONFIG_ACPI_DPTF is not set
-> CONFIG_ACPI_CONFIGFS=y
+> CONFIG_ACPI_WATCHDOG=y
+> CONFIG_ACPI_EXTLOG=m
+> CONFIG_ACPI_ADXL=y
+> # CONFIG_ACPI_CONFIGFS is not set
 > # CONFIG_ACPI_PFRUT is not set
 > CONFIG_ACPI_PCC=y
 > CONFIG_PMIC_OPREGION=y
 > CONFIG_X86_PM_TIMER=y
+> CONFIG_ACPI_PRMT=y
 > 
 > #
 > # CPU Frequency scaling
@@ -1409,34 +865,34 @@ Thank you for your testing efforts!
 > CONFIG_CPU_FREQ_GOV_ATTR_SET=y
 > CONFIG_CPU_FREQ_GOV_COMMON=y
 > CONFIG_CPU_FREQ_STAT=y
-> # CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE is not set
+> CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
 > # CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
-> CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
+> # CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
 > # CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not set
 > CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
-> CONFIG_CPU_FREQ_GOV_POWERSAVE=m
+> CONFIG_CPU_FREQ_GOV_POWERSAVE=y
 > CONFIG_CPU_FREQ_GOV_USERSPACE=y
 > CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-> # CONFIG_CPU_FREQ_GOV_CONSERVATIVE is not set
+> CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
 > CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
 > 
 > #
 > # CPU frequency scaling drivers
 > #
-> CONFIG_CPUFREQ_DT=m
-> CONFIG_CPUFREQ_DT_PLATDEV=y
 > CONFIG_X86_INTEL_PSTATE=y
-> CONFIG_X86_PCC_CPUFREQ=m
+> # CONFIG_X86_PCC_CPUFREQ is not set
 > # CONFIG_X86_AMD_PSTATE is not set
-> CONFIG_X86_ACPI_CPUFREQ=y
+> CONFIG_X86_ACPI_CPUFREQ=m
+> CONFIG_X86_ACPI_CPUFREQ_CPB=y
 > CONFIG_X86_POWERNOW_K8=m
-> CONFIG_X86_SPEEDSTEP_CENTRINO=m
-> CONFIG_X86_P4_CLOCKMOD=y
+> # CONFIG_X86_AMD_FREQ_SENSITIVITY is not set
+> # CONFIG_X86_SPEEDSTEP_CENTRINO is not set
+> CONFIG_X86_P4_CLOCKMOD=m
 > 
 > #
 > # shared options
 > #
-> CONFIG_X86_SPEEDSTEP_LIB=y
+> CONFIG_X86_SPEEDSTEP_LIB=m
 > # end of CPU Frequency scaling
 > 
 > #
@@ -1445,7 +901,7 @@ Thank you for your testing efforts!
 > CONFIG_CPU_IDLE=y
 > # CONFIG_CPU_IDLE_GOV_LADDER is not set
 > CONFIG_CPU_IDLE_GOV_MENU=y
-> CONFIG_CPU_IDLE_GOV_TEO=y
+> # CONFIG_CPU_IDLE_GOV_TEO is not set
 > # CONFIG_CPU_IDLE_GOV_HALTPOLL is not set
 > CONFIG_HALTPOLL_CPUIDLE=y
 > # end of CPU Idle
@@ -1459,22 +915,45 @@ Thank you for your testing efforts!
 > CONFIG_PCI_DIRECT=y
 > CONFIG_PCI_MMCONFIG=y
 > CONFIG_MMCONF_FAM10H=y
-> # CONFIG_PCI_CNB20LE_QUIRK is not set
-> CONFIG_ISA_BUS=y
-> # CONFIG_ISA_DMA_API is not set
+> CONFIG_ISA_DMA_API=y
+> CONFIG_AMD_NB=y
 > # end of Bus options (PCI etc.)
 > 
 > #
 > # Binary Emulations
 > #
-> # CONFIG_IA32_EMULATION is not set
-> CONFIG_X86_X32=y
+> CONFIG_IA32_EMULATION=y
+> # CONFIG_X86_X32 is not set
+> CONFIG_COMPAT_32=y
 > CONFIG_COMPAT=y
 > CONFIG_COMPAT_FOR_U64_ALIGNMENT=y
+> CONFIG_SYSVIPC_COMPAT=y
 > # end of Binary Emulations
 > 
 > CONFIG_HAVE_KVM=y
-> # CONFIG_VIRTUALIZATION is not set
+> CONFIG_HAVE_KVM_PFNCACHE=y
+> CONFIG_HAVE_KVM_IRQCHIP=y
+> CONFIG_HAVE_KVM_IRQFD=y
+> CONFIG_HAVE_KVM_IRQ_ROUTING=y
+> CONFIG_HAVE_KVM_DIRTY_RING=y
+> CONFIG_HAVE_KVM_EVENTFD=y
+> CONFIG_KVM_MMIO=y
+> CONFIG_KVM_ASYNC_PF=y
+> CONFIG_HAVE_KVM_MSI=y
+> CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT=y
+> CONFIG_KVM_VFIO=y
+> CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT=y
+> CONFIG_KVM_COMPAT=y
+> CONFIG_HAVE_KVM_IRQ_BYPASS=y
+> CONFIG_HAVE_KVM_NO_POLL=y
+> CONFIG_KVM_XFER_TO_GUEST_WORK=y
+> CONFIG_HAVE_KVM_PM_NOTIFIER=y
+> CONFIG_VIRTUALIZATION=y
+> CONFIG_KVM=m
+> CONFIG_KVM_INTEL=m
+> # CONFIG_KVM_AMD is not set
+> # CONFIG_KVM_XEN is not set
+> CONFIG_KVM_MMU_AUDIT=y
 > CONFIG_AS_AVX512=y
 > CONFIG_AS_SHA1_NI=y
 > CONFIG_AS_SHA256_NI=y
@@ -1488,12 +967,16 @@ Thank you for your testing efforts!
 > CONFIG_HOTPLUG_SMT=y
 > CONFIG_GENERIC_ENTRY=y
 > CONFIG_KPROBES=y
-> # CONFIG_JUMP_LABEL is not set
+> CONFIG_JUMP_LABEL=y
+> # CONFIG_STATIC_KEYS_SELFTEST is not set
 > # CONFIG_STATIC_CALL_SELFTEST is not set
 > CONFIG_OPTPROBES=y
+> CONFIG_KPROBES_ON_FTRACE=y
+> CONFIG_UPROBES=y
 > CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y
 > CONFIG_ARCH_USE_BUILTIN_BSWAP=y
 > CONFIG_KRETPROBES=y
+> CONFIG_USER_RETURN_NOTIFIER=y
 > CONFIG_HAVE_IOREMAP_PROT=y
 > CONFIG_HAVE_KPROBES=y
 > CONFIG_HAVE_KRETPROBES=y
@@ -1531,12 +1014,17 @@ Thank you for your testing efforts!
 > CONFIG_HAVE_ALIGNED_STRUCT_PAGE=y
 > CONFIG_HAVE_CMPXCHG_LOCAL=y
 > CONFIG_HAVE_CMPXCHG_DOUBLE=y
+> CONFIG_ARCH_WANT_COMPAT_IPC_PARSE_VERSION=y
+> CONFIG_ARCH_WANT_OLD_COMPAT_IPC=y
 > CONFIG_HAVE_ARCH_SECCOMP=y
 > CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
-> # CONFIG_SECCOMP is not set
+> CONFIG_SECCOMP=y
+> CONFIG_SECCOMP_FILTER=y
+> # CONFIG_SECCOMP_CACHE_DEBUG is not set
 > CONFIG_HAVE_ARCH_STACKLEAK=y
 > CONFIG_HAVE_STACKPROTECTOR=y
-> # CONFIG_STACKPROTECTOR is not set
+> CONFIG_STACKPROTECTOR=y
+> CONFIG_STACKPROTECTOR_STRONG=y
 > CONFIG_ARCH_SUPPORTS_LTO_CLANG=y
 > CONFIG_ARCH_SUPPORTS_LTO_CLANG_THIN=y
 > CONFIG_LTO_NONE=y
@@ -1567,10 +1055,11 @@ Thank you for your testing efforts!
 > CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
 > CONFIG_HAVE_STACK_VALIDATION=y
 > CONFIG_HAVE_RELIABLE_STACKTRACE=y
-> CONFIG_ISA_BUS_API=y
+> CONFIG_OLD_SIGSUSPEND3=y
+> CONFIG_COMPAT_OLD_SIGACTION=y
 > CONFIG_COMPAT_32BIT_TIME=y
 > CONFIG_HAVE_ARCH_VMAP_STACK=y
-> # CONFIG_VMAP_STACK is not set
+> CONFIG_VMAP_STACK=y
 > CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=y
 > # CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT is not set
 > CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
@@ -1578,6 +1067,7 @@ Thank you for your testing efforts!
 > CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
 > CONFIG_STRICT_MODULE_RWX=y
 > CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=y
+> CONFIG_ARCH_USE_MEMREMAP_PROT=y
 > # CONFIG_LOCK_EVENT_COUNTS is not set
 > CONFIG_ARCH_HAS_MEM_ENCRYPT=y
 > CONFIG_HAVE_STATIC_CALL=y
@@ -1589,7 +1079,6 @@ Thank you for your testing efforts!
 > CONFIG_ARCH_HAS_ELFCORE_COMPAT=y
 > CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH=y
 > CONFIG_DYNAMIC_SIGFRAME=y
-> CONFIG_HAVE_ARCH_NODE_DEV_GROUP=y
 > 
 > #
 > # GCOV-based kernel profiling
@@ -1602,10 +1091,10 @@ Thank you for your testing efforts!
 > # end of General architecture-dependent options
 > 
 > CONFIG_RT_MUTEXES=y
-> CONFIG_BASE_SMALL=1
+> CONFIG_BASE_SMALL=0
 > CONFIG_MODULE_SIG_FORMAT=y
 > CONFIG_MODULES=y
-> # CONFIG_MODULE_FORCE_LOAD is not set
+> CONFIG_MODULE_FORCE_LOAD=y
 > CONFIG_MODULE_UNLOAD=y
 > # CONFIG_MODULE_FORCE_UNLOAD is not set
 > # CONFIG_MODVERSIONS is not set
@@ -1615,21 +1104,71 @@ Thank you for your testing efforts!
 > CONFIG_MODULE_SIG_ALL=y
 > # CONFIG_MODULE_SIG_SHA1 is not set
 > # CONFIG_MODULE_SIG_SHA224 is not set
-> # CONFIG_MODULE_SIG_SHA256 is not set
-> CONFIG_MODULE_SIG_SHA384=y
+> CONFIG_MODULE_SIG_SHA256=y
+> # CONFIG_MODULE_SIG_SHA384 is not set
 > # CONFIG_MODULE_SIG_SHA512 is not set
-> CONFIG_MODULE_SIG_HASH="sha384"
+> CONFIG_MODULE_SIG_HASH="sha256"
 > CONFIG_MODULE_COMPRESS_NONE=y
 > # CONFIG_MODULE_COMPRESS_GZIP is not set
 > # CONFIG_MODULE_COMPRESS_XZ is not set
 > # CONFIG_MODULE_COMPRESS_ZSTD is not set
 > # CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is not set
 > CONFIG_MODPROBE_PATH="/sbin/modprobe"
-> # CONFIG_TRIM_UNUSED_KSYMS is not set
 > CONFIG_MODULES_TREE_LOOKUP=y
-> # CONFIG_BLOCK is not set
+> CONFIG_BLOCK=y
+> CONFIG_BLK_CGROUP_RWSTAT=y
+> CONFIG_BLK_DEV_BSG_COMMON=y
+> CONFIG_BLK_ICQ=y
+> CONFIG_BLK_DEV_BSGLIB=y
+> CONFIG_BLK_DEV_INTEGRITY=y
+> CONFIG_BLK_DEV_INTEGRITY_T10=m
+> CONFIG_BLK_DEV_ZONED=y
+> CONFIG_BLK_DEV_THROTTLING=y
+> # CONFIG_BLK_DEV_THROTTLING_LOW is not set
+> CONFIG_BLK_WBT=y
+> CONFIG_BLK_WBT_MQ=y
+> # CONFIG_BLK_CGROUP_IOLATENCY is not set
+> # CONFIG_BLK_CGROUP_FC_APPID is not set
+> # CONFIG_BLK_CGROUP_IOCOST is not set
+> # CONFIG_BLK_CGROUP_IOPRIO is not set
+> CONFIG_BLK_DEBUG_FS=y
+> CONFIG_BLK_DEBUG_FS_ZONED=y
+> # CONFIG_BLK_SED_OPAL is not set
+> # CONFIG_BLK_INLINE_ENCRYPTION is not set
+> 
+> #
+> # Partition Types
+> #
+> # CONFIG_PARTITION_ADVANCED is not set
+> CONFIG_MSDOS_PARTITION=y
+> CONFIG_EFI_PARTITION=y
+> # end of Partition Types
+> 
+> CONFIG_BLOCK_COMPAT=y
+> CONFIG_BLK_MQ_PCI=y
+> CONFIG_BLK_MQ_VIRTIO=y
+> CONFIG_BLK_MQ_RDMA=y
+> CONFIG_BLK_PM=y
+> CONFIG_BLOCK_HOLDER_DEPRECATED=y
+> 
+> #
+> # IO Schedulers
+> #
+> CONFIG_MQ_IOSCHED_DEADLINE=y
+> CONFIG_MQ_IOSCHED_KYBER=y
+> CONFIG_IOSCHED_BFQ=y
+> CONFIG_BFQ_GROUP_IOSCHED=y
+> # CONFIG_BFQ_CGROUP_DEBUG is not set
+> # end of IO Schedulers
+> 
+> CONFIG_PREEMPT_NOTIFIERS=y
+> CONFIG_PADATA=y
 > CONFIG_ASN1=y
-> CONFIG_UNINLINE_SPIN_UNLOCK=y
+> CONFIG_INLINE_SPIN_UNLOCK_IRQ=y
+> CONFIG_INLINE_READ_UNLOCK=y
+> CONFIG_INLINE_READ_UNLOCK_IRQ=y
+> CONFIG_INLINE_WRITE_UNLOCK=y
+> CONFIG_INLINE_WRITE_UNLOCK_IRQ=y
 > CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
 > CONFIG_MUTEX_SPIN_ON_OWNER=y
 > CONFIG_RWSEM_SPIN_ON_OWNER=y
@@ -1641,6 +1180,7 @@ Thank you for your testing efforts!
 > CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=y
 > CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=y
 > CONFIG_ARCH_HAS_SYSCALL_WRAPPER=y
+> CONFIG_FREEZER=y
 > 
 > #
 > # Executable file formats
@@ -1648,9 +1188,9 @@ Thank you for your testing efforts!
 > CONFIG_BINFMT_ELF=y
 > CONFIG_COMPAT_BINFMT_ELF=y
 > CONFIG_ELFCORE=y
-> # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+> CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS=y
 > CONFIG_BINFMT_SCRIPT=y
-> # CONFIG_BINFMT_MISC is not set
+> CONFIG_BINFMT_MISC=m
 > CONFIG_COREDUMP=y
 > # end of Executable file formats
 > 
@@ -1664,9 +1204,16 @@ Thank you for your testing efforts!
 > CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
 > CONFIG_SPARSEMEM_VMEMMAP=y
 > CONFIG_HAVE_FAST_GUP=y
+> CONFIG_NUMA_KEEP_MEMINFO=y
+> CONFIG_MEMORY_ISOLATION=y
 > CONFIG_EXCLUSIVE_SYSTEM_RAM=y
+> CONFIG_HAVE_BOOTMEM_INFO_NODE=y
 > CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-> # CONFIG_MEMORY_HOTPLUG is not set
+> CONFIG_MEMORY_HOTPLUG=y
+> # CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE is not set
+> CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
+> CONFIG_MEMORY_HOTREMOVE=y
+> CONFIG_MHP_MEMMAP_ON_MEMORY=y
 > CONFIG_SPLIT_PTLOCK_CPUS=4
 > CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK=y
 > CONFIG_MEMORY_BALLOON=y
@@ -1676,39 +1223,69 @@ Thank you for your testing efforts!
 > CONFIG_MIGRATION=y
 > CONFIG_ARCH_ENABLE_HUGEPAGE_MIGRATION=y
 > CONFIG_ARCH_ENABLE_THP_MIGRATION=y
+> CONFIG_CONTIG_ALLOC=y
 > CONFIG_PHYS_ADDR_T_64BIT=y
 > CONFIG_VIRT_TO_BUS=y
 > CONFIG_MMU_NOTIFIER=y
 > CONFIG_KSM=y
 > CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
 > CONFIG_ARCH_SUPPORTS_MEMORY_FAILURE=y
-> # CONFIG_MEMORY_FAILURE is not set
+> CONFIG_MEMORY_FAILURE=y
+> CONFIG_HWPOISON_INJECT=m
 > CONFIG_TRANSPARENT_HUGEPAGE=y
-> # CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS is not set
-> CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
+> CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS=y
+> # CONFIG_TRANSPARENT_HUGEPAGE_MADVISE is not set
 > CONFIG_ARCH_WANTS_THP_SWAP=y
+> CONFIG_THP_SWAP=y
 > CONFIG_NEED_PER_CPU_EMBED_FIRST_CHUNK=y
 > CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK=y
+> CONFIG_USE_PERCPU_NUMA_NODE_ID=y
 > CONFIG_HAVE_SETUP_PER_CPU_AREA=y
-> # CONFIG_CMA is not set
+> CONFIG_FRONTSWAP=y
+> CONFIG_CMA=y
+> # CONFIG_CMA_DEBUG is not set
+> # CONFIG_CMA_DEBUGFS is not set
+> # CONFIG_CMA_SYSFS is not set
+> CONFIG_CMA_AREAS=19
+> # CONFIG_MEM_SOFT_DIRTY is not set
+> CONFIG_ZSWAP=y
+> # CONFIG_ZSWAP_COMPRESSOR_DEFAULT_DEFLATE is not set
+> CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZO=y
+> # CONFIG_ZSWAP_COMPRESSOR_DEFAULT_842 is not set
+> # CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4 is not set
+> # CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZ4HC is not set
+> # CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD is not set
+> CONFIG_ZSWAP_COMPRESSOR_DEFAULT="lzo"
+> CONFIG_ZSWAP_ZPOOL_DEFAULT_ZBUD=y
+> # CONFIG_ZSWAP_ZPOOL_DEFAULT_Z3FOLD is not set
+> # CONFIG_ZSWAP_ZPOOL_DEFAULT_ZSMALLOC is not set
+> CONFIG_ZSWAP_ZPOOL_DEFAULT="zbud"
+> # CONFIG_ZSWAP_DEFAULT_ON is not set
 > CONFIG_ZPOOL=y
 > CONFIG_ZBUD=y
-> CONFIG_Z3FOLD=m
+> # CONFIG_Z3FOLD is not set
 > CONFIG_ZSMALLOC=y
 > CONFIG_ZSMALLOC_STAT=y
 > CONFIG_GENERIC_EARLY_IOREMAP=y
-> # CONFIG_DEFERRED_STRUCT_PAGE_INIT is not set
+> CONFIG_DEFERRED_STRUCT_PAGE_INIT=y
 > CONFIG_PAGE_IDLE_FLAG=y
 > CONFIG_IDLE_PAGE_TRACKING=y
 > CONFIG_ARCH_HAS_CACHE_LINE_SIZE=y
 > CONFIG_ARCH_HAS_PTE_DEVMAP=y
-> CONFIG_ARCH_HAS_ZONE_DMA_SET=y
-> # CONFIG_ZONE_DMA is not set
+> CONFIG_ZONE_DMA=y
 > CONFIG_ZONE_DMA32=y
+> CONFIG_ZONE_DEVICE=y
+> CONFIG_DEV_PAGEMAP_OPS=y
+> CONFIG_HMM_MIRROR=y
+> CONFIG_DEVICE_PRIVATE=y
+> CONFIG_VMAP_PFN=y
+> CONFIG_ARCH_USES_HIGH_VMA_FLAGS=y
+> CONFIG_ARCH_HAS_PKEYS=y
 > # CONFIG_PERCPU_STATS is not set
 > # CONFIG_GUP_TEST is not set
-> CONFIG_READ_ONLY_THP_FOR_FS=y
+> # CONFIG_READ_ONLY_THP_FOR_FS is not set
 > CONFIG_ARCH_HAS_PTE_SPECIAL=y
+> CONFIG_SECRETMEM=y
 > # CONFIG_ANON_VMA_NAME is not set
 > 
 > #
@@ -1719,6 +1296,10 @@ Thank you for your testing efforts!
 > # end of Memory Management options
 > 
 > CONFIG_NET=y
+> CONFIG_COMPAT_NETLINK_MESSAGES=y
+> CONFIG_NET_INGRESS=y
+> CONFIG_NET_EGRESS=y
+> CONFIG_SKB_EXTENSIONS=y
 > 
 > #
 > # Networking options
@@ -1728,266 +1309,719 @@ Thank you for your testing efforts!
 > CONFIG_UNIX=y
 > CONFIG_UNIX_SCM=y
 > CONFIG_AF_UNIX_OOB=y
-> # CONFIG_UNIX_DIAG is not set
-> # CONFIG_TLS is not set
-> # CONFIG_XFRM_USER is not set
-> # CONFIG_NET_KEY is not set
+> CONFIG_UNIX_DIAG=m
+> CONFIG_TLS=m
+> CONFIG_TLS_DEVICE=y
+> # CONFIG_TLS_TOE is not set
+> CONFIG_XFRM=y
+> CONFIG_XFRM_OFFLOAD=y
+> CONFIG_XFRM_ALGO=y
+> CONFIG_XFRM_USER=y
+> # CONFIG_XFRM_USER_COMPAT is not set
+> # CONFIG_XFRM_INTERFACE is not set
+> CONFIG_XFRM_SUB_POLICY=y
+> CONFIG_XFRM_MIGRATE=y
+> CONFIG_XFRM_STATISTICS=y
+> CONFIG_XFRM_AH=m
+> CONFIG_XFRM_ESP=m
+> CONFIG_XFRM_IPCOMP=m
+> CONFIG_NET_KEY=m
+> CONFIG_NET_KEY_MIGRATE=y
+> # CONFIG_SMC is not set
+> CONFIG_XDP_SOCKETS=y
+> # CONFIG_XDP_SOCKETS_DIAG is not set
 > CONFIG_INET=y
-> # CONFIG_IP_MULTICAST is not set
-> # CONFIG_IP_ADVANCED_ROUTER is not set
+> CONFIG_IP_MULTICAST=y
+> CONFIG_IP_ADVANCED_ROUTER=y
+> CONFIG_IP_FIB_TRIE_STATS=y
+> CONFIG_IP_MULTIPLE_TABLES=y
+> CONFIG_IP_ROUTE_MULTIPATH=y
+> CONFIG_IP_ROUTE_VERBOSE=y
+> CONFIG_IP_ROUTE_CLASSID=y
 > CONFIG_IP_PNP=y
 > CONFIG_IP_PNP_DHCP=y
 > # CONFIG_IP_PNP_BOOTP is not set
 > # CONFIG_IP_PNP_RARP is not set
-> # CONFIG_NET_IPIP is not set
-> # CONFIG_NET_IPGRE_DEMUX is not set
-> CONFIG_NET_IP_TUNNEL=y
-> # CONFIG_SYN_COOKIES is not set
-> # CONFIG_NET_IPVTI is not set
+> CONFIG_NET_IPIP=m
+> CONFIG_NET_IPGRE_DEMUX=m
+> CONFIG_NET_IP_TUNNEL=m
+> CONFIG_NET_IPGRE=m
+> CONFIG_NET_IPGRE_BROADCAST=y
+> CONFIG_IP_MROUTE_COMMON=y
+> CONFIG_IP_MROUTE=y
+> CONFIG_IP_MROUTE_MULTIPLE_TABLES=y
+> CONFIG_IP_PIMSM_V1=y
+> CONFIG_IP_PIMSM_V2=y
+> CONFIG_SYN_COOKIES=y
+> CONFIG_NET_IPVTI=m
+> CONFIG_NET_UDP_TUNNEL=m
 > # CONFIG_NET_FOU is not set
 > # CONFIG_NET_FOU_IP_TUNNELS is not set
-> # CONFIG_INET_AH is not set
-> # CONFIG_INET_ESP is not set
-> # CONFIG_INET_IPCOMP is not set
-> CONFIG_INET_TUNNEL=y
-> CONFIG_INET_DIAG=y
-> CONFIG_INET_TCP_DIAG=y
-> # CONFIG_INET_UDP_DIAG is not set
-> # CONFIG_INET_RAW_DIAG is not set
+> CONFIG_INET_AH=m
+> CONFIG_INET_ESP=m
+> CONFIG_INET_ESP_OFFLOAD=m
+> # CONFIG_INET_ESPINTCP is not set
+> CONFIG_INET_IPCOMP=m
+> CONFIG_INET_XFRM_TUNNEL=m
+> CONFIG_INET_TUNNEL=m
+> CONFIG_INET_DIAG=m
+> CONFIG_INET_TCP_DIAG=m
+> CONFIG_INET_UDP_DIAG=m
+> CONFIG_INET_RAW_DIAG=m
 > # CONFIG_INET_DIAG_DESTROY is not set
-> # CONFIG_TCP_CONG_ADVANCED is not set
+> CONFIG_TCP_CONG_ADVANCED=y
+> CONFIG_TCP_CONG_BIC=m
 > CONFIG_TCP_CONG_CUBIC=y
+> CONFIG_TCP_CONG_WESTWOOD=m
+> CONFIG_TCP_CONG_HTCP=m
+> CONFIG_TCP_CONG_HSTCP=m
+> CONFIG_TCP_CONG_HYBLA=m
+> CONFIG_TCP_CONG_VEGAS=m
+> CONFIG_TCP_CONG_NV=m
+> CONFIG_TCP_CONG_SCALABLE=m
+> CONFIG_TCP_CONG_LP=m
+> CONFIG_TCP_CONG_VENO=m
+> CONFIG_TCP_CONG_YEAH=m
+> CONFIG_TCP_CONG_ILLINOIS=m
+> CONFIG_TCP_CONG_DCTCP=m
+> # CONFIG_TCP_CONG_CDG is not set
+> CONFIG_TCP_CONG_BBR=m
+> CONFIG_DEFAULT_CUBIC=y
+> # CONFIG_DEFAULT_RENO is not set
 > CONFIG_DEFAULT_TCP_CONG="cubic"
-> # CONFIG_TCP_MD5SIG is not set
+> CONFIG_TCP_MD5SIG=y
 > CONFIG_IPV6=y
-> # CONFIG_IPV6_ROUTER_PREF is not set
-> # CONFIG_IPV6_OPTIMISTIC_DAD is not set
-> # CONFIG_INET6_AH is not set
-> # CONFIG_INET6_ESP is not set
-> # CONFIG_INET6_IPCOMP is not set
-> # CONFIG_IPV6_MIP6 is not set
-> # CONFIG_IPV6_VTI is not set
-> CONFIG_IPV6_SIT=y
-> # CONFIG_IPV6_SIT_6RD is not set
+> CONFIG_IPV6_ROUTER_PREF=y
+> CONFIG_IPV6_ROUTE_INFO=y
+> CONFIG_IPV6_OPTIMISTIC_DAD=y
+> CONFIG_INET6_AH=m
+> CONFIG_INET6_ESP=m
+> CONFIG_INET6_ESP_OFFLOAD=m
+> # CONFIG_INET6_ESPINTCP is not set
+> CONFIG_INET6_IPCOMP=m
+> CONFIG_IPV6_MIP6=m
+> # CONFIG_IPV6_ILA is not set
+> CONFIG_INET6_XFRM_TUNNEL=m
+> CONFIG_INET6_TUNNEL=m
+> CONFIG_IPV6_VTI=m
+> CONFIG_IPV6_SIT=m
+> CONFIG_IPV6_SIT_6RD=y
 > CONFIG_IPV6_NDISC_NODETYPE=y
-> # CONFIG_IPV6_TUNNEL is not set
-> # CONFIG_IPV6_MULTIPLE_TABLES is not set
-> # CONFIG_IPV6_MROUTE is not set
+> CONFIG_IPV6_TUNNEL=m
+> CONFIG_IPV6_GRE=m
+> CONFIG_IPV6_MULTIPLE_TABLES=y
+> # CONFIG_IPV6_SUBTREES is not set
+> CONFIG_IPV6_MROUTE=y
+> CONFIG_IPV6_MROUTE_MULTIPLE_TABLES=y
+> CONFIG_IPV6_PIMSM_V2=y
 > # CONFIG_IPV6_SEG6_LWTUNNEL is not set
 > # CONFIG_IPV6_SEG6_HMAC is not set
 > # CONFIG_IPV6_RPL_LWTUNNEL is not set
 > # CONFIG_IPV6_IOAM6_LWTUNNEL is not set
-> # CONFIG_NETLABEL is not set
+> CONFIG_NETLABEL=y
 > # CONFIG_MPTCP is not set
-> # CONFIG_NETWORK_SECMARK is not set
+> CONFIG_NETWORK_SECMARK=y
 > CONFIG_NET_PTP_CLASSIFY=y
 > CONFIG_NETWORK_PHY_TIMESTAMPING=y
-> # CONFIG_NETFILTER is not set
+> CONFIG_NETFILTER=y
+> CONFIG_NETFILTER_ADVANCED=y
+> CONFIG_BRIDGE_NETFILTER=m
+> 
+> #
+> # Core Netfilter Configuration
+> #
+> CONFIG_NETFILTER_INGRESS=y
+> CONFIG_NETFILTER_EGRESS=y
+> CONFIG_NETFILTER_SKIP_EGRESS=y
+> CONFIG_NETFILTER_NETLINK=m
+> CONFIG_NETFILTER_FAMILY_BRIDGE=y
+> CONFIG_NETFILTER_FAMILY_ARP=y
+> # CONFIG_NETFILTER_NETLINK_HOOK is not set
+> # CONFIG_NETFILTER_NETLINK_ACCT is not set
+> CONFIG_NETFILTER_NETLINK_QUEUE=m
+> CONFIG_NETFILTER_NETLINK_LOG=m
+> CONFIG_NETFILTER_NETLINK_OSF=m
+> CONFIG_NF_CONNTRACK=m
+> CONFIG_NF_LOG_SYSLOG=m
+> CONFIG_NETFILTER_CONNCOUNT=m
+> CONFIG_NF_CONNTRACK_MARK=y
+> CONFIG_NF_CONNTRACK_SECMARK=y
+> CONFIG_NF_CONNTRACK_ZONES=y
+> CONFIG_NF_CONNTRACK_PROCFS=y
+> CONFIG_NF_CONNTRACK_EVENTS=y
+> CONFIG_NF_CONNTRACK_TIMEOUT=y
+> CONFIG_NF_CONNTRACK_TIMESTAMP=y
+> CONFIG_NF_CONNTRACK_LABELS=y
+> CONFIG_NF_CT_PROTO_DCCP=y
+> CONFIG_NF_CT_PROTO_GRE=y
+> CONFIG_NF_CT_PROTO_SCTP=y
+> CONFIG_NF_CT_PROTO_UDPLITE=y
+> CONFIG_NF_CONNTRACK_AMANDA=m
+> CONFIG_NF_CONNTRACK_FTP=m
+> CONFIG_NF_CONNTRACK_H323=m
+> CONFIG_NF_CONNTRACK_IRC=m
+> CONFIG_NF_CONNTRACK_BROADCAST=m
+> CONFIG_NF_CONNTRACK_NETBIOS_NS=m
+> CONFIG_NF_CONNTRACK_SNMP=m
+> CONFIG_NF_CONNTRACK_PPTP=m
+> CONFIG_NF_CONNTRACK_SANE=m
+> CONFIG_NF_CONNTRACK_SIP=m
+> CONFIG_NF_CONNTRACK_TFTP=m
+> CONFIG_NF_CT_NETLINK=m
+> CONFIG_NF_CT_NETLINK_TIMEOUT=m
+> CONFIG_NF_CT_NETLINK_HELPER=m
+> CONFIG_NETFILTER_NETLINK_GLUE_CT=y
+> CONFIG_NF_NAT=m
+> CONFIG_NF_NAT_AMANDA=m
+> CONFIG_NF_NAT_FTP=m
+> CONFIG_NF_NAT_IRC=m
+> CONFIG_NF_NAT_SIP=m
+> CONFIG_NF_NAT_TFTP=m
+> CONFIG_NF_NAT_REDIRECT=y
+> CONFIG_NF_NAT_MASQUERADE=y
+> CONFIG_NETFILTER_SYNPROXY=m
+> CONFIG_NF_TABLES=m
+> CONFIG_NF_TABLES_INET=y
+> CONFIG_NF_TABLES_NETDEV=y
+> CONFIG_NFT_NUMGEN=m
+> CONFIG_NFT_CT=m
+> CONFIG_NFT_CONNLIMIT=m
+> CONFIG_NFT_LOG=m
+> CONFIG_NFT_LIMIT=m
+> CONFIG_NFT_MASQ=m
+> CONFIG_NFT_REDIR=m
+> CONFIG_NFT_NAT=m
+> # CONFIG_NFT_TUNNEL is not set
+> CONFIG_NFT_OBJREF=m
+> CONFIG_NFT_QUEUE=m
+> CONFIG_NFT_QUOTA=m
+> CONFIG_NFT_REJECT=m
+> CONFIG_NFT_REJECT_INET=m
+> CONFIG_NFT_COMPAT=m
+> CONFIG_NFT_HASH=m
+> CONFIG_NFT_FIB=m
+> CONFIG_NFT_FIB_INET=m
+> # CONFIG_NFT_XFRM is not set
+> CONFIG_NFT_SOCKET=m
+> # CONFIG_NFT_OSF is not set
+> # CONFIG_NFT_TPROXY is not set
+> # CONFIG_NFT_SYNPROXY is not set
+> CONFIG_NF_DUP_NETDEV=m
+> CONFIG_NFT_DUP_NETDEV=m
+> CONFIG_NFT_FWD_NETDEV=m
+> CONFIG_NFT_FIB_NETDEV=m
+> # CONFIG_NFT_REJECT_NETDEV is not set
+> # CONFIG_NF_FLOW_TABLE is not set
+> CONFIG_NETFILTER_XTABLES=y
+> CONFIG_NETFILTER_XTABLES_COMPAT=y
+> 
+> #
+> # Xtables combined modules
+> #
+> CONFIG_NETFILTER_XT_MARK=m
+> CONFIG_NETFILTER_XT_CONNMARK=m
+> CONFIG_NETFILTER_XT_SET=m
+> 
+> #
+> # Xtables targets
+> #
+> CONFIG_NETFILTER_XT_TARGET_AUDIT=m
+> CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
+> CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+> CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
+> CONFIG_NETFILTER_XT_TARGET_CONNSECMARK=m
+> CONFIG_NETFILTER_XT_TARGET_CT=m
+> CONFIG_NETFILTER_XT_TARGET_DSCP=m
+> CONFIG_NETFILTER_XT_TARGET_HL=m
+> CONFIG_NETFILTER_XT_TARGET_HMARK=m
+> CONFIG_NETFILTER_XT_TARGET_IDLETIMER=m
+> # CONFIG_NETFILTER_XT_TARGET_LED is not set
+> CONFIG_NETFILTER_XT_TARGET_LOG=m
+> CONFIG_NETFILTER_XT_TARGET_MARK=m
+> CONFIG_NETFILTER_XT_NAT=m
+> CONFIG_NETFILTER_XT_TARGET_NETMAP=m
+> CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+> CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+> CONFIG_NETFILTER_XT_TARGET_NOTRACK=m
+> CONFIG_NETFILTER_XT_TARGET_RATEEST=m
+> CONFIG_NETFILTER_XT_TARGET_REDIRECT=m
+> CONFIG_NETFILTER_XT_TARGET_MASQUERADE=m
+> CONFIG_NETFILTER_XT_TARGET_TEE=m
+> CONFIG_NETFILTER_XT_TARGET_TPROXY=m
+> CONFIG_NETFILTER_XT_TARGET_TRACE=m
+> CONFIG_NETFILTER_XT_TARGET_SECMARK=m
+> CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+> CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP=m
+> 
+> #
+> # Xtables matches
+> #
+> CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
+> CONFIG_NETFILTER_XT_MATCH_BPF=m
+> CONFIG_NETFILTER_XT_MATCH_CGROUP=m
+> CONFIG_NETFILTER_XT_MATCH_CLUSTER=m
+> CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+> CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+> CONFIG_NETFILTER_XT_MATCH_CONNLABEL=m
+> CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
+> CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+> CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+> CONFIG_NETFILTER_XT_MATCH_CPU=m
+> CONFIG_NETFILTER_XT_MATCH_DCCP=m
+> CONFIG_NETFILTER_XT_MATCH_DEVGROUP=m
+> CONFIG_NETFILTER_XT_MATCH_DSCP=m
+> CONFIG_NETFILTER_XT_MATCH_ECN=m
+> CONFIG_NETFILTER_XT_MATCH_ESP=m
+> CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+> CONFIG_NETFILTER_XT_MATCH_HELPER=m
+> CONFIG_NETFILTER_XT_MATCH_HL=m
+> # CONFIG_NETFILTER_XT_MATCH_IPCOMP is not set
+> CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
+> CONFIG_NETFILTER_XT_MATCH_IPVS=m
+> # CONFIG_NETFILTER_XT_MATCH_L2TP is not set
+> CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+> CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+> CONFIG_NETFILTER_XT_MATCH_MAC=m
+> CONFIG_NETFILTER_XT_MATCH_MARK=m
+> CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+> # CONFIG_NETFILTER_XT_MATCH_NFACCT is not set
+> CONFIG_NETFILTER_XT_MATCH_OSF=m
+> CONFIG_NETFILTER_XT_MATCH_OWNER=m
+> CONFIG_NETFILTER_XT_MATCH_POLICY=m
+> CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
+> CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+> CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+> CONFIG_NETFILTER_XT_MATCH_RATEEST=m
+> CONFIG_NETFILTER_XT_MATCH_REALM=m
+> CONFIG_NETFILTER_XT_MATCH_RECENT=m
+> CONFIG_NETFILTER_XT_MATCH_SCTP=m
+> CONFIG_NETFILTER_XT_MATCH_SOCKET=m
+> CONFIG_NETFILTER_XT_MATCH_STATE=m
+> CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+> CONFIG_NETFILTER_XT_MATCH_STRING=m
+> CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+> # CONFIG_NETFILTER_XT_MATCH_TIME is not set
+> # CONFIG_NETFILTER_XT_MATCH_U32 is not set
+> # end of Core Netfilter Configuration
+> 
+> CONFIG_IP_SET=m
+> CONFIG_IP_SET_MAX=256
+> CONFIG_IP_SET_BITMAP_IP=m
+> CONFIG_IP_SET_BITMAP_IPMAC=m
+> CONFIG_IP_SET_BITMAP_PORT=m
+> CONFIG_IP_SET_HASH_IP=m
+> CONFIG_IP_SET_HASH_IPMARK=m
+> CONFIG_IP_SET_HASH_IPPORT=m
+> CONFIG_IP_SET_HASH_IPPORTIP=m
+> CONFIG_IP_SET_HASH_IPPORTNET=m
+> CONFIG_IP_SET_HASH_IPMAC=m
+> CONFIG_IP_SET_HASH_MAC=m
+> CONFIG_IP_SET_HASH_NETPORTNET=m
+> CONFIG_IP_SET_HASH_NET=m
+> CONFIG_IP_SET_HASH_NETNET=m
+> CONFIG_IP_SET_HASH_NETPORT=m
+> CONFIG_IP_SET_HASH_NETIFACE=m
+> CONFIG_IP_SET_LIST_SET=m
+> CONFIG_IP_VS=m
+> CONFIG_IP_VS_IPV6=y
+> # CONFIG_IP_VS_DEBUG is not set
+> CONFIG_IP_VS_TAB_BITS=12
+> 
+> #
+> # IPVS transport protocol load balancing support
+> #
+> CONFIG_IP_VS_PROTO_TCP=y
+> CONFIG_IP_VS_PROTO_UDP=y
+> CONFIG_IP_VS_PROTO_AH_ESP=y
+> CONFIG_IP_VS_PROTO_ESP=y
+> CONFIG_IP_VS_PROTO_AH=y
+> CONFIG_IP_VS_PROTO_SCTP=y
+> 
+> #
+> # IPVS scheduler
+> #
+> CONFIG_IP_VS_RR=m
+> CONFIG_IP_VS_WRR=m
+> CONFIG_IP_VS_LC=m
+> CONFIG_IP_VS_WLC=m
+> CONFIG_IP_VS_FO=m
+> CONFIG_IP_VS_OVF=m
+> CONFIG_IP_VS_LBLC=m
+> CONFIG_IP_VS_LBLCR=m
+> CONFIG_IP_VS_DH=m
+> CONFIG_IP_VS_SH=m
+> # CONFIG_IP_VS_MH is not set
+> CONFIG_IP_VS_SED=m
+> CONFIG_IP_VS_NQ=m
+> # CONFIG_IP_VS_TWOS is not set
+> 
+> #
+> # IPVS SH scheduler
+> #
+> CONFIG_IP_VS_SH_TAB_BITS=8
+> 
+> #
+> # IPVS MH scheduler
+> #
+> CONFIG_IP_VS_MH_TAB_INDEX=12
+> 
+> #
+> # IPVS application helper
+> #
+> CONFIG_IP_VS_FTP=m
+> CONFIG_IP_VS_NFCT=y
+> CONFIG_IP_VS_PE_SIP=m
+> 
+> #
+> # IP: Netfilter Configuration
+> #
+> CONFIG_NF_DEFRAG_IPV4=m
+> CONFIG_NF_SOCKET_IPV4=m
+> CONFIG_NF_TPROXY_IPV4=m
+> CONFIG_NF_TABLES_IPV4=y
+> CONFIG_NFT_REJECT_IPV4=m
+> CONFIG_NFT_DUP_IPV4=m
+> CONFIG_NFT_FIB_IPV4=m
+> CONFIG_NF_TABLES_ARP=y
+> CONFIG_NF_DUP_IPV4=m
+> CONFIG_NF_LOG_ARP=m
+> CONFIG_NF_LOG_IPV4=m
+> CONFIG_NF_REJECT_IPV4=m
+> CONFIG_NF_NAT_SNMP_BASIC=m
+> CONFIG_NF_NAT_PPTP=m
+> CONFIG_NF_NAT_H323=m
+> CONFIG_IP_NF_IPTABLES=m
+> CONFIG_IP_NF_MATCH_AH=m
+> CONFIG_IP_NF_MATCH_ECN=m
+> CONFIG_IP_NF_MATCH_RPFILTER=m
+> CONFIG_IP_NF_MATCH_TTL=m
+> CONFIG_IP_NF_FILTER=m
+> CONFIG_IP_NF_TARGET_REJECT=m
+> CONFIG_IP_NF_TARGET_SYNPROXY=m
+> CONFIG_IP_NF_NAT=m
+> CONFIG_IP_NF_TARGET_MASQUERADE=m
+> CONFIG_IP_NF_TARGET_NETMAP=m
+> CONFIG_IP_NF_TARGET_REDIRECT=m
+> CONFIG_IP_NF_MANGLE=m
+> # CONFIG_IP_NF_TARGET_CLUSTERIP is not set
+> CONFIG_IP_NF_TARGET_ECN=m
+> CONFIG_IP_NF_TARGET_TTL=m
+> CONFIG_IP_NF_RAW=m
+> CONFIG_IP_NF_SECURITY=m
+> CONFIG_IP_NF_ARPTABLES=m
+> CONFIG_IP_NF_ARPFILTER=m
+> CONFIG_IP_NF_ARP_MANGLE=m
+> # end of IP: Netfilter Configuration
+> 
+> #
+> # IPv6: Netfilter Configuration
+> #
+> CONFIG_NF_SOCKET_IPV6=m
+> CONFIG_NF_TPROXY_IPV6=m
+> CONFIG_NF_TABLES_IPV6=y
+> CONFIG_NFT_REJECT_IPV6=m
+> CONFIG_NFT_DUP_IPV6=m
+> CONFIG_NFT_FIB_IPV6=m
+> CONFIG_NF_DUP_IPV6=m
+> CONFIG_NF_REJECT_IPV6=m
+> CONFIG_NF_LOG_IPV6=m
+> CONFIG_IP6_NF_IPTABLES=m
+> CONFIG_IP6_NF_MATCH_AH=m
+> CONFIG_IP6_NF_MATCH_EUI64=m
+> CONFIG_IP6_NF_MATCH_FRAG=m
+> CONFIG_IP6_NF_MATCH_OPTS=m
+> CONFIG_IP6_NF_MATCH_HL=m
+> CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+> CONFIG_IP6_NF_MATCH_MH=m
+> CONFIG_IP6_NF_MATCH_RPFILTER=m
+> CONFIG_IP6_NF_MATCH_RT=m
+> # CONFIG_IP6_NF_MATCH_SRH is not set
+> # CONFIG_IP6_NF_TARGET_HL is not set
+> CONFIG_IP6_NF_FILTER=m
+> CONFIG_IP6_NF_TARGET_REJECT=m
+> CONFIG_IP6_NF_TARGET_SYNPROXY=m
+> CONFIG_IP6_NF_MANGLE=m
+> CONFIG_IP6_NF_RAW=m
+> CONFIG_IP6_NF_SECURITY=m
+> CONFIG_IP6_NF_NAT=m
+> CONFIG_IP6_NF_TARGET_MASQUERADE=m
+> CONFIG_IP6_NF_TARGET_NPT=m
+> # end of IPv6: Netfilter Configuration
+> 
+> CONFIG_NF_DEFRAG_IPV6=m
+> CONFIG_NF_TABLES_BRIDGE=m
+> # CONFIG_NFT_BRIDGE_META is not set
+> CONFIG_NFT_BRIDGE_REJECT=m
+> # CONFIG_NF_CONNTRACK_BRIDGE is not set
+> CONFIG_BRIDGE_NF_EBTABLES=m
+> CONFIG_BRIDGE_EBT_BROUTE=m
+> CONFIG_BRIDGE_EBT_T_FILTER=m
+> CONFIG_BRIDGE_EBT_T_NAT=m
+> CONFIG_BRIDGE_EBT_802_3=m
+> CONFIG_BRIDGE_EBT_AMONG=m
+> CONFIG_BRIDGE_EBT_ARP=m
+> CONFIG_BRIDGE_EBT_IP=m
+> CONFIG_BRIDGE_EBT_IP6=m
+> CONFIG_BRIDGE_EBT_LIMIT=m
+> CONFIG_BRIDGE_EBT_MARK=m
+> CONFIG_BRIDGE_EBT_PKTTYPE=m
+> CONFIG_BRIDGE_EBT_STP=m
+> CONFIG_BRIDGE_EBT_VLAN=m
+> CONFIG_BRIDGE_EBT_ARPREPLY=m
+> CONFIG_BRIDGE_EBT_DNAT=m
+> CONFIG_BRIDGE_EBT_MARK_T=m
+> CONFIG_BRIDGE_EBT_REDIRECT=m
+> CONFIG_BRIDGE_EBT_SNAT=m
+> CONFIG_BRIDGE_EBT_LOG=m
+> CONFIG_BRIDGE_EBT_NFLOG=m
 > # CONFIG_BPFILTER is not set
 > # CONFIG_IP_DCCP is not set
-> # CONFIG_IP_SCTP is not set
+> CONFIG_IP_SCTP=m
+> # CONFIG_SCTP_DBG_OBJCNT is not set
+> # CONFIG_SCTP_DEFAULT_COOKIE_HMAC_MD5 is not set
+> CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1=y
+> # CONFIG_SCTP_DEFAULT_COOKIE_HMAC_NONE is not set
+> CONFIG_SCTP_COOKIE_HMAC_MD5=y
+> CONFIG_SCTP_COOKIE_HMAC_SHA1=y
+> CONFIG_INET_SCTP_DIAG=m
 > # CONFIG_RDS is not set
-> # CONFIG_TIPC is not set
+> CONFIG_TIPC=m
+> # CONFIG_TIPC_MEDIA_IB is not set
+> CONFIG_TIPC_MEDIA_UDP=y
+> CONFIG_TIPC_CRYPTO=y
+> CONFIG_TIPC_DIAG=m
 > CONFIG_ATM=m
-> # CONFIG_ATM_CLIP is not set
-> # CONFIG_ATM_LANE is not set
-> # CONFIG_ATM_BR2684 is not set
-> # CONFIG_L2TP is not set
-> CONFIG_STP=y
-> CONFIG_GARP=y
-> CONFIG_MRP=y
-> CONFIG_BRIDGE=y
+> CONFIG_ATM_CLIP=m
+> # CONFIG_ATM_CLIP_NO_ICMP is not set
+> CONFIG_ATM_LANE=m
+> # CONFIG_ATM_MPOA is not set
+> CONFIG_ATM_BR2684=m
+> # CONFIG_ATM_BR2684_IPFILTER is not set
+> CONFIG_L2TP=m
+> CONFIG_L2TP_DEBUGFS=m
+> CONFIG_L2TP_V3=y
+> CONFIG_L2TP_IP=m
+> CONFIG_L2TP_ETH=m
+> CONFIG_STP=m
+> CONFIG_GARP=m
+> CONFIG_MRP=m
+> CONFIG_BRIDGE=m
 > CONFIG_BRIDGE_IGMP_SNOOPING=y
 > CONFIG_BRIDGE_VLAN_FILTERING=y
-> CONFIG_BRIDGE_MRP=y
+> # CONFIG_BRIDGE_MRP is not set
 > # CONFIG_BRIDGE_CFM is not set
 > # CONFIG_NET_DSA is not set
-> CONFIG_VLAN_8021Q=y
+> CONFIG_VLAN_8021Q=m
 > CONFIG_VLAN_8021Q_GVRP=y
 > CONFIG_VLAN_8021Q_MVRP=y
-> CONFIG_DECNET=y
-> CONFIG_DECNET_ROUTER=y
-> CONFIG_LLC=y
+> # CONFIG_DECNET is not set
+> CONFIG_LLC=m
 > # CONFIG_LLC2 is not set
 > # CONFIG_ATALK is not set
 > # CONFIG_X25 is not set
-> CONFIG_LAPB=m
+> # CONFIG_LAPB is not set
 > # CONFIG_PHONET is not set
-> # CONFIG_6LOWPAN is not set
-> # CONFIG_IEEE802154 is not set
+> CONFIG_6LOWPAN=m
+> # CONFIG_6LOWPAN_DEBUGFS is not set
+> # CONFIG_6LOWPAN_NHC is not set
+> CONFIG_IEEE802154=m
+> # CONFIG_IEEE802154_NL802154_EXPERIMENTAL is not set
+> CONFIG_IEEE802154_SOCKET=m
+> CONFIG_IEEE802154_6LOWPAN=m
+> CONFIG_MAC802154=m
 > CONFIG_NET_SCHED=y
 > 
 > #
 > # Queueing/Scheduling
 > #
 > CONFIG_NET_SCH_CBQ=m
-> CONFIG_NET_SCH_HTB=y
+> CONFIG_NET_SCH_HTB=m
 > CONFIG_NET_SCH_HFSC=m
 > CONFIG_NET_SCH_ATM=m
-> # CONFIG_NET_SCH_PRIO is not set
+> CONFIG_NET_SCH_PRIO=m
 > CONFIG_NET_SCH_MULTIQ=m
 > CONFIG_NET_SCH_RED=m
-> # CONFIG_NET_SCH_SFB is not set
-> CONFIG_NET_SCH_SFQ=y
-> # CONFIG_NET_SCH_TEQL is not set
-> # CONFIG_NET_SCH_TBF is not set
-> CONFIG_NET_SCH_CBS=y
-> CONFIG_NET_SCH_ETF=m
+> CONFIG_NET_SCH_SFB=m
+> CONFIG_NET_SCH_SFQ=m
+> CONFIG_NET_SCH_TEQL=m
+> CONFIG_NET_SCH_TBF=m
+> # CONFIG_NET_SCH_CBS is not set
+> # CONFIG_NET_SCH_ETF is not set
 > # CONFIG_NET_SCH_TAPRIO is not set
-> CONFIG_NET_SCH_GRED=y
-> # CONFIG_NET_SCH_DSMARK is not set
+> CONFIG_NET_SCH_GRED=m
+> CONFIG_NET_SCH_DSMARK=m
 > CONFIG_NET_SCH_NETEM=m
 > CONFIG_NET_SCH_DRR=m
 > CONFIG_NET_SCH_MQPRIO=m
-> CONFIG_NET_SCH_SKBPRIO=y
-> CONFIG_NET_SCH_CHOKE=y
+> # CONFIG_NET_SCH_SKBPRIO is not set
+> CONFIG_NET_SCH_CHOKE=m
 > CONFIG_NET_SCH_QFQ=m
 > CONFIG_NET_SCH_CODEL=m
-> # CONFIG_NET_SCH_FQ_CODEL is not set
-> CONFIG_NET_SCH_CAKE=y
+> CONFIG_NET_SCH_FQ_CODEL=y
+> # CONFIG_NET_SCH_CAKE is not set
 > CONFIG_NET_SCH_FQ=m
 > CONFIG_NET_SCH_HHF=m
-> # CONFIG_NET_SCH_PIE is not set
+> CONFIG_NET_SCH_PIE=m
+> # CONFIG_NET_SCH_FQ_PIE is not set
+> CONFIG_NET_SCH_INGRESS=m
 > CONFIG_NET_SCH_PLUG=m
-> CONFIG_NET_SCH_ETS=y
-> # CONFIG_NET_SCH_DEFAULT is not set
+> # CONFIG_NET_SCH_ETS is not set
+> CONFIG_NET_SCH_DEFAULT=y
+> # CONFIG_DEFAULT_FQ is not set
+> # CONFIG_DEFAULT_CODEL is not set
+> CONFIG_DEFAULT_FQ_CODEL=y
+> # CONFIG_DEFAULT_SFQ is not set
+> # CONFIG_DEFAULT_PFIFO_FAST is not set
+> CONFIG_DEFAULT_NET_SCH="fq_codel"
 > 
 > #
 > # Classification
 > #
 > CONFIG_NET_CLS=y
-> CONFIG_NET_CLS_BASIC=y
-> CONFIG_NET_CLS_TCINDEX=y
-> # CONFIG_NET_CLS_ROUTE4 is not set
-> CONFIG_NET_CLS_FW=y
-> CONFIG_NET_CLS_U32=y
-> # CONFIG_CLS_U32_PERF is not set
+> CONFIG_NET_CLS_BASIC=m
+> CONFIG_NET_CLS_TCINDEX=m
+> CONFIG_NET_CLS_ROUTE4=m
+> CONFIG_NET_CLS_FW=m
+> CONFIG_NET_CLS_U32=m
+> CONFIG_CLS_U32_PERF=y
 > CONFIG_CLS_U32_MARK=y
-> CONFIG_NET_CLS_RSVP=y
-> CONFIG_NET_CLS_RSVP6=y
-> # CONFIG_NET_CLS_FLOW is not set
-> # CONFIG_NET_CLS_CGROUP is not set
-> # CONFIG_NET_CLS_BPF is not set
-> CONFIG_NET_CLS_FLOWER=y
+> CONFIG_NET_CLS_RSVP=m
+> CONFIG_NET_CLS_RSVP6=m
+> CONFIG_NET_CLS_FLOW=m
+> CONFIG_NET_CLS_CGROUP=y
+> CONFIG_NET_CLS_BPF=m
+> CONFIG_NET_CLS_FLOWER=m
 > CONFIG_NET_CLS_MATCHALL=m
-> # CONFIG_NET_EMATCH is not set
-> # CONFIG_NET_CLS_ACT is not set
+> CONFIG_NET_EMATCH=y
+> CONFIG_NET_EMATCH_STACK=32
+> CONFIG_NET_EMATCH_CMP=m
+> CONFIG_NET_EMATCH_NBYTE=m
+> CONFIG_NET_EMATCH_U32=m
+> CONFIG_NET_EMATCH_META=m
+> CONFIG_NET_EMATCH_TEXT=m
+> # CONFIG_NET_EMATCH_CANID is not set
+> CONFIG_NET_EMATCH_IPSET=m
+> # CONFIG_NET_EMATCH_IPT is not set
+> CONFIG_NET_CLS_ACT=y
+> CONFIG_NET_ACT_POLICE=m
+> CONFIG_NET_ACT_GACT=m
+> CONFIG_GACT_PROB=y
+> CONFIG_NET_ACT_MIRRED=m
+> CONFIG_NET_ACT_SAMPLE=m
+> # CONFIG_NET_ACT_IPT is not set
+> CONFIG_NET_ACT_NAT=m
+> CONFIG_NET_ACT_PEDIT=m
+> CONFIG_NET_ACT_SIMP=m
+> CONFIG_NET_ACT_SKBEDIT=m
+> CONFIG_NET_ACT_CSUM=m
+> # CONFIG_NET_ACT_MPLS is not set
+> CONFIG_NET_ACT_VLAN=m
+> CONFIG_NET_ACT_BPF=m
+> # CONFIG_NET_ACT_CONNMARK is not set
+> # CONFIG_NET_ACT_CTINFO is not set
+> CONFIG_NET_ACT_SKBMOD=m
+> # CONFIG_NET_ACT_IFE is not set
+> CONFIG_NET_ACT_TUNNEL_KEY=m
+> # CONFIG_NET_ACT_GATE is not set
+> # CONFIG_NET_TC_SKB_EXT is not set
 > CONFIG_NET_SCH_FIFO=y
 > CONFIG_DCB=y
-> CONFIG_DNS_RESOLVER=y
-> CONFIG_BATMAN_ADV=y
-> CONFIG_BATMAN_ADV_BATMAN_V=y
-> CONFIG_BATMAN_ADV_BLA=y
-> CONFIG_BATMAN_ADV_DAT=y
-> CONFIG_BATMAN_ADV_NC=y
-> CONFIG_BATMAN_ADV_MCAST=y
-> CONFIG_BATMAN_ADV_DEBUG=y
-> # CONFIG_BATMAN_ADV_TRACING is not set
-> # CONFIG_OPENVSWITCH is not set
-> # CONFIG_VSOCKETS is not set
-> # CONFIG_NETLINK_DIAG is not set
+> CONFIG_DNS_RESOLVER=m
+> # CONFIG_BATMAN_ADV is not set
+> CONFIG_OPENVSWITCH=m
+> CONFIG_OPENVSWITCH_GRE=m
+> CONFIG_VSOCKETS=m
+> CONFIG_VSOCKETS_DIAG=m
+> CONFIG_VSOCKETS_LOOPBACK=m
+> CONFIG_VMWARE_VMCI_VSOCKETS=m
+> CONFIG_VIRTIO_VSOCKETS=m
+> CONFIG_VIRTIO_VSOCKETS_COMMON=m
+> CONFIG_NETLINK_DIAG=m
 > CONFIG_MPLS=y
 > CONFIG_NET_MPLS_GSO=y
-> # CONFIG_MPLS_ROUTING is not set
-> # CONFIG_NET_NSH is not set
+> CONFIG_MPLS_ROUTING=m
+> CONFIG_MPLS_IPTUNNEL=m
+> CONFIG_NET_NSH=y
 > # CONFIG_HSR is not set
-> # CONFIG_NET_SWITCHDEV is not set
-> # CONFIG_NET_L3_MASTER_DEV is not set
-> CONFIG_QRTR=y
-> CONFIG_QRTR_SMD=y
-> CONFIG_QRTR_TUN=m
-> CONFIG_QRTR_MHI=m
+> CONFIG_NET_SWITCHDEV=y
+> CONFIG_NET_L3_MASTER_DEV=y
+> # CONFIG_QRTR is not set
 > # CONFIG_NET_NCSI is not set
 > CONFIG_PCPU_DEV_REFCNT=y
 > CONFIG_RPS=y
 > CONFIG_RFS_ACCEL=y
 > CONFIG_SOCK_RX_QUEUE_MAPPING=y
 > CONFIG_XPS=y
-> # CONFIG_CGROUP_NET_PRIO is not set
-> # CONFIG_CGROUP_NET_CLASSID is not set
+> CONFIG_CGROUP_NET_PRIO=y
+> CONFIG_CGROUP_NET_CLASSID=y
 > CONFIG_NET_RX_BUSY_POLL=y
 > CONFIG_BQL=y
+> CONFIG_BPF_STREAM_PARSER=y
 > CONFIG_NET_FLOW_LIMIT=y
 > 
 > #
 > # Network testing
 > #
-> # CONFIG_NET_PKTGEN is not set
-> # CONFIG_NET_DROP_MONITOR is not set
+> CONFIG_NET_PKTGEN=m
+> CONFIG_NET_DROP_MONITOR=y
 > # end of Network testing
 > # end of Networking options
 > 
-> CONFIG_HAMRADIO=y
-> 
-> #
-> # Packet Radio protocols
-> #
-> CONFIG_AX25=y
-> CONFIG_AX25_DAMA_SLAVE=y
-> CONFIG_NETROM=y
-> CONFIG_ROSE=y
-> 
-> #
-> # AX.25 network device drivers
-> #
-> CONFIG_MKISS=y
-> CONFIG_6PACK=y
-> # CONFIG_BPQETHER is not set
-> # CONFIG_BAYCOM_SER_FDX is not set
-> # CONFIG_BAYCOM_SER_HDX is not set
-> CONFIG_BAYCOM_PAR=m
-> CONFIG_YAM=m
-> # end of AX.25 network device drivers
-> 
+> # CONFIG_HAMRADIO is not set
 > CONFIG_CAN=m
-> # CONFIG_CAN_RAW is not set
+> CONFIG_CAN_RAW=m
 > CONFIG_CAN_BCM=m
-> # CONFIG_CAN_GW is not set
+> CONFIG_CAN_GW=m
 > # CONFIG_CAN_J1939 is not set
-> CONFIG_CAN_ISOTP=m
+> # CONFIG_CAN_ISOTP is not set
 > 
 > #
 > # CAN Device Drivers
 > #
-> # CONFIG_CAN_VCAN is not set
-> CONFIG_CAN_VXCAN=m
+> CONFIG_CAN_VCAN=m
+> # CONFIG_CAN_VXCAN is not set
 > CONFIG_CAN_SLCAN=m
 > CONFIG_CAN_DEV=m
 > CONFIG_CAN_CALC_BITTIMING=y
-> CONFIG_CAN_FLEXCAN=m
-> CONFIG_CAN_GRCAN=m
-> CONFIG_CAN_KVASER_PCIEFD=m
-> # CONFIG_CAN_C_CAN is not set
+> # CONFIG_CAN_KVASER_PCIEFD is not set
+> CONFIG_CAN_C_CAN=m
+> CONFIG_CAN_C_CAN_PLATFORM=m
+> CONFIG_CAN_C_CAN_PCI=m
 > CONFIG_CAN_CC770=m
-> CONFIG_CAN_CC770_ISA=m
-> # CONFIG_CAN_CC770_PLATFORM is not set
+> # CONFIG_CAN_CC770_ISA is not set
+> CONFIG_CAN_CC770_PLATFORM=m
 > # CONFIG_CAN_IFI_CANFD is not set
-> CONFIG_CAN_M_CAN=m
-> CONFIG_CAN_M_CAN_PCI=m
-> CONFIG_CAN_M_CAN_PLATFORM=m
-> CONFIG_CAN_PEAK_PCIEFD=m
+> # CONFIG_CAN_M_CAN is not set
+> # CONFIG_CAN_PEAK_PCIEFD is not set
 > CONFIG_CAN_SJA1000=m
 > CONFIG_CAN_EMS_PCI=m
-> CONFIG_CAN_EMS_PCMCIA=m
-> CONFIG_CAN_F81601=m
+> # CONFIG_CAN_F81601 is not set
 > CONFIG_CAN_KVASER_PCI=m
-> # CONFIG_CAN_PEAK_PCI is not set
-> CONFIG_CAN_PEAK_PCMCIA=m
+> CONFIG_CAN_PEAK_PCI=m
+> CONFIG_CAN_PEAK_PCIEC=y
 > CONFIG_CAN_PLX_PCI=m
 > # CONFIG_CAN_SJA1000_ISA is not set
 > CONFIG_CAN_SJA1000_PLATFORM=m
-> # CONFIG_CAN_SOFTING is not set
+> CONFIG_CAN_SOFTING=m
+> 
+> #
+> # CAN SPI interfaces
+> #
+> # CONFIG_CAN_HI311X is not set
+> # CONFIG_CAN_MCP251X is not set
+> # CONFIG_CAN_MCP251XFD is not set
+> # end of CAN SPI interfaces
 > 
 > #
 > # CAN USB interfaces
 > #
-> CONFIG_CAN_8DEV_USB=m
+> # CONFIG_CAN_8DEV_USB is not set
 > # CONFIG_CAN_EMS_USB is not set
-> CONFIG_CAN_ESD_USB2=m
-> CONFIG_CAN_ETAS_ES58X=m
-> CONFIG_CAN_GS_USB=m
-> CONFIG_CAN_KVASER_USB=m
-> CONFIG_CAN_MCBA_USB=m
+> # CONFIG_CAN_ESD_USB2 is not set
+> # CONFIG_CAN_ETAS_ES58X is not set
+> # CONFIG_CAN_GS_USB is not set
+> # CONFIG_CAN_KVASER_USB is not set
+> # CONFIG_CAN_MCBA_USB is not set
 > # CONFIG_CAN_PEAK_USB is not set
 > # CONFIG_CAN_UCAN is not set
 > # end of CAN USB interfaces
@@ -1995,95 +2029,59 @@ Thank you for your testing efforts!
 > # CONFIG_CAN_DEBUG_DEVICES is not set
 > # end of CAN Device Drivers
 > 
-> CONFIG_BT=m
-> CONFIG_BT_BREDR=y
-> # CONFIG_BT_RFCOMM is not set
-> CONFIG_BT_BNEP=y
-> # CONFIG_BT_BNEP_MC_FILTER is not set
-> CONFIG_BT_BNEP_PROTO_FILTER=y
-> # CONFIG_BT_HIDP is not set
-> CONFIG_BT_HS=y
-> # CONFIG_BT_LE is not set
-> CONFIG_BT_LEDS=y
-> CONFIG_BT_MSFTEXT=y
-> # CONFIG_BT_AOSPEXT is not set
-> CONFIG_BT_DEBUGFS=y
-> # CONFIG_BT_SELFTEST is not set
-> # CONFIG_BT_FEATURE_DEBUG is not set
-> 
-> #
-> # Bluetooth device drivers
-> #
-> CONFIG_BT_INTEL=m
-> CONFIG_BT_BCM=m
-> CONFIG_BT_HCIBTUSB=m
-> # CONFIG_BT_HCIBTUSB_AUTOSUSPEND is not set
-> CONFIG_BT_HCIBTUSB_BCM=y
-> # CONFIG_BT_HCIBTUSB_MTK is not set
-> # CONFIG_BT_HCIBTUSB_RTL is not set
-> CONFIG_BT_HCIUART=m
-> CONFIG_BT_HCIUART_H4=y
-> CONFIG_BT_HCIUART_BCSP=y
-> # CONFIG_BT_HCIUART_ATH3K is not set
-> CONFIG_BT_HCIUART_INTEL=y
-> CONFIG_BT_HCIUART_AG6XX=y
-> # CONFIG_BT_HCIBCM203X is not set
-> CONFIG_BT_HCIBPA10X=m
-> CONFIG_BT_HCIBFUSB=m
-> CONFIG_BT_HCIDTL1=m
-> CONFIG_BT_HCIBT3C=m
-> # CONFIG_BT_HCIBLUECARD is not set
-> CONFIG_BT_HCIVHCI=m
-> # CONFIG_BT_MRVL is not set
-> # CONFIG_BT_ATH3K is not set
-> CONFIG_BT_VIRTIO=m
-> # end of Bluetooth device drivers
-> 
+> # CONFIG_BT is not set
 > # CONFIG_AF_RXRPC is not set
 > # CONFIG_AF_KCM is not set
+> CONFIG_STREAM_PARSER=y
 > # CONFIG_MCTP is not set
 > CONFIG_FIB_RULES=y
 > CONFIG_WIRELESS=y
-> # CONFIG_CFG80211 is not set
-> 
-> #
-> # CFG80211 needs to be enabled for MAC80211
-> #
+> CONFIG_WEXT_CORE=y
+> CONFIG_WEXT_PROC=y
+> CONFIG_CFG80211=m
+> # CONFIG_NL80211_TESTMODE is not set
+> # CONFIG_CFG80211_DEVELOPER_WARNINGS is not set
+> CONFIG_CFG80211_REQUIRE_SIGNED_REGDB=y
+> CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS=y
+> CONFIG_CFG80211_DEFAULT_PS=y
+> # CONFIG_CFG80211_DEBUGFS is not set
+> CONFIG_CFG80211_CRDA_SUPPORT=y
+> CONFIG_CFG80211_WEXT=y
+> CONFIG_MAC80211=m
+> CONFIG_MAC80211_HAS_RC=y
+> CONFIG_MAC80211_RC_MINSTREL=y
+> CONFIG_MAC80211_RC_DEFAULT_MINSTREL=y
+> CONFIG_MAC80211_RC_DEFAULT="minstrel_ht"
+> CONFIG_MAC80211_MESH=y
+> CONFIG_MAC80211_LEDS=y
+> CONFIG_MAC80211_DEBUGFS=y
+> # CONFIG_MAC80211_MESSAGE_TRACING is not set
+> # CONFIG_MAC80211_DEBUG_MENU is not set
 > CONFIG_MAC80211_STA_HASH_MAX_SIZE=0
-> CONFIG_RFKILL=y
+> CONFIG_RFKILL=m
 > CONFIG_RFKILL_LEDS=y
-> # CONFIG_RFKILL_INPUT is not set
-> CONFIG_RFKILL_GPIO=y
+> CONFIG_RFKILL_INPUT=y
+> # CONFIG_RFKILL_GPIO is not set
 > CONFIG_NET_9P=y
 > CONFIG_NET_9P_FD=y
 > CONFIG_NET_9P_VIRTIO=y
-> CONFIG_NET_9P_DEBUG=y
-> CONFIG_CAIF=y
-> # CONFIG_CAIF_DEBUG is not set
-> CONFIG_CAIF_NETDEV=y
-> # CONFIG_CAIF_USB is not set
-> # CONFIG_CEPH_LIB is not set
-> CONFIG_NFC=m
-> # CONFIG_NFC_DIGITAL is not set
-> # CONFIG_NFC_NCI is not set
-> CONFIG_NFC_HCI=m
-> # CONFIG_NFC_SHDLC is not set
-> 
-> #
-> # Near Field Communication (NFC) devices
-> #
-> CONFIG_NFC_PN533=m
-> CONFIG_NFC_PN533_USB=m
-> CONFIG_NFC_PN533_I2C=m
-> # end of Near Field Communication (NFC) devices
-> 
+> # CONFIG_NET_9P_RDMA is not set
+> # CONFIG_NET_9P_DEBUG is not set
+> # CONFIG_CAIF is not set
+> CONFIG_CEPH_LIB=m
+> # CONFIG_CEPH_LIB_PRETTYDEBUG is not set
+> CONFIG_CEPH_LIB_USE_DNS_RESOLVER=y
+> # CONFIG_NFC is not set
 > CONFIG_PSAMPLE=m
 > # CONFIG_NET_IFE is not set
 > CONFIG_LWTUNNEL=y
 > CONFIG_LWTUNNEL_BPF=y
 > CONFIG_DST_CACHE=y
 > CONFIG_GRO_CELLS=y
-> CONFIG_FAILOVER=y
+> CONFIG_SOCK_VALIDATE_XMIT=y
+> CONFIG_NET_SELFTESTS=y
+> CONFIG_NET_SOCK_MSG=y
+> CONFIG_FAILOVER=m
 > CONFIG_ETHTOOL_NETLINK=y
 > 
 > #
@@ -2094,41 +2092,50 @@ Thank you for your testing efforts!
 > CONFIG_HAVE_PCI=y
 > CONFIG_PCI=y
 > CONFIG_PCI_DOMAINS=y
-> # CONFIG_PCIEPORTBUS is not set
-> # CONFIG_PCIEASPM is not set
-> CONFIG_PCIE_PTM=y
-> # CONFIG_PCI_MSI is not set
+> CONFIG_PCIEPORTBUS=y
+> CONFIG_HOTPLUG_PCI_PCIE=y
+> CONFIG_PCIEAER=y
+> CONFIG_PCIEAER_INJECT=m
+> CONFIG_PCIE_ECRC=y
+> CONFIG_PCIEASPM=y
+> CONFIG_PCIEASPM_DEFAULT=y
+> # CONFIG_PCIEASPM_POWERSAVE is not set
+> # CONFIG_PCIEASPM_POWER_SUPERSAVE is not set
+> # CONFIG_PCIEASPM_PERFORMANCE is not set
+> CONFIG_PCIE_PME=y
+> CONFIG_PCIE_DPC=y
+> # CONFIG_PCIE_PTM is not set
+> # CONFIG_PCIE_EDR is not set
+> CONFIG_PCI_MSI=y
+> CONFIG_PCI_MSI_IRQ_DOMAIN=y
 > CONFIG_PCI_QUIRKS=y
 > # CONFIG_PCI_DEBUG is not set
 > # CONFIG_PCI_REALLOC_ENABLE_AUTO is not set
-> # CONFIG_PCI_STUB is not set
-> # CONFIG_PCI_PF_STUB is not set
+> CONFIG_PCI_STUB=y
+> CONFIG_PCI_PF_STUB=m
 > CONFIG_PCI_ATS=y
 > CONFIG_PCI_LOCKLESS_CONFIG=y
 > CONFIG_PCI_IOV=y
-> # CONFIG_PCI_PRI is not set
-> # CONFIG_PCI_PASID is not set
+> CONFIG_PCI_PRI=y
+> CONFIG_PCI_PASID=y
+> # CONFIG_PCI_P2PDMA is not set
 > CONFIG_PCI_LABEL=y
-> # CONFIG_PCIE_BUS_TUNE_OFF is not set
-> # CONFIG_PCIE_BUS_DEFAULT is not set
-> # CONFIG_PCIE_BUS_SAFE is not set
-> # CONFIG_PCIE_BUS_PERFORMANCE is not set
-> CONFIG_PCIE_BUS_PEER2PEER=y
 > CONFIG_HOTPLUG_PCI=y
 > CONFIG_HOTPLUG_PCI_ACPI=y
-> CONFIG_HOTPLUG_PCI_ACPI_IBM=y
+> CONFIG_HOTPLUG_PCI_ACPI_IBM=m
 > # CONFIG_HOTPLUG_PCI_CPCI is not set
-> # CONFIG_HOTPLUG_PCI_SHPC is not set
+> CONFIG_HOTPLUG_PCI_SHPC=y
 > 
 > #
 > # PCI controller drivers
 > #
-> CONFIG_PCI_FTPCI100=y
-> # CONFIG_PCI_HOST_GENERIC is not set
+> CONFIG_VMD=y
 > 
 > #
 > # DesignWare PCI Core Support
 > #
+> # CONFIG_PCIE_DW_PLAT_HOST is not set
+> # CONFIG_PCI_MESON is not set
 > # end of DesignWare PCI Core Support
 > 
 > #
@@ -2139,11 +2146,6 @@ Thank you for your testing efforts!
 > #
 > # Cadence PCIe controllers support
 > #
-> CONFIG_PCIE_CADENCE=y
-> CONFIG_PCIE_CADENCE_HOST=y
-> CONFIG_PCIE_CADENCE_PLAT=y
-> CONFIG_PCIE_CADENCE_PLAT_HOST=y
-> # CONFIG_PCI_J721E_HOST is not set
 > # end of Cadence PCIe controllers support
 > # end of PCI controller drivers
 > 
@@ -2156,50 +2158,23 @@ Thank you for your testing efforts!
 > #
 > # PCI switch controller drivers
 > #
-> CONFIG_PCI_SW_SWITCHTEC=m
+> # CONFIG_PCI_SW_SWITCHTEC is not set
 > # end of PCI switch controller drivers
 > 
-> CONFIG_CXL_BUS=m
-> CONFIG_CXL_MEM=m
-> CONFIG_CXL_MEM_RAW_COMMANDS=y
-> CONFIG_CXL_ACPI=m
-> CONFIG_PCCARD=y
-> CONFIG_PCMCIA=m
-> CONFIG_PCMCIA_LOAD_CIS=y
-> CONFIG_CARDBUS=y
-> 
-> #
-> # PC-card bridges
-> #
-> # CONFIG_YENTA is not set
-> CONFIG_PD6729=m
-> CONFIG_I82092=m
-> CONFIG_PCCARD_NONSTATIC=y
-> CONFIG_RAPIDIO=m
-> CONFIG_RAPIDIO_DISC_TIMEOUT=30
-> # CONFIG_RAPIDIO_ENABLE_RX_TX_PORTS is not set
-> # CONFIG_RAPIDIO_DEBUG is not set
-> CONFIG_RAPIDIO_ENUM_BASIC=m
-> # CONFIG_RAPIDIO_CHMAN is not set
-> CONFIG_RAPIDIO_MPORT_CDEV=m
-> 
-> #
-> # RapidIO Switch drivers
-> #
-> CONFIG_RAPIDIO_CPS_XX=m
-> CONFIG_RAPIDIO_CPS_GEN2=m
-> CONFIG_RAPIDIO_RXS_GEN3=m
-> # end of RapidIO Switch drivers
+> # CONFIG_CXL_BUS is not set
+> # CONFIG_PCCARD is not set
+> # CONFIG_RAPIDIO is not set
 > 
 > #
 > # Generic Driver Options
 > #
+> CONFIG_AUXILIARY_BUS=y
 > # CONFIG_UEVENT_HELPER is not set
 > CONFIG_DEVTMPFS=y
-> # CONFIG_DEVTMPFS_MOUNT is not set
+> CONFIG_DEVTMPFS_MOUNT=y
 > # CONFIG_DEVTMPFS_SAFE is not set
 > CONFIG_STANDALONE=y
-> # CONFIG_PREVENT_FIRMWARE_BUILD is not set
+> CONFIG_PREVENT_FIRMWARE_BUILD=y
 > 
 > #
 > # Firmware loader
@@ -2209,22 +2184,20 @@ Thank you for your testing efforts!
 > CONFIG_EXTRA_FIRMWARE=""
 > CONFIG_FW_LOADER_USER_HELPER=y
 > # CONFIG_FW_LOADER_USER_HELPER_FALLBACK is not set
-> CONFIG_FW_LOADER_COMPRESS=y
+> # CONFIG_FW_LOADER_COMPRESS is not set
+> CONFIG_FW_CACHE=y
 > # end of Firmware loader
 > 
-> # CONFIG_ALLOW_DEV_COREDUMP is not set
+> CONFIG_ALLOW_DEV_COREDUMP=y
 > # CONFIG_DEBUG_DRIVER is not set
-> CONFIG_DEBUG_DEVRES=y
+> # CONFIG_DEBUG_DEVRES is not set
 > # CONFIG_DEBUG_TEST_DRIVER_REMOVE is not set
 > # CONFIG_TEST_ASYNC_DRIVER_PROBE is not set
 > CONFIG_GENERIC_CPU_AUTOPROBE=y
 > CONFIG_GENERIC_CPU_VULNERABILITIES=y
 > CONFIG_REGMAP=y
 > CONFIG_REGMAP_I2C=m
-> CONFIG_REGMAP_SLIMBUS=m
-> CONFIG_REGMAP_W1=y
-> CONFIG_REGMAP_MMIO=y
-> CONFIG_REGMAP_IRQ=y
+> CONFIG_REGMAP_SPI=m
 > CONFIG_DMA_SHARED_BUFFER=y
 > # CONFIG_DMA_FENCE_TRACE is not set
 > # end of Generic Driver Options
@@ -2232,12 +2205,11 @@ Thank you for your testing efforts!
 > #
 > # Bus devices
 > #
-> CONFIG_MHI_BUS=y
-> CONFIG_MHI_BUS_DEBUG=y
-> CONFIG_MHI_BUS_PCI_GENERIC=m
+> # CONFIG_MHI_BUS is not set
 > # end of Bus devices
 > 
-> # CONFIG_CONNECTOR is not set
+> CONFIG_CONNECTOR=y
+> CONFIG_PROC_EVENTS=y
 > 
 > #
 > # Firmware Drivers
@@ -2249,13 +2221,42 @@ Thank you for your testing efforts!
 > # end of ARM System Control and Management Interface Protocol
 > 
 > CONFIG_EDD=m
-> CONFIG_EDD_OFF=y
+> # CONFIG_EDD_OFF is not set
 > CONFIG_FIRMWARE_MEMMAP=y
+> CONFIG_DMIID=y
+> CONFIG_DMI_SYSFS=y
+> CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK=y
+> # CONFIG_ISCSI_IBFT is not set
 > CONFIG_FW_CFG_SYSFS=y
-> CONFIG_FW_CFG_SYSFS_CMDLINE=y
+> # CONFIG_FW_CFG_SYSFS_CMDLINE is not set
 > CONFIG_SYSFB=y
-> CONFIG_SYSFB_SIMPLEFB=y
+> # CONFIG_SYSFB_SIMPLEFB is not set
 > # CONFIG_GOOGLE_FIRMWARE is not set
+> 
+> #
+> # EFI (Extensible Firmware Interface) Support
+> #
+> CONFIG_EFI_VARS=y
+> CONFIG_EFI_ESRT=y
+> CONFIG_EFI_VARS_PSTORE=y
+> CONFIG_EFI_VARS_PSTORE_DEFAULT_DISABLE=y
+> CONFIG_EFI_RUNTIME_MAP=y
+> # CONFIG_EFI_FAKE_MEMMAP is not set
+> CONFIG_EFI_RUNTIME_WRAPPERS=y
+> CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
+> # CONFIG_EFI_BOOTLOADER_CONTROL is not set
+> # CONFIG_EFI_CAPSULE_LOADER is not set
+> # CONFIG_EFI_TEST is not set
+> # CONFIG_APPLE_PROPERTIES is not set
+> # CONFIG_RESET_ATTACK_MITIGATION is not set
+> # CONFIG_EFI_RCI2_TABLE is not set
+> # CONFIG_EFI_DISABLE_PCI_DMA is not set
+> # end of EFI (Extensible Firmware Interface) Support
+> 
+> CONFIG_UEFI_CPER=y
+> CONFIG_UEFI_CPER_X86=y
+> CONFIG_EFI_EARLYCON=y
+> CONFIG_EFI_CUSTOM_SSDT_OVERLAYS=y
 > 
 > #
 > # Tegra firmware driver
@@ -2263,81 +2264,116 @@ Thank you for your testing efforts!
 > # end of Tegra firmware driver
 > # end of Firmware Drivers
 > 
-> CONFIG_GNSS=m
-> # CONFIG_GNSS_USB is not set
+> # CONFIG_GNSS is not set
 > # CONFIG_MTD is not set
-> CONFIG_DTC=y
-> CONFIG_OF=y
-> # CONFIG_OF_UNITTEST is not set
-> CONFIG_OF_FLATTREE=y
-> CONFIG_OF_EARLY_FLATTREE=y
-> CONFIG_OF_KOBJ=y
-> CONFIG_OF_DYNAMIC=y
-> CONFIG_OF_ADDRESS=y
-> CONFIG_OF_IRQ=y
-> CONFIG_OF_RESERVED_MEM=y
-> CONFIG_OF_RESOLVE=y
-> CONFIG_OF_OVERLAY=y
+> # CONFIG_OF is not set
 > CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=y
-> CONFIG_PARPORT=y
-> # CONFIG_PARPORT_PC is not set
-> CONFIG_PARPORT_AX88796=y
-> # CONFIG_PARPORT_1284 is not set
-> CONFIG_PARPORT_NOT_PC=y
+> CONFIG_PARPORT=m
+> CONFIG_PARPORT_PC=m
+> CONFIG_PARPORT_SERIAL=m
+> # CONFIG_PARPORT_PC_FIFO is not set
+> # CONFIG_PARPORT_PC_SUPERIO is not set
+> # CONFIG_PARPORT_AX88796 is not set
+> CONFIG_PARPORT_1284=y
 > CONFIG_PNP=y
-> CONFIG_PNP_DEBUG_MESSAGES=y
+> # CONFIG_PNP_DEBUG_MESSAGES is not set
 > 
 > #
 > # Protocols
 > #
 > CONFIG_PNPACPI=y
+> CONFIG_BLK_DEV=y
+> CONFIG_BLK_DEV_NULL_BLK=m
+> CONFIG_BLK_DEV_NULL_BLK_FAULT_INJECTION=y
+> # CONFIG_BLK_DEV_FD is not set
+> CONFIG_CDROM=m
+> # CONFIG_PARIDE is not set
+> # CONFIG_BLK_DEV_PCIESSD_MTIP32XX is not set
+> CONFIG_ZRAM=m
+> CONFIG_ZRAM_DEF_COMP_LZORLE=y
+> # CONFIG_ZRAM_DEF_COMP_LZO is not set
+> CONFIG_ZRAM_DEF_COMP="lzo-rle"
+> CONFIG_ZRAM_WRITEBACK=y
+> # CONFIG_ZRAM_MEMORY_TRACKING is not set
+> CONFIG_BLK_DEV_LOOP=m
+> CONFIG_BLK_DEV_LOOP_MIN_COUNT=0
+> # CONFIG_BLK_DEV_DRBD is not set
+> CONFIG_BLK_DEV_NBD=m
+> # CONFIG_BLK_DEV_SX8 is not set
+> CONFIG_BLK_DEV_RAM=m
+> CONFIG_BLK_DEV_RAM_COUNT=16
+> CONFIG_BLK_DEV_RAM_SIZE=16384
+> CONFIG_CDROM_PKTCDVD=m
+> CONFIG_CDROM_PKTCDVD_BUFFERS=8
+> # CONFIG_CDROM_PKTCDVD_WCACHE is not set
+> # CONFIG_ATA_OVER_ETH is not set
+> CONFIG_VIRTIO_BLK=m
+> CONFIG_BLK_DEV_RBD=m
 > 
 > #
 > # NVME Support
 > #
+> CONFIG_NVME_CORE=m
+> CONFIG_BLK_DEV_NVME=m
+> CONFIG_NVME_MULTIPATH=y
+> # CONFIG_NVME_HWMON is not set
+> CONFIG_NVME_FABRICS=m
+> # CONFIG_NVME_RDMA is not set
+> CONFIG_NVME_FC=m
+> # CONFIG_NVME_TCP is not set
+> CONFIG_NVME_TARGET=m
+> # CONFIG_NVME_TARGET_PASSTHRU is not set
+> CONFIG_NVME_TARGET_LOOP=m
+> # CONFIG_NVME_TARGET_RDMA is not set
+> CONFIG_NVME_TARGET_FC=m
+> CONFIG_NVME_TARGET_FCLOOP=m
+> # CONFIG_NVME_TARGET_TCP is not set
 > # end of NVME Support
 > 
 > #
 > # Misc devices
 > #
 > CONFIG_SENSORS_LIS3LV02D=m
-> CONFIG_AD525X_DPOT=m
-> CONFIG_AD525X_DPOT_I2C=m
+> # CONFIG_AD525X_DPOT is not set
 > # CONFIG_DUMMY_IRQ is not set
 > # CONFIG_IBM_ASM is not set
-> CONFIG_PHANTOM=m
-> CONFIG_TIFM_CORE=y
-> # CONFIG_TIFM_7XX1 is not set
+> # CONFIG_PHANTOM is not set
+> CONFIG_TIFM_CORE=m
+> CONFIG_TIFM_7XX1=m
 > # CONFIG_ICS932S401 is not set
-> CONFIG_ENCLOSURE_SERVICES=y
+> CONFIG_ENCLOSURE_SERVICES=m
+> CONFIG_SGI_XP=m
 > CONFIG_HP_ILO=m
+> CONFIG_SGI_GRU=m
+> # CONFIG_SGI_GRU_DEBUG is not set
 > CONFIG_APDS9802ALS=m
 > CONFIG_ISL29003=m
 > CONFIG_ISL29020=m
-> # CONFIG_SENSORS_TSL2550 is not set
-> # CONFIG_SENSORS_BH1770 is not set
-> # CONFIG_SENSORS_APDS990X is not set
-> CONFIG_HMC6352=m
-> CONFIG_DS1682=m
-> # CONFIG_VMWARE_BALLOON is not set
-> CONFIG_SRAM=y
-> CONFIG_DW_XDATA_PCIE=m
+> CONFIG_SENSORS_TSL2550=m
+> CONFIG_SENSORS_BH1770=m
+> CONFIG_SENSORS_APDS990X=m
+> # CONFIG_HMC6352 is not set
+> # CONFIG_DS1682 is not set
+> CONFIG_VMWARE_BALLOON=m
+> # CONFIG_LATTICE_ECP3_CONFIG is not set
+> # CONFIG_SRAM is not set
+> # CONFIG_DW_XDATA_PCIE is not set
 > # CONFIG_PCI_ENDPOINT_TEST is not set
 > # CONFIG_XILINX_SDFEC is not set
-> CONFIG_MISC_RTSX=y
-> # CONFIG_HISI_HIKEY_USB is not set
-> CONFIG_C2PORT=m
-> CONFIG_C2PORT_DURAMAR_2150=m
+> CONFIG_MISC_RTSX=m
+> # CONFIG_C2PORT is not set
 > 
 > #
 > # EEPROM support
 > #
-> CONFIG_EEPROM_AT24=m
+> # CONFIG_EEPROM_AT24 is not set
+> # CONFIG_EEPROM_AT25 is not set
 > CONFIG_EEPROM_LEGACY=m
 > CONFIG_EEPROM_MAX6875=m
-> # CONFIG_EEPROM_93CX6 is not set
-> CONFIG_EEPROM_IDT_89HPESX=m
-> CONFIG_EEPROM_EE1004=m
+> CONFIG_EEPROM_93CX6=m
+> # CONFIG_EEPROM_93XX46 is not set
+> # CONFIG_EEPROM_IDT_89HPESX is not set
+> # CONFIG_EEPROM_EE1004 is not set
 > # end of EEPROM support
 > 
 > CONFIG_CB710_CORE=m
@@ -2347,56 +2383,315 @@ Thank you for your testing efforts!
 > #
 > # Texas Instruments shared transport line discipline
 > #
-> CONFIG_TI_ST=m
+> # CONFIG_TI_ST is not set
 > # end of Texas Instruments shared transport line discipline
 > 
 > CONFIG_SENSORS_LIS3_I2C=m
-> 
-> #
-> # Altera FPGA firmware download module (requires I2C)
-> #
 > CONFIG_ALTERA_STAPL=m
-> # CONFIG_INTEL_MEI is not set
-> # CONFIG_INTEL_MEI_ME is not set
+> CONFIG_INTEL_MEI=m
+> CONFIG_INTEL_MEI_ME=m
 > # CONFIG_INTEL_MEI_TXE is not set
+> # CONFIG_INTEL_MEI_HDCP is not set
+> # CONFIG_INTEL_MEI_PXP is not set
 > CONFIG_VMWARE_VMCI=m
 > # CONFIG_GENWQE is not set
-> CONFIG_ECHO=m
-> CONFIG_MISC_ALCOR_PCI=y
+> # CONFIG_ECHO is not set
+> # CONFIG_BCM_VK is not set
+> # CONFIG_MISC_ALCOR_PCI is not set
 > CONFIG_MISC_RTSX_PCI=m
-> CONFIG_MISC_RTSX_USB=y
-> CONFIG_HABANA_AI=m
+> # CONFIG_MISC_RTSX_USB is not set
+> # CONFIG_HABANA_AI is not set
 > # CONFIG_UACCE is not set
 > CONFIG_PVPANIC=y
 > # CONFIG_PVPANIC_MMIO is not set
-> CONFIG_PVPANIC_PCI=y
+> # CONFIG_PVPANIC_PCI is not set
 > # end of Misc devices
 > 
 > #
 > # SCSI device support
 > #
 > CONFIG_SCSI_MOD=y
+> CONFIG_RAID_ATTRS=m
+> CONFIG_SCSI_COMMON=y
+> CONFIG_SCSI=y
+> CONFIG_SCSI_DMA=y
+> CONFIG_SCSI_NETLINK=y
+> CONFIG_SCSI_PROC_FS=y
+> 
+> #
+> # SCSI support type (disk, tape, CD-ROM)
+> #
+> CONFIG_BLK_DEV_SD=m
+> CONFIG_CHR_DEV_ST=m
+> CONFIG_BLK_DEV_SR=m
+> CONFIG_CHR_DEV_SG=m
+> CONFIG_BLK_DEV_BSG=y
+> CONFIG_CHR_DEV_SCH=m
+> CONFIG_SCSI_ENCLOSURE=m
+> CONFIG_SCSI_CONSTANTS=y
+> CONFIG_SCSI_LOGGING=y
+> CONFIG_SCSI_SCAN_ASYNC=y
+> 
+> #
+> # SCSI Transports
+> #
+> CONFIG_SCSI_SPI_ATTRS=m
+> CONFIG_SCSI_FC_ATTRS=m
+> CONFIG_SCSI_ISCSI_ATTRS=m
+> CONFIG_SCSI_SAS_ATTRS=m
+> CONFIG_SCSI_SAS_LIBSAS=m
+> CONFIG_SCSI_SAS_ATA=y
+> CONFIG_SCSI_SAS_HOST_SMP=y
+> CONFIG_SCSI_SRP_ATTRS=m
+> # end of SCSI Transports
+> 
+> CONFIG_SCSI_LOWLEVEL=y
+> # CONFIG_ISCSI_TCP is not set
+> # CONFIG_ISCSI_BOOT_SYSFS is not set
+> # CONFIG_SCSI_CXGB3_ISCSI is not set
+> # CONFIG_SCSI_CXGB4_ISCSI is not set
+> # CONFIG_SCSI_BNX2_ISCSI is not set
+> # CONFIG_BE2ISCSI is not set
+> # CONFIG_BLK_DEV_3W_XXXX_RAID is not set
+> # CONFIG_SCSI_HPSA is not set
+> # CONFIG_SCSI_3W_9XXX is not set
+> # CONFIG_SCSI_3W_SAS is not set
+> # CONFIG_SCSI_ACARD is not set
+> # CONFIG_SCSI_AACRAID is not set
+> # CONFIG_SCSI_AIC7XXX is not set
+> # CONFIG_SCSI_AIC79XX is not set
+> # CONFIG_SCSI_AIC94XX is not set
+> # CONFIG_SCSI_MVSAS is not set
+> # CONFIG_SCSI_MVUMI is not set
+> # CONFIG_SCSI_DPT_I2O is not set
+> # CONFIG_SCSI_ADVANSYS is not set
+> # CONFIG_SCSI_ARCMSR is not set
+> # CONFIG_SCSI_ESAS2R is not set
+> # CONFIG_MEGARAID_NEWGEN is not set
+> # CONFIG_MEGARAID_LEGACY is not set
+> # CONFIG_MEGARAID_SAS is not set
+> CONFIG_SCSI_MPT3SAS=m
+> CONFIG_SCSI_MPT2SAS_MAX_SGE=128
+> CONFIG_SCSI_MPT3SAS_MAX_SGE=128
+> # CONFIG_SCSI_MPT2SAS is not set
+> # CONFIG_SCSI_MPI3MR is not set
+> # CONFIG_SCSI_SMARTPQI is not set
+> # CONFIG_SCSI_UFSHCD is not set
+> # CONFIG_SCSI_HPTIOP is not set
+> # CONFIG_SCSI_BUSLOGIC is not set
+> # CONFIG_SCSI_MYRB is not set
+> # CONFIG_SCSI_MYRS is not set
+> # CONFIG_VMWARE_PVSCSI is not set
+> # CONFIG_LIBFC is not set
+> # CONFIG_SCSI_SNIC is not set
+> # CONFIG_SCSI_DMX3191D is not set
+> # CONFIG_SCSI_FDOMAIN_PCI is not set
+> CONFIG_SCSI_ISCI=m
+> # CONFIG_SCSI_IPS is not set
+> # CONFIG_SCSI_INITIO is not set
+> # CONFIG_SCSI_INIA100 is not set
+> # CONFIG_SCSI_PPA is not set
+> # CONFIG_SCSI_IMM is not set
+> # CONFIG_SCSI_STEX is not set
+> # CONFIG_SCSI_SYM53C8XX_2 is not set
+> # CONFIG_SCSI_IPR is not set
+> # CONFIG_SCSI_QLOGIC_1280 is not set
+> # CONFIG_SCSI_QLA_FC is not set
+> # CONFIG_SCSI_QLA_ISCSI is not set
+> # CONFIG_SCSI_LPFC is not set
+> # CONFIG_SCSI_EFCT is not set
+> # CONFIG_SCSI_DC395x is not set
+> # CONFIG_SCSI_AM53C974 is not set
+> # CONFIG_SCSI_WD719X is not set
+> CONFIG_SCSI_DEBUG=m
+> # CONFIG_SCSI_PMCRAID is not set
+> # CONFIG_SCSI_PM8001 is not set
+> # CONFIG_SCSI_BFA_FC is not set
+> # CONFIG_SCSI_VIRTIO is not set
+> # CONFIG_SCSI_CHELSIO_FCOE is not set
+> CONFIG_SCSI_DH=y
+> CONFIG_SCSI_DH_RDAC=y
+> CONFIG_SCSI_DH_HP_SW=y
+> CONFIG_SCSI_DH_EMC=y
+> CONFIG_SCSI_DH_ALUA=y
 > # end of SCSI device support
 > 
+> CONFIG_ATA=m
+> CONFIG_SATA_HOST=y
+> CONFIG_PATA_TIMINGS=y
+> CONFIG_ATA_VERBOSE_ERROR=y
+> CONFIG_ATA_FORCE=y
+> CONFIG_ATA_ACPI=y
+> # CONFIG_SATA_ZPODD is not set
+> CONFIG_SATA_PMP=y
+> 
+> #
+> # Controllers with non-SFF native interface
+> #
+> CONFIG_SATA_AHCI=m
+> CONFIG_SATA_MOBILE_LPM_POLICY=0
+> CONFIG_SATA_AHCI_PLATFORM=m
+> # CONFIG_SATA_INIC162X is not set
+> # CONFIG_SATA_ACARD_AHCI is not set
+> # CONFIG_SATA_SIL24 is not set
+> CONFIG_ATA_SFF=y
+> 
+> #
+> # SFF controllers with custom DMA interface
+> #
+> # CONFIG_PDC_ADMA is not set
+> # CONFIG_SATA_QSTOR is not set
+> # CONFIG_SATA_SX4 is not set
+> CONFIG_ATA_BMDMA=y
+> 
+> #
+> # SATA SFF controllers with BMDMA
+> #
+> CONFIG_ATA_PIIX=m
+> # CONFIG_SATA_DWC is not set
+> # CONFIG_SATA_MV is not set
+> # CONFIG_SATA_NV is not set
+> # CONFIG_SATA_PROMISE is not set
+> # CONFIG_SATA_SIL is not set
+> # CONFIG_SATA_SIS is not set
+> # CONFIG_SATA_SVW is not set
+> # CONFIG_SATA_ULI is not set
+> # CONFIG_SATA_VIA is not set
+> # CONFIG_SATA_VITESSE is not set
+> 
+> #
+> # PATA SFF controllers with BMDMA
+> #
+> # CONFIG_PATA_ALI is not set
+> # CONFIG_PATA_AMD is not set
+> # CONFIG_PATA_ARTOP is not set
+> # CONFIG_PATA_ATIIXP is not set
+> # CONFIG_PATA_ATP867X is not set
+> # CONFIG_PATA_CMD64X is not set
+> # CONFIG_PATA_CYPRESS is not set
+> # CONFIG_PATA_EFAR is not set
+> # CONFIG_PATA_HPT366 is not set
+> # CONFIG_PATA_HPT37X is not set
+> # CONFIG_PATA_HPT3X2N is not set
+> # CONFIG_PATA_HPT3X3 is not set
+> # CONFIG_PATA_IT8213 is not set
+> # CONFIG_PATA_IT821X is not set
+> # CONFIG_PATA_JMICRON is not set
+> # CONFIG_PATA_MARVELL is not set
+> # CONFIG_PATA_NETCELL is not set
+> # CONFIG_PATA_NINJA32 is not set
+> # CONFIG_PATA_NS87415 is not set
+> # CONFIG_PATA_OLDPIIX is not set
+> # CONFIG_PATA_OPTIDMA is not set
+> # CONFIG_PATA_PDC2027X is not set
+> # CONFIG_PATA_PDC_OLD is not set
+> # CONFIG_PATA_RADISYS is not set
+> # CONFIG_PATA_RDC is not set
+> # CONFIG_PATA_SCH is not set
+> # CONFIG_PATA_SERVERWORKS is not set
+> # CONFIG_PATA_SIL680 is not set
+> # CONFIG_PATA_SIS is not set
+> # CONFIG_PATA_TOSHIBA is not set
+> # CONFIG_PATA_TRIFLEX is not set
+> # CONFIG_PATA_VIA is not set
+> # CONFIG_PATA_WINBOND is not set
+> 
+> #
+> # PIO-only SFF controllers
+> #
+> # CONFIG_PATA_CMD640_PCI is not set
+> # CONFIG_PATA_MPIIX is not set
+> # CONFIG_PATA_NS87410 is not set
+> # CONFIG_PATA_OPTI is not set
+> # CONFIG_PATA_RZ1000 is not set
+> 
+> #
+> # Generic fallback / legacy drivers
+> #
+> # CONFIG_PATA_ACPI is not set
+> CONFIG_ATA_GENERIC=m
+> # CONFIG_PATA_LEGACY is not set
+> CONFIG_MD=y
+> CONFIG_BLK_DEV_MD=y
+> CONFIG_MD_AUTODETECT=y
+> CONFIG_MD_LINEAR=m
+> CONFIG_MD_RAID0=m
+> CONFIG_MD_RAID1=m
+> CONFIG_MD_RAID10=m
+> CONFIG_MD_RAID456=m
+> CONFIG_MD_MULTIPATH=m
+> CONFIG_MD_FAULTY=m
+> CONFIG_MD_CLUSTER=m
+> # CONFIG_BCACHE is not set
+> CONFIG_BLK_DEV_DM_BUILTIN=y
+> CONFIG_BLK_DEV_DM=m
+> CONFIG_DM_DEBUG=y
+> CONFIG_DM_BUFIO=m
+> # CONFIG_DM_DEBUG_BLOCK_MANAGER_LOCKING is not set
+> CONFIG_DM_BIO_PRISON=m
+> CONFIG_DM_PERSISTENT_DATA=m
+> # CONFIG_DM_UNSTRIPED is not set
+> CONFIG_DM_CRYPT=m
+> CONFIG_DM_SNAPSHOT=m
+> CONFIG_DM_THIN_PROVISIONING=m
+> CONFIG_DM_CACHE=m
+> CONFIG_DM_CACHE_SMQ=m
+> CONFIG_DM_WRITECACHE=m
+> # CONFIG_DM_EBS is not set
+> CONFIG_DM_ERA=m
+> # CONFIG_DM_CLONE is not set
+> CONFIG_DM_MIRROR=m
+> CONFIG_DM_LOG_USERSPACE=m
+> CONFIG_DM_RAID=m
+> CONFIG_DM_ZERO=m
+> CONFIG_DM_MULTIPATH=m
+> CONFIG_DM_MULTIPATH_QL=m
+> CONFIG_DM_MULTIPATH_ST=m
+> # CONFIG_DM_MULTIPATH_HST is not set
+> # CONFIG_DM_MULTIPATH_IOA is not set
+> CONFIG_DM_DELAY=m
+> # CONFIG_DM_DUST is not set
+> CONFIG_DM_UEVENT=y
+> CONFIG_DM_FLAKEY=m
+> CONFIG_DM_VERITY=m
+> # CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG is not set
+> # CONFIG_DM_VERITY_FEC is not set
+> CONFIG_DM_SWITCH=m
+> CONFIG_DM_LOG_WRITES=m
+> CONFIG_DM_INTEGRITY=m
+> # CONFIG_DM_ZONED is not set
+> CONFIG_DM_AUDIT=y
+> CONFIG_TARGET_CORE=m
+> CONFIG_TCM_IBLOCK=m
+> CONFIG_TCM_FILEIO=m
+> CONFIG_TCM_PSCSI=m
+> CONFIG_TCM_USER2=m
+> CONFIG_LOOPBACK_TARGET=m
+> CONFIG_ISCSI_TARGET=m
+> # CONFIG_SBP_TARGET is not set
 > # CONFIG_FUSION is not set
 > 
 > #
 > # IEEE 1394 (FireWire) support
 > #
-> CONFIG_FIREWIRE=y
+> CONFIG_FIREWIRE=m
 > CONFIG_FIREWIRE_OHCI=m
-> # CONFIG_FIREWIRE_NET is not set
-> CONFIG_FIREWIRE_NOSY=m
+> CONFIG_FIREWIRE_SBP2=m
+> CONFIG_FIREWIRE_NET=m
+> # CONFIG_FIREWIRE_NOSY is not set
 > # end of IEEE 1394 (FireWire) support
 > 
 > CONFIG_MACINTOSH_DRIVERS=y
-> # CONFIG_MAC_EMUMOUSEBTN is not set
+> CONFIG_MAC_EMUMOUSEBTN=y
 > CONFIG_NETDEVICES=y
+> CONFIG_MII=y
 > CONFIG_NET_CORE=y
 > # CONFIG_BONDING is not set
-> # CONFIG_DUMMY is not set
+> CONFIG_DUMMY=m
 > # CONFIG_WIREGUARD is not set
 > # CONFIG_EQUALIZER is not set
+> # CONFIG_NET_FC is not set
+> # CONFIG_IFB is not set
 > # CONFIG_NET_TEAM is not set
 > # CONFIG_MACVLAN is not set
 > # CONFIG_IPVLAN is not set
@@ -2404,16 +2699,19 @@ Thank you for your testing efforts!
 > # CONFIG_GENEVE is not set
 > # CONFIG_BAREUDP is not set
 > # CONFIG_GTP is not set
+> # CONFIG_AMT is not set
 > # CONFIG_MACSEC is not set
-> # CONFIG_NETCONSOLE is not set
-> # CONFIG_NTB_NETDEV is not set
-> # CONFIG_RIONET is not set
-> # CONFIG_TUN is not set
+> CONFIG_NETCONSOLE=m
+> CONFIG_NETCONSOLE_DYNAMIC=y
+> CONFIG_NETPOLL=y
+> CONFIG_NET_POLL_CONTROLLER=y
+> CONFIG_TUN=m
 > # CONFIG_TUN_VNET_CROSS_LE is not set
-> # CONFIG_VETH is not set
+> CONFIG_VETH=m
 > CONFIG_VIRTIO_NET=m
 > # CONFIG_NLMON is not set
-> # CONFIG_MHI_NET is not set
+> # CONFIG_NET_VRF is not set
+> # CONFIG_VSOCKMON is not set
 > # CONFIG_ARCNET is not set
 > CONFIG_ATM_DRIVERS=y
 > # CONFIG_ATM_DUMMY is not set
@@ -2430,13 +2728,9 @@ Thank you for your testing efforts!
 > # CONFIG_ATM_FORE200E is not set
 > # CONFIG_ATM_HE is not set
 > # CONFIG_ATM_SOLOS is not set
-> # CONFIG_CAIF_DRIVERS is not set
 > CONFIG_ETHERNET=y
-> CONFIG_NET_VENDOR_3COM=y
-> # CONFIG_PCMCIA_3C574 is not set
-> # CONFIG_PCMCIA_3C589 is not set
-> # CONFIG_VORTEX is not set
-> # CONFIG_TYPHOON is not set
+> CONFIG_MDIO=y
+> # CONFIG_NET_VENDOR_3COM is not set
 > CONFIG_NET_VENDOR_ADAPTEC=y
 > # CONFIG_ADAPTEC_STARFIRE is not set
 > CONFIG_NET_VENDOR_AGERE=y
@@ -2447,11 +2741,13 @@ Thank you for your testing efforts!
 > # CONFIG_ACENIC is not set
 > # CONFIG_ALTERA_TSE is not set
 > CONFIG_NET_VENDOR_AMAZON=y
+> # CONFIG_ENA_ETHERNET is not set
 > # CONFIG_NET_VENDOR_AMD is not set
 > CONFIG_NET_VENDOR_AQUANTIA=y
 > # CONFIG_AQTION is not set
 > CONFIG_NET_VENDOR_ARC=y
 > CONFIG_NET_VENDOR_ASIX=y
+> # CONFIG_SPI_AX88796C is not set
 > CONFIG_NET_VENDOR_ATHEROS=y
 > # CONFIG_ATL2 is not set
 > # CONFIG_ATL1 is not set
@@ -2476,7 +2772,9 @@ Thank you for your testing efforts!
 > # CONFIG_THUNDER_NIC_VF is not set
 > # CONFIG_THUNDER_NIC_BGX is not set
 > # CONFIG_THUNDER_NIC_RGX is not set
+> CONFIG_CAVIUM_PTP=y
 > # CONFIG_LIQUIDIO is not set
+> # CONFIG_LIQUIDIO_VF is not set
 > CONFIG_NET_VENDOR_CHELSIO=y
 > # CONFIG_CHELSIO_T1 is not set
 > # CONFIG_CHELSIO_T3 is not set
@@ -2485,7 +2783,6 @@ Thank you for your testing efforts!
 > CONFIG_NET_VENDOR_CISCO=y
 > # CONFIG_ENIC is not set
 > CONFIG_NET_VENDOR_CORTINA=y
-> # CONFIG_GEMINI_ETHERNET is not set
 > # CONFIG_CX_ECAT is not set
 > # CONFIG_DNET is not set
 > CONFIG_NET_VENDOR_DEC=y
@@ -2498,39 +2795,52 @@ Thank you for your testing efforts!
 > CONFIG_NET_VENDOR_ENGLEDER=y
 > # CONFIG_TSNEP is not set
 > CONFIG_NET_VENDOR_EZCHIP=y
-> # CONFIG_EZCHIP_NPS_MANAGEMENT_ENET is not set
-> CONFIG_NET_VENDOR_FUJITSU=y
-> # CONFIG_PCMCIA_FMVJ18X is not set
 > CONFIG_NET_VENDOR_GOOGLE=y
+> # CONFIG_GVE is not set
 > CONFIG_NET_VENDOR_HUAWEI=y
+> # CONFIG_HINIC is not set
 > CONFIG_NET_VENDOR_I825XX=y
 > CONFIG_NET_VENDOR_INTEL=y
 > # CONFIG_E100 is not set
 > CONFIG_E1000=y
-> # CONFIG_E1000E is not set
-> # CONFIG_IGB is not set
+> CONFIG_E1000E=y
+> CONFIG_E1000E_HWTS=y
+> CONFIG_IGB=y
+> CONFIG_IGB_HWMON=y
 > # CONFIG_IGBVF is not set
 > # CONFIG_IXGB is not set
-> # CONFIG_IXGBE is not set
-> # CONFIG_I40E is not set
-> # CONFIG_IGC is not set
+> CONFIG_IXGBE=y
+> CONFIG_IXGBE_HWMON=y
+> # CONFIG_IXGBE_DCB is not set
+> CONFIG_IXGBE_IPSEC=y
+> # CONFIG_IXGBEVF is not set
+> CONFIG_I40E=y
+> # CONFIG_I40E_DCB is not set
+> # CONFIG_I40EVF is not set
+> # CONFIG_ICE is not set
+> # CONFIG_FM10K is not set
+> CONFIG_IGC=y
 > CONFIG_NET_VENDOR_MICROSOFT=y
 > # CONFIG_JME is not set
 > CONFIG_NET_VENDOR_LITEX=y
-> # CONFIG_LITEX_LITEETH is not set
 > CONFIG_NET_VENDOR_MARVELL=y
 > # CONFIG_MVMDIO is not set
 > # CONFIG_SKGE is not set
 > # CONFIG_SKY2 is not set
+> # CONFIG_PRESTERA is not set
 > CONFIG_NET_VENDOR_MELLANOX=y
 > # CONFIG_MLX4_EN is not set
 > # CONFIG_MLX5_CORE is not set
 > # CONFIG_MLXSW_CORE is not set
 > # CONFIG_MLXFW is not set
 > CONFIG_NET_VENDOR_MICREL=y
+> # CONFIG_KS8842 is not set
+> # CONFIG_KS8851 is not set
 > # CONFIG_KS8851_MLL is not set
 > # CONFIG_KSZ884X_PCI is not set
 > CONFIG_NET_VENDOR_MICROCHIP=y
+> # CONFIG_ENC28J60 is not set
+> # CONFIG_ENCX24J600 is not set
 > # CONFIG_LAN743X is not set
 > CONFIG_NET_VENDOR_MICROSEMI=y
 > CONFIG_NET_VENDOR_MYRI=y
@@ -2543,12 +2853,11 @@ Thank you for your testing efforts!
 > # CONFIG_S2IO is not set
 > # CONFIG_VXGE is not set
 > CONFIG_NET_VENDOR_NETRONOME=y
+> # CONFIG_NFP is not set
 > CONFIG_NET_VENDOR_NI=y
 > # CONFIG_NI_XGE_MANAGEMENT_ENET is not set
 > CONFIG_NET_VENDOR_8390=y
-> # CONFIG_PCMCIA_AXNET is not set
 > # CONFIG_NE2K_PCI is not set
-> # CONFIG_PCMCIA_PCNET is not set
 > CONFIG_NET_VENDOR_NVIDIA=y
 > # CONFIG_FORCEDETH is not set
 > CONFIG_NET_VENDOR_OKI=y
@@ -2572,9 +2881,10 @@ Thank you for your testing efforts!
 > # CONFIG_ATP is not set
 > # CONFIG_8139CP is not set
 > # CONFIG_8139TOO is not set
-> # CONFIG_R8169 is not set
+> CONFIG_R8169=y
 > CONFIG_NET_VENDOR_RENESAS=y
 > CONFIG_NET_VENDOR_ROCKER=y
+> # CONFIG_ROCKER is not set
 > CONFIG_NET_VENDOR_SAMSUNG=y
 > # CONFIG_SXGBE_ETH is not set
 > CONFIG_NET_VENDOR_SEEQ=y
@@ -2587,7 +2897,6 @@ Thank you for your testing efforts!
 > # CONFIG_SIS900 is not set
 > # CONFIG_SIS190 is not set
 > CONFIG_NET_VENDOR_SMSC=y
-> # CONFIG_PCMCIA_SMC91C92 is not set
 > # CONFIG_EPIC100 is not set
 > # CONFIG_SMSC911X is not set
 > # CONFIG_SMSC9420 is not set
@@ -2607,6 +2916,7 @@ Thank you for your testing efforts!
 > # CONFIG_TI_CPSW_PHY_SEL is not set
 > # CONFIG_TLAN is not set
 > CONFIG_NET_VENDOR_VERTEXCOM=y
+> # CONFIG_MSE102X is not set
 > CONFIG_NET_VENDOR_VIA=y
 > # CONFIG_VIA_RHINE is not set
 > # CONFIG_VIA_VELOCITY is not set
@@ -2617,17 +2927,79 @@ Thank you for your testing efforts!
 > # CONFIG_XILINX_EMACLITE is not set
 > # CONFIG_XILINX_AXI_EMAC is not set
 > # CONFIG_XILINX_LL_TEMAC is not set
-> CONFIG_NET_VENDOR_XIRCOM=y
-> # CONFIG_PCMCIA_XIRC2PS is not set
 > # CONFIG_FDDI is not set
 > # CONFIG_HIPPI is not set
 > # CONFIG_NET_SB1000 is not set
-> # CONFIG_PHYLIB is not set
-> # CONFIG_MDIO_DEVICE is not set
+> CONFIG_PHYLIB=y
+> CONFIG_SWPHY=y
+> # CONFIG_LED_TRIGGER_PHY is not set
+> CONFIG_FIXED_PHY=y
+> 
+> #
+> # MII PHY device drivers
+> #
+> # CONFIG_AMD_PHY is not set
+> # CONFIG_ADIN_PHY is not set
+> # CONFIG_AQUANTIA_PHY is not set
+> CONFIG_AX88796B_PHY=y
+> # CONFIG_BROADCOM_PHY is not set
+> # CONFIG_BCM54140_PHY is not set
+> # CONFIG_BCM7XXX_PHY is not set
+> # CONFIG_BCM84881_PHY is not set
+> # CONFIG_BCM87XX_PHY is not set
+> # CONFIG_CICADA_PHY is not set
+> # CONFIG_CORTINA_PHY is not set
+> # CONFIG_DAVICOM_PHY is not set
+> # CONFIG_ICPLUS_PHY is not set
+> # CONFIG_LXT_PHY is not set
+> # CONFIG_INTEL_XWAY_PHY is not set
+> # CONFIG_LSI_ET1011C_PHY is not set
+> # CONFIG_MARVELL_PHY is not set
+> # CONFIG_MARVELL_10G_PHY is not set
+> # CONFIG_MARVELL_88X2222_PHY is not set
+> # CONFIG_MAXLINEAR_GPHY is not set
+> # CONFIG_MEDIATEK_GE_PHY is not set
+> # CONFIG_MICREL_PHY is not set
+> # CONFIG_MICROCHIP_PHY is not set
+> # CONFIG_MICROCHIP_T1_PHY is not set
+> # CONFIG_MICROSEMI_PHY is not set
+> # CONFIG_MOTORCOMM_PHY is not set
+> # CONFIG_NATIONAL_PHY is not set
+> # CONFIG_NXP_C45_TJA11XX_PHY is not set
+> # CONFIG_NXP_TJA11XX_PHY is not set
+> # CONFIG_QSEMI_PHY is not set
+> CONFIG_REALTEK_PHY=y
+> # CONFIG_RENESAS_PHY is not set
+> # CONFIG_ROCKCHIP_PHY is not set
+> # CONFIG_SMSC_PHY is not set
+> # CONFIG_STE10XP is not set
+> # CONFIG_TERANETICS_PHY is not set
+> # CONFIG_DP83822_PHY is not set
+> # CONFIG_DP83TC811_PHY is not set
+> # CONFIG_DP83848_PHY is not set
+> # CONFIG_DP83867_PHY is not set
+> # CONFIG_DP83869_PHY is not set
+> # CONFIG_VITESSE_PHY is not set
+> # CONFIG_XILINX_GMII2RGMII is not set
+> # CONFIG_MICREL_KS8995MA is not set
+> CONFIG_MDIO_DEVICE=y
+> CONFIG_MDIO_BUS=y
+> CONFIG_FWNODE_MDIO=y
+> CONFIG_ACPI_MDIO=y
+> CONFIG_MDIO_DEVRES=y
+> # CONFIG_MDIO_BITBANG is not set
+> # CONFIG_MDIO_BCM_UNIMAC is not set
+> # CONFIG_MDIO_MVUSB is not set
+> # CONFIG_MDIO_THUNDER is not set
+> 
+> #
+> # MDIO Multiplexers
+> #
 > 
 > #
 > # PCS device drivers
 > #
+> # CONFIG_PCS_XPCS is not set
 > # end of PCS device drivers
 > 
 > # CONFIG_PLIP is not set
@@ -2638,34 +3010,129 @@ Thank you for your testing efforts!
 > # CONFIG_USB_KAWETH is not set
 > # CONFIG_USB_PEGASUS is not set
 > # CONFIG_USB_RTL8150 is not set
-> # CONFIG_USB_RTL8152 is not set
+> CONFIG_USB_RTL8152=y
 > # CONFIG_USB_LAN78XX is not set
-> # CONFIG_USB_USBNET is not set
+> CONFIG_USB_USBNET=y
+> CONFIG_USB_NET_AX8817X=y
+> CONFIG_USB_NET_AX88179_178A=y
+> # CONFIG_USB_NET_CDCETHER is not set
+> # CONFIG_USB_NET_CDC_EEM is not set
+> # CONFIG_USB_NET_CDC_NCM is not set
+> # CONFIG_USB_NET_HUAWEI_CDC_NCM is not set
+> # CONFIG_USB_NET_CDC_MBIM is not set
+> # CONFIG_USB_NET_DM9601 is not set
+> # CONFIG_USB_NET_SR9700 is not set
+> # CONFIG_USB_NET_SR9800 is not set
+> # CONFIG_USB_NET_SMSC75XX is not set
+> # CONFIG_USB_NET_SMSC95XX is not set
+> # CONFIG_USB_NET_GL620A is not set
+> # CONFIG_USB_NET_NET1080 is not set
+> # CONFIG_USB_NET_PLUSB is not set
+> # CONFIG_USB_NET_MCS7830 is not set
+> # CONFIG_USB_NET_RNDIS_HOST is not set
+> # CONFIG_USB_NET_CDC_SUBSET is not set
+> # CONFIG_USB_NET_ZAURUS is not set
+> # CONFIG_USB_NET_CX82310_ETH is not set
+> # CONFIG_USB_NET_KALMIA is not set
+> # CONFIG_USB_NET_QMI_WWAN is not set
 > # CONFIG_USB_HSO is not set
+> # CONFIG_USB_NET_INT51X1 is not set
 > # CONFIG_USB_IPHETH is not set
+> # CONFIG_USB_SIERRA_NET is not set
+> # CONFIG_USB_NET_CH9200 is not set
+> # CONFIG_USB_NET_AQC111 is not set
 > CONFIG_WLAN=y
 > CONFIG_WLAN_VENDOR_ADMTEK=y
+> # CONFIG_ADM8211 is not set
 > CONFIG_WLAN_VENDOR_ATH=y
 > # CONFIG_ATH_DEBUG is not set
+> # CONFIG_ATH5K is not set
 > # CONFIG_ATH5K_PCI is not set
+> # CONFIG_ATH9K is not set
+> # CONFIG_ATH9K_HTC is not set
+> # CONFIG_CARL9170 is not set
+> # CONFIG_ATH6KL is not set
+> # CONFIG_AR5523 is not set
+> # CONFIG_WIL6210 is not set
+> # CONFIG_ATH10K is not set
+> # CONFIG_WCN36XX is not set
+> # CONFIG_ATH11K is not set
 > CONFIG_WLAN_VENDOR_ATMEL=y
+> # CONFIG_ATMEL is not set
+> # CONFIG_AT76C50X_USB is not set
 > CONFIG_WLAN_VENDOR_BROADCOM=y
+> # CONFIG_B43 is not set
+> # CONFIG_B43LEGACY is not set
+> # CONFIG_BRCMSMAC is not set
+> # CONFIG_BRCMFMAC is not set
 > CONFIG_WLAN_VENDOR_CISCO=y
+> # CONFIG_AIRO is not set
 > CONFIG_WLAN_VENDOR_INTEL=y
+> # CONFIG_IPW2100 is not set
+> # CONFIG_IPW2200 is not set
+> # CONFIG_IWL4965 is not set
+> # CONFIG_IWL3945 is not set
+> # CONFIG_IWLWIFI is not set
+> # CONFIG_IWLMEI is not set
 > CONFIG_WLAN_VENDOR_INTERSIL=y
 > # CONFIG_HOSTAP is not set
+> # CONFIG_HERMES is not set
+> # CONFIG_P54_COMMON is not set
 > CONFIG_WLAN_VENDOR_MARVELL=y
-> CONFIG_WLAN_VENDOR_MEDIATEK=y
+> # CONFIG_LIBERTAS is not set
+> # CONFIG_LIBERTAS_THINFIRM is not set
+> # CONFIG_MWIFIEX is not set
+> # CONFIG_MWL8K is not set
+> # CONFIG_WLAN_VENDOR_MEDIATEK is not set
 > CONFIG_WLAN_VENDOR_MICROCHIP=y
+> # CONFIG_WILC1000_SDIO is not set
+> # CONFIG_WILC1000_SPI is not set
 > CONFIG_WLAN_VENDOR_RALINK=y
+> # CONFIG_RT2X00 is not set
 > CONFIG_WLAN_VENDOR_REALTEK=y
+> # CONFIG_RTL8180 is not set
+> # CONFIG_RTL8187 is not set
+> CONFIG_RTL_CARDS=m
+> # CONFIG_RTL8192CE is not set
+> # CONFIG_RTL8192SE is not set
+> # CONFIG_RTL8192DE is not set
+> # CONFIG_RTL8723AE is not set
+> # CONFIG_RTL8723BE is not set
+> # CONFIG_RTL8188EE is not set
+> # CONFIG_RTL8192EE is not set
+> # CONFIG_RTL8821AE is not set
+> # CONFIG_RTL8192CU is not set
+> # CONFIG_RTL8XXXU is not set
+> # CONFIG_RTW88 is not set
+> # CONFIG_RTW89 is not set
 > CONFIG_WLAN_VENDOR_RSI=y
+> # CONFIG_RSI_91X is not set
 > CONFIG_WLAN_VENDOR_ST=y
+> # CONFIG_CW1200 is not set
 > CONFIG_WLAN_VENDOR_TI=y
+> # CONFIG_WL1251 is not set
+> # CONFIG_WL12XX is not set
+> # CONFIG_WL18XX is not set
+> # CONFIG_WLCORE is not set
 > CONFIG_WLAN_VENDOR_ZYDAS=y
+> # CONFIG_USB_ZD1201 is not set
+> # CONFIG_ZD1211RW is not set
 > CONFIG_WLAN_VENDOR_QUANTENNA=y
-> # CONFIG_PCMCIA_RAYCS is not set
+> # CONFIG_QTNFMAC_PCIE is not set
+> CONFIG_MAC80211_HWSIM=m
+> # CONFIG_USB_NET_RNDIS_WLAN is not set
+> # CONFIG_VIRT_WIFI is not set
 > # CONFIG_WAN is not set
+> CONFIG_IEEE802154_DRIVERS=m
+> # CONFIG_IEEE802154_FAKELB is not set
+> # CONFIG_IEEE802154_AT86RF230 is not set
+> # CONFIG_IEEE802154_MRF24J40 is not set
+> # CONFIG_IEEE802154_CC2520 is not set
+> # CONFIG_IEEE802154_ATUSB is not set
+> # CONFIG_IEEE802154_ADF7242 is not set
+> # CONFIG_IEEE802154_CA8210 is not set
+> # CONFIG_IEEE802154_MCR20A is not set
+> # CONFIG_IEEE802154_HWSIM is not set
 > 
 > #
 > # Wireless WAN
@@ -2675,7 +3142,6 @@ Thank you for your testing efforts!
 > 
 > # CONFIG_VMXNET3 is not set
 > # CONFIG_FUJITSU_ES is not set
-> # CONFIG_USB4_NET is not set
 > # CONFIG_NETDEVSIM is not set
 > CONFIG_NET_FAILOVER=m
 > # CONFIG_ISDN is not set
@@ -2685,20 +3151,20 @@ Thank you for your testing efforts!
 > #
 > CONFIG_INPUT=y
 > CONFIG_INPUT_LEDS=y
-> CONFIG_INPUT_FF_MEMLESS=y
-> CONFIG_INPUT_SPARSEKMAP=y
-> CONFIG_INPUT_MATRIXKMAP=m
+> CONFIG_INPUT_FF_MEMLESS=m
+> CONFIG_INPUT_SPARSEKMAP=m
+> # CONFIG_INPUT_MATRIXKMAP is not set
 > 
 > #
 > # Userland interfaces
 > #
 > CONFIG_INPUT_MOUSEDEV=y
-> CONFIG_INPUT_MOUSEDEV_PSAUX=y
+> # CONFIG_INPUT_MOUSEDEV_PSAUX is not set
 > CONFIG_INPUT_MOUSEDEV_SCREEN_X=1024
 > CONFIG_INPUT_MOUSEDEV_SCREEN_Y=768
-> # CONFIG_INPUT_JOYDEV is not set
-> CONFIG_INPUT_EVDEV=m
-> CONFIG_INPUT_EVBUG=y
+> CONFIG_INPUT_JOYDEV=m
+> CONFIG_INPUT_EVDEV=y
+> # CONFIG_INPUT_EVBUG is not set
 > 
 > #
 > # Input Device Drivers
@@ -2706,6 +3172,7 @@ Thank you for your testing efforts!
 > CONFIG_INPUT_KEYBOARD=y
 > # CONFIG_KEYBOARD_ADP5588 is not set
 > # CONFIG_KEYBOARD_ADP5589 is not set
+> # CONFIG_KEYBOARD_APPLESPI is not set
 > CONFIG_KEYBOARD_ATKBD=y
 > # CONFIG_KEYBOARD_QT1050 is not set
 > # CONFIG_KEYBOARD_QT1070 is not set
@@ -2725,102 +3192,77 @@ Thank you for your testing efforts!
 > # CONFIG_KEYBOARD_NEWTON is not set
 > # CONFIG_KEYBOARD_OPENCORES is not set
 > # CONFIG_KEYBOARD_SAMSUNG is not set
-> # CONFIG_KEYBOARD_GOLDFISH_EVENTS is not set
 > # CONFIG_KEYBOARD_STOWAWAY is not set
 > # CONFIG_KEYBOARD_SUNKBD is not set
-> # CONFIG_KEYBOARD_IQS62X is not set
-> # CONFIG_KEYBOARD_OMAP4 is not set
 > # CONFIG_KEYBOARD_TM2_TOUCHKEY is not set
 > # CONFIG_KEYBOARD_XTKBD is not set
-> # CONFIG_KEYBOARD_CAP11XX is not set
-> # CONFIG_KEYBOARD_BCM is not set
 > # CONFIG_KEYBOARD_CYPRESS_SF is not set
-> # CONFIG_INPUT_MOUSE is not set
-> CONFIG_INPUT_JOYSTICK=y
-> CONFIG_JOYSTICK_ANALOG=y
-> CONFIG_JOYSTICK_A3D=m
-> CONFIG_JOYSTICK_ADI=m
-> CONFIG_JOYSTICK_COBRA=y
-> CONFIG_JOYSTICK_GF2K=m
-> CONFIG_JOYSTICK_GRIP=m
-> CONFIG_JOYSTICK_GRIP_MP=y
-> CONFIG_JOYSTICK_GUILLEMOT=m
-> CONFIG_JOYSTICK_INTERACT=y
-> CONFIG_JOYSTICK_SIDEWINDER=y
-> CONFIG_JOYSTICK_TMDC=m
-> CONFIG_JOYSTICK_IFORCE=y
-> CONFIG_JOYSTICK_IFORCE_USB=m
-> CONFIG_JOYSTICK_IFORCE_232=m
-> # CONFIG_JOYSTICK_WARRIOR is not set
-> CONFIG_JOYSTICK_MAGELLAN=y
-> CONFIG_JOYSTICK_SPACEORB=m
-> CONFIG_JOYSTICK_SPACEBALL=m
-> # CONFIG_JOYSTICK_STINGER is not set
-> # CONFIG_JOYSTICK_TWIDJOY is not set
-> CONFIG_JOYSTICK_ZHENHUA=m
-> # CONFIG_JOYSTICK_DB9 is not set
-> # CONFIG_JOYSTICK_GAMECON is not set
-> CONFIG_JOYSTICK_TURBOGRAFX=m
-> CONFIG_JOYSTICK_AS5011=m
-> CONFIG_JOYSTICK_JOYDUMP=y
-> CONFIG_JOYSTICK_XPAD=m
-> # CONFIG_JOYSTICK_XPAD_FF is not set
-> CONFIG_JOYSTICK_XPAD_LEDS=y
-> # CONFIG_JOYSTICK_PXRC is not set
-> # CONFIG_JOYSTICK_QWIIC is not set
-> CONFIG_JOYSTICK_FSIA6B=m
-> CONFIG_INPUT_TABLET=y
-> CONFIG_TABLET_USB_ACECAD=y
-> # CONFIG_TABLET_USB_AIPTEK is not set
-> CONFIG_TABLET_USB_HANWANG=m
-> CONFIG_TABLET_USB_KBTAB=y
-> CONFIG_TABLET_USB_PEGASUS=y
-> # CONFIG_TABLET_SERIAL_WACOM4 is not set
+> CONFIG_INPUT_MOUSE=y
+> CONFIG_MOUSE_PS2=y
+> CONFIG_MOUSE_PS2_ALPS=y
+> CONFIG_MOUSE_PS2_BYD=y
+> CONFIG_MOUSE_PS2_LOGIPS2PP=y
+> CONFIG_MOUSE_PS2_SYNAPTICS=y
+> CONFIG_MOUSE_PS2_SYNAPTICS_SMBUS=y
+> CONFIG_MOUSE_PS2_CYPRESS=y
+> CONFIG_MOUSE_PS2_LIFEBOOK=y
+> CONFIG_MOUSE_PS2_TRACKPOINT=y
+> CONFIG_MOUSE_PS2_ELANTECH=y
+> CONFIG_MOUSE_PS2_ELANTECH_SMBUS=y
+> CONFIG_MOUSE_PS2_SENTELIC=y
+> # CONFIG_MOUSE_PS2_TOUCHKIT is not set
+> CONFIG_MOUSE_PS2_FOCALTECH=y
+> CONFIG_MOUSE_PS2_VMMOUSE=y
+> CONFIG_MOUSE_PS2_SMBUS=y
+> CONFIG_MOUSE_SERIAL=m
+> # CONFIG_MOUSE_APPLETOUCH is not set
+> # CONFIG_MOUSE_BCM5974 is not set
+> CONFIG_MOUSE_CYAPA=m
+> CONFIG_MOUSE_ELAN_I2C=m
+> CONFIG_MOUSE_ELAN_I2C_I2C=y
+> CONFIG_MOUSE_ELAN_I2C_SMBUS=y
+> CONFIG_MOUSE_VSXXXAA=m
+> # CONFIG_MOUSE_GPIO is not set
+> CONFIG_MOUSE_SYNAPTICS_I2C=m
+> # CONFIG_MOUSE_SYNAPTICS_USB is not set
+> # CONFIG_INPUT_JOYSTICK is not set
+> # CONFIG_INPUT_TABLET is not set
 > # CONFIG_INPUT_TOUCHSCREEN is not set
 > CONFIG_INPUT_MISC=y
-> # CONFIG_INPUT_88PM80X_ONKEY is not set
-> CONFIG_INPUT_AD714X=m
-> CONFIG_INPUT_AD714X_I2C=m
-> CONFIG_INPUT_ATC260X_ONKEY=m
-> CONFIG_INPUT_ATMEL_CAPTOUCH=m
-> CONFIG_INPUT_BMA150=m
+> # CONFIG_INPUT_AD714X is not set
+> # CONFIG_INPUT_BMA150 is not set
 > # CONFIG_INPUT_E3X0_BUTTON is not set
-> CONFIG_INPUT_MAX77650_ONKEY=m
-> CONFIG_INPUT_MC13783_PWRBUTTON=m
+> # CONFIG_INPUT_PCSPKR is not set
 > # CONFIG_INPUT_MMA8450 is not set
-> CONFIG_INPUT_APANEL=m
+> # CONFIG_INPUT_APANEL is not set
 > # CONFIG_INPUT_GPIO_BEEPER is not set
 > # CONFIG_INPUT_GPIO_DECODER is not set
 > # CONFIG_INPUT_GPIO_VIBRA is not set
-> CONFIG_INPUT_ATLAS_BTNS=y
-> CONFIG_INPUT_ATI_REMOTE2=y
-> CONFIG_INPUT_KEYSPAN_REMOTE=y
-> CONFIG_INPUT_KXTJ9=m
+> # CONFIG_INPUT_ATLAS_BTNS is not set
+> # CONFIG_INPUT_ATI_REMOTE2 is not set
+> # CONFIG_INPUT_KEYSPAN_REMOTE is not set
+> # CONFIG_INPUT_KXTJ9 is not set
 > # CONFIG_INPUT_POWERMATE is not set
 > # CONFIG_INPUT_YEALINK is not set
-> CONFIG_INPUT_CM109=y
-> # CONFIG_INPUT_REGULATOR_HAPTIC is not set
-> # CONFIG_INPUT_RETU_PWRBUTTON is not set
-> CONFIG_INPUT_TPS65218_PWRBUTTON=m
+> # CONFIG_INPUT_CM109 is not set
 > CONFIG_INPUT_UINPUT=y
-> # CONFIG_INPUT_PCF50633_PMU is not set
 > # CONFIG_INPUT_PCF8574 is not set
-> CONFIG_INPUT_RK805_PWRKEY=m
-> CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
-> CONFIG_INPUT_DA7280_HAPTICS=m
-> CONFIG_INPUT_DA9063_ONKEY=m
-> CONFIG_INPUT_ADXL34X=m
-> CONFIG_INPUT_ADXL34X_I2C=m
+> # CONFIG_INPUT_PWM_BEEPER is not set
+> # CONFIG_INPUT_PWM_VIBRA is not set
+> # CONFIG_INPUT_GPIO_ROTARY_ENCODER is not set
+> # CONFIG_INPUT_DA7280_HAPTICS is not set
+> # CONFIG_INPUT_ADXL34X is not set
 > # CONFIG_INPUT_IMS_PCU is not set
-> CONFIG_INPUT_IQS269A=m
+> # CONFIG_INPUT_IQS269A is not set
 > # CONFIG_INPUT_IQS626A is not set
 > # CONFIG_INPUT_CMA3000 is not set
 > # CONFIG_INPUT_IDEAPAD_SLIDEBAR is not set
 > # CONFIG_INPUT_DRV260X_HAPTICS is not set
 > # CONFIG_INPUT_DRV2665_HAPTICS is not set
-> CONFIG_INPUT_DRV2667_HAPTICS=m
+> # CONFIG_INPUT_DRV2667_HAPTICS is not set
 > CONFIG_RMI4_CORE=m
 > CONFIG_RMI4_I2C=m
+> CONFIG_RMI4_SPI=m
 > CONFIG_RMI4_SMB=m
 > CONFIG_RMI4_F03=y
 > CONFIG_RMI4_F03_SERIO=m
@@ -2828,9 +3270,9 @@ Thank you for your testing efforts!
 > CONFIG_RMI4_F11=y
 > CONFIG_RMI4_F12=y
 > CONFIG_RMI4_F30=y
-> # CONFIG_RMI4_F34 is not set
+> CONFIG_RMI4_F34=y
 > # CONFIG_RMI4_F3A is not set
-> # CONFIG_RMI4_F55 is not set
+> CONFIG_RMI4_F55=y
 > 
 > #
 > # Hardware I/O ports
@@ -2838,23 +3280,18 @@ Thank you for your testing efforts!
 > CONFIG_SERIO=y
 > CONFIG_ARCH_MIGHT_HAVE_PC_SERIO=y
 > CONFIG_SERIO_I8042=y
-> CONFIG_SERIO_SERPORT=m
-> CONFIG_SERIO_CT82C710=y
-> CONFIG_SERIO_PARKBD=m
-> CONFIG_SERIO_PCIPS2=m
+> CONFIG_SERIO_SERPORT=y
+> # CONFIG_SERIO_CT82C710 is not set
+> # CONFIG_SERIO_PARKBD is not set
+> # CONFIG_SERIO_PCIPS2 is not set
 > CONFIG_SERIO_LIBPS2=y
 > CONFIG_SERIO_RAW=m
-> # CONFIG_SERIO_ALTERA_PS2 is not set
+> CONFIG_SERIO_ALTERA_PS2=m
 > # CONFIG_SERIO_PS2MULT is not set
-> # CONFIG_SERIO_ARC_PS2 is not set
-> CONFIG_SERIO_APBPS2=m
-> CONFIG_SERIO_GPIO_PS2=y
-> CONFIG_USERIO=m
-> CONFIG_GAMEPORT=y
-> # CONFIG_GAMEPORT_NS558 is not set
-> # CONFIG_GAMEPORT_L4 is not set
-> CONFIG_GAMEPORT_EMU10K1=m
-> CONFIG_GAMEPORT_FM801=m
+> CONFIG_SERIO_ARC_PS2=m
+> # CONFIG_SERIO_GPIO_PS2 is not set
+> # CONFIG_USERIO is not set
+> # CONFIG_GAMEPORT is not set
 > # end of Hardware I/O ports
 > # end of Input device support
 > 
@@ -2862,7 +3299,12 @@ Thank you for your testing efforts!
 > # Character devices
 > #
 > CONFIG_TTY=y
-> # CONFIG_VT is not set
+> CONFIG_VT=y
+> CONFIG_CONSOLE_TRANSLATIONS=y
+> CONFIG_VT_CONSOLE=y
+> CONFIG_VT_CONSOLE_SLEEP=y
+> CONFIG_HW_CONSOLE=y
+> CONFIG_VT_HW_CONSOLE_BINDING=y
 > CONFIG_UNIX98_PTYS=y
 > # CONFIG_LEGACY_PTYS is not set
 > CONFIG_LDISC_AUTOLOAD=y
@@ -2873,155 +3315,141 @@ Thank you for your testing efforts!
 > CONFIG_SERIAL_EARLYCON=y
 > CONFIG_SERIAL_8250=y
 > # CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
-> # CONFIG_SERIAL_8250_PNP is not set
+> CONFIG_SERIAL_8250_PNP=y
 > # CONFIG_SERIAL_8250_16550A_VARIANTS is not set
 > # CONFIG_SERIAL_8250_FINTEK is not set
 > CONFIG_SERIAL_8250_CONSOLE=y
+> CONFIG_SERIAL_8250_DMA=y
 > CONFIG_SERIAL_8250_PCI=y
 > CONFIG_SERIAL_8250_EXAR=y
-> CONFIG_SERIAL_8250_CS=m
-> CONFIG_SERIAL_8250_NR_UARTS=4
+> CONFIG_SERIAL_8250_NR_UARTS=64
 > CONFIG_SERIAL_8250_RUNTIME_UARTS=4
 > CONFIG_SERIAL_8250_EXTENDED=y
-> # CONFIG_SERIAL_8250_MANY_PORTS is not set
-> # CONFIG_SERIAL_8250_ASPEED_VUART is not set
+> CONFIG_SERIAL_8250_MANY_PORTS=y
 > CONFIG_SERIAL_8250_SHARE_IRQ=y
 > # CONFIG_SERIAL_8250_DETECT_IRQ is not set
 > CONFIG_SERIAL_8250_RSA=y
 > CONFIG_SERIAL_8250_DWLIB=y
-> # CONFIG_SERIAL_8250_DW is not set
+> CONFIG_SERIAL_8250_DW=y
 > # CONFIG_SERIAL_8250_RT288X is not set
-> CONFIG_SERIAL_8250_LPSS=m
-> # CONFIG_SERIAL_8250_MID is not set
+> CONFIG_SERIAL_8250_LPSS=y
+> CONFIG_SERIAL_8250_MID=y
 > CONFIG_SERIAL_8250_PERICOM=y
-> # CONFIG_SERIAL_OF_PLATFORM is not set
 > 
 > #
 > # Non-8250 serial port support
 > #
-> CONFIG_SERIAL_UARTLITE=y
-> CONFIG_SERIAL_UARTLITE_CONSOLE=y
-> CONFIG_SERIAL_UARTLITE_NR_UARTS=1
+> # CONFIG_SERIAL_MAX3100 is not set
+> # CONFIG_SERIAL_MAX310X is not set
+> # CONFIG_SERIAL_UARTLITE is not set
 > CONFIG_SERIAL_CORE=y
 > CONFIG_SERIAL_CORE_CONSOLE=y
-> # CONFIG_SERIAL_JSM is not set
-> CONFIG_SERIAL_SIFIVE=y
-> # CONFIG_SERIAL_SIFIVE_CONSOLE is not set
-> CONFIG_SERIAL_LANTIQ=m
-> CONFIG_SERIAL_SCCNXP=y
-> # CONFIG_SERIAL_SCCNXP_CONSOLE is not set
-> CONFIG_SERIAL_SC16IS7XX_CORE=m
-> CONFIG_SERIAL_SC16IS7XX=m
-> CONFIG_SERIAL_SC16IS7XX_I2C=y
+> CONFIG_SERIAL_JSM=m
+> # CONFIG_SERIAL_LANTIQ is not set
+> # CONFIG_SERIAL_SCCNXP is not set
+> # CONFIG_SERIAL_SC16IS7XX is not set
 > # CONFIG_SERIAL_BCM63XX is not set
-> CONFIG_SERIAL_ALTERA_JTAGUART=m
-> CONFIG_SERIAL_ALTERA_UART=y
-> CONFIG_SERIAL_ALTERA_UART_MAXPORTS=4
-> CONFIG_SERIAL_ALTERA_UART_BAUDRATE=115200
-> CONFIG_SERIAL_ALTERA_UART_CONSOLE=y
-> CONFIG_SERIAL_XILINX_PS_UART=m
-> CONFIG_SERIAL_ARC=y
-> CONFIG_SERIAL_ARC_CONSOLE=y
+> # CONFIG_SERIAL_ALTERA_JTAGUART is not set
+> # CONFIG_SERIAL_ALTERA_UART is not set
+> CONFIG_SERIAL_ARC=m
 > CONFIG_SERIAL_ARC_NR_PORTS=1
-> CONFIG_SERIAL_RP2=y
-> CONFIG_SERIAL_RP2_NR_UARTS=32
-> CONFIG_SERIAL_FSL_LPUART=y
-> CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+> # CONFIG_SERIAL_RP2 is not set
+> # CONFIG_SERIAL_FSL_LPUART is not set
 > # CONFIG_SERIAL_FSL_LINFLEXUART is not set
-> CONFIG_SERIAL_CONEXANT_DIGICOLOR=m
 > # CONFIG_SERIAL_SPRD is not set
 > # end of Serial drivers
 > 
 > CONFIG_SERIAL_MCTRL_GPIO=y
 > CONFIG_SERIAL_NONSTANDARD=y
-> CONFIG_MOXA_INTELLIO=m
-> CONFIG_MOXA_SMARTIO=y
-> CONFIG_SYNCLINK_GT=y
-> CONFIG_N_HDLC=y
-> # CONFIG_GOLDFISH_TTY is not set
-> # CONFIG_N_GSM is not set
+> # CONFIG_MOXA_INTELLIO is not set
+> # CONFIG_MOXA_SMARTIO is not set
+> CONFIG_SYNCLINK_GT=m
+> CONFIG_N_HDLC=m
+> CONFIG_N_GSM=m
 > CONFIG_NOZOMI=m
-> CONFIG_NULL_TTY=y
-> # CONFIG_RPMSG_TTY is not set
+> # CONFIG_NULL_TTY is not set
+> CONFIG_HVC_DRIVER=y
 > # CONFIG_SERIAL_DEV_BUS is not set
-> CONFIG_TTY_PRINTK=y
-> CONFIG_TTY_PRINTK_LEVEL=6
-> CONFIG_PRINTER=y
+> CONFIG_PRINTER=m
 > # CONFIG_LP_CONSOLE is not set
-> CONFIG_PPDEV=y
-> # CONFIG_VIRTIO_CONSOLE is not set
+> CONFIG_PPDEV=m
+> CONFIG_VIRTIO_CONSOLE=m
 > CONFIG_IPMI_HANDLER=m
+> CONFIG_IPMI_DMI_DECODE=y
 > CONFIG_IPMI_PLAT_DATA=y
-> # CONFIG_IPMI_PANIC_EVENT is not set
-> # CONFIG_IPMI_DEVICE_INTERFACE is not set
+> CONFIG_IPMI_PANIC_EVENT=y
+> CONFIG_IPMI_PANIC_STRING=y
+> CONFIG_IPMI_DEVICE_INTERFACE=m
 > CONFIG_IPMI_SI=m
 > CONFIG_IPMI_SSIF=m
-> # CONFIG_IPMI_IPMB is not set
 > CONFIG_IPMI_WATCHDOG=m
 > CONFIG_IPMI_POWEROFF=m
-> # CONFIG_IPMB_DEVICE_INTERFACE is not set
 > CONFIG_HW_RANDOM=y
-> # CONFIG_HW_RANDOM_TIMERIOMEM is not set
-> # CONFIG_HW_RANDOM_INTEL is not set
+> CONFIG_HW_RANDOM_TIMERIOMEM=m
+> CONFIG_HW_RANDOM_INTEL=m
 > # CONFIG_HW_RANDOM_AMD is not set
-> CONFIG_HW_RANDOM_BA431=y
-> # CONFIG_HW_RANDOM_VIA is not set
-> CONFIG_HW_RANDOM_VIRTIO=m
-> CONFIG_HW_RANDOM_CCTRNG=m
-> CONFIG_HW_RANDOM_XIPHERA=m
-> CONFIG_APPLICOM=y
-> 
-> #
-> # PCMCIA character devices
-> #
-> CONFIG_SYNCLINK_CS=m
-> CONFIG_CARDMAN_4000=m
-> CONFIG_CARDMAN_4040=m
-> CONFIG_SCR24X=m
-> # CONFIG_IPWIRELESS is not set
-> # end of PCMCIA character devices
-> 
-> CONFIG_MWAVE=y
+> # CONFIG_HW_RANDOM_BA431 is not set
+> CONFIG_HW_RANDOM_VIA=m
+> CONFIG_HW_RANDOM_VIRTIO=y
+> # CONFIG_HW_RANDOM_XIPHERA is not set
+> # CONFIG_APPLICOM is not set
+> # CONFIG_MWAVE is not set
 > CONFIG_DEVMEM=y
-> CONFIG_NVRAM=m
+> CONFIG_NVRAM=y
 > CONFIG_DEVPORT=y
 > CONFIG_HPET=y
-> # CONFIG_HPET_MMAP is not set
-> CONFIG_HANGCHECK_TIMER=y
+> CONFIG_HPET_MMAP=y
+> # CONFIG_HPET_MMAP_DEFAULT is not set
+> CONFIG_HANGCHECK_TIMER=m
+> CONFIG_UV_MMTIMER=m
 > CONFIG_TCG_TPM=y
-> # CONFIG_HW_RANDOM_TPM is not set
-> CONFIG_TCG_TIS_CORE=m
-> CONFIG_TCG_TIS=m
-> CONFIG_TCG_TIS_I2C_CR50=m
+> CONFIG_HW_RANDOM_TPM=y
+> CONFIG_TCG_TIS_CORE=y
+> CONFIG_TCG_TIS=y
+> # CONFIG_TCG_TIS_SPI is not set
+> # CONFIG_TCG_TIS_I2C_CR50 is not set
 > CONFIG_TCG_TIS_I2C_ATMEL=m
-> # CONFIG_TCG_TIS_I2C_INFINEON is not set
+> CONFIG_TCG_TIS_I2C_INFINEON=m
 > CONFIG_TCG_TIS_I2C_NUVOTON=m
 > CONFIG_TCG_NSC=m
 > CONFIG_TCG_ATMEL=m
-> # CONFIG_TCG_INFINEON is not set
-> # CONFIG_TCG_CRB is not set
+> CONFIG_TCG_INFINEON=m
+> CONFIG_TCG_CRB=y
 > # CONFIG_TCG_VTPM_PROXY is not set
-> # CONFIG_TCG_TIS_ST33ZP24_I2C is not set
+> CONFIG_TCG_TIS_ST33ZP24=m
+> CONFIG_TCG_TIS_ST33ZP24_I2C=m
+> # CONFIG_TCG_TIS_ST33ZP24_SPI is not set
 > CONFIG_TELCLOCK=m
-> CONFIG_XILLYBUS_CLASS=y
-> CONFIG_XILLYBUS=m
-> CONFIG_XILLYBUS_OF=m
-> CONFIG_XILLYUSB=y
-> CONFIG_RANDOM_TRUST_CPU=y
+> # CONFIG_XILLYBUS is not set
+> # CONFIG_XILLYUSB is not set
+> # CONFIG_RANDOM_TRUST_CPU is not set
 > # CONFIG_RANDOM_TRUST_BOOTLOADER is not set
 > # end of Character devices
 > 
 > #
 > # I2C support
 > #
-> CONFIG_I2C=m
+> CONFIG_I2C=y
+> CONFIG_ACPI_I2C_OPREGION=y
 > CONFIG_I2C_BOARDINFO=y
 > CONFIG_I2C_COMPAT=y
 > CONFIG_I2C_CHARDEV=m
-> # CONFIG_I2C_MUX is not set
+> CONFIG_I2C_MUX=m
+> 
+> #
+> # Multiplexer I2C Chip support
+> #
+> # CONFIG_I2C_MUX_GPIO is not set
+> # CONFIG_I2C_MUX_LTC4306 is not set
+> # CONFIG_I2C_MUX_PCA9541 is not set
+> # CONFIG_I2C_MUX_PCA954x is not set
+> # CONFIG_I2C_MUX_REG is not set
+> CONFIG_I2C_MUX_MLXCPLD=m
+> # end of Multiplexer I2C Chip support
+> 
 > CONFIG_I2C_HELPER_AUTO=y
-> CONFIG_I2C_SMBUS=m
-> CONFIG_I2C_ALGOBIT=m
+> CONFIG_I2C_SMBUS=y
+> CONFIG_I2C_ALGOBIT=y
 > CONFIG_I2C_ALGOPCA=m
 > 
 > #
@@ -3031,88 +3459,122 @@ Thank you for your testing efforts!
 > #
 > # PC SMBus host controller drivers
 > #
-> CONFIG_I2C_ALI1535=m
-> CONFIG_I2C_ALI1563=m
-> CONFIG_I2C_ALI15X3=m
+> # CONFIG_I2C_ALI1535 is not set
+> # CONFIG_I2C_ALI1563 is not set
+> # CONFIG_I2C_ALI15X3 is not set
 > # CONFIG_I2C_AMD756 is not set
 > # CONFIG_I2C_AMD8111 is not set
-> CONFIG_I2C_AMD_MP2=m
-> # CONFIG_I2C_I801 is not set
+> # CONFIG_I2C_AMD_MP2 is not set
+> CONFIG_I2C_I801=y
 > CONFIG_I2C_ISCH=m
-> # CONFIG_I2C_ISMT is not set
-> # CONFIG_I2C_PIIX4 is not set
+> CONFIG_I2C_ISMT=m
+> CONFIG_I2C_PIIX4=m
 > CONFIG_I2C_NFORCE2=m
-> # CONFIG_I2C_NFORCE2_S4985 is not set
+> CONFIG_I2C_NFORCE2_S4985=m
 > # CONFIG_I2C_NVIDIA_GPU is not set
-> CONFIG_I2C_SIS5595=m
-> CONFIG_I2C_SIS630=m
+> # CONFIG_I2C_SIS5595 is not set
+> # CONFIG_I2C_SIS630 is not set
 > CONFIG_I2C_SIS96X=m
-> # CONFIG_I2C_VIA is not set
-> # CONFIG_I2C_VIAPRO is not set
+> CONFIG_I2C_VIA=m
+> CONFIG_I2C_VIAPRO=m
 > 
 > #
 > # ACPI drivers
 > #
-> # CONFIG_I2C_SCMI is not set
+> CONFIG_I2C_SCMI=m
 > 
 > #
 > # I2C system bus drivers (mostly embedded / system-on-chip)
 > #
-> CONFIG_I2C_CBUS_GPIO=m
+> # CONFIG_I2C_CBUS_GPIO is not set
 > CONFIG_I2C_DESIGNWARE_CORE=m
-> CONFIG_I2C_DESIGNWARE_SLAVE=y
+> # CONFIG_I2C_DESIGNWARE_SLAVE is not set
 > CONFIG_I2C_DESIGNWARE_PLATFORM=m
-> # CONFIG_I2C_DESIGNWARE_BAYTRAIL is not set
+> CONFIG_I2C_DESIGNWARE_BAYTRAIL=y
 > # CONFIG_I2C_DESIGNWARE_PCI is not set
 > # CONFIG_I2C_EMEV2 is not set
 > # CONFIG_I2C_GPIO is not set
-> CONFIG_I2C_KEMPLD=m
-> CONFIG_I2C_OCORES=m
+> # CONFIG_I2C_OCORES is not set
 > CONFIG_I2C_PCA_PLATFORM=m
-> # CONFIG_I2C_RK3X is not set
-> # CONFIG_I2C_SIMTEC is not set
-> CONFIG_I2C_XILINX=m
+> CONFIG_I2C_SIMTEC=m
+> # CONFIG_I2C_XILINX is not set
 > 
 > #
 > # External I2C/SMBus adapter drivers
 > #
-> CONFIG_I2C_DIOLAN_U2C=m
-> # CONFIG_I2C_DLN2 is not set
-> CONFIG_I2C_CP2615=m
+> # CONFIG_I2C_DIOLAN_U2C is not set
+> # CONFIG_I2C_CP2615 is not set
 > CONFIG_I2C_PARPORT=m
-> CONFIG_I2C_ROBOTFUZZ_OSIF=m
-> CONFIG_I2C_TAOS_EVM=m
-> CONFIG_I2C_TINY_USB=m
-> CONFIG_I2C_VIPERBOARD=m
+> # CONFIG_I2C_ROBOTFUZZ_OSIF is not set
+> # CONFIG_I2C_TAOS_EVM is not set
+> # CONFIG_I2C_TINY_USB is not set
 > 
 > #
 > # Other I2C/SMBus bus drivers
 > #
 > CONFIG_I2C_MLXCPLD=m
-> CONFIG_I2C_FSI=m
 > # CONFIG_I2C_VIRTIO is not set
 > # end of I2C Hardware Bus support
 > 
-> # CONFIG_I2C_STUB is not set
-> CONFIG_I2C_SLAVE=y
-> CONFIG_I2C_SLAVE_EEPROM=m
-> CONFIG_I2C_SLAVE_TESTUNIT=m
+> CONFIG_I2C_STUB=m
+> # CONFIG_I2C_SLAVE is not set
 > # CONFIG_I2C_DEBUG_CORE is not set
 > # CONFIG_I2C_DEBUG_ALGO is not set
 > # CONFIG_I2C_DEBUG_BUS is not set
 > # end of I2C support
 > 
 > # CONFIG_I3C is not set
-> # CONFIG_SPI is not set
+> CONFIG_SPI=y
+> # CONFIG_SPI_DEBUG is not set
+> CONFIG_SPI_MASTER=y
+> # CONFIG_SPI_MEM is not set
+> 
+> #
+> # SPI Master Controller Drivers
+> #
+> # CONFIG_SPI_ALTERA is not set
+> # CONFIG_SPI_AXI_SPI_ENGINE is not set
+> # CONFIG_SPI_BITBANG is not set
+> # CONFIG_SPI_BUTTERFLY is not set
+> # CONFIG_SPI_CADENCE is not set
+> # CONFIG_SPI_DESIGNWARE is not set
+> # CONFIG_SPI_NXP_FLEXSPI is not set
+> # CONFIG_SPI_GPIO is not set
+> # CONFIG_SPI_LM70_LLP is not set
+> # CONFIG_SPI_LANTIQ_SSC is not set
+> # CONFIG_SPI_OC_TINY is not set
+> # CONFIG_SPI_PXA2XX is not set
+> # CONFIG_SPI_ROCKCHIP is not set
+> # CONFIG_SPI_SC18IS602 is not set
+> # CONFIG_SPI_SIFIVE is not set
+> # CONFIG_SPI_MXIC is not set
+> # CONFIG_SPI_XCOMM is not set
+> # CONFIG_SPI_XILINX is not set
+> # CONFIG_SPI_ZYNQMP_GQSPI is not set
+> # CONFIG_SPI_AMD is not set
+> 
+> #
+> # SPI Multiplexer support
+> #
+> # CONFIG_SPI_MUX is not set
+> 
+> #
+> # SPI Protocol Masters
+> #
+> # CONFIG_SPI_SPIDEV is not set
+> # CONFIG_SPI_LOOPBACK_TEST is not set
+> # CONFIG_SPI_TLE62X0 is not set
+> # CONFIG_SPI_SLAVE is not set
+> CONFIG_SPI_DYNAMIC=y
 > # CONFIG_SPMI is not set
 > # CONFIG_HSI is not set
-> CONFIG_PPS=m
+> CONFIG_PPS=y
 > # CONFIG_PPS_DEBUG is not set
 > 
 > #
 > # PPS clients support
 > #
-> CONFIG_PPS_CLIENT_KTIMER=m
+> # CONFIG_PPS_CLIENT_KTIMER is not set
 > CONFIG_PPS_CLIENT_LDISC=m
 > CONFIG_PPS_CLIENT_PARPORT=m
 > CONFIG_PPS_CLIENT_GPIO=m
@@ -3124,53 +3586,46 @@ Thank you for your testing efforts!
 > #
 > # PTP clock support
 > #
-> # CONFIG_PTP_1588_CLOCK is not set
+> CONFIG_PTP_1588_CLOCK=y
 > CONFIG_PTP_1588_CLOCK_OPTIONAL=y
-> 
-> #
-> # Enable PHYLIB and NETWORK_PHY_TIMESTAMPING to see the additional clocks.
-> #
+> # CONFIG_DP83640_PHY is not set
+> # CONFIG_PTP_1588_CLOCK_INES is not set
+> CONFIG_PTP_1588_CLOCK_KVM=m
+> # CONFIG_PTP_1588_CLOCK_IDT82P33 is not set
+> # CONFIG_PTP_1588_CLOCK_IDTCM is not set
+> # CONFIG_PTP_1588_CLOCK_VMW is not set
 > # end of PTP clock support
 > 
 > CONFIG_PINCTRL=y
-> CONFIG_GENERIC_PINCTRL_GROUPS=y
 > CONFIG_PINMUX=y
-> CONFIG_GENERIC_PINMUX_FUNCTIONS=y
 > CONFIG_PINCONF=y
 > CONFIG_GENERIC_PINCONF=y
-> CONFIG_DEBUG_PINCTRL=y
+> # CONFIG_DEBUG_PINCTRL is not set
 > # CONFIG_PINCTRL_AMD is not set
-> CONFIG_PINCTRL_DA9062=m
-> CONFIG_PINCTRL_EQUILIBRIUM=m
-> CONFIG_PINCTRL_MCP23S08_I2C=m
-> CONFIG_PINCTRL_MCP23S08=m
-> # CONFIG_PINCTRL_MICROCHIP_SGPIO is not set
-> CONFIG_PINCTRL_OCELOT=y
-> CONFIG_PINCTRL_RK805=m
-> # CONFIG_PINCTRL_SINGLE is not set
-> # CONFIG_PINCTRL_STMFX is not set
+> # CONFIG_PINCTRL_MCP23S08 is not set
+> # CONFIG_PINCTRL_SX150X is not set
 > 
 > #
 > # Intel pinctrl drivers
 > #
-> # CONFIG_PINCTRL_BAYTRAIL is not set
-> CONFIG_PINCTRL_CHERRYVIEW=y
+> CONFIG_PINCTRL_BAYTRAIL=y
+> # CONFIG_PINCTRL_CHERRYVIEW is not set
 > # CONFIG_PINCTRL_LYNXPOINT is not set
 > CONFIG_PINCTRL_INTEL=y
 > # CONFIG_PINCTRL_ALDERLAKE is not set
 > CONFIG_PINCTRL_BROXTON=m
-> # CONFIG_PINCTRL_CANNONLAKE is not set
+> CONFIG_PINCTRL_CANNONLAKE=m
 > CONFIG_PINCTRL_CEDARFORK=m
-> # CONFIG_PINCTRL_DENVERTON is not set
+> CONFIG_PINCTRL_DENVERTON=m
 > # CONFIG_PINCTRL_ELKHARTLAKE is not set
-> CONFIG_PINCTRL_EMMITSBURG=y
-> CONFIG_PINCTRL_GEMINILAKE=y
-> CONFIG_PINCTRL_ICELAKE=m
-> CONFIG_PINCTRL_JASPERLAKE=y
-> CONFIG_PINCTRL_LAKEFIELD=m
-> CONFIG_PINCTRL_LEWISBURG=y
+> # CONFIG_PINCTRL_EMMITSBURG is not set
+> CONFIG_PINCTRL_GEMINILAKE=m
+> # CONFIG_PINCTRL_ICELAKE is not set
+> # CONFIG_PINCTRL_JASPERLAKE is not set
+> # CONFIG_PINCTRL_LAKEFIELD is not set
+> CONFIG_PINCTRL_LEWISBURG=m
 > CONFIG_PINCTRL_SUNRISEPOINT=m
-> CONFIG_PINCTRL_TIGERLAKE=y
+> # CONFIG_PINCTRL_TIGERLAKE is not set
 > # end of Intel pinctrl drivers
 > 
 > #
@@ -3180,285 +3635,206 @@ Thank you for your testing efforts!
 > 
 > CONFIG_GPIOLIB=y
 > CONFIG_GPIOLIB_FASTPATH_LIMIT=512
-> CONFIG_OF_GPIO=y
 > CONFIG_GPIO_ACPI=y
 > CONFIG_GPIOLIB_IRQCHIP=y
 > # CONFIG_DEBUG_GPIO is not set
-> CONFIG_GPIO_SYSFS=y
 > CONFIG_GPIO_CDEV=y
 > CONFIG_GPIO_CDEV_V1=y
-> CONFIG_GPIO_GENERIC=y
 > 
 > #
 > # Memory mapped GPIO drivers
 > #
-> CONFIG_GPIO_74XX_MMIO=m
-> # CONFIG_GPIO_ALTERA is not set
 > # CONFIG_GPIO_AMDPT is not set
-> CONFIG_GPIO_CADENCE=m
-> CONFIG_GPIO_DWAPB=y
+> # CONFIG_GPIO_DWAPB is not set
 > # CONFIG_GPIO_EXAR is not set
-> # CONFIG_GPIO_FTGPIO010 is not set
-> CONFIG_GPIO_GENERIC_PLATFORM=y
-> CONFIG_GPIO_GRGPIO=y
-> # CONFIG_GPIO_HLWD is not set
-> CONFIG_GPIO_ICH=y
-> CONFIG_GPIO_LOGICVC=m
-> CONFIG_GPIO_MB86S7X=y
-> CONFIG_GPIO_SAMA5D2_PIOBU=y
-> # CONFIG_GPIO_SIFIVE is not set
-> CONFIG_GPIO_SYSCON=y
-> CONFIG_GPIO_VX855=m
-> CONFIG_GPIO_WCD934X=m
-> CONFIG_GPIO_XILINX=y
-> CONFIG_GPIO_AMD_FCH=y
+> # CONFIG_GPIO_GENERIC_PLATFORM is not set
+> CONFIG_GPIO_ICH=m
+> # CONFIG_GPIO_MB86S7X is not set
+> # CONFIG_GPIO_VX855 is not set
+> # CONFIG_GPIO_AMD_FCH is not set
 > # end of Memory mapped GPIO drivers
 > 
 > #
 > # Port-mapped I/O GPIO drivers
 > #
-> CONFIG_GPIO_104_DIO_48E=y
-> CONFIG_GPIO_104_IDIO_16=m
-> # CONFIG_GPIO_104_IDI_48 is not set
-> CONFIG_GPIO_F7188X=y
-> CONFIG_GPIO_GPIO_MM=m
+> # CONFIG_GPIO_F7188X is not set
 > # CONFIG_GPIO_IT87 is not set
 > # CONFIG_GPIO_SCH is not set
-> CONFIG_GPIO_SCH311X=y
-> CONFIG_GPIO_WINBOND=y
-> CONFIG_GPIO_WS16C48=m
+> # CONFIG_GPIO_SCH311X is not set
+> # CONFIG_GPIO_WINBOND is not set
+> # CONFIG_GPIO_WS16C48 is not set
 > # end of Port-mapped I/O GPIO drivers
 > 
 > #
 > # I2C GPIO expanders
 > #
 > # CONFIG_GPIO_ADP5588 is not set
-> # CONFIG_GPIO_ADNP is not set
-> CONFIG_GPIO_GW_PLD=m
 > # CONFIG_GPIO_MAX7300 is not set
-> CONFIG_GPIO_MAX732X=m
+> # CONFIG_GPIO_MAX732X is not set
 > # CONFIG_GPIO_PCA953X is not set
 > # CONFIG_GPIO_PCA9570 is not set
-> CONFIG_GPIO_PCF857X=m
+> # CONFIG_GPIO_PCF857X is not set
 > # CONFIG_GPIO_TPIC2810 is not set
 > # end of I2C GPIO expanders
 > 
 > #
 > # MFD GPIO expanders
 > #
-> CONFIG_GPIO_ARIZONA=m
-> CONFIG_GPIO_BD9571MWV=m
-> CONFIG_GPIO_DLN2=m
-> CONFIG_GPIO_KEMPLD=m
-> # CONFIG_GPIO_MAX77650 is not set
-> # CONFIG_GPIO_TPS65086 is not set
-> CONFIG_GPIO_TPS65218=m
-> CONFIG_GPIO_TPS65912=m
-> # CONFIG_GPIO_TQMX86 is not set
-> CONFIG_GPIO_WM8994=m
 > # end of MFD GPIO expanders
 > 
 > #
 > # PCI GPIO expanders
 > #
-> CONFIG_GPIO_AMD8111=y
-> CONFIG_GPIO_BT8XX=y
-> CONFIG_GPIO_ML_IOH=m
-> CONFIG_GPIO_PCI_IDIO_16=y
-> CONFIG_GPIO_PCIE_IDIO_24=m
-> CONFIG_GPIO_RDC321X=y
-> CONFIG_GPIO_SODAVILLE=y
+> # CONFIG_GPIO_AMD8111 is not set
+> # CONFIG_GPIO_BT8XX is not set
+> # CONFIG_GPIO_ML_IOH is not set
+> # CONFIG_GPIO_PCI_IDIO_16 is not set
+> # CONFIG_GPIO_PCIE_IDIO_24 is not set
+> # CONFIG_GPIO_RDC321X is not set
 > # end of PCI GPIO expanders
+> 
+> #
+> # SPI GPIO expanders
+> #
+> # CONFIG_GPIO_MAX3191X is not set
+> # CONFIG_GPIO_MAX7301 is not set
+> # CONFIG_GPIO_MC33880 is not set
+> # CONFIG_GPIO_PISOSR is not set
+> # CONFIG_GPIO_XRA1403 is not set
+> # end of SPI GPIO expanders
 > 
 > #
 > # USB GPIO expanders
 > #
-> CONFIG_GPIO_VIPERBOARD=m
 > # end of USB GPIO expanders
 > 
 > #
 > # Virtual GPIO drivers
 > #
-> CONFIG_GPIO_AGGREGATOR=m
-> CONFIG_GPIO_MOCKUP=y
+> # CONFIG_GPIO_AGGREGATOR is not set
+> # CONFIG_GPIO_MOCKUP is not set
 > # CONFIG_GPIO_VIRTIO is not set
 > # CONFIG_GPIO_SIM is not set
 > # end of Virtual GPIO drivers
 > 
-> CONFIG_W1=y
-> 
-> #
-> # 1-wire Bus Masters
-> #
-> # CONFIG_W1_MASTER_MATROX is not set
-> CONFIG_W1_MASTER_DS2490=y
-> # CONFIG_W1_MASTER_DS2482 is not set
-> CONFIG_W1_MASTER_DS1WM=y
-> CONFIG_W1_MASTER_GPIO=y
-> CONFIG_W1_MASTER_SGI=y
-> # end of 1-wire Bus Masters
-> 
-> #
-> # 1-wire Slaves
-> #
-> CONFIG_W1_SLAVE_THERM=m
-> CONFIG_W1_SLAVE_SMEM=y
-> # CONFIG_W1_SLAVE_DS2405 is not set
-> CONFIG_W1_SLAVE_DS2408=y
-> # CONFIG_W1_SLAVE_DS2408_READBACK is not set
-> # CONFIG_W1_SLAVE_DS2413 is not set
-> CONFIG_W1_SLAVE_DS2406=m
-> CONFIG_W1_SLAVE_DS2423=m
-> # CONFIG_W1_SLAVE_DS2805 is not set
-> CONFIG_W1_SLAVE_DS2430=y
-> CONFIG_W1_SLAVE_DS2431=y
-> CONFIG_W1_SLAVE_DS2433=y
-> # CONFIG_W1_SLAVE_DS2433_CRC is not set
-> CONFIG_W1_SLAVE_DS2438=y
-> CONFIG_W1_SLAVE_DS250X=y
-> CONFIG_W1_SLAVE_DS2780=y
-> CONFIG_W1_SLAVE_DS2781=y
-> # CONFIG_W1_SLAVE_DS28E04 is not set
-> # CONFIG_W1_SLAVE_DS28E17 is not set
-> # end of 1-wire Slaves
-> 
+> # CONFIG_W1 is not set
 > CONFIG_POWER_RESET=y
-> CONFIG_POWER_RESET_ATC260X=m
-> CONFIG_POWER_RESET_GPIO=y
-> # CONFIG_POWER_RESET_GPIO_RESTART is not set
-> # CONFIG_POWER_RESET_LTC2952 is not set
-> # CONFIG_POWER_RESET_REGULATOR is not set
 > # CONFIG_POWER_RESET_RESTART is not set
-> # CONFIG_POWER_RESET_TPS65086 is not set
-> CONFIG_POWER_RESET_SYSCON=y
-> CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-> CONFIG_REBOOT_MODE=y
-> CONFIG_SYSCON_REBOOT_MODE=y
-> CONFIG_NVMEM_REBOOT_MODE=y
 > CONFIG_POWER_SUPPLY=y
 > # CONFIG_POWER_SUPPLY_DEBUG is not set
 > CONFIG_POWER_SUPPLY_HWMON=y
 > # CONFIG_PDA_POWER is not set
 > # CONFIG_TEST_POWER is not set
-> CONFIG_CHARGER_ADP5061=m
-> # CONFIG_BATTERY_ACT8945A is not set
-> CONFIG_BATTERY_CW2015=m
-> CONFIG_BATTERY_DS2760=m
-> CONFIG_BATTERY_DS2780=y
-> CONFIG_BATTERY_DS2781=y
+> # CONFIG_CHARGER_ADP5061 is not set
+> # CONFIG_BATTERY_CW2015 is not set
+> # CONFIG_BATTERY_DS2780 is not set
+> # CONFIG_BATTERY_DS2781 is not set
 > # CONFIG_BATTERY_DS2782 is not set
-> CONFIG_BATTERY_SBS=m
-> CONFIG_CHARGER_SBS=m
-> CONFIG_BATTERY_BQ27XXX=m
-> CONFIG_BATTERY_BQ27XXX_I2C=m
-> CONFIG_BATTERY_BQ27XXX_HDQ=m
-> # CONFIG_BATTERY_BQ27XXX_DT_UPDATES_NVM is not set
-> CONFIG_BATTERY_MAX17040=m
+> # CONFIG_BATTERY_SBS is not set
+> # CONFIG_CHARGER_SBS is not set
+> # CONFIG_MANAGER_SBS is not set
+> # CONFIG_BATTERY_BQ27XXX is not set
+> # CONFIG_BATTERY_MAX17040 is not set
 > # CONFIG_BATTERY_MAX17042 is not set
-> CONFIG_BATTERY_MAX1721X=y
-> CONFIG_CHARGER_PCF50633=m
-> CONFIG_CHARGER_ISP1704=m
-> CONFIG_CHARGER_MAX8903=m
-> CONFIG_CHARGER_LP8727=m
-> CONFIG_CHARGER_GPIO=m
-> # CONFIG_CHARGER_MANAGER is not set
+> # CONFIG_CHARGER_MAX8903 is not set
+> # CONFIG_CHARGER_LP8727 is not set
+> # CONFIG_CHARGER_GPIO is not set
 > # CONFIG_CHARGER_LT3651 is not set
 > # CONFIG_CHARGER_LTC4162L is not set
-> CONFIG_CHARGER_MAX14577=m
-> CONFIG_CHARGER_DETECTOR_MAX14656=m
-> # CONFIG_CHARGER_MAX77650 is not set
-> # CONFIG_CHARGER_MAX77693 is not set
 > # CONFIG_CHARGER_MAX77976 is not set
-> # CONFIG_CHARGER_MT6360 is not set
-> CONFIG_CHARGER_BQ2415X=m
-> # CONFIG_CHARGER_BQ24190 is not set
+> # CONFIG_CHARGER_BQ2415X is not set
 > # CONFIG_CHARGER_BQ24257 is not set
 > # CONFIG_CHARGER_BQ24735 is not set
-> CONFIG_CHARGER_BQ2515X=m
-> CONFIG_CHARGER_BQ25890=m
-> CONFIG_CHARGER_BQ25980=m
-> CONFIG_CHARGER_BQ256XX=m
-> CONFIG_CHARGER_SMB347=m
-> # CONFIG_CHARGER_TPS65217 is not set
+> # CONFIG_CHARGER_BQ2515X is not set
+> # CONFIG_CHARGER_BQ25890 is not set
+> # CONFIG_CHARGER_BQ25980 is not set
+> # CONFIG_CHARGER_BQ256XX is not set
 > # CONFIG_BATTERY_GAUGE_LTC2941 is not set
-> CONFIG_BATTERY_GOLDFISH=y
-> CONFIG_BATTERY_RT5033=m
-> CONFIG_CHARGER_RT9455=m
-> # CONFIG_CHARGER_UCS1002 is not set
+> # CONFIG_BATTERY_GOLDFISH is not set
+> # CONFIG_BATTERY_RT5033 is not set
+> # CONFIG_CHARGER_RT9455 is not set
 > # CONFIG_CHARGER_BD99954 is not set
 > CONFIG_HWMON=y
-> CONFIG_HWMON_VID=y
+> CONFIG_HWMON_VID=m
 > # CONFIG_HWMON_DEBUG_CHIP is not set
 > 
 > #
 > # Native drivers
 > #
-> # CONFIG_SENSORS_AD7414 is not set
+> CONFIG_SENSORS_ABITUGURU=m
+> CONFIG_SENSORS_ABITUGURU3=m
+> # CONFIG_SENSORS_AD7314 is not set
+> CONFIG_SENSORS_AD7414=m
 > CONFIG_SENSORS_AD7418=m
 > CONFIG_SENSORS_ADM1021=m
 > CONFIG_SENSORS_ADM1025=m
-> # CONFIG_SENSORS_ADM1026 is not set
+> CONFIG_SENSORS_ADM1026=m
 > CONFIG_SENSORS_ADM1029=m
 > CONFIG_SENSORS_ADM1031=m
 > # CONFIG_SENSORS_ADM1177 is not set
 > CONFIG_SENSORS_ADM9240=m
 > CONFIG_SENSORS_ADT7X10=m
+> # CONFIG_SENSORS_ADT7310 is not set
 > CONFIG_SENSORS_ADT7410=m
-> # CONFIG_SENSORS_ADT7411 is not set
+> CONFIG_SENSORS_ADT7411=m
 > CONFIG_SENSORS_ADT7462=m
 > CONFIG_SENSORS_ADT7470=m
 > CONFIG_SENSORS_ADT7475=m
 > # CONFIG_SENSORS_AHT10 is not set
-> CONFIG_SENSORS_AS370=y
-> # CONFIG_SENSORS_ASC7621 is not set
-> CONFIG_SENSORS_AXI_FAN_CONTROL=y
+> # CONFIG_SENSORS_AQUACOMPUTER_D5NEXT is not set
+> # CONFIG_SENSORS_AS370 is not set
+> CONFIG_SENSORS_ASC7621=m
+> # CONFIG_SENSORS_AXI_FAN_CONTROL is not set
 > CONFIG_SENSORS_K8TEMP=m
-> # CONFIG_SENSORS_APPLESMC is not set
+> CONFIG_SENSORS_K10TEMP=m
+> CONFIG_SENSORS_FAM15H_POWER=m
+> CONFIG_SENSORS_APPLESMC=m
 > CONFIG_SENSORS_ASB100=m
 > # CONFIG_SENSORS_ASPEED is not set
 > CONFIG_SENSORS_ATXP1=m
-> CONFIG_SENSORS_CORSAIR_CPRO=y
-> CONFIG_SENSORS_CORSAIR_PSU=m
-> # CONFIG_SENSORS_DS620 is not set
-> # CONFIG_SENSORS_DS1621 is not set
-> CONFIG_SENSORS_DELL_SMM=y
-> # CONFIG_SENSORS_I5K_AMB is not set
-> CONFIG_SENSORS_F71805F=y
-> CONFIG_SENSORS_F71882FG=y
+> # CONFIG_SENSORS_CORSAIR_CPRO is not set
+> # CONFIG_SENSORS_CORSAIR_PSU is not set
+> # CONFIG_SENSORS_DRIVETEMP is not set
+> CONFIG_SENSORS_DS620=m
+> CONFIG_SENSORS_DS1621=m
+> CONFIG_SENSORS_DELL_SMM=m
+> CONFIG_SENSORS_I5K_AMB=m
+> CONFIG_SENSORS_F71805F=m
+> CONFIG_SENSORS_F71882FG=m
 > CONFIG_SENSORS_F75375S=m
-> # CONFIG_SENSORS_GSC is not set
-> CONFIG_SENSORS_MC13783_ADC=m
 > CONFIG_SENSORS_FSCHMD=m
+> # CONFIG_SENSORS_FTSTEUTATES is not set
 > CONFIG_SENSORS_GL518SM=m
-> # CONFIG_SENSORS_GL520SM is not set
-> # CONFIG_SENSORS_G760A is not set
-> CONFIG_SENSORS_G762=m
-> # CONFIG_SENSORS_GPIO_FAN is not set
-> CONFIG_SENSORS_HIH6130=m
+> CONFIG_SENSORS_GL520SM=m
+> CONFIG_SENSORS_G760A=m
+> # CONFIG_SENSORS_G762 is not set
+> # CONFIG_SENSORS_HIH6130 is not set
 > CONFIG_SENSORS_IBMAEM=m
 > CONFIG_SENSORS_IBMPEX=m
-> CONFIG_SENSORS_I5500=y
-> CONFIG_SENSORS_CORETEMP=y
+> CONFIG_SENSORS_I5500=m
+> CONFIG_SENSORS_CORETEMP=m
 > CONFIG_SENSORS_IT87=m
-> # CONFIG_SENSORS_JC42 is not set
-> CONFIG_SENSORS_POWR1220=m
-> # CONFIG_SENSORS_LINEAGE is not set
+> CONFIG_SENSORS_JC42=m
+> # CONFIG_SENSORS_POWR1220 is not set
+> CONFIG_SENSORS_LINEAGE=m
 > # CONFIG_SENSORS_LTC2945 is not set
-> CONFIG_SENSORS_LTC2947=m
-> CONFIG_SENSORS_LTC2947_I2C=m
-> CONFIG_SENSORS_LTC2990=m
+> # CONFIG_SENSORS_LTC2947_I2C is not set
+> # CONFIG_SENSORS_LTC2947_SPI is not set
+> # CONFIG_SENSORS_LTC2990 is not set
 > # CONFIG_SENSORS_LTC2992 is not set
 > CONFIG_SENSORS_LTC4151=m
 > CONFIG_SENSORS_LTC4215=m
-> CONFIG_SENSORS_LTC4222=m
+> # CONFIG_SENSORS_LTC4222 is not set
 > CONFIG_SENSORS_LTC4245=m
-> CONFIG_SENSORS_LTC4260=m
+> # CONFIG_SENSORS_LTC4260 is not set
 > CONFIG_SENSORS_LTC4261=m
-> CONFIG_SENSORS_MAX127=m
-> # CONFIG_SENSORS_MAX16065 is not set
-> # CONFIG_SENSORS_MAX1619 is not set
+> # CONFIG_SENSORS_MAX1111 is not set
+> # CONFIG_SENSORS_MAX127 is not set
+> CONFIG_SENSORS_MAX16065=m
+> CONFIG_SENSORS_MAX1619=m
 > CONFIG_SENSORS_MAX1668=m
-> # CONFIG_SENSORS_MAX197 is not set
+> CONFIG_SENSORS_MAX197=m
+> # CONFIG_SENSORS_MAX31722 is not set
 > # CONFIG_SENSORS_MAX31730 is not set
 > # CONFIG_SENSORS_MAX6620 is not set
 > # CONFIG_SENSORS_MAX6621 is not set
@@ -3467,106 +3843,153 @@ Thank you for your testing efforts!
 > CONFIG_SENSORS_MAX6650=m
 > CONFIG_SENSORS_MAX6697=m
 > # CONFIG_SENSORS_MAX31790 is not set
-> # CONFIG_SENSORS_MCP3021 is not set
+> CONFIG_SENSORS_MCP3021=m
+> # CONFIG_SENSORS_MLXREG_FAN is not set
 > # CONFIG_SENSORS_TC654 is not set
 > # CONFIG_SENSORS_TPS23861 is not set
 > # CONFIG_SENSORS_MR75203 is not set
+> # CONFIG_SENSORS_ADCXX is not set
 > CONFIG_SENSORS_LM63=m
+> # CONFIG_SENSORS_LM70 is not set
 > CONFIG_SENSORS_LM73=m
 > CONFIG_SENSORS_LM75=m
 > CONFIG_SENSORS_LM77=m
 > CONFIG_SENSORS_LM78=m
 > CONFIG_SENSORS_LM80=m
-> # CONFIG_SENSORS_LM83 is not set
+> CONFIG_SENSORS_LM83=m
 > CONFIG_SENSORS_LM85=m
 > CONFIG_SENSORS_LM87=m
-> # CONFIG_SENSORS_LM90 is not set
+> CONFIG_SENSORS_LM90=m
 > CONFIG_SENSORS_LM92=m
 > CONFIG_SENSORS_LM93=m
-> # CONFIG_SENSORS_LM95234 is not set
+> CONFIG_SENSORS_LM95234=m
 > CONFIG_SENSORS_LM95241=m
-> # CONFIG_SENSORS_LM95245 is not set
+> CONFIG_SENSORS_LM95245=m
 > CONFIG_SENSORS_PC87360=m
-> # CONFIG_SENSORS_PC87427 is not set
+> CONFIG_SENSORS_PC87427=m
 > # CONFIG_SENSORS_NCT6683 is not set
-> # CONFIG_SENSORS_NCT6775 is not set
-> CONFIG_SENSORS_NCT7802=m
-> CONFIG_SENSORS_NPCM7XX=m
-> # CONFIG_SENSORS_PCF8591 is not set
-> # CONFIG_PMBUS is not set
-> CONFIG_SENSORS_SBTSI=m
-> CONFIG_SENSORS_SBRMI=m
-> CONFIG_SENSORS_SHT15=y
-> # CONFIG_SENSORS_SHT21 is not set
+> CONFIG_SENSORS_NCT6775=m
+> # CONFIG_SENSORS_NCT7802 is not set
+> # CONFIG_SENSORS_NCT7904 is not set
+> # CONFIG_SENSORS_NPCM7XX is not set
+> # CONFIG_SENSORS_NZXT_KRAKEN2 is not set
+> # CONFIG_SENSORS_NZXT_SMART2 is not set
+> CONFIG_SENSORS_PCF8591=m
+> CONFIG_PMBUS=m
+> CONFIG_SENSORS_PMBUS=m
+> # CONFIG_SENSORS_ADM1266 is not set
+> CONFIG_SENSORS_ADM1275=m
+> # CONFIG_SENSORS_BEL_PFE is not set
+> # CONFIG_SENSORS_BPA_RS600 is not set
+> # CONFIG_SENSORS_DELTA_AHE50DC_FAN is not set
+> # CONFIG_SENSORS_FSP_3Y is not set
+> # CONFIG_SENSORS_IBM_CFFPS is not set
+> # CONFIG_SENSORS_DPS920AB is not set
+> # CONFIG_SENSORS_INSPUR_IPSPS is not set
+> # CONFIG_SENSORS_IR35221 is not set
+> # CONFIG_SENSORS_IR36021 is not set
+> # CONFIG_SENSORS_IR38064 is not set
+> # CONFIG_SENSORS_IRPS5401 is not set
+> # CONFIG_SENSORS_ISL68137 is not set
+> CONFIG_SENSORS_LM25066=m
+> CONFIG_SENSORS_LTC2978=m
+> # CONFIG_SENSORS_LTC3815 is not set
+> # CONFIG_SENSORS_MAX15301 is not set
+> CONFIG_SENSORS_MAX16064=m
+> # CONFIG_SENSORS_MAX16601 is not set
+> # CONFIG_SENSORS_MAX20730 is not set
+> # CONFIG_SENSORS_MAX20751 is not set
+> # CONFIG_SENSORS_MAX31785 is not set
+> CONFIG_SENSORS_MAX34440=m
+> CONFIG_SENSORS_MAX8688=m
+> # CONFIG_SENSORS_MP2888 is not set
+> # CONFIG_SENSORS_MP2975 is not set
+> # CONFIG_SENSORS_MP5023 is not set
+> # CONFIG_SENSORS_PIM4328 is not set
+> # CONFIG_SENSORS_PM6764TR is not set
+> # CONFIG_SENSORS_PXE1610 is not set
+> # CONFIG_SENSORS_Q54SJ108A2 is not set
+> # CONFIG_SENSORS_STPDDC60 is not set
+> # CONFIG_SENSORS_TPS40422 is not set
+> # CONFIG_SENSORS_TPS53679 is not set
+> CONFIG_SENSORS_UCD9000=m
+> CONFIG_SENSORS_UCD9200=m
+> # CONFIG_SENSORS_XDPE122 is not set
+> CONFIG_SENSORS_ZL6100=m
+> # CONFIG_SENSORS_SBTSI is not set
+> # CONFIG_SENSORS_SBRMI is not set
+> CONFIG_SENSORS_SHT15=m
+> CONFIG_SENSORS_SHT21=m
 > # CONFIG_SENSORS_SHT3x is not set
-> CONFIG_SENSORS_SHT4x=m
-> CONFIG_SENSORS_SHTC1=m
-> # CONFIG_SENSORS_SIS5595 is not set
-> # CONFIG_SENSORS_DME1737 is not set
-> # CONFIG_SENSORS_EMC1403 is not set
-> CONFIG_SENSORS_EMC2103=m
+> # CONFIG_SENSORS_SHT4x is not set
+> # CONFIG_SENSORS_SHTC1 is not set
+> CONFIG_SENSORS_SIS5595=m
+> CONFIG_SENSORS_DME1737=m
+> CONFIG_SENSORS_EMC1403=m
+> # CONFIG_SENSORS_EMC2103 is not set
 > CONFIG_SENSORS_EMC6W201=m
-> # CONFIG_SENSORS_SMSC47M1 is not set
+> CONFIG_SENSORS_SMSC47M1=m
 > CONFIG_SENSORS_SMSC47M192=m
 > CONFIG_SENSORS_SMSC47B397=m
-> CONFIG_SENSORS_STTS751=m
-> CONFIG_SENSORS_SMM665=m
-> CONFIG_SENSORS_ADC128D818=m
-> # CONFIG_SENSORS_ADS7828 is not set
+> CONFIG_SENSORS_SCH56XX_COMMON=m
+> CONFIG_SENSORS_SCH5627=m
+> CONFIG_SENSORS_SCH5636=m
+> # CONFIG_SENSORS_STTS751 is not set
+> # CONFIG_SENSORS_SMM665 is not set
+> # CONFIG_SENSORS_ADC128D818 is not set
+> CONFIG_SENSORS_ADS7828=m
+> # CONFIG_SENSORS_ADS7871 is not set
 > CONFIG_SENSORS_AMC6821=m
 > CONFIG_SENSORS_INA209=m
 > CONFIG_SENSORS_INA2XX=m
 > # CONFIG_SENSORS_INA238 is not set
 > # CONFIG_SENSORS_INA3221 is not set
-> CONFIG_SENSORS_TC74=m
-> # CONFIG_SENSORS_THMC50 is not set
+> # CONFIG_SENSORS_TC74 is not set
+> CONFIG_SENSORS_THMC50=m
 > CONFIG_SENSORS_TMP102=m
-> CONFIG_SENSORS_TMP103=m
-> CONFIG_SENSORS_TMP108=m
+> # CONFIG_SENSORS_TMP103 is not set
+> # CONFIG_SENSORS_TMP108 is not set
 > CONFIG_SENSORS_TMP401=m
 > CONFIG_SENSORS_TMP421=m
-> CONFIG_SENSORS_TMP513=m
-> CONFIG_SENSORS_VIA_CPUTEMP=y
+> # CONFIG_SENSORS_TMP513 is not set
+> CONFIG_SENSORS_VIA_CPUTEMP=m
 > CONFIG_SENSORS_VIA686A=m
 > CONFIG_SENSORS_VT1211=m
-> CONFIG_SENSORS_VT8231=y
-> CONFIG_SENSORS_W83773G=m
+> CONFIG_SENSORS_VT8231=m
+> # CONFIG_SENSORS_W83773G is not set
 > CONFIG_SENSORS_W83781D=m
-> # CONFIG_SENSORS_W83791D is not set
+> CONFIG_SENSORS_W83791D=m
 > CONFIG_SENSORS_W83792D=m
 > CONFIG_SENSORS_W83793=m
 > CONFIG_SENSORS_W83795=m
-> CONFIG_SENSORS_W83795_FANCTRL=y
+> # CONFIG_SENSORS_W83795_FANCTRL is not set
 > CONFIG_SENSORS_W83L785TS=m
-> # CONFIG_SENSORS_W83L786NG is not set
-> CONFIG_SENSORS_W83627HF=y
-> # CONFIG_SENSORS_W83627EHF is not set
+> CONFIG_SENSORS_W83L786NG=m
+> CONFIG_SENSORS_W83627HF=m
+> CONFIG_SENSORS_W83627EHF=m
 > # CONFIG_SENSORS_XGENE is not set
 > 
 > #
 > # ACPI drivers
 > #
 > CONFIG_SENSORS_ACPI_POWER=m
-> # CONFIG_SENSORS_ATK0110 is not set
+> CONFIG_SENSORS_ATK0110=m
+> # CONFIG_SENSORS_ASUS_WMI is not set
+> # CONFIG_SENSORS_ASUS_WMI_EC is not set
 > CONFIG_THERMAL=y
-> CONFIG_THERMAL_NETLINK=y
+> # CONFIG_THERMAL_NETLINK is not set
 > # CONFIG_THERMAL_STATISTICS is not set
 > CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS=0
 > CONFIG_THERMAL_HWMON=y
-> # CONFIG_THERMAL_OF is not set
 > CONFIG_THERMAL_WRITABLE_TRIPS=y
 > CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y
 > # CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE is not set
 > # CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
-> # CONFIG_THERMAL_GOV_FAIR_SHARE is not set
+> CONFIG_THERMAL_GOV_FAIR_SHARE=y
 > CONFIG_THERMAL_GOV_STEP_WISE=y
 > CONFIG_THERMAL_GOV_BANG_BANG=y
 > CONFIG_THERMAL_GOV_USER_SPACE=y
-> # CONFIG_THERMAL_GOV_POWER_ALLOCATOR is not set
-> CONFIG_DEVFREQ_THERMAL=y
-> CONFIG_THERMAL_EMULATION=y
-> CONFIG_THERMAL_MMIO=m
-> CONFIG_DA9062_THERMAL=m
+> # CONFIG_THERMAL_EMULATION is not set
 > 
 > #
 > # Intel thermal drivers
@@ -3574,406 +3997,650 @@ Thank you for your testing efforts!
 > CONFIG_INTEL_POWERCLAMP=m
 > CONFIG_X86_THERMAL_VECTOR=y
 > CONFIG_X86_PKG_TEMP_THERMAL=m
-> CONFIG_INTEL_SOC_DTS_IOSF_CORE=m
 > # CONFIG_INTEL_SOC_DTS_THERMAL is not set
 > 
 > #
 > # ACPI INT340X thermal drivers
 > #
-> CONFIG_INT340X_THERMAL=m
-> CONFIG_ACPI_THERMAL_REL=m
-> CONFIG_INT3406_THERMAL=m
-> CONFIG_PROC_THERMAL_MMIO_RAPL=m
+> # CONFIG_INT340X_THERMAL is not set
 > # end of ACPI INT340X thermal drivers
 > 
-> # CONFIG_INTEL_PCH_THERMAL is not set
+> CONFIG_INTEL_PCH_THERMAL=m
 > # CONFIG_INTEL_TCC_COOLING is not set
 > # CONFIG_INTEL_MENLOW is not set
 > # end of Intel thermal drivers
 > 
-> # CONFIG_WATCHDOG is not set
+> CONFIG_WATCHDOG=y
+> CONFIG_WATCHDOG_CORE=y
+> # CONFIG_WATCHDOG_NOWAYOUT is not set
+> CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED=y
+> CONFIG_WATCHDOG_OPEN_TIMEOUT=0
+> CONFIG_WATCHDOG_SYSFS=y
+> # CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT is not set
+> 
+> #
+> # Watchdog Pretimeout Governors
+> #
+> # CONFIG_WATCHDOG_PRETIMEOUT_GOV is not set
+> 
+> #
+> # Watchdog Device Drivers
+> #
+> CONFIG_SOFT_WATCHDOG=m
+> CONFIG_WDAT_WDT=m
+> # CONFIG_XILINX_WATCHDOG is not set
+> # CONFIG_ZIIRAVE_WATCHDOG is not set
+> # CONFIG_MLX_WDT is not set
+> # CONFIG_CADENCE_WATCHDOG is not set
+> # CONFIG_DW_WATCHDOG is not set
+> # CONFIG_MAX63XX_WATCHDOG is not set
+> # CONFIG_ACQUIRE_WDT is not set
+> # CONFIG_ADVANTECH_WDT is not set
+> CONFIG_ALIM1535_WDT=m
+> CONFIG_ALIM7101_WDT=m
+> # CONFIG_EBC_C384_WDT is not set
+> CONFIG_F71808E_WDT=m
+> # CONFIG_SP5100_TCO is not set
+> CONFIG_SBC_FITPC2_WATCHDOG=m
+> # CONFIG_EUROTECH_WDT is not set
+> CONFIG_IB700_WDT=m
+> CONFIG_IBMASR=m
+> # CONFIG_WAFER_WDT is not set
+> CONFIG_I6300ESB_WDT=y
+> CONFIG_IE6XX_WDT=m
+> CONFIG_ITCO_WDT=y
+> CONFIG_ITCO_VENDOR_SUPPORT=y
+> CONFIG_IT8712F_WDT=m
+> CONFIG_IT87_WDT=m
+> CONFIG_HP_WATCHDOG=m
+> CONFIG_HPWDT_NMI_DECODING=y
+> # CONFIG_SC1200_WDT is not set
+> # CONFIG_PC87413_WDT is not set
+> CONFIG_NV_TCO=m
+> # CONFIG_60XX_WDT is not set
+> # CONFIG_CPU5_WDT is not set
+> CONFIG_SMSC_SCH311X_WDT=m
+> # CONFIG_SMSC37B787_WDT is not set
+> # CONFIG_TQMX86_WDT is not set
+> CONFIG_VIA_WDT=m
+> CONFIG_W83627HF_WDT=m
+> CONFIG_W83877F_WDT=m
+> CONFIG_W83977F_WDT=m
+> CONFIG_MACHZ_WDT=m
+> # CONFIG_SBC_EPX_C3_WATCHDOG is not set
+> CONFIG_INTEL_MEI_WDT=m
+> # CONFIG_NI903X_WDT is not set
+> # CONFIG_NIC7018_WDT is not set
+> # CONFIG_MEN_A21_WDT is not set
+> 
+> #
+> # PCI-based Watchdog Cards
+> #
+> CONFIG_PCIPCWATCHDOG=m
+> CONFIG_WDTPCI=m
+> 
+> #
+> # USB-based Watchdog Cards
+> #
+> # CONFIG_USBPCWATCHDOG is not set
 > CONFIG_SSB_POSSIBLE=y
-> CONFIG_SSB=m
-> CONFIG_SSB_PCIHOST_POSSIBLE=y
-> # CONFIG_SSB_PCIHOST is not set
-> CONFIG_SSB_PCMCIAHOST_POSSIBLE=y
-> # CONFIG_SSB_PCMCIAHOST is not set
-> CONFIG_SSB_DRIVER_GPIO=y
+> # CONFIG_SSB is not set
 > CONFIG_BCMA_POSSIBLE=y
 > CONFIG_BCMA=m
 > CONFIG_BCMA_HOST_PCI_POSSIBLE=y
-> # CONFIG_BCMA_HOST_PCI is not set
+> CONFIG_BCMA_HOST_PCI=y
 > # CONFIG_BCMA_HOST_SOC is not set
-> # CONFIG_BCMA_DRIVER_PCI is not set
+> CONFIG_BCMA_DRIVER_PCI=y
 > CONFIG_BCMA_DRIVER_GMAC_CMN=y
-> # CONFIG_BCMA_DRIVER_GPIO is not set
-> CONFIG_BCMA_DEBUG=y
+> CONFIG_BCMA_DRIVER_GPIO=y
+> # CONFIG_BCMA_DEBUG is not set
 > 
 > #
 > # Multifunction device drivers
 > #
 > CONFIG_MFD_CORE=y
-> CONFIG_MFD_ACT8945A=m
-> CONFIG_MFD_ATMEL_FLEXCOM=m
-> CONFIG_MFD_ATMEL_HLCDC=y
-> CONFIG_MFD_BCM590XX=m
-> CONFIG_MFD_BD9571MWV=m
+> # CONFIG_MFD_AS3711 is not set
+> # CONFIG_PMIC_ADP5520 is not set
+> # CONFIG_MFD_AAT2870_CORE is not set
+> # CONFIG_MFD_BCM590XX is not set
+> # CONFIG_MFD_BD9571MWV is not set
 > # CONFIG_MFD_AXP20X_I2C is not set
 > # CONFIG_MFD_MADERA is not set
-> CONFIG_MFD_DA9062=m
-> CONFIG_MFD_DA9063=m
+> # CONFIG_PMIC_DA903X is not set
+> # CONFIG_MFD_DA9052_SPI is not set
+> # CONFIG_MFD_DA9052_I2C is not set
+> # CONFIG_MFD_DA9055 is not set
+> # CONFIG_MFD_DA9062 is not set
+> # CONFIG_MFD_DA9063 is not set
 > # CONFIG_MFD_DA9150 is not set
-> CONFIG_MFD_DLN2=m
-> CONFIG_MFD_GATEWORKS_GSC=m
-> CONFIG_MFD_MC13XXX=m
-> CONFIG_MFD_MC13XXX_I2C=m
-> CONFIG_MFD_MP2629=m
-> CONFIG_MFD_HI6421_PMIC=y
-> CONFIG_HTC_PASIC3=m
+> # CONFIG_MFD_DLN2 is not set
+> # CONFIG_MFD_MC13XXX_SPI is not set
+> # CONFIG_MFD_MC13XXX_I2C is not set
+> # CONFIG_MFD_MP2629 is not set
+> # CONFIG_HTC_PASIC3 is not set
+> # CONFIG_HTC_I2CPLD is not set
 > # CONFIG_MFD_INTEL_QUARK_I2C_GPIO is not set
 > CONFIG_LPC_ICH=y
-> CONFIG_LPC_SCH=y
-> CONFIG_INTEL_SOC_PMIC_MRFLD=y
-> # CONFIG_MFD_INTEL_LPSS_ACPI is not set
-> # CONFIG_MFD_INTEL_LPSS_PCI is not set
+> CONFIG_LPC_SCH=m
+> CONFIG_MFD_INTEL_LPSS=y
+> CONFIG_MFD_INTEL_LPSS_ACPI=y
+> CONFIG_MFD_INTEL_LPSS_PCI=y
 > # CONFIG_MFD_INTEL_PMC_BXT is not set
-> CONFIG_MFD_IQS62X=m
+> # CONFIG_MFD_IQS62X is not set
 > # CONFIG_MFD_JANZ_CMODIO is not set
-> CONFIG_MFD_KEMPLD=m
-> CONFIG_MFD_88PM800=m
-> CONFIG_MFD_88PM805=m
-> CONFIG_MFD_MAX14577=m
-> CONFIG_MFD_MAX77650=m
-> CONFIG_MFD_MAX77686=m
-> CONFIG_MFD_MAX77693=m
+> # CONFIG_MFD_KEMPLD is not set
+> # CONFIG_MFD_88PM800 is not set
+> # CONFIG_MFD_88PM805 is not set
+> # CONFIG_MFD_88PM860X is not set
+> # CONFIG_MFD_MAX14577 is not set
+> # CONFIG_MFD_MAX77693 is not set
+> # CONFIG_MFD_MAX77843 is not set
 > # CONFIG_MFD_MAX8907 is not set
-> CONFIG_MFD_MT6360=m
+> # CONFIG_MFD_MAX8925 is not set
+> # CONFIG_MFD_MAX8997 is not set
+> # CONFIG_MFD_MAX8998 is not set
+> # CONFIG_MFD_MT6360 is not set
 > # CONFIG_MFD_MT6397 is not set
 > # CONFIG_MFD_MENF21BMC is not set
-> CONFIG_MFD_VIPERBOARD=m
-> CONFIG_MFD_NTXEC=m
-> CONFIG_MFD_RETU=m
-> CONFIG_MFD_PCF50633=m
-> CONFIG_PCF50633_ADC=m
-> CONFIG_PCF50633_GPIO=m
-> CONFIG_MFD_RDC321X=y
-> CONFIG_MFD_RT4831=m
-> CONFIG_MFD_RT5033=m
-> CONFIG_MFD_RK808=m
-> CONFIG_MFD_RN5T618=m
-> CONFIG_MFD_SI476X_CORE=m
-> # CONFIG_MFD_SM501 is not set
+> # CONFIG_EZX_PCAP is not set
+> # CONFIG_MFD_VIPERBOARD is not set
+> # CONFIG_MFD_RETU is not set
+> # CONFIG_MFD_PCF50633 is not set
+> # CONFIG_MFD_RDC321X is not set
+> # CONFIG_MFD_RT4831 is not set
+> # CONFIG_MFD_RT5033 is not set
+> # CONFIG_MFD_RC5T583 is not set
+> # CONFIG_MFD_SI476X_CORE is not set
+> CONFIG_MFD_SM501=m
+> CONFIG_MFD_SM501_GPIO=y
 > # CONFIG_MFD_SKY81452 is not set
-> CONFIG_MFD_SYSCON=y
+> # CONFIG_MFD_SYSCON is not set
 > # CONFIG_MFD_TI_AM335X_TSCADC is not set
 > # CONFIG_MFD_LP3943 is not set
-> CONFIG_MFD_TI_LMU=m
+> # CONFIG_MFD_LP8788 is not set
+> # CONFIG_MFD_TI_LMU is not set
+> # CONFIG_MFD_PALMAS is not set
 > # CONFIG_TPS6105X is not set
 > # CONFIG_TPS65010 is not set
-> CONFIG_TPS6507X=m
-> CONFIG_MFD_TPS65086=m
-> CONFIG_MFD_TPS65217=m
+> # CONFIG_TPS6507X is not set
+> # CONFIG_MFD_TPS65086 is not set
+> # CONFIG_MFD_TPS65090 is not set
 > # CONFIG_MFD_TI_LP873X is not set
-> # CONFIG_MFD_TI_LP87565 is not set
-> CONFIG_MFD_TPS65218=m
-> CONFIG_MFD_TPS65912=m
-> CONFIG_MFD_TPS65912_I2C=m
-> CONFIG_MFD_WL1273_CORE=m
-> CONFIG_MFD_LM3533=m
-> CONFIG_MFD_TQMX86=m
+> # CONFIG_MFD_TPS6586X is not set
+> # CONFIG_MFD_TPS65910 is not set
+> # CONFIG_MFD_TPS65912_I2C is not set
+> # CONFIG_MFD_TPS65912_SPI is not set
+> # CONFIG_TWL4030_CORE is not set
+> # CONFIG_TWL6040_CORE is not set
+> # CONFIG_MFD_WL1273_CORE is not set
+> # CONFIG_MFD_LM3533 is not set
+> # CONFIG_MFD_TQMX86 is not set
 > CONFIG_MFD_VX855=m
-> CONFIG_MFD_ARIZONA=m
-> CONFIG_MFD_ARIZONA_I2C=m
-> # CONFIG_MFD_CS47L24 is not set
-> CONFIG_MFD_WM5102=y
-> CONFIG_MFD_WM5110=y
-> # CONFIG_MFD_WM8997 is not set
-> CONFIG_MFD_WM8998=y
-> CONFIG_MFD_WM8994=m
-> CONFIG_MFD_STMFX=m
-> CONFIG_MFD_WCD934X=m
-> CONFIG_MFD_ATC260X=m
-> CONFIG_MFD_ATC260X_I2C=m
-> CONFIG_MFD_QCOM_PM8008=m
-> CONFIG_MFD_RSMU_I2C=m
+> # CONFIG_MFD_ARIZONA_I2C is not set
+> # CONFIG_MFD_ARIZONA_SPI is not set
+> # CONFIG_MFD_WM8400 is not set
+> # CONFIG_MFD_WM831X_I2C is not set
+> # CONFIG_MFD_WM831X_SPI is not set
+> # CONFIG_MFD_WM8350_I2C is not set
+> # CONFIG_MFD_WM8994 is not set
+> # CONFIG_MFD_ATC260X_I2C is not set
+> # CONFIG_MFD_INTEL_M10_BMC is not set
 > # end of Multifunction device drivers
 > 
-> CONFIG_REGULATOR=y
-> CONFIG_REGULATOR_DEBUG=y
-> CONFIG_REGULATOR_FIXED_VOLTAGE=m
-> # CONFIG_REGULATOR_VIRTUAL_CONSUMER is not set
-> CONFIG_REGULATOR_USERSPACE_CONSUMER=y
-> CONFIG_REGULATOR_88PG86X=m
-> CONFIG_REGULATOR_88PM800=m
-> CONFIG_REGULATOR_ACT8865=m
-> CONFIG_REGULATOR_ACT8945A=m
-> CONFIG_REGULATOR_AD5398=m
-> CONFIG_REGULATOR_ATC260X=m
-> CONFIG_REGULATOR_BCM590XX=m
-> CONFIG_REGULATOR_BD9571MWV=m
-> CONFIG_REGULATOR_DA9062=m
-> CONFIG_REGULATOR_DA9063=m
-> CONFIG_REGULATOR_DA9121=m
-> CONFIG_REGULATOR_DA9210=m
-> CONFIG_REGULATOR_DA9211=m
-> CONFIG_REGULATOR_FAN53555=m
-> CONFIG_REGULATOR_FAN53880=m
-> CONFIG_REGULATOR_GPIO=y
-> CONFIG_REGULATOR_HI6421=y
-> CONFIG_REGULATOR_HI6421V530=m
-> # CONFIG_REGULATOR_ISL9305 is not set
-> CONFIG_REGULATOR_ISL6271A=m
-> CONFIG_REGULATOR_LM363X=m
-> CONFIG_REGULATOR_LP3971=m
-> CONFIG_REGULATOR_LP3972=m
-> CONFIG_REGULATOR_LP872X=m
-> # CONFIG_REGULATOR_LP8755 is not set
-> CONFIG_REGULATOR_LTC3589=m
-> CONFIG_REGULATOR_LTC3676=m
-> # CONFIG_REGULATOR_MAX14577 is not set
-> CONFIG_REGULATOR_MAX1586=m
-> CONFIG_REGULATOR_MAX77650=m
-> CONFIG_REGULATOR_MAX8649=m
-> CONFIG_REGULATOR_MAX8660=m
-> CONFIG_REGULATOR_MAX8893=m
-> CONFIG_REGULATOR_MAX8952=m
-> # CONFIG_REGULATOR_MAX20086 is not set
-> CONFIG_REGULATOR_MAX77686=m
-> CONFIG_REGULATOR_MAX77693=m
-> CONFIG_REGULATOR_MAX77802=m
-> CONFIG_REGULATOR_MAX77826=m
-> CONFIG_REGULATOR_MC13XXX_CORE=m
-> # CONFIG_REGULATOR_MC13783 is not set
-> CONFIG_REGULATOR_MC13892=m
-> CONFIG_REGULATOR_MCP16502=m
-> # CONFIG_REGULATOR_MP5416 is not set
-> CONFIG_REGULATOR_MP8859=m
-> CONFIG_REGULATOR_MP886X=m
-> # CONFIG_REGULATOR_MPQ7920 is not set
-> CONFIG_REGULATOR_MT6311=m
-> CONFIG_REGULATOR_MT6360=m
-> CONFIG_REGULATOR_PCA9450=m
-> CONFIG_REGULATOR_PCF50633=m
-> CONFIG_REGULATOR_PF8X00=m
-> # CONFIG_REGULATOR_PFUZE100 is not set
-> CONFIG_REGULATOR_PV88060=m
-> CONFIG_REGULATOR_PV88080=m
-> # CONFIG_REGULATOR_PV88090 is not set
-> CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY=m
-> # CONFIG_REGULATOR_RK808 is not set
-> # CONFIG_REGULATOR_RN5T618 is not set
-> CONFIG_REGULATOR_RT4801=m
-> CONFIG_REGULATOR_RT4831=m
-> CONFIG_REGULATOR_RT5033=m
-> CONFIG_REGULATOR_RT6160=m
-> CONFIG_REGULATOR_RT6245=m
-> CONFIG_REGULATOR_RTQ2134=m
-> CONFIG_REGULATOR_RTMV20=m
-> # CONFIG_REGULATOR_RTQ6752 is not set
-> CONFIG_REGULATOR_SLG51000=m
-> CONFIG_REGULATOR_SY8106A=m
-> CONFIG_REGULATOR_SY8824X=m
-> CONFIG_REGULATOR_SY8827N=m
-> CONFIG_REGULATOR_TPS51632=m
-> CONFIG_REGULATOR_TPS62360=m
-> CONFIG_REGULATOR_TPS65023=m
-> CONFIG_REGULATOR_TPS6507X=m
-> CONFIG_REGULATOR_TPS65086=m
-> CONFIG_REGULATOR_TPS65132=m
-> CONFIG_REGULATOR_TPS65217=m
-> CONFIG_REGULATOR_TPS65218=m
-> CONFIG_REGULATOR_TPS65912=m
-> # CONFIG_REGULATOR_VCTRL is not set
-> CONFIG_REGULATOR_WM8994=m
+> # CONFIG_REGULATOR is not set
 > CONFIG_RC_CORE=m
-> # CONFIG_RC_MAP is not set
+> CONFIG_RC_MAP=m
 > CONFIG_LIRC=y
-> # CONFIG_RC_DECODERS is not set
-> # CONFIG_RC_DEVICES is not set
-> CONFIG_CEC_CORE=m
+> CONFIG_RC_DECODERS=y
+> CONFIG_IR_NEC_DECODER=m
+> CONFIG_IR_RC5_DECODER=m
+> CONFIG_IR_RC6_DECODER=m
+> CONFIG_IR_JVC_DECODER=m
+> CONFIG_IR_SONY_DECODER=m
+> CONFIG_IR_SANYO_DECODER=m
+> # CONFIG_IR_SHARP_DECODER is not set
+> CONFIG_IR_MCE_KBD_DECODER=m
+> # CONFIG_IR_XMP_DECODER is not set
+> CONFIG_IR_IMON_DECODER=m
+> # CONFIG_IR_RCMM_DECODER is not set
+> CONFIG_RC_DEVICES=y
+> # CONFIG_RC_ATI_REMOTE is not set
+> CONFIG_IR_ENE=m
+> # CONFIG_IR_IMON is not set
+> # CONFIG_IR_IMON_RAW is not set
+> # CONFIG_IR_MCEUSB is not set
+> CONFIG_IR_ITE_CIR=m
+> CONFIG_IR_FINTEK=m
+> CONFIG_IR_NUVOTON=m
+> # CONFIG_IR_REDRAT3 is not set
+> # CONFIG_IR_STREAMZAP is not set
+> CONFIG_IR_WINBOND_CIR=m
+> # CONFIG_IR_IGORPLUGUSB is not set
+> # CONFIG_IR_IGUANA is not set
+> # CONFIG_IR_TTUSBIR is not set
+> # CONFIG_RC_LOOPBACK is not set
+> CONFIG_IR_SERIAL=m
+> CONFIG_IR_SERIAL_TRANSMITTER=y
+> # CONFIG_RC_XBOX_DVD is not set
+> # CONFIG_IR_TOY is not set
 > 
 > #
 > # CEC support
 > #
-> # CONFIG_MEDIA_CEC_RC is not set
-> CONFIG_MEDIA_CEC_SUPPORT=y
-> CONFIG_CEC_CH7322=m
-> # CONFIG_USB_PULSE8_CEC is not set
-> # CONFIG_USB_RAINSHADOW_CEC is not set
+> # CONFIG_MEDIA_CEC_SUPPORT is not set
 > # end of CEC support
 > 
-> # CONFIG_MEDIA_SUPPORT is not set
+> CONFIG_MEDIA_SUPPORT=m
+> CONFIG_MEDIA_SUPPORT_FILTER=y
+> CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
+> 
+> #
+> # Media device types
+> #
+> # CONFIG_MEDIA_CAMERA_SUPPORT is not set
+> # CONFIG_MEDIA_ANALOG_TV_SUPPORT is not set
+> # CONFIG_MEDIA_DIGITAL_TV_SUPPORT is not set
+> # CONFIG_MEDIA_RADIO_SUPPORT is not set
+> # CONFIG_MEDIA_SDR_SUPPORT is not set
+> # CONFIG_MEDIA_PLATFORM_SUPPORT is not set
+> # CONFIG_MEDIA_TEST_SUPPORT is not set
+> # end of Media device types
+> 
+> #
+> # Media drivers
+> #
+> 
+> #
+> # Drivers filtered as selected at 'Filter media drivers'
+> #
+> # CONFIG_MEDIA_USB_SUPPORT is not set
+> # CONFIG_MEDIA_PCI_SUPPORT is not set
+> # end of Media drivers
+> 
+> CONFIG_MEDIA_HIDE_ANCILLARY_SUBDRV=y
+> 
+> #
+> # Media ancillary drivers
+> #
+> 
+> #
+> # Media SPI Adapters
+> #
+> # end of Media SPI Adapters
+> # end of Media ancillary drivers
 > 
 > #
 > # Graphics support
 > #
-> CONFIG_AGP=m
-> # CONFIG_AGP_INTEL is not set
-> CONFIG_AGP_SIS=m
-> CONFIG_AGP_VIA=m
+> # CONFIG_AGP is not set
+> CONFIG_INTEL_GTT=m
 > CONFIG_VGA_ARB=y
-> CONFIG_VGA_ARB_MAX_GPUS=16
-> # CONFIG_VGA_SWITCHEROO is not set
-> # CONFIG_DRM is not set
-> CONFIG_DRM_DEBUG_MODESET_LOCK=y
+> CONFIG_VGA_ARB_MAX_GPUS=64
+> CONFIG_VGA_SWITCHEROO=y
+> CONFIG_DRM=m
+> CONFIG_DRM_MIPI_DSI=y
+> CONFIG_DRM_DP_AUX_CHARDEV=y
+> # CONFIG_DRM_DEBUG_SELFTEST is not set
+> CONFIG_DRM_KMS_HELPER=m
+> CONFIG_DRM_FBDEV_EMULATION=y
+> CONFIG_DRM_FBDEV_OVERALLOC=100
+> CONFIG_DRM_LOAD_EDID_FIRMWARE=y
+> # CONFIG_DRM_DP_CEC is not set
+> CONFIG_DRM_TTM=m
+> CONFIG_DRM_VRAM_HELPER=m
+> CONFIG_DRM_TTM_HELPER=m
+> CONFIG_DRM_GEM_SHMEM_HELPER=m
+> 
+> #
+> # I2C encoder or helper chips
+> #
+> CONFIG_DRM_I2C_CH7006=m
+> CONFIG_DRM_I2C_SIL164=m
+> # CONFIG_DRM_I2C_NXP_TDA998X is not set
+> # CONFIG_DRM_I2C_NXP_TDA9950 is not set
+> # end of I2C encoder or helper chips
 > 
 > #
 > # ARM devices
 > #
 > # end of ARM devices
 > 
+> # CONFIG_DRM_RADEON is not set
+> # CONFIG_DRM_AMDGPU is not set
+> # CONFIG_DRM_NOUVEAU is not set
+> CONFIG_DRM_I915=m
+> CONFIG_DRM_I915_FORCE_PROBE=""
+> CONFIG_DRM_I915_CAPTURE_ERROR=y
+> CONFIG_DRM_I915_COMPRESS_ERROR=y
+> CONFIG_DRM_I915_USERPTR=y
+> CONFIG_DRM_I915_GVT=y
+> # CONFIG_DRM_I915_GVT_KVMGT is not set
+> CONFIG_DRM_I915_REQUEST_TIMEOUT=20000
+> CONFIG_DRM_I915_FENCE_TIMEOUT=10000
+> CONFIG_DRM_I915_USERFAULT_AUTOSUSPEND=250
+> CONFIG_DRM_I915_HEARTBEAT_INTERVAL=2500
+> CONFIG_DRM_I915_PREEMPT_TIMEOUT=640
+> CONFIG_DRM_I915_MAX_REQUEST_BUSYWAIT=8000
+> CONFIG_DRM_I915_STOP_TIMEOUT=100
+> CONFIG_DRM_I915_TIMESLICE_DURATION=1
+> # CONFIG_DRM_VGEM is not set
+> # CONFIG_DRM_VKMS is not set
+> # CONFIG_DRM_VMWGFX is not set
+> CONFIG_DRM_GMA500=m
+> # CONFIG_DRM_UDL is not set
+> CONFIG_DRM_AST=m
+> CONFIG_DRM_MGAG200=m
+> CONFIG_DRM_QXL=m
+> CONFIG_DRM_VIRTIO_GPU=m
+> CONFIG_DRM_PANEL=y
+> 
+> #
+> # Display Panels
+> #
+> # CONFIG_DRM_PANEL_RASPBERRYPI_TOUCHSCREEN is not set
+> # CONFIG_DRM_PANEL_WIDECHIPS_WS2401 is not set
+> # end of Display Panels
+> 
+> CONFIG_DRM_BRIDGE=y
+> CONFIG_DRM_PANEL_BRIDGE=y
+> 
+> #
+> # Display Interface Bridges
+> #
+> # CONFIG_DRM_ANALOGIX_ANX78XX is not set
+> # end of Display Interface Bridges
+> 
+> # CONFIG_DRM_ETNAVIV is not set
+> CONFIG_DRM_BOCHS=m
+> CONFIG_DRM_CIRRUS_QEMU=m
+> # CONFIG_DRM_GM12U320 is not set
+> # CONFIG_DRM_SIMPLEDRM is not set
+> # CONFIG_TINYDRM_HX8357D is not set
+> # CONFIG_TINYDRM_ILI9163 is not set
+> # CONFIG_TINYDRM_ILI9225 is not set
+> # CONFIG_TINYDRM_ILI9341 is not set
+> # CONFIG_TINYDRM_ILI9486 is not set
+> # CONFIG_TINYDRM_MI0283QT is not set
+> # CONFIG_TINYDRM_REPAPER is not set
+> # CONFIG_TINYDRM_ST7586 is not set
+> # CONFIG_TINYDRM_ST7735R is not set
+> # CONFIG_DRM_VBOXVIDEO is not set
+> # CONFIG_DRM_GUD is not set
+> # CONFIG_DRM_LEGACY is not set
+> CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
+> CONFIG_DRM_NOMODESET=y
+> CONFIG_DRM_PRIVACY_SCREEN=y
+> 
 > #
 > # Frame buffer Devices
 > #
-> # CONFIG_FB is not set
+> CONFIG_FB_CMDLINE=y
+> CONFIG_FB_NOTIFY=y
+> CONFIG_FB=y
+> # CONFIG_FIRMWARE_EDID is not set
+> CONFIG_FB_BOOT_VESA_SUPPORT=y
+> CONFIG_FB_CFB_FILLRECT=y
+> CONFIG_FB_CFB_COPYAREA=y
+> CONFIG_FB_CFB_IMAGEBLIT=y
+> CONFIG_FB_SYS_FILLRECT=m
+> CONFIG_FB_SYS_COPYAREA=m
+> CONFIG_FB_SYS_IMAGEBLIT=m
+> # CONFIG_FB_FOREIGN_ENDIAN is not set
+> CONFIG_FB_SYS_FOPS=m
+> CONFIG_FB_DEFERRED_IO=y
+> # CONFIG_FB_MODE_HELPERS is not set
+> CONFIG_FB_TILEBLITTING=y
+> 
+> #
+> # Frame buffer hardware drivers
+> #
+> # CONFIG_FB_CIRRUS is not set
+> # CONFIG_FB_PM2 is not set
+> # CONFIG_FB_CYBER2000 is not set
+> # CONFIG_FB_ARC is not set
+> # CONFIG_FB_ASILIANT is not set
+> # CONFIG_FB_IMSTT is not set
+> # CONFIG_FB_VGA16 is not set
+> # CONFIG_FB_UVESA is not set
+> CONFIG_FB_VESA=y
+> CONFIG_FB_EFI=y
+> # CONFIG_FB_N411 is not set
+> # CONFIG_FB_HGA is not set
+> # CONFIG_FB_OPENCORES is not set
+> # CONFIG_FB_S1D13XXX is not set
+> # CONFIG_FB_NVIDIA is not set
+> # CONFIG_FB_RIVA is not set
+> # CONFIG_FB_I740 is not set
+> # CONFIG_FB_LE80578 is not set
+> # CONFIG_FB_MATROX is not set
+> # CONFIG_FB_RADEON is not set
+> # CONFIG_FB_ATY128 is not set
+> # CONFIG_FB_ATY is not set
+> # CONFIG_FB_S3 is not set
+> # CONFIG_FB_SAVAGE is not set
+> # CONFIG_FB_SIS is not set
+> # CONFIG_FB_VIA is not set
+> # CONFIG_FB_NEOMAGIC is not set
+> # CONFIG_FB_KYRO is not set
+> # CONFIG_FB_3DFX is not set
+> # CONFIG_FB_VOODOO1 is not set
+> # CONFIG_FB_VT8623 is not set
+> # CONFIG_FB_TRIDENT is not set
+> # CONFIG_FB_ARK is not set
+> # CONFIG_FB_PM3 is not set
+> # CONFIG_FB_CARMINE is not set
+> # CONFIG_FB_SM501 is not set
+> # CONFIG_FB_SMSCUFX is not set
+> # CONFIG_FB_UDL is not set
+> # CONFIG_FB_IBM_GXT4500 is not set
+> # CONFIG_FB_VIRTUAL is not set
+> # CONFIG_FB_METRONOME is not set
+> # CONFIG_FB_MB862XX is not set
+> # CONFIG_FB_SIMPLE is not set
+> # CONFIG_FB_SSD1307 is not set
+> # CONFIG_FB_SM712 is not set
 > # end of Frame buffer Devices
 > 
 > #
 > # Backlight & LCD device support
 > #
-> CONFIG_LCD_CLASS_DEVICE=y
-> CONFIG_LCD_PLATFORM=y
+> CONFIG_LCD_CLASS_DEVICE=m
+> # CONFIG_LCD_L4F00242T03 is not set
+> # CONFIG_LCD_LMS283GF05 is not set
+> # CONFIG_LCD_LTV350QV is not set
+> # CONFIG_LCD_ILI922X is not set
+> # CONFIG_LCD_ILI9320 is not set
+> # CONFIG_LCD_TDO24M is not set
+> # CONFIG_LCD_VGG2432A4 is not set
+> CONFIG_LCD_PLATFORM=m
+> # CONFIG_LCD_AMS369FG06 is not set
+> # CONFIG_LCD_LMS501KF03 is not set
+> # CONFIG_LCD_HX8357 is not set
+> # CONFIG_LCD_OTM3225A is not set
 > CONFIG_BACKLIGHT_CLASS_DEVICE=y
-> CONFIG_BACKLIGHT_KTD253=m
-> CONFIG_BACKLIGHT_LM3533=m
+> # CONFIG_BACKLIGHT_KTD253 is not set
+> # CONFIG_BACKLIGHT_PWM is not set
 > CONFIG_BACKLIGHT_APPLE=m
 > # CONFIG_BACKLIGHT_QCOM_WLED is not set
-> # CONFIG_BACKLIGHT_RT4831 is not set
-> CONFIG_BACKLIGHT_SAHARA=y
-> CONFIG_BACKLIGHT_ADP8860=m
+> # CONFIG_BACKLIGHT_SAHARA is not set
+> # CONFIG_BACKLIGHT_ADP8860 is not set
 > # CONFIG_BACKLIGHT_ADP8870 is not set
-> CONFIG_BACKLIGHT_PCF50633=m
+> # CONFIG_BACKLIGHT_LM3630A is not set
 > # CONFIG_BACKLIGHT_LM3639 is not set
-> CONFIG_BACKLIGHT_TPS65217=m
+> CONFIG_BACKLIGHT_LP855X=m
 > # CONFIG_BACKLIGHT_GPIO is not set
-> CONFIG_BACKLIGHT_LV5207LP=m
+> # CONFIG_BACKLIGHT_LV5207LP is not set
 > # CONFIG_BACKLIGHT_BD6107 is not set
-> CONFIG_BACKLIGHT_ARCXCNN=m
-> CONFIG_BACKLIGHT_LED=y
+> # CONFIG_BACKLIGHT_ARCXCNN is not set
 > # end of Backlight & LCD device support
+> 
+> CONFIG_HDMI=y
+> 
+> #
+> # Console display driver support
+> #
+> CONFIG_VGA_CONSOLE=y
+> CONFIG_DUMMY_CONSOLE=y
+> CONFIG_DUMMY_CONSOLE_COLUMNS=80
+> CONFIG_DUMMY_CONSOLE_ROWS=25
+> CONFIG_FRAMEBUFFER_CONSOLE=y
+> CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+> CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+> # CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER is not set
+> # end of Console display driver support
+> 
+> CONFIG_LOGO=y
+> # CONFIG_LOGO_LINUX_MONO is not set
+> # CONFIG_LOGO_LINUX_VGA16 is not set
+> CONFIG_LOGO_LINUX_CLUT224=y
 > # end of Graphics support
 > 
-> CONFIG_SOUND=m
-> # CONFIG_SND is not set
+> # CONFIG_SOUND is not set
 > 
 > #
 > # HID support
 > #
 > CONFIG_HID=y
-> # CONFIG_HID_BATTERY_STRENGTH is not set
-> # CONFIG_HIDRAW is not set
-> # CONFIG_UHID is not set
-> # CONFIG_HID_GENERIC is not set
+> CONFIG_HID_BATTERY_STRENGTH=y
+> CONFIG_HIDRAW=y
+> CONFIG_UHID=m
+> CONFIG_HID_GENERIC=y
 > 
 > #
 > # Special HID drivers
 > #
 > CONFIG_HID_A4TECH=m
-> CONFIG_HID_ACRUX=y
+> # CONFIG_HID_ACCUTOUCH is not set
+> CONFIG_HID_ACRUX=m
 > # CONFIG_HID_ACRUX_FF is not set
 > CONFIG_HID_APPLE=m
-> # CONFIG_HID_AUREAL is not set
-> CONFIG_HID_BELKIN=y
-> # CONFIG_HID_CHERRY is not set
-> CONFIG_HID_COUGAR=y
-> CONFIG_HID_MACALLY=y
-> CONFIG_HID_CMEDIA=y
-> CONFIG_HID_CYPRESS=y
-> # CONFIG_HID_DRAGONRISE is not set
+> # CONFIG_HID_APPLEIR is not set
+> CONFIG_HID_ASUS=m
+> CONFIG_HID_AUREAL=m
+> CONFIG_HID_BELKIN=m
+> # CONFIG_HID_BETOP_FF is not set
+> # CONFIG_HID_BIGBEN_FF is not set
+> CONFIG_HID_CHERRY=m
+> # CONFIG_HID_CHICONY is not set
+> # CONFIG_HID_CORSAIR is not set
+> # CONFIG_HID_COUGAR is not set
+> # CONFIG_HID_MACALLY is not set
+> CONFIG_HID_CMEDIA=m
+> # CONFIG_HID_CP2112 is not set
+> # CONFIG_HID_CREATIVE_SB0540 is not set
+> CONFIG_HID_CYPRESS=m
+> CONFIG_HID_DRAGONRISE=m
+> # CONFIG_DRAGONRISE_FF is not set
 > # CONFIG_HID_EMS_FF is not set
+> # CONFIG_HID_ELAN is not set
 > CONFIG_HID_ELECOM=m
-> CONFIG_HID_EZKEY=y
+> # CONFIG_HID_ELO is not set
+> CONFIG_HID_EZKEY=m
+> # CONFIG_HID_FT260 is not set
 > CONFIG_HID_GEMBIRD=m
-> # CONFIG_HID_GFRM is not set
-> CONFIG_HID_GLORIOUS=m
-> CONFIG_HID_VIVALDI=y
-> # CONFIG_HID_KEYTOUCH is not set
-> # CONFIG_HID_KYE is not set
-> CONFIG_HID_WALTOP=y
-> CONFIG_HID_VIEWSONIC=m
+> CONFIG_HID_GFRM=m
+> # CONFIG_HID_GLORIOUS is not set
+> # CONFIG_HID_HOLTEK is not set
+> # CONFIG_HID_VIVALDI is not set
+> # CONFIG_HID_GT683R is not set
+> CONFIG_HID_KEYTOUCH=m
+> CONFIG_HID_KYE=m
+> # CONFIG_HID_UCLOGIC is not set
+> CONFIG_HID_WALTOP=m
+> # CONFIG_HID_VIEWSONIC is not set
 > # CONFIG_HID_XIAOMI is not set
-> CONFIG_HID_GYRATION=y
-> CONFIG_HID_ICADE=y
+> CONFIG_HID_GYRATION=m
+> CONFIG_HID_ICADE=m
 > CONFIG_HID_ITE=m
 > CONFIG_HID_JABRA=m
-> CONFIG_HID_TWINHAN=y
-> # CONFIG_HID_KENSINGTON is not set
-> CONFIG_HID_LCPOWER=y
-> CONFIG_HID_LED=y
+> CONFIG_HID_TWINHAN=m
+> CONFIG_HID_KENSINGTON=m
+> CONFIG_HID_LCPOWER=m
+> CONFIG_HID_LED=m
 > CONFIG_HID_LENOVO=m
+> # CONFIG_HID_LETSKETCH is not set
+> CONFIG_HID_LOGITECH=m
+> CONFIG_HID_LOGITECH_DJ=m
+> CONFIG_HID_LOGITECH_HIDPP=m
+> # CONFIG_LOGITECH_FF is not set
+> # CONFIG_LOGIRUMBLEPAD2_FF is not set
+> # CONFIG_LOGIG940_FF is not set
+> # CONFIG_LOGIWHEELS_FF is not set
 > CONFIG_HID_MAGICMOUSE=y
-> CONFIG_HID_MALTRON=m
-> CONFIG_HID_MAYFLASH=y
+> # CONFIG_HID_MALTRON is not set
+> # CONFIG_HID_MAYFLASH is not set
 > # CONFIG_HID_REDRAGON is not set
 > CONFIG_HID_MICROSOFT=m
 > CONFIG_HID_MONTEREY=m
 > CONFIG_HID_MULTITOUCH=m
 > # CONFIG_HID_NINTENDO is not set
-> CONFIG_HID_NTI=y
-> CONFIG_HID_ORTEK=y
-> # CONFIG_HID_PANTHERLORD is not set
-> # CONFIG_HID_PETALYNX is not set
+> CONFIG_HID_NTI=m
+> # CONFIG_HID_NTRIG is not set
+> CONFIG_HID_ORTEK=m
+> CONFIG_HID_PANTHERLORD=m
+> # CONFIG_PANTHERLORD_FF is not set
+> # CONFIG_HID_PENMOUNT is not set
+> CONFIG_HID_PETALYNX=m
 > CONFIG_HID_PICOLCD=m
+> CONFIG_HID_PICOLCD_FB=y
 > CONFIG_HID_PICOLCD_BACKLIGHT=y
-> # CONFIG_HID_PICOLCD_LCD is not set
+> CONFIG_HID_PICOLCD_LCD=y
 > CONFIG_HID_PICOLCD_LEDS=y
 > CONFIG_HID_PICOLCD_CIR=y
-> CONFIG_HID_PLANTRONICS=y
-> CONFIG_HID_PLAYSTATION=m
-> CONFIG_PLAYSTATION_FF=y
-> # CONFIG_HID_PRIMAX is not set
+> CONFIG_HID_PLANTRONICS=m
+> CONFIG_HID_PRIMAX=m
+> # CONFIG_HID_RETRODE is not set
+> # CONFIG_HID_ROCCAT is not set
 > CONFIG_HID_SAITEK=m
+> CONFIG_HID_SAMSUNG=m
 > # CONFIG_HID_SEMITEK is not set
-> # CONFIG_HID_SPEEDLINK is not set
-> CONFIG_HID_STEAM=y
-> CONFIG_HID_STEELSERIES=y
-> CONFIG_HID_SUNPLUS=y
+> # CONFIG_HID_SONY is not set
+> CONFIG_HID_SPEEDLINK=m
+> # CONFIG_HID_STEAM is not set
+> CONFIG_HID_STEELSERIES=m
+> CONFIG_HID_SUNPLUS=m
 > CONFIG_HID_RMI=m
 > CONFIG_HID_GREENASIA=m
-> CONFIG_GREENASIA_FF=y
-> # CONFIG_HID_SMARTJOYPLUS is not set
-> CONFIG_HID_TIVO=y
-> CONFIG_HID_TOPSEED=y
-> CONFIG_HID_THINGM=y
+> # CONFIG_GREENASIA_FF is not set
+> CONFIG_HID_SMARTJOYPLUS=m
+> # CONFIG_SMARTJOYPLUS_FF is not set
+> CONFIG_HID_TIVO=m
+> CONFIG_HID_TOPSEED=m
+> CONFIG_HID_THINGM=m
+> CONFIG_HID_THRUSTMASTER=m
+> # CONFIG_THRUSTMASTER_FF is not set
 > # CONFIG_HID_UDRAW_PS3 is not set
+> # CONFIG_HID_U2FZERO is not set
+> # CONFIG_HID_WACOM is not set
 > CONFIG_HID_WIIMOTE=m
 > CONFIG_HID_XINMO=m
 > CONFIG_HID_ZEROPLUS=m
-> CONFIG_ZEROPLUS_FF=y
-> CONFIG_HID_ZYDACRON=y
-> CONFIG_HID_SENSOR_HUB=m
+> # CONFIG_ZEROPLUS_FF is not set
+> CONFIG_HID_ZYDACRON=m
+> CONFIG_HID_SENSOR_HUB=y
 > CONFIG_HID_SENSOR_CUSTOM_SENSOR=m
-> # CONFIG_HID_ALPS is not set
+> CONFIG_HID_ALPS=m
+> # CONFIG_HID_MCP2221 is not set
 > # end of Special HID drivers
 > 
 > #
 > # USB HID support
 > #
-> # CONFIG_USB_HID is not set
+> CONFIG_USB_HID=y
 > # CONFIG_HID_PID is not set
-> 
-> #
-> # USB HID Boot Protocol drivers
-> #
-> # CONFIG_USB_KBD is not set
-> CONFIG_USB_MOUSE=y
-> # end of USB HID Boot Protocol drivers
+> # CONFIG_USB_HIDDEV is not set
 > # end of USB HID support
 > 
 > #
 > # I2C HID support
 > #
-> CONFIG_I2C_HID_ACPI=m
-> CONFIG_I2C_HID_OF=m
-> CONFIG_I2C_HID_OF_GOODIX=m
+> # CONFIG_I2C_HID_ACPI is not set
 > # end of I2C HID support
-> 
-> CONFIG_I2C_HID_CORE=m
 > 
 > #
 > # Intel ISH HID support
 > #
-> CONFIG_INTEL_ISH_HID=y
+> CONFIG_INTEL_ISH_HID=m
 > # CONFIG_INTEL_ISH_FIRMWARE_DOWNLOADER is not set
 > # end of Intel ISH HID support
 > 
@@ -3988,58 +4655,60 @@ Thank you for your testing efforts!
 > CONFIG_USB_SUPPORT=y
 > CONFIG_USB_COMMON=y
 > # CONFIG_USB_LED_TRIG is not set
-> CONFIG_USB_ULPI_BUS=y
+> # CONFIG_USB_ULPI_BUS is not set
 > # CONFIG_USB_CONN_GPIO is not set
 > CONFIG_USB_ARCH_HAS_HCD=y
 > CONFIG_USB=y
-> # CONFIG_USB_PCI is not set
-> # CONFIG_USB_ANNOUNCE_NEW_DEVICES is not set
+> CONFIG_USB_PCI=y
+> CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
 > 
 > #
 > # Miscellaneous USB options
 > #
-> # CONFIG_USB_DEFAULT_PERSIST is not set
-> CONFIG_USB_FEW_INIT_RETRIES=y
-> CONFIG_USB_DYNAMIC_MINORS=y
-> CONFIG_USB_OTG=y
-> CONFIG_USB_OTG_PRODUCTLIST=y
-> # CONFIG_USB_OTG_DISABLE_EXTERNAL_HUB is not set
-> CONFIG_USB_OTG_FSM=m
+> CONFIG_USB_DEFAULT_PERSIST=y
+> # CONFIG_USB_FEW_INIT_RETRIES is not set
+> # CONFIG_USB_DYNAMIC_MINORS is not set
+> # CONFIG_USB_OTG is not set
+> # CONFIG_USB_OTG_PRODUCTLIST is not set
 > CONFIG_USB_LEDS_TRIGGER_USBPORT=y
 > CONFIG_USB_AUTOSUSPEND_DELAY=2
-> CONFIG_USB_MON=m
+> CONFIG_USB_MON=y
 > 
 > #
 > # USB Host Controller Drivers
 > #
-> CONFIG_USB_C67X00_HCD=y
-> CONFIG_USB_XHCI_HCD=m
-> CONFIG_USB_XHCI_DBGCAP=y
+> # CONFIG_USB_C67X00_HCD is not set
+> CONFIG_USB_XHCI_HCD=y
+> # CONFIG_USB_XHCI_DBGCAP is not set
+> CONFIG_USB_XHCI_PCI=y
 > # CONFIG_USB_XHCI_PCI_RENESAS is not set
-> CONFIG_USB_XHCI_PLATFORM=m
+> # CONFIG_USB_XHCI_PLATFORM is not set
 > CONFIG_USB_EHCI_HCD=y
 > CONFIG_USB_EHCI_ROOT_HUB_TT=y
 > CONFIG_USB_EHCI_TT_NEWSCHED=y
+> CONFIG_USB_EHCI_PCI=y
 > # CONFIG_USB_EHCI_FSL is not set
-> CONFIG_USB_EHCI_HCD_PLATFORM=y
-> CONFIG_USB_OXU210HP_HCD=m
+> # CONFIG_USB_EHCI_HCD_PLATFORM is not set
+> # CONFIG_USB_OXU210HP_HCD is not set
 > # CONFIG_USB_ISP116X_HCD is not set
 > # CONFIG_USB_FOTG210_HCD is not set
-> # CONFIG_USB_OHCI_HCD is not set
-> CONFIG_USB_U132_HCD=m
+> # CONFIG_USB_MAX3421_HCD is not set
+> CONFIG_USB_OHCI_HCD=y
+> CONFIG_USB_OHCI_HCD_PCI=y
+> # CONFIG_USB_OHCI_HCD_PLATFORM is not set
+> CONFIG_USB_UHCI_HCD=y
 > # CONFIG_USB_SL811_HCD is not set
-> CONFIG_USB_R8A66597_HCD=y
-> CONFIG_USB_HCD_BCMA=m
-> CONFIG_USB_HCD_SSB=m
+> # CONFIG_USB_R8A66597_HCD is not set
+> # CONFIG_USB_HCD_BCMA is not set
 > # CONFIG_USB_HCD_TEST_MODE is not set
 > 
 > #
 > # USB Device Class drivers
 > #
-> CONFIG_USB_ACM=m
+> # CONFIG_USB_ACM is not set
 > # CONFIG_USB_PRINTER is not set
-> CONFIG_USB_WDM=y
-> CONFIG_USB_TMC=y
+> # CONFIG_USB_WDM is not set
+> # CONFIG_USB_TMC is not set
 > 
 > #
 > # NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
@@ -4048,363 +4717,317 @@ Thank you for your testing efforts!
 > #
 > # also be needed; see USB_STORAGE Help for more info
 > #
+> CONFIG_USB_STORAGE=m
+> # CONFIG_USB_STORAGE_DEBUG is not set
+> # CONFIG_USB_STORAGE_REALTEK is not set
+> # CONFIG_USB_STORAGE_DATAFAB is not set
+> # CONFIG_USB_STORAGE_FREECOM is not set
+> # CONFIG_USB_STORAGE_ISD200 is not set
+> # CONFIG_USB_STORAGE_USBAT is not set
+> # CONFIG_USB_STORAGE_SDDR09 is not set
+> # CONFIG_USB_STORAGE_SDDR55 is not set
+> # CONFIG_USB_STORAGE_JUMPSHOT is not set
+> # CONFIG_USB_STORAGE_ALAUDA is not set
+> # CONFIG_USB_STORAGE_ONETOUCH is not set
+> # CONFIG_USB_STORAGE_KARMA is not set
+> # CONFIG_USB_STORAGE_CYPRESS_ATACB is not set
+> # CONFIG_USB_STORAGE_ENE_UB6250 is not set
+> # CONFIG_USB_UAS is not set
 > 
 > #
 > # USB Imaging devices
 > #
-> CONFIG_USB_MDC800=y
-> CONFIG_USBIP_CORE=y
-> # CONFIG_USBIP_VHCI_HCD is not set
-> CONFIG_USBIP_HOST=y
-> CONFIG_USBIP_VUDC=m
-> # CONFIG_USBIP_DEBUG is not set
-> CONFIG_USB_CDNS_SUPPORT=m
-> CONFIG_USB_CDNS_HOST=y
-> CONFIG_USB_CDNS3=m
-> # CONFIG_USB_CDNS3_GADGET is not set
-> CONFIG_USB_CDNS3_HOST=y
+> # CONFIG_USB_MDC800 is not set
+> # CONFIG_USB_MICROTEK is not set
+> # CONFIG_USBIP_CORE is not set
+> # CONFIG_USB_CDNS_SUPPORT is not set
 > # CONFIG_USB_MUSB_HDRC is not set
 > # CONFIG_USB_DWC3 is not set
-> CONFIG_USB_DWC2=m
-> # CONFIG_USB_DWC2_HOST is not set
-> 
-> #
-> # Gadget/Dual-role mode requires USB Gadget support to be enabled
-> #
-> CONFIG_USB_DWC2_PERIPHERAL=y
-> # CONFIG_USB_DWC2_DUAL_ROLE is not set
-> CONFIG_USB_DWC2_DEBUG=y
-> CONFIG_USB_DWC2_VERBOSE=y
-> # CONFIG_USB_DWC2_TRACK_MISSED_SOFS is not set
-> CONFIG_USB_DWC2_DEBUG_PERIODIC=y
-> CONFIG_USB_CHIPIDEA=m
-> CONFIG_USB_CHIPIDEA_UDC=y
-> CONFIG_USB_CHIPIDEA_HOST=y
-> CONFIG_USB_CHIPIDEA_MSM=m
-> # CONFIG_USB_CHIPIDEA_IMX is not set
-> CONFIG_USB_CHIPIDEA_GENERIC=m
-> CONFIG_USB_CHIPIDEA_TEGRA=m
-> CONFIG_USB_ISP1760=y
-> CONFIG_USB_ISP1760_HCD=y
-> CONFIG_USB_ISP1760_HOST_ROLE=y
+> # CONFIG_USB_DWC2 is not set
+> # CONFIG_USB_CHIPIDEA is not set
+> # CONFIG_USB_ISP1760 is not set
 > 
 > #
 > # USB port drivers
 > #
-> CONFIG_USB_USS720=y
+> # CONFIG_USB_USS720 is not set
 > CONFIG_USB_SERIAL=m
 > CONFIG_USB_SERIAL_GENERIC=y
-> CONFIG_USB_SERIAL_SIMPLE=m
+> # CONFIG_USB_SERIAL_SIMPLE is not set
 > # CONFIG_USB_SERIAL_AIRCABLE is not set
-> CONFIG_USB_SERIAL_ARK3116=m
+> # CONFIG_USB_SERIAL_ARK3116 is not set
 > # CONFIG_USB_SERIAL_BELKIN is not set
-> CONFIG_USB_SERIAL_CH341=m
-> CONFIG_USB_SERIAL_WHITEHEAT=m
-> CONFIG_USB_SERIAL_DIGI_ACCELEPORT=m
-> CONFIG_USB_SERIAL_CP210X=m
-> CONFIG_USB_SERIAL_CYPRESS_M8=m
+> # CONFIG_USB_SERIAL_CH341 is not set
+> # CONFIG_USB_SERIAL_WHITEHEAT is not set
+> # CONFIG_USB_SERIAL_DIGI_ACCELEPORT is not set
+> # CONFIG_USB_SERIAL_CP210X is not set
+> # CONFIG_USB_SERIAL_CYPRESS_M8 is not set
 > # CONFIG_USB_SERIAL_EMPEG is not set
-> CONFIG_USB_SERIAL_FTDI_SIO=m
-> CONFIG_USB_SERIAL_VISOR=m
+> # CONFIG_USB_SERIAL_FTDI_SIO is not set
+> # CONFIG_USB_SERIAL_VISOR is not set
 > # CONFIG_USB_SERIAL_IPAQ is not set
 > # CONFIG_USB_SERIAL_IR is not set
-> CONFIG_USB_SERIAL_EDGEPORT=m
+> # CONFIG_USB_SERIAL_EDGEPORT is not set
 > # CONFIG_USB_SERIAL_EDGEPORT_TI is not set
 > # CONFIG_USB_SERIAL_F81232 is not set
-> CONFIG_USB_SERIAL_F8153X=m
-> CONFIG_USB_SERIAL_GARMIN=m
-> CONFIG_USB_SERIAL_IPW=m
-> CONFIG_USB_SERIAL_IUU=m
+> # CONFIG_USB_SERIAL_F8153X is not set
+> # CONFIG_USB_SERIAL_GARMIN is not set
+> # CONFIG_USB_SERIAL_IPW is not set
+> # CONFIG_USB_SERIAL_IUU is not set
 > # CONFIG_USB_SERIAL_KEYSPAN_PDA is not set
 > # CONFIG_USB_SERIAL_KEYSPAN is not set
-> CONFIG_USB_SERIAL_KLSI=m
-> CONFIG_USB_SERIAL_KOBIL_SCT=m
-> CONFIG_USB_SERIAL_MCT_U232=m
-> CONFIG_USB_SERIAL_METRO=m
+> # CONFIG_USB_SERIAL_KLSI is not set
+> # CONFIG_USB_SERIAL_KOBIL_SCT is not set
+> # CONFIG_USB_SERIAL_MCT_U232 is not set
+> # CONFIG_USB_SERIAL_METRO is not set
 > # CONFIG_USB_SERIAL_MOS7720 is not set
-> CONFIG_USB_SERIAL_MOS7840=m
-> CONFIG_USB_SERIAL_MXUPORT=m
+> # CONFIG_USB_SERIAL_MOS7840 is not set
+> # CONFIG_USB_SERIAL_MXUPORT is not set
 > # CONFIG_USB_SERIAL_NAVMAN is not set
 > # CONFIG_USB_SERIAL_PL2303 is not set
 > # CONFIG_USB_SERIAL_OTI6858 is not set
-> CONFIG_USB_SERIAL_QCAUX=m
-> CONFIG_USB_SERIAL_QUALCOMM=m
-> CONFIG_USB_SERIAL_SPCP8X5=m
-> CONFIG_USB_SERIAL_SAFE=m
-> CONFIG_USB_SERIAL_SAFE_PADDED=y
-> CONFIG_USB_SERIAL_SIERRAWIRELESS=m
-> CONFIG_USB_SERIAL_SYMBOL=m
-> CONFIG_USB_SERIAL_TI=m
+> # CONFIG_USB_SERIAL_QCAUX is not set
+> # CONFIG_USB_SERIAL_QUALCOMM is not set
+> # CONFIG_USB_SERIAL_SPCP8X5 is not set
+> # CONFIG_USB_SERIAL_SAFE is not set
+> # CONFIG_USB_SERIAL_SIERRAWIRELESS is not set
+> # CONFIG_USB_SERIAL_SYMBOL is not set
+> # CONFIG_USB_SERIAL_TI is not set
 > # CONFIG_USB_SERIAL_CYBERJACK is not set
-> CONFIG_USB_SERIAL_WWAN=m
-> CONFIG_USB_SERIAL_OPTION=m
-> CONFIG_USB_SERIAL_OMNINET=m
-> CONFIG_USB_SERIAL_OPTICON=m
-> CONFIG_USB_SERIAL_XSENS_MT=m
-> CONFIG_USB_SERIAL_WISHBONE=m
+> # CONFIG_USB_SERIAL_OPTION is not set
+> # CONFIG_USB_SERIAL_OMNINET is not set
+> # CONFIG_USB_SERIAL_OPTICON is not set
+> # CONFIG_USB_SERIAL_XSENS_MT is not set
+> # CONFIG_USB_SERIAL_WISHBONE is not set
 > # CONFIG_USB_SERIAL_SSU100 is not set
-> CONFIG_USB_SERIAL_QT2=m
-> CONFIG_USB_SERIAL_UPD78F0730=m
+> # CONFIG_USB_SERIAL_QT2 is not set
+> # CONFIG_USB_SERIAL_UPD78F0730 is not set
 > # CONFIG_USB_SERIAL_XR is not set
-> # CONFIG_USB_SERIAL_DEBUG is not set
+> CONFIG_USB_SERIAL_DEBUG=m
 > 
 > #
 > # USB Miscellaneous drivers
 > #
-> CONFIG_USB_EMI62=y
+> # CONFIG_USB_EMI62 is not set
 > # CONFIG_USB_EMI26 is not set
-> CONFIG_USB_ADUTUX=m
-> CONFIG_USB_SEVSEG=y
+> # CONFIG_USB_ADUTUX is not set
+> # CONFIG_USB_SEVSEG is not set
 > # CONFIG_USB_LEGOTOWER is not set
-> CONFIG_USB_LCD=m
-> CONFIG_USB_CYPRESS_CY7C63=m
-> CONFIG_USB_CYTHERM=m
-> CONFIG_USB_IDMOUSE=y
-> CONFIG_USB_FTDI_ELAN=y
-> CONFIG_USB_APPLEDISPLAY=y
+> # CONFIG_USB_LCD is not set
+> # CONFIG_USB_CYPRESS_CY7C63 is not set
+> # CONFIG_USB_CYTHERM is not set
+> # CONFIG_USB_IDMOUSE is not set
+> # CONFIG_USB_FTDI_ELAN is not set
+> # CONFIG_USB_APPLEDISPLAY is not set
 > # CONFIG_APPLE_MFI_FASTCHARGE is not set
 > # CONFIG_USB_SISUSBVGA is not set
-> CONFIG_USB_LD=m
+> # CONFIG_USB_LD is not set
 > # CONFIG_USB_TRANCEVIBRATOR is not set
-> CONFIG_USB_IOWARRIOR=m
+> # CONFIG_USB_IOWARRIOR is not set
 > # CONFIG_USB_TEST is not set
 > # CONFIG_USB_EHSET_TEST_FIXTURE is not set
-> CONFIG_USB_ISIGHTFW=y
+> # CONFIG_USB_ISIGHTFW is not set
 > # CONFIG_USB_YUREX is not set
-> CONFIG_USB_EZUSB_FX2=m
+> # CONFIG_USB_EZUSB_FX2 is not set
 > # CONFIG_USB_HUB_USB251XB is not set
 > # CONFIG_USB_HSIC_USB3503 is not set
 > # CONFIG_USB_HSIC_USB4604 is not set
 > # CONFIG_USB_LINK_LAYER_TEST is not set
-> CONFIG_USB_CHAOSKEY=m
+> # CONFIG_USB_CHAOSKEY is not set
 > # CONFIG_USB_ATM is not set
 > 
 > #
 > # USB Physical Layer drivers
 > #
-> CONFIG_USB_PHY=y
 > # CONFIG_NOP_USB_XCEIV is not set
 > # CONFIG_USB_GPIO_VBUS is not set
-> # CONFIG_TAHVO_USB is not set
-> CONFIG_USB_ISP1301=m
+> # CONFIG_USB_ISP1301 is not set
 > # end of USB Physical Layer drivers
 > 
-> CONFIG_USB_GADGET=m
-> # CONFIG_USB_GADGET_DEBUG is not set
-> # CONFIG_USB_GADGET_DEBUG_FILES is not set
-> # CONFIG_USB_GADGET_DEBUG_FS is not set
-> CONFIG_USB_GADGET_VBUS_DRAW=2
-> CONFIG_USB_GADGET_STORAGE_NUM_BUFFERS=2
-> # CONFIG_U_SERIAL_CONSOLE is not set
-> 
-> #
-> # USB Peripheral Controller
-> #
-> CONFIG_USB_FOTG210_UDC=m
-> CONFIG_USB_GR_UDC=m
-> CONFIG_USB_R8A66597=m
-> CONFIG_USB_PXA27X=m
-> CONFIG_USB_MV_UDC=m
-> CONFIG_USB_MV_U3D=m
-> CONFIG_USB_SNP_CORE=m
-> CONFIG_USB_SNP_UDC_PLAT=m
-> CONFIG_USB_M66592=m
-> # CONFIG_USB_BDC_UDC is not set
-> CONFIG_USB_NET2272=m
-> CONFIG_USB_NET2272_DMA=y
-> CONFIG_USB_GADGET_XILINX=m
-> CONFIG_USB_DUMMY_HCD=m
-> # end of USB Peripheral Controller
-> 
-> CONFIG_USB_LIBCOMPOSITE=m
-> CONFIG_USB_F_ACM=m
-> CONFIG_USB_F_SS_LB=m
-> CONFIG_USB_U_SERIAL=m
-> CONFIG_USB_U_ETHER=m
-> CONFIG_USB_F_SERIAL=m
-> CONFIG_USB_F_OBEX=m
-> CONFIG_USB_F_ECM=m
-> CONFIG_USB_F_SUBSET=m
-> CONFIG_USB_F_RNDIS=m
-> CONFIG_USB_F_FS=m
-> CONFIG_USB_F_HID=m
-> CONFIG_USB_CONFIGFS=m
-> CONFIG_USB_CONFIGFS_SERIAL=y
-> CONFIG_USB_CONFIGFS_ACM=y
-> CONFIG_USB_CONFIGFS_OBEX=y
-> # CONFIG_USB_CONFIGFS_NCM is not set
-> # CONFIG_USB_CONFIGFS_ECM is not set
-> # CONFIG_USB_CONFIGFS_ECM_SUBSET is not set
-> CONFIG_USB_CONFIGFS_RNDIS=y
-> # CONFIG_USB_CONFIGFS_EEM is not set
-> # CONFIG_USB_CONFIGFS_F_LB_SS is not set
-> CONFIG_USB_CONFIGFS_F_FS=y
-> # CONFIG_USB_CONFIGFS_F_HID is not set
-> # CONFIG_USB_CONFIGFS_F_PRINTER is not set
-> 
-> #
-> # USB Gadget precomposed configurations
-> #
-> CONFIG_USB_ZERO=m
-> CONFIG_USB_ZERO_HNPTEST=y
-> CONFIG_USB_ETH=m
-> # CONFIG_USB_ETH_RNDIS is not set
-> # CONFIG_USB_ETH_EEM is not set
-> # CONFIG_USB_G_NCM is not set
-> CONFIG_USB_GADGETFS=m
-> # CONFIG_USB_FUNCTIONFS is not set
-> CONFIG_USB_G_SERIAL=m
-> # CONFIG_USB_G_PRINTER is not set
-> # CONFIG_USB_CDC_COMPOSITE is not set
-> CONFIG_USB_G_HID=m
-> CONFIG_USB_G_DBGP=m
-> CONFIG_USB_G_DBGP_PRINTK=y
-> # CONFIG_USB_G_DBGP_SERIAL is not set
-> CONFIG_USB_RAW_GADGET=m
-> # end of USB Gadget precomposed configurations
-> 
+> # CONFIG_USB_GADGET is not set
 > CONFIG_TYPEC=y
-> CONFIG_TYPEC_TCPM=m
-> CONFIG_TYPEC_TCPCI=m
-> CONFIG_TYPEC_RT1711H=m
-> CONFIG_TYPEC_MT6360=m
-> # CONFIG_TYPEC_TCPCI_MAXIM is not set
-> # CONFIG_TYPEC_FUSB302 is not set
-> # CONFIG_TYPEC_UCSI is not set
-> CONFIG_TYPEC_TPS6598X=m
-> CONFIG_TYPEC_HD3SS3220=m
-> CONFIG_TYPEC_STUSB160X=m
+> # CONFIG_TYPEC_TCPM is not set
+> CONFIG_TYPEC_UCSI=y
+> # CONFIG_UCSI_CCG is not set
+> CONFIG_UCSI_ACPI=y
+> # CONFIG_TYPEC_TPS6598X is not set
+> # CONFIG_TYPEC_STUSB160X is not set
 > 
 > #
 > # USB Type-C Multiplexer/DeMultiplexer Switch support
 > #
-> CONFIG_TYPEC_MUX_PI3USB30532=m
-> CONFIG_TYPEC_MUX_INTEL_PMC=y
+> # CONFIG_TYPEC_MUX_PI3USB30532 is not set
 > # end of USB Type-C Multiplexer/DeMultiplexer Switch support
 > 
 > #
 > # USB Type-C Alternate Mode drivers
 > #
+> # CONFIG_TYPEC_DP_ALTMODE is not set
 > # end of USB Type-C Alternate Mode drivers
 > 
-> CONFIG_USB_ROLE_SWITCH=y
-> # CONFIG_USB_ROLES_INTEL_XHCI is not set
-> # CONFIG_MMC is not set
+> # CONFIG_USB_ROLE_SWITCH is not set
+> CONFIG_MMC=m
+> CONFIG_MMC_BLOCK=m
+> CONFIG_MMC_BLOCK_MINORS=8
+> CONFIG_SDIO_UART=m
+> # CONFIG_MMC_TEST is not set
+> 
+> #
+> # MMC/SD/SDIO Host Controller Drivers
+> #
+> # CONFIG_MMC_DEBUG is not set
+> CONFIG_MMC_SDHCI=m
+> CONFIG_MMC_SDHCI_IO_ACCESSORS=y
+> CONFIG_MMC_SDHCI_PCI=m
+> CONFIG_MMC_RICOH_MMC=y
+> CONFIG_MMC_SDHCI_ACPI=m
+> CONFIG_MMC_SDHCI_PLTFM=m
+> # CONFIG_MMC_SDHCI_F_SDH30 is not set
+> # CONFIG_MMC_WBSD is not set
+> # CONFIG_MMC_TIFM_SD is not set
+> # CONFIG_MMC_SPI is not set
+> # CONFIG_MMC_CB710 is not set
+> # CONFIG_MMC_VIA_SDMMC is not set
+> # CONFIG_MMC_VUB300 is not set
+> # CONFIG_MMC_USHC is not set
+> # CONFIG_MMC_USDHI6ROL0 is not set
+> # CONFIG_MMC_REALTEK_PCI is not set
+> CONFIG_MMC_CQHCI=m
+> # CONFIG_MMC_HSQ is not set
+> # CONFIG_MMC_TOSHIBA_PCI is not set
+> # CONFIG_MMC_MTK is not set
+> # CONFIG_MMC_SDHCI_XENON is not set
 > # CONFIG_MEMSTICK is not set
 > CONFIG_NEW_LEDS=y
 > CONFIG_LEDS_CLASS=y
-> CONFIG_LEDS_CLASS_FLASH=y
-> CONFIG_LEDS_CLASS_MULTICOLOR=m
+> # CONFIG_LEDS_CLASS_FLASH is not set
+> # CONFIG_LEDS_CLASS_MULTICOLOR is not set
 > # CONFIG_LEDS_BRIGHTNESS_HW_CHANGED is not set
 > 
 > #
 > # LED drivers
 > #
-> CONFIG_LEDS_AN30259A=m
-> CONFIG_LEDS_AW2013=m
-> CONFIG_LEDS_BCM6328=m
-> # CONFIG_LEDS_BCM6358 is not set
+> # CONFIG_LEDS_APU is not set
 > CONFIG_LEDS_LM3530=m
-> CONFIG_LEDS_LM3532=m
-> CONFIG_LEDS_LM3533=m
-> CONFIG_LEDS_LM3642=m
-> CONFIG_LEDS_LM3692X=m
+> # CONFIG_LEDS_LM3532 is not set
+> # CONFIG_LEDS_LM3642 is not set
 > # CONFIG_LEDS_PCA9532 is not set
-> CONFIG_LEDS_GPIO=y
-> # CONFIG_LEDS_LP3944 is not set
-> CONFIG_LEDS_LP3952=m
-> CONFIG_LEDS_LP50XX=m
-> CONFIG_LEDS_LP55XX_COMMON=m
-> # CONFIG_LEDS_LP5521 is not set
-> CONFIG_LEDS_LP5523=m
-> CONFIG_LEDS_LP5562=m
-> # CONFIG_LEDS_LP8501 is not set
-> # CONFIG_LEDS_LP8860 is not set
-> CONFIG_LEDS_PCA955X=m
-> CONFIG_LEDS_PCA955X_GPIO=y
-> CONFIG_LEDS_PCA963X=m
-> CONFIG_LEDS_REGULATOR=m
-> CONFIG_LEDS_BD2802=m
-> # CONFIG_LEDS_LT3593 is not set
-> # CONFIG_LEDS_MC13783 is not set
+> # CONFIG_LEDS_GPIO is not set
+> CONFIG_LEDS_LP3944=m
+> # CONFIG_LEDS_LP3952 is not set
+> # CONFIG_LEDS_LP50XX is not set
+> CONFIG_LEDS_CLEVO_MAIL=m
+> # CONFIG_LEDS_PCA955X is not set
+> # CONFIG_LEDS_PCA963X is not set
+> # CONFIG_LEDS_DAC124S085 is not set
+> # CONFIG_LEDS_PWM is not set
+> # CONFIG_LEDS_BD2802 is not set
+> CONFIG_LEDS_INTEL_SS4200=m
+> CONFIG_LEDS_LT3593=m
 > # CONFIG_LEDS_TCA6507 is not set
-> CONFIG_LEDS_TLC591XX=m
-> CONFIG_LEDS_MAX77650=m
-> CONFIG_LEDS_LM355x=m
-> CONFIG_LEDS_IS31FL319X=m
-> CONFIG_LEDS_IS31FL32XX=m
+> # CONFIG_LEDS_TLC591XX is not set
+> # CONFIG_LEDS_LM355x is not set
 > 
 > #
 > # LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THINGM)
 > #
 > CONFIG_LEDS_BLINKM=m
-> CONFIG_LEDS_SYSCON=y
-> CONFIG_LEDS_MLXREG=m
+> CONFIG_LEDS_MLXCPLD=m
+> # CONFIG_LEDS_MLXREG is not set
 > # CONFIG_LEDS_USER is not set
-> CONFIG_LEDS_NIC78BX=y
-> CONFIG_LEDS_TI_LMU_COMMON=y
-> CONFIG_LEDS_LM3697=m
-> CONFIG_LEDS_LM36274=m
-> # CONFIG_LEDS_LGM is not set
+> # CONFIG_LEDS_NIC78BX is not set
+> # CONFIG_LEDS_TI_LMU_COMMON is not set
 > 
 > #
 > # Flash and Torch LED drivers
 > #
-> CONFIG_LEDS_AAT1290=m
-> CONFIG_LEDS_AS3645A=m
-> CONFIG_LEDS_KTD2692=y
-> CONFIG_LEDS_LM3601X=m
-> CONFIG_LEDS_MAX77693=m
-> # CONFIG_LEDS_MT6360 is not set
-> CONFIG_LEDS_RT4505=m
-> CONFIG_LEDS_RT8515=m
-> CONFIG_LEDS_SGM3140=m
 > 
 > #
 > # LED Triggers
 > #
 > CONFIG_LEDS_TRIGGERS=y
-> CONFIG_LEDS_TRIGGER_TIMER=y
-> CONFIG_LEDS_TRIGGER_ONESHOT=y
-> # CONFIG_LEDS_TRIGGER_HEARTBEAT is not set
-> # CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
+> CONFIG_LEDS_TRIGGER_TIMER=m
+> CONFIG_LEDS_TRIGGER_ONESHOT=m
+> # CONFIG_LEDS_TRIGGER_DISK is not set
+> CONFIG_LEDS_TRIGGER_HEARTBEAT=m
+> CONFIG_LEDS_TRIGGER_BACKLIGHT=m
 > # CONFIG_LEDS_TRIGGER_CPU is not set
 > # CONFIG_LEDS_TRIGGER_ACTIVITY is not set
-> CONFIG_LEDS_TRIGGER_GPIO=y
+> CONFIG_LEDS_TRIGGER_GPIO=m
 > CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
 > 
 > #
 > # iptables trigger is under Netfilter config (LED target)
 > #
-> CONFIG_LEDS_TRIGGER_TRANSIENT=y
-> CONFIG_LEDS_TRIGGER_CAMERA=y
+> CONFIG_LEDS_TRIGGER_TRANSIENT=m
+> CONFIG_LEDS_TRIGGER_CAMERA=m
 > # CONFIG_LEDS_TRIGGER_PANIC is not set
-> CONFIG_LEDS_TRIGGER_NETDEV=y
-> CONFIG_LEDS_TRIGGER_PATTERN=m
+> # CONFIG_LEDS_TRIGGER_NETDEV is not set
+> # CONFIG_LEDS_TRIGGER_PATTERN is not set
 > CONFIG_LEDS_TRIGGER_AUDIO=m
-> CONFIG_LEDS_TRIGGER_TTY=y
+> # CONFIG_LEDS_TRIGGER_TTY is not set
 > 
 > #
 > # Simple LED drivers
 > #
-> CONFIG_ACCESSIBILITY=y
-> 
-> #
-> # Speakup console speech
-> #
-> # end of Speakup console speech
-> 
-> # CONFIG_INFINIBAND is not set
+> # CONFIG_ACCESSIBILITY is not set
+> CONFIG_INFINIBAND=m
+> CONFIG_INFINIBAND_USER_MAD=m
+> CONFIG_INFINIBAND_USER_ACCESS=m
+> CONFIG_INFINIBAND_USER_MEM=y
+> CONFIG_INFINIBAND_ON_DEMAND_PAGING=y
+> CONFIG_INFINIBAND_ADDR_TRANS=y
+> CONFIG_INFINIBAND_ADDR_TRANS_CONFIGFS=y
+> CONFIG_INFINIBAND_VIRT_DMA=y
+> # CONFIG_INFINIBAND_MTHCA is not set
+> # CONFIG_INFINIBAND_EFA is not set
+> # CONFIG_MLX4_INFINIBAND is not set
+> # CONFIG_INFINIBAND_OCRDMA is not set
+> # CONFIG_INFINIBAND_USNIC is not set
+> # CONFIG_INFINIBAND_RDMAVT is not set
+> CONFIG_RDMA_RXE=m
+> CONFIG_RDMA_SIW=m
+> CONFIG_INFINIBAND_IPOIB=m
+> # CONFIG_INFINIBAND_IPOIB_CM is not set
+> CONFIG_INFINIBAND_IPOIB_DEBUG=y
+> # CONFIG_INFINIBAND_IPOIB_DEBUG_DATA is not set
+> CONFIG_INFINIBAND_SRP=m
+> CONFIG_INFINIBAND_SRPT=m
+> # CONFIG_INFINIBAND_ISER is not set
+> # CONFIG_INFINIBAND_ISERT is not set
+> # CONFIG_INFINIBAND_RTRS_CLIENT is not set
+> # CONFIG_INFINIBAND_RTRS_SERVER is not set
+> # CONFIG_INFINIBAND_OPA_VNIC is not set
 > CONFIG_EDAC_ATOMIC_SCRUB=y
 > CONFIG_EDAC_SUPPORT=y
+> CONFIG_EDAC=y
+> CONFIG_EDAC_LEGACY_SYSFS=y
+> # CONFIG_EDAC_DEBUG is not set
+> CONFIG_EDAC_GHES=y
+> CONFIG_EDAC_E752X=m
+> CONFIG_EDAC_I82975X=m
+> CONFIG_EDAC_I3000=m
+> CONFIG_EDAC_I3200=m
+> CONFIG_EDAC_IE31200=m
+> CONFIG_EDAC_X38=m
+> CONFIG_EDAC_I5400=m
+> CONFIG_EDAC_I7CORE=m
+> CONFIG_EDAC_I5000=m
+> CONFIG_EDAC_I5100=m
+> CONFIG_EDAC_I7300=m
+> CONFIG_EDAC_SBRIDGE=m
+> CONFIG_EDAC_SKX=m
+> # CONFIG_EDAC_I10NM is not set
+> CONFIG_EDAC_PND2=m
+> # CONFIG_EDAC_IGEN6 is not set
 > CONFIG_RTC_LIB=y
 > CONFIG_RTC_MC146818_LIB=y
 > CONFIG_RTC_CLASS=y
-> # CONFIG_RTC_HCTOSYS is not set
-> CONFIG_RTC_SYSTOHC=y
-> CONFIG_RTC_SYSTOHC_DEVICE="rtc0"
+> CONFIG_RTC_HCTOSYS=y
+> CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
+> # CONFIG_RTC_SYSTOHC is not set
 > # CONFIG_RTC_DEBUG is not set
-> # CONFIG_RTC_NVMEM is not set
+> CONFIG_RTC_NVMEM=y
 > 
 > #
 > # RTC interfaces
@@ -4418,57 +5041,66 @@ Thank you for your testing efforts!
 > #
 > # I2C RTC drivers
 > #
-> # CONFIG_RTC_DRV_88PM80X is not set
-> CONFIG_RTC_DRV_ABB5ZES3=m
+> # CONFIG_RTC_DRV_ABB5ZES3 is not set
 > # CONFIG_RTC_DRV_ABEOZ9 is not set
-> CONFIG_RTC_DRV_ABX80X=m
+> # CONFIG_RTC_DRV_ABX80X is not set
 > CONFIG_RTC_DRV_DS1307=m
 > # CONFIG_RTC_DRV_DS1307_CENTURY is not set
 > CONFIG_RTC_DRV_DS1374=m
-> # CONFIG_RTC_DRV_DS1672 is not set
-> CONFIG_RTC_DRV_HYM8563=m
+> # CONFIG_RTC_DRV_DS1374_WDT is not set
+> CONFIG_RTC_DRV_DS1672=m
 > CONFIG_RTC_DRV_MAX6900=m
-> # CONFIG_RTC_DRV_MAX77686 is not set
-> CONFIG_RTC_DRV_RK808=m
-> # CONFIG_RTC_DRV_RS5C372 is not set
+> CONFIG_RTC_DRV_RS5C372=m
 > CONFIG_RTC_DRV_ISL1208=m
-> # CONFIG_RTC_DRV_ISL12022 is not set
-> # CONFIG_RTC_DRV_ISL12026 is not set
+> CONFIG_RTC_DRV_ISL12022=m
 > CONFIG_RTC_DRV_X1205=m
 > CONFIG_RTC_DRV_PCF8523=m
-> CONFIG_RTC_DRV_PCF85063=m
-> CONFIG_RTC_DRV_PCF85363=m
+> # CONFIG_RTC_DRV_PCF85063 is not set
+> # CONFIG_RTC_DRV_PCF85363 is not set
 > CONFIG_RTC_DRV_PCF8563=m
 > CONFIG_RTC_DRV_PCF8583=m
 > CONFIG_RTC_DRV_M41T80=m
-> # CONFIG_RTC_DRV_M41T80_WDT is not set
+> CONFIG_RTC_DRV_M41T80_WDT=y
 > CONFIG_RTC_DRV_BQ32K=m
-> CONFIG_RTC_DRV_RC5T619=m
-> CONFIG_RTC_DRV_S35390A=m
+> # CONFIG_RTC_DRV_S35390A is not set
 > CONFIG_RTC_DRV_FM3130=m
 > # CONFIG_RTC_DRV_RX8010 is not set
 > CONFIG_RTC_DRV_RX8581=m
-> # CONFIG_RTC_DRV_RX8025 is not set
-> # CONFIG_RTC_DRV_EM3027 is not set
-> CONFIG_RTC_DRV_RV3028=m
-> CONFIG_RTC_DRV_RV3032=m
-> CONFIG_RTC_DRV_RV8803=m
-> CONFIG_RTC_DRV_SD3078=m
+> CONFIG_RTC_DRV_RX8025=m
+> CONFIG_RTC_DRV_EM3027=m
+> # CONFIG_RTC_DRV_RV3028 is not set
+> # CONFIG_RTC_DRV_RV3032 is not set
+> # CONFIG_RTC_DRV_RV8803 is not set
+> # CONFIG_RTC_DRV_SD3078 is not set
 > 
 > #
 > # SPI RTC drivers
 > #
-> CONFIG_RTC_I2C_AND_SPI=m
+> # CONFIG_RTC_DRV_M41T93 is not set
+> # CONFIG_RTC_DRV_M41T94 is not set
+> # CONFIG_RTC_DRV_DS1302 is not set
+> # CONFIG_RTC_DRV_DS1305 is not set
+> # CONFIG_RTC_DRV_DS1343 is not set
+> # CONFIG_RTC_DRV_DS1347 is not set
+> # CONFIG_RTC_DRV_DS1390 is not set
+> # CONFIG_RTC_DRV_MAX6916 is not set
+> # CONFIG_RTC_DRV_R9701 is not set
+> CONFIG_RTC_DRV_RX4581=m
+> # CONFIG_RTC_DRV_RS5C348 is not set
+> # CONFIG_RTC_DRV_MAX6902 is not set
+> # CONFIG_RTC_DRV_PCF2123 is not set
+> # CONFIG_RTC_DRV_MCP795 is not set
+> CONFIG_RTC_I2C_AND_SPI=y
 > 
 > #
 > # SPI and I2C RTC drivers
 > #
 > CONFIG_RTC_DRV_DS3232=m
-> # CONFIG_RTC_DRV_DS3232_HWMON is not set
-> CONFIG_RTC_DRV_PCF2127=m
+> CONFIG_RTC_DRV_DS3232_HWMON=y
+> # CONFIG_RTC_DRV_PCF2127 is not set
 > CONFIG_RTC_DRV_RV3029C2=m
 > # CONFIG_RTC_DRV_RV3029_HWMON is not set
-> CONFIG_RTC_DRV_RX6110=m
+> # CONFIG_RTC_DRV_RX6110 is not set
 > 
 > #
 > # Platform RTC drivers
@@ -4476,36 +5108,61 @@ Thank you for your testing efforts!
 > CONFIG_RTC_DRV_CMOS=y
 > CONFIG_RTC_DRV_DS1286=m
 > CONFIG_RTC_DRV_DS1511=m
-> CONFIG_RTC_DRV_DS1553=y
+> CONFIG_RTC_DRV_DS1553=m
 > # CONFIG_RTC_DRV_DS1685_FAMILY is not set
-> CONFIG_RTC_DRV_DS1742=y
-> CONFIG_RTC_DRV_DS2404=y
-> CONFIG_RTC_DRV_DA9063=m
-> CONFIG_RTC_DRV_STK17TA8=y
+> CONFIG_RTC_DRV_DS1742=m
+> CONFIG_RTC_DRV_DS2404=m
+> CONFIG_RTC_DRV_STK17TA8=m
 > # CONFIG_RTC_DRV_M48T86 is not set
 > CONFIG_RTC_DRV_M48T35=m
 > CONFIG_RTC_DRV_M48T59=m
-> # CONFIG_RTC_DRV_MSM6242 is not set
-> # CONFIG_RTC_DRV_BQ4802 is not set
+> CONFIG_RTC_DRV_MSM6242=m
+> CONFIG_RTC_DRV_BQ4802=m
 > CONFIG_RTC_DRV_RP5C01=m
-> CONFIG_RTC_DRV_V3020=y
-> # CONFIG_RTC_DRV_PCF50633 is not set
-> CONFIG_RTC_DRV_ZYNQMP=y
-> CONFIG_RTC_DRV_NTXEC=m
+> CONFIG_RTC_DRV_V3020=m
 > 
 > #
 > # on-CPU RTC drivers
 > #
-> CONFIG_RTC_DRV_CADENCE=y
-> CONFIG_RTC_DRV_FTRTC010=y
-> # CONFIG_RTC_DRV_MC13XXX is not set
-> # CONFIG_RTC_DRV_R7301 is not set
+> # CONFIG_RTC_DRV_FTRTC010 is not set
 > 
 > #
 > # HID Sensor RTC drivers
 > #
-> CONFIG_RTC_DRV_GOLDFISH=y
-> # CONFIG_DMADEVICES is not set
+> # CONFIG_RTC_DRV_GOLDFISH is not set
+> CONFIG_DMADEVICES=y
+> # CONFIG_DMADEVICES_DEBUG is not set
+> 
+> #
+> # DMA Devices
+> #
+> CONFIG_DMA_ENGINE=y
+> CONFIG_DMA_VIRTUAL_CHANNELS=y
+> CONFIG_DMA_ACPI=y
+> # CONFIG_ALTERA_MSGDMA is not set
+> CONFIG_INTEL_IDMA64=m
+> # CONFIG_INTEL_IDXD is not set
+> # CONFIG_INTEL_IDXD_COMPAT is not set
+> CONFIG_INTEL_IOATDMA=m
+> # CONFIG_PLX_DMA is not set
+> # CONFIG_AMD_PTDMA is not set
+> # CONFIG_QCOM_HIDMA_MGMT is not set
+> # CONFIG_QCOM_HIDMA is not set
+> CONFIG_DW_DMAC_CORE=y
+> CONFIG_DW_DMAC=m
+> CONFIG_DW_DMAC_PCI=y
+> # CONFIG_DW_EDMA is not set
+> # CONFIG_DW_EDMA_PCIE is not set
+> CONFIG_HSU_DMA=y
+> # CONFIG_SF_PDMA is not set
+> # CONFIG_INTEL_LDMA is not set
+> 
+> #
+> # DMA Clients
+> #
+> CONFIG_ASYNC_TX_DMA=y
+> CONFIG_DMATEST=m
+> CONFIG_DMA_ENGINE_RAID=y
 > 
 > #
 > # DMABUF options
@@ -4517,48 +5174,55 @@ Thank you for your testing efforts!
 > # CONFIG_DMABUF_DEBUG is not set
 > # CONFIG_DMABUF_SELFTESTS is not set
 > # CONFIG_DMABUF_HEAPS is not set
-> CONFIG_DMABUF_SYSFS_STATS=y
+> # CONFIG_DMABUF_SYSFS_STATS is not set
 > # end of DMABUF options
 > 
+> CONFIG_DCA=m
 > # CONFIG_AUXDISPLAY is not set
 > # CONFIG_PANEL is not set
 > CONFIG_UIO=m
 > CONFIG_UIO_CIF=m
-> # CONFIG_UIO_PDRV_GENIRQ is not set
-> CONFIG_UIO_DMEM_GENIRQ=m
-> # CONFIG_UIO_AEC is not set
-> # CONFIG_UIO_SERCOS3 is not set
-> # CONFIG_UIO_PCI_GENERIC is not set
+> CONFIG_UIO_PDRV_GENIRQ=m
+> # CONFIG_UIO_DMEM_GENIRQ is not set
+> CONFIG_UIO_AEC=m
+> CONFIG_UIO_SERCOS3=m
+> CONFIG_UIO_PCI_GENERIC=m
 > # CONFIG_UIO_NETX is not set
-> CONFIG_UIO_PRUSS=m
-> CONFIG_UIO_MF624=m
-> CONFIG_VFIO=y
-> CONFIG_VFIO_IOMMU_TYPE1=y
+> # CONFIG_UIO_PRUSS is not set
+> # CONFIG_UIO_MF624 is not set
+> CONFIG_VFIO=m
+> CONFIG_VFIO_IOMMU_TYPE1=m
+> CONFIG_VFIO_VIRQFD=m
 > CONFIG_VFIO_NOIOMMU=y
+> CONFIG_VFIO_PCI_CORE=m
 > CONFIG_VFIO_PCI_MMAP=y
 > CONFIG_VFIO_PCI_INTX=y
-> # CONFIG_VFIO_PCI is not set
+> CONFIG_VFIO_PCI=m
+> # CONFIG_VFIO_PCI_VGA is not set
+> # CONFIG_VFIO_PCI_IGD is not set
 > CONFIG_VFIO_MDEV=m
+> CONFIG_IRQ_BYPASS_MANAGER=m
 > # CONFIG_VIRT_DRIVERS is not set
 > CONFIG_VIRTIO=y
-> CONFIG_VIRTIO_PCI_LIB=m
-> CONFIG_VIRTIO_PCI_LIB_LEGACY=m
+> CONFIG_VIRTIO_PCI_LIB=y
+> CONFIG_VIRTIO_PCI_LIB_LEGACY=y
 > CONFIG_VIRTIO_MENU=y
-> CONFIG_VIRTIO_PCI=m
+> CONFIG_VIRTIO_PCI=y
 > CONFIG_VIRTIO_PCI_LEGACY=y
-> CONFIG_VIRTIO_VDPA=m
-> CONFIG_VIRTIO_BALLOON=y
+> # CONFIG_VIRTIO_PMEM is not set
+> CONFIG_VIRTIO_BALLOON=m
+> CONFIG_VIRTIO_MEM=m
 > CONFIG_VIRTIO_INPUT=m
-> CONFIG_VIRTIO_MMIO=y
-> # CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES is not set
-> CONFIG_VDPA=y
-> CONFIG_VDPA_SIM=y
-> # CONFIG_VDPA_SIM_NET is not set
-> CONFIG_VDPA_SIM_BLOCK=y
-> CONFIG_VDPA_USER=m
-> CONFIG_VHOST_IOTLB=y
-> CONFIG_VHOST_RING=y
-> # CONFIG_VHOST_MENU is not set
+> # CONFIG_VIRTIO_MMIO is not set
+> CONFIG_VIRTIO_DMA_SHARED_BUFFER=m
+> # CONFIG_VDPA is not set
+> CONFIG_VHOST_IOTLB=m
+> CONFIG_VHOST=m
+> CONFIG_VHOST_MENU=y
+> CONFIG_VHOST_NET=m
+> # CONFIG_VHOST_SCSI is not set
+> CONFIG_VHOST_VSOCK=m
+> # CONFIG_VHOST_CROSS_ENDIAN_LEGACY is not set
 > 
 > #
 > # Microsoft Hyper-V guest support
@@ -4567,102 +5231,54 @@ Thank you for your testing efforts!
 > # end of Microsoft Hyper-V guest support
 > 
 > # CONFIG_GREYBUS is not set
-> CONFIG_COMEDI=y
-> CONFIG_COMEDI_DEBUG=y
-> CONFIG_COMEDI_DEFAULT_BUF_SIZE_KB=2048
-> CONFIG_COMEDI_DEFAULT_BUF_MAXSIZE_KB=20480
-> CONFIG_COMEDI_MISC_DRIVERS=y
-> CONFIG_COMEDI_BOND=m
-> # CONFIG_COMEDI_TEST is not set
-> CONFIG_COMEDI_PARPORT=m
-> # CONFIG_COMEDI_ISA_DRIVERS is not set
-> # CONFIG_COMEDI_PCI_DRIVERS is not set
-> CONFIG_COMEDI_PCMCIA_DRIVERS=m
-> CONFIG_COMEDI_CB_DAS16_CS=m
-> CONFIG_COMEDI_DAS08_CS=m
-> CONFIG_COMEDI_NI_DAQ_700_CS=m
-> CONFIG_COMEDI_NI_DAQ_DIO24_CS=m
-> CONFIG_COMEDI_NI_LABPC_CS=m
-> CONFIG_COMEDI_NI_MIO_CS=m
-> # CONFIG_COMEDI_QUATECH_DAQP_CS is not set
-> CONFIG_COMEDI_USB_DRIVERS=y
-> # CONFIG_COMEDI_DT9812 is not set
-> # CONFIG_COMEDI_NI_USB6501 is not set
-> CONFIG_COMEDI_USBDUX=y
-> CONFIG_COMEDI_USBDUXFAST=y
-> CONFIG_COMEDI_USBDUXSIGMA=y
-> CONFIG_COMEDI_VMK80XX=y
-> CONFIG_COMEDI_8254=m
-> CONFIG_COMEDI_8255=y
-> CONFIG_COMEDI_8255_SA=y
-> CONFIG_COMEDI_KCOMEDILIB=m
-> CONFIG_COMEDI_DAS08=m
-> CONFIG_COMEDI_NI_LABPC=m
-> CONFIG_COMEDI_NI_TIO=m
-> CONFIG_COMEDI_NI_ROUTING=m
-> # CONFIG_COMEDI_TESTS is not set
-> CONFIG_STAGING=y
-> # CONFIG_RTL8192U is not set
-> # CONFIG_RTLLIB is not set
-> CONFIG_STAGING_MEDIA=y
-> 
-> #
-> # Android
-> #
-> CONFIG_ASHMEM=y
-> # end of Android
-> 
-> # CONFIG_STAGING_BOARD is not set
-> CONFIG_LTE_GDM724X=m
-> # CONFIG_FIREWIRE_SERIAL is not set
-> # CONFIG_GS_FPGABOOT is not set
-> CONFIG_UNISYSSPAR=y
-> # CONFIG_UNISYS_VISORNIC is not set
-> # CONFIG_UNISYS_VISORINPUT is not set
-> CONFIG_COMMON_CLK_XLNX_CLKWZRD=y
-> CONFIG_MOST_COMPONENTS=y
-> CONFIG_MOST_NET=y
-> CONFIG_MOST_DIM2=y
-> # CONFIG_MOST_I2C is not set
-> CONFIG_XIL_AXIS_FIFO=m
-> CONFIG_FIELDBUS_DEV=m
-> CONFIG_HMS_ANYBUSS_BUS=m
-> CONFIG_ARCX_ANYBUS_CONTROLLER=m
-> CONFIG_HMS_PROFINET=m
-> # CONFIG_QLGE is not set
+> # CONFIG_COMEDI is not set
+> # CONFIG_STAGING is not set
 > CONFIG_X86_PLATFORM_DEVICES=y
-> # CONFIG_ACPI_WMI is not set
+> CONFIG_ACPI_WMI=m
+> CONFIG_WMI_BMOF=m
+> # CONFIG_HUAWEI_WMI is not set
+> # CONFIG_UV_SYSFS is not set
+> CONFIG_MXM_WMI=m
+> # CONFIG_PEAQ_WMI is not set
+> # CONFIG_NVIDIA_WMI_EC_BACKLIGHT is not set
+> # CONFIG_XIAOMI_WMI is not set
+> # CONFIG_GIGABYTE_WMI is not set
+> # CONFIG_YOGABOOK_WMI is not set
 > CONFIG_ACERHDF=m
-> CONFIG_ACER_WIRELESS=m
+> # CONFIG_ACER_WIRELESS is not set
+> CONFIG_ACER_WMI=m
 > # CONFIG_AMD_PMC is not set
-> CONFIG_ADV_SWBUTTON=m
-> # CONFIG_APPLE_GMUX is not set
-> # CONFIG_ASUS_LAPTOP is not set
-> CONFIG_ASUS_WIRELESS=m
+> # CONFIG_ADV_SWBUTTON is not set
+> CONFIG_APPLE_GMUX=m
+> CONFIG_ASUS_LAPTOP=m
+> # CONFIG_ASUS_WIRELESS is not set
+> CONFIG_ASUS_WMI=m
+> CONFIG_ASUS_NB_WMI=m
 > # CONFIG_ASUS_TF103C_DOCK is not set
-> CONFIG_MERAKI_MX100=y
-> # CONFIG_EEEPC_LAPTOP is not set
-> CONFIG_X86_PLATFORM_DRIVERS_DELL=y
-> CONFIG_DCDBAS=m
-> # CONFIG_DELL_RBU is not set
-> CONFIG_DELL_RBTN=y
-> CONFIG_DELL_SMBIOS=m
-> CONFIG_DELL_SMBIOS_SMM=y
-> CONFIG_DELL_SMO8800=m
-> # CONFIG_AMILO_RFKILL is not set
-> # CONFIG_FUJITSU_LAPTOP is not set
+> # CONFIG_MERAKI_MX100 is not set
+> CONFIG_EEEPC_LAPTOP=m
+> CONFIG_EEEPC_WMI=m
+> # CONFIG_X86_PLATFORM_DRIVERS_DELL is not set
+> CONFIG_AMILO_RFKILL=m
+> CONFIG_FUJITSU_LAPTOP=m
 > CONFIG_FUJITSU_TABLET=m
 > # CONFIG_GPD_POCKET_FAN is not set
-> # CONFIG_HP_ACCEL is not set
+> CONFIG_HP_ACCEL=m
 > # CONFIG_WIRELESS_HOTKEY is not set
-> CONFIG_IBM_RTL=m
-> # CONFIG_IDEAPAD_LAPTOP is not set
-> # CONFIG_SENSORS_HDAPS is not set
-> # CONFIG_INTEL_ATOMISP2_LED is not set
+> CONFIG_HP_WMI=m
+> # CONFIG_IBM_RTL is not set
+> CONFIG_IDEAPAD_LAPTOP=m
+> CONFIG_SENSORS_HDAPS=m
+> CONFIG_THINKPAD_ACPI=m
+> # CONFIG_THINKPAD_ACPI_DEBUGFACILITIES is not set
+> # CONFIG_THINKPAD_ACPI_DEBUG is not set
+> # CONFIG_THINKPAD_ACPI_UNSAFE_LEDS is not set
+> CONFIG_THINKPAD_ACPI_VIDEO=y
+> CONFIG_THINKPAD_ACPI_HOTKEY_POLL=y
+> # CONFIG_THINKPAD_LMI is not set
 > # CONFIG_INTEL_ATOMISP2_PM is not set
 > # CONFIG_INTEL_SAR_INT1092 is not set
-> # CONFIG_INTEL_SKL_INT3472 is not set
-> # CONFIG_INTEL_PMC_CORE is not set
+> CONFIG_INTEL_PMC_CORE=m
 > 
 > #
 > # Intel Speed Select Technology interface support
@@ -4670,86 +5286,105 @@ Thank you for your testing efforts!
 > # CONFIG_INTEL_SPEED_SELECT_INTERFACE is not set
 > # end of Intel Speed Select Technology interface support
 > 
-> # CONFIG_INTEL_HID_EVENT is not set
-> # CONFIG_INTEL_VBTN is not set
-> # CONFIG_INTEL_OAKTRAIL is not set
+> CONFIG_INTEL_WMI=y
+> # CONFIG_INTEL_WMI_SBL_FW_UPDATE is not set
+> CONFIG_INTEL_WMI_THUNDERBOLT=m
+> CONFIG_INTEL_HID_EVENT=m
+> CONFIG_INTEL_VBTN=m
+> # CONFIG_INTEL_INT0002_VGPIO is not set
+> CONFIG_INTEL_OAKTRAIL=m
 > # CONFIG_INTEL_ISHTP_ECLITE is not set
-> # CONFIG_INTEL_MRFLD_PWRBTN is not set
 > # CONFIG_INTEL_PUNIT_IPC is not set
-> # CONFIG_INTEL_RST is not set
+> CONFIG_INTEL_RST=m
 > # CONFIG_INTEL_SMARTCONNECT is not set
-> # CONFIG_INTEL_TURBO_MAX_3 is not set
+> CONFIG_INTEL_TURBO_MAX_3=y
 > # CONFIG_INTEL_UNCORE_FREQ_CONTROL is not set
 > # CONFIG_INTEL_VSEC is not set
-> # CONFIG_MSI_LAPTOP is not set
+> CONFIG_MSI_LAPTOP=m
+> CONFIG_MSI_WMI=m
 > # CONFIG_PCENGINES_APU2 is not set
 > # CONFIG_BARCO_P50_GPIO is not set
-> # CONFIG_SAMSUNG_LAPTOP is not set
+> CONFIG_SAMSUNG_LAPTOP=m
 > CONFIG_SAMSUNG_Q10=m
-> # CONFIG_TOSHIBA_BT_RFKILL is not set
-> CONFIG_TOSHIBA_HAPS=m
-> CONFIG_ACPI_CMPC=y
-> # CONFIG_COMPAL_LAPTOP is not set
+> CONFIG_TOSHIBA_BT_RFKILL=m
+> # CONFIG_TOSHIBA_HAPS is not set
+> # CONFIG_TOSHIBA_WMI is not set
+> CONFIG_ACPI_CMPC=m
+> CONFIG_COMPAL_LAPTOP=m
+> # CONFIG_LG_LAPTOP is not set
 > CONFIG_PANASONIC_LAPTOP=m
 > CONFIG_SONY_LAPTOP=m
-> # CONFIG_SONYPI_COMPAT is not set
+> CONFIG_SONYPI_COMPAT=y
 > # CONFIG_SYSTEM76_ACPI is not set
-> # CONFIG_TOPSTAR_LAPTOP is not set
-> CONFIG_I2C_MULTI_INSTANTIATE=m
-> # CONFIG_MLX_PLATFORM is not set
-> CONFIG_INTEL_IPS=y
-> CONFIG_INTEL_SCU_IPC=y
-> CONFIG_INTEL_SCU=y
-> CONFIG_INTEL_SCU_PCI=y
-> CONFIG_INTEL_SCU_PLATFORM=m
-> # CONFIG_INTEL_SCU_IPC_UTIL is not set
+> CONFIG_TOPSTAR_LAPTOP=m
+> # CONFIG_I2C_MULTI_INSTANTIATE is not set
+> CONFIG_MLX_PLATFORM=m
+> CONFIG_INTEL_IPS=m
+> # CONFIG_INTEL_SCU_PCI is not set
+> # CONFIG_INTEL_SCU_PLATFORM is not set
 > # CONFIG_SIEMENS_SIMATIC_IPC is not set
 > CONFIG_PMC_ATOM=y
-> CONFIG_GOLDFISH_PIPE=m
 > # CONFIG_CHROME_PLATFORMS is not set
-> # CONFIG_MELLANOX_PLATFORM is not set
-> # CONFIG_SURFACE_PLATFORMS is not set
+> CONFIG_MELLANOX_PLATFORM=y
+> CONFIG_MLXREG_HOTPLUG=m
+> # CONFIG_MLXREG_IO is not set
+> # CONFIG_MLXREG_LC is not set
+> CONFIG_SURFACE_PLATFORMS=y
+> # CONFIG_SURFACE3_WMI is not set
+> # CONFIG_SURFACE_3_POWER_OPREGION is not set
+> # CONFIG_SURFACE_GPE is not set
+> # CONFIG_SURFACE_HOTPLUG is not set
+> # CONFIG_SURFACE_PRO3_BUTTON is not set
 > CONFIG_HAVE_CLK=y
 > CONFIG_HAVE_CLK_PREPARE=y
 > CONFIG_COMMON_CLK=y
-> CONFIG_COMMON_CLK_MAX77686=m
-> CONFIG_COMMON_CLK_MAX9485=m
-> CONFIG_COMMON_CLK_RK808=m
+> # CONFIG_LMK04832 is not set
+> # CONFIG_COMMON_CLK_MAX9485 is not set
 > # CONFIG_COMMON_CLK_SI5341 is not set
-> CONFIG_COMMON_CLK_SI5351=m
-> # CONFIG_COMMON_CLK_SI514 is not set
-> CONFIG_COMMON_CLK_SI544=m
-> CONFIG_COMMON_CLK_SI570=m
-> CONFIG_COMMON_CLK_CDCE706=m
-> # CONFIG_COMMON_CLK_CDCE925 is not set
-> CONFIG_COMMON_CLK_CS2000_CP=m
+> # CONFIG_COMMON_CLK_SI5351 is not set
+> # CONFIG_COMMON_CLK_SI544 is not set
+> # CONFIG_COMMON_CLK_CDCE706 is not set
+> # CONFIG_COMMON_CLK_CS2000_CP is not set
 > # CONFIG_COMMON_CLK_LAN966X is not set
-> # CONFIG_COMMON_CLK_AXI_CLKGEN is not set
-> CONFIG_COMMON_CLK_VC5=m
-> # CONFIG_COMMON_CLK_FIXED_MMIO is not set
-> CONFIG_CLK_LGM_CGU=y
-> CONFIG_XILINX_VCU=m
+> # CONFIG_COMMON_CLK_PWM is not set
+> # CONFIG_XILINX_VCU is not set
 > CONFIG_HWSPINLOCK=y
 > 
 > #
 > # Clock Source drivers
 > #
-> CONFIG_TIMER_OF=y
-> CONFIG_TIMER_PROBE=y
 > CONFIG_CLKEVT_I8253=y
+> CONFIG_I8253_LOCK=y
 > CONFIG_CLKBLD_I8253=y
-> CONFIG_CLKSRC_MMIO=y
-> CONFIG_MICROCHIP_PIT64B=y
 > # end of Clock Source drivers
 > 
 > CONFIG_MAILBOX=y
-> CONFIG_PLATFORM_MHU=m
 > CONFIG_PCC=y
 > # CONFIG_ALTERA_MBOX is not set
-> # CONFIG_MAILBOX_TEST is not set
 > CONFIG_IOMMU_IOVA=y
+> CONFIG_IOASID=y
 > CONFIG_IOMMU_API=y
-> # CONFIG_IOMMU_SUPPORT is not set
+> CONFIG_IOMMU_SUPPORT=y
+> 
+> #
+> # Generic IOMMU Pagetable Support
+> #
+> # end of Generic IOMMU Pagetable Support
+> 
+> # CONFIG_IOMMU_DEBUGFS is not set
+> # CONFIG_IOMMU_DEFAULT_DMA_STRICT is not set
+> CONFIG_IOMMU_DEFAULT_DMA_LAZY=y
+> # CONFIG_IOMMU_DEFAULT_PASSTHROUGH is not set
+> CONFIG_IOMMU_DMA=y
+> # CONFIG_AMD_IOMMU is not set
+> CONFIG_DMAR_TABLE=y
+> CONFIG_INTEL_IOMMU=y
+> # CONFIG_INTEL_IOMMU_SVM is not set
+> # CONFIG_INTEL_IOMMU_DEFAULT_ON is not set
+> CONFIG_INTEL_IOMMU_FLOPPY_WA=y
+> CONFIG_INTEL_IOMMU_SCALABLE_MODE_DEFAULT_ON=y
+> CONFIG_IRQ_REMAP=y
+> # CONFIG_VIRTIO_IOMMU is not set
 > 
 > #
 > # Remoteproc drivers
@@ -4760,18 +5395,11 @@ Thank you for your testing efforts!
 > #
 > # Rpmsg drivers
 > #
-> CONFIG_RPMSG=y
-> # CONFIG_RPMSG_CHAR is not set
-> CONFIG_RPMSG_NS=y
 > # CONFIG_RPMSG_QCOM_GLINK_RPM is not set
-> CONFIG_RPMSG_VIRTIO=y
+> # CONFIG_RPMSG_VIRTIO is not set
 > # end of Rpmsg drivers
 > 
-> CONFIG_SOUNDWIRE=y
-> 
-> #
-> # SoundWire Devices
-> #
+> # CONFIG_SOUNDWIRE is not set
 > 
 > #
 > # SOC (System On Chip) specific Drivers
@@ -4800,7 +5428,6 @@ Thank you for your testing efforts!
 > #
 > # Enable LiteX SoC Builder specific drivers
 > #
-> # CONFIG_LITEX_SOC_CONTROLLER is not set
 > # end of Enable LiteX SoC Builder specific drivers
 > 
 > #
@@ -4816,72 +5443,45 @@ Thank you for your testing efforts!
 > # end of Xilinx SoC drivers
 > # end of SOC (System On Chip) specific Drivers
 > 
-> CONFIG_PM_DEVFREQ=y
-> 
-> #
-> # DEVFREQ Governors
-> #
-> CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
-> # CONFIG_DEVFREQ_GOV_PERFORMANCE is not set
-> # CONFIG_DEVFREQ_GOV_POWERSAVE is not set
-> CONFIG_DEVFREQ_GOV_USERSPACE=m
-> # CONFIG_DEVFREQ_GOV_PASSIVE is not set
-> 
-> #
-> # DEVFREQ Drivers
-> #
-> CONFIG_PM_DEVFREQ_EVENT=y
-> CONFIG_EXTCON=y
-> 
-> #
-> # Extcon Device Drivers
-> #
-> CONFIG_EXTCON_FSA9480=m
-> # CONFIG_EXTCON_GPIO is not set
-> CONFIG_EXTCON_INTEL_INT3496=y
-> CONFIG_EXTCON_INTEL_MRFLD=m
-> CONFIG_EXTCON_MAX14577=m
-> # CONFIG_EXTCON_MAX3355 is not set
-> CONFIG_EXTCON_MAX77693=m
-> CONFIG_EXTCON_PTN5150=m
-> CONFIG_EXTCON_RT8973A=m
-> # CONFIG_EXTCON_SM5502 is not set
-> CONFIG_EXTCON_USB_GPIO=y
-> CONFIG_EXTCON_USBC_TUSB320=m
+> # CONFIG_PM_DEVFREQ is not set
+> # CONFIG_EXTCON is not set
 > # CONFIG_MEMORY is not set
 > # CONFIG_IIO is not set
 > CONFIG_NTB=m
-> CONFIG_NTB_AMD=m
+> # CONFIG_NTB_MSI is not set
+> # CONFIG_NTB_AMD is not set
 > # CONFIG_NTB_IDT is not set
-> CONFIG_NTB_INTEL=m
-> CONFIG_NTB_EPF=m
-> CONFIG_NTB_SWITCHTEC=m
-> CONFIG_NTB_PINGPONG=m
-> CONFIG_NTB_TOOL=m
-> CONFIG_NTB_PERF=m
-> CONFIG_NTB_TRANSPORT=m
+> # CONFIG_NTB_INTEL is not set
+> # CONFIG_NTB_EPF is not set
+> # CONFIG_NTB_SWITCHTEC is not set
+> # CONFIG_NTB_PINGPONG is not set
+> # CONFIG_NTB_TOOL is not set
+> # CONFIG_NTB_PERF is not set
+> # CONFIG_NTB_TRANSPORT is not set
 > # CONFIG_VME_BUS is not set
-> # CONFIG_PWM is not set
+> CONFIG_PWM=y
+> CONFIG_PWM_SYSFS=y
+> # CONFIG_PWM_DEBUG is not set
+> # CONFIG_PWM_DWC is not set
+> CONFIG_PWM_LPSS=m
+> CONFIG_PWM_LPSS_PCI=m
+> CONFIG_PWM_LPSS_PLATFORM=m
+> # CONFIG_PWM_PCA9685 is not set
 > 
 > #
 > # IRQ chip support
 > #
-> CONFIG_IRQCHIP=y
-> CONFIG_AL_FIC=y
 > # end of IRQ chip support
 > 
 > # CONFIG_IPACK_BUS is not set
-> CONFIG_RESET_CONTROLLER=y
-> # CONFIG_RESET_INTEL_GW is not set
-> CONFIG_RESET_TI_SYSCON=y
+> # CONFIG_RESET_CONTROLLER is not set
 > 
 > #
 > # PHY Subsystem
 > #
-> CONFIG_GENERIC_PHY=y
-> CONFIG_GENERIC_PHY_MIPI_DPHY=y
-> CONFIG_USB_LGM_PHY=m
-> CONFIG_PHY_CAN_TRANSCEIVER=m
+> # CONFIG_GENERIC_PHY is not set
+> # CONFIG_USB_LGM_PHY is not set
+> # CONFIG_PHY_CAN_TRANSCEIVER is not set
 > 
 > #
 > # PHY drivers for Broadcom platforms
@@ -4889,30 +5489,15 @@ Thank you for your testing efforts!
 > # CONFIG_BCM_KONA_USB2_PHY is not set
 > # end of PHY drivers for Broadcom platforms
 > 
-> CONFIG_PHY_CADENCE_TORRENT=m
-> CONFIG_PHY_CADENCE_DPHY=y
-> CONFIG_PHY_CADENCE_SIERRA=m
-> CONFIG_PHY_CADENCE_SALVO=y
-> CONFIG_PHY_FSL_IMX8MQ_USB=y
-> # CONFIG_PHY_MIXEL_MIPI_DPHY is not set
-> # CONFIG_PHY_FSL_IMX8M_PCIE is not set
-> CONFIG_PHY_PXA_28NM_HSIC=y
-> CONFIG_PHY_PXA_28NM_USB2=y
-> # CONFIG_PHY_LAN966X_SERDES is not set
-> CONFIG_PHY_MAPPHONE_MDM6600=m
-> CONFIG_PHY_OCELOT_SERDES=y
-> CONFIG_PHY_QCOM_USB_HS=m
-> # CONFIG_PHY_QCOM_USB_HSIC is not set
-> CONFIG_PHY_SAMSUNG_USB2=m
-> # CONFIG_PHY_TUSB1210 is not set
-> # CONFIG_PHY_INTEL_LGM_COMBO is not set
+> # CONFIG_PHY_PXA_28NM_HSIC is not set
+> # CONFIG_PHY_PXA_28NM_USB2 is not set
 > # CONFIG_PHY_INTEL_LGM_EMMC is not set
 > # end of PHY Subsystem
 > 
 > CONFIG_POWERCAP=y
 > CONFIG_INTEL_RAPL_CORE=m
 > CONFIG_INTEL_RAPL=m
-> CONFIG_IDLE_INJECT=y
+> # CONFIG_IDLE_INJECT is not set
 > # CONFIG_DTPM is not set
 > # CONFIG_MCB is not set
 > 
@@ -4921,22 +5506,30 @@ Thank you for your testing efforts!
 > #
 > # end of Performance monitor support
 > 
-> # CONFIG_RAS is not set
-> CONFIG_USB4=y
-> CONFIG_USB4_DEBUGFS_WRITE=y
-> # CONFIG_USB4_DMA_TEST is not set
+> CONFIG_RAS=y
+> # CONFIG_RAS_CEC is not set
+> # CONFIG_USB4 is not set
 > 
 > #
 > # Android
 > #
-> CONFIG_ANDROID=y
-> CONFIG_ANDROID_BINDER_IPC=y
-> CONFIG_ANDROID_BINDERFS=y
-> CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
-> # CONFIG_ANDROID_BINDER_IPC_SELFTEST is not set
+> # CONFIG_ANDROID is not set
 > # end of Android
 > 
-> # CONFIG_DAX is not set
+> CONFIG_LIBNVDIMM=m
+> CONFIG_BLK_DEV_PMEM=m
+> CONFIG_ND_BLK=m
+> CONFIG_ND_CLAIM=y
+> CONFIG_ND_BTT=m
+> CONFIG_BTT=y
+> CONFIG_ND_PFN=m
+> CONFIG_NVDIMM_PFN=y
+> CONFIG_NVDIMM_DAX=y
+> CONFIG_NVDIMM_KEYS=y
+> CONFIG_DAX=y
+> CONFIG_DEV_DAX=m
+> CONFIG_DEV_DAX_PMEM=m
+> CONFIG_DEV_DAX_KMEM=m
 > CONFIG_NVMEM=y
 > CONFIG_NVMEM_SYSFS=y
 > # CONFIG_NVMEM_RMEM is not set
@@ -4946,54 +5539,29 @@ Thank you for your testing efforts!
 > #
 > CONFIG_STM=m
 > # CONFIG_STM_PROTO_BASIC is not set
-> CONFIG_STM_PROTO_SYS_T=m
-> # CONFIG_STM_DUMMY is not set
+> # CONFIG_STM_PROTO_SYS_T is not set
+> CONFIG_STM_DUMMY=m
 > CONFIG_STM_SOURCE_CONSOLE=m
 > CONFIG_STM_SOURCE_HEARTBEAT=m
-> # CONFIG_STM_SOURCE_FTRACE is not set
+> CONFIG_STM_SOURCE_FTRACE=m
 > CONFIG_INTEL_TH=m
-> # CONFIG_INTEL_TH_PCI is not set
+> CONFIG_INTEL_TH_PCI=m
 > CONFIG_INTEL_TH_ACPI=m
 > CONFIG_INTEL_TH_GTH=m
 > CONFIG_INTEL_TH_STH=m
-> # CONFIG_INTEL_TH_MSU is not set
+> CONFIG_INTEL_TH_MSU=m
 > CONFIG_INTEL_TH_PTI=m
-> CONFIG_INTEL_TH_DEBUG=y
+> # CONFIG_INTEL_TH_DEBUG is not set
 > # end of HW tracing support
 > 
-> CONFIG_FPGA=m
-> CONFIG_ALTERA_PR_IP_CORE=m
-> CONFIG_ALTERA_PR_IP_CORE_PLAT=m
-> CONFIG_FPGA_MGR_ALTERA_CVP=m
-> CONFIG_FPGA_BRIDGE=m
-> CONFIG_ALTERA_FREEZE_BRIDGE=m
-> CONFIG_XILINX_PR_DECOUPLER=m
-> CONFIG_FPGA_REGION=m
-> CONFIG_OF_FPGA_REGION=m
-> # CONFIG_FPGA_DFL is not set
-> CONFIG_FSI=y
-> CONFIG_FSI_NEW_DEV_NODE=y
-> CONFIG_FSI_MASTER_GPIO=y
-> # CONFIG_FSI_MASTER_HUB is not set
-> CONFIG_FSI_MASTER_ASPEED=y
-> # CONFIG_FSI_SCOM is not set
-> CONFIG_FSI_SBEFIFO=m
-> CONFIG_FSI_OCC=m
-> CONFIG_PM_OPP=y
-> CONFIG_UNISYS_VISORBUS=y
+> # CONFIG_FPGA is not set
+> # CONFIG_TEE is not set
+> # CONFIG_UNISYS_VISORBUS is not set
 > # CONFIG_SIOX is not set
-> CONFIG_SLIMBUS=y
-> # CONFIG_SLIM_QCOM_CTRL is not set
-> CONFIG_INTERCONNECT=y
-> CONFIG_COUNTER=m
-> # CONFIG_104_QUAD_8 is not set
-> CONFIG_INTERRUPT_CNT=m
-> CONFIG_FTM_QUADDEC=m
-> # CONFIG_MICROCHIP_TCB_CAPTURE is not set
-> CONFIG_INTEL_QEP=m
-> CONFIG_MOST=y
-> CONFIG_MOST_USB_HDM=y
-> CONFIG_MOST_CDEV=m
+> # CONFIG_SLIMBUS is not set
+> # CONFIG_INTERCONNECT is not set
+> # CONFIG_COUNTER is not set
+> # CONFIG_MOST is not set
 > # end of Device Drivers
 > 
 > #
@@ -5001,120 +5569,329 @@ Thank you for your testing efforts!
 > #
 > CONFIG_DCACHE_WORD_ACCESS=y
 > # CONFIG_VALIDATE_FS_PARSER is not set
-> # CONFIG_FS_DAX is not set
+> CONFIG_FS_IOMAP=y
+> CONFIG_EXT2_FS=m
+> CONFIG_EXT2_FS_XATTR=y
+> CONFIG_EXT2_FS_POSIX_ACL=y
+> CONFIG_EXT2_FS_SECURITY=y
+> # CONFIG_EXT3_FS is not set
+> CONFIG_EXT4_FS=y
+> CONFIG_EXT4_FS_POSIX_ACL=y
+> CONFIG_EXT4_FS_SECURITY=y
+> # CONFIG_EXT4_DEBUG is not set
+> CONFIG_JBD2=y
+> # CONFIG_JBD2_DEBUG is not set
+> CONFIG_FS_MBCACHE=y
+> # CONFIG_REISERFS_FS is not set
+> # CONFIG_JFS_FS is not set
+> CONFIG_XFS_FS=m
+> CONFIG_XFS_SUPPORT_V4=y
+> CONFIG_XFS_QUOTA=y
+> CONFIG_XFS_POSIX_ACL=y
+> CONFIG_XFS_RT=y
+> CONFIG_XFS_ONLINE_SCRUB=y
+> CONFIG_XFS_ONLINE_REPAIR=y
+> CONFIG_XFS_DEBUG=y
+> CONFIG_XFS_ASSERT_FATAL=y
+> CONFIG_GFS2_FS=m
+> CONFIG_GFS2_FS_LOCKING_DLM=y
+> CONFIG_OCFS2_FS=m
+> CONFIG_OCFS2_FS_O2CB=m
+> CONFIG_OCFS2_FS_USERSPACE_CLUSTER=m
+> CONFIG_OCFS2_FS_STATS=y
+> CONFIG_OCFS2_DEBUG_MASKLOG=y
+> # CONFIG_OCFS2_DEBUG_FS is not set
+> CONFIG_BTRFS_FS=m
+> CONFIG_BTRFS_FS_POSIX_ACL=y
+> # CONFIG_BTRFS_FS_CHECK_INTEGRITY is not set
+> # CONFIG_BTRFS_FS_RUN_SANITY_TESTS is not set
+> # CONFIG_BTRFS_DEBUG is not set
+> # CONFIG_BTRFS_ASSERT is not set
+> # CONFIG_BTRFS_FS_REF_VERIFY is not set
+> # CONFIG_NILFS2_FS is not set
+> CONFIG_F2FS_FS=m
+> CONFIG_F2FS_STAT_FS=y
+> CONFIG_F2FS_FS_XATTR=y
+> CONFIG_F2FS_FS_POSIX_ACL=y
+> CONFIG_F2FS_FS_SECURITY=y
+> # CONFIG_F2FS_CHECK_FS is not set
+> # CONFIG_F2FS_FAULT_INJECTION is not set
+> # CONFIG_F2FS_FS_COMPRESSION is not set
+> CONFIG_F2FS_IOSTAT=y
+> # CONFIG_ZONEFS_FS is not set
+> CONFIG_FS_DAX=y
+> CONFIG_FS_DAX_PMD=y
+> CONFIG_FS_POSIX_ACL=y
 > CONFIG_EXPORTFS=y
-> # CONFIG_EXPORTFS_BLOCK_OPS is not set
+> CONFIG_EXPORTFS_BLOCK_OPS=y
 > CONFIG_FILE_LOCKING=y
 > CONFIG_FS_ENCRYPTION=y
-> CONFIG_FS_VERITY=y
-> CONFIG_FS_VERITY_DEBUG=y
-> # CONFIG_FS_VERITY_BUILTIN_SIGNATURES is not set
+> CONFIG_FS_ENCRYPTION_ALGS=y
+> # CONFIG_FS_VERITY is not set
 > CONFIG_FSNOTIFY=y
 > CONFIG_DNOTIFY=y
 > CONFIG_INOTIFY_USER=y
 > CONFIG_FANOTIFY=y
-> # CONFIG_FANOTIFY_ACCESS_PERMISSIONS is not set
-> # CONFIG_QUOTA is not set
-> # CONFIG_AUTOFS4_FS is not set
-> CONFIG_AUTOFS_FS=m
-> # CONFIG_FUSE_FS is not set
+> CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
+> CONFIG_QUOTA=y
+> CONFIG_QUOTA_NETLINK_INTERFACE=y
+> CONFIG_PRINT_QUOTA_WARNING=y
+> # CONFIG_QUOTA_DEBUG is not set
+> CONFIG_QUOTA_TREE=y
+> # CONFIG_QFMT_V1 is not set
+> CONFIG_QFMT_V2=y
+> CONFIG_QUOTACTL=y
+> CONFIG_AUTOFS4_FS=y
+> CONFIG_AUTOFS_FS=y
+> CONFIG_FUSE_FS=m
+> CONFIG_CUSE=m
+> # CONFIG_VIRTIO_FS is not set
 > CONFIG_OVERLAY_FS=m
-> CONFIG_OVERLAY_FS_REDIRECT_DIR=y
-> CONFIG_OVERLAY_FS_REDIRECT_ALWAYS_FOLLOW=y
+> # CONFIG_OVERLAY_FS_REDIRECT_DIR is not set
+> # CONFIG_OVERLAY_FS_REDIRECT_ALWAYS_FOLLOW is not set
 > # CONFIG_OVERLAY_FS_INDEX is not set
 > # CONFIG_OVERLAY_FS_XINO_AUTO is not set
-> CONFIG_OVERLAY_FS_METACOPY=y
+> # CONFIG_OVERLAY_FS_METACOPY is not set
 > 
 > #
 > # Caches
 > #
-> # CONFIG_FSCACHE is not set
+> CONFIG_NETFS_SUPPORT=y
+> CONFIG_NETFS_STATS=y
+> CONFIG_FSCACHE=m
+> CONFIG_FSCACHE_STATS=y
+> # CONFIG_FSCACHE_DEBUG is not set
+> CONFIG_CACHEFILES=m
+> # CONFIG_CACHEFILES_DEBUG is not set
+> # CONFIG_CACHEFILES_ERROR_INJECTION is not set
 > # end of Caches
+> 
+> #
+> # CD-ROM/DVD Filesystems
+> #
+> CONFIG_ISO9660_FS=m
+> CONFIG_JOLIET=y
+> CONFIG_ZISOFS=y
+> CONFIG_UDF_FS=m
+> # end of CD-ROM/DVD Filesystems
+> 
+> #
+> # DOS/FAT/EXFAT/NT Filesystems
+> #
+> CONFIG_FAT_FS=m
+> CONFIG_MSDOS_FS=m
+> CONFIG_VFAT_FS=m
+> CONFIG_FAT_DEFAULT_CODEPAGE=437
+> CONFIG_FAT_DEFAULT_IOCHARSET="ascii"
+> # CONFIG_FAT_DEFAULT_UTF8 is not set
+> # CONFIG_EXFAT_FS is not set
+> # CONFIG_NTFS_FS is not set
+> # CONFIG_NTFS3_FS is not set
+> # end of DOS/FAT/EXFAT/NT Filesystems
 > 
 > #
 > # Pseudo filesystems
 > #
 > CONFIG_PROC_FS=y
-> # CONFIG_PROC_KCORE is not set
+> CONFIG_PROC_KCORE=y
 > CONFIG_PROC_VMCORE=y
-> # CONFIG_PROC_VMCORE_DEVICE_DUMP is not set
+> CONFIG_PROC_VMCORE_DEVICE_DUMP=y
 > CONFIG_PROC_SYSCTL=y
 > CONFIG_PROC_PAGE_MONITOR=y
-> # CONFIG_PROC_CHILDREN is not set
+> CONFIG_PROC_CHILDREN=y
 > CONFIG_PROC_PID_ARCH_STATUS=y
-> CONFIG_PROC_CPU_RESCTRL=y
 > CONFIG_KERNFS=y
 > CONFIG_SYSFS=y
 > CONFIG_TMPFS=y
-> # CONFIG_TMPFS_POSIX_ACL is not set
-> # CONFIG_TMPFS_XATTR is not set
+> CONFIG_TMPFS_POSIX_ACL=y
+> CONFIG_TMPFS_XATTR=y
 > # CONFIG_TMPFS_INODE64 is not set
 > CONFIG_HUGETLBFS=y
 > CONFIG_HUGETLB_PAGE=y
 > CONFIG_HUGETLB_PAGE_FREE_VMEMMAP=y
-> CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON=y
+> # CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON is not set
 > CONFIG_MEMFD_CREATE=y
 > CONFIG_ARCH_HAS_GIGANTIC_PAGE=y
 > CONFIG_CONFIGFS_FS=y
+> CONFIG_EFIVAR_FS=y
 > # end of Pseudo filesystems
 > 
-> # CONFIG_MISC_FILESYSTEMS is not set
-> # CONFIG_NETWORK_FILESYSTEMS is not set
+> CONFIG_MISC_FILESYSTEMS=y
+> # CONFIG_ORANGEFS_FS is not set
+> # CONFIG_ADFS_FS is not set
+> # CONFIG_AFFS_FS is not set
+> # CONFIG_ECRYPT_FS is not set
+> # CONFIG_HFS_FS is not set
+> # CONFIG_HFSPLUS_FS is not set
+> # CONFIG_BEFS_FS is not set
+> # CONFIG_BFS_FS is not set
+> # CONFIG_EFS_FS is not set
+> CONFIG_CRAMFS=m
+> CONFIG_CRAMFS_BLOCKDEV=y
+> CONFIG_SQUASHFS=m
+> # CONFIG_SQUASHFS_FILE_CACHE is not set
+> CONFIG_SQUASHFS_FILE_DIRECT=y
+> # CONFIG_SQUASHFS_DECOMP_SINGLE is not set
+> # CONFIG_SQUASHFS_DECOMP_MULTI is not set
+> CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y
+> CONFIG_SQUASHFS_XATTR=y
+> CONFIG_SQUASHFS_ZLIB=y
+> # CONFIG_SQUASHFS_LZ4 is not set
+> CONFIG_SQUASHFS_LZO=y
+> CONFIG_SQUASHFS_XZ=y
+> # CONFIG_SQUASHFS_ZSTD is not set
+> # CONFIG_SQUASHFS_4K_DEVBLK_SIZE is not set
+> # CONFIG_SQUASHFS_EMBEDDED is not set
+> CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
+> # CONFIG_VXFS_FS is not set
+> CONFIG_MINIX_FS=m
+> # CONFIG_OMFS_FS is not set
+> # CONFIG_HPFS_FS is not set
+> # CONFIG_QNX4FS_FS is not set
+> # CONFIG_QNX6FS_FS is not set
+> # CONFIG_ROMFS_FS is not set
+> CONFIG_PSTORE=y
+> CONFIG_PSTORE_DEFAULT_KMSG_BYTES=10240
+> CONFIG_PSTORE_DEFLATE_COMPRESS=y
+> # CONFIG_PSTORE_LZO_COMPRESS is not set
+> # CONFIG_PSTORE_LZ4_COMPRESS is not set
+> # CONFIG_PSTORE_LZ4HC_COMPRESS is not set
+> # CONFIG_PSTORE_842_COMPRESS is not set
+> # CONFIG_PSTORE_ZSTD_COMPRESS is not set
+> CONFIG_PSTORE_COMPRESS=y
+> CONFIG_PSTORE_DEFLATE_COMPRESS_DEFAULT=y
+> CONFIG_PSTORE_COMPRESS_DEFAULT="deflate"
+> # CONFIG_PSTORE_CONSOLE is not set
+> # CONFIG_PSTORE_PMSG is not set
+> # CONFIG_PSTORE_FTRACE is not set
+> CONFIG_PSTORE_RAM=m
+> # CONFIG_PSTORE_BLK is not set
+> # CONFIG_SYSV_FS is not set
+> # CONFIG_UFS_FS is not set
+> # CONFIG_EROFS_FS is not set
+> CONFIG_NETWORK_FILESYSTEMS=y
+> CONFIG_NFS_FS=y
+> # CONFIG_NFS_V2 is not set
+> CONFIG_NFS_V3=y
+> CONFIG_NFS_V3_ACL=y
+> CONFIG_NFS_V4=m
+> # CONFIG_NFS_SWAP is not set
+> CONFIG_NFS_V4_1=y
+> CONFIG_NFS_V4_2=y
+> CONFIG_PNFS_FILE_LAYOUT=m
+> CONFIG_PNFS_BLOCK=m
+> CONFIG_PNFS_FLEXFILE_LAYOUT=m
+> CONFIG_NFS_V4_1_IMPLEMENTATION_ID_DOMAIN="kernel.org"
+> # CONFIG_NFS_V4_1_MIGRATION is not set
+> CONFIG_NFS_V4_SECURITY_LABEL=y
+> CONFIG_ROOT_NFS=y
+> # CONFIG_NFS_USE_LEGACY_DNS is not set
+> CONFIG_NFS_USE_KERNEL_DNS=y
+> CONFIG_NFS_DEBUG=y
+> CONFIG_NFS_DISABLE_UDP_SUPPORT=y
+> # CONFIG_NFS_V4_2_READ_PLUS is not set
+> CONFIG_NFSD=m
+> CONFIG_NFSD_V2_ACL=y
+> CONFIG_NFSD_V3=y
+> CONFIG_NFSD_V3_ACL=y
+> CONFIG_NFSD_V4=y
+> CONFIG_NFSD_PNFS=y
+> # CONFIG_NFSD_BLOCKLAYOUT is not set
+> CONFIG_NFSD_SCSILAYOUT=y
+> # CONFIG_NFSD_FLEXFILELAYOUT is not set
+> # CONFIG_NFSD_V4_2_INTER_SSC is not set
+> CONFIG_NFSD_V4_SECURITY_LABEL=y
+> CONFIG_GRACE_PERIOD=y
+> CONFIG_LOCKD=y
+> CONFIG_LOCKD_V4=y
+> CONFIG_NFS_ACL_SUPPORT=y
+> CONFIG_NFS_COMMON=y
+> CONFIG_NFS_V4_2_SSC_HELPER=y
+> CONFIG_SUNRPC=y
+> CONFIG_SUNRPC_GSS=m
+> CONFIG_SUNRPC_BACKCHANNEL=y
+> CONFIG_RPCSEC_GSS_KRB5=m
+> # CONFIG_SUNRPC_DISABLE_INSECURE_ENCTYPES is not set
+> CONFIG_SUNRPC_DEBUG=y
+> CONFIG_SUNRPC_XPRT_RDMA=m
+> CONFIG_CEPH_FS=m
+> # CONFIG_CEPH_FSCACHE is not set
+> CONFIG_CEPH_FS_POSIX_ACL=y
+> # CONFIG_CEPH_FS_SECURITY_LABEL is not set
+> CONFIG_CIFS=m
+> CONFIG_CIFS_STATS2=y
+> CONFIG_CIFS_ALLOW_INSECURE_LEGACY=y
+> CONFIG_CIFS_UPCALL=y
+> CONFIG_CIFS_XATTR=y
+> CONFIG_CIFS_POSIX=y
+> CONFIG_CIFS_DEBUG=y
+> # CONFIG_CIFS_DEBUG2 is not set
+> # CONFIG_CIFS_DEBUG_DUMP_KEYS is not set
+> CONFIG_CIFS_DFS_UPCALL=y
+> # CONFIG_CIFS_SWN_UPCALL is not set
+> # CONFIG_CIFS_SMB_DIRECT is not set
+> # CONFIG_CIFS_FSCACHE is not set
+> # CONFIG_SMB_SERVER is not set
+> CONFIG_SMBFS_COMMON=m
+> # CONFIG_CODA_FS is not set
+> # CONFIG_AFS_FS is not set
+> CONFIG_9P_FS=y
+> CONFIG_9P_FS_POSIX_ACL=y
+> # CONFIG_9P_FS_SECURITY is not set
 > CONFIG_NLS=y
-> CONFIG_NLS_DEFAULT="iso8859-1"
-> # CONFIG_NLS_CODEPAGE_437 is not set
-> # CONFIG_NLS_CODEPAGE_737 is not set
+> CONFIG_NLS_DEFAULT="utf8"
+> CONFIG_NLS_CODEPAGE_437=y
+> CONFIG_NLS_CODEPAGE_737=m
 > CONFIG_NLS_CODEPAGE_775=m
-> # CONFIG_NLS_CODEPAGE_850 is not set
-> CONFIG_NLS_CODEPAGE_852=y
-> # CONFIG_NLS_CODEPAGE_855 is not set
-> # CONFIG_NLS_CODEPAGE_857 is not set
-> CONFIG_NLS_CODEPAGE_860=y
+> CONFIG_NLS_CODEPAGE_850=m
+> CONFIG_NLS_CODEPAGE_852=m
+> CONFIG_NLS_CODEPAGE_855=m
+> CONFIG_NLS_CODEPAGE_857=m
+> CONFIG_NLS_CODEPAGE_860=m
 > CONFIG_NLS_CODEPAGE_861=m
-> # CONFIG_NLS_CODEPAGE_862 is not set
-> CONFIG_NLS_CODEPAGE_863=y
+> CONFIG_NLS_CODEPAGE_862=m
+> CONFIG_NLS_CODEPAGE_863=m
 > CONFIG_NLS_CODEPAGE_864=m
 > CONFIG_NLS_CODEPAGE_865=m
-> # CONFIG_NLS_CODEPAGE_866 is not set
-> # CONFIG_NLS_CODEPAGE_869 is not set
-> # CONFIG_NLS_CODEPAGE_936 is not set
-> # CONFIG_NLS_CODEPAGE_950 is not set
-> # CONFIG_NLS_CODEPAGE_932 is not set
-> # CONFIG_NLS_CODEPAGE_949 is not set
-> # CONFIG_NLS_CODEPAGE_874 is not set
+> CONFIG_NLS_CODEPAGE_866=m
+> CONFIG_NLS_CODEPAGE_869=m
+> CONFIG_NLS_CODEPAGE_936=m
+> CONFIG_NLS_CODEPAGE_950=m
+> CONFIG_NLS_CODEPAGE_932=m
+> CONFIG_NLS_CODEPAGE_949=m
+> CONFIG_NLS_CODEPAGE_874=m
 > CONFIG_NLS_ISO8859_8=m
-> CONFIG_NLS_CODEPAGE_1250=y
-> CONFIG_NLS_CODEPAGE_1251=y
-> # CONFIG_NLS_ASCII is not set
-> # CONFIG_NLS_ISO8859_1 is not set
+> CONFIG_NLS_CODEPAGE_1250=m
+> CONFIG_NLS_CODEPAGE_1251=m
+> CONFIG_NLS_ASCII=y
+> CONFIG_NLS_ISO8859_1=m
 > CONFIG_NLS_ISO8859_2=m
-> # CONFIG_NLS_ISO8859_3 is not set
-> # CONFIG_NLS_ISO8859_4 is not set
-> CONFIG_NLS_ISO8859_5=y
-> CONFIG_NLS_ISO8859_6=y
-> CONFIG_NLS_ISO8859_7=y
-> CONFIG_NLS_ISO8859_9=y
+> CONFIG_NLS_ISO8859_3=m
+> CONFIG_NLS_ISO8859_4=m
+> CONFIG_NLS_ISO8859_5=m
+> CONFIG_NLS_ISO8859_6=m
+> CONFIG_NLS_ISO8859_7=m
+> CONFIG_NLS_ISO8859_9=m
 > CONFIG_NLS_ISO8859_13=m
-> CONFIG_NLS_ISO8859_14=y
-> CONFIG_NLS_ISO8859_15=y
-> # CONFIG_NLS_KOI8_R is not set
-> CONFIG_NLS_KOI8_U=y
+> CONFIG_NLS_ISO8859_14=m
+> CONFIG_NLS_ISO8859_15=m
+> CONFIG_NLS_KOI8_R=m
+> CONFIG_NLS_KOI8_U=m
 > CONFIG_NLS_MAC_ROMAN=m
 > CONFIG_NLS_MAC_CELTIC=m
-> CONFIG_NLS_MAC_CENTEURO=y
+> CONFIG_NLS_MAC_CENTEURO=m
 > CONFIG_NLS_MAC_CROATIAN=m
-> # CONFIG_NLS_MAC_CYRILLIC is not set
+> CONFIG_NLS_MAC_CYRILLIC=m
 > CONFIG_NLS_MAC_GAELIC=m
 > CONFIG_NLS_MAC_GREEK=m
-> CONFIG_NLS_MAC_ICELAND=y
-> # CONFIG_NLS_MAC_INUIT is not set
-> CONFIG_NLS_MAC_ROMANIAN=y
-> CONFIG_NLS_MAC_TURKISH=y
-> # CONFIG_NLS_UTF8 is not set
-> # CONFIG_DLM is not set
-> CONFIG_UNICODE=y
-> CONFIG_UNICODE_UTF8_DATA=y
-> # CONFIG_UNICODE_NORMALIZATION_SELFTEST is not set
+> CONFIG_NLS_MAC_ICELAND=m
+> CONFIG_NLS_MAC_INUIT=m
+> CONFIG_NLS_MAC_ROMANIAN=m
+> CONFIG_NLS_MAC_TURKISH=m
+> CONFIG_NLS_UTF8=m
+> CONFIG_DLM=m
+> CONFIG_DLM_DEBUG=y
+> # CONFIG_UNICODE is not set
 > CONFIG_IO_WQ=y
 > # end of File systems
 > 
@@ -5123,36 +5900,80 @@ Thank you for your testing efforts!
 > #
 > CONFIG_KEYS=y
 > # CONFIG_KEYS_REQUEST_CACHE is not set
-> # CONFIG_PERSISTENT_KEYRINGS is not set
-> CONFIG_TRUSTED_KEYS=m
+> CONFIG_PERSISTENT_KEYRINGS=y
+> CONFIG_TRUSTED_KEYS=y
 > CONFIG_ENCRYPTED_KEYS=y
 > # CONFIG_KEY_DH_OPERATIONS is not set
-> CONFIG_SECURITY_DMESG_RESTRICT=y
+> # CONFIG_KEY_NOTIFICATIONS is not set
+> # CONFIG_SECURITY_DMESG_RESTRICT is not set
 > CONFIG_SECURITY=y
+> CONFIG_SECURITY_WRITABLE_HOOKS=y
 > CONFIG_SECURITYFS=y
 > CONFIG_SECURITY_NETWORK=y
-> # CONFIG_PAGE_TABLE_ISOLATION is not set
-> CONFIG_SECURITY_PATH=y
+> CONFIG_PAGE_TABLE_ISOLATION=y
+> # CONFIG_SECURITY_INFINIBAND is not set
+> CONFIG_SECURITY_NETWORK_XFRM=y
+> # CONFIG_SECURITY_PATH is not set
+> CONFIG_INTEL_TXT=y
+> CONFIG_LSM_MMAP_MIN_ADDR=65535
 > CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
-> # CONFIG_HARDENED_USERCOPY is not set
+> CONFIG_HARDENED_USERCOPY=y
 > CONFIG_FORTIFY_SOURCE=y
 > # CONFIG_STATIC_USERMODEHELPER is not set
-> # CONFIG_SECURITY_SELINUX is not set
+> CONFIG_SECURITY_SELINUX=y
+> CONFIG_SECURITY_SELINUX_BOOTPARAM=y
+> CONFIG_SECURITY_SELINUX_DISABLE=y
+> CONFIG_SECURITY_SELINUX_DEVELOP=y
+> CONFIG_SECURITY_SELINUX_AVC_STATS=y
+> CONFIG_SECURITY_SELINUX_CHECKREQPROT_VALUE=1
+> CONFIG_SECURITY_SELINUX_SIDTAB_HASH_BITS=9
+> CONFIG_SECURITY_SELINUX_SID2STR_CACHE_SIZE=256
 > # CONFIG_SECURITY_SMACK is not set
 > # CONFIG_SECURITY_TOMOYO is not set
-> CONFIG_SECURITY_APPARMOR=y
-> # CONFIG_SECURITY_APPARMOR_HASH is not set
-> CONFIG_SECURITY_APPARMOR_DEBUG=y
-> # CONFIG_SECURITY_APPARMOR_DEBUG_ASSERTS is not set
-> # CONFIG_SECURITY_APPARMOR_DEBUG_MESSAGES is not set
+> # CONFIG_SECURITY_APPARMOR is not set
+> # CONFIG_SECURITY_LOADPIN is not set
 > CONFIG_SECURITY_YAMA=y
 > # CONFIG_SECURITY_SAFESETID is not set
 > # CONFIG_SECURITY_LOCKDOWN_LSM is not set
-> CONFIG_SECURITY_LANDLOCK=y
-> # CONFIG_INTEGRITY is not set
-> # CONFIG_DEFAULT_SECURITY_APPARMOR is not set
-> CONFIG_DEFAULT_SECURITY_DAC=y
-> CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,bpf"
+> # CONFIG_SECURITY_LANDLOCK is not set
+> CONFIG_INTEGRITY=y
+> CONFIG_INTEGRITY_SIGNATURE=y
+> CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
+> CONFIG_INTEGRITY_TRUSTED_KEYRING=y
+> # CONFIG_INTEGRITY_PLATFORM_KEYRING is not set
+> CONFIG_INTEGRITY_AUDIT=y
+> CONFIG_IMA=y
+> CONFIG_IMA_MEASURE_PCR_IDX=10
+> CONFIG_IMA_LSM_RULES=y
+> # CONFIG_IMA_TEMPLATE is not set
+> CONFIG_IMA_NG_TEMPLATE=y
+> # CONFIG_IMA_SIG_TEMPLATE is not set
+> CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
+> CONFIG_IMA_DEFAULT_HASH_SHA1=y
+> # CONFIG_IMA_DEFAULT_HASH_SHA256 is not set
+> # CONFIG_IMA_DEFAULT_HASH_SHA512 is not set
+> CONFIG_IMA_DEFAULT_HASH="sha1"
+> CONFIG_IMA_WRITE_POLICY=y
+> # CONFIG_IMA_READ_POLICY is not set
+> CONFIG_IMA_APPRAISE=y
+> # CONFIG_IMA_ARCH_POLICY is not set
+> # CONFIG_IMA_APPRAISE_BUILD_POLICY is not set
+> CONFIG_IMA_APPRAISE_BOOTPARAM=y
+> # CONFIG_IMA_APPRAISE_MODSIG is not set
+> CONFIG_IMA_TRUSTED_KEYRING=y
+> # CONFIG_IMA_BLACKLIST_KEYRING is not set
+> # CONFIG_IMA_LOAD_X509 is not set
+> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=y
+> CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=y
+> # CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT is not set
+> # CONFIG_IMA_DISABLE_HTABLE is not set
+> CONFIG_EVM=y
+> CONFIG_EVM_ATTR_FSUUID=y
+> # CONFIG_EVM_ADD_XATTRS is not set
+> # CONFIG_EVM_LOAD_X509 is not set
+> CONFIG_DEFAULT_SECURITY_SELINUX=y
+> # CONFIG_DEFAULT_SECURITY_DAC is not set
+> CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
 > 
 > #
 > # Kernel hardening options
@@ -5162,13 +5983,18 @@ Thank you for your testing efforts!
 > # Memory initialization
 > #
 > CONFIG_INIT_STACK_NONE=y
-> CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-> CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+> # CONFIG_INIT_ON_ALLOC_DEFAULT_ON is not set
+> # CONFIG_INIT_ON_FREE_DEFAULT_ON is not set
 > # end of Memory initialization
 > # end of Kernel hardening options
 > # end of Security options
 > 
-> CONFIG_XOR_BLOCKS=y
+> CONFIG_XOR_BLOCKS=m
+> CONFIG_ASYNC_CORE=m
+> CONFIG_ASYNC_MEMCPY=m
+> CONFIG_ASYNC_XOR=m
+> CONFIG_ASYNC_PQ=m
+> CONFIG_ASYNC_RAID6_RECOV=m
 > CONFIG_CRYPTO=y
 > 
 > #
@@ -5188,7 +6014,7 @@ Thank you for your testing efforts!
 > CONFIG_CRYPTO_AKCIPHER2=y
 > CONFIG_CRYPTO_AKCIPHER=y
 > CONFIG_CRYPTO_KPP2=y
-> CONFIG_CRYPTO_KPP=y
+> CONFIG_CRYPTO_KPP=m
 > CONFIG_CRYPTO_ACOMP2=y
 > CONFIG_CRYPTO_MANAGER=y
 > CONFIG_CRYPTO_MANAGER2=y
@@ -5197,25 +6023,24 @@ Thank you for your testing efforts!
 > CONFIG_CRYPTO_GF128MUL=y
 > CONFIG_CRYPTO_NULL=y
 > CONFIG_CRYPTO_NULL2=y
-> # CONFIG_CRYPTO_PCRYPT is not set
+> CONFIG_CRYPTO_PCRYPT=m
 > CONFIG_CRYPTO_CRYPTD=y
-> CONFIG_CRYPTO_AUTHENC=y
+> CONFIG_CRYPTO_AUTHENC=m
 > # CONFIG_CRYPTO_TEST is not set
 > CONFIG_CRYPTO_SIMD=y
-> CONFIG_CRYPTO_ENGINE=y
 > 
 > #
 > # Public-key cryptography
 > #
 > CONFIG_CRYPTO_RSA=y
-> CONFIG_CRYPTO_DH=y
-> CONFIG_CRYPTO_ECC=y
-> CONFIG_CRYPTO_ECDH=y
-> CONFIG_CRYPTO_ECDSA=y
-> CONFIG_CRYPTO_ECRDSA=y
-> CONFIG_CRYPTO_SM2=m
+> CONFIG_CRYPTO_DH=m
+> CONFIG_CRYPTO_ECC=m
+> CONFIG_CRYPTO_ECDH=m
+> # CONFIG_CRYPTO_ECDSA is not set
+> # CONFIG_CRYPTO_ECRDSA is not set
+> # CONFIG_CRYPTO_SM2 is not set
 > # CONFIG_CRYPTO_CURVE25519 is not set
-> CONFIG_CRYPTO_CURVE25519_X86=m
+> # CONFIG_CRYPTO_CURVE25519_X86 is not set
 > 
 > #
 > # Authenticated Encryption with Associated Data
@@ -5226,25 +6051,24 @@ Thank you for your testing efforts!
 > # CONFIG_CRYPTO_AEGIS128 is not set
 > # CONFIG_CRYPTO_AEGIS128_AESNI_SSE2 is not set
 > CONFIG_CRYPTO_SEQIV=y
-> CONFIG_CRYPTO_ECHAINIV=y
+> CONFIG_CRYPTO_ECHAINIV=m
 > 
 > #
 > # Block modes
 > #
 > CONFIG_CRYPTO_CBC=y
-> # CONFIG_CRYPTO_CFB is not set
+> CONFIG_CRYPTO_CFB=y
 > CONFIG_CRYPTO_CTR=y
-> CONFIG_CRYPTO_CTS=y
+> CONFIG_CRYPTO_CTS=m
 > CONFIG_CRYPTO_ECB=y
-> CONFIG_CRYPTO_LRW=y
+> CONFIG_CRYPTO_LRW=m
 > # CONFIG_CRYPTO_OFB is not set
 > CONFIG_CRYPTO_PCBC=m
-> # CONFIG_CRYPTO_XTS is not set
+> CONFIG_CRYPTO_XTS=m
 > # CONFIG_CRYPTO_KEYWRAP is not set
-> CONFIG_CRYPTO_NHPOLY1305=y
-> CONFIG_CRYPTO_NHPOLY1305_SSE2=m
-> CONFIG_CRYPTO_NHPOLY1305_AVX2=y
-> CONFIG_CRYPTO_ADIANTUM=m
+> # CONFIG_CRYPTO_NHPOLY1305_SSE2 is not set
+> # CONFIG_CRYPTO_NHPOLY1305_AVX2 is not set
+> # CONFIG_CRYPTO_ADIANTUM is not set
 > CONFIG_CRYPTO_ESSIV=m
 > 
 > #
@@ -5252,38 +6076,38 @@ Thank you for your testing efforts!
 > #
 > CONFIG_CRYPTO_CMAC=m
 > CONFIG_CRYPTO_HMAC=y
-> # CONFIG_CRYPTO_XCBC is not set
-> CONFIG_CRYPTO_VMAC=y
+> CONFIG_CRYPTO_XCBC=m
+> CONFIG_CRYPTO_VMAC=m
 > 
 > #
 > # Digest
 > #
 > CONFIG_CRYPTO_CRC32C=y
-> CONFIG_CRYPTO_CRC32C_INTEL=y
-> CONFIG_CRYPTO_CRC32=y
-> # CONFIG_CRYPTO_CRC32_PCLMUL is not set
+> CONFIG_CRYPTO_CRC32C_INTEL=m
+> CONFIG_CRYPTO_CRC32=m
+> CONFIG_CRYPTO_CRC32_PCLMUL=m
 > CONFIG_CRYPTO_XXHASH=m
-> CONFIG_CRYPTO_BLAKE2B=y
+> CONFIG_CRYPTO_BLAKE2B=m
 > # CONFIG_CRYPTO_BLAKE2S is not set
 > # CONFIG_CRYPTO_BLAKE2S_X86 is not set
 > CONFIG_CRYPTO_CRCT10DIF=y
-> # CONFIG_CRYPTO_CRCT10DIF_PCLMUL is not set
+> CONFIG_CRYPTO_CRCT10DIF_PCLMUL=m
 > CONFIG_CRYPTO_GHASH=y
 > CONFIG_CRYPTO_POLY1305=m
-> CONFIG_CRYPTO_POLY1305_X86_64=y
+> CONFIG_CRYPTO_POLY1305_X86_64=m
 > CONFIG_CRYPTO_MD4=m
 > CONFIG_CRYPTO_MD5=y
-> # CONFIG_CRYPTO_MICHAEL_MIC is not set
-> # CONFIG_CRYPTO_RMD160 is not set
+> CONFIG_CRYPTO_MICHAEL_MIC=m
+> CONFIG_CRYPTO_RMD160=m
 > CONFIG_CRYPTO_SHA1=y
-> CONFIG_CRYPTO_SHA1_SSSE3=m
+> CONFIG_CRYPTO_SHA1_SSSE3=y
 > CONFIG_CRYPTO_SHA256_SSSE3=y
-> # CONFIG_CRYPTO_SHA512_SSSE3 is not set
+> CONFIG_CRYPTO_SHA512_SSSE3=m
 > CONFIG_CRYPTO_SHA256=y
 > CONFIG_CRYPTO_SHA512=y
-> # CONFIG_CRYPTO_SHA3 is not set
-> CONFIG_CRYPTO_SM3=m
-> CONFIG_CRYPTO_STREEBOG=y
+> CONFIG_CRYPTO_SHA3=m
+> # CONFIG_CRYPTO_SM3 is not set
+> # CONFIG_CRYPTO_STREEBOG is not set
 > CONFIG_CRYPTO_WP512=m
 > CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL=m
 > 
@@ -5291,92 +6115,102 @@ Thank you for your testing efforts!
 > # Ciphers
 > #
 > CONFIG_CRYPTO_AES=y
-> CONFIG_CRYPTO_AES_TI=m
-> CONFIG_CRYPTO_AES_NI_INTEL=m
+> # CONFIG_CRYPTO_AES_TI is not set
+> CONFIG_CRYPTO_AES_NI_INTEL=y
+> CONFIG_CRYPTO_ANUBIS=m
+> CONFIG_CRYPTO_ARC4=m
 > CONFIG_CRYPTO_BLOWFISH=m
 > CONFIG_CRYPTO_BLOWFISH_COMMON=m
 > CONFIG_CRYPTO_BLOWFISH_X86_64=m
 > CONFIG_CRYPTO_CAMELLIA=m
-> CONFIG_CRYPTO_CAMELLIA_X86_64=y
+> CONFIG_CRYPTO_CAMELLIA_X86_64=m
 > CONFIG_CRYPTO_CAMELLIA_AESNI_AVX_X86_64=m
-> # CONFIG_CRYPTO_CAMELLIA_AESNI_AVX2_X86_64 is not set
-> CONFIG_CRYPTO_CAST_COMMON=y
-> CONFIG_CRYPTO_CAST5=y
-> CONFIG_CRYPTO_CAST5_AVX_X86_64=y
-> CONFIG_CRYPTO_CAST6=y
-> # CONFIG_CRYPTO_CAST6_AVX_X86_64 is not set
-> CONFIG_CRYPTO_DES=y
-> CONFIG_CRYPTO_DES3_EDE_X86_64=y
-> # CONFIG_CRYPTO_FCRYPT is not set
-> CONFIG_CRYPTO_CHACHA20=y
-> # CONFIG_CRYPTO_CHACHA20_X86_64 is not set
+> CONFIG_CRYPTO_CAMELLIA_AESNI_AVX2_X86_64=m
+> CONFIG_CRYPTO_CAST_COMMON=m
+> CONFIG_CRYPTO_CAST5=m
+> CONFIG_CRYPTO_CAST5_AVX_X86_64=m
+> CONFIG_CRYPTO_CAST6=m
+> CONFIG_CRYPTO_CAST6_AVX_X86_64=m
+> CONFIG_CRYPTO_DES=m
+> # CONFIG_CRYPTO_DES3_EDE_X86_64 is not set
+> CONFIG_CRYPTO_FCRYPT=m
+> CONFIG_CRYPTO_KHAZAD=m
+> CONFIG_CRYPTO_CHACHA20=m
+> CONFIG_CRYPTO_CHACHA20_X86_64=m
+> CONFIG_CRYPTO_SEED=m
 > CONFIG_CRYPTO_SERPENT=m
-> # CONFIG_CRYPTO_SERPENT_SSE2_X86_64 is not set
+> CONFIG_CRYPTO_SERPENT_SSE2_X86_64=m
 > CONFIG_CRYPTO_SERPENT_AVX_X86_64=m
 > CONFIG_CRYPTO_SERPENT_AVX2_X86_64=m
 > # CONFIG_CRYPTO_SM4 is not set
-> CONFIG_CRYPTO_SM4_AESNI_AVX_X86_64=y
-> CONFIG_CRYPTO_SM4_AESNI_AVX2_X86_64=y
-> # CONFIG_CRYPTO_TWOFISH is not set
-> CONFIG_CRYPTO_TWOFISH_COMMON=y
-> CONFIG_CRYPTO_TWOFISH_X86_64=y
-> CONFIG_CRYPTO_TWOFISH_X86_64_3WAY=y
-> # CONFIG_CRYPTO_TWOFISH_AVX_X86_64 is not set
+> # CONFIG_CRYPTO_SM4_AESNI_AVX_X86_64 is not set
+> # CONFIG_CRYPTO_SM4_AESNI_AVX2_X86_64 is not set
+> CONFIG_CRYPTO_TEA=m
+> CONFIG_CRYPTO_TWOFISH=m
+> CONFIG_CRYPTO_TWOFISH_COMMON=m
+> CONFIG_CRYPTO_TWOFISH_X86_64=m
+> CONFIG_CRYPTO_TWOFISH_X86_64_3WAY=m
+> CONFIG_CRYPTO_TWOFISH_AVX_X86_64=m
 > 
 > #
 > # Compression
 > #
 > CONFIG_CRYPTO_DEFLATE=y
 > CONFIG_CRYPTO_LZO=y
-> CONFIG_CRYPTO_842=y
+> # CONFIG_CRYPTO_842 is not set
 > # CONFIG_CRYPTO_LZ4 is not set
 > # CONFIG_CRYPTO_LZ4HC is not set
-> CONFIG_CRYPTO_ZSTD=m
+> # CONFIG_CRYPTO_ZSTD is not set
 > 
 > #
 > # Random Number Generation
 > #
-> CONFIG_CRYPTO_ANSI_CPRNG=y
+> CONFIG_CRYPTO_ANSI_CPRNG=m
 > CONFIG_CRYPTO_DRBG_MENU=y
 > CONFIG_CRYPTO_DRBG_HMAC=y
-> # CONFIG_CRYPTO_DRBG_HASH is not set
+> CONFIG_CRYPTO_DRBG_HASH=y
 > CONFIG_CRYPTO_DRBG_CTR=y
 > CONFIG_CRYPTO_DRBG=y
 > CONFIG_CRYPTO_JITTERENTROPY=y
 > CONFIG_CRYPTO_USER_API=y
 > CONFIG_CRYPTO_USER_API_HASH=y
 > CONFIG_CRYPTO_USER_API_SKCIPHER=y
-> # CONFIG_CRYPTO_USER_API_RNG is not set
-> CONFIG_CRYPTO_USER_API_AEAD=m
-> # CONFIG_CRYPTO_USER_API_ENABLE_OBSOLETE is not set
+> CONFIG_CRYPTO_USER_API_RNG=y
+> # CONFIG_CRYPTO_USER_API_RNG_CAVP is not set
+> CONFIG_CRYPTO_USER_API_AEAD=y
+> CONFIG_CRYPTO_USER_API_ENABLE_OBSOLETE=y
 > # CONFIG_CRYPTO_STATS is not set
 > CONFIG_CRYPTO_HASH_INFO=y
 > CONFIG_CRYPTO_HW=y
-> CONFIG_CRYPTO_DEV_PADLOCK=y
-> # CONFIG_CRYPTO_DEV_PADLOCK_AES is not set
+> CONFIG_CRYPTO_DEV_PADLOCK=m
+> CONFIG_CRYPTO_DEV_PADLOCK_AES=m
 > CONFIG_CRYPTO_DEV_PADLOCK_SHA=m
-> CONFIG_CRYPTO_DEV_ATMEL_I2C=m
-> CONFIG_CRYPTO_DEV_ATMEL_ECC=m
+> # CONFIG_CRYPTO_DEV_ATMEL_ECC is not set
 > # CONFIG_CRYPTO_DEV_ATMEL_SHA204A is not set
-> # CONFIG_CRYPTO_DEV_CCP is not set
-> CONFIG_CRYPTO_DEV_QAT=y
-> CONFIG_CRYPTO_DEV_QAT_DH895xCC=y
+> CONFIG_CRYPTO_DEV_CCP=y
+> CONFIG_CRYPTO_DEV_CCP_DD=m
+> CONFIG_CRYPTO_DEV_SP_CCP=y
+> CONFIG_CRYPTO_DEV_CCP_CRYPTO=m
+> CONFIG_CRYPTO_DEV_SP_PSP=y
+> # CONFIG_CRYPTO_DEV_CCP_DEBUGFS is not set
+> CONFIG_CRYPTO_DEV_QAT=m
+> CONFIG_CRYPTO_DEV_QAT_DH895xCC=m
 > CONFIG_CRYPTO_DEV_QAT_C3XXX=m
-> # CONFIG_CRYPTO_DEV_QAT_C62X is not set
-> CONFIG_CRYPTO_DEV_QAT_4XXX=y
+> CONFIG_CRYPTO_DEV_QAT_C62X=m
+> # CONFIG_CRYPTO_DEV_QAT_4XXX is not set
 > CONFIG_CRYPTO_DEV_QAT_DH895xCCVF=m
-> CONFIG_CRYPTO_DEV_QAT_C3XXXVF=y
-> # CONFIG_CRYPTO_DEV_QAT_C62XVF is not set
-> CONFIG_CRYPTO_DEV_VIRTIO=y
+> CONFIG_CRYPTO_DEV_QAT_C3XXXVF=m
+> CONFIG_CRYPTO_DEV_QAT_C62XVF=m
+> CONFIG_CRYPTO_DEV_NITROX=m
+> CONFIG_CRYPTO_DEV_NITROX_CNN55XX=m
+> # CONFIG_CRYPTO_DEV_VIRTIO is not set
 > # CONFIG_CRYPTO_DEV_SAFEXCEL is not set
-> # CONFIG_CRYPTO_DEV_CCREE is not set
-> CONFIG_CRYPTO_DEV_AMLOGIC_GXL=m
-> CONFIG_CRYPTO_DEV_AMLOGIC_GXL_DEBUG=y
+> # CONFIG_CRYPTO_DEV_AMLOGIC_GXL is not set
 > CONFIG_ASYMMETRIC_KEY_TYPE=y
 > CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
 > # CONFIG_ASYMMETRIC_TPM_KEY_SUBTYPE is not set
 > CONFIG_X509_CERTIFICATE_PARSER=y
-> CONFIG_PKCS8_PRIVATE_KEY_PARSER=y
+> # CONFIG_PKCS8_PRIVATE_KEY_PARSER is not set
 > CONFIG_PKCS7_MESSAGE_PARSER=y
 > # CONFIG_PKCS7_TEST_KEY is not set
 > CONFIG_SIGNED_PE_FILE_VERIFICATION=y
@@ -5385,8 +6219,8 @@ Thank you for your testing efforts!
 > # Certificates for signature checking
 > #
 > CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
-> # CONFIG_MODULE_SIG_KEY_TYPE_RSA is not set
-> CONFIG_MODULE_SIG_KEY_TYPE_ECDSA=y
+> CONFIG_MODULE_SIG_KEY_TYPE_RSA=y
+> # CONFIG_MODULE_SIG_KEY_TYPE_ECDSA is not set
 > CONFIG_SYSTEM_TRUSTED_KEYRING=y
 > CONFIG_SYSTEM_TRUSTED_KEYS=""
 > # CONFIG_SYSTEM_EXTRA_CERTIFICATE is not set
@@ -5401,14 +6235,15 @@ Thank you for your testing efforts!
 > #
 > # Library routines
 > #
-> CONFIG_LINEAR_RANGES=y
+> CONFIG_RAID6_PQ=m
+> CONFIG_RAID6_PQ_BENCHMARK=y
 > # CONFIG_PACKING is not set
 > CONFIG_BITREVERSE=y
 > CONFIG_GENERIC_STRNCPY_FROM_USER=y
 > CONFIG_GENERIC_STRNLEN_USER=y
 > CONFIG_GENERIC_NET_UTILS=y
 > CONFIG_CORDIC=m
-> CONFIG_PRIME_NUMBERS=y
+> # CONFIG_PRIME_NUMBERS is not set
 > CONFIG_RATIONAL=y
 > CONFIG_GENERIC_PCI_IOMAP=y
 > CONFIG_GENERIC_IOMAP=y
@@ -5420,41 +6255,38 @@ Thank you for your testing efforts!
 > # Crypto library routines
 > #
 > CONFIG_CRYPTO_LIB_AES=y
+> CONFIG_CRYPTO_LIB_ARC4=m
 > CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
-> CONFIG_CRYPTO_LIB_CHACHA_GENERIC=y
+> CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA=m
+> CONFIG_CRYPTO_LIB_CHACHA_GENERIC=m
 > # CONFIG_CRYPTO_LIB_CHACHA is not set
-> CONFIG_CRYPTO_ARCH_HAVE_LIB_CURVE25519=m
-> CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=m
 > # CONFIG_CRYPTO_LIB_CURVE25519 is not set
-> CONFIG_CRYPTO_LIB_DES=y
+> CONFIG_CRYPTO_LIB_DES=m
 > CONFIG_CRYPTO_LIB_POLY1305_RSIZE=11
-> CONFIG_CRYPTO_ARCH_HAVE_LIB_POLY1305=y
-> CONFIG_CRYPTO_LIB_POLY1305_GENERIC=y
-> CONFIG_CRYPTO_LIB_POLY1305=m
+> CONFIG_CRYPTO_ARCH_HAVE_LIB_POLY1305=m
+> CONFIG_CRYPTO_LIB_POLY1305_GENERIC=m
+> # CONFIG_CRYPTO_LIB_POLY1305 is not set
 > # CONFIG_CRYPTO_LIB_CHACHA20POLY1305 is not set
 > CONFIG_CRYPTO_LIB_SHA256=y
-> CONFIG_CRYPTO_LIB_SM4=y
 > # end of Crypto library routines
 > 
 > CONFIG_CRC_CCITT=y
 > CONFIG_CRC16=y
 > CONFIG_CRC_T10DIF=y
-> CONFIG_CRC_ITU_T=y
+> CONFIG_CRC_ITU_T=m
 > CONFIG_CRC32=y
 > # CONFIG_CRC32_SELFTEST is not set
-> # CONFIG_CRC32_SLICEBY8 is not set
+> CONFIG_CRC32_SLICEBY8=y
 > # CONFIG_CRC32_SLICEBY4 is not set
 > # CONFIG_CRC32_SARWATE is not set
-> CONFIG_CRC32_BIT=y
-> CONFIG_CRC64=m
-> CONFIG_CRC4=y
+> # CONFIG_CRC32_BIT is not set
+> # CONFIG_CRC64 is not set
+> # CONFIG_CRC4 is not set
 > CONFIG_CRC7=m
-> CONFIG_LIBCRC32C=y
-> CONFIG_CRC8=y
+> CONFIG_LIBCRC32C=m
+> CONFIG_CRC8=m
 > CONFIG_XXHASH=y
 > # CONFIG_RANDOM32_SELFTEST is not set
-> CONFIG_842_COMPRESS=y
-> CONFIG_842_DECOMPRESS=y
 > CONFIG_ZLIB_INFLATE=y
 > CONFIG_ZLIB_DEFLATE=y
 > CONFIG_LZO_COMPRESS=y
@@ -5464,11 +6296,11 @@ Thank you for your testing efforts!
 > CONFIG_ZSTD_DECOMPRESS=y
 > CONFIG_XZ_DEC=y
 > CONFIG_XZ_DEC_X86=y
-> # CONFIG_XZ_DEC_POWERPC is not set
-> # CONFIG_XZ_DEC_IA64 is not set
-> # CONFIG_XZ_DEC_ARM is not set
-> # CONFIG_XZ_DEC_ARMTHUMB is not set
-> # CONFIG_XZ_DEC_SPARC is not set
+> CONFIG_XZ_DEC_POWERPC=y
+> CONFIG_XZ_DEC_IA64=y
+> CONFIG_XZ_DEC_ARM=y
+> CONFIG_XZ_DEC_ARMTHUMB=y
+> CONFIG_XZ_DEC_SPARC=y
 > # CONFIG_XZ_DEC_MICROLZMA is not set
 > CONFIG_XZ_DEC_BCJ=y
 > # CONFIG_XZ_DEC_TEST is not set
@@ -5480,6 +6312,13 @@ Thank you for your testing efforts!
 > CONFIG_DECOMPRESS_LZ4=y
 > CONFIG_DECOMPRESS_ZSTD=y
 > CONFIG_GENERIC_ALLOCATOR=y
+> CONFIG_REED_SOLOMON=m
+> CONFIG_REED_SOLOMON_ENC8=y
+> CONFIG_REED_SOLOMON_DEC8=y
+> CONFIG_TEXTSEARCH=y
+> CONFIG_TEXTSEARCH_KMP=m
+> CONFIG_TEXTSEARCH_BM=m
+> CONFIG_TEXTSEARCH_FSM=m
 > CONFIG_INTERVAL_TREE=y
 > CONFIG_XARRAY_MULTI=y
 > CONFIG_ASSOCIATIVE_ARRAY=y
@@ -5490,9 +6329,19 @@ Thank you for your testing efforts!
 > CONFIG_NEED_SG_DMA_LENGTH=y
 > CONFIG_NEED_DMA_MAP_STATE=y
 > CONFIG_ARCH_DMA_ADDR_T_64BIT=y
-> CONFIG_DMA_DECLARE_COHERENT=y
 > CONFIG_SWIOTLB=y
-> CONFIG_DMA_RESTRICTED_POOL=y
+> CONFIG_DMA_CMA=y
+> # CONFIG_DMA_PERNUMA_CMA is not set
+> 
+> #
+> # Default contiguous memory area size:
+> #
+> CONFIG_CMA_SIZE_MBYTES=0
+> CONFIG_CMA_SIZE_SEL_MBYTES=y
+> # CONFIG_CMA_SIZE_SEL_PERCENTAGE is not set
+> # CONFIG_CMA_SIZE_SEL_MIN is not set
+> # CONFIG_CMA_SIZE_SEL_MAX is not set
+> CONFIG_CMA_ALIGNMENT=8
 > # CONFIG_DMA_API_DEBUG is not set
 > # CONFIG_DMA_MAP_BENCHMARK is not set
 > CONFIG_SGL_ALLOC=y
@@ -5504,22 +6353,32 @@ Thank you for your testing efforts!
 > # CONFIG_GLOB_SELFTEST is not set
 > CONFIG_NLATTR=y
 > CONFIG_CLZ_TAB=y
-> # CONFIG_IRQ_POLL is not set
+> CONFIG_IRQ_POLL=y
 > CONFIG_MPILIB=y
-> CONFIG_LIBFDT=y
+> CONFIG_SIGNATURE=y
+> CONFIG_DIMLIB=y
 > CONFIG_OID_REGISTRY=y
+> CONFIG_UCS2_STRING=y
 > CONFIG_HAVE_GENERIC_VDSO=y
 > CONFIG_GENERIC_GETTIMEOFDAY=y
 > CONFIG_GENERIC_VDSO_TIME_NS=y
+> CONFIG_FONT_SUPPORT=y
+> # CONFIG_FONTS is not set
+> CONFIG_FONT_8x8=y
+> CONFIG_FONT_8x16=y
+> CONFIG_SG_POOL=y
 > CONFIG_ARCH_HAS_PMEM_API=y
+> CONFIG_MEMREGION=y
 > CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE=y
 > CONFIG_ARCH_HAS_COPY_MC=y
 > CONFIG_ARCH_STACKWALK=y
 > CONFIG_STACKDEPOT=y
+> CONFIG_STACKDEPOT_ALWAYS_INIT=y
 > CONFIG_STACK_HASH_ORDER=20
+> CONFIG_SBITMAP=y
 > # end of Library routines
 > 
-> CONFIG_ASN1_ENCODER=m
+> CONFIG_ASN1_ENCODER=y
 > 
 > #
 > # Kernel hacking
@@ -5534,9 +6393,9 @@ Thank you for your testing efforts!
 > CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
 > CONFIG_CONSOLE_LOGLEVEL_QUIET=4
 > CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4
-> # CONFIG_BOOT_PRINTK_DELAY is not set
-> # CONFIG_DYNAMIC_DEBUG is not set
-> # CONFIG_DYNAMIC_DEBUG_CORE is not set
+> CONFIG_BOOT_PRINTK_DELAY=y
+> CONFIG_DYNAMIC_DEBUG=y
+> CONFIG_DYNAMIC_DEBUG_CORE=y
 > CONFIG_SYMBOLIC_ERRNAME=y
 > CONFIG_DEBUG_BUGVERBOSE=y
 > # end of printk and dmesg options
@@ -5548,20 +6407,18 @@ Thank you for your testing efforts!
 > CONFIG_DEBUG_INFO_REDUCED=y
 > # CONFIG_DEBUG_INFO_COMPRESSED is not set
 > # CONFIG_DEBUG_INFO_SPLIT is not set
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-> # CONFIG_DEBUG_INFO_DWARF4 is not set
+> # CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
+> CONFIG_DEBUG_INFO_DWARF4=y
 > # CONFIG_DEBUG_INFO_DWARF5 is not set
 > CONFIG_PAHOLE_HAS_SPLIT_BTF=y
 > # CONFIG_GDB_SCRIPTS is not set
-> CONFIG_FRAME_WARN=2048
+> CONFIG_FRAME_WARN=8192
 > CONFIG_STRIP_ASM_SYMS=y
 > # CONFIG_READABLE_ASM is not set
-> CONFIG_HEADERS_INSTALL=y
+> # CONFIG_HEADERS_INSTALL is not set
 > CONFIG_DEBUG_SECTION_MISMATCH=y
 > CONFIG_SECTION_MISMATCH_WARN_ONLY=y
-> CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B=y
 > CONFIG_STACK_VALIDATION=y
-> CONFIG_VMLINUX_MAP=y
 > # CONFIG_DEBUG_FORCE_WEAK_PER_CPU is not set
 > # end of Compile-time checks and compiler options
 > 
@@ -5570,11 +6427,12 @@ Thank you for your testing efforts!
 > #
 > CONFIG_MAGIC_SYSRQ=y
 > CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
-> # CONFIG_MAGIC_SYSRQ_SERIAL is not set
+> CONFIG_MAGIC_SYSRQ_SERIAL=y
+> CONFIG_MAGIC_SYSRQ_SERIAL_SEQUENCE=""
 > CONFIG_DEBUG_FS=y
-> # CONFIG_DEBUG_FS_ALLOW_ALL is not set
+> CONFIG_DEBUG_FS_ALLOW_ALL=y
 > # CONFIG_DEBUG_FS_DISALLOW_MOUNT is not set
-> CONFIG_DEBUG_FS_ALLOW_NONE=y
+> # CONFIG_DEBUG_FS_ALLOW_NONE is not set
 > CONFIG_HAVE_ARCH_KGDB=y
 > # CONFIG_KGDB is not set
 > CONFIG_ARCH_HAS_UBSAN_SANITIZE_ALL=y
@@ -5608,9 +6466,9 @@ Thank you for your testing efforts!
 > #
 > CONFIG_PAGE_EXTENSION=y
 > # CONFIG_DEBUG_PAGEALLOC is not set
-> # CONFIG_PAGE_OWNER is not set
+> CONFIG_PAGE_OWNER=y
 > # CONFIG_PAGE_TABLE_CHECK is not set
-> CONFIG_PAGE_POISONING=y
+> # CONFIG_PAGE_POISONING is not set
 > # CONFIG_DEBUG_PAGE_REF is not set
 > # CONFIG_DEBUG_RODATA_TEST is not set
 > CONFIG_ARCH_HAS_DEBUG_WX=y
@@ -5618,34 +6476,35 @@ Thank you for your testing efforts!
 > CONFIG_GENERIC_PTDUMP=y
 > # CONFIG_PTDUMP_DEBUGFS is not set
 > # CONFIG_DEBUG_OBJECTS is not set
-> CONFIG_SLUB_STATS=y
+> # CONFIG_SLUB_DEBUG_ON is not set
+> # CONFIG_SLUB_STATS is not set
 > CONFIG_HAVE_DEBUG_KMEMLEAK=y
 > # CONFIG_DEBUG_KMEMLEAK is not set
 > # CONFIG_DEBUG_STACK_USAGE is not set
-> CONFIG_SCHED_STACK_END_CHECK=y
+> # CONFIG_SCHED_STACK_END_CHECK is not set
 > CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=y
-> CONFIG_DEBUG_VM=y
-> # CONFIG_DEBUG_VM_VMACACHE is not set
-> # CONFIG_DEBUG_VM_RB is not set
-> CONFIG_DEBUG_VM_PGFLAGS=y
-> CONFIG_DEBUG_VM_PGTABLE=y
+> # CONFIG_DEBUG_VM is not set
+> # CONFIG_DEBUG_VM_PGTABLE is not set
 > CONFIG_ARCH_HAS_DEBUG_VIRTUAL=y
-> CONFIG_DEBUG_VIRTUAL=y
-> # CONFIG_DEBUG_MEMORY_INIT is not set
-> CONFIG_DEBUG_PER_CPU_MAPS=y
+> # CONFIG_DEBUG_VIRTUAL is not set
+> CONFIG_DEBUG_MEMORY_INIT=y
+> # CONFIG_DEBUG_PER_CPU_MAPS is not set
 > CONFIG_HAVE_ARCH_KASAN=y
 > CONFIG_HAVE_ARCH_KASAN_VMALLOC=y
 > CONFIG_CC_HAS_KASAN_GENERIC=y
 > CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
-> # CONFIG_KASAN is not set
+> CONFIG_KASAN=y
+> CONFIG_KASAN_GENERIC=y
+> # CONFIG_KASAN_OUTLINE is not set
+> CONFIG_KASAN_INLINE=y
+> CONFIG_KASAN_STACK=y
+> CONFIG_KASAN_VMALLOC=y
+> # CONFIG_KASAN_MODULE_TEST is not set
 > CONFIG_HAVE_ARCH_KFENCE=y
-> CONFIG_KFENCE=y
-> CONFIG_KFENCE_SAMPLE_INTERVAL=100
-> CONFIG_KFENCE_NUM_OBJECTS=255
-> CONFIG_KFENCE_STRESS_TEST_FAULTS=0
+> # CONFIG_KFENCE is not set
 > # end of Memory Debugging
 > 
-> # CONFIG_DEBUG_SHIRQ is not set
+> CONFIG_DEBUG_SHIRQ=y
 > 
 > #
 > # Debug Oops, Lockups and Hangs
@@ -5657,12 +6516,15 @@ Thank you for your testing efforts!
 > CONFIG_SOFTLOCKUP_DETECTOR=y
 > # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
 > CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
+> CONFIG_HARDLOCKUP_DETECTOR_PERF=y
 > CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=y
-> # CONFIG_HARDLOCKUP_DETECTOR is not set
+> CONFIG_HARDLOCKUP_DETECTOR=y
+> CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+> CONFIG_BOOTPARAM_HARDLOCKUP_PANIC_VALUE=1
 > CONFIG_DETECT_HUNG_TASK=y
 > CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=480
-> CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
-> CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE=1
+> # CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+> CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE=0
 > CONFIG_WQ_WATCHDOG=y
 > # CONFIG_TEST_LOCKUP is not set
 > # end of Debug Oops, Lockups and Hangs
@@ -5681,33 +6543,23 @@ Thank you for your testing efforts!
 > # Lock Debugging (spinlocks, mutexes, etc...)
 > #
 > CONFIG_LOCK_DEBUGGING_SUPPORT=y
-> CONFIG_PROVE_LOCKING=y
-> # CONFIG_PROVE_RAW_LOCK_NESTING is not set
-> CONFIG_LOCK_STAT=y
-> CONFIG_DEBUG_RT_MUTEXES=y
-> CONFIG_DEBUG_SPINLOCK=y
-> CONFIG_DEBUG_MUTEXES=y
-> CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
-> CONFIG_DEBUG_RWSEMS=y
-> CONFIG_DEBUG_LOCK_ALLOC=y
-> CONFIG_LOCKDEP=y
-> CONFIG_LOCKDEP_BITS=15
-> CONFIG_LOCKDEP_CHAINS_BITS=16
-> CONFIG_LOCKDEP_STACK_TRACE_BITS=19
-> CONFIG_LOCKDEP_STACK_TRACE_HASH_BITS=14
-> CONFIG_LOCKDEP_CIRCULAR_QUEUE_BITS=12
-> # CONFIG_DEBUG_LOCKDEP is not set
+> # CONFIG_PROVE_LOCKING is not set
+> # CONFIG_LOCK_STAT is not set
+> # CONFIG_DEBUG_RT_MUTEXES is not set
+> # CONFIG_DEBUG_SPINLOCK is not set
+> # CONFIG_DEBUG_MUTEXES is not set
+> # CONFIG_DEBUG_WW_MUTEX_SLOWPATH is not set
+> # CONFIG_DEBUG_RWSEMS is not set
+> # CONFIG_DEBUG_LOCK_ALLOC is not set
 > CONFIG_DEBUG_ATOMIC_SLEEP=y
 > # CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
-> CONFIG_LOCK_TORTURE_TEST=m
+> # CONFIG_LOCK_TORTURE_TEST is not set
 > # CONFIG_WW_MUTEX_SELFTEST is not set
 > # CONFIG_SCF_TORTURE_TEST is not set
-> CONFIG_CSD_LOCK_WAIT_DEBUG=y
+> # CONFIG_CSD_LOCK_WAIT_DEBUG is not set
 > # end of Lock Debugging (spinlocks, mutexes, etc...)
 > 
-> CONFIG_TRACE_IRQFLAGS=y
-> CONFIG_TRACE_IRQFLAGS_NMI=y
-> CONFIG_DEBUG_IRQFLAGS=y
+> # CONFIG_DEBUG_IRQFLAGS is not set
 > CONFIG_STACKTRACE=y
 > # CONFIG_WARN_ALL_UNSEEDED_RANDOM is not set
 > # CONFIG_DEBUG_KOBJECT is not set
@@ -5715,34 +6567,35 @@ Thank you for your testing efforts!
 > #
 > # Debug kernel data structures
 > #
-> # CONFIG_DEBUG_LIST is not set
-> CONFIG_DEBUG_PLIST=y
-> CONFIG_DEBUG_SG=y
-> CONFIG_DEBUG_NOTIFIERS=y
-> # CONFIG_BUG_ON_DATA_CORRUPTION is not set
+> CONFIG_DEBUG_LIST=y
+> # CONFIG_DEBUG_PLIST is not set
+> # CONFIG_DEBUG_SG is not set
+> # CONFIG_DEBUG_NOTIFIERS is not set
+> CONFIG_BUG_ON_DATA_CORRUPTION=y
 > # end of Debug kernel data structures
 > 
-> CONFIG_DEBUG_CREDENTIALS=y
+> # CONFIG_DEBUG_CREDENTIALS is not set
 > 
 > #
 > # RCU Debugging
 > #
-> CONFIG_PROVE_RCU=y
 > CONFIG_TORTURE_TEST=m
-> CONFIG_RCU_SCALE_TEST=m
-> CONFIG_RCU_TORTURE_TEST=m
-> # CONFIG_RCU_REF_SCALE_TEST is not set
-> CONFIG_RCU_CPU_STALL_TIMEOUT=21
+> # CONFIG_RCU_SCALE_TEST is not set
+> # CONFIG_RCU_TORTURE_TEST is not set
+> CONFIG_RCU_REF_SCALE_TEST=m
+> CONFIG_RCU_CPU_STALL_TIMEOUT=60
+> CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=21000
 > # CONFIG_RCU_TRACE is not set
 > # CONFIG_RCU_EQS_DEBUG is not set
 > # end of RCU Debugging
 > 
 > # CONFIG_DEBUG_WQ_FORCE_RR_CPU is not set
-> CONFIG_CPU_HOTPLUG_STATE_CONTROL=y
+> # CONFIG_CPU_HOTPLUG_STATE_CONTROL is not set
 > CONFIG_LATENCYTOP=y
 > CONFIG_USER_STACKTRACE_SUPPORT=y
 > CONFIG_NOP_TRACER=y
 > CONFIG_HAVE_FUNCTION_TRACER=y
+> CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
 > CONFIG_HAVE_DYNAMIC_FTRACE=y
 > CONFIG_HAVE_DYNAMIC_FTRACE_WITH_REGS=y
 > CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
@@ -5753,15 +6606,62 @@ Thank you for your testing efforts!
 > CONFIG_HAVE_OBJTOOL_MCOUNT=y
 > CONFIG_HAVE_C_RECORDMCOUNT=y
 > CONFIG_BUILDTIME_MCOUNT_SORT=y
+> CONFIG_TRACER_MAX_TRACE=y
 > CONFIG_TRACE_CLOCK=y
 > CONFIG_RING_BUFFER=y
 > CONFIG_EVENT_TRACING=y
 > CONFIG_CONTEXT_SWITCH_TRACER=y
-> CONFIG_PREEMPTIRQ_TRACEPOINTS=y
 > CONFIG_TRACING=y
+> CONFIG_GENERIC_TRACER=y
 > CONFIG_TRACING_SUPPORT=y
-> # CONFIG_FTRACE is not set
-> # CONFIG_PROVIDE_OHCI1394_DMA_INIT is not set
+> CONFIG_FTRACE=y
+> # CONFIG_BOOTTIME_TRACING is not set
+> CONFIG_FUNCTION_TRACER=y
+> CONFIG_FUNCTION_GRAPH_TRACER=y
+> CONFIG_DYNAMIC_FTRACE=y
+> CONFIG_DYNAMIC_FTRACE_WITH_REGS=y
+> CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS=y
+> CONFIG_DYNAMIC_FTRACE_WITH_ARGS=y
+> CONFIG_FUNCTION_PROFILER=y
+> CONFIG_STACK_TRACER=y
+> # CONFIG_IRQSOFF_TRACER is not set
+> CONFIG_SCHED_TRACER=y
+> CONFIG_HWLAT_TRACER=y
+> # CONFIG_OSNOISE_TRACER is not set
+> # CONFIG_TIMERLAT_TRACER is not set
+> # CONFIG_MMIOTRACE is not set
+> CONFIG_FTRACE_SYSCALLS=y
+> CONFIG_TRACER_SNAPSHOT=y
+> # CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP is not set
+> CONFIG_BRANCH_PROFILE_NONE=y
+> # CONFIG_PROFILE_ANNOTATED_BRANCHES is not set
+> CONFIG_BLK_DEV_IO_TRACE=y
+> CONFIG_KPROBE_EVENTS=y
+> # CONFIG_KPROBE_EVENTS_ON_NOTRACE is not set
+> CONFIG_UPROBE_EVENTS=y
+> CONFIG_BPF_EVENTS=y
+> CONFIG_DYNAMIC_EVENTS=y
+> CONFIG_PROBE_EVENTS=y
+> # CONFIG_BPF_KPROBE_OVERRIDE is not set
+> CONFIG_FTRACE_MCOUNT_RECORD=y
+> CONFIG_FTRACE_MCOUNT_USE_CC=y
+> CONFIG_TRACING_MAP=y
+> CONFIG_SYNTH_EVENTS=y
+> CONFIG_HIST_TRIGGERS=y
+> # CONFIG_TRACE_EVENT_INJECT is not set
+> # CONFIG_TRACEPOINT_BENCHMARK is not set
+> CONFIG_RING_BUFFER_BENCHMARK=m
+> # CONFIG_TRACE_EVAL_MAP_FILE is not set
+> # CONFIG_FTRACE_RECORD_RECURSION is not set
+> # CONFIG_FTRACE_STARTUP_TEST is not set
+> # CONFIG_FTRACE_SORT_STARTUP_TEST is not set
+> # CONFIG_RING_BUFFER_STARTUP_TEST is not set
+> # CONFIG_RING_BUFFER_VALIDATE_TIME_DELTAS is not set
+> # CONFIG_PREEMPTIRQ_DELAY_TEST is not set
+> # CONFIG_SYNTH_EVENT_GEN_TEST is not set
+> # CONFIG_KPROBE_EVENT_GEN_TEST is not set
+> # CONFIG_HIST_TRIGGERS_DEBUG is not set
+> CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
 > # CONFIG_SAMPLES is not set
 > CONFIG_HAVE_SAMPLE_FTRACE_DIRECT=y
 > CONFIG_HAVE_SAMPLE_FTRACE_DIRECT_MULTI=y
@@ -5778,14 +6678,15 @@ Thank you for your testing efforts!
 > CONFIG_EARLY_PRINTK=y
 > CONFIG_EARLY_PRINTK_DBGP=y
 > CONFIG_EARLY_PRINTK_USB_XDBC=y
+> # CONFIG_EFI_PGT_DUMP is not set
 > # CONFIG_DEBUG_TLBFLUSH is not set
 > CONFIG_HAVE_MMIOTRACE_SUPPORT=y
 > # CONFIG_X86_DECODER_SELFTEST is not set
-> # CONFIG_IO_DELAY_0X80 is not set
+> CONFIG_IO_DELAY_0X80=y
 > # CONFIG_IO_DELAY_0XED is not set
 > # CONFIG_IO_DELAY_UDELAY is not set
-> CONFIG_IO_DELAY_NONE=y
-> # CONFIG_DEBUG_BOOT_PARAMS is not set
+> # CONFIG_IO_DELAY_NONE is not set
+> CONFIG_DEBUG_BOOT_PARAMS=y
 > # CONFIG_CPA_DEBUG is not set
 > # CONFIG_DEBUG_ENTRY is not set
 > # CONFIG_DEBUG_NMI_SELFTEST is not set
@@ -5799,18 +6700,22 @@ Thank you for your testing efforts!
 > # Kernel Testing and Coverage
 > #
 > # CONFIG_KUNIT is not set
-> CONFIG_NOTIFIER_ERROR_INJECTION=m
-> CONFIG_PM_NOTIFIER_ERROR_INJECT=m
-> # CONFIG_OF_RECONFIG_NOTIFIER_ERROR_INJECT is not set
-> CONFIG_NETDEV_NOTIFIER_ERROR_INJECT=m
+> # CONFIG_NOTIFIER_ERROR_INJECTION is not set
 > CONFIG_FUNCTION_ERROR_INJECTION=y
-> # CONFIG_FAULT_INJECTION is not set
+> CONFIG_FAULT_INJECTION=y
+> # CONFIG_FAILSLAB is not set
+> # CONFIG_FAIL_PAGE_ALLOC is not set
+> # CONFIG_FAULT_INJECTION_USERCOPY is not set
+> CONFIG_FAIL_MAKE_REQUEST=y
+> # CONFIG_FAIL_IO_TIMEOUT is not set
+> # CONFIG_FAIL_FUTEX is not set
+> CONFIG_FAULT_INJECTION_DEBUG_FS=y
+> # CONFIG_FAIL_FUNCTION is not set
+> # CONFIG_FAIL_MMC_REQUEST is not set
+> # CONFIG_FAIL_SUNRPC is not set
 > CONFIG_ARCH_HAS_KCOV=y
 > CONFIG_CC_HAS_SANCOV_TRACE_PC=y
-> CONFIG_KCOV=y
-> CONFIG_KCOV_ENABLE_COMPARISONS=y
-> CONFIG_KCOV_INSTRUMENT_ALL=y
-> CONFIG_KCOV_IRQ_AREA_SIZE=0x40000
+> # CONFIG_KCOV is not set
 > CONFIG_RUNTIME_TESTING_MENU=y
 > # CONFIG_LKDTM is not set
 > # CONFIG_TEST_MIN_HEAP is not set
@@ -5822,6 +6727,7 @@ Thank you for your testing efforts!
 > # CONFIG_INTERVAL_TREE_TEST is not set
 > # CONFIG_PERCPU_TEST is not set
 > # CONFIG_ATOMIC64_SELFTEST is not set
+> # CONFIG_ASYNC_RAID6_TEST is not set
 > # CONFIG_TEST_HEXDUMP is not set
 > # CONFIG_STRING_SELFTEST is not set
 > # CONFIG_TEST_STRING_HELPERS is not set
@@ -5840,18 +6746,21 @@ Thank you for your testing efforts!
 > # CONFIG_TEST_BITOPS is not set
 > # CONFIG_TEST_VMALLOC is not set
 > # CONFIG_TEST_USER_COPY is not set
-> # CONFIG_TEST_BPF is not set
+> CONFIG_TEST_BPF=m
 > # CONFIG_TEST_BLACKHOLE_DEV is not set
 > # CONFIG_FIND_BIT_BENCHMARK is not set
 > # CONFIG_TEST_FIRMWARE is not set
 > # CONFIG_TEST_SYSCTL is not set
 > # CONFIG_TEST_UDELAY is not set
 > # CONFIG_TEST_STATIC_KEYS is not set
-> # CONFIG_TEST_DEBUG_VIRTUAL is not set
+> # CONFIG_TEST_KMOD is not set
 > # CONFIG_TEST_MEMCAT_P is not set
+> # CONFIG_TEST_LIVEPATCH is not set
 > # CONFIG_TEST_STACKINIT is not set
 > # CONFIG_TEST_MEMINIT is not set
+> # CONFIG_TEST_HMM is not set
 > # CONFIG_TEST_FREE_PAGES is not set
+> # CONFIG_TEST_FPU is not set
 > # CONFIG_TEST_CLOCKSOURCE_WATCHDOG is not set
 > CONFIG_ARCH_USE_MEMTEST=y
 > # CONFIG_MEMTEST is not set
@@ -5862,58 +6771,54 @@ Thank you for your testing efforts!
 > 
 > export_top_env()
 > {
-> 	export suite='rcutorture'
-> 	export testcase='rcutorture'
+> 	export suite='boot'
+> 	export testcase='boot'
 > 	export category='functional'
-> 	export need_memory='300MB'
-> 	export runtime=300
-> 	export job_origin='rcutorture.yaml'
+> 	export timeout='10m'
+> 	export job_origin='boot.yaml'
 > 	export queue_cmdline_keys='branch
 > commit'
-> 	export queue='bisect'
-> 	export testbox='vm-snb-67'
+> 	export queue='validate'
+> 	export testbox='vm-snb-157'
 > 	export tbox_group='vm-snb'
-> 	export branch='linux-devel/devel-hourly-20220304-094445'
-> 	export commit='556d8afe4a779f41dfc8fa373993a88e43f1c5dc'
-> 	export kconfig='x86_64-randconfig-a012-20210928'
+> 	export branch='ammarfaizi2-block/paulmck/linux-rcu/dev.2022.03.01a'
+> 	export commit='7bf8d644f869260f63eaaedebabdd2054f59ecc4'
+> 	export kconfig='x86_64-rhel-8.3-func'
+> 	export repeat_to=16
 > 	export nr_vm=160
-> 	export submit_id='6227adaafa9a1defaf472e96'
-> 	export job_file='/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml'
-> 	export id='2c60266b60311a02f4e4d7220371cf9e2c7d3b49'
+> 	export submit_id='6229cfc0a920e2f563b772ea'
+> 	export job_file='/lkp/jobs/scheduled/vm-snb-157/boot-1-debian-10.4-x86_64-20200603.cgz-7bf8d644f869260f63eaaedebabdd2054f59ecc4-20220310-128355-1v2pw5f-8.yaml'
+> 	export id='c2634508607ae7b6a04b90b5837c23cb4f9865ff'
 > 	export queuer_version='/lkp-src'
 > 	export model='qemu-system-x86_64 -enable-kvm -cpu SandyBridge'
 > 	export nr_cpu=2
 > 	export memory='16G'
-> 	export need_kconfig=\{\"RCU_TORTURE_TEST\"\=\>\"m\"\}'
-> '\{\"SECURITY_LOADPIN_ENABLED\"\=\>\"n,\ \<\=\ v4.19\"\}'
-> '\{\"SECURITY_LOADPIN_ENFORCE\"\=\>\"n,\ v4.20\"\}'
-> '\{\"MODULE_UNLOAD\"\=\>\"y\"\}'
-> '\{\"KVM_GUEST\"\=\>\"y\"\}
+> 	export need_kconfig=\{\"KVM_GUEST\"\=\>\"y\"\}
 > 	export ssh_base_port=23032
 > 	export kernel_cmdline='vmalloc=128M initramfs_async=0 page_owner=on'
 > 	export rootfs='debian-10.4-x86_64-20200603.cgz'
 > 	export compiler='gcc-9'
-> 	export enqueue_time='2022-03-09 03:25:31 +0800'
-> 	export _id='6227b814fa9a1defaf472e98'
-> 	export _rt='/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc'
+> 	export enqueue_time='2022-03-10 18:15:28 +0800'
+> 	export _id='6229cfc0a920e2f563b772ea'
+> 	export _rt='/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-rhel-8.3-func/gcc-9/7bf8d644f869260f63eaaedebabdd2054f59ecc4'
 > 	export user='lkp'
 > 	export LKP_SERVER='internal-lkp-server'
-> 	export result_root='/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3'
-> 	export scheduler_version='/lkp/lkp/.src-20220308-102049'
+> 	export result_root='/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-rhel-8.3-func/gcc-9/7bf8d644f869260f63eaaedebabdd2054f59ecc4/10'
+> 	export scheduler_version='/lkp/lkp/.src-20220310-172907'
 > 	export arch='x86_64'
-> 	export max_uptime=2100
+> 	export max_uptime=600
 > 	export initrd='/osimage/debian/debian-10.4-x86_64-20200603.cgz'
 > 	export bootloader_append='root=/dev/ram0
-> RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3
-> BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77
-> branch=linux-devel/devel-hourly-20220304-094445
-> job=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml
+> RESULT_ROOT=/result/boot/1/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-rhel-8.3-func/gcc-9/7bf8d644f869260f63eaaedebabdd2054f59ecc4/10
+> BOOT_IMAGE=/pkg/linux/x86_64-rhel-8.3-func/gcc-9/7bf8d644f869260f63eaaedebabdd2054f59ecc4/vmlinuz-5.17.0-rc1-00191-g7bf8d644f869
+> branch=ammarfaizi2-block/paulmck/linux-rcu/dev.2022.03.01a
+> job=/lkp/jobs/scheduled/vm-snb-157/boot-1-debian-10.4-x86_64-20200603.cgz-7bf8d644f869260f63eaaedebabdd2054f59ecc4-20220310-128355-1v2pw5f-8.yaml
 > user=lkp
 > ARCH=x86_64
-> kconfig=x86_64-randconfig-a012-20210928
-> commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc
+> kconfig=x86_64-rhel-8.3-func
+> commit=7bf8d644f869260f63eaaedebabdd2054f59ecc4
 > vmalloc=128M initramfs_async=0 page_owner=on
-> max_uptime=2100
+> max_uptime=600
 > LKP_SERVER=internal-lkp-server
 > selinux=0
 > debug
@@ -5936,16 +6841,16 @@ Thank you for your testing efforts!
 > console=ttyS0,115200
 > vga=normal
 > rw'
-> 	export modules_initrd='/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/modules.cgz'
+> 	export modules_initrd='/pkg/linux/x86_64-rhel-8.3-func/gcc-9/7bf8d644f869260f63eaaedebabdd2054f59ecc4/modules.cgz'
 > 	export bm_initrd='/osimage/deps/debian-10.4-x86_64-20200603.cgz/run-ipconfig_20200608.cgz,/osimage/deps/debian-10.4-x86_64-20200603.cgz/lkp_20220105.cgz,/osimage/deps/debian-10.4-x86_64-20200603.cgz/rsync-rootfs_20200608.cgz'
 > 	export lkp_initrd='/osimage/user/lkp/lkp-x86_64.cgz'
 > 	export site='inn'
 > 	export LKP_CGI_PORT=80
 > 	export LKP_CIFS_PORT=139
 > 	export schedule_notify_address=
-> 	export kernel='/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77'
-> 	export dequeue_time='2022-03-09 04:10:54 +0800'
-> 	export job_initrd='/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.cgz'
+> 	export kernel='/pkg/linux/x86_64-rhel-8.3-func/gcc-9/7bf8d644f869260f63eaaedebabdd2054f59ecc4/vmlinuz-5.17.0-rc1-00191-g7bf8d644f869'
+> 	export dequeue_time='2022-03-10 18:20:10 +0800'
+> 	export job_initrd='/lkp/jobs/scheduled/vm-snb-157/boot-1-debian-10.4-x86_64-20200603.cgz-7bf8d644f869260f63eaaedebabdd2054f59ecc4-20220310-128355-1v2pw5f-8.cgz'
 > 
 > 	[ -n "$LKP_SRC" ] ||
 > 	export LKP_SRC=/lkp/${user:-lkp}/src
@@ -5961,13 +6866,17 @@ Thank you for your testing efforts!
 > 
 > 	export_top_env
 > 
+> 	run_monitor $LKP_SRC/monitors/one-shot/wrapper boot-slabinfo
+> 	run_monitor $LKP_SRC/monitors/one-shot/wrapper boot-meminfo
+> 	run_monitor $LKP_SRC/monitors/one-shot/wrapper memmap
+> 	run_monitor $LKP_SRC/monitors/no-stdout/wrapper boot-time
 > 	run_monitor $LKP_SRC/monitors/wrapper kmsg
 > 	run_monitor $LKP_SRC/monitors/wrapper heartbeat
 > 	run_monitor $LKP_SRC/monitors/wrapper meminfo
 > 	run_monitor $LKP_SRC/monitors/wrapper oom-killer
 > 	run_monitor $LKP_SRC/monitors/plain/watchdog
 > 
-> 	run_test test='default' torture_type='rcu' $LKP_SRC/tests/wrapper rcutorture
+> 	run_test $LKP_SRC/tests/wrapper sleep 1
 > }
 > 
 > extract_stats()
@@ -5975,11 +6884,17 @@ Thank you for your testing efforts!
 > 	export stats_part_begin=
 > 	export stats_part_end=
 > 
-> 	env test='default' torture_type='rcu' $LKP_SRC/stats/wrapper rcutorture
+> 	$LKP_SRC/stats/wrapper boot-slabinfo
+> 	$LKP_SRC/stats/wrapper boot-meminfo
+> 	$LKP_SRC/stats/wrapper memmap
+> 	$LKP_SRC/stats/wrapper boot-memory
+> 	$LKP_SRC/stats/wrapper boot-time
+> 	$LKP_SRC/stats/wrapper kernel-size
 > 	$LKP_SRC/stats/wrapper kmsg
+> 	$LKP_SRC/stats/wrapper sleep
 > 	$LKP_SRC/stats/wrapper meminfo
 > 
-> 	$LKP_SRC/stats/wrapper time rcutorture.time
+> 	$LKP_SRC/stats/wrapper time sleep.time
 > 	$LKP_SRC/stats/wrapper dmesg
 > 	$LKP_SRC/stats/wrapper kmsg
 > 	$LKP_SRC/stats/wrapper last_state
@@ -5989,1781 +6904,4 @@ Thank you for your testing efforts!
 > 
 > "$@"
 
-
-> early console in setup code
-> early console in extract_kernel
-> input_data: 0x00000000030e22e0
-> input_len: 0x0000000000d1cbf1
-> output: 0x0000000001000000
-> output_len: 0x000000000295baa0
-> kernel_total_size: 0x0000000003220000
-> needed_size: 0x0000000003400000
-> trampoline_32bit: 0x000000000009d000
-> Physical KASLR using RDTSC...
-> Virtual KASLR using RDTSC...
-> 
-> Decompressing Linux... Parsing ELF... Performing relocations... done.
-> Booting the kernel.
-> Linux version 5.17.0-rc1-00111-g556d8afe4a77 (kbuild@1871ff489a11) (gcc-9 (Debian 9.3.0-22) 9.3.0, GNU ld (GNU Binutils for Debian) 2.35.2) #1 SMP Wed Mar 9 03:43:42 CST 2022
-> Command line: ip=::::vm-snb-67::dhcp root=/dev/ram0 RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3 BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77 branch=linux-devel/devel-hourly-20220304-094445 job=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml user=lkp ARCH=x86_64 kconfig=x86_64-randconfig-a012-20210928 commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc vmalloc=128M initramfs_async=0 page_owner=on max_uptime=2100 LKP_SERVER=internal-lkp-server selinux=0 debug apic=debug sysrq_always_enabled rcupdate.rcu_cpu_stall_timeout=100 net.ifnames=0 printk.devkmsg=on panic=-1 softlockup_panic=1 nmi_watchdog=panic oops=panic load_ramdisk=2 prompt_ramdi
-> KERNEL supported cpus:
-> Intel GenuineIntel
-> x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
-> x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
-> x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
-> x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
-> x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'standard' format.
-> signal: max sigframe size: 1360
-> BIOS-provided physical RAM map:
-> BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
-> BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
-> BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
-> BIOS-e820: [mem 0x0000000000100000-0x00000000bffdffff] usable
-> BIOS-e820: [mem 0x00000000bffe0000-0x00000000bfffffff] reserved
-> BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff] reserved
-> BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
-> BIOS-e820: [mem 0x0000000100000000-0x000000043fffffff] usable
-> printk: debug: ignoring loglevel setting.
-> printk: bootconsole [earlyser0] enabled
-> NX (Execute Disable) protection: active
-> Hypervisor detected: KVM
-> kvm-clock: Using msrs 4b564d01 and 4b564d00
-> kvm-clock: using sched offset of 5557670255 cycles
-> clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
-> tsc: Detected 2095.078 MHz processor
-> e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
-> e820: remove [mem 0x000a0000-0x000fffff] usable
-> last_pfn = 0x440000 max_arch_pfn = 0x400000000
-> x86/PAT: Configuration [0-7]: WB  WT  UC- UC  WB  WT  UC- UC  
-> Memory KASLR using RDTSC...
-> last_pfn = 0xbffe0 max_arch_pfn = 0x400000000
-> RAMDISK: [mem 0x78a9d000-0x7fffffff]
-> ACPI: Early table checksum verification disabled
-> ACPI: RSDP 0x00000000000F5850 000014 (v00 BOCHS )
-> ACPI: RSDT 0x00000000BFFE15C9 000030 (v01 BOCHS  BXPCRSDT 00000001 BXPC 00000001)
-> ACPI: FACP 0x00000000BFFE149D 000074 (v01 BOCHS  BXPCFACP 00000001 BXPC 00000001)
-> ACPI: DSDT 0x00000000BFFE0040 00145D (v01 BOCHS  BXPCDSDT 00000001 BXPC 00000001)
-> ACPI: FACS 0x00000000BFFE0000 000040
-> ACPI: APIC 0x00000000BFFE1511 000080 (v01 BOCHS  BXPCAPIC 00000001 BXPC 00000001)
-> ACPI: HPET 0x00000000BFFE1591 000038 (v01 BOCHS  BXPCHPET 00000001 BXPC 00000001)
-> ACPI: Reserving FACP table memory at [mem 0xbffe149d-0xbffe1510]
-> ACPI: Reserving DSDT table memory at [mem 0xbffe0040-0xbffe149c]
-> ACPI: Reserving FACS table memory at [mem 0xbffe0000-0xbffe003f]
-> ACPI: Reserving APIC table memory at [mem 0xbffe1511-0xbffe1590]
-> ACPI: Reserving HPET table memory at [mem 0xbffe1591-0xbffe15c8]
-> mapped APIC to ffffffffff5fd000 (        fee00000)
-> Zone ranges:
-> DMA32    [mem 0x0000000000001000-0x00000000ffffffff]
-> Normal   [mem 0x0000000100000000-0x000000043fffffff]
-> Movable zone start for each node
-> Early memory node ranges
-> node   0: [mem 0x0000000000001000-0x000000000009efff]
-> node   0: [mem 0x0000000000100000-0x00000000bffdffff]
-> node   0: [mem 0x0000000100000000-0x000000043fffffff]
-> Initmem setup node 0 [mem 0x0000000000001000-0x000000043fffffff]
-> On node 0, zone DMA32: 1 pages in unavailable ranges
-> On node 0, zone DMA32: 97 pages in unavailable ranges
-> On node 0, zone Normal: 32 pages in unavailable ranges
-> ACPI: PM-Timer IO Port: 0x608
-> ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
-> IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
-> ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 00, APIC ID 0, APIC INT 02
-> ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
-> Int: type 0, pol 1, trig 3, bus 00, IRQ 05, APIC ID 0, APIC INT 05
-> ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
-> Int: type 0, pol 1, trig 3, bus 00, IRQ 09, APIC ID 0, APIC INT 09
-> ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
-> Int: type 0, pol 1, trig 3, bus 00, IRQ 0a, APIC ID 0, APIC INT 0a
-> ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
-> Int: type 0, pol 1, trig 3, bus 00, IRQ 0b, APIC ID 0, APIC INT 0b
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 01, APIC ID 0, APIC INT 01
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 03, APIC ID 0, APIC INT 03
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 04, APIC ID 0, APIC INT 04
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 06, APIC ID 0, APIC INT 06
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 07, APIC ID 0, APIC INT 07
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 08, APIC ID 0, APIC INT 08
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 0c, APIC ID 0, APIC INT 0c
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 0d, APIC ID 0, APIC INT 0d
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 0e, APIC ID 0, APIC INT 0e
-> Int: type 0, pol 0, trig 0, bus 00, IRQ 0f, APIC ID 0, APIC INT 0f
-> ACPI: Using ACPI (MADT) for SMP configuration information
-> ACPI: HPET id: 0x8086a201 base: 0xfed00000
-> TSC deadline timer available
-> smpboot: Allowing 2 CPUs, 0 hotplug CPUs
-> mapped IOAPIC to ffffffffff5fc000 (fec00000)
-> [mem 0xc0000000-0xfeffbfff] available for PCI devices
-> Booting paravirtualized kernel on KVM
-> clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
-> setup_percpu: NR_CPUS:8192 nr_cpumask_bits:2 nr_cpu_ids:2 nr_node_ids:1
-> percpu: Embedded 502 pages/cpu s2016920 r8192 d31080 u2097152
-> pcpu-alloc: s2016920 r8192 d31080 u2097152 alloc=1*2097152
-> pcpu-alloc: [0] 0 [0] 1 
-> Built 1 zonelists, mobility grouping on.  Total pages: 4128482
-> Kernel command line: ip=::::vm-snb-67::dhcp root=/dev/ram0 RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3 BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77 branch=linux-devel/devel-hourly-20220304-094445 job=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml user=lkp ARCH=x86_64 kconfig=x86_64-randconfig-a012-20210928 commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc vmalloc=128M initramfs_async=0 page_owner=on max_uptime=2100 LKP_SERVER=internal-lkp-server selinux=0 debug apic=debug sysrq_always_enabled rcupdate.rcu_cpu_stall_timeout=100 net.ifnames=0 printk.devkmsg=on panic=-1 softlockup_panic=1 nmi_watchdog=panic oops=panic load_ramdisk=2 promp
-> sysrq: sysrq always enabled.
-> ignoring the deprecated load_ramdisk= option
-> Unknown kernel command line parameters "RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3 BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77 branch=linux-devel/devel-hourly-20220304-094445 job=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml user=lkp ARCH=x86_64 kconfig=x86_64-randconfig-a012-20210928 commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc vmalloc=128M page_owner=on max_uptime=2100 LKP_SERVER=internal-lkp-server selinux=0 softlockup_panic=1 nmi_watchdog=panic prompt_ramdisk=0 vga=normal", will be passed to user space.
-> Dentry cache hash table entries: 2097152 (order: 12, 16777216 bytes, linear)
-> Inode-cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
-> mem auto-init: stack:off, heap alloc:on, heap free:on
-> mem auto-init: clearing system memory may take some time...
-> Memory: 16245120K/16776696K available (14341K kernel code, 6125K rwdata, 7964K rodata, 3052K init, 13768K bss, 531316K reserved, 0K cma-reserved)
-> random: get_random_u64 called from cache_random_seq_create+0x54/0x10f with crng_init=0
-> SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
-> Running RCU self tests
-> rcu: Hierarchical RCU implementation.
-> rcu: 	RCU lockdep checking is enabled.
-> rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=2.
-> 	RCU CPU stall warnings timeout set to 100 (rcu_cpu_stall_timeout).
-> 	Trampoline variant of Tasks RCU enabled.
-> 	Rude variant of Tasks RCU enabled.
-> 	Tracing variant of Tasks RCU enabled.
-> rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
-> rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
-> NR_IRQS: 4352, nr_irqs: 56, preallocated irqs: 16
-> rcu: srcu_init: Setting srcu_struct sizes based on contention.
-> kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
-> printk: console [ttyS0] enabled
-> printk: bootconsole [earlyser0] disabled
-> Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-> ... MAX_LOCKDEP_SUBCLASSES:  8
-> ... MAX_LOCK_DEPTH:          48
-> ... MAX_LOCKDEP_KEYS:        8192
-> ... CLASSHASH_SIZE:          4096
-> ... MAX_LOCKDEP_ENTRIES:     32768
-> ... MAX_LOCKDEP_CHAINS:      65536
-> ... CHAINHASH_SIZE:          32768
-> memory used by lock dependency info: 6877 kB
-> memory used for stack traces: 4224 kB
-> per task-struct memory footprint: 2688 bytes
-> ACPI: Core revision 20211217
-> clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
-> APIC: Switch to symmetric I/O mode setup
-> masked ExtINT on CPU#0
-> ENABLING IO-APIC IRQs
-> init IO_APIC IRQs
-> apic 0 pin 0 not connected
-> IOAPIC[0]: Preconfigured routing entry (0-1 -> IRQ 1 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-2 -> IRQ 0 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-3 -> IRQ 3 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-4 -> IRQ 4 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-5 -> IRQ 5 Level:1 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-6 -> IRQ 6 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-7 -> IRQ 7 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-8 -> IRQ 8 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-9 -> IRQ 9 Level:1 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-10 -> IRQ 10 Level:1 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-11 -> IRQ 11 Level:1 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-12 -> IRQ 12 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-13 -> IRQ 13 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-14 -> IRQ 14 Level:0 ActiveLow:0)
-> IOAPIC[0]: Preconfigured routing entry (0-15 -> IRQ 15 Level:0 ActiveLow:0)
-> apic 0 pin 16 not connected
-> apic 0 pin 17 not connected
-> apic 0 pin 18 not connected
-> apic 0 pin 19 not connected
-> apic 0 pin 20 not connected
-> apic 0 pin 21 not connected
-> apic 0 pin 22 not connected
-> apic 0 pin 23 not connected
-> ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
-> clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1e3306b9ada, max_idle_ns: 440795224413 ns
-> Calibrating delay loop (skipped) preset value.. 4190.15 BogoMIPS (lpj=2095078)
-> pid_max: default: 4096 minimum: 301
-> LSM: Security Framework initializing
-> landlock: Up and running.
-> Yama: becoming mindful.
-> Mount-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
-> Mountpoint-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
-> Poking KASLR using RDTSC...
-> Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
-> Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
-> Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
-> Spectre V2 : Spectre mitigation: kernel not compiled with retpoline; no mitigation available!
-> Speculative Store Bypass: Vulnerable
-> MDS: Vulnerable: Clear CPU buffers attempted, no microcode
-> Freeing SMP alternatives memory: 16K
-> smpboot: CPU0: Intel Xeon E312xx (Sandy Bridge) (family: 0x6, model: 0x2a, stepping: 0x1)
-> cblist_init_generic: Setting adjustable number of callback queues.
-> cblist_init_generic: Setting shift to 1 and lim to 1.
-> cblist_init_generic: Setting shift to 1 and lim to 1.
-> cblist_init_generic: Setting shift to 1 and lim to 1.
-> Running RCU-tasks wait API self tests
-> Performance Events: unsupported p6 CPU model 42 no PMU driver, software events only.
-> rcu: Hierarchical SRCU implementation.
-> Callback from call_rcu_tasks_trace() invoked.
-> smp: Bringing up secondary CPUs ...
-> x86: Booting SMP configuration:
-> .... node  #0, CPUs:      #1
-> masked ExtINT on CPU#1
-> smpboot: CPU 1 Converting physical 0 to logical die 1
-> smp: Brought up 1 node, 2 CPUs
-> smpboot: Max logical packages: 2
-> smpboot: Total of 2 processors activated (8380.31 BogoMIPS)
-> devtmpfs: initialized
-> clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
-> futex hash table entries: 16 (order: -1, 2048 bytes, linear)
-> pinctrl core: initialized pinctrl subsystem
-> pinctrl core: failed to create debugfs directory
-> regulator-dummy: no parameters, enabled
-> NET: Registered PF_NETLINK/PF_ROUTE protocol family
-> audit: initializing netlink subsys (disabled)
-> thermal_sys: Registered thermal governor 'bang_bang'
-> thermal_sys: Registered thermal governor 'step_wise'
-> thermal_sys: Registered thermal governor 'user_space'
-> cpuidle: using governor menu
-> audit: type=2000 audit(1646770297.786:1): state=initialized audit_enabled=0 res=1
-> NET: Registered PF_QIPCRTR protocol family
-> acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
-> PCI: Using configuration type 1 for base access
-> kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
-> HugeTLB: can free 6 vmemmap pages for hugepages-2048kB
-> HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
-> cryptd: max_cpu_qlen set to 1000
-> ACPI: Added _OSI(Module Device)
-> ACPI: Added _OSI(Processor Device)
-> ACPI: Added _OSI(3.0 _SCP Extensions)
-> ACPI: Added _OSI(Processor Aggregator Device)
-> ACPI: Added _OSI(Linux-Dell-Video)
-> ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
-> ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
-> ACPI: 1 ACPI AML tables successfully acquired and loaded
-> Callback from call_rcu_tasks_rude() invoked.
-> ACPI: Interpreter enabled
-> ACPI: PM: (supports S0 S5)
-> ACPI: Using IOAPIC for interrupt routing
-> PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
-> ACPI: Enabled 2 GPEs in block 00 to 0F
-> ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
-> acpi PNP0A03:00: _OSC: OS supports [Segments HPX-Type3]
-> acpi PNP0A03:00: PCIe port services disabled; not requesting _OSC control
-> acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.
-> acpiphp: Slot [3] registered
-> acpiphp: Slot [4] registered
-> acpiphp: Slot [5] registered
-> acpiphp: Slot [6] registered
-> acpiphp: Slot [7] registered
-> acpiphp: Slot [8] registered
-> acpiphp: Slot [9] registered
-> acpiphp: Slot [10] registered
-> acpiphp: Slot [11] registered
-> acpiphp: Slot [12] registered
-> acpiphp: Slot [13] registered
-> acpiphp: Slot [14] registered
-> acpiphp: Slot [15] registered
-> acpiphp: Slot [16] registered
-> acpiphp: Slot [17] registered
-> acpiphp: Slot [18] registered
-> acpiphp: Slot [19] registered
-> acpiphp: Slot [20] registered
-> acpiphp: Slot [21] registered
-> acpiphp: Slot [22] registered
-> acpiphp: Slot [23] registered
-> acpiphp: Slot [24] registered
-> acpiphp: Slot [25] registered
-> acpiphp: Slot [26] registered
-> acpiphp: Slot [27] registered
-> acpiphp: Slot [28] registered
-> acpiphp: Slot [29] registered
-> acpiphp: Slot [30] registered
-> acpiphp: Slot [31] registered
-> PCI host bridge to bus 0000:00
-> pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
-> pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
-> pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
-> pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
-> pci_bus 0000:00: root bus resource [mem 0x440000000-0x4bfffffff window]
-> pci_bus 0000:00: root bus resource [bus 00-ff]
-> pci 0000:00:00.0: [8086:1237] type 00 class 0x060000
-> pci 0000:00:01.0: [8086:7000] type 00 class 0x060100
-> pci 0000:00:01.1: [8086:7010] type 00 class 0x010180
-> pci 0000:00:01.1: reg 0x20: [io  0xc040-0xc04f]
-> pci 0000:00:01.1: legacy IDE quirk: reg 0x10: [io  0x01f0-0x01f7]
-> pci 0000:00:01.1: legacy IDE quirk: reg 0x14: [io  0x03f6]
-> pci 0000:00:01.1: legacy IDE quirk: reg 0x18: [io  0x0170-0x0177]
-> pci 0000:00:01.1: legacy IDE quirk: reg 0x1c: [io  0x0376]
-> pci 0000:00:01.3: [8086:7113] type 00 class 0x068000
-> pci 0000:00:01.3: quirk: [io  0x0600-0x063f] claimed by PIIX4 ACPI
-> pci 0000:00:01.3: quirk: [io  0x0700-0x070f] claimed by PIIX4 SMB
-> pci 0000:00:02.0: [1234:1111] type 00 class 0x030000
-> pci 0000:00:02.0: reg 0x10: [mem 0xfd000000-0xfdffffff pref]
-> pci 0000:00:02.0: reg 0x18: [mem 0xfebf0000-0xfebf0fff]
-> pci 0000:00:02.0: reg 0x30: [mem 0xfebe0000-0xfebeffff pref]
-> pci 0000:00:03.0: [8086:100e] type 00 class 0x020000
-> pci 0000:00:03.0: reg 0x10: [mem 0xfebc0000-0xfebdffff]
-> pci 0000:00:03.0: reg 0x14: [io  0xc000-0xc03f]
-> pci 0000:00:03.0: reg 0x30: [mem 0xfeb80000-0xfebbffff pref]
-> pci 0000:00:04.0: [8086:25ab] type 00 class 0x088000
-> pci 0000:00:04.0: reg 0x10: [mem 0xfebf1000-0xfebf100f]
-> pci_bus 0000:00: on NUMA node 0
-> ACPI: PCI: Interrupt link LNKA configured for IRQ 10
-> ACPI: PCI: Interrupt link LNKB configured for IRQ 10
-> ACPI: PCI: Interrupt link LNKC configured for IRQ 11
-> ACPI: PCI: Interrupt link LNKD configured for IRQ 11
-> ACPI: PCI: Interrupt link LNKS configured for IRQ 9
-> iommu: Default domain type: Translated 
-> iommu: DMA domain TLB invalidation policy: lazy mode 
-> pci 0000:00:02.0: vgaarb: setting as boot VGA device
-> pci 0000:00:02.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
-> pci 0000:00:02.0: vgaarb: bridge control possible
-> vgaarb: loaded
-> ACPI: bus type USB registered
-> usbcore: registered new interface driver usbfs
-> usbcore: registered new interface driver hub
-> usbcore: registered new device driver usb
-> PCI: Using ACPI for IRQ routing
-> PCI: pci_cache_line_size set to 64 bytes
-> e820: reserve RAM buffer [mem 0x0009fc00-0x0009ffff]
-> e820: reserve RAM buffer [mem 0xbffe0000-0xbfffffff]
-> hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
-> hpet0: 3 comparators, 64-bit 100.000000 MHz counter
-> clocksource: Switched to clocksource kvm-clock
-> Callback from call_rcu_tasks() invoked.
-> pnp: PnP ACPI init
-> pnp 00:03: [dma 2]
-> pnp: PnP ACPI: found 7 devices
-> clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
-> NET: Registered PF_INET protocol family
-> IP idents hash table entries: 262144 (order: 9, 2097152 bytes, linear)
-> tcp_listen_portaddr_hash hash table entries: 8192 (order: 7, 720896 bytes, linear)
-> TCP established hash table entries: 131072 (order: 8, 1048576 bytes, linear)
-> TCP bind hash table entries: 65536 (order: 10, 5242880 bytes, vmalloc)
-> TCP: Hash tables configured (established 131072 bind 65536)
-> UDP hash table entries: 8192 (order: 8, 1572864 bytes, linear)
-> UDP-Lite hash table entries: 8192 (order: 8, 1572864 bytes, linear)
-> NET: Registered PF_UNIX/PF_LOCAL protocol family
-> pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
-> pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
-> pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
-> pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfffff window]
-> pci_bus 0000:00: resource 8 [mem 0x440000000-0x4bfffffff window]
-> pci 0000:00:01.0: PIIX3: Enabling Passive Release
-> pci 0000:00:00.0: Limiting direct PCI/PCI transfers
-> pci 0000:00:01.0: Activating ISA DMA hang workarounds
-> pci 0000:00:02.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
-> PCI: CLS 0 bytes, default 64
-> Unpacking initramfs...
-> Freeing initrd memory: 120204K
-> PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
-> software IO TLB: mapped [mem 0x00000000bbfe0000-0x00000000bffe0000] (64MB)
-> ACPI: bus type thunderbolt registered
-> clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1e3306b9ada, max_idle_ns: 440795224413 ns
-> AVX2 or AES-NI instructions are not detected.
-> Initialise system trusted keyrings
-> Key type blacklist registered
-> workingset: timestamp_bits=46 max_order=22 bucket_order=0
-> zbud: loaded
-> zsmalloc: debugfs not available, stat dir not created
-> NET: Registered PF_ALG protocol family
-> xor: automatically using best checksumming function   avx       
-> Key type asymmetric registered
-> Asymmetric key parser 'x509' registered
-> Asymmetric key parser 'pkcs8' registered
-> start plist test
-> end plist test
-> gpio_winbond: chip ID at 2e is ffff
-> gpio_winbond: not an our chip
-> gpio_winbond: chip ID at 4e is ffff
-> gpio_winbond: not an our chip
-> acpiphp_ibm: ibm_acpiphp_init: acpi_walk_namespace failed
-> N_HDLC line discipline registered with maxframe=4096
-> Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-> serial8250: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> serial8250: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> SyncLink GT
-> SyncLink GT, tty major#245
-> SyncLink GT no devices found
-> lp: driver loaded but no devices found
-> Applicom driver: $Id: ac.c,v 1.30 2000/03/22 16:03:57 dwmw2 Exp $
-> ac.o: No PCI boards found.
-> ac.o: For an ISA board you must supply memory and irq parameters.
-> ppdev: user-space parallel port driver
-> smapi::smapi_init, ERROR invalid usSmapiID
-> mwave: tp3780i::tp3780I_InitializeBoardData: Error: SMAPI is not available on this machine
-> mwave: mwavedd::mwave_init: Error: Failed to initialize board data
-> mwave: mwavedd::mwave_init: Error: Failed to initialize
-> Hangcheck: starting hangcheck timer 0.9.1 (tick is 180 seconds, margin is 60 seconds).
-> usbcore: registered new interface driver xillyusb
-> usbcore: registered new interface driver rtsx_usb
-> e1000: Intel(R) PRO/1000 Network Driver
-> e1000: Copyright (c) 1999-2006 Intel Corporation.
-> ACPI: \_SB_.LNKC: Enabled at IRQ 11
-> e1000 0000:00:03.0 eth0: (PCI:33MHz:32-bit) 52:54:00:12:34:56
-> e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
-> mkiss: AX.25 Multikiss, Hans Albas PE1AYX
-> AX.25: 6pack driver, Revision: 0.3.0
-> VFIO - User Level meta-driver version: 0.3
-> ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-> ehci-platform: EHCI generic platform driver
-> usbcore: registered new interface driver cdc_wdm
-> usbcore: registered new interface driver usbtmc
-> usbcore: registered new interface driver mdc800
-> mdc800: v0.7.5 (30/10/2000):USB Driver for Mustek MDC800 Digital Camera
-> usbcore: registered new interface driver appledisplay
-> usbcore: registered new interface driver emi62 - firmware loader
-> ftdi_elan: driver ftdi-elan
-> usbcore: registered new interface driver ftdi-elan
-> usbcore: registered new interface driver idmouse
-> usbcore: registered new interface driver isight_firmware
-> usbcore: registered new interface driver uss720
-> uss720: USB Parport Cable driver for Cables using the Lucent Technologies USS720 Chip
-> uss720: NOTE: this is a special purpose driver to allow nonstandard
-> uss720: protocols (eg. bitbang) over USS720 usb to parallel cables
-> uss720: If you just want to connect to a printer, use usblp instead
-> usbcore: registered new interface driver usbsevseg
-> usbcore: registered new device driver usbip-host
-> i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
-> serio: i8042 KBD port at 0x60,0x64 irq 1
-> serio: i8042 AUX port at 0x60,0x64 irq 12
-> mousedev: PS/2 mouse device common for all mice
-> usbcore: registered new interface driver usb_acecad
-> usbcore: registered new interface driver kbtab
-> usbcore: registered new interface driver pegasus_notetaker
-> usbcore: registered new interface driver ati_remote2
-> cm109: Keymap for Komunikate KIP1000 phone loaded
-> usbcore: registered new interface driver cm109
-> cm109: CM109 phone driver: 20080805 (C) Alfred E. Heggestad
-> usbcore: registered new interface driver keyspan_remote
-> rtc_cmos 00:00: RTC can wake from S4
-> rtc_cmos 00:00: registered as rtc0
-> rtc_cmos 00:00: alarms up to one day, y3k, 114 bytes nvram, hpet irqs
-> Driver for 1-wire Dallas network protocol.
-> usbcore: registered new interface driver DS9490R
-> DS1WM w1 busmaster driver - (c) 2004 Szabolcs Gyurko
-> intel_pstate: CPU model not supported
-> input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
-> evbug: Connected device: input0 (AT Translated Set 2 keyboard at isa0060/serio0/input0)
-> usbcore: registered new interface driver usbmouse
-> comedi: version 0.7.76 - http://www.comedi.org
-> usbcore: registered new interface driver usbdux
-> usbcore: registered new interface driver usbduxfast
-> usbcore: registered new interface driver usbduxsigma
-> usbcore: registered new interface driver vmk80xx
-> ashmem: initialized
-> usbcore: registered new interface driver hdm_usb
-> u32 classifier
-> input device check on
-> NET: Registered PF_INET6 protocol family
-> Segment Routing with IPv6
-> In-situ OAM (IOAM) with IPv6
-> sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
-> NET: Registered PF_PACKET protocol family
-> NET: Registered PF_NETROM protocol family
-> NET: Registered PF_ROSE protocol family
-> NET: Registered PF_AX25 protocol family
-> NET4: DECnet for Linux: V.2.5.68s (C) 1995-2003 Linux DECnet Project Team
-> DECnet: Routing cache hash table of 1024 buckets, 80Kbytes
-> NET: Registered PF_DECnet protocol family
-> 8021q: 802.1Q VLAN Support v1.8
-> 9pnet: Installing 9P2000 support
-> NET: Registered PF_CAIF protocol family
-> Key type dns_resolver registered
-> batman_adv: B.A.T.M.A.N. advanced 2022.0 (compatibility version 15) loaded
-> mpls_gso: MPLS GSO support
-> IPI shorthand broadcast: enabled
-> ... APIC ID:      00000000 (0)
-> ... APIC VERSION: 00050014
-> 0000000000000000000000000000000000000000000000000000000000000000
-> 0000000000000000000000000000000000000000000000000000000000000000
-> 0000000000000000000000000000000000000000000000000000000008000000
-> 
-> number of MP IRQ sources: 15.
-> number of IO-APIC #0 registers: 24.
-> testing the IO APIC.......................
-> IO APIC #0......
-> .... register #00: 00000000
-> .......    : physical APIC id: 00
-> .......    : Delivery Type: 0
-> .......    : LTS          : 0
-> .... register #01: 00170011
-> .......     : max redirection entries: 17
-> .......     : PRQ implemented: 0
-> .......     : IO APIC version: 11
-> .... register #02: 00000000
-> .......     : arbitration: 00
-> .... IRQ redirection table:
-> IOAPIC 0:
-> pin00, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin01, enabled , edge , high, V(22), IRR(0), S(0), logical , D(0002), M(0)
-> pin02, enabled , edge , high, V(30), IRR(0), S(0), logical , D(0001), M(0)
-> pin03, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin04, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin05, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin06, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin07, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin08, enabled , edge , high, V(22), IRR(0), S(0), logical , D(0001), M(0)
-> pin09, enabled , level, high, V(21), IRR(0), S(0), logical , D(0002), M(0)
-> pin0a, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin0b, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin0c, enabled , edge , high, V(21), IRR(0), S(0), logical , D(0001), M(0)
-> pin0d, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin0e, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin0f, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin10, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin11, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin12, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin13, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin14, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin15, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin16, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> pin17, disabled, edge , high, V(00), IRR(0), S(0), physical, D(0000), M(0)
-> IRQ to pin mappings:
-> IRQ0 -> 0:2
-> IRQ1 -> 0:1
-> IRQ3 -> 0:3
-> IRQ4 -> 0:4
-> IRQ5 -> 0:5
-> IRQ6 -> 0:6
-> IRQ7 -> 0:7
-> IRQ8 -> 0:8
-> IRQ9 -> 0:9
-> IRQ10 -> 0:10
-> IRQ11 -> 0:11
-> IRQ12 -> 0:12
-> IRQ13 -> 0:13
-> IRQ14 -> 0:14
-> IRQ15 -> 0:15
-> .................................... done.
-> sched_clock: Marking stable (47726844576, 47642871)->(48086399637, -311912190)
-> Loading compiled-in X.509 certificates
-> Loaded X.509 cert 'Build time autogenerated kernel key: 1ce19b688c6758fa98504a06999e9f6554fc9436'
-> debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-> Key type ._fscrypt registered
-> Key type .fscrypt registered
-> Key type fscrypt-provisioning registered
-> fs-verity: Initialized fs-verity
-> Key type encrypted registered
-> 8021q: adding VLAN 0 to HW filter on device eth0
-> e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
-> IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-> Sending DHCP requests ., OK
-> IP-Config: Got DHCP answer from 10.0.2.2, my address is 10.0.2.15
-> IP-Config: Complete:
-> device=eth0, hwaddr=52:54:00:12:34:56, ipaddr=10.0.2.15, mask=255.255.255.0, gw=10.0.2.2
-> host=vm-snb-67, domain=, nis-domain=(none)
-> bootserver=10.0.2.2, rootserver=10.0.2.2, rootpath=
-> nameserver0=10.0.2.3
-> DEBUG_HOTPLUG_CPU0: CPU 0 is now offline
-> Freeing unused kernel image (initmem) memory: 3052K
-> Write protecting the kernel read-only data: 24576k
-> Freeing unused kernel image (text/rodata gap) memory: 2040K
-> Freeing unused kernel image (rodata/data gap) memory: 228K
-> Run /init as init process
-> with arguments:
-> /init
-> with environment:
-> HOME=/
-> TERM=linux
-> RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3
-> BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77
-> branch=linux-devel/devel-hourly-20220304-094445
-> job=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml
-> user=lkp
-> ARCH=x86_64
-> kconfig=x86_64-randconfig-a012-20210928
-> commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc
-> vmalloc=128M
-> page_owner=on
-> max_uptime=2100
-> LKP_SERVER=internal-lkp-server
-> selinux=0
-> softlockup_panic=1
-> nmi_watchdog=panic
-> prompt_ramdisk=0
-> vga=normal
-> systemd[1]: RTC configured in localtime, applying delta of 0 minutes to system time.
-> systemd[1]: Inserted module 'autofs4'
-> 
-> Welcome to Debian GNU/Linux 10 (buster)!
-> 
-> random: systemd: uninitialized urandom read (16 bytes read)
-> Listening on udev Kernel Socket.
-> random: systemd: uninitialized urandom read (16 bytes read)
-> Listening on Syslog Socket.
-> random: systemd: uninitialized urandom read (16 bytes read)
-> Listening on Journal Audit Socket.
-> Listening on udev Control Socket.
-> Reached target Swap.
-> Listening on Journal Socket.
-> Starting Load Kernel Modules...
-> Starting Remount Root and Kernel File Systems...
-> Mounting POSIX Message Queue File System...
-> Mounting RPC Pipe File System...
-> Listening on initctl Compatibility Named Pipe.
-> Mounting Huge Pages File System...
-> Created slice system-getty.slice.
-> Reached target Paths.
-> Reached target Local Encrypted Volumes.
-> Created slice User and Session Slice.
-> Starting udev Coldplug all Devices...
-> Listening on Journal Socket (/dev/log).
-> Starting Journal Service...
-> Listening on RPCbind Server Activation Socket.
-> Reached target Slices.
-> Started Load Kernel Modules.
-> Started Remount Root and Kernel File Systems.
-> Mounted POSIX Message Queue File System.
-> Failed to mount RPC Pipe File System.
-> See 'systemctl status run-rpc_pipefs.mount' for details.
-> Mounted Huge Pages File System.
-> Reached target NFS client services.
-> Starting Create System Users...
-> Starting Load/Save Random Seed...
-> Starting Apply Kernel Variables...
-> Mounting Kernel Configuration File System...
-> Started Create System Users.
-> Started Load/Save Random Seed.
-> Starting Create Static Device Nodes in /dev...
-> Started Apply Kernel Variables.
-> Mounted Kernel Configuration File System.
-> Started Journal Service.
-> Starting Flush Journal to Persistent Storage...
-> random: fast init done
-> Started Create Static Device Nodes in /dev.
-> Reached target Local File Systems (Pre).
-> Reached target Local File Systems.
-> Starting Preprocess NFS configuration...
-> Starting udev Kernel Device Manager...
-> Started Flush Journal to Persistent Storage.
-> Starting Create Volatile Files and Directories...
-> Started Preprocess NFS configuration.
-> Started udev Kernel Device Manager.
-> Started Create Volatile Files and Directories.
-> Starting Network Time Synchronization...
-> Starting Update UTMP about System Boot/Shutdown...
-> Starting RPC bind portmap service...
-> Started udev Coldplug all Devices.
-> Starting Helper to synchronize boot up for ifupdown...
-> Started RPC bind portmap service.
-> Reached target RPC Port Mapper.
-> Reached target Remote File Systems (Pre).
-> Reached target Remote File Systems.
-> Started Update UTMP about System Boot/Shutdown.
-> Started Helper to synchronize boot up for ifupdown.
-> Starting Raise network interfaces...
-> Started Network Time Synchronization.
-> Reached target System Time Synchronized.
-> Reached target System Initialization.
-> Started Daily Cleanup of Temporary Directories.
-> Listening on D-Bus System Message Bus Socket.
-> Reached target Sockets.
-> Started Daily rotation of log files.
-> Started Daily apt download activities.
-> Started Daily apt upgrade and clean activities.
-> Reached target Timers.
-> Reached target Basic System.
-> Started D-Bus System Message Bus.
-> Starting System Logging Service...
-> Starting LSB: OpenIPMI Driver init script...
-> Starting Login Service...
-> Started Regular background program processing daemon.
-> Started Raise network interfaces.
-> Reached target Network.
-> Starting LKP bootstrap...
-> Starting Permit User Sessions...
-> Starting /etc/rc.local Compatibility...
-> Starting OpenBSD Secure Shell server...
-> Started Permit User Sessions.
-> Starting LSB: Load kernel image with kexec...
-> Started LKP bootstrap.
-> Started Login Service.
-> IPMI message handler: version 39.2
-> Started LSB: Load kernel image with kexec.
-> ipmi_si: IPMI System Interface driver
-> ipmi_si: Unable to find any System Interface(s)
-> Failed to start LSB: OpenIPMI Driver init script.
-> See 'systemctl status openipmi.service' for details.
-> random: crng init done
-> random: 7 urandom warning(s) missed due to ratelimiting
-> LKP: ttyS0: 247: Kernel tests: Boot OK!
-> LKP: ttyS0: 247: HOSTNAME vm-snb-67, MAC 52:54:00:12:34:56, kernel 5.17.0-rc1-00111-g556d8afe4a77 1
-> Started OpenBSD Secure Shell server.
-> input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input2
-> evbug: Connected device: input2 (Power Button at LNXPWRBN/button/input0)
-> ACPI: button: Power Button [PWRF]
-> RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
-> AVX version of gcm_enc/dec engaged.
-> AES CTR mode by8 optimization enabled
-> LKP: ttyS0: 247:  /lkp/lkp/src/bin/run-lkp /lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml
-> Started System Logging Service.
-> rcu-torture:--- Start of test: nreaders=1 nfakewriters=4 stat_interval=60 verbose=1 test_no_idle_hz=1 shuffle_interval=3 stutter=5 irqreader=1 fqs_duration=0 fqs_holdoff=0 fqs_stutter=3 test_boost=1/0 test_boost_interval=7 test_boost_duration=4 shutdown_secs=0 stall_cpu=0 stall_cpu_holdoff=10 stall_cpu_irqsoff=0 stall_cpu_block=0 n_barrier_cbs=0 onoff_interval=0 onoff_holdoff=0 read_exit_delay=13 read_exit_burst=16 nocbs_nthreads=0 nocbs_toggle=1000
-> rcu:  Start-test grace-period state: g35208 f0x0
-> rcu_torture_write_types: Testing conditional GPs.
-> rcu_torture_write_types: Testing conditional expedited GPs.
-> rcu_torture_write_types: Testing expedited GPs.
-> rcu_torture_write_types: Testing asynchronous GPs.
-> rcu_torture_write_types: Testing polling GPs.
-> rcu_torture_write_types: Testing polling expedited GPs.
-> rcu_torture_write_types: Testing normal GPs.
-> rcu-torture: Creating rcu_torture_writer task
-> rcu-torture: rcu_torture_writer task started
-> rcu-torture: Creating rcu_torture_fakewriter task
-> rcu-torture: Creating rcu_torture_fakewriter task
-> rcu-torture: rcu_torture_fakewriter task started
-> rcu-torture: Creating rcu_torture_fakewriter task
-> rcu-torture: rcu_torture_fakewriter task started
-> rcu-torture: Creating rcu_torture_fakewriter task
-> rcu-torture: rcu_torture_fakewriter task started
-> rcu-torture: Creating rcu_torture_reader task
-> rcu-torture: rcu_torture_fakewriter task started
-> rcu-torture: rcu_torture_reader task started
-> rcu-torture: Creating rcu_torture_stats task
-> rcu-torture: Creating torture_shuffle task
-> rcu-torture: rcu_torture_stats task started
-> rcu-torture: torture_shuffle task started
-> rcu-torture: Creating torture_stutter task
-> rcu-torture: torture_stutter task started
-> rcu-torture: Creating rcu_torture_fwd_prog task
-> rcu-torture: rcu_torture_fwd_progress task started
-> rcu-torture: Creating rcu_torture_read_exit task
-> rcu-torture: rcu_torture_read_exit: Start of test
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> LKP: stdout: 247: Kernel tests: Boot OK!
-> 
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> 
-> mount: /sys/kernel/debug: mount point does not exist.
-> 
-> LKP: stdout: 247: HOSTNAME vm-snb-67, MAC 52:54:00:12:34:56, kernel 5.17.0-rc1-00111-g556d8afe4a77 1
-> 
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> install debs round one: dpkg -i --force-confdef --force-depends /opt/deb/gawk_1%3a4.2.1+dfsg-1_amd64.deb
-> 
-> Selecting previously unselected package gawk.
-> 
-> (Reading database ... 16553 files and directories currently installed.)
-> 
-> Preparing to unpack .../gawk_1%3a4.2.1+dfsg-1_amd64.deb ...
-> 
-> Unpacking gawk (1:4.2.1+dfsg-1) ...
-> 
-> Setting up gawk (1:4.2.1+dfsg-1) ...
-> 
-> mount debug /sys/kernel/debug -t debugfs
-> 
-> rootfs on / type rootfs (rw)
-> 
-> rcu-torture: rcu_torture_read_exit: End of episode
-> sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
-> 
-> proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
-> 
-> devtmpfs on /dev type devtmpfs (rw,nosuid,size=8122696k,nr_inodes=2030674,mode=755)
-> 
-> securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
-> 
-> tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
-> 
-> devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
-> 
-> tmpfs on /run type tmpfs (rw,nosuid,nodev,mode=755)
-> 
-> tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
-> 
-> tmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,mode=755)
-> 
-> cgroup2 on /sys/fs/cgroup/unified type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)
-> 
-> cgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,name=systemd)
-> 
-> cgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)
-> 
-> cgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)
-> 
-> cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)
-> 
-> cgroup on /sys/fs/cgroup/misc type cgroup (rw,nosuid,nodev,noexec,relatime,misc)
-> 
-> cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)
-> 
-> cgroup on /sys/fs/cgroup/debug type cgroup (rw,nosuid,nodev,noexec,relatime,debug)
-> 
-> cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)
-> 
-> cgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)
-> 
-> cgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)
-> 
-> mqueue on /dev/mqueue type mqueue (rw,relatime)
-> 
-> hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
-> 
-> configfs on /sys/kernel/config type configfs (rw,relatime)
-> 
-> tmp on /tmp type tmpfs (rw,relatime)
-> 
-> nodev	sysfs
-> 
-> nodev	tmpfs
-> 
-> nodev	proc
-> 
-> nodev	cgroup
-> 
-> nodev	cgroup2
-> 
-> nodev	cpuset
-> 
-> nodev	devtmpfs
-> 
-> nodev	configfs
-> 
-> nodev	tracefs
-> 
-> nodev	securityfs
-> 
-> nodev	sockfs
-> 
-> nodev	pipefs
-> 
-> nodev	ramfs
-> 
-> nodev	hugetlbfs
-> 
-> nodev	devpts
-> 
-> nodev	mqueue
-> 
-> nodev	binder
-> 
-> nodev	autofs
-> 
-> rcu-torture: rtc: 00000000cc758e4b ver: 5 tfle: 0 rta: 6 rtaf: 0 rtf: 2 rtmbe: 0 rtmbkf: 0/0 rtbe: 0 rtbke: 0 rtbre: 0 rtbf: 0 rtb: 0 nt: 760 onoff: 0/0:0/0 -1,0:-1,0 0:0 (HZ=1000) barrier: 0/0:0 read-exits: 84 nocb-toggles: 0:0
-> rcu-torture: Reader Pipe:  49488 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Reader Batch:  49488 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Free-Block Circulation:  5 4 3 2 2 2 2 2 2 2 0
-> rcu_torture_fwd_prog: Starting forward-progress test 0
-> rcu_torture_fwd_prog_cr: Starting forward-progress test 0
-> rcu_torture_fwd_prog_cr: Waiting for CBs: rcu_barrier+0x0/0x253() 0
-> rcu_torture_fwd_prog_cr Duration 475 barrier: 251 pending 103 n_launders: 1841 n_launders_sa: 103 n_max_gps: 100 n_max_cbs: 1425 cver 0 gps 14
-> rcu_torture_fwd_cb_hist: Callback-invocation histogram 0 (duration 980 jiffies): 1s/10: 648:3 2s/10: 0:1 3s/10: 1091:11402 4s/10: 1424:3 5s/10: 103:5
-> rcu_torture_fwd_prog_nr: Starting forward-progress test 0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> LKP: stdout: 247:  /lkp/lkp/src/bin/run-lkp /lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml
-> 
-> RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3
-> 
-> job=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml
-> 
-> result_service: raw_upload, RESULT_MNT: /internal-lkp-server/result, RESULT_ROOT: /internal-lkp-server/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3, TMP_RESULT_ROOT: /tmp/lkp/result
-> 
-> run-job /lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml
-> 
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 http://internal-lkp-server:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/vm-snb-67/rcutorture-300s-default-rcu-debian-10.4-x86_64-20200603.cgz-556d8afe4a779f41dfc8fa373993a88e43f1c5dc-20220309-61359-zgedsu-2.yaml&job_state=running -O /dev/null
-> 
-> target ucode: 
-> 
-> 2022-03-08 20:12:30 modprobe rcutorture torture_type=rcu
-> 
-> 2022-03-08 20:12:31 sleep 300
-> 
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu_torture_fwd_prog_nr: 0 Duration 40623 cver 0 gps 14906
-> rcu_torture_fwd_prog_nr: Waiting for CBs: rcu_barrier+0x0/0x253() 0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rtc: 00000000cc758e4b ver: 5 tfle: 0 rta: 6 rtaf: 0 rtf: 2 rtmbe: 0 rtmbkf: 0/0 rtbe: 0 rtbke: 0 rtbre: 0 rtbf: 0 rtb: 0 nt: 1756 onoff: 0/0:0/0 -1,0:-1,0 0:0 (HZ=1000) barrier: 0/0:0 read-exits: 152 nocb-toggles: 0:0
-> rcu-torture: Reader Pipe:  118373 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Reader Batch:  118373 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Free-Block Circulation:  5 4 3 2 2 2 2 2 2 2 0
-> ??? Writer stall state RTWS_POLL_WAIT_EXP(12) g109004 f0x0 ->state 0x2 cpu 1
-> task:rcu_torture_wri state:D stack:    0 pid:  515 ppid:     2 flags:0x00004000
-> Call Trace:
-> <TASK>
-> __schedule+0x6dd/0x721
-> schedule+0x4e/0x83
-> schedule_hrtimeout_range_clock+0xba/0x10c
-> ? __hrtimer_init+0x135/0x135
-> torture_hrtimeout_ns+0x65/0x6b [torture]
-> rcu_torture_writer+0x4f5/0x766 [rcutorture]
-> ? write_comp_data+0x20/0x71
-> ? rcutorture_oom_notify+0x185/0x185 [rcutorture]
-> kthread+0xf7/0x106
-> ? kthread_complete_and_exit+0x2d/0x2d
-> ret_from_fork+0x1f/0x30
-> </TASK>
-> rcu: rcu_sched: wait state: RCU_GP_WAIT_GPS(1) ->state: 0x402 ->rt_priority 0 delta ->gp_start 46 ->gp_activity 45 ->gp_req_activity 46 ->gp_wake_time 45 ->gp_wake_seq 109001 ->gp_seq 109004 ->gp_seq_needed 109004 ->gp_max 133 ->gp_flags 0x0
-> rcu: RCU callbacks invoked since boot: 174032
-> rcu_tasks: RTGS_WAIT_CBS(11) since 176582 g:8 i:0/0 k. 
-> rcu_tasks_rude: RTGS_WAIT_CBS(11) since 176790 g:8 i:0/3 k. 
-> rcu_tasks_trace: RTGS_WAIT_CBS(11) since 176988 g:8 i:0/0 k. N0 h:0/0/0
-> Dumping ftrace buffer:
-> (ftrace buffer empty)
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu_torture_fwd_prog n_max_cbs: 1425
-> rcu_torture_fwd_prog: Starting forward-progress test 0
-> rcu_torture_fwd_prog_cr: Starting forward-progress test 0
-> rcu_torture_fwd_prog_cr: Waiting for CBs: rcu_barrier+0x0/0x253() 0
-> rcu_torture_fwd_prog_cr Duration 205 barrier: 129 pending 103 n_launders: 1632 n_launders_sa: 102 n_max_gps: 100 n_max_cbs: 1225 cver 0 gps 11
-> rcu_torture_fwd_cb_hist: Callback-invocation histogram 0 (duration 486 jiffies): 1s/10: 1531:6 2s/10: 1223:4 3s/10: 103:5
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu_torture_fwd_prog_nr: Starting forward-progress test 0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rtc: 00000000cc758e4b ver: 5 tfle: 0 rta: 6 rtaf: 0 rtf: 2 rtmbe: 0 rtmbkf: 0/0 rtbe: 0 rtbke: 0 rtbre: 0 rtbf: 0 rtb: 0 nt: 3261 onoff: 0/0:0/0 -1,0:-1,0 0:0 (HZ=1000) barrier: 0/0:0 read-exits: 237 nocb-toggles: 0:0
-> rcu-torture: Reader Pipe:  221546 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Reader Batch:  221546 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Free-Block Circulation:  5 4 3 2 2 2 2 2 2 2 0
-> ??? Writer stall state RTWS_POLL_WAIT_EXP(12) g141173 f0x2 ->state 0x0 cpu 1
-> rcu: rcu_sched: wait state: RCU_GP_WAIT_FQS(5) ->state: 0x0 ->rt_priority 0 delta ->gp_start 9 ->gp_activity 9 ->gp_req_activity 9 ->gp_wake_time 8 ->gp_wake_seq 141173 ->gp_seq 141173 ->gp_seq_needed 141176 ->gp_max 133 ->gp_flags 0x2
-> rcu: 	rcu_node 0:1 ->gp_seq 141173 ->gp_seq_needed 141176 ->qsmask 0x0 .... ->n_boosts 0
-> rcu: 	cpu 1 ->gp_seq_needed 141176
-> rcu: RCU callbacks invoked since boot: 195553
-> rcu_tasks: RTGS_WAIT_CBS(11) since 238020 g:8 i:0/0 k. 
-> rcu_tasks_rude: RTGS_WAIT_CBS(11) since 238228 g:8 i:0/3 k. 
-> rcu_tasks_trace: RTGS_WAIT_CBS(11) since 238425 g:8 i:0/0 k. N0 h:0/0/0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu_torture_fwd_prog_nr: 0 Duration 34398 cver 0 gps 12844
-> rcu_torture_fwd_prog_nr: Waiting for CBs: rcu_barrier+0x0/0x253() 0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rtc: 00000000cc758e4b ver: 5 tfle: 0 rta: 6 rtaf: 0 rtf: 2 rtmbe: 0 rtmbkf: 0/0 rtbe: 0 rtbke: 0 rtbre: 0 rtbf: 0 rtb: 0 nt: 4606 onoff: 0/0:0/0 -1,0:-1,0 0:0 (HZ=1000) barrier: 0/0:0 read-exits: 305 nocb-toggles: 0:0
-> rcu-torture: Reader Pipe:  312724 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Reader Batch:  312724 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Free-Block Circulation:  5 4 3 2 2 2 2 2 2 2 0
-> ??? Writer stall state RTWS_POLL_WAIT_EXP(12) g178804 f0x0 ->state 0x0 cpu 1
-> rcu: rcu_sched: wait state: RCU_GP_WAIT_GPS(1) ->state: 0x402 ->rt_priority 0 delta ->gp_start 25 ->gp_activity 24 ->gp_req_activity 25 ->gp_wake_time 24 ->gp_wake_seq 178801 ->gp_seq 178804 ->gp_seq_needed 178804 ->gp_max 133 ->gp_flags 0x0
-> rcu: RCU callbacks invoked since boot: 215714
-> rcu_tasks: RTGS_WAIT_CBS(11) since 299456 g:8 i:0/0 k. 
-> rcu_tasks_rude: RTGS_WAIT_CBS(11) since 299664 g:8 i:0/3 k. 
-> rcu_tasks_trace: RTGS_WAIT_CBS(11) since 299861 g:8 i:0/0 k. N0 h:0/0/0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu_torture_fwd_prog n_max_cbs: 1225
-> rcu_torture_fwd_prog: Starting forward-progress test 0
-> rcu_torture_fwd_prog_cr: Starting forward-progress test 0
-> rcu_torture_fwd_prog_cr: Waiting for CBs: rcu_barrier+0x0/0x253() 0
-> rcu_torture_fwd_prog_cr Duration 245 barrier: 126 pending 104 n_launders: 1742 n_launders_sa: 103 n_max_gps: 100 n_max_cbs: 1185 cver 0 gps 31
-> rcu_torture_fwd_cb_hist: Callback-invocation histogram 0 (duration 517 jiffies): 1s/10: 592:2 2s/10: 2231:28 3s/10: 104:5
-> rcu_torture_fwd_prog_nr: Starting forward-progress test 0
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> rcu-torture: rcu_torture_read_exit: Start of episode
-> rcu-torture: rcu_torture_read_exit: End of episode
-> 2022-03-08 20:17:31 rmmod rcutorture
-> 
-> rcu-torture: Stopping torture_shuffle task
-> rcu-torture: torture_shuffle is stopping
-> rcu-torture: Stopping torture_stutter task
-> rcu-torture: torture_stutter is stopping
-> rcu: rcu_sched: wait state: RCU_GP_WAIT_FQS(5) ->state: 0x402 ->rt_priority 0 delta ->gp_start 0 ->gp_activity 0 ->gp_req_activity 0 ->gp_wake_time 0 ->gp_wake_seq 231476 ->gp_seq 231477 ->gp_seq_needed 231480 ->gp_max 133 ->gp_flags 0x0
-> rcu: 	rcu_node 0:1 ->gp_seq 231477 ->gp_seq_needed 231484 ->qsmask 0x0 .... ->n_boosts 0
-> rcu: 	cpu 1 ->gp_seq_needed 231480
-> rcu: RCU callbacks invoked since boot: 241662
-> rcu_tasks: RTGS_WAIT_CBS(11) since 353737 g:8 i:0/0 k. 
-> rcu_tasks_rude: RTGS_WAIT_CBS(11) since 353944 g:8 i:0/3 k. 
-> rcu_tasks_trace: RTGS_WAIT_CBS(11) since 354142 g:8 i:0/0 k. N0 h:0/0/0
-> rcu-torture: rcu_torture_reader is stopping
-> rcu_torture_fwd_prog_nr: Waiting for CBs: rcu_barrier+0x0/0x253() 0
-> rcu_torture_fwd_prog: tested 2 tested_tries 3
-> rcu-torture: rcu_torture_fwd_prog is stopping
-> rcu-torture: rcu_torture_read_exit is stopping
-> rcu-torture: Stopping rcutorture_read_exit task
-> rcu-torture: Stopping rcu_torture_fwd_prog task
-> rcu-torture: Stopping rcu_torture_writer task
-> rcu-torture: rtc: 00000000cc758e4b ver: 5 tfle: 0 rta: 6 rtaf: 0 rtf: 2 rtmbe: 0 rtmbkf: 0/0 rtbe: 0 rtbke: 0 rtbre: 0 rtbf: 0 rtb: 0 nt: 5832 onoff: 0/0:0/0 -1,0:-1,0 0:0 (HZ=1000) barrier: 0/0:0 read-exits: 373 nocb-toggles: 0:0
-> rcu-torture: Reader Pipe:  402665 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Reader Batch:  402665 0 0 0 0 0 0 0 0 0 0
-> rcu-torture: Free-Block Circulation:  5 4 3 2 2 2 2 2 2 2 0
-> ??? Writer stall state RTWS_POLL_WAIT_EXP(12) g232412 f0x0 ->state 0x2 cpu 1
-> rcu: rcu_sched: wait state: RCU_GP_WAIT_GPS(1) ->state: 0x402 ->rt_priority 0 delta ->gp_start 130 ->gp_activity 129 ->gp_req_activity 130 ->gp_wake_time 129 ->gp_wake_seq 232409 ->gp_seq 232412 ->gp_seq_needed 232412 ->gp_max 133 ->gp_flags 0x0
-> rcu: RCU callbacks invoked since boot: 243296
-> rcu_tasks: RTGS_WAIT_CBS(11) since 360896 g:8 i:0/0 k. 
-> rcu_tasks_rude: RTGS_WAIT_CBS(11) since 361103 g:8 i:0/3 k. 
-> rcu_tasks_trace: RTGS_WAIT_CBS(11) since 361301 g:8 i:0/0 k. N0 h:0/0/0
-> rcu-torture: rcu_torture_stats is stopping
-> Started /etc/rc.local Compatibility.
-> Reached target Login Prompts.
-> Reached target Multi-User System.
-> Starting watchdog daemon...
-> Started watchdog daemon.
-> Reached target Graphical Interface.
-> Starting Update UTMP about System Runlevel Changes...
-> Started Update UTMP about System Runlevel Changes.
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 338s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=338s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 368s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=368s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 399s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=399s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 429s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=429s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 459s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=5/512 refcnt=8
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> pending: toggle_allocation_gate
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=459s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 489s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=489s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 519s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=519s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 550s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=550s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 580s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=580s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 610s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=5/512 refcnt=8
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> pending: toggle_allocation_gate
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=610s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 640s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=640s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 670s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=671s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 701s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=701s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 731s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=731s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 761s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=761s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 791s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=791s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 822s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=5/512 refcnt=8
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> pending: toggle_allocation_gate
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=822s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 852s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=852s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 882s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=882s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1871 1873
-> BUG: workqueue lockup - pool cpus=1 node=0 flags=0x0 nice=0 stuck for 912s!
-> Showing busy workqueues and worker pools:
-> workqueue events: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=15/256 refcnt=16
-> pending: do_free_init, e1000_watchdog, vmstat_shepherd, kfree_rcu_monitor, regulator_init_complete_work_function, kernfs_notify_workfn, release_one_tty, key_garbage_collector, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty, release_one_tty
-> workqueue events_unbound: flags=0x2
-> pwq 4: cpus=0-1 flags=0x4 nice=0 active=4/512 refcnt=7
-> in-flight: 40:fsnotify_mark_destroy_workfn fsnotify_mark_destroy_workfn BAR(1), 9:fsnotify_connector_destroy_workfn fsnotify_connector_destroy_workfn
-> workqueue events_power_efficient: flags=0x80
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=7/256 refcnt=8
-> pending: neigh_managed_work, neigh_managed_work, neigh_managed_work, neigh_periodic_work, neigh_periodic_work, neigh_periodic_work, check_lifetime
-> workqueue rcu_gp: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=3/256 refcnt=4
-> in-flight: 179:sync_rcu_do_polled_gp
-> pending: sync_rcu_do_polled_gp, process_srcu
-> workqueue mm_percpu_wq: flags=0x8
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-> pending: vmstat_update
-> workqueue cgroup_destroy: flags=0x0
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=9
-> pending: css_killed_work_fn
-> inactive: css_killed_work_fn, css_killed_work_fn, css_release_work_fn, css_release_work_fn, css_killed_work_fn, css_killed_work_fn, css_killed_work_fn
-> workqueue ipv6_addrconf: flags=0x40008
-> pwq 2: cpus=1 node=0 flags=0x0 nice=0 active=1/1 refcnt=2
-> pending: addrconf_verify_work
-> pool 2: cpus=1 node=0 flags=0x0 nice=0 hung=912s workers=3 idle: 23 36
-> pool 4: cpus=0-1 flags=0x4 nice=0 hung=0s workers=4 idle: 1873 1871
-> INFO: task systemd:1 blocked for more than 491 seconds.
-> Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:systemd         state:D stack:    0 pid:    1 ppid:     0 flags:0x00004000
-> Call Trace:
-> <TASK>
-> __schedule+0x6dd/0x721
-> ? usleep_range_state+0x9d/0x9d
-> schedule+0x4e/0x83
-> schedule_timeout+0x38/0x106
-> ? hlock_class+0x1a/0x5d
-> ? write_comp_data+0x20/0x71
-> ? lockdep_hardirqs_on_prepare+0x14a/0x169
-> ? _raw_spin_unlock_irq+0x1f/0x29
-> __wait_for_common+0xbd/0x11b
-> __flush_work+0x391/0x3bf
-> ? flush_workqueue_prep_pwqs+0x1ca/0x1ca
-> ? __wait_for_common+0x3c/0x11b
-> ? inotify_poll+0xaf/0xaf
-> fsnotify_destroy_group+0xad/0xe9
-> ? __sanitizer_cov_trace_pc+0x17/0x42
-> ? locks_remove_file+0x131/0x13e
-> ? inotify_poll+0xaf/0xaf
-> inotify_release+0x15/0x19
-> __fput+0x212/0x3c0
-> task_work_run+0x94/0xbf
-> exit_to_user_mode_prepare+0xb1/0x15c
-> syscall_exit_to_user_mode+0x18/0x43
-> do_syscall_64+0xa1/0xa7
-> entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fa39f4f7b54
-> RSP: 002b:00007fffb0b4d7d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000017 RCX: 00007fa39f4f7b54
-> RDX: 00007fa39f5c8ca0 RSI: 0000000000000000 RDI: 0000000000000017
-> RBP: 00007fa39e3468c0 R08: 00000000000000ef R09: 00007fa3a13f2060
-> R10: 0000000000000007 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007fffb0b4d890 R14: 0000000000000001 R15: 00007fa39f6e3a8e
-> </TASK>
-> INFO: task kworker/u4:1:9 blocked for more than 491 seconds.
-> Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/u4:1    state:D stack:    0 pid:    9 ppid:     2 flags:0x00004000
-> Workqueue: events_unbound fsnotify_connector_destroy_workfn
-> Call Trace:
-> <TASK>
-> __schedule+0x6dd/0x721
-> ? to_kthread+0x2c/0x36
-> ? usleep_range_state+0x9d/0x9d
-> schedule+0x4e/0x83
-> schedule_timeout+0x38/0x106
-> ? mark_held_locks+0x4a/0x5c
-> ? lockdep_hardirqs_on_prepare+0x14a/0x169
-> ? _raw_spin_unlock_irq+0x1f/0x29
-> __wait_for_common+0xbd/0x11b
-> __synchronize_srcu+0xfd/0x10c
-> ? rcu_tasks_pregp_step+0x5/0x5
-> ? __wait_for_common+0x3c/0x11b
-> fsnotify_connector_destroy_workfn+0x3d/0x6b
-> process_one_work+0x3d6/0x66d
-> worker_thread+0x29f/0x38a
-> ? rescuer_thread+0x382/0x382
-> kthread+0xf7/0x106
-> ? kthread_complete_and_exit+0x2d/0x2d
-> ret_from_fork+0x1f/0x30
-> </TASK>
-> INFO: task kworker/u4:2:40 blocked for more than 491 seconds.
-> Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/u4:2    state:D stack:    0 pid:   40 ppid:     2 flags:0x00004000
-> Workqueue: events_unbound fsnotify_mark_destroy_workfn
-> Call Trace:
-> <TASK>
-> __schedule+0x6dd/0x721
-> ? to_kthread+0x2c/0x36
-> ? usleep_range_state+0x9d/0x9d
-> schedule+0x4e/0x83
-> schedule_timeout+0x38/0x106
-> ? mark_held_locks+0x4a/0x5c
-> ? lockdep_hardirqs_on_prepare+0x14a/0x169
-> ? _raw_spin_unlock_irq+0x1f/0x29
-> __wait_for_common+0xbd/0x11b
-> __synchronize_srcu+0xfd/0x10c
-> ? rcu_tasks_pregp_step+0x5/0x5
-> ? __wait_for_common+0x3c/0x11b
-> fsnotify_mark_destroy_workfn+0x6a/0xc8
-> process_one_work+0x3d6/0x66d
-> worker_thread+0x29f/0x38a
-> ? rescuer_thread+0x382/0x382
-> kthread+0xf7/0x106
-> ? kthread_complete_and_exit+0x2d/0x2d
-> ret_from_fork+0x1f/0x30
-> </TASK>
-> INFO: task rmmod:1812 blocked for more than 491 seconds.
-> Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:rmmod           state:D stack:    0 pid: 1812 ppid:   508 flags:0x00004000
-> Call Trace:
-> <TASK>
-> __schedule+0x6dd/0x721
-> ? usleep_range_state+0x9d/0x9d
-> schedule+0x4e/0x83
-> schedule_timeout+0x38/0x106
-> ? hlock_class+0x1a/0x5d
-> ? write_comp_data+0x20/0x71
-> ? lockdep_hardirqs_on_prepare+0x14a/0x169
-> ? _raw_spin_unlock_irq+0x1f/0x29
-> __wait_for_common+0xbd/0x11b
-> kthread_stop+0x1bc/0x34c
-> _torture_stop_kthread+0x5a/0x6a [torture]
-> rcu_torture_cleanup+0x23b/0x834 [rcutorture]
-> ? prepare_to_wait_exclusive+0x83/0x83
-> __x64_sys_delete_module+0x109/0x1c3
-> ? lockdep_hardirqs_on_prepare+0x14a/0x169
-> do_syscall_64+0x85/0xa7
-> entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f93a158add7
-> RSP: 002b:00007ffd6aef9048 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
-> RAX: ffffffffffffffda RBX: 00007f93a3179900 RCX: 00007f93a158add7
-> RDX: 000000000000000a RSI: 0000000000000800 RDI: 00007f93a3179968
-> RBP: 0000000000000000 R08: 00007ffd6aef7fc1 R09: 0000000000000000
-> R10: 00007f93a15fcae0 R11: 0000000000000206 R12: 00007ffd6aef9270
-> R13: 00007ffd6aefadfc R14: 00007f93a3179260 R15: 00007f93a3179900
-> </TASK>
-> 
-> Showing all locks held in the system:
-> 2 locks held by kworker/u4:1/9:
-> #0: ffff9b4480051548 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x233/0x66d
-> #1: ffff9b448016fe78 (connector_reaper_work){+.+.}-{0:0}, at: process_one_work+0x233/0x66d
-> 1 lock held by khungtaskd/29:
-> #0: ffffffffbaddd460 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x22
-> 2 locks held by kworker/u4:2/40:
-> #0: ffff9b4480051548 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x233/0x66d
-> #1: ffff9b4480c93e78 ((reaper_work).work){+.+.}-{0:0}, at: process_one_work+0x233/0x66d
-> 2 locks held by kworker/1:2/179:
-> 1 lock held by in:imklog/431:
-> 1 lock held by dmesg/440:
-> 
-> =============================================
-> 
-> Kernel panic - not syncing: hung_task: blocked tasks
-> CPU: 1 PID: 29 Comm: khungtaskd Not tainted 5.17.0-rc1-00111-g556d8afe4a77 #1
-> Call Trace:
-> <TASK>
-> dump_stack_lvl+0xcd/0x134
-> panic+0x1c2/0x51f
-> ? _printk+0x53/0x55
-> ? watchdog+0x6ec/0x725
-> watchdog+0x6f8/0x725
-> ? rcu_read_unlock+0x94/0x94
-> kthread+0xf7/0x106
-> ? kthread_complete_and_exit+0x2d/0x2d
-> ret_from_fork+0x1f/0x30
-> </TASK>
-> Kernel Offset: 0x38200000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> 
-> Kboot worker: lkp-worker57
-> Elapsed time: 1020
-> 
-> kvm=(
-> 	qemu-system-x86_64
-> 	-enable-kvm
-> 	-cpu SandyBridge
-> 	-kernel $kernel
-> 	-initrd initrd-vm-snb-67.cgz
-> 	-m 16384
-> 	-smp 2
-> 	-device e1000,netdev=net0
-> 	-netdev user,id=net0,hostfwd=tcp::32032-:22
-> 	-boot order=nc
-> 	-no-reboot
-> 	-watchdog i6300esb
-> 	-watchdog-action debug
-> 	-rtc base=localtime
-> 	-serial stdio
-> 	-display none
-> 	-monitor null
-> )
-> 
-> append=(
-> 	ip=::::vm-snb-67::dhcp
-> 	root=/dev/ram0
-> 	RESULT_ROOT=/result/rcutorture/300s-default-rcu/vm-snb/debian-10.4-x86_64-20200603.cgz/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/3
-> 	BOOT_IMAGE=/pkg/linux/x86_64-randconfig-a012-20210928/gcc-9/556d8afe4a779f41dfc8fa373993a88e43f1c5dc/vmlinuz-5.17.0-rc1-00111-g556d8afe4a77
-> 	branch=linux-devel/devel-hourly-20220304-094445
-> 	job=/job-script
-> 	user=lkp
-> 	ARCH=x86_64
-> 	kconfig=x86_64-randconfig-a012-20210928
-> 	commit=556d8afe4a779f41dfc8fa373993a88e43f1c5dc
-> 	vmalloc=128M
-> 	initramfs_async=0
-> 	page_owner=on
-> 	max_uptime=2100
-> 	result_service=tmpfs
-> 	selinux=0
-> 	debug
-> 	apic=debug
-> 	sysrq_always_enabled
-> 	rcupdate.rcu_cpu_stall_timeout=100
-> 	net.ifnames=0
-> 	printk.devkmsg=on
-> 	panic=-1
-> 	softlockup_panic=1
-> 	nmi_watchdog=panic
-> 	oops=panic
-> 	load_ramdisk=2
-> 	prompt_ramdisk=0
-> 	drbd.minor_count=8
-> 	systemd.log_level=err
-> 	ignore_loglevel
-> 	console=tty0
-> 	earlyprintk=ttyS0,115200
-> 	console=ttyS0,115200
-> 	vga=normal
-> 	rw
-> 	rcuperf.shutdown=0
-> 	watchdog_thresh=240
-> )
-> 
-> "${kvm[@]}" -append "${append[*]}"
 

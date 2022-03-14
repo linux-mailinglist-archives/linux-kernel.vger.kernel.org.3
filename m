@@ -2,176 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B0F4D7E53
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80A34D7E55
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237899AbiCNJQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47806 "EHLO
+        id S237892AbiCNJTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237892AbiCNJP7 (ORCPT
+        with ESMTP id S236949AbiCNJTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:15:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096F43ED3A;
-        Mon, 14 Mar 2022 02:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647249290; x=1678785290;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tek9pvUQ8wIJl35VuH25V3YzoAX1Jt0Th31Nu4xv2nI=;
-  b=FgbKYYTflQBXhV6z6qK9fn7th8zg/svYGcOtiKtj1y/YjHVF/SRW9Bqg
-   ag+HN3oaQb9yiHSwPSFREzAVzoPJAxkvbfBkXqgP8GqUzwWeYXBTrU70u
-   k7ByhR4AEcV6TvLjkHzcaCw8tDL/4MJZjjL5F3M+rlFbZnoj66qIjzthe
-   84KVh+6b0BLdORGCbENeTpzn76yBPG5TAnm4ipUa+DJFV2oTJ77OoGRv3
-   1AKEnPWEh2VnbizJTtpjaJ/Esv5ryAUXsWQmXUdYJYcHZD7n1yde8qurI
-   qZAMy/Kifmt8smQK5aU1aLjpqVppRaVndaUjcDIsfL9vtf5Z4O9IlVTv/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="319201111"
-X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
-   d="scan'208";a="319201111"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:14:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
-   d="scan'208";a="556322465"
-Received: from srafikbh-mobl1.gar.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.54.232])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 02:14:42 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/1] serial: 8250: fix XOFF/XON sending when DMA is used
-Date:   Mon, 14 Mar 2022 11:14:32 +0200
-Message-Id: <20220314091432.4288-2-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220314091432.4288-1-ilpo.jarvinen@linux.intel.com>
-References: <20220314091432.4288-1-ilpo.jarvinen@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 14 Mar 2022 05:19:15 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B1DFE8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:18:02 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220314091800epoutp0498863279b8ea49b41a880d490104a368~cNKzaMw5q2503325033epoutp04T
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:18:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220314091800epoutp0498863279b8ea49b41a880d490104a368~cNKzaMw5q2503325033epoutp04T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647249480;
+        bh=+s7xWazCsiSQTevuQChhBWMZvqG2bPqG0Dby++5yyts=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=RVh4/1bcfD288yD2rsk7hcvRjpsxVm14PVa8Hxy9mVOLr7e+dSck5a6q2GggCCAid
+         MJYXzAIZYT9HrcsRspqDxLG3S5pXTa92hQ906wR3WJdeHcD85h2wInGiT4I1jUEIUG
+         Iq1BCaM+vmZrOUdxPyAZCCbp4nQYlUSiCQWE1hM4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220314091759epcas2p4ce1c4bdba1e3d986043157de768e8ccc~cNKyMzBRa2477824778epcas2p4f;
+        Mon, 14 Mar 2022 09:17:59 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KH9tX3zWZz4x9Q2; Mon, 14 Mar
+        2022 09:17:56 +0000 (GMT)
+X-AuditID: b6c32a47-831ff700000063c4-65-622f08441045
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CD.94.25540.4480F226; Mon, 14 Mar 2022 18:17:56 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH] driver/nvme/host: Support duplicated nsid for the
+ private
+Reply-To: sungup.moon@samsung.com
+Sender: Sungup Moon <sungup.moon@samsung.com>
+From:   Sungup Moon <sungup.moon@samsung.com>
+To:     "hch@lst.de" <hch@lst.de>
+CC:     "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220314070808.GB3806@lst.de>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220314091755epcms2p1c638716a47c2eae1a6069e2b73e5dc5d@epcms2p1>
+Date:   Mon, 14 Mar 2022 18:17:55 +0900
+X-CMS-MailID: 20220314091755epcms2p1c638716a47c2eae1a6069e2b73e5dc5d
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphk+LIzCtJLcpLzFFi42LZdljTTNeFQz/JYNIqNov/e46xWaxcfZTJ
+        YtKha4wWl3fNYbOYv+wpu8W61+9ZHNg8Jja/Y/c4f28ji8emVZ1sHpuX1HvsvtnA5vF5k1wA
+        W1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QFUoK
+        ZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE
+        7IwTCz+yFrQIV0zaktXAeJG/i5GTQ0LAROL2zm0sXYxcHEICOxglHhy/xtbFyMHBKyAo8XeH
+        MEiNsECwRN/U0ywgtpCAosTfZ32MEHFdiTX/pzCD2GwC2hL3zrxlAmkVEZCVuLKiHmQks8BP
+        RonXLa/ZIHbxSsxof8oCYUtLbF++FWwOJ1Dv3/V/WSHiGhI/lvUyQ9iiEjdXv2WHsd8fm88I
+        YYtItN47C1UjKPHg526ouKTErqfXoeL5Em2/F7GBHCEh0MEocf7hESaIhLnEn5fXwYbyCvhK
+        tLacBzuIRUBV4vDVb1CHukhsuz8T7CBmoOOWLXzNDPIYs4CmxPpd+iCmhICyxJFbLBAVfBId
+        h/+yw7y4Y94TqE2qEhcn9LDBvLtyXgPUmR4SpycuZp3AqDgLEdCzkOyahbBrASPzKkax1ILi
+        3PTUYqMCY3jUJufnbmIEJ0ct9x2MM95+0DvEyMTBeIhRgoNZSYTXaqlekhBvSmJlVWpRfnxR
+        aU5q8SFGU6AvJzJLiSbnA9NzXkm8oYmlgYmZmaG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKY
+        PiYOTqkGpu0TOJL2mqTx1GVciL17OtWgamGY7sdF+1Uazs1fsU/2ivf02RLtt7OnO/dO3biK
+        /2Hpi9tPUjNSGxheXjy9bZdWTteDW492r+R4fGtS9O7Vcy39uBZNcb60/fNJ9cWrZVpTn8aX
+        2RiuSHVJFmDf5N1z5G9MQLx/xZ4c99l/pn9uvtfXt2bmpPBXgeKXVjPvCa1+dnHCocXrF83Z
+        z/b1nXuL+IcMqdSjznk68+bVlwSs6uqan1Qd7RwRUfepvLyoWP+arcT6P8z86st2/tmX4jy1
+        6MNd6yh5+Zomjui4leU7pQ5nXL2z/URMfjrj9cTHM/jF/911m3JR9dzlo0/bd0kFpu0L5PfJ
+        mWTXt1H12DslluKMREMt5qLiRADrkTzyFwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220314070505epcms2p26dff1d529f4d8c208728e5fa5c5dd928
+References: <20220314070808.GB3806@lst.de>
+        <20220314070505epcms2p26dff1d529f4d8c208728e5fa5c5dd928@epcms2p2>
+        <CGME20220314070505epcms2p26dff1d529f4d8c208728e5fa5c5dd928@epcms2p1>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When 8250 UART is using DMA, x_char (XON/XOFF) is never sent
-to the wire. After this change, x_char is injected correctly.
+Thank you for your reply,
 
-Create uart_xchar_out() helper for sending the x_char out and
-accounting related to it. It seems that almost every driver
-does these same steps with x_char. Except for 8250, however,
-almost all currently lack .serial_out so they cannot immediately
-take advantage of this new helper.
+> =20
+> On Mon, Mar 14, 2022 at 04:05:05PM +0900, Sungup Moon wrote:
+> > When the multi-controller, managed by a special admin command, has priv=
+ate
+> > namespace with same nsid, current linux driver raise =22Duplicate unsha=
+red
+> > namespace=22 error. But, NVMe Specification defines the NSID usage like=
+ this:
+> >=20
+> > If Namespace Management, ANA Reporting, or NVM Sets are supported, the
+> > NSIDs shall be unique within the NVM subsystem. If the Namespace
+> > Management, ANA Reporting, and NVM Sets are not supported, then NSIDs:
+> > a) for shared namespace shall be unique; and
+> > b) for private namespace are not required to be unique.
+> > (reference: 6.1.6 NSID and Namespace Usage; NVM Express 1.4c spec)
+> >=20
+> > So, if a multi-controller, which is not managed by Namespace Management
+> > function, creates some private namespaces without ANA and NVM Sets, the
+> > duplicated NSID should be allowed because that is not a NVMe specificat=
+ion
+> > violation.
+> >=20
+> > But, current nvme driver checks only namespace is shared or not, so I
+> > propose following patch:
+> > 1. nvme_ctrl has unique_nsid field to identify that controller should
+> >    assign unique nsid.
+> > 2. nvme_init_ns_head function creates new nvme_ns_head instance not onl=
+y
+> >    head is null but controller's unique_nsid is false (no flagged
+> >    attribute) and namespace is not shared.
+> > 3. for creating bdev device file, nvme_mpath_set_disk_name will return
+> >    false when unique_nsid is false and namespace is not shared.
+> > 4. also, nvme_mpath_alloc_disk alto return 0 with same manner.
+> =20
+> From a very quick glance this looks good.  But please make sure you don't
+> spill over 80 charactes per line.
 
-The downside of this patch is that it might reintroduce
-the problems some devices faced with mixed DMA/non-DMA transfer
-which caused revert f967fc8f165f (Revert "serial: 8250_dma:
-don't bother DMA with small transfers"). However, the impact
-should be limited to cases with XON/XOFF (that didn't work
-with DMA capable devices to begin with so this problem is not
-very likely to cause a major issue, if any at all).
+I checked changes using =22scripts/checkpatch.pl --terse --file =7Bchanged =
+file=7D=22,
+but there is no warning on my changes. However I will recheck the spill-ove=
+r
+lines over 80 characters.
 
-Reported-by: Gilles Buloz <gilles.buloz@kontron.com>
-Tested-by: Gilles Buloz <gilles.buloz@kontron.com>
-Fixes: 9ee4b83e51f74 ("serial: 8250: Add support for dmaengine")
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dma.c  | 11 ++++++++++-
- drivers/tty/serial/8250/8250_port.c |  4 +---
- drivers/tty/serial/serial_core.c    | 14 ++++++++++++++
- include/linux/serial_core.h         |  2 ++
- 4 files changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
-index 890fa7ddaa7f..b3c3f7e5851a 100644
---- a/drivers/tty/serial/8250/8250_dma.c
-+++ b/drivers/tty/serial/8250/8250_dma.c
-@@ -64,10 +64,19 @@ int serial8250_tx_dma(struct uart_8250_port *p)
- 	struct uart_8250_dma		*dma = p->dma;
- 	struct circ_buf			*xmit = &p->port.state->xmit;
- 	struct dma_async_tx_descriptor	*desc;
-+	struct uart_port		*up = &p->port;
- 	int ret;
- 
--	if (dma->tx_running)
-+	if (dma->tx_running) {
-+		if (up->x_char) {
-+			dmaengine_pause(dma->txchan);
-+			uart_xchar_out(up, UART_TX);
-+			dmaengine_resume(dma->txchan);
-+		}
- 		return 0;
-+	} else if (up->x_char) {
-+		uart_xchar_out(up, UART_TX);
-+	}
- 
- 	if (uart_tx_stopped(&p->port) || uart_circ_empty(xmit)) {
- 		/* We have been called from __dma_tx_complete() */
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 3b12bfc1ed67..63e9bc6fce06 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1799,9 +1799,7 @@ void serial8250_tx_chars(struct uart_8250_port *up)
- 	int count;
- 
- 	if (port->x_char) {
--		serial_out(up, UART_TX, port->x_char);
--		port->icount.tx++;
--		port->x_char = 0;
-+		uart_xchar_out(port, UART_TX);
- 		return;
- 	}
- 	if (uart_tx_stopped(port)) {
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 0db90be4c3bc..f67540ae2a88 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -644,6 +644,20 @@ static void uart_flush_buffer(struct tty_struct *tty)
- 	tty_port_tty_wakeup(&state->port);
- }
- 
-+/*
-+ * This function performs low-level write of high-priority XON/XOFF
-+ * character and accounting for it.
-+ *
-+ * Requires uart_port to implement .serial_out().
-+ */
-+void uart_xchar_out(struct uart_port *uport, int offset)
-+{
-+	serial_port_out(uport, offset, uport->x_char);
-+	uport->icount.tx++;
-+	uport->x_char = 0;
-+}
-+EXPORT_SYMBOL_GPL(uart_xchar_out);
-+
- /*
-  * This function is used to send a high-priority XON/XOFF character to
-  * the device
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index c58cc142d23f..8c32935e1059 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -458,6 +458,8 @@ extern void uart_handle_cts_change(struct uart_port *uport,
- extern void uart_insert_char(struct uart_port *port, unsigned int status,
- 		 unsigned int overrun, unsigned int ch, unsigned int flag);
- 
-+void uart_xchar_out(struct uart_port *uport, int offset);
-+
- #ifdef CONFIG_MAGIC_SYSRQ_SERIAL
- #define SYSRQ_TIMEOUT	(HZ * 5)
- 
--- 
-2.30.2
-
+> Also I think instead of adding the
+> unique_nsid field a little helper that checks the relevant flags might
+> be a l=D1=96ttle=20nicer.=20=20It=20is=20not=20checked=20in=20a=20fast=20=
+path=20anywere=20and=20the=0D=0A>=20checks=20are=20pretty=20trivial.=0D=0A>=
+=20=0D=0A=0D=0AThank=20you=20for=20your=20advise=21=20I=20will=20remove=20f=
+lag=20and=20add=20checking=20function=20for=0D=0Aunique=20nsid.=0D=0A=0D=0A=
+Thank=20you,=0D=0ASungup=20Moon

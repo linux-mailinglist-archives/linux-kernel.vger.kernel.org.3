@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337784D7A64
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 06:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710E44D7A67
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 06:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiCNFdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 01:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S236188AbiCNFeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 01:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbiCNFdA (ORCPT
+        with ESMTP id S235332AbiCNFeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 01:33:00 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F90C3D48B;
-        Sun, 13 Mar 2022 22:31:50 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id o23so12760642pgk.13;
-        Sun, 13 Mar 2022 22:31:50 -0700 (PDT)
+        Mon, 14 Mar 2022 01:34:04 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31412721;
+        Sun, 13 Mar 2022 22:32:53 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q5so20191067ljb.11;
+        Sun, 13 Mar 2022 22:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=1DPJ7SGMvyfoUwo9X/vu4UVhU1Tx4WkS35X+VF/0EP4=;
-        b=cxtaKnregLaKLEDwWc84/IFvfdvNCRhQOdQ8cvcoQ0tXPxGr/jUXgrg2IgCcNZc4FX
-         uIli+ny1cThyTt0ySnrFHlkQYXsmvFWKeDHNyp6vW/XqFvmDATYyB4jB2yQD0ybHT9SF
-         RVWiAzwSIT/egVxAsfXWDaZ1Lz5XKQj5xSL2daoE+7r8CcvzFqWyaWffeupnz3hiVOCv
-         ownT4/Zxdz8yUXeN4uA3HJW2e0SIksfFWkb1RYc9dZTWPNsvX0GwGrjicf6ikBK+Ohc4
-         x7LEA3piKgrRpxHblffWw0F9Coe6z/vHgNd6r/FxFimyPcCfkmM3U7DijzOyF4qfuu58
-         rEXg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Bg2tizYqINxLaPAUtFWgOMe6U6P8VVtNtHhthzp+bNk=;
+        b=NfkG+SyIm8tCL/zOPwO1KnVTPxiHAE3v9/ysLSapqVw7bkxmxOhB2gmvGoQj1D55wT
+         yP9JUSKVbEKu1IcCLpsl4a+l/rLJ1YZzTI4MOUwTJZjsZEMlpQ4FDi1/k74Ny59szLHe
+         4GnDZcPErTJ6simgZ2+qeplpmZJQ3FoRm034iGgtalMdQC6mZ5G3p509KKto2DlrjNAs
+         /HemlPuaWhrk7KnKhasu3Fi8CpJMQQoX4+wK6rTItWoHpum3eLd+MefoRUIOwnYtRhFI
+         rixVSeJvqDJoMYq53sw+LBv/EFOcKZPnWCcrUsAGEzWGDheT2jBgW17SNFhWP5yE9QcV
+         YYAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=1DPJ7SGMvyfoUwo9X/vu4UVhU1Tx4WkS35X+VF/0EP4=;
-        b=3H6YllHj13TBmYQLULretUBT7mj0zPfvLB5pa9mOtGMzNiZVFJJmPTmrnt3fYX2qoa
-         +fc1Ww9Mp976fashEKfZETc30fBRKZCjFPf8b8W2MGaWFnOy9E5AXQ3E5nrnoBVhwyas
-         yKTO2X7hJ0FrqxuWZRRTC+C10AQwf35OhEGeHzY798SbkMdlaQbSNuhA9qww4ppH31ru
-         SVqvtcBISKCCJ1bZn7+kIjlN7XlmLeA/dosWqYRQMQa8CCf2FjUoLL0vMZ7xcOlQrxGR
-         u2HaEGdd+8Aq/IKoW6nzacXnJCCmSXCeqp/6/8a3LB62i0XCl6g05LUyUxnTB6Rw7lfP
-         pb6Q==
-X-Gm-Message-State: AOAM531Ie7h86Fu5A8i+lI1248/qbbGR8H2Wo9FAY6rEG5I8Bvs83XGx
-        R1dotXJohEwDT2oK9t+iPRs=
-X-Google-Smtp-Source: ABdhPJx3Q6EI395hKYFkDb0FwvhVKPS9olsiL4DX1R3h+KmPrDlCz6ZwH3PJj7ki9UbGPZr9Ln3Cbw==
-X-Received: by 2002:a63:485e:0:b0:380:2ff5:d0c0 with SMTP id x30-20020a63485e000000b003802ff5d0c0mr18929734pgk.493.1647235909751;
-        Sun, 13 Mar 2022 22:31:49 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id c7-20020aa78e07000000b004f6e4d8ccc8sm18116376pfr.163.2022.03.13.22.31.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 13 Mar 2022 22:31:49 -0700 (PDT)
-From:   Vincent Shih <vincent.sunplus@gmail.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v1 2/2] dt-bindings: usb: Add bindings doc for Sunplus USB HOST OHCI driver
-Date:   Mon, 14 Mar 2022 13:32:04 +0800
-Message-Id: <1647235924-15572-3-git-send-email-vincent.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
-References: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Bg2tizYqINxLaPAUtFWgOMe6U6P8VVtNtHhthzp+bNk=;
+        b=nkJZdqVSpD6zKw554f6Wpjvl6VB+M/YLLaeyFQDTr79u5vAB+hxrXBweW2tXUTp7Gc
+         ebuwtGKy+hGppORI4ctJNex7SdX1n1KY0IQLCIpqGIBjFznK30LEMgNVNQzvtn43VMw6
+         iNsn+ysHRv3idPKowKTsKXlPTxWKBmBHMHltfXllbxnWyVglmePCCLaVrzpSflWnbZze
+         hS/irNMEtItbXcaW2CITDZP/jFhqjx/fHSbESLnJJhkwCnhrINxmnvILv614Ze6Vy75y
+         Lh0lqiYXuTuc2txO3iyqmos01nE0iHOm0drafrSEBtJrh0q3MKBJuAWqlZQ+O9TOYcDl
+         SS3w==
+X-Gm-Message-State: AOAM531LMEMoWb7hdbfmtHO3Zvb2rKyAA5AtXPbWyOcB9aQOwTJgBfIc
+        nYr6TTlqg0x00PW/XHOq0DsWs7SY4kkxzLrYt9k=
+X-Google-Smtp-Source: ABdhPJw99wXJ7VBc1ldLK6Gm+PgQRmnPgXWSIBgfH6KHHKs1ZlA6/QsEtlHm/AWU4bJ5LyqvuX0idpMKmQT55Ln8Vd0=
+X-Received: by 2002:a2e:5009:0:b0:247:d738:3e8e with SMTP id
+ e9-20020a2e5009000000b00247d7383e8emr13197832ljb.281.1647235972025; Sun, 13
+ Mar 2022 22:32:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220311014245.4612-1-ctcchien@nuvoton.com> <20220311014245.4612-4-ctcchien@nuvoton.com>
+ <1f5e1e49-4ab0-5e06-fa8f-2a11b0fd1df9@canonical.com>
+In-Reply-To: <1f5e1e49-4ab0-5e06-fa8f-2a11b0fd1df9@canonical.com>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Mon, 14 Mar 2022 13:32:40 +0800
+Message-ID: <CAHpyw9dHau348qJB6g+fCcKqWByUsRHAGwb_mdUg=hjhW+xNsw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] EDAC: nuvoton: Add NPCM memory controller driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        ctcchien@nuvoton.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,102 +76,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings doc for Sunplus USB HOST OHCI driver
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
+=B9=B43=E6=9C=8811=E6=97=A5
+=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:15=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 11/03/2022 02:42, Medad CChien wrote:
+> > Add support for Nuvoton NPCM SoC.
+> >
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > ---
+> >  drivers/edac/Kconfig     |   9 +
+> >  drivers/edac/Makefile    |   1 +
+> >  drivers/edac/npcm_edac.c | 714 +++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 724 insertions(+)
+> >  create mode 100644 drivers/edac/npcm_edac.c
+> >
+> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> > index 58ab63642e72..757e1d160640 100644
+> > --- a/drivers/edac/Kconfig
+> > +++ b/drivers/edac/Kconfig
+> > @@ -539,4 +539,13 @@ config EDAC_DMC520
+> >         Support for error detection and correction on the
+> >         SoCs with ARM DMC-520 DRAM controller.
+> >
+> > +config EDAC_NPCM
+> > +     tristate "Nuvoton NPCM DDR Memory Controller"
+> > +     depends on ARCH_NPCM
+>
+> || COMPILE_TEST
+> (and test if it compiles)
+>
+> (...)
+>
+> > +
+> > +MODULE_DEVICE_TABLE(of, npcm_edac_of_match);
+> > +
+> > +static int npcm_edac_mc_probe(struct platform_device *pdev)
+> > +{
+> > +     const struct npcm_edac_platform_data *npcm_chip;
+> > +     struct device *dev =3D &pdev->dev;
+> > +     struct edac_mc_layer layers[1];
+> > +     const struct of_device_id *id;
+> > +     struct priv_data *priv_data;
+> > +     struct mem_ctl_info *mci;
+> > +     struct resource *res;
+> > +     void __iomem *reg;
+> > +     int ret =3D -ENODEV;
+> > +     int irq;
+> > +
+> > +     id =3D of_match_device(npcm_edac_of_match, &pdev->dev);
+> > +     if (!id)
+> > +             return -ENODEV;
+>
+> Why do you need it? How such case is even possible?
+this driver is used for two nuvoton SOCs, one is NPCM845 and the other
+is NPCM750
 
-Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
----
- .../bindings/usb/sunplus,sp7021-usb-ohci.yaml      | 69 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 70 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
-
-diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
-new file mode 100644
-index 0000000..7583b68
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ohci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus SP7021 OHCI Controller Device Tree Bindings
-+
-+allOf:
-+  - $ref: usb-hcd.yaml#
-+
-+maintainers:
-+  - Vincent Shih <vincent.sunplus@gmail.com>
-+
-+description:
-+  Sunplus SP7021 USB HOST IP is a USB2.0 Host Controller. It supports both
-+  Enhanced Host Controller Interface (EHCI) and Open Host Controller Interface
-+  (OHCI).
-+
-+  It supports 32-bits address bus and 64bit data bus interface, compliant
-+  to AMBA AXI interface for data transfer.
-+
-+  It supports 32-bits address and data bus interface, compliant to AMBA
-+  AHB interface for register configurations.
-+
-+  It supports 32-bits address and data bus interface, compliant to AMBA
-+  AXI interface for register alternative configurations.
-+
-+  The UTM Interface block generates PHY control signals, compliant to
-+  USB2.0 Transceiver Macrocell Interface Specification Revision 1.0.
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-usb-ohci
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - resets
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    sp_ohci0: usb@9c102080 {
-+      compatible = "sunplus,sp7021-usb-ohci";
-+      reg = <0x9c102080 0x68>;
-+      clocks = <&clkc 0x3a>;
-+      resets = <&rstc 0x2a>;
-+      interrupt-parent = <&intc>;
-+      interrupts = <15 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f7a9ed7..4c80c39 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17949,6 +17949,7 @@ SUNPLUS USB OHCI DRIVER
- M:	Vincent Shih <vincent.sunplus@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yaml
- F:	drivers/usb/host/ohci-sunplus.c
- 
- SUPERH
--- 
-2.7.4
-
+>
+> > +
+> > +     npcm_chip =3D of_device_get_match_data(&pdev->dev);
+> > +     if (!npcm_chip)
+> > +             return -ENODEV;
+>
+> I wonder, how is it possible to have here NULL?
+>
+> Best regards,
+> Krzysztof

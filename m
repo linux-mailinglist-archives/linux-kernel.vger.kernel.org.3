@@ -2,74 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616A44D807E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C18F4D8082
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiCNLQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S238847AbiCNLQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232349AbiCNLQN (ORCPT
+        with ESMTP id S238845AbiCNLQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:16:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5FD2BB09;
-        Mon, 14 Mar 2022 04:15:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A80561032;
-        Mon, 14 Mar 2022 11:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002A7C340E9;
-        Mon, 14 Mar 2022 11:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647256502;
-        bh=6yfUzUx3hzhPLIDF1CvX2NqY/lQlucJQRif0H041xoM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JfsA9q7MChAN4Exx0ZM5p0ou/V36b2anrh4NydF3HuEht2vVdDy6SbKIK4ushDc5g
-         XMYAPJubg4ZWzkZQHBK2ZCafD3qm9a80z3MYIrYTM/Tw+CNJZsDYxmrRo89r7o41mg
-         +cMmjl5TFpzivAY9Nho//Nd2ltc/a5C2iWqwySqynt92Evbnm27hGysFPTG8WDN4Av
-         KECWdDfiSUVM+WObt8KtRuZRZgiMbxIrmYPtU0Dfe/WKz16ohV9HQDSWM3xpMSzww5
-         2f2bxuu8VJELYvi7KPucNraoYP5G4thvLnXChc757hE32zEFT1lXGUg8pRbrQUnmnR
-         Jkox7Ke6tCZqQ==
-Date:   Mon, 14 Mar 2022 12:14:54 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     Niklas =?UTF-8?B?U8O2ZGVybHVuZA==?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Dmitriy Ulitin <ulitin@ispras.ru>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Mon, 14 Mar 2022 07:16:32 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872CA37BC9;
+        Mon, 14 Mar 2022 04:15:21 -0700 (PDT)
+X-UUID: e3be77fcdeec419b94e0b661dc5f322d-20220314
+X-UUID: e3be77fcdeec419b94e0b661dc5f322d-20220314
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 313481953; Mon, 14 Mar 2022 19:15:17 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 14 Mar 2022 19:15:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Mar 2022 19:15:16 +0800
+Message-ID: <0d75dca79fd51461705fb4c97cd71b48b7319ca6.camel@mediatek.com>
+Subject: Re: [PATCH v2] remoteproc: mediatek: fix side effect of mt8195 sram
+ power on
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH 17/24] media: platform: rename stm32/ to sti/stm32/
-Message-ID: <20220314121454.7432e231@coco.lan>
-In-Reply-To: <20220314083942.GA526468@gnbcxd0016.gnb.st.com>
-References: <cover.1647167750.git.mchehab@kernel.org>
-        <dc5be62a56ac19c6f49f4c8432558fd7b0efe7e6.1647167750.git.mchehab@kernel.org>
-        <20220314083942.GA526468@gnbcxd0016.gnb.st.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 14 Mar 2022 19:15:16 +0800
+In-Reply-To: <d1d746b3-4452-6424-a2fb-62faebcc7b92@collabora.com>
+References: <20220311123056.32689-1-tinghan.shen@mediatek.com>
+         <d1d746b3-4452-6424-a2fb-62faebcc7b92@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,133 +59,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alain,
+Hi Angelo,
 
-Em Mon, 14 Mar 2022 09:39:42 +0100
-Alain Volmat <alain.volmat@foss.st.com> escreveu:
+They will be fixed at next version.
+Thank you.
 
-> Hi Mauro,
-> 
-> I don't think stm32 should be put within the sti platform folder.
-> sti and stm32 are 2 different platforms from ST Microelectronics.
-> STi refers to the platform with SoCs such as STiH407/STiH410 and STiH418
-> while stm32 are all STM32 ones. Those two platforms aren't related.
-> What about having a folder stmicro or stmicroelectronics (too long
-> probably :D) with the 2 folders sti and stm32 into it ?
 
-Yeah, a folder like "st", "stm" (New York Stock Exchange uses this name),
-"stmicro", or even "stmicroelectronics" with either two folders on it
-or two separate submenus work from my side.
+Best regards,
+TingHan
 
-I would prefer to have a short name there, like "st" or "stm", but it
-is up to you to choose whatever works best for ST Microelectronics.
-
-Just let me know what works best and I'll change it at the patch.
-
-> 
-> Alain
-> 
-> On Sun, Mar 13, 2022 at 11:51:58AM +0100, Mauro Carvalho Chehab wrote:
-> > As the end goal is to have platform drivers split by vendor,
-> > rename stm32/ to sti/stm32/.
+On Fri, 2022-03-11 at 14:05 +0100, AngeloGioacchino Del Regno wrote:
+> Il 11/03/22 13:30, Tinghan Shen ha scritto:
+> > The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
 > > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
+> > 
+> > L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
+> > These bits have to be powered on to allow EMI access for SCP.
+> > 
+> > Bits[7:4] also affect audio DSP because audio DSP and SCP are
+> > placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
+> > blocked too.
+> > 
+> > L1TCM_SRAM_PDN bits[31:8] are not used.
+> > 
+> > This fix removes modification of bits[7:4] when power on/off mt8195 SCP
+> > L1TCM. It's because the modification introduces a short period of time
+> > blocking audio DSP to access EMI. This was not a problem until we have
+> > to load both SCP module and audio DSP module. audio DSP needs to access
+> > EMI because it has source/data on DRAM. Audio DSP will have unexpected
+> > behavior when it accesses EMI and the SCP driver blocks the EMI path at
+> > the same time.
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 > > ---
+> >   drivers/remoteproc/mtk_common.h |  2 +
+> >   drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++--------
+> >   2 files changed, 53 insertions(+), 16 deletions(-)
 > > 
-> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> > See [PATCH 00/24] at: https://lore.kernel.org/all/cover.1647167750.git.mchehab@kernel.org/
-> > 
-> >  MAINTAINERS                                               | 2 +-
-> >  drivers/media/platform/Kconfig                            | 2 +-
-> >  drivers/media/platform/Makefile                           | 2 +-
-> >  drivers/media/platform/{ => sti}/stm32/Kconfig            | 0
-> >  drivers/media/platform/{ => sti}/stm32/Makefile           | 0
-> >  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-hw.c   | 0
-> >  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-regs.h | 0
-> >  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.c      | 0
-> >  drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.h      | 0
-> >  drivers/media/platform/{ => sti}/stm32/stm32-dcmi.c       | 0
-> >  10 files changed, 3 insertions(+), 3 deletions(-)
-> >  rename drivers/media/platform/{ => sti}/stm32/Kconfig (100%)
-> >  rename drivers/media/platform/{ => sti}/stm32/Makefile (100%)
-> >  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-hw.c (100%)
-> >  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d-regs.h (100%)
-> >  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.c (100%)
-> >  rename drivers/media/platform/{ => sti}/stm32/dma2d/dma2d.h (100%)
-> >  rename drivers/media/platform/{ => sti}/stm32/stm32-dcmi.c (100%)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 7711a5ea125e..620705e0f043 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -12046,7 +12046,7 @@ L:	linux-media@vger.kernel.org
-> >  S:	Supported
-> >  T:	git git://linuxtv.org/media_tree.git
-> >  F:	Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-> > -F:	drivers/media/platform/stm32/stm32-dcmi.c
-> > +F:	drivers/media/platform/sti/stm32/stm32-dcmi.c
-> >  
-> >  MEDIA INPUT INFRASTRUCTURE (V4L/DVB)
-> >  M:	Mauro Carvalho Chehab <mchehab@kernel.org>
-> > diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> > index c3594807f8d7..cf373bfbca1b 100644
-> > --- a/drivers/media/platform/Kconfig
-> > +++ b/drivers/media/platform/Kconfig
-> > @@ -95,7 +95,7 @@ source "drivers/media/platform/samsung/s5p-g2d/Kconfig"
-> >  source "drivers/media/platform/samsung/s5p-jpeg/Kconfig"
-> >  source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
-> >  source "drivers/media/platform/sti/Kconfig"
-> > -source "drivers/media/platform/stm32/Kconfig"
-> > +source "drivers/media/platform/sti/stm32/Kconfig"
-> >  source "drivers/media/platform/ti-vpe/Kconfig"
-> >  source "drivers/media/platform/via/Kconfig"
-> >  source "drivers/media/platform/xilinx/Kconfig"
-> > diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-> > index 6a766acfbe37..e3dd2331003a 100644
-> > --- a/drivers/media/platform/Makefile
-> > +++ b/drivers/media/platform/Makefile
-> > @@ -40,7 +40,7 @@ obj-y += sti/bdisp/
-> >  obj-y += sti/c8sectpfe/
-> >  obj-y += sti/delta/
-> >  obj-y += sti/hva/
-> > -obj-y += stm32/
-> > +obj-y += sti/stm32/
-> >  obj-y += ti-vpe/
-> >  obj-y += via/
-> >  obj-y += xilinx/
-> > diff --git a/drivers/media/platform/stm32/Kconfig b/drivers/media/platform/sti/stm32/Kconfig
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/Kconfig
-> > rename to drivers/media/platform/sti/stm32/Kconfig
-> > diff --git a/drivers/media/platform/stm32/Makefile b/drivers/media/platform/sti/stm32/Makefile
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/Makefile
-> > rename to drivers/media/platform/sti/stm32/Makefile
-> > diff --git a/drivers/media/platform/stm32/dma2d/dma2d-hw.c b/drivers/media/platform/sti/stm32/dma2d/dma2d-hw.c
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/dma2d/dma2d-hw.c
-> > rename to drivers/media/platform/sti/stm32/dma2d/dma2d-hw.c
-> > diff --git a/drivers/media/platform/stm32/dma2d/dma2d-regs.h b/drivers/media/platform/sti/stm32/dma2d/dma2d-regs.h
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/dma2d/dma2d-regs.h
-> > rename to drivers/media/platform/sti/stm32/dma2d/dma2d-regs.h
-> > diff --git a/drivers/media/platform/stm32/dma2d/dma2d.c b/drivers/media/platform/sti/stm32/dma2d/dma2d.c
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/dma2d/dma2d.c
-> > rename to drivers/media/platform/sti/stm32/dma2d/dma2d.c
-> > diff --git a/drivers/media/platform/stm32/dma2d/dma2d.h b/drivers/media/platform/sti/stm32/dma2d/dma2d.h
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/dma2d/dma2d.h
-> > rename to drivers/media/platform/sti/stm32/dma2d/dma2d.h
-> > diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/sti/stm32/stm32-dcmi.c
-> > similarity index 100%
-> > rename from drivers/media/platform/stm32/stm32-dcmi.c
-> > rename to drivers/media/platform/sti/stm32/stm32-dcmi.c
-> > -- 
-> > 2.35.1
+> > diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
+> > index 5ff3867c72f3..ff954a06637c 100644
+> > --- a/drivers/remoteproc/mtk_common.h
+> > +++ b/drivers/remoteproc/mtk_common.h
+> > @@ -51,6 +51,8 @@
+> >   #define MT8192_CORE0_WDT_IRQ		0x10030
+> >   #define MT8192_CORE0_WDT_CFG		0x10034
 > >   
+> > +#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
+> > +
+> >   #define SCP_FW_VER_LEN			32
+> >   #define SCP_SHARE_BUFFER_SIZE		288
+> >   
+> > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> > index dcddb33e9997..086cf8263f6c 100644
+> > --- a/drivers/remoteproc/mtk_scp.c
+> > +++ b/drivers/remoteproc/mtk_scp.c
+> > @@ -365,22 +365,22 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
+> >   	return 0;
+> >   }
+> >   
+> > -static void mt8192_power_on_sram(void __iomem *addr)
+> > +static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
+> >   {
+> >   	int i;
+> >   
+> >   	for (i = 31; i >= 0; i--)
+> > -		writel(GENMASK(i, 0), addr);
+> > +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
+> >   	writel(0, addr);
+> >   }
+> >   
+> > -static void mt8192_power_off_sram(void __iomem *addr)
+> > +static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
+> >   {
+> >   	int i;
+> >   
+> >   	writel(0, addr);
+> >   	for (i = 0; i < 32; i++)
+> > -		writel(GENMASK(i, 0), addr);
+> > +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
+> >   }
+> >   
+> >   static int mt8192_scp_before_load(struct mtk_scp *scp)
+> > @@ -391,11 +391,32 @@ static int mt8192_scp_before_load(struct mtk_scp *scp)
+> >   	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
+> >   
+> >   	/* enable SRAM clock */
+> > -	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
+> > -	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
+> > -	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
+> > -	mt8192_power_on_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
+> > -	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+> > +
+> > +	/* enable MPU for all memory regions */
+> > +	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int mt8195_scp_before_load(struct mtk_scp *scp)
+> > +{
+> > +	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
+> > +	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
+> > +
+> > +	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
+> > +
+> > +	/* enable SRAM clock */
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
+> > +	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
+> > +			  MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
+> 
+> This is supposed to be MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS.
+> 
+> > +	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+> >   
+> >   	/* enable MPU for all memory regions */
+> >   	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
+> > @@ -551,11 +572,25 @@ static void mt8183_scp_stop(struct mtk_scp *scp)
+> >   static void mt8192_scp_stop(struct mtk_scp *scp)
+> >   {
+> >   	/* Disable SRAM clock */
+> > -	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
+> > -	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
+> > -	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
+> > -	mt8192_power_off_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
+> > -	mt8192_power_off_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+> > +
+> > +	/* Disable SCP watchdog */
+> > +	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
+> > +}
+> > +
+> > +static void mt8195_scp_stop(struct mtk_scp *scp)
+> > +{
+> > +	/* Disable SRAM clock */
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
+> > +	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
+> > +			   MT8195_L1TCM_SRAM_PDN_RESERVED_BITS);
+> 
+> same here.
+> 
+> > +	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+> >   
+> >   	/* Disable SCP watchdog */
+> >   	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
+> > @@ -888,11 +923,11 @@ static const struct mtk_scp_of_data mt8192_of_data = {
+> >   
+> >   static const struct mtk_scp_of_data mt8195_of_data = {
+> >   	.scp_clk_get = mt8195_scp_clk_get,
+> > -	.scp_before_load = mt8192_scp_before_load,
+> > +	.scp_before_load = mt8195_scp_before_load,
+> >   	.scp_irq_handler = mt8192_scp_irq_handler,
+> >   	.scp_reset_assert = mt8192_scp_reset_assert,
+> >   	.scp_reset_deassert = mt8192_scp_reset_deassert,
+> > -	.scp_stop = mt8192_scp_stop,
+> > +	.scp_stop = mt8195_scp_stop,
+> >   	.scp_da_to_va = mt8192_scp_da_to_va,
+> >   	.host_to_scp_reg = MT8192_GIPC_IN_SET,
+> >   	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
+> 
+> 
 
-
-
-Thanks,
-Mauro

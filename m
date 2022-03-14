@@ -2,78 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1612D4D84C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E43F4D8205
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242293AbiCNM32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S239951AbiCNL7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243861AbiCNMVU (ORCPT
+        with ESMTP id S240229AbiCNL6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:20 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847E2BE5;
-        Mon, 14 Mar 2022 05:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yAh5dhSWoezDHAmIMKrnf1fmCmAoJ/u8UhSQGN/+5rg=;
-  b=AOnEnK5rwCG4310Vpj8R+iKPhl+ZQD+1cDacCSAMGCta6CgsSn9yBslL
-   Y1TrJpCX8hv7jCgskW7U1RQ8F6ZnlT4GCA0nKToZhZGvR2wQ42o/C7TAp
-   6Uwkpl70GJ0CwzNzwB5HL+SwW86rfOZM88KpUW0hoMBFN0ZoFvJLVt9bZ
-   Y=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997353"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 20/30] airo: fix typos in comments
+        Mon, 14 Mar 2022 07:58:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207AFAE42;
+        Mon, 14 Mar 2022 04:57:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8DC161252;
+        Mon, 14 Mar 2022 11:57:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2641DC340E9;
+        Mon, 14 Mar 2022 11:57:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647259045;
+        bh=DUzAqXFVs+VEJAglzezlHMzIIGQMuDImC47ZVQ5Z6Zk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=R1VtqRbF70k3TPModvs2axplt2SWDpQ72LWmYvKmoN7cxX9Pv6L/haMO09rKvenBv
+         HqFxTbS/+Z0JR5M+w74TR5FAnrSy9pbA4xH5XiNUivuR80THvDQ16d9KQLZX6qCdDZ
+         E8IpF5Pe0pZpzVltrGFv5SRr1u40Ct/fiKPy1i4I=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Rong Chen <rong.chen@amlogic.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.4 33/43] mmc: meson: Fix usage of meson_mmc_post_req()
 Date:   Mon, 14 Mar 2022 12:53:44 +0100
-Message-Id: <20220314115354.144023-21-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112735.349285589@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Rong Chen <rong.chen@amlogic.com>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+commit f0d2f15362f02444c5d7ffd5a5eb03e4aa54b685 upstream.
 
+Currently meson_mmc_post_req() is called in meson_mmc_request() right
+after meson_mmc_start_cmd(). This could lead to DMA unmapping before the request
+is actually finished.
+
+To fix, don't call meson_mmc_post_req() until meson_mmc_request_done().
+
+Signed-off-by: Rong Chen <rong.chen@amlogic.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Fixes: 79ed05e329c3 ("mmc: meson-gx: add support for descriptor chain mode")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220216124239.4007667-1-rong.chen@amlogic.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/cisco/airo.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/meson-gx-mmc.c |   15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
-index 452d08545d31..10daef81c355 100644
---- a/drivers/net/wireless/cisco/airo.c
-+++ b/drivers/net/wireless/cisco/airo.c
-@@ -545,7 +545,7 @@ struct ConfigRid {
- #define MODE_CFG_MASK cpu_to_le16(0xff)
- #define MODE_ETHERNET_HOST cpu_to_le16(0<<8) /* rx payloads converted */
- #define MODE_LLC_HOST cpu_to_le16(1<<8) /* rx payloads left as is */
--#define MODE_AIRONET_EXTEND cpu_to_le16(1<<9) /* enable Aironet extenstions */
-+#define MODE_AIRONET_EXTEND cpu_to_le16(1<<9) /* enable Aironet extensions */
- #define MODE_AP_INTERFACE cpu_to_le16(1<<10) /* enable ap interface extensions */
- #define MODE_ANTENNA_ALIGN cpu_to_le16(1<<11) /* enable antenna alignment */
- #define MODE_ETHER_LLC cpu_to_le16(1<<12) /* enable ethernet LLC */
+--- a/drivers/mmc/host/meson-gx-mmc.c
++++ b/drivers/mmc/host/meson-gx-mmc.c
+@@ -174,6 +174,8 @@ struct meson_host {
+ 	int irq;
+ 
+ 	bool vqmmc_enabled;
++	bool needs_pre_post_req;
++
+ };
+ 
+ #define CMD_CFG_LENGTH_MASK GENMASK(8, 0)
+@@ -655,6 +657,8 @@ static void meson_mmc_request_done(struc
+ 	struct meson_host *host = mmc_priv(mmc);
+ 
+ 	host->cmd = NULL;
++	if (host->needs_pre_post_req)
++		meson_mmc_post_req(mmc, mrq, 0);
+ 	mmc_request_done(host->mmc, mrq);
+ }
+ 
+@@ -872,7 +876,7 @@ static int meson_mmc_validate_dram_acces
+ static void meson_mmc_request(struct mmc_host *mmc, struct mmc_request *mrq)
+ {
+ 	struct meson_host *host = mmc_priv(mmc);
+-	bool needs_pre_post_req = mrq->data &&
++	host->needs_pre_post_req = mrq->data &&
+ 			!(mrq->data->host_cookie & SD_EMMC_PRE_REQ_DONE);
+ 
+ 	/*
+@@ -888,22 +892,19 @@ static void meson_mmc_request(struct mmc
+ 		}
+ 	}
+ 
+-	if (needs_pre_post_req) {
++	if (host->needs_pre_post_req) {
+ 		meson_mmc_get_transfer_mode(mmc, mrq);
+ 		if (!meson_mmc_desc_chain_mode(mrq->data))
+-			needs_pre_post_req = false;
++			host->needs_pre_post_req = false;
+ 	}
+ 
+-	if (needs_pre_post_req)
++	if (host->needs_pre_post_req)
+ 		meson_mmc_pre_req(mmc, mrq);
+ 
+ 	/* Stop execution */
+ 	writel(0, host->regs + SD_EMMC_START);
+ 
+ 	meson_mmc_start_cmd(mmc, mrq->sbc ?: mrq->cmd);
+-
+-	if (needs_pre_post_req)
+-		meson_mmc_post_req(mmc, mrq, 0);
+ }
+ 
+ static void meson_mmc_read_resp(struct mmc_host *mmc, struct mmc_command *cmd)
+
 

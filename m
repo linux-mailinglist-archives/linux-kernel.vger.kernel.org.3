@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27364D79F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A846D4D79FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiCNEqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 00:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S233957AbiCNEyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 00:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbiCNEq2 (ORCPT
+        with ESMTP id S229549AbiCNEyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 00:46:28 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873D013D6F
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:45:19 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id e27-20020a056602045b00b00645bd576184so11517777iov.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:45:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=lU/XIXKZn4F9zm+7igwJpi8XQqygtgEUGB9afzywV84=;
-        b=uDrI5c0JqjLsSqsbmqpZooxJ2bFSscZRu4kt2RZjYpNZ4K6y1xxrQDpRyJtezwq2Oh
-         f8eaPOYA0GWnQOVN2cINlFQgJ4DyaBfg8r2KYuMHTXwDkRSodKkS2dNKipCuS3CsdmY4
-         B3xbqkv6YyFlGBV8FUk8OUA2GzVsk7Nj8r9z4sFAYa2cLPvYAfgBawAHUBCge6JMlrHb
-         gW7ct+Tb7F8oNbs7ybd35ZQ78g1rsZel9MLyz7zVO4SKuOnYlDFt1RF5pxMS7Z0DpXky
-         SNbMk3eoo554MQ+x1PocnHW5QFkOUUwkaEqWEqkpwNLF21wYdGTllpsSu2ScYJ8EJ8xx
-         hd7w==
-X-Gm-Message-State: AOAM5309vkz272T85h7Ss4iD2LKW7fWnXLwnpl2wLfWwO/77Q1J9IN3g
-        HlyGSoo+7C6MDMyzFH/M77DGsWAJzIqh7dxCUV6y/LaqpCtA
-X-Google-Smtp-Source: ABdhPJyhmOxjYABwFXVuB/sdOK1y3ea0X8uCodi46W0+sHCqZF1fF2n2DiFaKEB3fjEHxcO1Dfqi0Cr4unV5Lq/qN3OsEE2nxa0X
+        Mon, 14 Mar 2022 00:54:10 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4358BDFF6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:53:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647233581; x=1678769581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bDcfuJ4fQYIg26RqU/vjViaReE8o3gL8fjB6ap8civ0=;
+  b=HLXbVofsXFSthwvCw3NEnYAHH3sa1LCE1avEpv2GQ1676PkRvcXSk+h7
+   l69Imf3cQAXQ4Zb2RlwMi86WieBh7cWPqglv6WGOw/wgWRLvuGiHAa0Aq
+   WCoRKiGpkA3KmvqpHM2z6sf+HXwr0ENhaHT3J28aHluvZ1BD+Jv7ESWKc
+   pOsk9QGu8go6uOg3JQO3B9kw7x8O15whC2iJT+w+DXvWjdTj2NHlsxKWu
+   pFModdsW+z4vSc/Zgc3zPSTIcHYvfzmSfHM0otBUCtI2H5hHiK8MvTAVS
+   dpHXtua61j6sArQ4fsKNRtJWoYAEPTfQiWf/WBrBZbxFyjCJqt7krE8Ka
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253493978"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="253493978"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 21:53:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="515266932"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 21:52:59 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTchW-0009aV-J4; Mon, 14 Mar 2022 04:52:58 +0000
+Date:   Mon, 14 Mar 2022 12:52:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     tien.sung.ang@intel.com, Dinh Nguyen <dinguyen@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ang Tien Sung <tien.sung.ang@intel.com>
+Subject: Re: [PATCH 3/3] firmware: stratix10-svc: add new FCS commands
+Message-ID: <202203141217.H2LzQEuO-lkp@intel.com>
+References: <20220314102807.1746893-1-tien.sung.ang@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:fd0c:0:b0:645:d261:ba25 with SMTP id
- c12-20020a6bfd0c000000b00645d261ba25mr18103925ioi.124.1647233118924; Sun, 13
- Mar 2022 21:45:18 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 21:45:18 -0700
-In-Reply-To: <00000000000099c4ca05da07e42f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ea753505da2658d5@google.com>
-Subject: Re: [syzbot] possible deadlock in blkdev_put (3)
-From:   syzbot <syzbot+6479585dfd4dedd3f7e1@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, hch@lst.de, jack@suse.cz,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        penguin-kernel@I-love.SAKURA.ne.jp, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314102807.1746893-1-tien.sung.ang@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,209 +64,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    f0e18b03fcaf Merge tag 'x86_urgent_for_v5.17_rc8' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1547fb03700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
-dashboard link: https://syzkaller.appspot.com/bug?extid=6479585dfd4dedd3f7e1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1704bd29700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f78d41700000
+Thank you for the patch! Perhaps something to improve:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6479585dfd4dedd3f7e1@syzkaller.appspotmail.com
+[auto build test WARNING on linux/master]
+[also build test WARNING on linus/master v5.17-rc8]
+[cannot apply to next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.17.0-rc7-syzkaller-00241-gf0e18b03fcaf #0 Not tainted
-------------------------------------------------------
-udevd/3652 is trying to acquire lock:
-ffff888018c7a938 ((wq_completion)loop0){+.+.}-{0:0}, at: flush_workqueue+0xe1/0x13a0 kernel/workqueue.c:2824
+url:    https://github.com/0day-ci/linux/commits/tien-sung-ang-intel-com/firmware-stratix10-svc-Add-new-FCS-support/20220314-102938
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: h8300-allyesconfig (https://download.01.org/0day-ci/archive/20220314/202203141217.H2LzQEuO-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/21427534c2a95b30f967d178ee997d8ca94b34e6
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review tien-sung-ang-intel-com/firmware-stratix10-svc-Add-new-FCS-support/20220314-102938
+        git checkout 21427534c2a95b30f967d178ee997d8ca94b34e6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
 
-but task is already holding lock:
-ffff88801a0fa918 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0x99/0x950 block/bdev.c:902
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-which lock already depends on the new lock.
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/mfd/altera-sysmgr.h:13,
+                    from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
+   include/linux/firmware/intel/stratix10-smc.h:406:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'INTEL_SIP_SMC_SERVICE_COMPLETED'
+     406 |  * Request INTEL_SIP_SMC_SERVICE_COMPLETED
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/firmware/intel/stratix10-smc.h:406:12: error: unknown type name 'INTEL_SIP_SMC_SERVICE_COMPLETED'
+   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
+>> include/linux/mfd/altera-sysmgr.h:22:45: warning: 'struct device_node' declared inside parameter list will not be visible outside of this definition or declaration
+      22 | altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
+         |                                             ^~~~~~~~~~~
+   In file included from include/linux/err.h:5,
+                    from include/linux/mfd/altera-sysmgr.h:11,
+                    from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
+   include/linux/scatterlist.h: In function 'sg_set_buf':
+   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
+     160 |         BUG_ON(!virt_addr_valid(buf));
+         |         ^~~~~~
+   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
+     160 |         BUG_ON(!virt_addr_valid(buf));
+         |                 ^~~~~~~~~~~~~~~
+   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c: In function 'socfpga_dwmac_parse_data':
+   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:113:54: error: passing argument 1 of 'altr_sysmgr_regmap_lookup_by_phandle' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     113 |                 altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
+         |                                                      ^~
+         |                                                      |
+         |                                                      struct device_node *
+   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
+   include/linux/mfd/altera-sysmgr.h:22:58: note: expected 'struct device_node *' but argument is of type 'struct device_node *'
+      22 | altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
+         |                                      ~~~~~~~~~~~~~~~~~~~~^~
+   cc1: some warnings being treated as errors
 
 
-the existing dependency chain (in reverse order) is:
+vim +22 include/linux/mfd/altera-sysmgr.h
 
--> #6 (&disk->open_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       blkdev_get_by_dev.part.0+0x40e/0xc70 block/bdev.c:804
-       blkdev_get_by_dev+0x6b/0x80 block/bdev.c:847
-       swsusp_check+0x97/0x420 kernel/power/swap.c:1526
-       software_resume.part.0+0x102/0x1f0 kernel/power/hibernate.c:979
-       software_resume kernel/power/hibernate.c:86 [inline]
-       resume_store+0x161/0x190 kernel/power/hibernate.c:1181
-       kobj_attr_store+0x50/0x80 lib/kobject.c:856
-       sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
-       kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:296
-       call_write_iter include/linux/fs.h:2074 [inline]
-       new_sync_write+0x431/0x660 fs/read_write.c:503
-       vfs_write+0x7cd/0xae0 fs/read_write.c:590
-       ksys_write+0x12d/0x250 fs/read_write.c:643
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
+f36e789a1f8d0b Thor Thayer 2019-03-11  10  
+f36e789a1f8d0b Thor Thayer 2019-03-11  11  #include <linux/err.h>
+f36e789a1f8d0b Thor Thayer 2019-03-11  12  #include <linux/errno.h>
+f36e789a1f8d0b Thor Thayer 2019-03-11 @13  #include <linux/firmware/intel/stratix10-smc.h>
+f36e789a1f8d0b Thor Thayer 2019-03-11  14  
+f36e789a1f8d0b Thor Thayer 2019-03-11  15  struct device_node;
+f36e789a1f8d0b Thor Thayer 2019-03-11  16  
+f36e789a1f8d0b Thor Thayer 2019-03-11  17  #ifdef CONFIG_MFD_ALTERA_SYSMGR
+f36e789a1f8d0b Thor Thayer 2019-03-11  18  struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
+f36e789a1f8d0b Thor Thayer 2019-03-11  19  						    const char *property);
+f36e789a1f8d0b Thor Thayer 2019-03-11  20  #else
+f36e789a1f8d0b Thor Thayer 2019-03-11  21  static inline struct regmap *
+f36e789a1f8d0b Thor Thayer 2019-03-11 @22  altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
+f36e789a1f8d0b Thor Thayer 2019-03-11  23  				     const char *property)
+f36e789a1f8d0b Thor Thayer 2019-03-11  24  {
+f36e789a1f8d0b Thor Thayer 2019-03-11  25  	return ERR_PTR(-ENOTSUPP);
+f36e789a1f8d0b Thor Thayer 2019-03-11  26  }
+f36e789a1f8d0b Thor Thayer 2019-03-11  27  #endif
+f36e789a1f8d0b Thor Thayer 2019-03-11  28  
 
--> #5 (system_transition_mutex/1){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       software_resume.part.0+0x19/0x1f0 kernel/power/hibernate.c:934
-       software_resume kernel/power/hibernate.c:86 [inline]
-       resume_store+0x161/0x190 kernel/power/hibernate.c:1181
-       kobj_attr_store+0x50/0x80 lib/kobject.c:856
-       sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
-       kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:296
-       call_write_iter include/linux/fs.h:2074 [inline]
-       new_sync_write+0x431/0x660 fs/read_write.c:503
-       vfs_write+0x7cd/0xae0 fs/read_write.c:590
-       ksys_write+0x12d/0x250 fs/read_write.c:643
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #4 (&of->mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       kernfs_seq_start+0x47/0x470 fs/kernfs/file.c:112
-       seq_read_iter+0x2c6/0x1280 fs/seq_file.c:225
-       kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241
-       call_read_iter include/linux/fs.h:2068 [inline]
-       new_sync_read+0x429/0x6e0 fs/read_write.c:400
-       vfs_read+0x35c/0x600 fs/read_write.c:481
-       ksys_read+0x12d/0x250 fs/read_write.c:619
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #3 (&p->lock){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       seq_read_iter+0xdf/0x1280 fs/seq_file.c:182
-       call_read_iter include/linux/fs.h:2068 [inline]
-       generic_file_splice_read+0x45b/0x6d0 fs/splice.c:311
-       do_splice_to+0x1bf/0x250 fs/splice.c:796
-       splice_direct_to_actor+0x2c2/0x8c0 fs/splice.c:870
-       do_splice_direct+0x1b3/0x280 fs/splice.c:979
-       do_sendfile+0xaf2/0x1250 fs/read_write.c:1245
-       __do_sys_sendfile64 fs/read_write.c:1310 [inline]
-       __se_sys_sendfile64 fs/read_write.c:1296 [inline]
-       __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1296
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #2 (sb_writers#3){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1722 [inline]
-       sb_start_write include/linux/fs.h:1792 [inline]
-       file_start_write include/linux/fs.h:2937 [inline]
-       lo_write_bvec drivers/block/loop.c:243 [inline]
-       lo_write_simple drivers/block/loop.c:266 [inline]
-       do_req_filebacked drivers/block/loop.c:495 [inline]
-       loop_handle_cmd drivers/block/loop.c:1852 [inline]
-       loop_process_work+0x1499/0x1db0 drivers/block/loop.c:1892
-       process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
-       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-       kthread+0x2e9/0x3a0 kernel/kthread.c:377
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #1 ((work_completion)(&lo->rootcg_work)){+.+.}-{0:0}:
-       process_one_work+0x91b/0x1650 kernel/workqueue.c:2283
-       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-       kthread+0x2e9/0x3a0 kernel/kthread.c:377
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #0 ((wq_completion)loop0){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3063 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3186 [inline]
-       validate_chain kernel/locking/lockdep.c:3801 [inline]
-       __lock_acquire+0x2ad4/0x56c0 kernel/locking/lockdep.c:5027
-       lock_acquire kernel/locking/lockdep.c:5639 [inline]
-       lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
-       flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
-       drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2992
-       destroy_workqueue+0x71/0x800 kernel/workqueue.c:4429
-       __loop_clr_fd+0x1ab/0xe20 drivers/block/loop.c:1124
-       lo_release+0x1ac/0x1f0 drivers/block/loop.c:1756
-       blkdev_put_whole block/bdev.c:689 [inline]
-       blkdev_put+0x2de/0x950 block/bdev.c:944
-       blkdev_close+0x6a/0x80 block/fops.c:517
-       __fput+0x286/0x9f0 fs/file_table.c:317
-       task_work_run+0xdd/0x1a0 kernel/task_work.c:164
-       tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-       exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
-       exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
-       syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
-       do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-other info that might help us debug this:
-
-Chain exists of:
-  (wq_completion)loop0 --> system_transition_mutex/1 --> &disk->open_mutex
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&disk->open_mutex);
-                               lock(system_transition_mutex/1);
-                               lock(&disk->open_mutex);
-  lock((wq_completion)loop0);
-
- *** DEADLOCK ***
-
-1 lock held by udevd/3652:
- #0: ffff88801a0fa918 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_put+0x99/0x950 block/bdev.c:902
-
-stack backtrace:
-CPU: 0 PID: 3652 Comm: udevd Not tainted 5.17.0-rc7-syzkaller-00241-gf0e18b03fcaf #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2143
- check_prev_add kernel/locking/lockdep.c:3063 [inline]
- check_prevs_add kernel/locking/lockdep.c:3186 [inline]
- validate_chain kernel/locking/lockdep.c:3801 [inline]
- __lock_acquire+0x2ad4/0x56c0 kernel/locking/lockdep.c:5027
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
- drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2992
- destroy_workqueue+0x71/0x800 kernel/workqueue.c:4429
- __loop_clr_fd+0x1ab/0xe20 drivers/block/loop.c:1124
- lo_release+0x1ac/0x1f0 drivers/block/loop.c:1756
- blkdev_put_whole block/bdev.c:689 [inline]
- blkdev_put+0x2de/0x950 block/bdev.c:944
- blkdev_close+0x6a/0x80 block/fops.c:517
- __fput+0x286/0x9f0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- tracehook_notify_resume include/linux/tracehook.h:188 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
- exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f0ca7b90fc3
-Code: 48 ff ff ff b8 ff ff ff ff e9 3e ff ff ff 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
-RSP: 002b:00007ffcf6cd76d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007f0ca7a396a8 RCX: 00007f0ca7b90fc3
-RDX: 000000000000001c RSI: 00007ffcf6cd6ed8 RDI: 0000000000000008
-RBP: 0000564a5512feb0 R08: 0000000000000007 R09: 0000564a55126a00
-R10: 0000000002423870 R11: 0000000000000246 R12: 0000000000000002
-R13: 0000564a55116f80 R14: 0000000000000008 R15: 0000564a550e82c0
- </TASK>
-I/O error, dev loop0, sector 0 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
-I/O error, dev loop0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-Buffer I/O error on dev loop0, logical block 0, async page read
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

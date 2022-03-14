@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BA54D88A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345FF4D88BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242806AbiCNP6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S242882AbiCNQDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiCNP6T (ORCPT
+        with ESMTP id S236530AbiCNQDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:58:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC19403E5;
-        Mon, 14 Mar 2022 08:57:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA40C61307;
-        Mon, 14 Mar 2022 15:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AAA1C340E9;
-        Mon, 14 Mar 2022 15:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647273427;
-        bh=/rB6touVORwKOdNua1VLyFTBI38m6etM0LeyJRkf28I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lbnAbiB+xjtDfrTmBLaXAYV0gtMZi9Op4qc2ltgm1cEv8n6G4KIxXomoqHSWaULAO
-         LjQIGlmHSernXc6PVtJmbUXfB7KeqA2jtNkS0fBMvDGPDNJZPKRvScjuqunoa5V0tx
-         EBpQfls3GUeL8A4qVU/c7CtWOQOqudfnrrF3qM1zc7qHZ/IVRayFbKZNVkf623qzHX
-         OmbIIALwcruJM1jt8LpHEdV/chD2JR9rinCrpDaNuK1XcLXOASi9kq5DssTAsvu0jr
-         tT97BeNNgh7Rzrmc+PlBkUBQ2rSgc4iZQ8+ezp6HZMGJvb6iGa9rUSgn+zuUC1PPdW
-         a90I4ankoPeSw==
-Date:   Mon, 14 Mar 2022 08:57:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Fabien Parent <fparent@baylibre.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: Re: [PATCH net-next v2 9/9] net: ethernet: mtk-star-emac: separate
- tx/rx handling with two NAPIs
-Message-ID: <20220314085705.32033308@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <2d0ab5290e63069f310987a4423ef2a46f02f1b3.camel@mediatek.com>
-References: <20220127015857.9868-1-biao.huang@mediatek.com>
-        <20220127015857.9868-10-biao.huang@mediatek.com>
-        <20220127194338.01722b3c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <2bdb6c9b5ec90b6c606b7db8c13f8acb34910b36.camel@mediatek.com>
-        <20220128074454.46d0ca29@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <2d0ab5290e63069f310987a4423ef2a46f02f1b3.camel@mediatek.com>
+        Mon, 14 Mar 2022 12:03:23 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D520E45ACD;
+        Mon, 14 Mar 2022 09:02:13 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id r12so13931219pla.1;
+        Mon, 14 Mar 2022 09:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PcvQcPN5XoKvKQxrvFmbQntxTbKqV4dSuPUsUyk1/VU=;
+        b=loHgcdmDNyqZUA5/3x9feCiH8Ec3JeAmEtwKAF4HAFZent55/QExx9FK4FQT5X6JzT
+         aPkeG6j9eH4bffZpllzupw/Nmg/nn37qeBADEp8Ui+lQFAmxYzCvxKMfXdwJ8Y4+Gq8k
+         +0w2MS9lw56fRluUZSEJgViVv0K5Hh7OUxGZw8eKTey0GtnfS9z8SWjHQlzf2MN7c1Hr
+         U6HWPOjQyyeusLHpfroC98VTMgYFd5T6MC5QB9dGdfU6b3O0rac0BBis0IUT2hW7a18x
+         Lwav9aZHiJtVhLBwmvbv3zpLWN/WToQnHmBnotVOlAkfiIB4Q5+obxj9M10/IIVpUA2a
+         CPnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PcvQcPN5XoKvKQxrvFmbQntxTbKqV4dSuPUsUyk1/VU=;
+        b=D/YN3Bj7N4A0r2xZDtl17bx5nlKZcR+UoMtJhE7K6SjxqAyoc0Wt5ZUbIIokbqYf0h
+         3/BIMXucG6I5l4LIB+tKnluXDB9arxkReXzEBga/y3fud08m4zyanWYzPsHJuMLOSlVm
+         1XoyPwN1dHSQaaBzD7jPHmBa6aURCkz8hm9m6f/Usgx6361Mc+iuh5kgm3GJ1vGBO+9I
+         9oxvBFvf46prcGBdGEbiItxiHPvT+7czOYtCYar+pbmJtD0MT/whiKR54wKxFbxoUVXa
+         O+rmSccWJkFXyJaq0tFCrpAN1CW0Yb15FhpsgNeEOPTv3fZ6alpNbsp7vSjNFevyHRG8
+         8Q6g==
+X-Gm-Message-State: AOAM532jyW9SZLP2R3m9LW0LXsmIYyd3iWGZQ91JZ7qmXayaAk89dAIC
+        G5L0AKcaqvDNCjboeXf/Guk=
+X-Google-Smtp-Source: ABdhPJwjdy4jTXNMl0tz+SzVz6fwoQH5DqEth/4JnvhoImqAipGstlKJCFk9sLUX4ZHW10XUeilIYw==
+X-Received: by 2002:a17:90a:178f:b0:1bf:5f5a:728 with SMTP id q15-20020a17090a178f00b001bf5f5a0728mr26399573pja.171.1647273733246;
+        Mon, 14 Mar 2022 09:02:13 -0700 (PDT)
+Received: from localhost.localdomain (2001-b011-20e0-3483-4350-64e3-9d63-74cc.dynamic-ip6.hinet.net. [2001:b011:20e0:3483:4350:64e3:9d63:74cc])
+        by smtp.googlemail.com with ESMTPSA id x15-20020a056a00188f00b004f7675962d5sm19022584pfh.175.2022.03.14.09.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 09:02:12 -0700 (PDT)
+From:   Chin En Lin <shiyn.lin@gmail.com>
+To:     corbet@lwn.net
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Chin En Lin <shiyn.lin@gmail.com>
+Subject: [PATCH] Documentation: x86: Fix obsolete name of page fault handler
+Date:   Mon, 14 Mar 2022 23:59:01 +0800
+Message-Id: <20220314155901.227257-1-shiyn.lin@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 15:01:23 +0800 Biao Huang wrote:
-> > Drivers are expected to stop their queues at the end of xmit routine
-> > if
-> > the ring can't accommodate another frame. It's more efficient to stop
-> > the queues early than have to put skbs already dequeued from the
-> > qdisc
-> > layer back into the qdiscs.  
-> Yes, if descriptors ring is full, it's meaningful to stop the queue 
-> at the end of xmit; 
-> But driver seems hard to know how many descriptors the next skb will
-> request, e.g. 3 descriptors are available for next round send, but the
-> next skb may need 4 descriptors, in this case, we still need judge
-> whether descriptors are enough for skb transmission, then decide stop
-> the queue or not, at the beginning of xmit routine.
-> 
-> Maybe we should judge ring is full or not at the beginning and the end
-> of xmit routine(seems a little redundancy).
+Since commit 91eeafea1e4b ("x86/entry: Switch page fault
+exception to IDTENTRY_RAW"), the function name of page
+fault handler is out of date. This patch change
+do_page_fault() to exc_page_fault().
 
-Assume the worst case scenario. You set the default ring size to 512,
-skb can have at most MAX_SKB_FRAGS fragments (usually 17) so the max
-number of descriptors should not be very high, hard to pre-compute,
-or problematic compared to the total ring size.
+Signed-off-by: Chin En Lin <shiyn.lin@gmail.com>
+---
+ Documentation/x86/exception-tables.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/x86/exception-tables.rst b/Documentation/x86/exception-tables.rst
+index de58110c5ffd..0140a06b2705 100644
+--- a/Documentation/x86/exception-tables.rst
++++ b/Documentation/x86/exception-tables.rst
+@@ -32,14 +32,14 @@ Whenever the kernel tries to access an address that is currently not
+ accessible, the CPU generates a page fault exception and calls the
+ page fault handler::
+ 
+-  void do_page_fault(struct pt_regs *regs, unsigned long error_code)
++  void exc_page_fault(struct pt_regs *regs, unsigned long error_code)
+ 
+ in arch/x86/mm/fault.c. The parameters on the stack are set up by
+ the low level assembly glue in arch/x86/entry/entry_32.S. The parameter
+ regs is a pointer to the saved registers on the stack, error_code
+ contains a reason code for the exception.
+ 
+-do_page_fault first obtains the unaccessible address from the CPU
++exc_page_fault first obtains the unaccessible address from the CPU
+ control register CR2. If the address is within the virtual address
+ space of the process, the fault probably occurred, because the page
+ was not swapped in, write protected or something similar. However,
+@@ -281,12 +281,12 @@ vma occurs?
+ 
+     > c017e7a5 <do_con_write+e1> movb   (%ebx),%dl
+ #. MMU generates exception
+-#. CPU calls do_page_fault
++#. CPU calls exc_page_fault
+ #. do page fault calls search_exception_table (regs->eip == c017e7a5);
+ #. search_exception_table looks up the address c017e7a5 in the
+    exception table (i.e. the contents of the ELF section __ex_table)
+    and returns the address of the associated fault handle code c0199ff5.
+-#. do_page_fault modifies its own return address to point to the fault
++#. exc_page_fault modifies its own return address to point to the fault
+    handle code and returns.
+ #. execution continues in the fault handling code.
+ #. a) EAX becomes -EFAULT (== -14)
+-- 
+2.25.1
+

@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96A34D8E5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F54C4D8E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245141AbiCNUkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S236347AbiCNUnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245110AbiCNUka (ORCPT
+        with ESMTP id S236259AbiCNUmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:40:30 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE443AA79
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:39:19 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id v13so13361076qkv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:39:19 -0700 (PDT)
+        Mon, 14 Mar 2022 16:42:51 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0457433E97;
+        Mon, 14 Mar 2022 13:41:41 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a5so16045480pfv.2;
+        Mon, 14 Mar 2022 13:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NrEmpomOHclDV+kQuj0wjvwONyoQAm3AKPhEX1ax17s=;
-        b=H5jqZD+ybOPj9jvOGT1khK8EOCXznxHjM7UW3eRCvg1JuQYYgw/3R+pQmi8EHWtWzc
-         4KI9pDN1Ghpgzgglw9kOBN+tyh9VPInf28WNsFo9MJkp6FZEh4EV90UWqAixUqe5AnMZ
-         1+v+ds82XgLi03xfOBbcZP9UOu/4sComMDe2Bg46lqGZvcETO8YitlTCtzcPbdFDhbQb
-         J+q0GWqnlKQ8IlgA1niXGO2RItdxbWCu0XlAs0qWE1Eyg6hJSj61YiRQrW65+heH/PJp
-         N6QGyveZbHaXwuxcQUa2jHIsF+4n5IsjQo/Rx8DlP92qM3JzpfdBFx/ecoLTWvDYPUH+
-         zAgA==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dMQU9SMKR/lWX9t7ZKrdc0ixf/awYY/e1sBD6vIkKPI=;
+        b=RrxHYKMJBnyETq0qfUtJd1iGBLZXpi7mjMJFEVIjz11p6q7xjGkQSY/3iLk2WZMasM
+         x6fp47eS7duSMT81i4O+nfNKXkZbpkCBpzbOY3d5w3C4krYwww86shhuA/QzhDJrvFO0
+         lvJXrhQhnqoxiq/J4nZXspxAzMDT2XdWMwluYz10w9pQIlDB7Thpd6aNvzUkBNRRcgMw
+         z2AnC5JRv20+GCgX4GbusF7eF2MuuEBBWy7JY4ubO9gBhDJaESYPgAMyJ/BXCKZjziF7
+         eHLr8ucXJ6+HWfMgvHLv5Z5JhVi8iAYcg+EsBRFaGvdXwvcbvhRgOa4Bz5rsTcXNs+/G
+         6g9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NrEmpomOHclDV+kQuj0wjvwONyoQAm3AKPhEX1ax17s=;
-        b=D9Mm0khBdc6brnON8wT+Itl2JVg7xBu4fS033KHMEEq4Bmb3wAoiRZQ+LSqH6yLEEU
-         WlMmaOJ+RBuXr8WoU6Kc9cpvH6uHOfDVrvs21MVARqu0OM4XASq2uuQnCOnJ59Bb8TkV
-         kRh84sGRoQXuO8Jbq1oE6E33JSH+xM1njLxdDT66o9vhTCSqX0aPSV/gT7LeZ/l92GUo
-         19nipNyO4xVT9Qc8YuXTC/+PD82zhINptOSBitXhp+sSk46Ri7uOKAAP2QuGBBwuLoGb
-         ngWvUrOk1cdETSsD1nYcz28GZm9OjX/rtexYpATZjAqTa3T4J/3nvoL8MnWCtTJm7Q+C
-         NfWg==
-X-Gm-Message-State: AOAM530lx26qwMJGeFe6AVn2FvqPaQxHpe3qiglI/rGAiXW8EfuWTmG3
-        zQsWcGsdtf0eaAzMjDqXxIoTByqECo8Qlw==
-X-Google-Smtp-Source: ABdhPJwVXuvZmuG1IiPfArhVLDTUd60rYoPE5F9UgA8JVB+HYCUAnjh6XvDRJvRl58UiYBwc2HxQgw==
-X-Received: by 2002:a05:620a:28c4:b0:67d:c400:a9d7 with SMTP id l4-20020a05620a28c400b0067dc400a9d7mr5186069qkp.369.1647290357916;
-        Mon, 14 Mar 2022 13:39:17 -0700 (PDT)
-Received: from rivos-atish.ba.rivosinc.com (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id j188-20020a3755c5000000b0067d1c76a09fsm8597023qkb.74.2022.03.14.13.39.15
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=dMQU9SMKR/lWX9t7ZKrdc0ixf/awYY/e1sBD6vIkKPI=;
+        b=bEsSwOv5KCXl+AX+xjLcnCWzdohlTQHkh/DGaQt/nNWB8THigQRc89OAMcEcW0bv9F
+         hiDiz2OtOWYXOfSQVSDgldlb9STeEZB6gWYk58NJBlSZHU6z5WF5omw4b4iK/iXpixww
+         uzgviNLMq/0ct9bDSXUdEWr9xQmEM+VP6v+8Wu+AYgCCitQaWq9eq7OOmB2iVVf61vgA
+         wsYzh15SSXeES9jMur4koASsA3J9e5IBODJ0rAoQ5FCDYgaqMJ++Q44pR2sEinni4Ofa
+         nmwtWZ5yDCKf6FYoq7ng63V13M078XZIDSdl251w+7GOp7LbsRfeSWEgvdtVJrb4psaz
+         eKGQ==
+X-Gm-Message-State: AOAM533CHfKFTgeUNiTXMJuZZ+eeenZ+Im2K5ITsDv4tnKlAI3XWg3WU
+        JBSRXonqQM8DmyAkGdat4FY=
+X-Google-Smtp-Source: ABdhPJx3MBfRuN5zDbXZ+FLahPq7ftjfuDQAvsx25iJ5KKvDXeil8IvDJMbAZNuRbVSLLAVRY+z0sw==
+X-Received: by 2002:a65:670a:0:b0:37f:f344:76c1 with SMTP id u10-20020a65670a000000b0037ff34476c1mr21557392pgf.204.1647290500367;
+        Mon, 14 Mar 2022 13:41:40 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id na8-20020a17090b4c0800b001bf191ee347sm352677pjb.27.2022.03.14.13.41.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 13:39:17 -0700 (PDT)
-From:   Atish Patra <atishp@rivosinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v6 6/6] RISC-V: Improve /proc/cpuinfo output for ISA extensions
-Date:   Mon, 14 Mar 2022 13:38:45 -0700
-Message-Id: <20220314203845.832648-7-atishp@rivosinc.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220314203845.832648-1-atishp@rivosinc.com>
-References: <20220314203845.832648-1-atishp@rivosinc.com>
+        Mon, 14 Mar 2022 13:41:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 14 Mar 2022 10:41:38 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
+Subject: Re: [PATCH block-5.17] block: don't merge across cgroup boundaries
+ if iocost or iolatency is active
+Message-ID: <Yi+ogt9ahz3yr9RE@slm.duckdns.org>
+References: <Yi71WZ3O9/YViHSb@slm.duckdns.org>
+ <107965ce-a29a-b5f4-ef87-63b753380891@kernel.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <107965ce-a29a-b5f4-ef87-63b753380891@kernel.dk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,127 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the /proc/cpuinfo outputs the entire riscv,isa string which
-is not ideal when we have multiple ISA extensions present in the ISA
-string. Some of them may not be enabled in kernel as well.
-Same goes for the single letter extensions as well which prints the
-entire ISA string. Some of they may not be valid ISA extensions as
-well (e.g 'su')
+On Mon, Mar 14, 2022 at 02:12:34PM -0600, Jens Axboe wrote:
+> > * Add WARN_ON_ONCE() on blkg mismatch in ioc_rqos_merge() so that we can
+> >   easily notice similar failures in the future.
+> > 
+> > * Make sure iocost enable/disable transitions only happen when iocost is
+> >   actually enabled / disabled.
+> 
+> Is there really no better way to do this than add a lot of expensive
+> checks to the fast path?
+> 
+> Even just inverting the checks so that
+> 
+> if (req->bio->bi_blkg != bio->bi_blkg)
+> 	...
+> 
+> is checked first would seem a lot saner.
+> 
+> In any case, since this isn't a new regression, I'd feel a lot better
+> deferring it to 5.18.
 
-Parse only the valid & enabled ISA extension and print them.
+As discussed, the only risk of removing the disable/enable switch and always
+testing is ruining some merges for cases where blkcg is enabled but no
+control is applied, which shouldn't be a big problem. I'll redo the patch.
 
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/include/asm/hwcap.h |  7 ++++
- arch/riscv/kernel/cpu.c        | 65 ++++++++++++++++++++++++++++++++--
- 2 files changed, 70 insertions(+), 2 deletions(-)
+Thanks.
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 170bd80da520..691fc9c8099b 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -54,6 +54,13 @@ enum riscv_isa_ext_id {
- 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
- };
- 
-+struct riscv_isa_ext_data {
-+	/* Name of the extension displayed to userspace via /proc/cpuinfo */
-+	char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-+	/* The logical ISA extension ID */
-+	unsigned int isa_ext_id;
-+};
-+
- unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
- 
- #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index ad0a7e9f828b..fc115e307ef5 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -6,6 +6,7 @@
- #include <linux/init.h>
- #include <linux/seq_file.h>
- #include <linux/of.h>
-+#include <asm/hwcap.h>
- #include <asm/smp.h>
- #include <asm/pgtable.h>
- 
-@@ -63,12 +64,72 @@ int riscv_of_parent_hartid(struct device_node *node)
- }
- 
- #ifdef CONFIG_PROC_FS
-+#define __RISCV_ISA_EXT_DATA(UPROP, EXTID) \
-+	{							\
-+		.uprop = #UPROP,				\
-+		.isa_ext_id = EXTID,				\
-+	}
-+/**
-+ * Here are the ordering rules of extension naming defined by RISC-V
-+ * specification :
-+ * 1. All extensions should be separated from other multi-letter extensions
-+ *    from other multi-letter extensions by an underscore.
-+ * 2. The first letter following the 'Z' conventionally indicates the most
-+ *    closely related alphabetical extension category, IMAFDQLCBKJTPVH.
-+ *    If multiple 'Z' extensions are named, they should be ordered first
-+ *    by category, then alphabetically within a category.
-+ * 3. Standard supervisor-level extensions (starts with 'S') should be
-+ *    listed after standard unprivileged extensions.  If multiple
-+ *    supervisor-level extensions are listed, they should be ordered
-+ *    alphabetically.
-+ * 4. Non-standard extensions (starts with 'X') must be listed after all
-+ *    standard extensions. They must be separated from other multi-letter
-+ *    extensions by an underscore.
-+ */
-+static struct riscv_isa_ext_data isa_ext_arr[] = {
-+	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
-+};
-+
-+static void print_isa_ext(struct seq_file *f)
-+{
-+	struct riscv_isa_ext_data *edata;
-+	int i = 0, arr_sz;
-+
-+	arr_sz = ARRAY_SIZE(isa_ext_arr) - 1;
-+
-+	/* No extension support available */
-+	if (arr_sz <= 0)
-+		return;
-+
-+	for (i = 0; i <= arr_sz; i++) {
-+		edata = &isa_ext_arr[i];
-+		if (!__riscv_isa_extension_available(NULL, edata->isa_ext_id))
-+			continue;
-+		seq_printf(f, "_%s", edata->uprop);
-+	}
-+}
-+
-+/**
-+ * These are the only valid base (single letter) ISA extensions as per the spec.
-+ * It also specifies the canonical order in which it appears in the spec.
-+ * Some of the extension may just be a place holder for now (B, K, P, J).
-+ * This should be updated once corresponding extensions are ratified.
-+ */
-+static const char base_riscv_exts[13] = "imafdqcbkjpvh";
- 
- static void print_isa(struct seq_file *f, const char *isa)
- {
--	/* Print the entire ISA as it is */
-+	int i;
-+
- 	seq_puts(f, "isa\t\t: ");
--	seq_write(f, isa, strlen(isa));
-+	/* Print the rv[64/32] part */
-+	seq_write(f, isa, 4);
-+	for (i = 0; i < sizeof(base_riscv_exts); i++) {
-+		if (__riscv_isa_extension_available(NULL, base_riscv_exts[i] - 'a'))
-+			/* Print only enabled the base ISA extensions */
-+			seq_write(f, &base_riscv_exts[i], 1);
-+	}
-+	print_isa_ext(f);
- 	seq_puts(f, "\n");
- }
- 
 -- 
-2.30.2
-
+tejun

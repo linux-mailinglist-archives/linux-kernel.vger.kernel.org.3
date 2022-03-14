@@ -2,182 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6228C4D8B1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838214D8B1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243477AbiCNRwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S243483AbiCNRxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242506AbiCNRwc (ORCPT
+        with ESMTP id S232787AbiCNRxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:52:32 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF1B13F28;
-        Mon, 14 Mar 2022 10:51:21 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m12so20993647edc.12;
-        Mon, 14 Mar 2022 10:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K+QzBYfwm0KBPQGCnXunte5ZDjBtvy4RzhVp5w57kMg=;
-        b=M/RgnQtyHwMeBGs6ZTShnPjz0GwpDCtlAk8qLTaCj3CBf3lqkVGgBUfYjW/5rnhj6w
-         F471RcppKHuyJOL43RvWaNPZl7vKfBE5xbkh33zJQFVVxpMl0UnALnMEKRtT9a2jQane
-         xuLDh5HN6EvmrSuOlGtT2P6D9vGmaAUDZ92k2//CGuGtpHvYXDGCr9O3UZZP26Zqsr5W
-         BDBd71AkBAPiUW3yMN1A18XYZVyHfXr6Moh/uffalzPzOLEprYuOO8ey879wYry3Y02I
-         y2GHHmCjuMcvX+exgR46gfZQXbxqL5ErW5Ty3h/GDkGt39qm8OPKB021tktb0OiReuUW
-         JC8w==
+        Mon, 14 Mar 2022 13:53:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99ED513F2C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647280331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7PoYm4c24Q3JJh2lpWhFWRFLRzas/0vml62uEAb2M70=;
+        b=QTBDcmY+laqqzEB8NMsN7E/TkbVMeP4ZZwkDx5g/m7b+tjyOe9io8N15v3rj4Y8FUPAPLC
+        gnMtDcQSpt+Bnt0ZiQrB9AaMesJHzp2L9yFIcciTIYgtdpYcYplJlpLsjMRpy6hkNC9yKP
+        oxHdzPan6omJtmVrnrAK4U8jz7Y1b/0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-90-1EdAwJXiNVG2oqTBldw8_Q-1; Mon, 14 Mar 2022 13:52:10 -0400
+X-MC-Unique: 1EdAwJXiNVG2oqTBldw8_Q-1
+Received: by mail-wr1-f70.google.com with SMTP id y13-20020adfee0d000000b001f1fa450a3dso4686033wrn.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:52:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K+QzBYfwm0KBPQGCnXunte5ZDjBtvy4RzhVp5w57kMg=;
-        b=shgZUgy1T5FofVxnlsJQQIzLqvNz3oJcHxX5HKCId666IUcHhaiZ4b79Lm0wfbfPuM
-         Xc++ipHd0po89iANJuNfY0SEOUThjZAM3XU+sBhS11AZDO+ZDiwe5F1udsSCNiQ5uE2I
-         PCVWkZIUTTWc1+WGuwhz0KnRz84vPGBHB+NoCg2lk8znK4PM31+TMZzSiXf7Ww87BmMr
-         LMKA37CSPBDBJEXxv56Q3tUfT7TRJ9iuDpv/PbKPkj/jwEql49hvN1WUfmrzRrE2pBxi
-         DEzLxs7xcNBbSw4uNv+axELmQgzxmc3zjv12xb9ExPw/00nbKIcPeC/EEdhjGfIpRz+z
-         qmcQ==
-X-Gm-Message-State: AOAM532MBaUDRb97lsYvOpEs//tRxAOn96jGu9xBrNH8DvvL7PSOLLJF
-        xz02ZI0ZxmEj0KKBgtJ+oCI=
-X-Google-Smtp-Source: ABdhPJzZ7adnceVULLcpDzwBytwFNDA6cwAaMluqHekt/uFLE4gDihE6mCj1a9IEQdaxfIdH9HHp8Q==
-X-Received: by 2002:a05:6402:5208:b0:416:ce01:f9b5 with SMTP id s8-20020a056402520800b00416ce01f9b5mr16224792edd.275.1647280280357;
-        Mon, 14 Mar 2022 10:51:20 -0700 (PDT)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id z92-20020a509e65000000b00416466dc220sm8414953ede.87.2022.03.14.10.51.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7PoYm4c24Q3JJh2lpWhFWRFLRzas/0vml62uEAb2M70=;
+        b=Vmalxmt+DtF6NYe3pav/fucCeOi8RQpJBgv3ljc+Fh8AvSaHilb9h+kRfGS35AVRhC
+         9YXjPDB/EApvvTUHeMz8/5IJfa2gUOjCs6ozZw1pYwjEfANOHnDDVoNsNPRwj9y6Gfm3
+         7IJbQ9ZBCH8F3ibcjpeCsT6a+yHsZrJzit91s9y1Oj8XW7qpw7bpGEQ8Inr8XARvIgd+
+         JIJq/l8dYcoo0lEaQMJcul7grydEx5LL3c7Lon/vCR1ZGt0+SGOrvCiKHGTRwpJYldB/
+         jBrx3o84Uly58+FMWAgX3T14FLql7Vw3G+rg2SNZhksKg6QqNqvCUjf+e+B01Btrl2O9
+         0TfA==
+X-Gm-Message-State: AOAM532pcePrfPUNMoJ9vM5jp7H7DhSxc2CPmX3r+l3EYWSVVaHe4jD+
+        xc1JVSj286uRsU4CwRuh8k7lF/QqMmcAzRQPa1tvyZvgzyHMoBoMw93HmQWOgy6EIDQDU6Bz86R
+        T6nOu2ntQlObMZkQuEgeLHU4P
+X-Received: by 2002:a05:6000:1448:b0:1f0:6620:968f with SMTP id v8-20020a056000144800b001f06620968fmr17876447wrx.714.1647280329106;
+        Mon, 14 Mar 2022 10:52:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzO7a/vR6ZwBhjanEnZfZRofoAb4xNg0ErWA+say3xs9Cyy4NfYJHlDuNQt8RwO/jauBt0CRw==
+X-Received: by 2002:a05:6000:1448:b0:1f0:6620:968f with SMTP id v8-20020a056000144800b001f06620968fmr17876423wrx.714.1647280328797;
+        Mon, 14 Mar 2022 10:52:08 -0700 (PDT)
+Received: from vian.redhat.com ([2a0c:5a80:3506:3400:69b5:c807:1d52:ff67])
+        by smtp.gmail.com with ESMTPSA id l13-20020a5d4bcd000000b001f0620ecb3csm13678781wrt.40.2022.03.14.10.52.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 10:51:19 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 19:51:18 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v3 net-next 09/14] net: dsa: Validate hardware support
- for MST
-Message-ID: <20220314175118.w4plirtshhzgujn3@skbuf>
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
- <20220314095231.3486931-10-tobias@waldekranz.com>
+        Mon, 14 Mar 2022 10:52:08 -0700 (PDT)
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     feng.tang@intel.com, tglx@linutronix.de
+Cc:     andi.kleen@intel.com, bp@alien8.de, dave.hansen@intel.com,
+        hpa@zytor.com, len.brown@intel.com, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, paulmck@kernel.org, peterz@infradead.org,
+        rui.zhang@intel.com, tim.c.chen@intel.com, x86@kernel.org,
+        mtosatti@redhat.com, nsaenzju@redhat.com, frederic@kernel.org
+Subject: Re: [PATCH v3 1/2] x86/tsc: add a timer to make sure tsc_adjust is always checked
+Date:   Mon, 14 Mar 2022 18:52:07 +0100
+Message-Id: <20220314175207.274870-1-nsaenzju@redhat.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20211117023751.24190-1-feng.tang@intel.com>
+References: <20211117023751.24190-1-feng.tang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314095231.3486931-10-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:52:26AM +0100, Tobias Waldekranz wrote:
-> When joining a bridge where MST is enabled, we validate that the
-> proper offloading support is in place, otherwise we fallback to
-> software bridging.
-> 
-> When then mode is changed on a bridge in which we are members, we
-> refuse the change if offloading is not supported.
-> 
-> At the moment we only check for configurable learning, but this will
-> be further restricted as we support more MST related switchdev events.
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  net/dsa/dsa_priv.h |  2 ++
->  net/dsa/port.c     | 20 ++++++++++++++++++++
->  net/dsa/slave.c    |  6 ++++++
->  3 files changed, 28 insertions(+)
-> 
-> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
-> index f20bdd8ea0a8..2aba420696ef 100644
-> --- a/net/dsa/dsa_priv.h
-> +++ b/net/dsa/dsa_priv.h
-> @@ -234,6 +234,8 @@ int dsa_port_vlan_filtering(struct dsa_port *dp, bool vlan_filtering,
->  			    struct netlink_ext_ack *extack);
->  bool dsa_port_skip_vlan_configuration(struct dsa_port *dp);
->  int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock);
-> +int dsa_port_mst_enable(struct dsa_port *dp, bool on,
-> +			struct netlink_ext_ack *extack);
->  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
->  			bool targeted_match);
->  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
-> diff --git a/net/dsa/port.c b/net/dsa/port.c
-> index 58291df14cdb..1a17a0efa2fa 100644
-> --- a/net/dsa/port.c
-> +++ b/net/dsa/port.c
-> @@ -240,6 +240,10 @@ static int dsa_port_switchdev_sync_attrs(struct dsa_port *dp,
->  	if (err && err != -EOPNOTSUPP)
->  		return err;
->  
-> +	err = dsa_port_mst_enable(dp, br_mst_enabled(br), extack);
-> +	if (err && err != -EOPNOTSUPP)
-> +		return err;
+Hi Feng, Thomas,
 
-The "err && err != -EOPNOTSUPP" scheme is in place for compatibility
-with drivers that don't all support the bridge port attributes, but used
-to work prior to dsa_port_switchdev_sync_attrs()'s existence.
-
-I don't think this scheme is necessary for dsa_port_mst_enable(), you
-can just return -EOPNOTSUPP and remove the special handling for this code.
-
-> +
->  	return 0;
->  }
->  
-> @@ -735,6 +739,22 @@ int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock)
->  	return 0;
->  }
->  
-> +int dsa_port_mst_enable(struct dsa_port *dp, bool on,
-> +			struct netlink_ext_ack *extack)
-> +{
-> +	struct dsa_switch *ds = dp->ds;
-> +
-> +	if (!on)
-> +		return 0;
-> +
-> +	if (!dsa_port_can_configure_learning(dp)) {
-> +		NL_SET_ERR_MSG_MOD(extack, "Hardware does not support MST");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  int dsa_port_pre_bridge_flags(const struct dsa_port *dp,
->  			      struct switchdev_brport_flags flags,
->  			      struct netlink_ext_ack *extack)
-> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-> index a61a7c54af20..333f5702ea4f 100644
-> --- a/net/dsa/slave.c
-> +++ b/net/dsa/slave.c
-> @@ -463,6 +463,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
->  
->  		ret = dsa_port_ageing_time(dp, attr->u.ageing_time);
->  		break;
-> +	case SWITCHDEV_ATTR_ID_BRIDGE_MST:
-> +		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
-> +			return -EOPNOTSUPP;
-> +
-> +		ret = dsa_port_mst_enable(dp, attr->u.mst, extack);
-> +		break;
->  	case SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS:
->  		if (!dsa_port_offloads_bridge_port(dp, attr->orig_dev))
->  			return -EOPNOTSUPP;
-> -- 
-> 2.25.1
+> On Wed, Nov 17, 2021 at 10:37:51AM +0800, Feng Tang wrote:
+> Normally the tsc_sync will get checked every time system enters idle state,
+> but Thomas Gleixner mentioned there is still a caveat that a system won't
+> enter idle [1], either because it's too busy or configured purposely to not
+> enter idle. Setup a periodic timer (every 10 minitues) to make sure the
+> check is always on.
 > 
+> [1]. https://lore.kernel.org/lkml/875z286xtk.fsf@nanos.tec.linutronix.de/
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+
+I can see this timer interrupting my system's nohz_full CPUs. It'd be nice to
+be able to avoid the noise. A solution is using 'tsc=reliable', but IIUC this
+is not what the flag was created for. Any ideas/suggestions?
+
+Regards,
+Nicolas
+

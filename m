@@ -2,173 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF7A4D9096
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EADA4D909D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343741AbiCNXqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 19:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
+        id S1343756AbiCNXug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 19:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239436AbiCNXqx (ORCPT
+        with ESMTP id S242832AbiCNXub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 19:46:53 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072B3E5F1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:45:41 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id hw13so36166508ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mMcKlcLkl25csYGtmWB99GmowZ54MQeoPUbWxxcyFU0=;
-        b=bp+YoIVGfFN/43D3vqHErY1NhIRJApUAhtw6o/hQeIyaDBqIfE66EIhFuNlzouKqsM
-         ICMTNUqtiRAq88ITvYxr1uiF5OmdPGah32szvxsrVE8+TbWCoOGxOG6L25aPWaho7kdy
-         3FU/jNh6QDkaRKObZiMMOkBlD8Aqv99swKSc8YZ9bFy6T0F/mbML6sVVYqbR6qCMVE6H
-         bYhE/ZUbxEYhn6H6a+/VharXFDIBFPo45r3fdwvvEZ51SgbTUi25vilSjvica56rkM6I
-         xTjLcOE3UXJzEYpLAj8t0ISFMLBTpHiYS87O0Yj4+2ZJb/rKhYVFzvJMGee+en585/rw
-         GBaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mMcKlcLkl25csYGtmWB99GmowZ54MQeoPUbWxxcyFU0=;
-        b=2DYJaiznlr468lVJi0UP99ryW0CRBAgcJ8p0/+FKAmgDiD4cD1XQLrC4m+LKn4fbsy
-         dBq2Env84d4rXMaSzaXaRxQ3CwLirK4g6oWGo1JKbRG/SCP94Y7U495tDR925uvxYuWi
-         U0hMc54sV+mNCC2uPwzFMeGrWKFED1N7v6IicTmqOhSTgr2iQV54i3eNX07sgC9ZlTiJ
-         kSvMedkbzp7lSkWVjSqHg61zDYHRlFs3pNwTh57KpQfRAIwDNSVjiT1XPr5XGoTTRkDB
-         DBQqMSKlz0f181ee3k9i8wCZMSGzjUefsHLPb54++vW7z29bO1XDcFOOZf5stEMF9dBu
-         yAng==
-X-Gm-Message-State: AOAM532UUNUmIaWg/VCoFC9JqddWi+AKrJ1JumR4eGPr80Tgm4EnsD0v
-        IU6t2kbaYqyPPbbI0x7TyQLiAOhbLNEUv1xt7tq2uw==
-X-Google-Smtp-Source: ABdhPJzivdKSx3a2ptS01jjlhP74llQ2PdFx6OA83cn+BAtPtg6OtNsv++AhnKe1mUMAW8amvG7lkgIAO9oTvOh6yGc=
-X-Received: by 2002:a17:906:5d08:b0:6da:b4ea:937 with SMTP id
- g8-20020a1709065d0800b006dab4ea0937mr20516098ejt.446.1647301539672; Mon, 14
- Mar 2022 16:45:39 -0700 (PDT)
+        Mon, 14 Mar 2022 19:50:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1612A704
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647301761; x=1678837761;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=7M5knxoOmfrCuDGDv6Hrs47RoFG1XAbST+A6t24ICJ8=;
+  b=QPHlDHFBWZUSG3rlf3zIv8iIDh6rlIm3HCFknMeGqpkvK+sx/o3zK+41
+   s0lSwrXiM54riwcUhEgicOamZ6N2xipu4uV5hQ4FsJm5UzsHHUPmwDWtF
+   4ysCzmM0NGD+2f542TeZjSfWQC0pnf5YWSqfNnIvI5LjogAhBzIkBjFna
+   o2WdfAz9O8OunILc8iIOnAgoRm1UbjVH7zF3TvkeTYytJQ/3rcsPhS/OB
+   bfiOPz/6TbzZnltaQV9xHWoOWa8VHIPlEB6NI6CWyK0dVNNTIZMLz5+hx
+   wbWB1TauLdUEUpw/Fif7oOBPvYIn/Qnldi1CAi1MFNTvmadMDrI7sE301
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243622550"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="243622550"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:49:20 -0700
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="613071356"
+Received: from ssraox-mobl2.amr.corp.intel.com (HELO [10.209.55.169]) ([10.209.55.169])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 16:49:19 -0700
+Message-ID: <42e0aa73-04c8-a4c2-2d64-80812634b627@intel.com>
+Date:   Mon, 14 Mar 2022 16:49:12 -0700
 MIME-Version: 1.0
-References: <20220309165222.2843651-1-tjmercier@google.com>
- <20220309165222.2843651-8-tjmercier@google.com> <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
-In-Reply-To: <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Mon, 14 Mar 2022 16:45:28 -0700
-Message-ID: <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com>
-Subject: Re: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
-To:     Todd Kjos <tkjos@google.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     ira.weiny@intel.com, Dave Hansen <dave.hansen@linux.intel.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220311005742.1060992-1-ira.weiny@intel.com>
+ <20220311005742.1060992-6-ira.weiny@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 5/5] x86/pkeys: Standardize on u8 for pkey type
+In-Reply-To: <20220311005742.1060992-6-ira.weiny@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:33 AM Todd Kjos <tkjos@google.com> wrote:
->
-> On Wed, Mar 9, 2022 at 8:52 AM T.J. Mercier <tjmercier@google.com> wrote:
-> >
-> > The kernel interface should use types that the kernel defines instead o=
-f
-> > pid_t and uid_t, whose definiton is owned by libc. This fixes the heade=
-r
-> > so that it can be included without first including sys/types.h.
-> >
-> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > ---
-> >  include/uapi/linux/android/binder.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/a=
-ndroid/binder.h
-> > index 169fd5069a1a..aa28454dbca3 100644
-> > --- a/include/uapi/linux/android/binder.h
-> > +++ b/include/uapi/linux/android/binder.h
-> > @@ -289,8 +289,8 @@ struct binder_transaction_data {
-> >
-> >         /* General information about the transaction. */
-> >         __u32           flags;
-> > -       pid_t           sender_pid;
-> > -       uid_t           sender_euid;
-> > +       __kernel_pid_t  sender_pid;
-> > +       __kernel_uid_t  sender_euid;
->
-> Are we guaranteed that this does not affect the UAPI at all? Userspace
-> code using this definition will have to run with kernels using the old
-> definition and visa-versa.
+On 3/10/22 16:57, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The number of pkeys supported on x86 and powerpc are much smaller than a
+> u16 value can hold.  It is desirable to standardize on the type for
+> pkeys.  powerpc currently supports the most pkeys at 32.  u8 is plenty
+> large for that.
+> 
+> Standardize on the pkey types by changing u16 to u8.
 
-A standards compliant userspace should be expecting a signed integer
-type here. So the only way I can think userspace would be affected is
-if:
-1) pid_t is a long AND
-2) sizeof(long) > sizeof(int) AND
-3) Consumers of the pid_t definition actually attempt to mutate the
-result to make use of extra bits in the variable (which are not there)
+How widely was this intended to "standardize" things?  Looks like it may
+have missed a few spots.
 
-This seems extremely unlikely. For instance just on the topic of the
-first item, all of the C library implementations with pid_t
-definitions linked here use an int, except for Bionic which typdefs
-pid_t to __kernel_pid_t and Sortix which uses long.
-https://wiki.osdev.org/C_Library
-
-However I would argue this is already broken and should count as a bug
-fix since I can't do this:
-
-$ cat binder_include.c ; gcc binder_include.c
-#include <linux/android/binder.h>
-int main() {}
-In file included from binder_include.c:1:
-/usr/include/linux/android/binder.h:291:9: error: unknown type name =E2=80=
-=98pid_t=E2=80=99
-  291 |         pid_t           sender_pid;
-      |         ^~~~~
-/usr/include/linux/android/binder.h:292:9: error: unknown type name =E2=80=
-=98uid_t=E2=80=99
-  292 |         uid_t           sender_euid;
-      |         ^~~~~
-
-This is also the only occurrence of pid_t in all of
-include/uapi/linux. All 40+ other uses are __kernel_pid_t, and I don't
-see why the binder header should be different.
-
-
->
-> >         binder_size_t   data_size;      /* number of bytes of data */
-> >         binder_size_t   offsets_size;   /* number of bytes of offsets *=
-/
-> >
-> > --
-> > 2.35.1.616.g0bdcbb4464-goog
-> >
+Also if we're worried about the type needing to change or with the wrong
+type being used, I guess we could just to a pkey_t typedef.

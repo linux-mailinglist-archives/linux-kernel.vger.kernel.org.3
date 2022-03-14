@@ -2,70 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127894D8A51
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1593E4D8A53
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240121AbiCNRDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S241708AbiCNRDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236916AbiCNRDD (ORCPT
+        with ESMTP id S242644AbiCNRDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:03:03 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6EE12A97;
-        Mon, 14 Mar 2022 10:01:52 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22EFVXHh028194;
-        Mon, 14 Mar 2022 18:01:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=YovTH/zOWYwVFwm0JXeo0MHy5tDolznWR5TAmhBItbA=;
- b=pA0HzQcS8mjXYHM7coaVwsEP23Kgzym8eh2SXqnxzENUkr610aSHRsS9YdUrSAEwZvdO
- YBFuxUok5TX/0nqKjbd9DipCruzr7HG3lj5NeJWFv9y77Pj/dn4+/Q5oM/mY8j+PVw5T
- R0tOiNpyDec6DCqm51KrZ2m6uG7l8DqCUV+8FgWBrhJs6YDmJA4zn6bt22wdgKGfQqLE
- rSe6h4FBckKG6nW3QLRDIx1CHq0W4c6veHgIWYI3+WdnC/eAU3qu1YMbCXDsTrGKd3eI
- C5na4QpZs18pep0QJ2aUwiPlVg/sE2jb1CzlFLO3GB3jFx4KXsLyQEaPS3RGN1hMd4JD uQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et89dgrhj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 18:01:44 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C3E7410002A;
-        Mon, 14 Mar 2022 18:01:43 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BA3E62309F1;
-        Mon, 14 Mar 2022 18:01:43 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 14 Mar 2022 18:01:43
- +0100
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>,
-        <arnaud.pouliquen@foss.st.com>
-Subject: [RFC PATCH v4 4/4] remoteproc: virtio: Create platform device for the remoteproc_virtio
-Date:   Mon, 14 Mar 2022 18:01:26 +0100
-Message-ID: <20220314170126.2333996-5-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220314170126.2333996-1-arnaud.pouliquen@foss.st.com>
-References: <20220314170126.2333996-1-arnaud.pouliquen@foss.st.com>
+        Mon, 14 Mar 2022 13:03:24 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D798F3614A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:02:11 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22EFTHSe009865;
+        Mon, 14 Mar 2022 17:02:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=mISrCX70z/rxHRfGjFIF8J8xRhQQTFBktE2pHIBhCt8=;
+ b=a5pjN9WCFh/+rG1xaBeXSMvXbHDoyI+3aryG9ZjG8x3dpLhaWjM8QTIy4/gz4quGLHaw
+ 6ybocbX4k6mWTiQi6IknIsFdHVMoYbpcIyTljUACxMlkqwEcZzhX+wyyGpRprX5yExJE
+ aqj2kOfIflqAdJXf0gbx0c+rwkgz35oyMXfVM3vhas7UHscd8GKSzEvJi1Yd40Ezkn7T
+ 5lGxafDoK1XivlKFWSYDcc2iW1UEjUCii8kCwutMv77nYWCcp1aY2Q//FqB5Q52rCNxh
+ Fn037ywcj2JyC70t4yYAJ/jQl4Wyx66JzCkUCQywaPeZd8rauEgAe62g+/jK7qiVklb6 3A== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3et5xwgts1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Mar 2022 17:02:08 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22EGojRj016295;
+        Mon, 14 Mar 2022 17:02:07 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
+        by userp3030.oracle.com with ESMTP id 3et65nwjpg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Mar 2022 17:02:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iHuG44u4DtoXp4U0Woj4VdlhnRjFao0A0/cQ0hGBVbvHBgtdNhnEPiwq5beRKxtZ5wObbB+hyDvFZMIRj0A2n9oR/rN4NBciJ9sIl7XTjbvksgJefunK88F8h6tuVoMjLUU75hQd95iWbIxSypZobIIrkHeQ0cfKqY14xAKUPtwtuLY/QuACnBDqpTTuLxuNuc8zmoTcdg5sF9YzNeo35QkWAGOJr5kI3GSOhC0hW8WM+s7lQMfClpJ14WrQy4WGtZQMO5pIvCzBXDq+MLiFg2lEu7efES6O5Ty1W86Op6hY56DnTCYZtYGQ/VUwVKDPVN6gmV3xkfnTF/zk1U69vA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mISrCX70z/rxHRfGjFIF8J8xRhQQTFBktE2pHIBhCt8=;
+ b=Rqm74Wi6kbWDEt9d5gRu8xqcFkONxwu50JmYN2Ee3w6vQ3DwuLcVGBvZOBmdlJret1/FSaLUvvsVGb8E1svcus6CARJkOwDirJ0U1xEBff9rz5r27yis6noisyTrP4o+xFR2TzpvpgLCg32A7D1mnwqk+a86GD3LfjIeHk7/SvC7RNNxvrudBiEI+aMVgUitk5m+rWv5DWhUPKJLf0U6Z9DAmeRL4ftKt84eEhHSMAjWGJBuHZGfT0HLezQrVl94bqUHFgC0N22JNXi0N13NNlQRHPK+igk+x2sMPHHhbJ8htvBoToD25hGQQV+hPCDUYUtxmDezsL2tj6xh28btxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mISrCX70z/rxHRfGjFIF8J8xRhQQTFBktE2pHIBhCt8=;
+ b=Vs8qVifXL3QpV3ES6A49cMJVSZaAj0aBozXpnxSh4dg4lKJbhUmKFh2C5YmEuVhXSWSBMJs6z27y7HuCVWLyzKAIEjeQ8FO5LCZaTpYHhAlcf8508fmSkzfFR89Zwd4CQ8ME4WzNMfafWjyGxw746CGK4BjSlqYhnhnC+DV2YCM=
+Received: from BY5PR10MB4257.namprd10.prod.outlook.com (2603:10b6:a03:211::21)
+ by BN8PR10MB3251.namprd10.prod.outlook.com (2603:10b6:408:c9::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Mon, 14 Mar
+ 2022 17:02:03 +0000
+Received: from BY5PR10MB4257.namprd10.prod.outlook.com
+ ([fe80::2803:98d6:9d00:5572]) by BY5PR10MB4257.namprd10.prod.outlook.com
+ ([fe80::2803:98d6:9d00:5572%9]) with mapi id 15.20.5061.028; Mon, 14 Mar 2022
+ 17:02:03 +0000
+Message-ID: <3d22ac50-f13c-c2db-f5b7-dc229c3709f1@oracle.com>
+Date:   Mon, 14 Mar 2022 10:02:01 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [cel:nfsd-courteous-server 29/39] do_mounts.c:(.text+0x66):
+ multiple definition of `locks_owner_has_blockers';
+ init/main.o:main.c:(.text+0x0): first defined here
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Chuck Lever <chuck.lever@oracle.com>
+References: <202203130709.dYmfXVEC-lkp@intel.com>
+From:   dai.ngo@oracle.com
+In-Reply-To: <202203130709.dYmfXVEC-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0120.namprd04.prod.outlook.com
+ (2603:10b6:806:122::35) To BY5PR10MB4257.namprd10.prod.outlook.com
+ (2603:10b6:a03:211::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_12,2022-03-14_02,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f36f094d-13e7-4384-be7a-08da05dc5cea
+X-MS-TrafficTypeDiagnostic: BN8PR10MB3251:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR10MB3251C548364CF4DFD7336A4B870F9@BN8PR10MB3251.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c/HOZeaAbgKv+yRSbL/RCaTPbG3ZR1dQ66sVeE75JFi0o5JWhGO2NlQUQHS3yTmFhsdzzxzTUemuE1TO2RysacOtcIME0ST/RWGuM0QjNZB7jcLZwrfgUOv6YptlF48tzIt1O9CgzwA9b3SMapy1qsKf2dZPODsntPn0UThdJHJRVWy3A8nNv0fFBJOD5CfapcbROr0URgBQN/ALpSYGNTs4tHNByGeqKhPr2/muEzgjzvlk8wpi9zhOsrRv3jEZ8jMiV9xHTXq0ZrM3RNxSkpi2F5ODt5B2mTvnL/MwDOq6Ytm59u7CHK//GWiNC16+wPwukW+wErEKoLnvTxa4Bk02trUMhPnhu0EBE7VVhJer8Wp+nEQDtb69uZDaL9cLGi8NlWwTJsh7Yi/Xy3NRzeteMYAPala9JPZaWAspvgXZfD3zwespaN3YwSDFpI6h+6/Up5ojJv4w0+sChy/2Y92aDNfREoTbgZVEIk+QlOV9vOuSD1EmIEUGbU9RDehWd7YtpdKW3LGzyYIuU6oFKvGU1leDA/WOsmgV8fnfF0YYrPSfYd/glxO9zm/P4XZtFfX4+GMKQ/4Hzzi1OboifKwBZagvRxwHtDTV0MHDXQIVW/fHpXE1/hAOBwCrPykFQuysoHx8Smn18RVt7e9i8Ynwr8Oer3CgFAc5aUh6WSCs3tuUdcCjL/ye74zhRfnl8KvG+qASTr4XCZpT9HAU5ZtGl+CL4tu1SKHBWT9qWls9PNOBkVrADuPp3At61KZBt80XyOAWoNtEJB2QOpz0wnyEQpnakH4h1UaKduHnyKmShixQKbE6MR/4J3b99xyTd6k4QrIK7BZuhTnCR9H8qQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4257.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(84040400005)(186003)(83380400001)(26005)(8676002)(316002)(4326008)(6916009)(66476007)(66946007)(66556008)(36756003)(31686004)(966005)(6486002)(6512007)(508600001)(31696002)(86362001)(2616005)(107886003)(5660300002)(8936002)(30864003)(38100700002)(9686003)(53546011)(2906002)(6506007)(81973001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHBPMzkyN3NEang3YmEvVmNVa09Wb05tRDQ4ckxZS1dUR3FnWktqU01Jc0FX?=
+ =?utf-8?B?ckpMMGUwclZEeVlLUkVuM3pRRU9yZzRmUm5MNVBndlZINHl6UFQwc1U5bkpv?=
+ =?utf-8?B?ZDNqVUpwL1NUSVRpMllMa3Z4WWZoUS85RXdZRS9ON2JtVVl3bTJwNHlaOUtK?=
+ =?utf-8?B?VGlISFB3UFlGN0Z4SGtQcmk2WXFiWXpvK25Ldmdtc1dvZjd5ZDNOMVRDT1pS?=
+ =?utf-8?B?aTVXdVdpd1BFVXgyOUFHWUFBWkJpbVhMYWNGWWFCMzhvZi8rdXBHaGNwak5O?=
+ =?utf-8?B?NG8xdU5FVEo2b0UxclMxUWhzeTh3VGNBR3dvblpOWlBrY0FEODR6MllnUGo3?=
+ =?utf-8?B?SjU2dlc5OCtIU3d6NHJTdDRlYi9DYnhJOGZvVlBzM1Vod1ZmNitCYnZsckJy?=
+ =?utf-8?B?ZXd0Zy9xT3VTTWpoSy85R2k3NndjOGNLTUJzcHU4OGlpN3FTTk1RRDhydE9i?=
+ =?utf-8?B?cWRHdUFtQkgzeHdjNTRyRGNQRDF1cXlqWC9nY3FHMDhPcVQyS3VYL1Jmc011?=
+ =?utf-8?B?TTBvWjQ5VUhlT09CajJiU0NXWUtCUXViaGtFUnhIL09QUVZqYXZvZEV5aVFq?=
+ =?utf-8?B?K08vUExOejNWKzA2YTFXd2lLSWNaUm8wRUlaWkNkOGR6QUk1c0RzUis2MFZw?=
+ =?utf-8?B?WHdiWERSSVRnaTEreTFKOFZtZDYyRlM5bExITFZpNXlwb08xSGNWa1hUbHZx?=
+ =?utf-8?B?VXJIOE9IWFBwRFdNczVhNmZzMVd4VE4vNXROWThBUjdsVkhBNnAxNG5DOENS?=
+ =?utf-8?B?UVR1T0JzaXVTOVlIV05pZHlRbzZTVGphMUVXK1czYng2Q2ZmMTU2Y0hkVElh?=
+ =?utf-8?B?ZXZXd1dGTE54WDZSaG9vazByam43ODVrQ3hWQ1dUK05QbXF2SGQ1cFFvTmRZ?=
+ =?utf-8?B?TThPVThoYVZ6TGFmdzErL3JMWCtmVVhMUU5pa0IzVW9kSFNkWGEzRTVFSXQ0?=
+ =?utf-8?B?ZkZWUm0rTE45bWdyVi81VTZJSEh4SG9zMzJjMDZWTEk5WGI0NyswNEM2NTBx?=
+ =?utf-8?B?Q1lBV1h5TG1nQ1ZXSHJkenNUMHNpMkg0Y3lpZ1JtQlF2QmlMMzhTTFZlYnlX?=
+ =?utf-8?B?dWZhYWtvc1JGVDV5ZEdyaHJPTVV6YlZHR2NUWTl1bjNDMzZpWWN1dDgwb2ln?=
+ =?utf-8?B?bjVLdHE1WS92NXVsa2d2eit2M1dkU2FLUXFoV0hzMjJ2dmNEVU5OUkZsOGcz?=
+ =?utf-8?B?dE9pWUFYaWwrL2xpckI2REx0emZremE0Vit5RG92cThSV0Q3NFgxcWp0NnJE?=
+ =?utf-8?B?QzNSQlE2d3k2VmZxd2R6NFlJVTZLcS9qb01ybDlCRWU0dHlCWWZxcVQwVVo3?=
+ =?utf-8?B?alNrTC9GVnQrSDhOL1hUb1NnRkk0dFNJZjBMZU5lWW9NNW9qUGVNZ3lOTmRj?=
+ =?utf-8?B?emJtMENEeUQzOS91KzNvVUswUkl4WnlzRzNzd2c0czJUUGwwTE12djlKN0Nk?=
+ =?utf-8?B?VFZFTjNHMVVyUFJsT1lDS25DQjJnZEhUaEI4QTVLd0tpOFdxalEzdE9VZFpw?=
+ =?utf-8?B?MVU1blBOR2VpaTNVNmNFbm9yV2Fob01aZDRQVzJzMUpOTFM5empWSDNqSDFU?=
+ =?utf-8?B?OXlvMjA2MlB6Sm1BUnA0bkl0cXdTdlVmWVNERUpBTFFDNndDUmt1TFNVNXQy?=
+ =?utf-8?B?aURFa1R1a3VGRDFYYncxejdYUDdvUHhXdUxldjMwMHROa0xqZWFJQlAxNzYr?=
+ =?utf-8?B?MGFzdGsveEMweXd0Sml1Y2R3R01IK3k3L0swRDV3QzlvRVdPRUZpWnVEd3c0?=
+ =?utf-8?B?SmtTVkFwNzJUM0lWSG04ckVFdWEzSVhJQnFwZWxZN2ZGZTdqQjhBUk5HNktZ?=
+ =?utf-8?B?VzFKWEFoQWo4c2UwN0M2cjBlK0tUdjlZN0pMNWNtVlpyQ3Awc0NwM2dzSXBl?=
+ =?utf-8?B?emhOSmYySlJQRlBjNzlhdE81ZTduaHZuL1dRVFlOanAzRlI2VExwb2ZkUmpv?=
+ =?utf-8?Q?Dq8iCjrbm6ZQgZy2x+NNft8AhSltDZNk?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f36f094d-13e7-4384-be7a-08da05dc5cea
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4257.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2022 17:02:03.7272
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MU1H3kObasUF8cDieHTub7zmkVcLI0EYyzjH4J98G+dYNPlbxKyjBBfGaKZ523t8LCObDW75mATGZf1/4tzGRQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3251
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10285 signatures=693139
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 adultscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203140104
+X-Proofpoint-GUID: vqrdMKIfQinWMdpKpEvxqyvgWGsCBPmW
+X-Proofpoint-ORIG-GUID: vqrdMKIfQinWMdpKpEvxqyvgWGsCBPmW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,373 +153,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define a platform driver to manage the remoteproc virtio device as
-a platform devices.
+Hi,
 
-The platform device allows to pass rproc_vdev_data platform data to
-specify properties that are stored in the rproc_vdev structure.
+On 3/12/22 3:38 PM, kernel test robot wrote:
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
+> head:   ca4d8c00bb753707519f438e5286b2349af53054
+> commit: 3a59c0f1c4d6cb882410bfc086ad81458d4cbcaa [29/39] fs/lock: add helper locks_owner_has_blockers to check for blockers
+> config: m68k-randconfig-r031-20220313 (https://download.01.org/0day-ci/archive/20220313/202203130709.dYmfXVEC-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=3a59c0f1c4d6cb882410bfc086ad81458d4cbcaa
+>          git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+>          git fetch --no-tags cel nfsd-courteous-server
+>          git checkout 3a59c0f1c4d6cb882410bfc086ad81458d4cbcaa
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>     m68k-linux-ld: init/do_mounts.o: in function `locks_owner_has_blockers':
+>>> do_mounts.c:(.text+0x66): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
 
-Such approach will allow to preserve legacy remoteproc virtio device
-creation but also to probe the device using device tree mechanism.
+I looked through all the functions listed as having multiple
+definition of `locks_owner_has_blockers' such as init/main.o:main.c,
+arch/x86/kernel/head32.c, init/do_mounts_rd.c and many others.
+None of these functions has 'locks_owner_has_blockers' defined.
+I think there is a problem with the tools that detects this
+error, can you help to verify?
 
-remoteproc_virtio.c update:
-  - Add rproc_virtio_driver platform driver. The probe/remove ops replace
-    the rproc_rvdev_add_device/rproc_rvdev_remove_device functions.
-  - All reference to the rvdev->dev has been updated to rvdev-pdev->dev.
-  - rproc_rvdev_release is removed as associated to the rvdev device.
-  - The use of rvdev->kref counter is replaced by get/put_device on the
-    remoteproc virtio platform device.
-  - The vdev device no longer increments rproc device counter.
-    increment/decrement is done in rproc_virtio_probe/rproc_virtio_remove
-    function in charge of the vrings allocation/free.
+Thanks,
+-Dai
 
-remoteproc_core.c update:
-  Migrate from the rvdev device to the rvdev platform device.
-  From this patch, when a vdev resource is found in the resource table
-  the remoteproc core register a platform device.
-
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
-Update vs previous revision:
-  - remove useless platform_get_drvdata call in  rproc_handle_vdev function.
-    This call was a leftover from a previous version of the patch.
----
- drivers/remoteproc/remoteproc_core.c     |  13 +-
- drivers/remoteproc/remoteproc_internal.h |   3 -
- drivers/remoteproc/remoteproc_virtio.c   | 151 +++++++++++------------
- include/linux/remoteproc.h               |   6 +-
- 4 files changed, 83 insertions(+), 90 deletions(-)
-
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index c05c721c1f18..3cd624de8856 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -478,6 +478,7 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
- 	struct device *dev = &rproc->dev;
- 	struct rproc_vdev *rvdev;
- 	struct rproc_vdev_data rvdev_data;
-+	struct platform_device *pdev;
- 
- 	/* make sure resource isn't truncated */
- 	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
-@@ -506,9 +507,13 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
- 	rvdev_data.rsc_offset = offset;
- 	rvdev_data.rsc = rsc;
- 
--	rvdev = rproc_rvdev_add_device(rproc, &rvdev_data);
--	if (IS_ERR(rvdev))
--		return PTR_ERR(rvdev);
-+	pdev = platform_device_register_data(dev, "rproc-virtio", rvdev_data.index, &rvdev_data,
-+					     sizeof(rvdev_data));
-+	if (IS_ERR(pdev)) {
-+		dev_err(rproc->dev.parent,
-+			"failed to create rproc-virtio device\n");
-+		return PTR_ERR(pdev);
-+	}
- 
- 	return 0;
- }
-@@ -1248,7 +1253,7 @@ void rproc_resource_cleanup(struct rproc *rproc)
- 
- 	/* clean up remote vdev entries */
- 	list_for_each_entry_safe(rvdev, rvtmp, &rproc->rvdevs, node)
--		kref_put(&rvdev->refcount, rproc_vdev_release);
-+		platform_device_unregister(rvdev->pdev);
- 
- 	rproc_coredump_cleanup(rproc);
- }
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index ba8ba36561f4..c8914002d0c9 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -45,10 +45,7 @@ int rproc_of_parse_firmware(struct device *dev, int index,
- 			    const char **fw_name);
- 
- /* from remoteproc_virtio.c */
--struct rproc_vdev *rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data);
--void rproc_rvdev_remove_device(struct rproc_vdev *rvdev);
- irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
--void rproc_vdev_release(struct kref *ref);
- 
- /* from remoteproc_debugfs.c */
- void rproc_remove_trace_file(struct dentry *tfile);
-diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
-index 581c3dd13cd4..e734067174f1 100644
---- a/drivers/remoteproc/remoteproc_virtio.c
-+++ b/drivers/remoteproc/remoteproc_virtio.c
-@@ -13,6 +13,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/dma-mapping.h>
- #include <linux/export.h>
-+#include <linux/of_platform.h>
- #include <linux/of_reserved_mem.h>
- #include <linux/remoteproc.h>
- #include <linux/virtio.h>
-@@ -46,7 +47,11 @@ static int copy_dma_range_map(struct device *to, struct device *from)
- 
- static struct rproc_vdev *vdev_to_rvdev(struct virtio_device *vdev)
- {
--	return container_of(vdev->dev.parent, struct rproc_vdev, dev);
-+	struct platform_device *pdev;
-+
-+	pdev = container_of(vdev->dev.parent, struct platform_device, dev);
-+
-+	return platform_get_drvdata(pdev);
- }
- 
- static  struct rproc *vdev_to_rproc(struct virtio_device *vdev)
-@@ -341,13 +346,10 @@ static void rproc_virtio_dev_release(struct device *dev)
- {
- 	struct virtio_device *vdev = dev_to_virtio(dev);
- 	struct rproc_vdev *rvdev = vdev_to_rvdev(vdev);
--	struct rproc *rproc = vdev_to_rproc(vdev);
- 
- 	kfree(vdev);
- 
--	kref_put(&rvdev->refcount, rproc_vdev_release);
--
--	put_device(&rproc->dev);
-+	put_device(&rvdev->pdev->dev);
- }
- 
- /**
-@@ -363,7 +365,7 @@ static void rproc_virtio_dev_release(struct device *dev)
- static int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
- {
- 	struct rproc *rproc = rvdev->rproc;
--	struct device *dev = &rvdev->dev;
-+	struct device *dev = &rvdev->pdev->dev;
- 	struct virtio_device *vdev;
- 	struct rproc_mem_entry *mem;
- 	int ret;
-@@ -433,18 +435,8 @@ static int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
- 	vdev->dev.parent = dev;
- 	vdev->dev.release = rproc_virtio_dev_release;
- 
--	/*
--	 * We're indirectly making a non-temporary copy of the rproc pointer
--	 * here, because drivers probed with this vdev will indirectly
--	 * access the wrapping rproc.
--	 *
--	 * Therefore we must increment the rproc refcount here, and decrement
--	 * it _only_ when the vdev is released.
--	 */
--	get_device(&rproc->dev);
--
- 	/* Reference the vdev and vring allocations */
--	kref_get(&rvdev->refcount);
-+	get_device(dev);
- 
- 	ret = register_virtio_device(vdev);
- 	if (ret) {
-@@ -486,78 +478,57 @@ static int rproc_vdev_do_start(struct rproc_subdev *subdev)
- static void rproc_vdev_do_stop(struct rproc_subdev *subdev, bool crashed)
- {
- 	struct rproc_vdev *rvdev = container_of(subdev, struct rproc_vdev, subdev);
-+	struct device *dev = &rvdev->pdev->dev;
- 	int ret;
- 
--	ret = device_for_each_child(&rvdev->dev, NULL, rproc_remove_virtio_dev);
-+	ret = device_for_each_child(dev, NULL, rproc_remove_virtio_dev);
- 	if (ret)
--		dev_warn(&rvdev->dev, "can't remove vdev child device: %d\n", ret);
--}
--
--/**
-- * rproc_rvdev_release() - release the existence of a rvdev
-- *
-- * @dev: the subdevice's dev
-- */
--static void rproc_rvdev_release(struct device *dev)
--{
--	struct rproc_vdev *rvdev = container_of(dev, struct rproc_vdev, dev);
--
--	of_reserved_mem_device_release(dev);
--
--	kfree(rvdev);
-+		dev_warn(dev, "can't remove vdev child device: %d\n", ret);
- }
- 
--struct rproc_vdev *
--rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
-+static int rproc_virtio_probe(struct platform_device *pdev)
- {
-+	struct device *dev = &pdev->dev;
-+	struct rproc_vdev_data *rvdev_data = dev->platform_data;
- 	struct rproc_vdev *rvdev;
--	struct fw_rsc_vdev *rsc = rvdev_data->rsc;
--	char name[16];
-+	struct rproc *rproc = container_of(dev->parent, struct rproc, dev);
-+	struct fw_rsc_vdev *rsc;
- 	int i, ret;
- 
--	rvdev = kzalloc(sizeof(*rvdev), GFP_KERNEL);
--	if (!rvdev)
--		return ERR_PTR(-ENOMEM);
-+	if (!rvdev_data)
-+		return -EINVAL;
- 
--	kref_init(&rvdev->refcount);
-+	rvdev = devm_kzalloc(dev, sizeof(*rvdev), GFP_KERNEL);
-+	if (!rvdev)
-+		return -ENOMEM;
- 
- 	rvdev->id = rvdev_data->id;
- 	rvdev->rproc = rproc;
- 	rvdev->index = rvdev_data->index;
- 
--	/* Initialise vdev subdevice */
--	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
--	rvdev->dev.parent = &rproc->dev;
--	rvdev->dev.release = rproc_rvdev_release;
--	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
--	dev_set_drvdata(&rvdev->dev, rvdev);
--
--	ret = device_register(&rvdev->dev);
--	if (ret) {
--		put_device(&rvdev->dev);
--		return ERR_PTR(ret);
--	}
--
--	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
-+	ret = copy_dma_range_map(dev, rproc->dev.parent);
- 	if (ret)
--		goto free_rvdev;
-+		return ret;
- 
- 	/* Make device dma capable by inheriting from parent's capabilities */
--	set_dma_ops(&rvdev->dev, get_dma_ops(rproc->dev.parent));
-+	set_dma_ops(dev, get_dma_ops(rproc->dev.parent));
- 
--	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
--					   dma_get_mask(rproc->dev.parent));
-+	ret = dma_coerce_mask_and_coherent(dev, dma_get_mask(rproc->dev.parent));
- 	if (ret) {
--		dev_warn(&rvdev->dev,
--			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
-+		dev_warn(dev, "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
- 			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
- 	}
- 
-+	platform_set_drvdata(pdev, rvdev);
-+	rvdev->pdev = pdev;
-+
-+	rsc = rvdev_data->rsc;
-+
- 	/* parse the vrings */
- 	for (i = 0; i < rsc->num_of_vrings; i++) {
- 		ret = rproc_parse_vring(rvdev, rsc, i);
- 		if (ret)
--			goto free_rvdev;
-+			return ret;
- 	}
- 
- 	/* remember the resource offset*/
-@@ -577,18 +548,30 @@ rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
- 
- 	rproc_add_subdev(rproc, &rvdev->subdev);
- 
--	return rvdev;
-+	dev_dbg(dev, "virtio dev %d added\n",  rvdev->index);
-+
-+	/*
-+	 * We're indirectly making a non-temporary copy of the rproc pointer
-+	 * here, because the platform devicer or the vdev device will indirectly
-+	 * access the wrapping rproc.
-+	 *
-+	 * Therefore we must increment the rproc refcount here, and decrement
-+	 * it _only_ on platform remove.
-+	 */
-+	get_device(&rproc->dev);
-+
-+	return 0;
- 
- unwind_vring_allocations:
- 	for (i--; i >= 0; i--)
- 		rproc_free_vring(&rvdev->vring[i]);
--free_rvdev:
--	device_unregister(&rvdev->dev);
--	return ERR_PTR(ret);
-+
-+	return ret;
- }
- 
--void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
-+static int rproc_virtio_remove(struct platform_device *pdev)
- {
-+	struct rproc_vdev *rvdev = dev_get_drvdata(&pdev->dev);
- 	struct rproc *rproc = rvdev->rproc;
- 	struct rproc_vring *rvring;
- 	int id;
-@@ -600,19 +583,29 @@ void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
- 
- 	rproc_remove_subdev(rproc, &rvdev->subdev);
- 	rproc_remove_rvdev(rvdev);
--	device_unregister(&rvdev->dev);
--}
- 
--void rproc_vdev_release(struct kref *ref)
--{
--	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
--	struct rproc_vring *rvring;
--	int id;
-+	of_reserved_mem_device_release(&pdev->dev);
- 
--	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
--		rvring = &rvdev->vring[id];
--		rproc_free_vring(rvring);
--	}
-+	dev_dbg(&pdev->dev, "virtio dev %d removed\n",  rvdev->index);
- 
--	rproc_rvdev_remove_device(rvdev);
-+	/* The remote proc device can be removed */
-+	put_device(&rproc->dev);
-+
-+	return 0;
- }
-+
-+/* Platform driver */
-+static const struct of_device_id rproc_virtio_match[] = {
-+	{ .compatible = "rproc-virtio", },
-+	{},
-+};
-+
-+static struct platform_driver rproc_virtio_driver = {
-+	.probe		= rproc_virtio_probe,
-+	.remove		= rproc_virtio_remove,
-+	.driver		= {
-+		.name	= "rproc-virtio",
-+		.of_match_table	= rproc_virtio_match,
-+	},
-+};
-+builtin_platform_driver(rproc_virtio_driver);
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 93a1d0050fbc..31577d6b405d 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -616,9 +616,8 @@ struct rproc_vring {
- 
- /**
-  * struct rproc_vdev - remoteproc state for a supported virtio device
-- * @refcount: reference counter for the vdev and vring allocations
-  * @subdev: handle for registering the vdev as a rproc subdevice
-- * @dev: device struct used for reference count semantics
-+ * @pdev: remoteproc virtio platform device
-  * @id: virtio device id (as in virtio_ids.h)
-  * @node: list node
-  * @rproc: the rproc handle
-@@ -627,10 +626,9 @@ struct rproc_vring {
-  * @index: vdev position versus other vdev declared in resource table
-  */
- struct rproc_vdev {
--	struct kref refcount;
- 
- 	struct rproc_subdev subdev;
--	struct device dev;
-+	struct platform_device *pdev;
- 
- 	unsigned int id;
- 	struct list_head node;
--- 
-2.25.1
-
+>     m68k-linux-ld: init/do_mounts_rd.o: in function `locks_owner_has_blockers':
+>     do_mounts_rd.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: init/do_mounts_initrd.o: in function `locks_owner_has_blockers':
+>     do_mounts_initrd.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: init/initramfs.o: in function `locks_owner_has_blockers':
+>     initramfs.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: init/init_task.o: in function `locks_owner_has_blockers':
+>     init_task.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/irq.o: in function `locks_owner_has_blockers':
+>     irq.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/module.o: in function `locks_owner_has_blockers':
+>     module.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/process.o: in function `locks_owner_has_blockers':
+>     process.c:(.text+0xe): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/ptrace.o: in function `locks_owner_has_blockers':
+>     ptrace.c:(.text+0x182): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/setup.o: in function `locks_owner_has_blockers':
+>     setup.c:(.text+0x102): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/signal.o: in function `locks_owner_has_blockers':
+>     signal.c:(.text+0x3a0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/sys_m68k.o: in function `locks_owner_has_blockers':
+>     sys_m68k.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/time.o: in function `locks_owner_has_blockers':
+>     time.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/traps.o: in function `locks_owner_has_blockers':
+>     traps.c:(.text+0x12): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/kernel/dma.o: in function `locks_owner_has_blockers':
+>     dma.c:(.text+0x62): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/mm/init.o: in function `locks_owner_has_blockers':
+>     init.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/coldfire/device.o: in function `locks_owner_has_blockers':
+>     device.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/coldfire/vectors.o: in function `locks_owner_has_blockers':
+>     vectors.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/coldfire/m5206.o: in function `locks_owner_has_blockers':
+>     m5206.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/coldfire/reset.o: in function `locks_owner_has_blockers':
+>     reset.c:(.text+0x14): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/coldfire/timers.o: in function `locks_owner_has_blockers':
+>     timers.c:(.text+0x56): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: arch/m68k/coldfire/gpio.o: in function `locks_owner_has_blockers':
+>     gpio.c:(.text+0x26): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/fork.o: in function `locks_owner_has_blockers':
+>     fork.c:(.text+0x6b4): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/exec_domain.o: in function `locks_owner_has_blockers':
+>     exec_domain.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/panic.o: in function `locks_owner_has_blockers':
+>     panic.c:(.text+0x1d6): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/cpu.o: in function `locks_owner_has_blockers':
+>     cpu.c:(.text+0x296): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/exit.o: in function `locks_owner_has_blockers':
+>     exit.c:(.text+0x948): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/softirq.o: in function `locks_owner_has_blockers':
+>     softirq.c:(.text+0x12e): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/resource.o: in function `locks_owner_has_blockers':
+>     resource.c:(.text+0x6de): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/sysctl.o: in function `locks_owner_has_blockers':
+>     sysctl.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/capability.o: in function `locks_owner_has_blockers':
+>     capability.c:(.text+0x288): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/ptrace.o: in function `locks_owner_has_blockers':
+>     ptrace.c:(.text+0x474): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/signal.o: in function `locks_owner_has_blockers':
+>     signal.c:(.text+0x9cc): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/sys.o: in function `locks_owner_has_blockers':
+>     sys.c:(.text+0xdd4): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/umh.o: in function `locks_owner_has_blockers':
+>     umh.c:(.text+0x47a): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/workqueue.o: in function `locks_owner_has_blockers':
+>     workqueue.c:(.text+0x1e40): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/pid.o: in function `locks_owner_has_blockers':
+>     pid.c:(.text+0xc6): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/task_work.o: in function `locks_owner_has_blockers':
+>     task_work.c:(.text+0x24): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/extable.o: in function `locks_owner_has_blockers':
+>     extable.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/params.o: in function `locks_owner_has_blockers':
+>     params.c:(.text+0x998): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/kthread.o: in function `locks_owner_has_blockers':
+>     kthread.c:(.text+0x6c0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/nsproxy.o: in function `locks_owner_has_blockers':
+>     nsproxy.c:(.text+0x1fc): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/notifier.o: in function `locks_owner_has_blockers':
+>     notifier.c:(.text+0x12c): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/ksysfs.o: in function `locks_owner_has_blockers':
+>     ksysfs.c:(.text+0x180): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/cred.o: in function `locks_owner_has_blockers':
+>     cred.c:(.text+0x11a): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/reboot.o: in function `locks_owner_has_blockers':
+>     reboot.c:(.text+0x1d2): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/groups.o: in function `locks_owner_has_blockers':
+>     groups.c:(.text+0x32): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/sched/core.o: in function `locks_owner_has_blockers':
+>     core.c:(.text+0x918): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/sched/loadavg.o: in function `locks_owner_has_blockers':
+>     loadavg.c:(.text+0x38): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/sched/clock.o: in function `locks_owner_has_blockers':
+>     clock.c:(.text+0x0): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>     m68k-linux-ld: kernel/sched/cputime.o: in function `locks_owner_has_blockers':
+>     cputime.c:(.text+0x76): multiple definition of `locks_owner_has_blockers'; init/main.o:main.c:(.text+0x0): first defined here
+>
+> ---
+> 0-DAY CI Kernel Test Service
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

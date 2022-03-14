@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576904D813D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEC04D8119
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239453AbiCNLkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S239381AbiCNLi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239451AbiCNLjb (ORCPT
+        with ESMTP id S239390AbiCNLiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:39:31 -0400
+        Mon, 14 Mar 2022 07:38:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC72641318;
-        Mon, 14 Mar 2022 04:37:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969B642EC0;
+        Mon, 14 Mar 2022 04:36:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AC7061189;
-        Mon, 14 Mar 2022 11:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A845C340EC;
-        Mon, 14 Mar 2022 11:37:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA46861159;
+        Mon, 14 Mar 2022 11:36:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C75C340ED;
+        Mon, 14 Mar 2022 11:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647257874;
-        bh=YCUFzadyaHoFzSjHrge+ZnugCfMoDuKERu5OMjmewMI=;
+        s=korg; t=1647257799;
+        bh=boM+X7Jtz7xEMxABclzXsyS0I01CPMFAo2H06POull4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vZ2Ir2SUDBqiY0BGc97h8XuQ+vuWVzUC0dEnIqJ0wodtXw6B3lhuIDsH2b9ibmZ01
-         zKUU2ph2Ea0FuUj3uFlqN47Bl799ZBPSq30s88CDUZ1J/3zv10C52JvncKthF6UwdZ
-         ERISMV7IM7WalefMsUuw4HLr8cC3Jzn8yEFmE4KE=
+        b=wZB/A1ZYkxjjluI+u5hd9zgycP9xRwA7Y+WkAzgsa1BPbZ4j6CmZHHRjblYBLgyja
+         6ZF8g7Q7IMv/hvHe94/XV8+ztdTTKv0HcMDYzlfmA5PNluSjTYd2ll5tF0IdHawumk
+         cPpFLg6AJQSmzSmslhvLKNezgDdB7pleeJ4P2LUs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 10/30] gianfar: ethtool: Fix refcount leak in gfar_get_ts_info
-Date:   Mon, 14 Mar 2022 12:34:28 +0100
-Message-Id: <20220314112732.080037634@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.14 16/23] ARM: Spectre-BHB: provide empty stub for non-config
+Date:   Mon, 14 Mar 2022 12:34:29 +0100
+Message-Id: <20220314112731.528088035@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112731.785042288@linuxfoundation.org>
-References: <20220314112731.785042288@linuxfoundation.org>
+In-Reply-To: <20220314112731.050583127@linuxfoundation.org>
+References: <20220314112731.050583127@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 2ac5b58e645c66932438bb021cb5b52097ce70b0 ]
+commit 68453767131a5deec1e8f9ac92a9042f929e585d upstream.
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+When CONFIG_GENERIC_CPU_VULNERABILITIES is not set, references
+to spectre_v2_update_state() cause a build error, so provide an
+empty stub for that function when the Kconfig option is not set.
 
-Fixes: 7349a74ea75c ("net: ethernet: gianfar_ethtool: get phc index through drvdata")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Reviewed-by: Claudiu Manoil <claudiu.manoil@nxp.com>
-Link: https://lore.kernel.org/r/20220310015313.14938-1-linmq006@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes this build error:
+
+  arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
+  proc-v7-bugs.c:(.text+0x52): undefined reference to `spectre_v2_update_state'
+  arm-linux-gnueabi-ld: proc-v7-bugs.c:(.text+0x82): undefined reference to `spectre_v2_update_state'
+
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Russell King <rmk+kernel@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/gianfar_ethtool.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/include/asm/spectre.h |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/freescale/gianfar_ethtool.c b/drivers/net/ethernet/freescale/gianfar_ethtool.c
-index 395a5266ea30..0cddaaaf48aa 100644
---- a/drivers/net/ethernet/freescale/gianfar_ethtool.c
-+++ b/drivers/net/ethernet/freescale/gianfar_ethtool.c
-@@ -1528,6 +1528,7 @@ static int gfar_get_ts_info(struct net_device *dev,
- 	ptp_node = of_find_compatible_node(NULL, NULL, "fsl,etsec-ptp");
- 	if (ptp_node) {
- 		ptp_dev = of_find_device_by_node(ptp_node);
-+		of_node_put(ptp_node);
- 		if (ptp_dev)
- 			ptp = platform_get_drvdata(ptp_dev);
- 	}
--- 
-2.34.1
-
+--- a/arch/arm/include/asm/spectre.h
++++ b/arch/arm/include/asm/spectre.h
+@@ -25,7 +25,13 @@ enum {
+ 	SPECTRE_V2_METHOD_LOOP8 = BIT(__SPECTRE_V2_METHOD_LOOP8),
+ };
+ 
++#ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
+ void spectre_v2_update_state(unsigned int state, unsigned int methods);
++#else
++static inline void spectre_v2_update_state(unsigned int state,
++					   unsigned int methods)
++{}
++#endif
+ 
+ int spectre_bhb_update_vectors(unsigned int method);
+ 
 
 

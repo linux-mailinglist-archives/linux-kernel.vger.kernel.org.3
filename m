@@ -2,63 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488BF4D8679
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBECE4D8686
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242168AbiCNOJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 10:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S242199AbiCNOQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 10:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiCNOJk (ORCPT
+        with ESMTP id S231273AbiCNOQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 10:09:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E879812633
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:08:29 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 64DFD210FF;
-        Mon, 14 Mar 2022 14:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647266908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAhNsJjFHxV2he/80ReD7Z27tSC68xKgXFO8RfJmFX8=;
-        b=Asvmkn89+FVBxXkRaErKv6FmBlQVS6/ykODx0mBR3VxY45WKDGBRde0w95QkNj2swCjvN/
-        OzHUJO5JJOcjHX0yvlsyR8TxrgzcHideMdxQ4qsDSAiK7YL1y2gLR9M/dQ1ZO2ncq1m4n7
-        179g6X4yoDY1mm7Q2oLwwEa9rFpTENw=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A7A1EA3B9A;
-        Mon, 14 Mar 2022 14:08:27 +0000 (UTC)
-Date:   Mon, 14 Mar 2022 15:08:24 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v1 11/13] printk: reimplement console_lock for
- proper kthread support
-Message-ID: <Yi9MWKt+PByLsi6Y@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-12-john.ogness@linutronix.de>
- <YhYKP/UuSKENGwfj@alley>
- <87tuc7xma0.fsf@jogness.linutronix.de>
- <YioMcSe0P0Z7ksiW@alley>
- <87wnh14wp9.fsf@jogness.linutronix.de>
- <Yisj2PEtjZfHMe6N@alley>
- <87czisbotz.fsf@jogness.linutronix.de>
- <Yit2LN1nCaiUo5y4@alley>
- <87tuc4yvsw.fsf@jogness.linutronix.de>
+        Mon, 14 Mar 2022 10:16:03 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1E46443;
+        Mon, 14 Mar 2022 07:14:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GbAcfVpOu5uYS2RIXS/ciQZzH5LUrymaFDv/7Kfc6nf0Byi2zjeHJMWAChP/p+DJmLbdl0D8XE2ew0orRVfH+jjZSq8pMk8Ff86G8SfzQvSYYSDBJncR7h70J7Q517CwUOtY+7ExHJ5zDT1gm8PnTw4//3dBxRbQFPt9lKWvyphc1h81DyslJ5t9hdkzf2JGAyrhlo0FJvrBi76WzIF5w8oNy/8hr5wRTjrTyvx9Xmskh3cAu09whBTg5Nk8DI5cQ7pPKRwd5mEleHANk3Uq5+sePZL+wNeBULM2MZHg2yF3imn0ba5d09ZlQIbIrlx7vqQOvTHpbRkF3kCW5DyuDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+gJHKDr9NWeifnjG/BY3mPABz75qJc/iC1roVM+yU8s=;
+ b=CdOGeZsCmx3VnhXi0dUPTmHxIKHt3KErUN+vPUNAdhqG0PFdxprioMrgcGbr/6oWwrPqnEa8glzkp0H1tYb53VcD/K4M2zoJmnZBt6XlmyTWVQvK62mlLJbjkpl8sWJMa/cR8llH0sELVI9a6qUXxfaz22dfxzz0yGfyV4YA+6YiiLz5gtonveM9aI1xlNTG9OMjZUZ1tpt/SsoU6gUJxQ9ZO49ujDr6YC+NFHxUeIUdadqAvilI9MejGJlL036oL0pmYaz6kxMA1sE9XnZkH7UpM5EGw5ZDylFuoo5NAjPjecC4BI3hBAvITRVigFopnmVsinNWNdxfY7yLWt1nXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+gJHKDr9NWeifnjG/BY3mPABz75qJc/iC1roVM+yU8s=;
+ b=JyfAWNUQYuheqIoHasDOgWd2fkyXY1gXKp/GLHopJ0t8PFOguHmUYgm0nKI4B0giDlBzea5BiNXt5UufYrhLfAASkw+wlC67sjj+eR9XAQUvnnsSTCQWFaOu0g1+fqWRShn64+DUCtHKrNjWQEyixBze+hKd5thlzuKW4BssfgW9bhrkC5zKTAyt1/K/pe0A/cuk5l6/bzyR6QNkU6conwzr7veiQzN+TwGe0HRqzocxqLSM0/+HSaYrfnXOdvWiK9Zt6vlxQhLANN9JmfsJwND0GvRZhJf/V7cxG4rpkIkwLbSmdy9itA6uxxiuFjfh+Xs9fEbd9Y2aT7kJz9zmUQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CY4PR12MB1381.namprd12.prod.outlook.com (2603:10b6:903:42::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5061.25; Mon, 14 Mar 2022 14:14:51 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::88c:baca:7f34:fba7]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::88c:baca:7f34:fba7%5]) with mapi id 15.20.5061.028; Mon, 14 Mar 2022
+ 14:14:51 +0000
+Message-ID: <ae60e4a0-3333-1ad7-1ac9-62e6ac3751de@nvidia.com>
+Date:   Mon, 14 Mar 2022 14:14:41 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4.19 00/30] 4.19.235-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20220314112731.785042288@linuxfoundation.org>
+ <0ac87017-362d-33e2-eace-3407e0891a94@nvidia.com>
+ <Yi9LlP+x2swdsrbE@kroah.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <Yi9LlP+x2swdsrbE@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS8PR04CA0076.eurprd04.prod.outlook.com
+ (2603:10a6:20b:313::21) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tuc4yvsw.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3e4f368c-d4cf-4a6f-f18f-08da05c500d7
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1381:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1381A0B278BB34388EECE26ED90F9@CY4PR12MB1381.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UFd0nSVYwJK9vlERdXeaxL1SJ+9/ybzFCoGHcuHE9SdvPslwA91gEtDn5Rjx52SOJG3yJ+ucmNDrufvTyRXx8J5cG6S/zSw6bYJC8zrCCm7aR2zkurBvfdFn/RsU3662BfsW2yhSfNCtf6NyV0g9Q6+V3W3T/zRcWvbqn2549xEYw3h8/05180QL6T9LMZZvXz33MYWP2VzywsoaazBp2+Y4ptjnCA/KW3rMtL+4FvSHn2avUHhssMRkOD7lQD+/TErL5NiaNQJQfRejmaZJXTNP77SP1UXcVGL/CCDl+K++cR2kE32wL1Ob1nwKD3juQsDu4do8IsaKdHgRVxDF2SrMTIRhEA71n4HMeMHgrPKvDgmpqxWiLPF1K1zEziFDqOr4d0Po/apEx+gdM20/kLMhQC4feHhmrx1Gq00ceJcu5m2oKUbDDTUPmbgK6+8EMTJi8U3CGVPkG1qmXklJzkakcvLEHKjHSEmM8q6jqOtqb/bsgPAQlun2AHGXp5aZzFuSxOi5hcA8sLKGFnpcRCc21zV5C2oKaA9gNVGNSFVzEFRSp2g1IqakW0Dl27hcRJvQ4UBlUsNOVBG0kTWI62kwQg/f4MTXURAdrtKepz8bh2PNmlQ2M2niFN4SRK6k+MV26RN1yh2CL59TTRl1NCQkiAB43/Z54Wb+lNhKMPlGazc7hqeIZJlrMZ93iZdH7aaYxwnvFEKFpX9Dd9m1EAIFXzJGYaR+zmsw4D3zQ02HmESuiZuXwrW9f4l9KzxwpUOVp9gfJz6bJrWn/upJLXOBDgOY89Y2OFR6mpPgVWlfXxK3CPRyZwxYtu4cFi33nlun/tZVimqrkaaR/Kpc0w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(55236004)(2616005)(316002)(8676002)(26005)(186003)(4326008)(6916009)(6512007)(86362001)(966005)(6486002)(6666004)(6506007)(53546011)(66946007)(31686004)(2906002)(5660300002)(66476007)(66556008)(508600001)(7416002)(31696002)(36756003)(8936002)(45080400002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUlIaTVPb2U3TGxBdjUxd21TUGdJd3VabTNUTHVOV3FUZWZOcVYycUg4S2Vu?=
+ =?utf-8?B?c3pJU0lRNlpkKzJ5U3dqOU1OSmIwSVFrakhiZzlIYU5FTFhKdnBFckEra1FJ?=
+ =?utf-8?B?b3lOV1lrN1dHRXJrTURySFI3ZHIzMWl4NlppWmJ4Q1lDRTAzSE8yMCt3WGp4?=
+ =?utf-8?B?ZTI5SExFVVNpTDdzVWpNZFJ4SFNOT2JUdkE5NmkzY1R2ZlpqT2l3Zlh3d0Z5?=
+ =?utf-8?B?TnVxMUhHcHlSTWM0REloVnlHUWo0QUFkN3NpNndRcnpYRTJEL2g1cDZsOTFi?=
+ =?utf-8?B?dVFtRS9ob1RDSVFjK2xtRWRxNEFoeERCYXRiS2kxVDF1N1FsYnNLRFZnQmNp?=
+ =?utf-8?B?dW9Yc1lNS2MrTXkweEJYQjlzT3RyaHdPUGdGalVPaGVvMEc0YWNUdXdMZGpP?=
+ =?utf-8?B?YXlEdWZYTmlycis4M0VZUTlldVlxaFVUVDluNGJNRldBK0F3QzRaRzU3Mm1F?=
+ =?utf-8?B?bldnd3dVekQ1OWo4UDZ0cURLcFdBT2sxaFZWcGpQNlpvYVV5OG9YNWw0czVL?=
+ =?utf-8?B?aUpxL3BvcXFSdGtSazRPM2wrZmFjUU03cnJGcDR6Z1NHWEFMK3F6cmt4SXBq?=
+ =?utf-8?B?TG1HMTd4RlBwaTJpalIzbW44RzcvS2k1c1FoYUg2aGNoVWNCdmhRTjd3Smow?=
+ =?utf-8?B?Uld1Z01zWm4xWStveExhb01IMjdEYjZKdHFtK0tSdkdvYi8xVUtTOHU1QUs4?=
+ =?utf-8?B?Z2EwVHFYTndyWjBUQWFHdnF3eXdHT0pPYVhYTDZ4M2xDNXI0ZjU0Z1BHbXJz?=
+ =?utf-8?B?cW92SFNTTndsbThvUDgwaUdQOVlsaEUzbEtEaThoUWNoS3prWnVJeFpHR3Y1?=
+ =?utf-8?B?cVI0SXdmSEp4eWYzRU1mVCtCelh1UVZIanpXeFY4eEhpYTFNcnpJbzJtN0hq?=
+ =?utf-8?B?Z2h6ZjM2Um5oQ0MvbmNVa2tEVlBVanIyelpVN001RE5CRm1uOFl6dEs3b29Q?=
+ =?utf-8?B?cXNXT3RFcHU5eURFS3pjdW9Gd3VnTnhKWlFnampscTUzWk1wbnBLSFE4akJW?=
+ =?utf-8?B?QjkvSityRTMwb3Bzc0ZmcGxXV3pKTDg3WDRneGJTNVYzbGk5RmNET2ZKcWdT?=
+ =?utf-8?B?dWEwcmJQbkhHM1J6bXBkcGt5c0ZlYlhzci9rWHBremNlZ2FNNDUyOHU2SjlD?=
+ =?utf-8?B?enVENndjUVkwUEZ4KzNTcDlVTW13RVJ4cTRyanU4ZmVSOGtnbzJZMU9FQXdP?=
+ =?utf-8?B?RktNU1B1WUtOVzdGeHRPS3F6bHVWeTdJbmhNZHlVeEwwM05qcWt4NVJmWXk0?=
+ =?utf-8?B?MXRnV0hYQnJUb0F4VHk1VEErRnE2cE5LbmQwMTc0OU9uVHAzYkE1VS9JT2VI?=
+ =?utf-8?B?Mk1LVE5qMXkrb0dTSjc1c1M2RHowUE5VUlhPbWo1elRFMGJNVHlUNllEa2NC?=
+ =?utf-8?B?amZtalRhemh6RVJFMlFQQjA4NDVmVzlCNVVqVWtOTWRqVWRmNGJITHlnYVAw?=
+ =?utf-8?B?YXRQK0VwVWFvV0dOR0IyWlFpTzBXRDV6TlRVNFpFUlM2V0JBU3BDNm1MZWkx?=
+ =?utf-8?B?QzhBUlM5eTdGMTJ0Y05rbkJKUWdiUVJ0cHIxNnRReElkenV4USswRXZTSk1G?=
+ =?utf-8?B?dTNjNW5MZjh5Mm5YNkV0aFNIVEpGNU9Fb3JIVURJMUFyQ2o5NUs1Q2hPbzFG?=
+ =?utf-8?B?azRVWTV0YVoweTA2TDQyY29aQ3RsVFh4RDRyc2ZVWXpCR2tENU9NUVZlWGQ1?=
+ =?utf-8?B?TFl1VVVOZkNRbGNuRWJXOWZ1c3ZnMUNacG8wait0UWZhWGw2a1owWkRuUTVm?=
+ =?utf-8?B?cEF2R05TbWk5eVk4S3IrcEl6cWVCWW05QnVUbmgxS2tqRjM1c3J6ekg4VDJN?=
+ =?utf-8?B?bmlhVE5FYXNpK2IzaEJ3RW14U2NWazQxcXo2eFFEM1EyV244a1A3b2M4bjRk?=
+ =?utf-8?B?TDdEc09McElQZWZod2ZYWVhzeUw0U0NtME9SZ2l0OWRNZzNzUmRGWTQ4OWFJ?=
+ =?utf-8?B?Y0EvdGpjY1lyNjQ4a0xpMzM1T1BIN2NEeCsvbnJlUE56elZ0bkFPWGdHVHI2?=
+ =?utf-8?B?bDQrazNIL2VnPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e4f368c-d4cf-4a6f-f18f-08da05c500d7
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2022 14:14:51.0787
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TQdGXoz6TtGyUsorzfJjkDnxCOckHleRMz2u7cxRkABx0bId4ADMsCSAdnPZeiTpquplZI+G0UrHhE1Lg0JvZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1381
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,257 +130,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-03-11 23:27:51, John Ogness wrote:
-> Hi Petr,
+
+On 14/03/2022 14:05, Greg Kroah-Hartman wrote:
+> On Mon, Mar 14, 2022 at 01:58:12PM +0000, Jon Hunter wrote:
+>> Hi Greg,
+>>
+>> On 14/03/2022 11:34, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 4.19.235 release.
+>>> There are 30 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>> The whole patch series can be found in one patch at:
+>>> 	https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.kernel.org%2Fpub%2Flinux%2Fkernel%2Fv4.x%2Fstable-review%2Fpatch-4.19.235-rc1.gz&amp;data=04%7C01%7Cjonathanh%40nvidia.com%7C31eb601c0fb5484081d008da05c3aaad%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637828635201758957%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=qkVZnVBxsP8BHFANdvt6NDk8btMPekZoMolKI%2FHK1Zw%3D&amp;reserved=0
+>>> or in the git tree and branch at:
+>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+>>> and the diffstat can be found below.
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>>
+>>> -------------
+>>> Pseudo-Shortlog of commits:
+>>
+>> ...
+>>
+>>> James Morse <james.morse@arm.com>
+>>>       KVM: arm64: Reset PMC_EL0 to avoid a panic() on systems with no PMU
+>>
+>>
+>> The above is causing the following build error for ARM64 ...
+>>
+>> arch/arm64/kvm/sys_regs.c: In function ‘reset_pmcr’:
+>> arch/arm64/kvm/sys_regs.c:624:3: error: implicit declaration of function ‘vcpu_sys_reg’ [-Werror=implicit-function-declaration]
+>>     vcpu_sys_reg(vcpu, PMCR_EL0) = 0;
+>>     ^~~~~~~~~~~~
+>> arch/arm64/kvm/sys_regs.c:624:32: error: lvalue required as left operand of assignment
+>>     vcpu_sys_reg(vcpu, PMCR_EL0) = 0;
+>>
 > 
-> I do not think the example below is showing what you think it does, but
-> it does shed light on an important point.
-> 
-> On 2022-03-11, Petr Mladek <pmladek@suse.com> wrote:
-> > CPU0			CPU1			CPU2
-> >
-> > printk()
-> >   // direct mode allowed
-> 
-> OK, so @printk_direct is >= 1.
-> 
-> >   console_trylock()
-> >   console_unlock()
-> >     console_flush_all()
-> >
-> > 			printk_direct_enter()
-> 
-> @printk_direct is now >= 2.
+> Is this also broken in Linus's tree?
 
-I am sorry. I made a mistake in the example. I hope that
-the following shows what I wanted to show:
 
-CPU0			CPU1			CPU2
+No, Linus' tree is not broken. However, I don't see this change in 
+Linus' tree (v5.17-rc8).
 
-			printk_direct_enter()
-			  @printk_direct == 1.
+Jon
 
-printk()
-  // direct mode allowed
-  console_trylock()
-  console_unlock()
-
-			printk_direct_exit()
-			  @printk_direct == 0
-
-    console_flush_all()
-
-      allows_direct_printing() -> false;
-      break;
-
-      __console_unlock()
-        wakeup_klogd()
-
-						// woken printk_ktread
-						console_thread_printing_enter()
-
-
-      console_trylock()
-        atomic_tryblock()
-	  //fails because thread active
-
-   return;
-
-			printk_direct_enter()
-			  @printk_direct == 1
-
-						console_thread_printing_exit()
-
-My expectation: printk_kthread will go into sleep because the system
-		is in direct mode. In this case, nobody would be
-		scheduled to continue the printing.
-
-
-
-> No, the kthread does not sleep. It will continue printing until it is
-> blocked via console_lock()/console_trylock() or until all the records
-> are printed.
-
-I see. In the patch, the kthread does not check @printk_direct at all.
-I have missed this :-(
-
-From my POV, it is a very non-intuitive behavior. But it seems that
-you did it intentionally.
-
-
-> If that is what you mean, then you are suggesting that the
-> console_trylock() spins until all the kthreads have finished their
-> current record. This could be a new variant of console_trylock().
-
-No, console_trylock() must not wait. My expectation would be
-something like:
-
-static bool printer_should_wake(struct console *con, u64 seq)
-{
-[...]
-	/*
-	 * Bail out when direct more is requested. Make sure
-	 * that someone tries to continue printing in
-	 * the direct mode.
-	 */
-	if (atomic_read(&printk_direct)) {
-		defer_console_output();
-		return false;
-	}
-[...]
-}
-
-> That is what atomic consoles are for. Until atomic consoles are
-> available, that situation is covered by @oops_in_progress and
-> console_flush_on_panic().
- 
-> > This is the race that I see with console_trylock(). IMHO, if we solve
-> > this race then we do not need console_lock_reacquire().
-> 
-> I do not understand why you continue to mix console_trylock() and
-> console_lock_reacquire(). console_lock_reacquire() is only for the
-> console_lock() context.
-
-Because the code path in console_unlock() is the same for
-console_lock() and console_trylock(). I am sorry but I still do
-not see any convincing argument why it is so important to handle
-the trylock different way according to how it was taken originally.
-
-The result of console_trylock() and console_reackquire() is exactly
-the same:
-
-     + console_sem is taken
-     + kthreads are blocked by a single value (flag or counter)
-
-My view, is that the console_trylock_reacquire() is a weird
-function that is not necessary. If we really need it to avoid
-any race then then the logic is too complex and we have to make
-it easier. console_trylock() must always be safe to use!
-
-Simple logic:
-
-If the atomic console_trylock() fails it means that someone else is
-already printing. It does not matter if it is another console_lock
-owner or kthreads.
-
-If console_trylock() is enough in one code path then it should be
-enough also in the other.
-
-
-Also:
-
-If the console lock is released then anything could happen,
-especially the kthreads might start printing. I do not see
-any point in stopping them again.
-
-They will start working _only_ when the direct mode is _not_
-requested. If they did not start working then we could re-take
-the lock atomically and we do not need to set CON_DIRECT flag.
-
-My view is that console_kthreads_atomic_tryblock() is a fast
-path how to block the kthreads. IMHO, it is perfectly fine
-to use it even in console_lock(). The complicated and
-sleeping console_kthreads_block() is needed only
-when any kthread is printing and we really need to wait.
-
-
-OK, you wrote:
-
-<John>
-The reason for the reacquire is because (during direct printing) we see
-that a new record appeared and we need to make sure it gets printed
-(because other direct printers may have aborted, expecting us to print
-it).
-</John>
-
-Let's make sure that we understand it the same way. When are we
-expected to print the pending records directly?
-
-   + When console_lock() was used?   My answer is "No".
-   + When @printk_direct > 0         My answer is "Yes".
-
-
-
-> > Well, I might be wrong. It is Friday evening. I still do not have
-> > the entire picture. I probably should have waited for Monday.
-> 
-> I believe that you sense a danger with direct printing and
-> console_trylock(). It allows for scenarios like your example that end up
-> relying on kthreads to finish the printing (if there is no
-> panic). Mainline already has this issue because console_lock() can also
-> be scheduled away and console_trylock() has no chance to print. This
-> really is the same issue and ultimately relies on @oops_in_progress and
-> console_flush_on_panic() to get the messages out.
-
-Sure.
-
-> I believe you are hinting at the worst-case scenario: a kthread getting
-> scheduled out while printing and never seeing a CPU again because the
-> system is so busy. Assuming the system does not panic, no printing would
-> be seen on that console anymore, even if direct printing is enabled.
-
-We could not do much about this. As you say, it happens already in current
-mainline. If the current console_lock owner is sleeping, it might
-never release the console lock. The fallback is in
-console_flush_panic().
-
-IMHO, it is worse with the kthreads. Any printk kthread might block switching
-to the direct mode and printing messages on other consoles. We should
-allow switching to the direct mode ASAP. This is why I suggest that
-kthreads should check @printk_direct counter and bail out. It is
-similar to
-https://lore.kernel.org/all/20220202171821.179394-5-stephen.s.brennan@oracle.com/
-
-It makes the logic symmetric and easier:
-
-   + console_lock() and printk_direct_enter() block kthreads.
-	The kthreads will bail out on the next record when printing.
-
-   + console_unlock() and printk_direct_exit() allow using kthreads.
-
-   + console_unlock() will stop direct printing when @printk_direct == 0.
-
-   + printk_kthread() will get blocked when @printk_direct > 0
-
-   + vprintk_emit() and console_unlock() will do the same decision
-     according to @printk_direct counter. They will either try
-     to printk directly or wake up kthreads.
-
-Slightly unrelated:
-
-   + __console_emit_next_record() should allow handover by a parameter
-     passed from the caller. Not by guessing from a global state.
-
-
-> The only solution I see (aside from atomic consoles) is to disable
-> preemption during printing. Perhaps for non-atomic consoles, this is
-> what we need to do. That, together with a new console_trylock() variant,
-> should avoid this concern. Do you agree? Do we want to go that route?
-> 
-> Disabling preemption would be a problem moving forward for the fbcon
-> because, for the future, I really would like fbcon to live in a
-> sleepable context. I already have some new ideas about this. But that is
-> not a topic for this series.
-
-I though about this as well. But let's keep the preemption enabled in
-the kthreads for now. We could always disable it when it causes
-problems in the real life.
-
-Best Regards,
-Petr
-
-PS: It seems like we are going in circles. My intention is to keep
-    the logic as simple and as clear as possible:
-
-       + if we need lock then use lock
-
-       + if we need trylock then use trylock
-
-       + if we want direct mode then block kthreads and try enter
-	 the direct mode ASAP.
-
-       + if kthreads mode is allowed then do nothing in
-	 console_unlock() and leave the job to kthreads.
-
-       + console_lock() temporarily blocks kthreads but
-	 it handle messages only when direct mode is enforced.
+-- 
+nvpublic

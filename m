@@ -2,160 +2,567 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A846D4D79FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053B74D79FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiCNEyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 00:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S234733AbiCNEzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 00:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiCNEyK (ORCPT
+        with ESMTP id S229549AbiCNEzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 00:54:10 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4358BDFF6
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647233581; x=1678769581;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bDcfuJ4fQYIg26RqU/vjViaReE8o3gL8fjB6ap8civ0=;
-  b=HLXbVofsXFSthwvCw3NEnYAHH3sa1LCE1avEpv2GQ1676PkRvcXSk+h7
-   l69Imf3cQAXQ4Zb2RlwMi86WieBh7cWPqglv6WGOw/wgWRLvuGiHAa0Aq
-   WCoRKiGpkA3KmvqpHM2z6sf+HXwr0ENhaHT3J28aHluvZ1BD+Jv7ESWKc
-   pOsk9QGu8go6uOg3JQO3B9kw7x8O15whC2iJT+w+DXvWjdTj2NHlsxKWu
-   pFModdsW+z4vSc/Zgc3zPSTIcHYvfzmSfHM0otBUCtI2H5hHiK8MvTAVS
-   dpHXtua61j6sArQ4fsKNRtJWoYAEPTfQiWf/WBrBZbxFyjCJqt7krE8Ka
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="253493978"
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="253493978"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 21:53:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="515266932"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2022 21:52:59 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTchW-0009aV-J4; Mon, 14 Mar 2022 04:52:58 +0000
-Date:   Mon, 14 Mar 2022 12:52:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tien.sung.ang@intel.com, Dinh Nguyen <dinguyen@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: Re: [PATCH 3/3] firmware: stratix10-svc: add new FCS commands
-Message-ID: <202203141217.H2LzQEuO-lkp@intel.com>
-References: <20220314102807.1746893-1-tien.sung.ang@intel.com>
+        Mon, 14 Mar 2022 00:55:13 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B711E0CB
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:54:03 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id t5so13247555pfg.4
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 21:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mmiy5lr7iVIM3cilHYSQsZDnM018Jzelr0A2JnEgn+8=;
+        b=oa00G3/u3itjM9ldQtHz69esc28FP1TKhk6TGBKGBgpnIkPFRj/5gLPyWuJ1+huOgr
+         wOqb9tydI4tcVtps/+OhHXatqTXK2wZbGdfED6QF/XOUemHuqzkfUg1ZdSxQxTPZj3Ts
+         AzRHhcFh946zp36fyv37rrNuMco6XdA7QEGtRBPDv1p9cVW6LOE9pm+3xmT0SP937tx8
+         9G8j7gaL+UoDmdhBLbrfD0h6pFbSSbZ46wcoth9qdTD6nom1SF35Qq0jb+Bo8orqToRK
+         Md8G3rO9sWTuaa9m5cm3oPaFNAZQVdNLqZgy5PlX79K/SF4LaQL5zfTurYyi5ULLFqWH
+         2czw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mmiy5lr7iVIM3cilHYSQsZDnM018Jzelr0A2JnEgn+8=;
+        b=qD+QlpWFf+6a2oRfgzntMVReU+ngGsmBSgwarZMN/NVZ4L+Z9vETyqbnggwunDKaYp
+         A5IklHbqJzKELlxJIuaAHntCRe7bBxWuOzvMXHDs9OCP6/yfZYzPrWDaMmrMf+nHPGmq
+         9VHVszNpLNTFylGLWy4GNMq4WRPfTLu4BZyAKg1V3eVtiPS07jizb5fuISj4HCt8jMqs
+         Hng8o5lFtV+ZMvcGLg06SKuBjhPYe3YUksmpcoot+STkfgfVt/Yt/rWvuIAjYdLj/sVt
+         Zmre7NnKfDK3IQVekRvn4f5XXCnZMAkglX5y8PwWDauIZw7v+mmEKU93LqosY7ropyha
+         XBew==
+X-Gm-Message-State: AOAM531vrtf/CHd4NVjbV+Ox3n9uufVhvtfixRWl0zt3UTd3SBuNJxlu
+        k+ezvauuKvB1vKvzCECqwQGeZQ==
+X-Google-Smtp-Source: ABdhPJwMxpHPNLWU7E8nw4BWJgoEFKBaIbMpKiBw+3cJXYuW3k18DknTi33HFCgP6b+rM8IesmaZOg==
+X-Received: by 2002:a63:7d04:0:b0:378:fb34:5162 with SMTP id y4-20020a637d04000000b00378fb345162mr18774918pgc.487.1647233642679;
+        Sun, 13 Mar 2022 21:54:02 -0700 (PDT)
+Received: from [10.4.46.70] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id b9-20020a056a000cc900b004f7a986fc78sm6975997pfv.11.2022.03.13.21.53.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Mar 2022 21:54:02 -0700 (PDT)
+Message-ID: <444bfebb-ac1c-42b9-58f5-332780e749f7@bytedance.com>
+Date:   Mon, 14 Mar 2022 12:53:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314102807.1746893-1-tien.sung.ang@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v2][RFC] sched/fair: Change SIS_PROP to search idle CPU
+ based on sum of util_avg
+Content-Language: en-US
+To:     Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+Cc:     Tim Chen <tim.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>
+References: <20220310005228.11737-1-yu.c.chen@intel.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <20220310005228.11737-1-yu.c.chen@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Chen,
 
-Thank you for the patch! Perhaps something to improve:
+在 3/10/22 8:52 AM, Chen Yu 写道:
+> [Problem Statement]
+> Currently select_idle_cpu() uses the percpu average idle time to
+> estimate the total LLC domain idle time, and calculate the number
+> of CPUs to be scanned. This might be inconsistent because idle time
+> of a CPU does not necessarily correlate with idle time of a domain.
+> As a result, the load could be underestimated and causes over searching
+> when the system is very busy.
+> 
+> The following histogram is the time spent in select_idle_cpu(),
+> when running 224 instance of netperf on a system with 112 CPUs
+> per LLC domain:
+> 
+> @usecs:
+> [0]                  533 |                                                    |
+> [1]                 5495 |                                                    |
+> [2, 4)             12008 |                                                    |
+> [4, 8)            239252 |                                                    |
+> [8, 16)          4041924 |@@@@@@@@@@@@@@                                      |
+> [16, 32)        12357398 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+> [32, 64)        14820255 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> [64, 128)       13047682 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       |
+> [128, 256)       8235013 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@                        |
+> [256, 512)       4507667 |@@@@@@@@@@@@@@@                                     |
+> [512, 1K)        2600472 |@@@@@@@@@                                           |
+> [1K, 2K)          927912 |@@@                                                 |
+> [2K, 4K)          218720 |                                                    |
+> [4K, 8K)           98161 |                                                    |
+> [8K, 16K)          37722 |                                                    |
+> [16K, 32K)          6715 |                                                    |
+> [32K, 64K)           477 |                                                    |
+> [64K, 128K)            7 |                                                    |
+> 
+> netperf latency:
+> =======
+> case            	load    	    Lat_99th	    std%
+> TCP_RR          	thread-224	      257.39	(  0.21)
+> UDP_RR          	thread-224	      242.83	(  6.29)
+> 
+> The netperf 99th latency(usec) above is comparable with the time spent in
+> select_idle_cpu(). That is to say, when the system is overloaded, searching
+> for idle CPU could be a bottleneck.
+> 
+> [Proposal]
+> The main idea is to replace percpu average idle time with the domain
+> based metric. Choose average CPU utilization(util_avg) as the candidate.
+> In general, the number of CPUs to be scanned should be inversely
+> proportional to the sum of util_avg in this domain. That is, the lower
+> the util_avg is, the more select_idle_cpu() should scan for idle CPU,
+> and vice versa. The benefit of choosing util_avg is that, it is a metric
+> of accumulated historic activity, which seems to be more accurate than
+> instantaneous metrics(such as rq->nr_running).
+> 
+> Furthermore, borrow the util_avg from periodic load balance,
+> which could offload the overhead of select_idle_cpu().
+> 
+> According to last discussion[1], introduced the linear function
+> for experimental purpose:
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on linus/master v5.17-rc8]
-[cannot apply to next-20220310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+It would be better if you can prove it's a linear model by the
+SIS efficiency statistics :)
 
-url:    https://github.com/0day-ci/linux/commits/tien-sung-ang-intel-com/firmware-stratix10-svc-Add-new-FCS-support/20220314-102938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: h8300-allyesconfig (https://download.01.org/0day-ci/archive/20220314/202203141217.H2LzQEuO-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/21427534c2a95b30f967d178ee997d8ca94b34e6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tien-sung-ang-intel-com/firmware-stratix10-svc-Add-new-FCS-support/20220314-102938
-        git checkout 21427534c2a95b30f967d178ee997d8ca94b34e6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
+> 
+> f(x) = a - bx
+> 
+>       llc_size
+> x = \Sum      util_avg[cpu] / llc_cpu_capacity
+>       1
+> f(x) is the number of CPUs to be scanned, x is the sum util_avg.
+> To decide a and b, the following condition should be met:
+> 
+> [1] f(0) = llc_size
+> [2] f(x) = 4,  x >= 50%
+> 
+> That is to say, when the util_avg is 0, we should search for
+> the whole LLC domain. And if util_avg ratio reaches 50% or higher,
+> it should search at most 4 CPUs.
+> 
+> Yes, there would be questions like:
+> Why using this linear function to calculate the number of CPUs to
+> be scanned? Why choosing 50% as the threshold? These questions will
+> be discussed in the [Limitations] section.
+> 
+> [Benchmark]
+> netperf, hackbench, schbench, tbench
+> were tested with 25% 50% 75% 100% 125% 150% 175% 200% instance
+> of CPU number (these ratios are not CPU utilization). Each test lasts
+> for 100 seconds, and repeats 3 times. The system would reboot into a
+> fresh environment for each benchmark.
+> 
+> The following is the benchmark result comparison between
+> baseline:vanilla and compare:patched kernel. Positive compare%
+> indicates better performance.
+> 
+> netperf
+> =======
+> case            	load    	baseline(std%)	compare%( std%)
+> TCP_RR          	28 threads	 1.00 (  0.30)	 -1.26 (  0.32)
+> TCP_RR          	56 threads	 1.00 (  0.35)	 -1.26 (  0.41)
+> TCP_RR          	84 threads	 1.00 (  0.46)	 -0.15 (  0.60)
+> TCP_RR          	112 threads	 1.00 (  0.36)	 +0.44 (  0.41)
+> TCP_RR          	140 threads	 1.00 (  0.23)	 +0.95 (  0.21)
+> TCP_RR          	168 threads	 1.00 (  0.20)	+177.77 (  3.78)
+> TCP_RR          	196 threads	 1.00 (  0.18)	+185.43 ( 10.08)
+> TCP_RR          	224 threads	 1.00 (  0.16)	+187.86 (  7.32)
+> UDP_RR          	28 threads	 1.00 (  0.43)	 -0.93 (  0.27)
+> UDP_RR          	56 threads	 1.00 (  0.17)	 -0.39 ( 10.91)
+> UDP_RR          	84 threads	 1.00 (  6.36)	 +1.03 (  0.92)
+> UDP_RR          	112 threads	 1.00 (  5.55)	 +1.47 ( 17.67)
+> UDP_RR          	140 threads	 1.00 ( 18.17)	 +0.31 ( 15.48)
+> UDP_RR          	168 threads	 1.00 ( 15.00)	+153.87 ( 13.20)
+> UDP_RR          	196 threads	 1.00 ( 16.26)	+169.19 ( 13.78)
+> UDP_RR          	224 threads	 1.00 ( 51.81)	+76.72 ( 10.95)
+> 
+> hackbench
+> =========
+> (each group has 1/4 * 112 tasks)
+> case            	load    	baseline(std%)	compare%( std%)
+> process-pipe    	1 group 	 1.00 (  0.47)	 -0.46 (  0.16)
+> process-pipe    	2 groups 	 1.00 (  0.42)	 -0.61 (  0.74)
+> process-pipe    	3 groups 	 1.00 (  0.42)	 +0.38 (  0.20)
+> process-pipe    	4 groups 	 1.00 (  0.15)	 -0.36 (  0.56)
+> process-pipe    	5 groups 	 1.00 (  0.20)	 -5.08 (  0.01)
+> process-pipe    	6 groups 	 1.00 (  0.28)	 -2.98 (  0.29)
+> process-pipe    	7 groups 	 1.00 (  0.08)	 -1.18 (  0.28)
+> process-pipe    	8 groups 	 1.00 (  0.11)	 -0.40 (  0.07)
+> process-sockets 	1 group 	 1.00 (  0.43)	 -1.93 (  0.58)
+> process-sockets 	2 groups 	 1.00 (  0.23)	 -1.10 (  0.49)
+> process-sockets 	3 groups 	 1.00 (  1.10)	 -0.96 (  1.12)
+> process-sockets 	4 groups 	 1.00 (  0.59)	 -0.08 (  0.88)
+> process-sockets 	5 groups 	 1.00 (  0.45)	 +0.31 (  0.34)
+> process-sockets 	6 groups 	 1.00 (  0.23)	 +0.06 (  0.66)
+> process-sockets 	7 groups 	 1.00 (  0.12)	 +1.72 (  0.20)
+> process-sockets 	8 groups 	 1.00 (  0.11)	 +1.98 (  0.02)
+> threads-pipe    	1 group 	 1.00 (  1.07)	 +0.03 (  0.40)
+> threads-pipe    	2 groups 	 1.00 (  1.05)	 +0.19 (  1.27)
+> threads-pipe    	3 groups 	 1.00 (  0.32)	 -0.42 (  0.48)
+> threads-pipe    	4 groups 	 1.00 (  0.42)	 -0.76 (  0.79)
+> threads-pipe    	5 groups 	 1.00 (  0.19)	 -4.97 (  0.07)
+> threads-pipe    	6 groups 	 1.00 (  0.05)	 -4.11 (  0.04)
+> threads-pipe    	7 groups 	 1.00 (  0.10)	 -1.13 (  0.16)
+> threads-pipe    	8 groups 	 1.00 (  0.03)	 -0.08 (  0.05)
+> threads-sockets 	1 group 	 1.00 (  0.33)	 -1.93 (  0.69)
+> threads-sockets 	2 groups 	 1.00 (  0.20)	 -1.55 (  0.30)
+> threads-sockets 	3 groups 	 1.00 (  0.37)	 -1.29 (  0.59)
+> threads-sockets 	4 groups 	 1.00 (  1.83)	 +0.31 (  1.17)
+> threads-sockets 	5 groups 	 1.00 (  0.28)	+15.73 (  0.24)
+> threads-sockets 	6 groups 	 1.00 (  0.15)	 +5.02 (  0.34)
+> threads-sockets 	7 groups 	 1.00 (  0.10)	 +2.29 (  0.14)
+> threads-sockets 	8 groups 	 1.00 (  0.17)	 +2.22 (  0.12)
+> 
+> tbench
+> ======
+> case            	load    	baseline(std%)	compare%( std%)
+> loopback        	28 threads	 1.00 (  0.05)	 -1.39 (  0.04)
+> loopback        	56 threads	 1.00 (  0.08)	 -0.37 (  0.04)
+> loopback        	84 threads	 1.00 (  0.03)	 +0.20 (  0.13)
+> loopback        	112 threads	 1.00 (  0.04)	 +0.69 (  0.04)
+> loopback        	140 threads	 1.00 (  0.13)	 +1.15 (  0.21)
+> loopback        	168 threads	 1.00 (  0.03)	 +1.62 (  0.08)
+> loopback        	196 threads	 1.00 (  0.08)	 +1.50 (  0.30)
+> loopback        	224 threads	 1.00 (  0.05)	 +1.62 (  0.05)
+> 
+> schbench
+> ========
+> (each mthread group has 1/4 * 112 tasks)
+> case            	load    	baseline(std%)	compare%( std%)
+> normal          	1 mthread group	 1.00 ( 17.92)	+19.23 ( 23.67)
+> normal          	2 mthread groups 1.00 ( 21.10)	 +8.32 ( 16.92)
+> normal          	3 mthread groups 1.00 ( 10.80)	+10.03 (  9.21)
+> normal          	4 mthread groups 1.00 (  2.67)	 +0.11 (  3.00)
+> normal          	5 mthread groups 1.00 (  0.08)	 +0.00 (  0.13)
+> normal          	6 mthread groups 1.00 (  2.99)	 -2.66 (  3.87)
+> normal          	7 mthread groups 1.00 (  2.16)	 -0.83 (  2.24)
+> normal          	8 mthread groups 1.00 (  1.75)	 +0.18 (  3.18)
+> 
+> According to the results above, when the workloads is heavy, the throughput
+> of netperf improves a lot. It might be interesting to look into the reason
+> why this patch benefits netperf significantly. Further investigation has
+> shown that, this might be a 'side effect' of this patch. It is found that,
+> the CPU utilization is around 90% on vanilla kernel, while it is nearly
+> 100% on patched kernel. According to the perf profile, with the patch
+> applied, the scheduler would likely to choose previous running CPU for the
+> waking task, thus reduces runqueue lock contention, so the CPU utilization
+> is higher and get better performance.
+> 
+> [Limitations]
+> Q:Why using 50% as the util_avg/capacity threshold to search at most 4 CPUs?
+> 
+> A: 50% is chosen as that corresponds to almost full CPU utilization, when
+>     the CPU is fixed to run at its base frequency, with turbo enabled.
+>     4 is the minimal number of CPUs to be scanned in current select_idle_cpu().
+> 
+>     A synthetic workload was used to simulate different level of
+>     load. This workload takes every 10ms as the sample period, and in
+>     each sample period:
+> 
+>     while (!timeout_10ms) {
+>          loop(busy_pct_ms);
+>     	sleep(10ms-busy_pct_ms)
+>     }
+> 
+>     to simulate busy_pct% of CPU utilization. When the workload is
+>     running, the percpu runqueue util_avg was monitored. The
+>     following is the result from turbostat's Busy% on CPU2 and
+>     cfs_rq[2].util_avg from /sys/kernel/debug/sched/debug:
+> 
+>     Busy%    util_avg   util_avg/cpu_capacity%
+>     10.06    35         3.42
+>     19.97    99         9.67
+>     29.93    154        15.04
+>     39.86    213        20.80
+>     49.79    256        25.00
+>     59.73    325        31.74
+>     69.77    437        42.68
+>     79.69    458        44.73
+>     89.62    519        50.68
+>     99.54    598        58.39
+> 
+>     The reason why util_avg ratio is not consistent with Busy% might be due
+>     to CPU frequency invariance. The CPU is running at fixed lower frequency
+>     than the turbo frequency, then the util_avg scales lower than
+>     SCHED_CAPACITY_SCALE. In our test platform, the base frequency is 1.9GHz,
+>     and the max turbo frequency is 3.7GHz, so 1.9/3.7 is around 50%.
+>     In the future maybe we could use arch_scale_freq_capacity()
+>     instead of sds->total_capacity, so as to remove the impact from frequency.
+>     Then the 50% could be adjusted higher. For now, 50% is an aggressive
+>     threshold to restric the idle CPU searching and shows benchmark
+>     improvement.
+> 
+> Q: Why using nr_scan = a - b * sum_util_avg to do linear search?
+> 
+> A: Ideally the nr_scan could be:
+> 
+>     nr_scan = sum_util_avg / pelt_avg_scan_cost
+> 
+>     However consider the overhead of calculating pelt on avg_scan_cost
+>     in each wake up, choosing heuristic search for evaluation seems to
+>     be an acceptable trade-off.
+> 
+>     The f(sum_util_avg) could be of any form, as long as it is a monotonically
+>     decreasing function. At first f(x) = a - 2^(bx) was chosen. Because when the
+>     sum_util_avg is low, the system should try very hard to find an idle CPU. And
+>     if sum_util_avg goes higher, the system dramatically lose its interest to search
+>     for the idle CPU. But exponential function does have its drawback:
+> 
+>     Consider a system with 112 CPUs, let f(x) =  112 when x = 0,
+>     f(x) = 4 when x = 50, x belongs to [0, 100], then we have:
+> 
+>     f1(x) = 113 - 2^(x / 7.35)
+>     and
+>     f2(x) = 112 - 2.16 * x
+> 
+>     Since kernel does not support floating point, above functions are converted into:
+>     nr_scan1(x) = 113 - 2^(x / 7)
+>     and
+>     nr_scan2(x) = 112 - 2 * x
+> 
+>     util_avg%      0     1     2  ...   8     9   ... 47   48   49
+>     nr_scan1     112   112   112      111   111       49   49    4
+>     nr_scan2     112   110   108       96    94       18   16   14
+> 
+>     According to above result, the granularity of exponential function
+>     is coarse-grained, while the linear function is fine-grained.
+> 
+>     So finally choose linear function. After all, it has shown benchmark
+>     benefit without noticeable regression so far.
+> 
+> Q: How to deal with the following corner case:
+> 
+>     It is possible that there is unbalanced tasks among CPUs due to CPU affinity.
+>     For example, suppose the LLC domain is composed of 6 CPUs, and 5 tasks are bound
+>     to CPU0~CPU4, while CPU5 is idle:
+> 
+> 		CPU0	CPU1	CPU2	CPU3	CPU4	CPU5
+>     util_avg	1024	1024	1024	1024	1024	0
+> 
+>     Since the util_avg ratio is 83%( = 5/6 ), which is higher than 50%, select_idle_cpu()
+>     only searches 4 CPUs starting from CPU0, thus leaves idle CPU5 undetected.
+> 
+>     A possible workaround to mitigate this problem is that, the nr_scan should
+>     be increased by the number of idle CPUs found during periodic load balance
+>     in update_sd_lb_stats(). In above example, the nr_scan will be adjusted to
+>     4 + 1 = 5. Currently I don't have better solution in mind to deal with it
+>     gracefully.
+> 
+> Any comment is appreciated.
+> 
+> Link: https://lore.kernel.org/lkml/20220207135253.GF23216@worktop.programming.kicks-ass.net/ # [1]
+> Suggested-by: Tim Chen <tim.c.chen@intel.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+>   include/linux/sched/topology.h |   1 +
+>   kernel/sched/fair.c            | 107 +++++++++++++++++++--------------
+>   2 files changed, 63 insertions(+), 45 deletions(-)
+> 
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 8054641c0a7b..aae558459f00 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -81,6 +81,7 @@ struct sched_domain_shared {
+>   	atomic_t	ref;
+>   	atomic_t	nr_busy_cpus;
+>   	int		has_idle_cores;
+> +	int		nr_idle_scan;
+>   };
+>   
+>   struct sched_domain {
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 5146163bfabb..59f5f8432c21 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6271,43 +6271,14 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>   {
+>   	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+>   	int i, cpu, idle_cpu = -1, nr = INT_MAX;
+> -	struct rq *this_rq = this_rq();
+> -	int this = smp_processor_id();
+> -	struct sched_domain *this_sd;
+> -	u64 time = 0;
+> -
+> -	this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+> -	if (!this_sd)
+> -		return -1;
+> +	struct sched_domain_shared *sd_share;
+>   
+>   	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+>   
+>   	if (sched_feat(SIS_PROP) && !has_idle_core) {
+> -		u64 avg_cost, avg_idle, span_avg;
+> -		unsigned long now = jiffies;
+> -
+> -		/*
+> -		 * If we're busy, the assumption that the last idle period
+> -		 * predicts the future is flawed; age away the remaining
+> -		 * predicted idle time.
+> -		 */
+> -		if (unlikely(this_rq->wake_stamp < now)) {
+> -			while (this_rq->wake_stamp < now && this_rq->wake_avg_idle) {
+> -				this_rq->wake_stamp++;
+> -				this_rq->wake_avg_idle >>= 1;
+> -			}
+> -		}
+> -
+> -		avg_idle = this_rq->wake_avg_idle;
+> -		avg_cost = this_sd->avg_scan_cost + 1;
+> -
+> -		span_avg = sd->span_weight * avg_idle;
+> -		if (span_avg > 4*avg_cost)
+> -			nr = div_u64(span_avg, avg_cost);
+> -		else
+> -			nr = 4;
+> -
+> -		time = cpu_clock(this);
+> +		sd_share = rcu_dereference(per_cpu(sd_llc_shared, target));
+> +		if (sd_share)
+> +			nr = READ_ONCE(sd_share->nr_idle_scan);
+>   	}
+>   
+>   	for_each_cpu_wrap(cpu, cpus, target + 1) {
+> @@ -6328,18 +6299,6 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>   	if (has_idle_core)
+>   		set_idle_cores(target, false);
+>   
+> -	if (sched_feat(SIS_PROP) && !has_idle_core) {
+> -		time = cpu_clock(this) - time;
+> -
+> -		/*
+> -		 * Account for the scan cost of wakeups against the average
+> -		 * idle time.
+> -		 */
+> -		this_rq->wake_avg_idle -= min(this_rq->wake_avg_idle, time);
+> -
+> -		update_avg(&this_sd->avg_scan_cost, time);
+> -	}
+> -
+>   	return idle_cpu;
+>   }
+>   
+> @@ -9199,6 +9158,60 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>   	return idlest;
+>   }
+>   
+> +static inline void update_nr_idle_scan(struct lb_env *env, struct sd_lb_stats *sds,
+> +				       unsigned long sum_util)
+> +{
+> +	struct sched_domain_shared *sd_share;
+> +	int llc_size = per_cpu(sd_llc_size, env->dst_cpu);
+> +	int nr_scan;
+> +
+> +	/*
+> +	 * Update the number of CPUs to scan in LLC domain, which could
+> +	 * be used as a hint in select_idle_cpu(). The update of this hint
+> +	 * occurs during periodic load balancing, rather than frequent
+> +	 * newidle balance.
+> +	 */
+> +	if (env->idle == CPU_NEWLY_IDLE || env->sd->span_weight != llc_size)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+So nr_scan will probably be updated at llc-domain-lb-interval, which
+is llc_size milliseconds. Since load can be varied a lot during such
+a period, would this brought accuracy issues?
 
-All warnings (new ones prefixed by >>):
+Best regards
+Abel
 
-   In file included from include/linux/mfd/altera-sysmgr.h:13,
-                    from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
-   include/linux/firmware/intel/stratix10-smc.h:406:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'INTEL_SIP_SMC_SERVICE_COMPLETED'
-     406 |  * Request INTEL_SIP_SMC_SERVICE_COMPLETED
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/firmware/intel/stratix10-smc.h:406:12: error: unknown type name 'INTEL_SIP_SMC_SERVICE_COMPLETED'
-   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
->> include/linux/mfd/altera-sysmgr.h:22:45: warning: 'struct device_node' declared inside parameter list will not be visible outside of this definition or declaration
-      22 | altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-         |                                             ^~~~~~~~~~~
-   In file included from include/linux/err.h:5,
-                    from include/linux/mfd/altera-sysmgr.h:11,
-                    from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
-      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
-         |                                                   ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c: In function 'socfpga_dwmac_parse_data':
-   drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:113:54: error: passing argument 1 of 'altr_sysmgr_regmap_lookup_by_phandle' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     113 |                 altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
-         |                                                      ^~
-         |                                                      |
-         |                                                      struct device_node *
-   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c:7:
-   include/linux/mfd/altera-sysmgr.h:22:58: note: expected 'struct device_node *' but argument is of type 'struct device_node *'
-      22 | altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-         |                                      ~~~~~~~~~~~~~~~~~~~~^~
-   cc1: some warnings being treated as errors
-
-
-vim +22 include/linux/mfd/altera-sysmgr.h
-
-f36e789a1f8d0b Thor Thayer 2019-03-11  10  
-f36e789a1f8d0b Thor Thayer 2019-03-11  11  #include <linux/err.h>
-f36e789a1f8d0b Thor Thayer 2019-03-11  12  #include <linux/errno.h>
-f36e789a1f8d0b Thor Thayer 2019-03-11 @13  #include <linux/firmware/intel/stratix10-smc.h>
-f36e789a1f8d0b Thor Thayer 2019-03-11  14  
-f36e789a1f8d0b Thor Thayer 2019-03-11  15  struct device_node;
-f36e789a1f8d0b Thor Thayer 2019-03-11  16  
-f36e789a1f8d0b Thor Thayer 2019-03-11  17  #ifdef CONFIG_MFD_ALTERA_SYSMGR
-f36e789a1f8d0b Thor Thayer 2019-03-11  18  struct regmap *altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-f36e789a1f8d0b Thor Thayer 2019-03-11  19  						    const char *property);
-f36e789a1f8d0b Thor Thayer 2019-03-11  20  #else
-f36e789a1f8d0b Thor Thayer 2019-03-11  21  static inline struct regmap *
-f36e789a1f8d0b Thor Thayer 2019-03-11 @22  altr_sysmgr_regmap_lookup_by_phandle(struct device_node *np,
-f36e789a1f8d0b Thor Thayer 2019-03-11  23  				     const char *property)
-f36e789a1f8d0b Thor Thayer 2019-03-11  24  {
-f36e789a1f8d0b Thor Thayer 2019-03-11  25  	return ERR_PTR(-ENOTSUPP);
-f36e789a1f8d0b Thor Thayer 2019-03-11  26  }
-f36e789a1f8d0b Thor Thayer 2019-03-11  27  #endif
-f36e789a1f8d0b Thor Thayer 2019-03-11  28  
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +		return;
+> +
+> +	sd_share = rcu_dereference(per_cpu(sd_llc_shared, env->dst_cpu));
+> +	if (!sd_share)
+> +		return;
+> +
+> +	/*
+> +	 * In general, the number of cpus to be scanned should be
+> +	 * inversely proportional to the sum_util. That is, the lower
+> +	 * the sum_util is, the harder select_idle_cpu() should scan
+> +	 * for idle CPU, and vice versa. Let x be the sum_util ratio
+> +	 * [0-100] of the LLC domain, f(x) be the number of CPUs scanned:
+> +	 *
+> +	 * f(x) = a - bx                                              [1]
+> +	 *
+> +	 * Consider that f(x) = nr_llc when x = 0, and f(x) = 4 when
+> +	 * x >= threshold('h' below) then:
+> +	 *
+> +	 * a = llc_size;
+> +	 * b = (nr_llc - 4) / h                                       [2]
+> +	 *
+> +	 * then [2] becomes:
+> +	 *
+> +	 * f(x) = llc_size - (llc_size -4)x/h                         [3]
+> +	 *
+> +	 * Choose 50 (50%) for h as the threshold from experiment result.
+> +	 * And since x = 100 * sum_util / total_cap, [3] becomes:
+> +	 *
+> +	 * f(sum_util)
+> +	 *  = llc_size - (llc_size - 4) * 100 * sum_util / total_cap * 50
+> +	 *  = llc_size - (llc_size - 4) * 2 * sum_util / total_cap
+> +	 *
+> +	 */
+> +	nr_scan = llc_size - (llc_size - 4) * 2 * sum_util / sds->total_capacity;
+> +	if (nr_scan < 4)
+> +		nr_scan = 4;
+> +
+> +	WRITE_ONCE(sd_share->nr_idle_scan, nr_scan);
+> +}
+> +
+>   /**
+>    * update_sd_lb_stats - Update sched_domain's statistics for load balancing.
+>    * @env: The load balancing environment.
+> @@ -9212,6 +9225,7 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>   	struct sg_lb_stats *local = &sds->local_stat;
+>   	struct sg_lb_stats tmp_sgs;
+>   	int sg_status = 0;
+> +	unsigned long sum_util = 0;
+>   
+>   	do {
+>   		struct sg_lb_stats *sgs = &tmp_sgs;
+> @@ -9242,6 +9256,7 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>   		/* Now, start updating sd_lb_stats */
+>   		sds->total_load += sgs->group_load;
+>   		sds->total_capacity += sgs->group_capacity;
+> +		sum_util += sgs->group_util;
+>   
+>   		sg = sg->next;
+>   	} while (sg != env->sd->groups);
+> @@ -9268,6 +9283,8 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>   		WRITE_ONCE(rd->overutilized, SG_OVERUTILIZED);
+>   		trace_sched_overutilized_tp(rd, SG_OVERUTILIZED);
+>   	}
+> +
+> +	update_nr_idle_scan(env, sds, sum_util);
+>   }
+>   
+>   #define NUMA_IMBALANCE_MIN 2

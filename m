@@ -2,148 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A224D7E45
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349D94D7E4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbiCNJKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S237797AbiCNJNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237847AbiCNJKY (ORCPT
+        with ESMTP id S237975AbiCNJNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:10:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AB74163E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:09:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B58D81F37E;
-        Mon, 14 Mar 2022 09:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647248950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZDKu+JBJDRVsjqZYqekmRzMv+/i6U7EN7Ysg+sQ8Do=;
-        b=uCIdH4BgAQYuFlIehJjxgpckcXdbzP9TWuNWzBGP+N/RRevDvG/kHMeXZOeaCOqWUMPBlM
-        wOXxv+fnpkWi6wmnjC5RxJ9+YiuGCKZ7XHwwtmsHVsLwXJ92sV+nAd5JMxbWrJ4Y0E8jLH
-        z+M5f0awEFv/yEnFwo0N+oZeo+VrQWA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647248950;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZDKu+JBJDRVsjqZYqekmRzMv+/i6U7EN7Ysg+sQ8Do=;
-        b=ikGXtBGXunHXXi0s0Q+HKW7DKieChDD1m6bmplssi6BL3UTDT5malijRsZ2nkNS2XR/t/1
-        wpN+37ragpwEMZCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F77C13ADA;
-        Mon, 14 Mar 2022 09:09:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8XeQFjYGL2K5YgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 14 Mar 2022 09:09:10 +0000
-Message-ID: <b3575a73-384c-e0da-1db9-bad2aec053c4@suse.cz>
-Date:   Mon, 14 Mar 2022 10:09:10 +0100
+        Mon, 14 Mar 2022 05:13:04 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22914433B5;
+        Mon, 14 Mar 2022 02:11:54 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KH9dq1k19zcb1j;
+        Mon, 14 Mar 2022 17:06:55 +0800 (CST)
+Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 14 Mar 2022 17:11:50 +0800
+Received: from [10.67.111.186] (10.67.111.186) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 14 Mar 2022 17:11:50 +0800
+Message-ID: <aa25447a-f6ff-2ff2-72e9-3bbab1d430e9@huawei.com>
+Date:   Mon, 14 Mar 2022 17:11:50 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [mm/page_alloc] 8212a964ee: vm-scalability.throughput 30.5%
- improvement
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        0day robot <lkp@intel.com>, Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Eric Dumazet <eric.dumazet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>
-References: <20220312154321.GC1189@xsang-OptiPlex-9020>
- <15307f8a-c202-75d8-1361-dae0146df734@suse.cz>
- <CANn89i+fM0k+=Qw0M0fso1f-Ya8--5+==gtcWqCpo=Gu-ca1Ow@mail.gmail.com>
- <8f499c76-68cb-a2c3-01fd-c8759e2fd317@suse.cz>
- <CANn89iJwBe4+C8KP--c_9O6QE_Tou+1Z0+ugtuniG-06nzxPmg@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CANn89iJwBe4+C8KP--c_9O6QE_Tou+1Z0+ugtuniG-06nzxPmg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH 4.19 01/34] cgroup/cpuset: Fix a race between
+ cpuset_attach() and cpu hotplug
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Zhao Gongyi <zhaogongyi@huawei.com>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+References: <20220228172207.090703467@linuxfoundation.org>
+ <20220228172208.566431934@linuxfoundation.org>
+ <20220308151232.GA21752@blackbody.suse.cz> <Yi73dKB10LBTGb+S@kroah.com>
+From:   Zhang Qiao <zhangqiao22@huawei.com>
+In-Reply-To: <Yi73dKB10LBTGb+S@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.186]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500018.china.huawei.com (7.185.36.186)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/22 22:10, Eric Dumazet wrote:
-> On Sun, Mar 13, 2022 at 1:29 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->>
->> On 3/13/22 00:26, Eric Dumazet wrote:
->> > On Sat, Mar 12, 2022 at 10:59 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->> >>
->> >> On 3/12/22 16:43, kernel test robot wrote:
->> >>>
->> >>>
->> >>> Greeting,
->> >>>
->> >>> FYI, we noticed a 30.5% improvement of vm-scalability.throughput due to commit:
->> >>>
->> >>>
->> >>> commit: 8212a964ee020471104e34dce7029dec33c218a9 ("Re: [PATCH v2] mm/page_alloc: call check_new_pages() while zone spinlock is not held")
->> >>> url: https://github.com/0day-ci/linux/commits/Mel-Gorman/Re-PATCH-v2-mm-page_alloc-call-check_new_pages-while-zone-spinlock-is-not-held/20220309-203504
->> >>> patch link: https://lore.kernel.org/lkml/20220309123245.GI15701@techsingularity.net
->> >>
->> >> Heh, that's weird. I would expect some improvement from Eric's patch,
->> >> but this seems to be actually about Mel's "mm/page_alloc: check
->> >> high-order pages for corruption during PCP operations" applied directly
->> >> on 5.17-rc7 per the github url above. This was rather expected to make
->> >> performance worse if anything, so maybe the improvement is due to some
->> >> unexpected side-effect of different inlining decisions or cache alignment...
->> >>
->> >
->> > I doubt this has anything to do with inlining or cache alignment.
->> >
->> > I am not familiar with the benchmark, but its name
->> > (anon-w-rand-hugetlb) hints at hugetlb ?
->> >
->> > After Mel fix, we go over 512 'struct page' to perform sanity checks,
->> > thus loading into cpu caches the 512 cache lines.
->>
->> Ah, that's true.
->>
->> > This caching is done while no lock is held.
->>
->> But I don't think this is. The test was AFAICS done without your patch,
->> so the lock is still held in rmqueue(). And it's also held in
->> rmqueue_bulk() -> check_pcp_refill().
-> 
-> Note that Mel patch  touches both check_pcp_refill() and check_new_pcp()
-> 
-> __rmqueue_pcplist() definitely calls check_new_pcp() while the zone
-> spinlock is _not_ held.
 
-Yes, but the checking from check_new_pcp() is active only with
-CONFIG_DEBUG_VM or enabled debug_pagealloc, which were both disabled in the
-robot's report.
 
-> Note that it is possible to defer calls to check_pcp_refill after the
-> spinlock is released.
+在 2022/3/14 16:06, Greg Kroah-Hartman 写道:
+> On Tue, Mar 08, 2022 at 04:12:32PM +0100, Michal Koutný wrote:
+>> Hello.
+>>
+>> On Mon, Feb 28, 2022 at 06:24:07PM +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>>> [...]
+>>>      cpuset_attach()				cpu hotplug
+>>>     ---------------------------            ----------------------
+>>>     down_write(cpuset_rwsem)
+>>>     guarantee_online_cpus() // (load cpus_attach)
+>>> 					sched_cpu_deactivate
+>>> 					  set_cpu_active()
+>>> 					  // will change cpu_active_mask
+>>>     set_cpus_allowed_ptr(cpus_attach)
+>>>       __set_cpus_allowed_ptr_locked()
+>>>        // (if the intersection of cpus_attach and
+>>>          cpu_active_mask is empty, will return -EINVAL)
+>>>     up_write(cpuset_rwsem)
+>>> [...]
+>>> --- a/kernel/cgroup/cpuset.c
+>>> +++ b/kernel/cgroup/cpuset.c
+>>> @@ -1528,6 +1528,7 @@ static void cpuset_attach(struct cgroup_
+>>>  	cgroup_taskset_first(tset, &css);
+>>>  	cs = css_cs(css);
+>>>  
+>>> +	cpus_read_lock();
+>>>  	mutex_lock(&cpuset_mutex);
+>>
+>> This backport (and possible older kernels) looks suspicious since it comes
+>> before commit d74b27d63a8b ("cgroup/cpuset: Change cpuset_rwsem and
+>> hotplug lock order") v5.4-rc1~176^2~30 when the locking order was:
+>> cpuset lock, cpus lock.
+>>
+>> At the same time it also comes before commit 710da3c8ea7d ("sched/core:
+>> Prevent race condition between cpuset and __sched_setscheduler()")
+>> v5.4-rc1~176^2~27 when neither __sched_setscheduler() cared and this
+>> race is similar. (The swapped locking may still conflict with
+>> rebuild_sched_domains() before d74b27d63a8b.)
 > 
-> Untested patch:
+> Thanks for noticing this.  What do you recommend to do to resolve this?
+> 
+> thanks,
+> 
 
-I'll check the latest posting.
+hi, Please review the following patch to fix it.
+
+thanks.
+
+patch:
+
+[PATCH] cpuset: Fix unsafe lock order between cpuset lock and cpus lock
+
+The backport commit 4eec5fe1c680a ("cgroup/cpuset: Fix a race
+between cpuset_attach() and cpu hotplug") looks suspicious since
+it comes before commit d74b27d63a8b ("cgroup/cpuset: Change
+cpuset_rwsem and hotplug lock order") v5.4-rc1~176^2~30 when
+the locking order was: cpuset lock, cpus lock.
+
+Fix it with the correct locking order and reduce the cpus locking
+range because only set_cpus_allowed_ptr() needs the protection of
+cpus lock.
+
+Fixes: 4eec5fe1c680a ("cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug")
+Reported-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+---
+ kernel/cgroup/cpuset.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index d43d25acc..4e1c4232e 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1528,9 +1528,13 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+        cgroup_taskset_first(tset, &css);
+        cs = css_cs(css);
+
+-       cpus_read_lock();
+        mutex_lock(&cpuset_mutex);
+
++       /*
++        * It should hold cpus lock because a cpu offline event can
++        * cause set_cpus_allowed_ptr() failed.
++        */
++       cpus_read_lock();
+        /* prepare for attach */
+        if (cs == &top_cpuset)
+                cpumask_copy(cpus_attach, cpu_possible_mask);
+@@ -1549,6 +1553,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+                cpuset_change_task_nodemask(task, &cpuset_attach_nodemask_to);
+                cpuset_update_task_spread_flag(cs, task);
+        }
++       cpus_read_unlock();
+
+        /*
+         * Change mm for all threadgroup leaders. This is expensive and may
+@@ -1584,7 +1589,6 @@ static void cpuset_attach(struct cgroup_taskset *tset)
+                wake_up(&cpuset_attach_wq);
+
+        mutex_unlock(&cpuset_mutex);
+-       cpus_read_unlock();
+ }
+
+ /* The various types of files and directories in a cpuset file system */
+--
+2.18.0
+
+
+
+
+> greg k-h
+> .
+> 

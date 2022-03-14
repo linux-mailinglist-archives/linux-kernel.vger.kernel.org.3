@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025F54D7F5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355684D7F63
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238041AbiCNKDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S238288AbiCNKEV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Mar 2022 06:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbiCNKDl (ORCPT
+        with ESMTP id S238284AbiCNKEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:03:41 -0400
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1D537ABD;
-        Mon, 14 Mar 2022 03:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=GMRm70IRJ3DPdDAQd7rMaNIYMjmW5VYnvTf7K/KQIYQ=; b=U5N1VFVDe80FOaeIDdd17u8TFT
-        MhyUOzbd8/jOQ76yrdHMZk9XbAYGKQXhILyC0h7sfwj1eqbRoHSU9Je8Dc4Ld39qMBXddZ2yxnGpw
-        XmiV9Pn5phcS5tGHViuUc+FbhR4ub7adiw0/cipImjzl6mFqgLr/C5H8+03XtSmJF0XkeiOBwdZHE
-        wBNuuDvPdtcWoVMyEC0sGLrR7eiGePzNjOv+GAk/gl9rndycSHuSHNBcsmrOeiuepa/nofsMwrUvj
-        xPxvqIJM595r7AKn0qEPmAFRd5hTlR+WV6g6ebRXHZznDN0GX1Zy5Rw3/BRBuQTlsDIAowawVHbAV
-        yNrONV0g==;
-Received: from noodles by the.earth.li with local (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1nThWv-009O7y-JT; Mon, 14 Mar 2022 10:02:21 +0000
-Date:   Mon, 14 Mar 2022 10:02:21 +0000
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 15/15] ARM: dts: qcom: add syscon and cxo/pxo clock to
- gcc node for ipq8064
-Message-ID: <Yi8SrZkjYdU3W8aj@earth.li>
-References: <20220226135235.10051-1-ansuelsmth@gmail.com>
- <20220226135235.10051-16-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220226135235.10051-16-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Mar 2022 06:04:16 -0400
+Received: from mail.wilcox-tech.com (mail.wilcox-tech.com [45.32.83.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E40EB1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:03:05 -0700 (PDT)
+Received: (qmail 5988 invoked from network); 14 Mar 2022 10:03:03 -0000
+Received: from localhost (HELO smtpclient.apple) (AWilcox@Wilcox-Tech.com@127.0.0.1)
+  by localhost with ESMTPA; 14 Mar 2022 10:03:03 -0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [BUG] arm64/m1: Accessing SYS_ID_AA64ISAR2_EL1 causes early boot
+ failure on 5.15.28, 5.16.14, 5.17
+From:   "A. Wilcox" <awilfox@adelielinux.org>
+In-Reply-To: <1f0b74caa45a1d73af68eab8dcc15485@misterjones.org>
+Date:   Mon, 14 Mar 2022 05:03:02 -0500
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <2498FEAE-DE38-46C5-A50A-93396BB0938A@adelielinux.org>
+References: <32EA0FE1-5254-4A41-B684-AA2DEC021110@adelielinux.org>
+ <Yi7iRSHaFGsYup1p@kroah.com>
+ <1f0b74caa45a1d73af68eab8dcc15485@misterjones.org>
+To:     Marc Zyngier <maz@misterjones.org>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AFAICT the rest of the series has been picked up in clk-for-5.18, but I
-don't see this there or in dts-for-5.18. It's required for a
-functioning tsens driver on IPQ8064 so it would be nice to see it landed.
-
-On Sat, Feb 26, 2022 at 02:52:35PM +0100, Ansuel Smith wrote:
-> Add syscon compatible required for tsens driver to correctly probe driver
-> and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-> now requires them for the ipq8064 gcc driver that has now been modernized.
+On Mar 14, 2022, at 4:08 AM, Marc Zyngier <maz@misterjones.org> wrote:
+> On 2022-03-14 06:35, Greg KH wrote:
+>> On Sun, Mar 13, 2022 at 10:59:01PM -0500, A. Wilcox wrote:
+>>> Hello,
+>>> I’ve been testing kernel updates for the Adélie Linux distribution’s
+>>> ARM64 port using a Parallels VM on a MacBook Pro (13-inch, M1, 2020).
+>>> When the kernel attempts to access SYS_ID_AA64ISAR2_EL1, it causes a
+>>> fault as seen here booting 5.17.0-rc8:
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+> […]
 > 
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index 11481313bdb6..5524a68cf3d1 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -298,13 +298,13 @@ smem: smem@41000000 {
->  	};
->  
->  	clocks {
-> -		cxo_board {
-> +		cxo_board: cxo_board {
->  			compatible = "fixed-clock";
->  			#clock-cells = <0>;
->  			clock-frequency = <25000000>;
->  		};
->  
-> -		pxo_board {
-> +		pxo_board: pxo_board {
->  			compatible = "fixed-clock";
->  			#clock-cells = <0>;
->  			clock-frequency = <25000000>;
-> @@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
->  		};
->  
->  		gcc: clock-controller@900000 {
-> -			compatible = "qcom,gcc-ipq8064";
-> +			compatible = "qcom,gcc-ipq8064", "syscon";
-> +			clocks = <&pxo_board>, <&cxo_board>;
-> +			clock-names = "pxo", "cxo";
->  			reg = <0x00900000 0x4000>;
->  			#clock-cells = <1>;
->  			#reset-cells = <1>;
+>>> This is because detection of the clearbhb instruction support requires
+>>> accessing SYS_ID_AA64ISAR2_EL1. Commenting out the two uses of
+>>> supports_clearbhb in the kernel now yields a successful boot.
+>>> Qemu developers seem to have found this issue as well[1] when trying to
+>>> boot 5.17 using HVF, the Apple Hypervisor Framework. This seems to be
+>>> some sort of platform quirk on M1, or at least in HVF on M1. I’m not
+>>> sure what the best workaround would be for this. SYS_ID_AA64ISAR2_EL1
+>>> seems to be something added in ARMv8.7, so perhaps access to it could be
+>>> gated on that.
+>>> Unfortunately, this code was just added to 5.15.28 and 5.16.14, so
+>>> stable no longer boots on Parallels VM on M1. I am unsure if this
+>>> affects physical boot on Apple M1 or not.
+>> What commit causes this problem?  It sounds like you narrowed this down
+>> already, right?
+> 
+> This really is a Parallels bug. These kernels run fine on bare metal
+> M1 and in KVM. QEMU was affected as well, and that was fixed in their
+> HVF handling. HVF itself is fine.
+> 
+> So this should be punted back to the hypervisor vendor for not properly
+> implementing the architecture (no ID register is allowed to UNDEF).
+> 
+>        M.
 > -- 
-> 2.34.1
-> 
+> Who you jivin' with that Cosmik Debris?
 
-J.
+Thanks, I wasn’t able to test native boot.  Since this is a bug in the hypervisor, I’ll notify them in the morning.
 
--- 
-    I program, therefore I am.     |  .''`.  Debian GNU/Linux Developer
-                                   | : :' :  Happy to accept PGP signed
-                                   | `. `'   or encrypted mail - RSA
-                                   |   `-    key on the keyservers.
+For those of us stuck with Parallels, I’ll assume reverting of these three commits in my own build is the best way forward until it’s fixed.  The M1 isn’t going to grow new instruction support in the meantime, so I don’t see a whole lot of harm in it - but the other mitigations in .28 seem useful.
+
+Best,
+-A.

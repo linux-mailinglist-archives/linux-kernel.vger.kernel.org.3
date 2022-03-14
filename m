@@ -2,135 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374B44D9091
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF7A4D9096
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343748AbiCNXq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 19:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S1343741AbiCNXqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 19:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343737AbiCNXqZ (ORCPT
+        with ESMTP id S239436AbiCNXqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 19:46:25 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2041.outbound.protection.outlook.com [40.107.237.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B6E3190C;
-        Mon, 14 Mar 2022 16:45:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RUihr6Qd8IXJR5V2LZjl8zOxYs0yp7p0XiUomwPNWFn0omkYUw1LpMbsYDrRwD28fErf8zOb3rzvseDJrIjVhVfiIl87FyvyuBdZGodU1l4qcGhF3yVlgWQPvgXRnkJubSDFFKawUGUeqdOp9F8mNTavVPy7vuWdOJzrgE/dYzgYYnGD7M4QC7aIIht8Le9RVLyaPy2leQNvbFeIhhk5wPZLJ5soOKiZQf25vW53AToP6lFVTCdREIkMGvLN+i6GO7TulQ6ElsPqQXK6CRZ1guMKLajOgrN7mN8ahffrGKvk3WdXmghiUtCiV+dem0q+LLey9BOkhFGDRMC7D4Ut3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nDiy9pCrONdGForYbmTcE1Wgwtgkrqr3u5NuCOklz0M=;
- b=JT+53J6HmyXlsGpq7IKRz8zYqwz632MbBh08reN9ood/RiSF5H+TwB2PDCamdYoNq3jXmZodzxFHRJHHfD1mEEk9adtoeD2qAWajhHIWYLs6RX+x7mpB4gyhH1V33vxrf1gHt0rzcFq2vrbXyIeJAYFlYSZp/JHekFK4SYl+Ui/dDFg/XMogfMMEGN4YYwFnoDpf4SjGPNnq1spa2fvq9b9NFlbTkcHmCI/oEE6mPG0rsSwIsV+du/8gcfJmjLGishhvZhy1/W60Lz6l5Dqkyu1/J4cb/rz6uHhK2aVJmOMbYxrWxhmdCrHTn2/wjoEfPj6rKQ1MSPqmBMt2XGni2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nDiy9pCrONdGForYbmTcE1Wgwtgkrqr3u5NuCOklz0M=;
- b=D/8m5acfjnyyhnJlIYSXiyAnVhDrUzGQpIdSuIWZIyJoJj83TlWYpIbsoMSgKwQQpA0KrXj9MgiuUCcOIZWgYQ2dZ3pdaN4o8QpTDVNFgUlAgBentHOYx8PLLB2sxGQDOXYWPVvEL8hxMSjj4y/C/++LOeg9lnGuvtwWrkljwpLSoiR4rDTwjHTwJECah5ZGWfXOOtFEgvY0Uz06FI3txzXbGt57/rY7aonC52J6gJcT1b+ieSnqYSnwU/2CUWGszAmlV/xIrXZjCt5RMxo+FrRVVpj+K9a1RaocfMb5cxNVizw53B99wKuGS87W+3xh2kRgvLrsQIADz0mU7D6DmA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by LV2PR12MB5989.namprd12.prod.outlook.com (2603:10b6:408:171::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.28; Mon, 14 Mar
- 2022 23:45:12 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28%4]) with mapi id 15.20.5061.028; Mon, 14 Mar 2022
- 23:45:12 +0000
-Date:   Mon, 14 Mar 2022 20:45:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     leon@kernel.org, yishaih@mellanox.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn
-Subject: Re: [PATCH] RDMA/mlx5: Fix memory leak
-Message-ID: <20220314234511.GD172564@nvidia.com>
-References: <1647018361-18266-1-git-send-email-lyz_cs@pku.edu.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1647018361-18266-1-git-send-email-lyz_cs@pku.edu.cn>
-X-ClientProxiedBy: MN2PR13CA0001.namprd13.prod.outlook.com
- (2603:10b6:208:160::14) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 14 Mar 2022 19:46:53 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072B3E5F1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:45:41 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id hw13so36166508ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mMcKlcLkl25csYGtmWB99GmowZ54MQeoPUbWxxcyFU0=;
+        b=bp+YoIVGfFN/43D3vqHErY1NhIRJApUAhtw6o/hQeIyaDBqIfE66EIhFuNlzouKqsM
+         ICMTNUqtiRAq88ITvYxr1uiF5OmdPGah32szvxsrVE8+TbWCoOGxOG6L25aPWaho7kdy
+         3FU/jNh6QDkaRKObZiMMOkBlD8Aqv99swKSc8YZ9bFy6T0F/mbML6sVVYqbR6qCMVE6H
+         bYhE/ZUbxEYhn6H6a+/VharXFDIBFPo45r3fdwvvEZ51SgbTUi25vilSjvica56rkM6I
+         xTjLcOE3UXJzEYpLAj8t0ISFMLBTpHiYS87O0Yj4+2ZJb/rKhYVFzvJMGee+en585/rw
+         GBaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mMcKlcLkl25csYGtmWB99GmowZ54MQeoPUbWxxcyFU0=;
+        b=2DYJaiznlr468lVJi0UP99ryW0CRBAgcJ8p0/+FKAmgDiD4cD1XQLrC4m+LKn4fbsy
+         dBq2Env84d4rXMaSzaXaRxQ3CwLirK4g6oWGo1JKbRG/SCP94Y7U495tDR925uvxYuWi
+         U0hMc54sV+mNCC2uPwzFMeGrWKFED1N7v6IicTmqOhSTgr2iQV54i3eNX07sgC9ZlTiJ
+         kSvMedkbzp7lSkWVjSqHg61zDYHRlFs3pNwTh57KpQfRAIwDNSVjiT1XPr5XGoTTRkDB
+         DBQqMSKlz0f181ee3k9i8wCZMSGzjUefsHLPb54++vW7z29bO1XDcFOOZf5stEMF9dBu
+         yAng==
+X-Gm-Message-State: AOAM532UUNUmIaWg/VCoFC9JqddWi+AKrJ1JumR4eGPr80Tgm4EnsD0v
+        IU6t2kbaYqyPPbbI0x7TyQLiAOhbLNEUv1xt7tq2uw==
+X-Google-Smtp-Source: ABdhPJzivdKSx3a2ptS01jjlhP74llQ2PdFx6OA83cn+BAtPtg6OtNsv++AhnKe1mUMAW8amvG7lkgIAO9oTvOh6yGc=
+X-Received: by 2002:a17:906:5d08:b0:6da:b4ea:937 with SMTP id
+ g8-20020a1709065d0800b006dab4ea0937mr20516098ejt.446.1647301539672; Mon, 14
+ Mar 2022 16:45:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 19f35aac-3595-4fd2-99cf-08da0614ae7a
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5989:EE_
-X-Microsoft-Antispam-PRVS: <LV2PR12MB5989F57A7C7825C5ED41F5E7C20F9@LV2PR12MB5989.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pFv3dWAE6E4Mka4Fsjcnyq63U8gXVqaLYAq/LhappJyH/v25RlDRQUIaBu4yXLu6HkN8hRTWsymY43yscLT813Pe/8Qu7cwy7cLlsiAZDyXMCQxeP3vW1LoQRwjOUw9QqURcYszXDUDuZ6e5h6mReKwLJqWCXXl5RkWWUPz9a77C2zk+o/lEcZtefjDXZXHzbfxkj8P3kNwOdQYyvNfnOrTWMHeRUhHUXKXe31Oxy63HlRH2tgR5JyoxbXvV4+dhul4xwIuU5wbhTwpq45ZhSPWrXagqwKinefbh7uTFsqs0dCt0o/5ZTDPHWBvCS2EB+XQUhjQr9bxl9LFy69I/Fah3/0tdgB3pdKw+v6vUlkxddgyoCs5uk1sQ7okONtry0ZnfJj/0E4YrVnZ6t9qyXiTqTnEMttu/lWEe3ofj39fsofxHMDSW7pezqPFW1BqCfOtV2vibvRhDcTVHFgV2S3ymz0bQK+TRGqoEN8j/d4XicutRuqq78qnODIRTA+/tSbnGkHNvxfztonmNKwswvrbV/BRy9sWb6aiTCe2mfH3DawnsgTsQAGyJYXJ76YWA5qnH8AC0pDLoO/I2kZdV4gWTKyT2fOOAXMjRFbw7+kQ3ozvOU7WnNE3E5I9m1oFdb86skQAtJjrRlqIg/s5Xd5C3VQk5KLBFcOOPfAIVOr83oSQgQAPO6YvEVhu7eBSYBHuR4u1yTYn7pvrj5RMMHA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(66556008)(66476007)(508600001)(38100700002)(2906002)(6916009)(33656002)(2616005)(6486002)(4744005)(316002)(83380400001)(5660300002)(6512007)(86362001)(1076003)(8936002)(4326008)(26005)(186003)(66946007)(8676002)(6506007)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pBtIj/JzZLS32A8qUdhIiShHollNdGP9I73OYfbspvG3zPxsFJTNmat5AS5N?=
- =?us-ascii?Q?h1HQS5FfjcINAOm/b8AK/JFccOhwiXdKQIju6UEQdUg7mJG8HmhkisZBNdZh?=
- =?us-ascii?Q?WkxaNIxQs0r1UudwrGd2nmsg99N0Hi8HG5oi9PuC8wm/2xdri9GkN8um/IIT?=
- =?us-ascii?Q?8W6YCTAwoK9lFk5DnQnCDpOXRFfdrqAwAnHKos2kgiOGoEJxD1M7vVqcsmxI?=
- =?us-ascii?Q?DQ9t0TXm74ZYGSWwrOZaAYSgj/+yxu+bFpa8Ya4M5PluaKL72arRHDjHTx1f?=
- =?us-ascii?Q?r5tmMfcphLloiUI+ddMpSXNGvvEzsQPM1PGaqgmSqqkDmOxvBETd/ljX9TDr?=
- =?us-ascii?Q?W4cie9BKTXONy2qKIuyLKlxJAC8Ou6/yZnbRkxJoCbdocXpEL7lQQE6fY1u/?=
- =?us-ascii?Q?+cTTxD/FE+fZJ21t30/c+Yf1032gnl6oNOuURYLenzkt2k2h0tU8rforeUx3?=
- =?us-ascii?Q?AkO+VC3UKO+Uu+Rwr/35ZndMy7/kkkxoyvt1vNN4NzLpf5TDTj0Hu1oPW72Q?=
- =?us-ascii?Q?y7dxbqnONCqtFY2bkZxAgQ3p61WwbmIgYolbSXj6LHM/a8RkqdD884+BvdQ7?=
- =?us-ascii?Q?/T5+DAbDaV6vkuIC1dNSu2rHYVebbC98+OqEvWAGeSYOAkQFPpRtvpWxDtZC?=
- =?us-ascii?Q?4Cm8mX22c7dadSfU93iOZ5n88leL5s1ehC+2Q2KRtFqpzdIx40G7ls1tNRE9?=
- =?us-ascii?Q?7OlGXTgTfeyBTuzSJzWd6+J88Ai1o/n6gai4frGj8vZjy6IaX7UfKBk+najs?=
- =?us-ascii?Q?KRrtVUTaAUMohqdUo374T8zGeyAaKHZg2/4+g0lVzCa4Xqt53lj7pdzJMwao?=
- =?us-ascii?Q?wDy12CvqbiZIrv4ofDtZytLKG2G4yNkvSfPyJ7RtZx7Ii6K5UjekZzLbYOHD?=
- =?us-ascii?Q?CZuE9PnyL+6rdanC0ktt7G9zZ1uQOVph7bSjOxvfrhr9ATSA8C1BJKytuSss?=
- =?us-ascii?Q?FyrYYqM7tYqup6yb4V9zA4l+XhZEKXRISzNJYVAIVLZ0ZRALpLrrGT6grfE7?=
- =?us-ascii?Q?we7V2A2hJKRPzux2NRzlcUHLKTrEF73WM+Z9nK6/bp2uP7Twrz6Nbb8rREmn?=
- =?us-ascii?Q?u1YHqVpVO1L+/zilY9sSb4cRThekJTqRCz6tZbNyaPrLATLrDX5WqtB1c9uq?=
- =?us-ascii?Q?m7H4GaOrIVk7vaU3EC8eAz8JEZkdnnE2GuuEqUICuc/wFGCGTIAvf6FlqZio?=
- =?us-ascii?Q?74AVNSpCw/dPH9ln/RjyNobUGAEDsgMHRGwNTPBsinEHfGohgUzefvNMNJo7?=
- =?us-ascii?Q?CIfTNCZwGIEyfMFVpeKOaIEhpWyBG+pyt1ippGygpNJlHWXzvhDYHhNIQ2Ju?=
- =?us-ascii?Q?MMpfPmFbFUpbXQegQ1iRMtF6zG0yKgX8Gm1ZaaUeOzIQhZMrGJuwZ9Z475e2?=
- =?us-ascii?Q?m1rNlOdFP1sCbzHwDzDgx30esXBd/I1YyFwlQcPwAAg8/puVlNUCMaBTs+Ui?=
- =?us-ascii?Q?GZkmISJ+gHduHmExfrUL3OS9VDBCbJGB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19f35aac-3595-4fd2-99cf-08da0614ae7a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2022 23:45:12.3979
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eVaNyDtiwQlOp/ppZHqHRtgNIWz1bbf6NDRpWZLxLfpefnVV4sm34IFyTlxV2c52
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5989
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309165222.2843651-1-tjmercier@google.com>
+ <20220309165222.2843651-8-tjmercier@google.com> <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
+In-Reply-To: <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Mon, 14 Mar 2022 16:45:28 -0700
+Message-ID: <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com>
+Subject: Re: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
+To:     Todd Kjos <tkjos@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 09:06:01AM -0800, Yongzhi Liu wrote:
-> [why]
-> xa_insert is failed, so caller of subscribe_event_xa_alloc
-> cannot call other function to free obj_event. Therefore,
-> Resource release is needed on the error handling path to
-> prevent memory leak.
-> 
-> [how]
-> Fix this by adding kfree on the error handling path.
-> 
-> Fixes: 7597385 ("IB/mlx5: Enable subscription for device events over DEVX")
-> 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-> ---
->  drivers/infiniband/hw/mlx5/devx.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+On Thu, Mar 10, 2022 at 11:33 AM Todd Kjos <tkjos@google.com> wrote:
+>
+> On Wed, Mar 9, 2022 at 8:52 AM T.J. Mercier <tjmercier@google.com> wrote:
+> >
+> > The kernel interface should use types that the kernel defines instead o=
+f
+> > pid_t and uid_t, whose definiton is owned by libc. This fixes the heade=
+r
+> > so that it can be included without first including sys/types.h.
+> >
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> >  include/uapi/linux/android/binder.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/a=
+ndroid/binder.h
+> > index 169fd5069a1a..aa28454dbca3 100644
+> > --- a/include/uapi/linux/android/binder.h
+> > +++ b/include/uapi/linux/android/binder.h
+> > @@ -289,8 +289,8 @@ struct binder_transaction_data {
+> >
+> >         /* General information about the transaction. */
+> >         __u32           flags;
+> > -       pid_t           sender_pid;
+> > -       uid_t           sender_euid;
+> > +       __kernel_pid_t  sender_pid;
+> > +       __kernel_uid_t  sender_euid;
+>
+> Are we guaranteed that this does not affect the UAPI at all? Userspace
+> code using this definition will have to run with kernels using the old
+> definition and visa-versa.
 
-Applied to for-next with Leon's commit message
+A standards compliant userspace should be expecting a signed integer
+type here. So the only way I can think userspace would be affected is
+if:
+1) pid_t is a long AND
+2) sizeof(long) > sizeof(int) AND
+3) Consumers of the pid_t definition actually attempt to mutate the
+result to make use of extra bits in the variable (which are not there)
 
-Thanks,
-Jason
+This seems extremely unlikely. For instance just on the topic of the
+first item, all of the C library implementations with pid_t
+definitions linked here use an int, except for Bionic which typdefs
+pid_t to __kernel_pid_t and Sortix which uses long.
+https://wiki.osdev.org/C_Library
+
+However I would argue this is already broken and should count as a bug
+fix since I can't do this:
+
+$ cat binder_include.c ; gcc binder_include.c
+#include <linux/android/binder.h>
+int main() {}
+In file included from binder_include.c:1:
+/usr/include/linux/android/binder.h:291:9: error: unknown type name =E2=80=
+=98pid_t=E2=80=99
+  291 |         pid_t           sender_pid;
+      |         ^~~~~
+/usr/include/linux/android/binder.h:292:9: error: unknown type name =E2=80=
+=98uid_t=E2=80=99
+  292 |         uid_t           sender_euid;
+      |         ^~~~~
+
+This is also the only occurrence of pid_t in all of
+include/uapi/linux. All 40+ other uses are __kernel_pid_t, and I don't
+see why the binder header should be different.
+
+
+>
+> >         binder_size_t   data_size;      /* number of bytes of data */
+> >         binder_size_t   offsets_size;   /* number of bytes of offsets *=
+/
+> >
+> > --
+> > 2.35.1.616.g0bdcbb4464-goog
+> >

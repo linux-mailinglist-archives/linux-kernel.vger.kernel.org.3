@@ -2,207 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B056C4D8EF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30514D8EFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244294AbiCNVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 17:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
+        id S245354AbiCNVpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 17:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243834AbiCNVlh (ORCPT
+        with ESMTP id S237993AbiCNVp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 17:41:37 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934FD1DA54
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:40:26 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id l24-20020a4a8558000000b00320d5a1f938so22169240ooh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 14:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CH4PnxS5OBdq/D6Vp76lpnMDoAzcsxnrc14ncEtoegU=;
-        b=xebXMdKQRsxXOA7mx5JtV5zjLWaAZEH3jQiH8bLmEct6J+cbDMWpl6BEFRd4oEwx7C
-         aNHPC/DfZCpmFfU5qnKNnH9lLrZF0XsLRJadbQpFW5uHwvK1DyvQ7Ng9Wbst8nLe1qsR
-         Ft6GfQv4BPrC35S2TRP1ZBPhmcGSWrRLMGDXZIAdoA59r7bRWYD/W+k+4zIg/fhSzMzq
-         /2zrpUqXcbxsW4RumT0k8RSdI/Ja2wI5dBCudbU4qTij+ePaky/5R+yCovnVJr6c33D+
-         cUQgZOdC7qOyeFKfbd74gFwiJOa59Kf3ihQjT//XQ8aIRBETqhBdm4lOg+iDeP32JHMs
-         3GGQ==
+        Mon, 14 Mar 2022 17:45:28 -0400
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA256193ED;
+        Mon, 14 Mar 2022 14:44:17 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id g17so29643280lfh.2;
+        Mon, 14 Mar 2022 14:44:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CH4PnxS5OBdq/D6Vp76lpnMDoAzcsxnrc14ncEtoegU=;
-        b=qVk+Spu2D3odljnYBMBfmh5znJz6vTUvWOYctTwSY0WtixrGhNs75oDQXu/A3nQgh3
-         RrWCquZyjfE3A7Uxnbw5PvOoxCWzvRvk2C9lwBu4XHOplqQmlkzWRYrkHq6OXFNroYr0
-         4/EOer5v6CAybM/7+zcDpIcAaENWnKfUM1JkIu80zmxXT0MgN6ElXOhM7RYwxZUgAZSo
-         jRbSMHSnlAKdT6cleuofBeFCaU8WryQGzF1Dc4VNU42oL6L8jlQs/B9OAcMmtrVRRK6Z
-         v5HxPwtQ267oF4wyh9G+EV5Ton751Epr8CjD2szZ0GDl3i8w+Hywr3sAGN3d+pRruVCE
-         SpCQ==
-X-Gm-Message-State: AOAM530rL4+mt5ZnCgIvWvww57N5M9K1epAtJpVPPADicBOGGzH/Z/kL
-        S/S/7cMQW8okdKiPzR4GqvnxHg==
-X-Google-Smtp-Source: ABdhPJx9ShNGhKeS4XKWob97GViwdgXKmKriwSN7lAV2IHVCc/GNGiM8uDLrubhREgewA0JXe92OxQ==
-X-Received: by 2002:a05:6870:d685:b0:da:b3f:2b84 with SMTP id z5-20020a056870d68500b000da0b3f2b84mr402796oap.291.1647294025542;
-        Mon, 14 Mar 2022 14:40:25 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id y8-20020a544d88000000b002d525da014bsm8244544oix.42.2022.03.14.14.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 14:40:24 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 16:40:23 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Yogesh Lal <quic_ylal@quicinc.com>
-Cc:     quic_sibis@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: qcom: pas: Add elf64 support to coredump
-Message-ID: <Yi+2Rylfx6mOHHOK@builder.lan>
-References: <1647252013-7794-1-git-send-email-quic_ylal@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2VfnhbEGoaJMBxbZk/tXhcsK9P2W1Pv5LMv/tBwaIfo=;
+        b=gqFwpR5aJyOGQqvePQE5NWYaKTi370jQjW/2L/ts1xGaTpQ4QfjMv+JqadXeoG2FTw
+         mjp1/0l276dQdWj/+SRBx3x0JzTYWYjo8c4L+LrpDDADSeG3+OtxwjaDk2t9gMNeZEho
+         +wKDwLsEcpCd2B83UZCr4tVfMAmfnMZT/GDyZvP2Bimk8rK7XtyH/p80yBFLOhITHEzx
+         x1fpZ3uqS8IDwy8jtaY3fLCbmByDlTjfOBCKcupRPfVllV2Gx3WH9lEAnjjodGsQvPfj
+         5g9YiexxqUSOXfGWlFWHBJ+yIZsbsOM257QOpd+c1lGPNgAVdIkoPxhU4MAzVMJe8L7d
+         thjg==
+X-Gm-Message-State: AOAM533ZKh0AX2An3UQlx45daYnlDk8VY/k5RknXre2Ug1mNCEN89VtA
+        EDEihZWJWhLfhFNclONFHrOxQaGAEI7/AGcVg8Q=
+X-Google-Smtp-Source: ABdhPJwxEXoBr4ZBfHBu6jBT617TwgtgRa+XqjNS61tSGsjG05PbvU4akXVAa/APfYJL6iDAN9GZoTYHduL2i9Q84ZU=
+X-Received: by 2002:a19:6b0d:0:b0:448:53c6:702b with SMTP id
+ d13-20020a196b0d000000b0044853c6702bmr14479332lfa.528.1647294256086; Mon, 14
+ Mar 2022 14:44:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1647252013-7794-1-git-send-email-quic_ylal@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220301010412.431299-1-namhyung@kernel.org> <20220301010412.431299-3-namhyung@kernel.org>
+ <Yh3heodejlBiwqLj@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yh3heodejlBiwqLj@hirez.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 14 Mar 2022 14:44:04 -0700
+Message-ID: <CAM9d7ciHObwkvyy9Uz5NRb=KBY-HtXAtAJTgXocA6C42aBoAyg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] locking: Apply contention tracepoints in the slow path
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Radoslaw Burny <rburny@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 14 Mar 05:00 CDT 2022, Yogesh Lal wrote:
+On Tue, Mar 1, 2022 at 1:04 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Feb 28, 2022 at 05:04:10PM -0800, Namhyung Kim wrote:
+> > @@ -1718,9 +1726,11 @@ static __always_inline void __sched rtlock_slowlock(struct rt_mutex_base *lock)
+> >  {
+> >       unsigned long flags;
+> >
+> > +     trace_contention_begin(lock, _RET_IP_, LCB_F_RT | TASK_RTLOCK_WAIT);
+> >       raw_spin_lock_irqsave(&lock->wait_lock, flags);
+> >       rtlock_slowlock_locked(lock);
+> >       raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
+> > +     trace_contention_end(lock);
+> >  }
+>
+> Same, if you do it one level in, you can have the tracepoint itself look
+> at current->__state.
 
-> Add support to use elf64 coredumps to remote processors.
+So I tried this by reading the state in the trace like below:
 
-The commit message does not describe _this_ patch and it fails to
-explain _why_ sm8450 should have 64-bit coredumps.
++       TP_fast_assign(
++               __entry->lock_addr = lock;
++               __entry->flags = flags | get_current_state();
++       ),
 
-Please correct this.
+But I sometimes see unrelated values which contain
+__TASK_TRACED or __TASK_STOPPED and some unexpected values
+like TASK_UNINTERRUPTIBLE for rwlocks.  Maybe I missed something.
+
+Anyway I think it's confusing and complicates things unnecessarily.
+Probably it'd better using new flags like LCB_F_SPIN and LCB_F_WAIT.
 
 Thanks,
-Bjorn
-
-> 
-> Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
-> ---
->  drivers/remoteproc/qcom_q6v5_pas.c | 67 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 64 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 1ae47cc..58c335e 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -34,6 +34,7 @@ struct adsp_data {
->  	const char *firmware_name;
->  	int pas_id;
->  	unsigned int minidump_id;
-> +	bool uses_elf64;
->  	bool has_aggre2_clk;
->  	bool auto_boot;
->  
-> @@ -450,7 +451,11 @@ static int adsp_probe(struct platform_device *pdev)
->  	}
->  
->  	rproc->auto_boot = desc->auto_boot;
-> -	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
-> +
-> +	if (desc->uses_elf64)
-> +		rproc_coredump_set_elf_info(rproc, ELFCLASS64, EM_NONE);
-> +	else
-> +		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
->  
->  	adsp = (struct qcom_adsp *)rproc->priv;
->  	adsp->dev = &pdev->dev;
-> @@ -617,6 +622,24 @@ static const struct adsp_data sm8350_adsp_resource = {
->  	.ssctl_id = 0x14,
->  };
->  
-> +static const struct adsp_data sm8450_adsp_resource = {
-> +	.crash_reason_smem = 423,
-> +	.firmware_name = "adsp.mdt",
-> +	.pas_id = 1,
-> +	.uses_elf64 = true,
-> +	.has_aggre2_clk = false,
-> +	.auto_boot = true,
-> +	.proxy_pd_names = (char*[]){
-> +		"lcx",
-> +		"lmx",
-> +		NULL
-> +	},
-> +	.load_state = "adsp",
-> +	.ssr_name = "lpass",
-> +	.sysmon_name = "adsp",
-> +	.ssctl_id = 0x14,
-> +};
-> +
->  static const struct adsp_data msm8996_adsp_resource = {
->  		.crash_reason_smem = 423,
->  		.firmware_name = "adsp.mdt",
-> @@ -721,6 +744,24 @@ static const struct adsp_data sm8350_cdsp_resource = {
->  	.ssctl_id = 0x17,
->  };
->  
-> +static const struct adsp_data sm8450_cdsp_resource = {
-> +	.crash_reason_smem = 601,
-> +	.firmware_name = "cdsp.mdt",
-> +	.pas_id = 18,
-> +	.uses_elf64 = true,
-> +	.has_aggre2_clk = false,
-> +	.auto_boot = true,
-> +	.proxy_pd_names = (char*[]){
-> +		"cx",
-> +		"mxc",
-> +		NULL
-> +	},
-> +	.load_state = "cdsp",
-> +	.ssr_name = "cdsp",
-> +	.sysmon_name = "cdsp",
-> +	.ssctl_id = 0x17,
-> +};
-> +
->  static const struct adsp_data mpss_resource_init = {
->  	.crash_reason_smem = 421,
->  	.firmware_name = "modem.mdt",
-> @@ -755,6 +796,25 @@ static const struct adsp_data sc8180x_mpss_resource = {
->  	.ssctl_id = 0x12,
->  };
->  
-> +static const struct adsp_data sm8450_mpss_resource = {
-> +	.crash_reason_smem = 421,
-> +	.firmware_name = "modem.mdt",
-> +	.pas_id = 4,
-> +	.minidump_id = 3,
-> +	.uses_elf64 = true,
-> +	.has_aggre2_clk = false,
-> +	.auto_boot = false,
-> +	.proxy_pd_names = (char*[]){
-> +		"cx",
-> +		"mss",
-> +		NULL
-> +	},
-> +	.load_state = "modem",
-> +	.ssr_name = "mpss",
-> +	.sysmon_name = "modem",
-> +	.ssctl_id = 0x12,
-> +};
-> +
->  static const struct adsp_data slpi_resource_init = {
->  		.crash_reason_smem = 424,
->  		.firmware_name = "slpi.mdt",
-> @@ -879,10 +939,11 @@ static const struct of_device_id adsp_of_match[] = {
->  	{ .compatible = "qcom,sm8350-cdsp-pas", .data = &sm8350_cdsp_resource},
->  	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm8350_slpi_resource},
->  	{ .compatible = "qcom,sm8350-mpss-pas", .data = &mpss_resource_init},
-> -	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8350_adsp_resource},
-> -	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
-> +	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8450_adsp_resource},
-> +	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8450_cdsp_resource},
->  	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
->  	{ .compatible = "qcom,sm8450-mpss-pas", .data = &mpss_resource_init},
-> +	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, adsp_of_match);
-> -- 
-> 2.7.4
-> 
+Namhyung

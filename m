@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B3B4D82FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB514D849F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240722AbiCNMMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S241029AbiCNM13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241244AbiCNMI3 (ORCPT
+        with ESMTP id S241496AbiCNMSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6064B1CE;
-        Mon, 14 Mar 2022 05:04:48 -0700 (PDT)
+        Mon, 14 Mar 2022 08:18:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D2E4B1D0;
+        Mon, 14 Mar 2022 05:12:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A20616130A;
-        Mon, 14 Mar 2022 12:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CEDC340ED;
-        Mon, 14 Mar 2022 12:04:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B921361382;
+        Mon, 14 Mar 2022 12:12:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DB8C340E9;
+        Mon, 14 Mar 2022 12:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259487;
-        bh=+E5woosn/ZbFLikndWdbKLVKptItEm0e3E0i3Z+4g/Y=;
+        s=korg; t=1647259955;
+        bh=o1eyfosOZlTJ+hUZYylS3B8wCxvivTOqYdjwqWdX3ms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1TGXYLMoh1xof65JjsJUlB7X6jv9HHeb8c6W/dy1tkvb3SaKlygATE1BCl3TFxzto
-         LeYjp9JZpod350LNnvkSq9szofVZODvn6ChnFJqTVO8/48Z3rWpVdudMYsnKQegqjx
-         n5/fFlsUXqCZhBKTaJZ63Nd4DidLUde5XOAuDaE8=
+        b=zv0PIvxf7xj8JmJ1DLrI2R5SLxJD6JH/5NZWdxmLwOqfmwriqa9nRiM9NHZn6Cfk0
+         qIEWYs5fJ9N1SaS/tArL/N62BQfOSyRVjb12+XgMnhtUg7lRKGjATm6laUgqcMBvQ1
+         rzpaY8iax7EauPXxoo/FNo7/y3gnFh+itZmbox+g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 018/110] isdn: hfcpci: check the return value of dma_set_mask() in setup_hw()
+Subject: [PATCH 5.16 017/121] vhost: fix hung thread due to erroneous iotlb entries
 Date:   Mon, 14 Mar 2022 12:53:20 +0100
-Message-Id: <20220314112743.544081971@linuxfoundation.org>
+Message-Id: <20220314112744.608703877@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Anirudh Rayabharam <mail@anirudhrb.com>
 
-[ Upstream commit d0aeb0d4a3f7d2a0df7e9545892bbeede8f2ac7e ]
+[ Upstream commit e2ae38cf3d91837a493cb2093c87700ff3cbe667 ]
 
-The function dma_set_mask() in setup_hw() can fail, so its return value
-should be checked.
+In vhost_iotlb_add_range_ctx(), range size can overflow to 0 when
+start is 0 and last is ULONG_MAX. One instance where it can happen
+is when userspace sends an IOTLB message with iova=size=uaddr=0
+(vhost_process_iotlb_msg). So, an entry with size = 0, start = 0,
+last = ULONG_MAX ends up in the iotlb. Next time a packet is sent,
+iotlb_access_ok() loops indefinitely due to that erroneous entry.
 
-Fixes: 1700fe1a10dc ("Add mISDN HFC PCI driver")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+	Call Trace:
+	 <TASK>
+	 iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
+	 vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
+	 vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
+	 vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+	 kthread+0x2e9/0x3a0 kernel/kthread.c:377
+	 ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+	 </TASK>
+
+Reported by syzbot at:
+	https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
+
+To fix this, do two things:
+
+1. Return -EINVAL in vhost_chr_write_iter() when userspace asks to map
+   a range with size 0.
+2. Fix vhost_iotlb_add_range_ctx() to handle the range [0, ULONG_MAX]
+   by splitting it into two entries.
+
+Fixes: 0bbe30668d89e ("vhost: factor out IOTLB")
+Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+Link: https://lore.kernel.org/r/20220305095525.5145-1-mail@anirudhrb.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/isdn/hardware/mISDN/hfcpci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/vhost/iotlb.c | 11 +++++++++++
+ drivers/vhost/vhost.c |  5 +++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
-index bd087cca1c1d..af17459c1a5c 100644
---- a/drivers/isdn/hardware/mISDN/hfcpci.c
-+++ b/drivers/isdn/hardware/mISDN/hfcpci.c
-@@ -2005,7 +2005,11 @@ setup_hw(struct hfc_pci *hc)
- 	}
- 	/* Allocate memory for FIFOS */
- 	/* the memory needs to be on a 32k boundary within the first 4G */
--	dma_set_mask(&hc->pdev->dev, 0xFFFF8000);
-+	if (dma_set_mask(&hc->pdev->dev, 0xFFFF8000)) {
-+		printk(KERN_WARNING
-+		       "HFC-PCI: No usable DMA configuration!\n");
-+		return -EIO;
+diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
+index 670d56c879e5..40b098320b2a 100644
+--- a/drivers/vhost/iotlb.c
++++ b/drivers/vhost/iotlb.c
+@@ -57,6 +57,17 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+ 	if (last < start)
+ 		return -EFAULT;
+ 
++	/* If the range being mapped is [0, ULONG_MAX], split it into two entries
++	 * otherwise its size would overflow u64.
++	 */
++	if (start == 0 && last == ULONG_MAX) {
++		u64 mid = last / 2;
++
++		vhost_iotlb_add_range_ctx(iotlb, start, mid, addr, perm, opaque);
++		addr += mid + 1;
++		start = mid + 1;
 +	}
- 	buffer = dma_alloc_coherent(&hc->pdev->dev, 0x8000, &hc->hw.dmahandle,
- 				    GFP_KERNEL);
- 	/* We silently assume the address is okay if nonzero */
++
+ 	if (iotlb->limit &&
+ 	    iotlb->nmaps == iotlb->limit &&
+ 	    iotlb->flags & VHOST_IOTLB_FLAG_RETIRE) {
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 59edb5a1ffe2..55475fd59fb7 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -1170,6 +1170,11 @@ ssize_t vhost_chr_write_iter(struct vhost_dev *dev,
+ 		goto done;
+ 	}
+ 
++	if (msg.size == 0) {
++		ret = -EINVAL;
++		goto done;
++	}
++
+ 	if (dev->msg_handler)
+ 		ret = dev->msg_handler(dev, &msg);
+ 	else
 -- 
 2.34.1
 

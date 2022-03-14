@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359414D847C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEA64D8267
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241295AbiCNMYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S240250AbiCNMDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241303AbiCNMRL (ORCPT
+        with ESMTP id S240441AbiCNMCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:17:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0194B369E0;
-        Mon, 14 Mar 2022 05:12:18 -0700 (PDT)
+        Mon, 14 Mar 2022 08:02:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82211EC55;
+        Mon, 14 Mar 2022 05:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F7261315;
-        Mon, 14 Mar 2022 12:12:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3190EC340E9;
-        Mon, 14 Mar 2022 12:12:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDC56B80DF3;
+        Mon, 14 Mar 2022 11:59:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C6AC340E9;
+        Mon, 14 Mar 2022 11:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259936;
-        bh=YGDCMuwrUahh+Ocfj5rpl5YvgAJSu76Qii8l0ri9tGM=;
+        s=korg; t=1647259192;
+        bh=TqKFtjgXN3ErMrPJUo3AQq/1Nc3i24dF1IcWtRKWD2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d//OdAmPBZxCsmJU3n5/oZBVmHI+r39mlt3qpnxFi2kDFETQpGJgO2Qmaq+up7I1N
-         TkjW+zqkqM9FWWF8uV7X5AUcBY9GYwBO/7Cs/dpMHVHTl8V2YrQZNhIJXBMEZvm8gP
-         pIgLy3wxxaHpT7IbC5ZIq8Ewwv7fI6aP03s4J5vE=
+        b=jk9J4yh+LhdJXvu4+3z9+rSJJKE1ttwkvUGYd0ACm9F66VsFLrxI7gvhJ8yt+qSgJ
+         dN7ZcqbxwhumGJA9aDsWAD4RgKFoNIleP6Tl2i21QG/CI0kkDc0vjZTF6y4YwV5IMf
+         75/6aQBiJCMnnUEWqjennNqHmyoY3X/lI8Bisp+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Si-Wei Liu <si-wei.liu@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, Eli Cohen <elic@nvidia.com>,
-        Jason Wang <jasowang@redhat.com>,
+        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 013/121] vdpa/mlx5: add validation for VIRTIO_NET_CTRL_MQ_VQ_PAIRS_SET command
+Subject: [PATCH 5.10 23/71] tipc: fix incorrect order of state message data sanity check
 Date:   Mon, 14 Mar 2022 12:53:16 +0100
-Message-Id: <20220314112744.496974287@linuxfoundation.org>
+Message-Id: <20220314112738.582757933@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Si-Wei Liu <si-wei.liu@oracle.com>
+From: Tung Nguyen <tung.q.nguyen@dektech.com.au>
 
-[ Upstream commit ed0f849fc3a63ed2ddf5e72cdb1de3bdbbb0f8eb ]
+[ Upstream commit c79fcc27be90b308b3fa90811aefafdd4078668c ]
 
-When control vq receives a VIRTIO_NET_CTRL_MQ_VQ_PAIRS_SET command
-request from the driver, presently there is no validation against the
-number of queue pairs to configure, or even if multiqueue had been
-negotiated or not is unverified. This may lead to kernel panic due to
-uninitialized resource for the queues were there any bogus request
-sent down by untrusted driver. Tie up the loose ends there.
+When receiving a state message, function tipc_link_validate_msg()
+is called to validate its header portion. Then, its data portion
+is validated before it can be accessed correctly. However, current
+data sanity  check is done after the message header is accessed to
+update some link variables.
 
-Fixes: 52893733f2c5 ("vdpa/mlx5: Add multiqueue support")
-Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
-Link: https://lore.kernel.org/r/1642206481-30721-4-git-send-email-si-wei.liu@oracle.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Eli Cohen <elic@nvidia.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+This commit fixes this issue by moving the data sanity check to
+the beginning of state message handling and right after the header
+sanity check.
+
+Fixes: 9aa422ad3266 ("tipc: improve size validations for received domain records")
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Link: https://lore.kernel.org/r/20220308021200.9245-1-tung.q.nguyen@dektech.com.au
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ net/tipc/link.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index ef6da39ccb3f..7b4ab7cfc359 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -1571,11 +1571,27 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+diff --git a/net/tipc/link.c b/net/tipc/link.c
+index fb835a3822f4..7a353ff62844 100644
+--- a/net/tipc/link.c
++++ b/net/tipc/link.c
+@@ -2245,6 +2245,11 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
+ 		break;
  
- 	switch (cmd) {
- 	case VIRTIO_NET_CTRL_MQ_VQ_PAIRS_SET:
-+		/* This mq feature check aligns with pre-existing userspace
-+		 * implementation.
-+		 *
-+		 * Without it, an untrusted driver could fake a multiqueue config
-+		 * request down to a non-mq device that may cause kernel to
-+		 * panic due to uninitialized resources for extra vqs. Even with
-+		 * a well behaving guest driver, it is not expected to allow
-+		 * changing the number of vqs on a non-mq device.
-+		 */
-+		if (!MLX5_FEATURE(mvdev, VIRTIO_NET_F_MQ))
+ 	case STATE_MSG:
++		/* Validate Gap ACK blocks, drop if invalid */
++		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
++		if (glen > dlen)
 +			break;
 +
- 		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->riov, (void *)&mq, sizeof(mq));
- 		if (read != sizeof(mq))
- 			break;
+ 		l->rcv_nxt_state = msg_seqno(hdr) + 1;
  
- 		newqps = mlx5vdpa16_to_cpu(mvdev, mq.virtqueue_pairs);
-+		if (newqps < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
-+		    newqps > mlx5_vdpa_max_qps(mvdev->max_vqs))
-+			break;
-+
- 		if (ndev->cur_num_vqs == 2 * newqps) {
- 			status = VIRTIO_NET_OK;
+ 		/* Update own tolerance if peer indicates a non-zero value */
+@@ -2270,10 +2275,6 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
  			break;
+ 		}
+ 
+-		/* Receive Gap ACK blocks from peer if any */
+-		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
+-		if(glen > dlen)
+-			break;
+ 		tipc_mon_rcv(l->net, data + glen, dlen - glen, l->addr,
+ 			     &l->mon_state, l->bearer_id);
+ 
 -- 
 2.34.1
 

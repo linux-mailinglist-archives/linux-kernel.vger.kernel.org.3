@@ -2,141 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FE14D8F08
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEC94D8F11
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 22:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245399AbiCNVut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 17:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S245412AbiCNVvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 17:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbiCNVup (ORCPT
+        with ESMTP id S236193AbiCNVvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 17:50:45 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2044.outbound.protection.outlook.com [40.107.236.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE836340F6;
-        Mon, 14 Mar 2022 14:49:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Omq6Pc0L5YKE0/jTx3HjzJi8VTDsOgTTROMl9GEeX6Kj/dZd9MPJyy1Wea86m4TJMHh/hiVTTBPLqgQDZNpnxySeF4Df4FA8xqu0fEV92jZmcWa5GxEeC3TfdswbmkmXIgswBpouTKvT+s9vPh13hOnE2yH/ca7raUHvGAEeWf7FgKS18xnf7t4QFqx7vL1VxoYR+iikNqRI5JRX+C/k7+QplXCcWGXLhyvqhImRsSx8awldkp/MpEQF+nW7Ofr+cMJxkynss0rVmPua1Hhmb+48Ew5iJVEAU0ZASkBtbEBDd7qFK2SvA6SuAsS64fOo1jgqRwToViwUhSfeYDd4HA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=31SYqNiHWFjuf56QD8Z23OoU3v91m/m3QJxpZCzNnag=;
- b=FRHxBwQQSudtj2bhHUhSOt3zBSQctCj0mE2ZbXKfvVRuJK0uDg8T4yVg8UDrUlI7JX5GkE0ckb/cZXIndze9Y7KIy42kYG7JTxsWU0qVRr3Rti7AiJu2GP84CkBbgp2kYQb9rPFfskbYRNQA4sw96M0gFuesSmyaSlhFL6gpQ3yMENiTuXVDJY/8qprpTAvS9Z58A5AUgyckEwVVG9bGjoyh++Ow3yXM+O1gXsikT9vyNcEbnCCLrLe8Bq1VGy8Z12GIWaxYNY6e2zhEiCUXQ8n7bBdvLL4fkLF1/dchM/VEsjHk37blT1BzoaeednbpLE8gBLOAJBlLeOlLGCjZUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=31SYqNiHWFjuf56QD8Z23OoU3v91m/m3QJxpZCzNnag=;
- b=jvU8doVx6qWuZnqwxPF8scniMZy8wGoyYs3MsbCZc2P7RpuGu2f4gjaWM4Gz3yXh/fB61MHW01LVGoMHXk/YGs12GGyvpbzM0FM9oC7bdOny4cwTHhE3mPfEfmM5jhUgeTa1aonR+zJPcTBlxet+GkvQzgsoxSrRY8ozml1dWU6ysh0r7a1zd6r89hd7AJ2vAIGtC1JSzyfSt5NyhzxRdOGxNdRFhIGO5lobAr2ie61/MNQZBCTEoPqEi4q85l/HEmVImceDrV97+i44Nc7DSsurpZQ39CD11e2VGG9tPHFQ57Bmftwg1zZq8uhPjDs0VzG0ukX3ZwwphsjtOYN2kQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CY4PR12MB1174.namprd12.prod.outlook.com (2603:10b6:903:36::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.25; Mon, 14 Mar
- 2022 21:49:29 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::51a0:4aee:2b4c:ca28%4]) with mapi id 15.20.5061.028; Mon, 14 Mar 2022
- 21:49:29 +0000
-Date:   Mon, 14 Mar 2022 18:49:28 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        pbonzini@redhat.com, corbet@lwn.net, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 29/32] vfio-pci/zdev: add DTSM to clp group capability
-Message-ID: <20220314214928.GK11336@nvidia.com>
-References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
- <20220314194451.58266-30-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314194451.58266-30-mjrosato@linux.ibm.com>
-X-ClientProxiedBy: MN2PR06CA0023.namprd06.prod.outlook.com
- (2603:10b6:208:23d::28) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 14 Mar 2022 17:51:39 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA6344C7;
+        Mon, 14 Mar 2022 14:50:29 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id r11so20014918ioh.10;
+        Mon, 14 Mar 2022 14:50:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=CGEh5iCMps2XS5R44sd7XPYTqLJq0sP1C+L9zYhWYlI=;
+        b=8Kv9xUNbCfhsRri5gbSrC9Tr0i+26T5SBixQtEQn4UxEtcfJWK7+RH37pbAVk+9RxM
+         ES5X3FAP4FDgUGJ+B0iQ9hteG9DtcfwQ3fkKLk1EOO+tN99KaFq9+9gLLJT3/G1Rg/yc
+         r2B1OYK9pRinkxZyVSC6gKj35TllfhPP+NXIbVu7Ky+Tfxdvbtmm4k9zTiP+Pa8CWOZH
+         MqojTJp1Osa9eca4/r/G9MFkQcX7EBWfsRIQHudS+W0PHzesNzDuGE4Iwkk2a1mEY8iT
+         j9s+7aLS+1iJJpfQqEqE4xnXU5Y/au1l2tOUUr49T7C92xhnZSpr1ZYgERAf+SXsZ3vM
+         50jQ==
+X-Gm-Message-State: AOAM530Rlusdxn7t130DM1fknv7n7IqalCB9FAtJ2xk+RUo02nBNAoaT
+        /c22A12SPOaNxL+ZUApQLw==
+X-Google-Smtp-Source: ABdhPJweO3VWhgxdwP7gQ1lIiOQaKbWSgKSaZY/XLgS/m78dLb5ar/Nckf4Npe8/Eq4Iw9CzsqdXRQ==
+X-Received: by 2002:a02:bb8c:0:b0:317:b015:1998 with SMTP id g12-20020a02bb8c000000b00317b0151998mr21388886jan.134.1647294628516;
+        Mon, 14 Mar 2022 14:50:28 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id c12-20020a056e02058c00b002c63f71c7dbsm9137733ils.56.2022.03.14.14.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 14:50:27 -0700 (PDT)
+Received: (nullmailer pid 623447 invoked by uid 1000);
+        Mon, 14 Mar 2022 21:50:24 -0000
+Date:   Mon, 14 Mar 2022 15:50:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: Re: [PATCH v6 3/6] ARM: dts: spear13xx: Fix sata node name
+Message-ID: <Yi+4oN5xuS2pq0ru@robh.at.kernel.org>
+References: <20220311210357.222830-1-linux@fw-web.de>
+ <20220311210357.222830-4-linux@fw-web.de>
+ <20220314034940.rxkgue2kllnqhucp@vireshk-i7>
+ <trinity-0f1389c2-6d2b-4499-a2fc-3cb93f4d09cb-1647272336831@3c-app-gmx-bap56>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7900b9f4-e3e0-461d-a170-08da06048412
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1174:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB117480D2774739DDC0A1F387C20F9@CY4PR12MB1174.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pBh7RkmfwwhB8Zixsc2nzm35NuhVbKBoYNCJ0nkfJPBK+z1twCTA30kEp/I8iZCW8vtcsdSsANn6dux/z8c/r5z03308hu7ssa4rzayh7cClzg8BApssY7qnWEGGSwsrJBkb19cXO3BHxuMEqNGZaCc4SoIoB02y2nFColXoaJSf4f86guY3M51uMR49NfV4x6sfRP9oXlm8mGrr0aa1/pRGHIAvyY6mOxAigbkSlOdl5yrVe99g16HbUHcYFhjvh+XXPpRW7oRfIgLRRGhjYTZS8Ou7JkZs4GmXZlsuTkLOGl6lhx9aszilDqxOFnCYtBYnTWh06znZzIXLYmiL+U6ilA4VkJuPCmwYVB5HRAiNF0QiQ0j00PmGEN9uHLpP93++uLRZ+vg4WosG1/ojVoFntCUbTeB+YMUWJC80TyEyoTtliqnq4q5TNl+PmLRpS5G9DvT3x6dFq/nzv06LhzKvRcnEBKlbnjg4021ix7N2Y3JhGictqSxTvkQIa/qmg23jJk8C39Pm/Bt15LEB92OYxgDOb7QcdhvUiqnYKlDA8i6LIRLnVQDIQ/sNo4jwNAztIblBHVYFt16ivIGZM1qZVZNTcWj4aFYpeE7fMSTnjHIKmyP9+35m4/sikwGF/ngKvk+lqGuJRvoLX2B97g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(316002)(33656002)(2906002)(36756003)(66946007)(508600001)(8936002)(6486002)(4744005)(7416002)(66476007)(5660300002)(38100700002)(8676002)(4326008)(66556008)(86362001)(186003)(6512007)(6506007)(26005)(1076003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JXLz8C8CDg2ibpjBeDUZAhe/RBRYjYSAYb9Yo7/F9FhA0/q6+6pbCX27QeZJ?=
- =?us-ascii?Q?sjXhbP3CrWGPBXx/JAcwQtwI27/K3J3NWUgQKMjqevp/NHN0RDwJTNi+XcY9?=
- =?us-ascii?Q?u6ko/wiYbNYmbfsRHF+RNpZdTYdb3w+szInjfNn1Rj6hv9XUX3LFmeIGqHtA?=
- =?us-ascii?Q?OmucCDHuLCxDLM+PS2naEpGeuiyNMa7PM7NP4JRsVlT1rlnYkJko2KcRHpFR?=
- =?us-ascii?Q?swexLSUMKJZ4aq4DkaO9LPTliFfLcNnoZO+3BoVesW4lcWnRB9mco7gGKqDj?=
- =?us-ascii?Q?BRmPlme1WmbBa8z9hl5F1NWM+6thUeC6m67sMVqUMuKOiV1FSaAHxnvSdMyn?=
- =?us-ascii?Q?WWJ465569o9W1L/C5oG8PpIPL4wM6wo2AFARon3vTk3jlg35D5D2xFJigGRy?=
- =?us-ascii?Q?eCGHGJBNWqEjBB4scsB/2AncdcdLpPiY1FCKKPj6Uh+ASDTj/LjS8R4ur2Ww?=
- =?us-ascii?Q?zoEG2QVCML4iceUwyminPFjIxydOGzAT2+v5kKzgPZZ96hbx/sZU4/kmbSXZ?=
- =?us-ascii?Q?dmBp2jDyh9ApSYguJBpjKQUoE9IwmGxFaH7JC0HUw99dU/Nl9EhsPZbCLCHI?=
- =?us-ascii?Q?cl/e8jgDNONAoqwmwD0c/IMD1jDxArJv2OhrpUg7zQrkabf+/sZkdaaROCyx?=
- =?us-ascii?Q?0VKwcyBIh84rdvUL9EV/vSfhXNBoY1SVdUmKcpdDtTrXDmm8i+6jxMWQ3Np1?=
- =?us-ascii?Q?UP5acGbBoVIr+9D6LsooNJYP/r1edc0gpZba4AEd0LTF3W2c1hpstr6uRODP?=
- =?us-ascii?Q?rA0GQEjQALAqjz2ot5OwZSPYp4x4NbhhXjRJCcRiN1A+mXO3htdzX8zl8YK8?=
- =?us-ascii?Q?O1W2c5VcUYKphjJoahuHCu54y7cAIwgDFOuE9oRthAjjbLfhVgIwIfhUFvTX?=
- =?us-ascii?Q?FvbFPC2Y3ma/MaHJui2Gf84ifLKakQs+ZBz6vrE4+G7yw2FCvns3JMUYTh59?=
- =?us-ascii?Q?mqj3PWIuw6Gj69YTX/O/5k72nBRNp4ArEqDLL9vzqmY1B6nx+BoadtHGwS3y?=
- =?us-ascii?Q?M8wuqm0fidPRl6cxv89W6YPczUe9/3KhQHP3CuZy5xj5KJ2EVpkSX6FmsYTe?=
- =?us-ascii?Q?yH/oKoGI46tUSGCh2lccIJl9liG9eFXUmhHfhUSiIVSGzWs069DIkwfN2QPm?=
- =?us-ascii?Q?Qms3VIwI/2lYjRHC/s0plU7O8MWuBky1PdSzin0pfOSUH1vWdn15PVzIxM5B?=
- =?us-ascii?Q?X5k5aQykIq4LVVtqiZpi5vpSA8LqfFS1gUJ77DGqdM1uQPqLL547fyaYrdSR?=
- =?us-ascii?Q?lnUy6Dgk2zQMEZXoYu07+k0p99xnB2gW+HJDYtQLnxX7QrGIW00qztAp+2hd?=
- =?us-ascii?Q?RJh8hxucWjmyB1WwswCqPnLUMaoENcBxAiQ+aAH7BMOeSdkmJh9MqAmVj78r?=
- =?us-ascii?Q?FaOF7jeSpIbw8VhnUhZwuOhFhJYOjgrlg4tHpzEINCjK60NvzLqYkifNk2UC?=
- =?us-ascii?Q?eR9qu0fVYTBn/RU3Gvnael4XWQgn+2JA?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7900b9f4-e3e0-461d-a170-08da06048412
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2022 21:49:29.3201
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jLx/2rceEV40bH+wEiqgKMMldtrdLV1Z4ZGoEzWYxb/NSNFW6lJL0gcuAyr+dIpo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1174
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <trinity-0f1389c2-6d2b-4499-a2fc-3cb93f4d09cb-1647272336831@3c-app-gmx-bap56>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 03:44:48PM -0400, Matthew Rosato wrote:
-> The DTSM, or designation type supported mask, indicates what IOAT formats
-> are available to the guest.  For an interpreted device, userspace will not
-> know what format(s) the IOAT assist supports, so pass it via the
-> capability chain.  Since the value belongs to the Query PCI Function Group
-> clp, let's extend the existing capability with a new version.
+On Mon, Mar 14, 2022 at 04:38:56PM +0100, Frank Wunderlich wrote:
+> Hi,
+> 
+> thanks for for checking the spear-patch.
+> 
+> > Gesendet: Montag, 14. März 2022 um 04:49 Uhr
+> > Von: "Viresh Kumar" <viresh.kumar@linaro.org>
+> >
+> > On 11-03-22, 22:03, Frank Wunderlich wrote:
+> > > From: Frank Wunderlich <frank-w@public-files.de>
+> > > 
+> > > After converting the binding to yaml the node name does
+> > > not match the standard pattern, change it.
+> > > 
+> > > arch/arm/boot/dts/spear1340-evb.dt.yaml: ahci@b1000000:
+> > > $nodename:0: 'ahci@b1000000' does not match '^sata(@.*)?$'
+> > > 	From schema: Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> > > 
+> > > Fixes: 07658d9a659b ("SPEAr13xx: Add dts and dtsi files")
+> > 
+> > I don't think this is correct. The above patch is correct. The first
+> > patch in this series changes the names and that's where things break.
+> 
+> it's right that my binding will break it, but the nodes are not named the right way.
+> And i used the commit that introduces the wrong node-names.
+> Maybe fixes-tag is wrong in this case.
 
-Why is this on the VFIO device?
+I'm pretty sure Viresh just meant the Fixes tag is not right.
 
-Maybe I don't quite understand it right, but the IOAT is the
-'userspace page table'?
-
-That is something that should be modeled as a nested iommu domain.
-
-Querying the formats and any control logic for this should be on the
-iommu side not built into VFIO.
-
-Jason
+Rob

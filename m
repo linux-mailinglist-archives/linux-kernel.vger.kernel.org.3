@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F264D8954
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9C44D89E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242989AbiCNQgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S243496AbiCNQhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235820AbiCNQgS (ORCPT
+        with ESMTP id S243079AbiCNQgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:36:18 -0400
+        Mon, 14 Mar 2022 12:36:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1594311C24;
-        Mon, 14 Mar 2022 09:35:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BA013D75;
+        Mon, 14 Mar 2022 09:35:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 656096138B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C23F613F1;
+        Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E3CDC36AEC;
         Mon, 14 Mar 2022 16:35:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6711C340F7;
-        Mon, 14 Mar 2022 16:35:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647275706;
-        bh=pGdMVo81L21nG9yhzpJ4FAUxkhj+Km9odTkR6fwp/F4=;
+        s=k20201202; t=1647275707;
+        bh=liZGOEi5kwKibIHDLOkP1/y+H373rnV9CYI73V4HmPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C7VEwuHpUixh3uASPaVRn5XFgd9qBRGXm2InpJIZ6XfvvsjPjR+9ZrW6HcrrFjoOg
-         MV3gZsgIY1iiIDA5KNGwjl/6OtPcVtZhV8n7KMSgpImb3Q1nJJzEUhO2fOg+T5Qw59
-         MggUQx1UmhRUcfSbtBKHnphRcKDJrItHbd3D11ntzxNW7DL8rfrI1Te4rP3GJF9CqU
-         T44iUq2ojBID43uO+t+LXsmiRdh/N4r4LjuFgVNPFiAcBZ2owDvLKMlxheRYSTkrI+
-         V30v3Gr9KM8I+COGWzXZrhVgIqnP7IRQEmQOyzaSKC9uBk9czJLczK4gZW3o4Krtwo
-         hhFow68/jywhw==
+        b=n1J2983tmUn3iZnCNgQJb5Xb33SGWHNR0nZKXFBIMKtop8s3M8DzMRlnE0K2oblam
+         SzAFzILtBx8OHhnR1gS+b7yrgngRzmwVrauNHcvdOTMdFa2OmQGTbROv+XLlSaCueh
+         t4invXgUDzVnElWZnxyH60c6Kj5aTUrqVNJPBajxO9heHEVw60NTAb6cdPZzrhRq9o
+         h+P1GG0u15CMQ9f5+iZWraRfPQgS295LizCVqRexyeE722IO7gqa58/CxBDpV2q86Q
+         WZ2DQNtPwsQ5GD7OJ6QK5ulMGsNvr5m8iVaJuNyUVsKhbAK8ZsVXkC5pm7/SAu9A4w
+         6DkOuK4TCQqvg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTney-001wwU-Gb; Mon, 14 Mar 2022 17:35:04 +0100
+        id 1nTney-001wwY-In; Mon, 14 Mar 2022 17:35:04 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
-        Andrew Jeffery <andrew@aj.id.au>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
         Dmitry Osipenko <digetx@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>,
-        Jammy Huang <jammy_huang@aspeedtech.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: [PATCH v2 06/67] media: platform: place Aspeed driver on a separate dir
-Date:   Mon, 14 Mar 2022 17:34:01 +0100
-Message-Id: <69c5ee8aae03bb9f9a8a825175a1cd0644eaf20c.1647274406.git.mchehab@kernel.org>
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 07/67] media: platform: place NXP drivers on a separate dir
+Date:   Mon, 14 Mar 2022 17:34:02 +0100
+Message-Id: <46fb99951fe2c71adfd7f4ea4439af5ed5ebb7f7.1647274406.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -75,108 +84,347 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to cleanup the main platform media directory, move Aspeed
-driver to its own directory.
+In order to cleanup the main platform media directory, move NXP
+drivers to their own directory.
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- MAINTAINERS                                        |  2 +-
- drivers/media/platform/Kconfig                     | 10 +---------
- drivers/media/platform/Makefile                    |  2 +-
- drivers/media/platform/aspeed/Kconfig              | 10 ++++++++++
- drivers/media/platform/aspeed/Makefile             |  2 ++
- drivers/media/platform/{ => aspeed}/aspeed-video.c |  0
- 6 files changed, 15 insertions(+), 11 deletions(-)
- create mode 100644 drivers/media/platform/aspeed/Kconfig
- create mode 100644 drivers/media/platform/aspeed/Makefile
- rename drivers/media/platform/{ => aspeed}/aspeed-video.c (100%)
+ MAINTAINERS                                   |  2 +-
+ drivers/media/platform/Kconfig                | 40 +----------
+ drivers/media/platform/Makefile               |  6 +-
+ drivers/media/platform/imx/Kconfig            | 25 -------
+ drivers/media/platform/imx/Makefile           |  1 -
+ drivers/media/platform/nxp/Kconfig            | 66 +++++++++++++++++++
+ drivers/media/platform/nxp/Makefile           |  8 +++
+ drivers/media/platform/{ => nxp}/fsl-viu.c    |  0
+ .../media/platform/{ => nxp}/imx-jpeg/Kconfig |  0
+ .../platform/{ => nxp}/imx-jpeg/Makefile      |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.c |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.h |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg.c    |  0
+ .../platform/{ => nxp}/imx-jpeg/mxc-jpeg.h    |  0
+ .../platform/{imx => nxp}/imx-mipi-csis.c     |  0
+ drivers/media/platform/{ => nxp}/imx-pxp.c    |  0
+ drivers/media/platform/{ => nxp}/imx-pxp.h    |  0
+ .../media/platform/{ => nxp}/mx2_emmaprp.c    |  0
+ 18 files changed, 78 insertions(+), 70 deletions(-)
+ delete mode 100644 drivers/media/platform/imx/Kconfig
+ delete mode 100644 drivers/media/platform/imx/Makefile
+ create mode 100644 drivers/media/platform/nxp/Kconfig
+ create mode 100644 drivers/media/platform/nxp/Makefile
+ rename drivers/media/platform/{ => nxp}/fsl-viu.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/Kconfig (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/Makefile (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg-hw.h (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-jpeg/mxc-jpeg.h (100%)
+ rename drivers/media/platform/{imx => nxp}/imx-mipi-csis.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-pxp.c (100%)
+ rename drivers/media/platform/{ => nxp}/imx-pxp.h (100%)
+ rename drivers/media/platform/{ => nxp}/mx2_emmaprp.c (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 1a9fb0615925..1b6f48a660de 100644
+index 1b6f48a660de..780ef2ef3362 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -3026,7 +3026,7 @@ L:	linux-media@vger.kernel.org
- L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+@@ -11841,7 +11841,7 @@ M:	Philipp Zabel <p.zabel@pengutronix.de>
+ L:	linux-media@vger.kernel.org
  S:	Maintained
- F:	Documentation/devicetree/bindings/media/aspeed-video.txt
--F:	drivers/media/platform/aspeed-video.c
-+F:	drivers/media/platform/aspeed/
+ T:	git git://linuxtv.org/media_tree.git
+-F:	drivers/media/platform/imx-pxp.[ch]
++F:	drivers/media/platform/nxp/imx-pxp.[ch]
  
- ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
- M:	Corentin Chary <corentin.chary@gmail.com>
+ MEDIA DRIVERS FOR ASCOT2E
+ M:	Sergey Kozlov <serjk@netup.ru>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 1446a99159c5..10f453ff2717 100644
+index 10f453ff2717..711b6ab9370b 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -50,15 +50,7 @@ source "drivers/media/platform/davinci/Kconfig"
+@@ -29,6 +29,8 @@ config V4L_MEM2MEM_DRIVERS
+ 	  to capture and output drivers, which use memory buffers for just
+ 	  one of those.
  
- source "drivers/media/platform/omap/Kconfig"
++source "drivers/media/platform/nxp/Kconfig"
++
+ # V4L platform drivers
  
--config VIDEO_ASPEED
--	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
+ source "drivers/media/platform/marvell-ccic/Kconfig"
+@@ -61,19 +63,6 @@ config VIDEO_SH_VOU
+ 	help
+ 	  Support for the Video Output Unit (VOU) on SuperH SoCs.
+ 
+-config VIDEO_VIU
+-	tristate "Freescale VIU Video Driver"
 -	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_V4L2
--	select VIDEOBUF2_DMA_CONTIG
+-	depends on VIDEO_V4L2 && (PPC_MPC512x || COMPILE_TEST) && I2C
+-	select VIDEOBUF_DMA_CONTIG
+-	default y
 -	help
--	  Support for the Aspeed Video Engine (VE) embedded in the Aspeed
--	  AST2400 and AST2500 SOCs. The VE can capture and compress video data
--	  from digital or analog sources.
-+source "drivers/media/platform/aspeed/Kconfig"
+-	  Support for Freescale VIU video driver. This device captures
+-	  video data, or overlays video on DIU frame buffer.
+-
+-	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
+-	  In doubt, say N.
+-
+ config VIDEO_MUX
+ 	tristate "Video Multiplexer"
+ 	depends on V4L_PLATFORM_DRIVERS
+@@ -193,7 +182,6 @@ source "drivers/media/platform/xilinx/Kconfig"
+ source "drivers/media/platform/rcar-vin/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+ source "drivers/media/platform/sunxi/Kconfig"
+-source "drivers/media/platform/imx/Kconfig"
  
- config VIDEO_SH_VOU
- 	tristate "SuperH VOU video output driver"
+ config VIDEO_TI_CAL
+ 	tristate "TI CAL (Camera Adaptation Layer) driver"
+@@ -273,18 +261,6 @@ config VIDEO_CODA
+ config VIDEO_IMX_VDOA
+ 	def_tristate VIDEO_CODA if SOC_IMX6Q || COMPILE_TEST
+ 
+-config VIDEO_IMX_PXP
+-	tristate "i.MX Pixel Pipeline (PXP)"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	  The i.MX Pixel Pipeline is a memory-to-memory engine for scaling,
+-	  color space conversion, and rotation.
+-
+-source "drivers/media/platform/imx-jpeg/Kconfig"
+-
+ config VIDEO_MEDIATEK_JPEG
+ 	tristate "Mediatek JPEG Codec driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
+@@ -423,18 +399,6 @@ config VIDEO_SAMSUNG_S5P_MFC
+ 	help
+ 	    MFC 5.1 and 6.x driver for V4L2
+ 
+-config VIDEO_MX2_EMMAPRP
+-	tristate "MX2 eMMa-PrP support"
+-	depends on V4L_MEM2MEM_DRIVERS
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	depends on SOC_IMX27 || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select V4L2_MEM2MEM_DEV
+-	help
+-	    MX2X chips have a PrP that can be used to process buffers from
+-	    memory to memory. Operations include resizing and format
+-	    conversion.
+-
+ config VIDEO_SAMSUNG_EXYNOS_GSC
+ 	tristate "Samsung Exynos G-Scaler driver"
+ 	depends on V4L_MEM2MEM_DRIVERS
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index e319044c57e9..18ec3d208483 100644
+index 18ec3d208483..4458690c1965 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -6,6 +6,7 @@
- # Place here, alphabetically sorted by directory
- # (e. g. LC_ALL=C sort Makefile)
- obj-y += allegro-dvt/
-+obj-y += aspeed/
- obj-y += am437x/
- obj-y += amphion/
- obj-y += atmel/
-@@ -47,7 +48,6 @@ obj-y += xilinx/
+@@ -15,14 +15,13 @@ obj-y += coda/
+ obj-y += davinci/
+ obj-y += exynos-gsc/
+ obj-y += exynos4-is/
+-obj-y += imx/
+-obj-y += imx-jpeg/
+ obj-y += marvell-ccic/
+ obj-y += meson/ge2d/
+ obj-y += mtk-jpeg/
+ obj-y += mtk-mdp/
+ obj-y += mtk-vcodec/
+ obj-y += mtk-vpu/
++obj-y += nxp/
+ obj-y += omap/
+ obj-y += omap3isp/
+ obj-y += qcom/camss/
+@@ -48,10 +47,8 @@ obj-y += xilinx/
  # Please place here only ancillary drivers that aren't SoC-specific
  # Please keep it alphabetically sorted by Kconfig name
  # (e. g. LC_ALL=C sort Makefile)
--obj-$(CONFIG_VIDEO_ASPEED)		+= aspeed-video.o
- obj-$(CONFIG_VIDEO_IMX_PXP)		+= imx-pxp.o
+-obj-$(CONFIG_VIDEO_IMX_PXP)		+= imx-pxp.o
  obj-$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
  obj-$(CONFIG_VIDEO_MUX)			+= video-mux.o
-diff --git a/drivers/media/platform/aspeed/Kconfig b/drivers/media/platform/aspeed/Kconfig
+-obj-$(CONFIG_VIDEO_MX2_EMMAPRP)		+= mx2_emmaprp.o
+ obj-$(CONFIG_VIDEO_PXA27x)		+= pxa_camera.o
+ obj-$(CONFIG_VIDEO_RCAR_DRIF)		+= rcar_drif.o
+ obj-$(CONFIG_VIDEO_RCAR_ISP)		+= rcar-isp.o
+@@ -61,4 +58,3 @@ obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
+ obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
+ obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+ obj-$(CONFIG_VIDEO_VIA_CAMERA)		+= via-camera.o
+-obj-$(CONFIG_VIDEO_VIU)			+= fsl-viu.o
+diff --git a/drivers/media/platform/imx/Kconfig b/drivers/media/platform/imx/Kconfig
+deleted file mode 100644
+index 7cd0617c9b1b..000000000000
+--- a/drivers/media/platform/imx/Kconfig
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-
+-menuconfig VIDEO_IMX
+-	bool "V4L2 capture drivers for NXP i.MX devices"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on ARCH_MXC || COMPILE_TEST
+-	depends on VIDEO_DEV && VIDEO_V4L2
+-	help
+-	  Say yes here to enable support for capture drivers on i.MX SoCs.
+-	  Support for the single SoC features are selectable in the sub-menu
+-	  options.
+-
+-if VIDEO_IMX
+-
+-config VIDEO_IMX_MIPI_CSIS
+-	tristate "MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
+-	select MEDIA_CONTROLLER
+-	select V4L2_FWNODE
+-	select VIDEO_V4L2_SUBDEV_API
+-	default n
+-	help
+-	  Video4Linux2 sub-device driver for the MIPI CSI-2 CSIS receiver
+-	  v3.3/v3.6.3 found on some i.MX7 and i.MX8 SoCs.
+-
+-endif # VIDEO_IMX
+diff --git a/drivers/media/platform/imx/Makefile b/drivers/media/platform/imx/Makefile
+deleted file mode 100644
+index f72bdbe8e6ef..000000000000
+--- a/drivers/media/platform/imx/Makefile
++++ /dev/null
+@@ -1 +0,0 @@
+-obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
+diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
 new file mode 100644
-index 000000000000..5025e892844c
+index 000000000000..df52d32ebe50
 --- /dev/null
-+++ b/drivers/media/platform/aspeed/Kconfig
-@@ -0,0 +1,10 @@
++++ b/drivers/media/platform/nxp/Kconfig
+@@ -0,0 +1,66 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_ASPEED
-+	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
++
++# V4L drivers
++
++menuconfig VIDEO_IMX
++	bool "V4L2 capture drivers for NXP i.MX devices"
 +	depends on V4L_PLATFORM_DRIVERS
-+	depends on VIDEO_V4L2
-+	select VIDEOBUF2_DMA_CONTIG
++	depends on ARCH_MXC || COMPILE_TEST
++	depends on VIDEO_DEV && VIDEO_V4L2
 +	help
-+	  Support for the Aspeed Video Engine (VE) embedded in the Aspeed
-+	  AST2400 and AST2500 SOCs. The VE can capture and compress video data
-+	  from digital or analog sources.
-diff --git a/drivers/media/platform/aspeed/Makefile b/drivers/media/platform/aspeed/Makefile
++	  Say yes here to enable support for capture drivers on i.MX SoCs.
++	  Support for the single SoC features are selectable in the sub-menu
++	  options.
++
++if VIDEO_IMX
++
++config VIDEO_IMX_MIPI_CSIS
++	tristate "MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
++	select MEDIA_CONTROLLER
++	select V4L2_FWNODE
++	select VIDEO_V4L2_SUBDEV_API
++	default n
++	help
++	  Video4Linux2 sub-device driver for the MIPI CSI-2 CSIS receiver
++	  v3.3/v3.6.3 found on some i.MX7 and i.MX8 SoCs.
++
++endif # VIDEO_IMX
++
++config VIDEO_VIU
++	tristate "Freescale/NXP VIU Video Driver"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_V4L2 && (PPC_MPC512x || COMPILE_TEST) && I2C
++	select VIDEOBUF_DMA_CONTIG
++	default y
++	help
++	  Support for Freescale VIU video driver. This device captures
++	  video data, or overlays video on DIU frame buffer.
++
++	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
++	  In doubt, say N.
++
++# mem2mem drivers
++
++config VIDEO_IMX_PXP
++	tristate "i.MX Pixel Pipeline (PXP)"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2 && (ARCH_MXC || COMPILE_TEST)
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	  The i.MX Pixel Pipeline is a memory-to-memory engine for scaling,
++	  color space conversion, and rotation.
++
++config VIDEO_MX2_EMMAPRP
++	tristate "Freescale/NXP MX2 eMMa-PrP support"
++	depends on V4L_MEM2MEM_DRIVERS
++	depends on VIDEO_DEV && VIDEO_V4L2
++	depends on SOC_IMX27 || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select V4L2_MEM2MEM_DEV
++	help
++	    MX2X chips have a PrP that can be used to process buffers from
++	    memory to memory. Operations include resizing and format
++	    conversion.
++
++source "drivers/media/platform/nxp/imx-jpeg/Kconfig"
+diff --git a/drivers/media/platform/nxp/Makefile b/drivers/media/platform/nxp/Makefile
 new file mode 100644
-index 000000000000..1979af63dadd
+index 000000000000..efc38c6578ce
 --- /dev/null
-+++ b/drivers/media/platform/aspeed/Makefile
-@@ -0,0 +1,2 @@
++++ b/drivers/media/platform/nxp/Makefile
+@@ -0,0 +1,8 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_VIDEO_ASPEED) += aspeed-video.o
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
++
++obj-y += imx-jpeg/
++
++obj-$(CONFIG_VIDEO_IMX_MIPI_CSIS) += imx-mipi-csis.o
++obj-$(CONFIG_VIDEO_IMX_PXP) += imx-pxp.o
++obj-$(CONFIG_VIDEO_MX2_EMMAPRP) += mx2_emmaprp.o
++obj-$(CONFIG_VIDEO_VIU) += fsl-viu.o
+diff --git a/drivers/media/platform/fsl-viu.c b/drivers/media/platform/nxp/fsl-viu.c
 similarity index 100%
-rename from drivers/media/platform/aspeed-video.c
-rename to drivers/media/platform/aspeed/aspeed-video.c
+rename from drivers/media/platform/fsl-viu.c
+rename to drivers/media/platform/nxp/fsl-viu.c
+diff --git a/drivers/media/platform/imx-jpeg/Kconfig b/drivers/media/platform/nxp/imx-jpeg/Kconfig
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/Kconfig
+rename to drivers/media/platform/nxp/imx-jpeg/Kconfig
+diff --git a/drivers/media/platform/imx-jpeg/Makefile b/drivers/media/platform/nxp/imx-jpeg/Makefile
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/Makefile
+rename to drivers/media/platform/nxp/imx-jpeg/Makefile
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg-hw.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg-hw.c
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg-hw.h
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg.c
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+similarity index 100%
+rename from drivers/media/platform/imx-jpeg/mxc-jpeg.h
+rename to drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+diff --git a/drivers/media/platform/imx/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+similarity index 100%
+rename from drivers/media/platform/imx/imx-mipi-csis.c
+rename to drivers/media/platform/nxp/imx-mipi-csis.c
+diff --git a/drivers/media/platform/imx-pxp.c b/drivers/media/platform/nxp/imx-pxp.c
+similarity index 100%
+rename from drivers/media/platform/imx-pxp.c
+rename to drivers/media/platform/nxp/imx-pxp.c
+diff --git a/drivers/media/platform/imx-pxp.h b/drivers/media/platform/nxp/imx-pxp.h
+similarity index 100%
+rename from drivers/media/platform/imx-pxp.h
+rename to drivers/media/platform/nxp/imx-pxp.h
+diff --git a/drivers/media/platform/mx2_emmaprp.c b/drivers/media/platform/nxp/mx2_emmaprp.c
+similarity index 100%
+rename from drivers/media/platform/mx2_emmaprp.c
+rename to drivers/media/platform/nxp/mx2_emmaprp.c
 -- 
 2.35.1
 

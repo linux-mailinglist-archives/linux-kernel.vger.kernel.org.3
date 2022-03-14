@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25394D82B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AAC4D8542
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239274AbiCNMGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S234515AbiCNMs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240585AbiCNMFx (ORCPT
+        with ESMTP id S237123AbiCNMry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:05:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDF3496A1;
-        Mon, 14 Mar 2022 05:02:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42032B80D24;
-        Mon, 14 Mar 2022 12:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E8BC340E9;
-        Mon, 14 Mar 2022 12:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259360;
-        bh=EpphPjkJYLQvxtjYHWazgFohtokZXh676sRXQzOPIuU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZBBkKVAx3az7UwYqkrxN6kpEuZQp70+4r3torI8HhvBrjFUB39Fr2XOpC/oi1hoLI
-         Nt/9teBv5kBrfnmq6es5PakB+3pgDncAB9ytWaGp++5FAC8GPmluBaqqF6FI0cPtVM
-         2R4UkdwZowcngs2UdaQkCdEDIIRPsQQDaj4OEgPs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 61/71] watch_queue: Fix to always request a pow-of-2 pipe ring size
+        Mon, 14 Mar 2022 08:47:54 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2A638BCC;
+        Mon, 14 Mar 2022 05:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ydan4DcFWSqbAVwutC+rrcavDBQ1Llz9s3pxcPtxROk=;
+  b=NVZvyqGzeDgz6fVAat5ruw+l13ThAvGEZes/BTGBhOmDh6Na4lMuZcvY
+   vN7nHEqhzJl1s6x6G4HwpeV1DKXCJEyvct7hxj4hRkL0bEJEsJvugAb/q
+   zDmyxHqHHACtbsYT/jaIfCC4PBNDQG9nGYf6KIhQVGQhiShgqHbeqhDuK
+   o=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997364"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kernel-janitors@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 30/30] perf/core: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:54 +0100
-Message-Id: <20220314112739.638370324@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-31-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-commit 96a4d8912b28451cd62825fd7caa0e66e091d938 upstream.
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-The pipe ring size must always be a power of 2 as the head and tail
-pointers are masked off by AND'ing with the size of the ring - 1.
-watch_queue_set_size(), however, lets you specify any number of notes
-between 1 and 511.  This number is passed through to pipe_resize_ring()
-without checking/forcing its alignment.
-
-Fix this by rounding the number of slots required up to the nearest
-power of two.  The request is meant to guarantee that at least that many
-notifications can be generated before the queue is full, so rounding
-down isn't an option, but, alternatively, it may be better to give an
-error if we aren't allowed to allocate that much ring space.
-
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-by: Jann Horn <jannh@google.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/watch_queue.c |    2 +-
+ kernel/events/core.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -244,7 +244,7 @@ long watch_queue_set_size(struct pipe_in
- 		goto error;
- 	}
- 
--	ret = pipe_resize_ring(pipe, nr_notes);
-+	ret = pipe_resize_ring(pipe, roundup_pow_of_two(nr_notes));
- 	if (ret < 0)
- 		goto error;
- 
-
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index cfde994ce61c..25fcd4cca0d7 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -872,7 +872,7 @@ static void perf_cgroup_switch(struct task_struct *task, int mode)
+ 			 * event_filter_match() to not have to pass
+ 			 * task around
+ 			 * we pass the cpuctx->ctx to perf_cgroup_from_task()
+-			 * because cgorup events are only per-cpu
++			 * because cgroup events are only per-cpu
+ 			 */
+ 			cpuctx->cgrp = perf_cgroup_from_task(task,
+ 							     &cpuctx->ctx);
 

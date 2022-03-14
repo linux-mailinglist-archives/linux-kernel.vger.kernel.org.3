@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D19F4D7FC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EF54D7FC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238525AbiCNK0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S234825AbiCNK0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238504AbiCNK0c (ORCPT
+        with ESMTP id S238514AbiCNK0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:26:32 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB5743483;
-        Mon, 14 Mar 2022 03:25:23 -0700 (PDT)
+        Mon, 14 Mar 2022 06:26:34 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B83434A3;
+        Mon, 14 Mar 2022 03:25:25 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id B01451F43505
+        with ESMTPSA id 489EC1F43511
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647253522;
-        bh=aEs1SFqoEgSqlYmwJeL2S9EUjavPhZ0L4qzqDRpfny4=;
+        s=mail; t=1647253524;
+        bh=tyJL5hF65QyMph+7DtjWZYFL2Qzea5pUr0xp38Yx7bo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LzuHfhhhy05sxCVVCJOoPAdJqjRDABOOt5S9sp7Ks3z/oFTmuJB3u1v7UGWtK9Cme
-         JXZq+4vin3gzjUZgoB4H5PxuMgzPttAL0rlyXOZ4zYbkqLbJGJdIRnDa6offNrQvJN
-         6Axy74Efz4VMD9AUYgIR8k0+fI/42onBtJ1oPN0ilBvrpR+SmckwhT0MZlQba6JG3C
-         +bY4g/FdhV3GsnAhQkVxRhaiO59nyOCtKbXJSgznRuZvCOCwc+jAuv6SP1qEk3xfg3
-         T/q4AZyawkdTNhMsdPWpNYXgk7tnQQxVGvDaY022TXM6wEwFrJ3v/wZ+CEiWuFK2u+
-         qXxMC3JYW4wKg==
-Message-ID: <3d980cef-cfa2-6161-9c5b-cd0705d8e8b1@collabora.com>
-Date:   Mon, 14 Mar 2022 11:25:18 +0100
+        b=V5Yw7/epWa0vrRb9G9PpmchU0FQS3UJZEMSFlkQ7E00UWWSNLN4lPorRW9TM2ocGN
+         uVREdeLNVzGlQ/4jcIgogV0YLO1c7Gq0P/Sop1BW+tj2o6ChKUh3P3IuMxRQziIMcw
+         2JuhmTnipYck0SlM4Lqxyj21lmX/Hkz66nk5TeYulwWV0E6U7CCkts6hQw2g5geiaW
+         XlY7XEAyoqXVCNBy9aoH+rTUqHf/zIvBJE/cszbI32FtWdVxqog3eqJgCorgfNQ84M
+         d2UdP7OmBTFGOyaTxt6pMHGORHjmNuFz15VmVMLdqbl0ykfRxyoSWmJY4iejHGiqAU
+         XLJHe/VM9FhEQ==
+Message-ID: <aaa158d8-767b-8a6e-b708-4bfe60dcb67b@collabora.com>
+Date:   Mon, 14 Mar 2022 11:25:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [v3 05/19] ASoC: mediatek: mt8186: support hostless in platform
- driver
+Subject: Re: [v3 14/19] dt-bindings: mediatek: mt8186: add audio afe document
 Content-Language: en-US
 To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org,
         robh+dt@kernel.org
@@ -43,12 +42,13 @@ Cc:     aaronyu@google.com, matthias.bgg@gmail.com, trevor.wu@mediatek.com,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Rob Herring <robh@kernel.org>
 References: <20220313151023.21229-1-jiaxin.yu@mediatek.com>
- <20220313151023.21229-6-jiaxin.yu@mediatek.com>
+ <20220313151023.21229-15-jiaxin.yu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220313151023.21229-6-jiaxin.yu@mediatek.com>
+In-Reply-To: <20220313151023.21229-15-jiaxin.yu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -62,14 +62,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 13/03/22 16:10, Jiaxin Yu ha scritto:
-> Add mt8186 hostless dai driver.
+> Add mt8186 audio afe document.
 > 
 > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 > ---
->   .../soc/mediatek/mt8186/mt8186-dai-hostless.c | 298 ++++++++++++++++++
->   1 file changed, 298 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-dai-hostless.c
+>   .../bindings/sound/mt8186-afe-pcm.yaml        | 175 ++++++++++++++++++
+>   1 file changed, 175 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
 > 
+
+

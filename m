@@ -2,87 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C4D4D87F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D614D87FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236711AbiCNPWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
+        id S239282AbiCNPXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbiCNPWP (ORCPT
+        with ESMTP id S242114AbiCNPWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:22:15 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2EB13F66
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:21:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647271265; x=1678807265;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=U3CvAktVdU1usYTq7NAeaK3m9HJMxau0P6laS9k8Lps=;
-  b=dKNjrhVL0AP5WqCM1phAFbKQOGCBqdMrhZup7XiTXr/Q7REZqw4EeseU
-   zRylSYgWlRNUbn1neXaW3WOKDu8jvJFFpC1XQY17evKblf6YcsqxWZ+U6
-   dLOB4WOC9pfdFqXg1cXVn4cGSCF+WXAu5+hiM8xZjSq35jIurXl7tE7LK
-   8pPT4IrwdwYyuC6qBLmM5Mz2rhvVWBGkjR2KBnBuetHSPDNTD3mjHxtj+
-   iu3NVVHfr2zWvzqSNgF6vRrY8hfqCvt0i8lzWUXONAgJo8AcLZpaN4vD7
-   29+M4HfJcr6g4R8CQbXrwglotsqXQTXDXUyn/RUIZ3y4mtDGlKpb2rBPp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="236003299"
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="236003299"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 08:21:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="515467811"
-Received: from zborja-mobl1.amr.corp.intel.com (HELO [10.212.239.199]) ([10.212.239.199])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 08:21:04 -0700
-Message-ID: <6b63d2ad-9b21-3fd6-37b4-31d7ad804c30@intel.com>
-Date:   Mon, 14 Mar 2022 08:20:57 -0700
+        Mon, 14 Mar 2022 11:22:51 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428783D482
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:21:38 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:46148)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nTmVs-001pwi-O2; Mon, 14 Mar 2022 09:21:36 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37680 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nTmVr-003ci5-Gz; Mon, 14 Mar 2022 09:21:36 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <hughd@google.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>
+References: <20220314064039.62972-1-linmiaohe@huawei.com>
+Date:   Mon, 14 Mar 2022 10:21:10 -0500
+In-Reply-To: <20220314064039.62972-1-linmiaohe@huawei.com> (Miaohe Lin's
+        message of "Mon, 14 Mar 2022 14:40:39 +0800")
+Message-ID: <87h78036hl.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Oscar Salvador <osalvador@suse.de>,
-        "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220310120749.23077-1-osalvador@suse.de>
- <87mthxb514.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YisK2PEkKAqtZPfp@localhost.localdomain>
- <87czip73b4.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yi9bhXSADpNt6WEC@localhost.localdomain>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa node
- changes its N_CPU state
-In-Reply-To: <Yi9bhXSADpNt6WEC@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nTmVr-003ci5-Gz;;;mid=<87h78036hl.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+M0LAEcOvb6LWyXxgtrZneXmnp61b93Kw=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Miaohe Lin <linmiaohe@huawei.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 558 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (2.0%), b_tie_ro: 10 (1.7%), parse: 0.86
+        (0.2%), extract_message_metadata: 12 (2.1%), get_uri_detail_list: 1.45
+        (0.3%), tests_pri_-1000: 5 (0.9%), tests_pri_-950: 1.25 (0.2%),
+        tests_pri_-900: 1.00 (0.2%), tests_pri_-90: 53 (9.5%), check_bayes: 51
+        (9.2%), b_tokenize: 7 (1.2%), b_tok_get_all: 6 (1.0%), b_comp_prob:
+        1.97 (0.4%), b_tok_touch_all: 34 (6.0%), b_finish: 0.88 (0.2%),
+        tests_pri_0: 276 (49.5%), check_dkim_signature: 0.51 (0.1%),
+        check_dkim_adsp: 2.9 (0.5%), poll_dns_idle: 174 (31.3%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 192 (34.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2] mm/mlock: fix potential imbalanced rlimit ucounts
+ adjustment
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/22 08:13, Oscar Salvador wrote:
-> On Mon, Mar 14, 2022 at 09:03:59AM +0800, Huang, Ying wrote:
->> Oscar Salvador <osalvador@suse.de> writes:
->> On host machine, PMEM is always exposed via memory hotplug.  But later
->> on, we found that for guest system it's possible for PMEM to be exposed
->> as normal memory.
-> Could you please elaborate on that? How is it done? I would love to hear the
-> details.
+Miaohe Lin <linmiaohe@huawei.com> writes:
 
-Qemu, for instance, has a "mem-path" argument.  It's typically used for
-using hugetlbfs as guest memory.  But, there's nothing stopping you from
-pointing it to a DAX device or a file on a DAX filesystem that's backed
-by pmem.
+> user_shm_lock forgets to set allowed to 0 when get_ucounts fails. So
+> the later user_shm_unlock might do the extra dec_rlimit_ucounts. Fix
+> this by resetting allowed to 0.
 
+This fix looks correct.  But the ability for people to follow and read
+the code seems questionable.  I saw in v1 of this patch Hugh originally
+misread the logic.
 
+Could we instead change the code to leave lock_limit at ULONG_MAX aka
+RLIM_INFINITY, leave initialized to 0, and not even need a special case
+of RLIM_INFINITY as nothing can be greater that ULONG_MAX?
+
+Something like this?
+
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 8f584eddd305..e7eabf5193ab 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -827,13 +827,12 @@ int user_shm_lock(size_t size, struct ucounts *ucounts)
+ 
+ 	locked = (size + PAGE_SIZE - 1) >> PAGE_SHIFT;
+ 	lock_limit = rlimit(RLIMIT_MEMLOCK);
+-	if (lock_limit == RLIM_INFINITY)
+-		allowed = 1;
+-	lock_limit >>= PAGE_SHIFT;
++	if (lock_limit != RLIM_INFINITY)
++		lock_limit >>= PAGE_SHIFT;
+ 	spin_lock(&shmlock_user_lock);
+ 	memlock = inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+ 
+-	if (!allowed && (memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
++	if ((memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
+ 		dec_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+ 		goto out;
+ 	}
+
+>
+> Fixes: d7c9e99aee48 ("Reimplement RLIMIT_MEMLOCK on top of ucounts")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Acked-by: Hugh Dickins <hughd@google.com>
+> ---
+> v1->v2:
+>   correct Fixes tag and collect Acked-by tag
+>   Thanks Hugh for review!
+> ---
+>  mm/mlock.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index 29372c0eebe5..efd2dd2943de 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -733,6 +733,7 @@ int user_shm_lock(size_t size, struct ucounts *ucounts)
+>  	}
+>  	if (!get_ucounts(ucounts)) {
+>  		dec_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+> +		allowed = 0;
+>  		goto out;
+>  	}
+>  	allowed = 1;
+
+Eric

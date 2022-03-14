@@ -2,169 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85B44D8F60
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F244D8F7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245514AbiCNWPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 18:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S245554AbiCNWYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 18:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237433AbiCNWPC (ORCPT
+        with ESMTP id S245547AbiCNWYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 18:15:02 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492573D496
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:13:51 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id s29so8362146lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=P+sSZ/MIHLkLQskC5zq8hmVD4ykc2QmIuRZHeedkEaI=;
-        b=ojFUY1Ydha4EjvryEkE3HsxyjtloLRMCc5AmrdkMj8nj0s1r31KnEkySamhyOGNtxJ
-         cJ4/+NGmk3It+nqJTCZRnc56LmxUKMBDiqc3uQZpAlGXydEiMUR7jJtwdNTo7+XXMIYH
-         QNHQHUqVtdiJqKTkpy7d2LLoYXI9o363C5m5z3JucWS9HzlQMtFiJJdXcQRg0G9WxnEY
-         wXE0rtDHshiBb39cqzlGsSxdkfRzf40J9yLOAikMOoZyBKTD8TtWjpUwsEgllQmeljW2
-         +DMEUU9d2SVX02w7yjNbVPm+mexqvGQEPcMME9EN0yRU2V4CNpsYEcIrO7KV7jTYwpEG
-         yk0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=P+sSZ/MIHLkLQskC5zq8hmVD4ykc2QmIuRZHeedkEaI=;
-        b=nMsQxgT0OLQHnXuiCNAr3sGQNmcRCSvO0o5PAaMllgS9kRGZWRnOT4EQ+SyD1XiN8r
-         8VAoVuX5URdPGHseQJw6r8bAmW3WzZln9P+y20aGMdzM45+DiWWG7YKiyHFqdDKO5slf
-         FUaGw69EXRGmQQCjSR6kirzuTwI49zUh6UVB4SK3z6miDL4k5ZctC46qqhmdceaYI8cI
-         TbN5l73FuRx6WqtB7Q3wjL1D/Jlm35BwftdvZhKVrnc3O1NZPg/38uku1jUVCOBPwX3x
-         OaXNGM3WSnOrksbIcQjz1F9IJ/Kh5Xytp31vcHrRQf4aG8vD9Qs9Dam2tUupxv49cKxV
-         K8sQ==
-X-Gm-Message-State: AOAM532Xfd595IOSpDIZBCIP0n0Vo9YsGCrD9nrJ0ZOPnOdu/33cpw2e
-        HBieeE/uVExLvGg9bV48I41syw==
-X-Google-Smtp-Source: ABdhPJzBOCPzfCoOjZRJEfzWh6SxoSpbyeNrkPdkrWcpL7NEjcByTPWlBt/VH7PbCKEeRFDPXcGgnQ==
-X-Received: by 2002:ac2:5441:0:b0:448:5b32:c493 with SMTP id d1-20020ac25441000000b004485b32c493mr14552456lfn.438.1647296029382;
-        Mon, 14 Mar 2022 15:13:49 -0700 (PDT)
-Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
-        by smtp.gmail.com with ESMTPSA id h1-20020a056512054100b0044847b32426sm3481059lfl.156.2022.03.14.15.13.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 15:13:48 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v3 net-next 09/14] net: dsa: Validate hardware support
- for MST
-In-Reply-To: <20220314202040.f2r4pidcy6ws34qv@skbuf>
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
- <20220314095231.3486931-10-tobias@waldekranz.com>
- <20220314165649.vtsd3xqv7htut55d@skbuf>
- <20220314175556.7mjr4tui4vb4i5qn@skbuf> <87mthsl2wn.fsf@waldekranz.com>
- <20220314202040.f2r4pidcy6ws34qv@skbuf>
-Date:   Mon, 14 Mar 2022 23:13:47 +0100
-Message-ID: <87h780kwro.fsf@waldekranz.com>
+        Mon, 14 Mar 2022 18:24:18 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772802BEB;
+        Mon, 14 Mar 2022 15:23:05 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9FAC85C0227;
+        Mon, 14 Mar 2022 18:23:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 14 Mar 2022 18:23:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=KlJ4W3E/DZOai3ong
+        DezQFkkKLCDtgk7PVp0U2t4V50=; b=SC2huqwNWLs+eBuNLQbAIEIxtLVpN+1YP
+        /XrG0bt9WkKq+OdXmTWQLBxchn8ukNIOBn1YMPUJ2SUBH8kpXcReVS+5GjfImh4s
+        oYpLDD6nFRpQvEU9DS5WMzBpx3YLkg+mGsKR2I/nNq3ubXr6ImCriLAXGxH/z4uJ
+        R9jJWbbNje+gkrPTd53cBZ/5zzV6OllMIi+JXEcnQ0aEI0klmuurW3jE+0jNRuF7
+        C9LXI1+1ncc18GHKm/gn4TZoA0iyoAC9H0T/e+yjqYVmqIRoFqF0UWTLVYjyZ+9n
+        8HOQ70zHZWmXbtbtI62Wy6nGJe37iBAsmhWMBgwc+fgrdbpmem6EQ==
+X-ME-Sender: <xms:RcAvYqOnntmGsLDHkTJBITBQ8g1rKc8S27w6Z1IyG00OVVl3DIseOg>
+    <xme:RcAvYo_uY1-23_86C9ckEdPdmrsqB9K13Go3l63qlrF_NJ-tvbuwAV78OnyMBk4Vc
+    ZmTDS3oUtJcnNX1K9w>
+X-ME-Received: <xmr:RcAvYhRlFUt9Ey2Rn5yMZm_aEEf7zq6fIJjkOIzp3dm3DxV5_-JcUjPaStVfy8OC06A-49yRFhvqd9aVhyT9M2SPHW_xZUgmL2c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvkedgudehkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpefftdejfeejudejvdeuveffvdeuieegiefhudfhffejueeuvedvvdevvdeu
+    hedtueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgtohhmphhuthhinhhghhhish
+    htohhrhidrohhrghdruhhkpdhotghtohhprghrthdrtghomhenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrghinheslhhinhhugidqmh
+    eikehkrdhorhhg
+X-ME-Proxy: <xmx:RcAvYqttP_zBb3tKznwJLsmHpM_KxwlN7CowEepi02Eva_E8eyfvcA>
+    <xmx:RcAvYicYcQPSbvd2lmhBz3eFY-_sJBrtVUlW_Nj5Y7rk5H0cTaVtQg>
+    <xmx:RcAvYu3utKmSl1wpY7eM53HOmJKhM7hf9spkEUlG2lwDz7TA5aWbYQ>
+    <xmx:RsAvYu2WyOKV1exmia410TrkEb1HBifzJDC-BLwaF54rGU9GxF_w7Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Mar 2022 18:22:59 -0400 (EDT)
+Date:   Tue, 15 Mar 2022 09:15:08 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     Pekka Paalanen <ppaalanen@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/10] drm/fourcc: Add DRM_FORMAT_C[124]
+In-Reply-To: <CAMuHMdVj8wxAVbcov1wFsgt_knMkcySBH8nMoKjyr=G+mLQmjQ@mail.gmail.com>
+Message-ID: <1f915fcc-1d95-99d1-c7b7-dc4e3b49e09f@linux-m68k.org>
+References: <cover.1646683502.git.geert@linux-m68k.org> <8d3c0cc370b0214244b01a64c588e5e506531716.1646683502.git.geert@linux-m68k.org> <CAMuHMdVq19wpA_7nKKTm-G2EmK3cMxxP6nbR_u=vkazqCZ=KhQ@mail.gmail.com> <20220314170539.17400f93@eldfell>
+ <CAMuHMdVj8wxAVbcov1wFsgt_knMkcySBH8nMoKjyr=G+mLQmjQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 22:20, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Mon, Mar 14, 2022 at 09:01:12PM +0100, Tobias Waldekranz wrote:
->> On Mon, Mar 14, 2022 at 19:55, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Mon, Mar 14, 2022 at 06:56:49PM +0200, Vladimir Oltean wrote:
->> >> > diff --git a/net/dsa/port.c b/net/dsa/port.c
->> >> > index 58291df14cdb..1a17a0efa2fa 100644
->> >> > --- a/net/dsa/port.c
->> >> > +++ b/net/dsa/port.c
->> >> > @@ -240,6 +240,10 @@ static int dsa_port_switchdev_sync_attrs(struct dsa_port *dp,
->> >> >  	if (err && err != -EOPNOTSUPP)
->> >> >  		return err;
->> >> >  
->> >> > +	err = dsa_port_mst_enable(dp, br_mst_enabled(br), extack);
->> >> > +	if (err && err != -EOPNOTSUPP)
->> >> > +		return err;
->> >> 
->> >> Sadly this will break down because we don't have unwinding on error in
->> >> place (sorry). We'd end up with an unoffloaded bridge port with
->> >> partially synced bridge port attributes. Could you please add a patch
->> >> previous to this one that handles this, and unoffloads those on error?
->> >
->> > Actually I would rather rename the entire dsa_port_mst_enable() function
->> > to dsa_port_mst_validate() and move it to the beginning of dsa_port_bridge_join().
->> > This simplifies the unwinding that needs to take place quite a bit.
->> 
->> Well you still need to unwind vlan filtering if setting the ageing time
->> fails, which is the most complicated one, right?
->
-> Yes, but we can leave that for another day :)
->
-> ...ergo
->
->> Should the unwinding patch still be part of this series then?
->
-> no.
+Hi Geert,
 
-Agreed
+On Mon, 14 Mar 2022, Geert Uytterhoeven wrote:
 
->> Still, I agree that _validate is a better name, and then _bridge_join
->> seems like a more reasonable placement.
->> 
->> While we're here, I actually made this a hard error in both scenarios
->> (but forgot to update the log - will do that in v4, depending on what we
->> decide here). There's a dilemma:
->> 
->> - When reacting to the attribute event, i.e. changing the mode on a
->>   member we're apart of, we _can't_ return -EOPNOTSUPP as it will be
->>   ignored, which is why dsa_port_mst_validate (nee _enable) returns
->>   -EINVAL.
->> 
->> - When joining a bridge, we _must_ return -EOPNOTSUPP to trigger the
->>   software fallback.
->> 
->> Having something like this in dsa_port_bridge_join...
->> 
->> err = dsa_port_mst_validate(dp);
->> if (err == -EINVAL)
->> 	return -EOPNOTSUPP;
->> else if (err)
->> 	return err;
->> 
->> ...works I suppose, but feels somewhat awkwark. Any better ideas?
->
-> What you can do is follow the model of dsa_switch_supports_uc_filtering(),
-> and create a dsa_switch_supports_mst() which is called inside an
-> "if br_mst_enabled(br)" check, and returns bool. When false, you could
-> return -EINVAL or -EOPNOTSUPP, as appropriate.
->
-> This is mostly fine, except for the pesky dsa_port_can_configure_learning(dp)
-> check :) So while you could name it dsa_port_supports_mst() and pass it
-> a dsa_port, the problem is that you can't put the implementation of this
-> new dsa_port_supports_mst() next to dsa_switch_supports_uc_filtering()
-> where it would be nice to sit for symmetry, because the latter is static
-> inline and we're missing the definition of dsa_port_can_configure_learning().
-> So.. the second best thing is to keep dsa_port_supports_mst() in the
-> same place where dsa_port_mst_enable() currently is.
->
-> What do you think?
+> On Mon, Mar 14, 2022 at 4:05 PM Pekka Paalanen <ppaalanen@gmail.com> wrote:
+> > On Mon, 14 Mar 2022 14:30:18 +0100
+> > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Mon, Mar 7, 2022 at 9:53 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > Introduce fourcc codes for color-indexed frame buffer formats with 
+> > > > two, four, and sixteen colors, and provide a mapping from bit per 
+> > > > pixel and depth to fourcc codes.
+> > > >
+> > > > As the number of bits per pixel is less than eight, these rely on 
+> > > > proper block handling for the calculation of bits per pixel and 
+> > > > pitch.
+> > > >
+> > > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > >
+> > > > --- a/include/uapi/drm/drm_fourcc.h
+> > > > +++ b/include/uapi/drm/drm_fourcc.h
+> > > > @@ -99,7 +99,10 @@ extern "C" {
+> > > >  #define DRM_FORMAT_INVALID     0
+> > > >
+> > > >  /* color index */
+> > > > -#define DRM_FORMAT_C8          fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
+> > > > +#define DRM_FORMAT_C1          fourcc_code('C', '1', ' ', ' ') /* [7:0] C0:C1:C2:C3:C4:C5:C6:C7 1:1:1:1:1:1:1:1 eight pixels/byte */
+> > > > +#define DRM_FORMAT_C2          fourcc_code('C', '2', ' ', ' ') /* [7:0] C0:C1:C2:C3 2:2:2:2 four pixels/byte */
+> > > > +#define DRM_FORMAT_C4          fourcc_code('C', '4', ' ', ' ') /* [7:0] C0:C1 4:4 two pixels/byte */
+> > > > +#define DRM_FORMAT_C8          fourcc_code('C', '8', ' ', ' ') /* [7:0] C 8 one pixel/byte */
+> > > >
+> > > >  /* 8 bpp Red */
+> > > >  #define DRM_FORMAT_R8          fourcc_code('R', '8', ' ', ' ') /* [7:0] R */
+> > >
+> > > After replying to Ilia's comment[1], I realized the CFB drawing
+> > > operations use native byte and bit ordering, unless
+> > > FBINFO_FOREIGN_ENDIAN is set.
+> > > While Amiga, Atari, and Sun-3 use big-endian bit ordering,
+> > > e.g. Acorn VIDC[2] uses little endian, and SH7760[3] is configurable
+> > > (sh7760fb configures ordering to match host order).
+> > > BTW, ssd130{7fb,x}_update_rect() both assume little-endian, so I
+> > > guess they are broken on big-endian.
+> > > Fbtest uses big-endian bit ordering, so < 8 bpp is probably broken
+> > > on little-endian.
+> > >
+> > > Hence the above should become:
+> > >
+> > >     #define DRM_FORMAT_C1          fourcc_code('C', '1', ' ', ' ') /*
+> > > [7:0] C7:C6:C5:C4:C3:C2:C1:C0 1:1:1:1:1:1:1:1 eight pixels/byte */
+> > >     #define DRM_FORMAT_C2          fourcc_code('C', '2', ' ', ' ') /*
+> > > [7:0] C3:C2:C1:C0 2:2:2:2 four pixels/byte */
+> > >     #define DRM_FORMAT_C4          fourcc_code('C', '4', ' ', ' ') /*
+> > > [7:0] C1:C0 4:4 two pixels/byte */
+> > >
+> > > The same changes should be made for DRM_FORMAT_[RD][124].
+> > >
+> > > The fbdev emulation code should gain support for these with and without
+> > > DRM_FORMAT_BIG_ENDIAN, the latter perhaps only on big-endian platforms?
+> > >
+> > > [1] https://lore.kernel.org/r/CAKb7UvgEdm9U=+RyRwL0TGRfA_Qc7NbhCWoZOft2DKdXggtKYw@mail.gmail.com/
+> > > [2] See p.30 of the VIDC datasheet
+> > >     http://chrisacorns.computinghistory.org.uk/docs/Acorn/Misc/Acorn_VIDC_Datasheet.pdf
+> > > [3] See p.1178 of the SH7660 datasheet
+> > >     https://datasheet.octopart.com/HD6417760BL200AV-Renesas-datasheet-14105759.pdf
+> >
+> > why would CPU endianess affect the order of bits in a byte?
+> 
+> It doesn't, but see below.
+> 
+> > Do you mean that bit 0 one machine is (1 << 0), and on another machine
+> > bit 0 is (1 << 7)?
+> 
+> No, I mean that in case of multiple pixels per byte, the display
+> hardware pumps out pixels to the CRTC starting from either the MSB
+> or the LSB of the first display byte.  Which order depends on the
+> display hardware, not on the CPU.
+> 
+> > In C, we have only one way to address bits of a byte and that is with
+> > arithmetic. You cannot take the address of a bit any other way, can you?
+> >
+> > Can we standardise on "bit n of a byte is addressed as (1 << n)"?
+> 
+> BIT(n) in Linux works the same for little- and big-endian CPUs.
+> But display hardware may use a different bit order.
+> 
 
-I think that would mostly work. It would have to be positioned higher up
-in the file though, so that it can be called from _bridge_join. Unless
-we add a forward for it of course, but that seems to break with existing
-conventions.
+Perhaps some of this confusion could be avoided if you describe the 
+problem in terms of the sequence of scan-out of pixels, rather than in 
+terms of the serialization of bits. The significance of bits within each 
+pixel and the ordering of pixels within each memory word are independent, 
+right?

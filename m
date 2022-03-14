@@ -2,105 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB164D7D38
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968B34D7D39
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237546AbiCNIGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
+        id S237553AbiCNIGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238900AbiCNIEq (ORCPT
+        with ESMTP id S239328AbiCNIFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:04:46 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FC06540
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:02:34 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id j17so22545066wrc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=FCTa1MEHZ8RflaCaL+Kv3IB7oupUyUxIYhWpI7cZElk=;
-        b=CPYvO7CXsDtRHFv+aDgUHU3k7MoLfFq17gtgRZR4JdQQpMZli8AiYNEUu+PbzficSb
-         kDLK7fNDlYCoxWfM3BOU2HueKNJDZIK7I8FZ6wWB9ui2crHxS9Xs4NT9/goKSvhMxDaC
-         Su/z3KOd5lN3ajtVx0cM1iXhpFPSDH2ClbJUQMQ4FZayf+7vJ1C2ZcNeR5klliK+Zh8G
-         yC+yUtrQhzURXVIK4aC3wcr1GxrSzO65DF7KDecC6oL00uM9/eG1Nn13sUKmdnUE3x+J
-         HCgbhL6ICpV2tGofvMIQEVBoxio1VM2bYHKzKXhsw+s4FNCnL8RBXUZ86ObcZVOCX5IQ
-         z8uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=FCTa1MEHZ8RflaCaL+Kv3IB7oupUyUxIYhWpI7cZElk=;
-        b=Ufv2DGHkHLKcRDSlCrdp07x4kZr5EOqsckvBAKkklBJf0Hj5X3nDYCTzXGJylIoA8E
-         y0FC2ogeQp/vE8uRoDcgy6uLAzpUGHqiLFudN0Q3Bb4hyLzH9JsYbm/xpaRb2RsJ7tFS
-         DZNAaSGyGcVn0vUDaYsxHU1GVkC/koAPelKpw0mLcFz7ELHzqiddHJCEtWCxXjyndl95
-         dqT1/Y0PIgIOhwCn8n/Jrc2FxS/706AhX5xlkOXE+wqWn/tAyFSCAhygH2NZaJORKKVP
-         T9IAeyDN28M2X4fBzAIntQK6WjC5/tT87eyRodKyJi4ty2fO3dK3aOoiDeQ5qAgIaqqr
-         dnFQ==
-X-Gm-Message-State: AOAM533T9RMDmZWLyIyZWBYfZac1vrdxmWELXMFqsd71BCkHtmegReyX
-        fc+4RHWMLyrtmq3WUm2e8rnibjxLCadA/A==
-X-Google-Smtp-Source: ABdhPJygPodjlvvW7OainAGLKsdDvzFoilMLfj02cRFY2jabbkEhO2PBY0GqOsOjtLsFBdJBcYu+Ag==
-X-Received: by 2002:a5d:51cb:0:b0:203:8dff:e9e4 with SMTP id n11-20020a5d51cb000000b002038dffe9e4mr13637700wrv.512.1647244935364;
-        Mon, 14 Mar 2022 01:02:15 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:67f0:57f7:2185:6d18? ([2001:861:44c0:66c0:67f0:57f7:2185:6d18])
-        by smtp.gmail.com with ESMTPSA id o6-20020a5d6846000000b001f044a8e214sm12331808wrw.107.2022.03.14.01.02.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 01:02:14 -0700 (PDT)
-Message-ID: <846c8a4f-73ed-5003-1c7c-578d580a9833@baylibre.com>
-Date:   Mon, 14 Mar 2022 09:02:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] media: meson-ir-tx: fix platform_get_irq.cocci warning
-Content-Language: en-US
-To:     Yihao Han <hanyihao@vivo.com>, Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-References: <20220310074059.12269-1-hanyihao@vivo.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220310074059.12269-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 14 Mar 2022 04:05:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859CA338;
+        Mon, 14 Mar 2022 01:03:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EFA4FCE10A8;
+        Mon, 14 Mar 2022 08:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D6CC340EE;
+        Mon, 14 Mar 2022 08:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647245016;
+        bh=PLyOXRyp/joleXlKUaTg+BlpTSHFV9oVS+l3FdSBbwo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CoNJ/MP0igatf0tWuoiMqW6Sx0dzD74K0reoXCLyI5WFnqrNwB5zJdwzzcXHBIYVi
+         aIOCKgf8PevIfE98O8McZ5V88s0BjEHAreCAkiWXoutB1x+L0PVStbHDE7ej7Rm5t/
+         FWCZ+lkC8wH7+PXs8frjFvPP84vAW9zfV6b0SWg13DsZ/0yeHiT54sud/7kjNZCB9+
+         0mz/Djy/Bk0iHb4SYdXHoPTYRRfcHv7Op4VzYYEBq8S5tI5oFpFe3x3pcUia/liMNJ
+         Rtywa7DcpdxWL3b5Or5cf0M2W14gUowW+jzKhcvlkdpm5uSLXNidTdDm374mmYDvtm
+         aV3NQv3am6byg==
+Date:   Mon, 14 Mar 2022 17:03:33 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] docs: bootconfig: Add how to embed the
+ bootconfig into kernel
+Message-Id: <20220314170333.0311c13a654c63d7ebe68e1f@kernel.org>
+In-Reply-To: <8ad1fb98-3141-1e57-b627-0c8184fef955@infradead.org>
+References: <164722283333.689258.144495814460576707.stgit@devnote2>
+        <164722286373.689258.9817790360544187508.stgit@devnote2>
+        <8ad1fb98-3141-1e57-b627-0c8184fef955@infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2022 08:40, Yihao Han wrote:
-> Remove dev_err() messages after platform_get_irq*() failures.
-> platform_get_irq() already prints an error.
-> 
-> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
-> 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
->   drivers/media/rc/meson-ir-tx.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/rc/meson-ir-tx.c b/drivers/media/rc/meson-ir-tx.c
-> index 63e1dbf0a4e9..abdb62b16e98 100644
-> --- a/drivers/media/rc/meson-ir-tx.c
-> +++ b/drivers/media/rc/meson-ir-tx.c
-> @@ -323,10 +323,8 @@ static int __init meson_irtx_probe(struct platform_device *pdev)
->   		return PTR_ERR(ir->reg_base);
->   
->   	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0) {
-> -		dev_err(dev, "no irq resource found\n");
-> +	if (irq < 0)
->   		return -ENODEV;
-> -	}
->   
->   	ir->dev = dev;
->   	ir->carrier = MIRTX_DEFAULT_CARRIER;
+On Sun, 13 Mar 2022 19:03:20 -0700
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+> 
+> 
+> On 3/13/22 18:54, Masami Hiramatsu wrote:
+> > Add a description how to embed the bootconfig file into kernel.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  Changes in v2:
+> >   - Corrected the text accoding to Randy's suggestion.
+> >   - Do not reccomend to use relative path for CONFIG_EMBED_BOOT_CONFIG_FILE.
+> > ---
+> >  Documentation/admin-guide/bootconfig.rst |   30 +++++++++++++++++++++++++++---
+> >  1 file changed, 27 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
+> > index a1860fc0ca88..1af1a172fdd4 100644
+> > --- a/Documentation/admin-guide/bootconfig.rst
+> > +++ b/Documentation/admin-guide/bootconfig.rst
+> > @@ -158,9 +158,15 @@ Each key-value pair is shown in each line with following style::
+> >  Boot Kernel With a Boot Config
+> >  ==============================
+> >  
+> > -Since the boot configuration file is loaded with initrd, it will be added
+> > -to the end of the initrd (initramfs) image file with padding, size,
+> > -checksum and 12-byte magic word as below.
+> > +There are two options to boot the kernel with bootconfig: attaching the
+> > +bootconfig to the initrd image or embedding it in the kernel itself.
+> > +
+> > +Attaching a Boot Config to Initrd
+> > +---------------------------------
+> > +
+> > +Since the boot configuration file is loaded with initrd by default,
+> > +it will be added to the end of the initrd (initramfs) image file with
+> > +padding, size, checksum and 12-byte magic word as below.
+> >  
+> >  [initrd][bootconfig][padding][size(le32)][checksum(le32)][#BOOTCONFIG\n]
+> >  
+> > @@ -196,6 +202,24 @@ To remove the config from the image, you can use -d option as below::
+> >  Then add "bootconfig" on the normal kernel command line to tell the
+> >  kernel to look for the bootconfig at the end of the initrd file.
+> >  
+> > +Embedding a Boot Config into Kernel
+> > +-----------------------------------
+> > +
+> > +If you can not use initrd, you can also embed the bootconfig file in the
+> > +kernel by Kconfig options. In this case, you need to recompile the kernel
+> > +with the following configs::
+> > +
+> > + COFNIG_EMBED_BOOT_CONFIG=y
+> 
+>     CONFIG_
+
+Oops, it's a typo...
+
+> 
+> > + CONFIG_EMBED_BOOT_CONFIG_FILE="/PATH/TO/BOOTCONFIG/FILE"
+> > +
+> > +``CONFIG_EMBED_BOOT_CONFIG_FILE`` requires a correct absolute path to
+> > +the bootconfig file. The kernel will embed it as the default bootconfig.
+> > +
+> > +Just as when attaching the bootconfig to the initrd, you need ``bootconfig``
+> > +option to the kernel command line to enable the embedded bootconfig.
+> 
+>           on the
+
+OK.
+
+Thank you!
+
+> 
+> preferably.
+> 
+> > +
+> > +Note that even if you set this option, you can override the embedded
+> > +bootconfig by another bootconfig which attached to the initrd.
+> >  
+> >  Kernel parameters via Boot Config
+> >  =================================
+> > 
+> 
+> thanks.
+> -- 
+> ~Randy
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

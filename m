@@ -2,113 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDFF4D7FCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CCD4D7FCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbiCNK2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S238527AbiCNK3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbiCNK2d (ORCPT
+        with ESMTP id S236946AbiCNK3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:28:33 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4E2434AC;
-        Mon, 14 Mar 2022 03:27:23 -0700 (PDT)
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2E5Q-1o85pv1l0w-013hgA; Mon, 14 Mar 2022 11:27:21 +0100
-Received: by mail-wr1-f41.google.com with SMTP id r10so23114352wrp.3;
-        Mon, 14 Mar 2022 03:27:21 -0700 (PDT)
-X-Gm-Message-State: AOAM533wi1wQFKz/jjWWoA7OIi+D1FVHiKPc6L98q8OBtKOPpvcimtkL
-        NbM+B+UpI1VmRhW9zYjTFTJXrifH5mXi/liRfHs=
-X-Google-Smtp-Source: ABdhPJzEqI1LonVZ6bGY0Zc5X1CtCNLufMa4XfGQ0mQSVCry0VjHQXsTUbzVOBx8Utrgu6D459mOK3Qcxj1FOdSYpI8=
-X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
- v3-20020adfedc3000000b001ec5f115415mr15782141wro.317.1647253641105; Mon, 14
- Mar 2022 03:27:21 -0700 (PDT)
+        Mon, 14 Mar 2022 06:29:10 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429C03C4AB
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:27:58 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KHCRJ5r0tz9sRx;
+        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZV1HWJixw3eq; Mon, 14 Mar 2022 11:27:56 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KHCRJ4t2wz9sRn;
+        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 92C178B76D;
+        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id VTHrXJMVcorN; Mon, 14 Mar 2022 11:27:56 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5C3918B763;
+        Mon, 14 Mar 2022 11:27:56 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 22EARkmA4139705
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 14 Mar 2022 11:27:46 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 22EAReXf4135139;
+        Mon, 14 Mar 2022 11:27:40 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org
+Subject: [PATCH v1 1/2] static_call: Properly initialise DEFINE_STATIC_CALL_RET0()
+Date:   Mon, 14 Mar 2022 11:27:35 +0100
+Message-Id: <1e0a61a88f52a460f62a58ffc2a5f847d1f7d9d8.1647253456.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220312180615.68929-1-singh.kuldeep87k@gmail.com>
- <20220312180615.68929-2-singh.kuldeep87k@gmail.com> <20220314035118.gbjbrwbsywxljjti@vireshk-i7>
- <20220314065434.GA43329@9a2d8922b8f1> <20220314073102.l6vokyookzyo76hj@vireshk-i7>
-In-Reply-To: <20220314073102.l6vokyookzyo76hj@vireshk-i7>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 14 Mar 2022 11:27:05 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1Go8xiQG=BLBmqoQiVqwkcR+T8gi0WLijzVfa3A_WuKA@mail.gmail.com>
-Message-ID: <CAK8P3a1Go8xiQG=BLBmqoQiVqwkcR+T8gi0WLijzVfa3A_WuKA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ARM: dts: spear13xx: Update SPI dma properties
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:t28q1Kl8p8y/OBfeV9ZIJ96sVsdvnyOLTTMw9weIAt2vbSH/DUv
- yL1LMMqmRs3xnHa17t1mulBn0ysPW3mUFsSQTFwLzWwmta2M4Jku2peA2D/XSbC/XVbitna
- Kw4eQIE2bJW69R7k1wcIMMae0tpvAMLU1vkmYAc4s4+issN27rM45N5XRNH3jObAisvV+EV
- aJc70dSYzCclOWoHPyAPw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Xeeq591h+34=:xxQi5QwfOEbLzqbQOb2f3V
- 5WlpQ5tZ+s+yu9A0UoaQGV86rl8AKvomDSy1o9kojwOGrsXfYaA3TTh2A7OrHJRmw+S+YZUOH
- e1Y+2bBDS8l4pWOL72naVxOOeopUzd6Pg2tgYERAi1gNXAQDNWJE658Wz6W4EMAp7Qurq4X2d
- mKWVYcNtqXZhfgmPgP1BYc2Onww95DRevGecy5/HEzf68E2iOs/0NctrrWUlb9DxAnpxkl63l
- MZ3zPceTRYDECdRo78FwByz+tOswz5ALs00IkcsRWBVUdaAeSV3aYYEqOUJQ7N1VgYCZmmqcT
- 0dZzRo8wry92g9Ejsmzgqkf1taILTvH4/TPe1J6fSpMHiARXKIOkBkuOYFkpB+p95Scj0L/U7
- pOEBrSJUAwoJc7ur9/SuDTWkIAZ16xHxUt02n1vCDdrFC7O7sM2nvBK7W/gHUOeEQkA6LsGBC
- K0Z1TphVLVL3gMGUzGKLFeTUptRjG5Ycc0EjPIwzb2DzneVnI+2o8Tl5sVLfrWIA20BpcZDsg
- zdfP5/7ar6ZV/qQq6He85v3pAUXB9Vt/6e1jnvCqJq50x5HFUiB5F+ntGqH2wVqDN/lDFxUoh
- jlMiL5T3rMBRcouoM//J5UlgRDhI5URj0ec96mLxh8a3lL8hBgbmGm8cv28Z/V/DJ+8wEqn2g
- PfY355G6A8Bpae+CDg6cyTsYjZuLFq7yxxoIQduv7NWwxouhP5+zIUGoCIQPGhAfSQuA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1647253655; l=4450; s=20211009; h=from:subject:message-id; bh=mtB8sSS5LTVjOGBbjCgyRtyvPACLaZttxYP+lcczsR8=; b=7bP7OAbkHz+/6afFcUTRv8eGwDx5YECqQXL5L+DDGNp+oAKSLi4QSEGQy6HKgnit9SY8FThsSKgB H7A3V2V8Ayq9RSUJlPG0Ynmt0Wk3In7Pcvfrmgw+WpCLM6Uorz6r
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 8:31 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 14-03-22, 12:24, Kuldeep Singh wrote:
-> > Dma-names order matters here.
-> > As per pl022 binding, dma-names order specify rx,tx and all DTs which
-> > have tx,rx as order start raising dtbs_chek warning. Thus, need to
-> > reverse this order. Please note, no functional change in this patch
-> > apart from just fixing warning.
-> >
-> > Warning:
-> > 'rx' was expected
-> > 'tx' was expected
->
-> Hmm. I see your point now.
->
->   dma-names:
->     description:
->       There must be at least one channel named "tx" for transmit and named "rx"
->       for receive.
->     minItems: 2
->     maxItems: 32
->     additionalItems: true
->     items:
->       - const: rx
->       - const: tx
->
->
-> I was expecting above to allow adding the items in any order, but
-> looks like the order is fixed with this.
+When a static call is updated with __static_call_return0() as target,
+arch_static_call_transform() set it to use an optimised set of
+instructions which are meant to lay in the same cacheline.
 
-I don't think that it was meant to have a fixed order: unlike the other
-bindings that define xxx-names properties, dmas require giving
-names to allow the DT to specify more than one possible DMA
-specifier for a given name. This means that nothing may ever just
-rely on an index but has to use the name for lookup.
+But when initialising a static call with DEFINE_STATIC_CALL_RET0(),
+we get a branch to the real __static_call_return0() function instead
+of getting the optimised setup:
 
-OTOH, while fixing the order in the binding does not add any
-value, it's also harmless as this should never be able to break
-anything that worked for any combination of old/new dtb and
-kernel, and it's probably easier to express in the binding.
+	c00d8120 <__SCT__perf_snapshot_branch_stack>:
+	c00d8120:	4b ff ff f4 	b       c00d8114 <__static_call_return0>
+	c00d8124:	3d 80 c0 0e 	lis     r12,-16370
+	c00d8128:	81 8c 81 3c 	lwz     r12,-32452(r12)
+	c00d812c:	7d 89 03 a6 	mtctr   r12
+	c00d8130:	4e 80 04 20 	bctr
+	c00d8134:	38 60 00 00 	li      r3,0
+	c00d8138:	4e 80 00 20 	blr
+	c00d813c:	00 00 00 00 	.long 0x0
 
-       Arnd
+Add ARCH_DEFINE_STATIC_CALL_RET0_TRAMP() defined by each architecture
+to setup the optimised configuration, and rework
+DEFINE_STATIC_CALL_RET0() to call it:
+
+	c00d8120 <__SCT__perf_snapshot_branch_stack>:
+	c00d8120:	48 00 00 14 	b       c00d8134 <__SCT__perf_snapshot_branch_stack+0x14>
+	c00d8124:	3d 80 c0 0e 	lis     r12,-16370
+	c00d8128:	81 8c 81 3c 	lwz     r12,-32452(r12)
+	c00d812c:	7d 89 03 a6 	mtctr   r12
+	c00d8130:	4e 80 04 20 	bctr
+	c00d8134:	38 60 00 00 	li      r3,0
+	c00d8138:	4e 80 00 20 	blr
+	c00d813c:	00 00 00 00 	.long 0x0
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/static_call.h |  1 +
+ arch/x86/include/asm/static_call.h     |  2 ++
+ include/linux/static_call.h            | 20 +++++++++++++++++---
+ 3 files changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/static_call.h b/arch/powerpc/include/asm/static_call.h
+index 0a0bc79bd1fa..de1018cc522b 100644
+--- a/arch/powerpc/include/asm/static_call.h
++++ b/arch/powerpc/include/asm/static_call.h
+@@ -24,5 +24,6 @@
+ 
+ #define ARCH_DEFINE_STATIC_CALL_TRAMP(name, func)	__PPC_SCT(name, "b " #func)
+ #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)	__PPC_SCT(name, "blr")
++#define ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)	__PPC_SCT(name, "b .+20")
+ 
+ #endif /* _ASM_POWERPC_STATIC_CALL_H */
+diff --git a/arch/x86/include/asm/static_call.h b/arch/x86/include/asm/static_call.h
+index ed4f8bb6c2d9..2455d721503e 100644
+--- a/arch/x86/include/asm/static_call.h
++++ b/arch/x86/include/asm/static_call.h
+@@ -38,6 +38,8 @@
+ #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
+ 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "ret; int3; nop; nop; nop")
+ 
++#define ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)			\
++	ARCH_DEFINE_STATIC_CALL_TRAMP(name, __static_call_return0)
+ 
+ #define ARCH_ADD_TRAMP_KEY(name)					\
+ 	asm(".pushsection .static_call_tramp_key, \"a\"		\n"	\
+diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+index fcc5b48989b3..3c50b0fdda16 100644
+--- a/include/linux/static_call.h
++++ b/include/linux/static_call.h
+@@ -196,6 +196,14 @@ extern long __static_call_return0(void);
+ 	};								\
+ 	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
+ 
++#define DEFINE_STATIC_CALL_RET0(name, _func)				\
++	DECLARE_STATIC_CALL(name, _func);				\
++	struct static_call_key STATIC_CALL_KEY(name) = {		\
++		.func = __static_call_return0,				\
++		.type = 1,						\
++	};								\
++	ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)
++
+ #define static_call_cond(name)	(void)__static_call(name)
+ 
+ #define EXPORT_STATIC_CALL(name)					\
+@@ -231,6 +239,12 @@ static inline int static_call_init(void) { return 0; }
+ 	};								\
+ 	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
+ 
++#define DEFINE_STATIC_CALL_RET0(name, _func)				\
++	DECLARE_STATIC_CALL(name, _func);				\
++	struct static_call_key STATIC_CALL_KEY(name) = {		\
++		.func = __static_call_return0,				\
++	};								\
++	ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)
+ 
+ #define static_call_cond(name)	(void)__static_call(name)
+ 
+@@ -284,6 +298,9 @@ static inline long __static_call_return0(void)
+ 		.func = NULL,						\
+ 	}
+ 
++#define DEFINE_STATIC_CALL_RET0(name, _func)				\
++	__DEFINE_STATIC_CALL(name, _func, __static_call_return0)
++
+ static inline void __static_call_nop(void) { }
+ 
+ /*
+@@ -327,7 +344,4 @@ static inline int static_call_text_reserved(void *start, void *end)
+ #define DEFINE_STATIC_CALL(name, _func)					\
+ 	__DEFINE_STATIC_CALL(name, _func, _func)
+ 
+-#define DEFINE_STATIC_CALL_RET0(name, _func)				\
+-	__DEFINE_STATIC_CALL(name, _func, __static_call_return0)
+-
+ #endif /* _LINUX_STATIC_CALL_H */
+-- 
+2.35.1
+

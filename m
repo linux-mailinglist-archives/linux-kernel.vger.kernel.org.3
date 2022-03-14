@@ -2,263 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651BB4D7B13
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E714D7AA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236495AbiCNHA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 03:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S236333AbiCNGKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 02:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbiCNHAx (ORCPT
+        with ESMTP id S236313AbiCNGKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 03:00:53 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C9A44090E
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:59:42 -0700 (PDT)
-Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
-        by 156.147.23.53 with ESMTP; 14 Mar 2022 15:59:40 +0900
-X-Original-SENDERIP: 156.147.1.126
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.126 with ESMTP; 14 Mar 2022 15:59:40 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Mon, 14 Mar 2022 15:59:06 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
-        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        djwong@kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: [PATCH v4 00/24] DEPT(Dependency Tracker)
-Message-ID: <20220314065906.GA6255@X58A-UD3R>
-References: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
- <Yiv9Fn4kcRbXJLmu@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Mon, 14 Mar 2022 02:10:51 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B778C3FDB9
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 23:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647238182; x=1678774182;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=z9ake2X2jpG73NBmd8zrDqJ46EtAmbTrrOkXWfn6vJU=;
+  b=ipezwAbVL91xqy0rDQBNi4zzC5s8lj+8yE25z3ZIo5HqGYXnQzir+bps
+   8U/JobdSIgedsemtkhBMbGNKPUtjmSA3NpPaSNcIKl0iPuuHK2PoFmkOd
+   uOGKpH+Rcc3f4BIy3GPmdwPf0ANTOVbXWmeq8GuZLDUgs68pBvzi5nxRf
+   g3PU7yS6Hgn+7ch0Wq3HC4/MArzRSqryLSpW7EOkoAEcniSwlmHOnJa97
+   CxBauDfaZkGM7yCGuqWxz15KnHUheyuZw0o2nSKYn4qhUfPicH56BYL99
+   rtR0dzlSqa4bWSBnlUJ0NUOPKmqaFA8/VgzziUuLoROsjWqo2BfYXqpdQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="316666675"
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="316666675"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 23:09:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
+   d="scan'208";a="689705358"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.87])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Mar 2022 23:09:37 -0700
+From:   tien.sung.ang@intel.com
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Ang Tien Sung <tien.sung.ang@intel.com>
+Subject: [PATCH v2 0/3] firmware: stratix10-svc: Add new FCS support
+Date:   Mon, 14 Mar 2022 22:09:26 +0800
+Message-Id: <20220314140926.2165156-1-tien.sung.ang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yiv9Fn4kcRbXJLmu@ip-172-31-19-208.ap-northeast-1.compute.internal>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 01:53:26AM +0000, Hyeonggon Yoo wrote:
-> On Fri, Mar 04, 2022 at 04:06:19PM +0900, Byungchul Park wrote:
-> > Hi Linus and folks,
-> > 
-> > I've been developing a tool for detecting deadlock possibilities by
-> > tracking wait/event rather than lock(?) acquisition order to try to
-> > cover all synchonization machanisms. It's done on v5.17-rc1 tag.
-> > 
-> > https://github.com/lgebyungchulpark/linux-dept/commits/dept1.14_on_v5.17-rc1
-> >
-> 
-> Small feedback unrelated to thread:
-> I'm not sure "Need to expand the ring buffer" is something to call
-> WARN(). Is this stack trace useful for something?
+From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-Yeah. It seems to happen too often. I won't warn it. Thanks.
+Hi,
+Beginning with Stratix10 and Agilex, a new fpga crypto services shall be
+supported. This is a first of many patches to add new cryto
+functionalities in the form of new commands to the firmware svc driver.
+The new crytpo services are provided by the Secure device manager(SDM).
+The firmware SVC driver receives the commands from the client drivers
+and sends this command via SMC calls to the Arm trusted firmware(ATF) or
+U-boot firmware at EL3. The firmware interrupt service handlers than,
+processes the new commands and send them the SDM's mailbox. 
+To support asynchronos commands, we have introduced a
+INTEL_SIP_SMP_SERVICE_COMPLETED command to poll the completion of the
+crypto operations. This polling commands are essential for the rest of
+the FCS commands. All new FCS commands shall have a prefix of
+INTEL_SIP_SMC_FCS_XXXXX.
+There shall also be a new FCS client device driver called intel_fcs 
+that will be added. The SVC firmware driver registers the new FCS client
+driver and allocates a new channel for this device driver. This brings
+the total supported client drivers to 3 (RSU, FPGA and FCS)
+We have tested this functionality by regression testing within Intel's
+test framework. 
 
-> ========
-> 
-> Hello Byungchul. These are two warnings of DEPT on system.
-> Both cases look similar.
-> 
-> In what case DEPT says (unknown)?
-> I'm not sure we can properly debug this.
-> 
-> ===================================================
-> DEPT: Circular dependency has been detected.
-> 5.17.0-rc1+ #3 Tainted: G        W        
-> ---------------------------------------------------
-> summary
-> ---------------------------------------------------
-> *** AA DEADLOCK ***
-> 
-> context A
->     [S] (unknown)(&vfork:0)
->     [W] wait_for_completion_killable(&vfork:0)
->     [E] complete(&vfork:0)
+Ang Tien Sung (3):
+  firmware: stratix10-svc: extend svc to support FCS features
+  firmware: stratix10-svc: add new polling command for FCS
+  firmware: stratix10-svc: add new FCS commands
 
-All the reports look like having to do with kernel_clone(). I need to
-check it more. Thank you very much.
+ drivers/firmware/stratix10-svc.c              | 160 ++++++++++++++++--
+ include/linux/firmware/intel/stratix10-smc.h  | 138 ++++++++++++++-
+ .../firmware/intel/stratix10-svc-client.h     |  50 +++++-
+ 3 files changed, 326 insertions(+), 22 deletions(-)
 
-You are awesome, Hyeonggon.
+-- 
+2.25.1
 
-Thank you,
-Byungchul
-
-> [S]: start of the event context
-> [W]: the wait blocked
-> [E]: the event not reachable
-> ---------------------------------------------------
-> context A's detail
-> ---------------------------------------------------
-> context A
->     [S] (unknown)(&vfork:0)
->     [W] wait_for_completion_killable(&vfork:0)
->     [E] complete(&vfork:0)
-> 
-> [S] (unknown)(&vfork:0):
-> (N/A)
-> 
-> [W] wait_for_completion_killable(&vfork:0):
-> [<ffffffc00802204c>] kernel_clone+0x25c/0x2b8
-> stacktrace:
->       dept_wait+0x74/0x88
->       wait_for_completion_killable+0x60/0xa0
->       kernel_clone+0x25c/0x2b8
->       __do_sys_clone+0x5c/0x74
->       __arm64_sys_clone+0x18/0x20
->       invoke_syscall.constprop.0+0x78/0xc4
->       do_el0_svc+0x98/0xd0
->       el0_svc+0x44/0xe4
->       el0t_64_sync_handler+0xb0/0x12c
->       el0t_64_sync+0x158/0x15c
-> 
-> [E] complete(&vfork:0):
-> [<ffffffc00801f49c>] mm_release+0x7c/0x90
-> stacktrace:
->       dept_event+0xe0/0x100
->       complete+0x48/0x98
->       mm_release+0x7c/0x90
->       exit_mm_release+0xc/0x14
->       do_exit+0x1b4/0x81c
->       do_group_exit+0x30/0x9c
->       __wake_up_parent+0x0/0x24
->       invoke_syscall.constprop.0+0x78/0xc4
->       do_el0_svc+0x98/0xd0
->       el0_svc+0x44/0xe4
->       el0t_64_sync_handler+0xb0/0x12c
->       el0t_64_sync+0x158/0x15c
-> ---------------------------------------------------
-> information that might be helpful
-> ---------------------------------------------------
-> CPU: 6 PID: 229 Comm: start-stop-daem Tainted: G        W         5.17.0-rc1+ #3
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->  dump_backtrace.part.0+0x9c/0xc4
->  show_stack+0x14/0x28
->  dump_stack_lvl+0x9c/0xcc
->  dump_stack+0x14/0x2c
->  print_circle+0x2d4/0x438
->  cb_check_dl+0x44/0x70
->  bfs+0x60/0x168
->  add_dep+0x88/0x11c
->  do_event.constprop.0+0x19c/0x2c0
->  dept_event+0xe0/0x100
->  complete+0x48/0x98
->  mm_release+0x7c/0x90
->  exit_mm_release+0xc/0x14
->  do_exit+0x1b4/0x81c
->  do_group_exit+0x30/0x9c
->  __wake_up_parent+0x0/0x24
->  invoke_syscall.constprop.0+0x78/0xc4
->  do_el0_svc+0x98/0xd0
->  el0_svc+0x44/0xe4
->  el0t_64_sync_handler+0xb0/0x12c
->  el0t_64_sync+0x158/0x15c
-> 
-> 
-> 
-> 
-> ===================================================
-> DEPT: Circular dependency has been detected.
-> 5.17.0-rc1+ #3 Tainted: G        W        
-> ---------------------------------------------------
-> summary
-> ---------------------------------------------------
-> *** AA DEADLOCK ***
-> 
-> context A
->     [S] (unknown)(&try_completion:0)
->     [W] wait_for_completion_timeout(&try_completion:0)
->     [E] complete(&try_completion:0)
-> 
-> [S]: start of the event context
-> [W]: the wait blocked
-> [E]: the event not reachable
-> ---------------------------------------------------
-> context A's detail
-> ---------------------------------------------------
-> context A
->     [S] (unknown)(&try_completion:0)
->     [W] wait_for_completion_timeout(&try_completion:0)
->     [E] complete(&try_completion:0)
-> 
-> [S] (unknown)(&try_completion:0):
-> (N/A)
-> 
-> [W] wait_for_completion_timeout(&try_completion:0):
-> [<ffffffc008166bf4>] kunit_try_catch_run+0xb4/0x160
-> stacktrace:
->       dept_wait+0x74/0x88
->       wait_for_completion_timeout+0x64/0xa0
->       kunit_try_catch_run+0xb4/0x160
->       kunit_test_try_catch_successful_try_no_catch+0x3c/0x98
->       kunit_try_run_case+0x9c/0xa0
->       kunit_generic_run_threadfn_adapter+0x1c/0x28
->       kthread+0xd4/0xe4
->       ret_from_fork+0x10/0x20
-> 
-> [E] complete(&try_completion:0):
-> [<ffffffc00803dce4>] kthread_complete_and_exit+0x18/0x20
-> stacktrace:
->       dept_event+0xe0/0x100
->       complete+0x48/0x98
->       kthread_complete_and_exit+0x18/0x20
->       kunit_try_catch_throw+0x0/0x1c
->       kthread+0xd4/0xe4
->       ret_from_fork+0x10/0x20
-> 
-> ---------------------------------------------------
-> information that might be helpful
-> ---------------------------------------------------
-> CPU: 15 PID: 132 Comm: kunit_try_catch Tainted: G        W         5.17.0-rc1+ #3
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->  dump_backtrace.part.0+0x9c/0xc4
->  show_stack+0x14/0x28
->  dump_stack_lvl+0x9c/0xcc
->  dump_stack+0x14/0x2c
->  print_circle+0x2d4/0x438
->  cb_check_dl+0x44/0x70
->  bfs+0x60/0x168
->  add_dep+0x88/0x11c
->  do_event.constprop.0+0x19c/0x2c0
->  dept_event+0xe0/0x100
->  complete+0x48/0x98
->  kthread_complete_and_exit+0x18/0x20
->  kunit_try_catch_throw+0x0/0x1c
->  kthread+0xd4/0xe4
->  ret_from_fork+0x10/0x20
-
-
-> -- 
-> Thank you, You are awesome!
-> Hyeonggon :-)

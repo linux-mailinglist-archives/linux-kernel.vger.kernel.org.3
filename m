@@ -2,160 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E6A4D8064
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3775C4D8066
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238803AbiCNLKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
+        id S238810AbiCNLKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiCNLKT (ORCPT
+        with ESMTP id S238801AbiCNLKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:10:19 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C97113CF9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:09:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id c20so19252106edr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=6n6ZEPynSftslrkkn67A9oe0ON+g8zOOoRrauuQESMk=;
-        b=mdNIalz8h2RDTjPqrlM3K4jz0236U7jn5xSEIBvOEbVYU/XbpiHR159ZScGA4hIDYx
-         yuL9nVsFKdhvSzggc/aCQm7MaYAF0quz3ReRJfl3YNaP13vvZulbDJzlv6X7A9O9OTy7
-         pI3wSVawVh5TNALp7y/RBVPdu1nsqFXZBbZmkAAA+nyGM/4HGglw7KnHsIj6bsba+0K4
-         t2R/sBj7TWigNOI6yHniw5MThsD7e9Pdt3uiptfvGhwjZAJAHGyx2NLiO4qVRIYELhUj
-         MH/kDdd+9R31vP59FZ4L2Fwm40x5LTQ+tIjfEjBpmSXbk2Jdz/nfQFpL1+nO3OEyhVzC
-         evAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=6n6ZEPynSftslrkkn67A9oe0ON+g8zOOoRrauuQESMk=;
-        b=jxZvj8L6u5j+h7/Mf5A3J0r2Chi41gJDCrPDrMQG2sZAsAOhziL9zUJKkcBWi7iYAm
-         WT/iGy8tSH/tnRCT6nkVCNeFBhZIb9wVpvCQ92tAYwp1SHNRHI9iSdSKINohMZvjrPJG
-         q0MoVFxMue1r4UcAHijR4PbQQBiBsQJaTobWd/ACjeg93r5U66b0mxNXTvhli66sr/qm
-         eXQDwJnF/6Fe0QML8tu0RmHigWkpCS5YP1K2GVA6tMpw8nWvWRPb+e5dvElw097N9IC5
-         pMrC23W8BZbWssf04Jbx2dWRqh9MsPaGk5R6EaWQIYfSs3uRU96P24SWVenZIL7DTVsg
-         wEzw==
-X-Gm-Message-State: AOAM532abfKGlG7Q7hEqy77IkiThcgzZmaBcMO+UVZ64VEjMVGj7inIr
-        HXnjxkQxGLxx2ahm6b9mDb6stA==
-X-Google-Smtp-Source: ABdhPJytZgYN5TIXtT04/HdwGf3nX+Q2qhLKHYxSegtQ6AUH7F1BwD6kLs3Rx9zAh4zfS9hUnzKQFQ==
-X-Received: by 2002:aa7:ce1a:0:b0:416:460:9df5 with SMTP id d26-20020aa7ce1a000000b0041604609df5mr19651936edv.277.1647256147967;
-        Mon, 14 Mar 2022 04:09:07 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id er12-20020a056402448c00b00413d03ac4a2sm7419235edb.69.2022.03.14.04.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 04:09:07 -0700 (PDT)
-Message-ID: <037a8f48-29c5-ae45-b562-df15dbe6d163@blackwall.org>
-Date:   Mon, 14 Mar 2022 13:09:05 +0200
+        Mon, 14 Mar 2022 07:10:22 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5924213CE9;
+        Mon, 14 Mar 2022 04:09:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHDLq4Hk7z4xLS;
+        Mon, 14 Mar 2022 22:09:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647256147;
+        bh=Pn1uR5RihtV7pTnv1JUsDYmzsaDWJ6firiRLmwfXPek=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n5U06B3GSHe3a1Z+2k6iyL3TPdXQ4xShWl8Tc0PL/FA78Bw8jce/JZhPcMlgDp+FP
+         kbt8IQ7xRMri04p0tjbS+7CF73eLu00Qokuza5lFkoTAPEPk3xr7Z75Y9KRdZutsA/
+         bXooPOvzBsxGwMoedm+dV4u9Q2W5N89Xs8SnIh1WvUIeyp8Qre+df0AIBpHF4RtYML
+         zU0fpKB4IXR5gVc6WMgA/X7PlsVtClsi5+oksOUUxJKImahhPn6s8/4Ahn8fAuRiVQ
+         pglOimgfcEWNyM4at2HNCFCqcn7k1bQAA+6C5hWOOgsqF8sZTqWxgn0PnnUNGEnikC
+         Xi85WnS64rtQA==
+Date:   Mon, 14 Mar 2022 22:09:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Gwendal Grignou <gwendal@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20220314220905.4e9eb8cf@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 net-next 01/14] net: bridge: mst: Multiple Spanning
- Tree (MST) mode
-Content-Language: en-US
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
- <20220314095231.3486931-2-tobias@waldekranz.com>
- <9c103a85-f0e2-77cd-9fc6-dc19d99b19ec@blackwall.org>
-In-Reply-To: <9c103a85-f0e2-77cd-9fc6-dc19d99b19ec@blackwall.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/j7RygJc+1yep=iCIVz/ba9I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 12:37, Nikolay Aleksandrov wrote:
-> On 14/03/2022 11:52, Tobias Waldekranz wrote:
->> Allow the user to switch from the current per-VLAN STP mode to an MST
->> mode.
->>
->> Up to this point, per-VLAN STP states where always isolated from each
->> other. This is in contrast to the MSTP standard (802.1Q-2018, Clause
->> 13.5), where VLANs are grouped into MST instances (MSTIs), and the
->> state is managed on a per-MSTI level, rather that at the per-VLAN
->> level.
->>
->> Perhaps due to the prevalence of the standard, many switching ASICs
->> are built after the same model. Therefore, add a corresponding MST
->> mode to the bridge, which we can later add offloading support for in a
->> straight-forward way.
->>
->> For now, all VLANs are fixed to MSTI 0, also called the Common
->> Spanning Tree (CST). That is, all VLANs will follow the port-global
->> state.
->>
->> Upcoming changes will make this actually useful by allowing VLANs to
->> be mapped to arbitrary MSTIs and allow individual MSTI states to be
->> changed.
->>
->> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
->> ---
-> [snip]
->> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
->> index 48bc61ebc211..35b47f6b449a 100644
->> --- a/net/bridge/br_private.h
->> +++ b/net/bridge/br_private.h
->> @@ -178,6 +178,7 @@ enum {
->>   * @br_mcast_ctx: if MASTER flag set, this is the global vlan multicast context
->>   * @port_mcast_ctx: if MASTER flag unset, this is the per-port/vlan multicast
->>   *                  context
->> + * @msti: if MASTER flag set, this holds the VLANs MST instance
->>   * @vlist: sorted list of VLAN entries
->>   * @rcu: used for entry destruction
->>   *
->> @@ -210,6 +211,8 @@ struct net_bridge_vlan {
->>  		struct net_bridge_mcast_port	port_mcast_ctx;
->>  	};
->>  
->> +	u16				msti;
->> +
->>  	struct list_head		vlist;
->>  
->>  	struct rcu_head			rcu;
->> @@ -445,6 +448,7 @@ enum net_bridge_opts {
->>  	BROPT_NO_LL_LEARN,
->>  	BROPT_VLAN_BRIDGE_BINDING,
->>  	BROPT_MCAST_VLAN_SNOOPING_ENABLED,
->> +	BROPT_MST_ENABLED,
->>  };
->>  
->>  struct net_bridge {
->> @@ -1765,6 +1769,29 @@ static inline bool br_vlan_state_allowed(u8 state, bool learn_allow)
->>  }
->>  #endif
->>  
->> +/* br_mst.c */
->> +#ifdef CONFIG_BRIDGE_VLAN_FILTERING
-> 
-> There is already such ifdef, you can embed all MST code inside it.
-> 
+--Sig_/j7RygJc+1yep=iCIVz/ba9I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My bad, I somehow confused the function placement. This is good. :)
+Hi all,
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+In commit
 
+  f97ec5d75e92 ("HID: intel-ish-hid: Use dma_alloc_coherent for firmware up=
+date")
+
+Fixes tag
+
+  Fixes: commit 91b228107da3 ("HID: intel-ish-hid: ISH firmware loader clie=
+nt driver")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/j7RygJc+1yep=iCIVz/ba9I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIvIlEACgkQAVBC80lX
+0GymBwf/Qh5HfPEx/3hy6ppWHQulrhF7G5Z0ZlEFfqOAbitnGPmMY2BEyJ1VNSY1
+L1r5/fnWTUahYITXL7TNPswXrSv3EOkcWQyIVW+TnBjJA4uZwR81AuV6L+BpHpMY
+qcuAYgIVWQv+XErp9HryOfafHvboO+iE/tijdYbGMRLOQYbXvQFfjsqwdM7TIeDb
+7CT7v8xnrXYw2hkIX+4NKtKQeFZVVCdK8YMMJa6OdDW5c6PRQcrHqcwBX1ru8i0N
+VjTHFUd9UxRRS/4YND9AlSFU2rn7fDqOtXVmMK0WzvKP33y9969tWj4/kSP2/n35
+pnX1yhqIxMvjo5jLZkfwaar/dgRFJg==
+=rz2q
+-----END PGP SIGNATURE-----
+
+--Sig_/j7RygJc+1yep=iCIVz/ba9I--

@@ -2,104 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D624D8277
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19464D829E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240328AbiCNMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S240539AbiCNMGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240638AbiCNMDX (ORCPT
+        with ESMTP id S240423AbiCNMFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:03:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1DF14B407
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:00:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647259197;
+        Mon, 14 Mar 2022 08:05:15 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8778848E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:02:03 -0700 (PDT)
+Received: from zn.tnic (p5de8e440.dip0.t-ipconnect.de [93.232.228.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A37BB1EC01CE;
+        Mon, 14 Mar 2022 13:01:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647259317;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=DTumIzkUVMCDvmMhaJUDyMiG+aNJUlziXvFqILOQYsI=;
-        b=Fx8sD/JbdyLzP94A+V1xfdOotmYcIHm5ISvnQ1T6ndEogXzV7TyfCtDPGRf0p6VsegfNy3
-        bsIYugzTUMz0IuHNj+aJqTOdh7hc3YIRq0GfcMbMz2X9Lov5XQZX8WQYcB7+3myGY8KD6t
-        oMsYqiKDn0QvQOa0h6KBhlk3n/P0HXs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-Y-JefBWWPk6yX7A-kJ9QrQ-1; Mon, 14 Mar 2022 07:59:56 -0400
-X-MC-Unique: Y-JefBWWPk6yX7A-kJ9QrQ-1
-Received: by mail-wr1-f70.google.com with SMTP id h11-20020a5d430b000000b001f01a35a86fso4268343wrq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:59:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=DTumIzkUVMCDvmMhaJUDyMiG+aNJUlziXvFqILOQYsI=;
-        b=ZuzIMK4S4jQhVwN/J9SqY90hKt3y5tuYd0Le1uhWwYXFxrqBwl/jQoVXdqpMkptwFS
-         6Oj+X3HSMgbrbgf7B8jPw90usbnC2GqNKWT0c6rN4NoM/3NGRcQaboIbOQCaAbed3rI/
-         jtOOiDAD3LXjsuVCIuS8uXQnrbn6wcIYjCfiCJjD5Z8i+TG357CMOnwZgDdQ+2CBRryL
-         52Cn69QN/ytePuL6nlP2FJMWU1vdgXi4X3VW/inJfef5a84roThCsXZddMEewoSn+zFP
-         p+RlZybliiRWlLdXZNfkE2yBhqefOqnXPs5cH1synY9r8UD6QxbCW9ig3zdSZWHFkLSl
-         LLgA==
-X-Gm-Message-State: AOAM530SbCxrnhCknzC4Clg6wjmk8OeoQa4IVIVZfWNCdqyb5BnFLupD
-        rNMiLrqz/LaPrT7L4jmDVizqMJcWhplq7s31OQRqcDUP5GNuozguYohCaPJV1hRAfgDxJJQ40iq
-        XLh57b3v/y9QYsS/m0WpiTeIN
-X-Received: by 2002:a05:600c:4f09:b0:389:cf43:eaf8 with SMTP id l9-20020a05600c4f0900b00389cf43eaf8mr17160220wmq.201.1647259194497;
-        Mon, 14 Mar 2022 04:59:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzp7ZJAVv6i97GoEYXJTrh4j1WEgqWNchpszO38kLqkQtDsjqJCu3h0XIEDXpnWhcBdQ3hpYw==
-X-Received: by 2002:a05:600c:4f09:b0:389:cf43:eaf8 with SMTP id l9-20020a05600c4f0900b00389cf43eaf8mr17160208wmq.201.1647259194258;
-        Mon, 14 Mar 2022 04:59:54 -0700 (PDT)
-Received: from redhat.com ([2.55.183.53])
-        by smtp.gmail.com with ESMTPSA id w6-20020a5d6806000000b002036515dda7sm13416882wru.33.2022.03.14.04.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 04:59:53 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 07:59:51 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        elic@nvidia.com, jasowang@redhat.com, mail@anirudhrb.com,
-        mst@redhat.com
-Subject: [GIT PULL] virtio: a last minute regression fix
-Message-ID: <20220314075951-mutt-send-email-mst@kernel.org>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=EXzvUYnVA1bHebasBXnECfFY2YfAaZOPqS4CjTkMFw4=;
+        b=ZdTRD+gl824VDlabbTXdlHHx3TMzcbUecmjNNGhO+H1Mm3SWwi52CpsSCVaf1ZBah2BEip
+        +G+qMtrN9u2V5aBlAVlH3xMe9D/o53X56Wz2M7Ozo5sUz3EHML+WNDNt+d1CTd9gCG+QIX
+        JowryStWJkJv1T7G75KqpfA2kaFoLEk=
+Date:   Mon, 14 Mar 2022 13:01:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [tip:locking/core 4/5] vmlinux.o: warning: objtool:
+ do_machine_check()+0x419: call to mca_msr_reg() leaves .noinstr.text section
+Message-ID: <Yi8ur4I5RJ2CT0Rx@zn.tnic>
+References: <202203141947.9KhIyyR7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202203141947.9KhIyyR7-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3dd7d135e75cb37c8501ba02977332a2a487dd39:
+On Mon, Mar 14, 2022 at 07:40:08PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+> head:   cd27ccfc727e99352321c0c75012ab9c5a90321e
+> commit: acb13ea0baf8db8d05a3910c06e997c90825faad [4/5] asm-generic/bitops: Always inline all bit manipulation helpers
+> config: x86_64-randconfig-a005-20220314 (https://download.01.org/0day-ci/archive/20220314/202203141947.9KhIyyR7-lkp@intel.com/config)
+> compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+> reproduce (this is a W=1 build):
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=acb13ea0baf8db8d05a3910c06e997c90825faad
+>         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>         git fetch --no-tags tip locking/core
+>         git checkout acb13ea0baf8db8d05a3910c06e997c90825faad
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    vmlinux.o: warning: objtool: mce_read_aux()+0x42: call to mca_msr_reg() leaves .noinstr.text section
+> >> vmlinux.o: warning: objtool: do_machine_check()+0x419: call to mca_msr_reg() leaves .noinstr.text section
+>    vmlinux.o: warning: objtool: enter_from_user_mode()+0x4a: call to on_thread_stack() leaves .noinstr.text section
+>    vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to on_thread_stack() leaves .noinstr.text section
+>    vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4a: call to on_thread_stack() leaves .noinstr.text section
+>    vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4a: call to on_thread_stack() leaves .noinstr.text section
 
-  tools/virtio: handle fallout from folio work (2022-03-06 06:06:50 -0500)
+You need to test tip/ras/core with that .config - not some random
+patches inside of locking/core. Fixing the noinstr issues is split into
+a couple of patches in locking/core and ras/core.
 
-are available in the Git repository at:
+Thx.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+-- 
+Regards/Gruss,
+    Boris.
 
-for you to fetch changes up to 95932ab2ea07b79cdb33121e2f40ccda9e6a73b5:
-
-  vhost: allow batching hint without size (2022-03-10 08:12:04 -0500)
-
-----------------------------------------------------------------
-virtio: a last minute regression fix
-
-I thought we did a lot of testing, but a regression still
-managed to sneak in. The fix seems trivial.
-
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-
-----------------------------------------------------------------
-Jason Wang (1):
-      vhost: allow batching hint without size
-
- drivers/vhost/vhost.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
+https://people.kernel.org/tglx/notes-about-netiquette

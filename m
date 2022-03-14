@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42E24D7955
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423C24D7956
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 03:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235883AbiCNC2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 22:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S235889AbiCNC2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 22:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiCNC2O (ORCPT
+        with ESMTP id S234197AbiCNC2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 22:28:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39220BC05
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 19:27:06 -0700 (PDT)
+        Sun, 13 Mar 2022 22:28:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E063413F19
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 19:27:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647224826; x=1678760826;
+  t=1647224847; x=1678760847;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=GEyE/4btuBn2qY75wID4c2MfMBzqfeDl8itxIezppds=;
-  b=jWw6sqGKetCImTRs3qmmHdR8o27qiOgO2FunjfvJpcVPseLy74/15l9E
-   2jQlRGgJmngupYzO22jwxyyYNb2SnIKvtI+WcDHWPjB+7lTDQe9UUNvCi
-   K11V5iiQbFGW62LhfirIIk3moofhrRZ3/KJTZ9kMHeh2q037C+VgXTylA
-   x7FnRC/r1zSWhN+XbJZPp5VwGtaf5eCHMHNfpJDBOlqZWdg1LtOC1H6t+
-   tTIzDM6+stzY9lHydk+UncO1pBWwMpbDGcne/qGSHhb9h94TkdFYagTHe
-   nEQvOuA7VdnevMBBEy1C1biMJdWvRXRvO3qKqVakU1dSEJt1dffBZsSe3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="236523921"
+  bh=bLpvtee0AxUOHreGYXfOFx2RNWEz8rJVJmltAsRSmtM=;
+  b=P/OUPZXNuB+S98YlYnmS/zYuMJ94YUFBr49qe8Wz+Q9+Czj+e0qL5mHB
+   n0OAkbFRBOBaCjmbMNifUk7yNfjo4RU2jAfSehkFCoutEvYB37luInXnH
+   qGyYNokKcVbBwfLVIhG6tB+vUDSVVnJX/60mNim4cZZPYz6/6522/1F1e
+   jNfewrNn4KoApIj271z5LWqWoyhqCoJSHY8KpIVUD2Gmgp9AwplTYJQMC
+   7bqxxTzJIG5FLJdRYOWOh5qqy57f1HeBW+rqiwP57p7wL93swxjc6wvss
+   RM6msK3fbqCqT7FQWr+CyRPUQuhzVC+WPzjyWo+hZQi7VLIdlntK9fGv7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255873236"
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="236523921"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 19:27:05 -0700
+   d="scan'208";a="255873236"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 19:27:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,179,1643702400"; 
-   d="scan'208";a="645620297"
+   d="scan'208";a="713543840"
 Received: from unknown (HELO localhost.localdomain) ([10.226.216.87])
-  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2022 19:27:04 -0700
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2022 19:27:26 -0700
 From:   tien.sung.ang@intel.com
 To:     Dinh Nguyen <dinguyen@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
         Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH 0/3] firmware: stratix10-svc: Add new FCS support
-Date:   Mon, 14 Mar 2022 18:26:44 +0800
-Message-Id: <20220314102644.1746670-1-tien.sung.ang@intel.com>
+Subject: [PATCH 1/3] firmware: stratix10-svc: extend svc to support FCS features
+Date:   Mon, 14 Mar 2022 18:27:17 +0800
+Message-Id: <20220314102717.1746721-1-tien.sung.ang@intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,37 +60,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-Hi,
-Beginning with Stratix10 and Agilex, a new fpga crypto services shall be
-supported. This is a first of many patches to add new cryto
-functionalities in the form of new commands to the firmware svc driver.
-The new crytpo services are provided by the Secure device manager(SDM).
-The firmware SVC driver receives the commands from the client drivers
-and sends this command via SMC calls to the Arm trusted firmware(ATF) or
-U-boot firmware at EL3. The firmware interrupt service handlers than,
-processes the new commands and send them the SDM's mailbox. 
-To support asynchronos commands, we have introduced a
-INTEL_SIP_SMP_SERVICE_COMPLETED command to poll the completion of the
-crypto operations. This polling commands are essential for the rest of
-the FCS commands. All new FCS commands shall have a prefix of
-INTEL_SIP_SMC_FCS_XXXXX.
-There shall also be a new FCS client device driver called intel_fcs 
-that will be added. The SVC firmware driver registers the new FCS client
-driver and allocates a new channel for this device driver. This brings
-the total supported client drivers to 3 (RSU, FPGA and FCS)
-We have tested this functionality by regression testing within Intel's
-test framework. 
+Extend Intel service layer driver to support FPGA Crypto service(FCS)
+features on Intel Soc platforms. Adding an additional channel and FCS
+platform driver ("intel_fcs") as part of the probe method.
+FCS driver uses the driver to send crypto operations' commands to
+the secure device manager(SDM) on Intel Soc platforms Stratix10 and
+Agilex.
 
-Ang Tien Sung (3):
-  firmware: stratix10-svc: extend svc to support FCS features
-  firmware: stratix10-svc: add new polling command for FCS
-  firmware: stratix10-svc: add new FCS commands
+Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+---
+ drivers/firmware/stratix10-svc.c              | 30 +++++++++++++++----
+ .../firmware/intel/stratix10-svc-client.h     |  4 +--
+ 2 files changed, 27 insertions(+), 7 deletions(-)
 
- drivers/firmware/stratix10-svc.c              | 160 ++++++++++++++++--
- include/linux/firmware/intel/stratix10-smc.h  | 137 ++++++++++++++-
- .../firmware/intel/stratix10-svc-client.h     |  50 +++++-
- 3 files changed, 325 insertions(+), 22 deletions(-)
-
+diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+index c4bf934e3553..23079896044d 100644
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -34,12 +34,13 @@
+  * timeout is set to 30 seconds (30 * 1000) at Intel Stratix10 SoC.
+  */
+ #define SVC_NUM_DATA_IN_FIFO			32
+-#define SVC_NUM_CHANNEL				2
++#define SVC_NUM_CHANNEL				3
+ #define FPGA_CONFIG_DATA_CLAIM_TIMEOUT_MS	200
+ #define FPGA_CONFIG_STATUS_TIMEOUT_SEC		30
+ 
+ /* stratix10 service layer clients */
+ #define STRATIX10_RSU				"stratix10-rsu"
++#define INTEL_FCS				"intel-fcs"
+ 
+ typedef void (svc_invoke_fn)(unsigned long, unsigned long, unsigned long,
+ 			     unsigned long, unsigned long, unsigned long,
+@@ -53,6 +54,7 @@ struct stratix10_svc_chan;
+  */
+ struct stratix10_svc {
+ 	struct platform_device *stratix10_svc_rsu;
++	struct platform_device *intel_svc_fcs;
+ };
+ 
+ /**
+@@ -1029,6 +1031,11 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+ 	chans[1].name = SVC_CLIENT_RSU;
+ 	spin_lock_init(&chans[1].lock);
+ 
++	chans[2].scl = NULL;
++	chans[2].ctrl = controller;
++	chans[2].name = SVC_CLIENT_FCS;
++	spin_lock_init(&chans[2].lock);
++
+ 	list_add_tail(&controller->node, &svc_ctrl);
+ 	platform_set_drvdata(pdev, controller);
+ 
+@@ -1047,8 +1054,22 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = platform_device_add(svc->stratix10_svc_rsu);
+-	if (ret)
+-		goto err_put_device;
++	if (ret) {
++		platform_device_put(svc->stratix10_svc_rsu);
++		return ret;
++	}
++
++	svc->intel_svc_fcs = platform_device_alloc(INTEL_FCS, 1);
++	if (!svc->intel_svc_fcs) {
++		dev_err(dev, "failed to allocate %s device\n", INTEL_FCS);
++		return -ENOMEM;
++	}
++
++	ret = platform_device_add(svc->intel_svc_fcs);
++	if (ret) {
++		platform_device_put(svc->intel_svc_fcs);
++		return ret;
++	}
+ 
+ 	dev_set_drvdata(dev, svc);
+ 
+@@ -1056,8 +1077,6 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
+-err_put_device:
+-	platform_device_put(svc->stratix10_svc_rsu);
+ err_free_kfifo:
+ 	kfifo_free(&controller->svc_fifo);
+ 	return ret;
+@@ -1068,6 +1087,7 @@ static int stratix10_svc_drv_remove(struct platform_device *pdev)
+ 	struct stratix10_svc *svc = dev_get_drvdata(&pdev->dev);
+ 	struct stratix10_svc_controller *ctrl = platform_get_drvdata(pdev);
+ 
++	platform_device_unregister(svc->intel_svc_fcs);
+ 	platform_device_unregister(svc->stratix10_svc_rsu);
+ 
+ 	kfifo_free(&ctrl->svc_fifo);
+diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
+index 19781b0f6429..468490590f85 100644
+--- a/include/linux/firmware/intel/stratix10-svc-client.h
++++ b/include/linux/firmware/intel/stratix10-svc-client.h
+@@ -14,8 +14,8 @@
+  */
+ #define SVC_CLIENT_FPGA			"fpga"
+ #define SVC_CLIENT_RSU			"rsu"
+-
+-/*
++#define SVC_CLIENT_FCS			"fcs"
++/**
+  * Status of the sent command, in bit number
+  *
+  * SVC_STATUS_OK:
 -- 
 2.25.1
 

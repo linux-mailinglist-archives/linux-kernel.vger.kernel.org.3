@@ -2,98 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BD14D8E11
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D424D8E14
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244976AbiCNUZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
+        id S244984AbiCNU0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234868AbiCNUZJ (ORCPT
+        with ESMTP id S239565AbiCNU0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:25:09 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AA6338BA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:23:59 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id c23so19798832ioi.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=T1epUkuBEZR2LhEdTqhXHlnF09YRfThD+WUlWYZsbP0=;
-        b=fWGutWI0+heOIc6s/q00lJpgol9Zvzto/tICQBOMfxpWn88QkI04LQNjbtcSoRtoNZ
-         u6uWsaJjXbByOdfxzfe1qtbAIBQypO/oZyGNtMMSFPVTGcQNsKjgswRWumXleVk7Pncq
-         zDDcwYAWM7ltxc+5zs6D+6nBX4VZsSLj4+ryaHBUi/GxNunfhRZ89zy01PhaWgklJF35
-         92Hnji94/RVDOTuH/pSUDVr0ffZd1iFZZBy0L/aOM6ItNK4uBsvfrN9Tx/t5364NyonN
-         eoTNaNSEy7FL+7FkWLjjRXC5D3tJKbdVOO5TPbUG8V0ux358zUKMSK/N3ayhXJ/WcEYJ
-         gm3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=T1epUkuBEZR2LhEdTqhXHlnF09YRfThD+WUlWYZsbP0=;
-        b=xfUg0nLUc/P8EndZKBrRDGfDJpab5qHz9N1EhjcHK6P2tk38ZGbXhCa9tFX3GKC2s7
-         H68mH14cqCWqhAq8f5WN1JYOcvwsxp0QIcNnzyFsJQu/NHYRDqPiHZeSNMJio7inc7X3
-         5fCcOopv4LImRXFg1DKPv6o3KMSV7zErUfztJ6M9zG4CMVAEB21c7GKaDhyyVi4pSru7
-         cLGoIXZjEw2XYA2PVFgv2z9gbi9L246SeSc8N2UROUWz2ypIN2Hc9G8xpPjTwrpU9+uB
-         bxfbQKwQLIECGOKCobDwq8yrYQM+lVqZraLTxiDoV3TZ/rDgwzeKFh0BB+WMHBFP8rE9
-         /VTw==
-X-Gm-Message-State: AOAM533syxI8H2ho2Y2tdhqJcUMgzPuzUs20bPYQvSzrtiPknJEuicNV
-        NHK3xkOzSa8ME2x31UpBADhxTQ==
-X-Google-Smtp-Source: ABdhPJzFeprnrbWSaeXT0Xqz0t75bLQpl1HbWK/xqoNcZCH+IS0MjT6fe3aSlh6501m3gcpRMBYtHQ==
-X-Received: by 2002:a02:1143:0:b0:308:eb2e:70ef with SMTP id 64-20020a021143000000b00308eb2e70efmr22039594jaf.248.1647289438486;
-        Mon, 14 Mar 2022 13:23:58 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id u15-20020a056e021a4f00b002c665afb993sm10033922ilv.11.2022.03.14.13.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 13:23:58 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Ming Lei <ming.lei@redhat.com>, Yu Kuai <yukuai3@huawei.com>,
-        kernel-team@fb.com,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Saravanan D <saravanand@fb.com>
-In-Reply-To: <Yi7rdrzQEHjJLGKB@slm.duckdns.org>
-References: <Yi7rdrzQEHjJLGKB@slm.duckdns.org>
-Subject: Re: [PATCH block-5.17] fix rq-qos breakage from skipping rq_qos_done_bio()
-Message-Id: <164728943786.144850.10059816217572335500.b4-ty@kernel.dk>
-Date:   Mon, 14 Mar 2022 14:23:57 -0600
+        Mon, 14 Mar 2022 16:26:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C7A738D8A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647289495;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qRHljpgGvVgnDGtfezqn+KWyVVjnp4ljpx+/v6Obqe8=;
+        b=PTOMLHGlu370uzhZQMp44/mkPlFyT8sk+cpDgJQwmXUxwlN47uhTuuw6u8zCpMgf4XdiLr
+        AdAHPmQJuIQkI97wq2wUl6oaohIMlERpaYhSYRuuRXUapAGlqW8bJemzyDJbdNKZXjpt2M
+        pf1D0DccjwGJmAouvkYemwsE2X1Ecj4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-EyVu_tTiPtaCn_i4mjo1jw-1; Mon, 14 Mar 2022 16:24:50 -0400
+X-MC-Unique: EyVu_tTiPtaCn_i4mjo1jw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A02A98038E3;
+        Mon, 14 Mar 2022 20:24:49 +0000 (UTC)
+Received: from [172.30.41.16] (unknown [10.2.17.101])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A9503145BEE1;
+        Mon, 14 Mar 2022 20:24:48 +0000 (UTC)
+Subject: [PATCH v3] vfio-pci: Provide reviewers and acceptance criteria for
+ vendor drivers
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     alex.williamson@redhat.com, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        yishaih@nvidia.com, linux-doc@vger.kernel.org, corbet@lwn.net
+Date:   Mon, 14 Mar 2022 14:24:48 -0600
+Message-ID: <164728932975.54581.1235687116658126625.stgit@omen>
+User-Agent: StGit/1.0-8-g6af9-dirty
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Mar 2022 21:15:02 -1000, Tejun Heo wrote:
-> a647a524a467 ("block: don't call rq_qos_ops->done_bio if the bio isn't
-> tracked") made bio_endio() skip rq_qos_done_bio() if BIO_TRACKED is not set.
-> While this fixed a potential oops, it also broke blk-iocost by skipping the
-> done_bio callback for merged bios.
-> 
-> Before, whether a bio goes through rq_qos_throttle() or rq_qos_merge(),
-> rq_qos_done_bio() would be called on the bio on completion with BIO_TRACKED
-> distinguishing the former from the latter. rq_qos_done_bio() is not called
-> for bios which wenth through rq_qos_merge(). This royally confuses
-> blk-iocost as the merged bios never finish and are considered perpetually
-> in-flight.
-> 
-> [...]
+Vendor or device specific extensions for devices exposed to userspace
+through the vfio-pci-core library open both new functionality and new
+risks.  Here we attempt to provided formalized requirements and
+expectations to ensure that future drivers both collaborate in their
+interaction with existing host drivers, as well as receive additional
+reviews from community members with experience in this area.
 
-Applied, thanks!
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Yishai Hadas <yishaih@nvidia.com>
+Cc: Kevin Tian <kevin.tian@intel.com>
+Acked-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+---
 
-[1/1] fix rq-qos breakage from skipping rq_qos_done_bio()
-      (no commit info)
+v3:
 
-Best regards,
--- 
-Jens Axboe
+Relocate to Documentation/driver-api/
+Include index.rst reference
+Cross link from maintainer-entry-profile
+Add Shameer's Ack
+
+v2:
+
+Added Yishai
+
+v1:
+
+Per the proposal here[1], I've collected those that volunteered and
+those that I interpreted as showing interest (alpha by last name).  For
+those on the reviewers list below, please R-b/A-b to keep your name as a
+reviewer.  More volunteers are still welcome, please let me know
+explicitly; R-b/A-b will not be used to automatically add reviewers but
+are of course welcome.  Thanks,
+
+Alex
+
+[1]https://lore.kernel.org/all/20220310134954.0df4bb12.alex.williamson@redhat.com/
+
+ Documentation/driver-api/index.rst                 |    1 +
+ .../vfio-pci-vendor-driver-acceptance.rst          |   35 ++++++++++++++++++++
+ .../maintainer/maintainer-entry-profile.rst        |    1 +
+ MAINTAINERS                                        |   10 ++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst
+
+diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+index c57c609ad2eb..da1372c8ec3d 100644
+--- a/Documentation/driver-api/index.rst
++++ b/Documentation/driver-api/index.rst
+@@ -103,6 +103,7 @@ available subsections can be seen below.
+    sync_file
+    vfio-mediated-device
+    vfio
++   vfio-pci-vendor-driver-acceptance
+    xilinx/index
+    xillybus
+    zorro
+diff --git a/Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst b/Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst
+new file mode 100644
+index 000000000000..3a108d748681
+--- /dev/null
++++ b/Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst
+@@ -0,0 +1,35 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Acceptance criteria for vfio-pci device specific driver variants
++================================================================
++
++Overview
++--------
++The vfio-pci driver exists as a device agnostic driver using the
++system IOMMU and relying on the robustness of platform fault
++handling to provide isolated device access to userspace.  While the
++vfio-pci driver does include some device specific support, further
++extensions for yet more advanced device specific features are not
++sustainable.  The vfio-pci driver has therefore split out
++vfio-pci-core as a library that may be reused to implement features
++requiring device specific knowledge, ex. saving and loading device
++state for the purposes of supporting migration.
++
++In support of such features, it's expected that some device specific
++variants may interact with parent devices (ex. SR-IOV PF in support of
++a user assigned VF) or other extensions that may not be otherwise
++accessible via the vfio-pci base driver.  Authors of such drivers
++should be diligent not to create exploitable interfaces via such
++interactions or allow unchecked userspace data to have an effect
++beyond the scope of the assigned device.
++
++New driver submissions are therefore requested to have approval via
++Sign-off/Acked-by/etc for any interactions with parent drivers.
++Additionally, drivers should make an attempt to provide sufficient
++documentation for reviewers to understand the device specific
++extensions, for example in the case of migration data, how is the
++device state composed and consumed, which portions are not otherwise
++available to the user via vfio-pci, what safeguards exist to validate
++the data, etc.  To that extent, authors should additionally expect to
++require reviews from at least one of the listed reviewers, in addition
++to the overall vfio maintainer.
+diff --git a/Documentation/maintainer/maintainer-entry-profile.rst b/Documentation/maintainer/maintainer-entry-profile.rst
+index 5d5cc3acdf85..8b4971c7e3fa 100644
+--- a/Documentation/maintainer/maintainer-entry-profile.rst
++++ b/Documentation/maintainer/maintainer-entry-profile.rst
+@@ -103,3 +103,4 @@ to do something different in the near future.
+    ../nvdimm/maintainer-entry-profile
+    ../riscv/patch-acceptance
+    ../driver-api/media/maintainer-entry-profile
++   ../driver-api/vfio-pci-vendor-driver-acceptance
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4322b5321891..fd17d1891216 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20314,6 +20314,16 @@ F:	drivers/vfio/mdev/
+ F:	include/linux/mdev.h
+ F:	samples/vfio-mdev/
+ 
++VFIO PCI VENDOR DRIVERS
++R:	Jason Gunthorpe <jgg@nvidia.com>
++R:	Yishai Hadas <yishaih@nvidia.com>
++R:	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
++R:	Kevin Tian <kevin.tian@intel.com>
++L:	kvm@vger.kernel.org
++S:	Maintained
++P:	Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst
++F:	drivers/vfio/pci/*/
++
+ VFIO PLATFORM DRIVER
+ M:	Eric Auger <eric.auger@redhat.com>
+ L:	kvm@vger.kernel.org
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403524D84D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4B94D8388
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243645AbiCNMbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
+        id S241068AbiCNMQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242902AbiCNMTw (ORCPT
+        with ESMTP id S242356AbiCNMJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:19:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC650062;
-        Mon, 14 Mar 2022 05:14:58 -0700 (PDT)
+        Mon, 14 Mar 2022 08:09:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F75326136;
+        Mon, 14 Mar 2022 05:07:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C761DB80D24;
-        Mon, 14 Mar 2022 12:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E7DC340E9;
-        Mon, 14 Mar 2022 12:14:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 808D46130F;
+        Mon, 14 Mar 2022 12:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8762EC340E9;
+        Mon, 14 Mar 2022 12:07:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260091;
-        bh=vBP/YxaUzrVlJHfNwkewHyeHTb6r0DcQuvfBndlKXP4=;
+        s=korg; t=1647259634;
+        bh=iisqsymPcjUmWpJynHiH1JJ4hAIhHOoyRgJad4t/c7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u34oGR4TL61N1+gzBHQ92WLDzdPfI4ib7lUBI73QgPl8f6XrhTlNt3DVUVtGV/4Z0
-         +7M1WmZ00G4oyBHH7+6qAAaCiKl2p6NRRs68bdWM3nGQCQBwl9/cHMd4j7jBaaU/p/
-         2wpvIIEWgX/RnGzfuPSzMOvd3hcEfEwTKdhjSbOs=
+        b=cTGcP18jSsH2mPmUWigUwMXc/lA/tct3kFthmkdwS5ZEVecOKKNnm3729OsvhijBl
+         Llp/lLqJLaVGEK2DMEPevjtQoAzra6V6iPM0rDVadX/fK/ZD+J4eKdSYb6AD30EI+V
+         H58wrTts5qOoaT0PC564YClQvw2E+FDiAf6bq1pQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>
-Subject: [PATCH 5.16 053/121] mm: gup: make fault_in_safe_writeable() use fixup_user_fault()
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 054/110] usb: dwc3: pci: add support for the Intel Raptor Lake-S
 Date:   Mon, 14 Mar 2022 12:53:56 +0100
-Message-Id: <20220314112745.606855263@linuxfoundation.org>
+Message-Id: <20220314112744.544555365@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[ Upstream commit fe673d3f5bf1fc50cdc4b754831db91a2ec10126 ]
+[ Upstream commit 038438a25c45d5ac996e95a22fa9e76ff3d1f8c7 ]
 
-Instead of using GUP, make fault_in_safe_writeable() actually force a
-'handle_mm_fault()' using the same fixup_user_fault() machinery that
-futexes already use.
+This patch adds the necessary PCI ID for Intel Raptor Lake-S
+devices.
 
-Using the GUP machinery meant that fault_in_safe_writeable() did not do
-everything that a real fault would do, ranging from not auto-expanding
-the stack segment, to not updating accessed or dirty flags in the page
-tables (GUP sets those flags on the pages themselves).
-
-The latter causes problems on architectures (like s390) that do accessed
-bit handling in software, which meant that fault_in_safe_writeable()
-didn't actually do all the fault handling it needed to, and trying to
-access the user address afterwards would still cause faults.
-
-Reported-and-tested-by: Andreas Gruenbacher <agruenba@redhat.com>
-Fixes: cdd591fc86e3 ("iov_iter: Introduce fault_in_iov_iter_writeable")
-Link: https://lore.kernel.org/all/CAHc6FU5nP+nziNGG0JAF1FUx-GV7kKFvM7aZuU_XD2_1v4vnvg@mail.gmail.com/
-Acked-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20220214141948.18637-1-heikki.krogerus@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/gup.c | 57 +++++++++++++++++++-------------------------------------
- 1 file changed, 19 insertions(+), 38 deletions(-)
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 37087529bb95..b7e5e80538c9 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1723,11 +1723,11 @@ EXPORT_SYMBOL(fault_in_writeable);
-  * @uaddr: start of address range
-  * @size: length of address range
-  *
-- * Faults in an address range using get_user_pages, i.e., without triggering
-- * hardware page faults.  This is primarily useful when we already know that
-- * some or all of the pages in the address range aren't in memory.
-+ * Faults in an address range for writing.  This is primarily useful when we
-+ * already know that some or all of the pages in the address range aren't in
-+ * memory.
-  *
-- * Other than fault_in_writeable(), this function is non-destructive.
-+ * Unlike fault_in_writeable(), this function is non-destructive.
-  *
-  * Note that we don't pin or otherwise hold the pages referenced that we fault
-  * in.  There's no guarantee that they'll stay in memory for any duration of
-@@ -1738,46 +1738,27 @@ EXPORT_SYMBOL(fault_in_writeable);
-  */
- size_t fault_in_safe_writeable(const char __user *uaddr, size_t size)
- {
--	unsigned long start = (unsigned long)untagged_addr(uaddr);
--	unsigned long end, nstart, nend;
-+	unsigned long start = (unsigned long)uaddr, end;
- 	struct mm_struct *mm = current->mm;
--	struct vm_area_struct *vma = NULL;
--	int locked = 0;
-+	bool unlocked = false;
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 1ecedbb1684c..06d0e88ec8af 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -43,6 +43,7 @@
+ #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
+ #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
+ #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
++#define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
+ #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
+ #define PCI_DEVICE_ID_AMD_MR			0x163a
  
--	nstart = start & PAGE_MASK;
-+	if (unlikely(size == 0))
-+		return 0;
- 	end = PAGE_ALIGN(start + size);
--	if (end < nstart)
-+	if (end < start)
- 		end = 0;
--	for (; nstart != end; nstart = nend) {
--		unsigned long nr_pages;
--		long ret;
+@@ -420,6 +421,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ADLS),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
  
--		if (!locked) {
--			locked = 1;
--			mmap_read_lock(mm);
--			vma = find_vma(mm, nstart);
--		} else if (nstart >= vma->vm_end)
--			vma = vma->vm_next;
--		if (!vma || vma->vm_start >= end)
--			break;
--		nend = end ? min(end, vma->vm_end) : vma->vm_end;
--		if (vma->vm_flags & (VM_IO | VM_PFNMAP))
--			continue;
--		if (nstart < vma->vm_start)
--			nstart = vma->vm_start;
--		nr_pages = (nend - nstart) / PAGE_SIZE;
--		ret = __get_user_pages_locked(mm, nstart, nr_pages,
--					      NULL, NULL, &locked,
--					      FOLL_TOUCH | FOLL_WRITE);
--		if (ret <= 0)
-+	mmap_read_lock(mm);
-+	do {
-+		if (fixup_user_fault(mm, start, FAULT_FLAG_WRITE, &unlocked))
- 			break;
--		nend = nstart + ret * PAGE_SIZE;
--	}
--	if (locked)
--		mmap_read_unlock(mm);
--	if (nstart == end)
--		return 0;
--	return size - min_t(size_t, nstart - start, size);
-+		start = (start + PAGE_SIZE) & PAGE_MASK;
-+	} while (start != end);
-+	mmap_read_unlock(mm);
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_RPLS),
++	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
 +
-+	if (size > (unsigned long)uaddr - start)
-+		return size - ((unsigned long)uaddr - start);
-+	return 0;
- }
- EXPORT_SYMBOL(fault_in_safe_writeable);
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
  
 -- 
 2.34.1

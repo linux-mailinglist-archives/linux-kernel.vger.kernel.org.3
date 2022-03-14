@@ -2,86 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD984D86F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AFE4D86E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 15:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbiCNObQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 10:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S240000AbiCNOZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 10:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiCNObO (ORCPT
+        with ESMTP id S232574AbiCNOZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 10:31:14 -0400
-X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Mar 2022 07:30:03 PDT
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7081F2C66A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:30:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.197.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 573663F7E1;
-        Mon, 14 Mar 2022 14:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647267791;
-        bh=dYP9n+9ZiLQtINhhSZR+LCQtgVyYHHqH/JL5P9eptWA=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=m6AFUwQGWaBaGC+cdpSpajath+yktgZlTUEC9UMrSq26IIRj5EOcgVwC47Cyx9pGv
-         7IySM5xswIv8Hy1OfIqpGOO4ZviewW9315zLKX9yKG6NR023rwUfNyfQNDeDxuj9hC
-         J8V7s0rqYfUt8ITwdCVb2eoWyCCwMttbcG4OJ5FyeEsFFgqTmHS3j6vWDEZlBPE7Xp
-         On0RjeNTD2Vh3ykWYaLMvEChH05lyUs9dbrB8vAzEzbwddbu+4ZfuuXszho8bc8gGZ
-         HYZJes9g3WIlOxDIRgJgoioDN3+bjhe7E2UbXV4Zd4GNJ6kvkZcrA9evSk0QPHgGaZ
-         S5bWVXRZ3DTzQ==
-From:   Andy Chi <andy.chi@canonical.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     andy.chi@canonical.com
-Subject: [PATCH] ALSA: hda/realtek: fix right sounds and mute/micmute LEDs for HP machines
-Date:   Mon, 14 Mar 2022 22:21:19 +0800
-Message-Id: <20220314142122.71602-1-andy.chi@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Mar 2022 10:25:47 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3131527FC5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 07:24:35 -0700 (PDT)
+Received: (qmail 1680880 invoked by uid 1000); 14 Mar 2022 10:24:34 -0400
+Date:   Mon, 14 Mar 2022 10:24:34 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, CobeChen@zhaoxin.com,
+        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
+Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
+ zhaoxin
+Message-ID: <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
+References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* The HP ProBook 440/450 and EliteBook 640/650 are
-  using ALC236 codec which used 0x02 to control mute LED
-  and 0x01 to control micmute LED. Therefore, add a quirk to make it works.
+On Mon, Mar 14, 2022 at 03:35:37PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
+> In zhaoxin platform, some ehci projects will latch a wakeup signal
+> internal when plug in a device on port during system S0. This wakeup
+> signal will turn on when ehci runtime suspend, which will trigger a
+> system control interrupt that will resume ehci back to D0. As no
+> device connect, ehci will be set to runtime suspend and turn on the
+> internal latched wakeup signal again. It will cause a suspend-resume
+> loop and generate system control interrupt continuously.
+> 
+> Fixed this issue by clear wakeup signal latched in ehci internal when
+> ehci resume callback is called.
+> 
+> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+> ---
+>  drivers/usb/host/ehci-hcd.c | 26 ++++++++++++++++++++++++++
+>  drivers/usb/host/ehci-pci.c |  4 ++++
+>  drivers/usb/host/ehci.h     |  1 +
+>  3 files changed, 31 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+> index 3d82e0b..e4840ef 100644
+> --- a/drivers/usb/host/ehci-hcd.c
+> +++ b/drivers/usb/host/ehci-hcd.c
+> @@ -1103,6 +1103,30 @@ static void ehci_remove_device(struct usb_hcd *hcd,
+> struct usb_device *udev)
+> 
+>  #ifdef CONFIG_PM
+> 
+> +/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
+> +static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
+> +{
+> +       u32 __iomem     *reg = &ehci->regs->port_status[4];
+> +       u32     t1 = ehci_readl(ehci, reg);
 
-Signed-off-by: Andy Chi <andy.chi@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 4 ++++
- 1 file changed, 4 insertions(+)
+The "t1" in this line should start in the same column as the "*reg" in 
+the line above, to match the style of other variable declarations in 
+this file (see ehci_init() as an example).
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index c34b4888978b..4650ef9110d6 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9017,6 +9017,10 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8992, "HP EliteBook 845 G9", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x103c, 0x8994, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x103c, 0x8995, "HP EliteBook 855 G9", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x103c, 0x89a4, "HP ProBook 440 G9", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x89a6, "HP ProBook 450 G9", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x89ac, "HP EliteBook 640 G9", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x89ae, "HP EliteBook 650 G9", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x89c3, "Zbook Studio G9", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x89c6, "Zbook Fury 17 G9", ALC245_FIXUP_CS35L41_SPI_2),
- 	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
--- 
-2.25.1
+> +
+> +       t1 &= (u32)~0xf0000;
+> +       t1 |= PORT_TEST_FORCE;
+> +       ehci_writel(ehci, t1, reg);
+> +       t1 = ehci_readl(ehci, reg);
+> +       msleep(1);
+> +       t1 &= (u32)~0xf0000;
+> +       ehci_writel(ehci, t1, reg);
+> +       ehci_readl(ehci, reg);
+> +       msleep(1);
+> +       t1 = ehci_readl(ehci, reg);
+> +       ehci_writel(ehci, t1 | PORT_CSC, reg);
+> +       ehci_readl(ehci, reg);
+> +       udelay(500);
+> +       t1 = ehci_readl(ehci, &ehci->regs->status);
+> +       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
+> +       ehci_readl(ehci, &ehci->regs->status);
 
+You should not clear the STS_PCD bit.  What if some other port had a 
+status change at the same time?  Then because you cleared the 
+port-change-detect bit, the system would not realize that the other port 
+needed to be handled.
+
+Leaving the STS_PCD bit turned on will cause the driver to do a little 
+extra work, but it shouldn't cause any harm.
+
+> +}
+> +
+>  /* suspend/resume, section 4.3 */
+> 
+>  /* These routines handle the generic parts of controller suspend/resume */
+> @@ -1154,6 +1178,8 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
+>         if (ehci->shutdown)
+>                 return 0;               /* Controller is dead */
+> 
+> +       if (ehci->zx_wakeup_clear == 1)
+
+You don't need to check that the value is equal to 1.  Treat this 
+more like a Boolean flag and just write:
+
+	if (ehci->zx_wakeup_clear)
+
+Also, to make the flag's meaning more obvious, you might want to name 
+it "zx_wakeup_clear_needed" or "zx_clear_latched_wakeup".
+
+Otherwise this patch looks okay.  Please submit a revised version, 
+without the whitespace damage.
+
+Alan Stern
+
+> +               ehci_zx_wakeup_clear(ehci);
+>         /*
+>          * If CF is still set and reset isn't forced
+>          * then we maintained suspend power.
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index e87cf3a..a5e27de 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>                         ehci->has_synopsys_hc_bug = 1;
+>                 }
+>                 break;
+> +       case PCI_VENDOR_ID_ZHAOXIN:
+> +               if (pdev->device == 0x3104 && (pdev->revision & 0xf0) ==
+> 0x90)
+> +                       ehci->zx_wakeup_clear = 1;
+> +               break;
+>         }
+> 
+>         /* optional debug port, normally in the first BAR */
+> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+> index fdd073c..712fdd0 100644
+> --- a/drivers/usb/host/ehci.h
+> +++ b/drivers/usb/host/ehci.h
+> @@ -220,6 +220,7 @@ struct ehci_hcd {                   /* one per
+> controller */
+>         unsigned                imx28_write_fix:1; /* For Freescale i.MX28
+> */
+>         unsigned                spurious_oc:1;
+>         unsigned                is_aspeed:1;
+> +       unsigned                zx_wakeup_clear:1;
+> 
+>         /* required for usb32 quirk */
+>         #define OHCI_CTRL_HCFS          (3 << 6)
+> -- 
+> 2.7.4

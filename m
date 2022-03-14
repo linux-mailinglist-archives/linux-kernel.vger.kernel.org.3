@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3E54D8490
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF544D83B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241561AbiCNMZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242127AbiCNMSq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S242123AbiCNMSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 14 Mar 2022 08:18:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6519537AB5;
-        Mon, 14 Mar 2022 05:13:38 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242392AbiCNMJz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 14 Mar 2022 08:09:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58D56404;
+        Mon, 14 Mar 2022 05:07:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEFE5B80DF4;
-        Mon, 14 Mar 2022 12:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E94C340EC;
-        Mon, 14 Mar 2022 12:13:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 744B5B80DED;
+        Mon, 14 Mar 2022 12:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9096C340EC;
+        Mon, 14 Mar 2022 12:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260015;
-        bh=UvXv8CoBIHSYv2czPD3shVCPtUxLOgoHieXifBMuTc8=;
+        s=korg; t=1647259668;
+        bh=dQE9AN0W3xhOOojm4d6cc0ZVs/VcgoMmZFSyfL9v3+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ySa4HX1riUGO1JkRDZQ3gtG0Vx/ZDc/NW8pUHHBWT4RElEqQhUgGdNafqwExRsvqT
-         bM2Zs6avwQW3DelnIl818mkCqQ4etgQDWuXzNcqg/wCvvetuLWQayIpH8ta1m2Bn27
-         VJmCz4IVjzT56dPLsdTYwd1QMnbDtvcHv4pQQ2sM=
+        b=2H3d7uU+57Zd59ZIej/qiKmal169BeekIH6tY1uFdYkQmbuOszYGvDNcgTacdPzFQ
+         Ax6HMtCuQp5s0XFKJpUpBrnbn/MBsjT20w6aGvRwD+5kAmVOXx+IMRWQUG8lkqbfFK
+         ly2uVu5Uit+gXjAO4u4XjISlHEhHm5GggT0irB8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Norbert Ciosek <norbertx.ciosek@intel.com>,
-        Michal Maloszewski <michal.maloszewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 033/121] iavf: Fix handling of vlan strip virtual channel messages
-Date:   Mon, 14 Mar 2022 12:53:36 +0100
-Message-Id: <20220314112745.053459816@linuxfoundation.org>
+Subject: [PATCH 5.15 035/110] tipc: fix incorrect order of state message data sanity check
+Date:   Mon, 14 Mar 2022 12:53:37 +0100
+Message-Id: <20220314112744.017934814@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,91 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Maloszewski <michal.maloszewski@intel.com>
+From: Tung Nguyen <tung.q.nguyen@dektech.com.au>
 
-[ Upstream commit 2cf29e55894886965722e6625f6a03630b4db31d ]
+[ Upstream commit c79fcc27be90b308b3fa90811aefafdd4078668c ]
 
-Modify netdev->features for vlan stripping based on virtual
-channel messages received from the PF. Change is needed
-to synchronize vlan strip status between PF sysfs and iavf ethtool.
+When receiving a state message, function tipc_link_validate_msg()
+is called to validate its header portion. Then, its data portion
+is validated before it can be accessed correctly. However, current
+data sanity  check is done after the message header is accessed to
+update some link variables.
 
-Fixes: 5951a2b9812d ("iavf: Fix VLAN feature flags after VFR")
-Signed-off-by: Norbert Ciosek <norbertx.ciosek@intel.com>
-Signed-off-by: Michal Maloszewski <michal.maloszewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+This commit fixes this issue by moving the data sanity check to
+the beginning of state message handling and right after the header
+sanity check.
+
+Fixes: 9aa422ad3266 ("tipc: improve size validations for received domain records")
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Link: https://lore.kernel.org/r/20220308021200.9245-1-tung.q.nguyen@dektech.com.au
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/intel/iavf/iavf_virtchnl.c   | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ net/tipc/link.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-index d3da65d24bd6..c83ac6adeeb7 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-@@ -1460,6 +1460,22 @@ void iavf_request_reset(struct iavf_adapter *adapter)
- 	adapter->current_op = VIRTCHNL_OP_UNKNOWN;
- }
- 
-+/**
-+ * iavf_netdev_features_vlan_strip_set - update vlan strip status
-+ * @netdev: ptr to netdev being adjusted
-+ * @enable: enable or disable vlan strip
-+ *
-+ * Helper function to change vlan strip status in netdev->features.
-+ */
-+static void iavf_netdev_features_vlan_strip_set(struct net_device *netdev,
-+						const bool enable)
-+{
-+	if (enable)
-+		netdev->features |= NETIF_F_HW_VLAN_CTAG_RX;
-+	else
-+		netdev->features &= ~NETIF_F_HW_VLAN_CTAG_RX;
-+}
-+
- /**
-  * iavf_virtchnl_completion
-  * @adapter: adapter structure
-@@ -1683,8 +1699,18 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 			}
- 			break;
- 		case VIRTCHNL_OP_ENABLE_VLAN_STRIPPING:
-+			dev_warn(&adapter->pdev->dev, "Changing VLAN Stripping is not allowed when Port VLAN is configured\n");
-+			/* Vlan stripping could not be enabled by ethtool.
-+			 * Disable it in netdev->features.
-+			 */
-+			iavf_netdev_features_vlan_strip_set(netdev, false);
-+			break;
- 		case VIRTCHNL_OP_DISABLE_VLAN_STRIPPING:
- 			dev_warn(&adapter->pdev->dev, "Changing VLAN Stripping is not allowed when Port VLAN is configured\n");
-+			/* Vlan stripping could not be disabled by ethtool.
-+			 * Enable it in netdev->features.
-+			 */
-+			iavf_netdev_features_vlan_strip_set(netdev, true);
- 			break;
- 		default:
- 			dev_err(&adapter->pdev->dev, "PF returned error %d (%s) to our request %d\n",
-@@ -1918,6 +1944,20 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 		spin_unlock_bh(&adapter->adv_rss_lock);
- 		}
+diff --git a/net/tipc/link.c b/net/tipc/link.c
+index 4e7936d9b442..115a4a7950f5 100644
+--- a/net/tipc/link.c
++++ b/net/tipc/link.c
+@@ -2285,6 +2285,11 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
  		break;
-+	case VIRTCHNL_OP_ENABLE_VLAN_STRIPPING:
-+		/* PF enabled vlan strip on this VF.
-+		 * Update netdev->features if needed to be in sync with ethtool.
-+		 */
-+		if (!v_retval)
-+			iavf_netdev_features_vlan_strip_set(netdev, true);
-+		break;
-+	case VIRTCHNL_OP_DISABLE_VLAN_STRIPPING:
-+		/* PF disabled vlan strip on this VF.
-+		 * Update netdev->features if needed to be in sync with ethtool.
-+		 */
-+		if (!v_retval)
-+			iavf_netdev_features_vlan_strip_set(netdev, false);
-+		break;
- 	default:
- 		if (adapter->current_op && (v_opcode != adapter->current_op))
- 			dev_warn(&adapter->pdev->dev, "Expected response %d from PF, received %d\n",
+ 
+ 	case STATE_MSG:
++		/* Validate Gap ACK blocks, drop if invalid */
++		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
++		if (glen > dlen)
++			break;
++
+ 		l->rcv_nxt_state = msg_seqno(hdr) + 1;
+ 
+ 		/* Update own tolerance if peer indicates a non-zero value */
+@@ -2310,10 +2315,6 @@ static int tipc_link_proto_rcv(struct tipc_link *l, struct sk_buff *skb,
+ 			break;
+ 		}
+ 
+-		/* Receive Gap ACK blocks from peer if any */
+-		glen = tipc_get_gap_ack_blks(&ga, l, hdr, true);
+-		if(glen > dlen)
+-			break;
+ 		tipc_mon_rcv(l->net, data + glen, dlen - glen, l->addr,
+ 			     &l->mon_state, l->bearer_id);
+ 
 -- 
 2.34.1
 

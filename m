@@ -2,194 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E104D7AEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E404D7AFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 07:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236403AbiCNGsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 02:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S236377AbiCNGxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 02:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiCNGsr (ORCPT
+        with ESMTP id S229904AbiCNGw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 02:48:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 139E2403CF;
-        Sun, 13 Mar 2022 23:47:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF8BC1042;
-        Sun, 13 Mar 2022 23:47:36 -0700 (PDT)
-Received: from [10.163.33.185] (unknown [10.163.33.185])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B84F33F7D7;
-        Sun, 13 Mar 2022 23:47:28 -0700 (PDT)
-Message-ID: <0d04d7a0-9186-ce89-fe51-616c2af37a8d@arm.com>
-Date:   Mon, 14 Mar 2022 12:17:29 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC V1 11/11] perf: Capture branch privilege information
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Rob Herring <rob.herring@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
- <1642998653-21377-12-git-send-email-anshuman.khandual@arm.com>
- <b85da904-50cb-b7e3-1429-6f5ef244567b@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <b85da904-50cb-b7e3-1429-6f5ef244567b@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Mar 2022 02:52:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301693E0DA;
+        Sun, 13 Mar 2022 23:51:49 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 740E5218FD;
+        Mon, 14 Mar 2022 06:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647240707; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KaGB7dEJoq/IO9YnLPYzErd3/g/5zWdaF8A5d/oApOQ=;
+        b=cfya0Glh/FJn65IhLMvH8+C8+gbOmDTJj/odI7/GBa5mOplXL1RpolGDj4VdU+C4zHComa
+        m8wS5A9jfJIyWss6aRbqmuuZslc2Tt/VTL3kuTdUsJf5V6vS6HIshvTJhgThnt0WfAXqnh
+        cQO06e0p2P/axbvh3dlb/yMLvTgY38Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647240707;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KaGB7dEJoq/IO9YnLPYzErd3/g/5zWdaF8A5d/oApOQ=;
+        b=OP92m/bbnzatAlmrPUi2OFwxPvZ18N6vU/YHCJw9TBIrFWHOjTDrpDpC4Z0IqMqPkQU5BP
+        nhdqH3u/am4g6qAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 4413CA3B81;
+        Mon, 14 Mar 2022 06:51:47 +0000 (UTC)
+Date:   Mon, 14 Mar 2022 07:51:47 +0100
+Message-ID: <s5h5yohc9h8.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Joe Perches <joe@perches.com>,
+        kernel-janitors@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: seq: oss: fix typo
+In-Reply-To: <20220313085635.102123-1-Julia.Lawall@inria.fr>
+References: <20220313085635.102123-1-Julia.Lawall@inria.fr>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/26/22 22:57, James Clark wrote:
+On Sun, 13 Mar 2022 09:56:35 +0100,
+Julia Lawall wrote:
 > 
-> On 24/01/2022 04:30, Anshuman Khandual wrote:
->> Platforms like arm64 could capture privilege level information for all the
->> branch records. Hence this adds a new element in the struct branch_entry to
->> record the privilege level information, which could be requested through a
->> new event.attr.branch_sample_type flag PERF_SAMPLE_BRANCH_PRIV_SAVE. While
->> here, update the BRBE driver as required.
->>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
->> Cc: Jiri Olsa <jolsa@redhat.com>
->> Cc: Namhyung Kim <namhyung@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-perf-users@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  drivers/perf/arm_pmu_brbe.c              | 28 ++++++++++++++++++++++++
->>  include/linux/perf_event.h               |  5 +++++
->>  include/uapi/linux/perf_event.h          | 13 ++++++++++-
->>  tools/include/uapi/linux/perf_event.h    | 13 ++++++++++-
->>  tools/perf/Documentation/perf-record.txt |  1 +
->>  tools/perf/util/parse-branch-options.c   |  1 +
->>  6 files changed, 59 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/perf/arm_pmu_brbe.c b/drivers/perf/arm_pmu_brbe.c
->> index 7cd1208c6c58..d4cbea74c148 100644
->> --- a/drivers/perf/arm_pmu_brbe.c
->> +++ b/drivers/perf/arm_pmu_brbe.c
->> @@ -270,6 +270,25 @@ static int brbe_fetch_perf_type(u64 brbinf)
->>  	}
->>  }
->>  
->> +static int brbe_fetch_perf_priv(u64 brbinf)
->> +{
->> +	int brbe_el = brbe_fetch_el(brbinf);
->> +
->> +	switch (brbe_el) {
->> +	case BRBINF_EL_EL0:
->> +		return PERF_BR_USER;
->> +	case BRBINF_EL_EL1:
->> +		return PERF_BR_KERNEL;
->> +	case BRBINF_EL_EL2:
->> +		if (is_kernel_in_hyp_mode())
->> +			return PERF_BR_KERNEL;
->> +		return PERF_BR_HV;
->> +	default:
->> +		pr_warn("unknown branch privilege captured\n");
->> +		return -1;
->> +	}
->> +}
->> +
->>  static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
->>  			       u64 brbinf, int idx)
->>  {
->> @@ -302,6 +321,15 @@ static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *ev
->>  			cpuc->brbe_entries[idx].in_tx = brbinf & BRBINF_TX;
->>  		}
->>  	}
->> +
->> +	if (branch_sample_priv(event)) {
->> +		/*
->> +		 * All these information (i.e branch privilege level) are not
->> +		 * available for source only branch records.
->> +		 */
->> +		if (type != BRBINF_VALID_SOURCE)
->> +			cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
->> +	}
->>  }
->>  
->>  /*
->> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
->> index 916ce5102b33..8021b6a30d86 100644
->> --- a/include/linux/perf_event.h
->> +++ b/include/linux/perf_event.h
->> @@ -1688,4 +1688,9 @@ static inline bool branch_sample_hw_index(const struct perf_event *event)
->>  {
->>  	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
->>  }
->> +
->> +static inline bool branch_sample_priv(const struct perf_event *event)
->> +{
->> +	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
->> +}
->>  #endif /* _LINUX_PERF_EVENT_H */
->> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
->> index 361fdc6b87a0..4d77710f7a4e 100644
->> --- a/include/uapi/linux/perf_event.h
->> +++ b/include/uapi/linux/perf_event.h
->> @@ -204,6 +204,8 @@ enum perf_branch_sample_type_shift {
->>  
->>  	PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT	= 17, /* save low level index of raw branch records */
->>  
->> +	PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT	= 18, /* save privillege mode */
->> +
->>  	PERF_SAMPLE_BRANCH_MAX_SHIFT		/* non-ABI */
->>  };
->>  
->> @@ -233,6 +235,8 @@ enum perf_branch_sample_type {
->>  
->>  	PERF_SAMPLE_BRANCH_HW_INDEX	= 1U << PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT,
->>  
->> +	PERF_SAMPLE_BRANCH_PRIV_SAVE	= 1U << PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT,
->> +
->>  	PERF_SAMPLE_BRANCH_MAX		= 1U << PERF_SAMPLE_BRANCH_MAX_SHIFT,
->>  };
->>  
->> @@ -265,6 +269,12 @@ enum {
->>  	PERF_BR_MAX,
->>  };
->>  
->> +enum {
->> +	PERF_BR_USER	= 0,
->> +	PERF_BR_KERNEL	= 1,
->> +	PERF_BR_HV	= 2,
->> +};
->> +
-> Can we have 0 as "UNKNOWN". It's going to be difficult to parse files when privilege information
-> isn't saved and get accurate results without that. For example if it's not set then presumably
-> the field would be 0 (PERF_BR_USER), but that doesn't mean the samples are user in that case.
+> Fix typo in "announcement".
 > 
-> I know you might be able to go backwards and look at what arguments were passed to the kernel but
-> it's not guaranteed that the kernel honored the request anyway. There are also other platforms
-> to think about etc.
-> 
-> If you look at the branch type definitions above they start at 0 (PERF_BR_UNKNOWN) which I think
-> works out quite nicely in the userspace code.
+> Reported-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-This is being taken care in the new BRBE related perf ABI changes series (V3).
+Thanks, applied now.
 
-https://lore.kernel.org/all/20220314055857.125421-1-anshuman.khandual@arm.com/
+
+Takashi

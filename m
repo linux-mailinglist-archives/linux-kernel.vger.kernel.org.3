@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4317F4D82A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89784D848A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240429AbiCNMGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S241733AbiCNMZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240421AbiCNMFP (ORCPT
+        with ESMTP id S242538AbiCNMTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:05:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2942149241;
-        Mon, 14 Mar 2022 05:02:05 -0700 (PDT)
+        Mon, 14 Mar 2022 08:19:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF134F475;
+        Mon, 14 Mar 2022 05:14:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C0061260;
-        Mon, 14 Mar 2022 12:02:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40FC7C340E9;
-        Mon, 14 Mar 2022 12:02:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9920CB80DF9;
+        Mon, 14 Mar 2022 12:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9525C340ED;
+        Mon, 14 Mar 2022 12:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259324;
-        bh=UyCtQWl67fX8xmmCx85LQ2WETmjPJSDy8cN0/Tj/lPI=;
+        s=korg; t=1647260057;
+        bh=m8jRNaz/jrCc7HEoFVxnZs1a2N3/lU3a7CW7j0amyek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pQdtL5sGfvE2kE1vLsfDJRX2jJ7vK+k6yiF6tEyA0Roy8CGPcPpoxDTWULiMeTsns
-         2BO5VB7dHxOCX1o8+Ots/Jb+JwmJHpnvAeweFc1GLs+QTDt6Jr6jrV4/a45ly+X0rJ
-         7fVuBweUcQmH8sj7rsJiEzaJe6e9WGvEChePSXhY=
+        b=l6R/OGQYu/cZ8nnPElkE7Kp5KzKNXJ5qcozwrJejaTfa+yfxCkgrE9MbrEwqkeoov
+         WVuLNFSdAI+HMNCJv65ScIqNp1kKvIxy9/yJbbMroIXkPFNRUep+XZIHs6iFimff2X
+         haUl0R6jj+cilX9B5XyMsSCLhqQUqSGx6VcLZAtA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott McNutt <scott.mcnutt@siriusxm.com>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 53/71] net: macb: Fix lost RX packet wakeup race in NAPI receive
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 043/121] net: marvell: prestera: Add missing of_node_put() in prestera_switch_set_base_mac_addr
 Date:   Mon, 14 Mar 2022 12:53:46 +0100
-Message-Id: <20220314112739.414191650@linuxfoundation.org>
+Message-Id: <20220314112745.329830316@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,81 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 0bf476fc3624e3a72af4ba7340d430a91c18cd67 upstream.
+[ Upstream commit c9ffa3e2bc451816ce0295e40063514fabf2bd36 ]
 
-There is an oddity in the way the RSR register flags propagate to the
-ISR register (and the actual interrupt output) on this hardware: it
-appears that RSR register bits only result in ISR being asserted if the
-interrupt was actually enabled at the time, so enabling interrupts with
-RSR bits already set doesn't trigger an interrupt to be raised. There
-was already a partial fix for this race in the macb_poll function where
-it checked for RSR bits being set and re-triggered NAPI receive.
-However, there was a still a race window between checking RSR and
-actually enabling interrupts, where a lost wakeup could happen. It's
-necessary to check again after enabling interrupts to see if RSR was set
-just prior to the interrupt being enabled, and re-trigger receive in that
-case.
+This node pointer is returned by of_find_compatible_node() with
+refcount incremented. Calling of_node_put() to aovid the refcount leak.
 
-This issue was noticed in a point-to-point UDP request-response protocol
-which periodically saw timeouts or abnormally high response times due to
-received packets not being processed in a timely fashion. In many
-applications, more packets arriving, including TCP retransmissions, would
-cause the original packet to be processed, thus masking the issue.
-
-Fixes: 02f7a34f34e3 ("net: macb: Re-enable RX interrupt only when RX is done")
-Cc: stable@vger.kernel.org
-Co-developed-by: Scott McNutt <scott.mcnutt@siriusxm.com>
-Signed-off-by: Scott McNutt <scott.mcnutt@siriusxm.com>
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Fixes: 501ef3066c89 ("net: marvell: prestera: Add driver for Prestera family ASIC devices")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/cadence/macb_main.c |   25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/marvell/prestera/prestera_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1448,7 +1448,14 @@ static int macb_poll(struct napi_struct
- 	if (work_done < budget) {
- 		napi_complete_done(napi, work_done);
- 
--		/* Packets received while interrupts were disabled */
-+		/* RSR bits only seem to propagate to raise interrupts when
-+		 * interrupts are enabled at the time, so if bits are already
-+		 * set due to packets received while interrupts were disabled,
-+		 * they will not cause another interrupt to be generated when
-+		 * interrupts are re-enabled.
-+		 * Check for this case here. This has been seen to happen
-+		 * around 30% of the time under heavy network load.
-+		 */
- 		status = macb_readl(bp, RSR);
- 		if (status) {
- 			if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
-@@ -1456,6 +1463,22 @@ static int macb_poll(struct napi_struct
- 			napi_reschedule(napi);
- 		} else {
- 			queue_writel(queue, IER, bp->rx_intr_mask);
-+
-+			/* In rare cases, packets could have been received in
-+			 * the window between the check above and re-enabling
-+			 * interrupts. Therefore, a double-check is required
-+			 * to avoid losing a wakeup. This can potentially race
-+			 * with the interrupt handler doing the same actions
-+			 * if an interrupt is raised just after enabling them,
-+			 * but this should be harmless.
-+			 */
-+			status = macb_readl(bp, RSR);
-+			if (unlikely(status)) {
-+				queue_writel(queue, IDR, bp->rx_intr_mask);
-+				if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
-+					queue_writel(queue, ISR, MACB_BIT(RCOMP));
-+				napi_schedule(napi);
-+			}
- 		}
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+index c687dc9aa973..36c5b1eba30d 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+@@ -553,6 +553,7 @@ static int prestera_switch_set_base_mac_addr(struct prestera_switch *sw)
+ 		dev_info(prestera_dev(sw), "using random base mac address\n");
  	}
+ 	of_node_put(base_mac_np);
++	of_node_put(np);
  
+ 	return prestera_hw_switch_mac_set(sw, sw->base_mac);
+ }
+-- 
+2.34.1
+
 
 

@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838214D8B1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 207F54D8B2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbiCNRxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S243507AbiCNR5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiCNRxW (ORCPT
+        with ESMTP id S240191AbiCNR5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:53:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99ED513F2C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647280331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7PoYm4c24Q3JJh2lpWhFWRFLRzas/0vml62uEAb2M70=;
-        b=QTBDcmY+laqqzEB8NMsN7E/TkbVMeP4ZZwkDx5g/m7b+tjyOe9io8N15v3rj4Y8FUPAPLC
-        gnMtDcQSpt+Bnt0ZiQrB9AaMesJHzp2L9yFIcciTIYgtdpYcYplJlpLsjMRpy6hkNC9yKP
-        oxHdzPan6omJtmVrnrAK4U8jz7Y1b/0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-1EdAwJXiNVG2oqTBldw8_Q-1; Mon, 14 Mar 2022 13:52:10 -0400
-X-MC-Unique: 1EdAwJXiNVG2oqTBldw8_Q-1
-Received: by mail-wr1-f70.google.com with SMTP id y13-20020adfee0d000000b001f1fa450a3dso4686033wrn.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:52:10 -0700 (PDT)
+        Mon, 14 Mar 2022 13:57:10 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515362DD62;
+        Mon, 14 Mar 2022 10:56:00 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id r29so11864710edc.0;
+        Mon, 14 Mar 2022 10:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j8z4v8YxtWANrTWb6RFPyfnlW/ootQzYbnhWcATbHWQ=;
+        b=AjMTYWO0eXv50h4Efspnrs7DrZdGLyTZb5SWWsRCQUMcCXc1oNqULW6PhRKMLgap58
+         B4Krs3qCdiKdxIBQwTlcfDKIX9Hcb/6cnL2UJqNXK2S0+3a1WTdaeEGnylXLthn65qo/
+         lah1W+eNY1Leu9LzmbypCiIaZGNz0wy5QR6f6SR/g306mIXdHgIQLbNuVHOKNBFe66Sz
+         SrZdOLdgZ91VgLzbtP147JkR4lv0B1cburt4PRocOahUCRM6l9TIherZOKfA3v+z0Rqf
+         iyUvAAosQnmzynDKWwVA6QY+xt+DNMQUQb6Tg26+frCQSkIhjFkeafwyQkd3km1GsRhC
+         mpxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7PoYm4c24Q3JJh2lpWhFWRFLRzas/0vml62uEAb2M70=;
-        b=Vmalxmt+DtF6NYe3pav/fucCeOi8RQpJBgv3ljc+Fh8AvSaHilb9h+kRfGS35AVRhC
-         9YXjPDB/EApvvTUHeMz8/5IJfa2gUOjCs6ozZw1pYwjEfANOHnDDVoNsNPRwj9y6Gfm3
-         7IJbQ9ZBCH8F3ibcjpeCsT6a+yHsZrJzit91s9y1Oj8XW7qpw7bpGEQ8Inr8XARvIgd+
-         JIJq/l8dYcoo0lEaQMJcul7grydEx5LL3c7Lon/vCR1ZGt0+SGOrvCiKHGTRwpJYldB/
-         jBrx3o84Uly58+FMWAgX3T14FLql7Vw3G+rg2SNZhksKg6QqNqvCUjf+e+B01Btrl2O9
-         0TfA==
-X-Gm-Message-State: AOAM532pcePrfPUNMoJ9vM5jp7H7DhSxc2CPmX3r+l3EYWSVVaHe4jD+
-        xc1JVSj286uRsU4CwRuh8k7lF/QqMmcAzRQPa1tvyZvgzyHMoBoMw93HmQWOgy6EIDQDU6Bz86R
-        T6nOu2ntQlObMZkQuEgeLHU4P
-X-Received: by 2002:a05:6000:1448:b0:1f0:6620:968f with SMTP id v8-20020a056000144800b001f06620968fmr17876447wrx.714.1647280329106;
-        Mon, 14 Mar 2022 10:52:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzO7a/vR6ZwBhjanEnZfZRofoAb4xNg0ErWA+say3xs9Cyy4NfYJHlDuNQt8RwO/jauBt0CRw==
-X-Received: by 2002:a05:6000:1448:b0:1f0:6620:968f with SMTP id v8-20020a056000144800b001f06620968fmr17876423wrx.714.1647280328797;
-        Mon, 14 Mar 2022 10:52:08 -0700 (PDT)
-Received: from vian.redhat.com ([2a0c:5a80:3506:3400:69b5:c807:1d52:ff67])
-        by smtp.gmail.com with ESMTPSA id l13-20020a5d4bcd000000b001f0620ecb3csm13678781wrt.40.2022.03.14.10.52.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=j8z4v8YxtWANrTWb6RFPyfnlW/ootQzYbnhWcATbHWQ=;
+        b=Ah3lShP/t+d6IoJQDnkWvU7Qh42ibzBE//v8ldHa6qFlD5Ve2+DjcAFCwCcQew63E6
+         gxwop/V9Ho84kpbK1Vzpi52Lvrjy1EKTkaR042Z+TGyow73b6I5wm5/bDjDiSDUe8ZHU
+         JQHVjHuGiO5Wkljn4XDaNnkDnJfwHNabetnaCfd7KMybmA7lUMkq/2vs3K0RMIyCHpJO
+         hGT2BeWn9AQRKBAuwSw6aWp5+CJiYvtzsQm4WRv4Z0hRu/KKMp3uf+2TieEwjMHSzHxT
+         NidqkzeP9nQTsflFMPZzQBT/ul2EDHMtiwc7FDdhZpGxlpwCHvORlnF/UovmW/bPmwr5
+         uvjQ==
+X-Gm-Message-State: AOAM532DnpL9oC1qEdm+4gS9oT0UpJxjS0SNV7nFsEuyOXQp0q9YuvHq
+        pi6hGhkNspV+Rcak8X9/UIA=
+X-Google-Smtp-Source: ABdhPJy926fQG3oSQirbFPmeHBjqAmigNyVHn6+Yl5vzV7K2iNg9nGN5w2v8rujJyYp+vq/t/MAGtg==
+X-Received: by 2002:a05:6402:4301:b0:418:585b:cfe1 with SMTP id m1-20020a056402430100b00418585bcfe1mr12030306edc.250.1647280558842;
+        Mon, 14 Mar 2022 10:55:58 -0700 (PDT)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906c00900b006d4a45869basm7154199ejz.199.2022.03.14.10.55.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 10:52:08 -0700 (PDT)
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     feng.tang@intel.com, tglx@linutronix.de
-Cc:     andi.kleen@intel.com, bp@alien8.de, dave.hansen@intel.com,
-        hpa@zytor.com, len.brown@intel.com, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, paulmck@kernel.org, peterz@infradead.org,
-        rui.zhang@intel.com, tim.c.chen@intel.com, x86@kernel.org,
-        mtosatti@redhat.com, nsaenzju@redhat.com, frederic@kernel.org
-Subject: Re: [PATCH v3 1/2] x86/tsc: add a timer to make sure tsc_adjust is always checked
-Date:   Mon, 14 Mar 2022 18:52:07 +0100
-Message-Id: <20220314175207.274870-1-nsaenzju@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20211117023751.24190-1-feng.tang@intel.com>
-References: <20211117023751.24190-1-feng.tang@intel.com>
+        Mon, 14 Mar 2022 10:55:58 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 19:55:56 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Cooper Lees <me@cooperlees.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v3 net-next 09/14] net: dsa: Validate hardware support
+ for MST
+Message-ID: <20220314175556.7mjr4tui4vb4i5qn@skbuf>
+References: <20220314095231.3486931-1-tobias@waldekranz.com>
+ <20220314095231.3486931-10-tobias@waldekranz.com>
+ <20220314165649.vtsd3xqv7htut55d@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314165649.vtsd3xqv7htut55d@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Feng, Thomas,
-
-> On Wed, Nov 17, 2021 at 10:37:51AM +0800, Feng Tang wrote:
-> Normally the tsc_sync will get checked every time system enters idle state,
-> but Thomas Gleixner mentioned there is still a caveat that a system won't
-> enter idle [1], either because it's too busy or configured purposely to not
-> enter idle. Setup a periodic timer (every 10 minitues) to make sure the
-> check is always on.
+On Mon, Mar 14, 2022 at 06:56:49PM +0200, Vladimir Oltean wrote:
+> > diff --git a/net/dsa/port.c b/net/dsa/port.c
+> > index 58291df14cdb..1a17a0efa2fa 100644
+> > --- a/net/dsa/port.c
+> > +++ b/net/dsa/port.c
+> > @@ -240,6 +240,10 @@ static int dsa_port_switchdev_sync_attrs(struct dsa_port *dp,
+> >  	if (err && err != -EOPNOTSUPP)
+> >  		return err;
+> >  
+> > +	err = dsa_port_mst_enable(dp, br_mst_enabled(br), extack);
+> > +	if (err && err != -EOPNOTSUPP)
+> > +		return err;
 > 
-> [1]. https://lore.kernel.org/lkml/875z286xtk.fsf@nanos.tec.linutronix.de/
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> Sadly this will break down because we don't have unwinding on error in
+> place (sorry). We'd end up with an unoffloaded bridge port with
+> partially synced bridge port attributes. Could you please add a patch
+> previous to this one that handles this, and unoffloads those on error?
 
-I can see this timer interrupting my system's nohz_full CPUs. It'd be nice to
-be able to avoid the noise. A solution is using 'tsc=reliable', but IIUC this
-is not what the flag was created for. Any ideas/suggestions?
-
-Regards,
-Nicolas
-
+Actually I would rather rename the entire dsa_port_mst_enable() function
+to dsa_port_mst_validate() and move it to the beginning of dsa_port_bridge_join().
+This simplifies the unwinding that needs to take place quite a bit.

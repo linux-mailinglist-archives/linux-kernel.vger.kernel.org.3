@@ -2,72 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC69D4D838E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29974D8336
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240902AbiCNMQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S241420AbiCNMNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241312AbiCNMIg (ORCPT
+        with ESMTP id S241745AbiCNMJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC6A4BBB1;
-        Mon, 14 Mar 2022 05:04:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB41FB80DEC;
-        Mon, 14 Mar 2022 12:04:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABCB0C340EC;
-        Mon, 14 Mar 2022 12:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647259494;
-        bh=tV82BqDO0AsjvHNlIhCJicG5lFAeNtcRzJzz1XpeSds=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qYFlmSkdisUfwzRsUpQ1ZJH7Ei1DCePaIe3y4UVsIryWRl6HDJ4B3kqwp5Jg9JiW5
-         sJpyctpVBJ1rU2W+uK7PUzg2aG15UJj1a5rYGmgb7hcZVP1rWpvObl4JrY9RSQj/nO
-         oE42bLIJ4j13VitrmJ6XPbVqZcGhrlKXBrjyMAvJWHZUgpyZn7f/7O+yUSQft1veI7
-         8t9n14bDMkFQVU4dNZg446VPLzZDU0+u7CcQCQsAPvZEhMm4rpbba8+bhgF8IaKXo4
-         ZU6Y/pd8l3PutJ1e9YQdLxRHhP9anv5ZWokMA4b+FEs3NNNlF2UFbyFoAwWsVdTHpL
-         tYoX+ZrJ6nH+g==
-Date:   Mon, 14 Mar 2022 13:04:47 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Niklas =?UTF-8?B?U8O2ZGVybHVuZA==?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Shijie Qin <shijie.qin@nxp.com>,
-        Zhou Peng <eagle.zhou@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>
-Subject: Re: [PATCH 49/64] media: platform: rename amphion/ to nxp/amphion/
-Message-ID: <20220314130447.7f03f726@coco.lan>
-In-Reply-To: <CAOMZO5CHPYR+sdSS1ay_Zr1qL0XCGCJ2kqMxK3JxDuxDtjFCtA@mail.gmail.com>
-References: <cover.1647242578.git.mchehab@kernel.org>
-        <bb359b4709ceb1112813965237d153cd366cae2d.1647242579.git.mchehab@kernel.org>
-        <CAOMZO5CHPYR+sdSS1ay_Zr1qL0XCGCJ2kqMxK3JxDuxDtjFCtA@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Mon, 14 Mar 2022 08:09:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C298D50068
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:05:56 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nTjSG-0006MY-0k; Mon, 14 Mar 2022 13:05:40 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-cd06-1d72-9fa6-b58a.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:cd06:1d72:9fa6:b58a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AA0FD4AE7C;
+        Mon, 14 Mar 2022 12:05:02 +0000 (UTC)
+Date:   Mon, 14 Mar 2022 13:05:02 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        kernel-janitors@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 27/30] can: ucan: fix typos in comments
+Message-ID: <20220314120502.kpc27kzk2dnou2td@pengutronix.de>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+ <20220314115354.144023-28-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="utbqex7kud7q6aoc"
+Content-Disposition: inline
+In-Reply-To: <20220314115354.144023-28-Julia.Lawall@inria.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,20 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 14 Mar 2022 08:29:14 -0300
-Fabio Estevam <festevam@gmail.com> escreveu:
 
-> Hi Mauro,
-> 
-> On Mon, Mar 14, 2022 at 4:56 AM Mauro Carvalho Chehab
-> <mchehab@kernel.org> wrote:
-> >
-> > As the end goal is to have platform drivers split by vendor,
-> > rename amphion/ to nxp/amphion/.  
-> 
-> Amphion is the vendor itself, so the current naming scheme is correct.
+--utbqex7kud7q6aoc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok, I'll fix it on the next series.
+On 14.03.2022 12:53:51, Julia Lawall wrote:
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
+>=20
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-Thanks,
-Mauro
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+Should I take this, or are you going to upstream this?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--utbqex7kud7q6aoc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIvL2sACgkQrX5LkNig
+013ghgf+OFs60+q+Dd4p/sUmD7ZvtB2QitZ69mbLVzun53kAWpiwm8dMpruvkzVv
+3fJoo1LQf3RatjI3X1VdBhhPiXydxXqsPyPKM+wqGIFx4eBvUVVX2tqkJWa8fCiT
+thYXj2u52KL/ewRCqY2n2P/SV9TZkBh1XCi0VfNJXctig/trq6EI8ggC5WDHPyqS
+F+RLj00w4KXI1qm0cB81jzv9UV0I2yBhkdPhXcNZB6Wc7vgEeTufJwMwyPScrEVB
+NopO4WdprdujxEEXl01ajOknMu6cuI2XCyVLWljYENYCbCfQ1AV19uYrYbTazGP/
+iyaki+mj1/3mHLwV1NfiqnMPC0u8ug==
+=Z0sl
+-----END PGP SIGNATURE-----
+
+--utbqex7kud7q6aoc--

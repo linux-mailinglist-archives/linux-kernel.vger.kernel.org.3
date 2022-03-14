@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920204D84F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796534D84F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245568AbiCNMdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S245583AbiCNMdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243944AbiCNMVZ (ORCPT
+        with ESMTP id S243945AbiCNMVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 08:21:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D445F13D31;
-        Mon, 14 Mar 2022 05:19:13 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C613D33;
+        Mon, 14 Mar 2022 05:19:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 884EFB80DF5;
-        Mon, 14 Mar 2022 12:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B62D6C340E9;
-        Mon, 14 Mar 2022 12:19:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06DD360C70;
+        Mon, 14 Mar 2022 12:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF056C340E9;
+        Mon, 14 Mar 2022 12:19:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260351;
-        bh=EpphPjkJYLQvxtjYHWazgFohtokZXh676sRXQzOPIuU=;
+        s=korg; t=1647260355;
+        bh=/ysTpHMR/qo7lmvua99zXU/quYDGz2gZ/U7+mWVtzZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cvlO3QbbvI04hZhtXtHTbnW9zdFi5y1v62bfYMoTkolmdHF0vDMcGRvFbDnwrKGcU
-         u8QlQFMO0k8FKo0GPJYyoV184EiK3FoqJMxQ9mfZaSDm5cASN6+tE60mLa3caWhaKn
-         VYs2tLJoA45QCi5tegWK004mrnNC2WalEIWyHp4w=
+        b=CS3V/gc+DzlmRi4TpMUzUTPlEEi67rhn3pOYUahvXe1WOQZb4UhxYm5BhzE42bfCS
+         SA1E0kXq2ygQ2ybCDimovDFjNXvD79/2PVN/7jWwhlnU5Pl9uyCq7n2fVXxpNepE8G
+         8AWSUNVYPGMVtKbktAx1Vj0K4oXVDviQ6FU6+n6w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jann Horn <jannh@google.com>,
         David Howells <dhowells@redhat.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 108/121] watch_queue: Fix to always request a pow-of-2 pipe ring size
-Date:   Mon, 14 Mar 2022 12:54:51 +0100
-Message-Id: <20220314112747.124927943@linuxfoundation.org>
+Subject: [PATCH 5.16 109/121] watch_queue: Fix the alloc bitmap size to reflect notes allocated
+Date:   Mon, 14 Mar 2022 12:54:52 +0100
+Message-Id: <20220314112747.152601399@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
 References: <20220314112744.120491875@linuxfoundation.org>
@@ -57,19 +57,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Howells <dhowells@redhat.com>
 
-commit 96a4d8912b28451cd62825fd7caa0e66e091d938 upstream.
+commit 3b4c0371928c17af03e8397ac842346624017ce6 upstream.
 
-The pipe ring size must always be a power of 2 as the head and tail
-pointers are masked off by AND'ing with the size of the ring - 1.
-watch_queue_set_size(), however, lets you specify any number of notes
-between 1 and 511.  This number is passed through to pipe_resize_ring()
-without checking/forcing its alignment.
+Currently, watch_queue_set_size() sets the number of notes available in
+wqueue->nr_notes according to the number of notes allocated, but sets
+the size of the bitmap to the unrounded number of notes originally asked
+for.
 
-Fix this by rounding the number of slots required up to the nearest
-power of two.  The request is meant to guarantee that at least that many
-notifications can be generated before the queue is full, so rounding
-down isn't an option, but, alternatively, it may be better to give an
-error if we aren't allowed to allocate that much ring space.
+Fix this by setting the bitmap size to the number of notes we're
+actually going to make available (ie. the number allocated).
 
 Fixes: c73be61cede5 ("pipe: Add general notification queue support")
 Reported-by: Jann Horn <jannh@google.com>
@@ -77,19 +73,27 @@ Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/watch_queue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/watch_queue.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 --- a/kernel/watch_queue.c
 +++ b/kernel/watch_queue.c
-@@ -244,7 +244,7 @@ long watch_queue_set_size(struct pipe_in
+@@ -244,6 +244,7 @@ long watch_queue_set_size(struct pipe_in
  		goto error;
  	}
  
--	ret = pipe_resize_ring(pipe, nr_notes);
-+	ret = pipe_resize_ring(pipe, roundup_pow_of_two(nr_notes));
++	nr_notes = nr_pages * WATCH_QUEUE_NOTES_PER_PAGE;
+ 	ret = pipe_resize_ring(pipe, roundup_pow_of_two(nr_notes));
  	if (ret < 0)
  		goto error;
+@@ -269,7 +270,7 @@ long watch_queue_set_size(struct pipe_in
+ 	wqueue->notes = pages;
+ 	wqueue->notes_bitmap = bitmap;
+ 	wqueue->nr_pages = nr_pages;
+-	wqueue->nr_notes = nr_pages * WATCH_QUEUE_NOTES_PER_PAGE;
++	wqueue->nr_notes = nr_notes;
+ 	return 0;
  
+ error_p:
 
 

@@ -2,101 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B3C4D83AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3453F4D81CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiCNMSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
+        id S239709AbiCNLzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242314AbiCNMJv (ORCPT
+        with ESMTP id S239742AbiCNLzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5F013EA6;
-        Mon, 14 Mar 2022 05:07:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53C2F6130D;
-        Mon, 14 Mar 2022 12:07:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC65C340E9;
-        Mon, 14 Mar 2022 12:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259622;
-        bh=K0Zfy3TQifKqnpEDApkGb4MJ3KxVp4amKIB/i6G30+A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CVRcyxIEqyhwXZ9D/vGnZJ9fTsvxRk8vqVK/0dL9Bocs4AJVqaDWIaa5KKNJfFrvu
-         MVUDJRJi5d4h4wrykOpLxGZkriry4DIRnJHHMkHma/0IxjTU1zCiv/6VwdIrRyBWPb
-         B0NgmzKPT6Jdf1KKz8ScqH8p8/znNosq4+U9Id/U=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 034/110] ethernet: Fix error handling in xemaclite_of_probe
+        Mon, 14 Mar 2022 07:55:24 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192E165BD;
+        Mon, 14 Mar 2022 04:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UTHD6t3CngG06uxaTMECWlsIkBw43Sz+p3dlizGDUyI=;
+  b=TBZeCP4LZz66oYQVczpjdP60ygr5bwb9Ez2/mtvEnHgl7mGPiKL6Dp1n
+   nAb9oBUYNJSaHuh9smaYp1pBq9nMib2XI7DxVZm1QZ6lgCAg5BSSEASfu
+   GGIbCM5ViJuxsMeu/WnkU2JTVJrvG23WnOdV8UOYHzpsaw275LxQgBSoV
+   I=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997345"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     kernel-janitors@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 12/30] drivers: net: packetengines: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:36 +0100
-Message-Id: <20220314112743.990351778@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-13-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit b19ab4b38b06aae12442b2de95ccf58b5dc53584 ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-This node pointer is returned by of_parse_phandle() with refcount
-incremented in this function. Calling of_node_put() to avoid the
-refcount leak. As the remove function do.
-
-Fixes: 5cdaaa12866e ("net: emaclite: adding MDIO and phy lib support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220308024751.2320-1-linmq006@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_emaclite.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/packetengines/yellowfin.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-index b780aad3550a..5524ac4fae80 100644
---- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-@@ -1185,7 +1185,7 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
- 	if (rc) {
- 		dev_err(dev,
- 			"Cannot register network device, aborting\n");
--		goto error;
-+		goto put_node;
- 	}
+diff --git a/drivers/net/ethernet/packetengines/yellowfin.c b/drivers/net/ethernet/packetengines/yellowfin.c
+index 12105f62cbdd..03650022d444 100644
+--- a/drivers/net/ethernet/packetengines/yellowfin.c
++++ b/drivers/net/ethernet/packetengines/yellowfin.c
+@@ -191,7 +191,7 @@ IV. Notes
  
- 	dev_info(dev,
-@@ -1193,6 +1193,8 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
- 		 (unsigned long __force)ndev->mem_start, lp->base_addr, ndev->irq);
- 	return 0;
+ Thanks to Kim Stearns of Packet Engines for providing a pair of G-NIC boards.
+ Thanks to Bruce Faust of Digitalscape for providing both their SYM53C885 board
+-and an AlphaStation to verifty the Alpha port!
++and an AlphaStation to verify the Alpha port!
  
-+put_node:
-+	of_node_put(lp->phy_node);
- error:
- 	free_netdev(ndev);
- 	return rc;
--- 
-2.34.1
-
-
+ IVb. References
+ 
 

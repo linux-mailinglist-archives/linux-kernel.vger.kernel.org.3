@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779E24D846C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE9F4D8379
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbiCNMYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S241099AbiCNMP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241282AbiCNMRH (ORCPT
+        with ESMTP id S241073AbiCNMIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:17:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACB33615B;
-        Mon, 14 Mar 2022 05:12:14 -0700 (PDT)
+        Mon, 14 Mar 2022 08:08:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9385130F47;
+        Mon, 14 Mar 2022 05:04:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC08461315;
-        Mon, 14 Mar 2022 12:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA05C340E9;
-        Mon, 14 Mar 2022 12:12:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 05F37CE1268;
+        Mon, 14 Mar 2022 12:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB70C340E9;
+        Mon, 14 Mar 2022 12:04:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259933;
-        bh=RpuEEhblVS7oeVMwXLKhwEPjAiZgZESDzNGYsLkFL/c=;
+        s=korg; t=1647259464;
+        bh=sGG4xEp0veDolkndlxoaSezooSPfZ1+e2LfA0C1bkR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s0CnPijFfoTAiKbWCmO62hfc3OIn1pb8Mj2THxoKm/F/W6e+YXpYObygAx41vSLP0
-         6EPtBzTPTYvsl4/ztk6zI4Jyonj15Uh1kGxaJQsaCNHakgfZDzr1GwODSc9iHbS6fe
-         RGP3xx6RN19MHdkc1UmvAl+DY0IRWyPT8iCRSnaw=
+        b=AY3ltJtInTcydp217F4ccvbPcrt7KIQeaLHw7kNLHBSIeDuclQ2idCHJWN+bbJta5
+         A1OcQYoZwfw5UYOtSAtrpw9Mw953Rcm3EH+MZqGjwmspcvI3XoOoaZY4SaQ8k5+9Ps
+         8lHxwyl/pXB83RJmDslqTTjhksZY6PgZdryPEZgA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuang Li <shuali@redhat.com>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 012/121] tipc: fix kernel panic when enabling bearer
+Subject: [PATCH 5.15 013/110] net: phy: meson-gxl: fix interrupt handling in forced mode
 Date:   Mon, 14 Mar 2022 12:53:15 +0100
-Message-Id: <20220314112744.468877112@linuxfoundation.org>
+Message-Id: <20220314112743.403681167@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,104 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-[ Upstream commit be4977b847f5d5cedb64d50eaaf2218c3a55a3a3 ]
+[ Upstream commit a502a8f04097e038c3daa16c5202a9538116d563 ]
 
-When enabling a bearer on a node, a kernel panic is observed:
+This PHY doesn't support a link-up interrupt source. If aneg is enabled
+we use the "aneg complete" interrupt for this purpose, but if aneg is
+disabled link-up isn't signaled currently.
+According to a vendor driver there's an additional "energy detect"
+interrupt source that can be used to signal link-up if aneg is disabled.
+We can safely ignore this interrupt source if aneg is enabled.
 
-[    4.498085] RIP: 0010:tipc_mon_prep+0x4e/0x130 [tipc]
-...
-[    4.520030] Call Trace:
-[    4.520689]  <IRQ>
-[    4.521236]  tipc_link_build_proto_msg+0x375/0x750 [tipc]
-[    4.522654]  tipc_link_build_state_msg+0x48/0xc0 [tipc]
-[    4.524034]  __tipc_node_link_up+0xd7/0x290 [tipc]
-[    4.525292]  tipc_rcv+0x5da/0x730 [tipc]
-[    4.526346]  ? __netif_receive_skb_core+0xb7/0xfc0
-[    4.527601]  tipc_l2_rcv_msg+0x5e/0x90 [tipc]
-[    4.528737]  __netif_receive_skb_list_core+0x20b/0x260
-[    4.530068]  netif_receive_skb_list_internal+0x1bf/0x2e0
-[    4.531450]  ? dev_gro_receive+0x4c2/0x680
-[    4.532512]  napi_complete_done+0x6f/0x180
-[    4.533570]  virtnet_poll+0x29c/0x42e [virtio_net]
-...
+This patch was tested on a TX3 Mini TV box with S905W (even though
+boot message says it's a S905D).
 
-The node in question is receiving activate messages in another
-thread after changing bearer status to allow message sending/
-receiving in current thread:
+This issue has been existing longer, but due to changes in phylib and
+the driver the patch applies only from the commit marked as fixed.
 
-         thread 1           |              thread 2
-         --------           |              --------
-                            |
-tipc_enable_bearer()        |
-  test_and_set_bit_lock()   |
-    tipc_bearer_xmit_skb()  |
-                            | tipc_l2_rcv_msg()
-                            |   tipc_rcv()
-                            |     __tipc_node_link_up()
-                            |       tipc_link_build_state_msg()
-                            |         tipc_link_build_proto_msg()
-                            |           tipc_mon_prep()
-                            |           {
-                            |             ...
-                            |             // null-pointer dereference
-                            |             u16 gen = mon->dom_gen;
-                            |             ...
-                            |           }
-  // Not being executed yet |
-  tipc_mon_create()         |
-  {                         |
-    ...                     |
-    // allocate             |
-    mon = kzalloc();        |
-    ...                     |
-  }                         |
-
-Monitoring pointer in thread 2 is dereferenced before monitoring data
-is allocated in thread 1. This causes kernel panic.
-
-This commit fixes it by allocating the monitoring data before enabling
-the bearer to receive messages.
-
-Fixes: 35c55c9877f8 ("tipc: add neighbor monitoring framework")
-Reported-by: Shuang Li <shuali@redhat.com>
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 84c8f773d2dc ("net: phy: meson-gxl: remove the use of .ack_callback()")
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Link: https://lore.kernel.org/r/04cac530-ea1b-850e-6cfa-144a55c4d75d@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/bearer.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/net/phy/meson-gxl.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
-index 60bc74b76adc..1cb5907d90d8 100644
---- a/net/tipc/bearer.c
-+++ b/net/tipc/bearer.c
-@@ -352,16 +352,18 @@ static int tipc_enable_bearer(struct net *net, const char *name,
- 		goto rejected;
- 	}
+diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
+index 7e7904fee1d9..c49062ad72c6 100644
+--- a/drivers/net/phy/meson-gxl.c
++++ b/drivers/net/phy/meson-gxl.c
+@@ -30,8 +30,12 @@
+ #define  INTSRC_LINK_DOWN	BIT(4)
+ #define  INTSRC_REMOTE_FAULT	BIT(5)
+ #define  INTSRC_ANEG_COMPLETE	BIT(6)
++#define  INTSRC_ENERGY_DETECT	BIT(7)
+ #define INTSRC_MASK	30
  
--	test_and_set_bit_lock(0, &b->up);
--	rcu_assign_pointer(tn->bearer_list[bearer_id], b);
--	if (skb)
--		tipc_bearer_xmit_skb(net, bearer_id, skb, &b->bcast_addr);
--
-+	/* Create monitoring data before accepting activate messages */
- 	if (tipc_mon_create(net, bearer_id)) {
- 		bearer_disable(net, b);
-+		kfree_skb(skb);
- 		return -ENOMEM;
- 	}
- 
-+	test_and_set_bit_lock(0, &b->up);
-+	rcu_assign_pointer(tn->bearer_list[bearer_id], b);
-+	if (skb)
-+		tipc_bearer_xmit_skb(net, bearer_id, skb, &b->bcast_addr);
++#define INT_SOURCES (INTSRC_LINK_DOWN | INTSRC_ANEG_COMPLETE | \
++		     INTSRC_ENERGY_DETECT)
 +
- 	pr_info("Enabled bearer <%s>, priority %u\n", name, prio);
+ #define BANK_ANALOG_DSP		0
+ #define BANK_WOL		1
+ #define BANK_BIST		3
+@@ -200,7 +204,6 @@ static int meson_gxl_ack_interrupt(struct phy_device *phydev)
  
- 	return res;
+ static int meson_gxl_config_intr(struct phy_device *phydev)
+ {
+-	u16 val;
+ 	int ret;
+ 
+ 	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
+@@ -209,16 +212,9 @@ static int meson_gxl_config_intr(struct phy_device *phydev)
+ 		if (ret)
+ 			return ret;
+ 
+-		val = INTSRC_ANEG_PR
+-			| INTSRC_PARALLEL_FAULT
+-			| INTSRC_ANEG_LP_ACK
+-			| INTSRC_LINK_DOWN
+-			| INTSRC_REMOTE_FAULT
+-			| INTSRC_ANEG_COMPLETE;
+-		ret = phy_write(phydev, INTSRC_MASK, val);
++		ret = phy_write(phydev, INTSRC_MASK, INT_SOURCES);
+ 	} else {
+-		val = 0;
+-		ret = phy_write(phydev, INTSRC_MASK, val);
++		ret = phy_write(phydev, INTSRC_MASK, 0);
+ 
+ 		/* Ack any pending IRQ */
+ 		ret = meson_gxl_ack_interrupt(phydev);
+@@ -237,9 +233,16 @@ static irqreturn_t meson_gxl_handle_interrupt(struct phy_device *phydev)
+ 		return IRQ_NONE;
+ 	}
+ 
++	irq_status &= INT_SOURCES;
++
+ 	if (irq_status == 0)
+ 		return IRQ_NONE;
+ 
++	/* Aneg-complete interrupt is used for link-up detection */
++	if (phydev->autoneg == AUTONEG_ENABLE &&
++	    irq_status == INTSRC_ENERGY_DETECT)
++		return IRQ_HANDLED;
++
+ 	phy_trigger_machine(phydev);
+ 
+ 	return IRQ_HANDLED;
 -- 
 2.34.1
 

@@ -2,151 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124B54D7DCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D554D7DD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbiCNIr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S234472AbiCNIuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiCNIr1 (ORCPT
+        with ESMTP id S229613AbiCNIt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:47:27 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB23A5F8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:46:18 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id y3-20020a056602178300b00645d25c30c1so11802102iox.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:46:18 -0700 (PDT)
+        Mon, 14 Mar 2022 04:49:56 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34BB1400F;
+        Mon, 14 Mar 2022 01:48:45 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so10475014pjb.3;
+        Mon, 14 Mar 2022 01:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WbMnsuV/WjCVgNHAAhwwQM/BhzDcEyxYmkQ9AWEx0BI=;
+        b=bxThCbIpNeDgqjkFCkbfhRkEALDTWe1csTnrolRMgdog4jnm1bH22CRZna/bQgdFKp
+         1sW1dMPVhsdRfj0VpQqquI3cp7HB6Y1b/3TpsLYBeMYWbTkUjxSgMEFRdl5BOy7bvVub
+         TCtRcbFNERpH4UdbXnj4EkSdge2Rcd+oDdPT6odeNXvies7/Qjs7EioxKajx294l3bIC
+         DkTIHXgGWrYvdfe83M1AqfZR6Z1rZygMxFUTRBG/su6fFwiDz42y+oZ5zPN+vZ3A/7X6
+         /TTmPVV5mxwz2j+K8ajtR0Tc25GRqSyXIWNpRaavtzvWD+HVT1cUksniqqbEcOlD2XpS
+         6eaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=iDERiaxOeM52K2KOtaDNsxpyia3UF8paSxXwnZxS/hk=;
-        b=CXCsm8Ngmagbae4TNWhfrATcLpTh0rS2fMOTSTlzeYSWvnqgc2iKTxEncnKupYJ1Up
-         h2FFOmr/oii2nNXoo9NjAMqmf45a+1bD+jRgHQqw9v8bCAjwaKdXQy6S3EBggb28L5Q+
-         f0ZaKYRjZmaCl5Nw3ER2RUEeKQYhW1vEInDDTtFYoR/RZg95qR2ekqn9vKZ7aymffDa/
-         WXU6N0kOixu3wU/pjONmlDk6PYQ+TYBELCQaSn/s+miQVbtfm8RxhOnQprHBgg1Ut18s
-         PBn2hj+FGH0qHqmgGQzoAlL8NVTYmaZN0i8MdqCWx6MZcH5CzWpojeeOvxRdPJ+RxZsT
-         5jkQ==
-X-Gm-Message-State: AOAM5323w87hV7yHuNIF7FJ52iQeIkGVmRjucGoZmLV/5hqMyh1v8HTE
-        UXfgs4ZKCgObPTX9LzPZ8h1QQ/EpgW3kkOzt+TsnkY0fQPnL
-X-Google-Smtp-Source: ABdhPJylKLuaVwo+1DCS35SUR4T4Ev9NJOnv8dUEnUY9HmDSzvz9EHVijKk7r0ecyfXjqdGagYF7kRl7cHrua+Vzw2NNVVBZ//6Q
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WbMnsuV/WjCVgNHAAhwwQM/BhzDcEyxYmkQ9AWEx0BI=;
+        b=pl8m3bNcJbFbANxbs9hvpX56RgJb/B80payT7h8XOY+Wh4AjDnhTGDGptvDzOMc0IR
+         2o+PXegqYOOiPo0zQDDe9TFu1vaRejfXCftk7tTpP0VZahGuiLKMxs/FqyZ0pvrk24LM
+         QAWymR0Mwi2LBmS/ajiIlDVzqPNG6zh3gPuy7Sym78gIuDxpdvcHskm15Wvy9418qnif
+         WhdDM1S0+U4KRuitkNSv/tzfJXIIylogHbcrg4w9KePjvrfdTQnIpmoQUHtKPLZBTIEI
+         OgbGIF4XCh0VrugYrHsF26+rwz4B7HccRGw3xoDRHPbRSSaC4YJX+yeib81soH9wnsiZ
+         FznQ==
+X-Gm-Message-State: AOAM533ceT9xMM6bKm/aojDiU7lCRBFG7l8Vnz7+FbeliPewBe8bw4Er
+        xY8uXWScQf6dLXuxZ66mr24=
+X-Google-Smtp-Source: ABdhPJyr2nILvPxagHGAFHs0MUGvuIVd6mr/DBlvo6qTVtXtTLACOTTBI/7QXIAYJI7qpOYF+7clWQ==
+X-Received: by 2002:a17:90a:6508:b0:1be:d59c:1f10 with SMTP id i8-20020a17090a650800b001bed59c1f10mr23905491pjj.229.1647247725315;
+        Mon, 14 Mar 2022 01:48:45 -0700 (PDT)
+Received: from localhost.localdomain ([2001:288:7001:2708:503c:a5f3:4f9d:fb88])
+        by smtp.gmail.com with ESMTPSA id y13-20020a056a00180d00b004f733bc57e5sm18798479pfa.192.2022.03.14.01.48.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 01:48:44 -0700 (PDT)
+From:   Jui-Tse Huang <juitse.huang@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Huaixin Chang <changhuaixin@linux.alibaba.com>,
+        Beata Michalska <beata.michalska@arm.com>,
+        Chun-Hung Tseng <henrybear327@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
+        Yiwei Lin <s921975628@gmail.com>
+Subject: [PATCH v2] docs/scheduler: Introduce the doc of load average
+Date:   Mon, 14 Mar 2022 16:47:59 +0800
+Message-Id: <20220314084759.9849-1-juitse.huang@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2686:b0:319:acb4:46e6 with SMTP id
- o6-20020a056638268600b00319acb446e6mr19121883jat.231.1647247577807; Mon, 14
- Mar 2022 01:46:17 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 01:46:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bb7f1c05da29b601@google.com>
-Subject: [syzbot] general protection fault in __device_attach
-From:   syzbot <syzbot+dd3c97de244683533381@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The load average is one of a common as well as easy observed statistic
+provied by Linux, but still not well documented, which makes the numbers
+that users observes from the output of top, htop or other system
+monitoring application are only numbers. This patch gives a discussion
+on how Linux calculates the load average as well as what metrics are
+concerned while calculating the load average.
 
-syzbot found the following issue on:
+The discussion flow is divided into several parts:
+1. The expression used to get the load average.
+2. Why Linux choose such average method from the other.
+2. The meaning of each term in the expression.
+3. The metrics, that is, the type of tasks that will be covered in the
+   calculation.
+4. A brief explanation over the fixed-point nubmer since the weights
+   defined in the Linux kernel are based on it.
 
-HEAD commit:    e7e19defa575 Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ea76f6700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
-dashboard link: https://syzkaller.appspot.com/bug?extid=dd3c97de244683533381
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dd3c97de244683533381@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000021: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000108-0x000000000000010f]
-CPU: 1 PID: 14569 Comm: syz-executor.4 Not tainted 5.17.0-rc7-syzkaller-00068-ge7e19defa575 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__device_attach+0xad/0x4a0 drivers/base/dd.c:949
-Code: e8 03 42 80 3c 20 00 0f 85 a3 03 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 48 49 8d bc 24 08 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 6e 03 00 00 45 0f b6 b4 24 08 01 00
-RSP: 0018:ffffc90010a87b98 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: 1ffff92002150f74 RCX: 0000000000000000
-RDX: 0000000000000021 RSI: 0000000000000008 RDI: 0000000000000108
-RBP: ffff88807829d030 R08: 0000000000000000 R09: ffffc90010a87ad7
-R10: fffff52002150f5a R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 00000000fffffff0 R15: ffff88807829d140
-FS:  00007f7048b3e700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f704a2dd090 CR3: 0000000074ae3000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- proc_ioctl.part.0+0x48e/0x560 drivers/usb/core/devio.c:2340
- proc_ioctl drivers/usb/core/devio.c:170 [inline]
- proc_ioctl_compat drivers/usb/core/devio.c:2389 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2705 [inline]
- usbdev_ioctl+0xc01/0x36c0 drivers/usb/core/devio.c:2791
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f704a1c9049
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7048b3e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f704a2dbf60 RCX: 00007f704a1c9049
-RDX: 0000000020000000 RSI: 00000000c00c5512 RDI: 0000000000000003
-RBP: 00007f704a22308d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc683ba24f R14: 00007f7048b3e300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__device_attach+0xad/0x4a0 drivers/base/dd.c:949
-Code: e8 03 42 80 3c 20 00 0f 85 a3 03 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 48 49 8d bc 24 08 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 6e 03 00 00 45 0f b6 b4 24 08 01 00
-RSP: 0018:ffffc90010a87b98 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: 1ffff92002150f74 RCX: 0000000000000000
-RDX: 0000000000000021 RSI: 0000000000000008 RDI: 0000000000000108
-RBP: ffff88807829d030 R08: 0000000000000000 R09: ffffc90010a87ad7
-R10: fffff52002150f5a R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 00000000fffffff0 R15: ffff88807829d140
-FS:  00007f7048b3e700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f0b074ee1b8 CR3: 0000000074ae3000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	e8 03 42 80 3c       	callq  0x3c804208
-   5:	20 00                	and    %al,(%rax)
-   7:	0f 85 a3 03 00 00    	jne    0x3b0
-   d:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  14:	fc ff df
-  17:	4c 8b 65 48          	mov    0x48(%rbp),%r12
-  1b:	49 8d bc 24 08 01 00 	lea    0x108(%r12),%rdi
-  22:	00
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	74 06                	je     0x38
-  32:	0f 8e 6e 03 00 00    	jle    0x3a6
-  38:	45                   	rex.RB
-  39:	0f                   	.byte 0xf
-  3a:	b6 b4                	mov    $0xb4,%dh
-  3c:	24 08                	and    $0x8,%al
-  3e:	01 00                	add    %eax,(%rax)
-
+Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
+Signed-off-by: Yiwei Lin <s921975628@gmail.com>
+Co-Developed-by: Yiwei Lin <s921975628@gmail.com>
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v1 -> v2:
+    fix typo: '$cat /proc/laodavg' -> '$cat /proc/loadavg'
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ Documentation/scheduler/index.rst        |  1 +
+ Documentation/scheduler/load-average.rst | 77 ++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 Documentation/scheduler/load-average.rst
+
+diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
+index 88900aabdbf7..bdc779b4190f 100644
+--- a/Documentation/scheduler/index.rst
++++ b/Documentation/scheduler/index.rst
+@@ -17,6 +17,7 @@ Linux Scheduler
+     sched-nice-design
+     sched-rt-group
+     sched-stats
++    load-average
+ 
+     text_files
+ 
+diff --git a/Documentation/scheduler/load-average.rst b/Documentation/scheduler/load-average.rst
+new file mode 100644
+index 000000000000..589320ee1cd7
+--- /dev/null
++++ b/Documentation/scheduler/load-average.rst
+@@ -0,0 +1,77 @@
++============
++Load Average
++============
++
++Load average is a basic statistic provided by almost all operating systems that
++aims to report the usage of system hardware resources. In Linux kernel, the
++load average is calculated via the following expression::
++
++                / 0                                      , if t = 0
++    load_{t} = |
++                \ laod_{t - 1} * exp + active * (1 - exp), otherwise
++
++The expression represents the exponential moving average of the historical
++loading of the system. There are several reasons that Linux kernel chooses
++exponential moving average from other similar average equations such as simple
++moving average or cumulative moving average:
++
++#. The exponential moving average consumes fixed memory space, while the simple
++   moving average has O(n) space complexity where n is the number of timeslice
++   within a given interval.
++#. The exponential moving average not only applies a higher weight to the most
++   recent record but also declines the weight exponentially, which makes the
++   resulting load average reflect the situation of the current system. Neither
++   the simple moving average nor cumulative moving average has this feature.
++
++In the expression, the load_{t} in the expression indicates the calculated load
++average at the given time t.
++The active is the most recent recorded system load. In Linux, the system load
++means the number of tasks in the state of TASK_RUNNING or TASK_UNINTERRUPTIBLE
++of the entire system. Tasks with TASK_UNINTERRUPTIBLE state are usually waiting
++for disk I/O or holding an uninterruptible lock, which is considered as a part
++of system resource, thus, Linux kernel covers them while calculating the load
++average.
++The exp means the weight applied to the previous report of load average, while
++(1 - exp) is the weight applied to the most recently recorded system load.
++There are three different weights defined in the Linux kernel, in
++include/linux/sched/loadavg.h, to perform statistics in various timescales::
++
++    // include/linux/sched/loadavg.h
++    ...
++    #define EXP_1    1884    /* 1/exp(5sec/1min) as fixed-point */
++    #define EXP_5    2014    /* 1/exp(5sec/5min) */
++    #define EXP_15   2037    /* 1/exp(5sec/15min) */
++    ...
++
++According to the expression shown on the top of this page, the weight (exp)
++controls how much of the last load load_{t - 1} will take place in the
++calculation of current load, while (1 - exp) is the weight applied to the most
++recent record of system load active.
++
++Due to the security issue, the weights are defined as fixed-point numbers based
++on the unsigned integer rather than floating-pointing numbers. The introduction
++of the fixed-point number keeps the FPU away from the calculation process. Since
++the precession of the fixed-point used in the Linux kernel is 11 bits, a
++fixed-point can be converted to a floating-point by dividing it by 2048, as the
++expression shown below::
++
++    EXP_1  = 1884 / 2048 = 0.919922
++    EXP_5  = 2014 / 2048 = 0.983398
++    EXP_15 = 2037 / 2048 = 0.994629
++
++Which indicates the weights applied to active are::
++
++    (1 - EXP_1)  = (1 - 0.919922) = 0.080078
++    (1 - EXP_5)  = (1 - 0.983398) = 0.016602
++    (1 - EXP_15) = (1 - 0.994629) = 0.005371
++
++The load average will be updated every 5 seconds. Each time the scheduler_tick()
++be called, the function calc_global_load_tick() will also be invoked, which
++makes the active of each CPU core be calculated and be merged globally, finally,
++the load average will be updated with that global active.
++
++As a user, the load average can be observed via top, htop, or other system
++monitor application, or more directly, by the following command::
++
++    $ cat /proc/loadavg
++
+-- 
+2.25.1
+

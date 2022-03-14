@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543AB4D81FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA1C4D8481
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239934AbiCNL6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S241537AbiCNMZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239961AbiCNL5t (ORCPT
+        with ESMTP id S242066AbiCNMSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1C61A810;
-        Mon, 14 Mar 2022 04:56:39 -0700 (PDT)
+        Mon, 14 Mar 2022 08:18:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FF945AC1;
+        Mon, 14 Mar 2022 05:13:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 935CD60FF3;
-        Mon, 14 Mar 2022 11:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4FBC340E9;
-        Mon, 14 Mar 2022 11:56:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70591B80DEB;
+        Mon, 14 Mar 2022 12:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D58C340E9;
+        Mon, 14 Mar 2022 12:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647258998;
-        bh=KvKDAui/CinZjCg225vfuFYQ8QlZ/9hUwJbTjLb9eqE=;
+        s=korg; t=1647260008;
+        bh=XfB8JnrX5fpv0Y1HPLUFgDi9OI3o3e1hxuP3xLUFmbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WO3ES5L6Qc5TnWug2+Su1Sl3IgCRZZlirsV8/nsEwfC50qjL3jV+LlN/9vXHfqg4P
-         9MrycmegcroFMH9BD9Hi+/yJ09IPZnoATHY/tb8DrcC5O+W4aVElWjtKcVS/oFAnZj
-         oO1S1sWKMH8LnowwginoWUDTteym3d+jh6O0UgT0=
+        b=CSGvaEey2X+4/c55ATP2o647cpaZiFTDNapzJYFHOuDt2NYStrrPtSpA7x+z8wwqW
+         L0nt2hHwSVEr6jHYWAswi4XMeDvhJbWal1h6c50GCNwK4OFH1KwHac+/eWNQ+lK9PU
+         KwhEQxK9np1ICZODnHvx9NLt1oKQxvWO0D39VnZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Paul Durrant <paul@xen.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/43] Revert "xen-netback: remove hotplug-status once it has served its purpose"
+Subject: [PATCH 5.16 031/121] net: dsa: mt7530: fix incorrect test in mt753x_phylink_validate()
 Date:   Mon, 14 Mar 2022 12:53:34 +0100
-Message-Id: <20220314112735.068616000@linuxfoundation.org>
+Message-Id: <20220314112744.998508983@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-[ Upstream commit 0f4558ae91870692ce7f509c31c9d6ee721d8cdc ]
+[ Upstream commit e5417cbf7ab5df1632e68fe7d9e6331fc0e7dbd6 ]
 
-This reverts commit 1f2565780e9b7218cf92c7630130e82dcc0fe9c2.
+Discussing one of the tests in mt753x_phylink_validate() with Landen
+Chao confirms that the "||" should be "&&". Fix this.
 
-The 'hotplug-status' node should not be removed as long as the vif
-device remains configured. Otherwise the xen-netback would wait for
-re-running the network script even if it was already called (in case of
-the frontent re-connecting). But also, it _should_ be removed when the
-vif device is destroyed (for example when unbinding the driver) -
-otherwise hotplug script would not configure the device whenever it
-re-appear.
-
-Moving removal of the 'hotplug-status' node was a workaround for nothing
-calling network script after xen-netback module is reloaded. But when
-vif interface is re-created (on xen-netback unbind/bind for example),
-the script should be called, regardless of who does that - currently
-this case is not handled by the toolstack, and requires manual
-script call. Keeping hotplug-status=connected to skip the call is wrong
-and leads to not configured interface.
-
-More discussion at
-https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@ipxe.org/T/#u
-
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Reviewed-by: Paul Durrant <paul@xen.org>
-Link: https://lore.kernel.org/r/20220222001817.2264967-1-marmarek@invisiblethingslab.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Link: https://lore.kernel.org/r/E1nRCF0-00CiXD-7q@rmk-PC.armlinux.org.uk
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/xen-netback/xenbus.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/mt7530.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
-index 416305e6d093..0fe0fbd83ce4 100644
---- a/drivers/net/xen-netback/xenbus.c
-+++ b/drivers/net/xen-netback/xenbus.c
-@@ -435,6 +435,7 @@ static void backend_disconnect(struct backend_info *be)
- 		unsigned int queue_index;
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index fb59efc7f926..14bf1828cbba 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -2928,7 +2928,7 @@ mt753x_phylink_validate(struct dsa_switch *ds, int port,
  
- 		xen_unregister_watchers(vif);
-+		xenbus_rm(XBT_NIL, be->dev->nodename, "hotplug-status");
- #ifdef CONFIG_DEBUG_FS
- 		xenvif_debugfs_delif(vif);
- #endif /* CONFIG_DEBUG_FS */
+ 	phylink_set_port_modes(mask);
+ 
+-	if (state->interface != PHY_INTERFACE_MODE_TRGMII ||
++	if (state->interface != PHY_INTERFACE_MODE_TRGMII &&
+ 	    !phy_interface_mode_is_8023z(state->interface)) {
+ 		phylink_set(mask, 10baseT_Half);
+ 		phylink_set(mask, 10baseT_Full);
 -- 
 2.34.1
 

@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE5B4D8BDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 19:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2FC4D8BE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 19:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238746AbiCNSim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 14:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
+        id S243941AbiCNSmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 14:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234612AbiCNSik (ORCPT
+        with ESMTP id S236506AbiCNSm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 14:38:40 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC74E3EA9E;
-        Mon, 14 Mar 2022 11:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1647283051; x=1678819051;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GNEfO5t/KNUf2cvjnQzdxGPpMnXGCdat3iHHsYtvCuM=;
-  b=XQ/BYTJNS8Age5OM/27aEZrLC/auI4Pa0hF8ZMXhQaxgnZyq3A6Tw9A8
-   rM0ymeGXBPGSmq1GPEJsU0WmhmNtTC8JhHDcSvVwA7k1yBUSBFQnjc6bo
-   PR+RJNxQJabRSkuYLVCqyU6GomLLKteQh4M7jzt3vWfZ+1mE4RLsT5Mad
-   8=;
-X-IronPort-AV: E=Sophos;i="5.90,181,1643673600"; 
-   d="scan'208";a="70825562"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-0085f2c8.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 14 Mar 2022 18:37:30 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-0085f2c8.us-west-2.amazon.com (Postfix) with ESMTPS id 3289241EAE;
-        Mon, 14 Mar 2022 18:37:23 +0000 (UTC)
-Received: from EX13D02UWC002.ant.amazon.com (10.43.162.6) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 14 Mar 2022 18:37:23 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D02UWC002.ant.amazon.com (10.43.162.6) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Mon, 14 Mar 2022 18:37:23 +0000
-Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
- (172.19.181.128) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Mon, 14 Mar 2022 18:37:22
- +0000
-Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id BCEB7176D; Mon, 14 Mar 2022 18:37:22 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <german.gomez@arm.com>
-CC:     <Nick.Forrington@arm.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
-        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
-        <james.clark@arm.com>, <john.garry@huawei.com>, <jolsa@kernel.org>,
-        <kjain@linux.ibm.com>, <leo.yan@linaro.org>,
-        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <yao.jin@linux.intel.com>
-Subject: Re: [PATCH v2 2/2] perf mem: Support HITM for when mem_lvl_num is used
-Date:   Mon, 14 Mar 2022 18:37:21 +0000
-Message-ID: <20220314183721.3198-1-alisaidi@amazon.com>
+        Mon, 14 Mar 2022 14:42:29 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91EE3DDE2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 11:41:19 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EA64140027
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 18:41:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647283277;
+        bh=twa4BYCzD/GIzllgnltsSCLONxEdjrI922zlGL23Jjc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=aE17M9ZnbvnSRPQabWf3yMKevnT3dkWF4uCQEj0hvdYw8IxjS2xcXqO1uDBnrIkhc
+         rvLFACKUunfbn0SLnvAnUnJ0OT9qd2eZqERJcevZGkmdrteWXGh1tSkAWJsSo/Dbba
+         aAp6ZGR4V7474ZmhBR4uNQCeAA6hu+FYOj254mcbwNFqZylp8NbNCBaHBRe5V6BYGz
+         I/X4uRDVQxd/6i7G5x2/q8QLjlorhAAsLiMwc1ygfLkh+cxHwgi+1GHyE1cFTpdwdP
+         sBEObrkEdWicBjNP0tniIKa1LkduYTNhbUy/r9wWeVWCV8r/Bj9Q/TiftzKEFWTRT8
+         2vzp/Rsl4Sxvg==
+Received: by mail-ed1-f69.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so9278677edb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 11:41:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=twa4BYCzD/GIzllgnltsSCLONxEdjrI922zlGL23Jjc=;
+        b=o465Y+d1Zee5r0mOH3+tjXxXlMeGcmxyD+7Onz6dflZAWqk0qzkLwEA4/cdhZ2QKYw
+         4mvJZUxT3io2S+PMap8vtn5A9YP7iObuB2W2kf7C27qv8p1gsyyJKOSxWQkHatgpEmay
+         YRTf9zxSzJI48ayszFkZiYU1R0po+wq/+h+4CQHfPhtvJYoGcrfUAMoRX89PAUHKm1wI
+         Igm5cUePQ7A4h2k0NMSCAZ1LNRSMvN4zesm47dEyM94X50ASxjG8qq1YOwSs/Oe3Igly
+         TUzUkYXhwbycW6yYKAcv37zgzRck8X4RqiNkreth/NWY3p+LHpIW/N7UvzjfctwGLbYi
+         7HIQ==
+X-Gm-Message-State: AOAM532HcEBBZ26w+pBbJmNoVgPVRchPxvQNYE3RyEFRLNGpC7BzCjmO
+        Ri5M8LIG1fyWzpT076j+A0+rv6HHzgUKH0IxUlmO7uKaf2+riIiVrKbUV/rVjhFTCmaCKzOSjrQ
+        Yf4BtsJ73FhqgUDSMp1lqOQ16lZi9rSrOiTNcg2y2JA==
+X-Received: by 2002:a05:6402:440d:b0:412:9e8a:5e51 with SMTP id y13-20020a056402440d00b004129e8a5e51mr22505822eda.362.1647283277573;
+        Mon, 14 Mar 2022 11:41:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw/rA9hTsxiHAKvu85JqEzovAJIEl0PB2/ZQkQ43N1ZDrKyGcfarG14p+fKLfXO8AtY7sKdXA==
+X-Received: by 2002:a05:6402:440d:b0:412:9e8a:5e51 with SMTP id y13-20020a056402440d00b004129e8a5e51mr22505808eda.362.1647283277339;
+        Mon, 14 Mar 2022 11:41:17 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170907914400b006d9e0b46fabsm7076849ejs.193.2022.03.14.11.41.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 11:41:16 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH] ARM: dts: exynos: drop deprecated SFR region from MIPI phy
+Date:   Mon, 14 Mar 2022 19:41:13 +0100
+Message-Id: <20220314184113.251013-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <df73fb93-3892-6713-8ebe-bc57a861ec5d@arm.com>
-References: <df73fb93-3892-6713-8ebe-bc57a861ec5d@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-13.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,54 +81,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi German and Leo,
+Commit e4b3d38088df ("phy: exynos-video-mipi: Fix regression by adding
+support for PMU regmap") deprecated the usage of unit address in MIPI
+phy node, in favor of a syscon phandle.  Deprecating was a correct
+approach because that unit address was actually coming from Power
+Management Unit SFR range so its usage here caused overlapped memory
+mapping.
 
-On   Mon, 14 Mar 2022 18:00:13 +0000, German Gomez wrote:
-> Hi Leo, Ali
-> 
-> On 14/03/2022 06:33, Leo Yan wrote:
-> > On Sun, Mar 13, 2022 at 07:19:33PM +0000, Ali Saidi wrote:
-> >
-> > [...]
-> >
-> >>>>> +			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L4)) {
-> >>>> According to a comment in the previous patch, using L4 is specific to Neoverse, right?
-> >>>>
-> >>>> Maybe we need to distinguish the Neoverse case from the generic one here as well
-> >>>>
-> >>>> if (is_neoverse)
-> >>>> // treat L4 as llc
-> >>>> else
-> >>>> // treat L3 as llc
-> >>> I personally think it's not good idea to distinguish platforms in the decoding code.
-> >> I agree here. The more we talk about this, the more I'm wondering if we're
-> >> spending too much code solving a problem that doesn't exist. I know of no
-> >> Neoverse systems that actually have 4 cache levels, they all actually have three
-> >> even though it's technically possible to have four.  I have some doubts anyone
-> >> will actually build four levels of cache and perhaps the most prudent path here
-> >> is to assume only three levels (and adjust the previous patch) until someone 
-> >> actually produces a system with four levels instead of a lot of code that is
-> >> never actually exercised?
-> > I am not right person to say L4 cache is not implemented in Neoverse
-> > platforms; my guess for a "System cache" data source might be L3 or
-> > L4 and it is a implementation dependent.  Maybe German or Arm mates
-> > could confirm for this.
-> 
-> I had a look at the TRMs for the N1[1], V1[2] and N2[3] Neoverse cores
-> (specifically the LL_CACHE_RD pmu events). If we were to assign a number
-> to the system cache (assuming all caches are implemented):
-> 
-> *For N1*, if L2 and L3 are implemented, system cache would follow at *L4*
-To date no one has built 4 level though. Everyone has only built three.
+In 2016 commit 26dbadba495f ("phy: exynos-mipi-video: Drop support for
+direct access to PMU") fully removed support for parsing that MIPI phy
+unit address (SFR range) but the address stayed in Exynos5250 DTSI for
+compatibility reasons.
 
-> *For V1 and N2*, if L2 is implemented, system cache would follow at *L3*
-> (these don't seem to have the same/similar per-cluster L3 cache from the N1)
+Remove that deprecated unit address from Exynos5250 MIPI phy, because it
+has been almost 6 years since it was deprecated and it causes now DT
+schema validation warnings:
 
-And in the future they're not able to build >3. German and Leo if there aren't
-strong objections I think the best path forward is for me to respin these
-assuming only 3 levels and if someone builds 4 in a far-off-future we can always
-change the implementation then. Agreed?
+  video-phy@10040710: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
 
-Thanks,
-Ali
+Any out-of-tree users of Exynos5250 DTSI, should update their code to
+use newer syscon property.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/arm/boot/dts/exynos5250.dtsi | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
+index 5baaa7eb71a4..d8d401b5ca48 100644
+--- a/arch/arm/boot/dts/exynos5250.dtsi
++++ b/arch/arm/boot/dts/exynos5250.dtsi
+@@ -817,15 +817,14 @@ mixer: mixer@14450000 {
+ 			status = "disabled";
+ 		};
+ 
+-		dp_phy: video-phy {
++		dp_phy: video-phy-0 {
+ 			compatible = "samsung,exynos5250-dp-video-phy";
+ 			samsung,pmu-syscon = <&pmu_system_controller>;
+ 			#phy-cells = <0>;
+ 		};
+ 
+-		mipi_phy: video-phy@10040710 {
++		mipi_phy: video-phy-1 {
+ 			compatible = "samsung,s5pv210-mipi-video-phy";
+-			reg = <0x10040710 0x100>;
+ 			#phy-cells = <1>;
+ 			syscon = <&pmu_system_controller>;
+ 		};
+-- 
+2.32.0
 

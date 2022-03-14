@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3C34D8204
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03F44D8492
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239920AbiCNL7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        id S236673AbiCNMZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240195AbiCNL6Y (ORCPT
+        with ESMTP id S242470AbiCNMTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:58:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84269A191;
-        Mon, 14 Mar 2022 04:57:15 -0700 (PDT)
+        Mon, 14 Mar 2022 08:19:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73BC4EA2E;
+        Mon, 14 Mar 2022 05:14:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DBBD6112C;
-        Mon, 14 Mar 2022 11:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD142C340E9;
-        Mon, 14 Mar 2022 11:57:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8628B80DF4;
+        Mon, 14 Mar 2022 12:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1965C340E9;
+        Mon, 14 Mar 2022 12:14:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259034;
-        bh=2z3sHLbs3i+JwZqjq1YXDQcvL9PzzebynVKwSZ/U2TA=;
+        s=korg; t=1647260041;
+        bh=hc9spbBytSU92EZINaMpl0guQyJhMUmjbBMFALGkpcU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JudAFNps27v3E9SW9XAOE2xpW1rUqNMB0zuXfXI2uMOyF20DG/z5+JEieRoH/LgF9
-         qnl3dzEIXr6txn/Zl7gFwveL8+tLNtpFACNKK8esQKaiiY3zlU8B+BbaGJMbRA+bgD
-         /oCt9ab7ir/NxPS+2lZL0MP+DgMTOIezBNGThAoU=
+        b=Ns7OMWGytlffaMqdVMtUYyf9lb1b61Wo+LTpAJkDiMNweiyHWLSnl5GeFuGocppvj
+         cehLtKYTbZ3frn1LSDz9NwXvDOQB+2LvLEpIZ1r+lODXH6ubLeRBCdo1YWC0s0EtIz
+         Ows7plRjf4wBBCYiEn5yRnAPEoD3i3Jk7grGBbW4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 5.4 31/43] staging: gdm724x: fix use after free in gdm_lte_rx()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 039/121] ethernet: Fix error handling in xemaclite_of_probe
 Date:   Mon, 14 Mar 2022 12:53:42 +0100
-Message-Id: <20220314112735.294023935@linuxfoundation.org>
+Message-Id: <20220314112745.220353198@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit fc7f750dc9d102c1ed7bbe4591f991e770c99033 upstream.
+[ Upstream commit b19ab4b38b06aae12442b2de95ccf58b5dc53584 ]
 
-The netif_rx_ni() function frees the skb so we can't dereference it to
-save the skb->len.
+This node pointer is returned by of_parse_phandle() with refcount
+incremented in this function. Calling of_node_put() to avoid the
+refcount leak. As the remove function do.
 
-Fixes: 61e121047645 ("staging: gdm7240: adding LTE USB driver")
-Cc: stable <stable@vger.kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220228074331.GA13685@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5cdaaa12866e ("net: emaclite: adding MDIO and phy lib support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220308024751.2320-1-linmq006@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/gdm724x/gdm_lte.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/staging/gdm724x/gdm_lte.c
-+++ b/drivers/staging/gdm724x/gdm_lte.c
-@@ -76,14 +76,15 @@ static void tx_complete(void *arg)
- 
- static int gdm_lte_rx(struct sk_buff *skb, struct nic *nic, int nic_type)
- {
--	int ret;
-+	int ret, len;
- 
-+	len = skb->len + ETH_HLEN;
- 	ret = netif_rx_ni(skb);
- 	if (ret == NET_RX_DROP) {
- 		nic->stats.rx_dropped++;
- 	} else {
- 		nic->stats.rx_packets++;
--		nic->stats.rx_bytes += skb->len + ETH_HLEN;
-+		nic->stats.rx_bytes += len;
+diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
+index 0815de581c7f..7ae67b054191 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
++++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
+@@ -1186,7 +1186,7 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
+ 	if (rc) {
+ 		dev_err(dev,
+ 			"Cannot register network device, aborting\n");
+-		goto error;
++		goto put_node;
  	}
  
+ 	dev_info(dev,
+@@ -1194,6 +1194,8 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
+ 		 (unsigned long __force)ndev->mem_start, lp->base_addr, ndev->irq);
  	return 0;
+ 
++put_node:
++	of_node_put(lp->phy_node);
+ error:
+ 	free_netdev(ndev);
+ 	return rc;
+-- 
+2.34.1
+
 
 

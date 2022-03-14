@@ -2,148 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95374D8564
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF084D8570
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233894AbiCNMtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S238201AbiCNMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242347AbiCNMsa (ORCPT
+        with ESMTP id S237740AbiCNMtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:48:30 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2909DE084;
-        Mon, 14 Mar 2022 05:46:05 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dr20so33281489ejc.6;
-        Mon, 14 Mar 2022 05:46:05 -0700 (PDT)
+        Mon, 14 Mar 2022 08:49:06 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5346A64FF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:47:54 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x15so23702838wru.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AfEfhobctAMGnNXoz9DFMeE1Ezn5+I06/IwgfEiFWno=;
-        b=NaViX/Ob7EurjojWFVkHCuVX5/dyO3EnUFQ8RfPzSUgNxDNUBgF7cCtrIr+DDwJ7ms
-         KSJFtMOMjj0vCxvc23rmNzyQO5bzAwO/zG64GgfcCFZMrAm9jGERgMocY4x9XvQjZskh
-         yGn2L2k+mxg6yxLVvRC21Nk+nEN2xfZ7gS3VMFlHS+FSBz9y0k179x0luSQ+RPhBTaKF
-         IbR7Rn1rAJlbsruiXG9LhDEqT4xf2wrW0QF0jzr8gnf5r8f3O1eIhrxxZT1AgigVfbgI
-         mZFv4UZ2zwE6p8NjNsO4HHoTOMTT+cbnrIM0WR4sjA+Y5gpuUwUHIvvNhrk1mAaRn1S6
-         ZWFQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=UcZz3PXNAXNeLX36v/bP5PcZAjppkzTqtYj3JQZLCdA=;
+        b=ig3ZPDbuCYDJsY/LgK1lpVFFGCBJvNLc/orKd5+QKvhAz74QdogXuc35H6CwRfnHa+
+         hT4a6QXAcVyg2Z83vj3WOEp6qcGbrEEGflCZ39lr6oczDy0B3LoakQsSKEWHEhF25TGl
+         8hqA7CALrwlBQeqlQOh45Re1Edl+ybv98yo2khw1rSBH1+PRnC5+dhq1eAaKBczXqlJZ
+         ul6xk3BFYCjhk7mvf7OU/zEMtmx7O3AMM19LQu/zS7QSrk84f2LvxIg8IXuLjexhJDQk
+         I8Cyu7Kd22U9CgsLcEo1AWInzQOZJKa0GgYkv0oshHsaKztu5Zrw0S35lj3UhbLW2UTT
+         zQNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AfEfhobctAMGnNXoz9DFMeE1Ezn5+I06/IwgfEiFWno=;
-        b=jk0IrdbSlxlXk3zIvYJ7+KwMh6NTByyR4F/LTWOL0GKLX2cNkccCkmfwavOpQGzlya
-         PeDBJ+7RedilrF7sH3k+xhtvgpeuscgOKyFiA4LoiowDBQjz2XOn6GugZA+e0j5hhTNN
-         pWiJ9Uiz/OjdeJr+x2FczId9FnSTEWpS5/Opm1ezBEHY/6/eNYyoxaEY4BEonxj+5rro
-         nirhIzflCxX7me1a9yLyVPBIagvJCmv99zPlnpU7iSkWjBX74S7zjP9ArRAXNY+Fl7Ao
-         Pu3X4x9bMdKgzNKErPK5hDUXuPLpAqytj3uxfllylY6XSNvxsDJvc267VR2M4AL1g9/K
-         /F5w==
-X-Gm-Message-State: AOAM532RINSz3IDWHjXlSUsGqn7WxmDEv0xDxYAU1kFoa6N2S240ii/r
-        u2Qh8M74qnRi9bwGhlq4hr8=
-X-Google-Smtp-Source: ABdhPJwQGEMNdKZIXZb8s4Ify5Z34Z/odEvJCAh4X2AaHEDVr1X24opAoevxRgsgAviJFEl3gvNV3Q==
-X-Received: by 2002:a17:907:1c0b:b0:6db:b756:4267 with SMTP id nc11-20020a1709071c0b00b006dbb7564267mr9181812ejc.147.1647261963250;
-        Mon, 14 Mar 2022 05:46:03 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id gl2-20020a170906e0c200b006a767d52373sm6759106ejb.182.2022.03.14.05.46.02
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=UcZz3PXNAXNeLX36v/bP5PcZAjppkzTqtYj3JQZLCdA=;
+        b=MBB2kA+TU3udfd9hxkbfBaAyQVZnE4dcMvrjo803NVGKMn3QYAiyowrrGaVFk/Nz0l
+         SOWASPXQ4F6OAi0WV8YHj6vu+2y9ImVreDNY4iI+3begGIFaSNyp7eh/4dqvDi1kQLoh
+         mptXSz2hNOPShrgrPCqnZ7U51+5phtKHqLrJZ4k+PsaO3fmYGrX1zt3s4Fr7xW8tYcqT
+         XRYoGjnKf7rXY86CUBZFQ1GzOc7QxtZEOqBgXgVrYgwIzsyXtUhOC4undmCur1B5HpuR
+         QGRPUPK9j1yCryLc/ld17Wgvxxn4jQUoiAyvWampOl5vrgrXNtq/Z1N9USmSu2bTOYkg
+         MiWg==
+X-Gm-Message-State: AOAM5304HM5IEGUzMsnseHCQJYnpB9/pwNTKCRS10wVv9oAONoHYl0SR
+        Dr2yK4l31zkpErsc7qmc4HX/FQ==
+X-Google-Smtp-Source: ABdhPJxbbfF5IE+ED+j6Qzjup3ymxmcmA/LwEtp0YD0fuDRr/NLeeKHy41JvH6RnmaYRzkrpBmXj8g==
+X-Received: by 2002:a5d:6d83:0:b0:203:6a0e:8854 with SMTP id l3-20020a5d6d83000000b002036a0e8854mr16161016wrs.259.1647262072830;
+        Mon, 14 Mar 2022 05:47:52 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f8-20020adfb608000000b0020229d72a4esm12782580wre.38.2022.03.14.05.47.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 05:46:02 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 13:46:01 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 15/15] ARM: dts: qcom: add syscon and cxo/pxo clock to
- gcc node for ipq8064
-Message-ID: <Yi85CWQdY08GLxzp@Ansuel-xps.localdomain>
-References: <20220226135235.10051-1-ansuelsmth@gmail.com>
- <20220226135235.10051-16-ansuelsmth@gmail.com>
- <Yi8SrZkjYdU3W8aj@earth.li>
+        Mon, 14 Mar 2022 05:47:52 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 12:47:50 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] vhost: Protect the virtqueue from being cleared
+ whilst still in use
+Message-ID: <Yi85dls3CCc2i1iK@google.com>
+References: <20220314084302.2933167-1-lee.jones@linaro.org>
+ <20220314072137-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yi8SrZkjYdU3W8aj@earth.li>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220314072137-mutt-send-email-mst@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:02:21AM +0000, Jonathan McDowell wrote:
-> AFAICT the rest of the series has been picked up in clk-for-5.18, but I
-> don't see this there or in dts-for-5.18. It's required for a
-> functioning tsens driver on IPQ8064 so it would be nice to see it landed.
->
+On Mon, 14 Mar 2022, Michael S. Tsirkin wrote:
 
-I think we just have to wait, they said that it was expected a delay
-between the clk and the dts merge. (one of the reason I couldn't drop
-the pxo/cxo fixed clock)
+> On Mon, Mar 14, 2022 at 08:43:02AM +0000, Lee Jones wrote:
+> > vhost_vsock_handle_tx_kick() already holds the mutex during its call
+> > to vhost_get_vq_desc().  All we have to do here is take the same lock
+> > during virtqueue clean-up and we mitigate the reported issues.
+> > 
+> > Also WARN() as a precautionary measure.  The purpose of this is to
+> > capture possible future race conditions which may pop up over time.
+> > 
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> 
+> Pls refer to my previous responses to this patch.  I'd like to see an
+> argument for why this will make future bugs less and not more likely.
 
-> On Sat, Feb 26, 2022 at 02:52:35PM +0100, Ansuel Smith wrote:
-> > Add syscon compatible required for tsens driver to correctly probe driver
-> > and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-> > now requires them for the ipq8064 gcc driver that has now been modernized.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
-> >  1 file changed, 5 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > index 11481313bdb6..5524a68cf3d1 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > @@ -298,13 +298,13 @@ smem: smem@41000000 {
-> >  	};
-> >  
-> >  	clocks {
-> > -		cxo_board {
-> > +		cxo_board: cxo_board {
-> >  			compatible = "fixed-clock";
-> >  			#clock-cells = <0>;
-> >  			clock-frequency = <25000000>;
-> >  		};
-> >  
-> > -		pxo_board {
-> > +		pxo_board: pxo_board {
-> >  			compatible = "fixed-clock";
-> >  			#clock-cells = <0>;
-> >  			clock-frequency = <25000000>;
-> > @@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
-> >  		};
-> >  
-> >  		gcc: clock-controller@900000 {
-> > -			compatible = "qcom,gcc-ipq8064";
-> > +			compatible = "qcom,gcc-ipq8064", "syscon";
-> > +			clocks = <&pxo_board>, <&cxo_board>;
-> > +			clock-names = "pxo", "cxo";
-> >  			reg = <0x00900000 0x4000>;
-> >  			#clock-cells = <1>;
-> >  			#reset-cells = <1>;
-> > -- 
-> > 2.34.1
-> > 
-> 
-> J.
-> 
-> -- 
->     I program, therefore I am.     |  .''`.  Debian GNU/Linux Developer
->                                    | : :' :  Happy to accept PGP signed
->                                    | `. `'   or encrypted mail - RSA
->                                    |   `-    key on the keyservers.
+If you think the previous 'check owner' patch fixes all of the
+concurrency issues, then this patch can be dropped.
 
 -- 
-	Ansuel
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

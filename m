@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4264D79DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F854D79DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 05:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiCNEU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 00:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S233661AbiCNE0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 00:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiCNEU5 (ORCPT
+        with ESMTP id S229653AbiCNE0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 00:20:57 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C39A3DDD7;
-        Sun, 13 Mar 2022 21:19:48 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id o26so12684964pgb.8;
-        Sun, 13 Mar 2022 21:19:48 -0700 (PDT)
+        Mon, 14 Mar 2022 00:26:11 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189DB10FF5;
+        Sun, 13 Mar 2022 21:25:02 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id 9so12488633pll.6;
+        Sun, 13 Mar 2022 21:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xn6H3mA7b0VSrMKmRJSvK65xNehM2Gh0IqixaKFebDg=;
-        b=bOj22QdvpSwsEmS2IwuPh2Z0UtElEMWMsifcMRfvfdrbNyxY7ur2GS2ItepyzV7xlz
-         Zu3bJG0Bzkyc6kFRubqH1YkHEyuDgV6ud9HleGCJqx9oZgsjx9o5xi9+wjLt4GmZd94G
-         gE787sGC9qa8f6PQgbvhjFYYnlZbMmIS84fAxrIA+xIpLyTfxbm+NcLoZgABi1pAc93K
-         lnLRMFSdB1jmAYtowGDewkHGNQVIp6D/AnwU2aplECPVwtyz/9wB7OaJWT4CMoNFpcZa
-         BPwFyeeuQkCWlqyH0Klb7XCFMxlwAf0TTerpNaULzA/wQfyQ772QC6rrs6oulB0/1z6o
-         Aemg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UiAHqGBIM+cfNI9owbzK7nwjbmtEignfka2Wp98X+Xg=;
+        b=oYtNS7cStt5ZqNlKnrdVy722BZ89Cq1DiKKeqQ/6yN7Ev+itix+lGnW3vtC0fLa9ie
+         +6s2b3xrOV2jtlzUfxDLoNxa2fBgrA+uhmnAwsVL0K0KUfu7mw5BMqIrwZwnV9sJGkyD
+         gyJjCDeKPfVUS26nr0gM++pVjG3/0VWJ36mNkhtKsJyho+TUFD7GPJs9iG8m0G/T5Tqo
+         UfRnh6IA4PdQD8cnEYbADr1BWF8T88EQu96dZTsI08L2wEgrFJ3HfeUpMaj/Aw8zzz1C
+         EjENioe6aPFQyShvAjOGlWkrLCL+o9fVLsryvsZywB32aLcEGeLJ0YwbtzCYoCZHvP5b
+         Idfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xn6H3mA7b0VSrMKmRJSvK65xNehM2Gh0IqixaKFebDg=;
-        b=ckhYbu8i7ZaCBubN79lpScjoXmGU0BU65ZpOiu5kXdtj5bosIVMKGRPtdG3sJEZhuc
-         kwU1YpjUwIkWrDkEDwly/TSGSSQSy5oXOlAehCjmYSdGzL/CtmDcWYkqlfDJiChsYd5W
-         nH7GgV7xp3YzfxNNQFMym5CkQn+V7C+mW0B8Hq63boAIFF6/lLPcxXrULfopDYK++bai
-         OxKLYZyllVTj175SQuCRBWb/H7xhxGViiSN0VdRMwnCYvJc2hKE3IQ7UarZlIPSJckDU
-         0v5XwkRw2EDUJqS9wtEEJ/Iw8JrJfCq+VtA3QX1UB2w3C7UBOxaSe0R+vQxgKBcfmjst
-         ew/w==
-X-Gm-Message-State: AOAM5338jDpwJKyY3eRr8gQG6m8Ov8yLQLmitecPxkmSCQ2FGfZhZF1b
-        y7FdXf+NP9PXGMmZRhEgDdyxeiIAb7w62g==
-X-Google-Smtp-Source: ABdhPJzb9O8NS4VJyLozBGT8LcFD6kasrh3c/PtACZK8NROEfnvEa0E0y1h3A2JuacqstTwFXLdhwg==
-X-Received: by 2002:a63:fa0d:0:b0:372:d581:e84 with SMTP id y13-20020a63fa0d000000b00372d5810e84mr18430949pgh.414.1647231587839;
-        Sun, 13 Mar 2022 21:19:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UiAHqGBIM+cfNI9owbzK7nwjbmtEignfka2Wp98X+Xg=;
+        b=XytiN4Dj4Zv1ssOfpqT0S0qQsjnrY0r1CC5BULIa9qZQ42zI8JF69NPqGnJqliZRuO
+         TlCbKgFCebILQ+Mcg9NBSM3ql5eZ7s9hMpYiskpFl4x8Bkop8/10xfsfnGPHFZ2mZD+M
+         iJW+4a3Nv9hQPMrHYkjpDZeYpQg9oI60sNlGPT7BRsQ+aoTxX0slDG9+h24ui6WZze2c
+         VxI0JYItySH2XkSZGwxcv/41CkqYk+/1wYUGRCT25Vvl16f943kGRIXxKc0YVQmFs8Mx
+         F6PK5m9H97VdlY3/H1u5hH3YxlVK0LacnEWVJsOPcYyrH4dLpBxxzzvWqdpdueoDmJxu
+         ahUg==
+X-Gm-Message-State: AOAM533CQAtZoh1vFf3HR84UU4kRPr7u/rdbW+uXtU0pZmttvNoKUy7k
+        ys3WFR8jnPRBvGhhhiRESYE=
+X-Google-Smtp-Source: ABdhPJyds6/EOWgn1LIFNhg0V3YMbw3B4QAYJTONCWSSQQGtyTU712OQqp5ozQJlDcqZV/ci1TNS2Q==
+X-Received: by 2002:a17:902:e943:b0:153:f9b:99c9 with SMTP id b3-20020a170902e94300b001530f9b99c9mr21485762pll.170.1647231901533;
+        Sun, 13 Mar 2022 21:25:01 -0700 (PDT)
 Received: from localhost.localdomain ([103.149.162.115])
-        by smtp.gmail.com with ESMTPSA id a133-20020a621a8b000000b004f6a79008ddsm18361447pfa.45.2022.03.13.21.19.43
+        by smtp.gmail.com with ESMTPSA id w8-20020a63a748000000b0038117e18f02sm7500309pgo.29.2022.03.13.21.24.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 21:19:47 -0700 (PDT)
+        Sun, 13 Mar 2022 21:25:01 -0700 (PDT)
 From:   Dongli Si <kvmx86@gmail.com>
 X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
-To:     liam.merwick@oracle.com
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, joerg.roedel@amd.com,
-        jolsa@kernel.org, kim.phillips@amd.com, kvmx86@gmail.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        mark.rutland@arm.com, mingo@kernel.org, namhyung@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [PATCH v2] perf/x86/amd: Don't touch the Host-only bit inside the guest hypervisor
-Date:   Mon, 14 Mar 2022 12:19:30 +0800
-Message-Id: <20220314041930.1487087-1-sidongli1997@gmail.com>
+To:     peterz@infradead.org, joerg.roedel@amd.com
+Cc:     liam.merwick@oracle.com, kim.phillips@amd.com, mingo@kernel.org,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] perf/x86/amd: Don't touch the Host-only bit inside the guest hypervisor
+Date:   Mon, 14 Mar 2022 12:22:54 +0800
+Message-Id: <20220314042254.1487836-1-sidongli1997@gmail.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <3508496a-59ea-2004-2917-2ffe712cc187@oracle.com>
-References: <3508496a-59ea-2004-2917-2ffe712cc187@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,44 +73,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2022 22:25, Liam Merwick wrote:
-> On 10/03/2022 18:34, Dongli Si wrote:
-> > From: Dongli Si <sidongli1997@gmail.com>
-> > 
-> > With nested virtualization, when the guest hypervisor runs a nested guest
-> > and if uses "perf record" in an AMD Milan guest hypervisor, the guest
-> > hypervisor dmesg will reports the following warning message:
-> 
-> I think it might be clearer with L0/L1/L2 terminology. Maybe something 
-> like the following?
-> 
-> "With nested virtualization on AMD Milan, if "perf record" is run in an
-> L1 hypervisor with an L2 guest, the following warning is emitted in
-> the L1 guest."
-> 
-> 
-> > 
-> > [] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000510076)
-> > at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
-> > [] Call Trace:
-> > []  <IRQ>
-> > []  ? x86_pmu_enable+0x146/0x300
-> > []  __perf_install_in_context+0x150/0x170
-> > 
-> > The AMD64_EVENTSEL_HOSTONLY bit is defined and used on the host, while
-> > the guest hypervisor performance monitor unit should avoid such use.
-> 
-> "The AMD64_EVENTSEL_HOSTONLY bit is defined and used on the host (L0),
-> while the L1 hypervisor Performance Monitor Unit should avoid such use."
-> 
-> 
-> 
-> > 
-> > Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
-> > Signed-off-by: Dongli Si <sidongli1997@gmail.com>
-> 
-> Tested-by: Liam Merwick <liam.merwick@oracle.com>
-> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+From: Dongli Si <sidongli1997@gmail.com>
 
-Hi Liam, I will improve the description based on your suggestion
-and resend the patch, thanks!
+With nested virtualization on AMD Milan, if "perf record" is run in an
+L1 hypervisor with an L2 guest, the following warning is emitted in
+the L1 guest.
+
+[] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000510076)
+at rIP: 0xffffffff81003a50 (x86_pmu_enable_all+0x60/0x100)
+[] Call Trace:
+[]  <IRQ>
+[]  ? x86_pmu_enable+0x146/0x300
+[]  __perf_install_in_context+0x150/0x170
+
+The AMD64_EVENTSEL_HOSTONLY bit is defined and used on the host (L0),
+while the L1 hypervisor Performance Monitor Unit should avoid such use.
+
+Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
+Signed-off-by: Dongli Si <sidongli1997@gmail.com>
+Tested-by: Liam Merwick <liam.merwick@oracle.com>
+Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+---
+v3: Add Tested-by, Reviewed-by from Liam and improve description.
+v2: https://lore.kernel.org/all/20220310183404.1291725-1-sidongli1997@gmail.com/
+v1: https://lore.kernel.org/all/20220227132640.3-1-sidongli1997@gmail.com/
+
+ arch/x86/events/amd/core.c        |  4 +++-
+ arch/x86/include/asm/hypervisor.h | 10 ++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 9687a8aef01c..14cd079243a4 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -8,6 +8,7 @@
+ #include <linux/jiffies.h>
+ #include <asm/apicdef.h>
+ #include <asm/nmi.h>
++#include <asm/hypervisor.h>
+ 
+ #include "../perf_event.h"
+ 
+@@ -1027,7 +1028,8 @@ void amd_pmu_enable_virt(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 
+-	cpuc->perf_ctr_virt_mask = 0;
++	if (run_as_host())
++		cpuc->perf_ctr_virt_mask = 0;
+ 
+ 	/* Reload all events */
+ 	amd_pmu_disable_all();
+diff --git a/arch/x86/include/asm/hypervisor.h b/arch/x86/include/asm/hypervisor.h
+index e41cbf2ec41d..fcc66c23cc72 100644
+--- a/arch/x86/include/asm/hypervisor.h
++++ b/arch/x86/include/asm/hypervisor.h
+@@ -73,11 +73,21 @@ static inline bool hypervisor_is_type(enum x86_hypervisor_type type)
+ {
+ 	return x86_hyper_type == type;
+ }
++
++static inline bool run_as_host(void)
++{
++	return hypervisor_is_type(X86_HYPER_NATIVE);
++}
+ #else
+ static inline void init_hypervisor_platform(void) { }
+ static inline bool hypervisor_is_type(enum x86_hypervisor_type type)
+ {
+ 	return type == X86_HYPER_NATIVE;
+ }
++
++static inline bool run_as_host(void)
++{
++	return true;
++}
+ #endif /* CONFIG_HYPERVISOR_GUEST */
+ #endif /* _ASM_X86_HYPERVISOR_H */
+-- 
+2.32.0
+

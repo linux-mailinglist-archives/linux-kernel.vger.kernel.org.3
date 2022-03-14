@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C3D4D83BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6D14D84C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242735AbiCNMTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S242515AbiCNMaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240430AbiCNML3 (ORCPT
+        with ESMTP id S243877AbiCNMVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:11:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C241033E0F;
-        Mon, 14 Mar 2022 05:10:19 -0700 (PDT)
+        Mon, 14 Mar 2022 08:21:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3256121AC;
+        Mon, 14 Mar 2022 05:17:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 580C96130D;
-        Mon, 14 Mar 2022 12:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329EBC340EC;
-        Mon, 14 Mar 2022 12:10:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88983B80DF9;
+        Mon, 14 Mar 2022 12:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB44EC340E9;
+        Mon, 14 Mar 2022 12:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259818;
-        bh=EpphPjkJYLQvxtjYHWazgFohtokZXh676sRXQzOPIuU=;
+        s=korg; t=1647260250;
+        bh=1YcsxDwy55FRMcevWNunqDFXcYipB2vLzDPAXkg5MwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x8nKBUCzORACQTi+rqkC7iHyPNt+CaZWu822hikb3mF1oh3oVvyJ9sRdyoSzXFpJu
-         CswoeGPXy2EGimb4v6MHeZJYwxEYPKBObWWsZpoQHGoB0UHjYWksLWTGrWpLEFWB9W
-         LgJTR20DUmpzIgf8FqsZXizTLpxSfOjtIQEiCchQ=
+        b=TI4AYlTs9i72kTJX56OkWzuCM/eCvrozif1mkhjBQ9SG8H4hq0ysNnG0XFVQ2890D
+         an+5h5X/1yfGsjw9pdEKsDhQ4LbvrAq3SMKI7TBDYrS3mHsIb6XIGxw026r5Z0AT4j
+         Ee0UDl6y4qk7XzyqC1NTiJ6FWgPZP9WjKfsdZtc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 096/110] watch_queue: Fix to always request a pow-of-2 pipe ring size
-Date:   Mon, 14 Mar 2022 12:54:38 +0100
-Message-Id: <20220314112745.706611364@linuxfoundation.org>
+        stable@vger.kernel.org, Marcelo Tosatti <mtosatti@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.16 096/121] tracing/osnoise: Do not unregister events twice
+Date:   Mon, 14 Mar 2022 12:54:39 +0100
+Message-Id: <20220314112746.792467396@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-commit 96a4d8912b28451cd62825fd7caa0e66e091d938 upstream.
+commit f0cfe17bcc1dd2f0872966b554a148e888833ee9 upstream.
 
-The pipe ring size must always be a power of 2 as the head and tail
-pointers are masked off by AND'ing with the size of the ring - 1.
-watch_queue_set_size(), however, lets you specify any number of notes
-between 1 and 511.  This number is passed through to pipe_resize_ring()
-without checking/forcing its alignment.
+Nicolas reported that using:
 
-Fix this by rounding the number of slots required up to the nearest
-power of two.  The request is meant to guarantee that at least that many
-notifications can be generated before the queue is full, so rounding
-down isn't an option, but, alternatively, it may be better to give an
-error if we aren't allowed to allocate that much ring space.
+ # trace-cmd record -e all -M 10 -p osnoise --poll
 
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-by: Jann Horn <jannh@google.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Resulted in the following kernel warning:
+
+ ------------[ cut here ]------------
+ WARNING: CPU: 0 PID: 1217 at kernel/tracepoint.c:404 tracepoint_probe_unregister+0x280/0x370
+ [...]
+ CPU: 0 PID: 1217 Comm: trace-cmd Not tainted 5.17.0-rc6-next-20220307-nico+ #19
+ RIP: 0010:tracepoint_probe_unregister+0x280/0x370
+ [...]
+ CR2: 00007ff919b29497 CR3: 0000000109da4005 CR4: 0000000000170ef0
+ Call Trace:
+  <TASK>
+  osnoise_workload_stop+0x36/0x90
+  tracing_set_tracer+0x108/0x260
+  tracing_set_trace_write+0x94/0xd0
+  ? __check_object_size.part.0+0x10a/0x150
+  ? selinux_file_permission+0x104/0x150
+  vfs_write+0xb5/0x290
+  ksys_write+0x5f/0xe0
+  do_syscall_64+0x3b/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+ RIP: 0033:0x7ff919a18127
+ [...]
+ ---[ end trace 0000000000000000 ]---
+
+The warning complains about an attempt to unregister an
+unregistered tracepoint.
+
+This happens on trace-cmd because it first stops tracing, and
+then switches the tracer to nop. Which is equivalent to:
+
+  # cd /sys/kernel/tracing/
+  # echo osnoise > current_tracer
+  # echo 0 > tracing_on
+  # echo nop > current_tracer
+
+The osnoise tracer stops the workload when no trace instance
+is actually collecting data. This can be caused both by
+disabling tracing or disabling the tracer itself.
+
+To avoid unregistering events twice, use the existing
+trace_osnoise_callback_enabled variable to check if the events
+(and the workload) are actually active before trying to
+deactivate them.
+
+Link: https://lore.kernel.org/all/c898d1911f7f9303b7e14726e7cc9678fbfb4a0e.camel@redhat.com/
+Link: https://lkml.kernel.org/r/938765e17d5a781c2df429a98f0b2e7cc317b022.1646823913.git.bristot@kernel.org
+
+Cc: stable@vger.kernel.org
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Fixes: 2fac8d6486d5 ("tracing/osnoise: Allow multiple instances of the same tracer")
+Reported-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/watch_queue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_osnoise.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -244,7 +244,7 @@ long watch_queue_set_size(struct pipe_in
- 		goto error;
- 	}
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -2222,6 +2222,17 @@ static void osnoise_workload_stop(void)
+ 	if (osnoise_has_registered_instances())
+ 		return;
  
--	ret = pipe_resize_ring(pipe, nr_notes);
-+	ret = pipe_resize_ring(pipe, roundup_pow_of_two(nr_notes));
- 	if (ret < 0)
- 		goto error;
- 
++	/*
++	 * If callbacks were already disabled in a previous stop
++	 * call, there is no need to disable then again.
++	 *
++	 * For instance, this happens when tracing is stopped via:
++	 * echo 0 > tracing_on
++	 * echo nop > current_tracer.
++	 */
++	if (!trace_osnoise_callback_enabled)
++		return;
++
+ 	trace_osnoise_callback_enabled = false;
+ 	/*
+ 	 * Make sure that ftrace_nmi_enter/exit() see
 
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4594D839B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A884D8227
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237518AbiCNMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S240211AbiCNMBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242292AbiCNMJu (ORCPT
+        with ESMTP id S240200AbiCNMAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A111D26558;
-        Mon, 14 Mar 2022 05:07:02 -0700 (PDT)
+        Mon, 14 Mar 2022 08:00:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC2648E70;
+        Mon, 14 Mar 2022 04:58:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2E92B80DED;
-        Mon, 14 Mar 2022 12:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CF0C340E9;
-        Mon, 14 Mar 2022 12:06:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6280A6120D;
+        Mon, 14 Mar 2022 11:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31DDAC340E9;
+        Mon, 14 Mar 2022 11:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259616;
-        bh=i7xv0jglIHn4FUUINh7I6a5MJYZqrXrWYxEtF5hnFLA=;
+        s=korg; t=1647259111;
+        bh=MAIlccY/RJd+CCFZzl14X9+ucrvVWEJotG4GzCGGkX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gsP2ODDZfTww0d0Op/XUZl0cVg45FWqxFjfxbNuXZuFsE02yAvmqBPoaOyqanExn1
-         pWAvY/DRJNldsSqENMGWBs230Ni3+CAVL1b9syghAqSrYKD9O++SPOCkBKoE+UMDEU
-         SCB4VHnJZOPpO1yHG6Mb4Zu2GdvQXK21pypj5L5g=
+        b=2eTnrXTxpVJmQqLvBCJ3Y2R09nM7ppD+wcA76qqbcJ1/oR73TrNBPqgJFjJBGa6QO
+         SVLTvNaY1irLoD7gHW4ruAtdXgWWinoYm/XCZPww/KqFsKbUC4ZwkUXQbap19ekDMy
+         Z0WOt1VyFRawHeYzI1LjXyciWde2J/nxBzdRnz6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 050/110] net: bcmgenet: Dont claim WOL when its not available
-Date:   Mon, 14 Mar 2022 12:53:52 +0100
-Message-Id: <20220314112744.433400772@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Borislav Petkov <bp@suse.de>,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: [PATCH 5.4 42/43] x86/mm/pat: Dont flush cache if hardware enforces cache coherency across encryption domnains
+Date:   Mon, 14 Mar 2022 12:53:53 +0100
+Message-Id: <20220314112735.599916628@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeremy Linton <jeremy.linton@arm.com>
+From: Krish Sadhukhan <krish.sadhukhan@oracle.com>
 
-[ Upstream commit 00b022f8f876a3a036b0df7f971001bef6398605 ]
+commit 75d1cc0e05af579301ce4e49cf6399be4b4e6e76 upstream.
 
-Some of the bcmgenet platforms don't correctly support WOL, yet
-ethtool returns:
+In some hardware implementations, coherency between the encrypted and
+unencrypted mappings of the same physical page is enforced. In such a
+system, it is not required for software to flush the page from all CPU
+caches in the system prior to changing the value of the C-bit for the
+page. So check that bit before flushing the cache.
 
-"Supports Wake-on: gsf"
+ [ bp: Massage commit message. ]
 
-which is false.
-
-Ideally if there isn't a wol_irq, or there is something else that
-keeps the device from being able to wakeup it should display:
-
-"Supports Wake-on: d"
-
-This patch checks whether the device can wakup, before using the
-hard-coded supported flags. This corrects the ethtool reporting, as
-well as the WOL configuration because ethtool verifies that the mode
-is supported before attempting it.
-
-Fixes: c51de7f3976b ("net: bcmgenet: add Wake-on-LAN support code")
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-Tested-by: Peter Robinson <pbrobinson@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220310045535.224450-1-jeremy.linton@arm.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lkml.kernel.org/r/20200917212038.5090-3-krish.sadhukhan@oracle.com
+Signed-off-by: Liam Merwick <liam.merwick@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/x86/mm/pageattr.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-index e31a5a397f11..f55d9d9c01a8 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-@@ -40,6 +40,13 @@
- void bcmgenet_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
- {
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
-+	struct device *kdev = &priv->pdev->dev;
-+
-+	if (!device_can_wakeup(kdev)) {
-+		wol->supported = 0;
-+		wol->wolopts = 0;
-+		return;
-+	}
+--- a/arch/x86/mm/pageattr.c
++++ b/arch/x86/mm/pageattr.c
+@@ -1967,7 +1967,7 @@ static int __set_memory_enc_dec(unsigned
+ 	/*
+ 	 * Before changing the encryption attribute, we need to flush caches.
+ 	 */
+-	cpa_flush(&cpa, 1);
++	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
  
- 	wol->supported = WAKE_MAGIC | WAKE_MAGICSECURE | WAKE_FILTER;
- 	wol->wolopts = priv->wolopts;
--- 
-2.34.1
-
+ 	ret = __change_page_attr_set_clr(&cpa, 1);
+ 
 
 

@@ -2,357 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B734D8908
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFE54D891A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242989AbiCNQ2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
+        id S241870AbiCNQbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239747AbiCNQ2a (ORCPT
+        with ESMTP id S238700AbiCNQbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:28:30 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF19B6325;
-        Mon, 14 Mar 2022 09:27:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id y22so20735480eds.2;
-        Mon, 14 Mar 2022 09:27:19 -0700 (PDT)
+        Mon, 14 Mar 2022 12:31:17 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3512ACD;
+        Mon, 14 Mar 2022 09:30:06 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so6006181wme.5;
+        Mon, 14 Mar 2022 09:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9yrn1+pWYLFNK3LpjVPRAgU6sL03BaCGB5nJqvDYuGY=;
-        b=dkIg/S2eIn4VcnjGne0ysx6FqVS93jehn4bRooOVIBe5RgxR36hvMC//PcKdoJH4eg
-         uIRl5E7W11dPp9gX0DZHcVQGL3V8houx5HIJQWgDjVyUCX7ad+mvjUTmPU+oGdn1MLGA
-         Eyx2Uiv4LTNuRhzjWIu1RchSXc8AkK2b9IKvermApodN4fxA1b+W8s7x+iV8kHZvswef
-         Ibj9H0s9jKxZG/mjIgM26rj8aOq6OfnRkh7CS2PFpvWwIksgXroqnH+V6tPSj7tJgGmX
-         4RWaEGSXDslrzi/Ved8xIhzHkJycZhMaRR6/FR98A3GdQoHPUOuO4+A5BgOxRUM+gmhr
-         r5eA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XvhrMTIMvKzPGRJgmngvFLAfyO2VzTvVeYWKjcIpGxA=;
+        b=e3Sah/Di09yh5ceRUwRXYNtdeD4LgUZUDEv4lgZApVQ9EiAuyz3bem7EmaGfSLDu6p
+         FeToxKOAq+aDXzDUC5tLjoLP/JO6pb9LER4kJ+k/NSjYb0BY2+Z/LKiIqW9L7zS+z8Fm
+         walWjQ0D2fQ7qjarnBog9+z2VbBw/A+iRyhArLY80DIHNaDVPyxugLP4H8Fbssz10geb
+         029xSVHE5uJoLt8JUyOIYN4Ho5cRbtizTB19zaSNlvzAUoqzb4pObw3CREBgpeOPgxo4
+         L8DdPofEYV6GG98O3/P/xy0WsFiRN1DzRNMSZBtGDkEWeHzyH9uMGTXdfcOleqmgowqv
+         ShYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9yrn1+pWYLFNK3LpjVPRAgU6sL03BaCGB5nJqvDYuGY=;
-        b=xRQ72CgQ6YAjLB283tIwZO4tfYj/u+Z6OXU3sBCRUGfiHcug0rGqs45y62vuBQBbjH
-         WsLRaeoMZSzViiT50uwrn1IdI/fEWxg1glnwlLqLSGkjw+XjtArVQPwlK3GJmEuAZ+Em
-         QvN4qzjcaYqHL68GhCEFOkr+03A39gh3SoY+m85ZcDXvscZjms0ElC8zubjm2ZgBIPky
-         YFuMNDY2Fi9WHEVftxhqTZxbG2TQFvlPNMQgySWvyjTQDYPKWkkuGi7oIj7viUA4zrmM
-         crnH+4380zADCPALksjIdq3tlqSGdY3M/jqI/CnXc5Isv5SXF3qY8Xop899pu1cuk7CN
-         8U/A==
-X-Gm-Message-State: AOAM5312Lb/P5mhy2lN2hwywqZyolwH9JPjg3zGwlzu6ZRp2Pvt41aYk
-        xgyOG6LBL+9eWIkssEZ43Q4=
-X-Google-Smtp-Source: ABdhPJwDx5IBzWsln/W0OlCddZmEz42ZQdy4vLm5bWAawT6t2f8AsCedff0q9L0p20aXVyddE0TrGQ==
-X-Received: by 2002:a50:e60f:0:b0:415:9509:32a2 with SMTP id y15-20020a50e60f000000b00415950932a2mr21373909edm.235.1647275238137;
-        Mon, 14 Mar 2022 09:27:18 -0700 (PDT)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id e18-20020a50ec92000000b0041852b30c9esm5157503edr.27.2022.03.14.09.27.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XvhrMTIMvKzPGRJgmngvFLAfyO2VzTvVeYWKjcIpGxA=;
+        b=lh37NjMKVisuwAc5T9EsWNBN6ppC3Jh+RSIlPmPGw3O2OizxpB2kZmCcDkLKRrPPkl
+         wCRWLHev/aHlChbFZZg/XJAGNjOna0Y6ajOMgozfXNJvIwgcvRbNhdJSFFJ/xyUssUPp
+         J6pZ3KThECvg+nQd72aHHjene/Ip6yJ/froUJ2yvf1zYqM3BMCRH5t51cIvDRbdy5FOn
+         E5QVOQjQdUIYjtvR752zE3rfFiDPU5DCqzLNFOBCIvlAKKuyv2rShHRE80hOreO7KE+M
+         5BBJeBSfM8+udN8+fO2/Y4AdvFmOjIboY6M4YeDEyug5O24HeyylQ53wJ0yenX0w8WDF
+         a+cw==
+X-Gm-Message-State: AOAM532jhWSlu7Mi6eqws0l67Teap1N7zhns3GcpRtM0VYEsp5f+zysr
+        8yj5Ub+UhtUn6FNAvsAcc/0=
+X-Google-Smtp-Source: ABdhPJyFNTB3mLdxXVKW9CXVu9oHJ446cfD46sOj4wFh4o9HnBId3wNCqgcQb+12uGlh3N5FH/1Veg==
+X-Received: by 2002:a05:600c:21c3:b0:389:ee24:caf2 with SMTP id x3-20020a05600c21c300b00389ee24caf2mr45862wmj.20.1647275405179;
+        Mon, 14 Mar 2022 09:30:05 -0700 (PDT)
+Received: from linuxdev2.toradex.int (31-10-206-124.static.upc.ch. [31.10.206.124])
+        by smtp.gmail.com with ESMTPSA id w10-20020a5d680a000000b001f1dabec837sm13476817wru.113.2022.03.14.09.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 09:27:17 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 18:27:16 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Mon, 14 Mar 2022 09:30:04 -0700 (PDT)
+From:   Max Krummenacher <max.oss.09@gmail.com>
+X-Google-Original-From: Max Krummenacher <max.krummenacher@toradex.com>
+To:     max.krummenacher@toradex.com
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Johann Neuhauser <jneuhauser@dh-electronics.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Li Yang <leoyang.li@nxp.com>, Lucas Stach <dev@lynxeye.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Olof Johansson <olof@lixom.net>,
+        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v3 net-next 14/14] net: dsa: mv88e6xxx: MST Offloading
-Message-ID: <20220314162716.fm4tpkdi4b4ak3th@skbuf>
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
- <20220314095231.3486931-15-tobias@waldekranz.com>
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org
+Subject: [PATCH v1 00/14] ARM: dts: imx6dl-colibri: Misc improvements and newly added carriers
+Date:   Mon, 14 Mar 2022 17:29:44 +0100
+Message-Id: <20220314162958.40361-1-max.krummenacher@toradex.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314095231.3486931-15-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:52:31AM +0100, Tobias Waldekranz wrote:
-> Allocate a SID in the STU for each MSTID in use by a bridge and handle
-> the mapping of MSTIDs to VLANs using the SID field of each VTU entry.
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/chip.c | 251 ++++++++++++++++++++++++++++++-
->  drivers/net/dsa/mv88e6xxx/chip.h |  13 ++
->  2 files changed, 257 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-> index c14a62aa6a6c..c23dbf37aeec 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> @@ -1667,24 +1667,32 @@ static int mv88e6xxx_pvt_setup(struct mv88e6xxx_chip *chip)
->  	return 0;
->  }
->  
-> -static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
-> +static void mv88e6xxx_port_fast_age_fid(struct mv88e6xxx_chip *chip, int port,
-> +					u16 fid)
->  {
-> -	struct mv88e6xxx_chip *chip = ds->priv;
->  	int err;
->  
-> -	if (dsa_to_port(ds, port)->lag)
-> +	if (dsa_to_port(chip->ds, port)->lag)
->  		/* Hardware is incapable of fast-aging a LAG through a
->  		 * regular ATU move operation. Until we have something
->  		 * more fancy in place this is a no-op.
->  		 */
->  		return;
->  
-> -	mv88e6xxx_reg_lock(chip);
-> -	err = mv88e6xxx_g1_atu_remove(chip, 0, port, false);
-> -	mv88e6xxx_reg_unlock(chip);
-> +	err = mv88e6xxx_g1_atu_remove(chip, fid, port, false);
->  
->  	if (err)
-> -		dev_err(ds->dev, "p%d: failed to flush ATU\n", port);
-> +		dev_err(chip->ds->dev, "p%d: failed to flush ATU (FID %u)\n",
-> +			port, fid);
-> +}
-> +
-> +static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
-> +{
-> +	struct mv88e6xxx_chip *chip = ds->priv;
-> +
-> +	mv88e6xxx_reg_lock(chip);
-> +	mv88e6xxx_port_fast_age_fid(chip, port, 0);
-> +	mv88e6xxx_reg_unlock(chip);
->  }
->  
->  static int mv88e6xxx_vtu_setup(struct mv88e6xxx_chip *chip)
-> @@ -1818,6 +1826,159 @@ static int mv88e6xxx_stu_setup(struct mv88e6xxx_chip *chip)
->  	return mv88e6xxx_stu_loadpurge(chip, &stu);
->  }
->  
-> +static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, u8 *sid)
-> +{
-> +	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
-> +	struct mv88e6xxx_mst *mst;
-> +
-> +	set_bit(0, busy);
 
-__set_bit
+This is a general update of the Colibri iMX6 device tree files.
 
-> +
-> +	list_for_each_entry(mst, &chip->msts, node) {
-> +		set_bit(mst->stu.sid, busy);
-> +	}
+The Toradex Colibri family is composed of a SoM that can be plugged on
+various carrier boards, with carrier boards allowing multiple optional
+accessories (e.g. display, camera, ...).
 
-Up to you, but parentheses are generally not used for single-line blocks.
+The device tree sources are structured into a SoM dtsi and a carrier dts
+which then includes the SoM dtsi. The SoM dtsi defines and enables the
+functionality self contained on the SoM and prepares for functionality
+provided by the carrier HW or accessories, so that the carrier dts then
+can enable or amend nodes provided. Accessories are enabled in overlays
+depending on HW configuration.
 
-> +
-> +	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
-> +
-> +	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
-> +}
-> +
-> +static int mv88e6xxx_mst_put(struct mv88e6xxx_chip *chip, u8 sid)
-> +{
-> +	struct mv88e6xxx_mst *mst, *tmp;
-> +	int err;
-> +
-> +	if (!sid)
-> +		return 0;
+The series improves the existing Colibri Evaluation Board device tree and
+adds new device trees for the Aster, Iris, and Iris V2 carrier boards.
 
-Very minor nitpick: since mv88e6xxx_mst_put already checks this, could
-you drop the "!sid" check from callers?
+Additionally it drops the dedicated device tree for SoM V1.1 HW used in a
+Evaluation board. The regular device tree works well in that combination.
+The higher SD card speed possible with SoM V1.1 would require HW
+modification on the carrier board.
 
-> +
-> +	list_for_each_entry_safe(mst, tmp, &chip->msts, node) {
-> +		if (mst->stu.sid != sid)
-> +			continue;
-> +
-> +		if (!refcount_dec_and_test(&mst->refcnt))
-> +			return 0;
-> +
-> +		mst->stu.valid = false;
-> +		err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-> +		if (err)
+Improvements:
+- Specifies GPIO line names for use with libgpiod.
+- Disables optional accessories. They would be enabled in overlays
+  depending on HW configuration.
+- Lower power consumption after poweroff.
+- Move more functionality into the SoM dtsi file to reduce code
+  duplication.
+- General cleanup to adhere to dtbs bindings and missed alphabetically
+  ordering.
 
-Should we bother with a refcount_set(&mst->refcount, 1) on error?
+Fixes:
+- Copy/paste error in i2c2 pinmuxing resulting in i2c2 being
+  nonfunctional.
 
-> +			return err;
-> +
-> +		list_del(&mst->node);
-> +		kfree(mst);
-> +		return 0;
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +
-> +static int mv88e6xxx_mst_get(struct mv88e6xxx_chip *chip, struct net_device *br,
-> +			     u16 msti, u8 *sid)
-> +{
-> +	struct mv88e6xxx_mst *mst;
-> +	int err, i;
-> +
-> +	if (!mv88e6xxx_has_stu(chip)) {
-> +		err = -EOPNOTSUPP;
-> +		goto err;
-> +	}
-> +
-> +	if (!msti) {
-> +		*sid = 0;
-> +		return 0;
-> +	}
-> +
-> +	list_for_each_entry(mst, &chip->msts, node) {
-> +		if (mst->br == br && mst->msti == msti) {
-> +			refcount_inc(&mst->refcnt);
-> +			*sid = mst->stu.sid;
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	err = mv88e6xxx_sid_get(chip, sid);
-> +	if (err)
-> +		goto err;
-> +
-> +	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
-> +	if (!mst) {
-> +		err = -ENOMEM;
-> +		goto err;
-> +	}
-> +
-> +	INIT_LIST_HEAD(&mst->node);
-> +	refcount_set(&mst->refcnt, 1);
-> +	mst->br = br;
-> +	mst->msti = msti;
-> +	mst->stu.valid = true;
-> +	mst->stu.sid = *sid;
-> +
-> +	/* The bridge starts out all ports in the disabled state. But
-> +	 * a STU state of disabled means to go by the port-global
-> +	 * state. So we set all user port's initial state to blocking,
-> +	 * to match the bridge's behavior.
-> +	 */
-> +	for (i = 0; i < mv88e6xxx_num_ports(chip); i++)
-> +		mst->stu.state[i] = dsa_is_user_port(chip->ds, i) ?
-> +			MV88E6XXX_PORT_CTL0_STATE_BLOCKING :
-> +			MV88E6XXX_PORT_CTL0_STATE_DISABLED;
-> +
-> +	err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-> +	if (err)
-> +		goto err_free;
-> +
-> +	list_add_tail(&mst->node, &chip->msts);
-> +	return 0;
-> +
-> +err_free:
-> +	kfree(mst);
-> +err:
-> +	return err;
-> +}
-> +
-> +static int mv88e6xxx_port_mst_state_set(struct dsa_switch *ds, int port,
-> +					const struct switchdev_mst_state *st)
-> +{
-> +	struct dsa_port *dp = dsa_to_port(ds, port);
-> +	struct mv88e6xxx_chip *chip = ds->priv;
-> +	struct mv88e6xxx_mst *mst;
-> +	u8 state;
-> +	int err;
-> +
-> +	if (!mv88e6xxx_has_stu(chip))
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (st->state) {
-> +	case BR_STATE_DISABLED:
-> +	case BR_STATE_BLOCKING:
-> +	case BR_STATE_LISTENING:
-> +		state = MV88E6XXX_PORT_CTL0_STATE_BLOCKING;
-> +		break;
-> +	case BR_STATE_LEARNING:
-> +		state = MV88E6XXX_PORT_CTL0_STATE_LEARNING;
-> +		break;
-> +	case BR_STATE_FORWARDING:
-> +		state = MV88E6XXX_PORT_CTL0_STATE_FORWARDING;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	list_for_each_entry(mst, &chip->msts, node) {
-> +		if (mst->br == dsa_port_bridge_dev_get(dp) &&
-> +		    mst->msti == st->msti) {
-> +			if (mst->stu.state[port] == state)
-> +				return 0;
-> +
-> +			mst->stu.state[port] = state;
-> +			mv88e6xxx_reg_lock(chip);
-> +			err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-> +			mv88e6xxx_reg_unlock(chip);
-> +			return err;
-> +		}
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +
->  static int mv88e6xxx_port_check_hw_vlan(struct dsa_switch *ds, int port,
->  					u16 vid)
->  {
-> @@ -2437,6 +2598,12 @@ static int mv88e6xxx_port_vlan_leave(struct mv88e6xxx_chip *chip,
->  	if (err)
->  		return err;
->  
-> +	if (!vlan.valid && vlan.sid) {
-> +		err = mv88e6xxx_mst_put(chip, vlan.sid);
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	return mv88e6xxx_g1_atu_remove(chip, vlan.fid, port, false);
->  }
->  
-> @@ -2482,6 +2649,72 @@ static int mv88e6xxx_port_vlan_del(struct dsa_switch *ds, int port,
->  	return err;
->  }
->  
-> +static void mv88e6xxx_port_vlan_fast_age(struct dsa_switch *ds, int port, u16 vid)
-> +{
-> +	struct mv88e6xxx_chip *chip = ds->priv;
-> +	struct mv88e6xxx_vtu_entry vlan;
-> +	int err;
-> +
-> +	mv88e6xxx_reg_lock(chip);
-> +
-> +	err = mv88e6xxx_vtu_get(chip, vid, &vlan);
-> +	if (err)
-> +		goto unlock;
-> +
-> +	mv88e6xxx_port_fast_age_fid(chip, port, vlan.fid);
-> +
-> +unlock:
-> +	mv88e6xxx_reg_unlock(chip);
-> +
-> +	if (err)
-> +		dev_err(ds->dev, "p%d: failed to flush ATU in VID %u\n",
-> +			port, vid);
+Adds:
+- imx6dl-colibri-aster.dtb: used for a Colibri iMX6 mated in an Aster
+  carrier board.
+- imx6dl-colibri-iris.dtb: used for a Colibri iMX6 mated in an
+  Iris V1.x carrier board.
+- imx6dl-colibri-iris-v2.dtb: used for a Colibri iMX6 mated in an
+  Iris V2.x carrier board.
 
-This error message actually corresponds to an mv88e6xxx_vtu_get() error,
-so the message is kind of incorrect. mv88e6xxx_port_fast_age_fid(),
-whose error code isn't propagated here, has its own "failed to flush ATU"
-error message.
+Drops:
+- imx6dl-colibri-v1_1-eval-v3.dtb, imx6dl-colibri-eval-v3.dtb is good
+  enough.
 
-> +}
 
-Otherwise this looks pretty good.
+Max Krummenacher (13):
+  dt-bindings: arm: fsl: imx6dl-colibri: Drop dedicated v1.1 bindings
+  dt-bindings: arm: fsl: Add carriers for toradex,colibri-imx6dl
+  ARM: dts: imx6dl-colibri: Drop dedicated v1.1 device tree
+  ARM: dts: imx6dl-colibri: Fix I2C pinmuxing
+  ARM: dts: imx6dl-colibri: Disable add-on accessories
+  ARM: dts: imx6dl-colibri: Command pmic to standby for poweroff
+  ARM: dts: imx6dl-colibri: Add additional pingroups
+  ARM: dts: imx6dl-colibri: Move common nodes to SoM dtsi
+  ARM: dts: imx6dl-colibri: Cleanup
+  ARM: dts: imx6dl-colibri: Add usdhc1 sleep pin configuration
+  ARM: dts: imx6dl-colibri: Add support for Toradex Iris carrier boards
+  ARM: dts: imx6dl-colibri: Add support for Toradex Aster carrier board
+  ARM: imx_v6_v7_defconfig: Enable the ADC part of the STMPE MFD
+
+Oleksandr Suvorov (1):
+  ARM: dts: imx6dl-colibri: Add gpio-line-names
+
+ .../devicetree/bindings/arm/fsl.yaml          |  11 +-
+ arch/arm/boot/dts/Makefile                    |   4 +-
+ arch/arm/boot/dts/imx6dl-colibri-aster.dts    | 113 +++
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts  | 110 +--
+ arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts  |  46 ++
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts     | 152 ++++
+ .../boot/dts/imx6dl-colibri-v1_1-eval-v3.dts  |  31 -
+ .../boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi    |  44 -
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi        | 771 ++++++++++++++----
+ arch/arm/configs/imx_v6_v7_defconfig          |   1 +
+ 10 files changed, 919 insertions(+), 364 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-aster.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris.dts
+ delete mode 100644 arch/arm/boot/dts/imx6dl-colibri-v1_1-eval-v3.dts
+ delete mode 100644 arch/arm/boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi
+
+-- 
+2.20.1
+

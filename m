@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C60E4D822C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4304D8506
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240099AbiCNMAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S243307AbiCNMar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240004AbiCNMAX (ORCPT
+        with ESMTP id S242757AbiCNMTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:00:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587482719;
-        Mon, 14 Mar 2022 04:58:24 -0700 (PDT)
+        Mon, 14 Mar 2022 08:19:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3DE50067;
+        Mon, 14 Mar 2022 05:14:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4A4A1CE1265;
-        Mon, 14 Mar 2022 11:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227B7C340E9;
-        Mon, 14 Mar 2022 11:58:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABB5FB80D24;
+        Mon, 14 Mar 2022 12:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3CAC340ED;
+        Mon, 14 Mar 2022 12:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259097;
-        bh=M8ax33quUGmZY4WEvx5nH5KNIApyPzylG8aYXe9hmrg=;
+        s=korg; t=1647260070;
+        bh=J+Mcl10zyPpXgAkuHU6RkLOihHsQk3ZLF8tcHkwuWgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PUygYS/+71FTFKMEelV2/12H69RUsMtRzMoywNk4PP6xQoIlD/VPSYUyKL5p21ch
-         WvCzeSqD9wBJOVl0nGkpyGvfacEdH9ftVDByJ/g/nW8R93MsIGGDuE5r1CpxYMf9ko
-         dX21fcMB+84ZY6CQt1S+AlYI/flsQyVJ3zTBDtNQ=
+        b=WBsgJsIrSFBgjPMSEYEJiShDWqmAjyuAzmgWFwJesMBkvcr8SHgsaBTLC1Oo2L5f7
+         eBvlt9DqiFrtfLkkXT8hKBXUc9nRw7c//aYu9GSTVb2YxyIkrlFu+8CuhV752oPIGg
+         ZeNpuWJ0bpg3VrfSZcQc9EpuGzCbH7xwQFReCvYE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 39/43] ext4: add check to prevent attempting to resize an fs with sparse_super2
+        stable@vger.kernel.org, Roi Dayan <roid@nvidia.com>,
+        Maor Dickman <maord@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 047/121] net/mlx5e: Lag, Only handle events from highest priority multipath entry
 Date:   Mon, 14 Mar 2022 12:53:50 +0100
-Message-Id: <20220314112735.516023170@linuxfoundation.org>
+Message-Id: <20220314112745.440328160@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Triplett <josh@joshtriplett.org>
+From: Roi Dayan <roid@nvidia.com>
 
-commit b1489186cc8391e0c1e342f9fbc3eedf6b944c61 upstream.
+[ Upstream commit ad11c4f1d8fd1f03639460e425a36f7fd0ea83f5 ]
 
-The in-kernel ext4 resize code doesn't support filesystem with the
-sparse_super2 feature. It fails with errors like this and doesn't finish
-the resize:
-EXT4-fs (loop0): resizing filesystem from 16640 to 7864320 blocks
-EXT4-fs warning (device loop0): verify_reserved_gdb:760: reserved GDT 2 missing grp 1 (32770)
-EXT4-fs warning (device loop0): ext4_resize_fs:2111: error (-22) occurred during file system resize
-EXT4-fs (loop0): resized filesystem to 2097152
+There could be multiple multipath entries but changing the port affinity
+for each one doesn't make much sense and there should be a default one.
+So only track the entry with lowest priority value.
+The commit doesn't affect existing users with a single entry.
 
-To reproduce:
-mkfs.ext4 -b 4096 -I 256 -J size=32 -E resize=$((256*1024*1024)) -O sparse_super2 ext4.img 65M
-truncate -s 30G ext4.img
-mount ext4.img /mnt
-python3 -c 'import fcntl, os, struct ; fd = os.open("/mnt", os.O_RDONLY | os.O_DIRECTORY) ; fcntl.ioctl(fd, 0x40086610, struct.pack("Q", 30 * 1024 * 1024 * 1024 // 4096), False) ; os.close(fd)'
-dmesg | tail
-e2fsck ext4.img
-
-The userspace resize2fs tool has a check for this case: it checks if the
-filesystem has sparse_super2 set and if the kernel provides
-/sys/fs/ext4/features/sparse_super2. However, the former check requires
-manually reading and parsing the filesystem superblock.
-
-Detect this case in ext4_resize_begin and error out early with a clear
-error message.
-
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
-Link: https://lore.kernel.org/r/74b8ae78405270211943cd7393e65586c5faeed1.1623093259.git.josh@joshtriplett.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 544fe7c2e654 ("net/mlx5e: Activate HW multipath and handle port affinity based on FIB events")
+Signed-off-by: Roi Dayan <roid@nvidia.com>
+Reviewed-by: Maor Dickman <maord@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/resize.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
---- a/fs/ext4/resize.c
-+++ b/fs/ext4/resize.c
-@@ -74,6 +74,11 @@ int ext4_resize_begin(struct super_block
- 		return -EPERM;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c b/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c
+index 1ca01a5b6cdd..626aa60b6099 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c
+@@ -126,6 +126,10 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
+ 		return;
  	}
  
-+	if (ext4_has_feature_sparse_super2(sb)) {
-+		ext4_msg(sb, KERN_ERR, "Online resizing not supported with sparse_super2");
-+		return -EOPNOTSUPP;
-+	}
++	/* Handle multipath entry with lower priority value */
++	if (mp->mfi && mp->mfi != fi && fi->fib_priority >= mp->mfi->fib_priority)
++		return;
 +
- 	if (test_and_set_bit_lock(EXT4_FLAGS_RESIZING,
- 				  &EXT4_SB(sb)->s_ext4_flags))
- 		ret = -EBUSY;
+ 	/* Handle add/replace event */
+ 	nhs = fib_info_num_path(fi);
+ 	if (nhs == 1) {
+@@ -135,12 +139,13 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
+ 			int i = mlx5_lag_dev_get_netdev_idx(ldev, nh_dev);
+ 
+ 			if (i < 0)
+-				i = MLX5_LAG_NORMAL_AFFINITY;
+-			else
+-				++i;
++				return;
+ 
++			i++;
+ 			mlx5_lag_set_port_affinity(ldev, i);
+ 		}
++
++		mp->mfi = fi;
+ 		return;
+ 	}
+ 
+-- 
+2.34.1
+
 
 

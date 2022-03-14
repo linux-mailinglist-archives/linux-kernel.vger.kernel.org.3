@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CDF4D83B5
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5194D83B4
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242320AbiCNMS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S242266AbiCNMSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242433AbiCNMJ5 (ORCPT
+        with ESMTP id S242432AbiCNMJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 08:09:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B709613F2A;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B749813F45;
         Mon, 14 Mar 2022 05:08:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E8A66135D;
-        Mon, 14 Mar 2022 12:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA59C340E9;
-        Mon, 14 Mar 2022 12:08:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 212E76130F;
+        Mon, 14 Mar 2022 12:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175A3C340E9;
+        Mon, 14 Mar 2022 12:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259688;
-        bh=iBZFQFF1FJIeniL1ICzMmlQooXPv2YUfr1yxhVTgtuY=;
+        s=korg; t=1647259692;
+        bh=q8RsPXMoCCqmPZ40Vrs5tp3m4huDF+NIsBimtd/u2C0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tyuzAzAlIqhYG/a2+aUoaDXs9pvInkCV5RDJOssgrio4CBQvP3+8C39Aar/WEuIYj
-         5q0L5a+J0/Wn+A8o66RE1ampUdSxE4o2uPpO6XfBmBSc5/hzXNX76PdX4VOHEGw2hO
-         wn5JrSsapwpmFXzZTzRC0/yj6+1LlYECZRzSOzC0=
+        b=D7fGJzNdA4ESxPCQkZEZPOwjuvCcSbXlGuR2tBEjfyjslErJwbjwNzx8KogJry/v6
+         3+EMEvwcqsLlqWrT6P6717l01A7Df8qqejHxNiIDptt+VwFm4yGNHqNvAd0HezB6qP
+         /hXafIteRUmgUj8rSdWg319xc57T4oXThPl+hjHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Leslie Shi <Yuliang.Shi@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 065/110] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-Date:   Mon, 14 Mar 2022 12:54:07 +0100
-Message-Id: <20220314112744.849259089@linuxfoundation.org>
+Subject: [PATCH 5.15 066/110] drm/amdgpu: bypass tiling flag check in virtual display case (v2)
+Date:   Mon, 14 Mar 2022 12:54:08 +0100
+Message-Id: <20220314112744.878139382@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
 References: <20220314112743.029192918@linuxfoundation.org>
@@ -58,70 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shreeya Patel <shreeya.patel@collabora.com>
+From: Guchun Chen <guchun.chen@amd.com>
 
-[ Upstream commit ae42f9288846353982e2eab181fb41e7fd8bf60f ]
+[ Upstream commit e2b993302f40c4eb714ecf896dd9e1c5be7d4cd7 ]
 
-We are racing the registering of .to_irq when probing the
-i2c driver. This results in random failure of touchscreen
-devices.
+vkms leverages common amdgpu framebuffer creation, and
+also as it does not support FB modifier, there is no need
+to check tiling flags when initing framebuffer when virtual
+display is enabled.
 
-Following explains the race condition better.
+This can fix below calltrace:
 
-[gpio driver] gpio driver registers gpio chip
-[gpio consumer] gpio is acquired
-[gpio consumer] gpiod_to_irq() fails with -ENXIO
-[gpio driver] gpio driver registers irqchip
-gpiod_to_irq works at this point, but -ENXIO is fatal
+amdgpu 0000:00:08.0: GFX9+ requires FB check based on format modifier
+WARNING: CPU: 0 PID: 1023 at drivers/gpu/drm/amd/amdgpu/amdgpu_display.c:1150 amdgpu_display_framebuffer_init+0x8e7/0xb40 [amdgpu]
 
-We could see the following errors in dmesg logs when gc->to_irq is NULL
+v2: check adev->enable_virtual_display instead as vkms can be
+	enabled in bare metal as well.
 
-[2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
-[2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
-
-To avoid this situation, defer probing until to_irq is registered.
-Returning -EPROBE_DEFER would be the first step towards avoiding
-the failure of devices due to the race in registration of .to_irq.
-Final solution to this issue would be to avoid using gc irq members
-until they are fully initialized.
-
-This issue has been reported many times in past and people have been
-using workarounds like changing the pinctrl_amd to built-in instead
-of loading it as a module or by adding a softdep for pinctrl_amd into
-the config file.
-
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Leslie Shi <Yuliang.Shi@amd.com>
+Signed-off-by: Guchun Chen <guchun.chen@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpiolib.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_display.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 9e151413f51a..358f0ad9d0f8 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -3116,6 +3116,16 @@ int gpiod_to_irq(const struct gpio_desc *desc)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+index dc50c05f23fc..5c08047adb59 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
+@@ -1145,7 +1145,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
+ 	if (ret)
+ 		return ret;
  
- 		return retirq;
- 	}
-+#ifdef CONFIG_GPIOLIB_IRQCHIP
-+	if (gc->irq.chip) {
-+		/*
-+		 * Avoid race condition with other code, which tries to lookup
-+		 * an IRQ before the irqchip has been properly registered,
-+		 * i.e. while gpiochip is still being brought up.
-+		 */
-+		return -EPROBE_DEFER;
-+	}
-+#endif
- 	return -ENXIO;
- }
- EXPORT_SYMBOL_GPL(gpiod_to_irq);
+-	if (!dev->mode_config.allow_fb_modifiers) {
++	if (!dev->mode_config.allow_fb_modifiers && !adev->enable_virtual_display) {
+ 		drm_WARN_ONCE(dev, adev->family >= AMDGPU_FAMILY_AI,
+ 			      "GFX9+ requires FB check based on format modifier\n");
+ 		ret = check_tiling_flags_gfx6(rfb);
 -- 
 2.34.1
 

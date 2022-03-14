@@ -2,254 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435524D9023
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8FE4D9026
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 00:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343607AbiCNXNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 19:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S1343600AbiCNXNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 19:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343593AbiCNXNP (ORCPT
+        with ESMTP id S1343597AbiCNXNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 19:13:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D803BF9D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:12:04 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id hw13so36037876ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:12:04 -0700 (PDT)
+        Mon, 14 Mar 2022 19:13:41 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E703BF8F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:12:31 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id o5so5056798ybe.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 16:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=13A/gfkIaAByq4gAjyXkarTV6d8yj2S6x1jqYzFsBbY=;
-        b=XyhHGdtsqR5jO4+gdhJ+ojCimLghZaCx6WwKcAAr9p/2GHkSdRv19zrt+XUtu0LuJ1
-         4Gi3j0ozCaHiWgxhJc4o3NtmD//SjQ72LePzqe4q9e8nM9zUasMsb8biiDYMtwoPpEiK
-         HiEQwniQHvCSrEdIgduOKuvq5s7i1I61Hc25rgZasnYsPug81ADoCsCnTDZdjqQkvvrc
-         u7MiR0TGkpcQ8Zcq8IwJmMfz/vudNt99WnaGo1qHlKZqAE+13K9TG1hMprm48aLrDHKG
-         KLTxKsyGj+myiFI0F5MUapN41yj6qFYTl4WnkkqKuAziWcCDY/3yvCe8iF3wjdp+upo9
-         pSbg==
+        bh=6jcGFDnk2ZGG1bJEADu4KX2ojHtFBsAIu/76P0Vp8qQ=;
+        b=dEkCRsYp+MJ88Ryr09A72p/YdO6yGqO6HYOT4j+2PmSf1Fc1i9uuNZUJ+dRzhXIR6c
+         hxl6+bTXY9g96VrCHB0rf9zglCVg57wIzPMGUcl5G2N5nJP47hZFJ5A4EU3etADVLZgi
+         rCnORkYhOEfIzI1brWjsOm2WChZta6k5dxI7S2kWeXNu/p9wcGlH00DgLS5xj0VIdA9+
+         kRr9gSd3K2K6tVeJ2E4Pc4R6dxc6xmvfG6BS2pPF+t9G64rYVLNSg+w8f8XYM9gZuG4M
+         eD2+VeyTWRB3lxjb3FjgONy4cWYZK5gUSzWbV3xwfDDe8hn56mHOHgTPMbNq8JcjBCJS
+         8t1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=13A/gfkIaAByq4gAjyXkarTV6d8yj2S6x1jqYzFsBbY=;
-        b=snR9xbn++encXDvsG73Z79FK9moLEwH8aQMWF1bURw/xlLaVqohyVuR/Bp9iQfE9Vk
-         nD6mX5XCVxHmV7dW0wiDfEEeShRLGgWY9weUb7h5MNPFe6lNq3s1pL8CFyi6+YX9HsC/
-         5LdbWfBKWzw3xaS410RsbkFh4Orxkj228KIG3QWSiSm+4CCjvR2wg5nR0cVvoANlPYOY
-         mMAm1nK8pcLTu1Uyyzk0PMghMvDEKzDYnE5Is2OHFw0TU6PvNNuRQEPFmQe8FfY7mPKg
-         FEfWjxHeOj+bNe6j1WX5L1HVCzlRIdb7iwhzbcKRFRUjwMuFSGsfinb9EaMl7YNeFRv2
-         E8jg==
-X-Gm-Message-State: AOAM531J4pkKuyZ42i6XbwU7wZQLDKg0IFZLFQOv/0MozuffbFV6UQia
-        tOfeRKaoXKlIO4pkqDdci8VcImH9oSAnUeHVRBNGPw==
-X-Google-Smtp-Source: ABdhPJxrYa+KB1WbMq/YAdFrphjTMXfrrUez93q/arw+NPP8ockEEmt+q4BVAJMOhiHKlLzSTBYxF0kk+h/zL39D7LI=
-X-Received: by 2002:a17:906:36ce:b0:6d6:e540:ed65 with SMTP id
- b14-20020a17090636ce00b006d6e540ed65mr20941241ejc.330.1647299522669; Mon, 14
- Mar 2022 16:12:02 -0700 (PDT)
+        bh=6jcGFDnk2ZGG1bJEADu4KX2ojHtFBsAIu/76P0Vp8qQ=;
+        b=H2E51Y9H52nFBCztQopCu9nPKzRLLPNeOPSanly7RxhULT9lyjSVDZz/SmRGYZ/Unr
+         9o//NKb6SXk4EtAJ3e3lcQD8MjQkp87nvbt1T20FXb8KgBCFObk6Pf5A7HbynrvRY96z
+         8t/FN9IVrmN2OwB2zlC0HXLpY6x2tSVEgSFDcXqzaHLMSfqYtDlbMNGK2AKxgVF/R8JI
+         hw9JMm5MB0NVEbRu4mWZ6bDg1jurxC7uWUyakPt2I64ZLWAUVGQS3N8KjjHydv9MtLH0
+         +Exs0/6ftfuvtjYEgwszK5J9+hxNkMvSfGaTPMJWqrn+H318N+rAb4BJzpbQdeNW2b7o
+         /e+g==
+X-Gm-Message-State: AOAM533+DPyVUo6Go187+Mzi0aWDRPS8LQD5lwr3M9HY2hLLJx8uaWGJ
+        It8otAx1Xbpted9zWq6QE/lFqyZjSL1H7ETJrtcRPA==
+X-Google-Smtp-Source: ABdhPJwOFHiGKaFjeiuAVqn0xvjObYV2J61nUJiTd5dhiZHHRCKHynlwkSXGaPtMkDjYwpTL95ZQnsnKJb988XLF1wk=
+X-Received: by 2002:a25:d512:0:b0:61d:aded:1743 with SMTP id
+ r18-20020a25d512000000b0061daded1743mr19108638ybe.526.1647299550552; Mon, 14
+ Mar 2022 16:12:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com> <20220311162445.346685-8-vincent.whitchurch@axis.com>
-In-Reply-To: <20220311162445.346685-8-vincent.whitchurch@axis.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 14 Mar 2022 19:11:50 -0400
-Message-ID: <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
-Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        jic23@kernel.org, linux-iio@vger.kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org
+References: <20220224172559.4170192-1-rananta@google.com> <20220224172559.4170192-5-rananta@google.com>
+ <Yi+DS/BUPMiB+B0a@google.com>
+In-Reply-To: <Yi+DS/BUPMiB+B0a@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Mon, 14 Mar 2022 16:12:19 -0700
+Message-ID: <CAJHc60zTDrwM_cEBKACQjqxceKbCV65mMM83xgPa0xvxMtZo=Q@mail.gmail.com>
+Subject: Re: [PATCH v4 04/13] KVM: arm64: Capture VM's first run
+To:     Oliver Upton <oupton@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 11:24 AM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
+On Mon, Mar 14, 2022 at 11:02 AM Oliver Upton <oupton@google.com> wrote:
+Hi Oliver,
 >
-> Add a regression test for the problem fixed by the following patch,
-> which would require specific environmental conditions to be able to be
-> reproduced and regression-tested on real hardware:
+> Hi Raghavendra,
 >
->  iio: light: opt3001: Fixed timeout error when 0 lux
->  https://lore.kernel.org/lkml/20210920125351.6569-1-valek@2n.cz/
+> On Thu, Feb 24, 2022 at 05:25:50PM +0000, Raghavendra Rao Ananta wrote:
+> > Capture the first run of the KVM VM, which is basically the
+> > first KVM_RUN issued for any vCPU. This state of the VM is
+> > helpful in the upcoming patches to prevent user-space from
+> > configuring certain VM features, such as the feature bitmap
+> > exposed by the psuedo-firmware registers, after the VM has
+> > started running.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 >
-> No other aspects of the driver are tested.
+> I believe this patch is superseded by commit:
 >
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
->  .../roadtest/roadtest/tests/iio/__init__.py   |  0
->  .../roadtest/roadtest/tests/iio/config        |  1 +
->  .../roadtest/tests/iio/light/__init__.py      |  0
->  .../roadtest/roadtest/tests/iio/light/config  |  1 +
->  .../roadtest/tests/iio/light/test_opt3001.py  | 95 +++++++++++++++++++
->  5 files changed, 97 insertions(+)
->  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/__init__.py
->  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/config
->  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/__init__.py
->  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/config
->  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
+>   5177fe91e4cf ("KVM: arm64: Do not change the PMU event filter after a VCPU has run")
 >
-> diff --git a/tools/testing/roadtest/roadtest/tests/iio/__init__.py b/tools/testing/roadtest/roadtest/tests/iio/__init__.py
-> new file mode 100644
-> index 000000000000..e69de29bb2d1
-> diff --git a/tools/testing/roadtest/roadtest/tests/iio/config b/tools/testing/roadtest/roadtest/tests/iio/config
-> new file mode 100644
-> index 000000000000..a08d9e23ce38
-> --- /dev/null
-> +++ b/tools/testing/roadtest/roadtest/tests/iio/config
-> @@ -0,0 +1 @@
-> +CONFIG_IIO=y
-> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/__init__.py b/tools/testing/roadtest/roadtest/tests/iio/light/__init__.py
-> new file mode 100644
-> index 000000000000..e69de29bb2d1
-> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/config b/tools/testing/roadtest/roadtest/tests/iio/light/config
-> new file mode 100644
-> index 000000000000..b9753f2d0728
-> --- /dev/null
-> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/config
-> @@ -0,0 +1 @@
-> +CONFIG_OPT3001=m
-> diff --git a/tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py b/tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
-> new file mode 100644
-> index 000000000000..abf20b8f3516
-> --- /dev/null
-> +++ b/tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Copyright Axis Communications AB
-> +
-> +from typing import Any, Final
-> +
-> +from roadtest.backend.i2c import SMBusModel
-> +from roadtest.core.devicetree import DtFragment, DtVar
-> +from roadtest.core.hardware import Hardware
-> +from roadtest.core.modules import insmod, rmmod
-> +from roadtest.core.suite import UMLTestCase
-> +from roadtest.core.sysfs import I2CDriver, read_float
-> +
-> +REG_RESULT: Final = 0x00
-> +REG_CONFIGURATION: Final = 0x01
-> +REG_LOW_LIMIT: Final = 0x02
-> +REG_HIGH_LIMIT: Final = 0x03
-> +REG_MANUFACTURER_ID: Final = 0x7E
-> +REG_DEVICE_ID: Final = 0x7F
-> +
-> +REG_CONFIGURATION_CRF: Final = 1 << 7
-> +
-> +
-> +class OPT3001(SMBusModel):
-> +    def __init__(self, **kwargs: Any) -> None:
-> +        super().__init__(regbytes=2, byteorder="big", **kwargs)
-> +        # Reset values from datasheet
-> +        self.regs = {
-> +            REG_RESULT: 0x0000,
-> +            REG_CONFIGURATION: 0xC810,
-> +            REG_LOW_LIMIT: 0xC000,
-> +            REG_HIGH_LIMIT: 0xBFFF,
-> +            REG_MANUFACTURER_ID: 0x5449,
-> +            REG_DEVICE_ID: 0x3001,
-> +        }
-> +
-> +    def reg_read(self, addr: int) -> int:
-> +        val = self.regs[addr]
-> +
-> +        if addr == REG_CONFIGURATION:
-> +            # Always indicate that the conversion is ready.  This is good
-> +            # enough for our current purposes.
-> +            val |= REG_CONFIGURATION_CRF
-> +
-> +        return val
-> +
-> +    def reg_write(self, addr: int, val: int) -> None:
-> +        assert addr in self.regs
-> +        self.regs[addr] = val
-> +
-> +
-> +class TestOPT3001(UMLTestCase):
+> on kvmarm/next.
+>
+Perfect! Just what we needed. I'll drop this patch.
 
-I am partial to starting with UML since there are a lot of nice easy
-things about starting there; however, I imagine people will eventually
-want to use this on other architectures (speaking from experience).
-How difficult do you think it would be to extend this to support
-manipulating fake devices in say QEMU?
-
-I also have some colleagues inside of Google that worked on some
-projects to simulate simple devices on an FPGA to test software and
-adjacent devices in a conceptually similar way; one of these teams
-built a Domain Specific Language kind of like roadtest to implement
-the tests and the environment for the tests. The main reason I mention
-this here is I am thinking about maybe one day having an API you can
-implement so you can run your roadtests on UML, QEMU, or on any
-emulator or hardware testbed that implements the appropriate API.
-
-I'll try to dig up some people who might be interested and add them here.
-
-> +    dts = DtFragment(
-> +        src="""
-> +&i2c {
-> +    light-sensor@$addr$ {
-> +        compatible = "ti,opt3001";
-> +        reg = <0x$addr$>;
-> +    };
-> +};
-> +        """,
-> +        variables={
-> +            "addr": DtVar.I2C_ADDR,
-> +        },
-> +    )
-> +
-> +    @classmethod
-> +    def setUpClass(cls) -> None:
-> +        insmod("opt3001")
-> +
-> +    @classmethod
-> +    def tearDownClass(cls) -> None:
-> +        rmmod("opt3001")
-> +
-> +    def setUp(self) -> None:
-> +        self.driver = I2CDriver("opt3001")
-> +        self.hw = Hardware("i2c")
-> +        self.hw.load_model(OPT3001)
-> +
-> +    def tearDown(self) -> None:
-> +        self.hw.close()
-> +
-> +    def test_illuminance(self) -> None:
-> +        data = [
-> +            # Some values from datasheet, and 0
-> +            (0b_0000_0000_0000_0000, 0),
-> +            (0b_0000_0000_0000_0001, 0.01),
-> +            (0b_0011_0100_0101_0110, 88.80),
-> +            (0b_0111_1000_1001_1010, 2818.56),
-> +        ]
-> +        with self.driver.bind(self.dts["addr"]) as dev:
-> +            luxfile = dev.path / "iio:device0/in_illuminance_input"
-> +
-> +            for regval, lux in data:
-> +                self.hw.reg_write(REG_RESULT, regval)
-> +                self.assertEqual(read_float(luxfile), lux)
-
-I love the framework; this looks very easy to use.
-
-One nit about this test; it seems like you cover just one test case
-here - the happy path. Can you cover some other one? Particularly some
-error paths?
-
-Sorry, I am not trying to be cheeky here; it looks like this driver
-actually should probably be fully (or very close to fully) testable
-via roadtest as I understand it. It only looks like there are a
-handful of cases to cover for the driver: the device is busy, the
-device returned something invalid, the user requested something
-invalid, and several SMBus read/write failures - it really only looks
-like there are a handful of paths and I think they are all accessible
-via the I2C interface (except for maybe the user requesting something
-invalid).
+Regards,
+Raghavendra
+>
+> --
+> Thanks,
+> Oliver

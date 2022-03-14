@@ -2,165 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FA14D8577
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8F54D857B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235505AbiCNMwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S236435AbiCNMyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiCNMwj (ORCPT
+        with ESMTP id S234764AbiCNMyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:52:39 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFD25FC9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:51:29 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2d07ae0b1c0so161852097b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=0hwovVYgP3mGujUVRa+0EXWnvlkG8+Qr5fRIelkpXxM=;
-        b=p6rh3aKXRdSAeyhTBWvkb9PXkqbUO5r30M+yLgLuWKipFVhpuNW5xfT2RnfEYBAzeC
-         kkmln8rZAuumu4qvV0+p7rqGcXcZjVVodCGEF/gWllqNw86onvScpRt7+MV04Sv8IkHT
-         pDYEYzIp9hIOYFk/AjDgoMFW4Pp3rc/+i0KKoEAaR9GWM0ymvfaaIEzLTedyTUE9PbnF
-         k7T31BqoPffuLZAfgOsbkKoykjfe/VPUuHcZda9+L+vroHtXCkmyR/DIsIUAfYHbbWw5
-         aGiTqijCvYeiQsGMvvCjVOSAfZCw+Pu7g5RrxqAiJIrYA1+r9EsrdLFfKTkjEw5uoyHD
-         Cj7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=0hwovVYgP3mGujUVRa+0EXWnvlkG8+Qr5fRIelkpXxM=;
-        b=xn8waQUE+oD/oME1J6upHNKILKXYqn4r1YH159IMgxOdGwu2VNjadrATlWz7/bq4jK
-         7MAot2H71WD+QicDAZW9/mO15+njP2ftYBx4KJQ367H4IPIX5wBT3yATSN9kgWL+Khkl
-         xMg24C/OudGcf/mIwsjew7mcKnuG5dgfWl+/VtM3s7IS+TkoX900jETzLyDREalFQx/0
-         U12A3P6E0As4VUuHqrhTAe1gJn9SJFjr597tnmBbKB+0N8bHmGxePBEO+oiIVX6zN3iN
-         0jVybHCZmghkKxuldGr2e+4bPB805vvpvFe3DMUMAYPpMUbtrpxf32RdGmaQhDsxzGDh
-         2CJQ==
-X-Gm-Message-State: AOAM532M5y890BuzDcDnJmAoVyZCEIQEWu7NFluBFk/h0uHhzhlqx6Gu
-        tz56t+iqddIcRKX+R4nLcAC99h5y23b07HE1gP5RAA==
-X-Google-Smtp-Source: ABdhPJzMi9wzr1CXBtQPKVErB7okkB8ivKKmqm74MYzFseu5+5eV32ta93w6gnhfEGfRQrBXSioTrUbPpaESHtiA4as=
-X-Received: by 2002:a81:4ed5:0:b0:2dc:e57:e5f2 with SMTP id
- c204-20020a814ed5000000b002dc0e57e5f2mr18654717ywb.199.1647262287990; Mon, 14
- Mar 2022 05:51:27 -0700 (PDT)
+        Mon, 14 Mar 2022 08:54:01 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C492DA;
+        Mon, 14 Mar 2022 05:52:45 -0700 (PDT)
+Received: from [192.168.55.80] (unknown [182.2.71.250])
+        by gnuweeb.org (Postfix) with ESMTPSA id DA17B7E2D8;
+        Mon, 14 Mar 2022 12:52:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1647262364;
+        bh=QP9qO2FBwMZ+3k7m4lRYIB4s3BYrNYzFDH5sYdG3TcA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YZuePdMFS8buq4NhNmYpWNGPftWC5GA/hDeKsRppbPS9c9JhqfjpYvvvvHd1lrjw/
+         sH3eIEuDWtiUAmIemOCsU0MxBJIQRhGVjnDtjpKi7D4CzXByvRCi8cB+eFXy9z72Q8
+         oZF/nXH0d+kfGy70MHc7DazuNlJhNC8kpNIWJI6btOl0UHA3MUGBSoJnZJKQFp9TWB
+         qNsHdGy8HvxX8qUYvlUIuuOoYLHdHa0SB0GnQPf6ihi2V53/POnNmPUUMuNsPZsHxo
+         6UIJdpug1pIrXtUmvdzW0Vs7MQrFXWxcTshHT6eD/L6aiswJy+Bp+RmBIMHb0zJDv/
+         DLQByjAO671qQ==
+Message-ID: <1f1488c8-6c63-db0a-b0f9-159a1ec8b5cd@gnuweeb.org>
+Date:   Mon, 14 Mar 2022 19:52:36 +0700
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 14 Mar 2022 18:21:17 +0530
-Message-ID: <CA+G9fYsziOWHkV+YbKymtpVBkL=DAHnmMfkeuWvx0pJPg=fMEA@mail.gmail.com>
-Subject: WARNING: CPU: 0 PID: 884 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:3162
- mark_page_dirty_in_slot
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>
-Cc:     open list <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Wireless Mailing List <linux-wireless@vger.kernel.org>,
+        netdev Mailing List <netdev@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        stable@vger.kernel.org
+Subject: [LOCKDEP SPLAT 5.17-rc8] WARNING: possible circular locking
+ dependency detected (at: rtw_ops_config+0x27/0xd0 | at:
+ ieee80211_mgd_probe_ap+0x114/0x150)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While running kselftest kvm tests on Linux mainline 5.17.0-rc8 on x86_64 device
-the following kernel warning was noticed
 
-# selftests: kvm: hyperv_clock
-[   59.752584] ------------[ cut here ]------------
-[   59.757297] WARNING: CPU: 0 PID: 884 at
-arch/x86/kvm/../../../virt/kvm/kvm_main.c:3162
-mark_page_dirty_in_slot+0xba/0xd0
-[   59.768196] Modules linked in: x86_pkg_temp_thermal fuse
-[   59.773531] CPU: 0 PID: 884 Comm: hyperv_clock Not tainted 5.17.0-rc8 #1
-[   59.780242] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.5 11/26/2020
-[   59.787652] RIP: 0010:mark_page_dirty_in_slot+0xba/0xd0
-[   59.792894] Code: 89 ea 09 c6 e8 07 cd 00 00 5b 41 5c 41 5d 41 5e
-5d c3 48 8b 83 c0 00 00 00 49 63 d5 f0 48 0f ab 10 5b 41 5c 41 5d 41
-5e 5d c3 <0f> 0b 5b 41 5c 41 5d 41 5e 5d c3 0f 1f 44 00 00 eb 80 0f 1f
-40 00
-[   59.811659] RSP: 0018:ffffa1548109bbe0 EFLAGS: 00010246
-[   59.816919] RAX: 0000000080000000 RBX: ffff9174c5303a00 RCX: 0000000000000000
-[   59.824068] RDX: 0000000000000000 RSI: ffffffffb6e29061 RDI: ffffffffb6e29061
-[   59.831219] RBP: ffffa1548109bc00 R08: 0000000000000000 R09: 0000000000000001
-[   59.838369] R10: 0000000000000001 R11: 0000000000000000 R12: ffffa1548109d000
-[   59.845545] R13: 0000000000000022 R14: 0000000000000000 R15: 0000000000000004
-[   59.852721] FS:  00007f07cc7b9740(0000) GS:ffff917827a00000(0000)
-knlGS:0000000000000000
-[   59.860822] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   59.866585] CR2: 0000000000000000 CR3: 0000000106700006 CR4: 00000000003726f0
-[   59.873737] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   59.880886] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   59.888034] Call Trace:
-[   59.890512]  <TASK>
-[   59.892641]  __kvm_write_guest_page+0xc8/0x100
-[   59.897112]  kvm_write_guest+0x61/0xb0
-[   59.900882]  kvm_hv_invalidate_tsc_page+0xd3/0x140
-[   59.905688]  ? kvm_hv_invalidate_tsc_page+0x72/0x140
-[   59.910676]  kvm_arch_vm_ioctl+0x20f/0xb70
-[   59.914789]  ? __lock_acquire+0x3af/0x2370
-[   59.918913]  ? __this_cpu_preempt_check+0x13/0x20
-[   59.923638]  ? lock_is_held_type+0xdd/0x130
-[   59.927845]  kvm_vm_ioctl+0x774/0xe10
-[   59.931530]  ? ktime_get_coarse_real_ts64+0xbe/0xd0
-[   59.936429]  ? __this_cpu_preempt_check+0x13/0x20
-[   59.941178]  ? lockdep_hardirqs_on+0x7e/0x100
-[   59.945552]  ? ktime_get_coarse_real_ts64+0xbe/0xd0
-[   59.950493]  ? ktime_get_coarse_real_ts64+0xbe/0xd0
-[   59.955459]  ? security_file_ioctl+0x37/0x50
-[   59.959753]  __x64_sys_ioctl+0x91/0xc0
-[   59.963524]  do_syscall_64+0x5c/0x80
-[   59.967125]  ? do_syscall_64+0x69/0x80
-[   59.970896]  ? syscall_exit_to_user_mode+0x3e/0x50
-[   59.975706]  ? do_syscall_64+0x69/0x80
-[   59.979495]  ? exc_page_fault+0x7c/0x250
-[   59.983453]  ? asm_exc_page_fault+0x8/0x30
-[   59.987570]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   59.992637] RIP: 0033:0x7f07cc0b78f7
-[   59.996234] Code: b3 66 90 48 8b 05 a1 35 2c 00 64 c7 00 26 00 00
-00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00
-00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 71 35 2c 00 f7 d8 64 89
-01 48
-[   60.014996] RSP: 002b:00007ffdf0b37478 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[   60.022581] RAX: ffffffffffffffda RBX: 000000004030ae7b RCX: 00007f07cc0b78f7
-[   60.029729] RDX: 00007ffdf0b374b0 RSI: 000000004030ae7b RDI: 0000000000000006
-[   60.036880] RBP: 0000000000000007 R08: 000000000040de60 R09: 0000000000000007
-[   60.044030] R10: 0000000000067816 R11: 0000000000000246 R12: 00007f07cc7bf000
-[   60.051180] R13: 0000000000000007 R14: 0000000000006592 R15: 0000000000136843
-[   60.058357]  </TASK>
-[   60.060566] irq event stamp: 6625
-[   60.063925] hardirqs last  enabled at (6635): [<ffffffffb7064848>]
-__up_console_sem+0x58/0x60
-[   60.072511] hardirqs last disabled at (6644): [<ffffffffb706482d>]
-__up_console_sem+0x3d/0x60
-[   60.081044] softirqs last  enabled at (6092): [<ffffffffb8400327>]
-__do_softirq+0x327/0x493
-[   60.089407] softirqs last disabled at (6085): [<ffffffffb6fe3a65>]
-irq_exit_rcu+0xe5/0x130
-[   60.097735] ---[ end trace 0000000000000000 ]---
-ok 6 selftests: kvm: hyperv_clock
+Hello,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I got the following lockdep splat in 5.17-rc8. I don't have the reproducer
+for this. I will send a follow up if I can find something useful.
 
-metadata:
-  git_describe: v5.17-rc8
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
-  kernel-config: https://builds.tuxbuild.com/26LbaUN6vcuAN7Rd69gZkFWp5J8/config
-  build: https://builds.tuxbuild.com/26LbaUN6vcuAN7Rd69gZkFWp5J8/
+<4>[   93.549746][    T8]
+<4>[   93.551216][    T8] ======================================================
+<4>[   93.552707][    T8] WARNING: possible circular locking dependency detected
+<4>[   93.554195][    T8] 5.17.0-rc8-superb-owl-00001-g09688c0166e7 #2 Not tainted
+<4>[   93.555878][    T8] ------------------------------------------------------
+<4>[   93.557667][    T8] kworker/u16:0/8 is trying to acquire lock:
+<4>[   93.559459][    T8] ffff888167aa8170 (&rtwdev->mutex){+.+.}-{3:3}, at: rtw_ops_config+0x27/0xd0 [rtw88_core]
+<4>[   93.561248][    T8]
+<4>[   93.561248][    T8] but task is already holding lock:
+<4>[   93.564694][    T8] ffff888167aa2988 (&local->iflist_mtx){+.+.}-{3:3}, at: ieee80211_mgd_probe_ap+0x114/0x150 [mac80211]
+<4>[   93.566425][    T8]
+<4>[   93.566425][    T8] which lock already depends on the new lock.
+<4>[   93.566425][    T8]
+<4>[   93.571410][    T8]
+<4>[   93.571410][    T8] the existing dependency chain (in reverse order) is:
+<4>[   93.574576][    T8]
+<4>[   93.574576][    T8] -> #1 (&local->iflist_mtx){+.+.}-{3:3}:
+<4>[   93.577669][    T8]        lock_acquire+0xc0/0x190
+<4>[   93.579207][    T8]        __mutex_lock_common+0xab/0xe20
+<4>[   93.580726][    T8]        mutex_lock_nested+0x1c/0x30
+<4>[   93.582196][    T8]        ieee80211_iterate_interfaces+0x2a/0x50 [mac80211]
+<4>[   93.583681][    T8]        rtw_fw_c2h_cmd_handle+0x16e/0x1b0 [rtw88_core]
+<4>[   93.585152][    T8]        rtw_c2h_work+0x49/0x70 [rtw88_core]
+<4>[   93.586601][    T8]        process_one_work+0x299/0x410
+<4>[   93.588012][    T8]        worker_thread+0x240/0x440
+<4>[   93.589413][    T8]        kthread+0xef/0x110
+<4>[   93.590817][    T8]        ret_from_fork+0x1f/0x30
+<4>[   93.592222][    T8]
+<4>[   93.592222][    T8] -> #0 (&rtwdev->mutex){+.+.}-{3:3}:
+<4>[   93.594901][    T8]        validate_chain+0x16d8/0x2800
+<4>[   93.596202][    T8]        __lock_acquire+0x910/0xbf0
+<4>[   93.597473][    T8]        lock_acquire+0xc0/0x190
+<4>[   93.598716][    T8]        __mutex_lock_common+0xab/0xe20
+<4>[   93.599952][    T8]        mutex_lock_nested+0x1c/0x30
+<4>[   93.601187][    T8]        rtw_ops_config+0x27/0xd0 [rtw88_core]
+<4>[   93.602429][    T8]        ieee80211_hw_config+0x32b/0x3a0 [mac80211]
+<4>[   93.603691][    T8]        ieee80211_recalc_ps+0x128/0x1f0 [mac80211]
+<4>[   93.604942][    T8]        ieee80211_mgd_probe_ap+0x120/0x150 [mac80211]
+<4>[   93.606196][    T8]        process_one_work+0x299/0x410
+<4>[   93.607470][    T8]        worker_thread+0x240/0x440
+<4>[   93.608732][    T8]        kthread+0xef/0x110
+<4>[   93.610008][    T8]        ret_from_fork+0x1f/0x30
+<4>[   93.611309][    T8]
+<4>[   93.611309][    T8] other info that might help us debug this:
+<4>[   93.611309][    T8]
+<4>[   93.615150][    T8]  Possible unsafe locking scenario:
+<4>[   93.615150][    T8]
+<4>[   93.617743][    T8]        CPU0                    CPU1
+<4>[   93.619014][    T8]        ----                    ----
+<4>[   93.620289][    T8]   lock(&local->iflist_mtx);
+<4>[   93.621556][    T8]                                lock(&rtwdev->mutex);
+<4>[   93.622855][    T8]                                lock(&local->iflist_mtx);
+<4>[   93.624149][    T8]   lock(&rtwdev->mutex);
+<4>[   93.625423][    T8]
+<4>[   93.625423][    T8]  *** DEADLOCK ***
+<4>[   93.625423][    T8]
+<4>[   93.629231][    T8] 4 locks held by kworker/u16:0/8:
+<4>[   93.630516][    T8]  #0: ffff888165fb3938 ((wq_completion)phy0){+.+.}-{0:0}, at: process_one_work+0x241/0x410
+<4>[   93.631845][    T8]  #1: ffffc9000016fe70 ((work_completion)(&ifmgd->monitor_work)){+.+.}-{0:0}, at: process_one_work+0x267/0x410
+<4>[   93.633174][    T8]  #2: ffff888168b0cd00 (&wdev->mtx){+.+.}-{3:3}, at: ieee80211_mgd_probe_ap+0x2e/0x150 [mac80211]
+<4>[   93.634550][    T8]  #3: ffff888167aa2988 (&local->iflist_mtx){+.+.}-{3:3}, at: ieee80211_mgd_probe_ap+0x114/0x150 [mac80211]
+<4>[   93.635943][    T8]
+<4>[   93.635943][    T8] stack backtrace:
+<4>[   93.638685][    T8] CPU: 5 PID: 8 Comm: kworker/u16:0 Not tainted 5.17.0-rc8-superb-owl-00001-g09688c0166e7 #2 c0022b89d38a680ae1699c58d0b58d598bc94d78
+<4>[   93.640140][    T8] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
+<4>[   93.640141][    T8] Workqueue: phy0 ieee80211_sta_monitor_work [mac80211]
+<4>[   93.640156][    T8] Call Trace:
+<4>[   93.640157][    T8]  <TASK>
+<4>[   93.640159][    T8]  dump_stack_lvl+0x5d/0x78
+<4>[   93.640161][    T8]  print_circular_bug+0x5cb/0x5d0
+<4>[   93.640163][    T8]  ? ret_from_fork+0x1f/0x30
+<4>[   93.640164][    T8]  ? stack_trace_save+0x3a/0x50
+<4>[   93.640166][    T8]  ? save_trace+0x3d/0x2c0
+<4>[   93.640168][    T8]  ? __bfs+0x115/0x200
+<4>[   93.640169][    T8]  check_noncircular+0xd5/0xe0
+<4>[   93.640170][    T8]  ? rcu_read_lock_sched_held+0x34/0x70
+<4>[   93.640173][    T8]  ? trace_pelt_cfs_tp+0x28/0xc0
+<4>[   93.640175][    T8]  validate_chain+0x16d8/0x2800
+<4>[   93.640176][    T8]  ? rcu_read_lock_sched_held+0x34/0x70
+<4>[   93.640179][    T8]  ? lockdep_unlock+0x60/0xd0
+<4>[   93.662452][    T8]  ? validate_chain+0x7f2/0x2800
+<4>[   93.663783][    T8]  __lock_acquire+0x910/0xbf0
+<4>[   93.665091][    T8]  lock_acquire+0xc0/0x190
+<4>[   93.666402][    T8]  ? rtw_ops_config+0x27/0xd0 [rtw88_core a449d5db60ca04d68f4e53b03937ed71ebf1d2c4]
+<4>[   93.667734][    T8]  ? rtw_ops_config+0x27/0xd0 [rtw88_core a449d5db60ca04d68f4e53b03937ed71ebf1d2c4]
+<4>[   93.669088][    T8]  __mutex_lock_common+0xab/0xe20
+<4>[   93.670423][    T8]  ? rtw_ops_config+0x27/0xd0 [rtw88_core a449d5db60ca04d68f4e53b03937ed71ebf1d2c4]
+<4>[   93.671779][    T8]  ? lock_is_held_type+0xe2/0x140
+<4>[   93.673118][    T8]  ? rtw_ops_config+0x27/0xd0 [rtw88_core a449d5db60ca04d68f4e53b03937ed71ebf1d2c4]
+<4>[   93.674480][    T8]  mutex_lock_nested+0x1c/0x30
+<4>[   93.675854][    T8]  rtw_ops_config+0x27/0xd0 [rtw88_core a449d5db60ca04d68f4e53b03937ed71ebf1d2c4]
+<4>[   93.677260][    T8]  ieee80211_hw_config+0x32b/0x3a0 [mac80211 43fac5b3b5afe755bbfeab9090be9cf8c1dc014f]
+<4>[   93.678708][    T8]  ieee80211_recalc_ps+0x128/0x1f0 [mac80211 43fac5b3b5afe755bbfeab9090be9cf8c1dc014f]
+<4>[   93.680147][    T8]  ieee80211_mgd_probe_ap+0x120/0x150 [mac80211 43fac5b3b5afe755bbfeab9090be9cf8c1dc014f]
+<4>[   93.681607][    T8]  process_one_work+0x299/0x410
+<4>[   93.683051][    T8]  worker_thread+0x240/0x440
+<4>[   93.684512][    T8]  ? worker_clr_flags+0x40/0x40
+<4>[   93.685957][    T8]  kthread+0xef/0x110
+<4>[   93.687400][    T8]  ? kthread_blkcg+0x30/0x30
+<4>[   93.688827][    T8]  ret_from_fork+0x1f/0x30
+<4>[   93.690272][    T8]  </TASK>
 
---
-Linaro LKFT
-https://lkft.linaro.org
 
-[1] https://lkft.validation.linaro.org/scheduler/job/4714912#L1520
-[2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.17-rc8/testrun/8445627/suite/linux-log-parser/test/check-kernel-warning-4714912/details/
+-- 
+Ammar Faizi
+

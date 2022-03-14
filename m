@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3454D87FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D994D8809
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241068AbiCNPYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S241420AbiCNP2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240263AbiCNPYk (ORCPT
+        with ESMTP id S238922AbiCNP2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:24:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 657D86273
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647271409;
+        Mon, 14 Mar 2022 11:28:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8830A13F36
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:27:12 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647271631;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=KHZnSg7/qBVpskWF9ZLyqLdJeUS4qXl+pZ5FsBxS5Ts=;
-        b=K/jJG40NzbI5BsQa/ZRO1NIaFX+nARgpzgi9RGeO27+vockG1aftHqXnLjBElBd8hW4Id8
-        u4Pk4YfAKcbcKyv/zxTScDlwD7OlfipaCN4WEVMu1+2aUT/S3T6KqgWEP1hw57zUGNBi/c
-        rVi7q8dqzwcGUpUZGxK1c81x/Y/0bik=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-Rk8c9Uk7NPmrR0__sH1B9w-1; Mon, 14 Mar 2022 11:23:26 -0400
-X-MC-Unique: Rk8c9Uk7NPmrR0__sH1B9w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B9733806709;
-        Mon, 14 Mar 2022 15:23:25 +0000 (UTC)
-Received: from localhost (unknown [10.22.17.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 47779400F756;
-        Mon, 14 Mar 2022 15:23:24 +0000 (UTC)
-Date:   Mon, 14 Mar 2022 12:23:23 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 4.14.270-rt130
-Message-ID: <Yi9d67rCGFSDb/UP@uudg.org>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5ZIfmwWb2WbJZ9l5iSAxqdfWYYMc+kkAzn78elxgggk=;
+        b=2QnjM1SeFWxXmJrw27fv2lIzu0ACfZAFozfFjteT+xHMtXsfF821fzXo+5gKYuh3xAPdyD
+        czbvQ/DTUU921vAI3StVMgkWQRUVomVzBpQlZ0o1sBX59pKhfEoIlmg/mT0C/jbF0ENGF/
+        hiCXx49XArdd0701qfLuyJzY4u5qqCl4Dv/tNhK1OiJ2K1BYdKjIAhTE+VcTJa6brT7CpX
+        qSeaq/BRvxwb/9WO7OwFG8JnSRsJ8wEMnj4xDPV7FhBtuhwchpwmBx1z6VNhErSOVaIxwn
+        q0O22qmftUMD6dCPFgPsHJ4bS7FuGlrAJBCPD6PoZGudqOt5TI3Mvqq6bG3GRA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647271631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5ZIfmwWb2WbJZ9l5iSAxqdfWYYMc+kkAzn78elxgggk=;
+        b=tpO0fU//UaLJH0a/mguVPCt3eT9qjNJU9AVu0j4bJIuf5oev7+wLDGQIpB+pxwT5U9bVpn
+        5yr4AxND2pjfLMBA==
+To:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     John Garry <john.garry@huawei.com>,
+        David Decotigny <ddecotig@google.com>
+Subject: Re: [PATCH] genirq/msi: Shutdown managed interrupts with
+ unsatifiable affinities
+In-Reply-To: <20220307190625.254426-1-maz@kernel.org>
+References: <20220307190625.254426-1-maz@kernel.org>
+Date:   Mon, 14 Mar 2022 16:27:10 +0100
+Message-ID: <87sfrkftbl.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Mon, Mar 07 2022 at 19:06, Marc Zyngier wrote:
+> When booting with maxcpus=<small number>, interrupt controllers
+> such as the GICv3 ITS may not be able to satisfy the affinity of
+> some managed interrupts, as some of the HW resources are simply
+> not available.
 
-I'm pleased to announce the 4.14.270-rt130 stable release.
+This is also true if you have offlined lots of CPUs, right?
 
-This release is just an update to the new stable 4.14.270
-version and no RT specific changes have been made.
+> In order to deal with this, do not try to activate such interrupt
+> if there is no online CPU capable of handling it. Instead, place
+> it in shutdown state. Once a capable CPU shows up, it will be
+> activated.
+>
+> Reported-by: John Garry <john.garry@huawei.com>
+> Reported-by: David Decotigny <ddecotig@google.com>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  kernel/irq/msi.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
+> index 2bdfce5edafd..aa84ce84c2ec 100644
+> --- a/kernel/irq/msi.c
+> +++ b/kernel/irq/msi.c
+> @@ -818,6 +818,18 @@ static int msi_init_virq(struct irq_domain *domain, int virq, unsigned int vflag
+>  		irqd_clr_can_reserve(irqd);
+>  		if (vflags & VIRQ_NOMASK_QUIRK)
+>  			irqd_set_msi_nomask_quirk(irqd);
+> +
+> +		/*
+> +		 * If the interrupt is managed but no CPU is available
+> +		 * to service it, shut it down until better times.
+> +		 */
+> +		if ((vflags & VIRQ_ACTIVATE) &&
+> +		    irqd_affinity_is_managed(irqd) &&
+> +		    !cpumask_intersects(irq_data_get_affinity_mask(irqd),
+> +					cpu_online_mask)) {
+> +			    irqd_set_managed_shutdown(irqd);
 
-You can get this release via the git tree at:
+Hrm. Why is this in the !CAN_RESERVE path and not before the actual
+activation call?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+Thanks,
 
-  branch: v4.14-rt
-  Head SHA1: c20ba726d404f40c1aedeece35f48c795d5a1659
-
-Or to build 4.14.270-rt130 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.270.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/patch-4.14.270-rt130.patch.xz
-
-
-All keys used for the uploads can be found on the following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-
-Enjoy!
-Luis
-
+        tglx

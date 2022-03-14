@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9C94D83AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3524D82D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241977AbiCNMSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S240653AbiCNMHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242376AbiCNMJy (ORCPT
+        with ESMTP id S240708AbiCNMG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F39D14004;
-        Mon, 14 Mar 2022 05:07:31 -0700 (PDT)
+        Mon, 14 Mar 2022 08:06:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD332018A;
+        Mon, 14 Mar 2022 05:03:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49AF16130D;
-        Mon, 14 Mar 2022 12:07:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D74FC340E9;
-        Mon, 14 Mar 2022 12:07:25 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 27E7FCE1265;
+        Mon, 14 Mar 2022 12:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC4DC340E9;
+        Mon, 14 Mar 2022 12:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259646;
-        bh=wqjYFkslxvrZjmqfbYf5nUKxy5nRUxoIo/P8qVlyWeo=;
+        s=korg; t=1647259392;
+        bh=KJ76qdj+9s1wslnc9jYS35+T7a9INtf5aJ7Icsm/uo4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2NEWTHpzm0GbK5U9XmID0/rdWPmSfS/25LmNXdb4+pLRwzKQtby98t/swniBVnb1z
-         G5FwI8QK72zr7vXRUu+juBeRDFihe11laTbmf61NDmDgV7oIC9LnmvBTam1g6W2uGk
-         HjYO/0gtIiTQbDMRgdwQvRXH7H+SsSwrX+AscbEM=
+        b=IBDTF68M3p1xT5Lv7GdCbJlI45c4W5qAurJnDRvWKdQSrROJYO+0qHTYVPgGfwUgr
+         lL3eYpgMZ98JiWuU4e9XSQocCyBnHl94jvQgc9QuHlmyrLgXYKbTqZ5AJAcyOlFQ4r
+         /PAJD2yXPlsTFLwSh1O3TO9jV2BZoYuo8YqsYs2c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anton Romanov <romanton@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 057/110] kvm: x86: Disable KVM_HC_CLOCK_PAIRING if tsc is in always catchup mode
-Date:   Mon, 14 Mar 2022 12:53:59 +0100
-Message-Id: <20220314112744.627462723@linuxfoundation.org>
+        stable@vger.kernel.org, Ross Philipson <ross.philipson@oracle.com>,
+        Borislav Petkov <bp@suse.de>,
+        Daniel Kiper <daniel.kiper@oracle.com>
+Subject: [PATCH 5.10 67/71] x86/boot: Add setup_indirect support in early_memremap_is_setup_data()
+Date:   Mon, 14 Mar 2022 12:54:00 +0100
+Message-Id: <20220314112739.814638150@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Romanov <romanton@google.com>
+From: Ross Philipson <ross.philipson@oracle.com>
 
-[ Upstream commit 3a55f729240a686aa8af00af436306c0cd532522 ]
+commit 445c1470b6ef96440e7cfc42dfc160f5004fd149 upstream.
 
-If vcpu has tsc_always_catchup set each request updates pvclock data.
-KVM_HC_CLOCK_PAIRING consumers such as ptp_kvm_x86 rely on tsc read on
-host's side and do hypercall inside pvclock_read_retry loop leading to
-infinite loop in such situation.
+The x86 boot documentation describes the setup_indirect structures and
+how they are used. Only one of the two functions in ioremap.c that needed
+to be modified to be aware of the introduction of setup_indirect
+functionality was updated. Adds comparable support to the other function
+where it was missing.
 
-v3:
-    Removed warn
-    Changed return code to KVM_EFAULT
-v2:
-    Added warn
-
-Signed-off-by: Anton Romanov <romanton@google.com>
-Message-Id: <20220216182653.506850-1-romanton@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b3c72fc9a78e ("x86/boot: Introduce setup_indirect")
+Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1645668456-22036-3-git-send-email-ross.philipson@oracle.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/x86/mm/ioremap.c |   33 +++++++++++++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8213f7fb71a7..61bc54748f22 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8666,6 +8666,13 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
- 	if (clock_type != KVM_CLOCK_PAIRING_WALLCLOCK)
- 		return -KVM_EOPNOTSUPP;
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -694,22 +694,51 @@ static bool memremap_is_setup_data(resou
+ static bool __init early_memremap_is_setup_data(resource_size_t phys_addr,
+ 						unsigned long size)
+ {
++	struct setup_indirect *indirect;
+ 	struct setup_data *data;
+ 	u64 paddr, paddr_next;
  
-+	/*
-+	 * When tsc is in permanent catchup mode guests won't be able to use
-+	 * pvclock_read_retry loop to get consistent view of pvclock
-+	 */
-+	if (vcpu->arch.tsc_always_catchup)
-+		return -KVM_EOPNOTSUPP;
+ 	paddr = boot_params.hdr.setup_data;
+ 	while (paddr) {
+-		unsigned int len;
++		unsigned int len, size;
+ 
+ 		if (phys_addr == paddr)
+ 			return true;
+ 
+ 		data = early_memremap_decrypted(paddr, sizeof(*data));
++		if (!data) {
++			pr_warn("failed to early memremap setup_data entry\n");
++			return false;
++		}
 +
- 	if (!kvm_get_walltime_and_clockread(&ts, &cycle))
- 		return -KVM_EOPNOTSUPP;
++		size = sizeof(*data);
  
--- 
-2.34.1
-
+ 		paddr_next = data->next;
+ 		len = data->len;
+ 
+-		early_memunmap(data, sizeof(*data));
++		if ((phys_addr > paddr) && (phys_addr < (paddr + len))) {
++			early_memunmap(data, sizeof(*data));
++			return true;
++		}
++
++		if (data->type == SETUP_INDIRECT) {
++			size += len;
++			early_memunmap(data, sizeof(*data));
++			data = early_memremap_decrypted(paddr, size);
++			if (!data) {
++				pr_warn("failed to early memremap indirect setup_data\n");
++				return false;
++			}
++
++			indirect = (struct setup_indirect *)data->data;
++
++			if (indirect->type != SETUP_INDIRECT) {
++				paddr = indirect->addr;
++				len = indirect->len;
++			}
++		}
++
++		early_memunmap(data, size);
+ 
+ 		if ((phys_addr > paddr) && (phys_addr < (paddr + len)))
+ 			return true;
 
 

@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A6C4D8DB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A144D8DC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244867AbiCNUEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S244914AbiCNUHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244853AbiCNUD7 (ORCPT
+        with ESMTP id S234180AbiCNUHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:03:59 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F5D11F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:46 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id r11so19670886ioh.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:46 -0700 (PDT)
+        Mon, 14 Mar 2022 16:07:04 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC17403ED
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:05:54 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso21804659ooi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linuxtx.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=5f2/HoIwu4j9nQu9qTBXrIZ6NMk6olPlLIzOEbYSwZw=;
-        b=YSdWC5rvFf1g8ioBrwOR3I4g6iXlWuZTXYZmkB/YQq1F1LrcUaSd/IQL+JvtW6ihSp
-         oQaeInLjTzG/E53npJN0joUHNTo51L0lUAbybFrGGy5h1XilJkR03a6LOeR1W6M85NDw
-         P7mQ1C/yLXctxm7ySS07JsZcTqIrLfPQo031NqWsuNEIjJHqw9V4GydqW30p1Zya0c1K
-         ZwDP19hMy8Qj4hekRHBCFttQRHyES8t1BcI1ERp2y6JBS5pxUC1EbIe4MEMkoI0rpq90
-         NUTTKj2kIS88DkRO7tkBQ/gT5XSv4rVJd4VuWAIIiRZQFiudmldpM26HeG4gPWGw4D1b
-         lyFw==
+        bh=iL+bTF+IsJj2jfqqbh63XbPYr229OTSdVOr9HvKPCW0=;
+        b=TvMuOAeIRfWytcYVW6/pg0KYzYrx9Tkxdo4o5kJKp1AwbBur9neOONvgjXK7aCQowK
+         qvKd4xqhAUQZfT9YjahbL9ca2ZzjkajQUPO/zkPl36ooh449iOMz0Rrpk7DUj0zH1PqI
+         VmTjLtNHvo36r8ScufR7fwNxUecCfr+qp7+yg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=5f2/HoIwu4j9nQu9qTBXrIZ6NMk6olPlLIzOEbYSwZw=;
-        b=4g/ILwNAtrEGQbh1K5u4OpOm5K+whpkjoygMeXjFnHNntknUOIniCtKPvwycc0sweN
-         wiGpDIn6PbKGeIpmZFxMsPNenQKoi3c70yHA/ZPwRdyKlRV1HHsEieFmVfP1T1qJIpCe
-         IiDGbTBKqrI1TS8AIbXTh+tSYxs7+j2q3EmyagjYwTqx5W+oFhOJ5VW9CcJu6PhB8gLE
-         ThhbjMGS7WbJBUFfqn7qPugT596DJubwlTXc1WOZlSXx/xs4tV6bvu1b4e1uCaAnWO8F
-         WHEiKnf4PF6AE2uXVD2HeeG6+SfSP3R/Oe22cZpjLc1Gem1j7LCBd5ExSnaGzXgCub9V
-         9+xg==
-X-Gm-Message-State: AOAM53175Qxgln1gSzKQJyDGU/8BRJbMsWnT02L7aAfWnrv/IlitjeGK
-        5hSRfRQFT16pq8gZ1zsAHcYrtA==
-X-Google-Smtp-Source: ABdhPJzeQC03D9/rf02Bht8goOg45eN2rPjgNoqhJu/PvxB2PzO/F0nX9G85uS1FXW19T23DPBCxaw==
-X-Received: by 2002:a05:6638:16c5:b0:319:e32b:98e3 with SMTP id g5-20020a05663816c500b00319e32b98e3mr12201874jat.123.1647288165969;
-        Mon, 14 Mar 2022 13:02:45 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id x14-20020a056e021bce00b002c7ada1bec5sm943788ilv.88.2022.03.14.13.02.45
+        bh=iL+bTF+IsJj2jfqqbh63XbPYr229OTSdVOr9HvKPCW0=;
+        b=Xd66CkajuuAMgAPDaVFrl0/2n0NV65doa/FMAg6wBr5JEOzFmxv6LT5LWFu/kvWHcS
+         f4PqBPeD9UDfoFPMsBCMWf8TNu/ZymWxlCNkfSH68kHbIXuka3xwriEmX4atKxLOSQS5
+         px+035RJstOqd/zCLPlnUdLx76R1kHKHG9Ngx7W5fRBp0B8PhOQPKJYW9k3P0OMdwgvS
+         ER3w9K6SWxrRZeTEjPFCizoevb1sJSNRy3sJkV2lL3kmT8ldianuKJaPJuksvdQI/NYC
+         YSucX9HYboceZgaUddb0DAth1z2H/kVMyuFlHbSigrxPmrxRQmcKbFFXNQYNQ7j8qv6u
+         pnCA==
+X-Gm-Message-State: AOAM532RHTpTDQ/73Kf2Q4R8QFNoJyEvsIC1LOpbB8IN11cSuMVDreI9
+        IfMUYT3Jinit3EQlQ6fptZwmKA==
+X-Google-Smtp-Source: ABdhPJy0s8+oSNomesaZ0ulF3NtaDRMWwTOCjPz1yaBWqLDcyEb0YpB2dblrbvA9Ii/MbMTDfH0M2Q==
+X-Received: by 2002:a05:6870:e74b:b0:db:2768:f169 with SMTP id t11-20020a056870e74b00b000db2768f169mr375879oak.120.1647288353793;
+        Mon, 14 Mar 2022 13:05:53 -0700 (PDT)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id n11-20020a9d710b000000b005af4ceeaac1sm8074726otj.37.2022.03.14.13.05.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 13:02:45 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 20:02:42 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v4 13/13] selftests: KVM: aarch64: Add the bitmap
- firmware registers to get-reg-list
-Message-ID: <Yi+fYt3MhMoZbN+T@google.com>
-References: <20220224172559.4170192-1-rananta@google.com>
- <20220224172559.4170192-14-rananta@google.com>
+        Mon, 14 Mar 2022 13:05:52 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 15:05:51 -0500
+From:   Justin Forbes <jmforbes@linuxtx.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.16 000/121] 5.16.15-rc1 review
+Message-ID: <Yi+gH+yWc5td2rR8@fedora64.linuxtx.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224172559.4170192-14-rananta@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 05:25:59PM +0000, Raghavendra Rao Ananta wrote:
-> Add the psuedo-firmware registers KVM_REG_ARM_STD_BMAP,
-> KVM_REG_ARM_STD_HYP_BMAP, and KVM_REG_ARM_VENDOR_HYP_BMAP to
-> the base_regs[] list.
+On Mon, Mar 14, 2022 at 12:53:03PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.15 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Reviewed-by: Oliver Upton <oupton@google.com>
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-> ---
->  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> index f769fc6cd927..42e613a7bb6a 100644
-> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> @@ -686,6 +686,9 @@ static __u64 base_regs[] = {
->  	KVM_REG_ARM_FW_REG(0),
->  	KVM_REG_ARM_FW_REG(1),
->  	KVM_REG_ARM_FW_REG(2),
-> +	KVM_REG_ARM_FW_BMAP_REG(0),	/* KVM_REG_ARM_STD_BMAP */
-> +	KVM_REG_ARM_FW_BMAP_REG(1),	/* KVM_REG_ARM_STD_HYP_BMAP */
-> +	KVM_REG_ARM_FW_BMAP_REG(2),	/* KVM_REG_ARM_VENDOR_HYP_BMAP */
->  	ARM64_SYS_REG(3, 3, 14, 3, 1),	/* CNTV_CTL_EL0 */
->  	ARM64_SYS_REG(3, 3, 14, 3, 2),	/* CNTV_CVAL_EL0 */
->  	ARM64_SYS_REG(3, 3, 14, 0, 2),
-> -- 
-> 2.35.1.473.g83b2b277ed-goog
-> 
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

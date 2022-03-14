@@ -2,151 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A774C4D8038
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135DA4D803E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238699AbiCNKxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S238728AbiCNKz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiCNKx1 (ORCPT
+        with ESMTP id S238724AbiCNKzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:53:27 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1235F30F49;
-        Mon, 14 Mar 2022 03:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1647255115;
-        bh=oECk5B9577Bg6L/hYRaSYz3HYPl+YlalMHbwajDQoi0=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=bWxkOKvsETehgIZIwLFRUda3i7fFZyaOLWSKKMC4P4vjRS06SWRpIenV0P8Duwq0U
-         C99P8KbX00jbjTYyPIjT6cqb7uPjiYry0WTDhqErnO1HSohuB+qCFyv5TXJp9s6JPb
-         t/UxBCck5Vuln9VIm8g2PZGLrLDiE8ng8z7hNVlM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mgeo8-1o47SJ1XTQ-00h4H2; Mon, 14
- Mar 2022 11:51:55 +0100
-Date:   Mon, 14 Mar 2022 11:51:51 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: media: uvcvideo: Update mailing list address
-Message-ID: <Yi8eR1nQIk4t7o+a@latitude>
-References: <20220312203323.626657-1-j.neuschaefer@gmx.net>
- <Yi0F6mUm7iCRGvCt@pendragon.ideasonboard.com>
- <Yi0IH48oA8ztvX8K@latitude>
- <164716363247.3407360.2736836911812651199@Monstersaurus>
- <Yi3+33EysD/JqCdr@pendragon.ideasonboard.com>
+        Mon, 14 Mar 2022 06:55:55 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F442AC50
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:54:44 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id g17so26342450lfh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 03:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vRzVdmii+d1cRN7UUZvjKYaaOk5b0ubFZRbbFk1xnRM=;
+        b=WOfWrWmy0naPgZhVqDU9oBsnW9w/GajwOvDdBr8tdiTSrCzoO5S0M0dPAbIpU5oBbv
+         gBHGP5e1shXAYGvRzTab6g/ag4v8nCkOCkvvZ6Sq4xt2XOQaXfDNLPoxIpEwwcit3adK
+         jGSwFUAgxuwohakllItBGBYEkY8j/FrPnFfNH1aPtyJ6rqIjWbNI5fVFAFgB4NHVB1ca
+         9QiMkrr8EygobsrU0AKovYRFPhNOA1MIBLD2B2GA5dRlEULv8ccSnM3sK71+mpizNyLs
+         +pJK7eTiM9aO6Rr2H9mMduAZIV/M5vYhcle29fwiIJYA+XXmsr9Dw4dOTzlIedNXNCJd
+         99ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vRzVdmii+d1cRN7UUZvjKYaaOk5b0ubFZRbbFk1xnRM=;
+        b=dJQR0fB+4Kw162I6MipHiYowaVeBUt0hEvlmrlDKNJ22YAUQ3TikjIKrJ1875fE2QJ
+         ddgam4nR9iHk4MJigEKocqjaj4UjsBQrVD5duNPzU7AMXCdH0Xl/DXgxPrf+i1edoUP4
+         dpelSAt5SXiSvv71UwOapja/ymZSiu2pTB4kRy8xFLN/Qjq9p27qTbkvyfJq9GfGFj0D
+         fZQcTwxHNWnWfNZlKhS5iT/nw5tJS2URKkcKwUGLTJHB0K7skuW9p3I74krCyPo6c1KP
+         YqPS85swDUaT0V79LWDR6wTEpxlM6+VN2KJYg4JxvxhaAGA5D5PeMKK04BQ9raZSzmf2
+         tsfg==
+X-Gm-Message-State: AOAM531tcqggJLuk6rV0kOo/A6MXLv5OyLxfgRYYV5JLCQM/Uxn7f/ch
+        cp+NAkvTgz63b8olqlUBg4Ts3bIOZB9QNwrAMtdH9Q==
+X-Google-Smtp-Source: ABdhPJxIJjYE9r/4kFXslwW+YzFmI5aeSDCVRy6PflGXevF8einmHE4Hrsb5JyQbb3vGO2YaaTn+GEbuLpxxph0yCCU=
+X-Received: by 2002:ac2:4e98:0:b0:448:3039:d170 with SMTP id
+ o24-20020ac24e98000000b004483039d170mr13956278lfr.233.1647255282348; Mon, 14
+ Mar 2022 03:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IeSFFX1yzYsaLYJn"
-Content-Disposition: inline
-In-Reply-To: <Yi3+33EysD/JqCdr@pendragon.ideasonboard.com>
-X-Provags-ID: V03:K1:hYMmSQrL3bPc8+CIx3DPBxfUGaRa7/tA9JtWlJuKVAHEsf1qsB9
- Qjm/TzfGdK7copyw+FG6lu/uVyvzO2D/X1zwM3kwUSm2y08Rbesqi+YAEDgR4D2icheDra+
- pIXJ8a0gzTfEFAWNaN/waTyRBScAqS1p3UOn/atXtIvNQm0CnzrV7A7WqQoDAiYcMknGOJV
- pVGJu1swqsQ5p0hS4Mgrg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pFWspQwbjXM=:0oJ/owvNo83AAqoqdW4Tjy
- KWY9wkAcy2CMTrSdrPsilOnq+48+AazeceEkb5dVQ8Lz5of7gqIZ1bE20VAjlG/AHEkIrL3kx
- nrn7OniSnQpD2uD1cPig15/vt5K9iV2bmiF1LGVzdYs9kpbB/vyc50Cg41e+8Fq5vlJFjHMhk
- 49WnjYw85PS35BPscPTCoRdzMNpppFc2YBjTcu0nh+Zwsu6CYnQB2bOuF3+qc3esQ2bn4rCZ4
- oGisd0ETdS93uQPtv2Xksafu3AU1v0tJLbPnSxl7TUh5wceBUGHHUYT2c3qStKw9kE5KqGXBo
- L6rgNVbwqW/RYTVcb/EiOQ3gaQxQ9vZN9dOREY1NrDQxVSC3tPH3D5H/NLDdDK0bJXRZvxDo9
- sAZb0XxjYPqk7QCIm5xF/y7PI/y0StYL9baOT5vjZwjWRftIWN4LfOFv4k0H7XOeTf8to5cIE
- JyK9NdaxYt1eipiF5GOHtP74CyjVT3S+L/gBvvgeToRxhI7VUTvdmpw5mynvvgg7NozytwyhM
- j7o/ZZ5hkTsUIDn4OnRsjjoFzdwHr5vYT3RMNR27qj44fskTXsm1nRx7JgtS5ieob1BxQWf+I
- CM0HacG1Gi+3NUwAWAoFk32TSiPPp5x42DIK4L87YH6CMDu59BpyfOnN0zB33jtc/XrtDgdB/
- knJ42BI+OSzkIzmM8IO11e+dpqhBPSL1BVP+uFOuy6NBbMMPPzD54JmJb21Moj0PibGNoc6L8
- Jo7a9SQlWoaXbaJuX2Hr5w6PaEKr15AiqY7C3Rwg1zCBs9JYqaqXxHMqvcAGyzI6PVCw7Lc4L
- xgNU6jaYIBzwPQymcJ5KiRYp9VKeuvoKv4YHc0MNAtx7VTeqKODzDHSYelSREuIcVmPxWX+KT
- XeQL0fCvJkGuvkNze28CW4XPVbhABGqfJInYJ1mqlS8Bt5KoSx42mnSEPIPfO7FH4S3Non/Z2
- zgRO96KcjIVbak1Lkj7r85lWCxJzom8FeE4twO4iq3s9RUlLPArG5E0kS4m2bWD7A66bLjlvq
- 9TleqSSeXRx1vTTkGHNeEIYsfWAHFho2DodWSDABP2scbonJbUfZlmgmI3piW1/rR3F4639om
- zZQiebmB1Tjkb4=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220303164522.129583-1-ulf.hansson@linaro.org>
+In-Reply-To: <20220303164522.129583-1-ulf.hansson@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 14 Mar 2022 11:54:06 +0100
+Message-ID: <CAPDyKFod3LdfRRgVfdASqgSBAXqJnGkdKMM9qKnAYcfUQptF_g@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: Improve fallback to speed modes if eMMC HS200 fails
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     linux-mmc@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yann Gautier <yann.gautier@foss.st.com>,
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 3 Mar 2022 at 17:45, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> In the error path of mmc_select_hs200() we are trying our best to restore
+> the card/host into a valid state. This makes sense, especially if we
+> encounter a simple switch error (-EBADMSG). However, rather than then
+> continue with using the legacy speed mode, let's try the other better speed
+> modes first. Additionally, let's update the card->mmc_avail_type to avoid
+> us from trying a broken HS200 mode again.
+>
+> In an Amlogic S905W based TV box where the switch to HS200 mode fails for
+> the eMMC, this allows us to use the eMMC in DDR mode in favor of the legacy
+> mode, which greatly improves the performance.
+>
+> Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
---IeSFFX1yzYsaLYJn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Heiner, does this solve your problems? Can you perhaps run some tests
+at your side to see how it works for you?
 
-On Sun, Mar 13, 2022 at 04:25:35PM +0200, Laurent Pinchart wrote:
-> On Sun, Mar 13, 2022 at 09:27:12AM +0000, Kieran Bingham wrote:
-> > Quoting Jonathan Neusch=C3=A4fer (2022-03-12 20:52:47)
-> > > On Sat, Mar 12, 2022 at 10:43:22PM +0200, Laurent Pinchart wrote:
-> > > > Hi Jonathan,
-> > > >=20
-> > > > Thank you for the patch.
-> > > >=20
-> > > > On Sat, Mar 12, 2022 at 09:33:22PM +0100, Jonathan Neusch=C3=A4fer =
-wrote:
-> > > > > The mailing list address for UVC development has changed a while =
-ago,
-> > > > > but it was only updated in MAINTAINERS, not in the documentation.
-> > > > > Update it there, too.
-> > > >=20
-> > > > Thanks for bringing this to my attention, I didn't know we were sti=
-ll
-> > > > referencing that old list.
-> > > >=20
-> > > > How about moving to the linux-media@vger.kernel.org mailing list in=
-stead
-> > > > ? I don't see many reasons to treat this driver with a special mail=
-ing
-> > > > list anymore.
-> > >=20
-> > > Fine by me, but I'll wait for the opinion of others who more regularly
-> > > contribute to the media subsystem.
-> >=20
-> > Being subscribed to the linux-uvc-devel list, and seeing that it's a
-> > black hole where people post, and unfortunately get very little to no
-> > response I certainly concur that it needs to be changed.
-> >=20
-> > I don't think we can guarantee a better response with linux-media, but
-> > at least it's the right place, where the driver is actually maintained.
-> >=20
-> > So I also believe it should be moved to linux-media.
->=20
-> Jonathan, would you send a v2 that references the
-> linux-media@vger.kernel.org list ?
+Kind regards
+Uffe
 
-Will do.
-
-
-Thanks,
-Jonathan
-
---IeSFFX1yzYsaLYJn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIvHiQACgkQCDBEmo7z
-X9s4fg/+JAxbTqjTZe2yn4H2xautGMoBbW/SonKS5JC3b1crlfFR9eoiHbnX3tzg
-nXaD4iiANSee+IM0f0z1AXo2SPiY8v/Xng94KsOUN5x7tZVBDICXNGgiW4d0wI4i
-Vdm7G9nmrrjF8Laf6LNShSqcYbA3tdyMxnGLUcLohwUQ1HZxzGQGoFwXkFlQ+llf
-t0sbXULhZ2eyQutCVCLXaVyunzkih8SGim+F16ocOeaO+rxDKHEadbKbjXvGG0ae
-z09kUsp9xmyxHmMiUDAinNnHlvK/GYsOBKMzPebuAYEFXf5OvXB5ORV8LLtC+f/m
-4tAx1IchRK5gIeRe2/O6HHuXzLc4W1ylXhxZLegccwqld9BLDJaO+xjterBCHBEb
-XazfGveB6YUisaa8T8vfPj7t1jBX966mFFDXwpoZLak73rwLDihFR59Zbt7bVWsv
-SLw2ceQhw4Lm1i0hSf+/KfjmUszJ5368EqvpgXWXDQYf2k6NVmYJylbSF59bYoDV
-MmMKqSogNbMqbPSPmmqZPxFmeOoa+jO0qtZtixKh/MgNSG0aZ/0+BabL37VLucbQ
-fd7oFtA2dlQdovvA6aVs/LdjjJMspRzlJRBmx3+cI39b7Nf7DlgVM+7B6ODNPmWR
-lIAAzhA8RKxMzukTLDK6c8EQOVcc/WAwcby6MZvQicdF4QDMhzE=
-=NEWr
------END PGP SIGNATURE-----
-
---IeSFFX1yzYsaLYJn--
+> ---
+>  drivers/mmc/core/mmc.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
+> index 141f851c9f58..6e7db45cb8e0 100644
+> --- a/drivers/mmc/core/mmc.c
+> +++ b/drivers/mmc/core/mmc.c
+> @@ -1518,13 +1518,23 @@ static int mmc_select_timing(struct mmc_card *card)
+>         if (!mmc_can_ext_csd(card))
+>                 goto bus_speed;
+>
+> -       if (card->mmc_avail_type & EXT_CSD_CARD_TYPE_HS400ES)
+> +       if (card->mmc_avail_type & EXT_CSD_CARD_TYPE_HS400ES) {
+>                 err = mmc_select_hs400es(card);
+> -       else if (card->mmc_avail_type & EXT_CSD_CARD_TYPE_HS200)
+> +               goto out;
+> +       }
+> +
+> +       if (card->mmc_avail_type & EXT_CSD_CARD_TYPE_HS200) {
+>                 err = mmc_select_hs200(card);
+> -       else if (card->mmc_avail_type & EXT_CSD_CARD_TYPE_HS)
+> +               if (err == -EBADMSG)
+> +                       card->mmc_avail_type &= ~EXT_CSD_CARD_TYPE_HS200;
+> +               else
+> +                       goto out;
+> +       }
+> +
+> +       if (card->mmc_avail_type & EXT_CSD_CARD_TYPE_HS)
+>                 err = mmc_select_hs(card);
+>
+> +out:
+>         if (err && err != -EBADMSG)
+>                 return err;
+>
+> --
+> 2.25.1
+>

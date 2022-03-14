@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47634D8AA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2384D8AAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 18:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243172AbiCNRQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 13:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S241682AbiCNRXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 13:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiCNRQq (ORCPT
+        with ESMTP id S229968AbiCNRXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 13:16:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE5B39694;
-        Mon, 14 Mar 2022 10:15:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2CCB60F4B;
-        Mon, 14 Mar 2022 17:15:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150B1C340E9;
-        Mon, 14 Mar 2022 17:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647278135;
-        bh=EQd6QSNnIgzu3N+XI4qSRIf3ZpnZgC2hfNyP7yHWeBE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y6CAX+qOJXC95w4Way/8WtBS1h2fPcGylcautxIBOI+BwC9RVxzqTY8X8lhA8uMLy
-         L1AMLZqASaO1VE/YPMgC4SCZM4P4ZFkVoJKnBFm5sIrO+7WpODruCkO27obRRajcPj
-         +aN6AB+KKiM7HnHe9lzn0Cx79eMZPhgTFLDVJnwtkQGVYpBALFM9YNIYedpSqqOyWM
-         m6z46nqw/ga5QmvGFIM+bvvP7dfd7aFLJnMQzX/voQeFDidnejFZSUqB41sLKsyyOt
-         YoSlvtI23iEkzOwbMMB1HqmD1MsTYosJ2D+5czzgRBXTLeoJUFGAm2yxKXjEznECX7
-         +M2IFMZGeb/DQ==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nToI8-001zIU-Fa; Mon, 14 Mar 2022 18:15:32 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+        Mon, 14 Mar 2022 13:23:34 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14683F309;
+        Mon, 14 Mar 2022 10:22:23 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id g20so20931782edw.6;
+        Mon, 14 Mar 2022 10:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GaBMEcrePt+w27MCrGFS0ZRIBB+TLDUM++NKsoUse28=;
+        b=F/GbgPgJJas+sWwxDfEdIEAV9MWpQmQZ6gGHvDgtsLI4ueojnctMqU+Ro0y6CE2jQ7
+         7HfL0iW/kaYCw+0kfIOftIbVIwr6QG6MYwB9MVnen+D5b9abOs9torl8wGRAu7pdQm/i
+         +FsSIKv3ftoqqo98xW4SbXxB3S9BeXWDR57rNoVIjO2wEh/n6XaeI5g7mVip+Z524Cyi
+         KrhWaUk0jLHNnh1HFg16Z87GrqIRn95tDPK0/8M6r/fC5vRSO8jGGlWGxeU4oTOxuv1I
+         I6yIkpSjzQalprgeeLcAnrb06WXcdkH68KPhC48XBm+zYHKs2a2WbqNEVl2b/II74CWe
+         r6sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GaBMEcrePt+w27MCrGFS0ZRIBB+TLDUM++NKsoUse28=;
+        b=v3BPBKzV6rLXiJ/ytoPCNIJ4uNiQ5M32bomNuhCeXmZmWCS5pe9o0PGc0xZSOTFwTa
+         9BRsCNsS5qANzJuuAgS+HXgn8xX678bcx1H7x/U3KV3Dt8VYYKbfbnTrlPfY8FWkNYWO
+         +7hLcw/RuTdJeJ3iRrFvfzn3bU2MmF7b8zshYn3llatON251jnsluVnorcDSpIYsQRB2
+         8Ac6M6nhugdsFF/YOankJL+6Fl570GLuYsWKQvQchADEa1bZLzvpi1mPVx9qVKo88ZHy
+         9iIgdHzefLroM08tYyz3nv74nDphRXOIn+LTgCnb9/dnTdBNtkDgYC+/RmDu1yQZ3Kkm
+         h7VQ==
+X-Gm-Message-State: AOAM530/2rBbecz0Dd950JG/hZAbEWb8+5WW9UNZY3erhm4e/IA1zjGt
+        7JEF1J4kfB34zj9TBbQQhwY=
+X-Google-Smtp-Source: ABdhPJyE14lC5sdDZko7CQASEf8TpHDb+WCoI++ZZovUsci3NcAk1M2ARl/8wru+mO0QLzE8MgfoCQ==
+X-Received: by 2002:aa7:dd17:0:b0:416:320:5e56 with SMTP id i23-20020aa7dd17000000b0041603205e56mr21902178edv.240.1647278542246;
+        Mon, 14 Mar 2022 10:22:22 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm7037886eji.67.2022.03.14.10.22.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 10:22:21 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Aline Santana Cordeiro <alinesantanacordeiro@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Ondrej Jirman <megous@megous.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] media: atomisp: fix bad usage at error handling logic
-Date:   Mon, 14 Mar 2022 18:15:31 +0100
-Message-Id: <7c6071ba016b58206fc1f731f02c67ea0ae3c758.1647278119.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 47/67] media: platform: rename sunxi/ to allwinner/
+Date:   Mon, 14 Mar 2022 18:22:20 +0100
+Message-ID: <2816975.e9J7NaK4W3@kista>
+In-Reply-To: <85266b480902079391d4206b8aa276ff131a730f.1647274407.git.mchehab@kernel.org>
+References: <cover.1647274406.git.mchehab@kernel.org> <85266b480902079391d4206b8aa276ff131a730f.1647274407.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As warned by sparse:
-	atomisp: drivers/staging/media/atomisp/pci/atomisp_acc.c:508 atomisp_acc_load_extensions() warn: iterator used outside loop: 'acc_fw'
+Dne ponedeljek, 14. marec 2022 ob 17:34:42 CET je Mauro Carvalho Chehab 
+napisal(a):
+> As the end goal is to have platform drivers split by vendor,
+> rename sunxi/ to allwinner/.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-The acc_fw interactor is used outside the loop, at the error handling
-logic. On most cases, this is actually safe there, but, if
-atomisp_css_set_acc_parameters() has an error, an attempt to use it
-will pick an invalid value for acc_fw.
+I would rather not do that. Everything related to Allwinner is called sunxi, 
+albeit there are a few outliers. This is similar to Amlogic/meson situation.
 
-Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
- .../staging/media/atomisp/pci/atomisp_acc.c   | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+Best regards,
+Jernej
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
-index 9a1751895ab0..28cb271663c4 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
-@@ -439,6 +439,18 @@ int atomisp_acc_s_mapped_arg(struct atomisp_sub_device *asd,
- 	return 0;
- }
- 
-+static void atomisp_acc_unload_some_extensions(struct atomisp_sub_device *asd,
-+					      int i,
-+					      struct atomisp_acc_fw *acc_fw)
-+{
-+	while (--i >= 0) {
-+		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
-+			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
-+							 acc_flag_to_pipe[i].pipe_id);
-+		}
-+	}
-+}
-+
- /*
-  * Appends the loaded acceleration binary extensions to the
-  * current ISP mode. Must be called just before sh_css_start().
-@@ -479,16 +491,20 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 								     acc_fw->fw,
- 								     acc_flag_to_pipe[i].pipe_id,
- 								     acc_fw->type);
--				if (ret)
-+				if (ret) {
-+					atomisp_acc_unload_some_extensions(asd, i, acc_fw);
- 					goto error;
-+				}
- 
- 				ext_loaded = true;
- 			}
- 		}
- 
- 		ret = atomisp_css_set_acc_parameters(acc_fw);
--		if (ret < 0)
-+		if (ret < 0) {
-+			atomisp_acc_unload_some_extensions(asd, i, acc_fw);
- 			goto error;
-+		}
- 	}
- 
- 	if (!ext_loaded)
-@@ -497,6 +513,7 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 	ret = atomisp_css_update_stream(asd);
- 	if (ret) {
- 		dev_err(isp->dev, "%s: update stream failed.\n", __func__);
-+		atomisp_acc_unload_extensions(asd);
- 		goto error;
- 	}
- 
-@@ -504,13 +521,6 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 	return 0;
- 
- error:
--	while (--i >= 0) {
--		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
--			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
--							 acc_flag_to_pipe[i].pipe_id);
--		}
--	}
--
- 	list_for_each_entry_continue_reverse(acc_fw, &asd->acc.fw, list) {
- 		if (acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_OUTPUT &&
- 		    acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_VIEWFINDER)
--- 
-2.35.1
 

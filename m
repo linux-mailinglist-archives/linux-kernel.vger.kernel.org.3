@@ -2,104 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE934D80D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF154D80CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239090AbiCNLfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S239024AbiCNLfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbiCNLfI (ORCPT
+        with ESMTP id S238997AbiCNLe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:35:08 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F05342486;
-        Mon, 14 Mar 2022 04:33:52 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id q13so13237064plk.12;
-        Mon, 14 Mar 2022 04:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xJJVf4XEMS36RF5BbkvFmc1p0vno0lmSqAoaojk+slA=;
-        b=PHPEp2SKy9JooD3Aftbg0qeiKDQRQUX/ARYN1xjsX0tgRSiBwubEkLn3uB4OT5ahh9
-         cGf+l5rHd7iSPGDzTuK3Bm7z3cmy2mWruG3B+a3K8BucByQbZSH/7wJyt8nZ5tNVgxLo
-         6TS5xdTpb9nx2JaL0gbb0/ikCmgNNQnBFpeLAy1Dp6XPgkTWkQnvR1jh4cLl4mYUFpga
-         VHCBh3idXBfkvmEVA17siKwqAZPY1Ga0GdZJSp1Q4FoWadHV9hDkjh8n5an+AlqdeOqn
-         X6h8bnwWz6TLNdsPw7NcX4hr13TOhxx5F953CufuBCAzz+LSXLutS9AMxcnt3T9KpKpK
-         woSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xJJVf4XEMS36RF5BbkvFmc1p0vno0lmSqAoaojk+slA=;
-        b=0TktoOJNyeGQMNQSu0zeIPkxHrYjwzqwivR0lVvTUlPYEqkC28oRMviy3yo1h7YXFS
-         aXyjQAqwN/j2v1lMoW2h8gi3fm9T3hFGydonabkgfsKrMgcDjOuwSUIdVE9fxIYSwNq6
-         +ZbRiTYo/RBppGGGWcxjSvaQmNny4bvZIZaSpee1et9iVYy39Gc4wbW4n3yzyIdETJcC
-         H025IB62avjF9xOec4qtX+/Ui75y7BTpCTRGvN8E2LDRX6xNEr83/3EvV6f581SPHEHa
-         5wNtPNnApxnHaP7r6aDasY0gjhmkWlJXzKNOLr5ltRxZqC6ybyhYgrE8qo2BNjIlkU5p
-         NuoQ==
-X-Gm-Message-State: AOAM533wEpNhBDuQrZYYaPF4/zIcWbZ9bX23v/2zcnftcK6hkKjvKtTU
-        saFVN1Zy7eLVOs2UQnR+ACgl23VCraQ63A==
-X-Google-Smtp-Source: ABdhPJzJP9uVr7dX011F6jFGipnvelTk+3P07bcB2Cn2YFKJ4ur9c+h3c15aMRP1gV9Kn0yvEESgWA==
-X-Received: by 2002:a17:902:7805:b0:151:b8ec:202b with SMTP id p5-20020a170902780500b00151b8ec202bmr23074862pll.111.1647257631606;
-        Mon, 14 Mar 2022 04:33:51 -0700 (PDT)
-Received: from ubuntu.mate (subs02-180-214-232-74.three.co.id. [180.214.232.74])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a030300b001c17851b6a1sm13608117pje.28.2022.03.14.04.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 04:33:51 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] Documentation: update stable tree link
-Date:   Mon, 14 Mar 2022 18:33:29 +0700
-Message-Id: <20220314113329.485372-6-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314113329.485372-1-bagasdotme@gmail.com>
-References: <20220314113329.485372-1-bagasdotme@gmail.com>
+        Mon, 14 Mar 2022 07:34:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA393EB8E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 04:33:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F7996112F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 11:33:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0F6C340EC;
+        Mon, 14 Mar 2022 11:33:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647257627;
+        bh=WnA80cH9bCfifQAruhmVw0SF3GOH8r0waE1k9+hp16M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NtN9qLvGrdCVps1JMlMK+p3Zl6l/JM8B2TKNo/eHGwlfB+zl2jVvb9xhyjedeLN7K
+         ZOwkP8PInd4Q1R6cYhpxvJmagFxptOMCqBWTjDuwzwu6w1FxGzQ41rW7PPGOy8cTGU
+         /UUqeoFQ/ONH3p/P7ESxslIQpDebHm/19u/RmBaE=
+Date:   Mon, 14 Mar 2022 12:33:42 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     shaikh kamaluddin <shaikhkamal2012@gmail.com>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH] staging: android: ashmem: Declared file operation with
+ const keyword Warning found by checkpatch.pl script.
+Message-ID: <Yi8oFtMxfTkPF8/h@kroah.com>
+References: <20220312204128.3942-1-shaikhkamal2012@gmail.com>
+ <303ed0c8-8e2c-51a4-a4da-be973a25cdec@gmail.com>
+ <bf27518d-4990-8b0e-c6ea-26a658ce2e54@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <bf27518d-4990-8b0e-c6ea-26a658ce2e54@gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The link to stable tree is redirected to
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git. Update
-accordingly.
+On Mon, Mar 14, 2022 at 04:55:55PM +0530, shaikh kamaluddin wrote:
+> On 3/13/2022 3:13 AM, Pavel Skripkin wrote:
+> > Hi Shaikh,
+> > 
+> > On 3/12/22 23:41, shaikh kamal wrote:
+> > > Signed-off-by: shaikh kamal <shaikhkamal2012@gmail.com>
+> > > ---
+> > >   drivers/staging/android/ashmem.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/staging/android/ashmem.c
+> > > b/drivers/staging/android/ashmem.c
+> > > index ddbde3f8430e..4c6b420fbf4d 100644
+> > > --- a/drivers/staging/android/ashmem.c
+> > > +++ b/drivers/staging/android/ashmem.c
+> > > @@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file
+> > > *file, unsigned long addr,
+> > >   static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
+> > >   {
+> > > -    static struct file_operations vmfile_fops;
+> > > +    static const struct file_operations vmfile_fops;
+> > >       struct ashmem_area *asma = file->private_data;
+> > >       int ret = 0;
+> > 
+> > Are you sure this patch compiles? vmfile_fops is overrided few lines below
+> > 
+> > odd checkpatch.pl warning...
+> > 
+> > 
+> > 
+> > 
+> > With regards,
+> > Pavel Skripkin
+> 
+> Thank you,yes vmfile_fops is overrided in below code.
+> Building the kernel - make -j4,
+> drivers/staging/android/ashmem.c: In function ‘ashmem_mmap’:
+> drivers/staging/android/ashmem.c:431:16: error: assignment of read-only
+> variable ‘vmfile_fops’
+>     vmfile_fops = *vmfile->f_op;
+>                 ^
+> drivers/staging/android/ashmem.c:432:21: error: assignment of member ‘mmap’
+> in read-only object
+>     vmfile_fops.mmap = ashmem_vmfile_mmap;
+>                      ^
+> drivers/staging/android/ashmem.c:433:34: error: assignment of member
+> ‘get_unmapped_area’ in read-only object
+>     vmfile_fops.get_unmapped_area =
+>                                   ^
+> scripts/Makefile.build:288: recipe for target
+> 'drivers/staging/android/ashmem.o' failed
+> make[3]: *** [drivers/staging/android/ashmem.o] Error 1
+> scripts/Makefile.build:550: recipe for target 'drivers/staging/android'
+> failed
+> make[2]: *** [drivers/staging/android] Error 2
+> scripts/Makefile.build:550: recipe for target 'drivers/staging' failed
+> make[1]: *** [drivers/staging] Error 2
+> Makefile:1831: recipe for target 'drivers' failed
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sasha Levin <sashal@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/process/stable-kernel-rules.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+As always, it is expected that when you submit a change to the kernel,
+at the very least you have test-built it to ensure that it does not
+break the build.  Please remember to do this next time.
 
-diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
-index c494914622e..a9a479fba90 100644
---- a/Documentation/process/stable-kernel-rules.rst
-+++ b/Documentation/process/stable-kernel-rules.rst
-@@ -178,7 +178,7 @@ Trees
-  - The finalized and tagged releases of all stable kernels can be found
-    in separate branches per version at:
- 
--	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-+	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
- 
-  - The release candidate of all stable kernel versions can be found at:
- 
--- 
-An old man doll... just what I always wanted! - Clara
+thanks,
 
+greg k-h

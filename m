@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5DC4D84B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4DF4D84E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242039AbiCNM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S244313AbiCNMby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243626AbiCNMVF (ORCPT
+        with ESMTP id S243657AbiCNMVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:05 -0400
+        Mon, 14 Mar 2022 08:21:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B5F54FA5;
-        Mon, 14 Mar 2022 05:16:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CFB55202;
+        Mon, 14 Mar 2022 05:16:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86EF7608C4;
-        Mon, 14 Mar 2022 12:16:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AF8C340E9;
-        Mon, 14 Mar 2022 12:16:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5288060C71;
+        Mon, 14 Mar 2022 12:16:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9A1C340E9;
+        Mon, 14 Mar 2022 12:16:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260190;
-        bh=dVGoPrrWRTVHA4L6rhMCbLqZZdospTvDe05WnMPVvFI=;
+        s=korg; t=1647260195;
+        bh=cwguBtztnNbV8hxATJW/2SnShoO0jpbrx3D/7sf+30I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NtiqJ63sYxe1yOsuMCUs1nSeZ8aGGyhCuZn+BK99bTn6IxYJ8Yo9q2PZo8sd5xTNG
-         9o82BkcBav8kZ9REmriEmfrXwP6m+KZXkV1mPu3kdel+OFBBgyiNOaihbUDFaPAVYi
-         XPRNYFs/gwxnL+V4295A0KMozaXsS/nPdrUQr4uE=
+        b=NFrqH8dmHQws33v+rYyDsNlweqxMoq81rhtuVgA2I1KxKkGaPGisGXLMjW9g0PLIT
+         SEJLo01gGq2Du0TV6jHeWqWy9oLVS4/nm+uje8a3EAl/EVJoFf1cATZQZgMwetF3xA
+         OZkjcIoqbWltbRYrsPnMo9q29w2qiTTwycguOW6Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 082/121] tracing/osnoise: Make osnoise_main to sleep for microseconds
-Date:   Mon, 14 Mar 2022 12:54:25 +0100
-Message-Id: <20220314112746.409684021@linuxfoundation.org>
+Subject: [PATCH 5.16 083/121] tracing: Fix selftest config check for function graph start up test
+Date:   Mon, 14 Mar 2022 12:54:26 +0100
+Message-Id: <20220314112746.436979608@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
 References: <20220314112744.120491875@linuxfoundation.org>
@@ -56,101 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit dd990352f01ee9a6c6eee152e5d11c021caccfe4 ]
+[ Upstream commit c5229a0bd47814770c895e94fbc97ad21819abfe ]
 
-osnoise's runtime and period are in the microseconds scale, but it is
-currently sleeping in the millisecond's scale. This behavior roots in the
-usage of hwlat as the skeleton for osnoise.
+CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is required to test
+direct tramp.
 
-Make osnoise to sleep in the microseconds scale. Also, move the sleep to
-a specialized function.
+Link: https://lkml.kernel.org/r/bdc7e594e13b0891c1d61bc8d56c94b1890eaed7.1640017960.git.christophe.leroy@csgroup.eu
 
-Link: https://lkml.kernel.org/r/302aa6c7bdf2d131719b22901905e9da122a11b2.1645197336.git.bristot@kernel.org
-
-Cc: Ingo Molnar <mingo@redhat.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_osnoise.c | 53 ++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 21 deletions(-)
+ kernel/trace/trace_selftest.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index b58674e8644a..58c788b0ca27 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1437,6 +1437,37 @@ static int run_osnoise(void)
- static struct cpumask osnoise_cpumask;
- static struct cpumask save_cpumask;
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index afd937a46496..abcadbe933bb 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -784,9 +784,7 @@ static struct fgraph_ops fgraph_ops __initdata  = {
+ 	.retfunc		= &trace_graph_return,
+ };
  
-+/*
-+ * osnoise_sleep - sleep until the next period
-+ */
-+static void osnoise_sleep(void)
-+{
-+	u64 interval;
-+	ktime_t wake_time;
-+
-+	mutex_lock(&interface_lock);
-+	interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
-+	mutex_unlock(&interface_lock);
-+
-+	/*
-+	 * differently from hwlat_detector, the osnoise tracer can run
-+	 * without a pause because preemption is on.
-+	 */
-+	if (!interval) {
-+		/* Let synchronize_rcu_tasks() make progress */
-+		cond_resched_tasks_rcu_qs();
-+		return;
-+	}
-+
-+	wake_time = ktime_add_us(ktime_get(), interval);
-+	__set_current_state(TASK_INTERRUPTIBLE);
-+
-+	while (schedule_hrtimeout_range(&wake_time, 0, HRTIMER_MODE_ABS)) {
-+		if (kthread_should_stop())
-+			break;
-+	}
-+}
-+
- /*
-  * osnoise_main - The osnoise detection kernel thread
-  *
-@@ -1445,30 +1476,10 @@ static struct cpumask save_cpumask;
-  */
- static int osnoise_main(void *data)
- {
--	u64 interval;
+-#if defined(CONFIG_DYNAMIC_FTRACE) && \
+-    defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+-#define TEST_DIRECT_TRAMP
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ noinline __noclone static void trace_direct_tramp(void) { }
+ #endif
  
- 	while (!kthread_should_stop()) {
--
- 		run_osnoise();
--
--		mutex_lock(&interface_lock);
--		interval = osnoise_data.sample_period - osnoise_data.sample_runtime;
--		mutex_unlock(&interface_lock);
--
--		do_div(interval, USEC_PER_MSEC);
--
--		/*
--		 * differently from hwlat_detector, the osnoise tracer can run
--		 * without a pause because preemption is on.
--		 */
--		if (interval < 1) {
--			/* Let synchronize_rcu_tasks() make progress */
--			cond_resched_tasks_rcu_qs();
--			continue;
--		}
--
--		if (msleep_interruptible(interval))
--			break;
-+		osnoise_sleep();
+@@ -849,7 +847,7 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+ 		goto out;
  	}
  
- 	return 0;
+-#ifdef TEST_DIRECT_TRAMP
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	tracing_reset_online_cpus(&tr->array_buffer);
+ 	set_graph_array(tr);
+ 
 -- 
 2.34.1
 

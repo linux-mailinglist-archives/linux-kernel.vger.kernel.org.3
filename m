@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0934D839A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A734D820B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241056AbiCNMR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        id S240157AbiCNL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241045AbiCNMIR (ORCPT
+        with ESMTP id S240128AbiCNL7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:17 -0400
+        Mon, 14 Mar 2022 07:59:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CB32DABF;
-        Mon, 14 Mar 2022 05:04:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74911433AE;
+        Mon, 14 Mar 2022 04:57:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42C62B80DF0;
-        Mon, 14 Mar 2022 12:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CDFC340E9;
-        Mon, 14 Mar 2022 12:04:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 443EBB80D96;
+        Mon, 14 Mar 2022 11:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC40CC340E9;
+        Mon, 14 Mar 2022 11:57:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259459;
-        bh=VOh4WZWDHbvl0DVM0VCouT/2UyXl+kHCC7NlZIFYlBw=;
+        s=korg; t=1647259060;
+        bh=IhES6SY4hVBe9WnX1Oa59VrbiUCnlFTaMAUQOD0QNW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k651MXGQdYCuKkJSGXEuk9sd6m6DWiHUMxErZ8+TzJ8oTYNieRgtt8fy3W6GF4I1E
-         hT8YjMvqnhePlznDwy3+1/O7rR6LonHupD1ITQy7HTreQJzTYacCJwRE5O8GgbeZ9K
-         /5NHUmKAERQSSyuHPnnEoHuM8+MCZhNcGMEJ6gLk=
+        b=Qyvl+eInIjEGhkIIxG/WqPPTfMedRkpSPbbSgxOU4v2wu3JdrcAt1IHB0OuqqevWr
+         K+oisQW8rLfS01i1EA/IbrUZRjc7CkMXsuQZgRfbfhp2DW8gudjtP3wFrAPiOk3/5V
+         RmobhAn8Os5d86dxuKWFPmWK1Won/BPNqrlnwOjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 012/110] vduse: Fix returning wrong type in vduse_domain_alloc_iova()
-Date:   Mon, 14 Mar 2022 12:53:14 +0100
-Message-Id: <20220314112743.375956292@linuxfoundation.org>
+Subject: [PATCH 5.4 04/43] net: qlogic: check the return value of dma_alloc_coherent() in qed_vf_hw_prepare()
+Date:   Mon, 14 Mar 2022 12:53:15 +0100
+Message-Id: <20220314112734.542742272@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,39 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit b9d102dafec6af1c07b610faf0a6d4e8aee14ae0 ]
+[ Upstream commit e0058f0fa80f6e09c4d363779c241c45a3c56b94 ]
 
-This fixes the following smatch warnings:
+The function dma_alloc_coherent() in qed_vf_hw_prepare() can fail, so
+its return value should be checked.
 
-drivers/vdpa/vdpa_user/iova_domain.c:305 vduse_domain_alloc_iova() warn: should 'iova_pfn << shift' be a 64 bit type?
-
-Fixes: 8c773d53fb7b ("vduse: Implement an MMU-based software IOTLB")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Link: https://lore.kernel.org/r/20220121083940.102-1-xieyongji@bytedance.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+Fixes: 1408cc1fa48c ("qed: Introduce VFs")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vdpa/vdpa_user/iova_domain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/qlogic/qed/qed_vf.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-index 1daae2608860..0678c2514197 100644
---- a/drivers/vdpa/vdpa_user/iova_domain.c
-+++ b/drivers/vdpa/vdpa_user/iova_domain.c
-@@ -302,7 +302,7 @@ vduse_domain_alloc_iova(struct iova_domain *iovad,
- 		iova_len = roundup_pow_of_two(iova_len);
- 	iova_pfn = alloc_iova_fast(iovad, iova_len, limit >> shift, true);
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.c b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+index adc2c8f3d48e..62e4511db857 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_vf.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+@@ -539,6 +539,9 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
+ 						    p_iov->bulletin.size,
+ 						    &p_iov->bulletin.phys,
+ 						    GFP_KERNEL);
++	if (!p_iov->bulletin.p_virt)
++		goto free_pf2vf_reply;
++
+ 	DP_VERBOSE(p_hwfn, QED_MSG_IOV,
+ 		   "VF's bulletin Board [%p virt 0x%llx phys 0x%08x bytes]\n",
+ 		   p_iov->bulletin.p_virt,
+@@ -578,6 +581,10 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
  
--	return iova_pfn << shift;
-+	return (dma_addr_t)iova_pfn << shift;
- }
+ 	return rc;
  
- static void vduse_domain_free_iova(struct iova_domain *iovad,
++free_pf2vf_reply:
++	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
++			  sizeof(union pfvf_tlvs),
++			  p_iov->pf2vf_reply, p_iov->pf2vf_reply_phys);
+ free_vf2pf_request:
+ 	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
+ 			  sizeof(union vfpf_tlvs),
 -- 
 2.34.1
 

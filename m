@@ -2,215 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CE64D88FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9259B4D88FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242966AbiCNQXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S242976AbiCNQXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236138AbiCNQXC (ORCPT
+        with ESMTP id S242969AbiCNQXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 12:23:02 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210F5140A1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:21:50 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id h2so10891556pfh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 09:21:50 -0700 (PDT)
+        Mon, 14 Mar 2022 12:23:17 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382961C13A;
+        Mon, 14 Mar 2022 09:22:04 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id hw13so33894368ejc.9;
+        Mon, 14 Mar 2022 09:22:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=qALLnaCSSKUHcfprNAAItch631Ge5KfRQPx2pUNLQTQ=;
-        b=H7D/n0JbKj9EjOt8JtzKTXMQH0CNTpYB4I8wApB4Rmv61PHXEWj9mIPqgO05ZTyBRV
-         gGQOTLYfGzzw1FdftrzkIh6XmORv26rbqjicyHqSgwyZQEb8kvdu+uMfyc1qS98htKOL
-         qldzP/g9QTFXumZOPLV1iMBVFyiv24zQIs4wc=
+        bh=z5m7Rzd7PHl8jdAafRhu23AuInCvvTjkbtTtp1sT0eE=;
+        b=VyL2mQcduDG3aI2fSM5miQTVTewd1/hd2WHokC6cIlqVaQoIGjmU/vmoXAGOjIMm4m
+         zkRLDLaUMvRDhWMyOLTLpqn5d+YQdByUozxpFYxf/oKqaUYgwYuiRETxLwZKnwCvcHXp
+         k6l2bMbDry3C3jTwrzyT+WonvUYJH3sUuMhx6+wM5ejb2RthhaEpKKANV5JGFCZ1QodQ
+         j0JhnWLITG4xcF8Tg/xFeRUe+PdsM4It24O6wzP6h65l6T0wGAufnZ1pD4MfT+zGONLP
+         cwP+rgZ7FOh44d8cbVkxmrc7sNCbQn0nmODD+BO9igAIswim9W1H6F9y3zB84Qd8FeXm
+         uveg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qALLnaCSSKUHcfprNAAItch631Ge5KfRQPx2pUNLQTQ=;
-        b=vfXg+6RYTaebVTaQg7YzeovFu3En5Oh3vyLQSLkUBMoq1t5Ih+MG5/UbPh0LAWCBpb
-         XDBdbzX11TeLUDnGOvFs4DCQObd4uebJl9vpTVyc7thwgpZycFDDzzfm5QQxPLNaM8kD
-         lepONsheo/LA5f63v2mB2v8bNXNRJgbYoKfdz4XpmNF/9xxR8wwCLJmERe7hS4QmHBDu
-         lsO03cJo0eEoTQMaYOgIT62X1iAuOcw23I0cLz1ewFYjbAgjuA79DY2Z+VrByOHrnwKI
-         UAlh174e1zFt/vUTls7rf9bX7A/AecXkZA3PhHkCgk/Uqq8Qfr53MIvHjerQ1fSANZHj
-         wOFw==
-X-Gm-Message-State: AOAM531Lsp6k+fJt3XfZNCVwMRselDluEJyV++u3E4pJf1xnwvHcd8g2
-        LeziRtqc7z7hnPYWRUArDgUNVA==
-X-Google-Smtp-Source: ABdhPJywlNfTDHCbCn7W5tk/3WvfHJOH4isiXUJsYK3fHzRwOBGDMLdgv9KHuQlVH/xNrUex2nFbYw==
-X-Received: by 2002:a65:6091:0:b0:35e:d274:5f54 with SMTP id t17-20020a656091000000b0035ed2745f54mr20676714pgu.200.1647274910285;
-        Mon, 14 Mar 2022 09:21:50 -0700 (PDT)
-Received: from ebps (cpe-75-80-179-40.san.res.rr.com. [75.80.179.40])
-        by smtp.gmail.com with ESMTPSA id c3-20020a056a00248300b004f6f729e485sm21916449pfv.127.2022.03.14.09.21.48
+        bh=z5m7Rzd7PHl8jdAafRhu23AuInCvvTjkbtTtp1sT0eE=;
+        b=sil+ZwE+V1lsFvHcP6cbDqcV9TZUj8hbQDRvxO3PtMkyHPOUO6rT/3H4q9q2d7X/4h
+         ajQRpe+Rrkbhr9VzobIC53xFQLBvJPtgN8abBJxn2mULa10n3rrkdeHlLFDBG7CiI4QS
+         zwnAbWKFq0574KpANYK+QJvsJb7oBKR3y5RqYPfbraTuqzN00I/DFG8GNVIDJVr5+vbB
+         ZYZBwxUkOsTtd7wubhyH/uxMyFpFcYcQpmUzCe/X6KlRnbUScWp96AcK8+m8otN3f5wB
+         wJcqCWKgnq0aTw9hR/ehCMl3cexaMv5+1CMI2VALZpArXUwryv5eaUXQcZABbGxD9mIC
+         VjtA==
+X-Gm-Message-State: AOAM5316FEWEQdYVcqxYN/01uiJb7mWBunxo7qnR+bXQUI1JX80facPH
+        PgqFfaStH7VFvWJynNkX9/o=
+X-Google-Smtp-Source: ABdhPJy1bCM29GUJpCGWrIB2LGEc3cpHH+v2TkW5IvI5lQwUIeFMD1X4o5Yuy3PBiAfd87Nb4S6cHA==
+X-Received: by 2002:a17:907:7685:b0:6db:67:7218 with SMTP id jv5-20020a170907768500b006db00677218mr19310240ejc.461.1647274920903;
+        Mon, 14 Mar 2022 09:22:00 -0700 (PDT)
+Received: from omen ([188.127.98.149])
+        by smtp.gmail.com with ESMTPSA id t22-20020a056402525600b00416cb5fdc56sm6300664edd.57.2022.03.14.09.21.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 09:21:49 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 09:21:46 -0700
-From:   Eric Badger <ebadger@purestorage.com>
-To:     "Raj, Ashok" <ashok.raj@intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver OHalloran <oohall@gmail.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v1] PCI/AER: Handle Multi UnCorrectable/Correctable
- errors properly
-Message-ID: <20220314162146.GA1439451@ebps>
-References: <20220311025807.14664-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220313195220.GA436941@bhelgaas>
- <20220313214314.GD182809@otc-nc-03>
+        Mon, 14 Mar 2022 09:22:00 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 17:21:58 +0100
+From:   Enver Balalic <balalic.enver@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pobrn@protonmail.com
+Subject: Re: [PATCH v2] platform/x86: hp-wmi: support omen thermal profile
+ policy v1
+Message-ID: <20220314162158.kuqg7jsvzaild5tl@omen>
+References: <20220314121453.kjszdciymtg6ctbq@omen>
+ <32332118-bf97-e890-7d97-5d4eeab0388b@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220313214314.GD182809@otc-nc-03>
+In-Reply-To: <32332118-bf97-e890-7d97-5d4eeab0388b@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 02:43:14PM -0700, Raj, Ashok wrote:
-> On Sun, Mar 13, 2022 at 02:52:20PM -0500, Bjorn Helgaas wrote:
-> > On Fri, Mar 11, 2022 at 02:58:07AM +0000, Kuppuswamy Sathyanarayanan wrote:
-> > > Currently the aer_irq() handler returns IRQ_NONE for cases without bits
-> > > PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
-> > > assumption is incorrect.
-> > > 
-> > > Consider a scenario where aer_irq() is triggered for a correctable
-> > > error, and while we process the error and before we clear the error
-> > > status in "Root Error Status" register, if the same kind of error
-> > > is triggered again, since aer_irq() only clears events it saw, the
-> > > multi-bit error is left in tact. This will cause the interrupt to fire
-> > > again, resulting in entering aer_irq() with just the multi-bit error
-> > > logged in the "Root Error Status" register.
-> > > 
-> > > Repeated AER recovery test has revealed this condition does happen
-> > > and this prevents any new interrupt from being triggered. Allow to
-> > > process interrupt even if only multi-correctable (BIT 1) or
-> > > multi-uncorrectable bit (BIT 3) is set.
-> > > 
-> > > Reported-by: Eric Badger <ebadger@purestorage.com>
-> > 
-> > Is there a bug report with any concrete details (dmesg, lspci, etc)
-> > that we can include here?
+Hi,
+
+On Mon, Mar 14, 2022 at 04:27:50PM +0100, Hans de Goede wrote:
+> Hi,
 > 
-> Eric might have more details to add when he collected numerous logs to get
-> to the timeline of the problem. The test was to stress the links with an
-> automated power off, this will result in some eDPC UC error followed by
-> link down. The recovery worked fine for several cycles and suddenly there
-> were no more interrupts. A manual rescan on pci would probe and device is
-> operational again.
+> On 3/14/22 13:14, Enver Balalic wrote:
+> > As it turns out, these laptops have 2 thermal profile versions.
+> > A previous patch added support for v0, this patch adds support
+> > for v1 thermal policies that are in use on some devices.
+> > We obtain the thermal policy version by querying the get system
+> > design data WMI call and looking at the fourth byte it returns,
+> > except if the system board DMI Board ID is in a specific array
+> > that the windows command center app overrides to thermal policy
+> > v0 for some reason.
+> > 
+> > - V1
+> >   Initial Patch
+> > - V2
+> >   Rename V0 thermal policy values to HP_OMEN_V0_THERMAL_PROFILE_
+> >   for consistency with the V1 thermal policy values.
+> >   Fix issue where instead of forcing certain boards to V0, they
+> >   were being forced to V1.
+> >   Drop unnecessary newline additions.
+> > 
+> > Signed-off-by: Enver Balalic <balalic.enver@gmail.com>
+> > ---
+> >  drivers/platform/x86/hp-wmi.c | 81 +++++++++++++++++++++++++++++------
+> >  1 file changed, 67 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+> > index c56c8864961d..0109ddc84be7 100644
+> > --- a/drivers/platform/x86/hp-wmi.c
+> > +++ b/drivers/platform/x86/hp-wmi.c
+> > @@ -57,6 +57,14 @@ static const char * const omen_thermal_profile_boards[] = {
+> >  	"8917", "8918", "8949", "894A", "89EB"
+> >  };
+> >  
+> > +/* DMI Board names of Omen laptops that are specifically set to be thermal
+> > + * profile version 0 by the Omen Command Center app, regardless of what
+> > + * the get system design information WMI call returns
+> > + */
+> > +static const char *const omen_thermal_profile_force_v0_boards[] = {
+> > +	"8607", "8746", "8747", "8749", "874A", "8748"
+> > +};
+> > +
+> >  enum hp_wmi_radio {
+> >  	HPWMI_WIFI	= 0x0,
+> >  	HPWMI_BLUETOOTH	= 0x1,
+> > @@ -117,6 +125,7 @@ enum hp_wmi_gm_commandtype {
+> >  	HPWMI_SET_PERFORMANCE_MODE = 0x1A,
+> >  	HPWMI_FAN_SPEED_MAX_GET_QUERY = 0x26,
+> >  	HPWMI_FAN_SPEED_MAX_SET_QUERY = 0x27,
+> > +	HPWMI_GET_SYSTEM_DESIGN_DATA = 0x28,
+> >  };
+> >  
+> >  enum hp_wmi_command {
+> > @@ -151,10 +160,16 @@ enum hp_wireless2_bits {
+> >  	HPWMI_POWER_FW_OR_HW	= HPWMI_POWER_BIOS | HPWMI_POWER_HARD,
+> >  };
+> >  
+> > -enum hp_thermal_profile_omen {
+> > -	HP_OMEN_THERMAL_PROFILE_DEFAULT     = 0x00,
+> > -	HP_OMEN_THERMAL_PROFILE_PERFORMANCE = 0x01,
+> > -	HP_OMEN_THERMAL_PROFILE_COOL        = 0x02,
+> > +enum hp_thermal_profile_omen_v1 {
+> > +	HP_OMEN_V1_THERMAL_PROFILE_DEFAULT	= 0x30,
+> > +	HP_OMEN_V1_THERMAL_PROFILE_PERFORMANCE	= 0x31,
+> > +	HP_OMEN_V1_THERMAL_PROFILE_COOL		= 0x50,
+> > +};
+> > +
+> > +enum hp_thermal_profile_omen_v0 {
+> > +	HP_OMEN_V0_THERMAL_PROFILE_DEFAULT     = 0x00,
+> > +	HP_OMEN_V0_THERMAL_PROFILE_PERFORMANCE = 0x01,
+> > +	HP_OMEN_V0_THERMAL_PROFILE_COOL        = 0x02,
+> >  };
+> 
+> IMHO it would be more logical to list the v0 settings above
+> the v1 settings, rather then the other way around.
+> 
+> I've fixed this up while merging this patch:
+> 
+> Thank you for your patch, I've applied this patch to my review-hans 
+> branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> 
+> Note it will show up in my review-hans branch once I've pushed my
+> local branch there, which might take a while.
+> 
+> Once I've run some tests on this branch the patches there will be
+> added to the platform-drivers-x86/for-next branch and eventually
+> will be included in the pdx86 pull-request to Linus for the next
+> merge-window.
+> 
+> Regards,
+> 
+> Hans
+> 
+Thank you.
+> 
+> >  
+> >  enum hp_thermal_profile {
+> > @@ -407,9 +422,6 @@ static int omen_thermal_profile_set(int mode)
+> >  	char buffer[2] = {0, mode};
+> >  	int ret;
+> >  
+> > -	if (mode < 0 || mode > 2)
+> > -		return -EINVAL;
+> > -
+> >  	ret = hp_wmi_perform_query(HPWMI_SET_PERFORMANCE_MODE, HPWMI_GM,
+> >  				   &buffer, sizeof(buffer), 0);
+> >  
+> > @@ -431,6 +443,30 @@ static bool is_omen_thermal_profile(void)
+> >  			    board_name) >= 0;
+> >  }
+> >  
+> > +static int omen_get_thermal_policy_version(void)
+> > +{
+> > +	unsigned char buffer[8] = { 0 };
+> > +	int ret;
+> > +
+> > +	const char *board_name = dmi_get_system_info(DMI_BOARD_NAME);
+> > +
+> > +	if (board_name) {
+> > +		int matches = match_string(omen_thermal_profile_force_v0_boards,
+> > +			ARRAY_SIZE(omen_thermal_profile_force_v0_boards),
+> > +			board_name);
+> > +		if (matches >= 0)
+> > +			return 0;
+> > +	}
+> > +
+> > +	ret = hp_wmi_perform_query(HPWMI_GET_SYSTEM_DESIGN_DATA, HPWMI_GM,
+> > +				   &buffer, sizeof(buffer), sizeof(buffer));
+While I was looking at the other changes to the hp-wmi driver
+on your review-hans branch, I noticed this commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?h=review-hans&id=be9d73e64957bbd31ee9a0d11adc0f720974c558
+(is this the proper way to link to a commit in a patch email response?)
 
-The problem was originally discovered while performing a looping hot plug
-test. At hot remove time, one or more corrected errors usually appeared:
-
-[256236.078151] pcieport 0000:89:02.0: AER: Corrected error received: 0000:89:02.0
-[256236.078154] pcieport 0000:89:02.0: AER: PCIe Bus Error: severity=Corrected, type=Physical Layer, (Receiver ID)
-[256236.088606] pcieport 0000:89:02.0: AER:   device [8086:347a] error status/mask=00000001/00000000
-[256236.097857] pcieport 0000:89:02.0: AER:    [ 0] RxErr                 
-[256236.152622] pcieport 0000:89:02.0: pciehp: Slot(400): Link Down
-[256236.152623] pcieport 0000:89:02.0: pciehp: Slot(400): Card not present
-[256236.152631] pcieport 0000:89:02.0: DPC: containment event, status:0x1f01 source:0x0000
-[256236.152632] pcieport 0000:89:02.0: DPC: unmasked uncorrectable error detected reason 0 ext_reason 0
-[256236.152634] pcieport 0000:89:02.0: AER: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
-[256236.164207] pcieport 0000:89:02.0: AER:   device [8086:347a] error status/mask=00000020/00100000
-[256236.173464] pcieport 0000:89:02.0: AER:    [ 5] SDES                   (First)
-[256236.278407] pci 0000:8a:00.0: Removing from iommu group 32
-[256237.500837] pcieport 0000:89:02.0: Data Link Layer Link Active not set in 1000 msec
-[256237.500842] pcieport 0000:89:02.0: link reset at upstream device 0000:89:02.0 failed
-[256237.500865] pcieport 0000:89:02.0: AER: Device recovery failed
-
-The problematic case arose when 2 corrected errors arrived in a sequence like this:
-
-1. Correctable error triggered, bit 0 (ERR_COR) set in Root Error Status,
-   which now has value 0x1.
-2. aer_irq() triggered, reads Root Error Status, finds value 0x1.
-3. Second correctable error triggered, bit 1 (multiple ERR_COR) set in Root
-   Error Status, which now has value 0x3.
-4. aer_irq() writes back 0x1 to Root Error Status, which now has value 0x2.
-5. aer_irq() triggered again due to the second error, but, finding value 0x2
-   in Root Error Status, takes no action. Future interrupts are now inhibited.
-  
-My observation on Intel Icelake is that a new AER interrupt will be generated
-when one writes to Root Error Status but other bits remain set. I concluded
-this based on testing with ACPI EINJ and a hack like this:
-
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 9fa1f97e5b27..5c9bbbe7887b 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -1196,6 +1196,10 @@ static irqreturn_t aer_irq(int irq, void *context)
- 	struct aer_err_source e_src = {};
- 
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
-+
-+	pci_dbg(pdev->port, "Root Error Status: %04x\n", e_src.status);
-+	return IRQ_NONE;
-+
- 	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
- 		return IRQ_NONE;
- 
-And then running these commands:
-
-    # Prep injection data for a correctable error.
-    $ cd /sys/kernel/debug/apei/einj
-    $ echo 0x00000040 > error_type
-    $ echo 0x4 > flags
-    $ echo 0x891000 > param4
-    
-    # Root Error Status is initially clear
-    $ setpci -s 89:02.0 ECAP0001+0x30.w
-    0000
-    
-    # Inject one error
-    $ echo 1 > error_inject
-    
-    # Interrupt received
-    [  285.526275] pcieport 0000:89:02.0: AER: Root Error Status 0001
-    
-    # Inject another error
-    $ echo 1 > error_inject
-    
-    # No interrupt received, but "multiple ERR_COR" is now set
-    $ setpci -s 89:02.0 ECAP0001+0x30.w
-    0003
-    
-    # Wait for a while, then clear ERR_COR. A new interrupt immediately fires.
-    $ setpci -s 89:02.0 ECAP0001+0x30.w=0x1
-    [  354.596748] pcieport 0000:89:02.0: AER: Root Error Status 0002
-
-
-I've tried to track down some different hardware to confirm this behavior, but
-haven't found any that can run this test.
-
-My reading of the PCIe 5.0 spec, section "6.2.4.1.2 Interrupt Generation"
-doesn't seem to describe the behavior I saw on Icelake.
-
-	If a Root Port or Root Complex Event Collector is enabled for
-	edge-triggered interrupt signaling using MSI or MSI-X, an interrupt
-	message must be sent every time the logical AND of the following
-	conditions transitions from FALSE to TRUE:
-	...
-    At least one Error Reporting Enable bit in the Root Error Command
-    register and its associated error Messages Received bit in the Root
-    Error Status register are both set to 1b.
-
-This section of the spec seems to say that, if Root Error Status sees the
-sequence of values described above (0x1->0x3->0x2), only one interrupt would
-be generated, since there was no FALSE to TRUE transition at 0x3->0x2.  So you
-would need something analogous to:
-
-8edf5332c3934 ("PCI: pciehp: Fix MSI interrupt race")
-
-However, this seems not to be the case for Icelake.
-
-Cheers,
-Eric
+Based on this, I think the input buffer size here should be 0.
+Do you want me to make another patch for this or will you check 
+and commit it directly instead?
+> > +
+> > +	if (ret)
+> > +		return ret < 0 ? ret : -EINVAL;
+> > +
+> > +	return buffer[3];
+> > +}
+> > +
+> >  static int omen_thermal_profile_get(void)
+> >  {
+> >  	u8 data;
+> > @@ -1053,13 +1089,16 @@ static int platform_profile_omen_get(struct platform_profile_handler *pprof,
+> >  		return tp;
+> >  
+> >  	switch (tp) {
+> > -	case HP_OMEN_THERMAL_PROFILE_PERFORMANCE:
+> > +	case HP_OMEN_V0_THERMAL_PROFILE_PERFORMANCE:
+> > +	case HP_OMEN_V1_THERMAL_PROFILE_PERFORMANCE:
+> >  		*profile = PLATFORM_PROFILE_PERFORMANCE;
+> >  		break;
+> > -	case HP_OMEN_THERMAL_PROFILE_DEFAULT:
+> > +	case HP_OMEN_V0_THERMAL_PROFILE_DEFAULT:
+> > +	case HP_OMEN_V1_THERMAL_PROFILE_DEFAULT:
+> >  		*profile = PLATFORM_PROFILE_BALANCED;
+> >  		break;
+> > -	case HP_OMEN_THERMAL_PROFILE_COOL:
+> > +	case HP_OMEN_V0_THERMAL_PROFILE_COOL:
+> > +	case HP_OMEN_V1_THERMAL_PROFILE_COOL:
+> >  		*profile = PLATFORM_PROFILE_COOL;
+> >  		break;
+> >  	default:
+> > @@ -1072,17 +1111,31 @@ static int platform_profile_omen_get(struct platform_profile_handler *pprof,
+> >  static int platform_profile_omen_set(struct platform_profile_handler *pprof,
+> >  				     enum platform_profile_option profile)
+> >  {
+> > -	int err, tp;
+> > +	int err, tp, tp_version;
+> > +
+> > +	tp_version = omen_get_thermal_policy_version();
+> > +
+> > +	if (tp_version < 0 || tp_version > 1)
+> > +		return -EOPNOTSUPP;
+> >  
+> >  	switch (profile) {
+> >  	case PLATFORM_PROFILE_PERFORMANCE:
+> > -		tp = HP_OMEN_THERMAL_PROFILE_PERFORMANCE;
+> > +		if (tp_version == 0)
+> > +			tp = HP_OMEN_V0_THERMAL_PROFILE_PERFORMANCE;
+> > +		else
+> > +			tp = HP_OMEN_V1_THERMAL_PROFILE_PERFORMANCE;
+> >  		break;
+> >  	case PLATFORM_PROFILE_BALANCED:
+> > -		tp = HP_OMEN_THERMAL_PROFILE_DEFAULT;
+> > +		if (tp_version == 0)
+> > +			tp = HP_OMEN_V0_THERMAL_PROFILE_DEFAULT;
+> > +		else
+> > +			tp = HP_OMEN_V1_THERMAL_PROFILE_DEFAULT;
+> >  		break;
+> >  	case PLATFORM_PROFILE_COOL:
+> > -		tp = HP_OMEN_THERMAL_PROFILE_COOL;
+> > +		if (tp_version == 0)
+> > +			tp = HP_OMEN_V0_THERMAL_PROFILE_COOL;
+> > +		else
+> > +			tp = HP_OMEN_V1_THERMAL_PROFILE_COOL;
+> >  		break;
+> >  	default:
+> >  		return -EOPNOTSUPP;
+> 
+Thanks,
+Enver.

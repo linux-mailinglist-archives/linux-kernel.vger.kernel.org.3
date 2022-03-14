@@ -2,139 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9114D85EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33FD4D85F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236711AbiCNNbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 09:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S241731AbiCNNda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 09:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbiCNNbn (ORCPT
+        with ESMTP id S231587AbiCNNd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 09:31:43 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B7A13D73;
-        Mon, 14 Mar 2022 06:30:32 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id q4so12660482qki.11;
-        Mon, 14 Mar 2022 06:30:32 -0700 (PDT)
+        Mon, 14 Mar 2022 09:33:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FBFC13DCF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 06:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647264735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N2dBQ7kyew540zi+JMXl0o4PlnhZGpL163gOjfNKUtE=;
+        b=XSzwmi+Xa1zHlm10iGCye6q5CiYxCVqDEdYHYoupR1QyQygZPceDEhyqlO/LxhpeppFgTO
+        BeCjCjop/wLWRS3qmd80fdRTzA6JdjBhRzDh5CkKzGGkw+E9RcjJBgGSB6f9cE818AQ1Ga
+        9O2oNd0QkppilwCBohw6TJ9mMC43alw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-383-Hahtsq7-P8mszRNceM4-CQ-1; Mon, 14 Mar 2022 09:32:13 -0400
+X-MC-Unique: Hahtsq7-P8mszRNceM4-CQ-1
+Received: by mail-ej1-f69.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so7957520ejk.16
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 06:32:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7ESmoGYKvForOfgnFNNl3bul8J0TvzMfyrdSY3ncE6E=;
-        b=uO+Um3ZMkaOLd27w4397t+Fkci9z8p3BGpG5jW0zNEyNevdQQ3tfMYRQx9pNG+RhSO
-         QAsxZlkwXCeoTcUeUAe1swxy98G/HDfoZh//jGFz/JX6ZKfggiHzqsgI+1hKpkYMkCLA
-         Xq1e6uM7YUAZmXhnNKlGjDNL+YA4lkbjb05Rb4WQ+9jzlcWCsd7NdS5v+Yovyyq+B6Xt
-         HauZd5YXzbkC71oZgaILvTVBcKFwPBMBzjYNbXUuvK4uP/8H+VVg4nMW9Y/R9aeqq3o0
-         wjayk+HwknTMqAXIUBrL3IFro1AQ69neLCqIjCTYulhrVSLFgMyMk2CNKgUWwxUTlhEO
-         vUpw==
-X-Gm-Message-State: AOAM530oWWKWLE09SRWpWTbka181do3MQbbMp7Uj40CiL+jDxlcKW9b/
-        XefFAtyX4Fne666Zy+onTgYoCxKduszn7w==
-X-Google-Smtp-Source: ABdhPJzO94wE27iqfcTwnmSWUlJLQydrjBgOPb1Wr0PywBgDqz56YNMacz/XufAKVIYWUsYJQWs5Aw==
-X-Received: by 2002:a05:620a:4085:b0:67b:315b:a09f with SMTP id f5-20020a05620a408500b0067b315ba09fmr14881685qko.334.1647264631247;
-        Mon, 14 Mar 2022 06:30:31 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id h8-20020ac87d48000000b002e1c6faae9csm5564977qtb.28.2022.03.14.06.30.30
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=N2dBQ7kyew540zi+JMXl0o4PlnhZGpL163gOjfNKUtE=;
+        b=CnFwqdePYau2LzgziZ/GP8VyRUn70tQhPBvqFxN9DQKZcWztSAbnXT7wrCnUTy3KNW
+         QuuiS/JW/ixiPTZFEcsK2dVcxghJfCVtJhY5VNEyfQGuPJHPceNXRPfR34AFWu5aF/Bk
+         lJsq0fiVH74cuBJPKuBBUqJmnQZB0HYmlnWzmhhfGRB2MyE9N8p+7c2xlZvDnzaGYXiQ
+         H2LPG7pSiYGayfDF132fTTxhOAtKKEQAE4OE95O9D+sG9FpvPAazclqQCx0u9Pd0KtAM
+         xxlTH+S2XjA3gmgd4BZLgVPTc4zUfOWkeHcyfGR7oyzxN2uXDOmLlL+s5g/nj8lsXiJU
+         nxJg==
+X-Gm-Message-State: AOAM530OnMVFNfML1Xl+AtTPoajGlK7Fk603NnyTAPMz3rcvyHsrgVSN
+        1ycRnJACC7FaUxz/TVDK063Iy7oABf01S6tLM/PSciRiKDIBs3Kinqyt2EZ+hfTI7kV0SnopkBF
+        mQP/A2Wj27YbnVvlyPS4WKEFQ
+X-Received: by 2002:a17:907:608f:b0:6db:af2c:ab7e with SMTP id ht15-20020a170907608f00b006dbaf2cab7emr11800381ejc.694.1647264731571;
+        Mon, 14 Mar 2022 06:32:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw2A4Jg7pFV8JQfJlYOlmkdwJUWsVc9ARLKYhWxh7NvlxsXly+PiHlJ2Xpyw1flCD87GI4MFA==
+X-Received: by 2002:a17:907:608f:b0:6db:af2c:ab7e with SMTP id ht15-20020a170907608f00b006dbaf2cab7emr11800348ejc.694.1647264731307;
+        Mon, 14 Mar 2022 06:32:11 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id g2-20020aa7c842000000b0041314b98872sm7887639edt.22.2022.03.14.06.32.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 06:30:30 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2db2add4516so163661667b3.1;
-        Mon, 14 Mar 2022 06:30:30 -0700 (PDT)
-X-Received: by 2002:a0d:f1c7:0:b0:2db:d2bc:be11 with SMTP id
- a190-20020a0df1c7000000b002dbd2bcbe11mr18928111ywf.62.1647264630398; Mon, 14
- Mar 2022 06:30:30 -0700 (PDT)
+        Mon, 14 Mar 2022 06:32:10 -0700 (PDT)
+Message-ID: <9f804acc-00b5-f619-f107-e3dc3c5ec8a6@redhat.com>
+Date:   Mon, 14 Mar 2022 14:32:08 +0100
 MIME-Version: 1.0
-References: <cover.1646683502.git.geert@linux-m68k.org> <8d3c0cc370b0214244b01a64c588e5e506531716.1646683502.git.geert@linux-m68k.org>
-In-Reply-To: <8d3c0cc370b0214244b01a64c588e5e506531716.1646683502.git.geert@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Mar 2022 14:30:18 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVq19wpA_7nKKTm-G2EmK3cMxxP6nbR_u=vkazqCZ=KhQ@mail.gmail.com>
-Message-ID: <CAMuHMdVq19wpA_7nKKTm-G2EmK3cMxxP6nbR_u=vkazqCZ=KhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] drm/fourcc: Add DRM_FORMAT_C[124]
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Helge Deller <deller@gmx.de>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: WARNING: CPU: 0 PID: 884 at
+ arch/x86/kvm/../../../virt/kvm/kvm_main.c:3162 mark_page_dirty_in_slot
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Wanpeng Li <wanpengli@tencent.com>
+Cc:     open list <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        lkft-triage@lists.linaro.org
+References: <CA+G9fYsziOWHkV+YbKymtpVBkL=DAHnmMfkeuWvx0pJPg=fMEA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CA+G9fYsziOWHkV+YbKymtpVBkL=DAHnmMfkeuWvx0pJPg=fMEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 9:53 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> Introduce fourcc codes for color-indexed frame buffer formats with two,
-> four, and sixteen colors, and provide a mapping from bit per pixel and
-> depth to fourcc codes.
->
-> As the number of bits per pixel is less than eight, these rely on proper
-> block handling for the calculation of bits per pixel and pitch.
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+On 3/14/22 13:51, Naresh Kamboju wrote:
+> While running kselftest kvm tests on Linux mainline 5.17.0-rc8 on x86_64 device
+> the following kernel warning was noticed
 
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -99,7 +99,10 @@ extern "C" {
->  #define DRM_FORMAT_INVALID     0
->
->  /* color index */
-> -#define DRM_FORMAT_C8          fourcc_code('C', '8', ' ', ' ') /* [7:0] C */
-> +#define DRM_FORMAT_C1          fourcc_code('C', '1', ' ', ' ') /* [7:0] C0:C1:C2:C3:C4:C5:C6:C7 1:1:1:1:1:1:1:1 eight pixels/byte */
-> +#define DRM_FORMAT_C2          fourcc_code('C', '2', ' ', ' ') /* [7:0] C0:C1:C2:C3 2:2:2:2 four pixels/byte */
-> +#define DRM_FORMAT_C4          fourcc_code('C', '4', ' ', ' ') /* [7:0] C0:C1 4:4 two pixels/byte */
-> +#define DRM_FORMAT_C8          fourcc_code('C', '8', ' ', ' ') /* [7:0] C 8 one pixel/byte */
->
->  /* 8 bpp Red */
->  #define DRM_FORMAT_R8          fourcc_code('R', '8', ' ', ' ') /* [7:0] R */
+Thanks, this is known.  I'll get back to it this week since Linus gave 
+me an extra week. :)
 
-After replying to Ilia's comment[1], I realized the CFB drawing
-operations use native byte and bit ordering, unless
-FBINFO_FOREIGN_ENDIAN is set.
-While Amiga, Atari, and Sun-3 use big-endian bit ordering,
-e.g. Acorn VIDC[2] uses little endian, and SH7760[3] is configurable
-(sh7760fb configures ordering to match host order).
-BTW, ssd130{7fb,x}_update_rect() both assume little-endian, so I
-guess they are broken on big-endian.
-Fbtest uses big-endian bit ordering, so < 8 bpp is probably broken
-on little-endian.
+Paolo
 
-Hence the above should become:
+> # selftests: kvm: hyperv_clock
+> [   59.752584] ------------[ cut here ]------------
+> [   59.757297] WARNING: CPU: 0 PID: 884 at
+> arch/x86/kvm/../../../virt/kvm/kvm_main.c:3162
+> mark_page_dirty_in_slot+0xba/0xd0
+> [   59.768196] Modules linked in: x86_pkg_temp_thermal fuse
+> [   59.773531] CPU: 0 PID: 884 Comm: hyperv_clock Not tainted 5.17.0-rc8 #1
+> [   59.780242] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.5 11/26/2020
+> [   59.787652] RIP: 0010:mark_page_dirty_in_slot+0xba/0xd0
+> [   59.792894] Code: 89 ea 09 c6 e8 07 cd 00 00 5b 41 5c 41 5d 41 5e
+> 5d c3 48 8b 83 c0 00 00 00 49 63 d5 f0 48 0f ab 10 5b 41 5c 41 5d 41
+> 5e 5d c3 <0f> 0b 5b 41 5c 41 5d 41 5e 5d c3 0f 1f 44 00 00 eb 80 0f 1f
+> 40 00
+> [   59.811659] RSP: 0018:ffffa1548109bbe0 EFLAGS: 00010246
+> [   59.816919] RAX: 0000000080000000 RBX: ffff9174c5303a00 RCX: 0000000000000000
+> [   59.824068] RDX: 0000000000000000 RSI: ffffffffb6e29061 RDI: ffffffffb6e29061
+> [   59.831219] RBP: ffffa1548109bc00 R08: 0000000000000000 R09: 0000000000000001
+> [   59.838369] R10: 0000000000000001 R11: 0000000000000000 R12: ffffa1548109d000
+> [   59.845545] R13: 0000000000000022 R14: 0000000000000000 R15: 0000000000000004
+> [   59.852721] FS:  00007f07cc7b9740(0000) GS:ffff917827a00000(0000)
+> knlGS:0000000000000000
+> [   59.860822] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   59.866585] CR2: 0000000000000000 CR3: 0000000106700006 CR4: 00000000003726f0
+> [   59.873737] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   59.880886] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   59.888034] Call Trace:
+> [   59.890512]  <TASK>
+> [   59.892641]  __kvm_write_guest_page+0xc8/0x100
+> [   59.897112]  kvm_write_guest+0x61/0xb0
+> [   59.900882]  kvm_hv_invalidate_tsc_page+0xd3/0x140
+> [   59.905688]  ? kvm_hv_invalidate_tsc_page+0x72/0x140
+> [   59.910676]  kvm_arch_vm_ioctl+0x20f/0xb70
+> [   59.914789]  ? __lock_acquire+0x3af/0x2370
+> [   59.918913]  ? __this_cpu_preempt_check+0x13/0x20
+> [   59.923638]  ? lock_is_held_type+0xdd/0x130
+> [   59.927845]  kvm_vm_ioctl+0x774/0xe10
+> [   59.931530]  ? ktime_get_coarse_real_ts64+0xbe/0xd0
+> [   59.936429]  ? __this_cpu_preempt_check+0x13/0x20
+> [   59.941178]  ? lockdep_hardirqs_on+0x7e/0x100
+> [   59.945552]  ? ktime_get_coarse_real_ts64+0xbe/0xd0
+> [   59.950493]  ? ktime_get_coarse_real_ts64+0xbe/0xd0
+> [   59.955459]  ? security_file_ioctl+0x37/0x50
+> [   59.959753]  __x64_sys_ioctl+0x91/0xc0
+> [   59.963524]  do_syscall_64+0x5c/0x80
+> [   59.967125]  ? do_syscall_64+0x69/0x80
+> [   59.970896]  ? syscall_exit_to_user_mode+0x3e/0x50
+> [   59.975706]  ? do_syscall_64+0x69/0x80
+> [   59.979495]  ? exc_page_fault+0x7c/0x250
+> [   59.983453]  ? asm_exc_page_fault+0x8/0x30
+> [   59.987570]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [   59.992637] RIP: 0033:0x7f07cc0b78f7
+> [   59.996234] Code: b3 66 90 48 8b 05 a1 35 2c 00 64 c7 00 26 00 00
+> 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00
+> 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 71 35 2c 00 f7 d8 64 89
+> 01 48
+> [   60.014996] RSP: 002b:00007ffdf0b37478 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000010
+> [   60.022581] RAX: ffffffffffffffda RBX: 000000004030ae7b RCX: 00007f07cc0b78f7
+> [   60.029729] RDX: 00007ffdf0b374b0 RSI: 000000004030ae7b RDI: 0000000000000006
+> [   60.036880] RBP: 0000000000000007 R08: 000000000040de60 R09: 0000000000000007
+> [   60.044030] R10: 0000000000067816 R11: 0000000000000246 R12: 00007f07cc7bf000
+> [   60.051180] R13: 0000000000000007 R14: 0000000000006592 R15: 0000000000136843
+> [   60.058357]  </TASK>
+> [   60.060566] irq event stamp: 6625
+> [   60.063925] hardirqs last  enabled at (6635): [<ffffffffb7064848>]
+> __up_console_sem+0x58/0x60
+> [   60.072511] hardirqs last disabled at (6644): [<ffffffffb706482d>]
+> __up_console_sem+0x3d/0x60
+> [   60.081044] softirqs last  enabled at (6092): [<ffffffffb8400327>]
+> __do_softirq+0x327/0x493
+> [   60.089407] softirqs last disabled at (6085): [<ffffffffb6fe3a65>]
+> irq_exit_rcu+0xe5/0x130
+> [   60.097735] ---[ end trace 0000000000000000 ]---
+> ok 6 selftests: kvm: hyperv_clock
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> metadata:
+>    git_describe: v5.17-rc8
+>    git_ref: master
+>    git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+>    git_sha: 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
+>    kernel-config: https://builds.tuxbuild.com/26LbaUN6vcuAN7Rd69gZkFWp5J8/config
+>    build: https://builds.tuxbuild.com/26LbaUN6vcuAN7Rd69gZkFWp5J8/
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+> 
+> [1] https://lkft.validation.linaro.org/scheduler/job/4714912#L1520
+> [2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.17-rc8/testrun/8445627/suite/linux-log-parser/test/check-kernel-warning-4714912/details/
+> 
 
-    #define DRM_FORMAT_C1          fourcc_code('C', '1', ' ', ' ') /*
-[7:0] C7:C6:C5:C4:C3:C2:C1:C0 1:1:1:1:1:1:1:1 eight pixels/byte */
-    #define DRM_FORMAT_C2          fourcc_code('C', '2', ' ', ' ') /*
-[7:0] C3:C2:C1:C0 2:2:2:2 four pixels/byte */
-    #define DRM_FORMAT_C4          fourcc_code('C', '4', ' ', ' ') /*
-[7:0] C1:C0 4:4 two pixels/byte */
-
-The same changes should be made for DRM_FORMAT_[RD][124].
-
-The fbdev emulation code should gain support for these with and without
-DRM_FORMAT_BIG_ENDIAN, the latter perhaps only on big-endian platforms?
-
-[1] https://lore.kernel.org/r/CAKb7UvgEdm9U=+RyRwL0TGRfA_Qc7NbhCWoZOft2DKdXggtKYw@mail.gmail.com/
-[2] See p.30 of the VIDC datasheet
-    http://chrisacorns.computinghistory.org.uk/docs/Acorn/Misc/Acorn_VIDC_Datasheet.pdf
-[3] See p.1178 of the SH7660 datasheet
-    https://datasheet.octopart.com/HD6417760BL200AV-Renesas-datasheet-14105759.pdf
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

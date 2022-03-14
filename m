@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E73F4D837D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 763C44D81DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241182AbiCNMPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
+        id S236385AbiCNL5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241458AbiCNMIp (ORCPT
+        with ESMTP id S238323AbiCNL5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:08:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C04DF71;
-        Mon, 14 Mar 2022 05:05:18 -0700 (PDT)
+        Mon, 14 Mar 2022 07:57:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7D013CF2;
+        Mon, 14 Mar 2022 04:55:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8ED5B80DEC;
-        Mon, 14 Mar 2022 12:05:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C284C36AE7;
-        Mon, 14 Mar 2022 12:05:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B0D60FF3;
+        Mon, 14 Mar 2022 11:55:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85370C36AE5;
+        Mon, 14 Mar 2022 11:55:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259514;
-        bh=uwf9dzxIwUnSO09Hn6uEZGOvmjnlWBgALoym4KdSelM=;
+        s=korg; t=1647258953;
+        bh=mwnCZ0OQrFjkyrpo4OL0dRkI5nNOtDz6vfSYkzZWJPo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2pOQYh5PpjHOAxQ2n6H5XmyLit3xjRq56/fYTb9Au8W+C3zaC+0ptrz6ZmscT/8uR
-         sMfyFTKCJiToobQ0cyX+PDTJtMqBIERN+vwEMCT2lExXzzIfM3O4EWqkCgVNaiLALd
-         lpssy/VWiBdPiaGJuJK8vUorv2S+qNtI7GQ876AU=
+        b=VB7zDodRXHLFV0jdF4zXtMbwV82X/ivjgGyaRvI7R+ALDXQapedXAkvahcDx/YMFF
+         7VOLLYflVZY+P3JKhXe8PTlYbUDC4XdJndeKvSkfH446/1m/Hb94oVuGkIrfx26S7R
+         xzUv/1PS+BqwZt9Jynui9/TMvBiI8OUSu20SWdk0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        stable@vger.kernel.org, Mark Featherston <mark@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 024/110] gpiolib: acpi: Convert ACPI value of debounce to microseconds
-Date:   Mon, 14 Mar 2022 12:53:26 +0100
-Message-Id: <20220314112743.710609916@linuxfoundation.org>
+Subject: [PATCH 5.4 16/43] gpio: ts4900: Do not set DAT and OE together
+Date:   Mon, 14 Mar 2022 12:53:27 +0100
+Message-Id: <20220314112734.874519991@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,76 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Mark Featherston <mark@embeddedTS.com>
 
-[ Upstream commit 660c619b9d7ccd28648ee3766cdbe94ec7b27402 ]
+[ Upstream commit 03fe003547975680fdb9ff5ab0e41cb68276c4f2 ]
 
-It appears that GPIO ACPI library uses ACPI debounce values directly.
-However, the GPIO library APIs expect the debounce timeout to be in
-microseconds.
+This works around an issue with the hardware where both OE and
+DAT are exposed in the same register. If both are updated
+simultaneously, the harware makes no guarantees that OE or DAT
+will actually change in any given order and may result in a
+glitch of a few ns on a GPIO pin when changing direction and value
+in a single write.
 
-Convert ACPI value of debounce to microseconds.
+Setting direction to input now only affects OE bit. Setting
+direction to output updates DAT first, then OE.
 
-While at it, document this detail where it is appropriate.
-
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215664
-Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Fixes: 8dcb7a15a585 ("gpiolib: acpi: Take into account debounce settings")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Fixes: 9c6686322d74 ("gpio: add Technologic I2C-FPGA gpio support")
+Signed-off-by: Mark Featherston <mark@embeddedTS.com>
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
 Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpiolib-acpi.c |  6 ++++--
- drivers/gpio/gpiolib.c      | 10 ++++++++++
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ drivers/gpio/gpio-ts4900.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-index d040c72fea58..4c2e32c38acc 100644
---- a/drivers/gpio/gpiolib-acpi.c
-+++ b/drivers/gpio/gpiolib-acpi.c
-@@ -311,7 +311,8 @@ static struct gpio_desc *acpi_request_own_gpiod(struct gpio_chip *chip,
- 	if (IS_ERR(desc))
- 		return desc;
+diff --git a/drivers/gpio/gpio-ts4900.c b/drivers/gpio/gpio-ts4900.c
+index 1da8d0586329..410452306bf7 100644
+--- a/drivers/gpio/gpio-ts4900.c
++++ b/drivers/gpio/gpio-ts4900.c
+@@ -1,7 +1,7 @@
+ /*
+  * Digital I/O driver for Technologic Systems I2C FPGA Core
+  *
+- * Copyright (C) 2015 Technologic Systems
++ * Copyright (C) 2015, 2018 Technologic Systems
+  * Copyright (C) 2016 Savoir-Faire Linux
+  *
+  * This program is free software; you can redistribute it and/or
+@@ -52,19 +52,33 @@ static int ts4900_gpio_direction_input(struct gpio_chip *chip,
+ {
+ 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
  
--	ret = gpio_set_debounce_timeout(desc, agpio->debounce_timeout);
-+	/* ACPI uses hundredths of milliseconds units */
-+	ret = gpio_set_debounce_timeout(desc, agpio->debounce_timeout * 10);
- 	if (ret)
- 		dev_warn(chip->parent,
- 			 "Failed to set debounce-timeout for pin 0x%04X, err %d\n",
-@@ -1052,7 +1053,8 @@ int acpi_dev_gpio_irq_get_by(struct acpi_device *adev, const char *name, int ind
- 			if (ret < 0)
- 				return ret;
- 
--			ret = gpio_set_debounce_timeout(desc, info.debounce);
-+			/* ACPI uses hundredths of milliseconds units */
-+			ret = gpio_set_debounce_timeout(desc, info.debounce * 10);
- 			if (ret)
- 				return ret;
- 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index d1b9b721218f..9e151413f51a 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -2186,6 +2186,16 @@ static int gpio_set_bias(struct gpio_desc *desc)
- 	return gpio_set_config_with_argument_optional(desc, bias, arg);
+-	/*
+-	 * This will clear the output enable bit, the other bits are
+-	 * dontcare when this is cleared
++	/* Only clear the OE bit here, requires a RMW. Prevents potential issue
++	 * with OE and data getting to the physical pin at different times.
+ 	 */
+-	return regmap_write(priv->regmap, offset, 0);
++	return regmap_update_bits(priv->regmap, offset, TS4900_GPIO_OE, 0);
  }
  
-+/**
-+ * gpio_set_debounce_timeout() - Set debounce timeout
-+ * @desc:	GPIO descriptor to set the debounce timeout
-+ * @debounce:	Debounce timeout in microseconds
-+ *
-+ * The function calls the certain GPIO driver to set debounce timeout
-+ * in the hardware.
-+ *
-+ * Returns 0 on success, or negative error code otherwise.
-+ */
- int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce)
+ static int ts4900_gpio_direction_output(struct gpio_chip *chip,
+ 					unsigned int offset, int value)
  {
- 	return gpio_set_config_with_argument_optional(desc,
+ 	struct ts4900_gpio_priv *priv = gpiochip_get_data(chip);
++	unsigned int reg;
+ 	int ret;
+ 
++	/* If changing from an input to an output, we need to first set the
++	 * proper data bit to what is requested and then set OE bit. This
++	 * prevents a glitch that can occur on the IO line
++	 */
++	regmap_read(priv->regmap, offset, &reg);
++	if (!(reg & TS4900_GPIO_OE)) {
++		if (value)
++			reg = TS4900_GPIO_OUT;
++		else
++			reg &= ~TS4900_GPIO_OUT;
++
++		regmap_write(priv->regmap, offset, reg);
++	}
++
+ 	if (value)
+ 		ret = regmap_write(priv->regmap, offset, TS4900_GPIO_OE |
+ 							 TS4900_GPIO_OUT);
 -- 
 2.34.1
 

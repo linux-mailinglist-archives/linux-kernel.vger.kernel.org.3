@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6385A4D83AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8ADE4D82C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241505AbiCNMSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S240688AbiCNMHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242404AbiCNMJ4 (ORCPT
+        with ESMTP id S240666AbiCNMHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C378C65CB;
-        Mon, 14 Mar 2022 05:07:55 -0700 (PDT)
+        Mon, 14 Mar 2022 08:07:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243FF22BD1;
+        Mon, 14 Mar 2022 05:03:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F186B80DF0;
-        Mon, 14 Mar 2022 12:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A24BC340E9;
-        Mon, 14 Mar 2022 12:07:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 830BE612FC;
+        Mon, 14 Mar 2022 12:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E85C340EC;
+        Mon, 14 Mar 2022 12:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259673;
-        bh=Mqf59jWgVyICVi1MOdIXW8LT3afhn1KB7de9lEOHhq4=;
+        s=korg; t=1647259417;
+        bh=8z1P7NjkHhYif4UrGWL+u6ANpfv1s/wJBTSk+EPdpA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C7sfSzWnExZQA9A390an7hdnVzqmP2bqwg0KmRno68o1DRAx/byXfkFVCu5QV2Wcg
-         cnRMqnjOdxpy7biu5iaPa0me0NgyiAU3f7Ek9MwaDtDd5xKrhLw58JTcTT9/FjivKa
-         3VtcJU6scEGfkRTNJSbVkOJukC+SbhUaxLJJdoy8=
+        b=lrur18UWYcP0aH7UmZnqRszNGo88HB0zvL6FMeszOdPcPA8dpmUf8gpIA763NsMLH
+         A7vA95+VnmIeBrZUGR7hzkmXTvg74Ju2UfcpBeW5IK+8uNIrbZL6ZpAYcVKBNGaRUs
+         /nUeLy6RiVdpftZB1g4qFL7ELvPCzBOoinkD7DLc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, suresh kumar <suresh2514@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 062/110] net-sysfs: add check for netdevice being present to speed_show
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 71/71] watch_queue: Fix filter limit check
 Date:   Mon, 14 Mar 2022 12:54:04 +0100
-Message-Id: <20220314112744.766252682@linuxfoundation.org>
+Message-Id: <20220314112739.925724995@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +55,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: suresh kumar <suresh2514@gmail.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 4224cfd7fb6523f7a9d1c8bb91bb5df1e38eb624 ]
+commit c993ee0f9f81caf5767a50d1faeba39a0dc82af2 upstream.
 
-When bringing down the netdevice or system shutdown, a panic can be
-triggered while accessing the sysfs path because the device is already
-removed.
+In watch_queue_set_filter(), there are a couple of places where we check
+that the filter type value does not exceed what the type_filter bitmap
+can hold.  One place calculates the number of bits by:
 
-    [  755.549084] mlx5_core 0000:12:00.1: Shutdown was called
-    [  756.404455] mlx5_core 0000:12:00.0: Shutdown was called
-    ...
-    [  757.937260] BUG: unable to handle kernel NULL pointer dereference at           (null)
-    [  758.031397] IP: [<ffffffff8ee11acb>] dma_pool_alloc+0x1ab/0x280
+   if (tf[i].type >= sizeof(wfilter->type_filter) * 8)
 
-    crash> bt
-    ...
-    PID: 12649  TASK: ffff8924108f2100  CPU: 1   COMMAND: "amsd"
-    ...
-     #9 [ffff89240e1a38b0] page_fault at ffffffff8f38c778
-        [exception RIP: dma_pool_alloc+0x1ab]
-        RIP: ffffffff8ee11acb  RSP: ffff89240e1a3968  RFLAGS: 00010046
-        RAX: 0000000000000246  RBX: ffff89243d874100  RCX: 0000000000001000
-        RDX: 0000000000000000  RSI: 0000000000000246  RDI: ffff89243d874090
-        RBP: ffff89240e1a39c0   R8: 000000000001f080   R9: ffff8905ffc03c00
-        R10: ffffffffc04680d4  R11: ffffffff8edde9fd  R12: 00000000000080d0
-        R13: ffff89243d874090  R14: ffff89243d874080  R15: 0000000000000000
-        ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
-    #10 [ffff89240e1a39c8] mlx5_alloc_cmd_msg at ffffffffc04680f3 [mlx5_core]
-    #11 [ffff89240e1a3a18] cmd_exec at ffffffffc046ad62 [mlx5_core]
-    #12 [ffff89240e1a3ab8] mlx5_cmd_exec at ffffffffc046b4fb [mlx5_core]
-    #13 [ffff89240e1a3ae8] mlx5_core_access_reg at ffffffffc0475434 [mlx5_core]
-    #14 [ffff89240e1a3b40] mlx5e_get_fec_caps at ffffffffc04a7348 [mlx5_core]
-    #15 [ffff89240e1a3bb0] get_fec_supported_advertised at ffffffffc04992bf [mlx5_core]
-    #16 [ffff89240e1a3c08] mlx5e_get_link_ksettings at ffffffffc049ab36 [mlx5_core]
-    #17 [ffff89240e1a3ce8] __ethtool_get_link_ksettings at ffffffff8f25db46
-    #18 [ffff89240e1a3d48] speed_show at ffffffff8f277208
-    #19 [ffff89240e1a3dd8] dev_attr_show at ffffffff8f0b70e3
-    #20 [ffff89240e1a3df8] sysfs_kf_seq_show at ffffffff8eedbedf
-    #21 [ffff89240e1a3e18] kernfs_seq_show at ffffffff8eeda596
-    #22 [ffff89240e1a3e28] seq_read at ffffffff8ee76d10
-    #23 [ffff89240e1a3e98] kernfs_fop_read at ffffffff8eedaef5
-    #24 [ffff89240e1a3ed8] vfs_read at ffffffff8ee4e3ff
-    #25 [ffff89240e1a3f08] sys_read at ffffffff8ee4f27f
-    #26 [ffff89240e1a3f50] system_call_fastpath at ffffffff8f395f92
+which is fine, but the second does:
 
-    crash> net_device.state ffff89443b0c0000
-      state = 0x5  (__LINK_STATE_START| __LINK_STATE_NOCARRIER)
+   if (tf[i].type >= sizeof(wfilter->type_filter) * BITS_PER_LONG)
 
-To prevent this scenario, we also make sure that the netdevice is present.
+which is not.  This can lead to a couple of out-of-bounds writes due to
+a too-large type:
 
-Signed-off-by: suresh kumar <suresh2514@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ (1) __set_bit() on wfilter->type_filter
+ (2) Writing more elements in wfilter->filters[] than we allocated.
+
+Fix this by just using the proper WATCH_TYPE__NR instead, which is the
+number of types we actually know about.
+
+The bug may cause an oops looking something like:
+
+  BUG: KASAN: slab-out-of-bounds in watch_queue_set_filter+0x659/0x740
+  Write of size 4 at addr ffff88800d2c66bc by task watch_queue_oob/611
+  ...
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x45/0x59
+   print_address_description.constprop.0+0x1f/0x150
+   ...
+   kasan_report.cold+0x7f/0x11b
+   ...
+   watch_queue_set_filter+0x659/0x740
+   ...
+   __x64_sys_ioctl+0x127/0x190
+   do_syscall_64+0x43/0x90
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+  Allocated by task 611:
+   kasan_save_stack+0x1e/0x40
+   __kasan_kmalloc+0x81/0xa0
+   watch_queue_set_filter+0x23a/0x740
+   __x64_sys_ioctl+0x127/0x190
+   do_syscall_64+0x43/0x90
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+  The buggy address belongs to the object at ffff88800d2c66a0
+   which belongs to the cache kmalloc-32 of size 32
+  The buggy address is located 28 bytes inside of
+   32-byte region [ffff88800d2c66a0, ffff88800d2c66c0)
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Reported-by: Jann Horn <jannh@google.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/net-sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/watch_queue.h |    3 ++-
+ kernel/watch_queue.c        |    4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
-index d7f9ee830d34..9e5657f63245 100644
---- a/net/core/net-sysfs.c
-+++ b/net/core/net-sysfs.c
-@@ -213,7 +213,7 @@ static ssize_t speed_show(struct device *dev,
- 	if (!rtnl_trylock())
- 		return restart_syscall();
+--- a/include/linux/watch_queue.h
++++ b/include/linux/watch_queue.h
+@@ -28,7 +28,8 @@ struct watch_type_filter {
+ struct watch_filter {
+ 	union {
+ 		struct rcu_head	rcu;
+-		unsigned long	type_filter[2];	/* Bitmask of accepted types */
++		/* Bitmask of accepted types */
++		DECLARE_BITMAP(type_filter, WATCH_TYPE__NR);
+ 	};
+ 	u32			nr_filters;	/* Number of filters */
+ 	struct watch_type_filter filters[];
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -322,7 +322,7 @@ long watch_queue_set_filter(struct pipe_
+ 		    tf[i].info_mask & WATCH_INFO_LENGTH)
+ 			goto err_filter;
+ 		/* Ignore any unknown types */
+-		if (tf[i].type >= sizeof(wfilter->type_filter) * 8)
++		if (tf[i].type >= WATCH_TYPE__NR)
+ 			continue;
+ 		nr_filter++;
+ 	}
+@@ -338,7 +338,7 @@ long watch_queue_set_filter(struct pipe_
  
--	if (netif_running(netdev)) {
-+	if (netif_running(netdev) && netif_device_present(netdev)) {
- 		struct ethtool_link_ksettings cmd;
+ 	q = wfilter->filters;
+ 	for (i = 0; i < filter.nr_filters; i++) {
+-		if (tf[i].type >= sizeof(wfilter->type_filter) * BITS_PER_LONG)
++		if (tf[i].type >= WATCH_TYPE__NR)
+ 			continue;
  
- 		if (!__ethtool_get_link_ksettings(netdev, &cmd))
--- 
-2.34.1
-
+ 		q->type			= tf[i].type;
 
 

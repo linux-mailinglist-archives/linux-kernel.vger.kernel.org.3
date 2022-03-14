@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A144D8DC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E38D4D8DD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244914AbiCNUHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S244962AbiCNUIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbiCNUHE (ORCPT
+        with ESMTP id S244964AbiCNUHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:07:04 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC17403ED
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:05:54 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso21804659ooi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iL+bTF+IsJj2jfqqbh63XbPYr229OTSdVOr9HvKPCW0=;
-        b=TvMuOAeIRfWytcYVW6/pg0KYzYrx9Tkxdo4o5kJKp1AwbBur9neOONvgjXK7aCQowK
-         qvKd4xqhAUQZfT9YjahbL9ca2ZzjkajQUPO/zkPl36ooh449iOMz0Rrpk7DUj0zH1PqI
-         VmTjLtNHvo36r8ScufR7fwNxUecCfr+qp7+yg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iL+bTF+IsJj2jfqqbh63XbPYr229OTSdVOr9HvKPCW0=;
-        b=Xd66CkajuuAMgAPDaVFrl0/2n0NV65doa/FMAg6wBr5JEOzFmxv6LT5LWFu/kvWHcS
-         f4PqBPeD9UDfoFPMsBCMWf8TNu/ZymWxlCNkfSH68kHbIXuka3xwriEmX4atKxLOSQS5
-         px+035RJstOqd/zCLPlnUdLx76R1kHKHG9Ngx7W5fRBp0B8PhOQPKJYW9k3P0OMdwgvS
-         ER3w9K6SWxrRZeTEjPFCizoevb1sJSNRy3sJkV2lL3kmT8ldianuKJaPJuksvdQI/NYC
-         YSucX9HYboceZgaUddb0DAth1z2H/kVMyuFlHbSigrxPmrxRQmcKbFFXNQYNQ7j8qv6u
-         pnCA==
-X-Gm-Message-State: AOAM532RHTpTDQ/73Kf2Q4R8QFNoJyEvsIC1LOpbB8IN11cSuMVDreI9
-        IfMUYT3Jinit3EQlQ6fptZwmKA==
-X-Google-Smtp-Source: ABdhPJy0s8+oSNomesaZ0ulF3NtaDRMWwTOCjPz1yaBWqLDcyEb0YpB2dblrbvA9Ii/MbMTDfH0M2Q==
-X-Received: by 2002:a05:6870:e74b:b0:db:2768:f169 with SMTP id t11-20020a056870e74b00b000db2768f169mr375879oak.120.1647288353793;
-        Mon, 14 Mar 2022 13:05:53 -0700 (PDT)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id n11-20020a9d710b000000b005af4ceeaac1sm8074726otj.37.2022.03.14.13.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 13:05:52 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 15:05:51 -0500
-From:   Justin Forbes <jmforbes@linuxtx.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 000/121] 5.16.15-rc1 review
-Message-ID: <Yi+gH+yWc5td2rR8@fedora64.linuxtx.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+        Mon, 14 Mar 2022 16:07:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889C240A28
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:06:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1449561243
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 20:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5ACC340E9;
+        Mon, 14 Mar 2022 20:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647288401;
+        bh=DOHt3LCYvGZ+M+llhcPXpvszVirNj9b7Vx1WQLAkF94=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=AanFG3WOTPvNoEiZcNP6OIPA2FuwI8mElPD56f2ouM3bwPsY2Dr4XPLp6qFsIunUL
+         Ox9ujc1OPKbG/whDy+/E1JxWHcUxzlTWO/Ehmvkw1zEkIlnZOq6wDnDOGTX0YizyOs
+         OVUzjsz4Av7yQr7vyNMLcRPCbqaFMlzw1Er2cJRycFsOWJStqEVr2XW9e3sOH/PEPV
+         hjCNQV6uxQ8020xp3h/Vo8UYB51oBeoTOxerq/5c1bQQWPZ8XLCXSuRvRFi9V6QHd0
+         oMo1U50MECs6ZWvioOPQpPImwP9urRn9XNsygUo0E0hYyd4v/7etHfW7ael0Aq/9ng
+         3qe5ISqwZOkoQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 18CC85C023F; Mon, 14 Mar 2022 13:06:41 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 13:06:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 2/3] preempt/dynamic: Introduce preempt mode accessors
+Message-ID: <20220314200641.GV4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220314133738.269522-1-frederic@kernel.org>
+ <20220314133738.269522-3-frederic@kernel.org>
+ <CANpmjNPqY65ZYLFukgp779pHbiRH05yns+G7Z36QdWwrQp1WOQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <CANpmjNPqY65ZYLFukgp779pHbiRH05yns+G7Z36QdWwrQp1WOQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,26 +65,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 12:53:03PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.15 release.
-> There are 121 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Mar 14, 2022 at 03:44:39PM +0100, Marco Elver wrote:
+> On Mon, 14 Mar 2022 at 14:37, Frederic Weisbecker <frederic@kernel.org> wrote:
+> >
+> > From: Valentin Schneider <valentin.schneider@arm.com>
+> >
+> > CONFIG_PREEMPT{_NONE, _VOLUNTARY} designate either:
+> > o The build-time preemption model when !PREEMPT_DYNAMIC
+> > o The default boot-time preemption model when PREEMPT_DYNAMIC
+> >
+> > IOW, using those on PREEMPT_DYNAMIC kernels is meaningless - the actual
+> > model could have been set to something else by the "preempt=foo" cmdline
+> > parameter.
+> >
+> > Introduce a set of helpers to determine the actual preemption mode used by
+> > the live kernel.
+> >
+> > Suggested-by: Marco Elver <elver@google.com>
+> > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > ---
+> >  include/linux/sched.h | 16 ++++++++++++++++
+> >  kernel/sched/core.c   | 11 +++++++++++
+> >  2 files changed, 27 insertions(+)
+> >
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index 508b91d57470..d348e886e4d0 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -2096,6 +2096,22 @@ static inline void cond_resched_rcu(void)
+> >  #endif
+> >  }
+> >
+> > +#ifdef CONFIG_PREEMPT_DYNAMIC
+> > +
+> > +extern bool preempt_mode_none(void);
+> > +extern bool preempt_mode_voluntary(void);
+> > +extern bool preempt_mode_full(void);
+> > +
+> > +#else
+> > +
+> > +#define preempt_mode_none() IS_ENABLED(CONFIG_PREEMPT_NONE)
+> > +#define preempt_mode_voluntary() IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY)
+> > +#define preempt_mode_full() IS_ENABLED(CONFIG_PREEMPT)
+> > +
 > 
-> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
-> Anything received after that time might be too late.
+> Shame this was somehow forgotten.
+> There was a v3 of this patch that fixed a bunch of things (e.g. making
+> these proper functions so all builds error if accidentally used in
+> #if).
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.15-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
+> https://lore.kernel.org/lkml/20211112185203.280040-3-valentin.schneider@arm.com/
 > 
-> thanks,
-> 
-> greg k-h
+> Is it also possible to take all the rest of that series (all 4
+> patches) from Valentin?
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Me, I am assuming that #2/3 is an experimental test so that I am able
+to easily whack this series over the head with rcutorture.  ;-)
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+							Thanx, Paul

@@ -2,89 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7984D7D5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E1A4D7D66
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237599AbiCNIKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S233763AbiCNINj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237611AbiCNIKO (ORCPT
+        with ESMTP id S237732AbiCNINL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:10:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A9D38A1;
-        Mon, 14 Mar 2022 01:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647245344; x=1678781344;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=9Z61s4WrZYBzdlpRR1dd1tEn6cmlD3NbOa2aklTM3Zk=;
-  b=Z/nyyWQJ4Q6tn5rN7abW/7gLy9E0mmPXAfcIkJIxAeDmfvOf6nxpYomT
-   RFfA8kZaRbidL2/DVs4uFOPJZXjldStVBIKkWhnMA1K9HO9q3Xna99Z/o
-   2PjiBBRJU6cVLFedILzDzkMyAUHKWBIlwYG05N7bJ6MH/IQDmIIfkZ2qJ
-   O5Z6cFVw1UfxGlmS4HRBVhwmMsFgNkqOufnwKHdHfj65UeFQW7aarodtA
-   gNbWGiby40nmfnyGtRX7YXleZVztYY9RCkaTj2Tht3ntbGD7JUme7MlaU
-   al0j0rRnHpcbdAzrJf7H2racrhjAgREdz93S9mJBaz2Ikf40f/RAvU3Wx
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="342390612"
-X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
-   d="scan'208";a="342390612"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 01:09:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
-   d="scan'208";a="556298140"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 01:08:55 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?utf-8?Q?Hol?= =?utf-8?Q?ger_Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v9 05/14] mm: multi-gen LRU: groundwork
-References: <20220309021230.721028-1-yuzhao@google.com>
-        <20220309021230.721028-6-yuzhao@google.com>
-Date:   Mon, 14 Mar 2022 16:08:53 +0800
-In-Reply-To: <20220309021230.721028-6-yuzhao@google.com> (Yu Zhao's message of
-        "Tue, 8 Mar 2022 19:12:22 -0700")
-Message-ID: <875yoh552i.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 14 Mar 2022 04:13:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E94E52E097
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 01:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647245519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e3fpUD1WBNJDewOagkvGRBUT0zzMkStT2pshcTX95+8=;
+        b=g8v5ZGIP0ia828j8qMaa/QrStDG1Yg6DjysaSb5+JrxR6cwGY+yf59jOhdraFUx5gtqvVV
+        EeU1cF/XgPXAuJqQ0pB97YuHCGtNs67uVjgrqwzRl2WGVsLoCT2knvcv5ORtFoY8UxSimW
+        HD63b2lJZZRgfNZeNMmlZhPXygOB8Bo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-373-XB3U27EkODunVOXDt7E-wA-1; Mon, 14 Mar 2022 04:11:57 -0400
+X-MC-Unique: XB3U27EkODunVOXDt7E-wA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3941C185A79C;
+        Mon, 14 Mar 2022 08:11:57 +0000 (UTC)
+Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 782EB40D019C;
+        Mon, 14 Mar 2022 08:11:50 +0000 (UTC)
+Date:   Mon, 14 Mar 2022 16:11:44 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Yu Kuai <yukuai3@huawei.com>, Saravanan D <saravanand@fb.com>,
+        Christopher Obbard <chris.obbard@collabora.com>
+Subject: Re: [PATCH block-5.17] fix rq-qos breakage from skipping
+ rq_qos_done_bio()
+Message-ID: <Yi74wAHBvU+8QGrP@T590>
+References: <Yi7rdrzQEHjJLGKB@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yi7rdrzQEHjJLGKB@slm.duckdns.org>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,36 +63,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yu,
+On Sun, Mar 13, 2022 at 09:15:02PM -1000, Tejun Heo wrote:
+> a647a524a467 ("block: don't call rq_qos_ops->done_bio if the bio isn't
+> tracked") made bio_endio() skip rq_qos_done_bio() if BIO_TRACKED is not set.
+> While this fixed a potential oops, it also broke blk-iocost by skipping the
+> done_bio callback for merged bios.
+> 
+> Before, whether a bio goes through rq_qos_throttle() or rq_qos_merge(),
+> rq_qos_done_bio() would be called on the bio on completion with BIO_TRACKED
+> distinguishing the former from the latter. rq_qos_done_bio() is not called
+> for bios which wenth through rq_qos_merge(). This royally confuses
+> blk-iocost as the merged bios never finish and are considered perpetually
+> in-flight.
+> 
+> One reliably reproducible failure mode is an intermediate cgroup geting
+> stuck active preventing its children from being activated due to the
+> leaf-only rule, leading to loss of control. The following is from
+> resctl-bench protection scenario which emulates isolating a web server like
+> workload from a memory bomb run on an iocost configuration which should
+> yield a reasonable level of protection.
+> 
+>   # cat /sys/block/nvme2n1/device/model
+>   Samsung SSD 970 PRO 512GB               
+>   # cat /sys/fs/cgroup/io.cost.model
+>   259:0 ctrl=user model=linear rbps=834913556 rseqiops=93622 rrandiops=102913 wbps=618985353 wseqiops=72325 wrandiops=71025
+>   # cat /sys/fs/cgroup/io.cost.qos
+>   259:0 enable=1 ctrl=user rpct=95.00 rlat=18776 wpct=95.00 wlat=8897 min=60.00 max=100.00
+>   # resctl-bench -m 29.6G -r out.json run protection::scenario=mem-hog,loops=1
+>   ...
+>   Memory Hog Summary
+>   ==================
+> 
+>   IO Latency: R p50=242u:336u/2.5m p90=794u:1.4m/7.5m p99=2.7m:8.0m/62.5m max=8.0m:36.4m/350m
+>               W p50=221u:323u/1.5m p90=709u:1.2m/5.5m p99=1.5m:2.5m/9.5m max=6.9m:35.9m/350m
+> 
+>   Isolation and Request Latency Impact Distributions:
+> 
+>                 min   p01   p05   p10   p25   p50   p75   p90   p95   p99   max  mean stdev
+>   isol%       15.90 15.90 15.90 40.05 57.24 59.07 60.01 74.63 74.63 90.35 90.35 58.12 15.82 
+>   lat-imp%        0     0     0     0     0  4.55 14.68 15.54 233.5 548.1 548.1 53.88 143.6 
+> 
+>   Result: isol=58.12:15.82% lat_imp=53.88%:143.6 work_csv=100.0% missing=3.96%
+> 
+> The isolation result of 58.12% is close to what this device would show
+> without any IO control.
+> 
+> Fix it by introducing a new flag BIO_QOS_MERGED to mark merged bios and
+> calling rq_qos_done_bio() on them too. For consistency and clarity, rename
+> BIO_TRACKED to BIO_QOS_THROTTLED. The flag checks are moved into
+> rq_qos_done_bio() so that it's next to the code paths that set the flags.
+> 
+> With the patch applied, the above same benchmark shows:
+> 
+>   # resctl-bench -m 29.6G -r out.json run protection::scenario=mem-hog,loops=1
+>   ...
+>   Memory Hog Summary
+>   ==================
+> 
+>   IO Latency: R p50=123u:84.4u/985u p90=322u:256u/2.5m p99=1.6m:1.4m/9.5m max=11.1m:36.0m/350m
+>               W p50=429u:274u/995u p90=1.7m:1.3m/4.5m p99=3.4m:2.7m/11.5m max=7.9m:5.9m/26.5m
+> 
+>   Isolation and Request Latency Impact Distributions:
+> 
+>                 min   p01   p05   p10   p25   p50   p75   p90   p95   p99   max  mean stdev
+>   isol%       84.91 84.91 89.51 90.73 92.31 94.49 96.36 98.04 98.71 100.0 100.0 94.42  2.81 
+>   lat-imp%        0     0     0     0     0  2.81  5.73 11.11 13.92 17.53 22.61  4.10  4.68 
+> 
+>   Result: isol=94.42:2.81% lat_imp=4.10%:4.68 work_csv=58.34% missing=0%
+> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Fixes: a647a524a467 ("block: don't call rq_qos_ops->done_bio if the bio isn't tracked")
+> Cc: stable@vger.kernel.org # v5.15+
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Yu Kuai <yukuai3@huawei.com>
 
-Yu Zhao <yuzhao@google.com> writes:
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 3326ee3903f3..747ab1690bcf 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -892,6 +892,16 @@ config ANON_VMA_NAME
->  	  area from being merged with adjacent virtual memory areas due to the
->  	  difference in their name.
->  
-> +# the multi-gen LRU {
-> +config LRU_GEN
-> +	bool "Multi-Gen LRU"
-> +	depends on MMU
-> +	# the following options can use up the spare bits in page flags
-> +	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+Looks fine since rq always holds one .q_usage_counter in case of merge:
 
-LRU_GEN depends on !MAXSMP.  So, What is the maximum NR_CPUS supported
-by LRU_GEN?
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-> +	help
-> +	  A high performance LRU implementation for memory overcommit.
-> +# }
-> +
->  source "mm/damon/Kconfig"
->  
->  endmenu
 
-Best Regards,
-Huang, Ying
 
-[snip]
+Thanks,
+Ming
+

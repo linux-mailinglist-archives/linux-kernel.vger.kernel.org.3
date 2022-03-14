@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8134D8C10
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 20:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D9B4D8C12
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 20:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243686AbiCNTKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 15:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S243839AbiCNTKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 15:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbiCNTKD (ORCPT
+        with ESMTP id S233327AbiCNTKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 15:10:03 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACBB220DD;
-        Mon, 14 Mar 2022 12:08:53 -0700 (PDT)
-Received: from g550jk.localnet (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9A351C8782;
-        Mon, 14 Mar 2022 19:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1647284900; bh=c0PhVAVBuzLcDTY70UAlTT8hnsjR2XvszePUiJZYgww=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=q9iVJh8gkxFkAohLgEyZc+3ba0+PrjmFzrQVBcJjj41PiNd24TayjH0AkAFa+f9TV
-         csgcW1WP7ywAjPZHfHUbILJy1jKvvI5j3/+ooR3QRvXH94sXVmoMBi/6Zd1S0G0+uB
-         Ks70d+RPUgps3DeI4vqcTj67T/UnxA48x+WPEQtE=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] rpmsg: smd: allow opening rpm_requests even if already opened
-Date:   Mon, 14 Mar 2022 20:08:20 +0100
-Message-ID: <2630587.mvXUDI8C0e@g550jk>
-In-Reply-To: <20220220201909.445468-6-luca@z3ntu.xyz>
-References: <20220220201909.445468-1-luca@z3ntu.xyz> <20220220201909.445468-6-luca@z3ntu.xyz>
+        Mon, 14 Mar 2022 15:10:35 -0400
+Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E012AC71;
+        Mon, 14 Mar 2022 12:09:25 -0700 (PDT)
+Received: from authenticated-user (box.fidei.email [71.19.144.250])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.fidei.email (Postfix) with ESMTPSA id 087E4800B8;
+        Mon, 14 Mar 2022 15:09:20 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
+        t=1647284964; bh=D65mw+VPjgm9JWYvPB45yIJYu6PVXrs9awDCVElvqKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oqWNLfFMM0t5ScMbi/WPyX6ZvOi4rhNhgY/9LcB9hXP/lRZsjXcewTSRHxlYvXODO
+         9wMdnCz6gkOY/01XMnaTWEDR+2nXdH8Q4zPFi7R9sLcWdNT6QWor5f+p3Klyvv++B8
+         lvhL+GyGckUDhv/4bT6NtM70+O7h9bl4Z+Tw5oNMGfy0vl+kzjPPRS73gsYNKIpcsM
+         AoWW1+Mv0H+wOlb3/Ck5Hy1bU06IaqUSnOPwElwSTMhtZ6fFUm9a8LhENZgFY1gFGT
+         Hen0TVo2P4pzY7aBrxEOK8yJy9s6mkXSOHfxhwG/kKnGRPgmNLJAffLP7/6fZ5YllL
+         tO92Ttv6QB2aA==
+From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Subject: [PATCH] MAINTAINERS: btrfs: update development git tree location
+Date:   Mon, 14 Mar 2022 15:09:07 -0400
+Message-Id: <20220314190907.23279-1-sweettea-kernel@dorminy.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Patches get pulled into a branch on github as listed, before eventually
+making it into a pull request using the kernel.org git repository.
+Development is expected to work off of the github branch, though, so
+list it in MAINTAINERS as a secondary tree.
 
-any feedback on this patch? It's needed for msm8953 to boot properly.
+Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards
-Luca
-
-On Sonntag, 20. Februar 2022 21:18:58 CET Luca Weiss wrote:
-> On msm8953 the channel seems to be already opened when booting Linux but
-> we still need to open it for communication with regulators etc.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Changes in v2:
-> - rework original patch, don't drop condition completely but allow force
->   opening rpm_requests channel
-> 
->  drivers/rpmsg/qcom_smd.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-> index 540e027f08c4..887e21ca51f2 100644
-> --- a/drivers/rpmsg/qcom_smd.c
-> +++ b/drivers/rpmsg/qcom_smd.c
-> @@ -1288,9 +1288,14 @@ static void qcom_channel_state_worker(struct
-> work_struct *work) if (channel->state != SMD_CHANNEL_CLOSED)
->  			continue;
-> 
-> +		/*
-> +		 * Always open rpm_requests, even when already opened 
-which is
-> +		 * required on some SoCs like msm8953.
-> +		 */
->  		remote_state = GET_RX_CHANNEL_INFO(channel, state);
->  		if (remote_state != SMD_CHANNEL_OPENING &&
-> -		    remote_state != SMD_CHANNEL_OPENED)
-> +		    remote_state != SMD_CHANNEL_OPENED &&
-> +		    strcmp(channel->name, "rpm_requests"))
->  			continue;
-> 
->  		if (channel->registered)
-
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e127c2fb08a7..38316c82f64a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4108,6 +4108,7 @@ W:	http://btrfs.wiki.kernel.org/
+ Q:	http://patchwork.kernel.org/project/linux-btrfs/list/
+ C:	irc://irc.libera.chat/btrfs
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git
++T:	git https://github.com/kdave/btrfs-devel.git misc-next
+ F:	Documentation/filesystems/btrfs.rst
+ F:	fs/btrfs/
+ F:	include/linux/btrfs*
+-- 
+2.35.1
 

@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16D24D81DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1B84D82EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbiCNL4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S237463AbiCNMLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239904AbiCNL4c (ORCPT
+        with ESMTP id S240968AbiCNMIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:56:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5EB848;
-        Mon, 14 Mar 2022 04:55:20 -0700 (PDT)
+        Mon, 14 Mar 2022 08:08:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013652AE02;
+        Mon, 14 Mar 2022 05:04:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30C1361214;
-        Mon, 14 Mar 2022 11:55:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B19C340E9;
-        Mon, 14 Mar 2022 11:55:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45D1D6130D;
+        Mon, 14 Mar 2022 12:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DD0C340E9;
+        Mon, 14 Mar 2022 12:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647258919;
-        bh=me4fpLUHxkRe3Tkzdw+OPHm6dkUnZ2aIUyj3nhuC9fI=;
+        s=korg; t=1647259451;
+        bh=bqsgv4wYRlRAXFN2jwy/To0VbWXSYoahODxLG/Pqnl0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yUNGNhGo/O4T7s8uJNTNGcuSWuYt4N8Gk9MOfebvumnGqIVrJRutQsmESyVK28DsL
-         AfMoNOGiKN/lHZ3tuu3JuiIDM6LxtpMJvCeg0Nj3sAuWd2+8/3kIoEwYjGahbpP37i
-         G+lON30V/Sa+Xpa4TjO9WjvQM3QyCe43tT5ag62g=
+        b=p3SH04pEZK0e+deVykMjji5sJ7xu/ZK+fgy//QqpUgt+kqOVUgtveDv6sFjYPLYra
+         ss+hUYAhFxbFaNxYoJvi2sPKWAgkkDGjUz8Ly30MqUqr2inwaPaZR+jjm/EstijnFY
+         oHc0/4XuJvu97STG/Rk839hy0arp0sIT7GEQcj0k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Shuang Li <shuali@redhat.com>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 01/43] clk: qcom: gdsc: Add support to update GDSC transition delay
+Subject: [PATCH 5.15 010/110] tipc: fix kernel panic when enabling bearer
 Date:   Mon, 14 Mar 2022 12:53:12 +0100
-Message-Id: <20220314112734.458717733@linuxfoundation.org>
+Message-Id: <20220314112743.320738039@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,117 +57,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Tung Nguyen <tung.q.nguyen@dektech.com.au>
 
-[ Upstream commit 4e7c4d3652f96f41179aab3ff53025c7a550d689 ]
+[ Upstream commit be4977b847f5d5cedb64d50eaaf2218c3a55a3a3 ]
 
-GDSCs have multiple transition delays which are used for the GDSC FSM
-states. Older targets/designs required these values to be updated from
-gdsc code to certain default values for the FSM state to work as
-expected. But on the newer targets/designs the values updated from the
-GDSC driver can hamper the FSM state to not work as expected.
+When enabling a bearer on a node, a kernel panic is observed:
 
-On SC7180 we observe black screens because the gdsc is being
-enabled/disabled very rapidly and the GDSC FSM state does not work as
-expected. This is due to the fact that the GDSC reset value is being
-updated from SW.
+[    4.498085] RIP: 0010:tipc_mon_prep+0x4e/0x130 [tipc]
+...
+[    4.520030] Call Trace:
+[    4.520689]  <IRQ>
+[    4.521236]  tipc_link_build_proto_msg+0x375/0x750 [tipc]
+[    4.522654]  tipc_link_build_state_msg+0x48/0xc0 [tipc]
+[    4.524034]  __tipc_node_link_up+0xd7/0x290 [tipc]
+[    4.525292]  tipc_rcv+0x5da/0x730 [tipc]
+[    4.526346]  ? __netif_receive_skb_core+0xb7/0xfc0
+[    4.527601]  tipc_l2_rcv_msg+0x5e/0x90 [tipc]
+[    4.528737]  __netif_receive_skb_list_core+0x20b/0x260
+[    4.530068]  netif_receive_skb_list_internal+0x1bf/0x2e0
+[    4.531450]  ? dev_gro_receive+0x4c2/0x680
+[    4.532512]  napi_complete_done+0x6f/0x180
+[    4.533570]  virtnet_poll+0x29c/0x42e [virtio_net]
+...
 
-Thus add support to update the transition delay from the clock
-controller gdscs as required.
+The node in question is receiving activate messages in another
+thread after changing bearer status to allow message sending/
+receiving in current thread:
 
-Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Link: https://lore.kernel.org/r/20220223185606.3941-1-tdas@codeaurora.org
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+         thread 1           |              thread 2
+         --------           |              --------
+                            |
+tipc_enable_bearer()        |
+  test_and_set_bit_lock()   |
+    tipc_bearer_xmit_skb()  |
+                            | tipc_l2_rcv_msg()
+                            |   tipc_rcv()
+                            |     __tipc_node_link_up()
+                            |       tipc_link_build_state_msg()
+                            |         tipc_link_build_proto_msg()
+                            |           tipc_mon_prep()
+                            |           {
+                            |             ...
+                            |             // null-pointer dereference
+                            |             u16 gen = mon->dom_gen;
+                            |             ...
+                            |           }
+  // Not being executed yet |
+  tipc_mon_create()         |
+  {                         |
+    ...                     |
+    // allocate             |
+    mon = kzalloc();        |
+    ...                     |
+  }                         |
+
+Monitoring pointer in thread 2 is dereferenced before monitoring data
+is allocated in thread 1. This causes kernel panic.
+
+This commit fixes it by allocating the monitoring data before enabling
+the bearer to receive messages.
+
+Fixes: 35c55c9877f8 ("tipc: add neighbor monitoring framework")
+Reported-by: Shuang Li <shuali@redhat.com>
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gdsc.c | 26 +++++++++++++++++++++-----
- drivers/clk/qcom/gdsc.h |  8 +++++++-
- 2 files changed, 28 insertions(+), 6 deletions(-)
+ net/tipc/bearer.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index a250f59708d8..888965bb93ed 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2015, 2017-2018, 2022, The Linux Foundation. All rights reserved.
-  */
+diff --git a/net/tipc/bearer.c b/net/tipc/bearer.c
+index 443f8e5b9477..36b466cfd9e1 100644
+--- a/net/tipc/bearer.c
++++ b/net/tipc/bearer.c
+@@ -352,16 +352,18 @@ static int tipc_enable_bearer(struct net *net, const char *name,
+ 		goto rejected;
+ 	}
  
- #include <linux/bitops.h>
-@@ -31,9 +31,14 @@
- #define CFG_GDSCR_OFFSET		0x4
+-	test_and_set_bit_lock(0, &b->up);
+-	rcu_assign_pointer(tn->bearer_list[bearer_id], b);
+-	if (skb)
+-		tipc_bearer_xmit_skb(net, bearer_id, skb, &b->bcast_addr);
+-
++	/* Create monitoring data before accepting activate messages */
+ 	if (tipc_mon_create(net, bearer_id)) {
+ 		bearer_disable(net, b);
++		kfree_skb(skb);
+ 		return -ENOMEM;
+ 	}
  
- /* Wait 2^n CXO cycles between all states. Here, n=2 (4 cycles). */
--#define EN_REST_WAIT_VAL	(0x2 << 20)
--#define EN_FEW_WAIT_VAL		(0x8 << 16)
--#define CLK_DIS_WAIT_VAL	(0x2 << 12)
-+#define EN_REST_WAIT_VAL	0x2
-+#define EN_FEW_WAIT_VAL		0x8
-+#define CLK_DIS_WAIT_VAL	0x2
++	test_and_set_bit_lock(0, &b->up);
++	rcu_assign_pointer(tn->bearer_list[bearer_id], b);
++	if (skb)
++		tipc_bearer_xmit_skb(net, bearer_id, skb, &b->bcast_addr);
 +
-+/* Transition delay shifts */
-+#define EN_REST_WAIT_SHIFT	20
-+#define EN_FEW_WAIT_SHIFT	16
-+#define CLK_DIS_WAIT_SHIFT	12
+ 	pr_info("Enabled bearer <%s>, priority %u\n", name, prio);
  
- #define RETAIN_MEM		BIT(14)
- #define RETAIN_PERIPH		BIT(13)
-@@ -308,7 +313,18 @@ static int gdsc_init(struct gdsc *sc)
- 	 */
- 	mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
- 	       EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
--	val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
-+
-+	if (!sc->en_rest_wait_val)
-+		sc->en_rest_wait_val = EN_REST_WAIT_VAL;
-+	if (!sc->en_few_wait_val)
-+		sc->en_few_wait_val = EN_FEW_WAIT_VAL;
-+	if (!sc->clk_dis_wait_val)
-+		sc->clk_dis_wait_val = CLK_DIS_WAIT_VAL;
-+
-+	val = sc->en_rest_wait_val << EN_REST_WAIT_SHIFT |
-+		sc->en_few_wait_val << EN_FEW_WAIT_SHIFT |
-+		sc->clk_dis_wait_val << CLK_DIS_WAIT_SHIFT;
-+
- 	ret = regmap_update_bits(sc->regmap, sc->gdscr, mask, val);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-index 64cdc8cf0d4d..907396ccb83f 100644
---- a/drivers/clk/qcom/gdsc.h
-+++ b/drivers/clk/qcom/gdsc.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2015, 2017-2018, 2022, The Linux Foundation. All rights reserved.
-  */
- 
- #ifndef __QCOM_GDSC_H__
-@@ -21,6 +21,9 @@ struct reset_controller_dev;
-  * @cxcs: offsets of branch registers to toggle mem/periph bits in
-  * @cxc_count: number of @cxcs
-  * @pwrsts: Possible powerdomain power states
-+ * @en_rest_wait_val: transition delay value for receiving enr ack signal
-+ * @en_few_wait_val: transition delay value for receiving enf ack signal
-+ * @clk_dis_wait_val: transition delay value for halting clock
-  * @resets: ids of resets associated with this gdsc
-  * @reset_count: number of @resets
-  * @rcdev: reset controller
-@@ -34,6 +37,9 @@ struct gdsc {
- 	unsigned int			clamp_io_ctrl;
- 	unsigned int			*cxcs;
- 	unsigned int			cxc_count;
-+	unsigned int			en_rest_wait_val;
-+	unsigned int			en_few_wait_val;
-+	unsigned int			clk_dis_wait_val;
- 	const u8			pwrsts;
- /* Powerdomain allowable state bitfields */
- #define PWRSTS_OFF		BIT(0)
+ 	return res;
 -- 
 2.34.1
 

@@ -2,96 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C8F4D81D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3657F4D84C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239958AbiCNL5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
+        id S242564AbiCNMaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239886AbiCNL5c (ORCPT
+        with ESMTP id S243879AbiCNMVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:57:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970081274C;
-        Mon, 14 Mar 2022 04:56:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 804EBB80DE3;
-        Mon, 14 Mar 2022 11:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F28C340E9;
-        Mon, 14 Mar 2022 11:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647258966;
-        bh=bMps1IWyihd+IApLTuN7q9Nk61AEbptapgwH3EKoC8Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=st3Mu23vUCRzB1IC9AjXo3yP1bYRXELBQsIYBTbLoFOaKLSsD2GystoJrzKN97eZq
-         0m+GmalYLq5hr37+eZQYtXER+bQCg1KBa9PeyDTsSK76743zvUURNkeqbTCxG3hOp3
-         tG2Thr7dku2Un9yLdacH45NC+trS5Icx2lhvsfdw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 18/43] net: phy: DP83822: clear MISR2 register to disable interrupts
+        Mon, 14 Mar 2022 08:21:21 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321F81140;
+        Mon, 14 Mar 2022 05:17:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FWNbZTFAMBhTgS2R1HpJWQ7vZbciDztq6nj7YGJohCE=;
+  b=HQtBKMWZuEVOREaqlRVE/01NtC4d9mTQstV2bcHaHlXi2M27x094itGk
+   yuLGQkwQVo5Kd+5w4hU+jps2xadytqyLLJD/jb2fGybRoVlo75MrqeOgt
+   CniSZtbcfdKiirA6FrQ75csVKfWVUiiTbUXYzQvGVOJZ2yELq0Y+wq8mE
+   U=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997337"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Justin Ernst <justin.ernst@hpe.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 05/30] x86/platform/uv: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:29 +0100
-Message-Id: <20220314112734.930123555@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-6-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Clément Léger <clement.leger@bootlin.com>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit 37c9d66c95564c85a001d8a035354f0220a1e1c3 ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-MISR1 was cleared twice but the original author intention was probably
-to clear MISR1 & MISR2 to completely disable interrupts. Fix it to
-clear MISR2.
-
-Fixes: 87461f7a58ab ("net: phy: DP83822 initial driver submission")
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220309142228.761153-1-clement.leger@bootlin.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/dp83822.c | 2 +-
+ drivers/platform/x86/uv_sysfs.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
-index 8a4b1d167ce2..ae17d2f9d534 100644
---- a/drivers/net/phy/dp83822.c
-+++ b/drivers/net/phy/dp83822.c
-@@ -238,7 +238,7 @@ static int dp83822_config_intr(struct phy_device *phydev)
- 		if (err < 0)
- 			return err;
+diff --git a/drivers/platform/x86/uv_sysfs.c b/drivers/platform/x86/uv_sysfs.c
+index 625b0b79d185..7c7c95c59908 100644
+--- a/drivers/platform/x86/uv_sysfs.c
++++ b/drivers/platform/x86/uv_sysfs.c
+@@ -555,7 +555,7 @@ static int init_pci_top_obj(struct uv_pci_top_obj *top_obj, char *line)
+ 	 */
+ 	line[6] = '_';
  
--		err = phy_write(phydev, MII_DP83822_MISR1, 0);
-+		err = phy_write(phydev, MII_DP83822_MISR2, 0);
- 		if (err < 0)
- 			return err;
- 
--- 
-2.34.1
-
-
+-	/* Null terminate after the concatencated name tokens
++	/* Null terminate after the concatenated name tokens
+ 	 * to produce kobj name string.
+ 	 */
+ 	line[14] = '\0';
 

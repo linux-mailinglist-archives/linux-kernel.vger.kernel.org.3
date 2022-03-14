@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B664D84DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA24D8219
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243800AbiCNMb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S240136AbiCNMAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241243AbiCNMRy (ORCPT
+        with ESMTP id S240056AbiCNL7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:17:54 -0400
+        Mon, 14 Mar 2022 07:59:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3229249F9E;
-        Mon, 14 Mar 2022 05:12:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208E813FB8;
+        Mon, 14 Mar 2022 04:57:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FFB2612FF;
-        Mon, 14 Mar 2022 12:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536B6C36AE9;
-        Mon, 14 Mar 2022 12:12:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 823BB6125F;
+        Mon, 14 Mar 2022 11:57:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB56C340ED;
+        Mon, 14 Mar 2022 11:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259944;
-        bh=sGG4xEp0veDolkndlxoaSezooSPfZ1+e2LfA0C1bkR8=;
+        s=korg; t=1647259073;
+        bh=k8YS5HB0MbE+wujgoxFGPpsu1hB5hAymUWGJFXCXhf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w2kvYP70Uf4p9V9bx6sDDoZqgUAfqI3Kz42+wvlqlOkP56lNeahDHQ5f6gYKfa9nh
-         lP0RcRoZZy8Io5ycnzdtlU+7v6mkDK1QVAB1ZdKwXGzc/nM+OdDNqD/eOlHeCEz4oW
-         2uYYQBy5AnUube0ylRqsiTHcm4MvNlmSdPhJt0Po=
+        b=MP1x5N5Zj27H0Ez58p0wpLOrQR1DhlJ42DBDFZn0xcEQ+5X1lD5YmfvYooM/nWtwH
+         wQxvXDDBTDnGiDp6uCou/lBM1iccuTkCf0BSDDq13BHg0nPmGfVSegLuomMKGdKE0O
+         UynAlxeRTpO8E22zVUo0RvPPWhARbYFHhBqoo6xs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 015/121] net: phy: meson-gxl: fix interrupt handling in forced mode
+        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 07/43] ARM: dts: aspeed: Fix AST2600 quad spi group
 Date:   Mon, 14 Mar 2022 12:53:18 +0100
-Message-Id: <20220314112744.552406448@linuxfoundation.org>
+Message-Id: <20220314112734.625913604@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,93 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Joel Stanley <joel@jms.id.au>
 
-[ Upstream commit a502a8f04097e038c3daa16c5202a9538116d563 ]
+[ Upstream commit 2f6edb6bcb2f3f41d876e0eba2ba97f87a0296ea ]
 
-This PHY doesn't support a link-up interrupt source. If aneg is enabled
-we use the "aneg complete" interrupt for this purpose, but if aneg is
-disabled link-up isn't signaled currently.
-According to a vendor driver there's an additional "energy detect"
-interrupt source that can be used to signal link-up if aneg is disabled.
-We can safely ignore this interrupt source if aneg is enabled.
+Requesting quad mode for the FMC resulted in an error:
 
-This patch was tested on a TX3 Mini TV box with S905W (even though
-boot message says it's a S905D).
+  &fmc {
+         status = "okay";
+ +       pinctrl-names = "default";
+ +       pinctrl-0 = <&pinctrl_fwqspi_default>'
 
-This issue has been existing longer, but due to changes in phylib and
-the driver the patch applies only from the commit marked as fixed.
+[    0.742963] aspeed-g6-pinctrl 1e6e2000.syscon:pinctrl: invalid function FWQSPID in map table
+￼
 
-Fixes: 84c8f773d2dc ("net: phy: meson-gxl: remove the use of .ack_callback()")
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Link: https://lore.kernel.org/r/04cac530-ea1b-850e-6cfa-144a55c4d75d@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+This is because the quad mode pins are a group of pins, not a function.
+
+After applying this patch we can request the pins and the QSPI data
+lines are muxed:
+
+ # cat /sys/kernel/debug/pinctrl/1e6e2000.syscon\:pinctrl-aspeed-g6-pinctrl/pinmux-pins |grep 1e620000.spi
+ pin 196 (AE12): device 1e620000.spi function FWSPID group FWQSPID
+ pin 197 (AF12): device 1e620000.spi function FWSPID group FWQSPID
+ pin 240 (Y1): device 1e620000.spi function FWSPID group FWQSPID
+ pin 241 (Y2): device 1e620000.spi function FWSPID group FWQSPID
+ pin 242 (Y3): device 1e620000.spi function FWSPID group FWQSPID
+ pin 243 (Y4): device 1e620000.spi function FWSPID group FWQSPID
+
+Fixes: f510f04c8c83 ("ARM: dts: aspeed: Add AST2600 pinmux nodes")
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Link: https://lore.kernel.org/r/20220304011010.974863-1-joel@jms.id.au
+Link: https://lore.kernel.org/r/20220304011010.974863-1-joel@jms.id.au'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/meson-gxl.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
-index 7e7904fee1d9..c49062ad72c6 100644
---- a/drivers/net/phy/meson-gxl.c
-+++ b/drivers/net/phy/meson-gxl.c
-@@ -30,8 +30,12 @@
- #define  INTSRC_LINK_DOWN	BIT(4)
- #define  INTSRC_REMOTE_FAULT	BIT(5)
- #define  INTSRC_ANEG_COMPLETE	BIT(6)
-+#define  INTSRC_ENERGY_DETECT	BIT(7)
- #define INTSRC_MASK	30
+diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
+index 996e006e06c2..f310f4d3bcc7 100644
+--- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
++++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
+@@ -118,7 +118,7 @@ pinctrl_fwspid_default: fwspid_default {
+ 	};
  
-+#define INT_SOURCES (INTSRC_LINK_DOWN | INTSRC_ANEG_COMPLETE | \
-+		     INTSRC_ENERGY_DETECT)
-+
- #define BANK_ANALOG_DSP		0
- #define BANK_WOL		1
- #define BANK_BIST		3
-@@ -200,7 +204,6 @@ static int meson_gxl_ack_interrupt(struct phy_device *phydev)
+ 	pinctrl_fwqspid_default: fwqspid_default {
+-		function = "FWQSPID";
++		function = "FWSPID";
+ 		groups = "FWQSPID";
+ 	};
  
- static int meson_gxl_config_intr(struct phy_device *phydev)
- {
--	u16 val;
- 	int ret;
- 
- 	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-@@ -209,16 +212,9 @@ static int meson_gxl_config_intr(struct phy_device *phydev)
- 		if (ret)
- 			return ret;
- 
--		val = INTSRC_ANEG_PR
--			| INTSRC_PARALLEL_FAULT
--			| INTSRC_ANEG_LP_ACK
--			| INTSRC_LINK_DOWN
--			| INTSRC_REMOTE_FAULT
--			| INTSRC_ANEG_COMPLETE;
--		ret = phy_write(phydev, INTSRC_MASK, val);
-+		ret = phy_write(phydev, INTSRC_MASK, INT_SOURCES);
- 	} else {
--		val = 0;
--		ret = phy_write(phydev, INTSRC_MASK, val);
-+		ret = phy_write(phydev, INTSRC_MASK, 0);
- 
- 		/* Ack any pending IRQ */
- 		ret = meson_gxl_ack_interrupt(phydev);
-@@ -237,9 +233,16 @@ static irqreturn_t meson_gxl_handle_interrupt(struct phy_device *phydev)
- 		return IRQ_NONE;
- 	}
- 
-+	irq_status &= INT_SOURCES;
-+
- 	if (irq_status == 0)
- 		return IRQ_NONE;
- 
-+	/* Aneg-complete interrupt is used for link-up detection */
-+	if (phydev->autoneg == AUTONEG_ENABLE &&
-+	    irq_status == INTSRC_ENERGY_DETECT)
-+		return IRQ_HANDLED;
-+
- 	phy_trigger_machine(phydev);
- 
- 	return IRQ_HANDLED;
 -- 
 2.34.1
 

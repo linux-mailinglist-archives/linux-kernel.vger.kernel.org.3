@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCEE4D8DB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A6C4D8DB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244848AbiCNUDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S244867AbiCNUEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244823AbiCNUDO (ORCPT
+        with ESMTP id S244853AbiCNUD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:03:14 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF8D3EA9F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:03 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id q11so19688864iod.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:03 -0700 (PDT)
+        Mon, 14 Mar 2022 16:03:59 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F5D11F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:46 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id r11so19670886ioh.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=uWhSAiXtN2kud9zOcgRUJbOu6RBWnBBMw3VH5eaYAVk=;
-        b=Z5wn1jQkI/tL2La22TjtqzWpSST81fZ9JcfOvXLTViP7hWAWBun1uo/L60hUZ9iA+W
-         ni8c1XupVrx+ACPqZTP9bZzCN55x9A10H4PAwRVU8kMoHC84aaHcwfimlpYyD7ZfeBoY
-         yZv/RuGavd53xyvNtorLgojnnZaQyWj2bc72UBvtfwe/6i9ljb5FBMkXn1vJzOVZ3974
-         Zcrao9MJ597SPt/7ht67phLP+6X+0u150bJLMC7SEEHFZIWfYGMKY4fEeDtl9z2wiuot
-         bf9zjyK+9hn3/IwDvngTcmKxVaONIFKuREe/M3XMiaZXrL258a836JAUj9Mmc9wsrOTL
-         qCsg==
+        bh=5f2/HoIwu4j9nQu9qTBXrIZ6NMk6olPlLIzOEbYSwZw=;
+        b=YSdWC5rvFf1g8ioBrwOR3I4g6iXlWuZTXYZmkB/YQq1F1LrcUaSd/IQL+JvtW6ihSp
+         oQaeInLjTzG/E53npJN0joUHNTo51L0lUAbybFrGGy5h1XilJkR03a6LOeR1W6M85NDw
+         P7mQ1C/yLXctxm7ySS07JsZcTqIrLfPQo031NqWsuNEIjJHqw9V4GydqW30p1Zya0c1K
+         ZwDP19hMy8Qj4hekRHBCFttQRHyES8t1BcI1ERp2y6JBS5pxUC1EbIe4MEMkoI0rpq90
+         NUTTKj2kIS88DkRO7tkBQ/gT5XSv4rVJd4VuWAIIiRZQFiudmldpM26HeG4gPWGw4D1b
+         lyFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=uWhSAiXtN2kud9zOcgRUJbOu6RBWnBBMw3VH5eaYAVk=;
-        b=A2ADkE7MD21XVlVpabuZCV1cf9flGniIX617R0rWLosbAbkpA27IIX+lqn75ki1Erv
-         VkralrHB+PToW5f8j7F6PlBivqCTRja6z5ADv5UEmxUExKUvltLv6HupLJtZhwkN3em2
-         rmk/pVLO94dBQoil5FlvPWEihyNEjUZXD7PZqPJNw7j9ZZpC1pnrYoxBAIQv7AvX9Bgh
-         f23amtdRQ+Fe+Zq+/nmCia6USTMDhPkN7pkYNRz/orIe+LzSplc5sDthYY6FGK5veTs0
-         EGiJnTdMaHbUSeZEDdowUcE+JXkdULhHpFwD+pcuYDhSJ7tR+KSv8cQjAYdY0qJosUXP
-         /tWA==
-X-Gm-Message-State: AOAM5336bNK5TqNipqfUeGxmZT1TlglR0t+c6u9qUqnuW7SvFMQt7tpn
-        29hkXYLDuKLe6duHOAXXvBGGkQ==
-X-Google-Smtp-Source: ABdhPJx5zEqKVyMxJ+r6McoYCQD64sld7d8x7eq7OhmRF56lD4EEnSDeeaZi8lEf/y3UDHbyHhJz9w==
-X-Received: by 2002:a5d:8d1a:0:b0:633:283d:8959 with SMTP id p26-20020a5d8d1a000000b00633283d8959mr19911675ioj.80.1647288122399;
-        Mon, 14 Mar 2022 13:02:02 -0700 (PDT)
+        bh=5f2/HoIwu4j9nQu9qTBXrIZ6NMk6olPlLIzOEbYSwZw=;
+        b=4g/ILwNAtrEGQbh1K5u4OpOm5K+whpkjoygMeXjFnHNntknUOIniCtKPvwycc0sweN
+         wiGpDIn6PbKGeIpmZFxMsPNenQKoi3c70yHA/ZPwRdyKlRV1HHsEieFmVfP1T1qJIpCe
+         IiDGbTBKqrI1TS8AIbXTh+tSYxs7+j2q3EmyagjYwTqx5W+oFhOJ5VW9CcJu6PhB8gLE
+         ThhbjMGS7WbJBUFfqn7qPugT596DJubwlTXc1WOZlSXx/xs4tV6bvu1b4e1uCaAnWO8F
+         WHEiKnf4PF6AE2uXVD2HeeG6+SfSP3R/Oe22cZpjLc1Gem1j7LCBd5ExSnaGzXgCub9V
+         9+xg==
+X-Gm-Message-State: AOAM53175Qxgln1gSzKQJyDGU/8BRJbMsWnT02L7aAfWnrv/IlitjeGK
+        5hSRfRQFT16pq8gZ1zsAHcYrtA==
+X-Google-Smtp-Source: ABdhPJzeQC03D9/rf02Bht8goOg45eN2rPjgNoqhJu/PvxB2PzO/F0nX9G85uS1FXW19T23DPBCxaw==
+X-Received: by 2002:a05:6638:16c5:b0:319:e32b:98e3 with SMTP id g5-20020a05663816c500b00319e32b98e3mr12201874jat.123.1647288165969;
+        Mon, 14 Mar 2022 13:02:45 -0700 (PDT)
 Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id f1-20020a056e020b4100b002c68e176293sm8273190ilu.87.2022.03.14.13.02.01
+        by smtp.gmail.com with ESMTPSA id x14-20020a056e021bce00b002c7ada1bec5sm943788ilv.88.2022.03.14.13.02.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 13:02:01 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 20:01:58 +0000
+        Mon, 14 Mar 2022 13:02:45 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 20:02:42 +0000
 From:   Oliver Upton <oupton@google.com>
 To:     Raghavendra Rao Ananta <rananta@google.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
@@ -63,46 +63,53 @@ Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
         Jing Zhang <jingzhangos@google.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v4 09/13] Docs: KVM: Rename psci.rst to hypercalls.rst
-Message-ID: <Yi+fNr9w28Nz2j3G@google.com>
+Subject: Re: [PATCH v4 13/13] selftests: KVM: aarch64: Add the bitmap
+ firmware registers to get-reg-list
+Message-ID: <Yi+fYt3MhMoZbN+T@google.com>
 References: <20220224172559.4170192-1-rananta@google.com>
- <20220224172559.4170192-10-rananta@google.com>
+ <20220224172559.4170192-14-rananta@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224172559.4170192-10-rananta@google.com>
+In-Reply-To: <20220224172559.4170192-14-rananta@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 05:25:55PM +0000, Raghavendra Rao Ananta wrote:
-> Since the doc now covers more of general hypercalls'
-> details, rather than just PSCI, rename the file to a
-> more appropriate name- hypercalls.rst.
+On Thu, Feb 24, 2022 at 05:25:59PM +0000, Raghavendra Rao Ananta wrote:
+> Add the psuedo-firmware registers KVM_REG_ARM_STD_BMAP,
+> KVM_REG_ARM_STD_HYP_BMAP, and KVM_REG_ARM_VENDOR_HYP_BMAP to
+> the base_regs[] list.
 > 
 > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-
-You should move the file before adding to it IMO (switch this patch with
-the previous one).
 
 Reviewed-by: Oliver Upton <oupton@google.com>
 
 > ---
->  Documentation/virt/kvm/arm/{psci.rst => hypercalls.rst} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/virt/kvm/arm/{psci.rst => hypercalls.rst} (100%)
+>  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/virt/kvm/arm/psci.rst b/Documentation/virt/kvm/arm/hypercalls.rst
-> similarity index 100%
-> rename from Documentation/virt/kvm/arm/psci.rst
-> rename to Documentation/virt/kvm/arm/hypercalls.rst
+> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> index f769fc6cd927..42e613a7bb6a 100644
+> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> @@ -686,6 +686,9 @@ static __u64 base_regs[] = {
+>  	KVM_REG_ARM_FW_REG(0),
+>  	KVM_REG_ARM_FW_REG(1),
+>  	KVM_REG_ARM_FW_REG(2),
+> +	KVM_REG_ARM_FW_BMAP_REG(0),	/* KVM_REG_ARM_STD_BMAP */
+> +	KVM_REG_ARM_FW_BMAP_REG(1),	/* KVM_REG_ARM_STD_HYP_BMAP */
+> +	KVM_REG_ARM_FW_BMAP_REG(2),	/* KVM_REG_ARM_VENDOR_HYP_BMAP */
+>  	ARM64_SYS_REG(3, 3, 14, 3, 1),	/* CNTV_CTL_EL0 */
+>  	ARM64_SYS_REG(3, 3, 14, 3, 2),	/* CNTV_CVAL_EL0 */
+>  	ARM64_SYS_REG(3, 3, 14, 0, 2),
 > -- 
 > 2.35.1.473.g83b2b277ed-goog
 > 

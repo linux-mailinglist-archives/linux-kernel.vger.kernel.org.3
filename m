@@ -2,82 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972EF4D8876
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CE44D887E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242729AbiCNPsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S242740AbiCNPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242082AbiCNPso (ORCPT
+        with ESMTP id S231625AbiCNPuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:48:44 -0400
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.46.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E188F3D49B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:47:33 -0700 (PDT)
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id D92CBBED9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 10:47:31 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id TmuxnWUCU9AGSTmuxnfTLS; Mon, 14 Mar 2022 10:47:31 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tRqjCxvAZu7oVyWFJbLmTP0gKVyFUe+nsBqmNBS8AjM=; b=qPBu/eIy+wOL0xOMpiZvJY8Oti
-        5uVq1Vf/xOJWsF6WxMdKYnbcZEONDTU8PAyF+SPIihghziOrWcEHNkQaO47XtcXK/Lt412Fw+5F6V
-        2jN47CcCjPgkKNQNelr6+CdVm93AYKoPAKjNeF2xQU5ORJq0lt9KdpEV+4U+qQjkEP48ZNtDQ3mkh
-        /pkEtze2DNPin4YuOsiWIIIt8N5rt4v0Xq4oe1Sh3SUWZD1jEWokBlp24WKHvY9cNaUj8gV6QAmC2
-        l6oyWlOaD9vx7C2+eEbPnUy0NQ6RWQCRxkh+mJgbVYnJyylZOIaRjh9NwO3b5cl4HafFpaQz/0q2X
-        HG42j/uw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54250)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nTmux-0024nF-39; Mon, 14 Mar 2022 15:47:31 +0000
-Message-ID: <3bae3cee-2daf-b622-7057-8e8ae79a1425@roeck-us.net>
-Date:   Mon, 14 Mar 2022 08:47:29 -0700
+        Mon, 14 Mar 2022 11:50:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83711E0CB;
+        Mon, 14 Mar 2022 08:48:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C45612BE;
+        Mon, 14 Mar 2022 15:48:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A396FC340E9;
+        Mon, 14 Mar 2022 15:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647272937;
+        bh=s+TtZRwiP40i13W0ONxdEk+ZBzo1ccAH1/yhq91ObCU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qOZ9SyNSgE5dYpNLYffCb9nmYF2XS1a1E7CXAivcB2D7nSwwlYhvNFeFnJv3GShAz
+         K5h4FWPwy3UmipofzaCMWd/cBd+4s5AShvAKtf4r6HO7f/+3zV+A/HdX57WRekLV11
+         7ov0FLJ4XqIoYzxeebgZxjt7b500gDNZNY0Rm05cDGJQpjaaCJthdu6HlUhlIgmC9e
+         +1/vqHVsb8kG149TaEOCkeH+/voKSmHV7R3FLDBGQSoi8qJxfd4uK0CF11lp/avXcZ
+         oMrqVTsJoojIpLTAHP/aHwjtIED910ZSDlQ77pL6DnLtirrmYFAdqSX7WKixXrSu3v
+         sit4Xn8H1K9gw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4F6635C4167; Mon, 14 Mar 2022 08:48:57 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 08:48:57 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        rcu@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [GIT PULL] RCU changes for v5.18
+Message-ID: <20220314154857.GA2637810@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220314032823.GA2593360@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4.19 00/29] 4.19.235-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220314145920.247358804@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220314145920.247358804@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nTmux-0024nF-39
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54250
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 12
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314032823.GA2593360@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,28 +57,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/22 08:00, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.235 release.
-> There are 29 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, Mar 13, 2022 at 08:28:23PM -0700, Paul E. McKenney wrote:
+> Hello, Linus,
 > 
-> Responses should be made by Wed, 16 Mar 2022 14:59:12 +0000.
-> Anything received after that time might be too late.
+> Please pull the latest RCU git tree from:
+
+OK, I was apparently unable to distinguish v5.17-rc8 from v5.18 yesterday
+evening.  :-/
+
+I will resent both pull requests next week, and please accept my apologies
+for the bother.
+
+							Thanx, Paul
+
+> The following changes since commit da123016ca8cb5697366c0b2dd55059b976e67e4:
 > 
-
-All ia64 builds:
-
-kernel/fork.c:728:13: warning: 'task_struct_whitelist' defined but not used [-Wunused-function]
-   728 | static void task_struct_whitelist(unsigned long *offset, unsigned long *size)
-       |             ^~~~~~~~~~~~~~~~~~~~~
-arch/ia64/kernel/acpi.c: In function 'acpi_numa_fixup':
-arch/ia64/kernel/acpi.c:540:17: error: implicit declaration of function 'slit_distance'; did you mean 'node_distance'? [-Werror=implicit-function-declaration]
-   540 |                 slit_distance(0, 0) = LOCAL_DISTANCE;
-       |                 ^~~~~~~~~~~~~
-       |                 node_distance
-arch/ia64/kernel/acpi.c:540:37: error: lvalue required as left operand of assignment
-   540 |                 slit_distance(0, 0) = LOCAL_DISTANCE;
-       |                                     ^
-
-Guenter
+>   rcu-tasks: Fix computation of CPU-to-list shift counts (2022-01-26 13:04:05 -0800) tags/rcu-urgent.2022.01.26a
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2022.03.13a
+> 
+>   # HEAD: d5578190bed3d110203e3b6b29c5a7a39d51c6c0 Merge branches 'exp.2022.02.24a', 'fixes.2022.02.14a', 'rcu_barrier.2022.02.08a', 'rcu-tasks.2022.02.08a', 'rt.2022.02.01b', 'torture.2022.02.01b' and 'torturescript.2022.02.08a' into HEAD (2022-02-24 09:38:46 -0800)
+> 
+> RCU changes for this cycle were:
+> 
+> exp.2022.02.24a: Contains a fix for idle detection from Neeraj Upadhyay
+> 	and missing access marking detected by KCSAN.
+> 
+> fixes.2022.02.14a: Miscellaneous fixes.
+> 
+> rcu_barrier.2022.02.08a: Reduces coupling between rcu_barrier() and
+> 	CPU-hotplug operations, so that rcu_barrier() no longer needs
+> 	to do cpus_read_lock().  This may also someday allow system
+> 	boot to bring CPUs online concurrently.
+> 
+> rcu-tasks.2022.02.08a: Enable more aggressive movement to per-CPU
+> 	queueing when reacting to excessive lock contention due
+> 	to workloads placing heavy update-side stress on RCU tasks.
+> 
+> rt.2022.02.01b: Improvements to RCU priority boosting, including
+> 	changes from Neeraj Upadhyay, Zqiang, and Alison Chaiken.
+> 
+> torture.2022.02.01b: Various fixes improving test robustness and
+> 	debug information.
+> 
+> torturescript.2022.02.08a: Add tests for SRCU size transitions, further
+> 	compress torture.sh build products, and improve debug output.
+> 
+> ----------------------------------------------------------------
+> Alison Chaiken (4):
+>       rcu: Move kthread_prio bounds-check to a separate function
+>       rcu: Make priority of grace-period thread consistent
+>       rcu: Elevate priority of offloaded callback threads
+>       rcu: Update documentation regarding kthread_prio cmdline parameter
+> 
+> David Woodhouse (2):
+>       rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
+>       rcu: Add mutex for rcu boost kthread spawning and affinity setting
+> 
+> Ingo Molnar (2):
+>       rcu: Uninline multi-use function: finish_rcuwait()
+>       rcu: Remove __read_mostly annotations from rcu_scheduler_active externs
+> 
+> Neeraj Upadhyay (3):
+>       rcu/exp: Fix check for idle context in rcu_exp_handler
+>       rcu/nocb: Handle concurrent nocb kthreads creation
+>       rcu: Remove unused rcu_state.boost
+> 
+> Paul E. McKenney (34):
+>       rcu: Mark ->expmask access in synchronize_rcu_expedited_wait()
+>       rcu: Mark accesses to boost_starttime
+>       rcu: Don't deboost before reporting expedited quiescent state
+>       rcutorture: Print message before invoking ->cb_barrier()
+>       torture: Distinguish kthread stopping and being asked to stop
+>       rcutorture: Increase visibility of forward-progress hangs
+>       rcutorture: Make rcu_fwd_cb_nodelay be a counter
+>       rcutorture: Add end-of-test check to rcu_torture_fwd_prog() loop
+>       rcutorture: Fix rcu_fwd_mutex deadlock
+>       torture: Wake up kthreads after storing task_struct pointer
+>       rcutorture: Enable limited callback-flooding tests of SRCU
+>       torture: Drop trailing ^M from console output
+>       torture: Allow four-digit repetition numbers for --configs parameter
+>       torture: Output per-failed-run summary lines from torture.sh
+>       torture: Make kvm.sh summaries note runs having only KCSAN reports
+>       torture: Indicate which torture.sh runs' bugs are all KCSAN reports
+>       torture: Compress KCSAN as well as KASAN vmlinux files
+>       torture: Make kvm-remote.sh try multiple times to download tarball
+>       torture: Print only one summary line per run
+>       torture: Make kvm-find-errors.sh notice missing vmlinux file
+>       torture: Change KVM environment variable to RCUTORTURE
+>       rcu: Refactor rcu_barrier() empty-list handling
+>       rcu: Rework rcu_barrier() and callback-migration logic
+>       rcu: Make rcu_barrier() no longer block CPU-hotplug operations
+>       rcu: Create and use an rcu_rdp_cpu_online()
+>       rcu-tasks: Use order_base_2() instead of ilog2()
+>       rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
+>       torture: Make torture.sh help message match reality
+>       rcutorture: Test SRCU size transitions
+>       rcutorture: Provide non-power-of-two Tasks RCU scenarios
+>       MAINTAINERS:  Add Frederic and Neeraj to their RCU files
+>       rcu: Inline __call_rcu() into call_rcu()
+>       rcu: Mark writes to the rcu_segcblist structure's ->flags field
+>       Merge branches 'exp.2022.02.24a', 'fixes.2022.02.14a', 'rcu_barrier.2022.02.08a', 'rcu-tasks.2022.02.08a', 'rt.2022.02.01b', 'torture.2022.02.01b' and 'torturescript.2022.02.08a' into HEAD
+> 
+> Uladzislau Rezki (Sony) (1):
+>       rcu: Fix description of kvfree_rcu()
+> 
+> Yury Norov (1):
+>       rcu: Replace cpumask_weight with cpumask_empty where appropriate
+> 
+> Zqiang (3):
+>       rcu: Create per-cpu rcuc kthreads only when rcutree.use_softirq=0
+>       rcu: Add per-CPU rcuc task dumps to RCU CPU stall warnings
+>       kasan: Record work creation stack trace with interrupts enabled
+> 
+>  Documentation/admin-guide/kernel-parameters.txt    |   2 +
+>  MAINTAINERS                                        |   2 +
+>  include/linux/rcupdate.h                           |   4 +-
+>  include/linux/rcutree.h                            |   2 +-
+>  include/linux/rcuwait.h                            |   6 +-
+>  include/trace/events/rcu.h                         |   9 +-
+>  kernel/rcu/rcu_segcblist.h                         |   4 +-
+>  kernel/rcu/rcutorture.c                            |  41 ++-
+>  kernel/rcu/tasks.h                                 |   6 +-
+>  kernel/rcu/tree.c                                  | 328 ++++++++++++---------
+>  kernel/rcu/tree.h                                  |  18 +-
+>  kernel/rcu/tree_exp.h                              |   5 +-
+>  kernel/rcu/tree_nocb.h                             |  18 +-
+>  kernel/rcu/tree_plugin.h                           |  31 +-
+>  kernel/rcu/tree_stall.h                            |  35 +++
+>  kernel/rcu/update.c                                |   7 +
+>  kernel/torture.c                                   |   6 +-
+>  .../selftests/rcutorture/bin/console-badness.sh    |   2 +-
+>  .../testing/selftests/rcutorture/bin/kvm-again.sh  |   4 +-
+>  .../selftests/rcutorture/bin/kvm-check-branches.sh |   4 +-
+>  .../selftests/rcutorture/bin/kvm-end-run-stats.sh  |   4 +-
+>  .../selftests/rcutorture/bin/kvm-find-errors.sh    |   6 +
+>  .../selftests/rcutorture/bin/kvm-recheck-rcu.sh    |   2 +-
+>  .../testing/selftests/rcutorture/bin/kvm-remote.sh |  25 +-
+>  tools/testing/selftests/rcutorture/bin/kvm.sh      |  16 +-
+>  .../selftests/rcutorture/bin/parse-console.sh      |  10 +
+>  tools/testing/selftests/rcutorture/bin/torture.sh  |  38 ++-
+>  .../selftests/rcutorture/configs/rcu/RUDE01        |   2 +-
+>  .../selftests/rcutorture/configs/rcu/SRCU-N.boot   |   1 +
+>  .../selftests/rcutorture/configs/rcu/SRCU-P.boot   |   2 +
+>  .../selftests/rcutorture/configs/rcu/TRACE01       |   2 +-
+>  31 files changed, 400 insertions(+), 242 deletions(-)

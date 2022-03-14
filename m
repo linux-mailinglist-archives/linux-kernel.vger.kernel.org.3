@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB37A4D7994
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 04:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DA44D7998
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 04:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236055AbiCNDLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Mar 2022 23:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S236062AbiCNDMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Mar 2022 23:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234110AbiCNDLx (ORCPT
+        with ESMTP id S234110AbiCNDMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Mar 2022 23:11:53 -0400
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 92B733EABE;
-        Sun, 13 Mar 2022 20:10:38 -0700 (PDT)
+        Sun, 13 Mar 2022 23:12:45 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F13D3EB80
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 20:11:36 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id w127so15969324oig.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 20:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:In-Reply-To:References; bh=/6HzUGy06hM2SDuTzHlFmrQwBi
-        rbmZfP+pzDHCHdknA=; b=Mfgv3i4PImablT+GvCk8FF1KkVJiKCkLs/Bn15Yeo5
-        FZA398umSSerAMR0EnXfgLcRWcIBzLbvOcmb1moWvwVQwq1jLijZuvBTBtAgeP+w
-        3KUNWCmY/WrZqrWEka/AENorGIjXtJMauyylXLZtLKf00fzXWyvCaY5jrBln3SjT
-        E=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogD3VoQssi5iY9kqAA--.1912S2;
-        Mon, 14 Mar 2022 11:10:36 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     leon@kernel.org
-Cc:     yishaih@mellanox.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jgg@ziepe.ca,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH v2] RDMA/mlx5: Fix memory leak in error subscribe event routine
-Date:   Sun, 13 Mar 2022 20:10:35 -0700
-Message-Id: <1647227435-46416-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <Yi5A0AkiVTLfkYFM@unreal>
-References: <Yi5A0AkiVTLfkYFM@unreal>
-X-CM-TRANSID: 5oFpogD3VoQssi5iY9kqAA--.1912S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw18urW7GF17Cr4DJF18Zrb_yoWfJrc_WF
-        1qv397Xa45CFn5Cr9rCrs3WryI9r4UWw1xXan2gasIk3y3Ca13Ca9aqFZYvw47JrW5KryY
-        yr9FyryxAw4FgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl6s0DM28EF7xvwVC2z280
-        aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07
-        x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15
-        McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-        1lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k2
-        0xvE74AGY7Cv6cx26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwESBlPy7ubR6QAxs2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=b97IRgdojmskoUj6xqTHzV6FHlt1zL1rWKMe4IXbzRY=;
+        b=AQbTXJ84foDJZijT8rN9O+ZyaKxspYFHahatLu8HgjAPtx/RzWnyYpEt6luy35aGOD
+         oLBFHv9ni+/8hOoFbjKWpsPx28eey7mnsCl8ArvINXwleTjqB3mM3vA5D1TNUXkqWliv
+         R1fBtoUhRehEJ9HI9W0PQhHSCii56Kv7bFM5Zhu8Xzn54WbkcqrhSWUayTrCqiH4ISw5
+         07mlXsfA5SqIG9nVJB5Qsp14IxM7WTSBhquB7K2cjBJRrTToO//6Cj+kp627F4VcyDYF
+         TYOaOcwpXt7TCRTiVqg+k4gcN4PHo8Z+KCddahoa2KEoClxiKPgiWc0grciteYzPicyX
+         kgww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=b97IRgdojmskoUj6xqTHzV6FHlt1zL1rWKMe4IXbzRY=;
+        b=mB+xmoMHQJjaFIy40j3Co2agqDfdb1xa53Fp4STqCBM7Mo8VJAo1VYNYbjmgyGBSEb
+         mMK404wx1IurqZclWFCRiUZ28eEgMZXe1qZB6o3vskINbgzxCWD39Py1wNVq319A8Imv
+         +DyrdtcJghtKkdNZBY1SFCA1uWbQRwidRxUzI+Nnp3aLdFgxw89q3kQ0PChXbt6qll3l
+         At9OLgnJrrswadrowMd2c0ZJFkog4WwpMA1lc+SwMVGUNg9OqexQFw2Dep3fT3vOa6L5
+         I9r3zekEVeKISHSr+eASDMaaxGHfINKt0qU4iP9DfZgPzzyQnZOloevjWHisA3WYOlRX
+         CjQg==
+X-Gm-Message-State: AOAM533G3dT+Ej5hl2AAPM+PQVygHgP4ys7fvv+DpMOyEOcMtGX63juI
+        fx9wl2+u6jmBaImQivXorbJ4vw==
+X-Google-Smtp-Source: ABdhPJyKEa+Se2UwgWD2hdDOZ7BJEdR1K3aXZDbCdRx68cKzGaePUH5fcZIQXDSUmEC6v67vWJ1SkA==
+X-Received: by 2002:a05:6808:8e4:b0:2ec:aea1:353a with SMTP id d4-20020a05680808e400b002ecaea1353amr6093082oic.27.1647227495871;
+        Sun, 13 Mar 2022 20:11:35 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 60-20020a9d0642000000b005b22a82458csm6920561otn.55.2022.03.13.20.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Mar 2022 20:11:35 -0700 (PDT)
+Date:   Sun, 13 Mar 2022 20:11:23 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Miaohe Lin <linmiaohe@huawei.com>
+cc:     Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
+        Herbert.van.den.Bergh@oracle.com,
+        Alexey Gladkov <legion@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mlock: fix potential imbalanced rlimit ucounts
+ adjustment
+In-Reply-To: <bcfc2048-93ce-b357-8671-7070614db36a@huawei.com>
+Message-ID: <1e758c8f-c87b-50ef-52db-942c8a86a32a@google.com>
+References: <20220310132417.41189-1-linmiaohe@huawei.com> <268b3146-2963-15b6-6d6-95a96853314@google.com> <bcfc2048-93ce-b357-8671-7070614db36a@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case second xa_insert() fails, the obj_event is not released.
-Fix the error unwind flow to free that memory to avoid memory leak.
+On Mon, 14 Mar 2022, Miaohe Lin wrote:
+> On 2022/3/14 10:40, Hugh Dickins wrote:
+> > On Thu, 10 Mar 2022, Miaohe Lin wrote:
+> > 
+> >> user_shm_lock forgets to set allowed to 0 when get_ucounts fails. So
+> >> the later user_shm_unlock might do the extra dec_rlimit_ucounts. Fix
+> >> this by resetting allowed to 0.
+> >>
+> >> Fixes: 5ed44a401ddf ("do not limit locked memory when RLIMIT_MEMLOCK is RLIM_INFINITY")
+> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> > 
+> > NAK.  user_shm_lock() remembers to declare "int allowed = 0" on entry.
+> > 
+> 
+> If lock_limit is RLIM_INFINITY, "allowed" will be set to 1. And if get_ucounts fails
+> in some corner cases, "allowed" will remain to be 1 while the user_shm_lock ops indeed
+> fails. Or am I miss something?
 
-Fixes: 7597385 ("IB/mlx5: Enable subscription for device events over DEVX")
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/infiniband/hw/mlx5/devx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+You are right, I am wrong: sorry.
+Thanks for pointing now to that RLIM_INFINITY case.
 
-diff --git a/drivers/infiniband/hw/mlx5/devx.c b/drivers/infiniband/hw/mlx5/devx.c
-index 08b7f6b..15c0884 100644
---- a/drivers/infiniband/hw/mlx5/devx.c
-+++ b/drivers/infiniband/hw/mlx5/devx.c
-@@ -1886,8 +1886,10 @@ subscribe_event_xa_alloc(struct mlx5_devx_event_table *devx_event_table,
- 				key_level2,
- 				obj_event,
- 				GFP_KERNEL);
--		if (err)
-+		if (err) {
-+			kfree(obj_event);
- 			return err;
-+		}
- 		INIT_LIST_HEAD(&obj_event->obj_sub_list);
- 	}
- 
--- 
-2.7.4
+But then the Fixes tag is wrong: it should be
+Fixes: d7c9e99aee48 ("Reimplement RLIMIT_MEMLOCK on top of ucounts")
+       which introduced the possibility of error down there.
 
+With that,
+Acked-by: Hugh Dickins <hughd@google.com>
+
+> 
+> Many thanks for comment.
+> 
+> >> ---
+> >>  mm/mlock.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/mm/mlock.c b/mm/mlock.c
+> >> index 29372c0eebe5..efd2dd2943de 100644
+> >> --- a/mm/mlock.c
+> >> +++ b/mm/mlock.c
+> >> @@ -733,6 +733,7 @@ int user_shm_lock(size_t size, struct ucounts *ucounts)
+> >>  	}
+> >>  	if (!get_ucounts(ucounts)) {
+> >>  		dec_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+> >> +		allowed = 0;
+> >>  		goto out;
+> >>  	}
+> >>  	allowed = 1;
+> >> -- 
+> >> 2.23.0

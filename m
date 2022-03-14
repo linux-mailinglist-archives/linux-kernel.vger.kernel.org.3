@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19A14D826D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B006D4D84B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240327AbiCNMEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S241840AbiCNM2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240471AbiCNMCy (ORCPT
+        with ESMTP id S243351AbiCNMUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:02:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF41496B1;
-        Mon, 14 Mar 2022 05:00:20 -0700 (PDT)
+        Mon, 14 Mar 2022 08:20:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D25344F2;
+        Mon, 14 Mar 2022 05:15:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F7CEB80DF0;
-        Mon, 14 Mar 2022 12:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC61C340E9;
-        Mon, 14 Mar 2022 12:00:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 780E4608C4;
+        Mon, 14 Mar 2022 12:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 111E3C340E9;
+        Mon, 14 Mar 2022 12:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259218;
-        bh=Cj88WQtc6ogjYVx86hH5d5ZgVRyMEWOCQcXPIlCIh4c=;
+        s=korg; t=1647260147;
+        bh=vIM6AUwnOl+uW/m2jIG6QnLVc2yWJTjJ5mdHCQ0xwYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rn7jurmc1Vyb1viMfQ8gjG79bP7UHwcxqmKNhmTIIGHET1PMgESOJ3X+qAzs327EH
-         eHBviwF4Y0jzGlDNarHsI1IMh2u3vd3GXeQ4HQOfl4p8hzte4/nH5LlmCWDQTXiVp3
-         2Ajms5SBWvIeaFfUmukGVWQ7FjAdRJ/s131jrF2U=
+        b=d4Ytoh73pVsG11ScPCMHKzTZCPqlYbMXFXloecOCbwoAAc/5wsXZ1fqxP9TKElugh
+         H5QYcVWKZwNep5vp3dhZ/JSf97CHz2I/RPAnLnwQYCmbBh/cFqehmMdnJtFpC/m0sF
+         SUx87KxB+4G+seCglZ0dT7Ru84tpyvQtpNKwiS9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roi Dayan <roid@nvidia.com>,
-        Maor Dickman <maord@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@infradead.org>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 29/71] net/mlx5e: Lag, Only handle events from highest priority multipath entry
+Subject: [PATCH 5.16 019/121] virtio-blk: Remove BUG_ON() in virtio_queue_rq()
 Date:   Mon, 14 Mar 2022 12:53:22 +0100
-Message-Id: <20220314112738.748050816@linuxfoundation.org>
+Message-Id: <20220314112744.664541917@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roi Dayan <roid@nvidia.com>
+From: Xie Yongji <xieyongji@bytedance.com>
 
-[ Upstream commit ad11c4f1d8fd1f03639460e425a36f7fd0ea83f5 ]
+[ Upstream commit e030759a1ddcbf61d42b6e996bfeb675e0032d8b ]
 
-There could be multiple multipath entries but changing the port affinity
-for each one doesn't make much sense and there should be a default one.
-So only track the entry with lowest priority value.
-The commit doesn't affect existing users with a single entry.
+Currently we have a BUG_ON() to make sure the number of sg
+list does not exceed queue_max_segments() in virtio_queue_rq().
+However, the block layer uses queue_max_discard_segments()
+instead of queue_max_segments() to limit the sg list for
+discard requests. So the BUG_ON() might be triggered if
+virtio-blk device reports a larger value for max discard
+segment than queue_max_segments(). To fix it, let's simply
+remove the BUG_ON() which has become unnecessary after commit
+02746e26c39e("virtio-blk: avoid preallocating big SGL for data").
+And the unused vblk->sg_elems can also be removed together.
 
-Fixes: 544fe7c2e654 ("net/mlx5e: Activate HW multipath and handle port affinity based on FIB events")
-Signed-off-by: Roi Dayan <roid@nvidia.com>
-Reviewed-by: Maor Dickman <maord@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 1f23816b8eb8 ("virtio_blk: add discard and write zeroes support")
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+Reviewed-by: Max Gurtovoy <mgurtovoy@nvidia.com>
+Link: https://lore.kernel.org/r/20220304100058.116-2-xieyongji@bytedance.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/block/virtio_blk.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
-index 0f0d250bbc15..c04413f449c5 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
-@@ -123,6 +123,10 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
- 		return;
- 	}
+diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+index 87f239eb0a99..b3df5e5452a7 100644
+--- a/drivers/block/virtio_blk.c
++++ b/drivers/block/virtio_blk.c
+@@ -76,9 +76,6 @@ struct virtio_blk {
+ 	 */
+ 	refcount_t refs;
  
-+	/* Handle multipath entry with lower priority value */
-+	if (mp->mfi && mp->mfi != fi && fi->fib_priority >= mp->mfi->fib_priority)
-+		return;
-+
- 	/* Handle add/replace event */
- 	nhs = fib_info_num_path(fi);
- 	if (nhs == 1) {
-@@ -132,12 +136,13 @@ static void mlx5_lag_fib_route_event(struct mlx5_lag *ldev,
- 			int i = mlx5_lag_dev_get_netdev_idx(ldev, nh_dev);
+-	/* What host tells us, plus 2 for header & tailer. */
+-	unsigned int sg_elems;
+-
+ 	/* Ida index - used to track minor number allocations. */
+ 	int index;
  
- 			if (i < 0)
--				i = MLX5_LAG_NORMAL_AFFINITY;
--			else
--				++i;
-+				return;
+@@ -322,8 +319,6 @@ static blk_status_t virtio_queue_rq(struct blk_mq_hw_ctx *hctx,
+ 	blk_status_t status;
+ 	int err;
  
-+			i++;
- 			mlx5_lag_set_port_affinity(ldev, i);
- 		}
-+
-+		mp->mfi = fi;
- 		return;
- 	}
+-	BUG_ON(req->nr_phys_segments + 2 > vblk->sg_elems);
+-
+ 	status = virtblk_setup_cmd(vblk->vdev, req, vbr);
+ 	if (unlikely(status))
+ 		return status;
+@@ -783,8 +778,6 @@ static int virtblk_probe(struct virtio_device *vdev)
+ 	/* Prevent integer overflows and honor max vq size */
+ 	sg_elems = min_t(u32, sg_elems, VIRTIO_BLK_MAX_SG_ELEMS - 2);
+ 
+-	/* We need extra sg elements at head and tail. */
+-	sg_elems += 2;
+ 	vdev->priv = vblk = kmalloc(sizeof(*vblk), GFP_KERNEL);
+ 	if (!vblk) {
+ 		err = -ENOMEM;
+@@ -796,7 +789,6 @@ static int virtblk_probe(struct virtio_device *vdev)
+ 	mutex_init(&vblk->vdev_mutex);
+ 
+ 	vblk->vdev = vdev;
+-	vblk->sg_elems = sg_elems;
+ 
+ 	INIT_WORK(&vblk->config_work, virtblk_config_changed_work);
+ 
+@@ -854,7 +846,7 @@ static int virtblk_probe(struct virtio_device *vdev)
+ 		set_disk_ro(vblk->disk, 1);
+ 
+ 	/* We can handle whatever the host told us to handle. */
+-	blk_queue_max_segments(q, vblk->sg_elems-2);
++	blk_queue_max_segments(q, sg_elems);
+ 
+ 	/* No real sector limit. */
+ 	blk_queue_max_hw_sectors(q, -1U);
+@@ -932,7 +924,7 @@ static int virtblk_probe(struct virtio_device *vdev)
+ 		 * handled it.
+ 		 */
+ 		if (!v)
+-			v = sg_elems - 2;
++			v = sg_elems;
+ 		blk_queue_max_discard_segments(q,
+ 					       min(v, MAX_DISCARD_SEGMENTS));
  
 -- 
 2.34.1

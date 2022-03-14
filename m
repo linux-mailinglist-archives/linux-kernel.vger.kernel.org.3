@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8AC4D829B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4568F4D8491
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbiCNMGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S237312AbiCNMZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240371AbiCNMFN (ORCPT
+        with ESMTP id S242521AbiCNMTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:05:13 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4081F628;
-        Mon, 14 Mar 2022 05:02:03 -0700 (PDT)
+        Mon, 14 Mar 2022 08:19:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075804F460;
+        Mon, 14 Mar 2022 05:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 311C0CE1268;
-        Mon, 14 Mar 2022 12:02:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01714C340E9;
-        Mon, 14 Mar 2022 12:01:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4321B80DBF;
+        Mon, 14 Mar 2022 12:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB52C340EC;
+        Mon, 14 Mar 2022 12:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259320;
-        bh=2z3sHLbs3i+JwZqjq1YXDQcvL9PzzebynVKwSZ/U2TA=;
+        s=korg; t=1647260054;
+        bh=sFF5kOSFIYhuLY8fRw2uLPZeHATbtnDGZk9fWhUpgkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T39nAuN1io4XezrKyjB447WLBevhjBGT+6z/Aor2YrEIN/Aat9PWMub8mYz5kkZm/
-         SvXlQE7MYuNqw25MTqjX+1XNhkzPv0z+LBLmHsWNUEcvxQ7GdFtvqKiJ+5rPjGZshr
-         oyZObRRTLuS1wpuZdyfAK/5d0lELr2z0VO8RqWDM=
+        b=mYdWbMfR6t75m9eXoAGAbMWzO78jR5g/1IDIlX8Fi1pTVw0eDCUTDGLK/sgV0XxqK
+         IVgGd81MNau1DqFDPE9Z0YKiwnQUQYzMeYHQr4JdGtyjHYL9MSA4M9C3B4W6LnzuFB
+         +90YgCHhAlWGhMRw1sXD49HP4/xPzitbxBra386k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 5.10 52/71] staging: gdm724x: fix use after free in gdm_lte_rx()
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 042/121] net: ethernet: lpc_eth: Handle error for clk_enable
 Date:   Mon, 14 Mar 2022 12:53:45 +0100
-Message-Id: <20220314112739.386426374@linuxfoundation.org>
+Message-Id: <20220314112745.302151330@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit fc7f750dc9d102c1ed7bbe4591f991e770c99033 upstream.
+[ Upstream commit 2169b79258c8be803d2595d6456b1e77129fe154 ]
 
-The netif_rx_ni() function frees the skb so we can't dereference it to
-save the skb->len.
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-Fixes: 61e121047645 ("staging: gdm7240: adding LTE USB driver")
-Cc: stable <stable@vger.kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220228074331.GA13685@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b7370112f519 ("lpc32xx: Added ethernet driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/gdm724x/gdm_lte.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/nxp/lpc_eth.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/staging/gdm724x/gdm_lte.c
-+++ b/drivers/staging/gdm724x/gdm_lte.c
-@@ -76,14 +76,15 @@ static void tx_complete(void *arg)
- 
- static int gdm_lte_rx(struct sk_buff *skb, struct nic *nic, int nic_type)
+diff --git a/drivers/net/ethernet/nxp/lpc_eth.c b/drivers/net/ethernet/nxp/lpc_eth.c
+index bc39558fe82b..756f97dce85b 100644
+--- a/drivers/net/ethernet/nxp/lpc_eth.c
++++ b/drivers/net/ethernet/nxp/lpc_eth.c
+@@ -1471,6 +1471,7 @@ static int lpc_eth_drv_resume(struct platform_device *pdev)
  {
--	int ret;
-+	int ret, len;
+ 	struct net_device *ndev = platform_get_drvdata(pdev);
+ 	struct netdata_local *pldat;
++	int ret;
  
-+	len = skb->len + ETH_HLEN;
- 	ret = netif_rx_ni(skb);
- 	if (ret == NET_RX_DROP) {
- 		nic->stats.rx_dropped++;
- 	} else {
- 		nic->stats.rx_packets++;
--		nic->stats.rx_bytes += skb->len + ETH_HLEN;
-+		nic->stats.rx_bytes += len;
- 	}
+ 	if (device_may_wakeup(&pdev->dev))
+ 		disable_irq_wake(ndev->irq);
+@@ -1480,7 +1481,9 @@ static int lpc_eth_drv_resume(struct platform_device *pdev)
+ 			pldat = netdev_priv(ndev);
  
- 	return 0;
+ 			/* Enable interface clock */
+-			clk_enable(pldat->clk);
++			ret = clk_enable(pldat->clk);
++			if (ret)
++				return ret;
+ 
+ 			/* Reset and initialize */
+ 			__lpc_eth_reset(pldat);
+-- 
+2.34.1
+
 
 

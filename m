@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CA14D8261
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05944D8373
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240191AbiCNMDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S240868AbiCNMOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240223AbiCNMCc (ORCPT
+        with ESMTP id S241913AbiCNMJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:02:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFA949FBC;
-        Mon, 14 Mar 2022 04:59:55 -0700 (PDT)
+        Mon, 14 Mar 2022 08:09:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BAC21E1A;
+        Mon, 14 Mar 2022 05:06:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8530661297;
-        Mon, 14 Mar 2022 11:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41636C340EC;
-        Mon, 14 Mar 2022 11:59:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB917B80DED;
+        Mon, 14 Mar 2022 12:06:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BAFC340E9;
+        Mon, 14 Mar 2022 12:06:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259163;
-        bh=uH+9wUozafbkU8hZyLgzaileE4CqzDonFw9tNkZ91r4=;
+        s=korg; t=1647259571;
+        bh=FqpALfqcNa6EdMdvrr0CBCpp7kSW2XO976p/OpdCGBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=opNnZS84ZEMUgcS+JWJvoF34k6TNx7XVbT6n06FLoA6jUuRKLvFkFo2gvOulHnyH/
-         73rIBdnA3J9u2ufa0qTHs73nZ6E+Wx1peivePeaf7vIiJIx011vaQCxqMKHkFDpBG+
-         1nMqETTwAQ4qULsE12xqBngL1IEUCRy6CSeRXYIs=
+        b=OjEsZG8pdm+WBn7UqtfRXVRLMAAT/XWjpCiJnTHObrjBS7MZW6Dtt3kOqT3CaMZJW
+         MRw7SaIxPqrSySPhOFjG+r1E96h6NdISv+2eTyrZvueb+QCX/d3PvBePfhXfvS7ni3
+         Da18mQ8gfCjtLCXITDB1pA9VT9Uujdn0X9WVL6vw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jacob Keller <jacob.e.keller@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 17/71] ice: stop disabling VFs due to PF error responses
+        stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 008/110] HID: vivaldi: fix sysfs attributes leak
 Date:   Mon, 14 Mar 2022 12:53:10 +0100
-Message-Id: <20220314112738.415508406@linuxfoundation.org>
+Message-Id: <20220314112743.265392306@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacob Keller <jacob.e.keller@intel.com>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit 79498d5af8e458102242d1667cf44df1f1564e63 ]
+[ Upstream commit cc71d37fd1f11e0495b1cf580909ebea37eaa886 ]
 
-The ice_vc_send_msg_to_vf function has logic to detect "failure"
-responses being sent to a VF. If a VF is sent more than
-ICE_DFLT_NUM_INVAL_MSGS_ALLOWED then the VF is marked as disabled.
-Almost identical logic also existed in the i40e driver.
+The driver creates the top row map sysfs attribute in input_configured()
+method; unfortunately we do not have a callback that is executed when HID
+interface is unbound, thus we are leaking these sysfs attributes, for
+example when device is disconnected.
 
-This logic was added to the ice driver in commit 1071a8358a28 ("ice:
-Implement virtchnl commands for AVF support") which itself copied from
-the i40e implementation in commit 5c3c48ac6bf5 ("i40e: implement virtual
-device interface").
+To fix it let's switch to managed version of adding sysfs attributes which
+will ensure that they are destroyed when the driver is unbound.
 
-Neither commit provides a proper explanation or justification of the
-check. In fact, later commits to i40e changed the logic to allow
-bypassing the check in some specific instances.
-
-The "logic" for this seems to be that error responses somehow indicate a
-malicious VF. This is not really true. The PF might be sending an error
-for any number of reasons such as lack of resources, etc.
-
-Additionally, this causes the PF to log an info message for every failed
-VF response which may confuse users, and can spam the kernel log.
-
-This behavior is not documented as part of any requirement for our
-products and other operating system drivers such as the FreeBSD
-implementation of our drivers do not include this type of check.
-
-In fact, the change from dev_err to dev_info in i40e commit 18b7af57d9c1
-("i40e: Lower some message levels") explains that these messages
-typically don't actually indicate a real issue. It is quite likely that
-a user who hits this in practice will be very confused as the VF will be
-disabled without an obvious way to recover.
-
-We already have robust malicious driver detection logic using actual
-hardware detection mechanisms that detect and prevent invalid device
-usage. Remove the logic since its not a documented requirement and the
-behavior is not intuitive.
-
-Fixes: 1071a8358a28 ("ice: Implement virtchnl commands for AVF support")
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes: 14c9c014babe ("HID: add vivaldi HID driver")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Tested-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/intel/ice/ice_virtchnl_pf.c   | 18 ------------------
- .../net/ethernet/intel/ice/ice_virtchnl_pf.h   |  3 ---
- 2 files changed, 21 deletions(-)
+ drivers/hid/hid-vivaldi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-index 48511ad0e0c8..5134342ff70f 100644
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-@@ -1849,24 +1849,6 @@ ice_vc_send_msg_to_vf(struct ice_vf *vf, u32 v_opcode,
+diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
+index 576518e704ee..d57ec1767037 100644
+--- a/drivers/hid/hid-vivaldi.c
++++ b/drivers/hid/hid-vivaldi.c
+@@ -143,7 +143,7 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
+ static int vivaldi_input_configured(struct hid_device *hdev,
+ 				    struct hid_input *hidinput)
+ {
+-	return sysfs_create_group(&hdev->dev.kobj, &input_attribute_group);
++	return devm_device_add_group(&hdev->dev, &input_attribute_group);
+ }
  
- 	dev = ice_pf_to_dev(pf);
- 
--	/* single place to detect unsuccessful return values */
--	if (v_retval) {
--		vf->num_inval_msgs++;
--		dev_info(dev, "VF %d failed opcode %d, retval: %d\n", vf->vf_id,
--			 v_opcode, v_retval);
--		if (vf->num_inval_msgs > ICE_DFLT_NUM_INVAL_MSGS_ALLOWED) {
--			dev_err(dev, "Number of invalid messages exceeded for VF %d\n",
--				vf->vf_id);
--			dev_err(dev, "Use PF Control I/F to enable the VF\n");
--			set_bit(ICE_VF_STATE_DIS, vf->vf_states);
--			return -EIO;
--		}
--	} else {
--		vf->num_valid_msgs++;
--		/* reset the invalid counter, if a valid message is received. */
--		vf->num_inval_msgs = 0;
--	}
--
- 	aq_ret = ice_aq_send_msg_to_vf(&pf->hw, vf->vf_id, v_opcode, v_retval,
- 				       msg, msglen, NULL);
- 	if (aq_ret && pf->hw.mailboxq.sq_last_status != ICE_AQ_RC_ENOSYS) {
-diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.h b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.h
-index 59e5b4f16e96..d2e935c678a1 100644
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.h
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.h
-@@ -13,7 +13,6 @@
- #define ICE_MAX_MACADDR_PER_VF		18
- 
- /* Malicious Driver Detection */
--#define ICE_DFLT_NUM_INVAL_MSGS_ALLOWED		10
- #define ICE_MDD_EVENTS_THRESHOLD		30
- 
- /* Static VF transaction/status register def */
-@@ -97,8 +96,6 @@ struct ice_vf {
- 	unsigned int tx_rate;		/* Tx bandwidth limit in Mbps */
- 	DECLARE_BITMAP(vf_states, ICE_VF_STATES_NBITS);	/* VF runtime states */
- 
--	u64 num_inval_msgs;		/* number of continuous invalid msgs */
--	u64 num_valid_msgs;		/* number of valid msgs detected */
- 	unsigned long vf_caps;		/* VF's adv. capabilities */
- 	u8 num_req_qs;			/* num of queue pairs requested by VF */
- 	u16 num_mac;
+ static const struct hid_device_id vivaldi_table[] = {
 -- 
 2.34.1
 

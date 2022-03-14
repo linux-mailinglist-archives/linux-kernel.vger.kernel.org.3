@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018564D800F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C764D7FE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbiCNKmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S238577AbiCNKeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiCNKm1 (ORCPT
+        with ESMTP id S236630AbiCNKeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:42:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2C13EA92;
-        Mon, 14 Mar 2022 03:41:17 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22E8a3U8011989;
-        Mon, 14 Mar 2022 10:41:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=CWAf8f5TJCbQpdwIz0ofQ9Dva67XSRgREsrrNLuwR9c=;
- b=klV9G+whGYzATWcvlvJ+tJNC2VIlxd+vsF5+qJdKS96KQrLV+jZTFRX1KRRmLLC3jS0R
- +36EX2xsnn7jfK64QiwvpAHQeQ/rxfPp4UFw3XfeHppYsSHD6W750YZI2y2rSDN13KPG
- +NFaToHJSA5EoiT53C+FVZ/0rOQYbC1jYjwIqMUzQJI53xD+Mtp9wBGQ+Iqmah4EyubH
- rQtRIjGnpqldEMzATxOW5Ic/StmAzn1vbE5+dUUy8Z1f7uAPUDr4V7ad73RT4behrR0y
- k9y0/Jz89jDUfkTbuTPmMI3iiWdrpgdWE78n3S5Jz5MxixN6aa68RkrTVEqNcwkao1U+ bg== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3es5kmqf47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 10:41:17 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22EAbQ2Q027535;
-        Mon, 14 Mar 2022 10:41:14 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3erk58kc7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Mar 2022 10:41:14 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22EAfBI743844076
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Mar 2022 10:41:12 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B4C311C6E8;
-        Mon, 14 Mar 2022 10:32:12 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D897311C6C7;
-        Mon, 14 Mar 2022 10:32:10 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.29.85])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Mar 2022 10:32:10 +0000 (GMT)
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     fstests@vger.kernel.org
-Cc:     riteshh@linux.ibm.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ext4/053: Add support for testing mb_optimize_scan
-Date:   Mon, 14 Mar 2022 16:02:07 +0530
-Message-Id: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 14 Mar 2022 06:34:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6751230F;
+        Mon, 14 Mar 2022 03:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647253970; x=1678789970;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tcH7GGg15JCUBMXBBEr4A+gzUlR4DzpJ44QMDaHKhXo=;
+  b=A9UqD0DW9K+S/CvEXXSZVh2smEJ6SObgjqDf2xwJiJ156wqXF6kdH8Dd
+   IsnXq0g+GAKC5bvUEuEHgnIaEHsHhnc4odPUXkIygMc7+h6oFuC3/MqaH
+   dwGpMF7LIVpWhn53OdS48+pVJK+2h1rTFaCQYyxz7mUM8sitteejWSZhK
+   /gXs8bf5MGq0evoU1A6+lEn25rPbXzsfgWOKTliNK5qwEnrWIHRr62vUB
+   OFHQJ7LViTcDJFwfS5c0RMNoQHEaiFg2xV+x+/msJ4W2N7RYwLeF23Zy3
+   +sfDKq6Cd+j0Y6swoOvrsCnWhcyWdfTLbF9BNQWrve+mOMV8M+G4Dle8d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="255941815"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="255941815"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 03:32:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="580067063"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga001.jf.intel.com with ESMTP; 14 Mar 2022 03:32:45 -0700
+Message-ID: <4436fbb9-32fa-82f0-bf99-344b9bfddf78@intel.com>
+Date:   Mon, 14 Mar 2022 12:32:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Jofw897RvP4hcS-2YBWXAd3cvoNMdPUR
-X-Proofpoint-GUID: Jofw897RvP4hcS-2YBWXAd3cvoNMdPUR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_04,2022-03-14_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 adultscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- mlxscore=0 bulkscore=0 malwarescore=0 mlxlogscore=921 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203140065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] mmc: block: enable cache-flushing when mmc cache is on
+Content-Language: en-US
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Michael Wu <michael@allwinnertech.com>, ulf.hansson@linaro.org,
+        beanhuo@micron.com, porzio@gmail.com
+Cc:     lixiang <lixiang@allwinnertech.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220312044315.7994-1-michael@allwinnertech.com>
+ <DM6PR04MB6575D203B92955D9A913576CFC0F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <DM6PR04MB6575D203B92955D9A913576CFC0F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to test the mb_optimize_scan mount option.
-Since its value is not reflected in the "options" file in proc,
-use "mb_structs_summary" to verify its value.
+On 14/03/2022 09:26, Avri Altman wrote:
+> Hi,
+>> The mmc core enable cache on default. But it only enables cache-flushing
+>> when host supports cmd23 and eMMC supports reliable write.
+>> For hosts which do not support cmd23 or eMMCs which do not support
+>> reliable write, the cache can not be flushed by `sync` command.
+>> This may leads to cache data lost.
+>> This patch enables cache-flushing as long as cache is enabled, no matter host
+>> supports cmd23 and/or eMMC supports reliable write or not.
+> I looked in the spec and indeed couldn't find why enabling cache is dependent of cmd23/reliable write.
+> Nor I was able to find the original commit log.
 
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
----
- tests/ext4/053 | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+Reliable write was added first, so it might have been an oversight:
 
-diff --git a/tests/ext4/053 b/tests/ext4/053
-index e1e79592..bd92002f 100755
---- a/tests/ext4/053
-+++ b/tests/ext4/053
-@@ -100,6 +100,7 @@ test_mnt() {
- 	(
- 	ret=0
- 	IFS=','
-+	proc_path="/proc/fs/ext4/$(_short_dev $SCRATCH_DEV)"
- 	for option in $OPTS; do
- 		if echo $IGNORED | grep -w $option; then
- 			continue
-@@ -114,11 +115,16 @@ test_mnt() {
- 		fi
- 		option=${option#^}
- 
--		if echo $CHECK_MINFO | grep -w $option; then
-+		if [[ $option =~ ^mb_optimize_scan=.*$ ]]; then
-+			# mb_optimize_scan needs special handling
-+			expected=${option#*=}
-+			ret=$(cat $proc_path/mb_structs_summary | grep "optimize_scan" \
-+				| awk '{ print $2 }')
-+		elif echo $CHECK_MINFO | grep -w $option; then
- 			findmnt -n -o OPTIONS $SCRATCH_DEV | grep $option
- 			ret=$?
- 		else
--			grep $option /proc/fs/ext4/$(_short_dev $SCRATCH_DEV)/options
-+			grep $option $proc_path/options
- 			ret=$?
- 		fi
- 
-@@ -526,13 +532,10 @@ for fstype in ext2 ext3 ext4; do
- 
- 	mnt prefetch_block_bitmaps removed
- 	mnt no_prefetch_block_bitmaps
--	# We don't currently have a way to know that the option has been
--	# applied, so comment it out for now. This should be fixed in the
--	# future.
--	#mnt mb_optimize_scan=0
--	#mnt mb_optimize_scan=1
--	#not_mnt mb_optimize_scan=9
--	#not_mnt mb_optimize_scan=
-+	mnt mb_optimize_scan=0
-+	mnt mb_optimize_scan=1
-+	not_mnt mb_optimize_scan=9
-+	not_mnt mb_optimize_scan=
- 	mnt nombcache
- 	mnt no_mbcache nombcache
- 	mnt check=none removed
--- 
-2.27.0
+commit 881d1c25f765938a95def5afe39486ce39f9fc96
+Author: Seungwon Jeon <tgih.jun@samsung.com>
+Date:   Fri Oct 14 14:03:21 2011 +0900
+
+    mmc: core: Add cache control for eMMC4.5 device
+    
+    This patch adds cache feature of eMMC4.5 Spec.
+    If device supports cache capability, host can utilize some specific
+    operations.
+    
+    Signed-off-by: Seungwon Jeon <tgih.jun@samsung.com>
+    Signed-off-by: Jaehoon Chung <jh80.chung@samsung.com>
+    Signed-off-by: Chris Ball <cjb@laptop.org>
+
+
+
+> 
+> Please allow few days to ask internally.
+> 
+> Thanks,
+> Avri
 

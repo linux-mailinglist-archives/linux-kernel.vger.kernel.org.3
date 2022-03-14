@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AA84D8460
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBAB4D8210
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbiCNMYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S240050AbiCNL74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbiCNMQZ (ORCPT
+        with ESMTP id S239915AbiCNL5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:16:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91CA344EA;
-        Mon, 14 Mar 2022 05:12:06 -0700 (PDT)
+        Mon, 14 Mar 2022 07:57:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5280643EF6;
+        Mon, 14 Mar 2022 04:56:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A81AF612FC;
-        Mon, 14 Mar 2022 12:12:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E99C340EC;
-        Mon, 14 Mar 2022 12:12:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE19EB80DE4;
+        Mon, 14 Mar 2022 11:56:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4733AC340E9;
+        Mon, 14 Mar 2022 11:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259926;
-        bh=KDeKeSrBscd88xlJvU6ol2p8TedSnBm20d6bP+U4DyY=;
+        s=korg; t=1647258975;
+        bh=zAmBtxxf0vAvm+XiG5ACnQVwKv/vaIfK+Mk7XN5R41c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xxaxujiSePbL/tNqY5cMiCBobGZIRmdb12pAgCrqSOebgF4udM4ekFReHk2g50YST
-         yFkSV0XPLcGmfOeda3WyFhpa6TJmWlFyaBpXf7KAP6hR2LKFJlM2W+/3VQy68uC/yy
-         wV3EXltK/D5CR+bj6QTs9PqHFhapSCoXglNxFSeY=
+        b=EwmwD2DQJg8pNX8ws+pxby4/2/D3GUezNhQIbMhb05g/vsJHNgLhTtZvMktWCEIbm
+         gIHrY62KDySmcj38RJvm0g7a6eA2fsoA55Gat979I1SplfQsrA6kH3mQaMb65Satl4
+         hVuKntVBjfN8XWU7u+QSYUbYqqCsfEl2ItW7t7j8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Silvan Jegen <s.jegen@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 010/121] HID: nintendo: check the return value of alloc_workqueue()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 02/43] arm64: dts: armada-3720-turris-mox: Add missing ethernet0 alias
 Date:   Mon, 14 Mar 2022 12:53:13 +0100
-Message-Id: <20220314112744.413091251@linuxfoundation.org>
+Message-Id: <20220314112734.486167101@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit fe23b6bbeac40de957724b90a88d46fb336e29a9 ]
+[ Upstream commit a0e897d1b36793fe0ab899f2fe93dff25c82f418 ]
 
-The function alloc_workqueue() in nintendo_hid_probe() can fail, but
-there is no check of its return value. To fix this bug, its return value
-should be checked with new error handling code.
+U-Boot uses ethernet* aliases for setting MAC addresses. Therefore define
+also alias for ethernet0.
 
-Fixes: c4eae84feff3e ("HID: nintendo: add rumble support")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Reviewed-by: Silvan Jegen <s.jegen@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 7109d817db2e ("arm64: dts: marvell: add DTS for Turris Mox")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-nintendo.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-index b6a9a0f3966e..2204de889739 100644
---- a/drivers/hid/hid-nintendo.c
-+++ b/drivers/hid/hid-nintendo.c
-@@ -2128,6 +2128,10 @@ static int nintendo_hid_probe(struct hid_device *hdev,
- 	spin_lock_init(&ctlr->lock);
- 	ctlr->rumble_queue = alloc_workqueue("hid-nintendo-rumble_wq",
- 					     WQ_FREEZABLE | WQ_MEM_RECLAIM, 0);
-+	if (!ctlr->rumble_queue) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
- 	INIT_WORK(&ctlr->rumble_worker, joycon_rumble_worker);
+diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+index 16e73597bb78..cf139c399d03 100644
+--- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+@@ -18,6 +18,7 @@ / {
  
- 	ret = hid_parse(hdev);
+ 	aliases {
+ 		spi0 = &spi0;
++		ethernet0 = &eth0;
+ 		ethernet1 = &eth1;
+ 	};
+ 
 -- 
 2.34.1
 

@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BE94D8841
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEDF4D8844
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240302AbiCNPiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S242594AbiCNPi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232412AbiCNPiU (ORCPT
+        with ESMTP id S231261AbiCNPi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:38:20 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825EB3F887
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:37:10 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id r127so13030345qke.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:37:10 -0700 (PDT)
+        Mon, 14 Mar 2022 11:38:27 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4228443EC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:37:16 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id q10so22486274ljc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 08:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fireburn-co-uk.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0elgh052PSKRgUoeTnvN0bWDvw6A8anfaBt8OXlPQ1Y=;
-        b=IyDJx9FYLxq0/OFsl6PjULq1hPM856m5NjEgas6tyzwW95iNX23GcmcSfTJao1Fs/h
-         tEtyXRs5sajz8UhQzmJCrvnbMP7lrCkmfqVXyx57DLKwk4PFK0RvlBIsiR/94g0I7C5A
-         YrnmAurs8ZyiwcDO763iE4Nv7FSddrIfqLH+28Ije3Ai5heLz+OwouI0bqjK4GIIGWai
-         MTsTx3GdhUHVPdnjITT9f0PKJUHfKt2sEuZ5Aur/ejjH+qKT/4cd6c/WW8NOPmmTLXgw
-         izFMebbzzUX0tj8pI8aAt+aXqwLiX40VKiFbdvc6SUYsmPf/GGGio/meEWEfa6Q5ya6T
-         7vIA==
+         :cc;
+        bh=kVfmtFDSCvEKnN5uVHIJTuQQYlsxOsGyYkf8pyY+0/Q=;
+        b=ly6VgkyE/N2DilB66OlGgTRs7XW4ikkdeCj07AHpzwPTXmBvg/eY2zam8ApFTRlOR5
+         nYovovt0CjCv0mVFSdNNRfD1GBVc98xUTH+4hYovxh5gLLysSq2wur504PTEG7cXYGzk
+         +jkPBUqOQv7lTNsllfuiADSGF2qWM+CK0jYEiKkOeZX+chYHMrRb45BRHJrBu4Jf8w6g
+         g8K5/Gotpcv8hvk7q9iB5jA2GHMwmm9zGE4Zz7n+REZaUOmbpBXU/YkfD9h+I400cL5l
+         XV0ZgIKwTM1nv/8HsVU0lty08o+lppZiLyPoP2ZAWtdnBTDuHImmVUyRAagMg+LpSgsO
+         R1yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0elgh052PSKRgUoeTnvN0bWDvw6A8anfaBt8OXlPQ1Y=;
-        b=IrNOlZPQx3DFIZ44iq4u436F+0QJt9Ubmds9da+zx4AGVHkrjd7PcJPYU7yrpcvfV0
-         kE2MJ/XDHjezRvLAppBfSzfUd8Xk1pqZrPP3Kisw4TNfLPNknzoNvPbZ/WOa4ILr58/N
-         Kj7Y2ZiwnyT0XEt1jZ3pD/PwO1cz8RGCXo2W0k8PFShmb0KDbII4a1z9ezzzqJzACLV+
-         xKvRvL9JfHrT0YfUlkXALQp6M7z7OMyECexwS48mTCyrVtXJGCH6wGFSbZPEGmCY+9If
-         GkkRJW63Bx86iXtt1kDCBla9/8SflYibMM83GeoLJKjERxzTkCm2Paw5zraCcDCemSQV
-         5hGA==
-X-Gm-Message-State: AOAM531sQGt6ha1CKpPs2Debxc5WG/MEEu17D1CYfsxcubfrUSBjuUCl
-        Bl08W4x9kzNj9BfrQbba6kBsIZKxWTDs0yeFLsn+Qg==
-X-Google-Smtp-Source: ABdhPJyTloUkN91Q7ZAlujMEv/38sKubt4ooFXq30iFcN33LD+RPW78EKqagwBPZqPZIqDQ7wmDhXrXxN16GxBT1U60=
-X-Received: by 2002:a05:620a:1902:b0:5f1:8f5d:b0f2 with SMTP id
- bj2-20020a05620a190200b005f18f5db0f2mr15068195qkb.60.1647272229548; Mon, 14
- Mar 2022 08:37:09 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=kVfmtFDSCvEKnN5uVHIJTuQQYlsxOsGyYkf8pyY+0/Q=;
+        b=J+n69GfXStqO07fy/TJV22nR7XdGwYZYdkxc0SnE3DDQhtkLuFiGjIhgdj0b6eOnX3
+         5M3hVXoBKIMa5nTnTGmzX/tXMvECfB3+NdxAM9KgT7qO93BcAGUrgn5CQ9noZ8UWd0gP
+         r8//xcqXE0lbL1jxZrG8hXLhP89gklbX21rgXtBcu6HpJjD8T8nJivWdlgzSySpcAh9x
+         XqhsLeYSWypZG+TkYnORwufBJqTfi+Xv9sbvuflfzuxLaG0ydwRNgmzGnvowBC/KMp5m
+         jpUXcLYfF2dlFrmQTbJmzlRWIgadiRAwF+StqLHswUCsuePVFnoGzp1YjWUHPAUOh/TS
+         1FxA==
+X-Gm-Message-State: AOAM5329oOz+gcJK7eafO90R5cgbnHNqARBKaJw55HouoVZfsPWYohwp
+        dgNstvuDbV1UXU1yoFrsfqNtOkDuzz4Pjk4Lc+zphw==
+X-Google-Smtp-Source: ABdhPJypcCytiOSWiftk8g5xIcm1i6Q4xC23lRZ00aVkchh307Y/e92ibN4O2ilaRQP1fEwUjwULABkE209J2py0EZQ=
+X-Received: by 2002:a2e:9654:0:b0:244:bb3f:6555 with SMTP id
+ z20-20020a2e9654000000b00244bb3f6555mr14586391ljh.282.1647272234801; Mon, 14
+ Mar 2022 08:37:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220312164550.1810665-1-mike@fireburn.co.uk> <61E2F921-2006-4E9A-AAFF-47371CBC5FCD@holtmann.org>
-In-Reply-To: <61E2F921-2006-4E9A-AAFF-47371CBC5FCD@holtmann.org>
-From:   Mike Lothian <mike@fireburn.co.uk>
-Date:   Mon, 14 Mar 2022 15:36:57 +0000
-Message-ID: <CAHbf0-GWcz85r4GEzmySFJ1n4iqeDTAm5H_Njs0FEpBs1hkJHw@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_event: Remove excessive bluetooth warning
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        BlueZ <linux-bluetooth@vger.kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220307213356.2797205-1-brijesh.singh@amd.com> <20220307213356.2797205-47-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-47-brijesh.singh@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 14 Mar 2022 09:37:03 -0600
+Message-ID: <CAMkAt6pTwo0e6deCtdY7zjEi7-45Mb_Pr7R0uK8WL8uUZAadRw@mail.gmail.com>
+Subject: Re: [PATCH v12 46/46] virt: sevguest: Add documentation for SEV-SNP
+ CPUID Enforcement
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 at 15:32, Marcel Holtmann <marcel@holtmann.org> wrote:
+On Mon, Mar 7, 2022 at 2:35 PM Brijesh Singh <brijesh.singh@amd.com> wrote:
 >
-> Hi Mike,
+> From: Michael Roth <michael.roth@amd.com>
 >
-> > Fixes: 3e54c5890c87a ("Bluetooth: hci_event: Use of a function table to=
- handle HCI events")
-> > Signed-off-by: Mike Lothian <mike@fireburn.co.uk>
-> > ---
-> > net/bluetooth/hci_event.c | 8 --------
-> > 1 file changed, 8 deletions(-)
-> >
-> > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-> > index fc30f4c03d29..aa57fccd2e47 100644
-> > --- a/net/bluetooth/hci_event.c
-> > +++ b/net/bluetooth/hci_event.c
-> > @@ -6818,14 +6818,6 @@ static void hci_event_func(struct hci_dev *hdev,=
- u8 event, struct sk_buff *skb,
-> >               return;
-> >       }
-> >
-> > -     /* Just warn if the length is over max_len size it still be
-> > -      * possible to partially parse the event so leave to callback to
-> > -      * decide if that is acceptable.
-> > -      */
-> > -     if (skb->len > ev->max_len)
-> > -             bt_dev_warn(hdev, "unexpected event 0x%2.2x length: %u > =
-%u",
-> > -                         event, skb->len, ev->max_len);
-> > -
+> Update the documentation with information regarding SEV-SNP CPUID
+> Enforcement details and what sort of assurances it provides to guests.
 >
-> which event type is this? You need to have a commit message giving detail=
-s. I am also pretty sure that this is broken hardware and we can go for rat=
-elimited version, but the warning is justified if the hardware is stupid. I=
-f our table is wrong, we fix the table, but not just silence an unpleasant =
-warning.
->
-> Regards
->
-> Marcel
->
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 
-Hi Marcel
+Tested-by: Peter Gonda <pgonda@google.com>
 
-I noticed it had already been fixed in "Bluetooth: hci_event: Fix
-HCI_EV_VENDOR max_len"
-
-I've replied to that patch asking if it can be added to stable, would
-be nice to get this into 5.17.0 before next week
-
-Cheers
-
-Mike
+I've booted these V12 patches on our internal KVM stack and then
+tested these new driver ioctls with some basic usage. Feel free to add
+this tag to all the driver patches, I am not sure if a basic boot test
+qualifies this for the entire series though.

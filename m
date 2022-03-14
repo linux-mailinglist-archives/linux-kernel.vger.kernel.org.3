@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC3D4D7C58
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8054D7C4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 08:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236886AbiCNH5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 03:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236830AbiCNH5S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236832AbiCNH5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 14 Mar 2022 03:57:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53014131F;
-        Mon, 14 Mar 2022 00:56:03 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234643AbiCNH5P (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 14 Mar 2022 03:57:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083383981D;
+        Mon, 14 Mar 2022 00:56:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F10EB80CD7;
-        Mon, 14 Mar 2022 07:56:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD868C340FA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 811B06117C;
+        Mon, 14 Mar 2022 07:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE90C340FB;
         Mon, 14 Mar 2022 07:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647244560;
-        bh=9DGItyRqo5/TWrsCFxegH0TQiWspharIIrhV3x3Mb5c=;
+        bh=ac25/WJhoyDyFTbiMSLWiuHNdyYFaxWUkp4ZUnCYYMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZFdpmQvnRvMuJyA+ym0T7a8yeLcIb0fc/hdwJE+xcgYzlV8QqLAa+/UzK+GQ/+Jfm
-         Ud23qEzvUjMbaC9eGypCXo4IDg2KxJdyekrugyv+rYFmNlmzkCrh0HlpzNXr2IFov8
-         L6go9twm0cZunQiv20qTXbFoKHDZkJW6IMuARe5ObcOgOeWQemnyIcASe2IU8MhN1x
-         nD1dFlvjiV5OOXEGzF+5w/jfNeYqGIDprXy/Dwjv6cpqVZnS7O4XuWmp1QBM29Jm25
-         cyPNC9BKl0r/bvTxuGB8KgB9gqlgY5OCV4PZDwSHUC9RXCH6xX32xf7LbP0AXp9lfK
-         3yARTdDzW39Kw==
+        b=V93fkfLeV11ew1Qspa8IwKVmnMxlXYxMy2XWvD5o0BBmGh0SGmaqRUKPMLw0c/d2n
+         drccz+OGA3GFDnqLBISmvEkx0rQhQtA1IVILOrXnqcXt/fwAMz9Ksthss2txPtMqvU
+         itml5gCI8kGPAe4qG2e6y1Gau9o778V/9c0KQrya4ywWVaAlqetiqoxa4bhy8/PPAV
+         IfbTBaEfyorwF2vGJnqIFLq/5B1Wvj+N5PqI9ndI1ED6AFmtemhSgRDgWNEDm5Lxfx
+         awwJno+XaVP3PhxmXhHjr0kHIFgtxMKnr03CQNnD9gFcN7UZhsBD2WCIzqJnPCe2kM
+         I7/HR4fEsK5XQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTfYc-001kUh-M9; Mon, 14 Mar 2022 08:55:58 +0100
+        id 1nTfYc-001kUl-NM; Mon, 14 Mar 2022 08:55:58 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
@@ -46,22 +46,21 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 08/64] media: platform: place Intel drivers on a separate dir
-Date:   Mon, 14 Mar 2022 08:55:00 +0100
-Message-Id: <ca0756f7d11db77857559cf3d3465a45dc181a7c.1647242579.git.mchehab@kernel.org>
+        lijian <lijian@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 09/64] media: platform: place Via drivers on a separate dir
+Date:   Mon, 14 Mar 2022 08:55:01 +0100
+Message-Id: <11a35df1e9132ccba324ed9da204b4c018c19001.1647242579.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647242578.git.mchehab@kernel.org>
 References: <cover.1647242578.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -69,7 +68,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to cleanup the main platform media directory, move Intel
+In order to cleanup the main platform media directory, move Via
 driver to its own directory.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -78,87 +77,90 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
 
- drivers/media/platform/Kconfig                  | 11 +----------
- drivers/media/platform/Makefile                 |  2 +-
- drivers/media/platform/intel/Kconfig            | 11 +++++++++++
- drivers/media/platform/intel/Makefile           |  2 ++
- drivers/media/platform/{ => intel}/pxa_camera.c |  0
- 5 files changed, 15 insertions(+), 11 deletions(-)
- create mode 100644 drivers/media/platform/intel/Kconfig
- create mode 100644 drivers/media/platform/intel/Makefile
- rename drivers/media/platform/{ => intel}/pxa_camera.c (100%)
+ drivers/media/platform/Kconfig                | 11 +----------
+ drivers/media/platform/Makefile               |  2 +-
+ drivers/media/platform/via/Kconfig            | 11 +++++++++++
+ drivers/media/platform/via/Makefile           |  2 ++
+ drivers/media/platform/{ => via}/via-camera.c |  0
+ drivers/media/platform/{ => via}/via-camera.h |  0
+ 6 files changed, 15 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/media/platform/via/Kconfig
+ create mode 100644 drivers/media/platform/via/Makefile
+ rename drivers/media/platform/{ => via}/via-camera.c (100%)
+ rename drivers/media/platform/{ => via}/via-camera.h (100%)
 
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 711b6ab9370b..0cfbc0c2aa7a 100644
+index 0cfbc0c2aa7a..83a496327325 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -96,16 +96,7 @@ config VIDEO_OMAP3_DEBUG
- 	help
- 	  Enable debug messages on OMAP 3 camera controller driver.
+@@ -35,16 +35,7 @@ source "drivers/media/platform/nxp/Kconfig"
  
--config VIDEO_PXA27x
--	tristate "PXA27x Quick Capture Interface driver"
+ source "drivers/media/platform/marvell-ccic/Kconfig"
+ 
+-config VIDEO_VIA_CAMERA
+-	tristate "VIAFB camera controller support"
 -	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_DEV && VIDEO_V4L2
--	depends on PXA27x || COMPILE_TEST
+-	depends on FB_VIA && VIDEO_V4L2
 -	select VIDEOBUF2_DMA_SG
--	select SG_SPLIT
--	select V4L2_FWNODE
+-	select VIDEO_OV7670
 -	help
--	  This is a v4l2 driver for the PXA27x Quick Capture Interface
-+source "drivers/media/platform/intel/Kconfig"
+-	   Driver support for the integrated camera controller in VIA
+-	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
+-	   with ov7670 sensors.
++source "drivers/media/platform/via/Kconfig"
  
- config VIDEO_QCOM_CAMSS
- 	tristate "Qualcomm V4L2 Camera Subsystem driver"
+ source "drivers/media/platform/cadence/Kconfig"
+ 
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 4458690c1965..78ac0fa4dd57 100644
+index 78ac0fa4dd57..4742b18fd8d8 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -15,6 +15,7 @@ obj-y += coda/
- obj-y += davinci/
- obj-y += exynos-gsc/
- obj-y += exynos4-is/
-+obj-y += intel/
- obj-y += marvell-ccic/
- obj-y += meson/ge2d/
- obj-y += mtk-jpeg/
-@@ -49,7 +50,6 @@ obj-y += xilinx/
- # (e. g. LC_ALL=C sort Makefile)
- obj-$(CONFIG_VIDEO_MEM2MEM_DEINTERLACE)	+= m2m-deinterlace.o
- obj-$(CONFIG_VIDEO_MUX)			+= video-mux.o
--obj-$(CONFIG_VIDEO_PXA27x)		+= pxa_camera.o
- obj-$(CONFIG_VIDEO_RCAR_DRIF)		+= rcar_drif.o
- obj-$(CONFIG_VIDEO_RCAR_ISP)		+= rcar-isp.o
- obj-$(CONFIG_VIDEO_RENESAS_CEU)		+= renesas-ceu.o
-diff --git a/drivers/media/platform/intel/Kconfig b/drivers/media/platform/intel/Kconfig
+@@ -42,6 +42,7 @@ obj-y += stm32/
+ obj-y += sunxi/
+ obj-y += tegra/vde/
+ obj-y += ti-vpe/
++obj-y += via/
+ obj-y += vsp1/
+ obj-y += xilinx/
+ 
+@@ -57,4 +58,3 @@ obj-$(CONFIG_VIDEO_RENESAS_FCP)		+= rcar-fcp.o
+ obj-$(CONFIG_VIDEO_RENESAS_FDP1)	+= rcar_fdp1.o
+ obj-$(CONFIG_VIDEO_RENESAS_JPU)		+= rcar_jpu.o
+ obj-$(CONFIG_VIDEO_SH_VOU)		+= sh_vou.o
+-obj-$(CONFIG_VIDEO_VIA_CAMERA)		+= via-camera.o
+diff --git a/drivers/media/platform/via/Kconfig b/drivers/media/platform/via/Kconfig
 new file mode 100644
-index 000000000000..aeda421f7248
+index 000000000000..1dcf789dce96
 --- /dev/null
-+++ b/drivers/media/platform/intel/Kconfig
++++ b/drivers/media/platform/via/Kconfig
 @@ -0,0 +1,11 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+config VIDEO_PXA27x
-+	tristate "PXA27x Quick Capture Interface driver"
++config VIDEO_VIA_CAMERA
++	tristate "VIAFB camera controller support"
 +	depends on V4L_PLATFORM_DRIVERS
-+	depends on VIDEO_DEV && VIDEO_V4L2
-+	depends on PXA27x || COMPILE_TEST
++	depends on FB_VIA && VIDEO_V4L2
 +	select VIDEOBUF2_DMA_SG
-+	select SG_SPLIT
-+	select V4L2_FWNODE
++	select VIDEO_OV7670
 +	help
-+	  This is a v4l2 driver for the PXA27x Quick Capture Interface
-diff --git a/drivers/media/platform/intel/Makefile b/drivers/media/platform/intel/Makefile
++	   Driver support for the integrated camera controller in VIA
++	   Chrome9 chipsets.  Currently only tested on OLPC xo-1.5 systems
++	   with ov7670 sensors.
+diff --git a/drivers/media/platform/via/Makefile b/drivers/media/platform/via/Makefile
 new file mode 100644
-index 000000000000..7e8889cbd2df
+index 000000000000..80f747f3fffc
 --- /dev/null
-+++ b/drivers/media/platform/intel/Makefile
++++ b/drivers/media/platform/via/Makefile
 @@ -0,0 +1,2 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_VIDEO_PXA27x) += pxa_camera.o
-diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/intel/pxa_camera.c
++obj-$(CONFIG_VIDEO_VIA_CAMERA) += via-camera.o
+diff --git a/drivers/media/platform/via-camera.c b/drivers/media/platform/via/via-camera.c
 similarity index 100%
-rename from drivers/media/platform/pxa_camera.c
-rename to drivers/media/platform/intel/pxa_camera.c
+rename from drivers/media/platform/via-camera.c
+rename to drivers/media/platform/via/via-camera.c
+diff --git a/drivers/media/platform/via-camera.h b/drivers/media/platform/via/via-camera.h
+similarity index 100%
+rename from drivers/media/platform/via-camera.h
+rename to drivers/media/platform/via/via-camera.h
 -- 
 2.35.1
 

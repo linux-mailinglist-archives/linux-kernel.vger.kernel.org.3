@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE4E4D899C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDC24D8993
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 17:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244092AbiCNQiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 12:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S244000AbiCNQif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 12:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243180AbiCNQgc (ORCPT
+        with ESMTP id S243178AbiCNQgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 12:36:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EAC17076;
-        Mon, 14 Mar 2022 09:35:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BECF17AA2;
+        Mon, 14 Mar 2022 09:35:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAB126144F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C5261459;
         Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E367C341D6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFF7C340F5;
         Mon, 14 Mar 2022 16:35:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1647275708;
-        bh=eDQeajChn3UjFQC4O8YehTdZf6q+u3kEO5eQanQRww4=;
+        bh=D/9Pf0G1jVKyYl+J3ogGxCO+ak+TDvvT76qMp3Ofy8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RqlfCf6NMggWEZSiU5L9KzsIk4RTWhhtwDsoZeqQ04UWuapYNUChp2MM/0pJuOMMx
-         KvtBG+9gK9tYCL3LSGPGgQzvS0htR4MGmQ/OgH/kX6m2L3/S1E+dsIQb5JIpK2LeOi
-         qR0uJPMFSf8lsSGh/APlkHooklsS7Sp7U0SSjK70uxoIuENumYtIMdDwF7RcQyFy5O
-         Te1p8n6mlPxxRIdFJdTQA7N1p7b69zJzAS2fJODRlZ5iGi2YnABAh+bGkJNsGB6hsw
-         Ds55IiHOgoIcJ+tut2pJiz5bDJDNzAuqewB9I6nUIzEHTjCX/o5geEgATL1KOQB8Nh
-         D22bbf/wDu8aw==
+        b=pf0jVS+1Fq/+7YbCSvKy1e+BoixrGCwVhZzDFrxW9q9ESWU5GkE3zEjlmrJufK0lG
+         duMzCHtFghDcdbj6Nt4tOQh5w2BEpTbiSZa6vYjy5zBqYLi0w1+JMeDARD42R60mos
+         KB/W+drz9YnPj9eBSJPkIVIJuhpM/MLLhuU9w1lJnA/EeUrJtOuO4/kJHx1hjD/BdD
+         dQb5HppR1ulo/NPt6VAdnod1vDq8tAFT4Ew7pHE6RvJ2X4YSsGkpOpXzwba8XiQKRv
+         G2vKIOFp6NJnfBfIzCFj6DFdtDG9WtY3m6kyA/1xlP/S7jufYmijlI3QRHCHBJEyD3
+         2pKfkChIx9xAA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nTnf0-001wym-Dv; Mon, 14 Mar 2022 17:35:06 +0100
+        id 1nTnf0-001wyq-FK; Mon, 14 Mar 2022 17:35:06 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Dmitry Osipenko <digetx@gmail.com>,
         Eugen Hristev <eugen.hristev@microchip.com>,
-        Evgeny Novikov <novikov@ispras.ru>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Herman <yanshuaijun@yulong.com>,
         Jacopo Mondi <jacopo@jmondi.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Ming Qian <ming.qian@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 41/67] media: platform: rename marvell-ccic/ to marvell/
-Date:   Mon, 14 Mar 2022 17:34:36 +0100
-Message-Id: <ee2d2808bcba51d1879bff04c6d97e69453d8729.1647274407.git.mchehab@kernel.org>
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH v2 42/67] media: platform: rename meson/ge2d/ to amlogic/meson-ge2d/
+Date:   Mon, 14 Mar 2022 17:34:37 +0100
+Message-Id: <83078d0edf793369710cf6a0c80981fa09286920.1647274407.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647274406.git.mchehab@kernel.org>
 References: <cover.1647274406.git.mchehab@kernel.org>
@@ -74,7 +75,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 As the end goal is to have platform drivers split by vendor,
-rename marvell-ccic/ to marvell/.
+rename meson/ge2d/ to amlogic/meson-ge2d/.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -82,86 +83,88 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 
- MAINTAINERS                                                    | 2 +-
- drivers/media/platform/Kconfig                                 | 2 +-
- drivers/media/platform/Makefile                                | 2 +-
- drivers/media/platform/{marvell-ccic => marvell}/Kconfig       | 0
- drivers/media/platform/{marvell-ccic => marvell}/Makefile      | 0
- drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c | 0
- drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c   | 0
- drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h   | 0
- drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c  | 0
- 9 files changed, 3 insertions(+), 3 deletions(-)
- rename drivers/media/platform/{marvell-ccic => marvell}/Kconfig (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/Makefile (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/cafe-driver.c (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.c (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/mcam-core.h (100%)
- rename drivers/media/platform/{marvell-ccic => marvell}/mmp-driver.c (100%)
+ MAINTAINERS                                                     | 2 +-
+ drivers/media/platform/Kconfig                                  | 2 +-
+ drivers/media/platform/Makefile                                 | 2 +-
+ .../media/platform/{meson/ge2d => amlogic/meson-ge2d}/Kconfig   | 0
+ .../media/platform/{meson/ge2d => amlogic/meson-ge2d}/Makefile  | 0
+ .../platform/{meson/ge2d => amlogic/meson-ge2d}/ge2d-regs.h     | 0
+ .../media/platform/{meson/ge2d => amlogic/meson-ge2d}/ge2d.c    | 0
+ 7 files changed, 3 insertions(+), 3 deletions(-)
+ rename drivers/media/platform/{meson/ge2d => amlogic/meson-ge2d}/Kconfig (100%)
+ rename drivers/media/platform/{meson/ge2d => amlogic/meson-ge2d}/Makefile (100%)
+ rename drivers/media/platform/{meson/ge2d => amlogic/meson-ge2d}/ge2d-regs.h (100%)
+ rename drivers/media/platform/{meson/ge2d => amlogic/meson-ge2d}/ge2d.c (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 84bc106acc57..b83cf0eb99ce 100644
+index b83cf0eb99ce..09b0e60da4e9 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -4248,7 +4248,7 @@ L:	linux-media@vger.kernel.org
- S:	Orphan
+@@ -12523,7 +12523,7 @@ L:	linux-amlogic@lists.infradead.org
+ S:	Supported
  T:	git git://linuxtv.org/media_tree.git
- F:	Documentation/admin-guide/media/cafe_ccic*
--F:	drivers/media/platform/marvell-ccic/
-+F:	drivers/media/platform/marvell/
+ F:	Documentation/devicetree/bindings/media/amlogic,axg-ge2d.yaml
+-F:	drivers/media/platform/meson/ge2d/
++F:	drivers/media/platform/amlogic/meson-ge2d/
  
- CAIF NETWORK LAYER
- L:	netdev@vger.kernel.org
+ MESON NAND CONTROLLER DRIVER FOR AMLOGIC SOCS
+ M:	Liang Yang <liang.yang@amlogic.com>
 diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 24a43cef18de..0a4260627a00 100644
+index 0a4260627a00..b4faee0a1b63 100644
 --- a/drivers/media/platform/Kconfig
 +++ b/drivers/media/platform/Kconfig
-@@ -76,7 +76,7 @@ source "drivers/media/platform/davinci/Kconfig"
- source "drivers/media/platform/exynos-gsc/Kconfig"
+@@ -67,6 +67,7 @@ config VIDEO_MUX
+ 
+ source "drivers/media/platform/allegro-dvt/Kconfig"
+ source "drivers/media/platform/am437x/Kconfig"
++source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
+ source "drivers/media/platform/amphion/Kconfig"
+ source "drivers/media/platform/aspeed/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+@@ -77,7 +78,6 @@ source "drivers/media/platform/exynos-gsc/Kconfig"
  source "drivers/media/platform/exynos4-is/Kconfig"
  source "drivers/media/platform/intel/Kconfig"
--source "drivers/media/platform/marvell-ccic/Kconfig"
-+source "drivers/media/platform/marvell/Kconfig"
- source "drivers/media/platform/meson/ge2d/Kconfig"
+ source "drivers/media/platform/marvell/Kconfig"
+-source "drivers/media/platform/meson/ge2d/Kconfig"
  source "drivers/media/platform/mtk-jpeg/Kconfig"
  source "drivers/media/platform/mtk-mdp/Kconfig"
+ source "drivers/media/platform/mtk-vcodec/Kconfig"
 diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 8d6e15fad0b1..8b2deba4b62c 100644
+index 8b2deba4b62c..48531f93d92f 100644
 --- a/drivers/media/platform/Makefile
 +++ b/drivers/media/platform/Makefile
-@@ -16,7 +16,7 @@ obj-y += davinci/
- obj-y += exynos-gsc/
+@@ -7,6 +7,7 @@
+ # (e. g. LC_ALL=C sort Makefile)
+ obj-y += allegro-dvt/
+ obj-y += am437x/
++obj-y += amlogic/meson-ge2d/
+ obj-y += amphion/
+ obj-y += aspeed/
+ obj-y += atmel/
+@@ -17,7 +18,6 @@ obj-y += exynos-gsc/
  obj-y += exynos4-is/
  obj-y += intel/
--obj-y += marvell-ccic/
-+obj-y += marvell/
- obj-y += meson/ge2d/
+ obj-y += marvell/
+-obj-y += meson/ge2d/
  obj-y += mtk-jpeg/
  obj-y += mtk-mdp/
-diff --git a/drivers/media/platform/marvell-ccic/Kconfig b/drivers/media/platform/marvell/Kconfig
+ obj-y += mtk-vcodec/
+diff --git a/drivers/media/platform/meson/ge2d/Kconfig b/drivers/media/platform/amlogic/meson-ge2d/Kconfig
 similarity index 100%
-rename from drivers/media/platform/marvell-ccic/Kconfig
-rename to drivers/media/platform/marvell/Kconfig
-diff --git a/drivers/media/platform/marvell-ccic/Makefile b/drivers/media/platform/marvell/Makefile
+rename from drivers/media/platform/meson/ge2d/Kconfig
+rename to drivers/media/platform/amlogic/meson-ge2d/Kconfig
+diff --git a/drivers/media/platform/meson/ge2d/Makefile b/drivers/media/platform/amlogic/meson-ge2d/Makefile
 similarity index 100%
-rename from drivers/media/platform/marvell-ccic/Makefile
-rename to drivers/media/platform/marvell/Makefile
-diff --git a/drivers/media/platform/marvell-ccic/cafe-driver.c b/drivers/media/platform/marvell/cafe-driver.c
+rename from drivers/media/platform/meson/ge2d/Makefile
+rename to drivers/media/platform/amlogic/meson-ge2d/Makefile
+diff --git a/drivers/media/platform/meson/ge2d/ge2d-regs.h b/drivers/media/platform/amlogic/meson-ge2d/ge2d-regs.h
 similarity index 100%
-rename from drivers/media/platform/marvell-ccic/cafe-driver.c
-rename to drivers/media/platform/marvell/cafe-driver.c
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell/mcam-core.c
+rename from drivers/media/platform/meson/ge2d/ge2d-regs.h
+rename to drivers/media/platform/amlogic/meson-ge2d/ge2d-regs.h
+diff --git a/drivers/media/platform/meson/ge2d/ge2d.c b/drivers/media/platform/amlogic/meson-ge2d/ge2d.c
 similarity index 100%
-rename from drivers/media/platform/marvell-ccic/mcam-core.c
-rename to drivers/media/platform/marvell/mcam-core.c
-diff --git a/drivers/media/platform/marvell-ccic/mcam-core.h b/drivers/media/platform/marvell/mcam-core.h
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/mcam-core.h
-rename to drivers/media/platform/marvell/mcam-core.h
-diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/media/platform/marvell/mmp-driver.c
-similarity index 100%
-rename from drivers/media/platform/marvell-ccic/mmp-driver.c
-rename to drivers/media/platform/marvell/mmp-driver.c
+rename from drivers/media/platform/meson/ge2d/ge2d.c
+rename to drivers/media/platform/amlogic/meson-ge2d/ge2d.c
 -- 
 2.35.1
 

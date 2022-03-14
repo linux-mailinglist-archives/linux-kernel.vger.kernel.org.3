@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666CC4D7A20
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 06:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A79D4D7A1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 06:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236146AbiCNFXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 01:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S235956AbiCNFXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 01:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236103AbiCNFXh (ORCPT
+        with ESMTP id S229738AbiCNFXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 01:23:37 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734503CFF8;
-        Sun, 13 Mar 2022 22:22:28 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id c15so3601146ljr.9;
-        Sun, 13 Mar 2022 22:22:28 -0700 (PDT)
+        Mon, 14 Mar 2022 01:23:30 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68AA3CFE5
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 22:22:21 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso16343232pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Mar 2022 22:22:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nbtSRVVGN9+RW0bywIMfiM4Hm879DO3M3rRCioh4tYQ=;
-        b=NAiU65hC0RdlCLNvMHA6EpX6WuG1OWLd6FapI0qT+0lKExVONOE/rIQb0+3xcyJkAa
-         z5iCeLlTWEynD+D7MnLrcagjOqNEPXn0GpMxTu3hskeyRL78MCrXgSx9nc1EPY6Wz0d5
-         76gvib3waCrlOEfs6bVRH2G6zlsa1wRjmRp5+vwBY6qEDDjbNVvaxjVtQyctK2uU1cCG
-         EfZDJ7LtZZPb/tYAuUBuqdPQAOsgXXhXfsWEw5MenlVKGDRzq3XiDn5QM2vIh9jT/DKm
-         zPtTkKup3Zfj4oC+ayDWrOPCMMeloEwjIPlhm8Lt6JUImhvXi9tVgaL5BQvz5al04JwU
-         /0Ag==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YXYRkkKUPAPMqJg2NjziNouYLGwGqlRoqdP1n5iuVLY=;
+        b=HSLYDs5aUaY/BcoZsN4dwJcrhpy14od/2Zt6j8OjXQIEPZTmsyybvsVpuXkXV/xhTG
+         /5d328WU4A3IQncbr0EZJX4TGw/LqKvIxs+ROZZUcbqbmUZW4WW3IjcpfgYF6DXmy0FN
+         AmvVF4WERpssoFBqqXnXjtsWXgDxwlh208WyahcKtoBznUPVAjOctS+GDEmAcG1QRrL5
+         jrOih2M1QFDEmWVYre6u5yS7+VL0RfnPBW/2bVD/XUHtkQvlr/ZGwf+ovYeE2W07LDeL
+         L1WUcUUnZw3op54XVX2Wzf0YaIp1PcT6VJVVmLFsdXnrYJ4b+U/uwpVLojlq1vwtK53G
+         cvdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nbtSRVVGN9+RW0bywIMfiM4Hm879DO3M3rRCioh4tYQ=;
-        b=4cVGIwEblLOlm2ibTploRUutXRPI8zjzF3fgam0DwRZgfXLKfnxgBNZas5Yf8Y4Ctx
-         2nFJZRjHnxTqQSWmyplSFjzmtwC09gCYkEPjwqgYNUuX1aJz73YkBLEaJZFO84BC2h3O
-         vtm1jSqLSH3M/4J/i2oMCFk1TgUdN3nXSht6DUSkny0ZusFgloWFHi92NtqW6JLzxtC8
-         k4QgdN4sDy3Xsk1yqDqBv4uhoIn6v65UoIhdREU6XrhVTWXPhIR6mKfwm2+hOaLk4Qao
-         SmZ5aVrlc3VFCuTisYHJgexCG3AovnyhhaXtTSvb34rnfBgO9GMH7KyzVMyTACr+WKHY
-         6aiA==
-X-Gm-Message-State: AOAM533GJhRE1klHSxNokqZ11jNl71KmhelxVfI7LNvt6oHkdUPhgeJK
-        w265kp9AdGdGVlhSNLYv4mu27McVy3gfveXAknw=
-X-Google-Smtp-Source: ABdhPJwvNQd3kXdudgrucu3kBp5FeLLKmBLeW5rm4ea83FVn+wM7tBsNQTBq6mKZ39OAcunmGGzS7AxL8r9kikQOvR8=
-X-Received: by 2002:a2e:5009:0:b0:247:d738:3e8e with SMTP id
- e9-20020a2e5009000000b00247d7383e8emr13180918ljb.281.1647235346612; Sun, 13
- Mar 2022 22:22:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YXYRkkKUPAPMqJg2NjziNouYLGwGqlRoqdP1n5iuVLY=;
+        b=5mE2pTDp0uP7J8bdQdN6ZwlgxdUP/tKzmFpDoYqTb0+F1oKX4hUlZ+GKQ1y3IXvk/d
+         UhwbhcQC48MyHkLFGVnmfDDJ8EN6dC0s+dSnCEyVHl31S84TrxJi15ImLT4zVOtgxOI/
+         ivjEsLdHfnfklg++mG42RnYOctM0safzcxsjG4CnGMmnEdOOPZXVCmLizjG73my7ShQC
+         AkHdlkRA9Y+ZOo/WPK0twT5+i8/Way6OGXoOS2RR+Z0jy4T7WaNf2qog25izD6Pa00kv
+         LnphP9IlPLFBoA155ECUjRQxzcaAZvcJQx8x4DPw3g3FWlX1TyMteRu2d4dwUQfzmoYd
+         2JEQ==
+X-Gm-Message-State: AOAM53387twPPQbxZTPPlz3kzJ6aOoLETaic4fSDhykM9KvDcjrigPFq
+        NGjueD0DbNeAafdca/zH9zDt
+X-Google-Smtp-Source: ABdhPJyC09LNYIuQkLllMG+RfcIfpSxd18bfbIF/RXyYupw3bFBwhsZ6JGP4PKm/ZRrQiI8Hzb2ChA==
+X-Received: by 2002:a17:90b:1e43:b0:1bf:920:8a26 with SMTP id pi3-20020a17090b1e4300b001bf09208a26mr33827130pjb.52.1647235341041;
+        Sun, 13 Mar 2022 22:22:21 -0700 (PDT)
+Received: from workstation ([59.92.58.163])
+        by smtp.gmail.com with ESMTPSA id f4-20020aa782c4000000b004f6f0334a51sm17477313pfn.126.2022.03.13.22.22.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 13 Mar 2022 22:22:20 -0700 (PDT)
+Date:   Mon, 14 Mar 2022 10:52:16 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     bjorn.andersson@linaro.org, bhelgaas@google.com,
+        svarbanov@mm-sol.com, robh@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Add support for handling MSIs from 8 endpoints
+Message-ID: <20220314052216.GA10218@workstation>
+References: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
+ <20220223100145.GA26873@lpieralisi>
 MIME-Version: 1.0
-References: <20220311014245.4612-1-ctcchien@nuvoton.com> <20220311014245.4612-2-ctcchien@nuvoton.com>
- <YiwGFmbXw0qwM9mx@latitude>
-In-Reply-To: <YiwGFmbXw0qwM9mx@latitude>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Mon, 14 Mar 2022 13:22:15 +0800
-Message-ID: <CAHpyw9dmFdnmOEr9L=H5BMYsh7bV9JWCfnpNA=zVg2OdLD9AOQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] ARM: dts: nuvoton: Add new device node
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        ctcchien@nuvoton.com, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223100145.GA26873@lpieralisi>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OK, I will check it.
-thanks for your comment
-
-B.R.
-Medad
-
-Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> =E6=96=BC 2022=E5=B9=B43=
-=E6=9C=8812=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=8810:31=E5=AF=AB=E9=
-=81=93=EF=BC=9A
->
-> >Subject: [PATCH v3 1/3] ARM: dts: nuvoton: Add new device node
->
-> To make it more obvious what this patch is about, I suggest something lik=
-e:
->
-> [PATCH v3 1/3] ARM: dts: nuvoton: Add memory controller node
->
->
-> This arguably makes the next line in the commit message redundant,
-> but there is other useful information that can be added there, if you
-> like, such as how the kernel is going to use the memory controller.
->
->
-> Best regards,
-> Jonathan
->
-> On Fri, Mar 11, 2022 at 09:42:43AM +0800, Medad CChien wrote:
-> >  Add NPCM memory controller device node
-> >
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+On Wed, Feb 23, 2022 at 10:01:45AM +0000, Lorenzo Pieralisi wrote:
+> On Tue, Dec 14, 2021 at 03:43:19PM +0530, Manivannan Sadhasivam wrote:
+> > The DWC controller used in the Qcom Platforms are capable of addressing the
+> > MSIs generated from 8 different endpoints each with 32 vectors (256 in
+> > total). Currently the driver is using the default value of addressing the
+> > MSIs from 1 endpoint only. Extend it by passing the MAX_MSI_IRQS to the
+> > num_vectors field of pcie_port structure.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > > ---
-> >  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/b=
-oot/dts/nuvoton-common-npcm7xx.dtsi
-> > index 3696980a3da1..ba542b26941e 100644
-> > --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > @@ -106,6 +106,13 @@
-> >               interrupt-parent =3D <&gic>;
-> >               ranges;
-> >
-> > +             mc: memory-controller@f0824000 {
-> > +                     compatible =3D "nuvoton,npcm750-memory-controller=
-";
-> > +                     reg =3D <0x0 0xf0824000 0x0 0x1000>;
-> > +                     interrupts =3D <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     status =3D "disabled";
-> > +             };
-> > +
-> >               rstc: rstc@f0801000 {
-> >                       compatible =3D "nuvoton,npcm750-reset";
-> >                       reg =3D <0xf0801000 0x70>;
-> > --
-> > 2.17.1
-> >
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> 
+> Need an ACK from qcom maintainers.
+> 
+
+I think this one can be merged now.
+
+Thanks,
+Mani
+
+> Thanks,
+> Lorenzo
+> 
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 1c3d1116bb60..8a4c08d815a5 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1550,6 +1550,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+> >  	pci->dev = dev;
+> >  	pci->ops = &dw_pcie_ops;
+> >  	pp = &pci->pp;
+> > +	pp->num_vectors = MAX_MSI_IRQS;
+> >  
+> >  	pcie->pci = pci;
+> >  
+> > -- 
+> > 2.25.1
+> > 

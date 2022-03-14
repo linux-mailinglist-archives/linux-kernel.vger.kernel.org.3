@@ -2,54 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CE44D887E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954BF4D8888
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 16:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242740AbiCNPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 11:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S242749AbiCNPv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 11:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiCNPuJ (ORCPT
+        with ESMTP id S231625AbiCNPvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:50:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83711E0CB;
-        Mon, 14 Mar 2022 08:48:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C45612BE;
-        Mon, 14 Mar 2022 15:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A396FC340E9;
-        Mon, 14 Mar 2022 15:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647272937;
-        bh=s+TtZRwiP40i13W0ONxdEk+ZBzo1ccAH1/yhq91ObCU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=qOZ9SyNSgE5dYpNLYffCb9nmYF2XS1a1E7CXAivcB2D7nSwwlYhvNFeFnJv3GShAz
-         K5h4FWPwy3UmipofzaCMWd/cBd+4s5AShvAKtf4r6HO7f/+3zV+A/HdX57WRekLV11
-         7ov0FLJ4XqIoYzxeebgZxjt7b500gDNZNY0Rm05cDGJQpjaaCJthdu6HlUhlIgmC9e
-         +1/vqHVsb8kG149TaEOCkeH+/voKSmHV7R3FLDBGQSoi8qJxfd4uK0CF11lp/avXcZ
-         oMrqVTsJoojIpLTAHP/aHwjtIED910ZSDlQ77pL6DnLtirrmYFAdqSX7WKixXrSu3v
-         sit4Xn8H1K9gw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4F6635C4167; Mon, 14 Mar 2022 08:48:57 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 08:48:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        rcu@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [GIT PULL] RCU changes for v5.18
-Message-ID: <20220314154857.GA2637810@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220314032823.GA2593360@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 14 Mar 2022 11:51:55 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6BB1A82D;
+        Mon, 14 Mar 2022 08:50:44 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id B67863201F96;
+        Mon, 14 Mar 2022 11:50:42 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 14 Mar 2022 11:50:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=nD1zjfgHJtc84ORON
+        Qo90iFLDqy65e7NHPqJ7KGjDrw=; b=XtmsdeDB97EvQUiWEzAglCxyC9pkGLcJV
+        X9hGE0DTnL+idBbquV/+wf6rG6WpWRWt7UtKncp4H1qRGTb7j6RXk1U8LXlSWojh
+        u1bbpEJykrDKgrnhamAzEY4pXVavZHH7pkZjuBJbRtRKDO2FrqvUV0pqq6Su7xWp
+        rUW2GGEFnPwyW9jYYS0K8weMSq3cmomGOsciAXA2ULBV3+oGt6mGystLNUfsxUjb
+        iOfPpg9saZdcBnAys9912BaYkOMgnktC6tbLBT0zBIdpAiGDRZ3Lo/ONTq5v+RAX
+        clZCe+LkzpET2kNxdExq40bF0G+5A8EDRk4vPpusTzdA3x/WBosHQ==
+X-ME-Sender: <xms:UWQvYr3JSYPu3GlB1Gqj4B52a8IBcWQ5tu3BaUtjjpYa7h3E6PXUzA>
+    <xme:UWQvYqHP3FkB9z0rggXVEqPDsYgDm51vbjl40X9Tvcb7K45QvfKwz3R0zhRZb4AmQ
+    F3aaCpl5sVN2mQ>
+X-ME-Received: <xmr:UWQvYr5lW6P8tT-3mYZDT9wJqLsGLp-1WHBfG457wmlknoloh1i81mQcHvwm>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvkedgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:UWQvYg1yXn-E5b0o6Etk98vYmwGFEOekuV2eRWvyqh-E1IlZh2nf-Q>
+    <xmx:UWQvYuEB7rsep2I_xj8WHVBeS46QozzW8BWBThN2xTfcZ4x4OyfbQA>
+    <xmx:UWQvYh-PWTTsWfCboHYz8vcvZqUToqDi1_kC5vUDRI-ZmMDlYFyIQg>
+    <xmx:UmQvYreJeymYaMxqbTh4SUb9HTq-m8r1crJXzsxRfZRp_vCPmmFlpA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Mar 2022 11:50:41 -0400 (EDT)
+Date:   Mon, 14 Mar 2022 17:50:38 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 0/3] Extend locked port feature with FDB locked
+ flag (MAC-Auth/MAB)
+Message-ID: <Yi9kTh6XZu3OiCz0@shredder>
+References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220314032823.GA2593360@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,150 +83,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 08:28:23PM -0700, Paul E. McKenney wrote:
-> Hello, Linus,
+On Thu, Mar 10, 2022 at 03:23:17PM +0100, Hans Schultz wrote:
+> This patch set extends the locked port feature for devices
+> that are behind a locked port, but do not have the ability to
+> authorize themselves as a supplicant using IEEE 802.1X.
+> Such devices can be printers, meters or anything related to
+> fixed installations. Instead of 802.1X authorization, devices
+> can get access based on their MAC addresses being whitelisted.
 > 
-> Please pull the latest RCU git tree from:
+> For an authorization daemon to detect that a device is trying
+> to get access through a locked port, the bridge will add the
+> MAC address of the device to the FDB with a locked flag to it.
+> Thus the authorization daemon can catch the FDB add event and
+> check if the MAC address is in the whitelist and if so replace
+> the FDB entry without the locked flag enabled, and thus open
+> the port for the device.
+> 
+> This feature is known as MAC-Auth or MAC Authentication Bypass
+> (MAB) in Cisco terminology, where the full MAB concept involves
+> additional Cisco infrastructure for authorization. There is no
+> real authentication process, as the MAC address of the device
+> is the only input the authorization daemon, in the general
+> case, has to base the decision if to unlock the port or not.
+> 
+> With this patch set, an implementation of the offloaded case is
+> supplied for the mv88e6xxx driver. When a packet ingresses on
+> a locked port, an ATU miss violation event will occur. When
 
-OK, I was apparently unable to distinguish v5.17-rc8 from v5.18 yesterday
-evening.  :-/
+When do you get an ATU miss violation? In case there is no FDB entry for
+the SA or also when there is an FDB entry, but it points to a different
+port? I see that the bridge will only create a "locked" FDB entry in
+case there is no existing entry, but it will not transition an existing
+entry to "locked" state. I guess ATU miss refers to an actual miss and
+not mismatch.
 
-I will resent both pull requests next week, and please accept my apologies
-for the bother.
+The HW I work with doesn't have the ability to generate such
+notifications, but it can trap packets on MISS (no entry) or MISMATCH
+(exists, but with different port). I believe that in order to support
+this feature we need to inject MISS-ed packets to the Rx path so that
+eventually the bridge itself will create the "locked" entry as opposed
+to notifying the bridge about the entry as in your case.
 
-							Thanx, Paul
+> handling such ATU miss violation interrupts, the MAC address of
+> the device is added to the FDB with a zero destination port
+> vector (DPV) and the MAC address is communicated through the
+> switchdev layer to the bridge, so that a FDB entry with the
+> locked flag enabled can be added.
+> 
+> Hans Schultz (3):
+>   net: bridge: add fdb flag to extent locked port feature
+>   net: switchdev: add support for offloading of fdb locked flag
+>   net: dsa: mv88e6xxx: mac-auth/MAB implementation
 
-> The following changes since commit da123016ca8cb5697366c0b2dd55059b976e67e4:
+Please extend tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+with new test cases for this code.
+
 > 
->   rcu-tasks: Fix computation of CPU-to-list shift counts (2022-01-26 13:04:05 -0800) tags/rcu-urgent.2022.01.26a
+>  drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
+>  drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
+>  drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
+>  drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
+>  drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
+>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
+>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
+>  drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
+>  drivers/net/dsa/mv88e6xxx/port.h              |  1 +
+>  include/net/switchdev.h                       |  3 +-
+>  include/uapi/linux/neighbour.h                |  1 +
+>  net/bridge/br.c                               |  3 +-
+>  net/bridge/br_fdb.c                           | 13 +++-
+>  net/bridge/br_input.c                         | 11 ++-
+>  net/bridge/br_private.h                       |  5 +-
+>  15 files changed, 167 insertions(+), 14 deletions(-)
+>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
 > 
-> are available in the Git repository at:
+> -- 
+> 2.30.2
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2022.03.13a
-> 
->   # HEAD: d5578190bed3d110203e3b6b29c5a7a39d51c6c0 Merge branches 'exp.2022.02.24a', 'fixes.2022.02.14a', 'rcu_barrier.2022.02.08a', 'rcu-tasks.2022.02.08a', 'rt.2022.02.01b', 'torture.2022.02.01b' and 'torturescript.2022.02.08a' into HEAD (2022-02-24 09:38:46 -0800)
-> 
-> RCU changes for this cycle were:
-> 
-> exp.2022.02.24a: Contains a fix for idle detection from Neeraj Upadhyay
-> 	and missing access marking detected by KCSAN.
-> 
-> fixes.2022.02.14a: Miscellaneous fixes.
-> 
-> rcu_barrier.2022.02.08a: Reduces coupling between rcu_barrier() and
-> 	CPU-hotplug operations, so that rcu_barrier() no longer needs
-> 	to do cpus_read_lock().  This may also someday allow system
-> 	boot to bring CPUs online concurrently.
-> 
-> rcu-tasks.2022.02.08a: Enable more aggressive movement to per-CPU
-> 	queueing when reacting to excessive lock contention due
-> 	to workloads placing heavy update-side stress on RCU tasks.
-> 
-> rt.2022.02.01b: Improvements to RCU priority boosting, including
-> 	changes from Neeraj Upadhyay, Zqiang, and Alison Chaiken.
-> 
-> torture.2022.02.01b: Various fixes improving test robustness and
-> 	debug information.
-> 
-> torturescript.2022.02.08a: Add tests for SRCU size transitions, further
-> 	compress torture.sh build products, and improve debug output.
-> 
-> ----------------------------------------------------------------
-> Alison Chaiken (4):
->       rcu: Move kthread_prio bounds-check to a separate function
->       rcu: Make priority of grace-period thread consistent
->       rcu: Elevate priority of offloaded callback threads
->       rcu: Update documentation regarding kthread_prio cmdline parameter
-> 
-> David Woodhouse (2):
->       rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
->       rcu: Add mutex for rcu boost kthread spawning and affinity setting
-> 
-> Ingo Molnar (2):
->       rcu: Uninline multi-use function: finish_rcuwait()
->       rcu: Remove __read_mostly annotations from rcu_scheduler_active externs
-> 
-> Neeraj Upadhyay (3):
->       rcu/exp: Fix check for idle context in rcu_exp_handler
->       rcu/nocb: Handle concurrent nocb kthreads creation
->       rcu: Remove unused rcu_state.boost
-> 
-> Paul E. McKenney (34):
->       rcu: Mark ->expmask access in synchronize_rcu_expedited_wait()
->       rcu: Mark accesses to boost_starttime
->       rcu: Don't deboost before reporting expedited quiescent state
->       rcutorture: Print message before invoking ->cb_barrier()
->       torture: Distinguish kthread stopping and being asked to stop
->       rcutorture: Increase visibility of forward-progress hangs
->       rcutorture: Make rcu_fwd_cb_nodelay be a counter
->       rcutorture: Add end-of-test check to rcu_torture_fwd_prog() loop
->       rcutorture: Fix rcu_fwd_mutex deadlock
->       torture: Wake up kthreads after storing task_struct pointer
->       rcutorture: Enable limited callback-flooding tests of SRCU
->       torture: Drop trailing ^M from console output
->       torture: Allow four-digit repetition numbers for --configs parameter
->       torture: Output per-failed-run summary lines from torture.sh
->       torture: Make kvm.sh summaries note runs having only KCSAN reports
->       torture: Indicate which torture.sh runs' bugs are all KCSAN reports
->       torture: Compress KCSAN as well as KASAN vmlinux files
->       torture: Make kvm-remote.sh try multiple times to download tarball
->       torture: Print only one summary line per run
->       torture: Make kvm-find-errors.sh notice missing vmlinux file
->       torture: Change KVM environment variable to RCUTORTURE
->       rcu: Refactor rcu_barrier() empty-list handling
->       rcu: Rework rcu_barrier() and callback-migration logic
->       rcu: Make rcu_barrier() no longer block CPU-hotplug operations
->       rcu: Create and use an rcu_rdp_cpu_online()
->       rcu-tasks: Use order_base_2() instead of ilog2()
->       rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
->       torture: Make torture.sh help message match reality
->       rcutorture: Test SRCU size transitions
->       rcutorture: Provide non-power-of-two Tasks RCU scenarios
->       MAINTAINERS:  Add Frederic and Neeraj to their RCU files
->       rcu: Inline __call_rcu() into call_rcu()
->       rcu: Mark writes to the rcu_segcblist structure's ->flags field
->       Merge branches 'exp.2022.02.24a', 'fixes.2022.02.14a', 'rcu_barrier.2022.02.08a', 'rcu-tasks.2022.02.08a', 'rt.2022.02.01b', 'torture.2022.02.01b' and 'torturescript.2022.02.08a' into HEAD
-> 
-> Uladzislau Rezki (Sony) (1):
->       rcu: Fix description of kvfree_rcu()
-> 
-> Yury Norov (1):
->       rcu: Replace cpumask_weight with cpumask_empty where appropriate
-> 
-> Zqiang (3):
->       rcu: Create per-cpu rcuc kthreads only when rcutree.use_softirq=0
->       rcu: Add per-CPU rcuc task dumps to RCU CPU stall warnings
->       kasan: Record work creation stack trace with interrupts enabled
-> 
->  Documentation/admin-guide/kernel-parameters.txt    |   2 +
->  MAINTAINERS                                        |   2 +
->  include/linux/rcupdate.h                           |   4 +-
->  include/linux/rcutree.h                            |   2 +-
->  include/linux/rcuwait.h                            |   6 +-
->  include/trace/events/rcu.h                         |   9 +-
->  kernel/rcu/rcu_segcblist.h                         |   4 +-
->  kernel/rcu/rcutorture.c                            |  41 ++-
->  kernel/rcu/tasks.h                                 |   6 +-
->  kernel/rcu/tree.c                                  | 328 ++++++++++++---------
->  kernel/rcu/tree.h                                  |  18 +-
->  kernel/rcu/tree_exp.h                              |   5 +-
->  kernel/rcu/tree_nocb.h                             |  18 +-
->  kernel/rcu/tree_plugin.h                           |  31 +-
->  kernel/rcu/tree_stall.h                            |  35 +++
->  kernel/rcu/update.c                                |   7 +
->  kernel/torture.c                                   |   6 +-
->  .../selftests/rcutorture/bin/console-badness.sh    |   2 +-
->  .../testing/selftests/rcutorture/bin/kvm-again.sh  |   4 +-
->  .../selftests/rcutorture/bin/kvm-check-branches.sh |   4 +-
->  .../selftests/rcutorture/bin/kvm-end-run-stats.sh  |   4 +-
->  .../selftests/rcutorture/bin/kvm-find-errors.sh    |   6 +
->  .../selftests/rcutorture/bin/kvm-recheck-rcu.sh    |   2 +-
->  .../testing/selftests/rcutorture/bin/kvm-remote.sh |  25 +-
->  tools/testing/selftests/rcutorture/bin/kvm.sh      |  16 +-
->  .../selftests/rcutorture/bin/parse-console.sh      |  10 +
->  tools/testing/selftests/rcutorture/bin/torture.sh  |  38 ++-
->  .../selftests/rcutorture/configs/rcu/RUDE01        |   2 +-
->  .../selftests/rcutorture/configs/rcu/SRCU-N.boot   |   1 +
->  .../selftests/rcutorture/configs/rcu/SRCU-P.boot   |   2 +
->  .../selftests/rcutorture/configs/rcu/TRACE01       |   2 +-
->  31 files changed, 400 insertions(+), 242 deletions(-)

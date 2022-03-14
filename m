@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0739F4D7F73
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB754D7F79
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 11:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238344AbiCNKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 06:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S238352AbiCNKLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiCNKLI (ORCPT
+        with ESMTP id S238348AbiCNKLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 06:11:08 -0400
+        Mon, 14 Mar 2022 06:11:12 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABB13BF9E;
-        Mon, 14 Mar 2022 03:09:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5823BFA3;
+        Mon, 14 Mar 2022 03:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647252599; x=1678788599;
+  t=1647252603; x=1678788603;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=HmjOEo/dn0cDP88bab4lAIJUcE42zK9xqaKpSspNVbc=;
-  b=pBes1IDG0bUKSXbkv52m4PWP0YKeUcY3XAI/Ao/OT0yV4BTBoqdXnE/9
-   mfQQSJgYXedUl01aeyXs+oxp+dKX99VfY1ogrXI6+NO+aMGhI2UP8qsKR
-   8Lvgswc8hpU5Lu6HcoE5eOTQaNnWnjty+Zedms48Hk1SKwa1OfHC5VUo6
-   c=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 14 Mar 2022 03:09:59 -0700
+  bh=doXGk5p8tT7N4V05wwPZ5/b5HZpry0GoqXMs9hAYbss=;
+  b=cnKMSmaSXrI4moe+D9t7kf+X9iJBM1jllZYM8vMi3Pcack8fmtKVtfpk
+   aTWCyZv9nIJLms190fDdrpBjgrX0bojAeiBo2/a79cINFnNOPFmFSiNcR
+   5Qydw0WkQReWjjPHcsGh2/qkGKxEPYuFh43zep1TP1OQmAjU8BIbdfuHI
+   M=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 14 Mar 2022 03:10:02 -0700
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Mar 2022 03:09:57 -0700
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Mar 2022 03:10:00 -0700
 X-QCInternal: smtphost
 Received: from hu-dikshita-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.13])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 14 Mar 2022 15:39:44 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 14 Mar 2022 15:39:45 +0530
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 91FA8467A; Mon, 14 Mar 2022 15:39:43 +0530 (+0530)
+        id BCCB34676; Mon, 14 Mar 2022 15:39:44 +0530 (+0530)
 From:   quic_dikshita@quicinc.com
 To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         hverkuil-cisco@xs4all.nl
@@ -42,9 +42,9 @@ Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
         stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
         quic_majja@quicinc.com, quic_jdas@quicinc.com,
         Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v4 1/2] media: v4l2-ctrls: Add intra-refresh type control
-Date:   Mon, 14 Mar 2022 15:39:33 +0530
-Message-Id: <1647252574-30451-2-git-send-email-quic_dikshita@quicinc.com>
+Subject: [PATCH v4 2/2] venus: venc: Add support for intra-refresh mode
+Date:   Mon, 14 Mar 2022 15:39:34 +0530
+Message-Id: <1647252574-30451-3-git-send-email-quic_dikshita@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1647252574-30451-1-git-send-email-quic_dikshita@quicinc.com>
 References: <1647252574-30451-1-git-send-email-quic_dikshita@quicinc.com>
@@ -60,106 +60,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dikshita Agarwal <quic_dikshita@quicinc.com>
 
-Add a control to set intra-refresh type.
+Add support for intra-refresh type v4l2 control.
 
 Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 22 ++++++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
- include/uapi/linux/v4l2-controls.h                 |  5 +++++
- 3 files changed, 36 insertions(+)
+ drivers/media/platform/qcom/venus/core.h       |  1 +
+ drivers/media/platform/qcom/venus/venc.c       |  6 +++++-
+ drivers/media/platform/qcom/venus/venc_ctrls.c | 10 ++++++++++
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-index 4cd7c54..1539cd5 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-@@ -1180,6 +1180,28 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     is set to non zero value.
-     Applicable to H264, H263 and MPEG4 encoder.
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 7c3bac0..65c0f01 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -260,6 +260,7 @@ struct venc_controls {
  
-+``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE (enum)``
-+
-+enum v4l2_mpeg_video_intra_refresh_period_type -
-+    Sets the type of intra refresh. The period to refresh
-+    the whole frame is specified by V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
-+    Note that if this control is not present, then it is undefined what
-+    refresh type is used and it is up to the drive to decide.
-+    Applicable to H264 and HEVC encoders. Possible values are:
-+
-+.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM``
-+      - The whole frame is completely refreshed randomly
-+      after the specified period.
-+    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC``
-+      - The whole frame MBs are completely refreshed in cyclic order
-+      after the specified period.
-+
- ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
-     Intra macroblock refresh period. This sets the period to refresh
-     the whole frame. In other words, this defines the number of frames
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 54ca4e6..3089e50 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -572,6 +572,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"VBV/CPB Limit",
- 		NULL,
- 	};
-+	static const char * const intra_refresh_period_type[] = {
-+		"Random",
-+		"Cyclic",
-+		NULL,
-+	};
+ 	u32 header_mode;
+ 	bool aud_enable;
++	u32 intra_refresh_type;
+ 	u32 intra_refresh_period;
  
- 	switch (id) {
- 	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
-@@ -705,6 +710,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		return hevc_start_code;
- 	case V4L2_CID_CAMERA_ORIENTATION:
- 		return camera_orientation;
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
-+		return intra_refresh_period_type;
- 	default:
- 		return NULL;
- 	}
-@@ -834,6 +841,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
- 	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
- 	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:	return "Intra Refresh Priod Type";
- 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
- 	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
- 	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
-@@ -1360,6 +1368,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_STATELESS_H264_DECODE_MODE:
- 	case V4L2_CID_STATELESS_H264_START_CODE:
- 	case V4L2_CID_CAMERA_ORIENTATION:
-+	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
- 		*type = V4L2_CTRL_TYPE_MENU;
+ 	struct {
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 84bafc3..bff8caf 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -893,8 +893,12 @@ static int venc_set_properties(struct venus_inst *inst)
+ 				mbs++;
+ 			mbs /= ctr->intra_refresh_period;
+ 
+-			intra_refresh.mode = HFI_INTRA_REFRESH_RANDOM;
+ 			intra_refresh.cir_mbs = mbs;
++			if (ctr->intra_refresh_type ==
++			    V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC)
++				intra_refresh.mode = HFI_INTRA_REFRESH_CYCLIC;
++			else
++				intra_refresh.mode = HFI_INTRA_REFRESH_RANDOM;
+ 		}
+ 
+ 		ptype = HFI_PROPERTY_PARAM_VENC_INTRA_REFRESH;
+diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+index 1ada42d..51f5a572 100644
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -316,6 +316,9 @@ static int venc_op_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY:
+ 		ctr->mastering = *ctrl->p_new.p_hdr10_mastering;
  		break;
- 	case V4L2_CID_LINK_FREQ:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index c8e0f84..e7df4c5 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -443,6 +443,11 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
- #define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
- #define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
-+#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE	(V4L2_CID_CODEC_BASE+237)
-+enum v4l2_mpeg_video_intra_refresh_period_type {
-+	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM	= 0,
-+	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC	= 1,
-+};
++	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
++		ctr->intra_refresh_type = ctrl->val;
++		break;
+ 	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:
+ 		ctr->intra_refresh_period = ctrl->val;
+ 		break;
+@@ -582,6 +585,13 @@ int venc_ctrl_init(struct venus_inst *inst)
+ 				   V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY,
+ 				   v4l2_ctrl_ptr_create(NULL));
  
- /* CIDs for the MPEG-2 Part 2 (H.262) codec */
- #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
++	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
++			       V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE,
++			       V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC,
++			       ~((1 << V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM) |
++			       (1 << V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC)),
++			       V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM);
++
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+ 			  V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
+ 			  ((4096 * 2304) >> 8), 1, 0);
 -- 
 2.7.4
 

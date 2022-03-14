@@ -2,149 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1644D84D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E414D84C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243460AbiCNMa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S242402AbiCNM3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242856AbiCNMTr (ORCPT
+        with ESMTP id S243874AbiCNMVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:19:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C6050B1A;
-        Mon, 14 Mar 2022 05:14:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 461FFB80DC0;
-        Mon, 14 Mar 2022 12:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E06EC340E9;
-        Mon, 14 Mar 2022 12:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647260082;
-        bh=gtBi2gKBebceaqDKfDa+ChA2WKq5ul1SA5b0xroSsPQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qkzaCX10dMWUx/kGp4hT0A1NhGAzlopx/yGxO/Yqo1NxRYGTCtGZp81Krvn6m0LsR
-         Ymnqtu5SUMVSiXsmK2YElDKmkQLo4D7KVm6+MusUEsbE3m9t8VwypARiYQHHP7Pt9+
-         9lio0uYyq6vOFtNsCxWW0jSeNJrdx6x47QmjkOMA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 050/121] selftests: pmtu.sh: Kill tcpdump processes launched by subshell.
+        Mon, 14 Mar 2022 08:21:21 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143810BC;
+        Mon, 14 Mar 2022 05:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VH4JLLVTmsGjZM12TeV9tkCYfL9x4NOujHU4Jgu+w1I=;
+  b=L3CXpax2DaNttb9lDffzBgJzlv8QFSW1v5rEwdDwwuvtUyy7/mpbG6iX
+   /WY7B1Pp7OxOx5CSLVvbFeFgK55HhM32oZ7Ebx7cCX8bp6RpBRp2UwMBv
+   d3MNv+Ns7ff4VorRWJmuPPyY04juf4MHXdfBhjYHAjJIqzZlrjlX1moTG
+   U=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997363"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 29/30] drm/amdgpu: fix typos in comments
 Date:   Mon, 14 Mar 2022 12:53:53 +0100
-Message-Id: <20220314112745.523294658@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
-References: <20220314112744.120491875@linuxfoundation.org>
-User-Agent: quilt/0.66
+Message-Id: <20220314115354.144023-30-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-[ Upstream commit 18dfc667550fe9c032a6dcc3402b50e691e18029 ]
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-The cleanup() function takes care of killing processes launched by the
-test functions. It relies on variables like ${tcpdump_pids} to get the
-relevant PIDs. But tests are run in their own subshell, so updated
-*_pids values are invisible to other shells. Therefore cleanup() never
-sees any process to kill:
-
-$ ./tools/testing/selftests/net/pmtu.sh -t pmtu_ipv4_exception
-TEST: ipv4: PMTU exceptions                                         [ OK ]
-TEST: ipv4: PMTU exceptions - nexthop objects                       [ OK ]
-
-$ pgrep -af tcpdump
-6084 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
-6085 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
-6086 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
-6087 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
-6088 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
-6089 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
-6090 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
-6091 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
-6228 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
-6229 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
-6230 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
-6231 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
-6232 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
-6233 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
-6234 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
-6235 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
-
-Fix this by running cleanup() in the context of the test subshell.
-Now that each test cleans the environment after completion, there's no
-need for calling cleanup() again when the next test starts. So let's
-drop it from the setup() function. This is okay because cleanup() is
-also called when pmtu.sh starts, so even the first test starts in a
-clean environment.
-
-Also, use tcpdump's immediate mode. Otherwise it might not have time to
-process buffered packets, resulting in missing packets or even empty
-pcap files for short tests.
-
-Note: PAUSE_ON_FAIL is still evaluated before cleanup(), so one can
-still inspect the test environment upon failure when using -p.
-
-Fixes: a92a0a7b8e7c ("selftests: pmtu: Simplify cleanup and namespace names")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/pmtu.sh | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-index 543ad7513a8e..2e8972573d91 100755
---- a/tools/testing/selftests/net/pmtu.sh
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -865,7 +865,6 @@ setup_ovs_bridge() {
- setup() {
- 	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+index fe660a8e150f..970b065e9a6b 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+@@ -340,7 +340,7 @@ static void amdgpu_cs_get_threshold_for_moves(struct amdgpu_device *adev,
+ 	if (free_vram >= 128 * 1024 * 1024 || free_vram >= total_vram / 8) {
+ 		s64 min_us;
  
--	cleanup
- 	for arg do
- 		eval setup_${arg} || { echo "  ${arg} not supported"; return 1; }
- 	done
-@@ -876,7 +875,7 @@ trace() {
+-		/* Be more aggresive on dGPUs. Try to fill a portion of free
++		/* Be more aggressive on dGPUs. Try to fill a portion of free
+ 		 * VRAM now.
+ 		 */
+ 		if (!(adev->flags & AMD_IS_APU))
+@@ -1280,7 +1280,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
+ 			continue;
  
- 	for arg do
- 		[ "${ns_cmd}" = "" ] && ns_cmd="${arg}" && continue
--		${ns_cmd} tcpdump -s 0 -i "${arg}" -w "${name}_${arg}.pcap" 2> /dev/null &
-+		${ns_cmd} tcpdump --immediate-mode -s 0 -i "${arg}" -w "${name}_${arg}.pcap" 2> /dev/null &
- 		tcpdump_pids="${tcpdump_pids} $!"
- 		ns_cmd=
- 	done
-@@ -1836,6 +1835,10 @@ run_test() {
- 
- 	unset IFS
- 
-+	# Since cleanup() relies on variables modified by this subshell, it
-+	# has to run in this context.
-+	trap cleanup EXIT
-+
- 	if [ "$VERBOSE" = "1" ]; then
- 		printf "\n##########################################################################\n\n"
- 	fi
--- 
-2.34.1
-
-
+ 		/*
+-		 * Work around dma_resv shortcommings by wrapping up the
++		 * Work around dma_resv shortcomings by wrapping up the
+ 		 * submission in a dma_fence_chain and add it as exclusive
+ 		 * fence.
+ 		 */
 

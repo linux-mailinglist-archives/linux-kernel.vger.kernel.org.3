@@ -2,94 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B315F4D7E12
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074954D7E15
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235729AbiCNJEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S237806AbiCNJE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiCNJET (ORCPT
+        with ESMTP id S237765AbiCNJEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:04:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C19528E17;
-        Mon, 14 Mar 2022 02:03:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B15B7612B9;
-        Mon, 14 Mar 2022 09:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF57C340F5;
-        Mon, 14 Mar 2022 09:03:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647248588;
-        bh=BCdwikr2vz55Gg6PuMXgetSu2UWOs0MXUsCZC+OCyyE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QahnG01e6jZc0dRks4DF6nDuGYJlCo/qGqpZq0DWYgiIZ0O8MFVA5Vgvgsw15t0qs
-         +sJ0J79nzL05Ucf+ZHyJRFRafef1ntTgOFhWjbgPocBgiEcaQnOoq8iWbgesmqr1Bf
-         qT2gzJx+BWAzjsGdWwqjnbu3tEA5GcJNa2JwjFLNk6f6Q+8eHjPuKKV9h8nJFMOlB2
-         KEOtb7jgBM+sckCHFbFWYUeMyzvzMt0RFO9Pq+jaMcD14udVF1WAK93VegVe9r5/SI
-         uFxblV0J6J6LKB6mJZMCf3fgv6PAKKnQKkrvcY5V40tCJv+sDyAfMv6H6WTzfVJNja
-         sdQQZSs7hGXzQ==
-Received: by mail-yb1-f173.google.com with SMTP id g26so29302888ybj.10;
-        Mon, 14 Mar 2022 02:03:08 -0700 (PDT)
-X-Gm-Message-State: AOAM532ED3LcxoHqq0BB0oZ8F3gaihBsD20SDOah0jSLiT7+k47OxnJi
-        DWQOoTA6bRhEm03eKRH47+nnXoIMLnx/cc3pLsE=
-X-Google-Smtp-Source: ABdhPJy8huQQmqnCSx9yI8of1v/BIBOYIbynMrebeBFvdYFpIPCFwVwclYk4awxHfJIfG6+KCP5D5ynA1anQobSsPqQ=
-X-Received: by 2002:a25:af8e:0:b0:622:c778:c0a2 with SMTP id
- g14-20020a25af8e000000b00622c778c0a2mr17505799ybh.50.1647248587150; Mon, 14
- Mar 2022 02:03:07 -0700 (PDT)
+        Mon, 14 Mar 2022 05:04:54 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43D0344CC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:03:44 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j17so22796191wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mJsuvDfEgbFAv2twfqdlbxVBvJIL07keRfhXHhiCGs0=;
+        b=Oay8URlUWrpzor5sypkcQla6be9eR0wRHPoF0u7G615sFYRw+zoabq8t48IApxdx2M
+         bOrpCT1TejItAS+HCyV9z9oMMrRKKCy3I+HfTQv7lnClu4t4UdC/Vbe2n7Qe9pQadvXj
+         4clRy6CZZZZ6RYzUj1AbwuTGUL6DsZFb+5ZI0CGbonWLpi1j+5hSqTsOKfGkesztJYff
+         Q0qgLgzQFTjQ1i/NifCt/D3dboRN39JDoezeuE0Ih54eSJwPjQH+JUQ8GiuPCobo57dx
+         EuqGjHvOOfgbsCp2pkl7f6DfnXDM5554cdN7/solkr6P0fnid+I4wZueC+oVw8hHmV7c
+         2+bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mJsuvDfEgbFAv2twfqdlbxVBvJIL07keRfhXHhiCGs0=;
+        b=mwqg8bHbBQsNYppdF8isiJjDJn2r9NhFVcEIMZGSG255Ttckotcz0gFu9167mPZQUh
+         LksuqUy9VhqCMeh87DSbxSJzqk1LgFZ4qw6APvMbFRKLfph5VTxsg6Q4e6bmof6iXvtW
+         rLGpRCrhQ8Di5tZw05hBsxmJJGJ5kwp3cd+T9b88fl3sNsLoRBLfi/+XPy0CrRpl3qba
+         Ru/A1IoXRVV6ZGiUi2tG07vHa56pIh0QZQqH+gB7pHzi4euAqWU8MWLe5WUqqtxUnVr/
+         8RRSEXCOyZ9PjBSEXMKdPtP9rpx892deHt1WbQupX5vrXlAQYyPhyGKNef3ZO6C1Ep7D
+         6/1A==
+X-Gm-Message-State: AOAM5310g6bXdWXkD/wv62x5YNPF4efiI+n3FhjYgkRdN5z3Jr2ouoMu
+        9+aTiBGrYO6fvyLg3ejMIgraSJUXkZqnkg==
+X-Google-Smtp-Source: ABdhPJzqhyWIhdw/+agPQiJAJhQRIc6T5qspCJsIkjm3/RCegi/FEFJnXs4wWJPLuRflEZ4Igg9GRw==
+X-Received: by 2002:adf:9f11:0:b0:1f0:728c:8fac with SMTP id l17-20020adf9f11000000b001f0728c8facmr16091191wrf.245.1647248623136;
+        Mon, 14 Mar 2022 02:03:43 -0700 (PDT)
+Received: from dabros-l.roam.corp.google.com ([185.157.14.92])
+        by smtp.gmail.com with ESMTPSA id f13-20020adff8cd000000b001f03439743fsm12862775wrq.75.2022.03.14.02.03.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 02:03:42 -0700 (PDT)
+From:   Jan Dabros <jsd@semihalf.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     wsa@kernel.org, upstream@semihalf.com, jsd@semihalf.com
+Subject: [PATCH v3 -next] i2c: designware: Remove code duplication
+Date:   Mon, 14 Mar 2022 10:03:23 +0100
+Message-Id: <20220314090323.272071-1-jsd@semihalf.com>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
 MIME-Version: 1.0
-References: <CAMj1kXE02HH7vRUjF3iKAL+1idKTy-oOYyGnBd3g90m6eObBxg@mail.gmail.com>
- <YikByJteDEtKi4Xv@shell.armlinux.org.uk> <CAMj1kXGnwbe=YYWaRxaXioEfTJOdXg9JYcNddO8iifpWLRZCWg@mail.gmail.com>
- <Yinwq3Z9l0selLLS@shell.armlinux.org.uk> <Yin2jQqW+pUWJZ7E@shell.armlinux.org.uk>
- <CAMj1kXGkUJ=-4oA4GvBZNK94A1MrZ7UwKDN_tJRgwq8KF06VmA@mail.gmail.com>
- <CA+G9fYvEANOMekjvtu7agdVYQ_b8OMtxQdyAV2JT_vMdBU3VRA@mail.gmail.com>
- <CAMj1kXEVVZTKX_86bbTfLpFuDriV0-uwCMgSKDP+dzcD1L4XCw@mail.gmail.com>
- <CA+G9fYuO-sy+sZnhSz=A7Xm0LdSp2AT+7jCKLB33tZzK4izj3g@mail.gmail.com>
- <CAMj1kXGb_0FNU7capJEDWTZF2OegmZyBphhH8GuNqL7+YYLjZQ@mail.gmail.com>
- <Yip3GJDbJIYNeg44@shell.armlinux.org.uk> <CA+G9fYsjK7z3VUgaOcs+cCCQWNsXW58pbDqruev6ANLdcswF1g@mail.gmail.com>
-In-Reply-To: <CA+G9fYsjK7z3VUgaOcs+cCCQWNsXW58pbDqruev6ANLdcswF1g@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 14 Mar 2022 10:02:55 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEA8TmK_pqDxrEg5==OPfWp8LWEBE=iFhJ8-5cm_DOgyA@mail.gmail.com>
-Message-ID: <CAMj1kXEA8TmK_pqDxrEg5==OPfWp8LWEBE=iFhJ8-5cm_DOgyA@mail.gmail.com>
-Subject: Re: [next] arm: Internal error: Oops: 5 PC is at __read_once_word_nocheck
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 at 10:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> Hi  Ard and Russell,
->
-> Your three patches applied and tested on x15 tested by Daniel and reported
-> kernel crash did not find it after multiple iterations.
->
-> ARM: unwind: set frame.pc correctly for current-thread unwinding
-> ARM: entry: fix unwinder problems caused by IRQ stacks
-> ARM: Revert "unwind: dump exception stack from calling frame"
->
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
+Simplify code by moving common part to one function.
 
-Thank you Naresh.
+Signed-off-by: Jan Dabros <jsd@semihalf.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+v2->v3:
+* Rebase on top of -next (v2 couldn't be applied cleanly)
+v1->v2:
+* Add kudos for Andy who suggested this change
+* Get rid of extra function and move common code to psp_send_i2c_req
+* Update commit message and commit title
+  (was "i2c:designware: Add helper to remove redundancy")
+ drivers/i2c/busses/i2c-designware-amdpsp.c | 35 ++++++++++------------
+ 1 file changed, 15 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+index 3844695e6bf3..9b37f2b95abc 100644
+--- a/drivers/i2c/busses/i2c-designware-amdpsp.c
++++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+@@ -214,17 +214,28 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+ 				PSP_I2C_REQ_RETRY_DELAY_US,
+ 				PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY_DELAY_US,
+ 				0, req);
+-	if (ret)
++	if (ret) {
++		dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C bus\n",
++			(i2c_req_type == PSP_I2C_REQ_ACQUIRE) ?
++			"release" : "acquire");
+ 		goto cleanup;
++	}
+ 
+ 	ret = status;
+-	if (ret)
++	if (ret) {
++		dev_err(psp_i2c_dev, "PSP communication error\n");
+ 		goto cleanup;
++	}
+ 
+ 	dev_dbg(psp_i2c_dev, "Request accepted by PSP after %ums\n",
+ 		jiffies_to_msecs(jiffies - start));
+ 
+ cleanup:
++	if (ret) {
++		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
++		psp_i2c_mbox_fail = true;
++	}
++
+ 	kfree(req);
+ 	return ret;
+ }
+@@ -249,16 +260,8 @@ static int psp_acquire_i2c_bus(void)
+ 	}
+ 
+ 	status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
+-	if (status) {
+-		if (status == -ETIMEDOUT)
+-			dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
+-		else
+-			dev_err(psp_i2c_dev, "PSP communication error\n");
+-
+-		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+-		psp_i2c_mbox_fail = true;
++	if (status)
+ 		goto cleanup;
+-	}
+ 
+ 	psp_i2c_sem_acquired = jiffies;
+ 	psp_i2c_access_count++;
+@@ -294,16 +297,8 @@ static void psp_release_i2c_bus(void)
+ 
+ 	/* Send a release command to PSP */
+ 	status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
+-	if (status) {
+-		if (status == -ETIMEDOUT)
+-			dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
+-		else
+-			dev_err(psp_i2c_dev, "PSP communication error\n");
+-
+-		dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
+-		psp_i2c_mbox_fail = true;
++	if (status)
+ 		goto cleanup;
+-	}
+ 
+ 	dev_dbg(psp_i2c_dev, "PSP semaphore held for %ums\n",
+ 		jiffies_to_msecs(jiffies - psp_i2c_sem_acquired));
+-- 
+2.35.1.723.g4982287a31-goog
+

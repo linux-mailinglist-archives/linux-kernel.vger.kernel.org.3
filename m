@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB414D8104
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9B74D8166
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239304AbiCNLiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S236639AbiCNLmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239291AbiCNLht (ORCPT
+        with ESMTP id S232165AbiCNLmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:37:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE85547AEA;
-        Mon, 14 Mar 2022 04:36:27 -0700 (PDT)
+        Mon, 14 Mar 2022 07:42:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834A248303;
+        Mon, 14 Mar 2022 04:39:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 574EFCE1177;
-        Mon, 14 Mar 2022 11:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F186AC340E9;
-        Mon, 14 Mar 2022 11:36:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED289B80D96;
+        Mon, 14 Mar 2022 11:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFB6C340E9;
+        Mon, 14 Mar 2022 11:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647257783;
-        bh=HwsHGatOAwvRX/cC+a2vIfx0rtyjLrnbbVf3+J4hg3U=;
+        s=korg; t=1647257957;
+        bh=KEam3vhPVA6p6R9OrQaWfRPkiJLYvrfBks84jOACUpQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XORnEdGpouhqU5ALl33AV+fZIXHfzgfzT5JGBzavnluUvyernYPHhL3I2zskPA2mQ
-         aSBAN7feCwZod7fHGcSGznUB0lsY2LnZ/6/cVv6968aa5k0MBGpaZFR106ACxUtNUm
-         YoB9+njMZ68RTTGdNdxywbbvteAw8lC+j+XUOYAo=
+        b=xzpyjiYJtfF5mMunRzNDtUpeesLxtUdG2PEZvMUW3p3lnJjCGFD43zsms5e4oOkO3
+         wXo27ceHwmLl0PH1S8HlaNNQpFc7vcOBNoUxvBoxkEDd08y/2/NV6wo/98qb1thjI5
+         SCWejIaUhODFP75eefa2B/Ogzb2goF2Ql73pkvhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Paul Durrant <paul@xen.org>,
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 12/23] Revert "xen-netback: remove hotplug-status once it has served its purpose"
-Date:   Mon, 14 Mar 2022 12:34:25 +0100
-Message-Id: <20220314112731.414748053@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+Subject: [PATCH 4.19 08/30] NFC: port100: fix use-after-free in port100_send_complete
+Date:   Mon, 14 Mar 2022 12:34:26 +0100
+Message-Id: <20220314112732.023900342@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112731.050583127@linuxfoundation.org>
-References: <20220314112731.050583127@linuxfoundation.org>
+In-Reply-To: <20220314112731.785042288@linuxfoundation.org>
+References: <20220314112731.785042288@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 0f4558ae91870692ce7f509c31c9d6ee721d8cdc ]
+[ Upstream commit f80cfe2f26581f188429c12bd937eb905ad3ac7b ]
 
-This reverts commit 1f2565780e9b7218cf92c7630130e82dcc0fe9c2.
+Syzbot reported UAF in port100_send_complete(). The root case is in
+missing usb_kill_urb() calls on error handling path of ->probe function.
 
-The 'hotplug-status' node should not be removed as long as the vif
-device remains configured. Otherwise the xen-netback would wait for
-re-running the network script even if it was already called (in case of
-the frontent re-connecting). But also, it _should_ be removed when the
-vif device is destroyed (for example when unbinding the driver) -
-otherwise hotplug script would not configure the device whenever it
-re-appear.
+port100_send_complete() accesses devm allocated memory which will be
+freed on probe failure. We should kill this urbs before returning an
+error from probe function to prevent reported use-after-free
 
-Moving removal of the 'hotplug-status' node was a workaround for nothing
-calling network script after xen-netback module is reloaded. But when
-vif interface is re-created (on xen-netback unbind/bind for example),
-the script should be called, regardless of who does that - currently
-this case is not handled by the toolstack, and requires manual
-script call. Keeping hotplug-status=connected to skip the call is wrong
-and leads to not configured interface.
+Fail log:
 
-More discussion at
-https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@ipxe.org/T/#u
+BUG: KASAN: use-after-free in port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+Read of size 1 at addr ffff88801bb59540 by task ksoftirqd/2/26
+...
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ port100_send_complete+0x16e/0x1a0 drivers/nfc/port100.c:935
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1670
 
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Reviewed-by: Paul Durrant <paul@xen.org>
-Link: https://lore.kernel.org/r/20220222001817.2264967-1-marmarek@invisiblethingslab.com
+...
+
+Allocated by task 1255:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+ alloc_dr drivers/base/devres.c:116 [inline]
+ devm_kmalloc+0x96/0x1d0 drivers/base/devres.c:823
+ devm_kzalloc include/linux/device.h:209 [inline]
+ port100_probe+0x8a/0x1320 drivers/nfc/port100.c:1502
+
+Freed by task 1255:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0xff/0x140 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:236 [inline]
+ __cache_free mm/slab.c:3437 [inline]
+ kfree+0xf8/0x2b0 mm/slab.c:3794
+ release_nodes+0x112/0x1a0 drivers/base/devres.c:501
+ devres_release_all+0x114/0x190 drivers/base/devres.c:530
+ really_probe+0x626/0xcc0 drivers/base/dd.c:670
+
+Reported-and-tested-by: syzbot+16bcb127fb73baeecb14@syzkaller.appspotmail.com
+Fixes: 0347a6ab300a ("NFC: port100: Commands mechanism implementation")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220308185007.6987-1-paskripkin@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/xen-netback/xenbus.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/nfc/port100.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
-index 9092b55e087f..df2e1ec9e624 100644
---- a/drivers/net/xen-netback/xenbus.c
-+++ b/drivers/net/xen-netback/xenbus.c
-@@ -499,6 +499,7 @@ static void backend_disconnect(struct backend_info *be)
- 		unsigned int queue_index;
+diff --git a/drivers/nfc/port100.c b/drivers/nfc/port100.c
+index 0f37acec98ab..bc680b8be133 100644
+--- a/drivers/nfc/port100.c
++++ b/drivers/nfc/port100.c
+@@ -1618,7 +1618,9 @@ static int port100_probe(struct usb_interface *interface,
+ 	nfc_digital_free_device(dev->nfc_digital_dev);
  
- 		xen_unregister_watchers(vif);
-+		xenbus_rm(XBT_NIL, be->dev->nodename, "hotplug-status");
- #ifdef CONFIG_DEBUG_FS
- 		xenvif_debugfs_delif(vif);
- #endif /* CONFIG_DEBUG_FS */
+ error:
++	usb_kill_urb(dev->in_urb);
+ 	usb_free_urb(dev->in_urb);
++	usb_kill_urb(dev->out_urb);
+ 	usb_free_urb(dev->out_urb);
+ 	usb_put_dev(dev->udev);
+ 
 -- 
 2.34.1
 

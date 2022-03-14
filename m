@@ -2,344 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8634D8F7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126414D8F85
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 23:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbiCNWZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 18:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S245586AbiCNW02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 18:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245547AbiCNWZc (ORCPT
+        with ESMTP id S245578AbiCNW00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 18:25:32 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D592DEC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:24:21 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id w3-20020a4ac183000000b0031d806bbd7eso22105178oop.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:24:21 -0700 (PDT)
+        Mon, 14 Mar 2022 18:26:26 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2EF3D4BC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:25:13 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a8so37255030ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 15:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VXkgLT4PeK4BJW91saFmU0oIFYB4QFVel8mcjNJiRmM=;
-        b=fwsIaGF4QuCLG0iOgTTV5GoIGnY2aHjoWMpp+AaEV9HELRz9N7G1iK1hkOwie1Zkol
-         Y28F3+urMv3v2rVixyeIAQ2o65BtxSzyrU3gx25E6JRVv6U6yHFRerWRgQJNb5zffoA4
-         ket7miU2iqbcmKor9+1hyAsL/JBc3lqGDvKF33VjYbtrsKmNCvn8sjr7/oxLXM91YF60
-         oXPnMZnaf1vQXjisuorXJmRxM278D8Is8nA+T3O+NWPy3qgGI2IdsAKZ+ahoM2mlFA/U
-         aQ7eOCa5ivMORSiUoJ0DZz8HCBq0GACHimqJYq4iWgAvAHOO4o2jGKdK0NzPEtM1r7zx
-         1PoQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C2afl50vRzCzlzNSM1o5i8QhGcaBpuDd6T9qiMLVa1s=;
+        b=eiWfqNLwPSMITSi4tZA697TINLHoTWddjX2tdwgu8rOVSjVpJDeuT64LyWwJJpv7w/
+         el4YHcBT53FfPNHY0wRGqGQOPAMU5oXA0RxxJwkaoR8sVkdrxOK2mRSVie5dLEiuHNDh
+         krGToc9wLAuONsOZgZ09i1aoXwtyzdKQzE0AOL//CHMUTyd7aCVKcTCfZ5FKIJDDgJNA
+         LsrmgbI0VhKa5UlYxETs3bCvSh1SH5bZEqkVVTxLA/UvnI0+raKNXceSVvhs5WK4SQvj
+         hkWVagKvz4P7O0uY0DVuqKCg641y0QCJ7R1AYIyovi6jz8iYloJ/5cXkF2e5L8880i1k
+         zv+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VXkgLT4PeK4BJW91saFmU0oIFYB4QFVel8mcjNJiRmM=;
-        b=ayyodXf22wxoc7O0MU5aJ/wr9vJQoJyvh4Lv5tjG3bsZSscgo+HpbNGjWxRZfhSfSG
-         HHuOluuo47SMprQaqW8/Ox/wZr6elb3dvrvJpRrolP1mKF2Lf1iVYtKTKS2qJnRg6B66
-         on49zf6EEg0eH4SWTwngaIJnflS4t4QbTyO/fm+lBGufGGR+kaa+AXqLcChxBwMjBhVI
-         roOdHo1xvAKWQSCvn+/zdCO8wscsQlwqD3C9gmM9xkqcZTY7Q9Cim7Nhq4LiSpwPOA4b
-         iuqg4ww4+fAUS08TxotYqDo1dNJ2Ruq0mXLVtEp/VcnoRyqZFZl6sNlN9cXVnrMkwaN8
-         Hmtw==
-X-Gm-Message-State: AOAM532jkHhAwZlMYSYBiylGnkkoSi3mg3bQ9NNVE3TbB5Wxr+hJUVYg
-        AfPMLksLJ19fPbtB/rVchnbsFg==
-X-Google-Smtp-Source: ABdhPJxsWboDvrA/SAMxOI6sRMS8CGcJCSsKU9LKX+lWQ7SnYyhFHebQojX6n+0d3k+fYy9xgMyUnw==
-X-Received: by 2002:a05:6870:1d4:b0:db:a2b3:cff9 with SMTP id n20-20020a05687001d400b000dba2b3cff9mr37oad.231.1647296660779;
-        Mon, 14 Mar 2022 15:24:20 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm7968434oov.3.2022.03.14.15.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 15:24:20 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 17:24:18 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     ohad@wizery.com, mathieu.poirier@linaro.org, robh+dt@kernel.or,
-        matthias.bgg@gmail.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stephane.leprovost@mediatek.com, khilman@baylibre.com
-Subject: Re: [PATCH v4 4/7] remoteproc: mtk_apu: Add support of JTAG
-Message-ID: <Yi/AkpIPO94E1qFg@builder.lan>
-References: <20220304161514.994128-1-abailon@baylibre.com>
- <20220304161514.994128-5-abailon@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C2afl50vRzCzlzNSM1o5i8QhGcaBpuDd6T9qiMLVa1s=;
+        b=iWZjW03+tpvQlJunCQN9sIlUz6+mtkheQNNIHNd2U7232t+fNXWYB1eKuwadBHOCQA
+         aOAmFd7BrSSK/w/g8VDIfKfCx+8YgrcRSlKWy17iYXjRIs2l/lUq/o1jAWdxgE2XHaiO
+         ehHTsRsQpI7abc3afBL18tzcWxcaQrnK1JFYLGdLbgwrxYZyZQ9IvctAlr3oS+tfUn9u
+         SQaDbywHUdqq/Lq1/8YILaM3saEueAaQM+cxTVMgEGUF2/iHtfe1OTXPKK1Wtz81ISNf
+         Y2Y0P0MGuPeVU4kPTkgJHSRzrpv7c18x5PUSEm93kHQJacBeD4ucFiNH45qSo7V/hj6m
+         N9OQ==
+X-Gm-Message-State: AOAM5304Kdixfm/ulx5z8AL/j5g4X+lFSq8fwuSdZzB07pdN4iip9HeG
+        BpvFfGyxmNhzz1TNVBLROerGsVDx2QLzLTbe+ke/xw==
+X-Google-Smtp-Source: ABdhPJxT+L+PoW2vGW+ultLAUaUQT0+vlwQouCpp/zyLolVzqtlFshODHZZJzjvlv5tGpakhMs0ZQPFx43iH18P5PGk=
+X-Received: by 2002:a17:906:c14b:b0:6da:b30d:76a0 with SMTP id
+ dp11-20020a170906c14b00b006dab30d76a0mr19915713ejc.279.1647296711838; Mon, 14
+ Mar 2022 15:25:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304161514.994128-5-abailon@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+In-Reply-To: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 14 Mar 2022 18:24:59 -0400
+Message-ID: <CAFd5g45zwSNr-_PSbtGn1MiQgombSBTCjXOG-cvcQW8xQQUo+Q@mail.gmail.com>
+Subject: Re: [RFC v1 00/10] roadtest: a driver testing framework
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, kernel@axis.com,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        jic23@kernel.org, linux-iio@vger.kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        corbet@lwn.net, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 04 Mar 10:15 CST 2022, Alexandre Bailon wrote:
++Kees Cook - I imagine you have already seen this, but I figured you
+would be interested because of your recent work on the KUnit UAPI and
+the mocking discussions.
++Dmitry Vyukov - This made me think of the syzkaller/KUnit experiments
+we did a couple of years back - this would probably work a bit better.
 
-> The DSP could be debugged using JTAG.
-> The support of JTAG could enabled at build time and it could be enabled
-> using debugfs.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->  drivers/remoteproc/Kconfig   |   9 +++
->  drivers/remoteproc/mtk_apu.c | 147 ++++++++++++++++++++++++++++++++++-
->  2 files changed, 155 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> index 959d24e9492c..28140cf04d8a 100644
-> --- a/drivers/remoteproc/Kconfig
-> +++ b/drivers/remoteproc/Kconfig
-> @@ -74,6 +74,15 @@ config MTK_APU
->  
->  	  It's safe to say N here.
->  
-> +config MTK_APU_JTAG
-> +	bool "Enable support of JTAG"
-> +	depends on MTK_APU
-> +	help
-> +	  Say y to enable support of JTAG.
-> +	  By default, JTAG will remain disabled until it is enabled using
-> +	  debugfs: remoteproc/remoteproc0/jtag. Write 1 to enable it and
-> +	  0 to disable it.
-> +
->  config OMAP_REMOTEPROC
->  	tristate "OMAP remoteproc support"
->  	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX
-> diff --git a/drivers/remoteproc/mtk_apu.c b/drivers/remoteproc/mtk_apu.c
-> index 867b4682b507..3905eb5b7174 100644
-> --- a/drivers/remoteproc/mtk_apu.c
-> +++ b/drivers/remoteproc/mtk_apu.c
-> @@ -5,12 +5,14 @@
->  
->  #include <linux/bitops.h>
->  #include <linux/clk.h>
-> +#include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/interrupt.h>
->  #include <linux/iommu.h>
->  #include <linux/irq.h>
->  #include <linux/module.h>
->  #include <linux/of_reserved_mem.h>
-> +#include <linux/pinctrl/consumer.h>
->  #include <linux/platform_device.h>
->  #include <linux/remoteproc.h>
->  #include <linux/string.h>
-> @@ -45,6 +47,11 @@
->  #define CORE_DEFAULT1				(0x00000140)
->  #define CORE_DEFAULT0_ARUSER_IDMA_USE_IOMMU	(0x10 << 0)
->  #define CORE_DEFAULT0_AWUSER_IDMA_USE_IOMMU	(0x10 << 5)
-> +#define CORE_DEFAULT2				(0x00000144)
-> +#define CORE_DEFAULT2_DBG_EN			BIT(3)
-> +#define CORE_DEFAULT2_NIDEN			BIT(2)
-> +#define CORE_DEFAULT2_SPNIDEN			BIT(1)
-> +#define CORE_DEFAULT2_SPIDEN			BIT(0)
->  #define CORE_XTENSA_ALTRESETVEC			(0x000001F8)
->  
->  #define VDEV_MEM_COUNT				(3)
-> @@ -59,6 +66,13 @@ struct mtk_apu_rproc {
->  	struct clk_bulk_data *clks;
->  	struct iommu_domain *domain;
->  	struct list_head mappings;
-> +
-> +#ifdef CONFIG_MTK_APU_JTAG
-> +	struct pinctrl *pinctrl;
-> +	struct pinctrl_state *pinctrl_jtag;
-> +	bool jtag_enabled;
-> +	struct mutex jtag_mutex;
-> +#endif
->  };
->  
->  static const char * const mt8183_clk_names[] = {
-> @@ -355,6 +369,133 @@ static irqreturn_t mtk_apu_rproc_callback(int irq, void *data)
->  	return IRQ_WAKE_THREAD;
->  }
->  
-> +#ifdef CONFIG_MTK_APU_JTAG
+On Fri, Mar 11, 2022 at 11:24 AM Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+>
+> This patchset proposes roadtest, a device-driver testing framework.  Drivers
+> are tested under User Mode Linux (UML) and interact with mocked/modelled
+> hardware.  The tests and hardware models are written in Python, the former
+> using Python's built-in unittest framework.
 
-Is there a strong reason to keep this compiled out? It's not that much
-code and it means that I have to build test both variations...
+Wow! This sounds awesome! I was hoping to get some kind of hardware
+modeling with KUnit eventually. I did some experiments, but this looks
+way more mature.
 
-> +
-> +static int apu_enable_jtag(struct mtk_apu_rproc *apu_rproc)
-> +{
-> +	int ret = 0;
-> +
-> +	mutex_lock(&apu_rproc->jtag_mutex);
+> Drivers are tested via their userspace interfaces.  The hardware models allow
+> tests to inject values into registers and assert that drivers control the
+> hardware in the right way and react as expected to stimuli.
 
-What happens if you perform the below writel() when jtag is already
-enabled? I.e. do you need this mutex or could you simply have
-enable/disable just write the register?
+I already took a look at the documentation patch - I'll comment there
+more in detail, but I like the hardware modelling and device tree
+code; it seems very usable.
 
-> +	if (apu_rproc->jtag_enabled)
-> +		goto err_mutex_unlock;
-> +
-> +	writel(CORE_DEFAULT2_SPNIDEN | CORE_DEFAULT2_SPIDEN |
-> +		CORE_DEFAULT2_NIDEN | CORE_DEFAULT2_DBG_EN,
-> +		apu_rproc->base + CORE_DEFAULT2);
-> +
-> +	apu_rproc->jtag_enabled = 1;
-> +
-> +err_mutex_unlock:
-> +	mutex_unlock(&apu_rproc->jtag_mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static int apu_disable_jtag(struct mtk_apu_rproc *apu_rproc)
-> +{
-> +	int ret = 0;
-> +
-> +	mutex_lock(&apu_rproc->jtag_mutex);
-> +	if (!apu_rproc->jtag_enabled)
-> +		goto err_mutex_unlock;
-> +
-> +	writel(0, apu_rproc->base + CORE_DEFAULT2);
-> +
-> +	apu_rproc->jtag_enabled = 0;
-> +
-> +err_mutex_unlock:
-> +	mutex_unlock(&apu_rproc->jtag_mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t rproc_jtag_read(struct file *filp, char __user *userbuf,
-> +			       size_t count, loff_t *ppos)
-> +{
-> +	struct rproc *rproc = filp->private_data;
-> +	struct mtk_apu_rproc *apu_rproc = (struct mtk_apu_rproc *)rproc->priv;
-> +	char *buf = apu_rproc->jtag_enabled ? "enabled\n" : "disabled\n";
-> +
-> +	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
+> Roadtest is meant to be used for relatively simple drivers, such as the ones
+> part of the IIO, regulator and RTC subsystems.
 
-Per my ask about write below, please make this read 'Y' or 'N'.
+Obviously for an initial version going after simple stuff makes sense,
+but I would hope there is applicability to any driver stack
+eventually.
 
-> +}
-> +
-> +static ssize_t rproc_jtag_write(struct file *filp, const char __user *user_buf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	struct rproc *rproc = filp->private_data;
-> +	struct mtk_apu_rproc *apu_rproc = (struct mtk_apu_rproc *)rproc->priv;
-> +	char buf[10];
-> +	int ret;
-> +
-> +	if (count < 1 || count > sizeof(buf))
-> +		return -EINVAL;
-> +
-> +	ret = copy_from_user(buf, user_buf, count);
-> +	if (ret)
-> +		return -EFAULT;
-> +
-> +	/* remove end of line */
-> +	if (buf[count - 1] == '\n')
-> +		buf[count - 1] = '\0';
-> +
+> Questions and answers:
+>
+> = Why do we need this?
+>
+> There are a large amount of these kind of drivers in the kernel.  Most of the
+> hardware is not available in current CI systems so most drivers can only, at
+> best, be build-tested there.  Even basic soundness such as a driver
+> successfully probing and binding to the devices it tries to be support cannot
+> be tested.  Drivers cannot be easily regression-tested to ensure that bugs
+> fixed once do not get reintroduced.
+>
+> Many drivers support multiple related hardware variants, and far from all patch
+> submitters have access to all the variants which the driver that they are
+> patching supports, so there is no way for them to easily verify that they
+> haven't broken something basic on a variant which they do not own.
+>
+> Furthermore, hardware can be used in many different configurations with drivers
+> supporting many different devicetree properties, so even just having access to
+> all the variants would be insufficient.
+>
+> On top of that, some of the chips measure environmental conditions such as
+> temperature, so testing extreme cases may not be simple even if one has access
+> to the hardware.
+>
+> All this makes development, modification, maintenance, and reviewing of these
+> drivers harder than it necessarily needs to be.  Roadtest hopes to make some of
+> these things slightly easier by providing a framework to create hardware
+> models/mocks and to write testcases which exercise drivers using these models.
 
-Please use kstrtobool_from_user().
+Very much agree. I used to do driver development and these
+difficulties are what prompted me to do KUnit.
 
-> +	if (!strncmp(buf, "enabled", count))
-> +		ret = apu_enable_jtag(apu_rproc);
-> +	else if (!strncmp(buf, "disabled", count))
-> +		ret = apu_disable_jtag(apu_rproc);
-> +	else
-> +		return -EINVAL;
-> +
-> +	return ret ? ret : count;
-> +}
-> +
-> +static const struct file_operations rproc_jtag_ops = {
-> +	.read = rproc_jtag_read,
-> +	.write = rproc_jtag_write,
-> +	.open = simple_open,
-> +};
-> +
-> +static int apu_jtag_probe(struct mtk_apu_rproc *apu_rproc)
-> +{
-> +	int ret;
-> +
-> +	if (!apu_rproc->rproc->dbg_dir)
-> +		return -ENODEV;
-> +
-> +	apu_rproc->pinctrl = devm_pinctrl_get(apu_rproc->dev);
-> +	if (IS_ERR(apu_rproc->pinctrl)) {
-> +		dev_warn(apu_rproc->dev, "Failed to find JTAG pinctrl\n");
+> = Do you have some specific examples of the kind of code this could be used to
+>   test?
+>
+> Here is an example of a patch which can easily be regression-tested using
+> roadtest (in fact, this series includes such a regression test) but is much
+> harder to do so automatically with real hardware since it requires specific
+> environmental conditions:
+>
+>  iio: light: opt3001: Fixed timeout error when 0 lux
+>  https://lore.kernel.org/lkml/20210920125351.6569-1-valek@2n.cz/
+>
+> Here is another example.  This driver has code which correctly parses a
+> documented devicetree property (amstaos,proximity-diodes) but which then fails
+> to actually communicate this setting to the hardware in any way.  Such code can
+> be easily tested with roadtest since the framework integrates devicetree
+> support and provides functions to assert that drivers writes expected registers
+> with expected values:
+>
+>  drivers/iio/light/tsl2772.c tsl2772_read_prox_diodes()
+>
+> (Both the above examples happen to be from the same subsystem but that should
+> in no way be taken to imply that such issues are unique to that subsystem or
+> that that subsystem has more of them.)
+>
+> = How does this relate to kselftests?
+>
+> Tests in kselftests also test kernel code using the userspace interfaces, but
+> that's about what's common between the frameworks.  kselftests has other goals
+> and does not provide any kind of mechanism for hardware mocking.
 
-I believe you failed to find the pinctrl instance for the remoteproc
-driver, not for the JTAG.
+I had a question that after thinking about it; I think I know the
+answer, so I am going to ask the question anyway and attempt to answer
+it myself:
 
-> +		return PTR_ERR(apu_rproc->pinctrl);
-> +	}
-> +
-> +	apu_rproc->pinctrl_jtag = pinctrl_lookup_state(apu_rproc->pinctrl,
-> +						       "jtag");
-> +	if (IS_ERR(apu_rproc->pinctrl_jtag))
-> +		return PTR_ERR(apu_rproc->pinctrl_jtag);
-> +
-> +	ret = pinctrl_select_state(apu_rproc->pinctrl,
-> +				   apu_rproc->pinctrl_jtag);
+I agree in regard to mocking, but why not use kselftest for driving
+tests that check drivers from userspace? I believe there are other
+kselftest tests implemented in Python, why can't you just run your
+tests inside of kselftest?
 
-So if the kernel is compiled with MTK_APU_JTAG "jtag" is the new
-"default" for this device?
+Now, I believe the answer to this question is that you need to control
+spinning up your own kernel to run inside your test harness because
+you need to control the environment that the kernel runs in - is this
+correct?
 
-Regards,
-Bjorn
+> = How does this relate to kunit?
+>
+> Kunit is for unit testing of functions in kernel code, and is not meant for
+> testing kernel code via userspace interfaces.  It could in theory be used to
+> test some of the simple drivers too, but that would require (1) a large amount
+> of mocking code in various kernel frameworks, and, more importantly, (2)
+> refactoring of the drivers to be tested.
 
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	mutex_init(&apu_rproc->jtag_mutex);
-> +
-> +	debugfs_create_file("jtag", 0600, apu_rproc->rproc->dbg_dir,
-> +			    apu_rproc->rproc, &rproc_jtag_ops);
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int apu_jtag_probe(struct mtk_apu_rproc *apu_rproc)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int apu_disable_jtag(struct mtk_apu_rproc *apu_rproc)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_MTK_APU_JTAG */
-> +
->  static int mtk_apu_rproc_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -442,6 +583,10 @@ static int mtk_apu_rproc_probe(struct platform_device *pdev)
->  		goto free_rproc;
->  	}
->  
-> +	ret = apu_jtag_probe(apu_rproc);
-> +	if (ret)
-> +		dev_warn(dev, "Failed to configure jtag\n");
+I mostly agree, but I think there is something that is missing here:
+so roadtest seems to depend on having a user interface to test a
+driver - for a simple smoke test on a simple driver without a big
+driver stack on top, that makes sense, but what about testing error
+paths or a platform driver buried beneath a deep driver stack? I think
+there is potential for a powerful combination using KUnit to test the
+low level kernel API and using roadtest to mock the hardware
+environment and provide configuration.
 
-If devm_pinctrl_get() failed you'll get two warnings, and if the user
-haven't added a "jtag" pinctrl state this warning isn't very
-descriptive. Consider omitting it and add appropriate error messages in
-apu_jtag_probe().
+I am imagining that we could have an in-kernel KUnit/roadtest API that
+we can use to have an in-kernel test request changes to the
+environment for creating error cases and the like that can be
+validated by KUnit test cases.
 
-Regards,
-Bjorn
+Going even further, I wonder if we could run kselftests inside of
+roadtest since roadtest allows us to change the environment on the
+fly.
 
-> +
->  	return 0;
->  
->  free_rproc:
-> @@ -457,7 +602,7 @@ static int mtk_apu_rproc_remove(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  
->  	disable_irq(apu_rproc->irq);
-> -
-> +	apu_disable_jtag(apu_rproc);
->  	rproc_del(rproc);
->  	of_reserved_mem_device_release(dev);
->  	rproc_free(rproc);
-> -- 
+> This can be contrasted with roadtest which works with mostly unmodified drivers
+> and which mocks the hardware at the lowest level without having to change
+> kernel frameworks.
+
+I think that is both potentially an advantage and a disadvantage.
+
+The advantage is that your test is very general; roadtests would
+likely be portable across kernel versions.
+
+The disadvantage is that you don't get as much code introspection: I
+imagine roadtest is not as good as testing error paths for example.
+
+I also think that having to change code to make it more testable is
+often an advantage as much as a disadvantage.
+
+Still, I think that is a good set of tradeoffs for roadtest to make
+when set against KUnit and kselftest since roadtest seems to fit in
+where kselftest and KUnit are weak.
+
+> = How do I use it?
+>
+> See Documentation/dev-tools/roadtest.rst added by the documentation patch for
+> more information about running and writing tests using this framework.
+>
+> = What's included in the patchset?
+>
+> The current framework allows developing tests for hardware which uses the I2C
+> bus.  Hardware models can also control GPIOs and use them to trigger
+> interrupts.
+>
+> This series includes tests for some IIO, regulator and RTC drivers.  The
+> regulator and RTC tests depend on a few driver patches which are either in
+> review or in linux-next.  These are noted in the commit messages.
+>
+> The entire patch set, including the required dependencies, is also available in
+> a git tree:
+>
+>  https://github.com/vwax/linux/commits/roadtest/rfc-v1
+>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-um@lists.infradead.org
+>
+> Cc: shuah@kernel.org
+> Cc: brendanhiggins@google.com
+> Cc: linux-kselftest@vger.kernel.org
+>
+> Cc: jic23@kernel.org
+> Cc: linux-iio@vger.kernel.org
+>
+> Cc: lgirdwood@gmail.com
+> Cc: broonie@kernel.org
+>
+> Cc: a.zummo@towertech.it
+> Cc: alexandre.belloni@bootlin.com
+> Cc: linux-rtc@vger.kernel.org
+>
+> Cc: corbet@lwn.net
+> Cc: linux-doc@vger.kernel.org
+>
+> Vincent Whitchurch (10):
+>   roadtest: import libvhost-user from QEMU
+>   roadtest: add C backend
+>   roadtest: add framework
+>   roadtest: add base config
+>   roadtest: add build files
+>   roadtest: add documentation
+>   iio: light: opt3001: add roadtest
+>   iio: light: vcnl4000: add roadtest
+>   regulator: tps62864: add roadtest
+>   rtc: pcf8563: add roadtest
+>
+>  Documentation/dev-tools/index.rst             |    1 +
+>  Documentation/dev-tools/roadtest.rst          |  669 ++++
+>  tools/testing/roadtest/.gitignore             |    2 +
+>  tools/testing/roadtest/Dockerfile             |   25 +
+>  tools/testing/roadtest/Makefile               |   84 +
+>  tools/testing/roadtest/init.sh                |   19 +
+>  tools/testing/roadtest/pyproject.toml         |   10 +
+>  tools/testing/roadtest/requirements.txt       |    4 +
+>  tools/testing/roadtest/roadtest/__init__.py   |    2 +
+>  .../roadtest/roadtest/backend/__init__.py     |    0
+>  .../roadtest/roadtest/backend/backend.py      |   32 +
+>  .../testing/roadtest/roadtest/backend/gpio.py |  111 +
+>  .../testing/roadtest/roadtest/backend/i2c.py  |  123 +
+>  .../testing/roadtest/roadtest/backend/main.py |   13 +
+>  .../testing/roadtest/roadtest/backend/mock.py |   20 +
+>  .../roadtest/roadtest/backend/test_gpio.py    |   98 +
+>  .../roadtest/roadtest/backend/test_i2c.py     |   84 +
+>  .../testing/roadtest/roadtest/cmd/__init__.py |    0
+>  tools/testing/roadtest/roadtest/cmd/main.py   |  146 +
+>  tools/testing/roadtest/roadtest/cmd/remote.py |   48 +
+>  .../roadtest/roadtest/core/__init__.py        |    0
+>  .../testing/roadtest/roadtest/core/control.py |   52 +
+>  .../roadtest/roadtest/core/devicetree.py      |  155 +
+>  .../roadtest/roadtest/core/hardware.py        |   94 +
+>  tools/testing/roadtest/roadtest/core/log.py   |   42 +
+>  .../testing/roadtest/roadtest/core/modules.py |   38 +
+>  .../testing/roadtest/roadtest/core/opslog.py  |   35 +
+>  tools/testing/roadtest/roadtest/core/proxy.py |   48 +
+>  tools/testing/roadtest/roadtest/core/suite.py |  286 ++
+>  tools/testing/roadtest/roadtest/core/sysfs.py |   77 +
+>  .../roadtest/roadtest/core/test_control.py    |   35 +
+>  .../roadtest/roadtest/core/test_devicetree.py |   31 +
+>  .../roadtest/roadtest/core/test_hardware.py   |   41 +
+>  .../roadtest/roadtest/core/test_log.py        |   54 +
+>  .../roadtest/roadtest/core/test_opslog.py     |   27 +
+>  .../roadtest/roadtest/tests/__init__.py       |    0
+>  .../roadtest/roadtest/tests/base/config       |   84 +
+>  .../roadtest/roadtest/tests/iio/__init__.py   |    0
+>  .../roadtest/roadtest/tests/iio/config        |    1 +
+>  .../roadtest/roadtest/tests/iio/iio.py        |  112 +
+>  .../roadtest/tests/iio/light/__init__.py      |    0
+>  .../roadtest/roadtest/tests/iio/light/config  |    2 +
+>  .../roadtest/tests/iio/light/test_opt3001.py  |   95 +
+>  .../roadtest/tests/iio/light/test_vcnl4000.py |  132 +
+>  .../roadtest/tests/iio/light/test_vcnl4010.py |  282 ++
+>  .../roadtest/tests/iio/light/test_vcnl4040.py |  104 +
+>  .../roadtest/tests/iio/light/test_vcnl4200.py |   96 +
+>  .../roadtest/tests/regulator/__init__.py      |    0
+>  .../roadtest/roadtest/tests/regulator/config  |    4 +
+>  .../roadtest/tests/regulator/test_tps62864.py |  187 ++
+>  .../roadtest/roadtest/tests/rtc/__init__.py   |    0
+>  .../roadtest/roadtest/tests/rtc/config        |    1 +
+>  .../roadtest/roadtest/tests/rtc/rtc.py        |   73 +
+>  .../roadtest/tests/rtc/test_pcf8563.py        |  348 ++
+>  tools/testing/roadtest/src/.gitignore         |    1 +
+>  tools/testing/roadtest/src/backend.c          |  884 +++++
+>  .../src/libvhost-user/include/atomic.h        |  310 ++
+>  .../src/libvhost-user/libvhost-user.c         | 2885 +++++++++++++++++
+>  .../src/libvhost-user/libvhost-user.h         |  691 ++++
+>  59 files changed, 8798 insertions(+)
+>  create mode 100644 Documentation/dev-tools/roadtest.rst
+>  create mode 100644 tools/testing/roadtest/.gitignore
+>  create mode 100644 tools/testing/roadtest/Dockerfile
+>  create mode 100644 tools/testing/roadtest/Makefile
+>  create mode 100755 tools/testing/roadtest/init.sh
+>  create mode 100644 tools/testing/roadtest/pyproject.toml
+>  create mode 100644 tools/testing/roadtest/requirements.txt
+>  create mode 100644 tools/testing/roadtest/roadtest/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/backend.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/gpio.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/i2c.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/main.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/mock.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/test_gpio.py
+>  create mode 100644 tools/testing/roadtest/roadtest/backend/test_i2c.py
+>  create mode 100644 tools/testing/roadtest/roadtest/cmd/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/cmd/main.py
+>  create mode 100644 tools/testing/roadtest/roadtest/cmd/remote.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/control.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/devicetree.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/hardware.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/log.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/modules.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/opslog.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/proxy.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/suite.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/sysfs.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/test_control.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/test_devicetree.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/test_hardware.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/test_log.py
+>  create mode 100644 tools/testing/roadtest/roadtest/core/test_opslog.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/base/config
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/config
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/iio.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/config
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/config
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
+>  create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
+>  create mode 100644 tools/testing/roadtest/src/.gitignore
+>  create mode 100644 tools/testing/roadtest/src/backend.c
+>  create mode 100644 tools/testing/roadtest/src/libvhost-user/include/atomic.h
+>  create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.c
+>  create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.h
+>
+> --
 > 2.34.1
-> 
+>

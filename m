@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77F14D8DFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E18A4D8E05
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 21:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244842AbiCNUPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 16:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S244928AbiCNUSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 16:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242151AbiCNUPf (ORCPT
+        with ESMTP id S237075AbiCNUSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 16:15:35 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994511EAD1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:14:23 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 17so21484900lji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:14:23 -0700 (PDT)
+        Mon, 14 Mar 2022 16:18:45 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909FD33EB4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:17:33 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id s25so23632403lji.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VKmL8N0MGUKpjg1aebJTq4IQfdUqqRnSzv3Tmq9qgdk=;
-        b=ObJVnTZXyeW/s7wGtaP9fKZR7mREfI6BR1X/Yg28I+eGnVwt2Z1JiRjzILenldH9Cd
-         Ce7VcSAUnYj/8zAFqRBfcAHwW7TpQNI1fb2kEmEqT6Y4GyAk7vgmEqBB3GtrxP4Nfb7U
-         N1eLsE6DoaxBy7NQEemmEpAEJ1imM1tkPetn4=
+        bh=llWQpUugVIez20+golvS85g3cCvwC31DD0QwwK3Qx28=;
+        b=DkZTTgDSXMSP8ycn8g7aDVO7MMxXsfSAxTIeaYTtorLLanSxli2WnOx6QwAcxXK3NF
+         DjAQXDoP0lfFrOsJ6MD3CHiG2wbXFclPK0VJxS+dFWsr6OJd6vtkNet+rH6UzNggFVPE
+         KpMHTjuGBhE7vD1SxpFm2Q6UBy+aKunBko6AY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VKmL8N0MGUKpjg1aebJTq4IQfdUqqRnSzv3Tmq9qgdk=;
-        b=kPTyBd63Ts4PCyZuOnvNc8I6ti6Jm5a2AgLoNXOyMcrpJnmk1ZZoWQDZRAay2mpu9v
-         aRa4Unw3YiAI5yl9EvO/vJH6MHEA2Q4Kua51iQqC7K+SrXSWP8WlxaMEq00YXbEia4Q2
-         +n32j/1mpp+drX5VfYxwlRVUKTKyac55FkgpjmgfAYpNKOA/O0Aa9QBoWsimQKCulUS9
-         Eif6LOPWvDO0iS5FFnKxqzixhNgd8OudPbTrmHCihSb3APc/+ySG+7oV0pInfLBQDIjh
-         iMfAtlCnd7PDgdW4nGGQKeeiH8UT64rUSNErigc8EDDRjXWWawfXah8qKq8n9Tjqh7Rm
-         XgIA==
-X-Gm-Message-State: AOAM532b58N7acy+CbfUQwuFSEI5Fa2TlqhL7qNBT8ewBPRrf7CwZCX2
-        kLxL8qPJiQFADRuzx0Uzkr1gTPrT4Yuj5q6p
-X-Google-Smtp-Source: ABdhPJy2k5XayKMoJ4a2Eby6Pc8rZnqNtgCXgsSni+79yczi4Tm2c+hppfa5SSlXbUQpRCjs114iPA==
-X-Received: by 2002:a2e:8ecc:0:b0:249:3a3b:fe70 with SMTP id e12-20020a2e8ecc000000b002493a3bfe70mr2995867ljl.230.1647288858387;
-        Mon, 14 Mar 2022 13:14:18 -0700 (PDT)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id m10-20020a2e97ca000000b00247e2d9a22esm4150096ljj.32.2022.03.14.13.14.15
+        bh=llWQpUugVIez20+golvS85g3cCvwC31DD0QwwK3Qx28=;
+        b=F+kmGP1fj9AEMBMBZzEQFq3v3YrMtZacr0pQGIg2XrL0VmDUSbQfn/nwNfNZfGJxaW
+         Ti+YiA1djID4ZP4qVUxI68VIfFkt55C6aRGidf23ccqs7Zkvp+MOvEta9Ug5Z6Z5qP9K
+         ebsJD9U6XzEIBDwZNneWplMXx28X91n7Mq5xPrfPmfbEpJ7eVnUBCmFNExj67LASdj/p
+         alavE152n2z6BXC13+NVZBw2hbljDPOq5QZNTdIZL5dSWGzHr3n12u7pd1rxa5F5K2Dy
+         qALuNSJ52c76GME00I8AQL5wiSoY9ObCVxhDK18mJHFtBFQm2QT8Y19fMUiCnclYOr01
+         pXNw==
+X-Gm-Message-State: AOAM531XkRJIjQoHMbV+5+RVyQEc5L6Y0aWaCl3C7dU2XEIA4jLbQrkZ
+        2muNkEmyiUmkHMVPhJ3da06rwzGLYP7jQXhq
+X-Google-Smtp-Source: ABdhPJxEm+p+aMFOtphVqGUs9KxlmrmQUnq3jId0k9EWM1oJx/qqL7o/So6OT81poc+t7R09W42Wpw==
+X-Received: by 2002:a2e:9bc6:0:b0:246:440d:b273 with SMTP id w6-20020a2e9bc6000000b00246440db273mr15004685ljj.121.1647289050525;
+        Mon, 14 Mar 2022 13:17:30 -0700 (PDT)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id n5-20020a196f45000000b004487ff4c12esm1698815lfk.105.2022.03.14.13.17.29
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 13:14:16 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id 17so21484664lji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:14:15 -0700 (PDT)
-X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
- k23-20020a2e6f17000000b0024801249c08mr14988725ljc.506.1647288855508; Mon, 14
- Mar 2022 13:14:15 -0700 (PDT)
+        Mon, 14 Mar 2022 13:17:29 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id bn33so23617123ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 13:17:29 -0700 (PDT)
+X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
+ i19-20020a05651c121300b00247e2d9cddamr14977824lja.443.1647289049378; Mon, 14
+ Mar 2022 13:17:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wiHa0vsZseZES=1T0rJ4Z_bC5cwHMUJfqFL9hVpvB283g@mail.gmail.com>
- <20220314192522.GA3031157@roeck-us.net>
-In-Reply-To: <20220314192522.GA3031157@roeck-us.net>
+References: <20220314032823.GA2593360@paulmck-ThinkPad-P17-Gen-1> <20220314154857.GA2637810@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220314154857.GA2637810@paulmck-ThinkPad-P17-Gen-1>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Mar 2022 13:13:59 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
-Message-ID: <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
-Subject: Re: Linux 5.17-rc8
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Edmond Chung <edmondchung@google.com>,
-        Andrew Chant <achant@google.com>,
-        Will McVicker <willmcvicker@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 14 Mar 2022 13:17:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjEVLfoypyZHwdLjh3vX_BSJO1JJBjha2XgcghSX=sdgw@mail.gmail.com>
+Message-ID: <CAHk-=wjEVLfoypyZHwdLjh3vX_BSJO1JJBjha2XgcghSX=sdgw@mail.gmail.com>
+Subject: Re: [GIT PULL] RCU changes for v5.18
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        rcu <rcu@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -81,43 +75,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Adding more people to the cc, since this last change was triggered
-by earlier changes.
-
-On Mon, Mar 14, 2022 at 12:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Mon, Mar 14, 2022 at 8:49 AM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Build results:
->         total: 155 pass: 155 fail: 0
-> Qemu test results:
->         total: 488 pass: 484 fail: 4
+> OK, I was apparently unable to distinguish v5.17-rc8 from v5.18 yesterday
+> evening.  :-/
+>
+> I will resent both pull requests next week, and please accept my apologies
+> for the bother.
 
-Uhhuh. We got all the previous problems sorted out, but a new one instead.
+"resent" and "resend" are very different ;)
 
-> This is a new problem. It bisects to commit fc328a7d1fcc ("gpio: Revert
-> regression in sysfs-gpio (gpiolib.c)"). The network connection fails
-> in the affected tests. Reverting the offending commit (ie reverting the
-> revert) fixes the problem.
+Anyway, no bother - I just assumed this meant that you sent your pull
+request for 5.18 early. Which is very much ok, and no bother at all.
+In fact, if things are ready, early pull requests are generally good
+things.
 
-Hmm. Looking at the changes since 5.16, that commit fc328a7d1fcc looks
-somewhat suspicious.
-
-It claims to "revert" things, but the behavior it reverts goes
-basically all the way back to v5.7 (with one of the patches going into
-5.10).
-
-And it clearly breaks things that used to work much more recently (ie
-this worked in rc7, but it was also the state in every release since
-5.10).
-
-So unless somebody can find the _real_ issue here, I suspect very
-strongly that that "fix" that came in last week was just wrong.
-
-It is also very non-specific "Some GPIO lines have stopped working"
-with no pointer to actual reports.
-
-LinusW? Thierry? Bartoz? Anybody?
-
-Yes, there;s something bad going on here, but we can't randomly "fix"
-things in an rc8 that have worked for several releases by now.
+But since you resent them, I'll just archive this email (and the LKMM
+one), and am now expecting a new set of pull requests that you don't
+hate that much later..
 
                Linus

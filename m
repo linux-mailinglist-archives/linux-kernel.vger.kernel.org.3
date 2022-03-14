@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ECE4D84C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5634D82A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242353AbiCNM3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S238216AbiCNMGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243872AbiCNMVV (ORCPT
+        with ESMTP id S240556AbiCNMFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:21 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B451096;
-        Mon, 14 Mar 2022 05:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W/+ETx5b3xS1Tdv9RdFRhbPpWKbPzvFWXK5rp+AtZnI=;
-  b=syBj3rUl3ursH0T++MuaesnsdMP2hosY4QJOBLPo46+CkhrwQsA7Mi8s
-   zbicBYa2rxPCOsEpDZ0NuY7meHnhcIvDxphOVVXXybCjQwkR3ToUKADVV
-   SC767kaFu8jfBW0jAhVy5zkX9xjfbEuM5i1C1uxUesnxLD8KzP+u1kMJp
-   s=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997362"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     kernel-janitors@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        linux-power@fi.rohmeurope.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 28/30] mfd: bd9576: fix typos in comments
+        Mon, 14 Mar 2022 08:05:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8BB47AF3;
+        Mon, 14 Mar 2022 05:02:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 836A2612FB;
+        Mon, 14 Mar 2022 12:02:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851D1C340E9;
+        Mon, 14 Mar 2022 12:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647259351;
+        bh=jSQBdgjmG/0puOUtBTQLeaUF/iDNY/kxEsrAKEP7R2Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=s1SbI+Wj+UyFgzxrwXqoo0z8wsXP5WF1oR2w9l/dWrj7tS77yz4hlKr469KGzwFNV
+         ZgDV1lpQ7tmVKzPcyXVtZiEH8Y+wDemrOCOQ3fypKgVZl8SP3ToRavyJOlxrCXwARZ
+         YuODNLWJqqV5dSNTeL2VtsMnUqFHxhZqgOLKK//s=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 59/71] watch_queue, pipe: Free watchqueue state after clearing pipe ring
 Date:   Mon, 14 Mar 2022 12:53:52 +0100
-Message-Id: <20220314115354.144023-29-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112739.582363593@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: David Howells <dhowells@redhat.com>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+commit db8facfc9fafacefe8a835416a6b77c838088f8b upstream.
 
+In free_pipe_info(), free the watchqueue state after clearing the pipe
+ring as each pipe ring descriptor has a release function, and in the
+case of a notification message, this is watch_queue_pipe_buf_release()
+which tries to mark the allocation bitmap that was previously released.
+
+Fix this by moving the put of the pipe's ref on the watch queue to after
+the ring has been cleared.  We still need to call watch_queue_clear()
+before doing that to make sure that the pipe is disconnected from any
+notification sources first.
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Reported-by: Jann Horn <jannh@google.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mfd/rohm-bd9576.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/pipe.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/rohm-bd9576.c b/drivers/mfd/rohm-bd9576.c
-index 6661a27d69a8..f37cd4f27aeb 100644
---- a/drivers/mfd/rohm-bd9576.c
-+++ b/drivers/mfd/rohm-bd9576.c
-@@ -23,7 +23,7 @@ enum {
- };
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -830,10 +830,8 @@ void free_pipe_info(struct pipe_inode_in
+ 	int i;
  
- /*
-- * Due to the BD9576MUF nasty IRQ behaiour we don't always populate IRQs.
-+ * Due to the BD9576MUF nasty IRQ behaviour we don't always populate IRQs.
-  * These will be added to regulator resources only if IRQ information for the
-  * PMIC is populated in device-tree.
-  */
+ #ifdef CONFIG_WATCH_QUEUE
+-	if (pipe->watch_queue) {
++	if (pipe->watch_queue)
+ 		watch_queue_clear(pipe->watch_queue);
+-		put_watch_queue(pipe->watch_queue);
+-	}
+ #endif
+ 
+ 	(void) account_pipe_buffers(pipe->user, pipe->nr_accounted, 0);
+@@ -843,6 +841,10 @@ void free_pipe_info(struct pipe_inode_in
+ 		if (buf->ops)
+ 			pipe_buf_release(pipe, buf);
+ 	}
++#ifdef CONFIG_WATCH_QUEUE
++	if (pipe->watch_queue)
++		put_watch_queue(pipe->watch_queue);
++#endif
+ 	if (pipe->tmp_page)
+ 		__free_page(pipe->tmp_page);
+ 	kfree(pipe->bufs);
+
 

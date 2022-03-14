@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02674D8384
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2244D823F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240968AbiCNMQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S236045AbiCNMBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241917AbiCNMJY (ORCPT
+        with ESMTP id S240220AbiCNMBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39D021E36;
-        Mon, 14 Mar 2022 05:06:16 -0700 (PDT)
+        Mon, 14 Mar 2022 08:01:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06BA29C9D;
+        Mon, 14 Mar 2022 04:59:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C6ABB80DF0;
-        Mon, 14 Mar 2022 12:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B0AC340EC;
-        Mon, 14 Mar 2022 12:06:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 326F661251;
+        Mon, 14 Mar 2022 11:59:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27285C340EC;
+        Mon, 14 Mar 2022 11:59:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259562;
-        bh=9NQFTWAPNISxKZgzADV4wKywB3/kKMexDBkUedIuC3I=;
+        s=korg; t=1647259154;
+        bh=HOjxcHufxyRTfpHSShWWcmsQrE1BqgUePpUDYNwRE6I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CAb2SIz28tk67q5q4tGU9PJQRIMQXmJ70/EnwiA6+7xdyhDXsdrYmxjEIDmC1IyBP
-         qvf/YV3e/pT+IBrWoMo+kZGXumL0REuBXxLwRL9ixFBKlJf1nQPPy9mCdMFbpPnuWi
-         ekhmvBODc1VNuh/HZMf6K9oAyYA1XBWzx1BYs4F8=
+        b=qQAjFgcspB7Y+UfTygkqmvuYIvpp06JhYwup9rn0m+b0ds9ZlOjmc0RqlV12UmJZC
+         Usq6bnuTh5NFS/+hJweZ2pzGNQMNJV7nCbsK1fMBHlZy7EKrbwTNlRZeWtvV/+O7dY
+         +rbbMzZrHiMzh2WYq6LSJseAmB2QbdZaMk0ULSv0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 006/110] clk: qcom: gdsc: Add support to update GDSC transition delay
+        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 15/71] ARM: dts: aspeed: Fix AST2600 quad spi group
 Date:   Mon, 14 Mar 2022 12:53:08 +0100
-Message-Id: <20220314112743.209771395@linuxfoundation.org>
+Message-Id: <20220314112738.360531242@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,117 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Joel Stanley <joel@jms.id.au>
 
-[ Upstream commit 4e7c4d3652f96f41179aab3ff53025c7a550d689 ]
+[ Upstream commit 2f6edb6bcb2f3f41d876e0eba2ba97f87a0296ea ]
 
-GDSCs have multiple transition delays which are used for the GDSC FSM
-states. Older targets/designs required these values to be updated from
-gdsc code to certain default values for the FSM state to work as
-expected. But on the newer targets/designs the values updated from the
-GDSC driver can hamper the FSM state to not work as expected.
+Requesting quad mode for the FMC resulted in an error:
 
-On SC7180 we observe black screens because the gdsc is being
-enabled/disabled very rapidly and the GDSC FSM state does not work as
-expected. This is due to the fact that the GDSC reset value is being
-updated from SW.
+  &fmc {
+         status = "okay";
+ +       pinctrl-names = "default";
+ +       pinctrl-0 = <&pinctrl_fwqspi_default>'
 
-Thus add support to update the transition delay from the clock
-controller gdscs as required.
+[    0.742963] aspeed-g6-pinctrl 1e6e2000.syscon:pinctrl: invalid function FWQSPID in map table
+￼
 
-Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Link: https://lore.kernel.org/r/20220223185606.3941-1-tdas@codeaurora.org
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+This is because the quad mode pins are a group of pins, not a function.
+
+After applying this patch we can request the pins and the QSPI data
+lines are muxed:
+
+ # cat /sys/kernel/debug/pinctrl/1e6e2000.syscon\:pinctrl-aspeed-g6-pinctrl/pinmux-pins |grep 1e620000.spi
+ pin 196 (AE12): device 1e620000.spi function FWSPID group FWQSPID
+ pin 197 (AF12): device 1e620000.spi function FWSPID group FWQSPID
+ pin 240 (Y1): device 1e620000.spi function FWSPID group FWQSPID
+ pin 241 (Y2): device 1e620000.spi function FWSPID group FWQSPID
+ pin 242 (Y3): device 1e620000.spi function FWSPID group FWQSPID
+ pin 243 (Y4): device 1e620000.spi function FWSPID group FWQSPID
+
+Fixes: f510f04c8c83 ("ARM: dts: aspeed: Add AST2600 pinmux nodes")
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Link: https://lore.kernel.org/r/20220304011010.974863-1-joel@jms.id.au
+Link: https://lore.kernel.org/r/20220304011010.974863-1-joel@jms.id.au'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gdsc.c | 26 +++++++++++++++++++++-----
- drivers/clk/qcom/gdsc.h |  8 +++++++-
- 2 files changed, 28 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 4ece326ea233..cf23cfd7e467 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2015, 2017-2018, 2022, The Linux Foundation. All rights reserved.
-  */
+diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
+index 910eacc8ad3b..a362714ae9fc 100644
+--- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
++++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
+@@ -118,7 +118,7 @@ pinctrl_fwspid_default: fwspid_default {
+ 	};
  
- #include <linux/bitops.h>
-@@ -34,9 +34,14 @@
- #define CFG_GDSCR_OFFSET		0x4
+ 	pinctrl_fwqspid_default: fwqspid_default {
+-		function = "FWQSPID";
++		function = "FWSPID";
+ 		groups = "FWQSPID";
+ 	};
  
- /* Wait 2^n CXO cycles between all states. Here, n=2 (4 cycles). */
--#define EN_REST_WAIT_VAL	(0x2 << 20)
--#define EN_FEW_WAIT_VAL		(0x8 << 16)
--#define CLK_DIS_WAIT_VAL	(0x2 << 12)
-+#define EN_REST_WAIT_VAL	0x2
-+#define EN_FEW_WAIT_VAL		0x8
-+#define CLK_DIS_WAIT_VAL	0x2
-+
-+/* Transition delay shifts */
-+#define EN_REST_WAIT_SHIFT	20
-+#define EN_FEW_WAIT_SHIFT	16
-+#define CLK_DIS_WAIT_SHIFT	12
- 
- #define RETAIN_MEM		BIT(14)
- #define RETAIN_PERIPH		BIT(13)
-@@ -341,7 +346,18 @@ static int gdsc_init(struct gdsc *sc)
- 	 */
- 	mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
- 	       EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
--	val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
-+
-+	if (!sc->en_rest_wait_val)
-+		sc->en_rest_wait_val = EN_REST_WAIT_VAL;
-+	if (!sc->en_few_wait_val)
-+		sc->en_few_wait_val = EN_FEW_WAIT_VAL;
-+	if (!sc->clk_dis_wait_val)
-+		sc->clk_dis_wait_val = CLK_DIS_WAIT_VAL;
-+
-+	val = sc->en_rest_wait_val << EN_REST_WAIT_SHIFT |
-+		sc->en_few_wait_val << EN_FEW_WAIT_SHIFT |
-+		sc->clk_dis_wait_val << CLK_DIS_WAIT_SHIFT;
-+
- 	ret = regmap_update_bits(sc->regmap, sc->gdscr, mask, val);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-index 5bb396b344d1..762f1b5e1ec5 100644
---- a/drivers/clk/qcom/gdsc.h
-+++ b/drivers/clk/qcom/gdsc.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2015, 2017-2018, 2022, The Linux Foundation. All rights reserved.
-  */
- 
- #ifndef __QCOM_GDSC_H__
-@@ -22,6 +22,9 @@ struct reset_controller_dev;
-  * @cxcs: offsets of branch registers to toggle mem/periph bits in
-  * @cxc_count: number of @cxcs
-  * @pwrsts: Possible powerdomain power states
-+ * @en_rest_wait_val: transition delay value for receiving enr ack signal
-+ * @en_few_wait_val: transition delay value for receiving enf ack signal
-+ * @clk_dis_wait_val: transition delay value for halting clock
-  * @resets: ids of resets associated with this gdsc
-  * @reset_count: number of @resets
-  * @rcdev: reset controller
-@@ -35,6 +38,9 @@ struct gdsc {
- 	unsigned int			clamp_io_ctrl;
- 	unsigned int			*cxcs;
- 	unsigned int			cxc_count;
-+	unsigned int			en_rest_wait_val;
-+	unsigned int			en_few_wait_val;
-+	unsigned int			clk_dis_wait_val;
- 	const u8			pwrsts;
- /* Powerdomain allowable state bitfields */
- #define PWRSTS_OFF		BIT(0)
 -- 
 2.34.1
 

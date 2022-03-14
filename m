@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD8D4D8387
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E474D84D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237728AbiCNMQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S243598AbiCNMbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241845AbiCNMJS (ORCPT
+        with ESMTP id S241775AbiCNMSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:09:18 -0400
+        Mon, 14 Mar 2022 08:18:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81E91FCD0;
-        Mon, 14 Mar 2022 05:06:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44197FD22;
+        Mon, 14 Mar 2022 05:12:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4653612FC;
-        Mon, 14 Mar 2022 12:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64017C340E9;
-        Mon, 14 Mar 2022 12:05:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7482F61380;
+        Mon, 14 Mar 2022 12:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD21C340E9;
+        Mon, 14 Mar 2022 12:12:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259557;
+        s=korg; t=1647259977;
         bh=P9K/h8KMbQZRQi1PXI9ISur1J4HQLQ4E1D9sSKqTb14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NMYCc8+b+ou5vWiT9C9YjwAsfT0avEhp6e/FaQtDtW2Zr7MtTdj1frdVquZsUBwK3
-         G28n0mpUKRI3OECUQJSkzHTvq+tHYfkbiFi2fUAu48hT9bACtKxDi49HeFkcGes0jz
-         Jb2XJuYW/stCHnyj1SQKwFgYy2QwapoYRpKNiJnA=
+        b=Q3wWq1wnHrThv3GOt8n8bz0LEYNbaIrNsbF/eip9NuWBwBskyIL9hK6rdL0XYy9cS
+         WwLm4vEaDQoZhizmfF9HcAE9VACEH1dg2XzHJtJwXRRxi8gXEwCGBkrOqejGEixL/a
+         zb+BU1HkBFBe6+snk1Uv6dF4VdS1AAcQ9NKrbjVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Stefan Wahren <stefan.wahren@i2se.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 005/110] ARM: boot: dts: bcm2711: Fix HVS register range
-Date:   Mon, 14 Mar 2022 12:53:07 +0100
-Message-Id: <20220314112743.182335808@linuxfoundation.org>
+Subject: [PATCH 5.16 005/121] ARM: boot: dts: bcm2711: Fix HVS register range
+Date:   Mon, 14 Mar 2022 12:53:08 +0100
+Message-Id: <20220314112744.275113530@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

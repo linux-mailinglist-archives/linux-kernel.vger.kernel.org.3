@@ -2,75 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE114D81BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FE04D84DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239744AbiCNLzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S244108AbiCNMbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239695AbiCNLzO (ORCPT
+        with ESMTP id S243225AbiCNMU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:55:14 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8D065BD;
-        Mon, 14 Mar 2022 04:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pC+jZYa0N/coy9ndTADCmLZOR5Knf8xSuYTEETm4CuE=;
-  b=Xyk8/eKcmpaK4I1WGhzwBy58EONTsXyBXaBvBS/WuPuobHQ8PhsRGe3L
-   dWlTg5kPUOeJ2V7TFhpb0eofnEXd9OV4gPpunnMj+XdFl1Qa8JHtVOxp1
-   lGyOxCRxngklR4Kax7j7dtbhO9DQWal0N4+k1gQcLCTXz+X2zfkqejfqa
-   A=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997336"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel-janitors@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 04/30] kernfs: fix typos in comments
+        Mon, 14 Mar 2022 08:20:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B11053737;
+        Mon, 14 Mar 2022 05:15:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F07604F5;
+        Mon, 14 Mar 2022 12:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCB9C340E9;
+        Mon, 14 Mar 2022 12:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647260130;
+        bh=poBCh3atWgfX9sp+dz+kc64kDx5yncm1QzRxAHWn7Jk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=0hNV++Rg37h2RyryxxptKQKPROSxC38edkhCfVm0PW7QqCBZXRSFOumOrh9c4LlR3
+         O0pqT7ec01EUNF1JpV3uD2Y+yJUVvuryjN4nvDqhaGHKlIEAA32wGa4w7Di861qqBX
+         cusXeK559Lie+OGOR7YgkEkzH6tFfj6XycH31rP0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 025/121] net: gro: move skb_gro_receive_list to udp_offload.c
 Date:   Mon, 14 Mar 2022 12:53:28 +0100
-Message-Id: <20220314115354.144023-5-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112744.832009339@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+References: <20220314112744.120491875@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Eric Dumazet <edumazet@google.com>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+[ Upstream commit 0b935d7f8c07bf0a192712bdbf76dbf45ef8b115 ]
 
+This helper is used once, no need to keep it in fat net/core/skbuff.c
+
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/kernfs/file.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/netdevice.h |  1 -
+ net/core/skbuff.c         | 26 --------------------------
+ net/ipv4/udp_offload.c    | 27 +++++++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index 7aefaca876a0..88423069407c 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -997,7 +997,7 @@ struct kernfs_node *__kernfs_create_file(struct kernfs_node *parent,
- #endif
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 049858c671ef..7500ac08c9ba 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3007,7 +3007,6 @@ struct net_device *dev_get_by_napi_id(unsigned int napi_id);
+ int netdev_get_name(struct net *net, char *name, int ifindex);
+ int dev_restart(struct net_device *dev);
+ int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb);
+-int skb_gro_receive_list(struct sk_buff *p, struct sk_buff *skb);
  
- 	/*
--	 * kn->attr.ops is accesible only while holding active ref.  We
-+	 * kn->attr.ops is accessible only while holding active ref.  We
- 	 * need to know whether some ops are implemented outside active
- 	 * ref.  Cache their existence in flags.
- 	 */
+ static inline unsigned int skb_gro_offset(const struct sk_buff *skb)
+ {
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 56e23333e708..f1e3d70e8987 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3919,32 +3919,6 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ }
+ EXPORT_SYMBOL_GPL(skb_segment_list);
+ 
+-int skb_gro_receive_list(struct sk_buff *p, struct sk_buff *skb)
+-{
+-	if (unlikely(p->len + skb->len >= 65536))
+-		return -E2BIG;
+-
+-	if (NAPI_GRO_CB(p)->last == p)
+-		skb_shinfo(p)->frag_list = skb;
+-	else
+-		NAPI_GRO_CB(p)->last->next = skb;
+-
+-	skb_pull(skb, skb_gro_offset(skb));
+-
+-	NAPI_GRO_CB(p)->last = skb;
+-	NAPI_GRO_CB(p)->count++;
+-	p->data_len += skb->len;
+-
+-	/* sk owenrship - if any - completely transferred to the aggregated packet */
+-	skb->destructor = NULL;
+-	p->truesize += skb->truesize;
+-	p->len += skb->len;
+-
+-	NAPI_GRO_CB(skb)->same_flow = 1;
+-
+-	return 0;
+-}
+-
+ /**
+  *	skb_segment - Perform protocol segmentation on skb.
+  *	@head_skb: buffer to segment
+diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
+index 86d32a1e62ac..c2398f9e46f0 100644
+--- a/net/ipv4/udp_offload.c
++++ b/net/ipv4/udp_offload.c
+@@ -424,6 +424,33 @@ static struct sk_buff *udp4_ufo_fragment(struct sk_buff *skb,
+ 	return segs;
+ }
+ 
++static int skb_gro_receive_list(struct sk_buff *p, struct sk_buff *skb)
++{
++	if (unlikely(p->len + skb->len >= 65536))
++		return -E2BIG;
++
++	if (NAPI_GRO_CB(p)->last == p)
++		skb_shinfo(p)->frag_list = skb;
++	else
++		NAPI_GRO_CB(p)->last->next = skb;
++
++	skb_pull(skb, skb_gro_offset(skb));
++
++	NAPI_GRO_CB(p)->last = skb;
++	NAPI_GRO_CB(p)->count++;
++	p->data_len += skb->len;
++
++	/* sk owenrship - if any - completely transferred to the aggregated packet */
++	skb->destructor = NULL;
++	p->truesize += skb->truesize;
++	p->len += skb->len;
++
++	NAPI_GRO_CB(skb)->same_flow = 1;
++
++	return 0;
++}
++
++
+ #define UDP_GRO_CNT_MAX 64
+ static struct sk_buff *udp_gro_receive_segment(struct list_head *head,
+ 					       struct sk_buff *skb)
+-- 
+2.34.1
+
+
 

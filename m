@@ -2,128 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9750A4D7E5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE484D7E62
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237913AbiCNJWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
+        id S237613AbiCNJZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 05:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbiCNJWT (ORCPT
+        with ESMTP id S231899AbiCNJZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:22:19 -0400
-Received: from out28-75.mail.aliyun.com (out28-75.mail.aliyun.com [115.124.28.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4EE427F1;
-        Mon, 14 Mar 2022 02:21:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07863903|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00699087-0.00170898-0.9913;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.N49gzxq_1647249655;
-Received: from 172.30.10.142(mailfrom:michael@allwinnertech.com fp:SMTPD_---.N49gzxq_1647249655)
-          by smtp.aliyun-inc.com(33.32.109.194);
-          Mon, 14 Mar 2022 17:21:06 +0800
-Message-ID: <88e53cb9-791f-ee58-9be8-76ae9986e0e2@allwinnertech.com>
-Date:   Mon, 14 Mar 2022 17:20:55 +0800
+        Mon, 14 Mar 2022 05:25:22 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43C22A706
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:24:12 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso16803667pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kZHSHqdSI/jBDMOjHUDo3932A1aQUbEpHtDBEyuk690=;
+        b=yWfq1hgFZccKLGWuefVV1mJc4fkOQ/n4zZZqIsZ8pODphn6dXBhPpYMZ3IU+za0xe/
+         VtatmqmI3DJJ0X/RGCVAfVKq7CGT1Q/DlLxmqg5bg/AMtX2uoe1OrV5A4QVXrY3z9ITP
+         OWgA+kweNNFIan1yFzFk3+vneAZLAOiy25mIqw0eNqFmDST9oZPbxnHOFaa3h0zmIFIY
+         6QgJbWx6VClE8tM4W6nT/qff5T2epMd/XdHZg933KIjw1dUSynxJ02gfWIaSdJfLM1R7
+         CxOK5W7DggUdJwKIJi4AWxQY2TGsgOitGWTFAfVu80sLwSamFPffPtyyNvyPm0VCD6R4
+         ncHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kZHSHqdSI/jBDMOjHUDo3932A1aQUbEpHtDBEyuk690=;
+        b=ODpDAj4hmDPLsy6MlVNB+RwIAmz2X/e9SaRC3QaDhyCNUia+kblX1Wiakq0c49Takk
+         Iek4gbzTVFZJ0WICcybzg6K2G5ZoqliN2/nCVGoXHHoFrt0YQMNzB0bVO7LwP0fBgctE
+         ghcOcZpsDwyXBVJ4G5rYJxgDY6gUMYZ1r1Wun+v1QiJxX4GpXMSKhWYvACxIOauNleby
+         xsJ0k9v6JY5LjRvJb27uLDHfJT6a0K28RkjiDPqcKJAOjNaEdgiDVaEbX1hN+m1uyQ5/
+         dVRWuM8HpC0QTmJWzUGi/PIyKF7vfQV3PGR3k+QYS2HNitbv/iV6bonYlAVfucEjJ5ZP
+         FcxQ==
+X-Gm-Message-State: AOAM533hIFuabizAvPagGwFiohma8p4+PW7BlBoB6DjYC66+nwZbUhy8
+        hbMzIsFvMOT9ksFPOKkHl3DbvA==
+X-Google-Smtp-Source: ABdhPJyA0G98h1VBptmjEZZwwLqHGgKMVxnl+eFxUnrBeDx78Q8mXd6fuEyQkeky7YM6g6XZqAwhSg==
+X-Received: by 2002:a17:903:41c9:b0:153:8a89:de18 with SMTP id u9-20020a17090341c900b001538a89de18mr212038ple.32.1647249852246;
+        Mon, 14 Mar 2022 02:24:12 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id u14-20020a056a00124e00b004f76d35c1dbsm15890636pfi.75.2022.03.14.02.24.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 14 Mar 2022 02:24:11 -0700 (PDT)
+From:   "luodaowen.backend" <luodaowen.backend@bytedance.com>
+To:     jefflexu@linux.alibaba.com
+Cc:     bo.liu@linux.alibaba.com, chao@kernel.org, dhowells@redhat.com,
+        eguan@linux.alibaba.com, gerry@linux.alibaba.com,
+        gregkh@linuxfoundation.org, joseph.qi@linux.alibaba.com,
+        linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tao.peng@linux.alibaba.com, torvalds@linux-foundation.org,
+        willy@infradead.org, xiang@kernel.org
+Subject: Re: [PATCH v4 00/21] fscache,erofs: fscache-based on-demand read semantics
+Date:   Mon, 14 Mar 2022 17:24:02 +0800
+Message-Id: <20220314092402.43044-1-luodaowen.backend@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20220307123305.79520-1-jefflexu@linux.alibaba.com>
+References: <20220307123305.79520-1-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-From:   Michael Wu <michael@allwinnertech.com>
-Subject: Re: [PATCH] mmc: block: enable cache-flushing when mmc cache is on
-To:     Adrian Hunter <adrian.hunter@intel.com>, ulf.hansson@linaro.org,
-        avri.altman@wdc.com, beanhuo@micron.com, porzio@gmail.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        allwinner-opensource-support 
-        <allwinner-opensource-support@allwinnertech.com>
-References: <20220312044315.7994-1-michael@allwinnertech.com>
- <83edf9a1-1712-5388-a3fa-d685f1f581df@intel.com>
-Content-Language: en-GB
-In-Reply-To: <83edf9a1-1712-5388-a3fa-d685f1f581df@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 14:54, Adrian Hunter wrote:
-> On 12/03/2022 06:43, Michael Wu wrote:
->> The mmc core enable cache on default. But it only enables cache-flushing
->> when host supports cmd23 and eMMC supports reliable write.
->> For hosts which do not support cmd23 or eMMCs which do not support
->> reliable write, the cache can not be flushed by `sync` command.
->> This may leads to cache data lost.
->> This patch enables cache-flushing as long as cache is enabled, no
->> matter host supports cmd23 and/or eMMC supports reliable write or not.
->>
-> 
-> Fixes tag?
-> 
+Hi,
 
-Hi Adrian,
-My patch intend to fix the cache problem brought by the following two 
-patches:
+We're also interested in this way, hoping for the formal solution upstream so we can make use of it as well.
 
-Fixes: d0c97cfb81ebc ("mmc: core: Use CMD23 for multiblock transfers 
-when we can.")
-Fixes: e9d5c746246c8 ("mmc/block: switch to using blk_queue_write_cache()")
+Thanks,
+daowen
 
-I'm not sure if this is what you referred to ("Fixes tag"). Please 
-correct me if I misunderstood.
-
->> Signed-off-by: Michael Wu <michael@allwinnertech.com>
->> ---
->>   drivers/mmc/core/block.c | 20 ++++++++++++++------
->>   1 file changed, 14 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
->> index 689eb9afeeed..1e508c079c1e 100644
->> --- a/drivers/mmc/core/block.c
->> +++ b/drivers/mmc/core/block.c
->> @@ -2279,6 +2279,8 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
->>   	struct mmc_blk_data *md;
->>   	int devidx, ret;
->>   	char cap_str[10];
->> +	bool enable_cache = false;
->> +	bool enable_fua = false;
->>   
->>   	devidx = ida_simple_get(&mmc_blk_ida, 0, max_devices, GFP_KERNEL);
->>   	if (devidx < 0) {
->> @@ -2375,12 +2377,18 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
->>   			md->flags |= MMC_BLK_CMD23;
->>   	}
->>   
->> -	if (mmc_card_mmc(card) &&
->> -	    md->flags & MMC_BLK_CMD23 &&
->> -	    ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
->> -	     card->ext_csd.rel_sectors)) {
->> -		md->flags |= MMC_BLK_REL_WR;
->> -		blk_queue_write_cache(md->queue.queue, true, true);
->> +	if (mmc_card_mmc(card)) {
->> +		if (md->flags & MMC_BLK_CMD23 &&
->> +			((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
->> +			card->ext_csd.rel_sectors)) {
->> +			md->flags |= MMC_BLK_REL_WR;
->> +			enable_fua = true;
->> +		}
->> +
->> +		if (mmc_cache_enabled(card->host))
->> +			enable_cache = true;
->> +
->> +		blk_queue_write_cache(md->queue.queue, enable_cache, enable_fua);
->>   	}
-> 
-> Seems like we should inform block layer about SD card cache also
-> 
-
-I saw another mail by Avri Altman, which says few days will be needed to 
-ask internally. Shall I wait or make another change here on 'inform 
-block layer about SD card cache'?
-
->>   
->>   	string_get_size((u64)size, 512, STRING_UNITS_2,
-
--- 
-Best Regards,
-Michael Wu
+On Mon, 7 Mar 2022 20:32:44 +0800 Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+>
+> changes since v3:
+> - cachefiles: The current implementation relies on the anonymous fd
+> mechanism to avoid
+>   the dependence on the format of cache file. When cache file is opened
+>   for the first time, an anon_fd associated with the cache file is sent to
+>   user daemon. User daemon could fetch and write data to cache file with
+>   the given anon_fd. The following write to the anon_fd will finally
+>   call to cachefiles kernel module, which will write data to cache file in
+>   the latest format of cache file. Thus the on-demand read mode can
+>   keep working no matter how cache file format could change in the
+>   future. (patch 4)
+> - cachefiles: the on-demand read mode reuses the existing
+>   "/dev/cachefiles" devnode (patch 3)
+> - erofs: squash several commits implementing readahead into single
+>   commit (patch 20)
+> - erofs: refactor the readahead routine, so that it can read multiple
+>   pages each round (patch 20)
+> - patch 1 and 7 have already been cherry-picked by the maintainers, but
+>   have not been merged to the master. Keep them here for completeness.
+>
+>
+> RFC: https://lore.kernel.org/all/YbRL2glGzjfZkVbH@B-P7TQMD6M-0146.local/t/
+> v1: https://lore.kernel.org/lkml/47831875-4bdd-8398-9f2d-0466b31a4382@linux.alibaba.com/T/
+> v2: https://lore.kernel.org/all/2946d871-b9e1-cf29-6d39-bcab30f2854f@linux.alibaba.com/t/
+> v3: https://lore.kernel.org/lkml/20220209060108.43051-1-jefflexu@linux.alibaba.com/T/
+>
+> [Background]
+> ============
+> Nydus [1] is a container image distribution service specially optimised
+> for distribution over network. Nydus is an excellent container image
+> acceleration solution, since it only pulls data from remote when it's
+> really needed, a.k.a. on-demand reading.
+>
+> erofs (Enhanced Read-Only File System) is a filesystem specially
+> optimised for read-only scenarios. (Documentation/filesystem/erofs.rst)
+>
+> Recently we are focusing on erofs in container images distribution
+> scenario [2], trying to combine it with nydus. In this case, erofs can
+> be mounted from one bootstrap file (metadata) with (optional) multiple
+> data blob files (data) stored on another local filesystem. (All these
+> files are actually image files in erofs disk format.)
+>
+> To accelerate the container startup (fetching container image from remote
+> and then start the container), we do hope that the bootstrap blob file
+> could support demand read. That is, erofs can be mounted and accessed
+> even when the bootstrap/data blob files have not been fully downloaded.
+>
+> That means we have to manage the cache state of the bootstrap/data blob
+> files (if cache hit, read directly from the local cache; if cache miss,
+> fetch the data somehow). It would be painful and may be dumb for erofs to
+> implement the cache management itself. Thus we prefer fscache/cachefiles
+> to do the cache management. Besides, the demand-read feature shall be
+> general and it can benefit other using scenarios if it can be implemented
+> in fscache level.
+>
+> [1] https://nydus.dev
+> [2] https://sched.co/pcdL
+>
+>
+> [Overall Design]
+> ================
+>
+> Please refer to patch 6 ("cachefiles: document on-demand read mode") for
+> more details.
+>
+> When working in original mode, cachefiles mainly serves as a local cache for
+> remote networking fs, while in on-demand read mode, cachefiles can boost the
+> scenario where on-demand read semantics is needed, e.g. container image
+> distribution.
+>
+> The essential difference between these two modes is that, in original mode,
+> when cache miss, netfs itself will fetch data from remote, and then write the
+> fetched data into cache file. While in on-demand read mode, a user daemon is
+> responsible for fetching data and then writing to the cache file.
+>
+> The on-demand read mode relies on a simple protocol used for communication
+> between kernel and user daemon.
+>
+> The current implementation relies on the anonymous fd mechanism to avoid
+> the dependence on the format of cache file. When cache file is opened
+> for the first time, an anon_fd associated with the cache file is sent to
+> user daemon. With the given anon_fd, user daemon could fetch and write data
+> into the cache file in the background, even when kernel has not triggered
+> the cache miss. Besides, the write() syscall to the anon_fd will finally
+> call cachefiles kernel module, which will write data to cache file in
+> the latest format of cache file.
+>
+> 1. cache miss
+> When cache miss, cachefiles kernel module will notify user daemon the
+> anon_fd, along with the requested file range. When notified, user dameon
+> needs to fetch data of the requested file range, and then write the fetched
+> data into cache file with the given anonymous fd. When finished
+> processing the request, user daemon needs to notify the kernel.
+>
+> After notifying the user daemon, the kernel read routine will hang there,
+> until the request is handled by user daemon. When it's awaken by the
+> notification from user daemon, i.e. the corresponding hole has been filled
+> by the user daemon, it will retry to read from the same file range.
+>
+> 2. cache hit
+> Once data is already ready in cache file, netfs will read from cache
+> file directly.
+>
+>
+> [Advantage of fscache-based demand-read]
+> ========================================
+> 1. Asynchronous Prefetch
+> In current mechanism, fscache is responsible for cache state management,
+> while the data plane (fetch data from local/remote on cache miss) is
+> done on the user daemon side.
+>
+> If data has already been ready in the backing file, the upper fs (e.g.
+> erofs) will read from the backing file directly and won't be trapped to
+> user space anymore. Thus the user daemon could fetch data (from remote)
+> asynchronously on the background, and thus accelerate the backing file
+> accessing in some degree.
+>
+> 2. Support massive blob files
+> Besides this mechanism supports a large amount of backing files, and
+> thus can benefit the densely employed scenario.
+>
+> In our using scenario, one container image can correspond to one
+> bootstrap file (required) and multiple data blob files (optional). For
+> example, one container image for node.js will corresponds to ~20 files
+> in total. In densely employed environment, there could be as many as
+> hundreds of containers and thus thousands of backing files on one
+> machine.
+>
+>
+> [Test]
+> ==========
+> You could start a quick test by
+> https://github.com/lostjeffle/demand-read-cachefilesd
+>
+>
+>
+> Jeffle Xu (21):
+>   fscache: export fscache_end_operation()
+>   cachefiles: export write routine
+>   cachefiles: introduce on-demand read mode
+>   cachefiles: notify user daemon with anon_fd when opening cache file
+>   cachefiles: implement on-demand read
+>   cachefiles: document on-demand read mode
+>   erofs: use meta buffers for erofs_read_superblock()
+>   erofs: export erofs_map_blocks()
+>   erofs: add mode checking helper
+>   erofs: register global fscache volume
+>   erofs: add cookie context helper functions
+>   erofs: add anonymous inode managing page cache of blob file
+>   erofs: add erofs_fscache_read_pages() helper
+>   erofs: register cookie context for bootstrap blob
+>   erofs: implement fscache-based metadata read
+>   erofs: implement fscache-based data read for non-inline layout
+>   erofs: implement fscache-based data read for inline layout
+>   erofs: register cookie context for data blobs
+>   erofs: implement fscache-based data read for data blobs
+>   erofs: implement fscache-based data readahead
+>   erofs: add 'uuid' mount option
+>
+>  .../filesystems/caching/cachefiles.rst        | 159 +++++
+>  fs/cachefiles/Kconfig                         |  11 +
+>  fs/cachefiles/daemon.c                        | 576 +++++++++++++++++-
+>  fs/cachefiles/internal.h                      |  48 ++
+>  fs/cachefiles/io.c                            |  72 ++-
+>  fs/cachefiles/namei.c                         |  16 +-
+>  fs/erofs/Makefile                             |   3 +-
+>  fs/erofs/data.c                               |  18 +-
+>  fs/erofs/fscache.c                            | 496 +++++++++++++++
+>  fs/erofs/inode.c                              |   6 +-
+>  fs/erofs/internal.h                           |  30 +
+>  fs/erofs/super.c                              | 106 +++-
+>  fs/fscache/internal.h                         |  11 -
+>  fs/nfs/fscache.c                              |   8 -
+>  include/linux/fscache.h                       |  15 +
+>  include/linux/netfs.h                         |   1 +
+>  include/trace/events/cachefiles.h             |   2 +
+>  include/uapi/linux/cachefiles.h               |  48 ++
+>  18 files changed, 1526 insertions(+), 100 deletions(-)
+>  create mode 100644 fs/erofs/fscache.c
+>  create mode 100644 include/uapi/linux/cachefiles.h
+>
+> --
+> 2.27.0

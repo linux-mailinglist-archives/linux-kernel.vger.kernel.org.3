@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6C14D850E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067904D851D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241974AbiCNMdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S238575AbiCNMfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241252AbiCNMV4 (ORCPT
+        with ESMTP id S245425AbiCNMc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 922FF1CFF0;
-        Mon, 14 Mar 2022 05:20:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3D9713D5;
-        Mon, 14 Mar 2022 05:20:42 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8207E3F99C;
-        Mon, 14 Mar 2022 05:20:41 -0700 (PDT)
-Message-ID: <faea4c0c-e20b-c043-6f74-95af8177e8bd@arm.com>
-Date:   Mon, 14 Mar 2022 12:20:36 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 3/3] ARM: dts: lpc32xx: Update spi clock properties
-Content-Language: en-GB
-To:     Vladimir Zapolskiy <vz@mleia.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220311093800.18778-1-singh.kuldeep87k@gmail.com>
- <20220311093800.18778-4-singh.kuldeep87k@gmail.com>
- <4aae560d-d266-d0d0-136f-32891b15bc01@mleia.com>
- <CAK8P3a3a_WXbDKN-jJUt_Wuvop0rfaUs4ytwyhogOxdtJAPx0w@mail.gmail.com>
- <4f39f086-1932-1729-8761-d5c533356812@mleia.com>
- <dc599cae-7245-73dc-8050-14ec6c1336b8@arm.com>
- <f497fb65-3568-cda2-f086-2275b50daf4b@mleia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <f497fb65-3568-cda2-f086-2275b50daf4b@mleia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 14 Mar 2022 08:32:59 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355D22BDB
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:29:47 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s42so14240651pfg.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 05:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=+61bL8B55NzgOqf7v3x/0YUtZZbl/U3fuc66QbGFfZE=;
+        b=kvbcNPZ8AU8hjjuMqdRRJzfMRv9vW8WHAUkY0BVtWGuE3kTb2M4e2gubEeWWT3UWNM
+         ub1mHQaSYRCvHmV3w6vPMALxasxRXBwnlkMu0mtMA/6ATHNOhXl3fUf/zEHhELFD4gS3
+         NPxGMJs4sTMyyzyc7F7hI8WXN65iCmKowwK80REtHveYu/PMyu0qbIyC6pk5GXx4OC05
+         Pdo04W7EK1ip99+LHKQTb0BVPCB8WRnNgC85WGyhoFcT8wREdfnjmSBNMiGLdB2fCNtw
+         swRVXL/zeFAoU1HWhyIkVructY4qmGlbFQPr2lA4uR/hy9u9dYY+Ryl8iuqsuuRtAZFb
+         KJfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+61bL8B55NzgOqf7v3x/0YUtZZbl/U3fuc66QbGFfZE=;
+        b=Y+2qKnMHCAttpBj1iI34AkWQF3f6z6y2auzfpD6ujeN8xVq5LFw8Mm8iu/MSQOWx6j
+         BMVnLKCSpXyNzM9HL/d09RGWGkiUiKsxADo7//nxZGeTx3f97U/1yXX/4B104K4dt3av
+         FEOqPrsifylW/BjwqjmDYu0x24H5NRgR2CI/8KhzkKhG0XqPVXdF8aZ6KEQUhkGCW3N5
+         j26WX0SDPk2axFmh+vczm76NGL2XTLkOBW7WNW/08swRECT4Hcxfmjg2cTqFMe7krpiN
+         gfAoNhzDWyt2N1wB2Azm22AHtKNnD8/Ib5upO4FWGiIMigJUyKdMlAtzI9z//fUhxBqO
+         smmw==
+X-Gm-Message-State: AOAM53036IIayflzuyZizNkUTngfVUrIo5sPgxWrJZDgnS1NOjplRRlL
+        k9Si/Djpn4LWz8PTiyhCFcb2eeIubEWQDw==
+X-Google-Smtp-Source: ABdhPJzvp/C8q1A8LG8IwnlOs9l/uNHFJyL0CoGXtylHk+itAljLyE1slZmcSiRQaO8klIv83082Ng==
+X-Received: by 2002:a65:41cc:0:b0:380:6f53:a550 with SMTP id b12-20020a6541cc000000b003806f53a550mr19757301pgq.471.1647260986752;
+        Mon, 14 Mar 2022 05:29:46 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.19])
+        by smtp.googlemail.com with ESMTPSA id 8-20020a056a00070800b004e14ae3e8d7sm20552263pfl.164.2022.03.14.05.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 05:29:46 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [RESEND PATCH v2] vt_ioctl: fix potential spectre v1 in VT_DISALLOCATE
+Date:   Mon, 14 Mar 2022 20:29:21 +0800
+Message-Id: <20220314122921.31223-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,123 +64,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-14 11:50, Vladimir Zapolskiy wrote:
-> On 3/14/22 1:43 PM, Robin Murphy wrote:
->> On 2022-03-11 14:07, Vladimir Zapolskiy wrote:
->>> On 3/11/22 3:38 PM, Arnd Bergmann wrote:
->>>> On Fri, Mar 11, 2022 at 2:20 PM Vladimir Zapolskiy <vz@mleia.com> 
->>>> wrote:
->>>>>
->>>>> On 3/11/22 11:38 AM, Kuldeep Singh wrote:
->>>>>> PL022 binding require two clocks to be defined but lpc platform 
->>>>>> doesn't
->>>>>> comply with bindings and define only one clock i.e apb_pclk.
->>>>>>
->>>>>> Update spi clocks and clocks-names property by adding appropriate 
->>>>>> clock
->>>>>> reference to make it compliant with bindings.
->>>>>>
->>>>>> CC: Vladimir Zapolskiy <vz@mleia.com>
->>>>>> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
->>>>>> ---
->>>>>> v2:
->>>>>> - New patch with similar changeset
->>>>>> - Send to soc ML
->>>>>>
->>>>>>     arch/arm/boot/dts/lpc32xx.dtsi | 8 ++++----
->>>>>>     1 file changed, 4 insertions(+), 4 deletions(-)
->>>>>>
->>>>>> diff --git a/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>> b/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>> index c87066d6c995..30958e02d5e2 100644
->>>>>> --- a/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>> +++ b/arch/arm/boot/dts/lpc32xx.dtsi
->>>>>> @@ -178,8 +178,8 @@ ssp0: spi@20084000 {
->>>>>>                                 compatible = "arm,pl022",
->>>>>> "arm,primecell";
->>>>>>                                 reg = <0x20084000 0x1000>;
->>>>>>                                 interrupts = <20 
->>>>>> IRQ_TYPE_LEVEL_HIGH>;
->>>>>> -                             clocks = <&clk LPC32XX_CLK_SSP0>;
->>>>>> -                             clock-names = "apb_pclk";
->>>>>> +                             clocks = <&clk LPC32XX_CLK_SSP0>,
->>>>>> <&clk LPC32XX_CLK_SSP0>;
->>>>>> +                             clock-names = "sspclk", "apb_pclk";
->>>>>
->>>>> In fact I'm uncertain if it is the right change, could it happen that
->>>>> the commit
->>>>> cc0f6e96c4fd ("spi: dt-bindings: Convert Arm pl022 to json-schema")
->>>>> sets a wrong
->>>>> schema pattern?
->>>>
->>>> Good pointm this doesn't quite seem right: it is unlikely that the
->>>> same clock
->>>> is used for both the SPI bus and the APB bus.
->>>>
->>>>> Apparently just one clock is wanted on all observed platforms and
->>>>> cases, this
->>>>> is implicitly confirmed by clock handling in the
->>>>> drivers/spi/spi-pl022.c :
->>>>>
->>>>>           pl022->clk = devm_clk_get(&adev->dev, NULL);
->>>>>
->>>>> So, I would vote to fix the device tree bindings schema.
->>>>
->>>> Isn't this just using the wrong name? The name of the macro
->>>> LPC32XX_CLK_SSP0 might indicate that this is indeed the SPI clock
->>>> rather than the APB clock, so we only need to change clock-names
->>>> property here and leave it unchanged otherwise.
->>>
->>> Yes, the name is wrong, here I'm ready to take the blame:
->>>
->>> Fixes: 93898eb775e5 ("arm: dts: lpc32xx: add clock properties to device
->>> nodes")
->>>
->>> Noteworthy the commit above presets the same clock name to other 
->>> PrimeCell
->>> controllers, namely pl110 (LCD), pl080 (DMA), pl175 (EMC) and pl18x 
->>> (SD),
->>> plus this one pl022 (SSP), and all but SSP and SD are AHB slaves in 
->>> fact.
->>>
->>> On LPC32xx the bus clock source and function clock source for SSP is 
->>> HCLK.
->>>
->>> My guess is that the misnamed "apb_pclk" migrated into the schema from
->>> the lpc32xx.dtsi, so I'd suggest, unless some platform really needs it,
->>> firstly fix the schema by removing "apb_pclk" clock. It will leave 
->>> just one
->>> clock, so "clock-names" property can be set as optional, and the drop
->>> the property from the lpc32xx.dtsi.
->>
->> No, "apb_pclk" is part of the common AMBA binding, and is required by
->> the "arm,primecell" compatible. You won't (usually) find it referenced
->> in drivers because it's dealt with by amba_get_enable_pclk() via
->> amba_probe().
->>
-> 
-> Thank you, it explains, why "apb_pclk" is required for all PrimeCell
-> controllers on the SoC. Nevertheless, in commit 93898eb775e5 it was
-> misidentified with the sspclk clock, the latter one is the only clock
-> explicitly utilized by the driver in 2015 and till today. Fixes in dts
-> files should be preceded by a fix in the driver.
+In VT_ACTIVATE an almost identical code path has been patched
+with array_index_nospec. In the VT_DISALLOCATE path, the arg is
+the user input from a system call argument and lately used as a index
+for vc_cons[index].d access, which can be reached through path like
+vt_disallocate->vc_busy or vt_disallocate->vc_deallocate.
+For consistency both code paths should have the same mitigations
+applied. Also, the code style is adjusted as suggested by Jiri.
 
-There's nothing to fix in the driver, though. In fact it can only be 
-working today because the Linux driver isn't very strict and simply 
-assumes that the first clock entry is SSPCLK *without* considering its 
-name (other consumers of the binding might be stricter; I don't know), 
-and because presumably the HCLK happens to be enabled already anyway. 
-Changing the driver behaviour would only stand to cause functional 
-regressions.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-There are effectively two bugs in the DTS here, firstly that it only has 
-one clock entry when it should have two, and secondly that the clock 
-entry which *is* present has the wrong name (or the wrong clock 
-specifier, depending on how you look at it). Kuldeep's patch merely 
-fixes the first one by fully describing the way it's currently working 
-in practice, so it's really just a choice of whether to treat "respect 
-the binding" and "describe the hardware correctly" as separate issues 
-and have a follow-up patch to correctly reference HCLK as the second 
-clock, or whether they're trivial enough to squash together.
+---
 
-Robin.
+v1 -> v2:
+- Add Reviewed-by
+https://lore.kernel.org/lkml/20220222081101.21233-1-xiam0nd.tong@gmail.com/
+
+RFC -> v1:
+- Adjust code style [Jiri Slaby]
+https://lore.kernel.org/lkml/20220222073954.20212-1-xiam0nd.tong@gmail.com/
+
+RFC:
+https://lore.kernel.org/lkml/20220222035648.17984-1-xiam0nd.tong@gmail.com/
+
+---
+ drivers/tty/vt/vt_ioctl.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/tty/vt/vt_ioctl.c b/drivers/tty/vt/vt_ioctl.c
+index 580136986..8c685b501 100644
+--- a/drivers/tty/vt/vt_ioctl.c
++++ b/drivers/tty/vt/vt_ioctl.c
+@@ -898,11 +898,13 @@ int vt_ioctl(struct tty_struct *tty,
+ 		if (arg > MAX_NR_CONSOLES)
+ 			return -ENXIO;
+ 
+-		if (arg == 0)
++		if (arg == 0) {
+ 			vt_disallocate_all();
+-		else
+-			return vt_disallocate(--arg);
+-		break;
++			break;
++		}
++
++		arg = array_index_nospec(arg - 1, MAX_NR_CONSOLES);
++		return vt_disallocate(arg);
+ 
+ 	case VT_RESIZE:
+ 	{
+-- 
+2.17.1
+

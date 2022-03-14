@@ -2,78 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6E44D84C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3274D8321
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242312AbiCNM3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S236157AbiCNMN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243862AbiCNMVU (ORCPT
+        with ESMTP id S242074AbiCNMJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:21:20 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9936C62;
-        Mon, 14 Mar 2022 05:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+QWaBDYxADvSsUY8qg5wOXMDHzBy5XuwKndW6k+z53c=;
-  b=iDNSBE41Nm8OgSBkPg8VbFTfqyui2cAsU7o3PiVl53qcCApFjm+i7YSj
-   upsrgeoeFoBN1ZYs54zq0bBgKLl6U2FOfYXTJkFFxMXfEI0xd1OD8f5QN
-   UsLDj5JRueFP/s6Wq0yCUcYpitC754Kyju23WQGbo2lgD/DiJmcrqq/wI
-   M=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997355"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 21/30] spi: sun4i: fix typos in comments
-Date:   Mon, 14 Mar 2022 12:53:45 +0100
-Message-Id: <20220314115354.144023-22-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+        Mon, 14 Mar 2022 08:09:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE38021E3E;
+        Mon, 14 Mar 2022 05:06:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2760761343;
+        Mon, 14 Mar 2022 12:06:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A92C340E9;
+        Mon, 14 Mar 2022 12:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647259593;
+        bh=gtBi2gKBebceaqDKfDa+ChA2WKq5ul1SA5b0xroSsPQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rLoVImgukwX1XbMJGpJidVgd/TW+woTPbe7JWf0hXq0ouqcsmaa6hR42az2dOLcaC
+         UIrdFuDOdbIVwN/s+0Yic5mGFP5gtUOEc92tFr7Nig78dOM4EwOCJoXVjpYbR2g12z
+         mO+Y98E56/xPaCQpgwHYiOJD+l/oxpvAxqnQkU/s=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 044/110] selftests: pmtu.sh: Kill tcpdump processes launched by subshell.
+Date:   Mon, 14 Mar 2022 12:53:46 +0100
+Message-Id: <20220314112744.267832445@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Guillaume Nault <gnault@redhat.com>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+[ Upstream commit 18dfc667550fe9c032a6dcc3402b50e691e18029 ]
 
+The cleanup() function takes care of killing processes launched by the
+test functions. It relies on variables like ${tcpdump_pids} to get the
+relevant PIDs. But tests are run in their own subshell, so updated
+*_pids values are invisible to other shells. Therefore cleanup() never
+sees any process to kill:
+
+$ ./tools/testing/selftests/net/pmtu.sh -t pmtu_ipv4_exception
+TEST: ipv4: PMTU exceptions                                         [ OK ]
+TEST: ipv4: PMTU exceptions - nexthop objects                       [ OK ]
+
+$ pgrep -af tcpdump
+6084 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
+6085 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
+6086 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
+6087 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
+6088 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
+6089 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
+6090 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
+6091 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
+6228 tcpdump -s 0 -i veth_A-R1 -w pmtu_ipv4_exception_veth_A-R1.pcap
+6229 tcpdump -s 0 -i veth_R1-A -w pmtu_ipv4_exception_veth_R1-A.pcap
+6230 tcpdump -s 0 -i veth_R1-B -w pmtu_ipv4_exception_veth_R1-B.pcap
+6231 tcpdump -s 0 -i veth_B-R1 -w pmtu_ipv4_exception_veth_B-R1.pcap
+6232 tcpdump -s 0 -i veth_A-R2 -w pmtu_ipv4_exception_veth_A-R2.pcap
+6233 tcpdump -s 0 -i veth_R2-A -w pmtu_ipv4_exception_veth_R2-A.pcap
+6234 tcpdump -s 0 -i veth_R2-B -w pmtu_ipv4_exception_veth_R2-B.pcap
+6235 tcpdump -s 0 -i veth_B-R2 -w pmtu_ipv4_exception_veth_B-R2.pcap
+
+Fix this by running cleanup() in the context of the test subshell.
+Now that each test cleans the environment after completion, there's no
+need for calling cleanup() again when the next test starts. So let's
+drop it from the setup() function. This is okay because cleanup() is
+also called when pmtu.sh starts, so even the first test starts in a
+clean environment.
+
+Also, use tcpdump's immediate mode. Otherwise it might not have time to
+process buffered packets, resulting in missing packets or even empty
+pcap files for short tests.
+
+Note: PAUSE_ON_FAIL is still evaluated before cleanup(), so one can
+still inspect the test environment upon failure when using -p.
+
+Fixes: a92a0a7b8e7c ("selftests: pmtu: Simplify cleanup and namespace names")
+Signed-off-by: Guillaume Nault <gnault@redhat.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-sun4i.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/pmtu.sh | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
-index 1fdfc6e6691d..6000d0761206 100644
---- a/drivers/spi/spi-sun4i.c
-+++ b/drivers/spi/spi-sun4i.c
-@@ -280,7 +280,7 @@ static int sun4i_spi_transfer_one(struct spi_master *master,
- 	 * SPI_CLK = MOD_CLK / (2 ^ (cdr + 1))
- 	 * Or we can use CDR2, which is calculated with the formula:
- 	 * SPI_CLK = MOD_CLK / (2 * (cdr + 1))
--	 * Wether we use the former or the latter is set through the
-+	 * Whether we use the former or the latter is set through the
- 	 * DRS bit.
- 	 *
- 	 * First try CDR2, and if we can't reach the expected
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 543ad7513a8e..2e8972573d91 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -865,7 +865,6 @@ setup_ovs_bridge() {
+ setup() {
+ 	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
+ 
+-	cleanup
+ 	for arg do
+ 		eval setup_${arg} || { echo "  ${arg} not supported"; return 1; }
+ 	done
+@@ -876,7 +875,7 @@ trace() {
+ 
+ 	for arg do
+ 		[ "${ns_cmd}" = "" ] && ns_cmd="${arg}" && continue
+-		${ns_cmd} tcpdump -s 0 -i "${arg}" -w "${name}_${arg}.pcap" 2> /dev/null &
++		${ns_cmd} tcpdump --immediate-mode -s 0 -i "${arg}" -w "${name}_${arg}.pcap" 2> /dev/null &
+ 		tcpdump_pids="${tcpdump_pids} $!"
+ 		ns_cmd=
+ 	done
+@@ -1836,6 +1835,10 @@ run_test() {
+ 
+ 	unset IFS
+ 
++	# Since cleanup() relies on variables modified by this subshell, it
++	# has to run in this context.
++	trap cleanup EXIT
++
+ 	if [ "$VERBOSE" = "1" ]; then
+ 		printf "\n##########################################################################\n\n"
+ 	fi
+-- 
+2.34.1
+
+
 

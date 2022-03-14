@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6A54D8208
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75F54D8291
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240054AbiCNL7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 07:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
+        id S240559AbiCNMFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240184AbiCNL6W (ORCPT
+        with ESMTP id S240512AbiCNMFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 07:58:22 -0400
+        Mon, 14 Mar 2022 08:05:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33AC9FCB;
-        Mon, 14 Mar 2022 04:57:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163EC48E63;
+        Mon, 14 Mar 2022 05:01:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A147EB80DE2;
-        Mon, 14 Mar 2022 11:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCF7C340E9;
-        Mon, 14 Mar 2022 11:57:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE163B80D24;
+        Mon, 14 Mar 2022 12:01:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37588C340E9;
+        Mon, 14 Mar 2022 12:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259030;
-        bh=53SuvHqLsdQdV5lGsvyqBuQ/n38DdwjVCycIDj9374k=;
+        s=korg; t=1647259308;
+        bh=boM+X7Jtz7xEMxABclzXsyS0I01CPMFAo2H06POull4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z4E0A99EwixVGe7p+WkN6t7Oti65q3BtCT0KTFUi9whMW5gMRgZQe2THs6N/f5lvW
-         yAeUA9RwrzOi/50BiWc+BfVD9tjA9W8TpOMp3Fvg0GLPd6rSpRT8O4LKr9bZE+SZ3J
-         b6sDS8s9g1f3YEBzD6HmO4RpZXTIANhvUNX60Bns=
+        b=KaiH0DvOCCuqzvwMkIqIZDF2szQD6YGpn+ZfYTNUUhXSl2krau84AZ2X1OBmyNbWS
+         fTUqyvFXZOhbgzcZU27qEYBrqUfabStmWnYstpRHZkCyeXWEWqNMIOyW8gskW/pCtA
+         2zcbRwRzDEKSnRE+CY6E4sQ61DL1oU06CuMmZ0Wo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 5.4 30/43] fuse: fix pipe buffer lifetime for direct_io
-Date:   Mon, 14 Mar 2022 12:53:41 +0100
-Message-Id: <20220314112735.266119159@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 49/71] ARM: Spectre-BHB: provide empty stub for non-config
+Date:   Mon, 14 Mar 2022 12:53:42 +0100
+Message-Id: <20220314112739.303528393@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
-References: <20220314112734.415677317@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,79 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 0c4bcfdecb1ac0967619ee7ff44871d93c08c909 upstream.
+commit 68453767131a5deec1e8f9ac92a9042f929e585d upstream.
 
-In FOPEN_DIRECT_IO mode, fuse_file_write_iter() calls
-fuse_direct_write_iter(), which normally calls fuse_direct_io(), which then
-imports the write buffer with fuse_get_user_pages(), which uses
-iov_iter_get_pages() to grab references to userspace pages instead of
-actually copying memory.
+When CONFIG_GENERIC_CPU_VULNERABILITIES is not set, references
+to spectre_v2_update_state() cause a build error, so provide an
+empty stub for that function when the Kconfig option is not set.
 
-On the filesystem device side, these pages can then either be read to
-userspace (via fuse_dev_read()), or splice()d over into a pipe using
-fuse_dev_splice_read() as pipe buffers with &nosteal_pipe_buf_ops.
+Fixes this build error:
 
-This is wrong because after fuse_dev_do_read() unlocks the FUSE request,
-the userspace filesystem can mark the request as completed, causing write()
-to return. At that point, the userspace filesystem should no longer have
-access to the pipe buffer.
+  arm-linux-gnueabi-ld: arch/arm/mm/proc-v7-bugs.o: in function `cpu_v7_bugs_init':
+  proc-v7-bugs.c:(.text+0x52): undefined reference to `spectre_v2_update_state'
+  arm-linux-gnueabi-ld: proc-v7-bugs.c:(.text+0x82): undefined reference to `spectre_v2_update_state'
 
-Fix by copying pages coming from the user address space to new pipe
-buffers.
-
-Reported-by: Jann Horn <jannh@google.com>
-Fixes: c3021629a0d8 ("fuse: support splice() reading from fuse device")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Russell King <rmk+kernel@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fuse/dev.c    |   12 +++++++++++-
- fs/fuse/file.c   |    1 +
- fs/fuse/fuse_i.h |    1 +
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ arch/arm/include/asm/spectre.h |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -933,7 +933,17 @@ static int fuse_copy_page(struct fuse_co
+--- a/arch/arm/include/asm/spectre.h
++++ b/arch/arm/include/asm/spectre.h
+@@ -25,7 +25,13 @@ enum {
+ 	SPECTRE_V2_METHOD_LOOP8 = BIT(__SPECTRE_V2_METHOD_LOOP8),
+ };
  
- 	while (count) {
- 		if (cs->write && cs->pipebufs && page) {
--			return fuse_ref_page(cs, page, offset, count);
-+			/*
-+			 * Can't control lifetime of pipe buffers, so always
-+			 * copy user pages.
-+			 */
-+			if (cs->req->args->user_pages) {
-+				err = fuse_copy_fill(cs);
-+				if (err)
-+					return err;
-+			} else {
-+				return fuse_ref_page(cs, page, offset, count);
-+			}
- 		} else if (!cs->len) {
- 			if (cs->move_pages && page &&
- 			    offset == 0 && count == PAGE_SIZE) {
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -1433,6 +1433,7 @@ static int fuse_get_user_pages(struct fu
- 			(PAGE_SIZE - ret) & (PAGE_SIZE - 1);
- 	}
++#ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
+ void spectre_v2_update_state(unsigned int state, unsigned int methods);
++#else
++static inline void spectre_v2_update_state(unsigned int state,
++					   unsigned int methods)
++{}
++#endif
  
-+	ap->args.user_pages = true;
- 	if (write)
- 		ap->args.in_pages = 1;
- 	else
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -248,6 +248,7 @@ struct fuse_args {
- 	bool nocreds:1;
- 	bool in_pages:1;
- 	bool out_pages:1;
-+	bool user_pages:1;
- 	bool out_argvar:1;
- 	bool page_zeroing:1;
- 	bool page_replace:1;
+ int spectre_bhb_update_vectors(unsigned int method);
+ 
 
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41134D8329
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBE34D82A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241059AbiCNMOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S240445AbiCNMGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242689AbiCNMKj (ORCPT
+        with ESMTP id S240555AbiCNMFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:10:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6EE31531;
-        Mon, 14 Mar 2022 05:09:27 -0700 (PDT)
+        Mon, 14 Mar 2022 08:05:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF73846173;
+        Mon, 14 Mar 2022 05:02:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FE416130D;
-        Mon, 14 Mar 2022 12:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DDFC340E9;
-        Mon, 14 Mar 2022 12:09:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15FDCB80D24;
+        Mon, 14 Mar 2022 12:02:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5446AC340ED;
+        Mon, 14 Mar 2022 12:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259761;
-        bh=U5Rul2AMCPlEOya2A6Nt5TwYosi8R9/tJibX+jcrzzg=;
+        s=korg; t=1647259347;
+        bh=qlgUNIR5LdJ8E/CVar6iRKrlBhipwT0fC3JfdrsqBjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DL0kF02EGZndGKMDMeHrdTLOXjI+zq0p+gXXJZOUZ00lgC1tfrd9cK3E+ZvQ5CeSz
-         Z3x6ym6rWurZfSELJ4Qq1NDyY7sVRNY3kgKFxcD/0Re7csoHOC1PVzgZxEAwZEwefN
-         3JOOuCltbUDfC+jG0DN9kCO0s2jPSoDQGsXIgr/A=
+        b=c4t0/nGf0awnKW5A8PWRTwNZput64heNzgMNzFXuXX6eCrDhBuwJZcWzcwsUTz998
+         lqwyNwjhWivKZvqF9HP5NiZZnuKrJDBq6xsw/tG0R65E+3tkcIODQOmAQpou8k5Hfs
+         ZvANbyWmoKtPG7f3Uo6gDahe5fkONEZ1s3WnVRyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Leszek Kaliszczuk <leszek.kaliszczuk@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Vikash Chandola <vikash.chandola@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 032/110] ice: Dont use GFP_KERNEL in atomic context
+Subject: [PATCH 5.10 41/71] hwmon: (pmbus) Clear pmbus fault/warning bits after read
 Date:   Mon, 14 Mar 2022 12:53:34 +0100
-Message-Id: <20220314112743.934364058@linuxfoundation.org>
+Message-Id: <20220314112739.082070941@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-References: <20220314112743.029192918@linuxfoundation.org>
+In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
+References: <20220314112737.929694832@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Vikash Chandola <vikash.chandola@linux.intel.com>
 
-[ Upstream commit 3d97f1afd8d831e0c0dc1157418f94b8faa97b54 ]
+[ Upstream commit 35f165f08950a876f1b95a61d79c93678fba2fd6 ]
 
-ice_misc_intr() is an irq handler. It should not sleep.
+Almost all fault/warning bits in pmbus status registers remain set even
+after fault/warning condition are removed. As per pmbus specification
+these faults must be cleared by user.
+Modify hwmon behavior to clear fault/warning bit after fetching data if
+fault/warning bit was set. This allows to get fresh data in next read.
 
-Use GFP_ATOMIC instead of GFP_KERNEL when allocating some memory.
-
-Fixes: 348048e724a0 ("ice: Implement iidc operations")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Tested-by: Leszek Kaliszczuk <leszek.kaliszczuk@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Vikash Chandola <vikash.chandola@linux.intel.com>
+Link: https://lore.kernel.org/r/20220222131253.2426834-1-vikash.chandola@linux.intel.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index d6ee62ae4480..137a054dd1e3 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2874,7 +2874,7 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
- 		struct iidc_event *event;
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index b0e2820a2d57..71798fde2ef0 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -898,6 +898,11 @@ static int pmbus_get_boolean(struct i2c_client *client, struct pmbus_boolean *b,
+ 		pmbus_update_sensor_data(client, s2);
  
- 		ena_mask &= ~ICE_AUX_CRIT_ERR;
--		event = kzalloc(sizeof(*event), GFP_KERNEL);
-+		event = kzalloc(sizeof(*event), GFP_ATOMIC);
- 		if (event) {
- 			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
- 			/* report the entire OICR value to AUX driver */
+ 	regval = status & mask;
++	if (regval) {
++		ret = pmbus_write_byte_data(client, page, reg, regval);
++		if (ret)
++			goto unlock;
++	}
+ 	if (s1 && s2) {
+ 		s64 v1, v2;
+ 
 -- 
 2.34.1
 

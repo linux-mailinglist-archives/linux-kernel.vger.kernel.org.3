@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED844D858C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC704D85EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 14:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239622AbiCNM6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
+        id S239905AbiCNNc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 09:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbiCNM6W (ORCPT
+        with ESMTP id S233166AbiCNNc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:58:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CD21261E;
-        Mon, 14 Mar 2022 05:57:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3DEED1F391;
-        Mon, 14 Mar 2022 12:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647262631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rDnjmno3RNaHoqZQk8WStttjohZNlh5HTFSnG4DmMuc=;
-        b=mY8tCJ8kdj2//VBcpDAmvBBhExrUmqIb9QskcfqVQbsBuGJos52kN/oZy8yP8s3R3YkMAT
-        55/zyV4NfDXeabMudRc7XBOL6SWU7OgUWrhN5/gRR9UioEoI1goBUSum1ejzdOss6B/OHt
-        9gluR5EzP1m6EZGprUljPNBmw0yLXtU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1825D13ADA;
-        Mon, 14 Mar 2022 12:57:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ua8+Bac7L2KtTgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 14 Mar 2022 12:57:11 +0000
-Date:   Mon, 14 Mar 2022 13:57:09 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Frank Hofmann <fhofmann@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Dao <dqminh@cloudflare.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] memcg: sync flush only if periodic flush is delayed
-Message-ID: <20220314125709.GA12347@blackbody.suse.cz>
-References: <20220304184040.1304781-1-shakeelb@google.com>
- <20220311160051.GA24796@blackbody.suse.cz>
- <20220312190715.cx4aznnzf6zdp7wv@google.com>
+        Mon, 14 Mar 2022 09:32:26 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAE913D73
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 06:31:16 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22EDDHa5016652;
+        Mon, 14 Mar 2022 13:30:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=NgDfcMbBGd3DW5fIpR/Qs+Z/HcDTzQJQcY7VH4+xRlQ=;
+ b=l7u+H6NDYrHrNDmmNzJ4WbiSV1eb92bPL7qD1dxIebKEG8qaHzkhxM6FnKR7UrxQPgWI
+ NMnV5L07zF9JuaA9WT1/3P41XAhSu3MBfFrwPPiqphUfcYiifgx8psDe5RwBbYx3isuP
+ EprYLgAhChrKr3xcx8j4syqs0i1J3ZiY1ZIT+Sc29DjAa+712E3ImXUi47gobsyc5aJg
+ 7pcnol+JDRdCf3XGgu2W9IkG87SA78gfm+sdf7+ScPhcLm5q32p5+pG91UaJwZpkdDYM
+ mIq4MvuBfUb2ALYFtWIn+5Wvn68/4BADN3S4hhTpFTcPBaYKGt7H0IbHLodprhqi1UlA aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3et6d98rvj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Mar 2022 13:30:54 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22EDDV8l018765;
+        Mon, 14 Mar 2022 13:30:54 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3et6d98ndc-106
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Mar 2022 13:30:54 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22EAxHSn010595;
+        Mon, 14 Mar 2022 11:09:04 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3erjshkysy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Mar 2022 11:09:04 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22EB91Tv28967192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Mar 2022 11:09:02 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0D64A42D9;
+        Mon, 14 Mar 2022 11:07:03 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E269A422D;
+        Mon, 14 Mar 2022 11:06:54 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Mon, 14 Mar 2022 11:06:54 +0000 (GMT)
+Date:   Mon, 14 Mar 2022 16:36:53 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        mgorman@techsingularity.net, mingo@kernel.org,
+        song.bao.hua@hisilicon.com, valentin.schneider@arm.com,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH v6] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
+Message-ID: <20220314110653.GM618915@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20220308063749.6929-1-kprateek.nayak@amd.com>
+ <20220308092944.GJ618915@linux.vnet.ibm.com>
+ <7e5bdc95-a30a-58bc-fc67-98b03fe1fa22@amd.com>
+ <20220309052554.GK618915@linux.vnet.ibm.com>
+ <bb443650-868a-49b7-e41e-c2a788781df5@amd.com>
+ <20220309094320.GL618915@linux.vnet.ibm.com>
+ <9effd823-5375-fce0-cb92-6630e82d8b04@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220312190715.cx4aznnzf6zdp7wv@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <9effd823-5375-fce0-cb92-6630e82d8b04@amd.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1TuZbGqvSJ_qoQVJnbLUZPvGHZME_YkZ
+X-Proofpoint-ORIG-GUID: Zmvb6ER6ezzHHQOszOXQqS7iTY-epXpB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-14_08,2022-03-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 clxscore=1015 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203140083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi 2.
+* K Prateek Nayak <kprateek.nayak@amd.com> [2022-03-09 17:00:33]:
 
-On Sat, Mar 12, 2022 at 07:07:15PM +0000, Shakeel Butt <shakeelb@google.com> wrote:
-> It is (b) that I am aiming for in this patch. At least (a) was not
-> happening in the cloudflare experiments. Are you suggesting having a
-> dedicated high priority wq would solve both (a) and (b)?
-> [...]
-> > We can't argue what's the effect of periodic only flushing so this
-> > newly introduced factor would inherit that too. I find it superfluous.
+> Hello Srikar,
 > 
+> On 3/9/2022 3:13 PM, Srikar Dronamraju wrote:
+> > [..snip..]
+> > I completely understand your problem. The only missing piece is why is this
+> > initial placement *not a problem for the unpinned case*. If we are able to
+> > articulate how the current code works well for the unpinned case, I would
+> > be fine.
+> From what I understand, the initial task placement happens as follows:
 > 
-> Sorry I didn't get your point. What is superfluous?
+> When a new task is created via fork or exec, for the initial wakeup
+> it takes the slow path in select_task_rq_fair() and goes to
+> find_idlest_cpu(). find_idlest_cpu() will explore the sched domain
+> hierarchy in a top-down fashion to find the idlest cpu for task to
+> run on.
+> 
+> During this, it'll call find_idlest_group() to get the idlest group
+> within a particular domain to search for the target cpu. In our case,
+> the local group will have spare capacity to accommodate tasks.
+> We only do a cpumask_test_cpu(this_cpu, sched_group_span(group))
+> to check is the task can run on a particular group.
+> 
 
-Let me retell my understanding.
-The current implementation flushes based on cumulated error and time.
-Your patch proposes conditioning the former with another time-based
-flushing, whose duration can be up to 2 times longer than the existing
-periodic flush.
+[snip]
 
-Assuming the periodic flush is working, the reader won't see data older
-than 2 seconds, so the additional sync-flush after (possible) 4 seconds
-seems superfluous.
+Ok, Prateek, I do understand the intent here.
+Thanks for spending the time to explain the same.
 
-(In the case of periodic flush being stuck, I thought the factor 2=4s/2s
-was superfluous, another magic parameter.)
+> Ah! I see. But I do believe this problem of initial
+> placement lies along the wakeup path.
+> --
+> Thanks and Regards,
+> Prateek
 
-I'm comparing here your proposal vs no synchronous flushing in
-workingset_refault().
-
-> Do you have any strong concerns with the currect patch?
-
-Does that clarify?
-
-(I agree with your initial thesis this can be iterated before it evolves
-to everyone's satisfaction.)
-
-
-Michal
-
+-- 
+Thanks and Regards
+Srikar Dronamraju

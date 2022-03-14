@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95034D8569
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE074D8200
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 12:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237582AbiCNMte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S240091AbiCNL7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 07:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239275AbiCNMr6 (ORCPT
+        with ESMTP id S240213AbiCNL6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:47:58 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955BD3A1A2;
-        Mon, 14 Mar 2022 05:41:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+hYUu2G/bq68s9f2SGkYZi4xlcaxcWwYD94UHu9GgRY=;
-  b=p9GC6OpXJFvaT9UgALjpX+KCc0W9t9BgRzlCd4QoDwR4er5TD0eMzJXf
-   DzriE/66opaOKETRTPjE9OG0m7KC1tMUXl7LiKztQkRo8CQrgGKYtj8jC
-   QkOqFsWa0Hcrkc3qfiXAVUjObxEM1YZHFPRQ9Qi9fLqe470ItuvysdJfW
-   k=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997352"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     kernel-janitors@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 19/30] rtlwifi: rtl8821ae: fix typos in comments
+        Mon, 14 Mar 2022 07:58:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211519FCB;
+        Mon, 14 Mar 2022 04:57:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BF65B80DE2;
+        Mon, 14 Mar 2022 11:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0066C340E9;
+        Mon, 14 Mar 2022 11:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647259039;
+        bh=B8JxXUMJP+tNVavWWNPa8zbI+2kLLFF+NYvVybtvMdw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1FKTlre9OQiZPTE77rWUgSHo45imUkMYjtskrU6uwSoYx8gnyXr01oNAUN7TZXdYc
+         WpgJP/1dWQ9+tlvshYBkiCMcstCBf85Chq2A8ZwqRYYT3+D2U9UZvc+ap1I2dRDd4B
+         hZDRGqeXYdl8T9F7k0ehL/nDhhmUxVgQHdmiCwFg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Scott McNutt <scott.mcnutt@siriusxm.com>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 32/43] net: macb: Fix lost RX packet wakeup race in NAPI receive
 Date:   Mon, 14 Mar 2022 12:53:43 +0100
-Message-Id: <20220314115354.144023-20-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Message-Id: <20220314112735.321761412@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220314112734.415677317@linuxfoundation.org>
+References: <20220314112734.415677317@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+From: Robert Hancock <robert.hancock@calian.com>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+commit 0bf476fc3624e3a72af4ba7340d430a91c18cd67 upstream.
 
+There is an oddity in the way the RSR register flags propagate to the
+ISR register (and the actual interrupt output) on this hardware: it
+appears that RSR register bits only result in ISR being asserted if the
+interrupt was actually enabled at the time, so enabling interrupts with
+RSR bits already set doesn't trigger an interrupt to be raised. There
+was already a partial fix for this race in the macb_poll function where
+it checked for RSR bits being set and re-triggered NAPI receive.
+However, there was a still a race window between checking RSR and
+actually enabling interrupts, where a lost wakeup could happen. It's
+necessary to check again after enabling interrupts to see if RSR was set
+just prior to the interrupt being enabled, and re-trigger receive in that
+case.
+
+This issue was noticed in a point-to-point UDP request-response protocol
+which periodically saw timeouts or abnormally high response times due to
+received packets not being processed in a timely fashion. In many
+applications, more packets arriving, including TCP retransmissions, would
+cause the original packet to be processed, thus masking the issue.
+
+Fixes: 02f7a34f34e3 ("net: macb: Re-enable RX interrupt only when RX is done")
+Cc: stable@vger.kernel.org
+Co-developed-by: Scott McNutt <scott.mcnutt@siriusxm.com>
+Signed-off-by: Scott McNutt <scott.mcnutt@siriusxm.com>
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/cadence/macb_main.c |   25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c
-index f6bff0ebd6b0..f3fe16798c59 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c
-@@ -872,7 +872,7 @@ static void rtl8821ae_dm_false_alarm_counter_statistics(struct ieee80211_hw *hw)
- 	else
- 		falsealm_cnt->cnt_all = falsealm_cnt->cnt_ofdm_fail;
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -1283,7 +1283,14 @@ static int macb_poll(struct napi_struct
+ 	if (work_done < budget) {
+ 		napi_complete_done(napi, work_done);
  
--	/*reset OFDM FA coutner*/
-+	/*reset OFDM FA counter*/
- 	rtl_set_bbreg(hw, ODM_REG_OFDM_FA_RST_11AC, BIT(17), 1);
- 	rtl_set_bbreg(hw, ODM_REG_OFDM_FA_RST_11AC, BIT(17), 0);
- 	/* reset CCK FA counter*/
-@@ -1464,7 +1464,7 @@ void rtl8812ae_dm_txpower_tracking_callback_thermalmeter(
- 	const u8 *delta_swing_table_idx_tup_b;
- 	const u8 *delta_swing_table_idx_tdown_b;
+-		/* Packets received while interrupts were disabled */
++		/* RSR bits only seem to propagate to raise interrupts when
++		 * interrupts are enabled at the time, so if bits are already
++		 * set due to packets received while interrupts were disabled,
++		 * they will not cause another interrupt to be generated when
++		 * interrupts are re-enabled.
++		 * Check for this case here. This has been seen to happen
++		 * around 30% of the time under heavy network load.
++		 */
+ 		status = macb_readl(bp, RSR);
+ 		if (status) {
+ 			if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
+@@ -1291,6 +1298,22 @@ static int macb_poll(struct napi_struct
+ 			napi_reschedule(napi);
+ 		} else {
+ 			queue_writel(queue, IER, bp->rx_intr_mask);
++
++			/* In rare cases, packets could have been received in
++			 * the window between the check above and re-enabling
++			 * interrupts. Therefore, a double-check is required
++			 * to avoid losing a wakeup. This can potentially race
++			 * with the interrupt handler doing the same actions
++			 * if an interrupt is raised just after enabling them,
++			 * but this should be harmless.
++			 */
++			status = macb_readl(bp, RSR);
++			if (unlikely(status)) {
++				queue_writel(queue, IDR, bp->rx_intr_mask);
++				if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
++					queue_writel(queue, ISR, MACB_BIT(RCOMP));
++				napi_schedule(napi);
++			}
+ 		}
+ 	}
  
--	/*2. Initilization ( 7 steps in total )*/
-+	/*2. Initialization ( 7 steps in total )*/
- 	rtl8812ae_get_delta_swing_table(hw,
- 		&delta_swing_table_idx_tup_a,
- 		&delta_swing_table_idx_tdown_a,
-@@ -2502,7 +2502,7 @@ static void rtl8821ae_dm_check_edca_turbo(struct ieee80211_hw *hw)
- 	rtlpriv->dm.dbginfo.num_non_be_pkt = 0;
- 
- 	/*===============================
--	 * list paramter for different platform
-+	 * list parameter for different platform
- 	 *===============================
- 	 */
- 	pb_is_cur_rdl_state = &rtlpriv->dm.is_cur_rdlstate;
+
 

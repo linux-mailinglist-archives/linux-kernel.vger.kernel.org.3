@@ -2,439 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03074D7F32
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A3B4D7F50
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 10:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238295AbiCNJze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 05:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S238278AbiCNKAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 06:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238288AbiCNJzL (ORCPT
+        with ESMTP id S238166AbiCNKAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 05:55:11 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2C938D8F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:53:18 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id s25so20997960lji.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 02:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=EhqGuJqqtp9wtuhSiVXt/o5grLaHVr4b0QqzceZCUO8=;
-        b=RJa3/5K5cCDl6EjFcQwfzqk/UcKzuV733YpHO1tIlGr8G8TfvlqiLBaFw5o8IGW6Gc
-         cqjOSwteauUJ5Hkth30AhD7p3H0YTs1M/kkCVVVoT2t1S0FUwVxa80JVNjNENM6dmrlq
-         QIe6ZiQ1MnjuDlJ9+sjvF3I/KIV0yarwG2f0OFT3St2q7QMAX+vJE2CZuh8remUW8zT9
-         sjZCJuwa65WRGm4AL6RvOiBKuKPDsgWE38hao2IROUxuHkD1v2PA7aHF/uQDwMrimK6i
-         kM+/knTp4IbzmlAwqwy53A9aW/b6Ph+Sd484UGqQJ/Abn08QumzCTKznDrNi2VzWv7x9
-         pc1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=EhqGuJqqtp9wtuhSiVXt/o5grLaHVr4b0QqzceZCUO8=;
-        b=kmdr4F8wkpgmfTzM96nQ/Hc/DfW8GxkJaUnkoYagZlsSwuHtgvfMv9zFRcKx/50Bra
-         +xYWWqS3HrtizTGDa597E9PPK3Xz38/IiIql/gCYqUjIt89tDJE/LybRK3k0zROxyOTp
-         12mF6z12duc1nHLvkMRA15AFQcdYYFhXd0dy8FL7txnZV4SYX4SCUxOo2bKuGtXieWK5
-         oPE/q65jC7h8p66NMbJTwADl4pcOcY9Ql3t82QpKh1kHwz1mfVB/pYqECbJL2nPALrPO
-         tOD/zc3hY32qqbjmoHUnaB8JfUH8lYJPkeKCx7tgs8eNe/Xyyce3gFPnygnbLoldY/TV
-         tMdQ==
-X-Gm-Message-State: AOAM5321ndH66shV5C6p1leRQy0HT4ATduEfh7kxJk8omB9b9tv7BJA4
-        +sEk08qXXIxFnpbrxycjj1kvZA==
-X-Google-Smtp-Source: ABdhPJx+Bm2nE+m0aEApfu+ftVJZhVBFOe9kvxEBDqF4k0QtCWa1a+gyVpQdN7tqFeWdRzVG9Wdosg==
-X-Received: by 2002:a2e:aa0b:0:b0:249:1e19:67f8 with SMTP id bf11-20020a2eaa0b000000b002491e1967f8mr9448720ljb.390.1647251596605;
-        Mon, 14 Mar 2022 02:53:16 -0700 (PDT)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056512304300b004488e49f2fasm984870lfb.129.2022.03.14.02.53.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 02:53:16 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Cooper Lees <me@cooperlees.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: [PATCH v3 net-next 14/14] net: dsa: mv88e6xxx: MST Offloading
-Date:   Mon, 14 Mar 2022 10:52:31 +0100
-Message-Id: <20220314095231.3486931-15-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220314095231.3486931-1-tobias@waldekranz.com>
-References: <20220314095231.3486931-1-tobias@waldekranz.com>
+        Mon, 14 Mar 2022 06:00:46 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5691013FA9;
+        Mon, 14 Mar 2022 02:59:35 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22E9rqMQ108791;
+        Mon, 14 Mar 2022 04:53:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1647251632;
+        bh=sXDP6FRE9AaNqzed1m1RfsUHilWi4nFVgOEPlOZhFcM=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=p2YmpfJixwk6rzSKyMZ4uABJJHWukEKF7M5iRHHyWqZUBHKDsueKxief1uzzPTFXy
+         lKoRq2MGJsDECgBzvNq2JxICfK+aXBP95nCOHBh7wYgRIfRpJw8iKPtm9wdIozfhru
+         4EgnIcu1MCmR/mM5CupYjrBLf9bjksc/ISOUfyjc=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22E9rqGZ052177
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Mar 2022 04:53:52 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 14
+ Mar 2022 04:53:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 14 Mar 2022 04:53:52 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22E9rp8V090706;
+        Mon, 14 Mar 2022 04:53:51 -0500
+Date:   Mon, 14 Mar 2022 15:23:50 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Benoit Parrot <bparrot@ti.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Zhou Qingyang <zhou1615@umn.edu>,
+        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
+Subject: Re: [PATCH 61/64] media: platform: rename ti-vpe/ to ti/vpe/
+Message-ID: <20220314095350.mbvjs7alqoz4vvml@ti.com>
+References: <cover.1647242578.git.mchehab@kernel.org>
+ <fecdb3d1e4fffbb5c3e0003a7d403ef9669ca026.1647242579.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <fecdb3d1e4fffbb5c3e0003a7d403ef9669ca026.1647242579.git.mchehab@kernel.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allocate a SID in the STU for each MSTID in use by a bridge and handle
-the mapping of MSTIDs to VLANs using the SID field of each VTU entry.
+Hi Mauro,
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c | 251 ++++++++++++++++++++++++++++++-
- drivers/net/dsa/mv88e6xxx/chip.h |  13 ++
- 2 files changed, 257 insertions(+), 7 deletions(-)
+On 14/03/22 08:55AM, Mauro Carvalho Chehab wrote:
+> As the end goal is to have platform drivers split by vendor,
+> rename ti-vpe/ to ti/vpe/.
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index c14a62aa6a6c..c23dbf37aeec 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1667,24 +1667,32 @@ static int mv88e6xxx_pvt_setup(struct mv88e6xxx_chip *chip)
- 	return 0;
- }
- 
--static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
-+static void mv88e6xxx_port_fast_age_fid(struct mv88e6xxx_chip *chip, int port,
-+					u16 fid)
- {
--	struct mv88e6xxx_chip *chip = ds->priv;
- 	int err;
- 
--	if (dsa_to_port(ds, port)->lag)
-+	if (dsa_to_port(chip->ds, port)->lag)
- 		/* Hardware is incapable of fast-aging a LAG through a
- 		 * regular ATU move operation. Until we have something
- 		 * more fancy in place this is a no-op.
- 		 */
- 		return;
- 
--	mv88e6xxx_reg_lock(chip);
--	err = mv88e6xxx_g1_atu_remove(chip, 0, port, false);
--	mv88e6xxx_reg_unlock(chip);
-+	err = mv88e6xxx_g1_atu_remove(chip, fid, port, false);
- 
- 	if (err)
--		dev_err(ds->dev, "p%d: failed to flush ATU\n", port);
-+		dev_err(chip->ds->dev, "p%d: failed to flush ATU (FID %u)\n",
-+			port, fid);
-+}
-+
-+static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
-+{
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+
-+	mv88e6xxx_reg_lock(chip);
-+	mv88e6xxx_port_fast_age_fid(chip, port, 0);
-+	mv88e6xxx_reg_unlock(chip);
- }
- 
- static int mv88e6xxx_vtu_setup(struct mv88e6xxx_chip *chip)
-@@ -1818,6 +1826,159 @@ static int mv88e6xxx_stu_setup(struct mv88e6xxx_chip *chip)
- 	return mv88e6xxx_stu_loadpurge(chip, &stu);
- }
- 
-+static int mv88e6xxx_sid_get(struct mv88e6xxx_chip *chip, u8 *sid)
-+{
-+	DECLARE_BITMAP(busy, MV88E6XXX_N_SID) = { 0 };
-+	struct mv88e6xxx_mst *mst;
-+
-+	set_bit(0, busy);
-+
-+	list_for_each_entry(mst, &chip->msts, node) {
-+		set_bit(mst->stu.sid, busy);
-+	}
-+
-+	*sid = find_first_zero_bit(busy, MV88E6XXX_N_SID);
-+
-+	return (*sid >= mv88e6xxx_max_sid(chip)) ? -ENOSPC : 0;
-+}
-+
-+static int mv88e6xxx_mst_put(struct mv88e6xxx_chip *chip, u8 sid)
-+{
-+	struct mv88e6xxx_mst *mst, *tmp;
-+	int err;
-+
-+	if (!sid)
-+		return 0;
-+
-+	list_for_each_entry_safe(mst, tmp, &chip->msts, node) {
-+		if (mst->stu.sid != sid)
-+			continue;
-+
-+		if (!refcount_dec_and_test(&mst->refcnt))
-+			return 0;
-+
-+		mst->stu.valid = false;
-+		err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-+		if (err)
-+			return err;
-+
-+		list_del(&mst->node);
-+		kfree(mst);
-+		return 0;
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static int mv88e6xxx_mst_get(struct mv88e6xxx_chip *chip, struct net_device *br,
-+			     u16 msti, u8 *sid)
-+{
-+	struct mv88e6xxx_mst *mst;
-+	int err, i;
-+
-+	if (!mv88e6xxx_has_stu(chip)) {
-+		err = -EOPNOTSUPP;
-+		goto err;
-+	}
-+
-+	if (!msti) {
-+		*sid = 0;
-+		return 0;
-+	}
-+
-+	list_for_each_entry(mst, &chip->msts, node) {
-+		if (mst->br == br && mst->msti == msti) {
-+			refcount_inc(&mst->refcnt);
-+			*sid = mst->stu.sid;
-+			return 0;
-+		}
-+	}
-+
-+	err = mv88e6xxx_sid_get(chip, sid);
-+	if (err)
-+		goto err;
-+
-+	mst = kzalloc(sizeof(*mst), GFP_KERNEL);
-+	if (!mst) {
-+		err = -ENOMEM;
-+		goto err;
-+	}
-+
-+	INIT_LIST_HEAD(&mst->node);
-+	refcount_set(&mst->refcnt, 1);
-+	mst->br = br;
-+	mst->msti = msti;
-+	mst->stu.valid = true;
-+	mst->stu.sid = *sid;
-+
-+	/* The bridge starts out all ports in the disabled state. But
-+	 * a STU state of disabled means to go by the port-global
-+	 * state. So we set all user port's initial state to blocking,
-+	 * to match the bridge's behavior.
-+	 */
-+	for (i = 0; i < mv88e6xxx_num_ports(chip); i++)
-+		mst->stu.state[i] = dsa_is_user_port(chip->ds, i) ?
-+			MV88E6XXX_PORT_CTL0_STATE_BLOCKING :
-+			MV88E6XXX_PORT_CTL0_STATE_DISABLED;
-+
-+	err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-+	if (err)
-+		goto err_free;
-+
-+	list_add_tail(&mst->node, &chip->msts);
-+	return 0;
-+
-+err_free:
-+	kfree(mst);
-+err:
-+	return err;
-+}
-+
-+static int mv88e6xxx_port_mst_state_set(struct dsa_switch *ds, int port,
-+					const struct switchdev_mst_state *st)
-+{
-+	struct dsa_port *dp = dsa_to_port(ds, port);
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+	struct mv88e6xxx_mst *mst;
-+	u8 state;
-+	int err;
-+
-+	if (!mv88e6xxx_has_stu(chip))
-+		return -EOPNOTSUPP;
-+
-+	switch (st->state) {
-+	case BR_STATE_DISABLED:
-+	case BR_STATE_BLOCKING:
-+	case BR_STATE_LISTENING:
-+		state = MV88E6XXX_PORT_CTL0_STATE_BLOCKING;
-+		break;
-+	case BR_STATE_LEARNING:
-+		state = MV88E6XXX_PORT_CTL0_STATE_LEARNING;
-+		break;
-+	case BR_STATE_FORWARDING:
-+		state = MV88E6XXX_PORT_CTL0_STATE_FORWARDING;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	list_for_each_entry(mst, &chip->msts, node) {
-+		if (mst->br == dsa_port_bridge_dev_get(dp) &&
-+		    mst->msti == st->msti) {
-+			if (mst->stu.state[port] == state)
-+				return 0;
-+
-+			mst->stu.state[port] = state;
-+			mv88e6xxx_reg_lock(chip);
-+			err = mv88e6xxx_stu_loadpurge(chip, &mst->stu);
-+			mv88e6xxx_reg_unlock(chip);
-+			return err;
-+		}
-+	}
-+
-+	return -ENOENT;
-+}
-+
- static int mv88e6xxx_port_check_hw_vlan(struct dsa_switch *ds, int port,
- 					u16 vid)
- {
-@@ -2437,6 +2598,12 @@ static int mv88e6xxx_port_vlan_leave(struct mv88e6xxx_chip *chip,
- 	if (err)
- 		return err;
- 
-+	if (!vlan.valid && vlan.sid) {
-+		err = mv88e6xxx_mst_put(chip, vlan.sid);
-+		if (err)
-+			return err;
-+	}
-+
- 	return mv88e6xxx_g1_atu_remove(chip, vlan.fid, port, false);
- }
- 
-@@ -2482,6 +2649,72 @@ static int mv88e6xxx_port_vlan_del(struct dsa_switch *ds, int port,
- 	return err;
- }
- 
-+static void mv88e6xxx_port_vlan_fast_age(struct dsa_switch *ds, int port, u16 vid)
-+{
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+	struct mv88e6xxx_vtu_entry vlan;
-+	int err;
-+
-+	mv88e6xxx_reg_lock(chip);
-+
-+	err = mv88e6xxx_vtu_get(chip, vid, &vlan);
-+	if (err)
-+		goto unlock;
-+
-+	mv88e6xxx_port_fast_age_fid(chip, port, vlan.fid);
-+
-+unlock:
-+	mv88e6xxx_reg_unlock(chip);
-+
-+	if (err)
-+		dev_err(ds->dev, "p%d: failed to flush ATU in VID %u\n",
-+			port, vid);
-+}
-+
-+static int mv88e6xxx_vlan_msti_set(struct dsa_switch *ds,
-+				   struct dsa_bridge bridge,
-+				   const struct switchdev_vlan_msti *msti)
-+{
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+	struct mv88e6xxx_vtu_entry vlan;
-+	u8 old_sid, new_sid;
-+	int err;
-+
-+	mv88e6xxx_reg_lock(chip);
-+
-+	err = mv88e6xxx_vtu_get(chip, msti->vid, &vlan);
-+	if (err)
-+		goto unlock;
-+
-+	if (!vlan.valid) {
-+		err = -EINVAL;
-+		goto unlock;
-+	}
-+
-+	old_sid = vlan.sid;
-+
-+	err = mv88e6xxx_mst_get(chip, bridge.dev, msti->msti, &new_sid);
-+	if (err)
-+		goto unlock;
-+
-+	if (new_sid != old_sid) {
-+		vlan.sid = new_sid;
-+
-+		err = mv88e6xxx_vtu_loadpurge(chip, &vlan);
-+		if (err) {
-+			mv88e6xxx_mst_put(chip, new_sid);
-+			goto unlock;
-+		}
-+	}
-+
-+	if (old_sid)
-+		err = mv88e6xxx_mst_put(chip, old_sid);
-+
-+unlock:
-+	mv88e6xxx_reg_unlock(chip);
-+	return err;
-+}
-+
- static int mv88e6xxx_port_fdb_add(struct dsa_switch *ds, int port,
- 				  const unsigned char *addr, u16 vid,
- 				  struct dsa_db db)
-@@ -6008,6 +6241,7 @@ static struct mv88e6xxx_chip *mv88e6xxx_alloc_chip(struct device *dev)
- 	mutex_init(&chip->reg_lock);
- 	INIT_LIST_HEAD(&chip->mdios);
- 	idr_init(&chip->policies);
-+	INIT_LIST_HEAD(&chip->msts);
- 
- 	return chip;
- }
-@@ -6540,10 +6774,13 @@ static const struct dsa_switch_ops mv88e6xxx_switch_ops = {
- 	.port_pre_bridge_flags	= mv88e6xxx_port_pre_bridge_flags,
- 	.port_bridge_flags	= mv88e6xxx_port_bridge_flags,
- 	.port_stp_state_set	= mv88e6xxx_port_stp_state_set,
-+	.port_mst_state_set	= mv88e6xxx_port_mst_state_set,
- 	.port_fast_age		= mv88e6xxx_port_fast_age,
-+	.port_vlan_fast_age	= mv88e6xxx_port_vlan_fast_age,
- 	.port_vlan_filtering	= mv88e6xxx_port_vlan_filtering,
- 	.port_vlan_add		= mv88e6xxx_port_vlan_add,
- 	.port_vlan_del		= mv88e6xxx_port_vlan_del,
-+	.vlan_msti_set		= mv88e6xxx_vlan_msti_set,
- 	.port_fdb_add           = mv88e6xxx_port_fdb_add,
- 	.port_fdb_del           = mv88e6xxx_port_fdb_del,
- 	.port_fdb_dump          = mv88e6xxx_port_fdb_dump,
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 6d4daa24d3e5..6a0b66354e1d 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -297,6 +297,16 @@ struct mv88e6xxx_region_priv {
- 	enum mv88e6xxx_region_id id;
- };
- 
-+struct mv88e6xxx_mst {
-+	struct list_head node;
-+
-+	refcount_t refcnt;
-+	struct net_device *br;
-+	u16 msti;
-+
-+	struct mv88e6xxx_stu_entry stu;
-+};
-+
- struct mv88e6xxx_chip {
- 	const struct mv88e6xxx_info *info;
- 
-@@ -397,6 +407,9 @@ struct mv88e6xxx_chip {
- 
- 	/* devlink regions */
- 	struct devlink_region *regions[_MV88E6XXX_REGION_MAX];
-+
-+	/* Bridge MST to SID mappings */
-+	struct list_head msts;
- };
- 
- struct mv88e6xxx_bus_ops {
+I submitted a patch to do something similar [0]. I think it is a better 
+one because there are actually 2 separate IP drivers here: CAL and VPE. 
+My patch puts them both in their own directories, and a later patch 
+introduces a 3rd driver, j721e-csi2rx.
+
+So I would like to see my patch's directory structure being used.
+
+Nacked-by: Pratyush Yadav <p.yadav@ti.com>
+
+[0] https://patchwork.linuxtv.org/project/linux-media/patch/20220121142904.4091481-11-p.yadav@ti.com/
+
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/64] at: https://lore.kernel.org/all/cover.1647242578.git.mchehab@kernel.org/
+> 
+
 -- 
-2.25.1
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

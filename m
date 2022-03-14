@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6FD4D8271
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E704D837F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 13:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbiCNMEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 08:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S241160AbiCNMQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 08:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240435AbiCNMCx (ORCPT
+        with ESMTP id S241307AbiCNMId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 08:02:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1194A496A7;
-        Mon, 14 Mar 2022 05:00:15 -0700 (PDT)
+        Mon, 14 Mar 2022 08:08:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD7F4B872;
+        Mon, 14 Mar 2022 05:04:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C2BB61260;
-        Mon, 14 Mar 2022 12:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44073C340E9;
-        Mon, 14 Mar 2022 12:00:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCB7FB80DF6;
+        Mon, 14 Mar 2022 12:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9CB7C340E9;
+        Mon, 14 Mar 2022 12:04:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647259214;
-        bh=3YcOFHwlwsN0mub8Bm/oweTTfIMWKNyAAyTDMHIIA/g=;
+        s=korg; t=1647259490;
+        bh=61uHkFMGvJanV3OCIKdUfTS/GzNdm0plwIvcxdlPqHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/zeZbwj+JCQDeip1QDVxIkBfYBN45xnr7gQvmCuTIK+Gh88TEk5rUpEGfeqr+Kgd
-         MFreD6O4S9qaFpl7H+7Gu0njiqg3105HUtgVio8efjutqOGyr9Gke2KSmyfpHOy6RU
-         9LSyTpF8jLXrpnuWY7J4Ulg8r+abPrbg8UM9UcZY=
+        b=mA7l8KSOgSydX6Lvw9k5tHC3kSODWhjB3sl9fam1bBoa0B7qYIGULtmO4OYsz4E4A
+         zvw3SSXhOsbYaXLWkOXrs1Gyx4k30IjCfjTU7y0Ve4rKrCDn4sKkmLIJ+FyKD+qFJk
+         MRDeEQRjkkCcLqibkuKbQ3nPZhyuSNTibKavR6lg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Moshe Shemesh <moshe@nvidia.com>,
-        Eran Ben Elisha <eranbe@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 28/71] net/mlx5: Fix a race on command flush flow
+Subject: [PATCH 5.15 019/110] net: qlogic: check the return value of dma_alloc_coherent() in qed_vf_hw_prepare()
 Date:   Mon, 14 Mar 2022 12:53:21 +0100
-Message-Id: <20220314112738.720484359@linuxfoundation.org>
+Message-Id: <20220314112743.572208876@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-References: <20220314112737.929694832@linuxfoundation.org>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+References: <20220314112743.029192918@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,90 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moshe Shemesh <moshe@nvidia.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit 063bd355595428750803d8736a9bb7c8db67d42d ]
+[ Upstream commit e0058f0fa80f6e09c4d363779c241c45a3c56b94 ]
 
-Fix a refcount use after free warning due to a race on command entry.
-Such race occurs when one of the commands releases its last refcount and
-frees its index and entry while another process running command flush
-flow takes refcount to this command entry. The process which handles
-commands flush may see this command as needed to be flushed if the other
-process released its refcount but didn't release the index yet. Fix it
-by adding the needed spin lock.
+The function dma_alloc_coherent() in qed_vf_hw_prepare() can fail, so
+its return value should be checked.
 
-It fixes the following warning trace:
-
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 11 PID: 540311 at lib/refcount.c:25 refcount_warn_saturate+0x80/0xe0
-...
-RIP: 0010:refcount_warn_saturate+0x80/0xe0
-...
-Call Trace:
- <TASK>
- mlx5_cmd_trigger_completions+0x293/0x340 [mlx5_core]
- mlx5_cmd_flush+0x3a/0xf0 [mlx5_core]
- enter_error_state+0x44/0x80 [mlx5_core]
- mlx5_fw_fatal_reporter_err_work+0x37/0xe0 [mlx5_core]
- process_one_work+0x1be/0x390
- worker_thread+0x4d/0x3d0
- ? rescuer_thread+0x350/0x350
- kthread+0x141/0x160
- ? set_kthread_struct+0x40/0x40
- ret_from_fork+0x1f/0x30
- </TASK>
-
-Fixes: 50b2412b7e78 ("net/mlx5: Avoid possible free of command entry while timeout comp handler")
-Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
-Reviewed-by: Eran Ben Elisha <eranbe@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 1408cc1fa48c ("qed: Introduce VFs")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/cmd.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/qlogic/qed/qed_vf.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-index 6af0dd847169..94426d29025e 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/cmd.c
-@@ -130,11 +130,8 @@ static int cmd_alloc_index(struct mlx5_cmd *cmd)
- 
- static void cmd_free_index(struct mlx5_cmd *cmd, int idx)
- {
--	unsigned long flags;
--
--	spin_lock_irqsave(&cmd->alloc_lock, flags);
-+	lockdep_assert_held(&cmd->alloc_lock);
- 	set_bit(idx, &cmd->bitmask);
--	spin_unlock_irqrestore(&cmd->alloc_lock, flags);
- }
- 
- static void cmd_ent_get(struct mlx5_cmd_work_ent *ent)
-@@ -144,17 +141,21 @@ static void cmd_ent_get(struct mlx5_cmd_work_ent *ent)
- 
- static void cmd_ent_put(struct mlx5_cmd_work_ent *ent)
- {
-+	struct mlx5_cmd *cmd = ent->cmd;
-+	unsigned long flags;
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.c b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+index 72a38d53d33f..e2a5a6a373cb 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_vf.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+@@ -513,6 +513,9 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
+ 						    p_iov->bulletin.size,
+ 						    &p_iov->bulletin.phys,
+ 						    GFP_KERNEL);
++	if (!p_iov->bulletin.p_virt)
++		goto free_pf2vf_reply;
 +
-+	spin_lock_irqsave(&cmd->alloc_lock, flags);
- 	if (!refcount_dec_and_test(&ent->refcnt))
--		return;
-+		goto out;
+ 	DP_VERBOSE(p_hwfn, QED_MSG_IOV,
+ 		   "VF's bulletin Board [%p virt 0x%llx phys 0x%08x bytes]\n",
+ 		   p_iov->bulletin.p_virt,
+@@ -552,6 +555,10 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
  
- 	if (ent->idx >= 0) {
--		struct mlx5_cmd *cmd = ent->cmd;
--
- 		cmd_free_index(cmd, ent->idx);
- 		up(ent->page_queue ? &cmd->pages_sem : &cmd->sem);
- 	}
+ 	return rc;
  
- 	cmd_free_ent(ent);
-+out:
-+	spin_unlock_irqrestore(&cmd->alloc_lock, flags);
- }
- 
- static struct mlx5_cmd_layout *get_inst(struct mlx5_cmd *cmd, int idx)
++free_pf2vf_reply:
++	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
++			  sizeof(union pfvf_tlvs),
++			  p_iov->pf2vf_reply, p_iov->pf2vf_reply_phys);
+ free_vf2pf_request:
+ 	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
+ 			  sizeof(union vfpf_tlvs),
 -- 
 2.34.1
 

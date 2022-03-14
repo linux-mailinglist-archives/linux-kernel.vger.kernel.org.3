@@ -2,47 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B7C4D7D57
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7984D7D5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Mar 2022 09:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbiCNIKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 04:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S237599AbiCNIKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 04:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237614AbiCNIKH (ORCPT
+        with ESMTP id S237611AbiCNIKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 04:10:07 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DA8E094;
-        Mon, 14 Mar 2022 01:08:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5224DCE10A8;
-        Mon, 14 Mar 2022 08:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B61C340E9;
-        Mon, 14 Mar 2022 08:08:48 +0000 (UTC)
-Message-ID: <430ded35-898e-47dd-c287-f3979a04af48@xs4all.nl>
-Date:   Mon, 14 Mar 2022 09:08:47 +0100
+        Mon, 14 Mar 2022 04:10:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A9D38A1;
+        Mon, 14 Mar 2022 01:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647245344; x=1678781344;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=9Z61s4WrZYBzdlpRR1dd1tEn6cmlD3NbOa2aklTM3Zk=;
+  b=Z/nyyWQJ4Q6tn5rN7abW/7gLy9E0mmPXAfcIkJIxAeDmfvOf6nxpYomT
+   RFfA8kZaRbidL2/DVs4uFOPJZXjldStVBIKkWhnMA1K9HO9q3Xna99Z/o
+   2PjiBBRJU6cVLFedILzDzkMyAUHKWBIlwYG05N7bJ6MH/IQDmIIfkZ2qJ
+   O5Z6cFVw1UfxGlmS4HRBVhwmMsFgNkqOufnwKHdHfj65UeFQW7aarodtA
+   gNbWGiby40nmfnyGtRX7YXleZVztYY9RCkaTj2Tht3ntbGD7JUme7MlaU
+   al0j0rRnHpcbdAzrJf7H2racrhjAgREdz93S9mJBaz2Ikf40f/RAvU3Wx
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10285"; a="342390612"
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="342390612"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 01:09:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,180,1643702400"; 
+   d="scan'208";a="556298140"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 01:08:55 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?utf-8?Q?Hol?= =?utf-8?Q?ger_Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v9 05/14] mm: multi-gen LRU: groundwork
+References: <20220309021230.721028-1-yuzhao@google.com>
+        <20220309021230.721028-6-yuzhao@google.com>
+Date:   Mon, 14 Mar 2022 16:08:53 +0800
+In-Reply-To: <20220309021230.721028-6-yuzhao@google.com> (Yu Zhao's message of
+        "Tue, 8 Mar 2022 19:12:22 -0700")
+Message-ID: <875yoh552i.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 1/2] media: v4l2-ctrls: Add intra-refresh type control
-Content-Language: en-US
-To:     quic_dikshita@quicinc.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
-        stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
-        quic_majja@quicinc.com, quic_jdas@quicinc.com
-References: <1647244809-25340-1-git-send-email-quic_dikshita@quicinc.com>
- <1647244809-25340-2-git-send-email-quic_dikshita@quicinc.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <1647244809-25340-2-git-send-email-quic_dikshita@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,130 +93,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dikshita,
+Hi, Yu,
 
-Some small comments below:
-
-On 3/14/22 09:00, quic_dikshita@quicinc.com wrote:
-> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> 
-> Add a control to set intra-refresh type.
-> 
-> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 27 ++++++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 ++++++++
->  include/uapi/linux/v4l2-controls.h                 |  5 ++++
->  3 files changed, 41 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 4cd7c54..2406272 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -1180,6 +1180,33 @@ enum v4l2_mpeg_video_h264_entropy_mode -
->      is set to non zero value.
->      Applicable to H264, H263 and MPEG4 encoder.
+Yu Zhao <yuzhao@google.com> writes:
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 3326ee3903f3..747ab1690bcf 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -892,6 +892,16 @@ config ANON_VMA_NAME
+>  	  area from being merged with adjacent virtual memory areas due to the
+>  	  difference in their name.
 >  
-> +``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE (enum)``
-> +
-> +enum v4l2_mpeg_video_intra_refresh_period_type -
-> +    Sets the type of intra refresh. The period to refresh
-> +    the whole frame is specified by V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
-> +    Note if the client sets this control to either
-> +    ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM``or
-> +    ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC``
-> +    the ``V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB`` control
-> +    shall be ignored.
+> +# the multi-gen LRU {
+> +config LRU_GEN
+> +	bool "Multi-Gen LRU"
+> +	depends on MMU
+> +	# the following options can use up the spare bits in page flags
+> +	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
 
-No, that's not right. Just drop this sentence. This control just sets
-the type, and whether CYCLIC_INTRA_REFRESH_MB is used or not depends
-on INTRA_REFRESH_PERIOD, but that has nothing to do with this control.
+LRU_GEN depends on !MAXSMP.  So, What is the maximum NR_CPUS supported
+by LRU_GEN?
 
-> +    And if this control is not present that it is undefined what
-> +    refresh type is used and it is upto the drive to decide.
-
-upto -> up to
-
-> +    Applicable to H264 and HEVC encoders. Possible values are:
+> +	help
+> +	  A high performance LRU implementation for memory overcommit.
+> +# }
 > +
-> +.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM``
-> +      - The whole frame is completely refreshed randomly
-> +      after the specified period.
-> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC``
-> +      - The whole frame MBs are completely refreshed in cyclic order
-> +      after the specified period.
-> +
->  ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
->      Intra macroblock refresh period. This sets the period to refresh
->      the whole frame. In other words, this defines the number of frames
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 54ca4e6..451c8b0 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -572,6 +572,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
->  		"VBV/CPB Limit",
->  		NULL,
->  	};
-> +	static const char * const intra_refresh_period_type[] = {
-> +		"Random",
-> +		"Cyclic",
-> +		NULL,
-> +	};
+>  source "mm/damon/Kconfig"
 >  
->  	switch (id) {
->  	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
-> @@ -705,6 +710,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
->  		return hevc_start_code;
->  	case V4L2_CID_CAMERA_ORIENTATION:
->  		return camera_orientation;
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
-> +		return intra_refresh_period_type;
->  	default:
->  		return NULL;
->  	}
-> @@ -834,6 +841,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder Slice Interface";
->  	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 Loop Filter Enable";
->  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of Intra Refresh MBs";
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:	return "Intra Refresh Type";
+>  endmenu
 
-"Intra Refresh Period Type"
+Best Regards,
+Huang, Ying
 
->  	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra Refresh Period";
->  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate Control Enable";
->  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
-> @@ -1360,6 +1368,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_STATELESS_H264_DECODE_MODE:
->  	case V4L2_CID_STATELESS_H264_START_CODE:
->  	case V4L2_CID_CAMERA_ORIENTATION:
-> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE:
->  		*type = V4L2_CTRL_TYPE_MENU;
->  		break;
->  	case V4L2_CID_LINK_FREQ:
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index c8e0f84..e7df4c5 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -443,6 +443,11 @@ enum v4l2_mpeg_video_multi_slice_mode {
->  #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
->  #define V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
->  #define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
-> +#define V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE	(V4L2_CID_CODEC_BASE+237)
-> +enum v4l2_mpeg_video_intra_refresh_period_type {
-> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_RANDOM	= 0,
-> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD_TYPE_CYCLIC	= 1,
-> +};
->  
->  /* CIDs for the MPEG-2 Part 2 (H.262) codec */
->  #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
-
-Regards,
-
-	Hans
+[snip]

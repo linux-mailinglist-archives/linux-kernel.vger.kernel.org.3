@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD19B4D9A2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EB24D9A31
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347742AbiCOLR3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Mar 2022 07:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S1347582AbiCOLSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240443AbiCOLRZ (ORCPT
+        with ESMTP id S1347935AbiCOLR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:17:25 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674C14F9C8;
-        Tue, 15 Mar 2022 04:16:13 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id z7so21756558iom.1;
-        Tue, 15 Mar 2022 04:16:13 -0700 (PDT)
+        Tue, 15 Mar 2022 07:17:58 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7764FC48;
+        Tue, 15 Mar 2022 04:16:46 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id s8so19072254pfk.12;
+        Tue, 15 Mar 2022 04:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AAkE7SxftAfpvES/fDnH9bGKGtxk3gDXiZ/9FkRestw=;
+        b=D9ZZQPHHiKEaIeKTdYsJAqn35qZ16PfsixcHx5xFjv48ZBFypa8/C6pfnAWzlJ8ni2
+         FmkpntlcbOqBammXerT1azupg45uFvRgkbM+sjRaFh2Qh/mnbClCG48HolUBluzvzrcf
+         pzIycnd/Uw0/HR6c0VoMXOVHTNAzt+d7EoimnuVSkT83z8Zc3Tp3l7AxXKbhUUpQwZ5x
+         WXZi/TdYY32IHI1sYl9rL8X4yyIF9wt5BLxUX1b2BxWVdzSUjymphoci0gd6FxW4wt2v
+         +m7MMAe9wo2PghXaYVOX3Bqjam2IOezbFYAObZNNG+1GZb65dPEhqtriAmrW210F0zQ7
+         uf7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SHSnS045xOSqGUGYNxZz1bWOxpfWFGxEnCoZhA82baU=;
-        b=3xfAtRGVXGHBLcX8+Mh3vpAwuXjYGkfopVBc94KvSfP1NcrqbaNyJONef7m4+N3OTa
-         Z/RBOIL/EByyETatpL+pIGDsVci3FDg/MYfjaxD/cpZgP8ar0H8kha8UPTUM0YuTDPHo
-         s2Xu5joW7JFZyCarbf9WRHfelFqXUZvsNc28V/fr5aozX3WaU8lxVVQ0OhVzd/zb42CS
-         algVk6Efq9iLkA1ef6Rid82tfEYq8GyZ2FS7JNPDXG2ngMgRdvsm8mj/gDEiUwBz8CfU
-         aCpFW8mcJ7hZxOlwSdVawraDJWtJJ/zVyucC6aUBBkZ+3rH6HiI150mscwzYT+BCIF9M
-         dXfQ==
-X-Gm-Message-State: AOAM5323WclRKWTa32v4CxUyaxpyDnSYjYBKAbRS0Yzy4r7sSNo9lrH5
-        dYtV8uxWvHyg1EwPXxh4VLVlgtTiZdZTwWl2yTM=
-X-Google-Smtp-Source: ABdhPJzi1K37T2uO44ZNsKuw/g+YHc0BL3RHRsR2lKGCgz1cR7gvf6hv3h3YACkfVRqhb8e8u22W4O3QZKPWM+TnQcw=
-X-Received: by 2002:a02:aa05:0:b0:315:40b9:7439 with SMTP id
- r5-20020a02aa05000000b0031540b97439mr24177076jam.131.1647342972700; Tue, 15
- Mar 2022 04:16:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AAkE7SxftAfpvES/fDnH9bGKGtxk3gDXiZ/9FkRestw=;
+        b=m3tdNJM7nsIFG1sbQZNaE7l7oXgYLuar88gf38XBrUb49OWf8+7b0ADTwPWYZOIiI6
+         GUYDAdBBhCfIZWdbfBTQKLDt49WiAP0Iph6YZ/tYRhaMusb2UZgSdnAIy4ZVb4pMl4dv
+         4iAoj8VbCFtZIDH9xrZJXWg5ZWzfc4ixMS6gqyYdr+1FRJNInIMUe+n2dU03wVFzjDtO
+         63/NNs7/VMzReBWXewmpxxPryEN9CYUQ8xBkM7YJaz24uDhWSAuwBmGCj5ppctHJVExw
+         qagKGXNf+Fq4BZ53eW5n5bl1AxhUgzJPC4mQVfrB46JuUtPwnnMmlCkiksH89gSzImZz
+         +jnw==
+X-Gm-Message-State: AOAM533rrP+55vq+mkIBwB9BaZ7Npb4G6+iviyVIoiXtMhX/CMiYSoT3
+        k70AguVBy5K1XJgdl9Se0oQ=
+X-Google-Smtp-Source: ABdhPJyv3EGVr7ESkHPJeXerNP7DwA2YOyixhtm7IUDDtGO/9IwMDnnlymyRHsry7symUmuGUKUkXg==
+X-Received: by 2002:a63:10c:0:b0:36c:6dd0:44af with SMTP id 12-20020a63010c000000b0036c6dd044afmr23371203pgb.41.1647343005769;
+        Tue, 15 Mar 2022 04:16:45 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-1.three.co.id. [180.214.233.1])
+        by smtp.gmail.com with ESMTPSA id na8-20020a17090b4c0800b001bf191ee347sm2862660pjb.27.2022.03.15.04.16.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 04:16:45 -0700 (PDT)
+Message-ID: <14882244-3ec4-7185-c872-143db25b2165@gmail.com>
+Date:   Tue, 15 Mar 2022 18:16:39 +0700
 MIME-Version: 1.0
-References: <20220308123712.18613-1-andriy.shevchenko@linux.intel.com> <20220314195138.20036-1-michael@walle.cc>
-In-Reply-To: <20220314195138.20036-1-michael@walle.cc>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Mar 2022 12:16:01 +0100
-Message-ID: <CAJZ5v0hbY8XCC-DfkoPFe15awV_FOpq91pUZvmZ9JrYi1QBMEg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] device property: Allow error pointer to be passed
- to fwnode APIs
-To:     Michael Walle <michael@walle.cc>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.16 000/121] 5.16.15-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220314112744.120491875@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,71 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 8:51 PM Michael Walle <michael@walle.cc> wrote:
->
-> Hi Andy,
->
-> > Some of the fwnode APIs might return an error pointer instead of NULL
-> > or valid fwnode handle. The result of such API call may be considered
-> > optional and hence the test for it is usually done in a form of
-> >
-> >       fwnode = fwnode_find_reference(...);
-> >       if (IS_ERR(fwnode))
-> >               ...error handling...
-> >
-> > Nevertheless the resulting fwnode may have bumped the reference count
-> > and hence caller of the above API is obliged to call fwnode_handle_put().
-> > Since fwnode may be not valid either as NULL or error pointer the check
-> > has to be performed there. This approach uglifies the code and adds
-> > a point of making a mistake, i.e. forgetting about error point case.
-> >
-> > To prevent this, allow an error pointer to be passed to the fwnode APIs.
-> >
-> > Fixes: 83b34afb6b79 ("device property: Introduce fwnode_find_reference()")
-> > Reported-by: Nuno Sá <nuno.sa@analog.com>
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Tested-by: Nuno Sá <nuno.sa@analog.com>
-> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Acked-by: Nuno Sá <nuno.sa@analog.com>
->
-> This breaks SFP/phylink (using the lan966x switch) on my board. See below
-> for more details.
+On 14/03/22 18.53, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.15 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-I'm dropping this commit for the time being.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
-> [..]
->
-> > @@ -480,15 +485,16 @@ int fwnode_property_get_reference_args(const struct fwnode_handle *fwnode,
-> >  {
-> >       int ret;
-> >
-> > +     if (IS_ERR_OR_NULL(fwnode))
-> > +             return -ENOENT;
-> > +
-> >       ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
-> >                                nargs, index, args);
-> > +     if (ret == 0)
->
-> Should this be "if (ret == 0 || IS_ERR_OR_NULL(fwnode->secondary))" ?
->
-> > +             return ret;
-> >
-> > -     if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
-> > -         !IS_ERR_OR_NULL(fwnode->secondary))
-> > -             ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
-> > -                                      prop, nargs_prop, nargs, index, args);
-> > -
-> > -     return ret;
-> > +     return fwnode_call_int_op(fwnode->secondary, get_reference_args, prop, nargs_prop,
-> > +                               nargs, index, args);
-> >  }
-> >  EXPORT_SYMBOL_GPL(fwnode_property_get_reference_args);
->
-> What happens before this patch is that sfp_bus_find_fwnode() will call
-> fwnode_property_get_reference_args() and the first calls return -ENOENT
-> which sfp_bus_find_fwnode() will handle in a special way. After your
-> patch, -EINVAL is returned, because fwnode_call_int_op() on
-> fwnode->secondary is always called regardless of the return value of
-> the original fwnode.
->
-> -michael
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara

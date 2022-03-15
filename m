@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B584D99C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F014D99CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347721AbiCOK74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S1347722AbiCOLAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347711AbiCOK7x (ORCPT
+        with ESMTP id S1347682AbiCOLA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:59:53 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCF93B540;
-        Tue, 15 Mar 2022 03:58:41 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id v4so17479502pjh.2;
-        Tue, 15 Mar 2022 03:58:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/dt0ki5c6TsVjagp5Hw0a3dDEKUn0j8kFSzZZMT3VYc=;
-        b=CUDzMgF/OnISw5WwvUlQdrwi1EXa0YCf1QhjvMTcHVlUXcy6VD8ZMlvFF7tJPBlWeN
-         eXhBpHgzxx1VwCLELmr8U06RnfrwTSbfaob1hWjaAu2YCWq2fs+OcavFOehs+UZJy+C7
-         w01sbeAnRq/XESe7cVEIXbUHrpQYDM64/taogeCxQkjSii1x1lDoKskiorsjXyjCT+M/
-         xxU7kLu3uinGfMGrXub9XdJquPoDC8YwgKVDAHlVm4hfHWveEWWMKssQH0bcGT5Clm0G
-         77FK5UGD3uDYI/0MQvAH3AtOKQhR63sBI0RA68+DxXfJv680L1LEsc0KgkgcyZ3d31oj
-         4o4A==
+        Tue, 15 Mar 2022 07:00:26 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135BC3BF8C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:59:15 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id e22so21650324ioe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:59:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/dt0ki5c6TsVjagp5Hw0a3dDEKUn0j8kFSzZZMT3VYc=;
-        b=20HIGvyHTJRtYtMTmeSledLGK5sDgvvyXDY59D7P8WoK5vuf7QkdgEMX/FRok7kVWJ
-         YBmMDShvsLVDbMDQh4wsanjqCuhk4VvH2BEopgVs52XvzVqvAbNfiH0mhWwrAiiWax6P
-         OFRVKNvDUnebYxTRLn4Hgfl9dFyg7axLjeApNq7KjJa1dvKcXDpeg+0pIZk6zDUnO+Hh
-         3OhmFXoIyp8SiGBh4yKuXBaBM9Utt1wlF3UZVy8BM99J7fwuuxUuOmS7BuUx1Otfaikx
-         gw9pnhPvkGs6IR2oftuQnpXlHSWXay8626JOIt2YbIIDDoL2qZ9MKt/O5Edr1Q5s4Hew
-         a0tA==
-X-Gm-Message-State: AOAM530PEDvLUeL77vmv/PgTRoqbX0P2UhBz3+UJJ7wWsxU4PP7TIz73
-        JW41NShO+BADIWrUjz9ShAo=
-X-Google-Smtp-Source: ABdhPJzxzlIcZjlz6fGRY/LxU0q1FUkEgjIQpU6PvljMdgXtNt10RS8iX1wrCcKfc74jdMCdCJSyHw==
-X-Received: by 2002:a17:902:ead2:b0:153:85ac:abc9 with SMTP id p18-20020a170902ead200b0015385acabc9mr6305446pld.173.1647341921264;
-        Tue, 15 Mar 2022 03:58:41 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-1.three.co.id. [180.214.233.1])
-        by smtp.gmail.com with ESMTPSA id s15-20020a63af4f000000b0037c8875108dsm20078684pgo.45.2022.03.15.03.58.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 03:58:40 -0700 (PDT)
-Message-ID: <c2692f8d-20f5-e310-e26e-087a9f82aa0d@gmail.com>
-Date:   Tue, 15 Mar 2022 17:58:34 +0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ERUzPoz66Ekz8nytoz/D+JRh+ZH5me7GDLLHYHnWy0A=;
+        b=oLKpvcFJhibXQ8KI2qGN+QOZSLwOOyGWaGccHbzLIAwSKFXUj2hpnZW6Hh3AFUyZcp
+         mjWZEgiB+oPMxB+8VyagyZxMHpXh8IsowR8YbP8hFHSflEHOXpXwTMhWc1hYRooWNhKt
+         DGMh+0RXTQDDUmtnCHQzjkzDNcW191fpe6nEz/FkXN0CfDKOjK5VwVaeIjQ+fM/WxE3L
+         TS3FcOzSQucu1DE4BDLCoJXetFEdbuecHA4pJx1Py7vdWAMnU50jm7RflirF/uDA20Te
+         Sz/+X7xq7iniqN6gkhKbvGVr70bu0rt9VNCkmufmeJl4pcSolg38cTozvzqHvniMer96
+         ihlQ==
+X-Gm-Message-State: AOAM532JdW2s3G7eA5EWLIPxNTY9hK3pteZIgoVh+Itd/zFFasFYqDAb
+        9E1kzHdBXfBAEKw63iHm+SG7uUAwJCuyd4qVwtpT5il9
+X-Google-Smtp-Source: ABdhPJze7jADM6hxsoUDLohxwrGeIietgUF+xluv+LJwGWqkX9IBmJfQx7VEw75753nUERdXj/GevRAwuXVs6OOkMe4=
+X-Received: by 2002:a02:6910:0:b0:319:4f4c:eede with SMTP id
+ e16-20020a026910000000b003194f4ceedemr22571720jac.301.1647341954431; Tue, 15
+ Mar 2022 03:59:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.15 000/110] 5.15.29-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220314112743.029192918@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+References: <20220312195210.23573-1-rdunlap@infradead.org>
+In-Reply-To: <20220312195210.23573-1-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 15 Mar 2022 11:59:02 +0100
+Message-ID: <CAJZ5v0gBYki-PFHiNGuFmpxQGB_+rW0i5D6VThsPHY6GFwGnYg@mail.gmail.com>
+Subject: Re: [PATCH v2] clocksource: acpi_pm: fix return value of __setup handler
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patches@lists.linux.dev, Dan Carpenter <dan.carpenter@oracle.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/22 18.53, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.29 release.
-> There are 110 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+On Sat, Mar 12, 2022 at 8:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> __setup() handlers should return 1 to obsolete_checksetup() in
+> init/main.c to indicate that the boot option has been handled.
+> A return of 0 causes the boot option/value to be listed as an Unknown
+> kernel parameter and added to init's (limited) environment strings.
+>
+> The __setup() handler interface isn't meant to handle negative return
+> values -- they are non-zero, so they mean "handled" (like a return
+> value of 1 does), but that's just a quirk. So return 1 from
+> parse_pmtmr(). Also print a warning message if kstrtouint() returns
+> an error.
+>
+> Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> From: Igor Zhbanov <i.zhbanov@omprussia.ru>
+> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Cc: John Stultz <john.stultz@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+Can you please resend this with a CC to linux-acpi?
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+> ---
+> v2: correct the Fixes: tag (Dan Carpenter)
+>
+>  drivers/clocksource/acpi_pm.c |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> --- linux-next-20220310.orig/drivers/clocksource/acpi_pm.c
+> +++ linux-next-20220310/drivers/clocksource/acpi_pm.c
+> @@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
+>         int ret;
+>
+>         ret = kstrtouint(arg, 16, &base);
+> -       if (ret)
+> -               return ret;
+> +       if (ret) {
+> +               pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
+> +               return 1;
+> +       }
+>
+>         pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
+>                 base);

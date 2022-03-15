@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C099D4DA102
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEAE4DA10D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350514AbiCORUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S1350525AbiCORXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241714AbiCORUd (ORCPT
+        with ESMTP id S1350457AbiCORXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:20:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D29E42ED3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:19:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B8D01474;
-        Tue, 15 Mar 2022 10:19:21 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E2273F73D;
-        Tue, 15 Mar 2022 10:19:17 -0700 (PDT)
-Message-ID: <68df2f49-9b74-7ea2-0178-be55824b3c89@arm.com>
-Date:   Tue, 15 Mar 2022 18:18:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] sched: dynamic config sd_flags if described in DT
-Content-Language: en-US
-To:     Qing Wang <wangqing@vivo.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <1647331137-69890-1-git-send-email-wangqing@vivo.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <1647331137-69890-1-git-send-email-wangqing@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 15 Mar 2022 13:23:48 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6636C583B8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:22:33 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e589b1f3c4so21973667b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=zv11HNoiWOaRRTcqPWCnh8JAjyULAP9JPJTQwBFMsq8=;
+        b=hdjiCLcdTxNnHZIaxKXevD6wYpO4tJh9hNr16sLmYoU8hjyEAcWwRvTquD+BH/awZT
+         QLFX7uBm4fu+DPIzrGDgqlpefYngLQ9bEkwjiA0CLhYIE54t20c3UDQVZG4v0e099xN0
+         Ei/r3R+uge9e6P7mnUO82X+e+KhGuDYDONXf56eiWG2tLERvhGurNdZkkhUXVr+751RA
+         PTsQ2W47lyNo8NTp5PPpg5sfys0Wth1CJll3ZWrO7pEp2rg5ZzqbPRGT7a6gC3QIDPGx
+         pYpYVbH36L9vQLQVJd0qLcDMi3ZksltTqaFU/Kwa/U28pkNhamkT2z8IQ098seipUSE6
+         QzIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=zv11HNoiWOaRRTcqPWCnh8JAjyULAP9JPJTQwBFMsq8=;
+        b=M7xixXDV5GQ/DmI8jBrS84/ngcColX5+KVV0qCdacutr3u8wcqBGNbMZQcflI9sE/g
+         wS3N/DVOJxucW6x1WaZn3TbrWYTRBlaEFk2u8lwdv53GZEawr9LDNZsJA3QPXFkrzL19
+         Qz5kfkmTT0PVOhTJgTSAqTQkNlfHDIvW3vqTz0mIvnjgH4ybdI+HSHvuXxWqUrTLWoog
+         OJl9yB6Qk+WVLzA/dMK0GucVK274iDf+A/k5NW8VR3wqcX+q721Q7ZihpZlBHqbCjuiL
+         gj0MJYk5OY9MFxB1sGdnbkwS/NyS3XqALXXHoBQlKS8QKpBsDMYYfnB4GzFlUaGzFaj/
+         xD8w==
+X-Gm-Message-State: AOAM5319lAVf3PZqYLKH1YI6bsIV1iz8sVRVXs/9pzLzf3mndXNp06m0
+        vSLbpNenphLjinbfMXzD56m7RVMqgU8+
+X-Google-Smtp-Source: ABdhPJywcoZma40GAuW6oHJQVBRIny/76kd1dbuidR6OYH4azzLPaSlrpAwem9MCflCBOgpSxDrnlhVoRxp+
+X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:213:25c1:7451:8743])
+ (user=bgeffon job=sendgmr) by 2002:a25:dd03:0:b0:633:3cd1:8f1d with SMTP id
+ u3-20020a25dd03000000b006333cd18f1dmr10363049ybg.617.1647364952603; Tue, 15
+ Mar 2022 10:22:32 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:22:21 -0700
+Message-Id: <20220315172221.9522-1-bgeffon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+Subject: [PATCH] zram: Add a huge_idle writeback mode
+From:   Brian Geffon <bgeffon@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, Brian Geffon <bgeffon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,50 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 08:58, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
+Today it's only possible to write back as a page, idle, or huge.
+A user might want to writeback pages which are huge and idle first
+as these idle pages do not require decompression and make a good
+first pass for writeback.
 
-(1) Can you share more information about your CPU topology?
+Signed-off-by: Brian Geffon <bgeffon@google.com>
+---
+ Documentation/admin-guide/blockdev/zram.rst |  6 ++++++
+ drivers/block/zram/zram_drv.c               | 10 ++++++----
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-I guess it is a single DSU (DynamIQ Shared Unit) ARMv9 system with 8
-CPUs? So L3 spans over [CPU0..CPU7].
+diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+index 3e11926a4df9..af1123bfaf92 100644
+--- a/Documentation/admin-guide/blockdev/zram.rst
++++ b/Documentation/admin-guide/blockdev/zram.rst
+@@ -343,6 +343,12 @@ Admin can request writeback of those idle pages at right timing via::
+ 
+ With the command, zram writeback idle pages from memory to the storage.
+ 
++Additionally, if a user choose to writeback only huge and idle pages
++this can be accomplished with::
++
++        echo huge_idle > /sys/block/zramX/writeback
++
++
+ If admin want to write a specific page in zram device to backing device,
+ they could write a page index into the interface.
+ 
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index cb253d80d72b..f196902ae554 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -643,8 +643,8 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
+ #define PAGE_WB_SIG "page_index="
+ 
+ #define PAGE_WRITEBACK 0
+-#define HUGE_WRITEBACK 1
+-#define IDLE_WRITEBACK 2
++#define HUGE_WRITEBACK (1<<0)
++#define IDLE_WRITEBACK (1<<1)
+ 
+ 
+ static ssize_t writeback_store(struct device *dev,
+@@ -664,6 +664,8 @@ static ssize_t writeback_store(struct device *dev,
+ 		mode = IDLE_WRITEBACK;
+ 	else if (sysfs_streq(buf, "huge"))
+ 		mode = HUGE_WRITEBACK;
++	else if (sysfs_streq(buf, "huge_idle"))
++		mode = IDLE_WRITEBACK | HUGE_WRITEBACK;
+ 	else {
+ 		if (strncmp(buf, PAGE_WB_SIG, sizeof(PAGE_WB_SIG) - 1))
+ 			return -EINVAL;
+@@ -725,10 +727,10 @@ static ssize_t writeback_store(struct device *dev,
+ 				zram_test_flag(zram, index, ZRAM_UNDER_WB))
+ 			goto next;
+ 
+-		if (mode == IDLE_WRITEBACK &&
++		if (mode & IDLE_WRITEBACK &&
+ 			  !zram_test_flag(zram, index, ZRAM_IDLE))
+ 			goto next;
+-		if (mode == HUGE_WRITEBACK &&
++		if (mode & HUGE_WRITEBACK &&
+ 			  !zram_test_flag(zram, index, ZRAM_HUGE))
+ 			goto next;
+ 		/*
+-- 
+2.35.1.723.g4982287a31-goog
 
-You also mentioned complexes. Am I right in assuming that [CPU0..CPU3]
-are Cortex-A510 cores where each 2 CPUs share a complex?
-
-What kind of uarch are the CPUs in [CPU4..CPU7]? Are they Cortex-A510's
-as well? I'm not sure after reading your email:
-
-https://lkml.kernel.org/r/SL2PR06MB30828CF9FF2879AFC9DC53D2BD0C9@SL2PR06MB3082.apcprd06.prod.outlook.com
-
-You might run into the issue that individual CPUs of your system see a
-different SD hierarchy in case that [CPU4..CPU7] aren't Cortex-A510's,
-i.e. CPUs not sharing complexes.
-
-(2) Related to your MC Sched Domain (SD) layer:
-
-If you have a single DSU ARMv9 system, then in Linux kernel mainline you
-shouldn't have sub-clustering of [CPU0..CPU3] and [CPU4...CPU7].
-
-I.e. the cpu-map entry in your dts file should only list cores, not
-clusters.
-
-I know that in Android the cluster entries are used to sub-group
-different uarch CPUs in an asymmetric CPU capacity system (a.k.a. Arm
-DynamIQ and Phantom domains) but this is eclipsing the true L3 (LLC)
-information and is not "supported" (in the sense of "used") in mainline.
-
-But I have a hard time to see what [CPU0..CPU3] or [CPU4..CPU7] are
-shareing in your system.
-
-(3) Why do you want this different SD hierarchy?
-
-I assume in mainline your system will have a single SD which is MC (w/o
-the Phantom domain approach from Android).
-
-You mentioned cpus_share_cache(). Or is it the extra SD level which
-changes the behaviour of CFS load-balancing? I'm just wondering since
-EAS wouldn't be affected here. I'm sure I can understand this better
-once we know more about your CPU topology.
-
-[...]

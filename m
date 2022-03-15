@@ -2,144 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ECB4D9C94
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C232E4D9C95
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344575AbiCONsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 09:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
+        id S1348772AbiCONsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 09:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348845AbiCONsG (ORCPT
+        with ESMTP id S244349AbiCONst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 09:48:06 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A87B52E68;
-        Tue, 15 Mar 2022 06:46:54 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a8so41434475ejc.8;
-        Tue, 15 Mar 2022 06:46:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=52KupTNckoTiW8mqVp3XaNIUEo5xHI2O53gUBo/w4bY=;
-        b=QV37BBlCAFf8+y0GnPcl7xfC72mhwaTLyyn3UdPWnY/QgD3M6YXFlsTox+8Sr0aM50
-         YKF8p/nicNpsxb16CkJ/Rgj/ZcVBDmz552ZTRZXKVtJX6Y1+JNZ3VesqXLUsmrIifYPE
-         RCfaipaUkL8a4RODT7XzcMQRJVLZ8Om4tHUpKeiPf1spDLP0QX9u9gsHEKJfCzgurpIi
-         EpLmEG7ztqvdwNX3HtwZ/I8yrE+13OqzXC5dFqYJQpC+pPMYvbbfsNxDK1eJ/CEuJWUz
-         bn0vMJtpOL3Cwcp0E/e7RpYoG80dZwvmuKYthDYqVbVXiRDAdhaztY13RmCrX+HCk0Hf
-         V9zA==
+        Tue, 15 Mar 2022 09:48:49 -0400
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EC1532CC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:47:36 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so1561852wmf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:47:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=52KupTNckoTiW8mqVp3XaNIUEo5xHI2O53gUBo/w4bY=;
-        b=203r7F0SJGSGpvNAj7PzgaiDnFKn+3YOdr92DNaq7JWrZVxCgflWTXh9gGMnq70zvw
-         tJGysimPzPIXfIfqvFAnO5GFAqwHiX2+liX7KbylJwmn2yKDxOGAo6WdsqOh/v2vl4n4
-         IkCWn/PpGCCMeMZfq1yJr+L09q2Usp2/KwRz8QcHcYnGG9kL7zUMSKevcbPwjPqtUn0M
-         AFrF2rX6LWsXRIVL4CZlO1Fq9mv05gYPABJvpmp8P5MR7guVF2tcs4nzO0xlwOuMHf+7
-         UvMvzdiot9icer8wbnbAiOZi7HthyN7aJJT4io+NrmjroRo68Zccxhob+guz/WTRLRxO
-         x9rw==
-X-Gm-Message-State: AOAM53037+Ep8I+Vv3Hv1HfEdwCwojj0fmh5l5czKdzPVM9RaCFD/vLC
-        9F2R12jYnq2VtHEE6nnHTCgqveAFsAJj64tVEJqV4poG3b8=
-X-Google-Smtp-Source: ABdhPJx74T1WC4KSLoavOvF2J087dYXRj2sBoADsQZx4rR3MZwKXVin3AJ8oFLeTGhdwdWC7AmRRqGC45z63osz7Blo=
-X-Received: by 2002:a17:907:e93:b0:6df:10b3:4fc0 with SMTP id
- ho19-20020a1709070e9300b006df10b34fc0mr1821009ejc.44.1647352012953; Tue, 15
- Mar 2022 06:46:52 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cUb7Ym7YiBit1oW7mIGdDtc855Srmaz5LFm1bk92JDs=;
+        b=RbLkJhe2ONOoesLVHPVKoE+CmzSDJ9fankXDOsNEi9q3yAJ3Fq+ngVK6i4pVyHkzvp
+         CIF0/QhN6VrRp9xQaLoSMSbOhd000D6bFOIqiU9Y/P+Wn1x2jFPGGf2rsokADkuTuRay
+         DkbNYUOtOeaKIrLggQmim1ft3bILNfzDM2ftS/TbGhPu3KfcdryrNmf9cjv0K/vanbqS
+         qQPBdcMLrv41EBunluK4CMBV7vYvQNmuWAFdJzYmiGHh6eigFeGfluOU87XWLf/rOJSA
+         cmwiGA3yb0efZBckXPy4lTgsHJVzIQLnXxZXKN65jGEYi0SzUo0w21qULn4jvG62hy7f
+         do/w==
+X-Gm-Message-State: AOAM531AGorKyIN8YHvyTjkD90qaH7p2j5rMcw0hfMWCKPG07yVMVOCw
+        uLL2hZ4+nabMx1W4PMzeW0vgGNIFcZk=
+X-Google-Smtp-Source: ABdhPJytT3AnIUgNmrWcCS6eglCCV+Fc0mjQURGc3W7lyrFTalBhR8Aju7XTZqMSC2tY0lfe/6nBxA==
+X-Received: by 2002:a05:600c:4f47:b0:381:6c3e:19dc with SMTP id m7-20020a05600c4f4700b003816c3e19dcmr3423857wmq.155.1647352055447;
+        Tue, 15 Mar 2022 06:47:35 -0700 (PDT)
+Received: from [192.168.64.180] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id e2-20020adfe7c2000000b001f04d622e7fsm15562748wrn.39.2022.03.15.06.47.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 06:47:35 -0700 (PDT)
+Message-ID: <90024a31-ea50-74fa-1ad2-db6c1db99fef@grimberg.me>
+Date:   Tue, 15 Mar 2022 15:47:33 +0200
 MIME-Version: 1.0
-References: <20220315103813.84407-1-shreeya.patel@collabora.com>
- <CAHp75VdoN+iSu1GLnxWW9BtL-p9uF1sfAw3ZxkFWNpoo44+bZg@mail.gmail.com> <b22cea07-aa2e-f5b5-d5aa-071e1084f00b@collabora.com>
-In-Reply-To: <b22cea07-aa2e-f5b5-d5aa-071e1084f00b@collabora.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 15 Mar 2022 15:45:39 +0200
-Message-ID: <CAHp75VfsenJ64tTMdAG=CRFkwWjxf5hKpWWSa4hRxkF4ReQdHg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: Restrict usage of gc irq members before initialization
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, krisman@collabora.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] [v2] nvme-pci: disable write zeros support on specific
+ SSDs
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        Mark Hsieh <mark_hsieh@wistron.corp-partner.google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        axboe@fb.com, kbusch@kernel.org, alsa-devel@alsa-project.org,
+        Mark_Hsieh@wistron.com
+References: <20220315132059.12747-1-mark_hsieh@wistron.corp-partner.google.com>
+ <20220315132202.GA12452@lst.de>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20220315132202.GA12452@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 2:32 PM Shreeya Patel
-<shreeya.patel@collabora.com> wrote:
-> On 15/03/22 4:30 pm, Andy Shevchenko wrote:
-> > On Tue, Mar 15, 2022 at 12:38 PM Shreeya Patel
-> > <shreeya.patel@collabora.com> wrote:
-> >
-> > Thanks for the update, my comments below.
-> >
-> >> gc irq members are exposed before they could be completely
-> > gc --> GPIO chip
-> >
-> >> initialized and this leads to race conditions.
-> > Any example here. like ~3-4 lines of the Oops in question?
-> >
-> >> One such issue was observed for the gc->irq.domain variable which
-> >> was accessed through the I2C interface in gpiochip_to_irq() before
-> >> it could be initialized by gpiochip_add_irqchip(). This resulted in
-> >> Kernel NULL pointer dereference.
-> >>
-> >> To avoid such scenarios, restrict usage of gc irq members before
-> > gc --> GPIO chip
-> >
-> >> they are completely initialized.
-> > ...
-> >
-> >> +       /*
-> >> +        * Using barrier() here to prevent compiler from reordering
-> >> +        * gc->irq.gc_irq_initialized before initialization of above
-> >> +        * gc irq members.
-> >> +        */
-> >> +       barrier();
-> >> +
-> >> +       gc->irq.gc_irq_initialized = true;
-> > There are too many duplications. Why not simply call it 'initialized'?
-> >
-> >> -       if (gc->to_irq) {
-> >> +       if (gc->to_irq && gc->irq.gc_irq_initialized) {
-> > Why can't this check be added into gpiochip_to_irq() ?
-> >
-> >      if (!gc->irq.initialized)
-> >          return -ENXIO;
-> >
-> > ...
->
->
-> Because we don't want to return -ENXIO in case of race condition.
->
-> It should return -EPROBE_DEFER similar to how we are doing when gc->to_irq
-> is NULL.
 
-> So in this case when both gc->to_irq = NULL and gc->irq.initialized = FALSE,
-> we will be returning -EPROBE_DEFER.
+>> Like commit 5611ec2b9814 ("nvme-pci: prevent SK hynix PC400 from using
+>> Write Zeroes command"), Micron has the same issue:
+>> [ 6305.633887] blk_update_request: operation not supported error, dev
+>> nvme0n1, sector 340812032 op 0x9:(WRITE_ZEROES) flags 0x0 phys_seg 0 prio class 0
+>>
+>> So also disable Write Zeroes command on Micron.
+> 
+> This still ignores all the questions I've asked.
 
-This is not true. The return code relies on an IRQ chip which may be
-assigned (not NULL).
-
-> This will make sure that devices
-> like touchscreen
-> do not become fatal due to returning -ENXIO.
-
-So, then you need to move it to to_irq() and return there deferred
-probe with a good comment in the code.
-
-> >> +       bool gc_irq_initialized;
-> > Can you move it closer to .init_hw so it will be weakly grouped by
-> > logic similarities?
-> > Also see above.
->
-> Thanks for your comments, I'll make the necessary changes and send a v3.
-
--- 
-With Best Regards,
-Andy Shevchenko
+For some reason I cannot find the original patch(es)

@@ -2,49 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5AB4DA019
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5978F4DA008
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350091AbiCOQb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S1350049AbiCOQ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238240AbiCOQb0 (ORCPT
+        with ESMTP id S1350029AbiCOQ3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:31:26 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E28905714B;
-        Tue, 15 Mar 2022 09:30:11 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Wed, 16 Mar 2022 00:30:03
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.64.209]
-Date:   Wed, 16 Mar 2022 00:30:03 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5ZGo5aSa5piO?= <duoming@zju.edu.cn>
-To:     "Eric Dumazet" <eric.dumazet@gmail.com>
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        ralf@linux-mips.org, jreuter@yaina.de
-Subject: Re: Re: [PATCH net V4 2/2] ax25: Fix NULL pointer dereferences in
- ax25 timers
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <c6052f5c-c1c4-18a0-a04f-e48f366200e4@gmail.com>
-References: <20220315015654.79941-1-duoming@zju.edu.cn>
- <c6052f5c-c1c4-18a0-a04f-e48f366200e4@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 15 Mar 2022 12:29:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECD42BB2F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647361700; x=1678897700;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9NlMuHVWGQMaaogSGPp+bKQ4Qb4Uj1fNrUqrs9vh7KA=;
+  b=meVPf+2z9MaGY0dIh7bO4K15rO0tzigxrG8EhjRtSzpMmeu5iWxIxxBh
+   XDj+6oFkFDuTmH5cxlMmsFfR0EFr3BJd/LPKhw6zYdtZn8SlSdnmS9VqM
+   0DtucWCT5O4Ml+5d1YNItqWaSpFqIawbhrrfnOaUKHSyK+WOCS77euRWP
+   14LppnBh6DtmclGBR4UJ4/oLNRNktdnsbwpLvUI+SrfKT9EdA5VXHTRId
+   hZNmcBitM4QXXIB9aq3AbTX3UOugl/+pk0DtvbHNH9EUA7R0MFFdcqVQM
+   GW+HVswEMRGA2Ar7W+y7dZfB62rWwExnfN9oz1Bh2wYGucnmbw/FGWWEF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255180783"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="255180783"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:28:20 -0700
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="646287929"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:28:20 -0700
+Date:   Tue, 15 Mar 2022 09:31:35 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 5/8] iommu: Add PASID support for DMA mapping API
+ users
+Message-ID: <20220315093135.5c11066d@jacob-builder>
+In-Reply-To: <20220315142216.GV11336@nvidia.com>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+        <20220315050713.2000518-6-jacob.jun.pan@linux.intel.com>
+        <00286dbb-fe73-3604-4dec-340eb91912c3@arm.com>
+        <20220315142216.GV11336@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <2533f9c8.5741.17f8e6a4593.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgBnLrALvzBiaToYAA--.3041W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg0KAVZdtYsFrwABsa
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,93 +79,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDE0IE1hciAyMDIyIDIwOjAzOjAwIC0wNzAwLCBFcmljIER1bWF6ZXQg
-d3JvdGU6Cj4gPiBUaGVyZSBhcmUgcmFjZSBjb25kaXRpb25zIHRoYXQgbWF5IGxlYWQgdG8gbnVs
-bCBwb2ludGVyIGRlcmVmZXJlbmNlcyBpbgo+ID4gYXgyNV9oZWFydGJlYXRfZXhwaXJ5KCksIGF4
-MjVfdDF0aW1lcl9leHBpcnkoKSwgYXgyNV90MnRpbWVyX2V4cGlyeSgpLAo+ID4gYXgyNV90M3Rp
-bWVyX2V4cGlyeSgpIGFuZCBheDI1X2lkbGV0aW1lcl9leHBpcnkoKSwgd2hlbiB3ZSB1c2UKPiA+
-IGF4MjVfa2lsbF9ieV9kZXZpY2UoKSB0byBkZXRhY2ggdGhlIGF4MjUgZGV2aWNlLgo+ID4KPiA+
-IE9uZSBvZiB0aGUgcmFjZSBjb25kaXRpb25zIHRoYXQgY2F1c2UgbnVsbCBwb2ludGVyIGRlcmVm
-ZXJlbmNlcyBjYW4gYmUKPiA+IHNob3duIGFzIGJlbG93Ogo+ID4KPiA+ICAgICAgICAoVGhyZWFk
-IDEpICAgICAgICAgICAgICAgICAgICB8ICAgICAgKFRocmVhZCAyKQo+ID4gYXgyNV9jb25uZWN0
-KCkgICAgICAgICAgICAgICAgICAgICAgIHwKPiA+ICAgYXgyNV9zdGRfZXN0YWJsaXNoX2RhdGFf
-bGluaygpICAgICB8Cj4gPiAgICBheDI1X3N0YXJ0X3QxdGltZXIoKSAgICAgICAgICAgICAgfAo+
-ID4gICAgIG1vZF90aW1lcigmYXgyNS0+dDF0aW1lciwuLikgICAgIHwKPiA+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8IGF4MjVfa2lsbF9ieV9kZXZpY2UoKQo+ID4gICAg
-ICh3YWl0IGEgdGltZSkgICAgICAgICAgICAgICAgICAgIHwgIC4uLgo+ID4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIHMtPmF4MjVfZGV2ID0gTlVMTDsgLy8oMSkKPiA+
-ICAgICBheDI1X3QxdGltZXJfZXhwaXJ5KCkgICAgICAgICAgICB8Cj4gPiAgICAgIGF4MjUtPmF4
-MjVfZGV2LT52YWx1ZXNbLi5dIC8vKDIpfCAgLi4uCj4gPiAgICAgICAuLi4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgfAo+ID4KPiA+IFdlIHNldCBudWxsIHRvIGF4MjVfY2ItPmF4MjVfZGV2
-IGluIHBvc2l0aW9uICgxKSBhbmQgZGVyZWZlcmVuY2UKPiA+IHRoZSBudWxsIHBvaW50ZXIgaW4g
-cG9zaXRpb24gKDIpLgo+ID4KPiA+IFRoZSBjb3JyZXNwb25kaW5nIGZhaWwgbG9nIGlzIHNob3du
-IGJlbG93Ogo+ID4gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09Cj4gPiBCVUc6IGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVu
-Y2UsIGFkZHJlc3M6IDAwMDAwMDAwMDAwMDAwNTAKPiA+IENQVTogMSBQSUQ6IDAgQ29tbTogc3dh
-cHBlci8xIE5vdCB0YWludGVkIDUuMTcuMC1yYzYtMDA3OTQtZzQ1NjkwYjdkMAo+ID4gUklQOiAw
-MDEwOmF4MjVfdDF0aW1lcl9leHBpcnkrMHgxMi8weDQwCj4gPiAuLi4KPiA+IENhbGwgVHJhY2U6
-Cj4gPiAgIGNhbGxfdGltZXJfZm4rMHgyMS8weDEyMAo+ID4gICBfX3J1bl90aW1lcnMucGFydC4w
-KzB4MWNhLzB4MjUwCj4gPiAgIHJ1bl90aW1lcl9zb2Z0aXJxKzB4MmMvMHg2MAo+ID4gICBfX2Rv
-X3NvZnRpcnErMHhlZi8weDJmMwo+ID4gICBpcnFfZXhpdF9yY3UrMHhiNi8weDEwMAo+ID4gICBz
-eXN2ZWNfYXBpY190aW1lcl9pbnRlcnJ1cHQrMHhhMi8weGQwCj4gPiAuLi4KPiA+Cj4gPiBUaGlz
-IHBhdGNoIHVzZXMgYXgyNV9kaXNjb25uZWN0KCkgdG8gZGVsZXRlIHRpbWVycyBiZWZvcmUgd2Ug
-c2V0IG51bGwgdG8KPiA+IGF4MjVfY2ItPmF4MjVfZGV2IGluIGF4MjVfa2lsbF9ieV9kZXZpY2Uo
-KS5UaGUgZnVuY3Rpb24gYXgyNV9kaXNjb25uZWN0KCkKPiA+IHdpbGwgbm90IHJldHVybiB1bnRp
-bCBhbGwgdGltZXJzIGFyZSBzdG9wcGVkLCBiZWNhdXNlIHdlIGhhdmUgY2hhbmdlZAo+ID4gZGVs
-X3RpbWVyKCkgdG8gZGVsX3RpbWVyX3N5bmMoKS4gV2hhdGBzIG1vcmUsIHdlIGFkZCBjb25kaXRp
-b24gY2hlY2sgaW4KPiA+IGF4MjVfZGVzdHJveV9zb2NrZXQoKSwgYmVjYXVzZSBheDI1X3N0b3Bf
-aGVhcnRiZWF0KCkgd2lsbCBub3QgcmV0dXJuLAo+ID4gaWYgdGhlcmUgaXMgc3RpbGwgaGVhcnRi
-ZWF0Lgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1
-LmNuPgo+IAo+IE1pc3NpbmcgRkl4ZXM6IHRhZyA/Cj4gCj4gCj4gPiAtLS0KPiA+IENoYW5nZXMg
-aW4gVjQ6Cj4gPiAgICAtIEJhc2VkIG9uIFtQQVRDSCBuZXQgVjQgMS8yXSBheDI1OiBGaXggcmVm
-Y291bnQgbGVha3MgY2F1c2VkIGJ5IGF4MjVfY2JfZGVsKCkuCj4gPgo+ID4gICBuZXQvYXgyNS9h
-Zl9heDI1LmMgICAgfCAgNyArKysrLS0tCj4gPiAgIG5ldC9heDI1L2F4MjVfdGltZXIuYyB8IDEw
-ICsrKysrLS0tLS0KPiA+ICAgMiBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDggZGVs
-ZXRpb25zKC0pCj4gPgo+ID4gZGlmZiAtLWdpdCBhL25ldC9heDI1L2FmX2F4MjUuYyBiL25ldC9h
-eDI1L2FmX2F4MjUuYwo+ID4gaW5kZXggMDg4NjEwOTQyMWEuLmRjNjE2MWE3NWExIDEwMDY0NAo+
-ID4gLS0tIGEvbmV0L2F4MjUvYWZfYXgyNS5jCj4gPiArKysgYi9uZXQvYXgyNS9hZl9heDI1LmMK
-PiA+IEBAIC04OSwyMCArODksMjAgQEAgc3RhdGljIHZvaWQgYXgyNV9raWxsX2J5X2RldmljZShz
-dHJ1Y3QgbmV0X2RldmljZSAqZGV2KQo+ID4gICAJCQlzayA9IHMtPnNrOwo+ID4gICAJCQlpZiAo
-IXNrKSB7Cj4gPiAgIAkJCQlzcGluX3VubG9ja19iaCgmYXgyNV9saXN0X2xvY2spOwo+ID4gLQkJ
-CQlzLT5heDI1X2RldiA9IE5VTEw7Cj4gPiAgIAkJCQlheDI1X2Rpc2Nvbm5lY3QocywgRU5FVFVO
-UkVBQ0gpOwo+ID4gKwkJCQlzLT5heDI1X2RldiA9IE5VTEw7Cj4gPiAgIAkJCQlzcGluX2xvY2tf
-YmgoJmF4MjVfbGlzdF9sb2NrKTsKPiA+ICAgCQkJCWdvdG8gYWdhaW47Cj4gPiAgIAkJCX0KPiA+
-ICAgCQkJc29ja19ob2xkKHNrKTsKPiA+ICAgCQkJc3Bpbl91bmxvY2tfYmgoJmF4MjVfbGlzdF9s
-b2NrKTsKPiA+ICAgCQkJbG9ja19zb2NrKHNrKTsKPiA+ICsJCQlheDI1X2Rpc2Nvbm5lY3Qocywg
-RU5FVFVOUkVBQ0gpOwo+ID4gICAJCQlzLT5heDI1X2RldiA9IE5VTEw7Cj4gPiAgIAkJCWlmIChz
-ay0+c2tfd3EpIHsKPiA+ICAgCQkJCWRldl9wdXRfdHJhY2soYXgyNV9kZXYtPmRldiwgJmF4MjVf
-ZGV2LT5kZXZfdHJhY2tlcik7Cj4gPiAgIAkJCQlheDI1X2Rldl9wdXQoYXgyNV9kZXYpOwo+ID4g
-ICAJCQl9Cj4gPiAtCQkJYXgyNV9kaXNjb25uZWN0KHMsIEVORVRVTlJFQUNIKTsKPiA+ICAgCQkJ
-cmVsZWFzZV9zb2NrKHNrKTsKPiA+ICAgCQkJc3Bpbl9sb2NrX2JoKCZheDI1X2xpc3RfbG9jayk7
-Cj4gPiAgIAkJCXNvY2tfcHV0KHNrKTsKPiA+IEBAIC0zMDcsNyArMzA3LDggQEAgdm9pZCBheDI1
-X2Rlc3Ryb3lfc29ja2V0KGF4MjVfY2IgKmF4MjUpCj4gPiAgIAo+ID4gICAJYXgyNV9jYl9kZWwo
-YXgyNSk7Cj4gPiAgIAo+ID4gLQlheDI1X3N0b3BfaGVhcnRiZWF0KGF4MjUpOwo+ID4gKwlpZiAo
-IWF4MjUtPnNrIHx8ICFzb2NrX2ZsYWcoYXgyNS0+c2ssIFNPQ0tfREVTVFJPWSkpCj4gPiArCQlh
-eDI1X3N0b3BfaGVhcnRiZWF0KGF4MjUpOwo+ID4gICAJYXgyNV9zdG9wX3QxdGltZXIoYXgyNSk7
-Cj4gPiAgIAlheDI1X3N0b3BfdDJ0aW1lcihheDI1KTsKPiA+ICAgCWF4MjVfc3RvcF90M3RpbWVy
-KGF4MjUpOwo+ID4gZGlmZiAtLWdpdCBhL25ldC9heDI1L2F4MjVfdGltZXIuYyBiL25ldC9heDI1
-L2F4MjVfdGltZXIuYwo+ID4gaW5kZXggODU4NjVlYmZkZmEuLjk5YWYzZDFhZWVjIDEwMDY0NAo+
-ID4gLS0tIGEvbmV0L2F4MjUvYXgyNV90aW1lci5jCj4gPiArKysgYi9uZXQvYXgyNS9heDI1X3Rp
-bWVyLmMKPiA+IEBAIC03OCwyNyArNzgsMjcgQEAgdm9pZCBheDI1X3N0YXJ0X2lkbGV0aW1lcihh
-eDI1X2NiICpheDI1KQo+ID4gICAKPiA+ICAgdm9pZCBheDI1X3N0b3BfaGVhcnRiZWF0KGF4MjVf
-Y2IgKmF4MjUpCj4gPiAgIHsKPiA+IC0JZGVsX3RpbWVyKCZheDI1LT50aW1lcik7Cj4gPiArCWRl
-bF90aW1lcl9zeW5jKCZheDI1LT50aW1lcik7Cj4gPiAgIH0KPiA+ICAgCj4gPiAgIHZvaWQgYXgy
-NV9zdG9wX3QxdGltZXIoYXgyNV9jYiAqYXgyNSkKPiA+ICAgewo+ID4gLQlkZWxfdGltZXIoJmF4
-MjUtPnQxdGltZXIpOwo+ID4gKwlkZWxfdGltZXJfc3luYygmYXgyNS0+dDF0aW1lcik7Cj4gPiAg
-IH0KPiA+ICAgCj4gPiAgIHZvaWQgYXgyNV9zdG9wX3QydGltZXIoYXgyNV9jYiAqYXgyNSkKPiA+
-ICAgewo+ID4gLQlkZWxfdGltZXIoJmF4MjUtPnQydGltZXIpOwo+ID4gKwlkZWxfdGltZXJfc3lu
-YygmYXgyNS0+dDJ0aW1lcik7Cj4gPiAgIH0KPiA+ICAgCj4gPiAgIHZvaWQgYXgyNV9zdG9wX3Qz
-dGltZXIoYXgyNV9jYiAqYXgyNSkKPiA+ICAgewo+ID4gLQlkZWxfdGltZXIoJmF4MjUtPnQzdGlt
-ZXIpOwo+ID4gKwlkZWxfdGltZXJfc3luYygmYXgyNS0+dDN0aW1lcik7Cj4gPiAgIH0KPiA+ICAg
-Cj4gPiAgIHZvaWQgYXgyNV9zdG9wX2lkbGV0aW1lcihheDI1X2NiICpheDI1KQo+ID4gICB7Cj4g
-PiAtCWRlbF90aW1lcigmYXgyNS0+aWRsZXRpbWVyKTsKPiA+ICsJZGVsX3RpbWVyX3N5bmMoJmF4
-MjUtPmlkbGV0aW1lcik7Cj4gPiAgIH0KPiA+ICAgCj4gPiAgIGludCBheDI1X3QxdGltZXJfcnVu
-bmluZyhheDI1X2NiICpheDI1KQo+IAo+IAo+IAo+IEFyZSB5b3Ugc3VyZSBjYWxsaW5nIGRlbF90
-aW1lX3N5bmMoKSB3b250IGRlYWRsb2NrID8KPiAKPiAKPiBJZiB0aGUgdGltZXIgaGFuZGxlcnMg
-bmVlZCBhIGxvY2sgb3duZWQgYnkgdGhlIHRocmVhZCBjYWxsaW5nIAo+IGRlbF90aW1lcl9zeW5j
-KCksCj4gCj4gdGhlbiB0aGlzIHdpbGwgYmxvY2sgZm9yZXZlci4KCkkgdGhpbmsgdGhlcmUgaXMg
-bm8gZGVhZGxvY2suCgpGdW5jdGlvbiBheDI1X2tpbGxfYnlfZGV2aWNlKCkgd2lsbCBvbmx5IGhv
-bGQgbG9ja19zb2NrKHNrKSBiZWZvcmUgdXNpbmcgCmF4MjVfZGlzY29ubmVjdCgpIHRvIGNhbGwg
-ZGVsX3RpbWVyX3N5bmMoKS4KCkluIHRpbWVycywgd2UgaG9sZCBiaF9sb2NrX3NvY2soc2spIG9y
-IHNwaW5fbG9ja19iaCgmYXgyNV9saXN0X2xvY2spIHdoaWNoCmlzIGRpZmZlcmVudCBmcm9tIGxv
-Y2tfc29jayhzaykuCgpCZXN0IHdpc2hlcywKRHVvbWluZyBaaG91Cgo=
+Hi Jason,
+
+On Tue, 15 Mar 2022 11:22:16 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Tue, Mar 15, 2022 at 11:16:41AM +0000, Robin Murphy wrote:
+> > On 2022-03-15 05:07, Jacob Pan wrote:  
+> > > DMA mapping API is the de facto standard for in-kernel DMA. It
+> > > operates on a per device/RID basis which is not PASID-aware.
+> > > 
+> > > Some modern devices such as Intel Data Streaming Accelerator, PASID is
+> > > required for certain work submissions. To allow such devices use DMA
+> > > mapping API, we need the following functionalities:
+> > > 1. Provide device a way to retrieve a PASID for work submission within
+> > > the kernel
+> > > 2. Enable the kernel PASID on the IOMMU for the device
+> > > 3. Attach the kernel PASID to the device's default DMA domain, let it
+> > > be IOVA or physical address in case of pass-through.
+> > > 
+> > > This patch introduces a driver facing API that enables DMA API
+> > > PASID usage. Once enabled, device drivers can continue to use DMA
+> > > APIs as is. There is no difference in dma_handle between without
+> > > PASID and with PASID.  
+> > 
+> > Surely the main point of PASIDs is to be able to use more than one
+> > of them?  
+> 
+> IMHO, not for the DMA API.
+> 
+Right, but we really need two here. One for DMA request w/o PASID (PASID 0)
+and a kernel PASID for DMA request tagged w/ PASID.
+Since DMA API is not per process, there is no need for more right now.
+
+> I can't think of good reasons why a single in-kernel device should
+> require more than one iommu_domain for use by the DMA API. Even with
+> the SIOV cases we have been looking at we don't really see a use case
+> for more than one DMA API iommu_domain on a single physical device.
+> Do you know of something on the horizon?
+> 
+Not that I know.
+
+> From my view the main point of PASIDs is to assign iommu_domains that
+> are not used by the DMA API.
+> 
+Right, DMA API default to PASID 0. But IDXD device cannot use PASID 0 for
+enqcmds.
+
+> IMHO it is a device mis-design of IDXD to require all DMA be PASID
+> tagged. Devices should be able to do DMA on their RID when the PCI
+IDXD can do DMA w/ RID, the PASID requirement is only for shared WQ where
+ENQCMDS is used. ENQCMDS has the benefit of avoiding locking where work
+submission is done from multiple CPUs.
+Tony, Dave?
+
+> function is controlled by a kernel driver. I see this driver facing
+> API as addressing a device quirk by aliasing the DMA API of the RID
+> into a PASID and that is really all it is good for.
+> 
+> In any case I think we are better to wait for an actual user for multi
+> DMA API iommu_domains to come forward before we try to build an API
+> for it.
+> 
+What would you recommend in the interim?
+
+Shall we let VT-d driver set up a special global PASID for DMA API? Then
+IDXD driver can retrieve it somehow? But that still needs an API similar to
+what I did in the previous version where PASID #1 was used.
+
+Thanks,
+
+Jacob

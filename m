@@ -2,113 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D914D9B5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259364D9B5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348282AbiCOMiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        id S1348340AbiCOMkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348211AbiCOMhq (ORCPT
+        with ESMTP id S1348211AbiCOMkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:37:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9408A53B4A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647347793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=meH+qCfj6lH9OjS/cwuXTPPvOKgAu1/eJ1NA4WtkLWw=;
-        b=XhNkYtxDs/rmrIQunN/OjYQDceUHOKaqqboWz6KTZh0ESrW2l0qqXr4WC9siLa6QwH8cxt
-        Rozx3CW0JdNmaFKaQjnvo7+VGs9ml/xeIwdyEN4vyPqU1oMXUnm2IRArf36z0X2Btv1Pqh
-        l2Ofs1GxhMnKLVMjG7BwnIAyCAFBPX4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-KND9RVyQPuSbX0xDbIJzlg-1; Tue, 15 Mar 2022 08:36:32 -0400
-X-MC-Unique: KND9RVyQPuSbX0xDbIJzlg-1
-Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b003815245c642so1175890wma.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:36:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=meH+qCfj6lH9OjS/cwuXTPPvOKgAu1/eJ1NA4WtkLWw=;
-        b=sCl3CZuQYBu/8N6VzgTwGzhtEDQ4MpzCL2pPqjNbSiwth4ChrigW3oBKeVBaYYNcxN
-         UKUQUCjh7PT83QdHOqDFFoajmqQ7AMAzDtYZAqFCx5STN6cWdl1GZUcdCDhry1PBopzy
-         b052gTOu8rdopuPBMffSwGAntXftsWksCpc20YxUHC3kbCYC5nP8LDlve4UwJdWDoGUD
-         06h0ye8D0Fk67q75M6t8vk/24O+cIFsV211rfyoC6BSJ9JckGJFzgjhZdDyB9SipFXgg
-         LDS65noUofCiNBi+O5ti31K73MeVkX12n787KAJ7Jpo5Dn/pjPFD+WSygH5VRiPZKb0G
-         2VLg==
-X-Gm-Message-State: AOAM531IEE0W7EZbUEgVtVBKttKTBDL4sofKZAtdomFo+G3zE4QD8Xaz
-        NYbsJTHVprhQJlmZq5XU2toIkO8eSeb5X52B4KjvgxHB7fAwfXSO77+PBBODtiqLUUbBblO9x3Q
-        Exs4O3hEdJH66NhNtwSp1OHYi
-X-Received: by 2002:a5d:5848:0:b0:203:a65d:1f49 with SMTP id i8-20020a5d5848000000b00203a65d1f49mr9962619wrf.397.1647347791478;
-        Tue, 15 Mar 2022 05:36:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwxs66bOxh/TumvNSO4GmYvVoUpKAXWPE2kOcJ3ObbpEpN4Okx+fZPk6CJYHBO98nKh9ymjiA==
-X-Received: by 2002:a5d:5848:0:b0:203:a65d:1f49 with SMTP id i8-20020a5d5848000000b00203a65d1f49mr9962610wrf.397.1647347791249;
-        Tue, 15 Mar 2022 05:36:31 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g7-20020a5d5407000000b001f0be7a7578sm15371811wrv.5.2022.03.15.05.36.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 05:36:30 -0700 (PDT)
-Message-ID: <fcdcd046-63f5-495d-b5ad-f407592f2160@redhat.com>
-Date:   Tue, 15 Mar 2022 13:36:29 +0100
+        Tue, 15 Mar 2022 08:40:31 -0400
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E095630F53;
+        Tue, 15 Mar 2022 05:39:17 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 15 Mar
+ 2022 20:39:12 +0800
+Received: from [10.29.8.53] (10.29.8.53) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 15 Mar
+ 2022 20:39:10 +0800
+Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
+ zhaoxin
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>
+References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
+ <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Message-ID: <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
+Date:   Tue, 15 Mar 2022 20:39:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5/5] drm/repaper: Reduce temporary buffer size in
- repaper_fb_dirty()
+In-Reply-To: <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220315110707.628166-1-geert@linux-m68k.org>
- <20220315110707.628166-6-geert@linux-m68k.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220315110707.628166-6-geert@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.29.8.53]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 12:07, Geert Uytterhoeven wrote:
-> As the temporary buffer is no longer used to store 8-bit grayscale data,
-> its size can be reduced to the size needed to store the monochrome
-> bitmap data.
+On 2022/3/14 10:24, Alan Stern wrote:
+> On Mon, Mar 14, 2022 at 03:35:37PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
+>> In zhaoxin platform, some ehci projects will latch a wakeup signal
+>> internal when plug in a device on port during system S0. This wakeup
+>> signal will turn on when ehci runtime suspend, which will trigger a
+>> system control interrupt that will resume ehci back to D0. As no
+>> device connect, ehci will be set to runtime suspend and turn on the
+>> internal latched wakeup signal again. It will cause a suspend-resume
+>> loop and generate system control interrupt continuously.
+>>
+>> Fixed this issue by clear wakeup signal latched in ehci internal when
+>> ehci resume callback is called.
+>>
+>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>> ---
+>>   drivers/usb/host/ehci-hcd.c | 26 ++++++++++++++++++++++++++
+>>   drivers/usb/host/ehci-pci.c |  4 ++++
+>>   drivers/usb/host/ehci.h     |  1 +
+>>   3 files changed, 31 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+>> index 3d82e0b..e4840ef 100644
+>> --- a/drivers/usb/host/ehci-hcd.c
+>> +++ b/drivers/usb/host/ehci-hcd.c
+>> @@ -1103,6 +1103,30 @@ static void ehci_remove_device(struct usb_hcd *hcd,
+>> struct usb_device *udev)
+>>
+>>   #ifdef CONFIG_PM
+>>
+>> +/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
+>> +static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
+>> +{
+>> +       u32 __iomem     *reg = &ehci->regs->port_status[4];
+>> +       u32     t1 = ehci_readl(ehci, reg);
 > 
-> Fixes: 24c6bedefbe71de9 ("drm/repaper: Use format helper for xrgb8888 to monochrome conversion")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> Untested due to lack of hardware.
+> The "t1" in this line should start in the same column as the "*reg" in
+> the line above, to match the style of other variable declarations in
+> this file (see ehci_init() as an example).
 > 
+>> +
+>> +       t1 &= (u32)~0xf0000;
+>> +       t1 |= PORT_TEST_FORCE;
+>> +       ehci_writel(ehci, t1, reg);
+>> +       t1 = ehci_readl(ehci, reg);
+>> +       msleep(1);
+>> +       t1 &= (u32)~0xf0000;
+>> +       ehci_writel(ehci, t1, reg);
+>> +       ehci_readl(ehci, reg);
+>> +       msleep(1);
+>> +       t1 = ehci_readl(ehci, reg);
+>> +       ehci_writel(ehci, t1 | PORT_CSC, reg);
+>> +       ehci_readl(ehci, reg);
+>> +       udelay(500);
+>> +       t1 = ehci_readl(ehci, &ehci->regs->status);
+>> +       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
+>> +       ehci_readl(ehci, &ehci->regs->status);
+> 
+> You should not clear the STS_PCD bit.  What if some other port had a
+> status change at the same time?  Then because you cleared the
+> port-change-detect bit, the system would not realize that the other port
+> needed to be handled.
 
-Patch looks good to me but I also don't have this hardware.
+I really didn't think about this case.
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Leaving the STS_PCD bit turned on will cause the driver to do a little
+> extra work, but it shouldn't cause any harm.
+> 
+I have encountered the following situation if EHCI runtime suspend is 
+enabled by default.
 
---
-Best regards,
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
 
+1.Wake from system to disk and boot OS.
+
+2.EHCI will entry runtime suspend after enumerated by driver during boot 
+phase of suspend to disk
+
+
+3.EHCI will be placed to freeze state and ehci_resume is called after 
+image is loaded.
+
+
+4.If PCD flag is set(caused by patch), then HCD_FLAG_RH_RUNNING will be set.
+
+
+5.Pci_pm_freeze_noirq is called to check ehci root hub state and return 
+value is -EBUSY. which will cause
+  quiesce phase of suspend to disk fail.
+
+
+
+However,EHCI runtime suspend is default disabled by kernel, user can 
+enable runtime suspend after boot into OS.
+  So I guess turning on suspend during startup is not a real requirement 
+and I will take your advice.
+
+Weitao Wang
+>> +}
+>> +
+>>   /* suspend/resume, section 4.3 */
+>>
+>>   /* These routines handle the generic parts of controller suspend/resume */
+>> @@ -1154,6 +1178,8 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
+>>          if (ehci->shutdown)
+>>                  return 0;               /* Controller is dead */
+>>
+>> +       if (ehci->zx_wakeup_clear == 1)
+> 
+> You don't need to check that the value is equal to 1.  Treat this
+> more like a Boolean flag and just write:
+> 
+> 	if (ehci->zx_wakeup_clear)
+> 
+> Also, to make the flag's meaning more obvious, you might want to name
+> it "zx_wakeup_clear_needed" or "zx_clear_latched_wakeup".
+> 
+> Otherwise this patch looks okay.  Please submit a revised version,
+> without the whitespace damage.
+> 
+> Alan Stern
+
+Okay,I will take your advice
+Weitao Wang
+
+> 
+>> +               ehci_zx_wakeup_clear(ehci);
+>>          /*
+>>           * If CF is still set and reset isn't forced
+>>           * then we maintained suspend power.
+>> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+>> index e87cf3a..a5e27de 100644
+>> --- a/drivers/usb/host/ehci-pci.c
+>> +++ b/drivers/usb/host/ehci-pci.c
+>> @@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>>                          ehci->has_synopsys_hc_bug = 1;
+>>                  }
+>>                  break;
+>> +       case PCI_VENDOR_ID_ZHAOXIN:
+>> +               if (pdev->device == 0x3104 && (pdev->revision & 0xf0) ==
+>> 0x90)
+>> +                       ehci->zx_wakeup_clear = 1;
+>> +               break;
+>>          }
+>>
+>>          /* optional debug port, normally in the first BAR */
+>> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+>> index fdd073c..712fdd0 100644
+>> --- a/drivers/usb/host/ehci.h
+>> +++ b/drivers/usb/host/ehci.h
+>> @@ -220,6 +220,7 @@ struct ehci_hcd {                   /* one per
+>> controller */
+>>          unsigned                imx28_write_fix:1; /* For Freescale i.MX28
+>> */
+>>          unsigned                spurious_oc:1;
+>>          unsigned                is_aspeed:1;
+>> +       unsigned                zx_wakeup_clear:1;
+>>
+>>          /* required for usb32 quirk */
+>>          #define OHCI_CTRL_HCFS          (3 << 6)
+>> -- 
+>> 2.7.4
+> .
+> 

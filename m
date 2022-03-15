@@ -2,139 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2424DA381
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 298A44DA384
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351483AbiCOTyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S1351501AbiCOT4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235514AbiCOTyM (ORCPT
+        with ESMTP id S235514AbiCOT4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:54:12 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AF0286C6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:52:59 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so414537pjl.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q0Z/mKLEzNMGFhUbWMgWDYenOVpB+Pa0RFNSj7m6Lq0=;
-        b=DdjagM6iLgCzTKKLhzNMMpzAvoMKa5fc95CsnEsQKICrPW80MBMPSL8FQwe5uHgRne
-         RXt4V1BllKjKmpk354xuyBEOLu/sckjJQ1RvERNexLsSTJjBPfadOsH2xg5KFK6Aj5vN
-         mZQUoj8QOCqRNk5BhjoQvb21U3wZRO5bpYjQc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q0Z/mKLEzNMGFhUbWMgWDYenOVpB+Pa0RFNSj7m6Lq0=;
-        b=u9lXRhiNnvAcUSoSRfKCYMhcnAXJ8h7leDa/wu1B2V4/hrnnFCKaVtRFnCYafrsCNb
-         KVZoR0bBWRH/18+wQmie0NfZxaAmu+n9QyAS4/QluL9SeH3x5j+o/jjf0s4S6EdfK5S3
-         jVz8NCfJ10tQ/GeSDxLvFQC2/ThOs0PrAC3hdM/gk8XbHpLEo34tZuDU0LqBLHUEtKm7
-         y0AbTmCMUIBuTsXBNa+SweFz0N/XoC+VOugbKi9xYI8PyP2ydViGZkI0fDjDeYeY/MAT
-         PafvVeVa0AQKrl1QkSnqgv3WNAb6MFy9u/xvgg5kAyRM7qYqKxOq2VBctO7TXEb0NQMc
-         kh1g==
-X-Gm-Message-State: AOAM531miotbyYWs4edVU8R3+x1QPhOeyT/OrsjAMnACeW/f5ViWexFe
-        5xekBdjPeozG2TG5xnGlxZkaNhYYje8jtg==
-X-Google-Smtp-Source: ABdhPJxVH1RzoNFr9lnuMz/Kq4V/O4Hk1z36zluI47SVOlMM23quvMSJX6PsAza8rFFcRnmxr300xw==
-X-Received: by 2002:a17:902:da89:b0:153:349c:d240 with SMTP id j9-20020a170902da8900b00153349cd240mr23369729plx.73.1647373978733;
-        Tue, 15 Mar 2022 12:52:58 -0700 (PDT)
-Received: from ebps (cpe-75-80-179-40.san.res.rr.com. [75.80.179.40])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm25503039pfe.20.2022.03.15.12.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:52:58 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 12:52:55 -0700
-From:   Eric Badger <ebadger@purestorage.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver OHalloran <oohall@gmail.com>, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        ebadger@purestorage.com
-Subject: Re: [PATCH v2] PCI/AER: Handle Multi UnCorrectable/Correctable
- errors properly
-Message-ID: <20220315195255.GA1523195@ebps>
-References: <20220315050842.120063-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220315171425.GA1521135@ebps>
- <2d4e8811-dce6-c891-e92d-e3746434685e@linux.intel.com>
+        Tue, 15 Mar 2022 15:56:23 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C513C46B31
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647374110; x=1678910110;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6AU4bmQHpzfCMff2LynTkVDLCExMM3FHo7azCwgzSc4=;
+  b=lD49rp0AWD9Hx8UbjwiHcbZUNqQN3kGPOyDZwD4JJPhViFDo6OLsfZZa
+   odWXrAqQ9yqsrRaRhDw/bwWYdb6QrmfYCUyj3kI/OPQkjT2s6kcul93Mv
+   QguuGfIrJJF1rXYWJtUpAnikrADuSkBjsrb4ClJrZCFHSPa35TpDGdpxq
+   OickCsEV9GAKS57aLZUq7preh7IyBFBd9ZnZvz0Iij7QV3eu7HjsO0bLL
+   tM2g+ybRaBqL6+OyamIM+DlmuqKY1sqfePsn6yrU2o9Bgu+5FfEWwpITf
+   9VcicPBJA2/oZVU74UzldQsf9w63DX3LUSqmvdoW/NcLOASoS+OB6A1ks
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243862759"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="243862759"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 12:55:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="690329395"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2022 12:55:07 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUDG7-000BRS-AK; Tue, 15 Mar 2022 19:55:07 +0000
+Date:   Wed, 16 Mar 2022 03:54:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        Christoffer Dall <cdall@linaro.org>
+Subject: Re: [PATCH] arm64: add the printing of tpidr_elx in __show_regs()
+Message-ID: <202203160347.f7ls2XFW-lkp@intel.com>
+References: <20220315110926.1060-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d4e8811-dce6-c891-e92d-e3746434685e@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220315110926.1060-1-thunder.leizhen@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 10:26:46AM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 3/15/22 10:14 AM, Eric Badger wrote:
-> > >   # Prep injection data for a correctable error.
-> > >   $ cd /sys/kernel/debug/apei/einj
-> > >   $ echo 0x00000040 > error_type
-> > >   $ echo 0x4 > flags
-> > >   $ echo 0x891000 > param4
-> > > 
-> > >   # Root Error Status is initially clear
-> > >   $ setpci -s <Dev ID> ECAP0001+0x30.w
-> > >   0000
-> > > 
-> > >   # Inject one error
-> > >   $ echo 1 > error_inject
-> > > 
-> > >   # Interrupt received
-> > >   pcieport <Dev ID>: AER: Root Error Status 0001
-> > > 
-> > >   # Inject another error (within 5 seconds)
-> > >   $ echo 1 > error_inject
-> > > 
-> > >   # No interrupt received, but "multiple ERR_COR" is now set
-> > >   $ setpci -s <Dev ID> ECAP0001+0x30.w
-> > >   0003
-> > > 
-> > >   # Wait for a while, then clear ERR_COR. A new interrupt immediately
-> > >     fires.
-> > >   $ setpci -s <Dev ID> ECAP0001+0x30.w=0x1
-> > >   pcieport <Dev ID>: AER: Root Error Status 0002
-> > > 
-> > > Currently, the above issue has been only reproduced in the ICL server
-> > > platform.
-> > > 
-> > > [Eric: proposed reproducing steps]
-> > Hmm, this differs from the procedure I described on v1, and I don't
-> > think will work as described here.
-> 
-> I have attempted to modify the steps to reproduce it without returning
-> IRQ_NONE for all cases (which will break the functionality). But I
-> think I did not correct the last few steps.
+Hi Zhen,
 
-Well, the thinking in always returning IRQ_NONE was so that only setpci
-modified the register and we could clearly see how writes to the
-register affect interrupt generation.
+Thank you for the patch! Perhaps something to improve:
 
-> How about replacing the last 3 steps with following?
-> 
->  # Inject another error (within 5 seconds)
->  $ echo 1 > error_inject
-> 
->  # You will get a new IRQ with only multiple ERR_COR bit set
->  pcieport <Dev ID>: AER: Root Error Status 0002
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on arm-perf/for-next/perf arm/for-next xilinx-xlnx/master soc/for-next kvmarm/next v5.17-rc8 next-20220315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This seems accurate. Though it does muddy a detail that I think was
-clearer in the original procedure: was the second interrupt triggered by
-the second error, or by the write of 0x1 to Root Error Status?
+url:    https://github.com/0day-ci/linux/commits/Zhen-Lei/arm64-add-the-printing-of-tpidr_elx-in-__show_regs/20220315-191234
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-buildonly-randconfig-r002-20220313 (https://download.01.org/0day-ci/archive/20220316/202203160347.f7ls2XFW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/1a42e34104d70b0b90fe074ba96f2c04d33ffb23
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Zhen-Lei/arm64-add-the-printing-of-tpidr_elx-in-__show_regs/20220315-191234
+        git checkout 1a42e34104d70b0b90fe074ba96f2c04d33ffb23
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
-Also, in terms of practically running the test, I find the mdelay() can
-block other interrupts and can make running the test sort of confusing
-("is it not printing because the interrupt didn't fire, or because it's
-spinning and blocking my NIC driver?" :).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Cheers,
-Eric
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kernel/process.c:220:30: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+                   printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
+                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                              ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                                   ^~~~~~~~~~~
+   include/linux/percpu-defs.h:252:27: note: expanded from macro 'this_cpu_ptr'
+   #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+                             ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:241:2: note: expanded from macro 'raw_cpu_ptr'
+           __verify_pcpu_ptr(ptr);                                         \
+           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:52: note: expanded from macro '__verify_pcpu_ptr'
+           const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+                                                       ~~~~~ ^
+>> arch/arm64/kernel/process.c:220:30: warning: format specifies type 'unsigned long' but the argument has type 'typeof (*(((void *)0))) *' (aka 'void *') [-Wformat]
+                   printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
+                                   ~~~~~~     ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   include/linux/percpu-defs.h:252:27: note: expanded from macro 'this_cpu_ptr'
+   #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+                             ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:239:31: note: expanded from macro 'raw_cpu_ptr'
+   #define raw_cpu_ptr(ptr)                                                \
+                                                                           ^
+   2 warnings generated.
+
+
+vim +220 arch/arm64/kernel/process.c
+
+   200	
+   201	void __show_regs(struct pt_regs *regs)
+   202	{
+   203		int i, top_reg;
+   204		u64 lr, sp;
+   205	
+   206		if (compat_user_mode(regs)) {
+   207			lr = regs->compat_lr;
+   208			sp = regs->compat_sp;
+   209			top_reg = 12;
+   210		} else {
+   211			lr = regs->regs[30];
+   212			sp = regs->sp;
+   213			top_reg = 29;
+   214		}
+   215	
+   216		show_regs_print_info(KERN_DEFAULT);
+   217		print_pstate(regs);
+   218	
+   219		if (IS_ENABLED(CONFIG_SMP))
+ > 220			printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
+   221	
+   222		if (!user_mode(regs)) {
+   223			printk("pc : %pS\n", (void *)regs->pc);
+   224			printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
+   225		} else {
+   226			printk("pc : %016llx\n", regs->pc);
+   227			printk("lr : %016llx\n", lr);
+   228		}
+   229	
+   230		printk("sp : %016llx\n", sp);
+   231	
+   232		if (system_uses_irq_prio_masking())
+   233			printk("pmr_save: %08llx\n", regs->pmr_save);
+   234	
+   235		i = top_reg;
+   236	
+   237		while (i >= 0) {
+   238			printk("x%-2d: %016llx", i, regs->regs[i]);
+   239	
+   240			while (i-- % 3)
+   241				pr_cont(" x%-2d: %016llx", i, regs->regs[i]);
+   242	
+   243			pr_cont("\n");
+   244		}
+   245	}
+   246	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

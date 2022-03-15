@@ -2,186 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AB24D9269
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0534A4D926B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344375AbiCOCDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 22:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
+        id S1344385AbiCOCFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 22:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245677AbiCOCDN (ORCPT
+        with ESMTP id S245677AbiCOCFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 22:03:13 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56FF13CE8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:02:02 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id i18so9355784vkr.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5HAPVMUD1lxYCnamxONVJx9ic0StEWbLmBaj3VaUmNk=;
-        b=ASCtFuerHqUmD1H8gbfpEbjk+0bDByLuwQg02wRbxMokEiwqIBprAIOG9M7v0UOg8f
-         tLPsebpL6ksJeTGw5U1p7vUDgJ707RXr4zdGeBZJa/7o9tJW2H7D/Bops/w5X8Ssrp5w
-         6MooG/t+9b8UA36JLp1D8K+U9cVyNTDlBXbt2QmSaKxE/dYoin7Ykvbs2gXj3ZAVECXm
-         irpc+Pu2OOdn9jZ4xicXGIEeTZCckmNxCjhP1XeoKsn7NFkm1Se4meNoCyIDrFjiWqzQ
-         2CftgPWQQPjptp+fyT1bSJj+a4+oBV//KA8WiuHisDDNu6d384sJ1GZWrKy/KB+6beFc
-         sEiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5HAPVMUD1lxYCnamxONVJx9ic0StEWbLmBaj3VaUmNk=;
-        b=zUqRFtYLEjbfCkkplZUApL/W8YLGuNC651A4tVi0MTUlg6fQy6KqIy1JJBXegcj/kS
-         wuo5EDDFYT/ymSLtvXwzOzpGiT8AsapTLIOUHEoCmCq/TRSDUCvpOzK9btn9wRQBd8zO
-         lfVDQ2ZgJqLvr/69TBRkTv6lGUuSBVTLSHyODYmMg2yElao3ud3GuabxEAz4vjxZIdgP
-         34P/sGHLHaqQJbrbN3zfpz3mH/mLC1DlkTZH6QfbRv0/0hcwmXCaIqOPZlTUToV+80TG
-         8bw3YDZanFZwr0zTSYWhalKOPO/yzJZ26+Dc8g2r/HfJEHHxhifLOEmWnsMNe8eGdKUg
-         fwjQ==
-X-Gm-Message-State: AOAM531dQvtZjnauxzjAb6BkNyUgiHEa2oBLvNsbWAfyvx6xAO4GAZHK
-        oOV1oi9Jlaqtr/43dgNVaRfr6Tw5xK9xDuziRKqMNuyVxhoSZg==
-X-Google-Smtp-Source: ABdhPJzxaZXYOAQeql12ZxZ/JtqGE7Wz+aqcct1Dy2jmWiwJoPI+Kv6RkcA7wDqdozyjaqYmJB9uYohDCh1r0Npne60=
-X-Received: by 2002:a1f:348a:0:b0:32d:34f:7941 with SMTP id
- b132-20020a1f348a000000b0032d034f7941mr10374403vka.13.1647309721755; Mon, 14
- Mar 2022 19:02:01 -0700 (PDT)
+        Mon, 14 Mar 2022 22:05:41 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BAB22B26;
+        Mon, 14 Mar 2022 19:04:28 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 15 Mar
+ 2022 10:04:27 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 15 Mar
+ 2022 10:04:26 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH] scsi: aha1542: remove unneeded semicolon
+Date:   Tue, 15 Mar 2022 10:04:25 +0800
+Message-ID: <1647309865-15620-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220208211637.2221872-1-eranian@google.com> <20220208211637.2221872-11-eranian@google.com>
-In-Reply-To: <20220208211637.2221872-11-eranian@google.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Mon, 14 Mar 2022 19:01:49 -0700
-Message-ID: <CABPqkBSzc167wNbJpWu7msfZ-KrGu-nMtFdw-naN+M7Q0py-vA@mail.gmail.com>
-Subject: Re: [PATCH v6 10/12] perf tools: Improve IBS error handling
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
-        jolsa@redhat.com, songliubraving@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kim,
+Fixes coccicheck warning:
+drivers/scsi/aha1542.c:553:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:582:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:605:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:306:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:348:3-4: Unneeded semicolon
+drivers/scsi/aha1542.c:412:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:640:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:658:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:677:2-3: Unneeded semicolon
+drivers/scsi/aha1542.c:538:2-3: Unneeded semicolon
 
-On Tue, Feb 8, 2022 at 1:17 PM Stephane Eranian <eranian@google.com> wrote:
->
-> From: Kim Phillips <kim.phillips@amd.com>
->
-> improve the error message returned on failed perf_event_open() on AMD when
-> using IBS.
->
-> Output of executing 'perf record -e ibs_op// true' BEFORE this patch:
->
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument)for event (ibs_op//u).
-> /bin/dmesg | grep -i perf may provide additional information.
->
-> Output after:
->
-> AMD IBS cannot exclude kernel events.  Try running at a higher privilege level.
->
-> Output of executing 'sudo perf record -e ibs_op// true' BEFORE this patch:
->
-> Error:
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (ibs_op//).
-> /bin/dmesg | grep -i perf may provide additional information.
->
-> Output after:
->
-> Error:
-> AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity
->
-> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Michael Petlan <mpetlan@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Robert Richter <robert.richter@amd.com>
-> Cc: Stephane Eranian <eranian@google.com>
-> ---
->  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 22d3267ce294..d42f63a484df 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -2847,9 +2847,22 @@ static bool find_process(const char *name)
->         return ret ? false : true;
->  }
->
-> +static bool is_amd(const char *arch, const char *cpuid)
-> +{
-> +       return arch && !strcmp("x86", arch) && cpuid && strstarts(cpuid, "AuthenticAMD");
-> +}
-> +
-> +static bool is_amd_ibs(struct evsel *evsel)
-> +{
-> +       return evsel->core.attr.precise_ip || !strncmp(evsel->pmu_name, "ibs", 3);
-> +}
-> +
->  int evsel__open_strerror(struct evsel *evsel, struct target *target,
->                          int err, char *msg, size_t size)
->  {
-> +       struct perf_env *env = evsel__env(evsel);
-> +       const char *arch = perf_env__arch(env);
-> +       const char *cpuid = perf_env__cpuid(env);
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/scsi/aha1542.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
+index f0e8ae9..a5a0a3e 100644
+--- a/drivers/scsi/aha1542.c
++++ b/drivers/scsi/aha1542.c
+@@ -303,7 +303,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 		if (flag & SCRD)
+ 			printk("SCRD ");
+ 		printk("status %02x\n", inb(STATUS(sh->io_port)));
+-	};
++	}
+ #endif
+ 	number_serviced = 0;
+ 
+@@ -345,7 +345,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 			if (!number_serviced)
+ 				shost_printk(KERN_WARNING, sh, "interrupt received, but no mail.\n");
+ 			return IRQ_HANDLED;
+-		};
++		}
+ 
+ 		mbo = (scsi2int(mb[mbi].ccbptr) - (unsigned long)aha1542->ccb_handle) / sizeof(struct ccb);
+ 		mbistatus = mb[mbi].status;
+@@ -409,7 +409,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 						 */
+ 		scsi_done(tmp_cmd);
+ 		number_serviced++;
+-	};
++	}
+ }
+ 
+ static int aha1542_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
+@@ -535,7 +535,7 @@ static void setup_mailboxes(struct Scsi_Host *sh)
+ 		any2scsi(aha1542->mb[i].ccbptr,
+ 			 aha1542->ccb_handle + i * sizeof(struct ccb));
+ 		aha1542->mb[AHA1542_MAILBOXES + i].status = 0;
+-	};
++	}
+ 	aha1542_intr_reset(sh->io_port);	/* reset interrupts, so they don't block */
+ 	any2scsi(mb_cmd + 2, aha1542->mb_handle);
+ 	if (aha1542_out(sh->io_port, mb_cmd, 5))
+@@ -550,7 +550,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
+ 	i = inb(STATUS(sh->io_port));
+ 	if (i & DF) {
+ 		i = inb(DATA(sh->io_port));
+-	};
++	}
+ 	aha1542_outb(sh->io_port, CMD_RETCONF);
+ 	aha1542_in(sh->io_port, inquiry_result, 3, 0);
+ 	if (!wait_mask(INTRFLAGS(sh->io_port), INTRMASK, HACC, 0, 0))
+@@ -579,7 +579,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
+ 	default:
+ 		shost_printk(KERN_ERR, sh, "Unable to determine DMA channel.\n");
+ 		return -1;
+-	};
++	}
+ 	switch (inquiry_result[1]) {
+ 	case 0x40:
+ 		sh->irq = 15;
+@@ -602,7 +602,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
+ 	default:
+ 		shost_printk(KERN_ERR, sh, "Unable to determine IRQ level.\n");
+ 		return -1;
+-	};
++	}
+ 	sh->this_id = inquiry_result[2] & 7;
+ 	return 0;
+ }
+@@ -637,7 +637,7 @@ static int aha1542_mbenable(struct Scsi_Host *sh)
+ 
+ 		if (aha1542_out(sh->io_port, mbenable_cmd, 3))
+ 			goto fail;
+-	};
++	}
+ 	while (0) {
+ fail:
+ 		shost_printk(KERN_ERR, sh, "Mailbox init failed\n");
+@@ -655,7 +655,7 @@ static int aha1542_query(struct Scsi_Host *sh)
+ 	i = inb(STATUS(sh->io_port));
+ 	if (i & DF) {
+ 		i = inb(DATA(sh->io_port));
+-	};
++	}
+ 	aha1542_outb(sh->io_port, CMD_INQUIRY);
+ 	aha1542_in(sh->io_port, inquiry_result, 4, 0);
+ 	if (!wait_mask(INTRFLAGS(sh->io_port), INTRMASK, HACC, 0, 0))
+@@ -674,7 +674,7 @@ static int aha1542_query(struct Scsi_Host *sh)
+ 	if (inquiry_result[0] == 0x43) {
+ 		shost_printk(KERN_INFO, sh, "Emulation mode not supported for AHA-1740 hardware, use aha1740 driver instead.\n");
+ 		return 1;
+-	};
++	}
+ 
+ 	/*
+ 	 * Always call this - boards that do not support extended bios translation
+-- 
+2.7.4
 
-This code dies for me on the latest tip.git because env = NULL and
-perf_env_cpuid() is broken for NULL argument.
-I don't quite know where this env global variable is set but I hope
-there is a better way of doing this, maybe using
-the evsel__env() function in the same util/evsel.c file.
-
-Similarly, the is_amd_ibs() suffers from a NULL pointer dereference
-because evsel->pmu_name maybe NULL:
-
-$ perf record -e rc2 .....
-
-causes a NULL pmu_name.
-
-Could you please send me an updated version to integrate with the
-branch sampling code?
-
-Thanks.
-
-
->
->         char sbuf[STRERR_BUFSIZE];
->         int printed = 0, enforced = 0;
->
-> @@ -2949,6 +2962,17 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
->                         return scnprintf(msg, size,
->         "Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
->                                         evsel__name(evsel));
-> +               if (is_amd(arch, cpuid)) {
-> +                       if (is_amd_ibs(evsel)) {
-> +                               if (evsel->core.attr.exclude_kernel)
-> +                                       return scnprintf(msg, size,
-> +       "AMD IBS can't exclude kernel events.  Try running at a higher privilege level.");
-> +                               if (!evsel->core.system_wide)
-> +                                       return scnprintf(msg, size,
-> +       "AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity");
-> +                       }
-> +               }
-> +
->                 break;
->         case ENODATA:
->                 return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
-> --
-> 2.35.0.263.gb82422642f-goog
->

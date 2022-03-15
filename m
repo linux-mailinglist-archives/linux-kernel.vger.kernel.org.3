@@ -2,167 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D904D9B8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BEB4D9B99
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348483AbiCOMuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S1348486AbiCOMvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235032AbiCOMuP (ORCPT
+        with ESMTP id S1348389AbiCOMvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:50:15 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E4ADF3F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:02 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id b67so15343013qkc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CKZh5yP21BRJU6B3iVZohrjJUcGpXAcyv437fSYRC0Y=;
-        b=Yv1MkmspeBbwsRJ2pamOnZE1WC5H25bDWwOngkXuqoBHKv1RwetJKfDBhO5KC+CN6f
-         G7nJo/AwN6nt3dBgrnuryWu2c9Lmu3AHoKrRmwJRug27mzXAp5IH7WVNR4KlpUs1YAY+
-         mP1ayzFjodrY5qk3bTXnLTzZmX6VNRdv3ZwUw0zsJKvb31VTVSNau2cg5pGcBLfNAo2c
-         +SnnHvign1o6aTjFrq9NQj0w6YeFbHWNxMG/Y8X2M4YbQVpUtUv1nLFczkpk/7nQfI6W
-         9bE4NMi3JkkcOuMXg2P/Mpq838BnD0nJTA8x4sWQpDzchM+iOQd4EwrERdudzh+azoBh
-         W3cg==
-X-Gm-Message-State: AOAM533yefA24/Ti/tKuYaHUR+qIOwi1wA9ZWhaJWwmOuXl8WIPgeY4D
-        h2fZ7b/nDQ6ioErb/F7h9HUPhMg2RLs3Xw==
-X-Google-Smtp-Source: ABdhPJyxGcR73e86Ig648PVGCnCHgzdK7E53jVPCTyd9yJ037yU9qLMTKRmCFYoFn4dCiYm704M8+A==
-X-Received: by 2002:a05:620a:f03:b0:67b:1465:d447 with SMTP id v3-20020a05620a0f0300b0067b1465d447mr17756793qkl.364.1647348541477;
-        Tue, 15 Mar 2022 05:49:01 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05622a051200b002e1e5e57e0csm406063qtx.11.2022.03.15.05.49.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 05:49:00 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2dbd97f9bfcso199791827b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:00 -0700 (PDT)
-X-Received: by 2002:a81:49d0:0:b0:2db:dc6d:445d with SMTP id
- w199-20020a8149d0000000b002dbdc6d445dmr24764496ywa.512.1647348539863; Tue, 15
- Mar 2022 05:48:59 -0700 (PDT)
+        Tue, 15 Mar 2022 08:51:08 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52635004B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647348591; x=1678884591;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SfW00ZwuA7gEkmiM+FXaiu2fQPLJNs0OT34MPTvSSQs=;
+  b=XnTHuINrC/cW7bnNpgJfbHzuBPheA8zYaiK1/3TzqEgCaPmyn62V6L+u
+   CoNyv05ibkw74AYvi0sJjjlIiIedkm10LIsYc6xsTHLTejEHgsU3AK9Jy
+   fwEUWz/OzyjWKUpTtHLW3OJB3FHZ7Tya7kg2SQukVEaT7v7cO4M5v9oqP
+   DvIuU9acW14RP/gaPanjhd2DiJb5GiJ98vHMpkhwNTKyjQc9MuEae7nqx
+   l04NpXgfCsYKUfa8a7/q4MqOSbd3NeuW4aA4cckmennbxsTTDfQB6X6W+
+   LpBlIVlDG1qR1a4Kp6W2nkHiLSd6rxFjI5S9MEMgpM2p4matb+c1uxJcK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256479668"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="256479668"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 05:49:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="580499979"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Mar 2022 05:49:49 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nU6cX-000AyP-62; Tue, 15 Mar 2022 12:49:49 +0000
+Date:   Tue, 15 Mar 2022 20:48:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/core] BUILD SUCCESS
+ 411472ae5bb4ffe1404dc5f1505f07e0f04770a8
+Message-ID: <62308b33.8UkgkMRjr/LI873X%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220315110707.628166-1-geert@linux-m68k.org> <20220315110707.628166-3-geert@linux-m68k.org>
- <27e1c911-798a-c14b-e5a0-622a7c5d8755@redhat.com>
-In-Reply-To: <27e1c911-798a-c14b-e5a0-622a7c5d8755@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 13:48:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUQ=A1uRYdO+da9wFpzLbGEDprVjnuFcD8B=MPkOePEKw@mail.gmail.com>
-Message-ID: <CAMuHMdUQ=A1uRYdO+da9wFpzLbGEDprVjnuFcD8B=MPkOePEKw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] drm/format-helper: Fix XRGB888 to monochrome conversion
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+branch HEAD: 411472ae5bb4ffe1404dc5f1505f07e0f04770a8  Merge tag 'v5.17-rc8' into irq/core, to fix conflicts
 
-On Tue, Mar 15, 2022 at 1:18 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> On 3/15/22 12:07, Geert Uytterhoeven wrote:
-> > The conversion functions drm_fb_xrgb8888_to_mono() and
-> > drm_fb_gray8_to_mono_line() do not behave correctly when the
-> > horizontal boundaries of the clip rectangle are not multiples of 8:
-> >   a. When x1 % 8 != 0, the calculated pitch is not correct,
-> >   b. When x2 % 8 != 0, the pixel data for the last byte is wrong.
-> >
->
-> Thanks a lot for tracking down and fixing these issues.
->
-> > Simplify the code and fix (a) by:
-> >   1. Removing start_offset, and always storing the first pixel in the
-> >      first bit of the monochrome destination buffer.
-> >      Drivers that require the first pixel in a byte to be located at an
-> >      x-coordinate that is a multiple of 8 can always align the clip
-> >      rectangle before calling drm_fb_xrgb8888_to_mono().
-> >      Note that:
-> >        - The ssd130x driver does not need the alignment, as the
-> >        monochrome buffer is a temporary format,
-> >        - The repaper driver always updates the full screen, so the clip
-> >        rectangle is always aligned.
-> >   2. Passing the number of pixels to drm_fb_gray8_to_mono_line(),
-> >      instead of the number of bytes, and the number of pixels in the
-> >      last byte.
-> >
-> > Fix (b) by explicitly setting the target bit, instead of always setting
-> > bit 7 and shifting the value in each loop iteration.
-> >
-> > Remove the bogus pitch check, which operates on bytes instead of pixels,
-> > and triggers when e.g. flashing the cursor on a text console with a font
-> > that is 8 pixels wide.
-> >
-> > Drop the confusing comment about scanlines, as a pitch in bytes always
-> > contains a multiple of 8 pixels.
-> >
-> > While at it, use the drm_rect_height() helper instead of open-coding the
-> > same operation.
-> >
-> > Update the comments accordingly.
-> >
-> > Fixes: bcf8b616deb87941 ("drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()")
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > ---
->
-> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
+elapsed time: 725m
 
-Thanks!
+configs tested: 170
+configs skipped: 3
 
-> I just have a small comment below.
->
-> [snip]
->
-> > +static void drm_fb_gray8_to_mono_line(u8 *dst, const u8 *src, unsigned int pixels)
-> > +{
-> > +     while (pixels) {
-> > +             unsigned int i, bits = min(pixels, 8U);
-> > +             u8 byte = 0;
-> >
-> > -                     byte >>= 1;
-> > -                     if (src[x] >> 7)
-> > -                             byte |= BIT(7);
-> > +             for (i = 0; i < bits; i++, pixels--) {
->
-> I think is worth to add a comment here explaining that the pixel is set to
-> 1 for brightness > 127 and to 0 for brightness < 128. Or as kernel-doc for
-> this helper function.
->
-> > +                     if (*src++ & BIT(7))
->
-> Pekka also mentioned that if (*src++ > 127) would make this easier to read.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Sure, will update. Nicely removes the need for a comment.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220314
+mips                 randconfig-c004-20220314
+powerpc              randconfig-c003-20220313
+powerpc                      pasemi_defconfig
+arm                       imx_v6_v7_defconfig
+xtensa                              defconfig
+arm                         nhk8815_defconfig
+x86_64                              defconfig
+sh                        edosk7760_defconfig
+powerpc                     taishan_defconfig
+sh                          lboxre2_defconfig
+um                           x86_64_defconfig
+arm                         lpc18xx_defconfig
+arm                       aspeed_g5_defconfig
+m68k                        stmark2_defconfig
+arc                          axs101_defconfig
+openrisc                  or1klitex_defconfig
+arm                            xcep_defconfig
+riscv             nommu_k210_sdcard_defconfig
+sh                            migor_defconfig
+sh                             sh03_defconfig
+m68k                           sun3_defconfig
+m68k                        m5272c3_defconfig
+powerpc                        cell_defconfig
+sh                           se7705_defconfig
+powerpc                      bamboo_defconfig
+csky                             alldefconfig
+parisc                generic-32bit_defconfig
+powerpc                 mpc837x_mds_defconfig
+powerpc                  storcenter_defconfig
+arm                         vf610m4_defconfig
+mips                           jazz_defconfig
+sh                   secureedge5410_defconfig
+h8300                     edosk2674_defconfig
+m68k                         apollo_defconfig
+powerpc                      arches_defconfig
+m68k                                defconfig
+arm                           h5000_defconfig
+sh                          rsk7201_defconfig
+arc                          axs103_defconfig
+parisc                generic-64bit_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                         microdev_defconfig
+sh                     sh7710voipgw_defconfig
+powerpc                     pq2fads_defconfig
+sh                          kfr2r09_defconfig
+parisc                              defconfig
+openrisc                 simple_smp_defconfig
+m68k                       m5208evb_defconfig
+mips                        bcm47xx_defconfig
+arm                         axm55xx_defconfig
+powerpc                mpc7448_hpc2_defconfig
+mips                  decstation_64_defconfig
+arm                  randconfig-c002-20220313
+arm                  randconfig-c002-20220314
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a004-20220314
+x86_64               randconfig-a005-20220314
+x86_64               randconfig-a003-20220314
+x86_64               randconfig-a002-20220314
+x86_64               randconfig-a006-20220314
+x86_64               randconfig-a001-20220314
+i386                 randconfig-a003-20220314
+i386                 randconfig-a004-20220314
+i386                 randconfig-a001-20220314
+i386                 randconfig-a006-20220314
+i386                 randconfig-a002-20220314
+i386                 randconfig-a005-20220314
+arc                  randconfig-r043-20220313
+riscv                randconfig-r042-20220313
+s390                 randconfig-r044-20220313
+arc                  randconfig-r043-20220314
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                                  kexec
 
-> > +                             byte |= BIT(i);
-> >               }
-> >               *dst++ = byte;
-> >       }
+clang tested configs:
+arm                  randconfig-c002-20220313
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220313
+riscv                randconfig-c006-20220313
+mips                 randconfig-c004-20220313
+i386                          randconfig-c001
+mips                   sb1250_swarm_defconfig
+arm                     davinci_all_defconfig
+powerpc                       ebony_defconfig
+mips                      bmips_stb_defconfig
+arm                       cns3420vb_defconfig
+arm                      pxa255-idp_defconfig
+arm                        magician_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                          imote2_defconfig
+mips                           mtx1_defconfig
+powerpc                      pmac32_defconfig
+powerpc                          allyesconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                     cu1000-neo_defconfig
+arm                           omap1_defconfig
+mips                          ath25_defconfig
+i386                             allyesconfig
+mips                malta_qemu_32r6_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a014-20220314
+x86_64               randconfig-a015-20220314
+x86_64               randconfig-a016-20220314
+x86_64               randconfig-a012-20220314
+x86_64               randconfig-a013-20220314
+x86_64               randconfig-a011-20220314
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                 randconfig-a013-20220314
+i386                 randconfig-a015-20220314
+i386                 randconfig-a014-20220314
+i386                 randconfig-a011-20220314
+i386                 randconfig-a016-20220314
+i386                 randconfig-a012-20220314
+hexagon              randconfig-r045-20220314
+hexagon              randconfig-r045-20220313
+riscv                randconfig-r042-20220314
+hexagon              randconfig-r041-20220313
+hexagon              randconfig-r041-20220314
+s390                 randconfig-r044-20220314
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

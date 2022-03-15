@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113CB4D95F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC3D4D95FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345778AbiCOIQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
+        id S1345797AbiCOIRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345767AbiCOIQn (ORCPT
+        with ESMTP id S1345787AbiCOIRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:16:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B68D4AE15
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647332130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tCvl2VW1cmsTMiDGSIxoASCMFsGS7CwQX41mH9mi7og=;
-        b=DLCOt/nnQszNEAlLGn/a1+bkvc2x8+GC7wTd6+5M3R/a33zQ2urEIKpBYSlZrfCy7htH94
-        7AiAG5PsPnprnHUX/hgMa8IMiIddGCEeAlLyHcyBa61a4tiTGABqmna3ArZhVKox36VgPG
-        L/KQJlHcYdvv8jBsqg5VTnrxdUNKw1M=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-uBzbiPxDPB66M4q86R-Peg-1; Tue, 15 Mar 2022 04:15:27 -0400
-X-MC-Unique: uBzbiPxDPB66M4q86R-Peg-1
-Received: by mail-qk1-f198.google.com with SMTP id 68-20020a370847000000b0067e0cd1c855so328249qki.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:15:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tCvl2VW1cmsTMiDGSIxoASCMFsGS7CwQX41mH9mi7og=;
-        b=Iw8BVrSz3Sz8CZe+0CCy0NjMSMqHvUWcVED+OEyN0xh9K1B6wH0gwfQOvemlpTHwrQ
-         ODJ6Bht0g7YjjZjGPqgJ6B95mehX6In9aY+3QG/vVVQvgIi6URLG6WpmdJa3QTd7JBpt
-         6VT5/5rmAnoKoipel7Xo29ch+ny4FerCzmlrvFFqoTQm3capJeWFDmI+3BShbS0EyUzS
-         DqWDDvD1R/Fl1GZeKqCpv0NDPTkYEBAaes9oh+AJ4o9Nx0oEMGIaRjcEVQHqgKdB2sAF
-         3eTHxoR1YJ7pNl2HLatdu9JjNbzAwkZb5Cq+kM6CuWfvvKg+u2p56BMoV5HMwQOZm/K+
-         hkIg==
-X-Gm-Message-State: AOAM533xrkD4vpyVpElRXBt2ur71jrmcej7fc6LDiiJVre/ygUmTogkv
-        wDD0ZtiTsoEimsVahYNpA+TPcDkGLGT+qlspJOh4k+3LkFwhJdaCarsYm1BfQ3Zf9MhzGwnWQPm
-        KvSefpSk9HPKT2ovJuxqsSyFy
-X-Received: by 2002:a05:620a:424e:b0:67d:3607:6b50 with SMTP id w14-20020a05620a424e00b0067d36076b50mr17091974qko.194.1647332127179;
-        Tue, 15 Mar 2022 01:15:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzjgYb2HPocNtGnS6faY8OIC23ZTZlsPZ5W/DCuKMZo/aQnXkwFKl2eu1filb04x820ASXlIQ==
-X-Received: by 2002:a05:620a:424e:b0:67d:3607:6b50 with SMTP id w14-20020a05620a424e00b0067d36076b50mr17091955qko.194.1647332126634;
-        Tue, 15 Mar 2022 01:15:26 -0700 (PDT)
-Received: from sgarzare-redhat (host-212-171-187-184.pool212171.interbusiness.it. [212.171.187.184])
-        by smtp.gmail.com with ESMTPSA id b126-20020a376784000000b0067d21404704sm8982966qkc.131.2022.03.15.01.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:15:26 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 09:15:17 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-Cc:     Krasnov Arseniy <oxffffaa@gmail.com>,
-        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 2/3] af_vsock: SOCK_SEQPACKET receive timeout test
-Message-ID: <20220315081517.m7rvlpintqipdu6i@sgarzare-redhat>
-References: <1bb5ce91-da53-7de9-49ba-f49f76f45512@sberdevices.ru>
- <6981b132-4121-62d8-7172-dca28ad1e498@sberdevices.ru>
+        Tue, 15 Mar 2022 04:17:10 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5677F4BFCF;
+        Tue, 15 Mar 2022 01:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qyv9L1J7lwguExQlG54d6Y/3Vo+2ko997MYNN73Ttqo=; b=OVHBEZrcSgULGYImZyZkeB3Dqz
+        3mskSLqD8AwhZSFAA7P/tPJv7+HK2PEdrKy52Xglr8vRqFGDVFu9EfUh97rSAN0G09sd6ImNb2lGO
+        Kx6A9vSANmb1GH9jY+ADoPlxn7jYM0uxiIwDc7iKyQQhSjIss+XMa6lVhLLEaBb8CS/o+6NUGpPyo
+        aiHUrZlqrV+ezBfxrpwzlMxTYbXbykV90OpfWcKKOJ9kepb5Bw+sQ8v+quvD/ZqJv/G/sTJ67/Awz
+        WlZWrls9KEinKvs9pd+ybn364wMZrD5hOR9rePpWTxWZ+/n2WIpwp18y4Na8y4ZQREbQgLSecriHW
+        QTRr04Aw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nU2Ky-0019lg-15; Tue, 15 Mar 2022 08:15:24 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6C8F0986205; Tue, 15 Mar 2022 09:15:22 +0100 (CET)
+Date:   Tue, 15 Mar 2022 09:15:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
+        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        masahiroy@kernel.org
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <20220315081522.GA8939@worktop.programming.kicks-ass.net>
+References: <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
+ <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net>
+ <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+ <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
+ <20220312154407.GF28057@worktop.programming.kicks-ass.net>
+ <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
+ <20220313085214.GK28057@worktop.programming.kicks-ass.net>
+ <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6981b132-4121-62d8-7172-dca28ad1e498@sberdevices.ru>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,54 +74,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 10:55:42AM +0000, Krasnov Arseniy Vladimirovich wrote:
->Test for receive timeout check: connection is established,
->receiver sets timeout, but sender does nothing. Receiver's
->'read()' call must return EAGAIN.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/vsock_test.c | 49 ++++++++++++++++++++++++++++++++
-> 1 file changed, 49 insertions(+)
->
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index 2a3638c0a008..aa2de27d0f77 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -391,6 +391,50 @@ static void test_seqpacket_msg_trunc_server(const struct test_opts *opts)
-> 	close(fd);
-> }
->
->+static void test_seqpacket_timeout_client(const struct test_opts *opts)
->+{
->+	int fd;
->+	struct timeval tv;
->+	char dummy;
->+
->+	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
->+	if (fd < 0) {
->+		perror("connect");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	tv.tv_sec = 1;
->+	tv.tv_usec = 0;
->+
->+	if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (void *)&tv, sizeof(tv)) == -1) {
->+		perror("setsockopt 'SO_RCVTIMEO'");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if ((read(fd, &dummy, sizeof(dummy)) != -1) ||
->+	    (errno != EAGAIN)) {
->+		perror("EAGAIN expected");
->+		exit(EXIT_FAILURE);
->+	}
+On Mon, Mar 14, 2022 at 03:59:05PM +0100, Peter Zijlstra wrote:
+> On Sun, Mar 13, 2022 at 09:52:14AM +0100, Peter Zijlstra wrote:
+> > On Sat, Mar 12, 2022 at 05:33:39PM -0800, Alexei Starovoitov wrote:
+> > > During the build with gcc 8.5 I see:
+> > > 
+> > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > > .ibt_endbr_seal, skipping
+> > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > > .orc_unwind section, skipping
+> > >   LD [M]  crypto/async_tx/async_xor.ko
+> > >   LD [M]  crypto/authenc.ko
+> > > make[3]: *** [../scripts/Makefile.modfinal:61:
+> > > arch/x86/crypto/crc32c-intel.ko] Error 255
+> > > make[3]: *** Waiting for unfinished jobs....
+> > > 
+> > > but make clean cures it.
+> > > I suspect it's some missing makefile dependency.
+> > 
+> > Yes, I recently ran into it; I've been trying to kick Makefile into
+> > submission but have not had success yet. Will try again on Monday.
+> > 
+> > Problem appears to be that it will re-link .ko even though .o hasn't
+> > changed, resulting in duplicate objtool runs. I've been trying to have
+> > makefile generate .o.objtool empty file to serve as dependency marker to
+> > avoid doing second objtool run, but like said, no luck yet.
+> 
+> Masahiro-san, I'm trying the below, but afaict it's not working because
+> the rule for the .o file itself:
+> 
+Ha, sleep, it is marvelous!
 
-The patch LGTM, maybe the only thing I would add here is a check on the 
-time spent in the read(), to see that it is approximately the timeout we 
-have set.
+The below appears to be working as desired.
 
-Thanks,
-Stefano
-
+---
+Index: linux-2.6/scripts/Makefile.build
+===================================================================
+--- linux-2.6.orig/scripts/Makefile.build
++++ linux-2.6/scripts/Makefile.build
+@@ -86,12 +86,18 @@ ifdef need-builtin
+ targets-for-builtin += $(obj)/built-in.a
+ endif
+ 
+-targets-for-modules := $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
++targets-for-modules :=
+ 
+ ifdef CONFIG_LTO_CLANG
+ targets-for-modules += $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)))
+ endif
+ 
++ifdef CONFIG_X86_KERNEL_IBT
++targets-for-modules += $(patsubst %.o, %.objtool, $(filter %.o, $(obj-m)))
++endif
++
++targets-for-modules += $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
++
+ ifdef need-modorder
+ targets-for-modules += $(obj)/modules.order
+ endif
+@@ -276,6 +282,19 @@ cmd_mod = { \
+ $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
+ 	$(call if_changed,mod)
+ 
++#
++# Since objtool will re-write the file it will change the timestamps, therefore
++# it is critical that the %.objtool file gets a timestamp *after* objtool runs.
++#
++# Additionally, care must be had with ordering this rule against the other rules
++# that take %.o as a dependency.
++#
++cmd_objtool_mod =							\
++	true $(cmd_objtool) ; touch $@
++
++$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
++	$(call if_changed,objtool_mod)
++
+ quiet_cmd_cc_lst_c = MKLST   $@
+       cmd_cc_lst_c = $(CC) $(c_flags) -g -c -o $*.o $< && \
+ 		     $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
+Index: linux-2.6/scripts/Makefile.lib
+===================================================================
+--- linux-2.6.orig/scripts/Makefile.lib
++++ linux-2.6/scripts/Makefile.lib
+@@ -552,9 +552,8 @@ objtool_args =								\
+ 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+ 	$(if $(CONFIG_SLS), --sls)
+ 
+-cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+-cmd_objtool_mod = $(if $(objtool-enabled), $(objtool) $(objtool_args) $(@:.ko=.o) ; )
+-cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
++cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(@:.objtool=.o))
++cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$(@:.objtool=.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+ 
+ endif # CONFIG_STACK_VALIDATION
+ 
+@@ -575,8 +574,8 @@ $(obj)/%.o: objtool-enabled :=
+ 
+ # instead run objtool on the module as a whole, right before
+ # the final link pass with the linker script.
+-%.ko: objtool-enabled = y
+-%.ko: part-of-module := y
++$(obj)/%.objtool: objtool-enabled = y
++$(obj)/%.objtool: part-of-module := y
+ 
+ else
+ 
+Index: linux-2.6/scripts/Makefile.modfinal
+===================================================================
+--- linux-2.6.orig/scripts/Makefile.modfinal
++++ linux-2.6/scripts/Makefile.modfinal
+@@ -32,7 +32,6 @@ ARCH_POSTLINK := $(wildcard $(srctree)/a
+ 
+ quiet_cmd_ld_ko_o = LD [M]  $@
+       cmd_ld_ko_o +=							\
+-	$(cmd_objtool_mod)						\
+ 	$(LD) -r $(KBUILD_LDFLAGS)					\
+ 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
+ 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\

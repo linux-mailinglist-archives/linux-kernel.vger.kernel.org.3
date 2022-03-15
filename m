@@ -2,140 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE0D4DA4D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A884DA4CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352050AbiCOVtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 17:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S1352060AbiCOVtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 17:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352030AbiCOVtN (ORCPT
+        with ESMTP id S1352049AbiCOVtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 17:49:13 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FC112607;
-        Tue, 15 Mar 2022 14:47:59 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id q7-20020a7bce87000000b00382255f4ca9so2192498wmj.2;
-        Tue, 15 Mar 2022 14:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NVS5/8gEjVie69Zd1ZcQN/pGDDEZHwC8MbV9kBXhXw4=;
-        b=JtRDL+jzbA2CpurhEq5sqgs358rQIRV66oS4ax27Q5FIwee91BsFKXRfAcsyZW+Yg5
-         V8ns6DXulMc+y79s5zhn+KblPUpB6ufd/w34jdO6HJaKIrmSMMteg+BQ7yNQywPqwgYd
-         3tAyl9IP9vggSW7W1QUBDeXYJoP+36xSVuobPkL2ykUq7czylMI5nuyi1ys+fbT5VsvY
-         +6ozn4khs71KEWDEmHBeyWX7et0PllMbAS2hnN0/2tsiKZmgkW1mLH9FL43LXMzzWO4l
-         zR4PvF/akG7dFa++4h8HMIsP72Y4Gpfep/hIBTaT9jfMVTqnA/rLKFyPX8H8tWVlklkH
-         nGdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NVS5/8gEjVie69Zd1ZcQN/pGDDEZHwC8MbV9kBXhXw4=;
-        b=em2ruH9o0ZRC65OBDPtt0qVVgZuklmAkRhX0h0NNKdPn9kFPCxP4ZAHC7ltXqdMUt0
-         GtkR1hURGhltjIq0mtvpN38nw6V+riwfDE7Onuo/KSVfP0uEE53Xe5ZK2YNAoTKY7WKp
-         iyALZVqp9lK1H7Y479E2oImzN8hkM6IjoGL+UQdCMMJqjOvHGf1slEfmBihSv30zD4O7
-         9PeSgLN5sDTmPqPkN1DdGO9pred6jQZsYbWGTmvKSLQbruSVQQi4sbGYlRD3o4PdT/p7
-         skXhBx4T/jBWej7nZZzYVHX39sG935qzVpzW8LSwFU7lFtrjWED+MDUrsnPPUiGI2ieb
-         +qpw==
-X-Gm-Message-State: AOAM531qGvGJ6gyYH0p2R9IzD7xIkz69m9WFr4i41JWuG7adWxGbs9R/
-        oqEGUdq8Cf3dtuPFVj9AWBM=
-X-Google-Smtp-Source: ABdhPJwOrSdxpfcB+uohas2LIQ75m5vJw/ALpy3BAkbWX8f2zPpTcazNBqNf3LZE1b5IpEg2uguYoQ==
-X-Received: by 2002:a05:600c:19d4:b0:389:d5d2:e90f with SMTP id u20-20020a05600c19d400b00389d5d2e90fmr4930004wmq.103.1647380877546;
-        Tue, 15 Mar 2022 14:47:57 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id p6-20020a5d4586000000b001f0436cb325sm113567wrq.52.2022.03.15.14.47.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 14:47:57 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 22:47:56 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 12/16] clk: qcom: clk-krait: add 8064 errata workaround
-Message-ID: <YjEJjB/Hwj/1Ncum@Ansuel-xps.localdomain>
-References: <20220313190419.2207-1-ansuelsmth@gmail.com>
- <20220313190419.2207-13-ansuelsmth@gmail.com>
- <169795c1-607e-ee60-7ac7-538ed888bedf@linaro.org>
- <Yi84aNrJ7p+3jy2A@Ansuel-xps.localdomain>
- <20220315213431.DB6C4C340EE@smtp.kernel.org>
+        Tue, 15 Mar 2022 17:49:41 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0464313F92;
+        Tue, 15 Mar 2022 14:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647380908; x=1678916908;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZAft5YeHr1CVffF2O5+59Xi/ukFqQR0kvS8hu/bL/+0=;
+  b=aZLLsRWWAAp3r+gIfvPQHSuoL+Mt/Fo3lv7ePMWV/7MwsHJjy5pu6fXA
+   hW3/Ud6VM08l++XjcnrCtCG4yzespK8tKrC/uP3hzT47WRFRUaLYuoTsg
+   VEdQ93WmOA6oEG5NbtERzIMjnljS1a/MXikuCXIU255oPIHXy8kHVP89m
+   utZ6RpP8WColT5v54AmLcOfqZFb4rNo+AZsNBKirDhdgYbwB7BMVQcl3T
+   Rv4uvuQMKmeDeKjJJeEDW9MS4HOQg4ia1njxERV+S9CRFao9lvpGA2zQ2
+   aKnM62nZ7rEDKRYjWB+hsCteF68HWz7G9WlhJpjshekItoFEiahc0DYl6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255259138"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="255259138"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 14:48:26 -0700
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="549751646"
+Received: from jpgabald-mobl.amr.corp.intel.com (HELO localhost) ([10.212.75.31])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 14:48:22 -0700
+Date:   Tue, 15 Mar 2022 14:48:21 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 03/10] PCI/DOE: Add Data Object Exchange Aux Driver
+Message-ID: <YjEJpWXeXA65E62J@iweiny-desk3>
+References: <20220201071952.900068-4-ira.weiny@intel.com>
+ <20220203224027.GA103950@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220315213431.DB6C4C340EE@smtp.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220203224027.GA103950@bhelgaas>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 02:34:30PM -0700, Stephen Boyd wrote:
-> Quoting Ansuel Smith (2022-03-14 05:43:20)
-> > On Mon, Mar 14, 2022 at 11:20:21AM +0300, Dmitry Baryshkov wrote:
-> > > On 13/03/2022 22:04, Ansuel Smith wrote:
-> > > > Add 8064 errata workaround where the sec_src clock gating needs to be
-> > > 
-> > > Could you please be more specific whether the errata applies only to the
-> > > ipq8064 or to the apq8064 too? 8064 is not specific enough.
-> > >
+On Thu, Feb 03, 2022 at 04:40:27PM -0600, Bjorn Helgaas wrote:
+> On Mon, Jan 31, 2022 at 11:19:45PM -0800, ira.weiny@intel.com wrote:
+> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > > 
-> > That's a good question... Problem is that we really don't know the
-> > answer. This errata comes from qsdk on an old sourcecode. I assume this
-> > is specific to ipq8064 and apq8064 have different mux configuration.
+> > Introduced in a PCI ECN [1], DOE provides a config space based mailbox
+> > with standard protocol discovery.  Each mailbox is accessed through a
+> > DOE Extended Capability.
 > > 
+> > Define an auxiliary device driver which control DOE auxiliary devices
+> > registered on the auxiliary bus.
+> > 
+> > A DOE mailbox is allowed to support any number of protocols while some
+> > DOE protocol specifications apply additional restrictions.
+> > 
+> > The protocols supported are queried and cached.  pci_doe_supports_prot()
+> > can be used to determine if the DOE device supports the protocol
+> > specified.
+> > 
+> > A synchronous interface is provided in pci_doe_exchange_sync() to
+> > perform a single query / response exchange from the driver through the
+> > device specified.
+> > 
+> > Testing was conducted against QEMU using:
+> > 
+> > https://lore.kernel.org/qemu-devel/1619454964-10190-1-git-send-email-cbrowy@avery-design.com/
+> > 
+> > This code is based on Jonathan's V4 series here:
+> > 
+> > https://lore.kernel.org/linux-cxl/20210524133938.2815206-1-Jonathan.Cameron@huawei.com/
 > 
-> I think it was some glitch that happened when the automatic clk gating
-> was enabled during a switch. The automatic clk gating didn't know that
-> software was running and switching the input so it killed the CPU and
-> stopped the clk. That lead to hangs and super badness. I assume it was
-> applicable to apq8064 as well because ipq8064 is basically apq8064 with
-> the multimedia subsystem replaced by the networking subsystem. Also I
-> wouldn't remember all these details because I worked on apq8064 but not
-> so much on ipq8064 :)
+> Details like references to previous versions can go below the "---"
+> so they are omitted from the merged commit.  Many/most maintainers now
+> include a Link: tag that facilitates tracing back from a commit to the
+> mailing list history.
 
-Honest question. Do you remember other glitch present on the platform?
-We are trying to bisect an instability problem and we still needs to
-find the reason. We really can't understand if it's just a power
-delivery problem or a scaling problem from muxes or other things.
+Done.
 
-The current problem is that after some time the device kernel panics
-with a number of strange reason like invalid kernel paging and other
-strange (or the device just freze and reboots, not even a crash log)
-Many kernel panics reports the crash near the mux switch (like random
-error right before the mux switch) So I suspect there is a problem
-there. But due to the fact that is very random we have NO exact way to
-repro it. I manage sometime, while playing with the code, to repo
-similar kernel crash but still i'm not sure of the real cause.
+> 
+> > [1] https://members.pcisig.com/wg/PCI-SIG/document/14143
+> >     Data Object Exchange (DOE) - Approved 12 March 2020
+> 
+> Please update the "PCI ECN" text above and this citation to PCIe r6.0,
+> sec 6.30.  No need to reference the ECN now that it's part of the
+> published spec.
 
-I know it's OT but do you have any idea about it? If you remember
-anything about it?
-(To scale the freq i'm using a dedicated cpufreq driver that works this
-way:
-- We first scale the cache to the max freq across all core, we set the
-  voltage
-- We scale the cpu to the correct target.
-This is all done under a lock. Do you see anything wrong in this logic?
-To mee these random crash looks to be really related to something wrong
-with the mux or with the cache set to a wrong state)
+Done.
 
-Thx for any suggestion about this.
-(also I will update this commit and mention both apq and ipq in the
-comments)
+> 
+> > +config PCI_DOE_DRIVER
+> > +	tristate "PCI Data Object Exchange (DOE) driver"
+> > +	select AUXILIARY_BUS
+> > +	help
+> > +	  Driver for DOE auxiliary devices.
+> > +
+> > +	  DOE provides a simple mailbox in PCI config space that is used by a
+> > +	  number of different protocols.  DOE is defined in the Data Object
+> > +	  Exchange ECN to the PCIe r5.0 spec.
+> 
+> Not sure this is relevant in Kconfig help, but if it is, update the
+> citation to PCIe r6.0, sec 6.30.
 
--- 
-	Ansuel
+I removed it.  I agree it will probably not age well.
+
+> 
+> > +obj-$(CONFIG_PCI_DOE_DRIVER)	+= pci-doe.o
+> >  obj-$(CONFIG_XEN_PCIDEV_FRONTEND) += xen-pcifront.o
+> >  
+> > +pci-doe-y := doe.o
+> 
+> Why do we need this doe.o to pci-doe.o dance?  Why not just rename
+> doe.c to pci-doe.c?  It looks like that's what we do with pci-stub.c
+> and pci-pf-stub.c, which are also tristate.
+
+Not sure.  I think I may have just carried that from the cxl side when I moved
+it here to pci.
+
+I agree pci-doe is good.  I'll adjust the series as needed.
+
+> 
+> > +++ b/drivers/pci/doe.c
+> > @@ -0,0 +1,675 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Data Object Exchange ECN
+> > + * https://members.pcisig.com/wg/PCI-SIG/document/14143
+> 
+> Update citation.  Maybe copyright dates, too.
+
+
+
+> 
+> > + * Copyright (C) 2021 Huawei
+> 
+> > +/* Timeout of 1 second from 6.xx.1 (Operation), ECN - Data Object Exchange */
+> 
+> Update citation.
+
+Done.
+
+> 
+> > +/**
+> > + * struct pci_doe - A single DOE mailbox driver
+> > + *
+> > + * @doe_dev: The DOE Auxiliary device being driven
+> > + * @abort_c: Completion used for initial abort handling
+> > + * @irq: Interrupt used for signaling DOE ready or abort
+> > + * @irq_name: Name used to identify the irq for a particular DOE
+> 
+> s/ irq / IRQ /
+
+Done.
+
+> 
+> > +static int pci_doe_cache_protocols(struct pci_doe *doe)
+> > +{
+> > +	u8 index = 0;
+> > +	int num_prots;
+> > +	int rc;
+> > +
+> > +	/* Discovery protocol must always be supported and must report itself */
+> > +	num_prots = 1;
+> > +	doe->prots = devm_kcalloc(&doe->doe_dev->adev.dev, num_prots,
+> > +				  sizeof(*doe->prots), GFP_KERNEL);
+> > +	if (doe->prots == NULL)
+> 
+> More idiomatic (and as you did below):
+> 
+>   if (!doe->prots)
+
+Done.
+
+> 
+> > +		return -ENOMEM;
+> > +
+> > +	do {
+> > +		struct pci_doe_protocol *prot;
+> > +
+> > +		prot = &doe->prots[num_prots - 1];
+> > +		rc = pci_doe_discovery(doe, &index, &prot->vid, &prot->type);
+> > +		if (rc)
+> > +			return rc;
+> > +
+> > +		if (index) {
+> > +			struct pci_doe_protocol *prot_new;
+> > +
+> > +			num_prots++;
+> > +			prot_new = devm_krealloc(&doe->doe_dev->adev.dev,
+> > +						 doe->prots,
+> > +						 sizeof(*doe->prots) *
+> > +							num_prots,
+> > +						 GFP_KERNEL);
+> > +			if (prot_new == NULL)
+> 
+> Ditto.
+
+Done.
+
+> 
+> > +				return -ENOMEM;
+> > +			doe->prots = prot_new;
+> > +		}
+> > +	} while (index);
+> > +
+> > +	doe->num_prots = num_prots;
+> > +	return 0;
+> > +}
+> 
+> > +static int pci_doe_reg_irq(struct pci_doe *doe)
+> > +{
+> > +	struct pci_dev *pdev = doe->doe_dev->pdev;
+> > +	bool poll = !pci_dev_msi_enabled(pdev);
+> > +	int offset = doe->doe_dev->cap_offset;
+> > +	int rc, irq;
+> > +	u32 val;
+> > +
+> 
+>   if (poll)
+>     return 0;
+> 
+> or maybe just:
+> 
+>   if (!pci_dev_msi_enabled(pdev))
+>     return 0;
+> 
+> No need to read PCI_DOE_CAP or indent all this code.
+
+Good point. done.
+
+> 
+> > +	pci_read_config_dword(pdev, offset + PCI_DOE_CAP, &val);
+> > +
+> > +	if (!poll && FIELD_GET(PCI_DOE_CAP_INT, val)) {
+> > +		irq = pci_irq_vector(pdev, FIELD_GET(PCI_DOE_CAP_IRQ, val));
+> > +		if (irq < 0)
+> > +			return irq;
+> > +
+> > +		doe->irq_name = devm_kasprintf(&doe->doe_dev->adev.dev,
+> > +						GFP_KERNEL,
+> > +						"DOE[%s]",
+> 
+> Fill line.
+
+Done.
+
+> 
+> > +						doe->doe_dev->adev.name);
+> > +		if (!doe->irq_name)
+> > +			return -ENOMEM;
+> > +
+> > +		rc = devm_request_irq(&pdev->dev, irq, pci_doe_irq, 0,
+> > +				      doe->irq_name, doe);
+> > +		if (rc)
+> > +			return rc;
+> > +
+> > +		doe->irq = irq;
+> > +		pci_write_config_dword(pdev, offset + PCI_DOE_CTRL,
+> > +				       PCI_DOE_CTRL_INT_EN);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> 
+> > +static int pci_doe_probe(struct auxiliary_device *aux_dev,
+> > +			 const struct auxiliary_device_id *id)
+> > +{
+> > +	struct pci_doe_dev *doe_dev = container_of(aux_dev,
+> > +					struct pci_doe_dev,
+> > +					adev);
+> 
+> Fill line.
+
+Done.
+
+> 
+> > +	struct pci_doe *doe;
+> > +	int rc;
+> > +
+> > +	doe = devm_kzalloc(&aux_dev->dev, sizeof(*doe), GFP_KERNEL);
+> > +	if (!doe)
+> > +		return -ENOMEM;
+> > +
+> > +	mutex_init(&doe->state_lock);
+> > +	init_completion(&doe->abort_c);
+> > +	doe->doe_dev = doe_dev;
+> > +	init_waitqueue_head(&doe->wq);
+> > +	INIT_DELAYED_WORK(&doe->statemachine, doe_statemachine_work);
+> > +	dev_set_drvdata(&aux_dev->dev, doe);
+> > +
+> > +	rc = pci_doe_reg_irq(doe);
+> 
+> "request_irq" or "setup_irq" or something?  "reg" is a little
+> ambiguous.
+
+Ok pci_doe_request_irq() since we are wrapping devm_request_irq()
+
+> 
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	/* Reset the mailbox by issuing an abort */
+> > +	rc = pci_doe_abort(doe);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	rc = pci_doe_cache_protocols(doe);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	return 0;
+> 
+> Same as:
+> 
+>   return pci_doe_cache_protocols(doe);
+
+Done.
+
+> 
+> > +static int __init pci_doe_init_module(void)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = auxiliary_driver_register(&pci_doe_auxiliary_drv);
+> > +	if (ret) {
+> > +		pr_err("Failed pci_doe auxiliary_driver_register() ret=%d\n",
+> > +		       ret);
+> > +		return ret;
+> > +	}
+> > +
+> > +	return 0;
+> 
+> Same as:
+> 
+>   if (ret)
+>     pr_err(...);
+> 
+>   return ret;
+
+Done.
+
+> 
+> > +++ b/include/linux/pci-doe.h
+> > @@ -0,0 +1,60 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Data Object Exchange was added as an ECN to the PCIe r5.0 spec.
+> 
+> Update citation.
+
+Done.
+
+> 
+> > +struct pci_doe_dev {
+> > +	struct auxiliary_device adev;
+> > +	struct pci_dev *pdev;
+> > +	int cap_offset;
+> 
+> Can you name this "doe_cap", in the style of "msi_cap", "msix_cap",
+> etc?
+
+I can.  However, I feel I have to point out that msi[x]_cap both have comments
+thusly:
+
+        u8                      msi_cap;        /* MSI capability offset */
+        u8                      msix_cap;       /* MSI-X capability offset */
+
+Whereas cap_offset when read in the code is nicely self documenting.
+
+...
+        int offset = doe->doe_dev->cap_offset;
+...
+
+So I feel like it should be left as cap_offset;
+
+Also there are 2 drivers which use cap_offset as well.
+
+
+drivers/pci/hotplug/shpchp.h|102| u32 cap_offset;
+drivers/pci/hotplug/shpchp_hpc.c|201| u32 cap_offset = ctrl->cap_offset;
+
+drivers/pci/controller/pcie-altera.c|112| u32 cap_offset;               /* PCIe capability structure register offset */
+drivers/pci/controller/pcie-altera.c|144| pcie->pcie_data->cap_offset +
+
+And I don't think the comment on the altera device is needed...
+
+So let me know if you feel strongly enough to change it.
+
+Ira

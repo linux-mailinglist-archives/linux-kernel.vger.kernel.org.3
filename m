@@ -2,121 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE874D9C61
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40D14D9C65
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242455AbiCONij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 09:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S242481AbiCONkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 09:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236089AbiCONih (ORCPT
+        with ESMTP id S236089AbiCONki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 09:38:37 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F5452E31
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:37:26 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id 1so14867600qke.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:37:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DeUBfYy1MF3rdgCkqnY1ulVb8mmjHkjr8oT5jWm5FTE=;
-        b=xhZrdSm7Hmgj9vj5pwALuUD6riyBh4nTM10XaHiBNsqwYKsy1EqRvdMPKeQ3p5gIxQ
-         nL3ZjxAhI86avrwzboJ9Rzu+U3kacCtAxIsmfLMjr5D7un7lizei/Ndq0qcWOARbTTgE
-         IRST/s/wlCTDrEX7bFghRkXbcItv270xdWA7349ZQCRtnvIEJ+Y9Lp4L8LnTEDZmAmLE
-         3ybsYyWPqQmib2sdkSpB4IVE8NBPkCo0qXXJ2sorhnXO5F4rei2A451QwgMn+2RXiu36
-         pXOxh/818tgy4R1U2wCTu/601nYVtHXKQYH5w/ylN8+Xdz5GILs4tv7tO+2rXIwhqnsP
-         3N+A==
-X-Gm-Message-State: AOAM53014WimcD8WAZ1aGA4PB4Wpy1v0SYiK2Emv9kw99TmaH43LIqiA
-        nopse7+oKugAH5RwRnQJKb812SdxJcxOUw==
-X-Google-Smtp-Source: ABdhPJxsfNCsmbjrjL53qpBbPvLazirKoVbtqdE5JknMz5t6TynIyLEOqrBxgPHHWDUNB2Jvzx7mMQ==
-X-Received: by 2002:a37:a0ca:0:b0:67d:b628:6a4e with SMTP id j193-20020a37a0ca000000b0067db6286a4emr8562320qke.35.1647351444900;
-        Tue, 15 Mar 2022 06:37:24 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id o28-20020a05620a111c00b0067d3b9ef388sm8794919qkk.98.2022.03.15.06.37.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 06:37:24 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2e5757b57caso45906217b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:37:24 -0700 (PDT)
-X-Received: by 2002:a81:5247:0:b0:2dc:2171:d42 with SMTP id
- g68-20020a815247000000b002dc21710d42mr24161091ywb.438.1647351444178; Tue, 15
- Mar 2022 06:37:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220315110707.628166-1-geert@linux-m68k.org> <20220315110707.628166-2-geert@linux-m68k.org>
- <YjCVesysvfpKNilD@smile.fi.intel.com>
-In-Reply-To: <YjCVesysvfpKNilD@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 14:37:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUXT4u_ewtHP4oCk6uOvu3a0M_mZAq+jf3MC97sOp5VEQ@mail.gmail.com>
-Message-ID: <CAMuHMdUXT4u_ewtHP4oCk6uOvu3a0M_mZAq+jf3MC97sOp5VEQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] drm/format-helper: Rename drm_fb_xrgb8888_to_mono_reversed()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Tue, 15 Mar 2022 09:40:38 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654C352E49
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647351566; x=1678887566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3NwXXEWXbHmt2Xfr/YsBFfwVwFs0lw1bJ2gTY6AcMOs=;
+  b=YBaPrv14IuxzV1zluUtg7fFFqVox9/WdKtjm10GEeEOuvg9tqCfJZjN+
+   g/66ct9aHIEqajnUuTD3F2Xa2cAZlKPC+BB3XknbHbthtRUyi+qa+dGwu
+   sN2djAvP5s30JhSZuDL7MsOnBqdVWS2iTb1H3dmhHbb3+dB+aWw8eBC32
+   yN+oiIown8zOCq6jcTkoxcfqRrAZ1qMWXq+uerslaq9asE66cVMNKMKwS
+   lTXr4j3bEjklrwj66FNB/saDo612prWl1L3ESLmKxyD3avVxTbrJdj368
+   IiAMF6l2SrMMY9nx4vk5RWw2dB7XQuVuJ6k2xsJHLAbLEevoSb81qWV6b
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255131218"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="255131218"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:39:26 -0700
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="498016584"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:39:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nU7Nq-000HhE-BR;
+        Tue, 15 Mar 2022 15:38:42 +0200
+Date:   Tue, 15 Mar 2022 15:38:42 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] drm/format-helper: Fix XRGB888 to monochrome
+ conversion
+Message-ID: <YjCW4uykfYdkNUTI@smile.fi.intel.com>
+References: <20220315110707.628166-1-geert@linux-m68k.org>
+ <20220315110707.628166-3-geert@linux-m68k.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315110707.628166-3-geert@linux-m68k.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Tue, Mar 15, 2022 at 12:07:04PM +0100, Geert Uytterhoeven wrote:
+> The conversion functions drm_fb_xrgb8888_to_mono() and
+> drm_fb_gray8_to_mono_line() do not behave correctly when the
+> horizontal boundaries of the clip rectangle are not multiples of 8:
+>   a. When x1 % 8 != 0, the calculated pitch is not correct,
+>   b. When x2 % 8 != 0, the pixel data for the last byte is wrong.
+> 
+> Simplify the code and fix (a) by:
+>   1. Removing start_offset, and always storing the first pixel in the
+>      first bit of the monochrome destination buffer.
+>      Drivers that require the first pixel in a byte to be located at an
+>      x-coordinate that is a multiple of 8 can always align the clip
+>      rectangle before calling drm_fb_xrgb8888_to_mono().
+>      Note that:
+>        - The ssd130x driver does not need the alignment, as the
+> 	 monochrome buffer is a temporary format,
+>        - The repaper driver always updates the full screen, so the clip
+> 	 rectangle is always aligned.
+>   2. Passing the number of pixels to drm_fb_gray8_to_mono_line(),
+>      instead of the number of bytes, and the number of pixels in the
+>      last byte.
+> 
+> Fix (b) by explicitly setting the target bit, instead of always setting
+> bit 7 and shifting the value in each loop iteration.
+> 
+> Remove the bogus pitch check, which operates on bytes instead of pixels,
+> and triggers when e.g. flashing the cursor on a text console with a font
+> that is 8 pixels wide.
+> 
+> Drop the confusing comment about scanlines, as a pitch in bytes always
+> contains a multiple of 8 pixels.
+> 
+> While at it, use the drm_rect_height() helper instead of open-coding the
+> same operation.
+> 
+> Update the comments accordingly.
 
-On Tue, Mar 15, 2022 at 2:33 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Tue, Mar 15, 2022 at 12:07:03PM +0100, Geert Uytterhoeven wrote:
-> > There is no "reversed" handling in drm_fb_xrgb8888_to_mono_reversed():
-> > the function just converts from color to grayscale, and reduces the
-> > number of grayscale levels from 256 to 2 (i.e. brightness 0-127 is
-> > mapped to 0, 128-255 to 1).  All "reversed" handling is done in the
-> > repaper driver, where this function originated.
-> >
-> > Hence make this clear by renaming drm_fb_xrgb8888_to_mono_reversed() to
-> > drm_fb_xrgb8888_to_mono(), and documenting the black/white pixel
-> > mapping.
->
-> W/ or w/o the below remark being addressed
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks!
+See comment below.
 
-> > --- a/drivers/gpu/drm/drm_format_helper.c
-> > +++ b/drivers/gpu/drm/drm_format_helper.c
-> > @@ -692,12 +692,12 @@ void drm_fb_xrgb8888_to_mono_reversed(void *dst, unsigned int dst_pitch, const v
-> >       for (y = 0; y < lines; y++) {
-> >               src32 = memcpy(src32, vaddr, len_src32);
-> >               drm_fb_xrgb8888_to_gray8_line(gray8, src32, linepixels);
-> > -             drm_fb_gray8_to_mono_reversed_line(mono, gray8, dst_pitch,
-> > -                                                start_offset, end_len);
->
-> > +             drm_fb_gray8_to_mono_line(mono, gray8, dst_pitch, start_offset,
-> > +                                       end_len);
->
-> Can be one line now (definition is already quite behind 80 limit).
+> Fixes: bcf8b616deb87941 ("drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> I tried hard to fix this in small steps, but everything was no
+> intertangled that this turned out to be unfeasible.
+> 
+> Note that making these changes does not introduce regressions in the
+> ssd130x driver, as the latter is broken for x1 != 0 or y1 != 0 anyway.
+> ---
+>  drivers/gpu/drm/drm_format_helper.c | 56 ++++++++++-------------------
+>  1 file changed, 18 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
+> index b68aa857c6514529..0d7cae921ed1134f 100644
+> --- a/drivers/gpu/drm/drm_format_helper.c
+> +++ b/drivers/gpu/drm/drm_format_helper.c
+> @@ -594,27 +594,16 @@ int drm_fb_blit_toio(void __iomem *dst, unsigned int dst_pitch, uint32_t dst_for
+>  }
+>  EXPORT_SYMBOL(drm_fb_blit_toio);
+>  
+> -static void drm_fb_gray8_to_mono_line(u8 *dst, const u8 *src, unsigned int pixels,
+> -				      unsigned int start_offset, unsigned int end_len)
+> -{
+> -	unsigned int xb, i;
+> -
+> -	for (xb = 0; xb < pixels; xb++) {
+> -		unsigned int start = 0, end = 8;
+> -		u8 byte = 0x00;
+> -
+> -		if (xb == 0 && start_offset)
+> -			start = start_offset;
+>  
+> -		if (xb == pixels - 1 && end_len)
+> -			end = end_len;
+> -
+> -		for (i = start; i < end; i++) {
+> -			unsigned int x = xb * 8 + i;
+> +static void drm_fb_gray8_to_mono_line(u8 *dst, const u8 *src, unsigned int pixels)
+> +{
+> +	while (pixels) {
+> +		unsigned int i, bits = min(pixels, 8U);
+> +		u8 byte = 0;
+>  
+> -			byte >>= 1;
+> -			if (src[x] >> 7)
+> -				byte |= BIT(7);
+> +		for (i = 0; i < bits; i++, pixels--) {
+> +			if (*src++ & BIT(7))
+> +				byte |= BIT(i);
+>  		}
+>  		*dst++ = byte;
+>  	}
+> @@ -634,16 +623,22 @@ static void drm_fb_gray8_to_mono_line(u8 *dst, const u8 *src, unsigned int pixel
+>   *
+>   * This function uses drm_fb_xrgb8888_to_gray8() to convert to grayscale and
+>   * then the result is converted from grayscale to monochrome.
+> + *
+> + * The first pixel (upper left corner of the clip rectangle) will be converted
+> + * and copied to the first bit (LSB) in the first byte of the monochrome
+> + * destination buffer.
+> + * If the caller requires that the first pixel in a byte must be located at an
+> + * x-coordinate that is a multiple of 8, then the caller must take care itself
+> + * of supplying a suitable clip rectangle.
+>   */
+>  void drm_fb_xrgb8888_to_mono(void *dst, unsigned int dst_pitch, const void *vaddr,
+>  			     const struct drm_framebuffer *fb, const struct drm_rect *clip)
+>  {
+>  	unsigned int linepixels = drm_rect_width(clip);
+> -	unsigned int lines = clip->y2 - clip->y1;
+> +	unsigned int lines = drm_rect_height(clip);
+>  	unsigned int cpp = fb->format->cpp[0];
+>  	unsigned int len_src32 = linepixels * cpp;
+>  	struct drm_device *dev = fb->dev;
+> -	unsigned int start_offset, end_len;
+>  	unsigned int y;
+>  	u8 *mono = dst, *gray8;
+>  	u32 *src32;
+> @@ -652,14 +647,11 @@ void drm_fb_xrgb8888_to_mono(void *dst, unsigned int dst_pitch, const void *vadd
+>  		return;
+>  
+>  	/*
+> -	 * The mono destination buffer contains 1 bit per pixel and
+> -	 * destination scanlines have to be in multiple of 8 pixels.
+> +	 * The mono destination buffer contains 1 bit per pixel
+>  	 */
 
-Yeah, but the code isn't.
-Nevertheless, this will be shortened in a later patch.
+Now it's one-line comment.
 
-Gr{oetje,eeting}s,
+>  	if (!dst_pitch)
+>  		dst_pitch = DIV_ROUND_UP(linepixels, 8);
+>  
+> -	drm_WARN_ONCE(dev, dst_pitch % 8 != 0, "dst_pitch is not a multiple of 8\n");
+> -
+>  	/*
+>  	 * The cma memory is write-combined so reads are uncached.
+>  	 * Speed up by fetching one line at a time.
+> @@ -677,23 +669,11 @@ void drm_fb_xrgb8888_to_mono(void *dst, unsigned int dst_pitch, const void *vadd
+>  
+>  	gray8 = (u8 *)src32 + len_src32;
+>  
+> -	/*
+> -	 * For damage handling, it is possible that only parts of the source
+> -	 * buffer is copied and this could lead to start and end pixels that
+> -	 * are not aligned to multiple of 8.
+> -	 *
+> -	 * Calculate if the start and end pixels are not aligned and set the
+> -	 * offsets for the mono line conversion function to adjust.
+> -	 */
+> -	start_offset = clip->x1 % 8;
+> -	end_len = clip->x2 % 8;
+> -
+>  	vaddr += clip_offset(clip, fb->pitches[0], cpp);
+>  	for (y = 0; y < lines; y++) {
+>  		src32 = memcpy(src32, vaddr, len_src32);
+>  		drm_fb_xrgb8888_to_gray8_line(gray8, src32, linepixels);
 
-                        Geert
+> -		drm_fb_gray8_to_mono_line(mono, gray8, dst_pitch, start_offset,
+> -					  end_len);
+> +		drm_fb_gray8_to_mono_line(mono, gray8, linepixels);
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Yep, with previously being on one line here will be less churn.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  		vaddr += fb->pitches[0];
+>  		mono += dst_pitch;
+>  	}
+> -- 
+> 2.25.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

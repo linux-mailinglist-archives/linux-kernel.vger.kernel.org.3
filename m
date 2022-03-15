@@ -2,119 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785424D97BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26064D97C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346665AbiCOJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S1346686AbiCOJh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238684AbiCOJgb (ORCPT
+        with ESMTP id S1346678AbiCOJhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:36:31 -0400
-Received: from out0-153.mail.aliyun.com (out0-153.mail.aliyun.com [140.205.0.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266884BFD2;
-        Tue, 15 Mar 2022 02:35:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047212;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---.N4z7UFy_1647336913;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.N4z7UFy_1647336913)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 15 Mar 2022 17:35:14 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/mmu: Don't rebuild page when the page is synced and no tlb flushing is required
-Date:   Tue, 15 Mar 2022 17:35:13 +0800
-Message-Id: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 15 Mar 2022 05:37:24 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284194E389
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:36:12 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so14156912iow.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:36:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=scxpqyv1QCaqaidKXli17C6qUPYI7CzIakzRF5Ou8Kg=;
+        b=YYRhh5byU6GjL+p+sEekb030vbYqDrslzVejJFRhDeydBcS9VAosNueBSLUbsH/Riw
+         /sdFl4DE+d0sW1NsaC1apwIldom+oSd8G+n0Q+qaz7LvkMDVvEME8FIxpAVXJM1nsOo/
+         13INK4c1PMGIeXoyoyk5+AZSSiqe5OtWWKLvoQXYWDxrd7SdFj5cOYBe+6TDwLHdKv7l
+         4oLt9eUghGwXg4DtaiIxFvq52lxW10kex3uxzgf4kW4hqVIQfHJKuHrz6gVSjVl+WePO
+         pJqrLQrus6l0hSBJHPtM2QW1Hy5Wsne/hAe0rJNVFkrYulVfSTwbbG8MQs8YIkOAwtBM
+         mcHQ==
+X-Gm-Message-State: AOAM5333Sr0KvhHLVsR6sjSgbNciQJQdjFFW2rldqpS1xtbKPc9/cVp7
+        0xSnWC0QB8lvZB9pRDXtEoWEPkIuGz42oNeyXzkkPFCC5n/b
+X-Google-Smtp-Source: ABdhPJxuGoffg/pqrbkgpJV8mQBOrM3W+1KUP7ru6GCbSnpEcm7RSNXialOrf39P4ZLfattjVwZw+j4AThI3Al+cbuX6d+5XO7C/
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:3415:b0:648:b4f6:6e4d with SMTP id
+ n21-20020a056602341500b00648b4f66e4dmr18825594ioz.98.1647336971535; Tue, 15
+ Mar 2022 02:36:11 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 02:36:11 -0700
+In-Reply-To: <0000000000009e7a1905b8295829@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000003887a05da3e872c@google.com>
+Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
+From:   syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        chouhan.shreyansh630@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before Commit c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page()
-to return true when remote flush is needed"), the return value
-of kvm_sync_page() indicates whether the page is synced, and
-kvm_mmu_get_page() would rebuild page when the sync fails.
-But now, kvm_sync_page() returns false when the page is
-synced and no tlb flushing is required, which leads to
-rebuild page in kvm_mmu_get_page(). So return the return
-value of mmu->sync_page() directly and check it in
-kvm_mmu_get_page(). If the sync fails, the page will be
-zapped and the invalid_list is not empty, so set flush as
-true is accepted in mmu_sync_children().
+syzbot suspects this issue was fixed by commit:
 
-Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
----
- arch/x86/kvm/mmu/mmu.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+commit 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun Mar 13 20:23:37 2022 +0000
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 3b8da8b0745e..8efd165ee27c 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1866,17 +1866,14 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
- 	  &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])	\
- 		if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
- 
--static bool kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-+static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 			 struct list_head *invalid_list)
- {
- 	int ret = vcpu->arch.mmu->sync_page(vcpu, sp);
- 
--	if (ret < 0) {
-+	if (ret < 0)
- 		kvm_mmu_prepare_zap_page(vcpu->kvm, sp, invalid_list);
--		return false;
--	}
--
--	return !!ret;
-+	return ret;
- }
- 
- static bool kvm_mmu_remote_flush_or_zap(struct kvm *kvm,
-@@ -2039,6 +2036,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 	struct hlist_head *sp_list;
- 	unsigned quadrant;
- 	struct kvm_mmu_page *sp;
-+	int ret;
- 	int collisions = 0;
- 	LIST_HEAD(invalid_list);
- 
-@@ -2091,11 +2089,13 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
- 			 * If the sync fails, the page is zapped.  If so, break
- 			 * in order to rebuild it.
- 			 */
--			if (!kvm_sync_page(vcpu, sp, &invalid_list))
-+			ret = kvm_sync_page(vcpu, sp, &invalid_list);
-+			if (ret < 0)
- 				break;
- 
- 			WARN_ON(!list_empty(&invalid_list));
--			kvm_flush_remote_tlbs(vcpu->kvm);
-+			if (ret > 0)
-+				kvm_flush_remote_tlbs(vcpu->kvm);
- 		}
- 
- 		__clear_sp_write_flooding_count(sp);
--- 
-2.31.1
+    Linux 5.17-rc8
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140283ad700000
+start commit:   f5b6eb1e0182 Merge branch 'i2c/for-current' of git://git.k..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8a9e9956ca52a5f6
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f1ca6a6fec34d601788
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158914ebd00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17720670300000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: Linux 5.17-rc8
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

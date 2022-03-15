@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477C4DA0C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125734DA0C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350401AbiCORE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S1350414AbiCOREc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350375AbiCOREZ (ORCPT
+        with ESMTP id S1350393AbiCOREZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 13:04:25 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 790B665F3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90F7F7655
         for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:03:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1647363792;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4Jw/lpacLpo5DYktMebusJ8yB8R69yJCZ2uGaoaoQg0=;
-        b=UZK1KOBGwRCawHagelUQuW5bpSRIRbN4YeL0Ob/C0f2itCpU9IHZ104MbJKf39cmRwRH10
-        mVk8iMGDBlQplbBAQ2UDLf/XO1M7KsXUImsnFj/0f24Teb/xqhL+Nin+p5fRQvCL+c/87r
-        4HNnmdMXtKcWlnmB1ZHY9o4mRJOvMh8=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=OmxYI6ts0ifPqvBUGqySYDpgc0rBSTfKUOaCBQr9r+M=;
+        b=LprTYFP7uPGFn+xjzs0uz8dgxJIg7HNYyTR5mw47jMUCLnKg6GqLkOFYKTn8RJpU6OsN73
+        Z7ujcqAP44kNNSEOfIrJZBgdLazFRz4DvlPE0vLW2kpG9HlpYLNlYEjgTu/wxf9AJ2Auj4
+        mJBD3RL5+NicXDUy+L9M0AfW/ot7Yd8=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-1I2mKmnaPeSmuz8txCBalQ-1; Tue, 15 Mar 2022 13:03:11 -0400
-X-MC-Unique: 1I2mKmnaPeSmuz8txCBalQ-1
-Received: by mail-pl1-f197.google.com with SMTP id e13-20020a17090301cd00b00150145346f9so8749184plh.23
+ us-mta-563-k2mQQShZNuKgp7tqoTu5Fw-1; Tue, 15 Mar 2022 13:03:11 -0400
+X-MC-Unique: k2mQQShZNuKgp7tqoTu5Fw-1
+Received: by mail-wr1-f71.google.com with SMTP id a5-20020adfc445000000b00203dcb13954so110564wrg.23
         for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:03:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Jw/lpacLpo5DYktMebusJ8yB8R69yJCZ2uGaoaoQg0=;
-        b=MKccQnk2+nX484zJ+3Tf6803Pq5VSWTnGgqv5vWu/t3y2ich9rQ1j+mzf9c+y7tNVN
-         b/jfMBLkFuqswavhv5DcEAkpgmdS+OuQjIh4B4QPo6bN/jdit6lXurf2xunqIDF8WDhF
-         lCpvMToKvlgqKv3S0o2vz1WZGIuyFc6yH94Bw5sZGutMbKeTlLvKtI0DhYOofO2BgxLq
-         /GuryeOv19wvXxB4z4QI8z5M13va8U4CkcpHTvvGlguWZ+6MSUvbRY+lpbBqVvyPkcKD
-         JrcWJEs1asPS3S1SeP0t2+GC7xE82wPeL66D4Y/Uya2Z8KVb9NBk7vuAPhGbXCCk9T2O
-         PpLg==
-X-Gm-Message-State: AOAM532leRYPtOLnue2zEQuRyvb9YOc+8l6+griB+NFhZFC8lVJ9a+4G
-        8aCdIYohoU7SA2qTJe29T0Aj4707SYNgNEU5/0dtYX+keQfFHfO1FGWtG45Qze7z6JaaQuPPEKk
-        yrQ5lQs13kj1YFtKsH4xIkmdww1+w24kGMZeIJZkj
-X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id bc8-20020a170902930800b0014edef5e6b5mr28994086plb.73.1647363788648;
-        Tue, 15 Mar 2022 10:03:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxwkSlWhefGkomKa+ET4d+8DI5dHK+kmIh6mqdVwNC6vXuvNiRZC0hFIJKt52FwtwMmUYaDWU7i3K55DyfEm38=
-X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id
- bc8-20020a170902930800b0014edef5e6b5mr28994051plb.73.1647363788283; Tue, 15
- Mar 2022 10:03:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OmxYI6ts0ifPqvBUGqySYDpgc0rBSTfKUOaCBQr9r+M=;
+        b=a/6mUpsfzgkDk2scBohg25tIs3YY9u1dR6/EsdHr4RaQI39uhQBtG+AE3ocmmNawD7
+         Lq6ZXQxG8TfC9VC2YcTicNtrg09NsiYFQ6jXUjltvVwULZu9vKf2Ke26xKwTN3YZ77Jj
+         QHTbXKICoUC98Dv9nhq26KhPUcyiCuCqIbcOre4aHuLzOVhwqezdGiQ4tA2ZZX6WENDP
+         V8OB3Q0B6CNKSqayviQJWlXgDs4eT+VKUIbJ1G52VJoFHXUFIR8siELojchIV6kWaPcp
+         nApj8TY0zJgu7zAkLYjA1WulSbDVrVHTKhiHoV3Xh0/k7HYUICV3yjFqs0Se6vBPDs1P
+         5YFA==
+X-Gm-Message-State: AOAM533HyKx+ZsDx8DiEi46NRSRqbAjcfgF5vmRrdCsoDcTpEZ8EhAwT
+        8m5GSaq3UG5xsRWBh65S3ZyxTmYED3L34NnZKwypsR6Vii6qU8ZndmKW9iNhETgq4XAY8Ab/HIS
+        uYIRPhNnMb730JynP2Ra4uExl
+X-Received: by 2002:a05:6000:2c6:b0:203:871d:aaa4 with SMTP id o6-20020a05600002c600b00203871daaa4mr20082228wry.47.1647363790163;
+        Tue, 15 Mar 2022 10:03:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz0VnXioS5GPLkgJGEECy6qRxXD0f5fqDGsdTj5oM5pW6HFay89xxxO5qnSXYIleqPeTR4uQw==
+X-Received: by 2002:a05:6000:2c6:b0:203:871d:aaa4 with SMTP id o6-20020a05600002c600b00203871daaa4mr20082206wry.47.1647363789931;
+        Tue, 15 Mar 2022 10:03:09 -0700 (PDT)
+Received: from redhat.com ([2.53.2.35])
+        by smtp.gmail.com with ESMTPSA id j7-20020a5d5647000000b0020372c969d9sm15998430wrw.29.2022.03.15.10.03.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 10:03:09 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 13:03:05 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 1/2] linux/types.h: Remove unnecessary __bitwise__
+Message-ID: <20220315130258-mutt-send-email-mst@kernel.org>
+References: <20220315153048.621328-1-helgaas@kernel.org>
+ <20220315153048.621328-2-helgaas@kernel.org>
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-15-benjamin.tissoires@redhat.com> <e1acd50f-fe67-14a8-846f-66b52e77abc0@linux.intel.com>
-In-Reply-To: <e1acd50f-fe67-14a8-846f-66b52e77abc0@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 15 Mar 2022 18:02:57 +0100
-Message-ID: <CAO-hwJK=S5jpqbScWrkhAWGUaZKtuKiNvspidWfs7xS4tAHjQA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 14/28] selftests/bpf: add tests for
- hid_{get|set}_data helpers
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315153048.621328-2-helgaas@kernel.org>
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -86,156 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 5:51 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->
-> Hi Benjamin,
->
-> On 04/03/2022 19:28, Benjamin Tissoires wrote:
-> > Simple test added here, with one use of each helper.
-> >
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > ---
-> >
-> > changes in v2:
-> > - split the patch with libbpf left outside.
-> > ---
-> >   tools/testing/selftests/bpf/prog_tests/hid.c | 65 ++++++++++++++++++++
-> >   tools/testing/selftests/bpf/progs/hid.c      | 45 ++++++++++++++
-> >   2 files changed, 110 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-> > index 91543b8078ca..74426523dd6f 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/hid.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-> > @@ -297,6 +297,68 @@ static int test_hid_raw_event(struct hid *hid_skel, int uhid_fd, int sysfs_fd)
-> >       return ret;
-> >   }
-> >
-> > +/*
-> > + * Attach hid_set_get_data to the given uhid device,
-> > + * retrieve and open the matching hidraw node,
-> > + * inject one event in the uhid device,
-> > + * check that the program makes correct use of bpf_hid_{set|get}_data.
-> > + */
-> > +static int test_hid_set_get_data(struct hid *hid_skel, int uhid_fd, int sysfs_fd)
-> > +{
-> > +     int err, hidraw_ino, hidraw_fd = -1;
-> > +     char hidraw_path[64] = {0};
-> > +     u8 buf[10] = {0};
-> > +     int ret = -1;
-> > +
-> > +     /* attach hid_set_get_data program */
-> > +     hid_skel->links.hid_set_get_data =
-> > +             bpf_program__attach_hid(hid_skel->progs.hid_set_get_data, sysfs_fd);
-> > +     if (!ASSERT_OK_PTR(hid_skel->links.hid_set_get_data,
-> > +                        "attach_hid(hid_set_get_data)"))
-> > +             return PTR_ERR(hid_skel->links.hid_set_get_data);
-> > +
-> > +     hidraw_ino = get_hidraw(hid_skel->links.hid_set_get_data);
-> > +     if (!ASSERT_GE(hidraw_ino, 0, "get_hidraw"))
-> > +             goto cleanup;
-> > +
-> > +     /* open hidraw node to check the other side of the pipe */
-> > +     sprintf(hidraw_path, "/dev/hidraw%d", hidraw_ino);
-> > +     hidraw_fd = open(hidraw_path, O_RDWR | O_NONBLOCK);
-> > +
-> > +     if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
-> > +             goto cleanup;
-> > +
-> > +     /* inject one event */
-> > +     buf[0] = 1;
-> > +     buf[1] = 42;
-> > +     send_event(uhid_fd, buf, 6);
-> > +
-> > +     /* read the data from hidraw */
-> > +     memset(buf, 0, sizeof(buf));
-> > +     err = read(hidraw_fd, buf, sizeof(buf));
-> > +     if (!ASSERT_EQ(err, 6, "read_hidraw"))
-> > +             goto cleanup;
-> > +
-> > +     if (!ASSERT_EQ(buf[2], (42 >> 2), "hid_set_get_data"))
-> > +             goto cleanup;
-> > +
-> > +     if (!ASSERT_EQ(buf[3], 1, "hid_set_get_data"))
-> > +             goto cleanup;
-> > +
-> > +     if (!ASSERT_EQ(buf[4], 42, "hid_set_get_data"))
-> > +             goto cleanup;
-> > +
-> > +     ret = 0;
-> > +
-> > +cleanup:
-> > +     if (hidraw_fd >= 0)
-> > +             close(hidraw_fd);
-> > +
-> > +     hid__detach(hid_skel);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> >   /*
-> >    * Attach hid_rdesc_fixup to the given uhid device,
-> >    * retrieve and open the matching hidraw node,
-> > @@ -395,6 +457,9 @@ void serial_test_hid_bpf(void)
-> >       err = test_hid_raw_event(hid_skel, uhid_fd, sysfs_fd);
-> >       ASSERT_OK(err, "hid");
-> >
-> > +     err = test_hid_set_get_data(hid_skel, uhid_fd, sysfs_fd);
-> > +     ASSERT_OK(err, "hid_set_get_data");
-> > +
-> >       err = test_rdesc_fixup(hid_skel, uhid_fd, sysfs_fd);
-> >       ASSERT_OK(err, "hid_rdesc_fixup");
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-> > index 2270448d0d3f..de6668471940 100644
-> > --- a/tools/testing/selftests/bpf/progs/hid.c
-> > +++ b/tools/testing/selftests/bpf/progs/hid.c
-> > @@ -66,3 +66,48 @@ int hid_rdesc_fixup(struct hid_bpf_ctx *ctx)
-> >
-> >       return 0;
-> >   }
-> > +
-> > +SEC("hid/device_event")
-> > +int hid_set_get_data(struct hid_bpf_ctx *ctx)
-> > +{
-> > +     int ret;
-> > +     __u8 *buf;
-> > +
-> > +     buf = bpf_ringbuf_reserve(&ringbuf, 8, 0);
->
-> Ordering of patches is probably wrong, it seems the ringbuf is defined
-> in patch #21 but used here.
->
-> Also, this usage of ringbuf leads into running out of available memory
-> in the buffer if used for long time, it is not evident from the test
-> case written here but I spent a couple of hours debugging my own BPF
-> program that used ringbuf in similar way as what is done here. Basically
-> the producer idx is increased with the bpf_ringbuf_reserve / discard,
-> but the consumer index is not if you don't have a consumer in place.
+On Tue, Mar 15, 2022 at 10:30:47AM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> There are no users of "__bitwise__" except the definition of "__bitwise".
+> Remove __bitwise__ and define __bitwise directly.
+> 
+> This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
+> for all sparse builds").
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Michael S. Tsirkin <mst@redhat.com>
 
-Oh, that's good to know.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-FWIW, on v3, we won't have to use a ringbuf at all. This is a new API
-break (sorry for that), but I think this will be better in the long
-run.
-I have chosen to use the hid_bpf_get_data() from [0]. The net
-advantage is that we get a pointer to the internal buffer that can be
-of any size, and we can even re-inject that same pointer into
-bpf_hid_raw_request() without having to use another buffer.
-
-I'm currently working on the documentation part and small fixes now
-that the big rewrite with that implementation is now done.
-
-Cheers,
-Benjamin
-
->
-> I ended up using a global statically allocated buffer for the purpose
-> for now.
->
-> -Tero
->
-
-[0] https://lore.kernel.org/linux-input/CAO-hwJJqP5iivQZOu0LTYa1D5OuM_aVi=LH27Udc_VYkbFsrww@mail.gmail.com/
+> ---
+>  include/uapi/linux/types.h  | 5 ++---
+>  tools/include/linux/types.h | 5 ++---
+>  2 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
+> index f6d2f83cbe29..71696f424ac8 100644
+> --- a/include/uapi/linux/types.h
+> +++ b/include/uapi/linux/types.h
+> @@ -20,11 +20,10 @@
+>   */
+>  
+>  #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>  #else
+> -#define __bitwise__
+> +#define __bitwise
+>  #endif
+> -#define __bitwise __bitwise__
+>  
+>  typedef __u16 __bitwise __le16;
+>  typedef __u16 __bitwise __be16;
+> diff --git a/tools/include/linux/types.h b/tools/include/linux/types.h
+> index 6e14a533ab4e..6c18c54e7d7f 100644
+> --- a/tools/include/linux/types.h
+> +++ b/tools/include/linux/types.h
+> @@ -43,11 +43,10 @@ typedef __u8  u8;
+>  typedef __s8  s8;
+>  
+>  #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>  #else
+> -#define __bitwise__
+> +#define __bitwise
+>  #endif
+> -#define __bitwise __bitwise__
+>  
+>  #define __force
+>  #define __user
+> -- 
+> 2.25.1
 

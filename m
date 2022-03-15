@@ -2,185 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4EE4D9525
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A424D9527
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241156AbiCOHXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
+        id S1345357AbiCOHXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235378AbiCOHXh (ORCPT
+        with ESMTP id S235378AbiCOHXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:23:37 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E99049F93;
-        Tue, 15 Mar 2022 00:22:25 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id qx21so39106010ejb.13;
-        Tue, 15 Mar 2022 00:22:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=mlC5IZSM8ZiN5kXMwqi/G7UDmiFwyv89OGwRdp4h9c4=;
-        b=WaV64ZMq+KgwReD0wEa/fqaKx8+Jz1oHfay/soRbS7ae3YHcElDkxrEakRNMu+vBfN
-         +rx+9QGkS2B3C7FsGypFXyGo+8F+RbUY4QPezmt04jsbMXKweP9hsjk0anFd5HQTOQjd
-         g0PHV3mmtq6xaAwhlL8kYi8K+E64PibcX6ODe4zU1i4KNbm8MOKCLIOWx3xL76+Koemd
-         +iCRt36aYLLe6nTPYnrg+Xt9X20rWB1veSZ4NRlUDRAKUPDL5CSAVUa6u7YnULp8uiC3
-         xv8W6OpSKlGgZRZCxwMIBBVLjdWNEdfjqCgcVHuNvmMnzEmGUsp5SSjPpi8sdbj6SEno
-         eZzw==
-X-Gm-Message-State: AOAM533n6+6DJN0lCi72pJ5o+l2kZesj6/v7MY1zKmwrQN12gGm7RH1E
-        schrrqOr1GGSeL3jNB9dOW8=
-X-Google-Smtp-Source: ABdhPJzv9Yjor43U8xEU81GlYFJX2xE1wkWNgZSMWiE0dReSrpzoQCnkUNmIZTj5zZjw0ro451L/CA==
-X-Received: by 2002:a17:907:94ca:b0:6da:e637:fa42 with SMTP id dn10-20020a17090794ca00b006dae637fa42mr21199690ejc.347.1647328943649;
-        Tue, 15 Mar 2022 00:22:23 -0700 (PDT)
-Received: from [192.168.0.153] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id y18-20020aa7ca12000000b0041677910461sm9129727eds.53.2022.03.15.00.22.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 00:22:22 -0700 (PDT)
-Message-ID: <f3c7af9b-85a0-1148-6096-30345f1a1478@kernel.org>
-Date:   Tue, 15 Mar 2022 08:22:21 +0100
+        Tue, 15 Mar 2022 03:23:48 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9A14AE3A;
+        Tue, 15 Mar 2022 00:22:37 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A15DB68AFE; Tue, 15 Mar 2022 08:22:33 +0100 (CET)
+Date:   Tue, 15 Mar 2022 08:22:33 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Patrick Huang <patrick.huang@amd.com>,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH] nvme-pci: Disable LTR for simple suspend
+Message-ID: <20220315072233.GA2288@lst.de>
+References: <20220314135537.1565-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v11 2/2] misc: Add iop driver for Sunplus SP7021
-Content-Language: en-US
-To:     =?UTF-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
-        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-References: <cover.1647095774.git.tonyhuang.sunplus@gmail.com>
- <07f507a84a9e39d3cd8393f41d1292c250e07642.1647095774.git.tonyhuang.sunplus@gmail.com>
- <00362767-080a-aa7f-672f-22b83ab35e61@kernel.org>
- <42f5f710077b40d7b6fde45789f46732@sphcmbx02.sunplus.com.tw>
- <e4ed4b50-c16f-5c46-7d64-f5b2f36f8f44@kernel.org>
- <58fd70a3fa3d44229edd849cab49eadf@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <58fd70a3fa3d44229edd849cab49eadf@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314135537.1565-1-mario.limonciello@amd.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 03:08, Tony Huang 黃懷厚 wrote:
-> Dear Krzysztof:
+On Mon, Mar 14, 2022 at 08:55:37AM -0500, Mario Limonciello wrote:
+> Some drives from SSSTC are showing stability problems after s0i3
+> entry when the Linux kernel is in s2idle loop if LTR has been
+> enabled. This leads to failures to resume.
 > 
-> 
->>>> On 12/03/2022 17:16, Tony Huang wrote:
->>>>> This driver is load 8051 bin code.
->>>>> The IOP core is DQ8051, so also named IOP8051.
->>>>> Need Install DQ8051, The DQ8051 bin file generated by keil C.
->>>>> We will provide users with 8051 normal and power off source code.
->>>>> Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/
->>>>>
->>>>
->> How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source
->>>> How+to+use+I+O+processor+8051+of+-
->>>>> files-for-IOP
->>>>> Users can follow the operation steps to generate normal.bin and
->>>>> poweroff.bin.
->>>>> Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338
->>>>> /26.+IOP8051 26.5?How To Create 8051 bin file
->>>>>
->>>>> PMC in power management purpose:
->>>>> Add sp_iop_poweroff() function. pm_power_off=sp_iop_poweroff.
->>>>> When the power off command is executed.
->>>>> The 8051 has a register(DEF_PWR_EN_0=0) to control the power-on and
->>>>> power-off of the system.
->>>>>
->>>>> Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
->>>>> ---
->>>>> Changes in v11:
->>>>>  - Addressed comments from Arnd Bergmann.
->>>>
->>>> How did you address Arnd's comments about splitting the driver to
->>>> proper parts? drivers/clk and drivers/power/reset?
->>>>
->>>
->>> drivers/clk : SP7021 system has clock device driver (clk-sp7021.c).
->>> So I set the IOP clock through the following function.
->>> clk_prepare_enable(iop->iopclk);
->>> clk_disable_unprepare(iop->iopclk);
->>>
->>> drivers/power/reset : SP7021 system does not have a power off device driver.
->>
->> What does it mean? The feedback was to split clk and reset features to
->> separate drivers and I still see only two patches here with a misc driver. So how
->> is his comments addressed? You did not reply in that thread.
->>
-> 
-> I finished replying to Arnd.
-> 
->>>
->>>>>  - Addressed comments from krzysztof.
->>>>>
->>>>>  MAINTAINERS                |   1 +
->>>>>  drivers/misc/Kconfig       |  23 +++
->>>>>  drivers/misc/Makefile      |   1 +
->>>>>  drivers/misc/sunplus_iop.c | 411
->>>>> +++++++++++++++++++++++++++++++++++++++++++++
->>>>
->>>> The driver looks like SoC specific driver. Why did you put it in
->>>> drivers/misc/, not in usual place - drivers/soc/?
->>>
->>> 8051 is designed for processing I/O events, like receiving IR signal from
->> remote controller,
->>> taking care of power on or off requests from RTC, or other hardware events
->> of external peripherals
->>> even when power of main system is off.
->>> So I put it in drivers/misc.
->>
->> Is IOP8061 a separate device? Your datasheet is saying its embedded in
->> SP7021 SoC, so it is a soc driver. This does not fit misc driver description (a
->> "strange device") but a SoC driver description.
->>
-> 
-> IOP is a separate device. CPU is 8051.		
-> SP7021 contains three kinds of CPU.		
-> Quad-core ARM Cortex-A7 (CA7)		
-> ARM926 real-time core		
-> 8051 low-power core		
-> 
->>>
->>>> sp_iop_poweroff is still here.
->>>
->>> sp_iop_poweroff(): SP7021 system does not have a power off device driver.
->>> 				I have to put it here.
->>
->> This should be rather in a reset driver, not in a misc one. What is your plan for
->> this driver? You described the hardware and judging by it, there will be quite a
->> lot of separate features so it's reasonable to split the driver into separate
->> logical elements. However keeping all in the same place would be ok, if you do
->> not plan to add any more features.
->> This would mean the driver will handle *only* reset and FW loading.
->>
-> 
-> Can I put sp_iop_poweroff() here for now?				
-> When power off device driver is added in /driver/power/reset is complete, we will move to it.
+> This appears to be a firmware issue specific to SSSTC SSDs, but to
+> avoid this class of problem, disable LTR when going into s2idle and
+> simple suspend has been set.
 
-Not really, because misc drivers is not a place for power off drivers.
-The driver here looks now like responsible only for system power
-management of a SoC, so most likely drivers/soc. However it has even
-less sense to add some feature here and immediately move it somewhere
-more appropriate (instead just add it to the appropriate place).
+This seems like a giant hammer to do this for all NVMe devices,
+why not quirk the specific ones?
 
-Your moving of parts of it to drivers/power/reset is now confusing. What
-will be left here? Please send entire set not just pieces.
+> +static void nvme_suspend_ltr(struct device *dev, bool disable)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	struct nvme_dev *ndev = pci_get_drvdata(pdev);
+> +
+> +	if (disable) {
+> +		u16 word;
+> +
+> +		pcie_capability_read_word(pdev, PCI_EXP_DEVCTL2, &word);
+> +		ndev->restore_ltr = word & PCI_EXP_DEVCTL2_LTR_EN;
+> +		pcie_capability_clear_word(pdev, PCI_EXP_DEVCTL2,
+> +					   PCI_EXP_DEVCTL2_LTR_EN);
+> +	} else if (ndev->restore_ltr) {
+> +		pcie_capability_set_word(pdev, PCI_EXP_DEVCTL2,
+> +					 PCI_EXP_DEVCTL2_LTR_EN);
+> +	}
+> +}
 
+The calling conventions of this function are rather strange by
+mixing up two very different things.
 
-Best regards,
-Krzysztof
+I think two PCI-level helpers to disable LTR and return the status
+it ways in and to enable LTR would be really nice to have here.
+
+>  	if (ndev->last_ps == U32_MAX ||
+>  	    nvme_set_power_state(ctrl, ndev->last_ps) != 0)
+>  		goto reset;
+> @@ -3239,6 +3259,11 @@ static int nvme_suspend(struct device *dev)
+>  
+>  	ndev->last_ps = U32_MAX;
+>  
+> +	/* If using s2idle with simple suspend, disable LTR to avoid problems. */
+
+Overly long line here.

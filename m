@@ -2,184 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E904DA337
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37D94DA339
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351294AbiCOTWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S1351335AbiCOTYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345039AbiCOTWs (ORCPT
+        with ESMTP id S1345039AbiCOTYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:22:48 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693DC3A703
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:21:35 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id d10-20020a17090a7bca00b001c5ed9a196bso2292422pjl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:21:35 -0700 (PDT)
+        Tue, 15 Mar 2022 15:24:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956902670;
+        Tue, 15 Mar 2022 12:22:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a8so43671946ejc.8;
+        Tue, 15 Mar 2022 12:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:cc:from:in-reply-to:content-transfer-encoding;
-        bh=3revWy2NpK6ECbDnOYqVuF2tDXXbaFT1az+SZDuKnXU=;
-        b=mJNattGinkcwvZjVRyzMU6hajqM8uOVCgCqfl4fj+Uehs0jA57xZClA9dRJN4jzQVp
-         cST26+DKNnbMUwvtKFq4uOsqjJnPC5c/NVbbbHNNSf18ACYIwq2Zmea8MjvcmlNSYr85
-         drUxZlaPKbKG+rS5Ij4ffcfcg98BtLPuWqZlvcI35QKD6k/g0tJnhybaWeYG7A1ZoaEX
-         nhnVoULZGsrVlY8WS5KEHfc9uQ8OzJaI71H9BqTH78f+2FJXtRivkzjrZGloYT6nWoYH
-         Rvqgj6GA6+eY5NSn7yfpbrxpoyIHhX2P16BZM6hMoouVNX955vckgZfOnPVq+oC4RCgl
-         dgqA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YUZLGSm75zNh7rcYmCCbe97E+affE9AzchNO0OWxx4o=;
+        b=cCFx+shCgIVka6s5fOiT+wREmOnQNIvnqKe3Op2trhAh9UheCWIrFXkW+s4OGLFZg8
+         3f/hmiwIx6xETfTpBaDhyvsp5e+la/BaRAVUo2Hkn6VhJXBpNLUZ/CebWTe5+I+2TArn
+         ZoBmhqvS42Fi+0U9YGhV3OF6TPzuxEBnrZBiIsOD4DMGpr5lWzbl78BTF0XGGGVBuHvd
+         Nfw9hlez1k1oCKSRv2Y4mmiL6RFdUgYbaZvJjwxwucRWtjNXJqOEnjyewIILyqKQzY8A
+         ptO4vaPR/B9wl75cLXCpPreHkpJaVDgWAjbySHrWO/oP3/F6vfvVFzIh7iUTLmAPk1c+
+         VoSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3revWy2NpK6ECbDnOYqVuF2tDXXbaFT1az+SZDuKnXU=;
-        b=tAk7CmlPaQeeqT/IoDAyzIkn1AP7yBARy1/TVsjwhPX5+MvB5sL8wE98E2sdLY9EPH
-         BR3HLK/i7u5lAUwJTDan057XVwrBekNd/3JOuOCw77F+dnScB72O+9gBh2f7GZPCvN6H
-         0IivUEQ6cZZoouCZ3pKK0mJ599Bjch6Ghzke5zfgcqmRuTU5PapeIpyqGFAv+dszixvn
-         PWscLvYLJD+oTC80cH4xGNPtnGYkNVkjWZk4NakskjjlMBKqt/AR6/v2w38XBfA4ZJHQ
-         fzxqik4g5F/OQTq1FnL7LprrvzXNm3QatrhR9QTwk7PKcQpi7DWJIisC0qAqx8lzoieJ
-         DEvQ==
-X-Gm-Message-State: AOAM530kGaF7ZzX04pB4Y6Y6EsGbRY2piMor5CTAFJZSGCZU7lBYbZaq
-        Il+bscRPuSb5eaj6WU5VOKwrJg==
-X-Google-Smtp-Source: ABdhPJw0EWEyUaTKRFCaOPzmM4AYdRJyyM9sZkmo4COwVEjE6+Uir81YQZ8DajOnMS+ZHr771xgIXA==
-X-Received: by 2002:a17:90a:77c9:b0:1c5:d5e5:a459 with SMTP id e9-20020a17090a77c900b001c5d5e5a459mr6280428pjs.191.1647372094928;
-        Tue, 15 Mar 2022 12:21:34 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm26254928pfl.44.2022.03.15.12.21.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 12:21:34 -0700 (PDT)
-Message-ID: <a30ec1e7-564f-665b-7c20-54dad6124418@linaro.org>
-Date:   Tue, 15 Mar 2022 12:21:33 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YUZLGSm75zNh7rcYmCCbe97E+affE9AzchNO0OWxx4o=;
+        b=uVoZgJiw66xsB0H5co4iUY5iBwPizMO75+iH2fTAEE2J6W1O6BXkBr2VMO+xplleiC
+         oGsrW7+hTImUKDKeAhTuXPA/Zd6cctF7V/smE3Wu14TJhmS9nYfBIUPpzEKXewkYtm3n
+         09hdItzGbEwS7A6zNWvBPxRUZ9Raf5uxswpa37gSwDCWtxLqmQynNZ8LsWKecd388Iah
+         CHXf+0VVTOg9fvPhOqdvmQC475GVNRP+8IDqX1ooUQSRln4IxjYKOVnzwM7C7tncpDf4
+         o96Hh5ecUKKMYooaaKurJ3BXBUBXfEWickTZ5s8G/PitImxeBEZohQHtri9jOIt1cUjm
+         xktA==
+X-Gm-Message-State: AOAM533gD3GLgdoUgq73da2LAQzgZHfIFq8meXdwHbIkXpZ9vn5YJ6dV
+        XEkHQF2ycAioWPGld0qdVmooEVdBUtMvjg==
+X-Google-Smtp-Source: ABdhPJx3oMQvDZcegvWM9E7xJZyXa9HzvY7rQWf3ct9h7oMvijJQwqMRKb2G2l22n3jGgUQYENCK5Q==
+X-Received: by 2002:a17:906:52c7:b0:6ce:a880:50a3 with SMTP id w7-20020a17090652c700b006cea88050a3mr23528658ejn.437.1647372172743;
+        Tue, 15 Mar 2022 12:22:52 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id n4-20020a056402060400b00415a1f9a4dasm9918377edv.91.2022.03.15.12.22.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 12:22:52 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 03/46] media: sun6i-csi: Grab bus clock instead of passing it to regmap
+Date:   Tue, 15 Mar 2022 20:22:50 +0100
+Message-ID: <2361247.jE0xQCEvom@kista>
+In-Reply-To: <20220311143532.265091-4-paul.kocialkowski@bootlin.com>
+References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com> <20220311143532.265091-4-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [syzbot] kernel BUG in ext4_ind_remove_space
-Content-Language: en-US
-To:     syzbot <syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-References: <00000000000042d70e05da43401f@google.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <00000000000042d70e05da43401f@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 08:14, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    09688c0166e7 Linux 5.17-rc8
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11a8bd61700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=fcc629d1a1ae8d3fe8a5
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1205b189700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15dda4fe700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com
-> 
-> EXT4-fs warning (device sda1): ext4_block_to_path:105: block 1074791436 > max in inode 1137
-> ------------[ cut here ]------------
-> kernel BUG at fs/ext4/indirect.c:1244!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 3590 Comm: syz-executor391 Not tainted 5.17.0-rc8-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
-> Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
-> RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-> R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
-> R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
-> FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
-> Call Trace:
->   <TASK>
->   ext4_punch_hole+0xfe8/0x11d0 fs/ext4/inode.c:4044
->   ext4_fallocate+0x1194/0x3ed0 fs/ext4/extents.c:4694
->   vfs_fallocate+0x48d/0xe10 fs/open.c:308
->   ksys_fallocate fs/open.c:331 [inline]
->   __do_sys_fallocate fs/open.c:339 [inline]
->   __se_sys_fallocate fs/open.c:337 [inline]
->   __x64_sys_fallocate+0xcf/0x140 fs/open.c:337
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f699234cdf9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f69922ff308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-> RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007f699234cdf9
-> RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000005
-> RBP: 00007f69923d5408 R08: 0000000000000000 R09: 0000000000000000
-> R10: 00000ffeffeff000 R11: 0000000000000246 R12: 00000ffeffeff000
-> R13: 00007f69923d5400 R14: 00007f69923a3004 R15: 0000000000022000
->   </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
-> Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
-> RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-> R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
-> R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
-> FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
+Hi Paul!
+
+Dne petek, 11. marec 2022 ob 15:34:49 CET je Paul Kocialkowski napisal(a):
+> Since the bus clock alone is not enough to get access to the registers,
+> don't pass it to regmap and manage it instead just like the other
+> clocks.
 > 
 
-#syz test:
-git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+Let me ask it in another way, is bus clock needed only for register access? If 
+yes, it makes sense to keep it enabled only during register access.
 
-===========================
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 01c9e4f743ba..dd9c35113efe 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -3924,7 +3924,8 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, 
-loff_t length)
-  	struct super_block *sb = inode->i_sb;
-  	ext4_lblk_t first_block, stop_block;
-  	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
-  	handle_t *handle;
-  	unsigned int credits;
-  	int ret = 0, ret2 = 0;
-@@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, 
-loff_t length)
-  		   offset;
-  	}
+Best regards,
+Jernej
 
-+	/*
-+	 * For punch hole the length + offset needs to be at least within
-+	 * one block before last
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - sbi->s_blocksize;
-+	if (offset + length >= max_length) {
-+		ret = -ENOSPC;
-+		goto out_mutex;
-+	}
-+
-  	if (offset & (sb->s_blocksize - 1) ||
-  	    (offset + length) & (sb->s_blocksize - 1)) {
-  		/*
---
-Thanks,
-Tadeusz
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 10 ++++++++--
+>  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h |  1 +
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/
+media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> index 5fbaa1e99412..dc79f3c14336 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> @@ -827,13 +827,19 @@ static int sun6i_csi_resource_request(struct 
+sun6i_csi_device *csi_dev,
+>  	if (IS_ERR(io_base))
+>  		return PTR_ERR(io_base);
+>  
+> -	csi_dev->regmap = devm_regmap_init_mmio_clk(&pdev->dev, "bus", 
+io_base,
+> -						    
+&sun6i_csi_regmap_config);
+> +	csi_dev->regmap = devm_regmap_init_mmio(&pdev->dev, io_base,
+> +						
+&sun6i_csi_regmap_config);
+>  	if (IS_ERR(csi_dev->regmap)) {
+>  		dev_err(&pdev->dev, "Failed to init register map\n");
+>  		return PTR_ERR(csi_dev->regmap);
+>  	}
+>  
+> +	csi_dev->clk_bus = devm_clk_get(&pdev->dev, "bus");
+> +	if (IS_ERR(csi_dev->clk_bus)) {
+> +		dev_err(&pdev->dev, "Unable to acquire bus clock\n");
+> +		return PTR_ERR(csi_dev->clk_bus);
+> +	}
+> +
+>  	csi_dev->clk_mod = devm_clk_get(&pdev->dev, "mod");
+>  	if (IS_ERR(csi_dev->clk_mod)) {
+>  		dev_err(&pdev->dev, "Unable to acquire csi clock\n");
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/
+media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> index e4e7ac6c869f..356661b413f8 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> @@ -51,6 +51,7 @@ struct sun6i_csi_device {
+>  	struct sun6i_video		video;
+>  
+>  	struct regmap			*regmap;
+> +	struct clk			*clk_bus;
+>  	struct clk			*clk_mod;
+>  	struct clk			*clk_ram;
+>  	struct reset_control		*reset;
+> -- 
+> 2.35.1
+> 
+> 
+
+

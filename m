@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F61C4DA19A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4866D4DA1A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245154AbiCORy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S1350764AbiCORzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbiCORyZ (ORCPT
+        with ESMTP id S238572AbiCORzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:54:25 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6DB366AF;
-        Tue, 15 Mar 2022 10:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=52rHBF+vZNkINQkzy+dQdKO7m6EguFtfzcKt22qdjiM=; b=HPlL8HyK99RwRZsRjeZp9Cpjg4
-        kISmRHdkZ49afWq1i4XuJmFWaG55ZUixdCnFq6GiXS3Dum+u2pUiRYSDCexImxtj91un1A+z2DhRz
-        SANGmL9f1drkYJPxYA91MhQPebwpPhLoAef9WkkDOltg6gHJGUYOa4AEOAT1jtzA9XMPmfpBqwL3n
-        QBYuLtvZB6p+f82lu7MzZl8+16TmJDfHVaGFcQNnoVDv8EkpwMf3hmBKmbiRlm5Sxb7zs2BQo25BX
-        yOWqlIAWFs9fFXCIDsQFWb3L1HtUu2oBjf7uo2sbIDyxI+55Jvy6Jf3O2e6TthmbW0UR2Fwi8dVQH
-        /CZcrmAA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUBLk-00A6wK-1k; Tue, 15 Mar 2022 17:52:48 +0000
-Date:   Tue, 15 Mar 2022 10:52:48 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com
-Subject: Re: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Message-ID: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
-References: <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcas5p2.samsung.com>
- <20220315155100.516107-1-maninder1.s@samsung.com>
+        Tue, 15 Mar 2022 13:55:23 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2948522C5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:54:10 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id u3so34372ybh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/gCZYXA1pFPtDLMS/KV6Ow2JMvpV89INylwyV10OD1Q=;
+        b=o8EjxOygDbe80v1/WABejnL1Pnq2uPy2+1seK8c4qpLhT7Tvg6tysQsseyBW42n2Nm
+         DecA+jHN9K8mORqxXFOt2hQcNu16K8S7CiRpGbANNDtPWG9LE0R4INvJrBK/SSw/iGHK
+         igHPhlAOlERy+Py3Naz9mrwa2uTojC1pjW2TiJFoffo905jVV0jUhmoko1UWFsJFFvZJ
+         co3JQohnNSRP5sWZolye/BxIjelGc6eOy7h1HmL+TOwZAYp6cwi0G/e8o7R8/dkJYmnO
+         FkS1lFtSA1q77Icd4gMoCqv9j8jSU+QJETSbQUfK6o5t6xnyIJZMUfqvYRhc1qvdULmh
+         +9rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/gCZYXA1pFPtDLMS/KV6Ow2JMvpV89INylwyV10OD1Q=;
+        b=U2OsHcWD71x7fad5/MNuRwzzkID1kOxEBjUXBtaO7rDZ9+BulzSk8djANpWZKpC1rW
+         6Af/B+ArnqWlOfatOzU1NjCi4sHRamIE5Y1eiywgIVTRe7bQbutiaTZYBE5eh7RXevSE
+         EMXIt80Rbs1xT+5Qh9QFV7LH1eFhr4xZc41n8hRUBA4fnLxtBmp7yFMsHWJUZ+FwbUgN
+         Z1IEKY3WpPZtQBj/mqpmbPHOtOBVpQSwEjPT/O5Hls05tpM4CQ81+Sip/wqWgRj60R2W
+         /5gqX05JwmX1r/NNISG3sSREjOTq7i3z4oBy62+WIikO0e9xEuGiOYp+jWXWsh0pAZh+
+         d9uQ==
+X-Gm-Message-State: AOAM530a94wbDssis8nBaTM4St4YAEM3DEe7tckFDrN1b0iPGkpHPbrt
+        1D9BEaJBWjOv5P7BzMwe/npZ+0JHRY1SPSGAaJNDnA==
+X-Google-Smtp-Source: ABdhPJzkMkMFsSfpPECWFU81L0xIQ9AJddFEVrI1qVKVg8/lSilFXpI08p1bc3RJ3P5DqyGs+pqrafqyjiuzinH5tHs=
+X-Received: by 2002:a5b:d46:0:b0:628:aafa:1e54 with SMTP id
+ f6-20020a5b0d46000000b00628aafa1e54mr23369223ybr.509.1647366849726; Tue, 15
+ Mar 2022 10:54:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315155100.516107-1-maninder1.s@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220224172559.4170192-1-rananta@google.com> <20220224172559.4170192-8-rananta@google.com>
+ <Yi+eoHWYgt6A5z+1@google.com> <CAJHc60z7wZmABs3Z0LVP9SJnu9T7tU-VK5=F0=tSjy9ScEdqOQ@mail.gmail.com>
+ <YjA1AzZPlPV20kMj@google.com>
+In-Reply-To: <YjA1AzZPlPV20kMj@google.com>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 15 Mar 2022 10:53:58 -0700
+Message-ID: <CAJHc60wv1+7Z9bG-Kioc-zig+8d8d1E8f0svtdVG4k2DcS2_dw@mail.gmail.com>
+Subject: Re: [PATCH v4 07/13] KVM: arm64: Add vendor hypervisor firmware register
+To:     Oliver Upton <oupton@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,83 +79,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 09:21:00PM +0530, Maninder Singh wrote:
-> print module information when KALLSYMS is disabled.
-> 
-> No change for %pB, as it needs to know symbol name to adjust address
-> value which can't be done without KALLSYMS.
-> 
-> (A) original output with KALLSYMS:
-> [8.842129] ps function_1 [crash]
-> [8.842735] pS function_1+0x4/0x2c [crash]
-> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> [8.843175] pB function_1+0x4/0x2c [crash]
-> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> 
-> (B) original output without KALLSYMS:
-> [12.487424] ps 0xffff800000eb008c
-> [12.487598] pS 0xffff800000eb008c
-> [12.487723] pSb 0xffff800000eb008c
-> [12.487850] pB 0xffff800000eb008c
-> [12.487967] pBb 0xffff800000eb008c
-> 
-> (C) With patched kernel 
-> with KALLYSMS:
-> [41.974576] ps function_1 [crash]
-> [41.975173] pS function_1+0x4/0x2c [crash]
-> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [41.975879] pB function_1+0x4/0x2c [crash]
-> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> without KALLSYMS:
-> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
-> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
-> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
-> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> with disable hashing:
-> [8.563916] ps 0xffff800000f2008c [crash]
-> [8.564574] pS 0xffff800000f20000+0x8c [crash]
-> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> [8.565008] pB 0xffff800000f20000+0x8c [crash]
-> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
-> ---
-> commit id 'kallsyms: print module name in %ps/S case when KALLSYMS is disabled'
-> 	needs to be removed from mm(linux-next) tree, current change is
-> 	with ignorance of this commit. I was not sure how to send patch, with 2 patches
-> 	consisting reversal commit also, or current approach is correct.
-> 
-> v1->v2: hash base address of module, change *fmt to fmt[0] and removed
->         copy paste.
-> v2->v3: fixed review comments from Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
->  include/linux/kallsyms.h |  2 +
->  include/linux/module.h   | 20 ++++++++++
->  kernel/kallsyms.c        | 27 +++++++------
->  kernel/module.c          |  4 +-
->  lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
+On Mon, Mar 14, 2022 at 11:41 PM Oliver Upton <oupton@google.com> wrote:
+>
+> On Mon, Mar 14, 2022 at 05:30:15PM -0700, Raghavendra Rao Ananta wrote:
+> > On Mon, Mar 14, 2022 at 12:59 PM Oliver Upton <oupton@google.com> wrote:
+> > >
+> > > On Thu, Feb 24, 2022 at 05:25:53PM +0000, Raghavendra Rao Ananta wrote:
+> > > > Introduce the firmware register to hold the vendor specific
+> > > > hypervisor service calls (owner value 6) as a bitmap. The
+> > > > bitmap represents the features that'll be enabled for the
+> > > > guest, as configured by the user-space. Currently, this
+> > > > includes support only for Precision Time Protocol (PTP),
+> > > > represented by bit-0.
+> > > >
+> > > > The register is also added to the kvm_arm_vm_scope_fw_regs[]
+> > > > list as it maintains its state per-VM.
+> > > >
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  arch/arm64/include/asm/kvm_host.h |  2 ++
+> > > >  arch/arm64/include/uapi/asm/kvm.h |  4 ++++
+> > > >  arch/arm64/kvm/guest.c            |  1 +
+> > > >  arch/arm64/kvm/hypercalls.c       | 22 +++++++++++++++++++++-
+> > > >  include/kvm/arm_hypercalls.h      |  3 +++
+> > > >  5 files changed, 31 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > > > index 318148b69279..d999456c4604 100644
+> > > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > > @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
+> > > >   *
+> > > >   * @hvc_std_bmap: Bitmap of standard secure service calls
+> > > >   * @hvc_std_hyp_bmap: Bitmap of standard hypervisor service calls
+> > > > + * @hvc_vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
+> > > >   */
+> > > >  struct kvm_hvc_desc {
+> > > >       u64 hvc_std_bmap;
+> > > >       u64 hvc_std_hyp_bmap;
+> > > > +     u64 hvc_vendor_hyp_bmap;
+> > > >  };
+> > > >
+> > > >  struct kvm_arch {
+> > > > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> > > > index 9a2caead7359..ed470bde13d8 100644
+> > > > --- a/arch/arm64/include/uapi/asm/kvm.h
+> > > > +++ b/arch/arm64/include/uapi/asm/kvm.h
+> > > > @@ -299,6 +299,10 @@ struct kvm_arm_copy_mte_tags {
+> > > >  #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME              BIT(0)
+> > > >  #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX     0       /* Last valid bit */
+> > > >
+> > > > +#define KVM_REG_ARM_VENDOR_HYP_BMAP          KVM_REG_ARM_FW_BMAP_REG(2)
+> > > > +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP               BIT(0)
+> > > > +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX  0       /* Last valid bit */
+> > > > +
+> > > >  /* SVE registers */
+> > > >  #define KVM_REG_ARM64_SVE            (0x15 << KVM_REG_ARM_COPROC_SHIFT)
+> > > >
+> > > > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> > > > index c42426d6137e..fc3656f91aed 100644
+> > > > --- a/arch/arm64/kvm/guest.c
+> > > > +++ b/arch/arm64/kvm/guest.c
+> > > > @@ -67,6 +67,7 @@ static const u64 kvm_arm_vm_scope_fw_regs[] = {
+> > > >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> > > >       KVM_REG_ARM_STD_BMAP,
+> > > >       KVM_REG_ARM_STD_HYP_BMAP,
+> > > > +     KVM_REG_ARM_VENDOR_HYP_BMAP,
+> > > >  };
+> > > >
+> > > >  /**
+> > > > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > > > index ebc0cc26cf2e..5c5098c8f1f9 100644
+> > > > --- a/arch/arm64/kvm/hypercalls.c
+> > > > +++ b/arch/arm64/kvm/hypercalls.c
+> > > > @@ -79,6 +79,9 @@ static bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
+> > > >       case ARM_SMCCC_HV_PV_TIME_ST:
+> > > >               return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_hyp_bmap,
+> > > >                                       KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
+> > > > +     case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> > > > +             return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_vendor_hyp_bmap,
+> > > > +                                     KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
+> > > >       default:
+> > > >               /* By default, allow the services that aren't listed here */
+> > > >               return true;
+> > > > @@ -162,7 +165,14 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> > > >               break;
+> > > >       case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> > > >               val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
+> > > > -             val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
+> > > > +
+> > > > +             /*
+> > > > +              * The feature bits exposed to user-space doesn't include
+> > > > +              * ARM_SMCCC_KVM_FUNC_FEATURES. However, we expose this to
+> > > > +              * the guest as bit-0. Hence, left-shift the user-space
+> > > > +              * exposed bitmap by 1 to accommodate this.
+> > > > +              */
+> > > > +             val[0] |= hvc_desc->hvc_vendor_hyp_bmap << 1;
+> > >
+> > > Having an off-by-one difference between the userspace and guest
+> > > representations of this bitmap seems like it could be a source of bugs
+> > > in the future. Its also impossible for the guest to completely hide the
+> > > vendor range if it so chooses.
+> > >
+> > > Why not tie ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID and
+> > > ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID to BIT(0)? PTP would then
+> > > become BIT(1).
+> > >
+> > I agree it's a little asymmetrical. But exposing a bit for the
+> > func_ids that you mentioned means providing a capability to disable
+> > them by the userspace. This would block the guests from even
+> > discovering the space. If it's not too ugly, we can maintain certain
+> > bits to always remain read-only to the user-space. On the other hand,
+> > we can simply ignore what the userspace configure and simply treat it
+> > as a userspace bug. What do you think?
+>
+> I think that assigning a bit to the aforementioned hypercalls would be
+> best. If userspace decides to hide all the features enumerated in the
+> subrange then there isn't much point to the guest knowing that the range
+> even exists. It shouldn't amount to much for userspace, as it will
+> likely just keep the default value and only worry about these registers
+> when migrating.
+>
+Sure, I'll include a bit for these as well.
 
-Hey Maninder, thanks for your patch!
+Thanks,
+Raghavenadra
 
-Since this touches kernel/module.c and include/linux/module.h I'd prefer
-this go through modules-next [0], and as you will see that's a different
-world right now. I also have a set of at least 2 other patch sets to
-merge there before yours.
-
-Also, what is on modules-next is not intended to go to Linus for the
-next merge window as the changes there got merged only late, and I want
-at least 2 months of testing on linux-newt before any pull requiest is
-sent to Linus.
-
-Can you rebase to modules-next? I can evaluate the patches then for
-integration there once the other stuff gets merged into that tree too.
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
-
-  Luis
+> Apologies if I'm being pedantic, but such a subtle implementation detail
+> could be overlooked in future changes.
+>
+> --
+> Oliver
+>
+> > > >               break;
+> > > >       case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> > > >               kvm_ptp_get_time(vcpu, val);
+> > > > @@ -188,6 +198,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+> > > >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> > > >       KVM_REG_ARM_STD_BMAP,
+> > > >       KVM_REG_ARM_STD_HYP_BMAP,
+> > > > +     KVM_REG_ARM_VENDOR_HYP_BMAP,
+> > > >  };
+> > > >
+> > > >  void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > > > @@ -196,6 +207,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > > >
+> > > >       hvc_desc->hvc_std_bmap = ARM_SMCCC_STD_FEATURES;
+> > > >       hvc_desc->hvc_std_hyp_bmap = ARM_SMCCC_STD_HYP_FEATURES;
+> > > > +     hvc_desc->hvc_vendor_hyp_bmap = ARM_SMCCC_VENDOR_HYP_FEATURES;
+> > > >  }
+> > > >
+> > > >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> > > > @@ -285,6 +297,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >       case KVM_REG_ARM_STD_HYP_BMAP:
+> > > >               val = READ_ONCE(hvc_desc->hvc_std_hyp_bmap);
+> > > >               break;
+> > > > +     case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > > > +             val = READ_ONCE(hvc_desc->hvc_vendor_hyp_bmap);
+> > > > +             break;
+> > > >       default:
+> > > >               return -ENOENT;
+> > > >       }
+> > > > @@ -311,6 +326,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+> > > >               fw_reg_bmap = &hvc_desc->hvc_std_hyp_bmap;
+> > > >               fw_reg_features = ARM_SMCCC_STD_HYP_FEATURES;
+> > > >               break;
+> > > > +     case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > > > +             fw_reg_bmap = &hvc_desc->hvc_vendor_hyp_bmap;
+> > > > +             fw_reg_features = ARM_SMCCC_VENDOR_HYP_FEATURES;
+> > > > +             break;
+> > > >       default:
+> > > >               return -ENOENT;
+> > > >       }
+> > > > @@ -416,6 +435,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > > >               return 0;
+> > > >       case KVM_REG_ARM_STD_BMAP:
+> > > >       case KVM_REG_ARM_STD_HYP_BMAP:
+> > > > +     case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > > >               return kvm_arm_set_fw_reg_bmap(vcpu, reg_id, val);
+> > > >       default:
+> > > >               return -ENOENT;
+> > > > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> > > > index a1cb6e839c74..91be758ca58e 100644
+> > > > --- a/include/kvm/arm_hypercalls.h
+> > > > +++ b/include/kvm/arm_hypercalls.h
+> > > > @@ -12,6 +12,9 @@
+> > > >  #define ARM_SMCCC_STD_HYP_FEATURES \
+> > > >       GENMASK_ULL(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
+> > > >
+> > > > +#define ARM_SMCCC_VENDOR_HYP_FEATURES \
+> > > > +     GENMASK_ULL(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
+> > > > +
+> > > >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> > > >
+> > > >  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+> > > > --
+> > > > 2.35.1.473.g83b2b277ed-goog
+> > > >

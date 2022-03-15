@@ -2,126 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D744D98ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2456B4D9965
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347154AbiCOKkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S1347591AbiCOKug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiCOKkJ (ORCPT
+        with ESMTP id S1347604AbiCOKsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:40:09 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B899040E65;
-        Tue, 15 Mar 2022 03:38:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: shreeya)
-        with ESMTPSA id C63431F41BCA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647340732;
-        bh=0Ayx2ck3KklerDtSR4xP/Yhxts6NZBaufUlBtW0oRvU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YFtQr2t9RxvdrDk6j5Dk4gPKK0fkc9d1H4DaHAl7U931gjBv+F/sZRPwpfJA6PTnP
-         vYb80IkieuQo7s+DsNr4a3A9V44Xf2S2Ksigkthe4geF4A2y8ncxcRuA8xvCz7CzkR
-         VKXwwAqD9tnxgE4b5pYrUlGv4adqaNQFwziH9smQ3ZEOxlrytSBEaK6y/kXk4Sww8O
-         eT1zps2TlL+lfvc3aelsG2M3464T5EWu/wkqXVueEljxq+us34muafVNVQjkN2wrLu
-         erxAAIk8URm3cTW8HVGOzP1tSpvBIlrUYuKrwiklyqlNJRtpnKHLKtF2Z5e/xYHxjt
-         IWtCkTb6lCVdg==
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, krisman@collabora.com,
-        andy.shevchenko@gmail.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH v2] gpio: Restrict usage of gc irq members before initialization
-Date:   Tue, 15 Mar 2022 16:08:13 +0530
-Message-Id: <20220315103813.84407-1-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 15 Mar 2022 06:48:00 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3240522D6;
+        Tue, 15 Mar 2022 03:45:02 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KHqlb4ryTz6809b;
+        Tue, 15 Mar 2022 18:44:11 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 15 Mar 2022 11:44:56 +0100
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Mar 2022 10:44:53 +0000
+From:   John Garry <john.garry@huawei.com>
+To:     <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <bvanassche@acm.org>,
+        <ming.lei@redhat.com>, <hch@lst.de>, <hare@suse.de>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <martin.wilck@suse.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/2] scsi/libata: A potential tagging fix and improvement
+Date:   Tue, 15 Mar 2022 18:39:04 +0800
+Message-ID: <1647340746-17600-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gc irq members are exposed before they could be completely
-initialized and this leads to race conditions.
+Two loosely related patches are included:
 
-One such issue was observed for the gc->irq.domain variable which
-was accessed through the I2C interface in gpiochip_to_irq() before
-it could be initialized by gpiochip_add_irqchip(). This resulted in
-Kernel NULL pointer dereference.
+- Fix for scsi_realloc_sdev_budget_map(). I noticed that the budget token
+  for scsi commands was way in excess of the device queue depth, so I
+  think we need to fix the sbitmap depth. I need to test this more.
 
-To avoid such scenarios, restrict usage of gc irq members before
-they are completely initialized.
+- libata change to use scsi command budget token for qc tag for SAS host.
+  I marked this as RFC as for SAS hosts I don't see anything which
+  guarantees that the budget size is <= 32 always.
+  For libsas hosts we resize the device depth to 32 in the slave configure
+  callback, but this seems an unreliable approach since not all hosts may
+  call this.
+  In addition, I am worried that even if we resize the device depth
+  properly in the slave config callback, we may still try to alloc qc tag
+  prior to this - in lun scan, for example.
+  So we need a way to guarantee that the device queue depth is <= 32
+  always, which I would be open to suggestions for.
 
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
----
+John Garry (2):
+  scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()
+  libata: Use scsi cmnd budget token for qc tag for SAS host
 
-Changes in v2 :-
-  - Make gc_irq_initialized flag a member of gpio_irq_chip structure.
-  - Make use of barrier() to avoid reordering of flag initialization before
-other gc irq members are initialized.
+ drivers/ata/libata-core.c |  5 +++--
+ drivers/ata/libata-sata.c | 21 ++++-----------------
+ drivers/ata/libata-scsi.c |  2 +-
+ drivers/ata/libata.h      |  4 ++--
+ drivers/scsi/scsi_scan.c  |  5 +++++
+ include/linux/libata.h    |  1 -
+ 6 files changed, 15 insertions(+), 23 deletions(-)
 
-
- drivers/gpio/gpiolib.c      | 11 ++++++++++-
- include/linux/gpio/driver.h |  9 +++++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index defb7c464b87..3973146736a1 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1593,6 +1593,15 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
- 
- 	acpi_gpiochip_request_interrupts(gc);
- 
-+	/*
-+	 * Using barrier() here to prevent compiler from reordering
-+	 * gc->irq.gc_irq_initialized before initialization of above
-+	 * gc irq members.
-+	 */
-+	barrier();
-+
-+	gc->irq.gc_irq_initialized = true;
-+
- 	return 0;
- }
- 
-@@ -3138,7 +3147,7 @@ int gpiod_to_irq(const struct gpio_desc *desc)
- 
- 	gc = desc->gdev->chip;
- 	offset = gpio_chip_hwgpio(desc);
--	if (gc->to_irq) {
-+	if (gc->to_irq && gc->irq.gc_irq_initialized) {
- 		int retirq = gc->to_irq(gc, offset);
- 
- 		/* Zero means NO_IRQ */
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index b0728c8ad90c..e93de63feece 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -203,6 +203,15 @@ struct gpio_irq_chip {
- 	 */
- 	unsigned int *map;
- 
-+	/**
-+	 * @gc_irq_initialized:
-+	 *
-+	 * Flag to track gc irq member's initialization.
-+	 * This flag will make sure gc irq members are not used before
-+	 * they are initialized.
-+	 */
-+	bool gc_irq_initialized;
-+
- 	/**
- 	 * @threaded:
- 	 *
 -- 
-2.30.2
+2.26.2
 

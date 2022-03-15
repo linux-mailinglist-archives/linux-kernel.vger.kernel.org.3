@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC694D9276
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A7C4D927A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239969AbiCOCNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 22:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S1344411AbiCOCPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 22:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236520AbiCOCNM (ORCPT
+        with ESMTP id S231442AbiCOCPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 22:13:12 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D3A42A0D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:11:59 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        Mon, 14 Mar 2022 22:15:04 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405B3344DF;
+        Mon, 14 Mar 2022 19:13:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F201B2C072F;
-        Tue, 15 Mar 2022 02:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1647310317;
-        bh=AVsCUcW1Pbwxc17pi8qVOG5z7q4ceR23WPd92uzUgXw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=qn3zc4VazfLr/TfKzvZsAVlRXH5RZ9xppQ5Ag3c8WDxDaXDC0rT7jI7SOgFMMVH+a
-         rO9ukHZUioX6ImVQjMF8UmQ31Zngi9LmATZooiCp1fDjhhr7iNbHA5sjLnL9O/U/2H
-         xUpgS02eCWh4eVctGvYtvEBGDQq4iUlNbrSab/VeB68A2WD6hUahYu7Chy6oR2q+5H
-         Y5LVvA/uKMHuXXDhTMCNDO64rKVebt5tp1t/WOQPEkUEhe2t4qI4yRrpkqd+TuWvIC
-         bvdIsw7iJwj/JXgP7G+SCbyPFPJzkdm1nVRonLCnJugGaUjNBHdkDBNba90YWegTn0
-         3j0wxQs3/P+Aw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B622ff5ed0001>; Tue, 15 Mar 2022 15:11:57 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 15 Mar 2022 15:11:57 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Tue, 15 Mar 2022 15:11:57 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 7/8] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Topic: [PATCH v2 7/8] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-Thread-Index: AQHYN+r1ZmR8jfENvE+HCb0E4rqs96y+vFuAgAAd8wA=
-Date:   Tue, 15 Mar 2022 02:11:56 +0000
-Message-ID: <7b78853e-71ec-7c57-4cac-5cd6303f3b13@alliedtelesis.co.nz>
-References: <20220314213143.2404162-1-chris.packham@alliedtelesis.co.nz>
- <20220314213143.2404162-8-chris.packham@alliedtelesis.co.nz>
- <Yi/cyUJ6oIs96UW2@lunn.ch>
-In-Reply-To: <Yi/cyUJ6oIs96UW2@lunn.ch>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BA0237A93182384FA910254A8F03FB41@atlnz.lc>
-Content-Transfer-Encoding: base64
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHcQj6TQxz4xRB;
+        Tue, 15 Mar 2022 13:13:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647310430;
+        bh=84nN59giJb6Wk9aHfEP/HVHFE7QFPITweDKcNwA7Qtg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DKx1irAU2KXTgOeiHVael5I9JdsvauZ+Lh5IeD9w42hbzxZXnF8Dk0VF09lag5hP9
+         jCUkn9oUN+tH0ysPWmDrNFwG7tJ9t/OyFaau+BkizmM7p+tseNFDOAWbFvm7N6BHQM
+         vyQSxfI3yP+hoQNVY04odqtCFu0ysGksl9jQuCJq3hiWu1VElKgRCP4X5wk5SRFzQG
+         bGMBnycj/nDkQS0X1g0YOjWpMjhzRPSNpYELry+dwL2zRVGVpJc8K8mxwsbi00jGKC
+         V8aKAysfTUn0Fe6z4IthGHLap/t9tif0rIatGqvYwVMDf9jQZFaoLyULqEI42vIQYG
+         MAtWkfKryPn2Q==
+Date:   Tue, 15 Mar 2022 13:13:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Subject: linux-next: manual merge of the tip tree with the net-next tree
+Message-ID: <20220315131348.421dd6c7@canb.auug.org.au>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=zO8ZZgZcihizO_F2bSoA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/KKKTz22ycwZs9Me/cI9EQnc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxNS8wMy8yMiAxMzoyNCwgQW5kcmV3IEx1bm4gd3JvdGU6DQo+PiBkaWZmIC0tZ2l0IGEv
-YXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS05OGR4MjUzMC5kdHNpIGIvYXJjaC9h
-cm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS05OGR4MjUzMC5kdHNpDQo+PiBuZXcgZmlsZSBt
-b2RlIDEwMDY0NA0KPj4gaW5kZXggMDAwMDAwMDAwMDAwLi5lYmU0NjRiOWViZDINCj4+IC0tLSAv
-ZGV2L251bGwNCj4+ICsrKyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtOThk
-eDI1MzAuZHRzaQ0KPj4gQEAgLTAsMCArMSwzNDMgQEANCj4+ICsvLyBTUERYLUxpY2Vuc2UtSWRl
-bnRpZmllcjogKEdQTC0yLjArIE9SIE1JVCkNCj4+ICsvKg0KPj4gKyAqIERldmljZSBUcmVlIEZv
-ciBBQzUuDQo+PiArICoNCj4+ICsgKiBDb3B5cmlnaHQgKEMpIDIwMjEgTWFydmVsbA0KPj4gKyAq
-DQo+PiArICovDQo+PiArDQo+PiArL2R0cy12MS87DQo+PiArCW1lbW9yeUAwIHsNCj4+ICsJCWRl
-dmljZV90eXBlID0gIm1lbW9yeSI7DQo+PiArCQlyZWcgPSA8MHgyIDB4MDAwMDAwMDAgMHgwIDB4
-NDAwMDAwMDA+Ow0KPj4gKwkJLy8gbGludXgsdXNhYmxlLW1lbW9yeSA9IDwweDIgMHgwMDAwMDAw
-MCAweDAgMHg4MDAwMDAwMD47DQo+PiArCX07DQo+IElzIHRoZSBtZW1vcnkgcGFydCBvZiB0aGUg
-U29DLCBvciBpcyBpdCBvbiB0aGUgYm9hcmQ/IE5vcm1hbGx5IGl0IGlzDQo+IG9uIHRoZSBib2Fy
-ZCwgc28gc2hvdWxkIGJlIGluIHRoZSAuZHRzIGZpbGUuIEJ1dCBBcHBsZSBNMSBldGMuLi4NCg0K
-SXQncyBvbiB0aGUgYm9hcmQuIE1hcnZlbGwncyBTREsgY29uZmxhdGVzIHRoZSBTb0MgYW5kIHRo
-ZSBjb21tb24gDQplbGVtZW50cyBiZXR3ZWVuIHRoZWlyIGJvYXJkIGRlc2lnbnMgKGhlbmNlIHRo
-ZSBTUEkgYW5kIEV0aGVybmV0IHN0dWZmIA0KaW4gdjEpLiBJJ2xsIG1vdmUgaXQgZm9yIHRoZSBu
-ZXh0IHJvdW5kLg0KDQpJIGFsc28gd2Fzbid0IHN1cmUgYWJvdXQgbGludXgsdXNhYmxlLW1lbW9y
-eS4gSXQncyBjb21tZW50ZWQgb3V0IHNvIGl0J3MgDQpvYnZpb3VzbHkgZG9pbmcgbm90aGluZyBi
-dXQgc2hvdWxkIGl0PyBObyBvdGhlciBpbi10cmVlIGR0cyBmaWxlcyBoYXZlIGl0Lg0KDQo+PiAr
-Jm1kaW8gew0KPj4gKwlwaHkwOiBldGhlcm5ldC1waHlAMCB7DQo+PiArCQlyZWcgPSA8MCAwPjsN
-Cj4gcGh5IHJlZyB2YWx1ZXMgYXJlIGEgc2luZ2xlIG51bWJlciwgdGhlIGFkZHJlc3Mgb24gdGhl
-IGJ1cywgaW4gdGhlDQo+IHJhbmdlIDAgdG8gMzEuDQpXaWxsIGZpeC4NCj4gICAgICAgIEFuZHJl
-dw==
+--Sig_/KKKTz22ycwZs9Me/cI9EQnc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the tip tree got a conflict in:
+
+  arch/x86/net/bpf_jit_comp.c
+
+between commit:
+
+  1022a5498f6f ("bpf, x86_64: Use bpf_jit_binary_pack_alloc")
+
+from the net-next tree and commit:
+
+  9e1db76f44de ("x86,bpf: Fix bpf_arch_text_poke()")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/net/bpf_jit_comp.c
+index 6b8de13faf83,b1c736be6545..000000000000
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@@ -380,7 -395,14 +391,14 @@@ int bpf_arch_text_poke(void *ip, enum b
+  		/* BPF poking in modules is not supported */
+  		return -EINVAL;
+ =20
++ 	/*
++ 	 * See emit_prologue(), for IBT builds the trampoline hook is preceded
++ 	 * with an ENDBR instruction.
++ 	 */
++ 	if (is_endbr(*(u32 *)ip))
++ 		ip +=3D ENDBR_INSN_SIZE;
++=20
+ -	return __bpf_arch_text_poke(ip, t, old_addr, new_addr, true);
+ +	return __bpf_arch_text_poke(ip, t, old_addr, new_addr);
+  }
+ =20
+  #define EMIT_LFENCE()	EMIT3(0x0F, 0xAE, 0xE8)
+
+--Sig_/KKKTz22ycwZs9Me/cI9EQnc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIv9lwACgkQAVBC80lX
+0Gwwlwf+K5/ogSwfGTxRP3k/yF3BJBKuDcidTyc05arl3e2zsrueHLHifN/2Krtx
+DZNISDDCoWR3xoaYiuVUw38Y63+c4Z6XS6Cm4UfQIlYzOEMDO3DoHt2QCQM8Ov3H
+dJL5DbNZX/JUur1CyihRmidIVkMU8k72TQzPf2/z8I9FxIadRuJoXl71jUjK3jon
+U0SNqEYePcIYzt5BM23HDSzO8G+RXdAmShCvqaXQhdH6hh3kMAfshAlungwvC+j6
+opjnsB3PZ480crwi/Oy3vok3tp7Zt2+NF6+R6v7p+MdUq8ezGTDC9M+zCTY8VKp4
+nU8A+YX2XOdusWGwpD6X+/7MybJnUw==
+=nwU1
+-----END PGP SIGNATURE-----
+
+--Sig_/KKKTz22ycwZs9Me/cI9EQnc--

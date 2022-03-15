@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFCC4D9E67
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428DC4D9E69
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344705AbiCOPPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S1349464AbiCOPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbiCOPPH (ORCPT
+        with ESMTP id S233204AbiCOPPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:15:07 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FF627CDF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:13:53 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t22so5243952plo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f5nlUBLV7MqYfh3uZWTTZlE6PzgMGo6+9eel+nmzmEc=;
-        b=FOwkB/9cds0wWFfxicB/tnGCM5m9Apu7u2pJ9B1T/auQbXakW0HkJaBq35LO7cLx81
-         fjXhiKYXerKnkoS2pnLwW2BFKxFYEqy/DihUnOQtYuffg0GRhC/ssczMhIKCgzOLYCqz
-         XOOwwWfhDHK+MvYre/j3pCg3vn5p2Nyooy8d9elwNJqRPd+njeHvbpD+6iSQwqSrKKwJ
-         aBgYpRwN5T52sPrV9hFqzxZGMhT9JV1vn9TRIzxBm3y6wCgkJv958FD1S6r57UxKViOc
-         YazUs0ItazTbiwfZ/o9QYGuJ6cHmULxnpnwa285vg+0/+ooM61+Jrus0/Bzo4185YXDE
-         BwUQ==
+        Tue, 15 Mar 2022 11:15:35 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FA127FE2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:14:21 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so5552056ilt.21
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:14:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f5nlUBLV7MqYfh3uZWTTZlE6PzgMGo6+9eel+nmzmEc=;
-        b=KCcv1Q8QPI8eHBSsIFt1vMfXFgvA7SW4ExZfVER21fu6X8t+s93o98Zi8CvPVjHWQg
-         QxpUSMwwRrDmPbsK3cWc/6aylvKxmp9QbyA01PbPMceLvF/F6xFcm7bNmdWuLI2lXRFA
-         txzTt3hIBM4qaPc76ZAzy/02W+5A1Y1MvoSMziup08ZiZGitpNrf33ZJLcYC7zuoK97j
-         1Kn0A4wdzfRnf1R1EMFWFQ14bxP/nLCy8FotFf7YFbBRq5x+hVHuRdJC26up88X2TUuT
-         NH02SsKO4Ox0kX3rmqtrUM9EnVbK9QEsqVN+851B5/yKjBcCDv940gbceq6ynW++nPgO
-         2FQw==
-X-Gm-Message-State: AOAM532r7mh2aIXIY13JlYI8gBHThnUu2gOmyk3ACKuD7dZsY61un03D
-        3BkrQY76VBDS/scbPu9QSVMxwQ==
-X-Google-Smtp-Source: ABdhPJyCccpeCH49rFaMMSFeIBQyW65dhNtaeYGUV8VzcCpHA9uN79iBq6oEDbJcgl1AlM7YYXcfZg==
-X-Received: by 2002:a17:902:8b87:b0:14b:47b3:c0a2 with SMTP id ay7-20020a1709028b8700b0014b47b3c0a2mr28439314plb.51.1647357232685;
-        Tue, 15 Mar 2022 08:13:52 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f72acd4dadsm24861405pfx.81.2022.03.15.08.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 08:13:51 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 09:13:49 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        angelogioacchino.delregno@collabora.com
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] remoteproc: mediatek: Support mt8186 scp
-Message-ID: <20220315151349.GA2479752@p14s>
-References: <20220315124747.30144-1-allen-kh.cheng@mediatek.com>
- <20220315124747.30144-3-allen-kh.cheng@mediatek.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=fzzxtMFFTEHBKO10X/j+nayURnj7o4HNsDU04+QEw4M=;
+        b=McCkZjVAj2CVG0c00t0/YQzkmdCpRavFJowQzIz6fC78l6dfsHVh8+SdofA3cmP87L
+         246tzUp++L0o2U5w5ElQw2eSxVcvymMV8fmUBjUOY35/WYTjtkjNYkv1UrpflZVPNJnT
+         dtitS1Y9ch7To4bK36F1syiZEINFRIqLFJbQ0q0pgAflNgnP4dK+41Ebrr63U2iHdpvW
+         wEo4u/37ibRaL1BfcZ20vBI1urb2Krk2pYouvVvNedP/M7hw3rowh0mMfAfPcr27Avgz
+         7vO23fW4fAIFYO0GCPEti1V6w7kZxeynPq/YohOxsjuY2IFm9J1oMY+GSbUpxdUbziWv
+         h9hg==
+X-Gm-Message-State: AOAM5325o2sAC/9TwVuXB1E2ZbI+KLonBIxjj+jRXPAogwPqgC574NOD
+        bdcmgVtUhkHJx0KrvvuRh7PFuni0V0skqHj0Y/i9eFXZbynQ
+X-Google-Smtp-Source: ABdhPJxox0C2PaY29+M9+IrDL4j7x3FcuzHBnxkxYfgMfeGLxSo5WaaBnQnVVwRXAhLxBL3tg34w9fYkcf2NBZxSjfue4Fq28l8s
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315124747.30144-3-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:344a:b0:319:fca7:7361 with SMTP id
+ q10-20020a056638344a00b00319fca77361mr9592119jav.225.1647357259337; Tue, 15
+ Mar 2022 08:14:19 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 08:14:19 -0700
+In-Reply-To: <000000000000183d9e05d7f0c0ee@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000042d70e05da43401f@google.com>
+Subject: Re: [syzbot] kernel BUG in ext4_ind_remove_space
+From:   syzbot <syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,111 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 08:47:47PM +0800, Allen-KH Cheng wrote:
-> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-> 
-> Add SCP support for mt8186
+syzbot has found a reproducer for the following issue on:
 
-V5 of this patchset is already in rproc-next and as such this one does not
-apply.
+HEAD commit:    09688c0166e7 Linux 5.17-rc8
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a8bd61700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=fcc629d1a1ae8d3fe8a5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1205b189700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15dda4fe700000
 
-> 
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com
 
-As far as I can see from the mailing list interactions, Angelo did not review
-the new section about cache initialisation and yet his RoB is present.  And to
-make matters worse he was not on the recipient list, which I have corrected.
+EXT4-fs warning (device sda1): ext4_block_to_path:105: block 1074791436 > max in inode 1137
+------------[ cut here ]------------
+kernel BUG at fs/ext4/indirect.c:1244!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3590 Comm: syz-executor391 Not tainted 5.17.0-rc8-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
+Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
+RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
+R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
+FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ ext4_punch_hole+0xfe8/0x11d0 fs/ext4/inode.c:4044
+ ext4_fallocate+0x1194/0x3ed0 fs/ext4/extents.c:4694
+ vfs_fallocate+0x48d/0xe10 fs/open.c:308
+ ksys_fallocate fs/open.c:331 [inline]
+ __do_sys_fallocate fs/open.c:339 [inline]
+ __se_sys_fallocate fs/open.c:337 [inline]
+ __x64_sys_fallocate+0xcf/0x140 fs/open.c:337
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f699234cdf9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f69922ff308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
+RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007f699234cdf9
+RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000005
+RBP: 00007f69923d5408 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000ffeffeff000 R11: 0000000000000246 R12: 00000ffeffeff000
+R13: 00007f69923d5400 R14: 00007f69923a3004 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
+Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
+RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
+R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
+FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
 
-Thanks,
-Mathieu
-
-> ---
->  drivers/remoteproc/mtk_common.h |  3 +++
->  drivers/remoteproc/mtk_scp.c    | 42 +++++++++++++++++++++++++++++++++
->  2 files changed, 45 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-> index 5ff3867c72f3..71ce4977cb0b 100644
-> --- a/drivers/remoteproc/mtk_common.h
-> +++ b/drivers/remoteproc/mtk_common.h
-> @@ -32,6 +32,9 @@
->  #define MT8183_SCP_CACHESIZE_8KB	BIT(8)
->  #define MT8183_SCP_CACHE_CON_WAYEN	BIT(10)
->  
-> +#define MT8186_SCP_L1_SRAM_PD_P1	0x40B0
-> +#define MT8186_SCP_L1_SRAM_PD_p2	0x40B4
-> +
->  #define MT8192_L2TCM_SRAM_PD_0		0x10C0
->  #define MT8192_L2TCM_SRAM_PD_1		0x10C4
->  #define MT8192_L2TCM_SRAM_PD_2		0x10C8
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> index dcddb33e9997..11be6b4235eb 100644
-> --- a/drivers/remoteproc/mtk_scp.c
-> +++ b/drivers/remoteproc/mtk_scp.c
-> @@ -383,6 +383,35 @@ static void mt8192_power_off_sram(void __iomem *addr)
->  		writel(GENMASK(i, 0), addr);
->  }
->  
-> +static int mt8186_scp_before_load(struct mtk_scp *scp)
-> +{
-> +	/* Clear SCP to host interrupt */
-> +	writel(MT8183_SCP_IPC_INT_BIT, scp->reg_base + MT8183_SCP_TO_HOST);
-> +
-> +	/* Reset clocks before loading FW */
-> +	writel(0x0, scp->reg_base + MT8183_SCP_CLK_SW_SEL);
-> +	writel(0x0, scp->reg_base + MT8183_SCP_CLK_DIV_SEL);
-> +
-> +	/* Turn on the power of SCP's SRAM before using it. Enable 1 block per time*/
-> +	mt8192_power_on_sram(scp->reg_base + MT8183_SCP_SRAM_PDN);
-> +
-> +	/* Initialize TCM before loading FW. */
-> +	writel(0x0, scp->reg_base + MT8183_SCP_L1_SRAM_PD);
-> +	writel(0x0, scp->reg_base + MT8183_SCP_TCM_TAIL_SRAM_PD);
-> +	writel(0x0, scp->reg_base + MT8186_SCP_L1_SRAM_PD_P1);
-> +	writel(0x0, scp->reg_base + MT8186_SCP_L1_SRAM_PD_p2);
-> +
-> +	/*
-> +	 * Set I-cache and D-cache size before loading SCP FW.
-> +	 * SCP SRAM logical address may change when cache size setting differs.
-> +	 */
-> +	writel(MT8183_SCP_CACHE_CON_WAYEN | MT8183_SCP_CACHESIZE_8KB,
-> +	       scp->reg_base + MT8183_SCP_CACHE_CON);
-> +	writel(MT8183_SCP_CACHESIZE_8KB, scp->reg_base + MT8183_SCP_DCACHE_CON);
-> +
-> +	return 0;
-> +}
-> +
->  static int mt8192_scp_before_load(struct mtk_scp *scp)
->  {
->  	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-> @@ -874,6 +903,18 @@ static const struct mtk_scp_of_data mt8183_of_data = {
->  	.ipi_buf_offset = 0x7bdb0,
->  };
->  
-> +static const struct mtk_scp_of_data mt8186_of_data = {
-> +	.scp_clk_get = mt8195_scp_clk_get,
-> +	.scp_before_load = mt8186_scp_before_load,
-> +	.scp_irq_handler = mt8183_scp_irq_handler,
-> +	.scp_reset_assert = mt8183_scp_reset_assert,
-> +	.scp_reset_deassert = mt8183_scp_reset_deassert,
-> +	.scp_stop = mt8183_scp_stop,
-> +	.scp_da_to_va = mt8183_scp_da_to_va,
-> +	.host_to_scp_reg = MT8183_HOST_TO_SCP,
-> +	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
-> +};
-> +
->  static const struct mtk_scp_of_data mt8192_of_data = {
->  	.scp_clk_get = mt8192_scp_clk_get,
->  	.scp_before_load = mt8192_scp_before_load,
-> @@ -900,6 +941,7 @@ static const struct mtk_scp_of_data mt8195_of_data = {
->  
->  static const struct of_device_id mtk_scp_of_match[] = {
->  	{ .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
-> +	{ .compatible = "mediatek,mt8186-scp", .data = &mt8186_of_data },
->  	{ .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
->  	{ .compatible = "mediatek,mt8195-scp", .data = &mt8195_of_data },
->  	{},
-> -- 
-> 2.18.0
-> 

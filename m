@@ -2,103 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE304DA3C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51F24DA3CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351606AbiCOUNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S1351611AbiCOUPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236582AbiCOUNR (ORCPT
+        with ESMTP id S234688AbiCOUPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:13:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749D65469E;
-        Tue, 15 Mar 2022 13:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647375124; x=1678911124;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=P0igHsy0agyY40a+InXlXjEkpY6Jf+LU2yEKK5b9mdI=;
-  b=d3RgezXLuKRrI24gkmG4Hewc2RaGh7c0r0bEIW+CEzKk97kXxS+pGn5J
-   vkyFl82K2rVTTQ/rFXbeqWRCeYskEE09UDpZKSHDh/NtL/cX7fsyF1xS4
-   cE/vF/79BAEOb9sejsa3NxEvKlNnI/JUcfOPpSeBX2ya0IWl6dk3J2gLB
-   bbURiBd1VI7rXjg2NgZ4PjFjujhvFSaFAMRvEWmxNB+kYsmYFm2CIdtT8
-   ZSfGi+BxwU7bH6Ykm9aBfOyf59E/DhiS0xy1h62IZa0cAepYARnRkXWxH
-   KSJmF7DPqaScEsmOh8jzyHu9rt23P0+OdsSy2VVRVpYv3SQkbLi3cK9Ov
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342843389"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="342843389"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 13:12:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="557092735"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.111])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 13:12:00 -0700
-Message-ID: <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
-Date:   Tue, 15 Mar 2022 22:11:54 +0200
+        Tue, 15 Mar 2022 16:15:50 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3CF5AA7A;
+        Tue, 15 Mar 2022 13:14:38 -0700 (PDT)
+Received: from g550jk.localnet (a246182.upc-a.chello.nl [62.163.246.182])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AF31CCB556;
+        Tue, 15 Mar 2022 20:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1647375275; bh=invxskIdOgqfDDwWrwC5sBLhuscbs9Z9OfNld5S4mXY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=L2oeOX4C6bkNHEBFWrmsaM2MWMfl0hw6j0WEXU/4cTem9TJB/VvFX3esSLGbqLMVL
+         /DRvGBKccPcqoyQ1ywoB04lPUYRS1MaVXJtBSius4TJ81oCYncEcV9rjqpaWl4epA7
+         t4WYPkpyP+GXyty/f1eHTaV3vks5fDawj+qSJw6s=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] rpmsg: smd: allow opening rpm_requests even if already opened
+Date:   Tue, 15 Mar 2022 21:14:35 +0100
+Message-ID: <5558411.DvuYhMxLoT@g550jk>
+In-Reply-To: <2630587.mvXUDI8C0e@g550jk>
+References: <20220220201909.445468-1-luca@z3ntu.xyz> <20220220201909.445468-6-luca@z3ntu.xyz> <2630587.mvXUDI8C0e@g550jk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
-Content-Language: en-US
-To:     "Steinar H. Gunderson" <sesse@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220310093844.982656-1-sesse@google.com>
- <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
- <YiuKAk7SaXP7B7Ee@google.com>
- <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
- <YjBnet2813sEGjZY@google.com>
- <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
- <YjDUO6bbyfGw/u0C@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <YjDUO6bbyfGw/u0C@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.3.2022 20.00, Steinar H. Gunderson wrote:
-> On Tue, Mar 15, 2022 at 01:32:38PM +0200, Adrian Hunter wrote:
->>> I think the structure looks good, but I'm not sure about updating
->>> e.g. ptq->last_cy_insn_cnt in both functions? Does that make sense?
->> It should only be updated in the new intel_pt_synth_cycle_sample().
->> intel_pt_synth_instruction_sample() should be unchanged.
-> 
-> Hm, OK. But something definitely changed between my original patch and
-> your change. (The first patch; I didn't try the last one yet.) With my
-> patch, I got (on a specific trace, synthing cycles only with perf report
-> --itrace=y0nse):
-> 
-> Samples: 4M of event 'cycles:uH', Event count (approx.): 4844309
-> 
-> With yours on the same file:
-> 
-> Samples: 2M of event 'cycles:uH', Event count (approx.): 77622449
-> 
-> The relative times between functions are also pretty different (although
-> none of them are obviously crazy), so one of them has to be wrong.
-> Is this to be expected, ie., would you expect your change to fix some
-> bad bug on cycle-only synth? For reference, “perf script --itrace=i0ns
-> -F +ipc | grep -c IPC:” (a quick proxy for the number of CYC packets :-) )
-> yields 4836782, so I'm a bit surprised why there are only 2M events
-> being emitted from that.
+On Montag, 14. M=E4rz 2022 20:08:20 CET Luca Weiss wrote:
+> Hi all,
+>=20
+> any feedback on this patch? It's needed for msm8953 to boot properly.
 
-Sorry, my first suggestion has issues, but the second is better.
+I was informed that the patch has already been applied and is now also pres=
+ent=20
+in linux-next, so please disregard my last email.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?
+id=3Da8f8cc6b39b7ee0dbaccbebd1268c9d3458ebf13
+
+Regards
+Luca
+
+>=20
+> Regards
+> Luca
+>=20
+> On Sonntag, 20. Februar 2022 21:18:58 CET Luca Weiss wrote:
+> > On msm8953 the channel seems to be already opened when booting Linux but
+> > we still need to open it for communication with regulators etc.
+> >=20
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+> > Changes in v2:
+> > - rework original patch, don't drop condition completely but allow force
+> >=20
+> >   opening rpm_requests channel
+> > =20
+> >  drivers/rpmsg/qcom_smd.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+> > index 540e027f08c4..887e21ca51f2 100644
+> > --- a/drivers/rpmsg/qcom_smd.c
+> > +++ b/drivers/rpmsg/qcom_smd.c
+> > @@ -1288,9 +1288,14 @@ static void qcom_channel_state_worker(struct
+> > work_struct *work) if (channel->state !=3D SMD_CHANNEL_CLOSED)
+> >=20
+> >  			continue;
+> >=20
+> > +		/*
+> > +		 * Always open rpm_requests, even when already opened
+>=20
+> which is
+>=20
+> > +		 * required on some SoCs like msm8953.
+> > +		 */
+> >=20
+> >  		remote_state =3D GET_RX_CHANNEL_INFO(channel, state);
+> >  		if (remote_state !=3D SMD_CHANNEL_OPENING &&
+> >=20
+> > -		    remote_state !=3D SMD_CHANNEL_OPENED)
+> > +		    remote_state !=3D SMD_CHANNEL_OPENED &&
+> > +		    strcmp(channel->name, "rpm_requests"))
+> >=20
+> >  			continue;
+> >  	=09
+> >  		if (channel->registered)
+
+
+
+

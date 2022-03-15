@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B63B4DA375
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE53E4DA37D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351472AbiCOTtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S1346018AbiCOTwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245391AbiCOTtS (ORCPT
+        with ESMTP id S234402AbiCOTwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:49:18 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F97DEA0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:48:06 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id c4so159753qtx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:48:06 -0700 (PDT)
+        Tue, 15 Mar 2022 15:52:40 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8631275C;
+        Tue, 15 Mar 2022 12:51:28 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id d10so43826334eje.10;
+        Tue, 15 Mar 2022 12:51:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jzTzwH5r+B8zHWp2dL9bIRp+jnDQp4u6qStPolr36JI=;
-        b=SVFOtodruKnk3NeRKIG5/VG4myOANEFzk02YEJ0NuwwHWsE4VW6a5bvyR4IHJYh6tI
-         qLGRCkAWEu1W3EUTBUpHvk3+xcmTBepwVGz8/ujzD59oWiwx8m1A3KGiIeIyn7PJbr3n
-         cjI5Tq52DG0wgeJnFutkLs0F3maHVsyVr/X5u9lk521S/opk+v81JmdUxwNgLKf2tpAl
-         OPY6ngods97/J3fjOT8eK1o8F2/Rgkgh5P5e94VScnMUVWoPV8/FsuijXoBvUUqKJnYc
-         MTyeXlAe8IEPYmqhRiBfvUoce+l+/IIOq2B35ZPzKtYGeXOCBAjAL1+suZcEXA+xd7+P
-         bq2A==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=c4mW0RIi6ae0ro8RnphpYWbFSmPVIVZ/Yq/iQ15Ckcc=;
+        b=VkovmwjNTFIcCmhapNNDEz0ANIJtO1Eo5FmGf1ZyJKNtWOiVrrHj45CObw+UwQSV4e
+         wJeQfjsGyrHMPS+WUN2mHLED6ydXQsFVwKIo8O5k6PjN/M8OONaxc6/WrTwplNxlLGNt
+         sru4h639itvUkezFz+Lgu9hOsiV+gkhfdPZUoLyPnNQwMki3e1wcteL4BhebPdQExLYr
+         KgCWH8kcA+t6q6AsBvADshjq6otkargoJsCXmJAeGXpCzf4n58Qbt8lzFhrgSq8STi1o
+         lHrmIE7G67hZvJzXPvmTbzDhZ6PYnG9b2tmYqUC0yC/jP2HwdIIRYNgHq1YJ6YfRM91a
+         S+8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jzTzwH5r+B8zHWp2dL9bIRp+jnDQp4u6qStPolr36JI=;
-        b=yuVq9tCokSH2hr71zynMrnB+ZlTeYwfh2tu2QiSgrJBZbFokHKlgJluo2Y0naq82bs
-         mriVv1coyFYRH4Vi5Y9i6WIfbDaSvC6LL92p1e8i035PB1Fn1Xzg7Hnk4IEJ3PjEbRBN
-         +zFhRzCtkwM2pORjK9KnE/W/lDo3sUnHNfWAzoec64dLHS4SC3Teq8ItYuHTz0I/L2kv
-         uLvwjDSes+iUZ9jOZAqgpDwWhAXOyGrU0y9qLV9Yj5OayxF1Qx9YsciawR1VfFJpO5N3
-         UccsA2D8hvKwhNrQra0qQGH3KQKokZ5SBKDL1EJEy33UEK6rqxeE97JK6dUsgpf+oxEl
-         w1nA==
-X-Gm-Message-State: AOAM531qqLDv19OQQX3HlrebGqa+Itzd6jW3D20V6AgOl8QoO9Vp6bg3
-        5lwOMcAlG4DFinPHgR5oySvcNKHBgzzOBFevB3T7Vg==
-X-Google-Smtp-Source: ABdhPJyXelC5s4w2x3SOsGNEaEWzPS5GKbL0dBxyHDUfFy3ZT9Bs9ZtipguBQMOUHwLyYFwcDvQ5ZAKqn0tSEJj2osQ=
-X-Received: by 2002:a05:622a:170a:b0:2e1:cdae:28df with SMTP id
- h10-20020a05622a170a00b002e1cdae28dfmr10979314qtk.299.1647373685297; Tue, 15
- Mar 2022 12:48:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=c4mW0RIi6ae0ro8RnphpYWbFSmPVIVZ/Yq/iQ15Ckcc=;
+        b=IXI+AzuA8e3kc0xVu75g7RvBqqBH+m2yw7amw32bZZ+21kR1itQuWcaMc3TOybGWYz
+         gHtcKMElve09b/9E1Utkce1mRs4RaWXbeAHcsTT0dGTGiQk1O5N46q2d7W3GfeK+gmWz
+         iEDBaVwEvoDpmtYTFAlr8/PeLonsM9I3MU8xyPbJJFkbLPGhqOHSfCcXHZLfbuqKg5iK
+         pXJpEJhPntkXHMa1sXNvASAINNKIn2r3DK3EIe6X2qbmLrcRyKaigdGsyoll2gTQn2tK
+         pEP8gonuGLwQ7F/TiQJm55FeTT1nhrkJgBcSLhOGaLBkpMtf2KzX4Q8IZiWGBZsLgBlr
+         3oMg==
+X-Gm-Message-State: AOAM532r2+K86w9ThlC6xNaGJzPiejBpEvi4wQslFAhok4LGqCzqZSvU
+        ioMz+usqOa+IQgZ+PVEPVvwfBYbCFW/Zlw==
+X-Google-Smtp-Source: ABdhPJwxOJVNfqcyOw+90b/wsi8sy2CbO7R38IKLMwGLeMuVFc+KW08b442TMAY+dr+jgagXCOtN2A==
+X-Received: by 2002:a17:906:53c7:b0:6ce:6f32:ce53 with SMTP id p7-20020a17090653c700b006ce6f32ce53mr24232089ejo.352.1647373886996;
+        Tue, 15 Mar 2022 12:51:26 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170906d20600b006ca00cb99e0sm6019ejz.34.2022.03.15.12.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 12:51:26 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 08/46] media: sun6i-csi: Tidy up Kconfig
+Date:   Tue, 15 Mar 2022 20:51:25 +0100
+Message-ID: <1737020.TLkxdtWsSY@kista>
+In-Reply-To: <20220311143532.265091-9-paul.kocialkowski@bootlin.com>
+References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com> <20220311143532.265091-9-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
- <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk> <CA+khW7g+T2sAkP1aycmts_82JKWgYk5Y0ZJp+EvjFUyNY8W_5w@mail.gmail.com>
- <Yi/LaZ5id4ZjqFmL@zeniv-ca.linux.org.uk> <CA+khW7jhD0+s9kivrd6PsNEaxmDCewhk_egrsxwdHPZNkubJYA@mail.gmail.com>
- <YjDiQbam/P+KkgKE@zeniv-ca.linux.org.uk>
-In-Reply-To: <YjDiQbam/P+KkgKE@zeniv-ca.linux.org.uk>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 15 Mar 2022 12:47:54 -0700
-Message-ID: <CA+khW7h=Ykav0c=vZQTMeVumxgNwq-pRgko1VTk4wjzCVnxHFA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
- for prog_bpf_syscall
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,46 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 12:02 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Tue, Mar 15, 2022 at 10:27:39AM -0700, Hao Luo wrote:
->
-> > Option 1: We can put restrictions on the pathname passed into this
-> > helper. We can explicitly require the parameter dirfd to be in bpffs
-> > (we can verify). In addition, we check pathname to be not containing
-> > any dot or dotdot, so the resolved path will end up inside bpffs,
-> > therefore won't take ->i_rwsem that is in the callchain of
-> > cgroup_mkdir().
->
-> Won't be enough - mount --bind the parent under itself and there you go...
-> Sure, you could prohibit mountpoint crossing, etc., but at that point
-> I'd question the usefulness of pathname resolution in the first place.
+Dne petek, 11. marec 2022 ob 15:34:54 CET je Paul Kocialkowski napisal(a):
+> Update the option title and help, group related options together,
+> add dependency on VIDEO_DEV since the driver uses it.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/media/platform/sunxi/sun6i-csi/Kconfig | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/Kconfig b/drivers/media/
+platform/sunxi/sun6i-csi/Kconfig
+> index fd03e48f0c8a..a88978eba455 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/Kconfig
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
+> @@ -1,12 +1,13 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config VIDEO_SUN6I_CSI
+> -	tristate "Allwinner V3s Camera Sensor Interface driver"
+> -	depends on PM && VIDEO_V4L2 && COMMON_CLK  && HAS_DMA
+> +	tristate "Allwinner A31 Camera Sensor Interface (CSI) Driver"
+>  	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on PM && COMMON_CLK && HAS_DMA
+> +	depends on VIDEO_DEV && VIDEO_V4L2
+> +	select REGMAP_MMIO
+>  	select MEDIA_CONTROLLER
+>  	select VIDEO_V4L2_SUBDEV_API
+>  	select VIDEOBUF2_DMA_CONTIG
+> -	select REGMAP_MMIO
+>  	select V4L2_FWNODE
+>  	help
+> -	   Support for the Allwinner Camera Sensor Interface Controller on 
+V3s.
+> +	   Support for the Allwinner A31 Camera Sensor Interface (CSI) 
+controller.
 
-[Apologies for resend, my response did not get delivered to mail list]
+While at it, it would be nice to somehow indicate that it's compatible with 
+more than one SoC.
 
-I don't see a use case where we need to bind mount the directories in
-bpffs, right now. So in option 1, we can also prohibit mountpoint
-crossing.
+Best regards,
+Jernej
 
-Pathname resolution is still useful in this case. Imagine we want to
-put all the created dirs under a base dir, we can open the base dir
-and reuse its fd for multiple mkdirs, for example:
+> -- 
+> 2.35.1
+> 
+> 
 
-Userspace:
-  fd = openat(..., "/sys/fs/bpf", ...);
-  pass fd to the bpf prog
 
-bpf prog:
-  bpf_mkdirat(fd, "common1", ...);
-  bpf_mkdirat(fd, "common1/a", ...);
-  bpf_mkdirat(fd, "common1/b", ...);
-  bpf_mkdirat(fd, "common2", ...);
-  ...
-
-It would be very inconvenient if we can't resolve multi-level paths.
-
-As Alexei said, another option is to delegate syscall to a worker
-thread. IMHO, we could do that in future if we find there is a need
-for the full feature of pathname resolution.
-
-Al, does that sound good?

@@ -2,61 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7674DA28E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B454DA28F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351125AbiCOSoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S1351134AbiCOSoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239074AbiCOSoD (ORCPT
+        with ESMTP id S1351122AbiCOSoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:44:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C095F04
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647369768; x=1678905768;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vgihbzq1dId2dw71lYvbL/5MvhzLZHJhRw37nPlzjhw=;
-  b=CpLLhBm2+gD9R5keMS+qLpZUdX5TpnoOjEt/PHpcL2mok9hHV2JT3MLT
-   opmRaM91N4UYI1ZpyHNZJJ/UTzngATwdAV1Yi05AoIG0z1IgZFvKwexQU
-   LCaJsMERkPiRn9Hn66croO2hDEluMCBbao6ae1pQ/DkbIvJWgVh9eChs1
-   VUQqzLPPAGBCoRIQFSAYhqquv6oLTx4YKTa50w0/2xA9ajhLNBRvNW805
-   itqLeXhy30H1Ue7cKxHzw9tGC4d1NhIXi9O76/xgYgzZq0D0tm+6iBH7T
-   eS6S1TN2fPNM0LBG6z+gIEMx+8hQ7JObRYdf6MyYGZdpYQbg856Ue7ElI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255228851"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="255228851"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 11:42:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="714295147"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2022 11:42:32 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUC7r-000BMM-HR; Tue, 15 Mar 2022 18:42:31 +0000
-Date:   Wed, 16 Mar 2022 02:42:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-q-release
- 499/7636] fs/f2fs/data.c:420:47: sparse: sparse: Using plain integer as NULL
- pointer
-Message-ID: <202203160222.7vluNYHt-lkp@intel.com>
+        Tue, 15 Mar 2022 14:44:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF85F04;
+        Tue, 15 Mar 2022 11:42:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id 3439F1F4303B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647369771;
+        bh=OqBz4qNcyZ8R5pFma1baORhNdguifW2BoSXyepNU+m4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=SKhbQisBAbD2ljdjGfwkMMG1lX3B5SLyBKin3hdMyXoPGgvGQ3dR75hz2J2fWgM4F
+         mNRog7HcWuwr4xXOmp+cdZngXqx0gg8X/vBl3J7B9FlUcNRewT1IZs5VDggdrvG+Fr
+         ja7vtn8dFRgRkCtoscrtNiCkV/wz/ayg5RkNj2fNgS8cwUZeqr2CbjmetK6U/HSG+0
+         kCO1/MtrF52P5Jp5CafUZ3E7QyMANcYsEVBENHTSVoIJaiuc3KlU3M6e2fuMYxLcCY
+         C2MlFgGbqfuboxPD3VcD9EkAJgMVJeIXu56gb81DuAVy5QUmVUrUUamaQrhfNhcG5n
+         laG4KdHzLDaHg==
+Subject: Re: [PATCH v2] gpio: Restrict usage of gc irq members before
+ initialization
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, krisman@collabora.com,
+        kbuild-all@lists.01.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <20220315103813.84407-1-shreeya.patel@collabora.com>
+ <202203160100.PENzQsMs-lkp@intel.com>
+ <CAHp75Vcsxn+8H-tpkN_ipjW4XGsfnhd7NA5Rz+cvGt7T4C9xfQ@mail.gmail.com>
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+Message-ID: <0a011be5-6f08-a9dc-3e62-f9296c7b9d2e@collabora.com>
+Date:   Wed, 16 Mar 2022 00:12:44 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAHp75Vcsxn+8H-tpkN_ipjW4XGsfnhd7NA5Rz+cvGt7T4C9xfQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,105 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-q-release
-head:   1a3500dc59324a85c20f025cfa6485a1a0debbdf
-commit: c258edb28a2a2f7db55d849efa431fca304a4851 [499/7636] Revert: "f2fs: check last page index in cached bio to decide submission"
-config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220316/202203160222.7vluNYHt-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/c258edb28a2a2f7db55d849efa431fca304a4851
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-q-release
-        git checkout c258edb28a2a2f7db55d849efa431fca304a4851
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 15/03/22 11:35 pm, Andy Shevchenko wrote:
+> On Tue, Mar 15, 2022 at 7:38 PM kernel test robot <lkp@intel.com> wrote:
+>> Hi Shreeya,
+>>
+>> Thank you for the patch! Yet something to improve:
+>
+>> All errors (new ones prefixed by >>):
+>>
+>>     drivers/gpio/gpiolib.c: In function 'gpiod_to_irq':
+>>>> drivers/gpio/gpiolib.c:3068:29: error: 'struct gpio_chip' has no member named 'irq'
+>>      3068 |         if (gc->to_irq && gc->irq.gc_irq_initialized) {
+>>           |                             ^~
+> Exactly, because this check should go under ifdeffery.
 
 
-sparse warnings: (new ones prefixed by >>)
->> fs/f2fs/data.c:420:47: sparse: sparse: Using plain integer as NULL pointer
-   In file included from fs/f2fs/data.c:22:
-   fs/f2fs/f2fs.h: In function 'blkaddr_in_node':
-   fs/f2fs/f2fs.h:2147:30: warning: taking address of packed member of 'struct f2fs_inode' may result in an unaligned pointer value [-Waddress-of-packed-member]
-    2147 |  return RAW_IS_INODE(node) ? node->i.i_addr : node->dn.addr;
-         |                              ^~~~
-   fs/f2fs/f2fs.h:2147:47: warning: taking address of packed member of 'struct direct_node' may result in an unaligned pointer value [-Waddress-of-packed-member]
-    2147 |  return RAW_IS_INODE(node) ? node->i.i_addr : node->dn.addr;
-         |                                               ^~~~
-   fs/f2fs/f2fs.h: In function '__mark_inode_dirty_flag':
-   fs/f2fs/f2fs.h:2340:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
-    2340 |   if (set)
-         |      ^
-   fs/f2fs/f2fs.h:2342:2: note: here
-    2342 |  case FI_DATA_EXIST:
-         |  ^~~~
-   fs/f2fs/data.o: warning: objtool: f2fs_xattr_fiemap()+0x312: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_set_data_page_dirty()+0x380: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_direct_IO()+0xd4: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_write_end()+0x3cc: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: __submit_merged_bio()+0x91e: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_submit_page_read()+0x312: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_submit_page_bio()+0x719: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_submit_page_write()+0xb7: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: __allocate_data_block()+0x599: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_reserve_new_blocks()+0x8f: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: prepare_write_begin()+0x6f3: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_write_begin()+0x1da: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_map_blocks()+0xe8a: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_mpage_readpages()+0x51: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_read_data_pages()+0x1d4: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_read_data_page()+0x1de: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: __get_data_block()+0x41: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_fiemap()+0xf7: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_should_update_inplace()+0x1fc: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_do_write_data_page()+0x1097: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: __write_data_page()+0x469: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_write_cache_pages()+0x587: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: __f2fs_write_data_pages()+0x6cb: sibling call from callable instruction with modified stack frame
-   fs/f2fs/data.o: warning: objtool: f2fs_xattr_fiemap.cold()+0x14: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_set_data_page_dirty.cold()+0x12: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_direct_IO.cold()+0xf: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_write_end.cold()+0x15: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: __submit_merged_bio.cold()+0x12: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_submit_page_read.cold()+0x15: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_submit_page_bio.cold()+0x13: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_submit_page_write.cold()+0x15: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: __allocate_data_block.cold()+0x12: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_reserve_new_blocks.cold()+0x1a: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: prepare_write_begin.cold()+0xa: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_write_begin.cold()+0x17: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_map_blocks.cold()+0x16: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_mpage_readpages.cold()+0x15: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_read_data_pages.cold()+0x12: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_read_data_page.cold()+0x12: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: __get_data_block.cold()+0x18: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_fiemap.cold()+0x10: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_should_update_inplace.cold()+0x14: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_do_write_data_page.cold()+0x13: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: __write_data_page.cold()+0x18: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: f2fs_write_cache_pages.cold()+0x13: call without frame pointer save/setup
-   fs/f2fs/data.o: warning: objtool: __f2fs_write_data_pages.cold()+0x13: call without frame pointer save/setup
+Makes sense to me now. gc->irq.initialized must be checked inside
+gpiochip_to_irq() wrapped around an ifdef CONFIG_GPIOLIB_IRQCHIP
 
-vim +420 fs/f2fs/data.c
+Thanks Andy, I'll send a v3 with this change.
 
-a912b54d3aaa011 Jaegeuk Kim 2017-05-10  417  
-b9109b0e49b93b0 Jaegeuk Kim 2017-05-10  418  void f2fs_submit_merged_write(struct f2fs_sb_info *sbi, enum page_type type)
-0c3a579758362d5 Chao Yu     2016-01-18  419  {
-a912b54d3aaa011 Jaegeuk Kim 2017-05-10 @420  	__submit_merged_write_cond(sbi, NULL, 0, 0, type, true);
-0c3a579758362d5 Chao Yu     2016-01-18  421  }
-0c3a579758362d5 Chao Yu     2016-01-18  422  
 
-:::::: The code at line 420 was first introduced by commit
-:::::: a912b54d3aaa011266dc266e3694f782f27233cf f2fs: split bio cache
+Shreeya Patel
 
-:::::: TO: Jaegeuk Kim <jaegeuk@kernel.org>
-:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

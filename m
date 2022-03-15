@@ -2,74 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8334D9DB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E36E4D9DBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349327AbiCOOf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S234611AbiCOOgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349353AbiCOOfm (ORCPT
+        with ESMTP id S1349290AbiCOOfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:35:42 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7867B403FA;
-        Tue, 15 Mar 2022 07:34:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 9EC871F4435A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647354868;
-        bh=JxMqM+6uXDMiR30ZOq7gXJqAurfbpVtQGVTFxdg00Bs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ND7xzCPUGu+KFVhFs2po+GLOe/NdZOeF+kj2Sct+iWDSXXg7/rCnaO4KQuGa0ueQy
-         wCN56DNvXE/KlskSGgmhihQp7gsePXMvkYFuqsVM4n4/Pa4UhEPclmTOHClIMOukva
-         06DaNA0aLLSU7ULg/98ogbAnRiKI3+7bpM/UjqY+5gvfZY34txEexotzuL9tbn+yQp
-         Vt5PnoNxx6h81IFblON1CKvLOozNBDfIaY3PpOT3ZSBsNeXnNnVVEszSsbdz9spGCb
-         0orgunP+xcVAB07+Z0Sj51yqP4qIMbStr7mqFzj3pkEM/1ido3ER6PiHEWUtxJV4gs
-         aozm3XDVkL9IA==
-Message-ID: <0066585f-3c7e-6657-b3a0-48448efc2a80@collabora.com>
-Date:   Tue, 15 Mar 2022 15:34:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 04/21] arm64: dts: mt8192: Add SCP node
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220304130809.12924-1-allen-kh.cheng@mediatek.com>
- <20220304130809.12924-5-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220304130809.12924-5-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 10:35:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FFB36326
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:34:42 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6E34E210EC;
+        Tue, 15 Mar 2022 14:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647354881; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Lzcj/afrhcKyM8V22XGA9WjIG/zmiMFuC2sCGOCyNQ=;
+        b=ZxVkZM0mhEHJO24Z6UuJSix96fYscV7iw1qEJZE9JspJ+LuBBBvp8t0gCFreiOvUcMOsb1
+        EkXjanautZrSq1uWCe0wAp+oTUIwlY9boE3xMP3FZSxM5BxS3JCFhO6jiyvk+F2mvH57Sq
+        AXs8zpuRZSqxk3J/XFIld4e0fU9kCJo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647354881;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Lzcj/afrhcKyM8V22XGA9WjIG/zmiMFuC2sCGOCyNQ=;
+        b=oX0UDiutKdYU7ubmxYbL4awI/73YmK33gOsd9kx67SXBHjFRb7PdcksQRwfw7s6xz6KLDx
+        9oF/dKfbumPcEnDw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id CDB9DA3B9C;
+        Tue, 15 Mar 2022 14:34:40 +0000 (UTC)
+Date:   Tue, 15 Mar 2022 15:34:40 +0100
+Message-ID: <s5hee338etb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Cc:     Daniel Palmer <daniel@0x0f.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: sti: sti_uniperif: Remove driver
+In-Reply-To: <PAXPR10MB47185B76D5F38482FB1125A5F1109@PAXPR10MB4718.EURPRD10.PROD.OUTLOOK.COM>
+References: <20220315091319.3351522-1-daniel@0x0f.com>
+        <s5h8rtba4to.wl-tiwai@suse.de>
+        <PAXPR10MB47185B76D5F38482FB1125A5F1109@PAXPR10MB4718.EURPRD10.PROD.OUTLOOK.COM>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/03/22 14:07, Allen-KH Cheng ha scritto:
-> Add SCP node for mt8192 SoC.
+On Tue, 15 Mar 2022 14:15:20 +0100,
+Arnaud POULIQUEN wrote:
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
+> Hello,
 > 
+> 
+> ST Restricted
+> 
+> > -----Original Message-----
+> > From: Takashi Iwai <tiwai@suse.de>
+> > Sent: mardi 15 mars 2022 11:28
+> > To: Daniel Palmer <daniel@0x0f.com>
+> > Cc: broonie@kernel.org; tiwai@suse.com; Arnaud POULIQUEN
+> > <arnaud.pouliquen@st.com>; alsa-devel@alsa-project.org; linux-
+> > kernel@vger.kernel.org
+> > Subject: Re: [PATCH] ASoC: sti: sti_uniperif: Remove driver
+> > 
+> > On Tue, 15 Mar 2022 10:13:19 +0100,
+> > Daniel Palmer wrote:
+> > >
+> > > This driver seems to be in the "only good for attracting bot generated
+> > > patches" phase of it's life.
+> > >
+> > > It doesn't seem like anyone actually tested the patches that have
+> > > been applied in the last few years as uni_reader_irq_handler()
+> > > had a dead lock added to it (it locks the stream, then calls
+> > > snd_pcm_stop_xrun() which will also lock the stream).
+> > 
+> > Mea culpa, that was an obvious deadlock I overlooked in the patch
+> > series.
+> > 
+> > > Seems best just to remove it.
+> > >
+> > > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> > > ---
+> > >  I've never used this driver, don't have the hardware etc.
+> > >  I just noticed that this looks broken when debugging my
+> > >  own driver that uses snd_pcm_stop_xrun() and was looking
+> > >  at other users to see if I was using it wrong and noticed
+> > >  this was the only place that locked the stream before
+> > >  calling snd_pcm_stop_xrun().
+> > >
+> > >  There are probably some other bits of the driver that
+> > >  should be removed but I didn't look that hard.
+> > >
+> > >  TL;DR; This driver seems broken, seems like nobody uses
+> > >  it. Maybe it should be deleted?
+> > 
+> > Yeah, that looks dead.
+> > 
+> 
+> The platform is still used for instance:
+> https://lore.kernel.org/all/1d95209f-9cb4-47a3-2696-7a93df7cdc05@foss.st.com/
+> 
+> So please do not remove the driver
+
+Ah, it's always good to see a vital sign!
+
+> The issue has not been detected because it is related to an error that 
+> occurs only when we reach the limit of the platform, with application
+> that stop the stream at same time.
+> So almost no chance to occur.
+> 
+> > OTOH, if anyone really wants to keep the stuff, please revert the
+> > commit dc865fb9e7c2251c9585ff6a7bf185d499db13e4.
+>  
+> Yes reverting the commit is one solution.
+> The other is to clean-up the snd_pcm_stream_lock/ snd_pcm_stream_unlock in the
+> Handler.
+
+That would work, but maybe it's safer to keep that lock, as the state
+change isn't protected by irq_lock but only implicitly by stream lock
+in start/stop callbacks.
+
+
+thanks,
+
+Takashi

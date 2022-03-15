@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E2C4DA4AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BB84DA4B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351990AbiCOVjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 17:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S1351995AbiCOVjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 17:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbiCOVja (ORCPT
+        with ESMTP id S235167AbiCOVjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 17:39:30 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3189A37A99;
-        Tue, 15 Mar 2022 14:38:18 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id bx5so574997pjb.3;
-        Tue, 15 Mar 2022 14:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BNoJUVu33RBtyBtnAprQNI1p3NZHgGbzhtFN4UzdDR0=;
-        b=GKGgw4osFatxLpSNtMw3h1IMZDSU6ZhMBqZ1QoQpwsP8pwL34zLiwl3Gq2Q+8HRtl4
-         YxJeE0tIb55qgIcnK2McbfJ8YYy4Ba9TWsOJpd1kagk8zQhMRzQSXdgq2zFMmKWNdB4D
-         aZL5+vgSnLZ6/qTdkAy/LWkG7SaqEDCHnKk4Bw+3tVilhG9WssFLFRhhlqfpG+WP9ltl
-         8mDaXWx5G31AU6ZG6NYbh7M2agkMwkkkqLze1ioGAtX7yETu5q6eIGH1q8c2yrEBvluN
-         tMizX4l3LMcvw94obsI/3ufcocWRla8tzOY9B1raNy+KA3vjNqpjSYfZEeuTImfX16FX
-         rTTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BNoJUVu33RBtyBtnAprQNI1p3NZHgGbzhtFN4UzdDR0=;
-        b=GVdZ/+DsUWnx67hgDCzU0+dNTO18OZx/II3oOVbboaEMMnykq2cWsDb+Rbl0iAreJl
-         3+kXzEFmxkdjEh2PhDWv+lp9cVMhe+8M3pza1h3xBRFXmUjDds8P18RWQpYMD3hVBQ/I
-         V9va6RHVHoYBFBpicI7hwgx6UAXSWCJT/XUmxoa9vG61S7PEE1rrlOS7+LvOl7Zcl/pU
-         MsJSnJ16ELXvyYyHC5FETDGyLWg2J2Co2AofkXZt9/zGaPH5pO7mDndkp6h9jfTfWrTR
-         Fat546A5IQ1dLcnhnPo4wf50a2nxlJ5sf+V4YzFKzbGdoaLO6t8MstPZn1U1d/Q4sFUK
-         jlaQ==
-X-Gm-Message-State: AOAM533jxnGFepgIoWfl7Gy2pgqsiKrEhh8J8a4Skt/6ZTbo1zwrcNF3
-        W+lfb+9zM0k8PhIjMOWczA5T29vJyU2vLVvv84FIHuii
-X-Google-Smtp-Source: ABdhPJwrW/i8S7xstQ2f1urd8K4yAG87xhQ6wR7zWxfvZGmrwrT2T+p2h5GGfJs4z46+bpI0ZujbjKhR5+VKDY6b7U4=
-X-Received: by 2002:a17:903:32d2:b0:153:9c6a:5750 with SMTP id
- i18-20020a17090332d200b001539c6a5750mr4681706plr.34.1647380297577; Tue, 15
- Mar 2022 14:38:17 -0700 (PDT)
+        Tue, 15 Mar 2022 17:39:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1F14580C7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647380318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=AmGRSEJnEeRXzVdIP5MU9emNHaIDHkbZKWaSg5MLVO2jI3IjJTLEtnz+Q2+ofYJTHFcgUM
+        bBlCNZiGcHNe6Ta9rFZQecICMmiMEUlRQu2ReJB9KSBcgk81S1T59GqQfgP2J3lTBiopsi
+        5s2Dt037Eixjb6vLTpQqnD3l9KqZ8D4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-226-xpv6ctb4OWq7-6_PAHXdSg-1; Tue, 15 Mar 2022 17:38:35 -0400
+X-MC-Unique: xpv6ctb4OWq7-6_PAHXdSg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F9E53C11A18;
+        Tue, 15 Mar 2022 21:38:34 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 088632EFA3;
+        Tue, 15 Mar 2022 21:38:34 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Gao Chao <chao.gao@intel.com>
+Subject: Re: [PATCH] KVM: VMX: Prepare VMCS setting for posted interrupt enabling when APICv is available
+Date:   Tue, 15 Mar 2022 17:38:26 -0400
+Message-Id: <20220315213829.2414856-1-pbonzini@redhat.com>
+In-Reply-To: <20220315145836.9910-1-guang.zeng@intel.com>
+References: 
 MIME-Version: 1.0
-References: <1d2931e80c03f4d3f7263beaf8f19a4867e9fe32.1647212431.git.dxu@dxuuu.xyz>
-In-Reply-To: <1d2931e80c03f4d3f7263beaf8f19a4867e9fe32.1647212431.git.dxu@dxuuu.xyz>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 15 Mar 2022 14:38:06 -0700
-Message-ID: <CAADnVQJUvfKmN6=j5hzhgE25XSa2uqR3MJyq+c=AGCKkTKD05g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpftool: Add SPDX identifier to btf-dump-file output
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 13, 2022 at 4:01 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> A concern about potential GPL violations came up at the new $DAYJOB when
-> I tried to vendor the vmlinux.h output. The central point was that the
-> generated vmlinux.h does not embed a license string -- making the
-> licensing of the file non-obvious.
->
-> This commit adds a LGPL-2.1 OR BSD-2-Clause SPDX license identifier to
-> the generated vmlinux.h output. This is line with what bpftool generates
-> in object file skeletons.
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  tools/bpf/bpftool/btf.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> index a2c665beda87..fca810a27768 100644
-> --- a/tools/bpf/bpftool/btf.c
-> +++ b/tools/bpf/bpftool/btf.c
-> @@ -425,6 +425,7 @@ static int dump_btf_c(const struct btf *btf,
->         if (err)
->                 return err;
->
-> +       printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n\n");
+Queued, thanks.
 
-I don't think we can add any kind of license identifier
-to the auto generated output.
-vmlinux.h is a pretty printed dwarfdump.
+Paolo
+

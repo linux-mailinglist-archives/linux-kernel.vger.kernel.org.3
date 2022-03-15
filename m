@@ -2,174 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7814DA2EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D944DA2F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351283AbiCOTFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S1351231AbiCOTGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351260AbiCOTEL (ORCPT
+        with ESMTP id S1351391AbiCOTEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:04:11 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B418F5A150
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:02:49 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id qx21so43512891ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:02:49 -0700 (PDT)
+        Tue, 15 Mar 2022 15:04:51 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027ACB7F;
+        Tue, 15 Mar 2022 12:03:15 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s11so407327pfu.13;
+        Tue, 15 Mar 2022 12:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nYOjHF+WhaOll744zl3KXczQ6UnybRfVr7cW3I5uN/U=;
-        b=eWq9aQSnpFSM7gGPtqgzIwr8bb/qKsDMvo0mIbS4s59AMIIHEMyCDMwhpLWRS+EYBR
-         qN4oTEZNXWPjiFCM5wbN4L3FVB0yMfHlzKy9DLlhHVCdkUAg+H8m96o6+l6phOAtZZtL
-         HqEaabMV1A231GA5THyiGjQn+CcdPV6Wcj7+UPW4PCAGWku/81HP+8C5q//5lWvhO0Pu
-         3zeib+NRZoI9eWeTsoj34Li0T9JVhg3Z1kUYOR1XGxD8A2nRmcx8ve9PFlZCqJIC6N4E
-         zEz1m0vSJoc3+NJsHrbvJr8ATMwQ+P3zv+QChYRQcRSYL4oNsBWZ06rrB2G0G0fVIJ1p
-         NQSA==
+        bh=lZaAUf36wy+zyCzd7ZqoHqZ/0IIkM1TVPdclUXF4mkE=;
+        b=RZGSwuYdBhGEZZlHlV7YGxZr5LLFVv4d1VaWOFpmrU7S0PTZrePuyM8iHU9Aw3ttCi
+         1feExChqyT5dno+xcN81w1Kx2u9R93ev0QwX5z5PWTF973Os48vOXKUIeRvZT2k7K9Q4
+         E+mZPy+M4eloI/g7aE08NffB5sdpanQXZXjbUtMHlBEBCFO4P/EqIETQhCAPpRa3yOky
+         Mh3Y2bbVusXtA2BzLCY+tDc667d2tO94H9IyRSCMn6L/S9DkHYnvWzwYiaBUjiJiPum6
+         YK02sFABucji2xmF+sH9inGtkQar2HeO5DVsxPzvgMLTIRajJShjCTPOcYcsFFIHblTx
+         8mJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nYOjHF+WhaOll744zl3KXczQ6UnybRfVr7cW3I5uN/U=;
-        b=xpd9GtBieWsKDluA8iYeAi9Z1nQZU9vMM4KEZ8zhZ9JXS2MsPx6gE6t84tKvA278l2
-         GaQr6DTgPdcg28UJ0/zYagLr+Qeia2ibaoPIwaytd8f4J4r0ku8ydMDgFpO1Mne0LPGV
-         OO7nC/eKvnqTPfoFwgJUe6HIHv43Zk7NxEvMx0TnKUP/CmmooJYB2HSS4eNkgSDT5RA9
-         md/3rbYTvVLrWHO6+WjwRtYcXUJY6uoxfEfPTl/3ZNW4MV297ovUxRdhiNguaZNo6FL6
-         d4+5E70AAwYNwtvjqJR8dUsaWoSLv000wRPlPENH2gL3q/xRdW6XCMyOC02BWL1EW+va
-         g9kQ==
-X-Gm-Message-State: AOAM532D6qdkU0Rf3cyaOoK9aNEZLCo7kzmyjUOoIudsUBdrhkr9ryOL
-        3MFEmnQK81W1ii08FlpTZXZt/q9WCs0W0pHnVgGZiA==
-X-Google-Smtp-Source: ABdhPJxRVh2ZUD0Nbieh2mZpcZVRDFfmA10fIZydckRgsnzTb2ustxoM9NqZuPCgmtI1mueDRq1Ne12Wp4MutQ+KdLw=
-X-Received: by 2002:a17:907:7f2a:b0:6d6:df12:7f57 with SMTP id
- qf42-20020a1709077f2a00b006d6df127f57mr23761361ejc.122.1647370967391; Tue, 15
- Mar 2022 12:02:47 -0700 (PDT)
+        bh=lZaAUf36wy+zyCzd7ZqoHqZ/0IIkM1TVPdclUXF4mkE=;
+        b=XtslDMXCcMCVRwdD/CymBG/klyZhnAgVC0Dm7cSCUPno48b2CdMd1qCDKIQJluAlCK
+         TrydRcHiCsoZVXWcPUukA70jXoqAI3hStDPV8sgqNmxQIS9s8DN/Vhius1W/VBA6hOKn
+         u9OW1COFzFolMfBlWc1I8w7K8rF7iBBOfGnlK4ZsRtufTxIs7hSm8NWb9wU5rFdbmEfC
+         NhB5LHUMLvLjb7sg/4aKyVE5oNzlAMbHb8NWw/eAgmwF0ViQdcwPUm+TZ39lKcTnq7UT
+         JfJZBUpDcm8VB23U84c/VsXLarGh+dZboVBmACc2Pbx8C2EA7jxc8guaYQuPpDZzh3oh
+         0/sA==
+X-Gm-Message-State: AOAM530G0sOibiUvxebv+ciEa6iPNeQou2o/ZTi3p4ADfJQyXpHI1jqJ
+        qrD+01ZbGzXICc/7p5XR2BlTNCYP1DcO0bqo7XwZ/CvT
+X-Google-Smtp-Source: ABdhPJxHGrdaXBmC/R8i51YwFlI9MFHPTpkJ3bWLJpxYfVIWuUNnyq58BY8R5uiEbHbWwdaehWkSoMFBhmDf9Z9gtf4=
+X-Received: by 2002:aa7:805a:0:b0:4f6:dc68:5d41 with SMTP id
+ y26-20020aa7805a000000b004f6dc685d41mr29924894pfm.69.1647370995298; Tue, 15
+ Mar 2022 12:03:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220309165222.2843651-1-tjmercier@google.com>
- <20220309165222.2843651-8-tjmercier@google.com> <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
- <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com> <a365a5f6c7864a879b133b99d1f43fb2@AcuMS.aculab.com>
-In-Reply-To: <a365a5f6c7864a879b133b99d1f43fb2@AcuMS.aculab.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Tue, 15 Mar 2022 12:02:35 -0700
-Message-ID: <CABdmKX3NEm8+pDBj2VG-r8E91CVHwQ+gGcKhG8D=5MgWcgincg@mail.gmail.com>
-Subject: Re: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for userspace
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Todd Kjos <tkjos@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        "Kenny.Ho@amd.com" <Kenny.Ho@amd.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk> <CA+khW7g+T2sAkP1aycmts_82JKWgYk5Y0ZJp+EvjFUyNY8W_5w@mail.gmail.com>
+ <Yi/LaZ5id4ZjqFmL@zeniv-ca.linux.org.uk> <CA+khW7jhD0+s9kivrd6PsNEaxmDCewhk_egrsxwdHPZNkubJYA@mail.gmail.com>
+ <CAADnVQJSMqcv3GPmUDcNKs23veqU-HWQQA5ECqdriMtjTpdv3w@mail.gmail.com>
+In-Reply-To: <CAADnVQJSMqcv3GPmUDcNKs23veqU-HWQQA5ECqdriMtjTpdv3w@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 15 Mar 2022 12:03:04 -0700
+Message-ID: <CAADnVQKttOMcfYdnCVtEm1HVYUf8ed-jMoTkeu1XgGMzW342Ww@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Hao Luo <haoluo@google.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 12:56 AM David Laight <David.Laight@aculab.com> wrote:
+On Tue, Mar 15, 2022 at 11:59 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> From: T.J. Mercier
-> > Sent: 14 March 2022 23:45
+> On Tue, Mar 15, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
 > >
-> > On Thu, Mar 10, 2022 at 11:33 AM Todd Kjos <tkjos@google.com> wrote:
+> > On Mon, Mar 14, 2022 at 4:12 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 > > >
-> > > On Wed, Mar 9, 2022 at 8:52 AM T.J. Mercier <tjmercier@google.com> wrote:
-> > > >
-> > > > The kernel interface should use types that the kernel defines instead of
-> > > > pid_t and uid_t, whose definiton is owned by libc. This fixes the header
-> > > > so that it can be included without first including sys/types.h.
-> > > >
-> > > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > > > ---
-> > > >  include/uapi/linux/android/binder.h | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-> > > > index 169fd5069a1a..aa28454dbca3 100644
-> > > > --- a/include/uapi/linux/android/binder.h
-> > > > +++ b/include/uapi/linux/android/binder.h
-> > > > @@ -289,8 +289,8 @@ struct binder_transaction_data {
-> > > >
-> > > >         /* General information about the transaction. */
-> > > >         __u32           flags;
-> > > > -       pid_t           sender_pid;
-> > > > -       uid_t           sender_euid;
-> > > > +       __kernel_pid_t  sender_pid;
-> > > > +       __kernel_uid_t  sender_euid;
+> > > On Mon, Mar 14, 2022 at 10:07:31AM -0700, Hao Luo wrote:
+> > > > Hello Al,
 > > >
-> > > Are we guaranteed that this does not affect the UAPI at all? Userspace
-> > > code using this definition will have to run with kernels using the old
-> > > definition and visa-versa.
+> > > > > In which contexts can those be called?
+> > > > >
+> > > >
+> > > > In a sleepable context. The plan is to introduce a certain tracepoints
+> > > > as sleepable, a program that attaches to sleepable tracepoints is
+> > > > allowed to call these functions. In particular, the first sleepable
+> > > > tracepoint introduced in this patchset is one at the end of
+> > > > cgroup_mkdir(). Do you have any advices?
+> > >
+> > > Yes - don't do it, unless you really want a lot of user-triggerable
+> > > deadlocks.
+> > >
+> > > Pathname resolution is not locking-agnostic.  In particular, you can't
+> > > do it if you are under any ->i_rwsem, whether it's shared or exclusive.
+> > > That includes cgroup_mkdir() callchains.  And if the pathname passed
+> > > to these functions will have you walk through the parent directory,
+> > > you would get screwed (e.g. if the next component happens to be
+> > > inexistent, triggering a lookup, which takes ->i_rwsem shared).
 > >
-> > A standards compliant userspace should be expecting a signed integer
-> > type here. So the only way I can think userspace would be affected is
-> > if:
-> > 1) pid_t is a long AND
-> > 2) sizeof(long) > sizeof(int) AND
-> > 3) Consumers of the pid_t definition actually attempt to mutate the
-> > result to make use of extra bits in the variable (which are not there)
+> > I'm thinking of two options, let's see if either can work out:
+> >
+> > Option 1: We can put restrictions on the pathname passed into this
+> > helper. We can explicitly require the parameter dirfd to be in bpffs
+> > (we can verify). In addition, we check pathname to be not containing
+> > any dot or dotdot, so the resolved path will end up inside bpffs,
+> > therefore won't take ->i_rwsem that is in the callchain of
+> > cgroup_mkdir().
+> >
+> > Option 2: We can avoid pathname resolution entirely. Like above, we
+> > can adjust the semantics of this helper to be: making an immediate
+> > directory under the dirfd passed in. In particular, like above, we can
+> > enforce the dirfd to be in bpffs and pathname to consist of only
+> > alphabet and numbers. With these restrictions, we call vfs_mkdir() to
+> > create directories.
+> >
+> > Being able to mkdir from bpf has useful use cases, let's try to make
+> > it happen even with many limitations.
 >
-> Or the userspace headers have a 16bit pid_t.
+> Option 3. delegate vfs_mkdir to a worker and wait in the helper.
 
-Since the kernel uses an int for PIDs, wouldn't a 16 bit pid_t already
-be potentially broken (overflow) on systems where int is not 16 bits?
-On systems where int is 16 bits, there is no change here except to
-achieve uniform use of __kernel_pid_t in the kernel headers and fix
-the include problem.
-
->
-> I can't help feeling that uapi headers should only use explicit
-> fixed sized types.
-> There is no point indirecting the type names - the sizes still
-> can't be changes.
-
-I think it's still unlikely to be an actual problem. For example there
-are other occasions where a switch like this was made:
-https://github.com/torvalds/linux/commit/694a58e29ef27c4c26f103a9decfd053f94dd34c
-https://github.com/torvalds/linux/commit/269b8fd5d058f2c0da01a42b20315ffc2640d99b
-
-And also since Binder's only known user is Android through Bionic
-which already expects the type of pid_t to be __kernel_pid_t.
-
-
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+I meant _dont_ wait, of course.

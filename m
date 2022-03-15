@@ -2,72 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9844D9B3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 015514D9B43
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348310AbiCOMcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S1348322AbiCOMdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236453AbiCOMcD (ORCPT
+        with ESMTP id S242296AbiCOMdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:32:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9175E532FB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:30:51 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KHt0w6pwsz1GCCL;
-        Tue, 15 Mar 2022 20:25:52 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 20:30:49 +0800
-Subject: Re: [PATCH] mm/mlock: remove unneeded start >= vma->vm_end check
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220314153223.53753-1-linmiaohe@huawei.com>
- <Yi9qq9hVloDXcW4b@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c0ff39e2-27fc-170f-00f5-d5e9ab5a22cd@huawei.com>
-Date:   Tue, 15 Mar 2022 20:30:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 15 Mar 2022 08:33:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9218253722
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:31:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38762614F9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFF8C340E8;
+        Tue, 15 Mar 2022 12:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647347515;
+        bh=E2eBpjD5jIw7gv0KgLK/o0cjIh46nKWrwiWNeEl7LAg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tv4uc9mmNovaJsyEk3mdxoyAwFxQWQTaobhOG78enG+SLniz5JcMG9diJ+g8Xw9tF
+         B+gxNrRH08KkRgq9hZEEMB5Hucmwi1JyV2c5d1FzE118b2tJ5GkmyjeZodgSJg7K+U
+         CxI4riUXKQHk9OnVX++aAjqmUZxzn61vV9mi/fYc=
+Date:   Tue, 15 Mar 2022 13:31:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "mb@lightnvm.io" <mb@lightnvm.io>,
+        "ckeepax@opensource.cirrus.com" <ckeepax@opensource.cirrus.com>,
+        "arnd@arndb.d" <arnd@arndb.d>, "mst@redhat.com" <mst@redhat.com>,
+        "javier@javigon.com" <javier@javigon.com>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "sunilmut@microsoft.com" <sunilmut@microsoft.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "rvmanjumce@gmail.com" <rvmanjumce@gmail.com>
+Subject: Re: [EXT] Re: [PATCH] Uwb: Nxp: sr1xx: Uwb driver support for sr1xx
+ series chip
+Message-ID: <YjCHNlC2Xc1QoTzQ@kroah.com>
+References: <20220307123732.2194907-1-manjunatha.venkatesh@nxp.com>
+ <YiYFlnPzpK8mrLxq@kroah.com>
+ <d0343411-f95f-e550-da69-2fdb15106312@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <Yi9qq9hVloDXcW4b@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d0343411-f95f-e550-da69-2fdb15106312@nxp.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/15 0:17, Matthew Wilcox wrote:
-> On Mon, Mar 14, 2022 at 11:32:23PM +0800, Miaohe Lin wrote:
->> If find_vma returns a vma, it must satisfies that start < vma->vm_end.
->> Since vma list is sorted in the ascending order, so we will never see
->> start >= vma->vm_end here. Remove this unneeded check.
-> 
-> faulty logic; vm_start + len might wrap.
+On Tue, Mar 15, 2022 at 10:43:47AM +0000, Manjunatha Venkatesh wrote:
+> >> +     sr1xx_dev = filp->private_data;
+> >> +     switch (cmd) {
+> >> +     case SR1XX_SET_PWR:
+> > You have custom ioctls on a device node, that's not very "subsystem"
+> > like at all.
+> >
+> > You need to define a standard user/kernel api for this subsystem, do not
+> > make it "whatever the device wants" like this currently is.
+> >
+> > And where is the userspace code that talks this brand new api?  We need
+> > to see that so we can properly determine if this is all working
+> > properly.
+> Currently these ioctl calls used for handling proprietary operation with 
+> respect to SR1xx chip.
+> corresponding user space UWB code is proprietary and might be shortly 
+> will be available as part of AOSP release, till that time not sure can 
+> share user space code outside or not.
+> Still if you think need the user space code required to evaluate driver 
+> part will check internally and come back on this.
 
-Many thanks for comment. I agree with you about "vm_start + len" might wrap.
-But what I mean here is that we will never see "start" >= vma->vm_end here
-as find_vma guarantees this. And I leave the "start + len <=  vma->vm_start"
-check untouched. So my cleanup should be right. Or am I miss something?
+For obvious reasons, we can not take kernel drivers that add a custom
+user/kernel api without any userspace code that we can see to use it.
+You wouldn't want us to take such code anyway.
 
-Thanks.
+So please, fix that, otherwise this is not going to go very far at all.
 
-> 
-> .
-> 
+thanks,
 
+greg k-h

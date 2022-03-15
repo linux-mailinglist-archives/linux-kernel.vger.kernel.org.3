@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021CD4D994E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6FD4D9956
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347346AbiCOKq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S1347524AbiCOKrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347337AbiCOKph (ORCPT
+        with ESMTP id S1347348AbiCOKpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:45:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6862337ABE;
-        Tue, 15 Mar 2022 03:44:03 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:44:00 -0000
+        Tue, 15 Mar 2022 06:45:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374C03818E;
+        Tue, 15 Mar 2022 03:44:04 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:44:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1647341042;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qlZymGBtpfBM/R1nPl1YZ7jW3BC7L6et+06dtoix/RQ=;
-        b=OQG8AWqunz5K/Ep0ATXaBxs3lllNiMTuMsmE60h2cBeNo2BtMnKBzqL5msSWkaxSoGV6fF
-        Y06LotIT0zq+JblxjFcYCKRqinrLB8NV9+JFUOUGxtHGCKzHgZQI5V7gfotA4GmfzJoiuW
-        Tw1cBcntHrmBIElkaeW2GvcjYjoFrTP6Np5++5lo2I7wVUgWQaCuMiX27SzwIPendhcci0
-        vNqaI2OCiBvpqPY1NsSl+6xKENz7Xnvm5mZNiFhBT6lntxSwombzUrUvl+tnQu8iy858Lo
-        VWpX0yM7NuXIPI8vZFDtapiIIZNroSOAagQjMb6r8SQea0hewpEKlmw4MyPKYg==
+        bh=ZLq02G9lGSoFei6eJJRxJPjfGRNv5HVQcuIgy4v11FU=;
+        b=h7Fl+lKOdjD3vrAln+EpUZB5P/UvMzxC9ePYMnVNiTnCsEXddd9nmtYhhA5YCwG1eVAn3T
+        uq5OnfJSGCxIstcW/AQg9dNSS35Li5KggXXfshwv6fuX5aKqCYamdWEQ4VsQcgkYqaf0h6
+        fMElE7/S/4sZlJQW+RiLK3ZBNiclvglqtcNdn5VItnnK9BgxghBqc60HVgiNMZx6BLev5W
+        +CDuJGZwIyyQG7UUaY78tV8UfCfjMonh+DsK+LF485Idaew6L3hJqZy8ZESzpjTYpKDMVo
+        L3cijIkZ1iACamsAMtx8b7d+dK5ykDYqoGIKzFd4HyWsLciLRzZfWN3egCDTbQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1647341042;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qlZymGBtpfBM/R1nPl1YZ7jW3BC7L6et+06dtoix/RQ=;
-        b=FrZwI/Vh4ds7tQb/0pTZqKsb5nCkyCNJu9nfskKpIyFJ6raozSAE/h9Rf2fHzFyjocI4S/
-        O+zgffvycfX39FCg==
+        bh=ZLq02G9lGSoFei6eJJRxJPjfGRNv5HVQcuIgy4v11FU=;
+        b=ygBqzxSM65fImj+XqPHQKCmMeQHbZkEkDLcGG4p88s8AqUQ1+0MrdLb7581zERzZjAz9Lu
+        V+V8LIjmD74gfrBA==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,kprobes: Cure sym+0 equals fentry woes
+Subject: [tip: x86/core] x86/ibt,ftrace: Make function-graph play nice
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154318.405947704@infradead.org>
-References: <20220308154318.405947704@infradead.org>
+In-Reply-To: <20220308154318.347296408@infradead.org>
+References: <20220308154318.347296408@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164734104096.16921.4784996221132938301.tip-bot2@tip-bot2>
+Message-ID: <164734104175.16921.11198842533678838543.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,257 +67,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     cc66bb91457827f62e2b6cb2518666820f0a6c48
-Gitweb:        https://git.kernel.org/tip/cc66bb91457827f62e2b6cb2518666820f0a6c48
+Commit-ID:     e52fc2cf3f662828cc0d51c4b73bed73ad275fce
+Gitweb:        https://git.kernel.org/tip/e52fc2cf3f662828cc0d51c4b73bed73ad275fce
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:32 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:31 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 15 Mar 2022 10:32:38 +01:00
+CommitterDate: Tue, 15 Mar 2022 10:32:37 +01:00
 
-x86/ibt,kprobes: Cure sym+0 equals fentry woes
+x86/ibt,ftrace: Make function-graph play nice
 
-In order to allow kprobes to skip the ENDBR instructions at sym+0 for
-X86_KERNEL_IBT builds, change _kprobe_addr() to take an architecture
-callback to inspect the function at hand and modify the offset if
-needed.
+Return trampoline must not use indirect branch to return; while this
+preserves the RSB, it is fundamentally incompatible with IBT. Instead
+use a retpoline like ROP gadget that defeats IBT while not unbalancing
+the RSB.
 
-This streamlines the existing interface to cover more cases and
-require less hooks. Once PowerPC gets fully converted there will only
-be the one arch hook.
+And since ftrace_stub is no longer a plain RET, don't use it to copy
+from. Since RET is a trivial instruction, poke it directly.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154318.405947704@infradead.org
+Link: https://lore.kernel.org/r/20220308154318.347296408@infradead.org
 ---
- arch/powerpc/kernel/kprobes.c  | 34 ++++++++++-------
- arch/x86/kernel/kprobes/core.c | 17 +++++++++-
- include/linux/kprobes.h        |  3 +-
- kernel/kprobes.c               | 66 ++++++++++++++++++++++++++-------
- 4 files changed, 92 insertions(+), 28 deletions(-)
+ arch/x86/kernel/ftrace.c    |  9 ++-------
+ arch/x86/kernel/ftrace_64.S | 21 +++++++++++++++++----
+ 2 files changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
-index 9a492fd..7dae0b0 100644
---- a/arch/powerpc/kernel/kprobes.c
-+++ b/arch/powerpc/kernel/kprobes.c
-@@ -105,6 +105,27 @@ kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset)
- 	return addr;
- }
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 7cc540e..1e31c7d 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -316,12 +316,12 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	unsigned long offset;
+ 	unsigned long npages;
+ 	unsigned long size;
+-	unsigned long retq;
+ 	unsigned long *ptr;
+ 	void *trampoline;
+ 	void *ip;
+ 	/* 48 8b 15 <offset> is movq <offset>(%rip), %rdx */
+ 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
++	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
+ 	union ftrace_op_code_union op_ptr;
+ 	int ret;
  
-+static bool arch_kprobe_on_func_entry(unsigned long offset)
-+{
-+#ifdef PPC64_ELF_ABI_v2
-+#ifdef CONFIG_KPROBES_ON_FTRACE
-+	return offset <= 16;
-+#else
-+	return offset <= 8;
-+#endif
-+#else
-+	return !offset;
-+#endif
-+}
-+
-+/* XXX try and fold the magic of kprobe_lookup_name() in this */
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
-+					 bool *on_func_entry)
-+{
-+	*on_func_entry = arch_kprobe_on_func_entry(offset);
-+	return (kprobe_opcode_t *)(addr + offset);
-+}
-+
- void *alloc_insn_page(void)
- {
- 	void *page;
-@@ -218,19 +239,6 @@ static nokprobe_inline void set_current_kprobe(struct kprobe *p, struct pt_regs 
- 	kcb->kprobe_saved_msr = regs->msr;
- }
+@@ -359,12 +359,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 		goto fail;
  
--bool arch_kprobe_on_func_entry(unsigned long offset)
--{
--#ifdef PPC64_ELF_ABI_v2
--#ifdef CONFIG_KPROBES_ON_FTRACE
--	return offset <= 16;
--#else
--	return offset <= 8;
--#endif
--#else
--	return !offset;
--#endif
--}
+ 	ip = trampoline + size;
 -
- void arch_prepare_kretprobe(struct kretprobe_instance *ri, struct pt_regs *regs)
- {
- 	ri->ret_addr = (kprobe_opcode_t *)regs->link;
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 4d8086a..9ea0e3e 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -52,6 +52,7 @@
- #include <asm/insn.h>
- #include <asm/debugreg.h>
- #include <asm/set_memory.h>
-+#include <asm/ibt.h>
+-	/* The trampoline ends with ret(q) */
+-	retq = (unsigned long)ftrace_stub;
+-	ret = copy_from_kernel_nofault(ip, (void *)retq, RET_SIZE);
+-	if (WARN_ON(ret < 0))
+-		goto fail;
++	memcpy(ip, retq, RET_SIZE);
  
- #include "common.h"
- 
-@@ -294,6 +295,22 @@ static int can_probe(unsigned long paddr)
- 	return (addr == paddr);
- }
- 
-+/* If x86 supports IBT (ENDBR) it must be skipped. */
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
-+					 bool *on_func_entry)
-+{
-+	if (is_endbr(*(u32 *)addr)) {
-+		*on_func_entry = !offset || offset == 4;
-+		if (*on_func_entry)
-+			offset = 4;
-+
-+	} else {
-+		*on_func_entry = !offset;
-+	}
-+
-+	return (kprobe_opcode_t *)(addr + offset);
-+}
-+
+ 	/* No need to test direct calls on created trampolines */
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 11ac028..e32b5cd 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -176,10 +176,10 @@ SYM_FUNC_END(ftrace_caller);
+ SYM_FUNC_START(ftrace_epilogue)
  /*
-  * Copy an instruction with recovering modified instruction by kprobes
-  * and adjust the displacement if the instruction uses the %rip-relative
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 19b8843..9c28f7a 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -265,7 +265,6 @@ extern int arch_init_kprobes(void);
- extern void kprobes_inc_nmissed_count(struct kprobe *p);
- extern bool arch_within_kprobe_blacklist(unsigned long addr);
- extern int arch_populate_kprobe_blacklist(void);
--extern bool arch_kprobe_on_func_entry(unsigned long offset);
- extern int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset);
- 
- extern bool within_kprobe_blacklist(unsigned long addr);
-@@ -384,6 +383,8 @@ static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
- }
- 
- kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset);
-+kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset, bool *on_func_entry);
-+
- int register_kprobe(struct kprobe *p);
- void unregister_kprobe(struct kprobe *p);
- int register_kprobes(struct kprobe **kps, int num);
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 6d1e11c..185badc 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1489,24 +1489,68 @@ bool within_kprobe_blacklist(unsigned long addr)
- }
- 
- /*
-+ * arch_adjust_kprobe_addr - adjust the address
-+ * @addr: symbol base address
-+ * @offset: offset within the symbol
-+ * @on_func_entry: was this @addr+@offset on the function entry
-+ *
-+ * Typically returns @addr + @offset, except for special cases where the
-+ * function might be prefixed by a CFI landing pad, in that case any offset
-+ * inside the landing pad is mapped to the first 'real' instruction of the
-+ * symbol.
-+ *
-+ * Specifically, for things like IBT/BTI, skip the resp. ENDBR/BTI.C
-+ * instruction at +0.
-+ */
-+kprobe_opcode_t *__weak arch_adjust_kprobe_addr(unsigned long addr,
-+						unsigned long offset,
-+						bool *on_func_entry)
-+{
-+	*on_func_entry = !offset;
-+	return (kprobe_opcode_t *)(addr + offset);
-+}
-+
-+/*
-  * If 'symbol_name' is specified, look it up and add the 'offset'
-  * to it. This way, we can specify a relative address to a symbol.
-  * This returns encoded errors if it fails to look up symbol or invalid
-  * combination of parameters.
+  * This is weak to keep gas from relaxing the jumps.
+- * It is also used to copy the RET for trampolines.
   */
--static kprobe_opcode_t *_kprobe_addr(kprobe_opcode_t *addr,
--			const char *symbol_name, unsigned int offset)
-+static kprobe_opcode_t *
-+_kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
-+	     unsigned long offset, bool *on_func_entry)
- {
- 	if ((symbol_name && addr) || (!symbol_name && !addr))
- 		goto invalid;
+ SYM_INNER_LABEL_ALIGN(ftrace_stub, SYM_L_WEAK)
+ 	UNWIND_HINT_FUNC
++	ENDBR
+ 	RET
+ SYM_FUNC_END(ftrace_epilogue)
  
- 	if (symbol_name) {
-+		/*
-+		 * Input: @sym + @offset
-+		 * Output: @addr + @offset
-+		 *
-+		 * NOTE: kprobe_lookup_name() does *NOT* fold the offset
-+		 *       argument into it's output!
-+		 */
- 		addr = kprobe_lookup_name(symbol_name, offset);
- 		if (!addr)
- 			return ERR_PTR(-ENOENT);
- 	}
+@@ -284,6 +284,7 @@ SYM_FUNC_START(__fentry__)
+ 	jnz trace
  
--	addr = (kprobe_opcode_t *)(((char *)addr) + offset);
-+	/*
-+	 * So here we have @addr + @offset, displace it into a new
-+	 * @addr' + @offset' where @addr' is the symbol start address.
-+	 */
-+	addr = (void *)addr + offset;
-+	if (!kallsyms_lookup_size_offset((unsigned long)addr, NULL, &offset))
-+		return ERR_PTR(-ENOENT);
-+	addr = (void *)addr - offset;
+ SYM_INNER_LABEL(ftrace_stub, SYM_L_GLOBAL)
++	ENDBR
+ 	RET
+ 
+ trace:
+@@ -307,7 +308,7 @@ EXPORT_SYMBOL(__fentry__)
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ SYM_FUNC_START(return_to_handler)
+-	subq  $24, %rsp
++	subq  $16, %rsp
+ 
+ 	/* Save the return values */
+ 	movq %rax, (%rsp)
+@@ -319,7 +320,19 @@ SYM_FUNC_START(return_to_handler)
+ 	movq %rax, %rdi
+ 	movq 8(%rsp), %rdx
+ 	movq (%rsp), %rax
+-	addq $24, %rsp
+-	JMP_NOSPEC rdi
 +
++	addq $16, %rsp
 +	/*
-+	 * Then ask the architecture to re-combine them, taking care of
-+	 * magical function entry details while telling us if this was indeed
-+	 * at the start of the function.
++	 * Jump back to the old return address. This cannot be JMP_NOSPEC rdi
++	 * since IBT would demand that contain ENDBR, which simply isn't so for
++	 * return addresses. Use a retpoline here to keep the RSB balanced.
 +	 */
-+	addr = arch_adjust_kprobe_addr((unsigned long)addr, offset, on_func_entry);
- 	if (addr)
- 		return addr;
- 
-@@ -1516,7 +1560,8 @@ invalid:
- 
- static kprobe_opcode_t *kprobe_addr(struct kprobe *p)
- {
--	return _kprobe_addr(p->addr, p->symbol_name, p->offset);
-+	bool on_func_entry;
-+	return _kprobe_addr(p->addr, p->symbol_name, p->offset, &on_func_entry);
- }
- 
- /*
-@@ -2043,11 +2088,6 @@ static int pre_handler_kretprobe(struct kprobe *p, struct pt_regs *regs)
- }
- NOKPROBE_SYMBOL(pre_handler_kretprobe);
- 
--bool __weak arch_kprobe_on_func_entry(unsigned long offset)
--{
--	return !offset;
--}
--
- /**
-  * kprobe_on_func_entry() -- check whether given address is function entry
-  * @addr: Target address
-@@ -2063,15 +2103,13 @@ bool __weak arch_kprobe_on_func_entry(unsigned long offset)
-  */
- int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long offset)
- {
--	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset);
-+	bool on_func_entry;
-+	kprobe_opcode_t *kp_addr = _kprobe_addr(addr, sym, offset, &on_func_entry);
- 
- 	if (IS_ERR(kp_addr))
- 		return PTR_ERR(kp_addr);
- 
--	if (!kallsyms_lookup_size_offset((unsigned long)kp_addr, NULL, &offset))
--		return -ENOENT;
--
--	if (!arch_kprobe_on_func_entry(offset))
-+	if (!on_func_entry)
- 		return -EINVAL;
- 
- 	return 0;
++	ANNOTATE_INTRA_FUNCTION_CALL
++	call .Ldo_rop
++	int3
++.Ldo_rop:
++	mov %rdi, (%rsp)
++	UNWIND_HINT_FUNC
++	RET
+ SYM_FUNC_END(return_to_handler)
+ #endif

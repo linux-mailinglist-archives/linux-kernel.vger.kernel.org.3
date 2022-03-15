@@ -2,81 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B354D9386
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CF14D938B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239536AbiCOFJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 01:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S1344828AbiCOFKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 01:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbiCOFJC (ORCPT
+        with ESMTP id S1344813AbiCOFKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 01:09:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92B3645E;
-        Mon, 14 Mar 2022 22:07:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47B42B809D2;
-        Tue, 15 Mar 2022 05:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B688EC340E8;
-        Tue, 15 Mar 2022 05:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647320868;
-        bh=rMie03k3BO34+o88YfxYoeUy5yYs6o8Z5WGNRtUX6zQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LgbWhMGnAqnil1zn+wUVOxqV+vQT2YuSWf9hCWbiQE8BqXfdYu99mVb/BSdgxc7Ix
-         ig6vimVdeuhTIpExLx9DZ++1UdztPhREqVI9HvhjdDgJQazmcDOyc5Hpm17Jj5NP4F
-         VGChJMVL3MxFyxqtQuwbx5hE0yTZ9CmNxImdyuPLV72pusqfW7oPlwtu6sm8h7kHe2
-         kwNvfzFcJN1hXIvNP7cA+krgydwPMx9O07lbvtiwZgroBhFG5N1G0DqNJHOcxp5UEN
-         gvyVO7RxrPnMmeyP2frlcgU0grAe3L62FKV79X9FKtpQdjPAmo/wEkFFMgsdanTqNb
-         hrkjV3i3fnjeQ==
-Date:   Mon, 14 Mar 2022 22:07:46 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next] net: sfp: add 2500base-X quirk for Lantech SFP
- module
-Message-ID: <20220314220746.561b1da8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220312205014.4154907-1-michael@walle.cc>
-References: <20220312205014.4154907-1-michael@walle.cc>
+        Tue, 15 Mar 2022 01:10:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F9645ACE;
+        Mon, 14 Mar 2022 22:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647320937; x=1678856937;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oJuv0Z8dvZxqgVY1+X5D78/R17rRg7H8XXZJ/5nQQ3A=;
+  b=XYo7iZfLk/t91ZJu5cLak395/UVXlaDrecuqsBD32+9SNeu92zSgY+P2
+   WLkKgXLxmovLTZ7zH9tfxhx3U8xDr5HQnEJ4pCvGqc2Ce3OVFbjeiSNng
+   jI61tYzweN4W9+yTsOybrBeXK2AJqirPxxl80SfAhhbx99xdvXSWFENc7
+   IEeRSX5G6yNiVt78bULuWimxYwkdvlSmquLkiGU+naT/6Dp3RRatPAwHG
+   xLgZis33RASBC9yGAH0guLp4yCyYbtUfkhN60F6jL/6Ahj4lyjZO5YzXW
+   9nI379GHGV1LYcVEO4bao/yKXeyDpEC/j5Wv6xg4gIJBfHRhqgN7Ywo4A
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253774485"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="253774485"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 22:08:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="580384681"
+Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 22:08:55 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver OHalloran <oohall@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v2] PCI/AER: Handle Multi UnCorrectable/Correctable errors properly
+Date:   Tue, 15 Mar 2022 05:08:42 +0000
+Message-Id: <20220315050842.120063-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Mar 2022 21:50:14 +0100 Michael Walle wrote:
-> The Lantech 8330-262D-E module is 2500base-X capable, but it reports the
-> nominal bitrate as 2500MBd instead of 3125MBd. Add a quirk for the
-> module.
-> 
-> The following in an EEPROM dump of such a SFP with the serial number
-> redacted:
-> 
-> 00: 03 04 07 00 00 00 01 20 40 0c 05 01 19 00 00 00    ???...? @????...
-> 10: 1e 0f 00 00 4c 61 6e 74 65 63 68 20 20 20 20 20    ??..Lantech
-> 20: 20 20 20 20 00 00 00 00 38 33 33 30 2d 32 36 32        ....8330-262
-> 30: 44 2d 45 20 20 20 20 20 56 31 2e 30 03 52 00 cb    D-E     V1.0?R.?
-> 40: 00 1a 00 00 46 43 XX XX XX XX XX XX XX XX XX XX    .?..FCXXXXXXXXXX
-> 50: 20 20 20 20 32 32 30 32 31 34 20 20 68 b0 01 98        220214  h???
-> 60: 45 58 54 52 45 4d 45 4c 59 20 43 4f 4d 50 41 54    EXTREMELY COMPAT
-> 70: 49 42 4c 45 20 20 20 20 20 20 20 20 20 20 20 20    IBLE
+Currently the aer_irq() handler returns IRQ_NONE for cases without bits
+PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
+assumption is incorrect.
 
-Any idea what the "Extremely Compatible" is referring to? :-D
+Consider a scenario where aer_irq() is triggered for a correctable
+error, and while we process the error and before we clear the error
+status in "Root Error Status" register, if the same kind of error
+is triggered again, since aer_irq() only clears events it saw, the
+multi-bit error is left in tact. This will cause the interrupt to fire
+again, resulting in entering aer_irq() with just the multi-bit error
+logged in the "Root Error Status" register.
 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+Repeated AER recovery test has revealed this condition does happen
+and this prevents any new interrupt from being triggered. Allow to
+process interrupt even if only multi-correctable (BIT 1) or
+multi-uncorrectable bit (BIT 3) is set.
 
-A quirk like this seems safe to apply to net and 5.17, still.
-Would you prefer that or net-next as marked?
+This error can be reproduced by making following changes to the
+aer_irq() function and by executing the given test commands.
+
+ static irqreturn_t aer_irq(int irq, void *context)
+         struct aer_err_source e_src = {};
+
+         pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS,
+				&e_src.status);
+ +       pci_dbg(pdev->port, "Root Error Status: %04x\n",
+ +		e_src.status);
+         if (!(e_src.status & AER_ERR_STATUS_MASK))
+                 return IRQ_NONE;
+
+ +       mdelay(5000);
+
+ # Prep injection data for a correctable error.
+ $ cd /sys/kernel/debug/apei/einj
+ $ echo 0x00000040 > error_type
+ $ echo 0x4 > flags
+ $ echo 0x891000 > param4
+
+ # Root Error Status is initially clear
+ $ setpci -s <Dev ID> ECAP0001+0x30.w
+ 0000
+
+ # Inject one error
+ $ echo 1 > error_inject
+
+ # Interrupt received
+ pcieport <Dev ID>: AER: Root Error Status 0001
+
+ # Inject another error (within 5 seconds)
+ $ echo 1 > error_inject
+
+ # No interrupt received, but "multiple ERR_COR" is now set
+ $ setpci -s <Dev ID> ECAP0001+0x30.w
+ 0003
+
+ # Wait for a while, then clear ERR_COR. A new interrupt immediately
+   fires.
+ $ setpci -s <Dev ID> ECAP0001+0x30.w=0x1
+ pcieport <Dev ID>: AER: Root Error Status 0002
+
+Currently, the above issue has been only reproduced in the ICL server
+platform.
+
+[Eric: proposed reproducing steps]
+Fixes: 4696b828ca37 ("PCI/AER: Hoist aerdrv.c, aer_inject.c up to drivers/pci/pcie/")
+Reported-by: Eric Badger <ebadger@purestorage.com>
+Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
+
+Changes since v1:
+ * Added Fixes tag.
+ * Included reproducing steps proposed by Eric.
+
+ drivers/pci/pcie/aer.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index 9fa1f97e5b27..7952e5efd6cf 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -101,6 +101,11 @@ struct aer_stats {
+ #define ERR_COR_ID(d)			(d & 0xffff)
+ #define ERR_UNCOR_ID(d)			(d >> 16)
+ 
++#define AER_ERR_STATUS_MASK		(PCI_ERR_ROOT_UNCOR_RCV |	\
++					PCI_ERR_ROOT_COR_RCV |		\
++					PCI_ERR_ROOT_MULTI_COR_RCV |	\
++					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
++
+ static int pcie_aer_disable;
+ static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
+ 
+@@ -1196,7 +1201,7 @@ static irqreturn_t aer_irq(int irq, void *context)
+ 	struct aer_err_source e_src = {};
+ 
+ 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
+-	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
++	if (!(e_src.status & AER_ERR_STATUS_MASK))
+ 		return IRQ_NONE;
+ 
+ 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_ERR_SRC, &e_src.id);
+-- 
+2.25.1
+

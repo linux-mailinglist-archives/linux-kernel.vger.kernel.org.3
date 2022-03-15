@@ -2,71 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5887C4D9661
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3564D9663
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346112AbiCOIe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S233493AbiCOIe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346113AbiCOIeO (ORCPT
+        with ESMTP id S1346140AbiCOIeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:34:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E95C10F8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:32:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 07B491F37E;
-        Tue, 15 Mar 2022 08:32:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647333165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bYkhOc7jYnnaJzo+1Uv/M+ohxdNO0S/jT3vuFCDsVq0=;
-        b=tYVVwupkSeyTkjuwC7GpGjykJWyIg0x1HfB8jJm6mimuRYUph0g8UTUQCdlRC2N4ZB5eKX
-        ypjBzvT8agH+7xZwFvfK3G5hxO46HseVzv0cTeiPRHMIIIcVSrm3Wk2J2AK4y88kmSqw3v
-        tT+lmUV0xKRyt8xM0LbFz3Hc2GZyaqE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647333165;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bYkhOc7jYnnaJzo+1Uv/M+ohxdNO0S/jT3vuFCDsVq0=;
-        b=JKMGLIfKHl/kcVKS1aposzv2vEEp3oEOhbC4yLi9tZVRs7XOP46OlBqJBP5GPGAam4h9Td
-        HfFFjPpRdg//y6Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8E84813B4E;
-        Tue, 15 Mar 2022 08:32:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wWoEICxPMGLdZgAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 15 Mar 2022 08:32:44 +0000
-Date:   Tue, 15 Mar 2022 09:32:42 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm: Only re-generate demotion targets when a numa
- node changes its N_CPU state
-Message-ID: <YjBPKmIpPNoJU/67@localhost.localdomain>
-References: <20220314150945.12694-1-osalvador@suse.de>
- <87pmmn3eh6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Tue, 15 Mar 2022 04:34:44 -0400
+Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586A137BDA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:33:26 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V7H.vfh_1647333200;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V7H.vfh_1647333200)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 15 Mar 2022 16:33:23 +0800
+Date:   Tue, 15 Mar 2022 16:33:20 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs: erofs: remember if kobject_init_and_add was done
+Message-ID: <YjBPUJKFtyhF2x/K@B-P7TQMD6M-0146.local>
+References: <20220315075152.63789-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87pmmn3eh6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220315075152.63789-1-dzm91@hust.edu.cn>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,45 +43,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 02:40:53PM +0800, Huang, Ying wrote:
-> Oscar Salvador <osalvador@suse.de> writes:
-> CPUHP_MM_DEMOTION_DEAD and CPUHP_AP_MM_DEMOTION_ONLINE needs to be
-> deleted from include/linux/cpuhotplug.h too.
+On Tue, Mar 15, 2022 at 03:51:52PM +0800, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> Syzkaller hit 'WARNING: kobject bug in erofs_unregister_sysfs'. This bug
+> is triggered by injecting fault in kobject_init_and_add of
+> erofs_unregister_sysfs.
+> 
+> Fix this by remembering if kobject_init_and_add is successful.
+> 
+> Note that I've tested the patch and the crash does not occur any more.
+> 
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Hi Huang Ying,
+Thanks for the effort!
 
-Right.
+Fixes: 168e9a76200c ("erofs: add sysfs interface")
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-Andrew, can you apply this on top? Thanks
-
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 411a428ace4d..8a9a2d01b7c6 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -72,8 +72,6 @@ enum cpuhp_state {
- 	CPUHP_SLUB_DEAD,
- 	CPUHP_DEBUG_OBJ_DEAD,
- 	CPUHP_MM_WRITEBACK_DEAD,
--	/* Must be after CPUHP_MM_VMSTAT_DEAD */
--	CPUHP_MM_DEMOTION_DEAD,
- 	CPUHP_MM_VMSTAT_DEAD,
- 	CPUHP_SOFTIRQ_DEAD,
- 	CPUHP_NET_MVNETA_DEAD,
-@@ -244,8 +242,6 @@ enum cpuhp_state {
- 	CPUHP_AP_BASE_CACHEINFO_ONLINE,
- 	CPUHP_AP_ONLINE_DYN,
- 	CPUHP_AP_ONLINE_DYN_END		= CPUHP_AP_ONLINE_DYN + 30,
--	/* Must be after CPUHP_AP_ONLINE_DYN for node_states[N_CPU] update */
--	CPUHP_AP_MM_DEMOTION_ONLINE,
- 	CPUHP_AP_X86_HPET_ONLINE,
- 	CPUHP_AP_X86_KVM_CLK_ONLINE,
- 	CPUHP_AP_ACTIVE,
-
-Huang Ying, it would be great to have your Reviewed-by/Acked-by if you
-are ok with the outome.
-
-Thanks
-
--- 
-Oscar Salvador
-SUSE Labs
+Thanks,
+Gao Xiang

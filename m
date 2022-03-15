@@ -2,110 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66E14DA1C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2719D4DA1D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350858AbiCOSBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S1350816AbiCOSDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350861AbiCOSBq (ORCPT
+        with ESMTP id S1350834AbiCOSDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:01:46 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CED659A6D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:00:32 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id u10so30238138wra.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:00:32 -0700 (PDT)
+        Tue, 15 Mar 2022 14:03:45 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40235593B8;
+        Tue, 15 Mar 2022 11:02:33 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bi12so43283565ejb.3;
+        Tue, 15 Mar 2022 11:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=l3MXoKEOYNqbj2rQ/N3Ogy/kqKRo5wc1bR+B02SiC7k=;
-        b=D2k50Loa48l6aPLwLn/ltBMwCMqTISYNTnM9B0ojlGWKnPQ4J+xK25tl8DW1EQfQNf
-         yhsnIR0lz3yEDD6kZyqxs8/6O1k3vWweUOr6109EgJIzK2kQrmDvguoMstwgxx3Uy5lf
-         HYopNzSccCNub71gngvSIrec9YQDiewfxL/n4EVHdHVpWp/IMq+B61P5P/l+w58dKR8t
-         4MvRPWf+dEMCKMsVOUEw7OIE7sUs8i3iEfoEeTRW8KFFgBe89qHG33/tjLE2REAC+EWY
-         hg6wgCZkYHWF1zmGDPTFthB+JsL2dUEMwjMR/ca6FqLEXKuSNmGkVJpodcOFr6CM9XyK
-         JlGw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lEC/nkhZWgafnlNYWqRvQ8T9pwDdv1X4bS+vmmN1SPI=;
+        b=TlfZFBpL4ZxfH1h0A4azfOpuLuqRtduCM9W127vgQdbSX84AaRxquI24AZvaA/0Mhu
+         W5o4xZkQR752Hf126heU6U/BBocdrE6/a2Ihx8NnsX9drwO5lACiezAZxvUZP3XJP8CY
+         RgL/YsUwucofJYAR5HTDtSgiXc/8GSxvQKtINLDlNNpQhcJWsrikOyezbu8mRlY3gTlv
+         rEOGgvjWGrYlDAjMi05/fTIC1jrV0GVsW+UEpEd1os1ZbL3wwjfaDDRl0voUi4hHNHYk
+         rJABGDMHxUmjB3eeAevsUeKUu16sJWDZhY2h8sMc8S1ej06qZ5FAgZCqYTXYxZQxhKT7
+         g/Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=l3MXoKEOYNqbj2rQ/N3Ogy/kqKRo5wc1bR+B02SiC7k=;
-        b=60qecc3FZl/jsKxf60HUtglqosiKkNDiZr4AUydPU1tq/sUjt5D49b3quoaY8y0cHA
-         NzjmOZQ6JWcVxFDUwwO7USW8cU7yN+6DXhSmW+tOhe4O8LkbWrJdhC9fqMfsqIb3ZIUz
-         F13Ky8XbS2h9VCJ13QaVVMA6m9IYEG4YArXMPxKrd+599h50JmjCNFcISZcLq4WebZNl
-         BSE5MXLmKmc+w3U+hP8Xg/msAzAjO5gfTo3Q0kmGxHv/WoO7CZe3TfP4MfIDYkQBleFx
-         wBxCt5ZQtjt2hJzM0il/s46vI/jWZujb39vX/im3Ptgs0GIX4fcgWhbYryMPZveuvp+O
-         zssg==
-X-Gm-Message-State: AOAM533IYF1qpTQTJ61OSaMPVIWtWej0WUneEaOomSsciCqehmNr6LdX
-        AQVu60yTcwCqo4zm/JMe92HDXQ==
-X-Google-Smtp-Source: ABdhPJxTspIEyKaTQIpafHC/PxEmHzjcrx9sd3PcK18nz+T0qpkOxhTp58llOV7mDVlhV5Xo4CJsyA==
-X-Received: by 2002:a05:6000:184f:b0:203:7fca:727e with SMTP id c15-20020a056000184f00b002037fca727emr20751839wri.186.1647367230701;
-        Tue, 15 Mar 2022 11:00:30 -0700 (PDT)
-Received: from google.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
-        by smtp.gmail.com with ESMTPSA id t14-20020a5d49ce000000b001f036a29f42sm15846299wrs.116.2022.03.15.11.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 11:00:30 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 19:00:27 +0100
-From:   "Steinar H. Gunderson" <sesse@google.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
-Message-ID: <YjDUO6bbyfGw/u0C@google.com>
-References: <20220310093844.982656-1-sesse@google.com>
- <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
- <YiuKAk7SaXP7B7Ee@google.com>
- <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
- <YjBnet2813sEGjZY@google.com>
- <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lEC/nkhZWgafnlNYWqRvQ8T9pwDdv1X4bS+vmmN1SPI=;
+        b=VPQYYS9KNUCyH1mUYRqrjpmKhQuRjkVTzpakjmzslZbInPw+bval+CVvfkbHSX7VRE
+         H5+VS3PO8ppfBwYH3uLBVITN9+5K2xggz7Sg0esvMtt6j6SRwYnLSGjnzmQE106WcPIN
+         J9X7G0tiTwlRzyjh8HBctbVqbXl/EFrT7kH18uqRMqhoKMN2jE5tX4BUgJB0j878W2W8
+         Jl+bMY8G1sBbUF3mTwt8MHkZhLhAJpjNNtmls2CRKv06hDYY41JACeBcl5W+6tBoV3jM
+         xTvwm7BBjiKjKPe7bFcRrBMdIpdWiuuJonrjePRRl1NUWFwlXuqIyBgWnARSjWjyYge9
+         zEmA==
+X-Gm-Message-State: AOAM532nDQGhrvCtU3GBL2tRwBuNrfXyq6F2ka4cS2W3fRfA7UeTfboH
+        P+R7RuXE6CBbonfso3uOGvVb19KiaMR3cj0BXHE=
+X-Google-Smtp-Source: ABdhPJwQNXcLkTGaCJKCgGEQ39fH/f9rG+zOEFi6wUHEyZIylN9K230wh3LynYxeoxVpwJTKYSVD3SjkIYeMUl1wmGU=
+X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
+ sd1-20020a1709076e0100b006d0562ce389mr23976723ejc.497.1647367351540; Tue, 15
+ Mar 2022 11:02:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com> <20220312132856.65163-6-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220312132856.65163-6-krzysztof.kozlowski@canonical.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 15 Mar 2022 20:01:18 +0200
+Message-ID: <CAHp75VfLtjfrB4Zj9ncOg3VYQrX58chEL+6g31_5fwuMUuURPg@mail.gmail.com>
+Subject: Re: [PATCH v4 05/11] PCI: Use driver_set_override() instead of open-coding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 01:32:38PM +0200, Adrian Hunter wrote:
->> I think the structure looks good, but I'm not sure about updating
->> e.g. ptq->last_cy_insn_cnt in both functions? Does that make sense?
-> It should only be updated in the new intel_pt_synth_cycle_sample().
-> intel_pt_synth_instruction_sample() should be unchanged.
+On Sat, Mar 12, 2022 at 4:09 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> Use a helper to set driver_override to reduce amount of duplicated code.
 
-Hm, OK. But something definitely changed between my original patch and
-your change. (The first patch; I didn't try the last one yet.) With my
-patch, I got (on a specific trace, synthing cycles only with perf report
---itrace=y0nse):
+the amount
 
-Samples: 4M of event 'cycles:uH', Event count (approx.): 4844309
+> Make the driver_override field const char, because it is not modified by
+> the core and it matches other subsystems.
 
-With yours on the same file:
 
-Samples: 2M of event 'cycles:uH', Event count (approx.): 77622449
+Seems like mine #4 here
+https://gist.github.com/andy-shev/a2cb1ee4767d6d2f5d20db53ecb9aabc :-)
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Thanks!
 
-The relative times between functions are also pretty different (although
-none of them are obviously crazy), so one of them has to be wrong.
-Is this to be expected, ie., would you expect your change to fix some
-bad bug on cycle-only synth? For reference, “perf script --itrace=i0ns
--F +ipc | grep -c IPC:” (a quick proxy for the number of CYC packets :-) )
-yields 4836782, so I'm a bit surprised why there are only 2M events
-being emitted from that.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/pci-sysfs.c | 28 ++++------------------------
+>  include/linux/pci.h     |  6 +++++-
+>  2 files changed, 9 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 602f0fb0b007..5c42965c32c2 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -567,31 +567,11 @@ static ssize_t driver_override_store(struct device *dev,
+>                                      const char *buf, size_t count)
+>  {
+>         struct pci_dev *pdev = to_pci_dev(dev);
+> -       char *driver_override, *old, *cp;
+> -
+> -       /* We need to keep extra room for a newline */
+> -       if (count >= (PAGE_SIZE - 1))
+> -               return -EINVAL;
+> -
+> -       driver_override = kstrndup(buf, count, GFP_KERNEL);
+> -       if (!driver_override)
+> -               return -ENOMEM;
+> -
+> -       cp = strchr(driver_override, '\n');
+> -       if (cp)
+> -               *cp = '\0';
+> -
+> -       device_lock(dev);
+> -       old = pdev->driver_override;
+> -       if (strlen(driver_override)) {
+> -               pdev->driver_override = driver_override;
+> -       } else {
+> -               kfree(driver_override);
+> -               pdev->driver_override = NULL;
+> -       }
+> -       device_unlock(dev);
+> +       int ret;
+>
+> -       kfree(old);
+> +       ret = driver_set_override(dev, &pdev->driver_override, buf, count);
+> +       if (ret)
+> +               return ret;
+>
+>         return count;
+>  }
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 60d423d8f0c4..415491fb85f4 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -516,7 +516,11 @@ struct pci_dev {
+>         u16             acs_cap;        /* ACS Capability offset */
+>         phys_addr_t     rom;            /* Physical address if not from BAR */
+>         size_t          romlen;         /* Length if not from BAR */
+> -       char            *driver_override; /* Driver name to force a match */
+> +       /*
+> +        * Driver name to force a match.  Do not set directly, because core
+> +        * frees it.  Use driver_set_override() to set or clear it.
+> +        */
+> +       const char      *driver_override;
+>
+>         unsigned long   priv_flags;     /* Private flags for the PCI driver */
+>
+> --
+> 2.32.0
+>
 
-/* Steinar */
+
+-- 
+With Best Regards,
+Andy Shevchenko

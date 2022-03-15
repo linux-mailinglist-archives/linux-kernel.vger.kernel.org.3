@@ -2,127 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09114D91CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5195D4D91CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344018AbiCOAym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S1344034AbiCOAy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 20:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344009AbiCOAyk (ORCPT
+        with ESMTP id S1344021AbiCOAyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:54:40 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1B56408
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:53:30 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id u10so34226469ybd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Lt0v7qfbVpJojnUOhECKbKcm+J8TaXSARb8f4EqcGus=;
-        b=NcJ6GT95IjwjOR7fg7I2dPoT6cEPdP1s+9cl39gfmvOwsEl2UnzXJarwaW1cc++OVX
-         KHYLbpajhxSkWOJMf6E6thHYEY00b2jEfloVh68OtUQ6gNsSYcTSEoIBonYeALJjQVXr
-         Nkb7EYO/A2YmRdwwwChRxUj5mR4zAwCyOe9SIXqYT9E5HkOQPJV4L2JUU1w/OKr+WPTG
-         Gq63PI1Aor1xMWg/54p8qQHyMOIVl25kvZrKgCkh5WHuXBSAG2l9fMIhUG0Ga/xbPUn5
-         gbz90cMjvnOwNBqsXiSQpP4veUZmlZNleYMN+BzxHLV2oEXAHy/H6JvbkWxHULOyHek6
-         2ajw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Lt0v7qfbVpJojnUOhECKbKcm+J8TaXSARb8f4EqcGus=;
-        b=ZBhy3VPtu83S2O9HTmR6cpGdJuvd25hz99pnbePSeN5bd5M5pE3J7wwUfy6ZxGvynL
-         d0XI+r/35jvJWbjIXgTaNbW7AFkozuMVct56I5Bt87frtKlBF3XP5cmL2LIHqivXgGfx
-         QalYhHjSPxYMGCp866Lp9eFlmdMmVm05Sut6oj+QNYIp2bsP5ce7hE+9ulyRfscXSvfl
-         a8qaR+NeIOl5cDckIw2ejZ7brBtQg6fAP3Rc+TsxaZnpV8HmM2rce4IXiE9iGNoCFa7c
-         8YiLcZbYJJj9mEyQAVbjgGKaMizbu7omuITeFNTWD/K3VHRDPOQlnWie548NiahzCDzg
-         3Cyg==
-X-Gm-Message-State: AOAM530ajqCwRPQZQhK3oa6l05F260VBZLBSgovYxb2rQwL40hDmIiDW
-        eiKf7KYiEshiOZLglEoxXizrCZv7nTcw6uo2W1cbZg==
-X-Google-Smtp-Source: ABdhPJy0vYhjKSzdR0l5rAiUKL5fMH1KKdSvw6k6L3Ir0xxhcUJUvlYtieHxEMduFKB1QfoHPL7UYmdRKZTdH7/O4FU=
-X-Received: by 2002:a25:c708:0:b0:628:d9f2:c0a6 with SMTP id
- w8-20020a25c708000000b00628d9f2c0a6mr22439300ybe.464.1647305609377; Mon, 14
- Mar 2022 17:53:29 -0700 (PDT)
+        Mon, 14 Mar 2022 20:54:55 -0400
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B749DE8F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:53:44 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id C201A233F8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:53:43 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id TvRXnSwehHnotTvRXniTGt; Mon, 14 Mar 2022 19:53:43 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5fgNwEORq9lNtfunc3Gc7PDe4t3ywET2mVsMrjGjJrc=; b=jpvhu2JuAc9EkLg3wh5k3r0sXX
+        fcbWRJXWG86lgWzJ7SmdRv+yAvzG6t7pXSDIXGdGBFgRzDyK78xNXJco5Pwac4Kfg/7rwkhUmwsmk
+        NjhNJWFs5gUGw3DOltUwv5rIyne/TuyJi4m3/veDw4F6Yvc260E+zIbMdjLyNjjQt7Z5KxW23xmVH
+        ygqGZp1K10OFexoxdidAoMppEpitKDY7Azf13aBKN1Neo/Nm1ZYnr68TnI99iQMf870LdyzREw6TJ
+        vDKscVJsATqluCxRFVbb4NNClJO9Kn82mULeYSKyH6kMPz9Z96WxespbaCHME0pPNKIrHPhTf0iSL
+        ks7sWdgA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57476 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nTvRW-003rrZ-U6; Tue, 15 Mar 2022 00:53:43 +0000
+Date:   Mon, 14 Mar 2022 17:53:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/110] 5.15.29-rc1 review
+Message-ID: <20220315005341.GF1943350@roeck-us.net>
+References: <20220314112743.029192918@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220311161406.23497-1-vincent.guittot@linaro.org> <20220311161406.23497-6-vincent.guittot@linaro.org>
-In-Reply-To: <20220311161406.23497-6-vincent.guittot@linaro.org>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 14 Mar 2022 17:53:18 -0700
-Message-ID: <CABk29Numf595wF6PiLd673TmFt6AV9qTEsWP7tSf2xPOKcGgLQ@mail.gmail.com>
-Subject: Re: [RFC 5/6] sched/fair: Take into account latency nice at wakeup
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>, parth@linux.ibm.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        "Hyser,Chris" <chris.hyser@oracle.com>,
-        Pavan Kondeti <pkondeti@codeaurora.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        Paul Turner <pjt@google.com>, pavel@ucw.cz,
-        Tejun Heo <tj@kernel.org>,
-        Dhaval Giani <dhaval.giani@oracle.com>, qperret@google.com,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nTvRW-003rrZ-U6
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57476
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 77
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Mon, Mar 14, 2022 at 12:53:02PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.29 release.
+> There are 110 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+> Anything received after that time might be too late.
+> 
 
-On Fri, Mar 11, 2022 at 8:21 AM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-[snip]
-> +
-> +static void check_preempt_from_idle(struct cfs_rq *cfs, struct sched_entity *se)
-> +{
-> +       struct sched_entity *next;
-> +
-> +       if (se->latency_weight <= 0)
-> +               return;
-> +
-> +       if (cfs->nr_running <= 1)
-> +               return;
+Build results:
+	total: 156 pass: 156 fail: 0
+Qemu test results:
+	total: 488 pass: 488 fail: 0
 
-I don't quite understand this nr_running check.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-> +       /*
-> +        * When waking from idle, we don't need to check to preempt at wakeup
-> +        * the idle thread and don't set next buddy as a candidate for being
-> +        * picked in priority.
-> +        * In case of simultaneous wakeup from idle, the latency sensitive tasks
-> +        * lost opportunity to preempt non sensitive tasks which woke up
-> +        * simultaneously.
-> +        */
-> +
-> +       if (cfs->next)
-> +               next = cfs->next;
-> +       else
-> +               next = __pick_first_entity(cfs);
-> +
-> +       if (next && wakeup_preempt_entity(next, se) == 1)
-> +               set_next_buddy(se);
-> +}
-> +
-
-What's the motivation to do this with the next buddy vs using wakeup
-entity placement to achieve a similar result? The latter would also
-more generically work when we aren't transitioning from idle. It also
-doesn't suffer from some slight weirdness here in the interaction with
-core scheduling, where rq->curr can be idle despite the presence of
-runnable tasks if the cpu is forced idle.
+Guenter

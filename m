@@ -2,180 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F004DA029
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BF84DA042
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350104AbiCOQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S1349188AbiCOQlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237518AbiCOQgI (ORCPT
+        with ESMTP id S1350140AbiCOQk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:36:08 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E515B506C1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647362095; x=1678898095;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5fe4aIhHkHpe8XfCx1caZ69+mJj0mxiFQCb/xeqLijs=;
-  b=Cu1LIVNoVZ2Alg3gJk1mwAVJkZ9sYKYF4UETiW5Qlv3ZIaF241DlHtHr
-   F31AaYNgaTxlwTmqidJiUZMYnlq+oNZHg9g+c37/SlCNIRBO58zoHFtGN
-   eGdKghCfK55JVJfyE4awjB2j83/kRDZFrjeqtD+bhLvGzZ3BsWQBcw3ya
-   V624SsyMd+JIvhnabBNM4QL8uqEtq3b0bicUM2b+T3tqqbOVTnS5CyziF
-   uqp7kEVzHd4vfCdFi/3glLCNDmDr9TgyTOE/xbEpeyEQG3x0zpw8/YYwf
-   /DpbCgvh0JT2PcHsW645nkbFOgBkZe0X8HrNHTSuS75A1BwQ4rD95EAVV
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="317074634"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="317074634"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:34:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="690257656"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:34:54 -0700
-Date:   Tue, 15 Mar 2022 09:38:10 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 5/8] iommu: Add PASID support for DMA mapping API
- users
-Message-ID: <20220315093810.4b4c5ebf@jacob-builder>
-In-Reply-To: <20220315143535.GX11336@nvidia.com>
-References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
-        <20220315050713.2000518-6-jacob.jun.pan@linux.intel.com>
-        <20220315143535.GX11336@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 15 Mar 2022 12:40:59 -0400
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C491B57169
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1647362382;
+        bh=SpliapCVlfa+D7lo3BSKvVkGgWUYrJC2HluZ0dliScA=;
+        h=From:To:Cc:Subject:Date;
+        b=j1gUfUjveD44+cikeEOvXTHgEEzZYSWXa/9Ey6IKnwyCTeWg1j+71vRFezMiSS/1D
+         s30ULYiWLyh1clZSHN5iFQO+i2nHseuZUFhJbDslT+oUXyyVwZ5JEvfBICI929Vw4n
+         fAaMkFCH3UQNEU3cSSfdxSEmr9ZQMHeFSCW4vgHA=
+Received: from localhost.localdomain ([43.227.138.48])
+        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
+        id 9E6B06D9; Wed, 16 Mar 2022 00:39:38 +0800
+X-QQ-mid: xmsmtpt1647362378te3kqnwz3
+Message-ID: <tencent_7A338FE792721C51E887BB2A8DFC0B815C0A@qq.com>
+X-QQ-XMAILINFO: MyHh0PQai9FptZrresos5TGYovrAI+b46m/OEFalwsYWPXYAt4CGzqGpH4qHzf
+         2gZ+SVmeOSV+UivL+Bfa4Ikq2zTwtG+Z97smM5IdHLqkcNd+luPBz0Yb+eYpR7i0DFS3jCwESFsR
+         m5tFS9SuWgxRbyJsQuBbym8kuCs7Cpwz3dW7XyK4yzc1hjTNFGwpRT25qBuMBFNIgOtrk4x/1Vsb
+         ZfE4+seSM2vdiI69P51oSn4a0ocKVw44nJZgWtBWyrgbUzNerW7mhuNXY+QT+5f2oYZEBwq3FZtD
+         hCJvQW7bb4mUKYry0ovwXK5UQO7v5NPbyHKtKFT0otiVgsp5TVOn4NO6snyt/0CkyDoFhfmgZw3U
+         6VK/Y0i6M5mbbfP70ZKhA5/7pCMXmZfs02vRHzEkqv2HOW5Zt3FnQ8+UlATL0O648en5Id8H69pv
+         42PRteqSxGASRIo9+7RB3ZJOgt+rEuhz01U9Mm17pZdCeSWvAmplhxrw9KbykJTmsK1Q8dBBFUD4
+         t0FuTeXnxskrXnGqAOueZRCQRoRnYrM/vnxqNRCLEeo1dIE9noBWe60UBs/AT+D0E+Dw/xODQ3by
+         rN8ZQrtJpAJv3F6DXS5r02PiyqzoOdET3nEE7ksHV3DYjAMtniHgvCHgPqmtnl/BvC/zwZbbuG1C
+         /Weayy7PbYKZwaExiDThhLoiardMm2W56CGXKv6dZQgj1yM5W9M+a7b9L61E0D1WFFvUHjzYec8t
+         pNpZkzrB188Jj76LomGTLX6/I/0HqURM7XhpmTpapQ3gWHOs/wLpVBsDiHQkA55vH7Z16TxDs/L2
+         KVEUi1MmCoPBqc00STWVF+RDT2cCAdiF2uT1AA0W0wjo4ycMmGQ0JNtKdbw6Ih4B9v+IIsqsq2yo
+         2SHgxsLj0g+7SV+nMKJF0r7lWIVVCh29/UM8db5wANkZQ5ci1FFOnBS1KmqiukFGmurUnR3Cr3
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com,
+        nsaenz@kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v3] staging: mmal-vchiq: add a check for the return of vmalloc()
+Date:   Wed, 16 Mar 2022 00:39:13 +0800
+X-OQ-MSGID: <20220315163913.878-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-On Tue, 15 Mar 2022 11:35:35 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
+vmalloc() is a memory allocation API which can return NULL when some
+internal memory errors happen. So it is better to check the return
+value of it to catch the error in time.
 
-> On Mon, Mar 14, 2022 at 10:07:09PM -0700, Jacob Pan wrote:
-> > DMA mapping API is the de facto standard for in-kernel DMA. It operates
-> > on a per device/RID basis which is not PASID-aware.
-> > 
-> > Some modern devices such as Intel Data Streaming Accelerator, PASID is
-> > required for certain work submissions. To allow such devices use DMA
-> > mapping API, we need the following functionalities:
-> > 1. Provide device a way to retrieve a PASID for work submission within
-> > the kernel
-> > 2. Enable the kernel PASID on the IOMMU for the device
-> > 3. Attach the kernel PASID to the device's default DMA domain, let it
-> > be IOVA or physical address in case of pass-through.
-> > 
-> > This patch introduces a driver facing API that enables DMA API
-> > PASID usage. Once enabled, device drivers can continue to use DMA APIs
-> > as is. There is no difference in dma_handle between without PASID and
-> > with PASID.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> >  drivers/iommu/dma-iommu.c | 65 +++++++++++++++++++++++++++++++++++++++
-> >  include/linux/dma-iommu.h |  7 +++++
-> >  include/linux/iommu.h     |  9 ++++++
-> >  3 files changed, 81 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> > index b22034975301..d0ff1a34b1b6 100644
-> > +++ b/drivers/iommu/dma-iommu.c
-> > @@ -39,6 +39,8 @@ enum iommu_dma_cookie_type {
-> >  	IOMMU_DMA_MSI_COOKIE,
-> >  };
-> >  
-> > +static DECLARE_IOASID_SET(iommu_dma_pasid);
-> > +
-> >  struct iommu_dma_cookie {
-> >  	enum iommu_dma_cookie_type	type;
-> >  	union {
-> > @@ -370,6 +372,69 @@ void iommu_put_dma_cookie(struct iommu_domain
-> > *domain) domain->iova_cookie = NULL;
-> >  }
-> >  
-> > +/**
-> > + * iommu_enable_pasid_dma --Enable in-kernel DMA request with PASID
-> > + * @dev:	Device to be enabled
-> > + *
-> > + * DMA request with PASID will be mapped the same way as the legacy
-> > DMA.
-> > + * If the device is in pass-through, PASID will also pass-through. If
-> > the
-> > + * device is in IOVA map, the supervisor PASID will point to the same
-> > IOVA
-> > + * page table.
-> > + *
-> > + * @return the kernel PASID to be used for DMA or INVALID_IOASID on
-> > failure
-> > + */
-> > +int iommu_enable_pasid_dma(struct device *dev, ioasid_t *pasid)
-> > +{
-> > +	struct iommu_domain *dom;
-> > +	ioasid_t id, max;
-> > +	int ret;
-> > +
-> > +	dom = iommu_get_domain_for_dev(dev);
-> > +	if (!dom || !dom->ops || !dom->ops->attach_dev_pasid)
-> > +		return -ENODEV;  
-> 
-> Given the purpose of this API I think it should assert that the device
-> has the DMA API in-use using the machinery from the other series.
-> 
-> ie this should not be used to clone non-DMA API iommu_domains..
-> 
-Let me try to confirm the specific here. I should check domain type and
-rejects all others except IOMMU_DOMAIN_DMA type, right? Should also allow
-IOMMU_DOMAIN_IDENTITY.
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ChangeLog:
+v1->v2 jump to the proper location and remove redundant instruction.
+v2->v3 fix the mistake bring by version 2.
+ drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-That makes sense.
-
-> > diff --git a/include/linux/dma-iommu.h b/include/linux/dma-iommu.h
-> > index 24607dc3c2ac..e6cb9b52a420 100644
-> > +++ b/include/linux/dma-iommu.h
-> > @@ -18,6 +18,13 @@ int iommu_get_dma_cookie(struct iommu_domain
-> > *domain); int iommu_get_msi_cookie(struct iommu_domain *domain,
-> > dma_addr_t base); void iommu_put_dma_cookie(struct iommu_domain
-> > *domain); 
-> > +/*
-> > + * For devices that can do DMA request with PASID, setup a system
-> > PASID.
-> > + * Address modes (IOVA, PA) are selected by the platform code.
-> > + */
-> > +int iommu_enable_pasid_dma(struct device *dev, ioasid_t *pasid);
-> > +void iommu_disable_pasid_dma(struct device *dev, ioasid_t pasid);  
-> 
-> The functions already have a kdoc, don't need two..
-> 
-Good point!
-
-Thanks,
-
-Jacob
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+index 76d3f03..24cc0fe 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+@@ -1909,6 +1909,10 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out_instance)
+ 	mutex_init(&instance->vchiq_mutex);
+ 
+ 	instance->bulk_scratch = vmalloc(PAGE_SIZE);
++	if (!instance->bulk_scratch) {
++		err = -ENOMEM;
++		goto err_free_instance;
++	}
+ 	instance->vchiq_instance = vchiq_instance;
+ 
+ 	mutex_init(&instance->context_map_lock);
+@@ -1940,6 +1944,7 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out_instance)
+ 	destroy_workqueue(instance->bulk_wq);
+ err_free:
+ 	vfree(instance->bulk_scratch);
++err_free_instance:
+ 	kfree(instance);
+ err_shutdown_vchiq:
+ 	vchiq_shutdown(vchiq_instance);
+-- 

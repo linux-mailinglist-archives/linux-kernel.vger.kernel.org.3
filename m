@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DC94DA425
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5454DA429
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351772AbiCOUnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S1351780AbiCOUnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245528AbiCOUnH (ORCPT
+        with ESMTP id S1351778AbiCOUnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:43:07 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF354BFDE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:41:54 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id q13so100417plk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:41:54 -0700 (PDT)
+        Tue, 15 Mar 2022 16:43:20 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFE958E7B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:42:07 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id e22so157132ioe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=x2HRjG55PUg/u3UM4Tr3n/OPNpIEJ3hkQ56bvjTB8cc=;
-        b=fc96+5KX3uv9vIHja5m9w7eMmKsL9uvKkZkMJeDlEFxaXlOoGOcK108jKNtxs/jin1
-         z7ZQV7hsQ0725yoDCA9JqSygHu/MNADXpyOUDFmDocLfQZFb9wcGSbKXmg47zG/xmq2s
-         v9PVrbMFnE7Sa56x4BWQdwvh0YAr2p7hCWmRY=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=3LYA3F2vS7/qRcuHKgfo+jK9meyWqLhonxVb0i4Hx5E=;
+        b=JeaFSWMAHkn88CJQ7Mt1LcJQgY6H3z7RzwGpe0n8y3L0NI06u9lVkivHPoeAw0zRmZ
+         K2qGAtbPX8jksaz032oREYbw/0yMTOWJhCv2Or9dsjzcHDEVojzLbdykPuNgiqjKwMni
+         B5OCnDwbIszh/wytrjATI/83XWdwSWil+C/TGz27DNTT/v9TUDHl4qNC7+9tkisJI9ao
+         KtIYrS0WF5D7th0tM1ik+R3w1SV00MX9jDR9O8GENmNV1Bq5JIr6CQU93gUQGVQuynrf
+         aJMq10vY9CPJfe4rDbeT+Q2Y36j2zYZBvWPNct8SlYtiSSs1WsUUsm8RJy+MUE3WUYQQ
+         P+sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=x2HRjG55PUg/u3UM4Tr3n/OPNpIEJ3hkQ56bvjTB8cc=;
-        b=pEqFYhDOxKuucrUJeEoblPjUPcxqe1gRGs8UJEFghnB1i7tiPAHmbXWS4gayhCaT7p
-         sIDe2qzWM/2lcypL+sBXf76HvvDpSgX+jA97+cM1ugnYowAnBPpupxRnf9b+0gXK//ky
-         BWQKyqLNFZTbiemo7kIB1kroBulxvF5I5VQITlRAnawXVgsdqLLIzDsdEnGQjX16cex7
-         nzbt7dGZl2fMeMABjYzuyFPRtKxL8J7vcV0EIxPEGx4jUtOf856S+RK1hKMN+5AEJ+PR
-         oXprOhVlMWNbq6XCNkfkyOEIImw0LjMamzv6/mljPsdIpKmuEQYQeCO8LlyNBGHNrgM6
-         6YNg==
-X-Gm-Message-State: AOAM5314itDg4TUtHPTEI3/SZOIz+mQeCUxEB+VxotiZBV69zlbWm7KC
-        NQhHiSPn78aVE/9rxR/O+iajjQ==
-X-Google-Smtp-Source: ABdhPJyuuEGZ83Uzbvo13KYrTnSMbxORc97gIkcaYmq0yqjspypdLR7q8pNlY7mihpUehwWbKA5bTg==
-X-Received: by 2002:a17:90b:3e8e:b0:1bf:489a:930d with SMTP id rj14-20020a17090b3e8e00b001bf489a930dmr6681587pjb.214.1647376913973;
-        Tue, 15 Mar 2022 13:41:53 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g24-20020a17090a579800b001c60f919656sm82903pji.18.2022.03.15.13.41.53
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=3LYA3F2vS7/qRcuHKgfo+jK9meyWqLhonxVb0i4Hx5E=;
+        b=IKhIs4JSabJxw7z0Vq1FBBu4wvdk9NofbiN62pE30bYiYZll33zo8KL/FiwXKtxUTq
+         YNGLKJ2vLcgRzcswNyD6WuKcecL5noJi1Wz8YOWx/sO+dyyMnWUc1ThMdEFRzqIeVOkq
+         Kq4tGuR096P7budVPXHugRBXlXpYyRXT09KV+oXzVLtP/sHUS4aSuzi493q5lshpRC3L
+         boynMn8SQMNrJApG1FfU4XkMAcMMgCiwpID95VxMjLRHeVmxQRyV5cujv8/qah/C7tsO
+         xNgxJBmzx3HEJ0KIc7l9bXB9Lp5HA3IIH3jKYFLY/jbsE0qOJEJT9hSDAfqsrgcBDvrQ
+         ZzCA==
+X-Gm-Message-State: AOAM533KyzV4bztodIKDBWMvsIYEev/r5Jf/bMQbngDpynD7QhmA0X86
+        0C0pGt25S7hO0iiAGfYr04AjNQ==
+X-Google-Smtp-Source: ABdhPJxyYA1foZ099T/TN7q5N1/aFnC/sZVxSPSTvM5nF2IoFH3QbFH+2gatQLGEz+Ob6ehjUf8AyQ==
+X-Received: by 2002:a05:6638:259:b0:319:e237:b6f9 with SMTP id w25-20020a056638025900b00319e237b6f9mr16110035jaq.186.1647376927106;
+        Tue, 15 Mar 2022 13:42:07 -0700 (PDT)
+Received: from [127.0.1.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id k5-20020a5d97c5000000b006412c791f90sm10260598ios.31.2022.03.15.13.42.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 13:41:53 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 13:41:52 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] x86: Separate out x86_regset for 32 and 64 bit
-Message-ID: <202203151340.7447F75BDC@keescook>
-References: <20220315201706.7576-1-rick.p.edgecombe@intel.com>
- <20220315201706.7576-2-rick.p.edgecombe@intel.com>
+        Tue, 15 Mar 2022 13:42:06 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     linux-block@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        kernel-janitors@vger.kernel.org
+In-Reply-To: <20220314150321.17720-1-lukas.bulwahn@gmail.com>
+References: <20220314150321.17720-1-lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] sr: simplify the local variable initialization in sr_block_open()
+Message-Id: <164737692606.34720.13651107602467649811.b4-ty@kernel.dk>
+Date:   Tue, 15 Mar 2022 14:42:06 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220315201706.7576-2-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 01:17:04PM -0700, Rick Edgecombe wrote:
-> In ptrace, the x86_32_regsets and x86_64_regsets are constructed such that
-> there are no gaps in the arrays. This appears to be for two reasons. One,
-> the code in fill_thread_core_info() can't handle the gaps. This will be
-> addressed in a future patch. And two, not having gaps shrinks the size of
-> the array in memory.
+On Mon, 14 Mar 2022 16:03:21 +0100, Lukas Bulwahn wrote:
+> Commit 01d0c698536f ("sr: implement ->free_disk to simplify refcounting")
+> refactored sr_block_open(), initialized one variable with a duplicate
+> assignment (probably an unintended copy & paste duplication) and turned one
+> error case into an early return, which makes the initialization of the
+> return variable needless.
 > 
-> Both regset arrays draw their indices from a shared enum x86_regset, but 32
-> bit and 64 bit don't all support the same regsets. In the case of
-> IA32_EMULATION they can be compiled in at the same time. So this enum has
-> to be laid out in a special way such that there are no gaps for both
-> x86_32_regsets and x86_64_regsets. This involves creating aliases for
-> enum’s that are only in one view or the other, or creating multiple
-> versions like in the case of REGSET_IOPERM32/REGSET_IOPERM64.
+> So, simplify the local variable initialization in sr_block_open() to make
+> the code a bit more clear.
 > 
-> Simplify the construction of these arrays by just fully separating out the
-> enums for 32 bit and 64 bit. Add some bitsize-free defines for
-> REGSET_GENERAL and REGSET_FP since they are the only two referred to in
-> bitsize generic code.
-> 
-> This should have no functional change and is only changing how constants
-> are generated and named. The enum is local to this file, so it does not
-> introduce any burden on code calling from other places in the kernel now
-> having to worry about whether to use a 32 bit or 64 bit enum name.
-> 
-> [1] https://lore.kernel.org/lkml/20180717162502.32274-1-yu-cheng.yu@intel.com/
-> 
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> [...]
 
-Have you verified there's no binary difference in machine code output?
+Applied, thanks!
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+[1/1] sr: simplify the local variable initialization in sr_block_open()
+      commit: 79d45f57a19537a1ec6ebf836944e968b154f86e
 
+Best regards,
 -- 
-Kees Cook
+Jens Axboe
+
+

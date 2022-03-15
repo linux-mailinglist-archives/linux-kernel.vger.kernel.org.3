@@ -2,147 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA05C4D9DDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78484D9DDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349337AbiCOOk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        id S1349354AbiCOOlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349261AbiCOOk4 (ORCPT
+        with ESMTP id S1349334AbiCOOk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:40:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEB5554B5;
-        Tue, 15 Mar 2022 07:39:44 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FETpll009276;
-        Tue, 15 Mar 2022 14:39:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HdrkUfe0/D5SVxX5k6mR556dpi7SYCIMHcWQB9GIKlo=;
- b=LbVoALjtgafgTI2BCQh6qHaf5siFetQrAIcatQeEdVxURph/o4sVEXrKHMx2c/8k3wrN
- EcbkMI6LjsH0SDP0gXkZb8Eizem2c5wugXoQjFuXP9dXKrDoHfIvmFk6m8eBtY7oUqPH
- 1BfcQX9SS3i+K4bq6BCrde3+gtVMlZzGJLgdRV3sP8OP27KnHTsO84CpDigcQ827TfnE
- oqNRYDUI1VoOkj49rwl0X5g7BugVszAZ5jnEdDJh0q/MmOssk/bZUEOjWJbhXLmDAOET
- odCf/R2LpJprCYcxnXbe4rTc5xAFgB9qkKY7mbu0yBAhuwxVqw7GIB9i3Pda/Tu8lPh+ wQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etujssxng-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 14:39:38 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22FEU8u7011563;
-        Tue, 15 Mar 2022 14:39:37 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etujssxn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 14:39:37 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FEdD3G010354;
-        Tue, 15 Mar 2022 14:39:36 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma04dal.us.ibm.com with ESMTP id 3erk59kb6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 14:39:36 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FEdYfe12386602
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 14:39:34 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3486EAC062;
-        Tue, 15 Mar 2022 14:39:34 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2C1BAC060;
-        Tue, 15 Mar 2022 14:39:19 +0000 (GMT)
-Received: from [9.211.32.184] (unknown [9.211.32.184])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Mar 2022 14:39:19 +0000 (GMT)
-Message-ID: <35ccdbb0-eb21-0c25-638e-4d46fb12e7a9@linux.ibm.com>
-Date:   Tue, 15 Mar 2022 10:39:18 -0400
+        Tue, 15 Mar 2022 10:40:58 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C45A5575C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:39:46 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 136703F366
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647355184;
+        bh=nPejALOuOdUqemhzHbmVuYnKHib7XI81pmDxKpjtzkE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=rkDdnnlFJ0FO+LAUXa+FOkDrffM+fLbgroFnudIvicOhMcRUxnFZvfjetHYnQGJVj
+         4yq/y0f//+0yS9zF5SOrfKtN1oH8212rsv0W7pFfWK3wbyiR5Y5Gw6s+rFjL4BBeET
+         hPmj//utUXlAB72dRxRvjjgtI66xOLDtcS4uWpxMX1oQyAkpJILyaF3rentDpQopGS
+         8hY2jfynVIKeu0fK74RYvviaWHgL+6sDtkhHgELY0CT7OCWRQJ/SV+EyB0yy5Prpgb
+         Pj2M2Q5q4z3trB/zbHmKYNIj4a7spiWukRYHCPeoyju7l2RVfYQer0cfyOQwMdtRoc
+         Lw4NJ9yfHe+gQ==
+Received: by mail-ej1-f69.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso9770755eje.20
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:39:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nPejALOuOdUqemhzHbmVuYnKHib7XI81pmDxKpjtzkE=;
+        b=bojWzlfF1BlBusnDvAfnrgl2dIKBofmwWHaIUl9AVGdqfQ0KRg1sYWyEJo17wC8GHo
+         xRzXIQxFcyVhsuVv18q1rzMSyiSVUQCibowMfTI+mCt6Ay/OYCgzhNSisvksWnuqONjW
+         2L/tZOeUYZiroS/8FJZJfcde5AY6le2zSibU51t0zb2hlUC4yXJPGRQ8r4eeVt7NZCHb
+         10XTpW36Ta0Av8oGlbzgp+I0aRRUOk04pyPK/YhM66eDPl02n4Plo0d+uYn5sP+GR14F
+         7V91bOaCknxirqAvXt4RSILvZtABDh6sCXkbfZWEHoPpIDXmqZsGDCdyBlPnsVGCeBR5
+         3daw==
+X-Gm-Message-State: AOAM530LWfNdYI4mcRMavsBF7MdytdsuzS4C0/IR2WaHLrYOt98IZy31
+        DejYUiuGkR7dxIgan7KGTmEvPiOEPDkKr4I66LmZy0wW6lP56Bja8VkLa8LVXZ7sg5HRoVapleQ
+        qHZCgLS0td6UXmMKv4d+R2+MpeVAJ/frqN8r01cYX5A==
+X-Received: by 2002:aa7:c34d:0:b0:418:c96a:cb58 with SMTP id j13-20020aa7c34d000000b00418c96acb58mr2257789edr.49.1647355182013;
+        Tue, 15 Mar 2022 07:39:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyigKXtRY+yKVzsglw5ybBL5p8Qv91o3EGBORJFXc7hNx9TUa56VJmCYe7gKusief6LkADMqA==
+X-Received: by 2002:aa7:c34d:0:b0:418:c96a:cb58 with SMTP id j13-20020aa7c34d000000b00418c96acb58mr2257769edr.49.1647355181845;
+        Tue, 15 Mar 2022 07:39:41 -0700 (PDT)
+Received: from [192.168.0.156] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.googlemail.com with ESMTPSA id r23-20020aa7da17000000b00415a1431488sm9739991eds.4.2022.03.15.07.39.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 07:39:41 -0700 (PDT)
+Message-ID: <5d9d99d7-b4da-d794-0d2a-9739bb1f3d66@canonical.com>
+Date:   Tue, 15 Mar 2022 15:39:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4 29/32] vfio-pci/zdev: add DTSM to clp group capability
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 4/8] pinctrl: mvebu: pinctrl driver for 98DX2530 SoC
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        pbonzini@redhat.com, corbet@lwn.net, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-doc@vger.kernel.org
-References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
- <20220314194451.58266-30-mjrosato@linux.ibm.com>
- <20220314214928.GK11336@nvidia.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220314214928.GK11336@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        huziji@marvell.com, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        adrian.hunter@intel.com, thomas.petazzoni@bootlin.com,
+        kostap@marvell.com, robert.marko@sartura.hr,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220314213143.2404162-1-chris.packham@alliedtelesis.co.nz>
+ <20220314213143.2404162-5-chris.packham@alliedtelesis.co.nz>
+ <04ed13f1-671f-7416-61d0-0bf452ae862e@canonical.com>
+ <YjCj07kxGh8n45GE@lunn.ch>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YjCj07kxGh8n45GE@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: MRRtZXdh7x6rRNvT7Mp08XCMaAMnd3Gt
-X-Proofpoint-ORIG-GUID: 5j6xI5tjpbzLXiLdvUu1mhlI6rdOOOoP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 mlxlogscore=966 adultscore=0 phishscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203150094
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/22 5:49 PM, Jason Gunthorpe wrote:
-> On Mon, Mar 14, 2022 at 03:44:48PM -0400, Matthew Rosato wrote:
->> The DTSM, or designation type supported mask, indicates what IOAT formats
->> are available to the guest.  For an interpreted device, userspace will not
->> know what format(s) the IOAT assist supports, so pass it via the
->> capability chain.  Since the value belongs to the Query PCI Function Group
->> clp, let's extend the existing capability with a new version.
+On 15/03/2022 15:33, Andrew Lunn wrote:
+>>> +static struct platform_driver ac5_pinctrl_driver = {
+>>> +	.driver = {
+>>> +		.name = "ac5-pinctrl",
+>>> +		.of_match_table = of_match_ptr(ac5_pinctrl_of_match),
+>>
+>> of_match_ptr() does not look correct for OF-only platform. This should
+>> complain in W=1 compile tests on !OF config.
 > 
-> Why is this on the VFIO device?
+> The Marvell family of SoC which this embedded SoC borrows HW blocks
+> from can boot using ACPI. I doubt anybody would boot this particularly
+> SoC using ACPI, but the drivers Chris copied probably do build !OF for
+> when ACPI is in us.
 
-Current vfio_pci_zdev support adds a series of capability chains to the 
-VFIO_DEVICE_GET_INFO ioctl.  These capability chains are all related to 
-output values associated with what are basically s390x query instructions.
+What I wanted to say - current setting should cause warnings. Therefore
+choose:
+1. For ACPI && !OF this should be still without of_match_ptr, to allow
+ACPI matching by OF (PRP0001).
+2. For !OF with of_match_ptr() (weird setup... how to match then?) the
+ac5_pinctrl_of_match should be marked as maybe unused.
 
-The capability chain being modified by this patch is used to populate a 
-response to the 'query this zPCI group' instruction.
 
-> 
-> Maybe I don't quite understand it right, but the IOAT is the
-> 'userspace page table'?
-
-IOAT = I/O Address Translation tables;  the head of which is called the 
-IOTA (translation anchor).  But yes, this would generally refer to the 
-guest DMA tables.
-
-Specifically here we are only talking about the DTSM which is the 
-formats that the guest is allowed to use for their address translation 
-tables, because the hardware (or in our case the intermediary kvm iommu) 
-can only operate on certain formats.
-
-> 
-> That is something that should be modeled as a nested iommu domain.
-> 
-> Querying the formats and any control logic for this should be on the
-> iommu side not built into VFIO.
-
-I agree that the DTSM is really controlled by what the IOMMU domain can 
-support (e.g. what guest table formats it can actually operate on) and 
-so the DTSM value should come from there vs out of KVM; but is there 
-harm in including the query response data here along with the rest of 
-the response information for 'query this zPCI group'?
+Best regards,
+Krzysztof

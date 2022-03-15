@@ -2,50 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C52B4D9F13
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23874D9F18
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349749AbiCOPsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S1349694AbiCOPt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343990AbiCOPsg (ORCPT
+        with ESMTP id S1343990AbiCOPt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:48:36 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D2513CD6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:47:23 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso11598708ilu.19
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:47:23 -0700 (PDT)
+        Tue, 15 Mar 2022 11:49:26 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C5D4132E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:48:12 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d7so2613705wrb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=a6KAQY3VyZyFpo4BZbWR8METDP2MdzVLWAebj4jnwww=;
+        b=o7hixJ6lijOXZAgiitpF7PHbOcpIqonKR1ge8zwFS5ikWmo1YAOfaaF6isNmOAPCaa
+         4jGxF+CNwCTi2CExXNHoRrRlQjfN/tnmSpc0nyxKqZyEazvLwQUYjP721XfcD5Na3sIb
+         WRI0ype/m3Udye6Gy02ZOsQlEuWH1wWqKcAprZojzibJ47ItQYIHGrvuUpfWt+TUnud1
+         S4tBk3KPdzCAd5lBdyyv/ItdxdWHhlwQD4eyeUUDTOQYECTUnl/zDRPnAY/zEqO+7LBH
+         yh04HaRppyqOvbXqSOMuBF10vncnmuaGsIewrDOyNS4yjatFMg4pH+e0oRz65Alrk6dw
+         q0tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=28O813Gr5PUQvn0MMcHbwsRx/N+acJ5kb7o53u4YKO0=;
-        b=0aebW71nxthovNAQ9hrwnmSBzsx5a+YtaGv1ZOWcu2v5b3pmOZW+NbS18Dsqmdnvzr
-         b1raog9ScnRkDcbtk/cWShRSIM3wAs/ORU/T6pVtLgMeyBSgHPTmhbOW+e7xML+9CNE7
-         7CYDLAoRggAfNfb/p/LPE178/dvcNRUn0yCMkyByFuytwj3B+ue6MkBeQPwuSK+MnUOC
-         +ePQh8AskYLqmU39LySjRMGNIjFkBM7tdGy64YdFn8bPWG2IRjwhytwJ1H+fRJktI/VJ
-         1ST1iVm0ac8wu3R8g3I8gaB6BnS64akvog49HdCzyCrzVSSwT3ATAcOuVVFWKZejSjNp
-         SXhA==
-X-Gm-Message-State: AOAM532eD1Ssg5/d/c3XBeF5Dr+oPrKojYsG36sj7+4dm9PAEbuY/n2R
-        4Ft6sModvrlB8qY8PRVC+c0inAhzRPjuubK9zMaQYasyhkB3
-X-Google-Smtp-Source: ABdhPJywPzr6mlKfw7AaKLCUPTJJ+2D7GtE9sQ9pZnQv49hU59a+AxAQHQyin3UVAh22WzaEKIHWZuZq+pP/icf7fEczCloQZBP1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=a6KAQY3VyZyFpo4BZbWR8METDP2MdzVLWAebj4jnwww=;
+        b=bJRfpOJ+cFS8USflOPFPCyb9kLIJLQS76ltZCXKI6cU+rfU4NGMSZANX1pbu6VL6NE
+         Z6H0dxUYXmEOZrJS3h4lyT9qAfI1cndvTZKmvmyabPgE7UxbL21HeNe/3l8vJH/EmQx/
+         I3pYkdXP44j+X5XNUDceXrG539qyqLf+mxUtiS1y3ifyZUB5IQLhtRdh/1o28HZLld5u
+         /P5zAivrBAHnmhejeZgXXmkGqFl0q7R4pQjrrD6999D7gR9p9i5O7E3bUp444I67MP3Z
+         aJP58ktCHjQdqfbabMgq7bhz7iFrbud8WeTLzh1z5c+Sd2nI/5B7Rnl03rZCAz7HK4zE
+         /kJw==
+X-Gm-Message-State: AOAM533O3BqSOxv2cu3UTdtoxbHlli6QJ5zrOmzO+q3MxPmw6QTTsOzC
+        YzDjticoFws+QdaOJiz2GYSjcsagL94GRQ==
+X-Google-Smtp-Source: ABdhPJxU2sFg3JEB5WDFx15gM3NxvEeHGqMJAVHLcn7LQ+/tHdNXzB5qtYwU8j4Amky5SInopLZ/2A==
+X-Received: by 2002:a5d:4528:0:b0:203:b457:3bac with SMTP id j8-20020a5d4528000000b00203b4573bacmr8601902wra.563.1647359291204;
+        Tue, 15 Mar 2022 08:48:11 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id z5-20020a05600c0a0500b0037fa93193a8sm3169049wmp.44.2022.03.15.08.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 08:48:10 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 15:48:08 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: Add ChromeOS fingerprint binding
+Message-ID: <YjC1OLsB8/JXLEzF@google.com>
+References: <20220314232214.4183078-1-swboyd@chromium.org>
+ <20220314232214.4183078-2-swboyd@chromium.org>
+ <e7f9466e-03c9-7754-0dc6-a04823d1047a@canonical.com>
+ <YjB0JOKysPpg2KGF@google.com>
+ <9ec3c26a-3b85-4bea-5a5b-de9ac570cfca@canonical.com>
+ <YjB46Sq3IwvgR8MB@google.com>
+ <CAE-0n51uDh2Cf_wGpAVH1t=T0A1eTT=+KU3WMtxtyPL3kLDAdA@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b048:0:b0:311:85be:a797 with SMTP id
- q8-20020a02b048000000b0031185bea797mr24041450jah.284.1647359243136; Tue, 15
- Mar 2022 08:47:23 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 08:47:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000081366905da43b67d@google.com>
-Subject: [syzbot] INFO: task hung in io_uring_del_tctx_node (2)
-From:   syzbot <syzbot+771a9fd5d128e0a5708c@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE-0n51uDh2Cf_wGpAVH1t=T0A1eTT=+KU3WMtxtyPL3kLDAdA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,152 +85,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 15 Mar 2022, Stephen Boyd wrote:
 
-syzbot found the following issue on:
+> Quoting Lee Jones (2022-03-15 04:30:49)
+> > On Tue, 15 Mar 2022, Krzysztof Kozlowski wrote:
+> >
+> > > On 15/03/2022 12:10, Lee Jones wrote:
+> > > > On Tue, 15 Mar 2022, Krzysztof Kozlowski wrote:
+> > > >
+> > > >> On 15/03/2022 00:22, Stephen Boyd wrote:
+> > > >>> Add a binding to describe the fingerprint processor found on Chromeboks
+> > > >>> with a fingerprint sensor.
+> > > >>>
+> > > >>> Cc: Rob Herring <robh+dt@kernel.org>
+> > > >>> Cc: <devicetree@vger.kernel.org>
+> > > >>> Cc: Guenter Roeck <groeck@chromium.org>
+> > > >>> Cc: Douglas Anderson <dianders@chromium.org>
+> > > >>> Cc: Craig Hesling <hesling@chromium.org>
+> > > >>> Cc: Tom Hughes <tomhughes@chromium.org>
+> > > >>> Cc: Alexandru M Stan <amstan@chromium.org>
+> > > >>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > > >>> ---
+> > > >>>  .../bindings/mfd/google,cros-ec-fp.yaml       | 89 +++++++++++++++++++
+> > > >>>  1 file changed, 89 insertions(+)
+> > > >>>  create mode 100644 Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml
+> > > >>>
+> > > >>> diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml
+> > > >>> new file mode 100644
+> > > >>> index 000000000000..05d2b2b9b713
+> > > >>> --- /dev/null
+> > > >>> +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml
+> > > >>> @@ -0,0 +1,89 @@
+> > > >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > >>> +%YAML 1.2
+> > > >>> +---
+> > > >>> +$id: http://devicetree.org/schemas/mfd/google,cros-ec-fp.yaml#
+> > > >>
+> > > >> Why is this in the MFD directory? Is it really a Multi Function Device?
+> > > >> Description is rather opposite. You also did not CC MFD maintainer.
+> > > >
+> > > > A lot of the ChromeOS Embedded Controller support used to be located
+> > > > in MFD.  There are still remnants, but most was moved to
+> > > > drivers/platform IIRC.
+> > > >
+> > > > Please see: drivers/mfd/cros_ec_dev.c
+> > >
+> > > Yes, I know, that part is a MFD. But why the fingerprint controller part
+> > > is MFD? To me it is closer to input device.
+> >
+> > It's tough to say from what I was sent above.
+> >
+> > But yes, sounds like it.
+> >
+> > We do not want any device 'functionality' in MFD ideally.
+> >
+> 
+> I put it next to the existing cros-ec binding. The existing binding is
+> there because of historical reasons as far as I know. Otherwise it
+> didn't seem MFD related so I didn't Cc mfd maintainer/list. New file
+> additions don't usually conflict with anything and this is in the
+> bindings directory so the driver side maintainer would be picking up the
+> binding.
 
-HEAD commit:    dda64ead7e82 Merge tag 'trace-v5.17-rc6' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15d7671d700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
-dashboard link: https://syzkaller.appspot.com/bug?extid=771a9fd5d128e0a5708c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11cb0461700000
+That's not how it works unfortunately.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+771a9fd5d128e0a5708c@syzkaller.appspotmail.com
+This file is located in the MFD bindings directory, so I would be
+picking it up (if it ends up staying here).
 
-INFO: task syz-executor.1:31000 blocked for more than 143 seconds.
-      Not tainted 5.17.0-rc7-syzkaller-00200-gdda64ead7e82 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.1  state:D stack:29160 pid:31000 ppid: 15800 flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4995 [inline]
- __schedule+0xa94/0x4910 kernel/sched/core.c:6304
- schedule+0xd2/0x260 kernel/sched/core.c:6377
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6436
- __mutex_lock_common kernel/locking/mutex.c:673 [inline]
- __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:733
- io_uring_del_tctx_node+0x109/0x20a fs/io_uring.c:9875
- io_uring_clean_tctx fs/io_uring.c:9891 [inline]
- io_uring_cancel_generic+0x5c3/0x695 fs/io_uring.c:9969
- io_uring_files_cancel include/linux/io_uring.h:16 [inline]
- do_exit+0x523/0x2a30 kernel/exit.c:761
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- get_signal+0x45a/0x2490 kernel/signal.c:2863
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fe6cca58049
-RSP: 002b:00007fe6cc1cd218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007fe6ccb6af68 RCX: 00007fe6cca58049
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fe6ccb6af68
-RBP: 00007fe6ccb6af60 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe6ccb6af6c
-R13: 00007ffc7aa5c47f R14: 00007fe6cc1cd300 R15: 0000000000022000
- </TASK>
+Best to rely on `get_maintainer.pl` for this:
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/27:
- #0: ffffffff8bb820a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
-2 locks held by getty/3275:
- #0: ffff88814aeae098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
- #1: ffffc90002b5e2e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2075
-1 lock held by syz-executor.1/31000:
- #0: ffff88801f8d10a8 (&ctx->uring_lock){+.+.}-{3:3}, at: io_uring_del_tctx_node+0x109/0x20a fs/io_uring.c:9875
-2 locks held by syz-executor.1/31016:
+$ ./scripts/get_maintainer.pl -f Documentation/devicetree/bindings/mfd/
+Lee Jones <lee.jones@linaro.org> (supporter:MULTIFUNCTION DEVICES (MFD))
+Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+linux-kernel@vger.kernel.org (open list)
 
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 PID: 27 Comm: khungtaskd Not tainted 5.17.0-rc7-syzkaller-00200-gdda64ead7e82 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1e6/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:212 [inline]
- watchdog+0xc1d/0xf50 kernel/hung_task.c:369
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 3752 Comm: kworker/u4:5 Not tainted 5.17.0-rc7-syzkaller-00200-gdda64ead7e82 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: bat_events batadv_nc_worker
-RIP: 0010:__lock_is_held kernel/locking/lockdep.c:5380 [inline]
-RIP: 0010:lock_is_held_type+0xa7/0x140 kernel/locking/lockdep.c:5682
-Code: 12 e9 8a 00 00 00 83 c3 01 41 3b 9c 24 58 0a 00 00 7d 7d 48 63 c3 48 89 ee 48 8d 04 80 4d 8d 7c c5 00 4c 89 ff e8 99 fe ff ff <85> c0 74 d8 41 83 fe ff 41 bd 01 00 00 00 74 14 31 c0 41 f6 47 22
-RSP: 0018:ffffc90002db7b00 EFLAGS: 00000096
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: ffffffff8bb81fe0 RDI: ffff888075e36b08
-RBP: ffffffff8bb81fe0 R08: 0000000000000000 R09: ffffffff8d93f017
-R10: fffffbfff1b27e02 R11: 0000000000000000 R12: ffff888075e36080
-R13: ffff888075e36ae0 R14: 00000000ffffffff R15: ffff888075e36b08
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055f753521608 CR3: 000000002103b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_is_held include/linux/lockdep.h:283 [inline]
- rcu_read_lock_sched_held+0x3a/0x70 kernel/rcu/update.c:125
- trace_lock_release include/trace/events/lock.h:58 [inline]
- lock_release+0x522/0x720 kernel/locking/lockdep.c:5650
- __raw_spin_unlock_bh include/linux/spinlock_api_smp.h:165 [inline]
- _raw_spin_unlock_bh+0x12/0x30 kernel/locking/spinlock.c:210
- spin_unlock_bh include/linux/spinlock.h:394 [inline]
- batadv_nc_purge_paths+0x2a5/0x3a0 net/batman-adv/network-coding.c:471
- batadv_nc_worker+0x8f9/0xfa0 net/batman-adv/network-coding.c:720
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	12 e9                	adc    %cl,%ch
-   2:	8a 00                	mov    (%rax),%al
-   4:	00 00                	add    %al,(%rax)
-   6:	83 c3 01             	add    $0x1,%ebx
-   9:	41 3b 9c 24 58 0a 00 	cmp    0xa58(%r12),%ebx
-  10:	00
-  11:	7d 7d                	jge    0x90
-  13:	48 63 c3             	movslq %ebx,%rax
-  16:	48 89 ee             	mov    %rbp,%rsi
-  19:	48 8d 04 80          	lea    (%rax,%rax,4),%rax
-  1d:	4d 8d 7c c5 00       	lea    0x0(%r13,%rax,8),%r15
-  22:	4c 89 ff             	mov    %r15,%rdi
-  25:	e8 99 fe ff ff       	callq  0xfffffec3
-* 2a:	85 c0                	test   %eax,%eax <-- trapping instruction
-  2c:	74 d8                	je     0x6
-  2e:	41 83 fe ff          	cmp    $0xffffffff,%r14d
-  32:	41 bd 01 00 00 00    	mov    $0x1,%r13d
-  38:	74 14                	je     0x4e
-  3a:	31 c0                	xor    %eax,%eax
-  3c:	41                   	rex.B
-  3d:	f6                   	.byte 0xf6
-  3e:	47                   	rex.RXB
-  3f:	22                   	.byte 0x22
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

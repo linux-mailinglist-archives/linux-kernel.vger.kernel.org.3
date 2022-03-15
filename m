@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A97C4D92A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDC94D92A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239932AbiCOCc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 22:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S1344478AbiCOCdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 22:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344497AbiCOCcx (ORCPT
+        with ESMTP id S237373AbiCOCdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 22:32:53 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B9D473A7;
-        Mon, 14 Mar 2022 19:31:43 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id u2so144867ple.10;
-        Mon, 14 Mar 2022 19:31:43 -0700 (PDT)
+        Mon, 14 Mar 2022 22:33:41 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08B647398
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so1041163pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=NsGzSUuRAUEHH/9SM8pnSMjXSu1YX9VwAzHp5uJO3Bo=;
-        b=SG5515+bdjCSQH5TVjdvzA0SK6Uio2R/TvBkAU2wCBacAYVukzHSTcac/Rf3MlRazC
-         PwTYCKE02yWjMCAQxUAdmNKlzZe2z8zy07nyYoVzXEw7Y1OVRoePD7V9lF7VNNahUv3L
-         B5m4SB4SvfZacPiMXdsNjUD0OBXHmgXCB5Dsana21MIN/2VB5O9M7J61lYqlm/IlPtTQ
-         PZOQUFLuOvDQCv0lJ7+5G175b6NUweNXRyIoJ/TkKyR63lQPMxgK7tZNRt1SUTTocPv7
-         SXl9hjC72Q1xBKXUs7M1clgyEMNUgTGjX24rIfYKrOGt7q9sDpo/7IR2RopvhwHXpIaM
-         bNaA==
+        bh=UisOO7Q5sWcTyT6YGXIaBwA+2hXKA5zA0oioUT8I7D0=;
+        b=GTEc8J50ZYn6y/baRDpqB9hxBgnQuXZskdpa3JoDVSVvdYYM7wfVnFY6S8hnEPVohx
+         joDYJjS8jnXWq6nqY6ttRVmX2LHgIYLaT0HVT6ZyLyovJgWdinXFX9gfM43cLZwU4vl+
+         ePUXEltdKnI5iR8jDAR8LU32uFlP5/BDB/O+jyHrv/iFythb3WNV1aFD2r4YbSgeDsYi
+         VdioSeQvK9Vw22hcNhyJGyNTzHRMsvgeAfgHRW2/xW+YGq9/j0F7ZGZ/74wGMX6y+7Te
+         Equf0m6AuMHCLgK1Xtoutq4yc3JtaOLGRFvo1y69+8pST22viSiCmVy9nUzZUzmXomh6
+         eI4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=NsGzSUuRAUEHH/9SM8pnSMjXSu1YX9VwAzHp5uJO3Bo=;
-        b=wMNcOjFzgCKqWTzh4g42S9OWHplxhEiioqkByLFqP2AqNmjZHqU4R28K1oO4WSZeBD
-         MdJUnIIGip718hL4sdyQR2zprRsXrn5sKJJif/QHE6ETqPgr6D21Jl37QX+kSOJ2bjdw
-         9+iHz74woDZAx6pwjTmrsckCI0vXmUpabIUYZzhjb3L3eYm6zhcDXi5chWdvKN7ePuUS
-         Df+4kCKmPwJh6QlCEMyjnFaPZ8yZAweEQL2qeimCkkaN6GUU9g1rlegE6Z2sVHOU0JMQ
-         FOjAg4qfbqfNyZMhNTIHOcIOv4QkqLNxBJQYmfzjSbeTrigX/EyXYrJ638UFFh1hZW65
-         h25A==
-X-Gm-Message-State: AOAM532H681xlzJM5FqXXCKgMU4sLNB65cM3MN4Ibj/VAxBpD+KQoz86
-        jrSRU7ds9BbpdV7O24e0DRA=
-X-Google-Smtp-Source: ABdhPJx3e0thfMZRyXjYf49ySSC0Jr5740y5Bhz/nQTIW5Em1or5HO+v6U26gDMredBMgOeFWZSOrg==
-X-Received: by 2002:a17:90a:5ae4:b0:1bf:9c61:6973 with SMTP id n91-20020a17090a5ae400b001bf9c616973mr2149929pji.73.1647311503033;
-        Mon, 14 Mar 2022 19:31:43 -0700 (PDT)
+        bh=UisOO7Q5sWcTyT6YGXIaBwA+2hXKA5zA0oioUT8I7D0=;
+        b=v41K0Woml+ttGRxP42GMJjepWOY/Giwsq9/qpZJVN18Xnc5vxSv+FPYKEbbJ8+y8LU
+         gwaBWaML0QtyBrRKSKxAFrjAQP4rltWydFFzRs1yUYO17xQVYSwaHIrTVceRphWir+Xn
+         y27MKHghb0QkHl+1hRUrS5H99/pSexvxhrjNk8e/XgI8Y6zy6ky0GClVeukfuIoitSqG
+         qtr9XQZnz9RdDTkVa1Bj9LgC1kBfGai4ybhE3vTLZfDLWatYolXXcZWHQOKDvKBCf8ln
+         K4UwG/H3j+zn+qaCphMDUqBCFg4sVQBgJJ3IV1qcC233FtG+Bb8dmq943WIScRXM/tIm
+         /SOQ==
+X-Gm-Message-State: AOAM532OAaS1R6uXySXBWOAGjPUv5gQH2kQSkZRAxFmscZJyGcKeyzMv
+        qViAYc9wZx6livd8ZxbjdIM=
+X-Google-Smtp-Source: ABdhPJzUWiTgcfMjzsN+iQA9b8xgnqGDJdPduixz6F8CAvVouD8nSKSZmWCti0JMDhaZ5GQA5KNzvQ==
+X-Received: by 2002:a17:90a:8595:b0:1bf:4592:a819 with SMTP id m21-20020a17090a859500b001bf4592a819mr2084621pjn.183.1647311550493;
+        Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q2-20020a056a00150200b004f8d80ced3csm2050220pfu.40.2022.03.14.19.31.41
+        by smtp.gmail.com with ESMTPSA id l188-20020a6225c5000000b004f715e38283sm21291197pfl.63.2022.03.14.19.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 19:31:42 -0700 (PDT)
+        Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
 To:     broonie@kernel.org
-Cc:     ldewangan@nvidia.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+Cc:     lgirdwood@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] spi: tegra20: Use of_device_get_match_data()
-Date:   Tue, 15 Mar 2022 02:31:38 +0000
-Message-Id: <20220315023138.2118293-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ASoC: ak4642: Use of_device_get_match_data()
+Date:   Tue, 15 Mar 2022 02:32:26 +0000
+Message-Id: <20220315023226.2118354-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,29 +77,32 @@ Use of_device_get_match_data() to simplify the code.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/spi/spi-tegra20-slink.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ sound/soc/codecs/ak4613.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 2a03739a0c60..80c3787deea9 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1006,14 +1006,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	struct resource		*r;
- 	int ret, spi_irq;
- 	const struct tegra_slink_chip_data *cdata = NULL;
--	const struct of_device_id *match;
+diff --git a/sound/soc/codecs/ak4613.c b/sound/soc/codecs/ak4613.c
+index 4d2e78101f28..e4c643724dd9 100644
+--- a/sound/soc/codecs/ak4613.c
++++ b/sound/soc/codecs/ak4613.c
+@@ -653,15 +653,10 @@ static int ak4613_i2c_probe(struct i2c_client *i2c,
+ 	struct ak4613_priv *priv;
  
--	match = of_match_device(tegra_slink_of_match, &pdev->dev);
--	if (!match) {
--		dev_err(&pdev->dev, "Error: No device match found\n");
--		return -ENODEV;
+ 	regmap_cfg = NULL;
+-	if (np) {
+-		const struct of_device_id *of_id;
+-
+-		of_id = of_match_device(ak4613_of_match, dev);
+-		if (of_id)
+-			regmap_cfg = of_id->data;
+-	} else {
++	if (np)
++		regmap_cfg = of_device_get_match_data(dev);
++	else
+ 		regmap_cfg = (const struct regmap_config *)id->driver_data;
 -	}
--	cdata = match->data;
-+	cdata = of_device_get_match_data(&pdev->dev);
  
- 	master = spi_alloc_master(&pdev->dev, sizeof(*tspi));
- 	if (!master) {
+ 	if (!regmap_cfg)
+ 		return -EINVAL;
 -- 
 2.25.1
 

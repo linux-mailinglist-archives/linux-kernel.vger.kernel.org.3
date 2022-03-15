@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497DC4D90BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797CD4D90C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239129AbiCOACg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S234687AbiCOAEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 20:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbiCOACd (ORCPT
+        with ESMTP id S230147AbiCOAEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:02:33 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5DE2A726
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:01:22 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id u3so34122185ybh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:01:22 -0700 (PDT)
+        Mon, 14 Mar 2022 20:04:43 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84D81AF21
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:03:31 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id l2so34098616ybe.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:03:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/Hx8gzlcnA9WQe4/nRaiJeKdSgiXZDA8CSlyHo2MoEU=;
-        b=jcHH0Naib9/jGqvrQ1aYDeQe3af8nnI2aVm55ZrM2tqkwPQZn77OZg8GBKl4niqFlQ
-         AgaFjT7RvjJ1AtNBsiX1VKChX7x2LCEBUrwA4ucBUbp+gNR+ORBmJ7+O91o1H1DRkdzZ
-         IE80u8haFRV+iUSWtskB4AzB1hgZlQvsiwDTgviW2XjmenxrO6BOvb0VMtE/mFkNiFM1
-         duwvtqqfBzFKgdy2HKekrDBNDHC5cL2jHfIk6dwXOzAPWNKms4SNu4Cznl84wLUduZ5k
-         AsDyPAX/JN0LPzP6m+1z1Qm/u8oNdK0JLnr87UllvIAwirMbxU8QFDQeNOaroPoUgKsZ
-         nkBA==
+        bh=eaFiWYFimi6t+iDaRbg5VVUqLWbBbcAAPN8RwZuBxaA=;
+        b=Evf9i8Vavlbp/u63YDa0b6dZ80bygUabrLqlyN40q1MZ27k5qrx/u4OW/4tuhC8OMF
+         +Bye2Mp1QIvPSqzamY+t3RQchPD2MLYoUdTSDyMuNbof9w5LnR/WIqrhoZv0PcZw7JDn
+         ewg7P3pD6vnbLmBfI3E8uBBcXZPtS86aOy9/aSN5TGuA8odGcTZ5tRVLS7oyOI9Gqxrb
+         dTHG7G3Hm0LzHx+2/Ki0WSQCHGYlfXa69jJ7wtRAuqRAWuc5QsRn5eOJmmUchv3T1jmh
+         CFHY/AJbnb+eHiv+rFZG6Po9pmOcDfOa0U2TnOp56tYIZCLcL1S7LQdVbRwWBzlkTgdB
+         f4fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/Hx8gzlcnA9WQe4/nRaiJeKdSgiXZDA8CSlyHo2MoEU=;
-        b=vZZ7jcCYBuL/7BP3qdI8cN6zKUzWwvEtnyy5H+Tequ9LIQsfbkC1EnPubhbQCeFIFy
-         SkZaVkWU684bZKlRUv8lCdNGPILHdqAObJq2DNijlYQew0Bj2oX+9b8lJtiCgZje3fv+
-         DdDqsLAWjaD3BtLF2LpmYgliXHY51hMTVxpbOegbbiviVAXL5cZX/s9Xo1UikQ/t5q2z
-         pO0DM5gdV/CVwrmC+kJD23P6jburA2RFOZKP8wIfK6tsDzAqb7v2dOf8jJhDZainhu/g
-         3OM3JLiIQPGAetLLxN8ZLPELJAuXNfHUZKztgJYU2KZgXZ6I1okURXgpv5N6PdjCtErL
-         0TKg==
-X-Gm-Message-State: AOAM531t7jVIw8jgEyEObtF5H5nCmKFMeCAm0a54+YnFrFeStnG+PUBG
-        R4vpC/A9F59UKSBB69aDF/QQ7eprovVphX9Dv4GXSjx55tw=
-X-Google-Smtp-Source: ABdhPJw5LtCuJ+XoMQAG1Kz6dZV2htXDgYWN1IuTcwXuEzgQE4YVaS5pBngW1oMfQeA9WTvMA9GcUMZRxHPHeRyBljA=
-X-Received: by 2002:a5b:dc5:0:b0:624:f16d:7069 with SMTP id
- t5-20020a5b0dc5000000b00624f16d7069mr19792106ybr.295.1647302481820; Mon, 14
- Mar 2022 17:01:21 -0700 (PDT)
+        bh=eaFiWYFimi6t+iDaRbg5VVUqLWbBbcAAPN8RwZuBxaA=;
+        b=rP36k6juxzDauyyyw7DrGLzjNm485Q7uJHY2+hGwsnZ36UCzekRuJOnPv1Na4iAzHn
+         j2ekv94CzhS2KajB2PaS+bvwf4r9bsCjOTmEn30ZGd5lBsuRK3hY7fjR1L/5i4Gt9ouA
+         UUsTxXzc8d1ITvGrfiRsn1/7GeKWJ/rar//nfHlS5SpMRstEwyY/UXLYB1rNkJinb8K7
+         NbpwItWBvKl9P0Yjj3dTLpDeqBK6OHJ449ZXjfkYD5g3psXnwxSZf6ZNuueJePScHhp7
+         wqjpsjIAcFVscyhv8wB9h1wyEmYb/M2CModfAWpwXqT2Bqb++HvZd1IjH55kA7LFRdR8
+         cbng==
+X-Gm-Message-State: AOAM533SWkVxP5tipQ122zPix9Eo4no8fR1xVz+roH43pfkSYakeeB0p
+        8AyRuPmzOop5H+oksVU3MZTWE3OrNofm2ts8Zv5xrwUuHLQ=
+X-Google-Smtp-Source: ABdhPJxyj894QQIw5lT5V5GCdo2yicrQwpuE4rn1dkU8fipKlETir9Y/deoFS0Uih9bzTNQN2ZF+WA9I0zSMZIVhy2U=
+X-Received: by 2002:a25:2308:0:b0:628:9a66:7327 with SMTP id
+ j8-20020a252308000000b006289a667327mr20187412ybj.626.1647302611182; Mon, 14
+ Mar 2022 17:03:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220216032124.28067-1-guodong.liu@mediatek.com>
-In-Reply-To: <20220216032124.28067-1-guodong.liu@mediatek.com>
+References: <20220228010103.2725893-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20220228010103.2725893-1-peng.fan@oss.nxp.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 15 Mar 2022 01:01:10 +0100
-Message-ID: <CACRpkdb5t_rKzRy6+NFy1zbrQstPXNMaUndvNvt6VOfiN2z2mA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] pinctrl: mediatek: Support pinctrl driver on mt8186
-To:     Guodong Liu <guodong.liu@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>, linux-gpio@vger.kernel.org,
+Date:   Tue, 15 Mar 2022 01:03:20 +0100
+Message-ID: <CACRpkdZ-6pj2fRBm8XOG78z2PcP_3fDPXk6xmr4LTrPEKsJS0A@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] dt-bindings: pinctrl: imx93: Add pinctrl binding
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     aisheng.dong@nxp.com, festevam@gmail.com, shawnguo@kernel.org,
+        stefan@agner.ch, robh+dt@kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,17 +69,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 4:21 AM Guodong Liu <guodong.liu@mediatek.com> wrote:
+On Mon, Feb 28, 2022 at 1:59 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
 
-> changes since v4:
-> - update mt8186 pull up RSEL type define value
-> - update mt8186 pull up RSEL type si unit value(ohm)
-> - update macro definition name
-> - update mt8186 bias resistance selectio register description
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> Add pinctrl binding doc for i.MX93
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Patches applied for v5.18!
-
-If people have more comments they can be fixed with further patches.
+Patch applied.
 
 Yours,
 Linus Walleij

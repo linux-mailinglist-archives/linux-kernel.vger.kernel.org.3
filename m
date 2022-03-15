@@ -2,182 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461814D958B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C373B4D9590
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345611AbiCOHrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S1345622AbiCOHsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244096AbiCOHrU (ORCPT
+        with ESMTP id S1345615AbiCOHs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:47:20 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2077.outbound.protection.outlook.com [40.107.244.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C1F4B857
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:46:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZlix7ftm475tc6uCpA9pCzDe4X04gjXHEYd5w/uOuFKh4KMJa25YAqtb46a8dBm+AEzTzprQMaC8d7eBtZpRlUbpqU6EgZIP09mUxplFImocw0vwr8iTav6ZfYig9Z5uSfCfRpA4COWjcGqWHQnzodmCKXwzmSWjllackYfcfKZmGKE6KVclAO7escP0nR1K7nCHu9RnQSF7l0B4Yc6ySRLFYYYHu6p7qqjfyxNeZPfb1+teQ42X7QgufsdajjGS75wlIq/c+sjZ9ZV7wmdih+nrCaPRJGJ/0HAM2MQXTwB10KkorlAp49CD2UGZjsi0r3NAAGsi4tvUwYB5GSWYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uexN9cNhq5OH/h0uM9Wm8mO/wSFnM017dTs6SOWiaiI=;
- b=Ei4A+Sxght7wComfaRDCA5PBcDYVgOuq2zXKrzDFYoOrboqJMvOqHHQM0HH9dic3FkkxTwJvHoNHUbpA6HX/6vV4AuZ67co0KVwNFjXZ180LCVOc7OVFs0+nYxAup9B38T8MqlSnNg3MrGIAdZcn2/drMcenqDqK+Nc1kafWwEsCPwbC38aAFF/O8Ywl3CzbJz8P19AZ6qzuhY5we7ohUNsI7OKZPcNwg+tMVq3NPRpQd4NwQ+WeKqqvvgb2k6xGerCmFMHK0VyRpzyH47fzseCOqPeHx8Td6mPTcb9uzH3QANLfNRGh/erGLeL/u4KjqepSNpz2FYD8zAe0J01icQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uexN9cNhq5OH/h0uM9Wm8mO/wSFnM017dTs6SOWiaiI=;
- b=AUd4Jd6oyTr55mbiQTfZ3ZSbQRb7xaNnrme8l4Ccv0uZ9vDLUC7wo4NXTRiSsIlhR+XJWhu+mAvnPOUvBdoCdRLLih16WtB+iOlYFRNkHBtH2CINUyoPH9ygYJoDsB+hEkwsBTJXBfkZC2GTUsjz/F8mnBHOXURRZzW8nNuYG3M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB3053.namprd12.prod.outlook.com (2603:10b6:208:c7::24)
- by DM6PR12MB2762.namprd12.prod.outlook.com (2603:10b6:5:45::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Tue, 15 Mar
- 2022 07:46:07 +0000
-Received: from MN2PR12MB3053.namprd12.prod.outlook.com
- ([fe80::9117:ca88:805a:6d5b]) by MN2PR12MB3053.namprd12.prod.outlook.com
- ([fe80::9117:ca88:805a:6d5b%4]) with mapi id 15.20.5061.028; Tue, 15 Mar 2022
- 07:46:06 +0000
-Message-ID: <aa641092-98e6-114d-b423-13e0bff248fa@amd.com>
-Date:   Tue, 15 Mar 2022 13:15:52 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v6 10/12] perf tools: Improve IBS error handling
-Content-Language: en-US
-To:     Stephane Eranian <eranian@google.com>
-Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
-        jolsa@redhat.com, songliubraving@fb.com,
-        linux-kernel@vger.kernel.org, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220208211637.2221872-1-eranian@google.com>
- <20220208211637.2221872-11-eranian@google.com>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <20220208211637.2221872-11-eranian@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BM1PR01CA0148.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:68::18) To MN2PR12MB3053.namprd12.prod.outlook.com
- (2603:10b6:208:c7::24)
+        Tue, 15 Mar 2022 03:48:27 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B74B85E;
+        Tue, 15 Mar 2022 00:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647330435; x=1678866435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=quiUqKlBf7DYFz3VVEXbltIrZqTg2LO5WwsAXib9Hnk=;
+  b=Za91geH1P2I45mTw4L9pQJ8ybXHUH1UhAqLa0YZhd1jJ27oXqh7nRHNo
+   wUmMcbiafaO/QDspj5baHKA99szuOkdNFKLgZQfnB/eArKIfvEig38fDJ
+   fOAJR6c+UPOa0lQ8vgYIYzF6LBJ4zYDNRDdfCXzYLN6WI0/NjY8gRexxr
+   OclT6UicGAgdr63nnBljE31ggcXIJECIFXeZOEfm1SWML5ovrUF9dGAOr
+   zqbI6JMs0TpuqpfsSEbBZpVsd25cLSz93mLWn5inRhfnEWeco9SjUCfyH
+   uSiCUYk7FqyT45sj2OWnsVIX3ALvD+SRXcrkRQFNZUYh+4MtLopFplB07
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243689305"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="243689305"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 00:47:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="540325193"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Mar 2022 00:47:12 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nU1tf-000AhV-ER; Tue, 15 Mar 2022 07:47:11 +0000
+Date:   Tue, 15 Mar 2022 15:46:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Haowen Bai <baihaowen@meizu.com>, freude@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Haowen Bai <baihaowen@meizu.com>
+Subject: Re: [PATCH] s390: crypto: Use min() instead of doing it manually
+Message-ID: <202203151545.3poQ7F02-lkp@intel.com>
+References: <1647311321-26303-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 10597c64-8c09-4866-5519-08da0657dcd8
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2762:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB27621B1615F6CD63F3E4B489E0109@DM6PR12MB2762.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4rKE/RepYh/+fCAxu6xAujFFYiEZq4hYpBEqWu7XYdiNXtfsvLRm48YEmGkuCwVfkUSXMCJ/HLoKWrnJyjb2gPo2mZ+38oTfGYq2gHd0KKkQRqnvd8WRJw0Co3ZXq45kFVp3AluMfjesjrIgeRQp6NBXkxtuoWJDImL51K9FhMJ4HhYb+Qx6rOeY9xwzlwk/Vt3AblmA4yaZ+tbimr4XPcqlCvNlHUxHz/xYVp5cB1y0ImFLVZdJKGyYcU5itNZVDP8p1zRUohm62XORegFPe3hnmgu6qt0QgLPjxJMyQyhASCwlMpmhaT+WquraEIJqxOheNMOh+J/gIiPhP7iRYC1YPQ5GijJrksxwYqebmSnbeM7HNm8k5cTKh3fKJOSM6ZCWDymEAF6IbKuLtPjYlpfVHotlli4xt6e7lfTlF/l3fAFbkFCJUBiIl+dUVok3MQEtlDRoFmwxuAA4+AaJBR3SxVfrXzrGsBxeRIiPmdEykLcU5JjyH7NHLEfc0FqMB3pHM2G8zoqO0KCtHpVnm9EsWBPjLf5SgWFZY907Vbc2enEyx0F7OHpDTOMjq9z5PLpKAg5TjXLp6rEiKlfVqVj0gX6VI9i9wFZLS9wuWdptblZxBAxVPE3Ts7aRD0tcj1siBl/Y4dPlngKHhIcJMEWTXaU8p74CS8EwGGsSQxtBmFMjmvFtgKlTCL2ylC9R41ZVo5hqZvsUnhkl0yNRWmPAErSPKrEe7bSW5a4+IwGF+em0jHCMFo565IpjVm30
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3053.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(31696002)(6486002)(316002)(2616005)(6916009)(53546011)(6512007)(66476007)(6506007)(66556008)(66946007)(4326008)(38100700002)(8676002)(86362001)(31686004)(5660300002)(6666004)(508600001)(2906002)(44832011)(8936002)(36756003)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eFZRVS9ZS0xVaXlTaWIzeHNIQUlnZ3RhOW9aMjVLem1pL2FXWUFiMGlvdnhH?=
- =?utf-8?B?dFJpRnEwdGpvRkJUQ2RuTVZuR1pXN1hkeDBzMmYyVWtsWnJkK20yMTN2QU1p?=
- =?utf-8?B?NDdKTGxHVU1OaXB5Y3ZPREIzazBBTHJzY2pCdXRyVzRVck40Vk4vNVFBN1FL?=
- =?utf-8?B?U3NPY09Fbzg2Und3b0xLMktOM01MRVFRNWMvSCtLc0dwU0hCTXZyUXFrbmdu?=
- =?utf-8?B?SEM5RGViVWEwcnlmdlZuajk3ZU51dUVIMXc1cnpLZC9BdXBRZ3RsdnkzZ3BE?=
- =?utf-8?B?cVFMOEZUVnBnekZVMWVKL21JZCtQaStxZ240S2FQbjF1VmdSUzFLN0hJaG5I?=
- =?utf-8?B?THJSZS9ES2xnZkFuaS9nYkQ1dVFJdlBqd3Bib2xSU08xZFpiTklWS25pNlJz?=
- =?utf-8?B?VDl0UjZvSUxKV2JrdCtqOUNwZ0pLaUN6dUJ3R2REem5hVkJ2SmVZRnVEQlRh?=
- =?utf-8?B?NG5jcC85M0l2WDVUdjJjbGFidmhoQnVRTEFoakIwVVhwZjRMVlVvRjVOVHlP?=
- =?utf-8?B?MnBUZGdkWTRDUXNNQytZLzI3WFlyTHZXUkZBN3pjZlNUTXVNWG5kYTV1K2w0?=
- =?utf-8?B?OHc0cjVPK1NWcTdGME1JZE5PQWlKVzNucTVSdFZzRUtCWnllL1hQdTJQOUo5?=
- =?utf-8?B?cVplV2krUlFtanFMSnU4SzEwTVRtelA2WFVTVWdoR3lFbVhZUVJGSXhiTHc5?=
- =?utf-8?B?bWxyS2VUbVhlWnJ6QXZSVVJkYVhvckpxektiaXFOalRhZGdWaytRZ0ExNmQ3?=
- =?utf-8?B?VGxoMFFVY1FaNmJrR0dKdlZSVTZ0cXJFZUFyTDhIYllHL25PMjRFaUxHWHJ1?=
- =?utf-8?B?S254cGNWMXlwaC81eHkrNy9xTFNqTHQwSURlMzQ5MzRmL0hlUldZK1VDSkp0?=
- =?utf-8?B?bTdkdXpDNkgxMnM2aElPQ0lBZ0VQQVlIcHlEQ0ZJY1EwOW9yNW4vNG9vb1BI?=
- =?utf-8?B?VEZLalJ0bXo4VGFhZGpUeTZqVUl3bk9VN1FxYXoxVEx5aHNnSm5TdzhWWlow?=
- =?utf-8?B?ZjR4WFUyVU8xRVdqQmZMeEh3WC9CcTU4ZUZnRnc1NnlDVis5Y2tZQ1p6b1Nw?=
- =?utf-8?B?dStpYit1WWh1L3RaakhJWGtlSTRVU0JFRWlRZGJtbXlOd3BPMjJqdUcxVURY?=
- =?utf-8?B?cEpoTjZuL2djR3Q3SURscnF4bTFpRm1RL1ZmVlZkNWF5WnlmalhlbGtwLzJO?=
- =?utf-8?B?ZHplWXFTc0NBMytBZVdUNWRGdWlocXlkVkdEN0s2Q2xRUkZLdEdyTUlaSHEy?=
- =?utf-8?B?enc2M0o5N2dyTnVUNzkxSGlXZkZJWHEzaDNSakN0Ny9HUFBUdE1Wb3NLdVpV?=
- =?utf-8?B?bzFGU05TV2ovQ011RnVXSDh4WWN5MWY1VXpWUWxyaVhac2tQQ3djbFdtTjYr?=
- =?utf-8?B?clFPdW5UYW8vWndOUmFLS3N3dlFNMHJpcGxuSW1xZkQzdkk2dk5aTEFvSno2?=
- =?utf-8?B?WE85b3grQmVsNGNSVTFwS05SNklTR0ROZG5WdEdYMFVGTkpZb3VFRkpDd0la?=
- =?utf-8?B?b3hvN1hVcVYvSzNtWVg2dWVhM1hiRzJYM3hNUXNzcGthUVR5djRUQ2VtSlpq?=
- =?utf-8?B?VEo1RU5xRDRrZ3QyaGIrWCtjc3E3akF6c1BvU0ZGenQyak9WR3NMN2NSUUdt?=
- =?utf-8?B?eDdodWo0Sko3K2VpN2FPMFE4QStLZlBvb2t5TVFVSTlQeVdxeVVMbXo5bHBp?=
- =?utf-8?B?bWJCUkFuclZvRGwvY0hqMFdHUWxEVXpKK2tuZXhWMlpmbGFIMnMyRFpaQldq?=
- =?utf-8?B?bjNVM2dSOHZIUFN6RlkraFZ4R0s5VWoyT3luT0pVdm5wOEdOeElPMDU5eUov?=
- =?utf-8?B?YWZ2Tm1SblAzaG5Fbi8zQUwyUjlqaURyU3dScHkwZDRsQnVpenRSQ1JjNGpt?=
- =?utf-8?B?TEJ2NURiTVRGQlB5VTZKU1Exd3p2Zk55d3RDZGZiZ25DNjhmNXNTZjdMSGpk?=
- =?utf-8?Q?dD8E815zQ6UjzjUahiNwXr94WBs3ETMM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10597c64-8c09-4866-5519-08da0657dcd8
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3053.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2022 07:46:06.7339
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eioXNsIK0Mqp9o+IUlAeFBOksckvFmzRuCVNP9kwPHRtsZQgQHUkD2PuMra68EH5a1yta9NG1y6rOx/qJkJwow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2762
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647311321-26303-1-git-send-email-baihaowen@meizu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephane,
+Hi Haowen,
 
-On 09-Feb-22 2:46 AM, Stephane Eranian wrote:
-> From: Kim Phillips <kim.phillips@amd.com>
-> 
-> improve the error message returned on failed perf_event_open() on AMD when
-> using IBS.
-> 
-> Output of executing 'perf record -e ibs_op// true' BEFORE this patch:
-> 
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument)for event (ibs_op//u).
-> /bin/dmesg | grep -i perf may provide additional information.
-> 
-> Output after:
-> 
-> AMD IBS cannot exclude kernel events.  Try running at a higher privilege level.
-> 
-> Output of executing 'sudo perf record -e ibs_op// true' BEFORE this patch:
-> 
-> Error:
-> The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (ibs_op//).
-> /bin/dmesg | grep -i perf may provide additional information.
-> 
-> Output after:
-> 
-> Error:
-> AMD IBS may only be available in system-wide/per-cpu mode.  Try using -a, or -C and workload affinity
+Thank you for the patch! Perhaps something to improve:
 
-This patch seems to be causing regression to perf python test.
+[auto build test WARNING on s390/features]
+[also build test WARNING on v5.17-rc8 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Without this patch:
+url:    https://github.com/0day-ci/linux/commits/Haowen-Bai/s390-crypto-Use-min-instead-of-doing-it-manually/20220315-103027
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
+config: s390-randconfig-r044-20220314 (https://download.01.org/0day-ci/archive/20220315/202203151545.3poQ7F02-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7d8807f03eff8ba4f49bf809d565da740a8ab11e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Haowen-Bai/s390-crypto-Use-min-instead-of-doing-it-manually/20220315-103027
+        git checkout 7d8807f03eff8ba4f49bf809d565da740a8ab11e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/s390/crypto/
 
-  $ sudo ./perf test -vvv 19
-   19: 'import perf' in python                                         :
-  --- start ---
-  test child forked, pid 145391
-  python usage test: "echo "import sys ; sys.path.append('python'); import perf" | '/usr/bin/python2' "
-  test child finished with 0
-  ---- end ----
-  'import perf' in python: Ok
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-With this patch:
+All warnings (new ones prefixed by >>):
 
-  $ sudo ./perf test -vvv 19
-   19: 'import perf' in python                                         :
-  --- start ---
-  test child forked, pid 144415
-  python usage test: "echo "import sys ; sys.path.append('python'); import perf" | '/usr/bin/python2' "
-  Traceback (most recent call last):
-    File "<stdin>", line 1, in <module>
-  ImportError: python/perf.so: undefined symbol: perf_env__cpuid
-  test child finished with -1
-  ---- end ----
-  'import perf' in python: FAILED!
+   In file included from drivers/s390/crypto/zcrypt_ep11misc.c:20:
+   In file included from drivers/s390/crypto/ap_bus.h:20:
+   In file included from arch/s390/include/asm/ap.h:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/s390/crypto/zcrypt_ep11misc.c:20:
+   In file included from drivers/s390/crypto/ap_bus.h:20:
+   In file included from arch/s390/include/asm/ap.h:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/s390/crypto/zcrypt_ep11misc.c:20:
+   In file included from drivers/s390/crypto/ap_bus.h:20:
+   In file included from arch/s390/include/asm/ap.h:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/s390/crypto/zcrypt_ep11misc.c:1112:13: warning: comparison of distinct pointer types ('typeof (kb->head.len) *' (aka 'unsigned short *') and 'typeof (keysize) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   keysize = min(kb->head.len, keysize);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   13 warnings generated.
 
-Thanks,
-Ravi
+
+vim +1112 drivers/s390/crypto/zcrypt_ep11misc.c
+
+  1067	
+  1068	static int ep11_wrapkey(u16 card, u16 domain,
+  1069				const u8 *key, size_t keysize,
+  1070				u32 mech, const u8 *iv,
+  1071				u8 *databuf, size_t *datasize)
+  1072	{
+  1073		struct wk_req_pl {
+  1074			struct pl_head head;
+  1075			u8  var_tag;
+  1076			u8  var_len;
+  1077			u32 var;
+  1078			u8  mech_tag;
+  1079			u8  mech_len;
+  1080			u32 mech;
+  1081			/*
+  1082			 * followed by iv data
+  1083			 * followed by key tag + key blob
+  1084			 * followed by dummy kek param
+  1085			 * followed by dummy mac param
+  1086			 */
+  1087		} __packed * req_pl;
+  1088		struct wk_rep_pl {
+  1089			struct pl_head head;
+  1090			u8  rc_tag;
+  1091			u8  rc_len;
+  1092			u32 rc;
+  1093			u8  data_tag;
+  1094			u8  data_lenfmt;
+  1095			u16 data_len;
+  1096			u8  data[1024];
+  1097		} __packed * rep_pl;
+  1098		struct ep11_cprb *req = NULL, *rep = NULL;
+  1099		struct ep11_target_dev target;
+  1100		struct ep11_urb *urb = NULL;
+  1101		struct ep11keyblob *kb;
+  1102		size_t req_pl_size;
+  1103		int api, rc = -ENOMEM;
+  1104		bool has_header = false;
+  1105		u8 *p;
+  1106	
+  1107		/* maybe the session field holds a header with key info */
+  1108		kb = (struct ep11keyblob *) key;
+  1109		if (kb->head.type == TOKTYPE_NON_CCA &&
+  1110		    kb->head.version == TOKVER_EP11_AES) {
+  1111			has_header = true;
+> 1112			keysize = min(kb->head.len, keysize);
+  1113		}
+  1114	
+  1115		/* request cprb and payload */
+  1116		req_pl_size = sizeof(struct wk_req_pl) + (iv ? 16 : 0)
+  1117			+ ASN1TAGLEN(keysize) + 4;
+  1118		req = alloc_cprb(req_pl_size);
+  1119		if (!req)
+  1120			goto out;
+  1121		if (!mech || mech == 0x80060001)
+  1122			req->flags |= 0x20; /* CPACF_WRAP needs special bit */
+  1123		req_pl = (struct wk_req_pl *) (((u8 *) req) + sizeof(*req));
+  1124		api = (!mech || mech == 0x80060001) ? 4 : 1; /* CKM_IBM_CPACF_WRAP */
+  1125		prep_head(&req_pl->head, req_pl_size, api, 33); /* WrapKey */
+  1126		req_pl->var_tag = 0x04;
+  1127		req_pl->var_len = sizeof(u32);
+  1128		/* mech is mech + mech params (iv here) */
+  1129		req_pl->mech_tag = 0x04;
+  1130		req_pl->mech_len = sizeof(u32) + (iv ? 16 : 0);
+  1131		req_pl->mech = (mech ? mech : 0x80060001); /* CKM_IBM_CPACF_WRAP */
+  1132		p = ((u8 *) req_pl) + sizeof(*req_pl);
+  1133		if (iv) {
+  1134			memcpy(p, iv, 16);
+  1135			p += 16;
+  1136		}
+  1137		/* key blob */
+  1138		p += asn1tag_write(p, 0x04, key, keysize);
+  1139		/* maybe the key argument needs the head data cleaned out */
+  1140		if (has_header) {
+  1141			kb = (struct ep11keyblob *)(p - keysize);
+  1142			memset(&kb->head, 0, sizeof(kb->head));
+  1143		}
+  1144		/* empty kek tag */
+  1145		*p++ = 0x04;
+  1146		*p++ = 0;
+  1147		/* empty mac tag */
+  1148		*p++ = 0x04;
+  1149		*p++ = 0;
+  1150	
+  1151		/* reply cprb and payload */
+  1152		rep = alloc_cprb(sizeof(struct wk_rep_pl));
+  1153		if (!rep)
+  1154			goto out;
+  1155		rep_pl = (struct wk_rep_pl *) (((u8 *) rep) + sizeof(*rep));
+  1156	
+  1157		/* urb and target */
+  1158		urb = kmalloc(sizeof(struct ep11_urb), GFP_KERNEL);
+  1159		if (!urb)
+  1160			goto out;
+  1161		target.ap_id = card;
+  1162		target.dom_id = domain;
+  1163		prep_urb(urb, &target, 1,
+  1164			 req, sizeof(*req) + req_pl_size,
+  1165			 rep, sizeof(*rep) + sizeof(*rep_pl));
+  1166	
+  1167		rc = zcrypt_send_ep11_cprb(urb);
+  1168		if (rc) {
+  1169			DEBUG_ERR(
+  1170				"%s zcrypt_send_ep11_cprb(card=%d dom=%d) failed, rc=%d\n",
+  1171				__func__, (int) card, (int) domain, rc);
+  1172			goto out;
+  1173		}
+  1174	
+  1175		rc = check_reply_pl((u8 *)rep_pl, __func__);
+  1176		if (rc)
+  1177			goto out;
+  1178		if (rep_pl->data_tag != 0x04 || rep_pl->data_lenfmt != 0x82) {
+  1179			DEBUG_ERR("%s unknown reply data format\n", __func__);
+  1180			rc = -EIO;
+  1181			goto out;
+  1182		}
+  1183		if (rep_pl->data_len > *datasize) {
+  1184			DEBUG_ERR("%s mismatch reply data len / data buffer len\n",
+  1185				  __func__);
+  1186			rc = -ENOSPC;
+  1187			goto out;
+  1188		}
+  1189	
+  1190		/* copy the data from the cprb to the data buffer */
+  1191		memcpy(databuf, rep_pl->data, rep_pl->data_len);
+  1192		*datasize = rep_pl->data_len;
+  1193	
+  1194	out:
+  1195		kfree(req);
+  1196		kfree(rep);
+  1197		kfree(urb);
+  1198		return rc;
+  1199	}
+  1200	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

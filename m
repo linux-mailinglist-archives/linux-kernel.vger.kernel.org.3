@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6FD4D9956
+	by mail.lfdr.de (Postfix) with ESMTP id A45944D9955
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347524AbiCOKrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S1347385AbiCOKrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347348AbiCOKpi (ORCPT
+        with ESMTP id S1347347AbiCOKpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 06:45:38 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374C03818E;
-        Tue, 15 Mar 2022 03:44:04 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:44:01 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A1D387A3;
+        Tue, 15 Mar 2022 03:44:05 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:44:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647341042;
+        s=2020; t=1647341043;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZLq02G9lGSoFei6eJJRxJPjfGRNv5HVQcuIgy4v11FU=;
-        b=h7Fl+lKOdjD3vrAln+EpUZB5P/UvMzxC9ePYMnVNiTnCsEXddd9nmtYhhA5YCwG1eVAn3T
-        uq5OnfJSGCxIstcW/AQg9dNSS35Li5KggXXfshwv6fuX5aKqCYamdWEQ4VsQcgkYqaf0h6
-        fMElE7/S/4sZlJQW+RiLK3ZBNiclvglqtcNdn5VItnnK9BgxghBqc60HVgiNMZx6BLev5W
-        +CDuJGZwIyyQG7UUaY78tV8UfCfjMonh+DsK+LF485Idaew6L3hJqZy8ZESzpjTYpKDMVo
-        L3cijIkZ1iACamsAMtx8b7d+dK5ykDYqoGIKzFd4HyWsLciLRzZfWN3egCDTbQ==
+        bh=QjIqBA18d+6k68nF1JF3P0tCn6XSCRmHUgMmZ3p20Y4=;
+        b=tN84Xxxhstz05GypjccyddASGrvt3zVXZfbwf+4JEqP4PMVHSCW8D96S9D0tn4bkdZeVSM
+        WrO2mGGUASJbMYKBjjF4e0w0oRj4zq4pVuMEaC7gybuuz1VmpXJ25e7OWjqwNu/jBWLLmd
+        +Nprr6kKTYC5FW6U8M4584m+izSUAoGgfWSSWkwZHI2ANGFlDr31sKYY/RTEAjdG34jjr3
+        5cwpJ3xPoGG6RBd+4fiK+GVugsTZGgumVEn1PMvVkgvwBz+yKLbF7bM2LpSD7aJ3nV11dT
+        1HRGUUNP2m3oJAVX5wGEF59ScppHIlrUtZMYesgluFFN/8zdhRdTGfu+GuxXSQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647341042;
+        s=2020e; t=1647341043;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZLq02G9lGSoFei6eJJRxJPjfGRNv5HVQcuIgy4v11FU=;
-        b=ygBqzxSM65fImj+XqPHQKCmMeQHbZkEkDLcGG4p88s8AqUQ1+0MrdLb7581zERzZjAz9Lu
-        V+V8LIjmD74gfrBA==
+        bh=QjIqBA18d+6k68nF1JF3P0tCn6XSCRmHUgMmZ3p20Y4=;
+        b=di7+i8AFSsb4flUU3Tgz5oXpgoXnniWK/KeGmcZmMraqVj8UgKFrw7ySqKlxFy0aWqYHUQ
+        PAx5HP6w5Z32iQDA==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,ftrace: Make function-graph play nice
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+Subject: [tip: x86/core] x86/livepatch: Validate __fentry__ location
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154318.347296408@infradead.org>
-References: <20220308154318.347296408@infradead.org>
+In-Reply-To: <20220308154318.285971256@infradead.org>
+References: <20220308154318.285971256@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164734104175.16921.11198842533678838543.tip-bot2@tip-bot2>
+Message-ID: <164734104253.16921.15291352375479075056.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,115 +67,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     e52fc2cf3f662828cc0d51c4b73bed73ad275fce
-Gitweb:        https://git.kernel.org/tip/e52fc2cf3f662828cc0d51c4b73bed73ad275fce
+Commit-ID:     d15cb3dab1e4f00e29599a4f5e1f6678a530d270
+Gitweb:        https://git.kernel.org/tip/d15cb3dab1e4f00e29599a4f5e1f6678a530d270
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:31 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:30 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 15 Mar 2022 10:32:37 +01:00
 
-x86/ibt,ftrace: Make function-graph play nice
+x86/livepatch: Validate __fentry__ location
 
-Return trampoline must not use indirect branch to return; while this
-preserves the RSB, it is fundamentally incompatible with IBT. Instead
-use a retpoline like ROP gadget that defeats IBT while not unbalancing
-the RSB.
+Currently livepatch assumes __fentry__ lives at func+0, which is most
+likely untrue with IBT on. Instead make it use ftrace_location() by
+default which both validates and finds the actual ip if there is any
+in the same symbol.
 
-And since ftrace_stub is no longer a plain RET, don't use it to copy
-from. Since RET is a trivial instruction, poke it directly.
-
+Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154318.347296408@infradead.org
+Link: https://lore.kernel.org/r/20220308154318.285971256@infradead.org
 ---
- arch/x86/kernel/ftrace.c    |  9 ++-------
- arch/x86/kernel/ftrace_64.S | 21 +++++++++++++++++----
- 2 files changed, 19 insertions(+), 11 deletions(-)
+ arch/powerpc/include/asm/livepatch.h | 10 ----------
+ kernel/livepatch/patch.c             | 19 ++-----------------
+ 2 files changed, 2 insertions(+), 27 deletions(-)
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 7cc540e..1e31c7d 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -316,12 +316,12 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	unsigned long offset;
- 	unsigned long npages;
- 	unsigned long size;
--	unsigned long retq;
- 	unsigned long *ptr;
- 	void *trampoline;
- 	void *ip;
- 	/* 48 8b 15 <offset> is movq <offset>(%rip), %rdx */
- 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
-+	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
- 	union ftrace_op_code_union op_ptr;
- 	int ret;
+diff --git a/arch/powerpc/include/asm/livepatch.h b/arch/powerpc/include/asm/livepatch.h
+index 4fe018c..7b9dcd5 100644
+--- a/arch/powerpc/include/asm/livepatch.h
++++ b/arch/powerpc/include/asm/livepatch.h
+@@ -19,16 +19,6 @@ static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+ 	regs_set_return_ip(regs, ip);
+ }
  
-@@ -359,12 +359,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 		goto fail;
- 
- 	ip = trampoline + size;
+-#define klp_get_ftrace_location klp_get_ftrace_location
+-static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
+-{
+-	/*
+-	 * Live patch works only with -mprofile-kernel on PPC. In this case,
+-	 * the ftrace location is always within the first 16 bytes.
+-	 */
+-	return ftrace_location_range(faddr, faddr + 16);
+-}
 -
--	/* The trampoline ends with ret(q) */
--	retq = (unsigned long)ftrace_stub;
--	ret = copy_from_kernel_nofault(ip, (void *)retq, RET_SIZE);
--	if (WARN_ON(ret < 0))
--		goto fail;
-+	memcpy(ip, retq, RET_SIZE);
+ static inline void klp_init_thread_info(struct task_struct *p)
+ {
+ 	/* + 1 to account for STACK_END_MAGIC */
+diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
+index fe316c0..c172bf9 100644
+--- a/kernel/livepatch/patch.c
++++ b/kernel/livepatch/patch.c
+@@ -124,19 +124,6 @@ unlock:
+ 	ftrace_test_recursion_unlock(bit);
+ }
  
- 	/* No need to test direct calls on created trampolines */
- 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 11ac028..e32b5cd 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -176,10 +176,10 @@ SYM_FUNC_END(ftrace_caller);
- SYM_FUNC_START(ftrace_epilogue)
- /*
-  * This is weak to keep gas from relaxing the jumps.
-- * It is also used to copy the RET for trampolines.
-  */
- SYM_INNER_LABEL_ALIGN(ftrace_stub, SYM_L_WEAK)
- 	UNWIND_HINT_FUNC
-+	ENDBR
- 	RET
- SYM_FUNC_END(ftrace_epilogue)
+-/*
+- * Convert a function address into the appropriate ftrace location.
+- *
+- * Usually this is just the address of the function, but on some architectures
+- * it's more complicated so allow them to provide a custom behaviour.
+- */
+-#ifndef klp_get_ftrace_location
+-static unsigned long klp_get_ftrace_location(unsigned long faddr)
+-{
+-	return faddr;
+-}
+-#endif
+-
+ static void klp_unpatch_func(struct klp_func *func)
+ {
+ 	struct klp_ops *ops;
+@@ -153,8 +140,7 @@ static void klp_unpatch_func(struct klp_func *func)
+ 	if (list_is_singular(&ops->func_stack)) {
+ 		unsigned long ftrace_loc;
  
-@@ -284,6 +284,7 @@ SYM_FUNC_START(__fentry__)
- 	jnz trace
+-		ftrace_loc =
+-			klp_get_ftrace_location((unsigned long)func->old_func);
++		ftrace_loc = ftrace_location((unsigned long)func->old_func);
+ 		if (WARN_ON(!ftrace_loc))
+ 			return;
  
- SYM_INNER_LABEL(ftrace_stub, SYM_L_GLOBAL)
-+	ENDBR
- 	RET
+@@ -186,8 +172,7 @@ static int klp_patch_func(struct klp_func *func)
+ 	if (!ops) {
+ 		unsigned long ftrace_loc;
  
- trace:
-@@ -307,7 +308,7 @@ EXPORT_SYMBOL(__fentry__)
- 
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
- SYM_FUNC_START(return_to_handler)
--	subq  $24, %rsp
-+	subq  $16, %rsp
- 
- 	/* Save the return values */
- 	movq %rax, (%rsp)
-@@ -319,7 +320,19 @@ SYM_FUNC_START(return_to_handler)
- 	movq %rax, %rdi
- 	movq 8(%rsp), %rdx
- 	movq (%rsp), %rax
--	addq $24, %rsp
--	JMP_NOSPEC rdi
-+
-+	addq $16, %rsp
-+	/*
-+	 * Jump back to the old return address. This cannot be JMP_NOSPEC rdi
-+	 * since IBT would demand that contain ENDBR, which simply isn't so for
-+	 * return addresses. Use a retpoline here to keep the RSB balanced.
-+	 */
-+	ANNOTATE_INTRA_FUNCTION_CALL
-+	call .Ldo_rop
-+	int3
-+.Ldo_rop:
-+	mov %rdi, (%rsp)
-+	UNWIND_HINT_FUNC
-+	RET
- SYM_FUNC_END(return_to_handler)
- #endif
+-		ftrace_loc =
+-			klp_get_ftrace_location((unsigned long)func->old_func);
++		ftrace_loc = ftrace_location((unsigned long)func->old_func);
+ 		if (!ftrace_loc) {
+ 			pr_err("failed to find location for function '%s'\n",
+ 				func->old_name);

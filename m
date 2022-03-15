@@ -2,157 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096A54D977E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442D74D9781
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346523AbiCOJT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S1346542AbiCOJUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346538AbiCOJT5 (ORCPT
+        with ESMTP id S1346543AbiCOJUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:19:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9596F13D3F;
-        Tue, 15 Mar 2022 02:18:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHnrx2HZnz4xvg;
-        Tue, 15 Mar 2022 20:18:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647335923;
-        bh=qKRtZYhERZZIQ1+1ePZpbu07BiR32VleXFJbK5n6jcg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=drez3G/AgYNVI8zRiawEaZIoTQjqQC4iLs/D0+HU/CF23pJdl8Ofo2DJhrSIhXWBW
-         gCJfp9VpAKxk0i8KuRda7z7avBe+vutiYGcy1u68lc5zgFqTMaHWbBmd8t+393fPPt
-         Dq3+/yPXmMvWG0qxVS6KBpwqyMhzbo6+QOfTqI0ApbTw+m4huM4HNlWoc423cl7gFH
-         UMQPw0Z9LmnbyETnvmQ5QpiAB1o8mzYiTvSn92v1wzj8xtKJ+vE3U7dJcqfOR+yooG
-         uSHriS0ON1Ye/ynFOA98bRAuVq3zL3fMfLtM0isv2nt1T2YqfYvstrc8iElK/Wn25k
-         lybrO1ci+EPYw==
-Date:   Tue, 15 Mar 2022 20:18:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhen Ni <nizhen@uniontech.com>
-Subject: linux-next: manual merge of the sysctl tree with the tip tree
-Message-ID: <20220315201840.6146f234@canb.auug.org.au>
+        Tue, 15 Mar 2022 05:20:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865653C49D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647335973; x=1678871973;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=46zrfiN9MIVTyj5zc/5rHeZmNQw0cmaObFmdxkGALgs=;
+  b=hxO1jfcBTGpAq3pxpO6YuVPo56KNSNV5q6kJLk30DEgi4TpRge0AAdO9
+   G8RWla8uazJPfWjTXJhFrHehBC9VHq69ZCbRBJPx3gh/pPCP5E3f5ksJw
+   Xl4E/3G/SNxFiS4G2yO7hbcUWN4SzftBhULr/cG9b7fmuN+NcdebgPT85
+   z6qRPXjnR8v7uRWM4FYp0D+/QU0VHnST6o90oS3WGnsUdQRy1hXtVO+0q
+   oUmzt+Kp1b+TCEZzgOxsdq16martUcvEnstW5XDfQ5yPb/pmKuR0flhmK
+   gVsP9OENGEEqaDFaBVkN3a3DanDtN6xNrqWl/NPZtRHUHVljfVgp+Imjs
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319474632"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="319474632"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 02:19:32 -0700
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="540356304"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 02:19:30 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm: Only re-generate demotion targets when a numa
+ node changes its N_CPU state
+References: <20220314150945.12694-1-osalvador@suse.de>
+        <87pmmn3eh6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <YjBPKmIpPNoJU/67@localhost.localdomain>
+Date:   Tue, 15 Mar 2022 17:19:28 +0800
+In-Reply-To: <YjBPKmIpPNoJU/67@localhost.localdomain> (Oscar Salvador's
+        message of "Tue, 15 Mar 2022 09:32:42 +0100")
+Message-ID: <87lexb1skf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vj6a5IykJBDqtYDTjRghcBq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vj6a5IykJBDqtYDTjRghcBq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Oscar Salvador <osalvador@suse.de> writes:
 
-Hi all,
+> On Tue, Mar 15, 2022 at 02:40:53PM +0800, Huang, Ying wrote:
+>> Oscar Salvador <osalvador@suse.de> writes:
+>> CPUHP_MM_DEMOTION_DEAD and CPUHP_AP_MM_DEMOTION_ONLINE needs to be
+>> deleted from include/linux/cpuhotplug.h too.
+>
+> Hi Huang Ying,
+>
+> Right.
+>
+> Andrew, can you apply this on top? Thanks
+>
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index 411a428ace4d..8a9a2d01b7c6 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -72,8 +72,6 @@ enum cpuhp_state {
+>  	CPUHP_SLUB_DEAD,
+>  	CPUHP_DEBUG_OBJ_DEAD,
+>  	CPUHP_MM_WRITEBACK_DEAD,
+> -	/* Must be after CPUHP_MM_VMSTAT_DEAD */
+> -	CPUHP_MM_DEMOTION_DEAD,
+>  	CPUHP_MM_VMSTAT_DEAD,
+>  	CPUHP_SOFTIRQ_DEAD,
+>  	CPUHP_NET_MVNETA_DEAD,
+> @@ -244,8 +242,6 @@ enum cpuhp_state {
+>  	CPUHP_AP_BASE_CACHEINFO_ONLINE,
+>  	CPUHP_AP_ONLINE_DYN,
+>  	CPUHP_AP_ONLINE_DYN_END		= CPUHP_AP_ONLINE_DYN + 30,
+> -	/* Must be after CPUHP_AP_ONLINE_DYN for node_states[N_CPU] update */
+> -	CPUHP_AP_MM_DEMOTION_ONLINE,
+>  	CPUHP_AP_X86_HPET_ONLINE,
+>  	CPUHP_AP_X86_KVM_CLK_ONLINE,
+>  	CPUHP_AP_ACTIVE,
+>
+> Huang Ying, it would be great to have your Reviewed-by/Acked-by if you
+> are ok with the outome.
 
-Today's linux-next merge of the sysctl tree got a conflict in:
+Sure.
 
-  kernel/sched/deadline.c
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-between commit:
-
-  eb77cf1c151c ("sched/deadline: Remove unused def_dl_bandwidth")
-
-from the tip tree and commit:
-
-  ebb891f03580 ("sched: Move deadline_period sysctls to deadline.c")
-
-from the sysctl tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc kernel/sched/deadline.c
-index 11cdc6d0c45f,9ed9ace11151..000000000000
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@@ -18,6 -18,42 +18,40 @@@
-  #include "sched.h"
-  #include "pelt.h"
- =20
- -struct dl_bandwidth def_dl_bandwidth;
- -
-+ /*
-+  * Default limits for DL period; on the top end we guard against small ut=
-il
-+  * tasks still getting ridiculously long effective runtimes, on the botto=
-m end we
-+  * guard against timer DoS.
-+  */
-+ static unsigned int sysctl_sched_dl_period_max =3D 1 << 22; /* ~4 seconds=
- */
-+ static unsigned int sysctl_sched_dl_period_min =3D 100;     /* 100 us */
-+ #ifdef CONFIG_SYSCTL
-+ static struct ctl_table sched_dl_sysctls[] =3D {
-+ 	{
-+ 		.procname       =3D "sched_deadline_period_max_us",
-+ 		.data           =3D &sysctl_sched_dl_period_max,
-+ 		.maxlen         =3D sizeof(unsigned int),
-+ 		.mode           =3D 0644,
-+ 		.proc_handler   =3D proc_dointvec,
-+ 	},
-+ 	{
-+ 		.procname       =3D "sched_deadline_period_min_us",
-+ 		.data           =3D &sysctl_sched_dl_period_min,
-+ 		.maxlen         =3D sizeof(unsigned int),
-+ 		.mode           =3D 0644,
-+ 		.proc_handler   =3D proc_dointvec,
-+ 	},
-+ 	{}
-+ };
-+=20
-+ static int __init sched_dl_sysctl_init(void)
-+ {
-+ 	register_sysctl_init("kernel", sched_dl_sysctls);
-+ 	return 0;
-+ }
-+ late_initcall(sched_dl_sysctl_init);
-+ #endif
-+=20
-  static inline struct task_struct *dl_task_of(struct sched_dl_entity *dl_s=
-e)
-  {
-  	return container_of(dl_se, struct task_struct, dl);
-
---Sig_/vj6a5IykJBDqtYDTjRghcBq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwWfAACgkQAVBC80lX
-0GxLfQf/V/cFLNKZxqqa7AsbySP1m/9D9gKx0p6A/nWc12vo6lMBPGDYhFr+GWfg
-LG1YEePaysIDSFDrAXOFFcrNGlpIvJIT/22cQiog30tODq+pOOeTEUUO70ajVOwI
-pd9ijBl/pMG14eFDmdzeV8/CuYNrR3O5/g/VBWXRMV6FyFFFnPb/W+4KJXHiG7uW
-ZMNMwOpJzIylR3e9quDXh5TX9FG2qNNjHTsZ+yZoeEKjGCsfdbtSVc0S4TaErcyx
-l4vruB8I6url4v0v5XsJZui8Le+TyCVIIgnoG6s1v8YLL8gUBlpxtBSmkEAdL8u8
-WTdj+mK0zVFOJKUc8xhbijse0cSzsw==
-=jn33
------END PGP SIGNATURE-----
-
---Sig_/vj6a5IykJBDqtYDTjRghcBq--
+Best Regards,
+Huang, Ying

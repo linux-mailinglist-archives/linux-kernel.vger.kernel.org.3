@@ -2,134 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0534DA582
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FC64DA583
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352301AbiCOWmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S1352303AbiCOWmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240275AbiCOWma (ORCPT
+        with ESMTP id S240275AbiCOWmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:42:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DEC5D191;
-        Tue, 15 Mar 2022 15:41:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BE7661375;
-        Tue, 15 Mar 2022 22:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1F9C340E8;
-        Tue, 15 Mar 2022 22:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647384076;
-        bh=QJySxIrBFyO2J4pGMuN4V88tfN+T8HlJrnBR2Ek3/Go=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=dbeYwPMA+kTG7ZgLzdU9tD5BjqbSBZgwwHMnn7xNl20ZI6Lc3+eQTN+TDtCI0XKrf
-         beBlw5oU26UsNs11wY6liecUUe2Y7gotd2VrMvsEsZdLXuCDofc1+HTGWKWHuvOUHY
-         YwhXTP+Wcf/cotszDCRQ9+zIGx+EpywxdgCwbVcGk7EMYOs4lhwLdLqTqsAyfQ3I+T
-         g5oM5XTKUCmYxw4yNlKrmy1ymUeueg0r7PqbSD7pzY38qUq/Ei0Wogq2p2vUe3gwUP
-         +ALTOpw3i9Zbo8Gwn1jOfNkfyI0BPrJk9LcEW/DXZ2u3QzgV1A3vKNNMNXP5OITDrw
-         /ui9SD0MMuKIQ==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 15 Mar 2022 18:42:39 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD55D5C9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:41:26 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id t2so1199801pfj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LDxK/xi7kYY9tmPdyRz28nRjjbfnzSTylZ2lhhKTPXk=;
+        b=sUf+nm8vjmNbUAtPL2AR6ZApsYGsLRgv5MM0cr7Ja39tfGmJ4yMWWrhgJeyHZqgggS
+         UYjfKVPbb99KayMwn/imKckbSVm/hGUUQN9c/rhVAz+/mYlqAiQzq6EDqOJMrt04mX0Q
+         PoPGju0IZtwgGA3RISA2z01k43sMYR2tNGPWfBXQKB0RyyeKRTLE/Iwya2EJ7ioupL2l
+         4vQXuI7mXL8x2E+Uz/h8/nLWetwur9Ve5jJ7Z73sPyHSsnNpp2RtFuqYnucYs5eoN159
+         yxAwRMSF8EUxXafYPgpS7S0xL0JGNKLe94xL0rEBAGGK6OigDJaQgQArk1PM4qfum2Cx
+         fs8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LDxK/xi7kYY9tmPdyRz28nRjjbfnzSTylZ2lhhKTPXk=;
+        b=u+5O0VPojo+c7MIggJ3fBpvNLtTGTTTTi/nDfdN5zL1fwsn/TGE/ZwpNdtAn0LRNLA
+         21iY0xbI4uTMRB4BHFxb9bk8Q3fyM6rKhmczwHRexJbquk0RvHvmkEbSGgdGdddZNwXH
+         DEfEqjFS2hVoTmDi7KFq5ZN6VMwuuNXGczRYz7JY4uhgmW3anUG4Hx0TdRJB42oLLkHl
+         DH7t9/8/eI7JTpwTIYmaxlccV6PijYfSX/Dg+co75Vh25x4wqyLBRFKeXHFzFm+DyXKX
+         UwgPGdH6zP7hgbx5olsWEm00XfsC/UkifJQH6Agg4mgBVP04pv09bvAvMML2+SF3Pptj
+         417g==
+X-Gm-Message-State: AOAM531D21ZOVDsrivanckuIeyddwwckNUwRM5pOarTjhJERgmNJpByL
+        masZfvdyYh6DgOciFZs+sc5VvQ==
+X-Google-Smtp-Source: ABdhPJz/dgdutvWHvVq0ljcWISsh0FoaUzN895aVcdgT/4ZucZW+zp+WPouMKfev/ndQL7N2cX98qg==
+X-Received: by 2002:aa7:8432:0:b0:4f6:6dcd:4f19 with SMTP id q18-20020aa78432000000b004f66dcd4f19mr31222248pfn.53.1647384085703;
+        Tue, 15 Mar 2022 15:41:25 -0700 (PDT)
+Received: from ?IPV6:2600:1700:38d4:55df:2366:8a7e:9fa2:44e6? ([2600:1700:38d4:55df:2366:8a7e:9fa2:44e6])
+        by smtp.gmail.com with ESMTPSA id d6-20020a17090a6f0600b001c64b1bcd50sm229582pjk.39.2022.03.15.15.41.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 15:41:25 -0700 (PDT)
+Message-ID: <87db9dbe-c7f1-deec-9c24-7d4bda406f2c@google.com>
+Date:   Tue, 15 Mar 2022 15:41:23 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YjEJjB/Hwj/1Ncum@Ansuel-xps.localdomain>
-References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-13-ansuelsmth@gmail.com> <169795c1-607e-ee60-7ac7-538ed888bedf@linaro.org> <Yi84aNrJ7p+3jy2A@Ansuel-xps.localdomain> <20220315213431.DB6C4C340EE@smtp.kernel.org> <YjEJjB/Hwj/1Ncum@Ansuel-xps.localdomain>
-Subject: Re: [PATCH 12/16] clk: qcom: clk-krait: add 8064 errata workaround
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Date:   Tue, 15 Mar 2022 15:41:14 -0700
-User-Agent: alot/0.10
-Message-Id: <20220315224115.EA1F9C340E8@smtp.kernel.org>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH 04/47] mm: asi: ASI support in interrupts/exceptions
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
+        pjt@google.com, oweisse@google.com, alexandre.chartre@oracle.com,
+        rppt@linux.ibm.com, dave.hansen@linux.intel.com,
+        peterz@infradead.org, luto@kernel.org, linux-mm@kvack.org
+References: <20220223052223.1202152-1-junaids@google.com>
+ <20220223052223.1202152-5-junaids@google.com> <87pmmofs83.ffs@tglx>
+ <9f2f1226-f398-f132-06f4-c21a2a2d1033@google.com> <877d8v74tw.ffs@tglx>
+From:   Junaid Shahid <junaids@google.com>
+In-Reply-To: <877d8v74tw.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-03-15 14:47:56)
-> On Tue, Mar 15, 2022 at 02:34:30PM -0700, Stephen Boyd wrote:
-> > Quoting Ansuel Smith (2022-03-14 05:43:20)
-> > > On Mon, Mar 14, 2022 at 11:20:21AM +0300, Dmitry Baryshkov wrote:
-> > > > On 13/03/2022 22:04, Ansuel Smith wrote:
-> > > > > Add 8064 errata workaround where the sec_src clock gating needs t=
-o be
-> > > >=20
-> > > > Could you please be more specific whether the errata applies only t=
-o the
-> > > > ipq8064 or to the apq8064 too? 8064 is not specific enough.
-> > > >
-> > >=20
-> > > That's a good question... Problem is that we really don't know the
-> > > answer. This errata comes from qsdk on an old sourcecode. I assume th=
-is
-> > > is specific to ipq8064 and apq8064 have different mux configuration.
-> > >=20
-> >=20
-> > I think it was some glitch that happened when the automatic clk gating
-> > was enabled during a switch. The automatic clk gating didn't know that
-> > software was running and switching the input so it killed the CPU and
-> > stopped the clk. That lead to hangs and super badness. I assume it was
-> > applicable to apq8064 as well because ipq8064 is basically apq8064 with
-> > the multimedia subsystem replaced by the networking subsystem. Also I
-> > wouldn't remember all these details because I worked on apq8064 but not
-> > so much on ipq8064 :)
->=20
-> Honest question. Do you remember other glitch present on the platform?
-> We are trying to bisect an instability problem and we still needs to
-> find the reason. We really can't understand if it's just a power
-> delivery problem or a scaling problem from muxes or other things.
->=20
-> The current problem is that after some time the device kernel panics
-> with a number of strange reason like invalid kernel paging and other
-> strange (or the device just freze and reboots, not even a crash log)
-> Many kernel panics reports the crash near the mux switch (like random
-> error right before the mux switch) So I suspect there is a problem
-> there. But due to the fact that is very random we have NO exact way to
-> repro it. I manage sometime, while playing with the code, to repo
-> similar kernel crash but still i'm not sure of the real cause.
->=20
-> I know it's OT but do you have any idea about it? If you remember
-> anything about it?
-> (To scale the freq i'm using a dedicated cpufreq driver that works this
-> way:
-> - We first scale the cache to the max freq across all core, we set the
->   voltage
-> - We scale the cpu to the correct target.
-> This is all done under a lock. Do you see anything wrong in this logic?
-
-I honestly don't remember much anymore about this. It's been a decade.
-Scaling the cache used to be an independent clk and operation vs. the
-CPU. Basically the clk domain and power domain for the cache was
-separate from the CPU. There's also the fuse stuff that means you have
-to read the fuse to know what OPP table to use. Otherwise you may be
-overclocking the CPU or undervolting it. It may also be that cpuidle
-can't happen during a frequency transition. Otherwise the clk gating
-will be reenabled when the cpu startup code reinitializes all the cpu
-registers? I'd have to look through some old vendor kernels to see if
-anything jogs my memory.
-
-> To mee these random crash looks to be really related to something wrong
-> with the mux or with the cache set to a wrong state)
->=20
-> Thx for any suggestion about this.
-> (also I will update this commit and mention both apq and ipq in the
-> comments)
+SGkgVGhvbWFzLA0KDQpPbiAzLzE1LzIyIDA1OjU1LCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
+DQo+Pj4NCj4+PiBUaGlzIGlzIHdyb25nLiBZb3UgY2Fubm90IGludm9rZSBhcmJpdHJhcnkg
+Y29kZSB3aXRoaW4gYSBub2luc3RyDQo+Pj4gc2VjdGlvbi4NCj4+Pg0KPj4+IFBsZWFzZSBl
+bmFibGUgQ09ORklHX1ZNTElOVVhfVkFMSURBVElPTiBhbmQgd2F0Y2ggdGhlIGJ1aWxkIHJl
+c3VsdCB3aXRoDQo+Pj4gYW5kIHdpdGhvdXQgeW91ciBwYXRjaGVzLg0KPj4+DQo+PiBUaGFu
+ayB5b3UgZm9yIHRoZSBwb2ludGVyLiBJdCBzZWVtcyB0aGF0IG1hcmtpbmcgYXNpX2ludHJf
+ZW50ZXIvZXhpdA0KPj4gYW5kIGFzaV9lbnRlci9leGl0LCBhbmQgdGhlIGZldyBmdW5jdGlv
+bnMgdGhhdCB0aGV5IGluIHR1cm4gY2FsbCwgYXMNCj4+IG5vaW5zdHIgd291bGQgZml4IHRo
+aXMsIGNvcnJlY3Q/IChBbG9uZyB3aXRoIHJlbW92aW5nIHRoZSBWTV9CVUdfT05zDQo+PiBm
+cm9tIHRob3NlIGZ1bmN0aW9ucyBhbmQgdXNpbmcgbm90cmFjZS9ub2RlYnVnIHZhcmlhbnRz
+IG9mIGEgY291cGxlIG9mDQo+PiBmdW5jdGlvbnMpLg0KPiANCj4geW91IGNhbiBrZWVwIHRo
+ZSBCVUdfT04oKXMuIElmIHN1Y2ggYSBidWcgaGFwcGVucyB0aGUgbm9pbnN0cg0KPiBjb3Jy
+ZWN0bmVzcyBpcyB0aGUgbGVhc3Qgb2YgeW91ciB3b3JyaWVzLCBidXQgaXQncyBpbXBvcnRh
+bnQgdG8gZ2V0IHRoZQ0KPiBpbmZvcm1hdGlvbiBvdXQsIHJpZ2h0Pw0KDQpZZXMsIHRoYXQg
+bWFrZXMgc2Vuc2UgOikNCg0KPiANCj4gVnMuIGFkZGluZyBub2luc3RyLiBZZXMsIG1ha2lu
+ZyB0aGUgZnVsbCBjYWxsY2hhaW4gbm9pbnN0ciBpcyBnb2luZyB0bw0KPiBjdXJlIGl0LCBi
+dXQgeW91IHJlYWxseSB3YW50IHRvIHRoaW5rIGhhcmQgd2hldGhlciB0aGVzZSBjYWxscyBu
+ZWVkIHRvDQo+IGJlIGluIHRoaXMgc2VjdGlvbiBvZiB0aGUgZXhjZXB0aW9uIGhhbmRsZXJz
+Lg0KPiANCj4gVGhlc2UgY29kZSBzZWN0aW9ucyBoYXZlIG90aGVyIGNvbnN0cmFpbnRzIGFz
+aWRlIG9mIGJlaW5nIGV4Y2x1ZGVkIGZyb20NCj4gaW5zdHJ1bWVudGF0aW9uLCB0aGUgbWFp
+biBvbmUgYmVpbmcgdGhhdCB5b3UgY2Fubm90IHVzZSBSQ1UgdGhlcmUuDQoNCk5laXRoZXIg
+b2YgdGhlc2UgZnVuY3Rpb25zIG5lZWQgdG8gdXNlIFJDVSwgc28gdGhhdCBzaG91bGQgYmUg
+b2suIEFyZSB0aGVyZSBhbnkgb3RoZXIgY29uc3RyYWludHMgdGhhdCBjb3VsZCBtYXR0ZXIg
+aGVyZT8NCg0KPiANCj4gSSdtIG5vdCB5ZXQgY29udmluY2VkIHRoYXQgYXNpX2ludHJfZW50
+ZXIoKS9leGl0KCkgbmVlZCB0byBiZSBpbnZva2VkIGluDQo+IGV4YWN0bHkgdGhlIHBsYWNl
+cyB5b3UgcHV0IGl0LiBUaGUgY2hhbmdlbG9nIGRvZXMgbm90IGdpdmUgYW55IGNsdWUNCj4g
+YWJvdXQgdGhlIHdoeS4uLg0KDQpJIGhhZCB0byBwbGFjZSB0aGVzZSBjYWxscyBlYXJseSBp
+biB0aGUgZXhjZXB0aW9uL2ludGVycnVwdCBoYW5kbGVycyBhbmQgc3BlY2lmaWNhbGx5IGJl
+Zm9yZSB0aGUgcG9pbnQgd2hlcmUgdGhpbmdzIGxpa2UgdHJhY2luZyBhbmQgbG9ja2RlcCBl
+dGMuIGNhbiBiZSB1c2VkIChhbmQgYWZ0ZXIgdGhlIHBvaW50IHdoZXJlIHRoZXkgY2FuIG5v
+IGxvbmdlciBiZSB1c2VkLCBmb3IgdGhlIGFzaV9pbnRyX2V4aXQoKSBjYWxscykuIE90aGVy
+d2lzZSwgd2Ugd291bGQgbmVlZCB0byBtYXAgYWxsIGRhdGEgc3RydWN0dXJlcyB0b3VjaGVk
+IGJ5IHRoZSB0cmFjaW5nL2xvY2tkZXAgaW5mcmFzdHJ1Y3R1cmUgaW50byB0aGUgQVNJIHJl
+c3RyaWN0ZWQgYWRkcmVzcyBzcGFjZXMuDQoNCkJhc2ljYWxseSwgaW4gZ2VuZXJhbCwgaWYg
+d2hpbGUgcnVubmluZyBpbiBhIHJlc3RyaWN0ZWQgYWRkcmVzcyBzcGFjZSwgc29tZSBrZXJu
+ZWwgY29kZSB0b3VjaGVzIHNvbWUgbWVtb3J5IHdoaWNoIGlzIG5vdCBtYXBwZWQgaW4gdGhl
+IHJlc3RyaWN0ZWQgYWRkcmVzcyBzcGFjZSwgaXQgd2lsbCB0YWtlIGFuIGltcGxpY2l0IEFT
+SSBFeGl0IHZpYSB0aGUgcGFnZSBmYXVsdCBoYW5kbGVyIGFuZCBjb250aW51ZSBydW5uaW5n
+LCBzbyBpdCB3b3VsZCBqdXN0IGJlIGEgc21hbGwgcGVyZm9ybWFuY2UgaGl0LCBidXQgbm90
+IGEgZmF0YWwgaXNzdWUuIEJ1dCB0aGVyZSBhcmUgMyBjcml0aWNhbCBjb2RlIHJlZ2lvbnMg
+d2hlcmUgdGhpcyBpbXBsaWNpdCBBU0kgRXhpdCBtZWNoYW5pc20gZG9lc24ndCBhcHBseS4g
+VGhlIGZpcnN0IGlzIHRoZSByZWdpb24gYmV0d2VlbiBhbiBhc2lfZW50ZXIoKSBjYWxsIGFu
+ZCB0aGUgYXNpX3NldF90YXJnZXRfdW5yZXN0cmljdGVkKCkgY2FsbC4gVGhlIHNlY29uZCBp
+cyB0aGUgcmVnaW9uIGJldHdlZW4gdGhlIHN0YXJ0IG9mIGFuIGludGVycnVwdC9leGNlcHRp
+b24gaGFuZGxlciBhbmQgdGhlIGFzaV9pbnRyX2VudGVyKCkgY2FsbCwgYW5kIHRoZSB0aGly
+ZCBpcyB0aGUgcmVnaW9uIGJldHdlZW4gdGhlIGFzaV9pbnRyX2V4aXQoKSBjYWxsIGFuZCB0
+aGUgSVJFVC4gU28gYW55IG1lbW9yeSB0aGF0IGlzIGFjY2Vzc2VkIGJ5IHRoZSBjb2RlIGlu
+IHRoZXNlIHJlZ2lvbnMgaGFzIHRvIGJlIG1hcHBlZCBpbiB0aGUgcmVzdHJpY3RlZCBhZGRy
+ZXNzIHNwYWNlLCB3aGljaCBpcyB3aHkgSSB0cmllZCB0byBwbGFjZSB0aGUgYXNpX2ludHJf
+ZW50ZXIvZXhpdCBjYWxscyBmYWlybHkgZWFybHkvbGF0ZSBpbiB0aGUgaGFuZGxlcnMuIEl0
+IGlzIHBvc3NpYmxlIHRvIG1vdmUgdGhlbSBmdXJ0aGVyIGluLCBidXQgaWYgd2UgYWNjaWRl
+bnRhbGx5IG1pc3MgYW5ub3RhdGluZyBzb21lIGRhdGEgbmVlZGVkIGluIHRoYXQgcmVnaW9u
+LCB0aGVuIGl0IGNvdWxkIHBvdGVudGlhbGx5IGJlIGZhdGFsIGluIHNvbWUgc2l0dWF0aW9u
+cy4NCg0KVGhhbmtzLA0KSnVuYWlkDQoNCj4gDQo+IFRoYW5rcywNCj4gDQo+ICAgICAgICAg
+IHRnbHgNCj4gDQo+IA0KPiANCg0K

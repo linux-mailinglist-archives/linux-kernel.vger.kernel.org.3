@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF9A4D9934
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1481F4D9939
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347454AbiCOKqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        id S1347398AbiCOKqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347310AbiCOKpc (ORCPT
+        with ESMTP id S1347278AbiCOKpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 06:45:32 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FD936160;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6863344EF;
         Tue, 15 Mar 2022 03:43:56 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:43:53 -0000
+Date:   Tue, 15 Mar 2022 10:43:54 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647341034;
+        s=2020; t=1647341035;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fVU+lrvapvn0znejHRZAg557m9aZeIjX/fmZ/bSUEbc=;
-        b=wP1xitNZYpJBRZYhBhaKo4Ih9XhK4NYHCgxolEMu5bqIpYulh4NaHVQDM9g7B8qkKf0wu2
-        trNBaBpZJaJssHxB/pb5FTBvLgIuevnlSYf7d3iLvUj9KCEkDFawhMqFoTQULvL8XmC42i
-        A9Fpsm2Z9BjMFbQ/e24/16R5bhHornjli/QgSPO6gJ7Gi5oFsLlowfrzSv/A0g9mbIY4dw
-        0NtBNUbT3N7f+Y7MyL9IoKIlLXIZOTRB24WpH2DjUgw45hoMebWVN3d4CHSTxHUPzgdWoL
-        EmePVfmQ3RIyIKgzpk7FN9s7zypFADiMXRIzX9k3S0/k2aft63H0BJmfML8okw==
+        bh=XQTL4lw8prEg4ZsF/2IcY+D8LEtbABpQAQdVVCpEUCI=;
+        b=POZBaVfg3Z4vJNzn11m8bHqZSUj2vHa2aejvkWHmxM4jcSRz5PA2pXN0fxlQKGZcJQIUcP
+        ERAo1A47zlSFmd7Gl7WjP784DGNcBk5es5CIqU3xNEbvAXWL3nR9vat8kOIhC3PkENdjgN
+        VCgS1GA+A3V7aWoazuhhHaNOIAl3zBY7AqOdKxtgtIqU59pW/Wy2IfXFJtcWe60LA+huZO
+        IMDeUjHJ861TD8hD7J7IpkpNJgw1Ha53fBDrodUr9HIYfbtu4KT3skPzdNVeArorpZfQb4
+        jTw3UL+yL6PdTTQUv45OIz/TEPRu6uGjDqZvgh+qqIx6WjTempJwORKYVb8GoQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647341034;
+        s=2020e; t=1647341035;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fVU+lrvapvn0znejHRZAg557m9aZeIjX/fmZ/bSUEbc=;
-        b=7ryQvtryx0Feqv/EEtyC0ZMee7t0cosuOKh3/ymiPIMUmLAwgLDHwLqpOAwGNhVuO+loNG
-        aZe1nmRXP6z/yqDg==
+        bh=XQTL4lw8prEg4ZsF/2IcY+D8LEtbABpQAQdVVCpEUCI=;
+        b=UmXF52EdrMvfPSZtYqHf0SH5TaitpIYRqdYLTgtQaJDRQAH+/vRAF9gMyS4YVopUzQPRq/
+        gOeK0KQ8LiUewrAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,sev: Annotations
+Subject: [tip: x86/core] x86/ibt,ftrace: Annotate ftrace code patching
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154318.995109889@infradead.org>
-References: <20220308154318.995109889@infradead.org>
+In-Reply-To: <20220308154318.936599479@infradead.org>
+References: <20220308154318.936599479@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164734103356.16921.7240074614046517982.tip-bot2@tip-bot2>
+Message-ID: <164734103435.16921.12087221192544447210.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,67 +67,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     e8d61bdf0fdfaeaf35fb5a63d6e67e60038b88e0
-Gitweb:        https://git.kernel.org/tip/e8d61bdf0fdfaeaf35fb5a63d6e67e60038b88e0
+Commit-ID:     3215de84c06d747bb748b98945add83e3ec8a6e2
+Gitweb:        https://git.kernel.org/tip/3215de84c06d747bb748b98945add83e3ec8a6e2
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:42 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:41 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 15 Mar 2022 10:32:41 +01:00
 
-x86/ibt,sev: Annotations
+x86/ibt,ftrace: Annotate ftrace code patching
 
-No IBT on AMD so far.. probably correct, who knows.
+These are code patching sites, not indirect targets.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154318.995109889@infradead.org
+Link: https://lore.kernel.org/r/20220308154318.936599479@infradead.org
 ---
- arch/x86/entry/entry_64.S        | 1 +
- arch/x86/entry/entry_64_compat.S | 1 +
- arch/x86/kernel/head_64.S        | 2 ++
- 3 files changed, 4 insertions(+)
+ arch/x86/kernel/ftrace_64.S | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index d76f14f..6e53991 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -95,6 +95,7 @@ SYM_CODE_START(entry_SYSCALL_64)
- 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index e32b5cd..4ec1360 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -145,6 +145,7 @@ SYM_FUNC_START(ftrace_caller)
+ 	movq %rcx, RSP(%rsp)
  
- SYM_INNER_LABEL(entry_SYSCALL_64_safe_stack, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(ftrace_caller_op_ptr, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR
+ 	/* Load the ftrace_ops into the 3rd parameter */
+ 	movq function_trace_op(%rip), %rdx
+ 
+@@ -155,6 +156,7 @@ SYM_INNER_LABEL(ftrace_caller_op_ptr, SYM_L_GLOBAL)
+ 	movq $0, CS(%rsp)
+ 
+ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR
+ 	call ftrace_stub
+ 
+ 	/* Handlers can change the RIP */
+@@ -169,6 +171,7 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+ 	 * layout here.
+ 	 */
+ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
 +	ANNOTATE_NOENDBR
  
- 	/* Construct struct pt_regs on stack */
- 	pushq	$__USER_DS				/* pt_regs->ss */
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index 74208a1..4fdb007 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -214,6 +214,7 @@ SYM_CODE_START(entry_SYSCALL_compat)
- 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
+ 	jmp ftrace_epilogue
+ SYM_FUNC_END(ftrace_caller);
+@@ -192,6 +195,7 @@ SYM_FUNC_START(ftrace_regs_caller)
+ 	/* save_mcount_regs fills in first two parameters */
  
- SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(ftrace_regs_caller_op_ptr, SYM_L_GLOBAL)
 +	ANNOTATE_NOENDBR
+ 	/* Load the ftrace_ops into the 3rd parameter */
+ 	movq function_trace_op(%rip), %rdx
  
- 	/* Construct struct pt_regs on stack */
- 	pushq	$__USER32_DS		/* pt_regs->ss */
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 462cc1e..b8e3019 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -332,6 +332,7 @@ SYM_CODE_END(start_cpu0)
-  */
- SYM_CODE_START_NOALIGN(vc_boot_ghcb)
- 	UNWIND_HINT_IRET_REGS offset=8
-+	ENDBR
+@@ -221,6 +225,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_op_ptr, SYM_L_GLOBAL)
+ 	leaq (%rsp), %rcx
  
- 	/* Build pt_regs */
- 	PUSH_AND_CLEAR_REGS
-@@ -439,6 +440,7 @@ SYM_CODE_END(early_idt_handler_common)
-  */
- SYM_CODE_START_NOALIGN(vc_no_ghcb)
- 	UNWIND_HINT_IRET_REGS offset=8
-+	ENDBR
+ SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR
+ 	call ftrace_stub
  
- 	/* Build pt_regs */
- 	PUSH_AND_CLEAR_REGS
+ 	/* Copy flags back to SS, to restore them */
+@@ -248,6 +253,7 @@ SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
+ 	 */
+ 	testq	%rax, %rax
+ SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR
+ 	jnz	1f
+ 
+ 	restore_mcount_regs
+@@ -261,6 +267,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
+ 	 * to the return.
+ 	 */
+ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
++	ANNOTATE_NOENDBR
+ 	jmp ftrace_epilogue
+ 
+ 	/* Swap the flags with orig_rax */

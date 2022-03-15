@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A6A4DA1AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8039A4DA1AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350774AbiCORzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S1350798AbiCORzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350773AbiCORzl (ORCPT
+        with ESMTP id S1350771AbiCORzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:55:41 -0400
+        Tue, 15 Mar 2022 13:55:43 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE96522C5;
-        Tue, 15 Mar 2022 10:54:22 -0700 (PDT)
-X-UUID: 60080052afa74c18b1c796ae8fcaa55f-20220316
-X-UUID: 60080052afa74c18b1c796ae8fcaa55f-20220316
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F67522D0;
+        Tue, 15 Mar 2022 10:54:28 -0700 (PDT)
+X-UUID: 830c241e1d314868b3bd42b6749d1744-20220316
+X-UUID: 830c241e1d314868b3bd42b6749d1744-20220316
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <sean.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 716368336; Wed, 16 Mar 2022 01:54:17 +0800
+        with ESMTP id 1106368329; Wed, 16 Mar 2022 01:54:22 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 01:54:16 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Mar 2022 01:54:21 +0800
 Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 01:54:10 +0800
+ Transport; Wed, 16 Mar 2022 01:54:20 +0800
 From:   <sean.wang@mediatek.com>
 To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
 CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
@@ -42,17 +43,20 @@ CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
         <michaelfsun@google.com>, <mcchou@chromium.org>,
         <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Yake Yang <yake.yang@mediatek.com>
-Subject: [PATCH v4 1/5] Bluetooth: btmtksdio: Fix kernel oops in btmtksdio_interrupt
-Date:   Wed, 16 Mar 2022 01:54:04 +0800
-Message-ID: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647366404.git.objelf@gmail.com>
+        <linux-kernel@vger.kernel.org>,
+        "Yake Yang" <yake.yang@mediatek.com>
+Subject: [PATCH v4 2/5] Bluetooth: mt7921s: Set HCI_QUIRK_VALID_LE_STATES
+Date:   Wed, 16 Mar 2022 01:54:05 +0800
+Message-ID: <9318ce1b76f8ed9b2c726362d3202310a54ae758.1647366404.git.objelf@gmail.com>
 X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647366404.git.objelf@gmail.com>
+References: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647366404.git.objelf@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,64 +65,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yake Yang <yake.yang@mediatek.com>
 
-Fix the following kernel oops in btmtksdio_interrrupt
+The patch set HCI_QUIRK_VALID_LE_STATES to be consistent with the btusb for
+MT7921 and is required for the likes of experimental LE simultaneous roles.
 
-[   14.339134]  btmtksdio_interrupt+0x28/0x54
-[   14.339139]  process_sdio_pending_irqs+0x68/0x1a0
-[   14.339144]  sdio_irq_work+0x40/0x70
-[   14.339154]  process_one_work+0x184/0x39c
-[   14.339160]  worker_thread+0x228/0x3e8
-[   14.339168]  kthread+0x148/0x3ac
-[   14.339176]  ret_from_fork+0x10/0x30
-
-That happened because hdev->power_on is already called before
-sdio_set_drvdata which btmtksdio_interrupt handler relies on is not
-properly set up.
-
-The details are shown as the below: hci_register_dev would run
-queue_work(hdev->req_workqueue, &hdev->power_on) as WQ_HIGHPRI
-workqueue_struct to complete the power-on sequeunce and thus hci_power_on
-may run before sdio_set_drvdata is done in btmtksdio_probe.
-
-The hci_dev_do_open in hci_power_on would initialize the device and enable
-the interrupt and thus it is possible that btmtksdio_interrupt is being
-called right before sdio_set_drvdata is filled out.
-
-When btmtksdio_interrupt is being called and sdio_set_drvdata is not filled
-, the kernel oops is going to happen because btmtksdio_interrupt access an
-uninitialized pointer.
-
-Fixes: 9aebfd4a2200 ("Bluetooth: mediatek: add support for MediaTek MT7663S and MT7668S SDIO devices")
 Reviewed-by: Mark Chen <markyawenchen@gmail.com>
 Co-developed-by: Sean Wang <sean.wang@mediatek.com>
 Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 Signed-off-by: Yake Yang <yake.yang@mediatek.com>
 ---
- drivers/bluetooth/btmtksdio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/bluetooth/btmtksdio.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index df3f9d090529..9644069cecbb 100644
+index 9644069cecbb..034e55278c56 100644
 --- a/drivers/bluetooth/btmtksdio.c
 +++ b/drivers/bluetooth/btmtksdio.c
-@@ -1281,6 +1281,8 @@ static int btmtksdio_probe(struct sdio_func *func,
- 	hdev->manufacturer = 70;
- 	set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
+@@ -1070,6 +1070,9 @@ static int btmtksdio_setup(struct hci_dev *hdev)
+ 			}
+ 		}
  
-+	sdio_set_drvdata(func, bdev);
++		/* Valid LE States quirk for MediaTek 7921 */
++		set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
 +
- 	err = hci_register_dev(hdev);
- 	if (err < 0) {
- 		dev_err(&func->dev, "Can't register HCI device\n");
-@@ -1288,8 +1290,6 @@ static int btmtksdio_probe(struct sdio_func *func,
- 		return err;
- 	}
- 
--	sdio_set_drvdata(func, bdev);
--
- 	/* pm_runtime_enable would be done after the firmware is being
- 	 * downloaded because the core layer probably already enables
- 	 * runtime PM for this func such as the case host->caps &
+ 		break;
+ 	case 0x7663:
+ 	case 0x7668:
 -- 
 2.25.1
 

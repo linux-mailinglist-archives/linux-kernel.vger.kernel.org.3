@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05AB4DA1BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A66E14DA1C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350842AbiCOSBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S1350858AbiCOSBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237133AbiCOSB2 (ORCPT
+        with ESMTP id S1350861AbiCOSBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:01:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BE3522C5;
-        Tue, 15 Mar 2022 11:00:15 -0700 (PDT)
-X-UUID: da412139d96948ad99d5e89085b360ac-20220316
-X-UUID: da412139d96948ad99d5e89085b360ac-20220316
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1033996954; Wed, 16 Mar 2022 02:00:11 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 02:00:10 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 02:00:10 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Eric.Liang@mediatek.com>, <Stella.Chang@mediatek.com>,
-        <Tom.Chou@mediatek.com>, <steve.lee@mediatek.com>,
-        <jsiuda@google.com>, <frankgor@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Yake Yang <yake.yang@mediatek.com>
-Subject: [PATCH RESEND 5/5] Bluetooth: mt7921s: Add WBS support
-Date:   Wed, 16 Mar 2022 02:00:04 +0800
-Message-ID: <e30fe2298865e619b439f628bf8cc3ffd1734a2c.1647367024.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647367024.git.objelf@gmail.com>
-References: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647367024.git.objelf@gmail.com>
+        Tue, 15 Mar 2022 14:01:46 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CED659A6D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:00:32 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u10so30238138wra.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=l3MXoKEOYNqbj2rQ/N3Ogy/kqKRo5wc1bR+B02SiC7k=;
+        b=D2k50Loa48l6aPLwLn/ltBMwCMqTISYNTnM9B0ojlGWKnPQ4J+xK25tl8DW1EQfQNf
+         yhsnIR0lz3yEDD6kZyqxs8/6O1k3vWweUOr6109EgJIzK2kQrmDvguoMstwgxx3Uy5lf
+         HYopNzSccCNub71gngvSIrec9YQDiewfxL/n4EVHdHVpWp/IMq+B61P5P/l+w58dKR8t
+         4MvRPWf+dEMCKMsVOUEw7OIE7sUs8i3iEfoEeTRW8KFFgBe89qHG33/tjLE2REAC+EWY
+         hg6wgCZkYHWF1zmGDPTFthB+JsL2dUEMwjMR/ca6FqLEXKuSNmGkVJpodcOFr6CM9XyK
+         JlGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=l3MXoKEOYNqbj2rQ/N3Ogy/kqKRo5wc1bR+B02SiC7k=;
+        b=60qecc3FZl/jsKxf60HUtglqosiKkNDiZr4AUydPU1tq/sUjt5D49b3quoaY8y0cHA
+         NzjmOZQ6JWcVxFDUwwO7USW8cU7yN+6DXhSmW+tOhe4O8LkbWrJdhC9fqMfsqIb3ZIUz
+         F13Ky8XbS2h9VCJ13QaVVMA6m9IYEG4YArXMPxKrd+599h50JmjCNFcISZcLq4WebZNl
+         BSE5MXLmKmc+w3U+hP8Xg/msAzAjO5gfTo3Q0kmGxHv/WoO7CZe3TfP4MfIDYkQBleFx
+         wBxCt5ZQtjt2hJzM0il/s46vI/jWZujb39vX/im3Ptgs0GIX4fcgWhbYryMPZveuvp+O
+         zssg==
+X-Gm-Message-State: AOAM533IYF1qpTQTJ61OSaMPVIWtWej0WUneEaOomSsciCqehmNr6LdX
+        AQVu60yTcwCqo4zm/JMe92HDXQ==
+X-Google-Smtp-Source: ABdhPJxTspIEyKaTQIpafHC/PxEmHzjcrx9sd3PcK18nz+T0qpkOxhTp58llOV7mDVlhV5Xo4CJsyA==
+X-Received: by 2002:a05:6000:184f:b0:203:7fca:727e with SMTP id c15-20020a056000184f00b002037fca727emr20751839wri.186.1647367230701;
+        Tue, 15 Mar 2022 11:00:30 -0700 (PDT)
+Received: from google.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
+        by smtp.gmail.com with ESMTPSA id t14-20020a5d49ce000000b001f036a29f42sm15846299wrs.116.2022.03.15.11.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 11:00:30 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 19:00:27 +0100
+From:   "Steinar H. Gunderson" <sesse@google.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+Message-ID: <YjDUO6bbyfGw/u0C@google.com>
+References: <20220310093844.982656-1-sesse@google.com>
+ <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
+ <YiuKAk7SaXP7B7Ee@google.com>
+ <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
+ <YjBnet2813sEGjZY@google.com>
+ <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yake Yang <yake.yang@mediatek.com>
+On Tue, Mar 15, 2022 at 01:32:38PM +0200, Adrian Hunter wrote:
+>> I think the structure looks good, but I'm not sure about updating
+>> e.g. ptq->last_cy_insn_cnt in both functions? Does that make sense?
+> It should only be updated in the new intel_pt_synth_cycle_sample().
+> intel_pt_synth_instruction_sample() should be unchanged.
 
-It is time to add wide band speech (WBS) support.
+Hm, OK. But something definitely changed between my original patch and
+your change. (The first patch; I didn't try the last one yet.) With my
+patch, I got (on a specific trace, synthing cycles only with perf report
+--itrace=y0nse):
 
-Reviewed-by: Mark Chen <markyawenchen@gmail.com>
-Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Yake Yang <yake.yang@mediatek.com>
----
- drivers/bluetooth/btmtksdio.c | 3 +++
- 1 file changed, 3 insertions(+)
+Samples: 4M of event 'cycles:uH', Event count (approx.): 4844309
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index c28eb9fc6176..f3dc5881fff7 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -1123,6 +1123,9 @@ static int btmtksdio_setup(struct hci_dev *hdev)
- 			return err;
- 		}
- 
-+		/* Enable WBS with mSBC codec */
-+		set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED, &hdev->quirks);
-+
- 		/* Enable GPIO reset mechanism */
- 		if (bdev->reset) {
- 			err = btmtksdio_reset_setting(hdev);
--- 
-2.25.1
+With yours on the same file:
 
+Samples: 2M of event 'cycles:uH', Event count (approx.): 77622449
+
+The relative times between functions are also pretty different (although
+none of them are obviously crazy), so one of them has to be wrong.
+Is this to be expected, ie., would you expect your change to fix some
+bad bug on cycle-only synth? For reference, “perf script --itrace=i0ns
+-F +ipc | grep -c IPC:” (a quick proxy for the number of CYC packets :-) )
+yields 4836782, so I'm a bit surprised why there are only 2M events
+being emitted from that.
+
+/* Steinar */

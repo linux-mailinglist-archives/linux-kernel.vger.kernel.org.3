@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F854D99D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C814D99DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347768AbiCOLCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S1347774AbiCOLDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237136AbiCOLCn (ORCPT
+        with ESMTP id S1347771AbiCOLDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:02:43 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFC54348C;
-        Tue, 15 Mar 2022 04:01:29 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 88F165FD02;
-        Tue, 15 Mar 2022 14:01:26 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1647342086;
-        bh=RW5IjNKHFJtjqsH4ITCzR2lYLoB/q/SCRxVZYrFoF2M=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=muk+0uigRIiMIRqEOQ2SYbS71/y0+PA7hbtudQIn3xYGeSHuKLRplpsW70W4IbNl7
-         l7oxHA9vTTgKM6GJMg703xMSkaiyc6d8cWEjnwcLkYVUxYAl3wMa5Spbbd3m56jALy
-         2lt8fEI1vQxzBno8Uyl0RHXUS6pqUghnEO5CSPdlytIkIRIuAHMGYTvMIQdc4LNkK9
-         ghXaaMQ+uP7G36xYl/WO37ZBHnE0rWmFRg8GvPsyycv1d0eKPDVNpNS6iySZAMwML7
-         p1KwCGkopfnevYJw36OQ74qLhtiF1/lQr160pV5AsyRVti3GkMCZHx3qi+Oh135p9e
-         G5uzIoZc4q/pQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 15 Mar 2022 14:01:20 +0300 (MSK)
-From:   Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
-        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 1/3] af_vsock: add two new tests for SOCK_SEQPACKET
-Thread-Topic: [RFC PATCH v1 1/3] af_vsock: add two new tests for
- SOCK_SEQPACKET
-Thread-Index: AQHYNTYb8Fo8I4zas06sN3idOLyY0qy/9J+AgAAmooA=
-Date:   Tue, 15 Mar 2022 11:00:35 +0000
-Message-ID: <74154bf9-06c9-5072-af60-38819ff01fe3@sberdevices.ru>
-References: <1bb5ce91-da53-7de9-49ba-f49f76f45512@sberdevices.ru>
- <20220315084257.lbrbsilpndswv3zy@sgarzare-redhat>
-In-Reply-To: <20220315084257.lbrbsilpndswv3zy@sgarzare-redhat>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E15ECCD410AEC24DAC43049E86EA6EAE@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Tue, 15 Mar 2022 07:03:23 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B35443F1;
+        Tue, 15 Mar 2022 04:02:11 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id g3so23706838edu.1;
+        Tue, 15 Mar 2022 04:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NGCtJBHvVo4Lj2+TmPpGUxDP/Ezlvzgj1VYvHRGJukQ=;
+        b=ow5oELPLIpGkU6tFjlv2iT5Yc4QfOrkwMYd9RcisDQuFTpGg6b/cupZgY9V/Keygmu
+         3LZB5YnSLV0uqv0hIUjKrLCQhrz0jvk8jcX3t6PDHby1zP+YTP1bOrnM6n30eKMUZRI0
+         PzgD37NiwSFL65DCr0X9d3vn+EC4BvFQNFzK0H4x7DEDBIFl83Y6IY6wY5OZfHnj3pkN
+         oaRqEWmkalAENwOK209UtyTJd37u7b3ZJflUACH9o6LLC06TnbdKi0TGExRf4sig6Leu
+         7WICaOYxjQqb19k2ViQovuOaUY4QcsZjGgIWAEzLhcWmK9YX7HZO/LMBDoyEvXDzKr4M
+         hehA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NGCtJBHvVo4Lj2+TmPpGUxDP/Ezlvzgj1VYvHRGJukQ=;
+        b=EVCaMoewyYNHpcyoUFDN6fIhgVX6B6T9C4jNA8/pXuqvNH/zjbBV6l49bN1zqUWXv1
+         Y/QA+tei0GJqHYO20SzbJHVP+ZS1csRS39aS+TSJ+FJdqqjggoDBtrQFyypi0W5hhn7K
+         LPfCTTsc9GoMfWuatztnuQlUOCEbwrqPC2zJqPoYMJgQukzL97GGAXSdoiruEqCJ0uQY
+         4l3cr5phUVODcEGWBi+YoLZ6h0NwI2C3QvnM/RA6sXAaYddrSVu7F4GmE417ZG6GtMGd
+         gmPn9wOAFgtmeP7tgWid49JISojQTw7+0iiH+mNe0shQ6bmbh+mVWmWyn/SmtfRitLyy
+         ooFw==
+X-Gm-Message-State: AOAM530PEVoIssAuKYS7cSQKriueD68JR0w/hOG5kD2Gsfpc7Da4cw49
+        wf/YEkZKLcNPYxdBv3z8MiejOnmUrpX4i1pX46ObImHg1c2i/A==
+X-Google-Smtp-Source: ABdhPJz1skzldLmjIw0o9QXGRq15EaszDnx56RVhuy4c296ngzWUWyUbQJaX7jm5s2FiobffFqlYOtlZ4u0kPnGe6is=
+X-Received: by 2002:a05:6402:b78:b0:416:171e:835d with SMTP id
+ cb24-20020a0564020b7800b00416171e835dmr24302911edb.270.1647342130370; Tue, 15
+ Mar 2022 04:02:10 -0700 (PDT)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/15 06:52:00 #18973197
-X-KSMG-AntiVirus-Status: Clean, skipped
+References: <20220315103813.84407-1-shreeya.patel@collabora.com>
+In-Reply-To: <20220315103813.84407-1-shreeya.patel@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 15 Mar 2022 13:00:56 +0200
+Message-ID: <CAHp75VdoN+iSu1GLnxWW9BtL-p9uF1sfAw3ZxkFWNpoo44+bZg@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: Restrict usage of gc irq members before initialization
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, krisman@collabora.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTUuMDMuMjAyMiAxMTo0MiwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBIaSBBcnNl
-bml5LA0KPiANCj4gT24gRnJpLCBNYXIgMTEsIDIwMjIgYXQgMTA6NTI6MzZBTSArMDAwMCwgS3Jh
-c25vdiBBcnNlbml5IFZsYWRpbWlyb3ZpY2ggd3JvdGU6DQo+PiBUaGlzIGFkZHMgdHdvIHRlc3Rz
-OiBmb3IgcmVjZWl2ZSB0aW1lb3V0IGFuZCByZWFkaW5nIHRvIGludmFsaWQNCj4+IGJ1ZmZlciBw
-cm92aWRlZCBieSB1c2VyLiBJIGZvcmdvdCB0byBwdXQgYm90aCBwYXRjaGVzIHRvIG1haW4NCj4+
-IHBhdGNoc2V0Lg0KPj4NCj4+IEFyc2VuaXkgS3Jhc25vdigyKToNCj4+DQo+PiBhZl92c29jazog
-U09DS19TRVFQQUNLRVQgcmVjZWl2ZSB0aW1lb3V0IHRlc3QNCj4+IGFmX3Zzb2NrOiBTT0NLX1NF
-UVBBQ0tFVCBicm9rZW4gYnVmZmVyIHRlc3QNCj4+DQo+PiB0b29scy90ZXN0aW5nL3Zzb2NrL3Zz
-b2NrX3Rlc3QuYyB8IDE3MCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysN
-Cj4+IDEgZmlsZSBjaGFuZ2VkLCAxNzAgaW5zZXJ0aW9ucygrKQ0KPiANCj4gVGhhbmsgeW91IGZv
-ciB0aGVzZSB0ZXN0cyENCg0KR3JlYXQhIFRoYW5rIFlvdQ0KDQo+IA0KPiBJIGxlZnQgYSBmZXcg
-Y29tbWVudHMgYW5kIEknbSBub3Qgc3VyZSBhYm91dCB0aGUgJ2Jyb2tlbiBidWZmZXIgdGVzdCcg
-YmVoYXZpb3IuDQoNCkFjaw0KDQo+IA0KPiBBYm91dCB0aGUgc2VyaWVzLCBpdCBzb3VuZHMgbGlr
-ZSBzb21ldGhpbmcgaXMgd3Jvbmcgd2l0aCB5b3VyIHNldHVwLCB1c3VhbGx5IHRoZSBjb3ZlciBs
-ZXR0ZXIgaXMgInBhdGNoIiAwLiBJbiB0aGlzIGNhc2UgSSB3b3VsZCBoYXZlIGV4cGVjdGVkOg0K
-PiANCj4gwqDCoMKgIFswLzJdIGFmX3Zzb2NrOiBhZGQgdHdvIG5ldyB0ZXN0cyBmb3IgU09DS19T
-RVFQQUNLRVQNCj4gwqDCoMKgIFsxLzJdIGFmX3Zzb2NrOiBTT0NLX1NFUVBBQ0tFVCByZWNlaXZl
-IHRpbWVvdXQgdGVzdA0KPiDCoMKgwqAgWzIvMl0gYWZfdnNvY2s6IFNPQ0tfU0VRUEFDS0VUIGJy
-b2tlbiBidWZmZXIgdGVzdA0KDQpBY2sNCg0KPiANCj4gQXJlIHlvdSB1c2luZyBgZ2l0IHNlbmQt
-ZW1haWxgIG9yIGBnaXQgcHVibGlzaGA/DQo+IA0KDQpJJ20gdXNpbmcgdGh1bmRlcmJpcmQgdG8g
-c2VuZCBwYXRjaGVzPjwsIGJlY2F1c2Ugd2UgZG9uJ3QgaGF2ZSBTTVRQIHNlcnZlcihleGNoYW5n
-ZSBvbmx5KS4gDQoNCj4gDQo+IFdoZW4geW91IHdpbGwgcmVtb3ZlIHRoZSBSRkMsIHBsZWFzZSBh
-ZGQgYG5ldC1uZXh0YCBsYWJlbDoNCj4gW1BBVENIIG5ldC1uZXh0IDAvMl0sIGV0Yy4uDQo+IA0K
-PiBUaGFua3MsDQo+IFN0ZWZhbm8NCj4gDQoNCg==
+On Tue, Mar 15, 2022 at 12:38 PM Shreeya Patel
+<shreeya.patel@collabora.com> wrote:
+
+Thanks for the update, my comments below.
+
+> gc irq members are exposed before they could be completely
+
+gc --> GPIO chip
+
+
+> initialized and this leads to race conditions.
+
+Any example here. like ~3-4 lines of the Oops in question?
+
+> One such issue was observed for the gc->irq.domain variable which
+> was accessed through the I2C interface in gpiochip_to_irq() before
+> it could be initialized by gpiochip_add_irqchip(). This resulted in
+> Kernel NULL pointer dereference.
+>
+> To avoid such scenarios, restrict usage of gc irq members before
+
+gc --> GPIO chip
+
+> they are completely initialized.
+
+...
+
+> +       /*
+> +        * Using barrier() here to prevent compiler from reordering
+> +        * gc->irq.gc_irq_initialized before initialization of above
+> +        * gc irq members.
+> +        */
+> +       barrier();
+> +
+> +       gc->irq.gc_irq_initialized = true;
+
+There are too many duplications. Why not simply call it 'initialized'?
+
+> -       if (gc->to_irq) {
+> +       if (gc->to_irq && gc->irq.gc_irq_initialized) {
+
+Why can't this check be added into gpiochip_to_irq() ?
+
+    if (!gc->irq.initialized)
+        return -ENXIO;
+
+...
+
+> +       bool gc_irq_initialized;
+
+Can you move it closer to .init_hw so it will be weakly grouped by
+logic similarities?
+Also see above.
+
+-- 
+With Best Regards,
+Andy Shevchenko

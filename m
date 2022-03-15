@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1404C4D965D
+	by mail.lfdr.de (Postfix) with ESMTP id AB62F4D965F
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346002AbiCOIcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S1346011AbiCOIce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345937AbiCOIcJ (ORCPT
+        with ESMTP id S1345954AbiCOIcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:32:09 -0400
+        Tue, 15 Mar 2022 04:32:11 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01CF4C41F;
-        Tue, 15 Mar 2022 01:30:57 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 08:30:55 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D64C40F;
+        Tue, 15 Mar 2022 01:30:58 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 08:30:56 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647333056;
+        s=2020; t=1647333057;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=rhBDEPMliXhAL8AF/RSs7wOZyFRx06mUvqmt8tarwXU=;
-        b=nkaHgOSHfB1skLi+872FhqlmxIGCbEhoRZoYnD2VZuRJ5m476i7XAyDyTQiPySdRkwmRfq
-        4I2nEZO9wVYdHGRQBkJ8oAykGai2UbEhw209huUlvcJbEBS0mQkB5C0XeODjMh7GwFiCmh
-        4/1YaTC5rKqsp02a7ZMWX2Wp424jl6NPacIAMIdRoXt7N11xtEy2691R5H1i9AQhTr+BWE
-        un6QzuMARIW82cV5USozJ+a3HxtnWzxXbUlah0GpMU/pTnyNbRLjGTH4lVRxipM4LPaS6I
-        h7dM1gU+YUL4O2hLGbgSYsjW6WREEtRbP0cKZw2C5u3haqKR84mwPaAwXSqRhA==
+        bh=9aTs/P1+obr23x07/kcEyux4yGJ7VgnSTxRlcS8hX9Q=;
+        b=A9UGIW+ApAy1QcmZhZm40EDkx568H5c6Nf8it0/z0Eb4XpfoRf0TZiHw5n95aPNnaVqyxB
+        3FJSLSixjZwhkrgeTma1Wmy4PM7mX0sfBGKuGpP3mm2j4f7jTIosNdwf4mVPPzXwaoZ6y4
+        F0xeZ0xngiVwG56/RLz66bSAXpnGCI36DepC7afToqJm3hKHcs7Rj3vmC43Uk85CxQ3Mpo
+        H9wdDQ7FqdJjDJajzdwjT7rpgW/WSbl7PQvpSuoa6KABbSUBn8b/QnMzGaeuI/P/PEJRbE
+        6/5tRw5y/7uLozRYqvZdnNsEqM9YabZbXrNqXHNmmTnmLwLQjic82rMf2vE2hg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647333056;
+        s=2020e; t=1647333057;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=rhBDEPMliXhAL8AF/RSs7wOZyFRx06mUvqmt8tarwXU=;
-        b=6lBrWOleZZQ6qouQtm9kVlLvcpA26lRn5Z23xxa1F7pNXeZFlrL1H/+2ABgdULrAgEBSRQ
-        3MktHtUkQs88ofBQ==
+        bh=9aTs/P1+obr23x07/kcEyux4yGJ7VgnSTxRlcS8hX9Q=;
+        b=a3nqu/M0fNK2YQmIZt1aEx91Kzh+qMEeaf7uYGQMNsyhKezwOPirJ+6DfoZVkANlRFT6XT
+        GmOt1mPfT/TudVBQ==
 From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
 Subject: [tip: sched/core] sched/headers: Reorganize, clean up and optimize
- kernel/sched/fair.c dependencies
+ kernel/sched/core.c dependencies
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <164733305548.16921.12780434654364941164.tip-bot2@tip-bot2>
+Message-ID: <164733305635.16921.864659737535928482.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,14 +62,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     c4ad6fcb67c42d65481c85733c8009c8afdfdf4e
-Gitweb:        https://git.kernel.org/tip/c4ad6fcb67c42d65481c85733c8009c8afdfdf4e
+Commit-ID:     e66f6481a8c748ce2d4b37a3d5e10c4dd0d65e80
+Gitweb:        https://git.kernel.org/tip/e66f6481a8c748ce2d4b37a3d5e10c4dd0d65e80
 Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Tue, 22 Feb 2022 13:50:01 +01:00
+AuthorDate:    Wed, 23 Feb 2022 08:17:15 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Wed, 23 Feb 2022 10:58:33 +01:00
 
-sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies
+sched/headers: Reorganize, clean up and optimize kernel/sched/core.c dependencies
 
 Use all generic headers from kernel/sched/sched.h that are required
 for it to build.
@@ -79,46 +79,111 @@ Sort the sections alphabetically.
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Reviewed-by: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/fair.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ kernel/sched/core.c | 81 ++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 70 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7391c92..89d21fd 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -20,6 +20,35 @@
-  *  Adaptive scheduling granularity, math enhancements by Peter Zijlstra
-  *  Copyright (C) 2007 Red Hat, Inc., Peter Zijlstra
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 22de537..5eaa421 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6,7 +6,73 @@
+  *
+  *  Copyright (C) 1991-2002  Linus Torvalds
   */
-+#include <linux/energy_model.h>
-+#include <linux/mmap_lock.h>
-+#include <linux/hugetlb_inline.h>
-+#include <linux/jiffies.h>
-+#include <linux/mm_api.h>
 +#include <linux/highmem.h>
++#include <linux/hrtimer_api.h>
++#include <linux/ktime_api.h>
++#include <linux/sched/signal.h>
++#include <linux/syscalls_api.h>
++#include <linux/debug_locks.h>
++#include <linux/prefetch.h>
++#include <linux/capability.h>
++#include <linux/pgtable_api.h>
++#include <linux/wait_bit.h>
++#include <linux/jiffies.h>
 +#include <linux/spinlock_api.h>
 +#include <linux/cpumask_api.h>
 +#include <linux/lockdep_api.h>
++#include <linux/hardirq.h>
 +#include <linux/softirq.h>
 +#include <linux/refcount_api.h>
 +#include <linux/topology.h>
 +#include <linux/sched/clock.h>
 +#include <linux/sched/cond_resched.h>
-+#include <linux/sched/cputime.h>
++#include <linux/sched/debug.h>
 +#include <linux/sched/isolation.h>
++#include <linux/sched/loadavg.h>
++#include <linux/sched/mm.h>
++#include <linux/sched/nohz.h>
++#include <linux/sched/rseq_api.h>
++#include <linux/sched/rt.h>
 +
-+#include <linux/cpuidle.h>
++#include <linux/blkdev.h>
++#include <linux/context_tracking.h>
++#include <linux/cpuset.h>
++#include <linux/delayacct.h>
++#include <linux/init_task.h>
 +#include <linux/interrupt.h>
-+#include <linux/mempolicy.h>
++#include <linux/ioprio.h>
++#include <linux/kallsyms.h>
++#include <linux/kcov.h>
++#include <linux/kprobes.h>
++#include <linux/llist_api.h>
++#include <linux/mmu_context.h>
++#include <linux/mmzone.h>
 +#include <linux/mutex_api.h>
++#include <linux/nmi.h>
++#include <linux/nospec.h>
++#include <linux/perf_event_api.h>
 +#include <linux/profile.h>
 +#include <linux/psi.h>
-+#include <linux/ratelimit.h>
++#include <linux/rcuwait_api.h>
++#include <linux/sched/wake_q.h>
++#include <linux/scs.h>
++#include <linux/slab.h>
++#include <linux/syscalls.h>
++#include <linux/vtime.h>
++#include <linux/wait_api.h>
++#include <linux/workqueue_api.h>
++
++#ifdef CONFIG_PREEMPT_DYNAMIC
++# include <linux/entry-common.h>
++#endif
++
++#include <uapi/linux/sched/types.h>
 +
 +#include <asm/switch_to.h>
++#include <asm/tlb.h>
 +
-+#include <linux/sched/cond_resched.h>
-+
- #include "sched.h"
+ #define CREATE_TRACE_POINTS
++#include <linux/sched/rseq_api.h>
+ #include <trace/events/sched.h>
+ #undef CREATE_TRACE_POINTS
+ 
+@@ -14,22 +80,15 @@
  #include "stats.h"
  #include "autogroup.h"
+ 
+-#include <linux/nospec.h>
+-#include <linux/blkdev.h>
+-#include <linux/jump_label.h>
+-#include <linux/kcov.h>
+-#include <linux/scs.h>
+-
+-#include <asm/switch_to.h>
+-#include <asm/tlb.h>
++#include "autogroup.h"
++#include "pelt.h"
++#include "smp.h"
++#include "stats.h"
+ 
+ #include "../workqueue_internal.h"
+ #include "../../fs/io-wq.h"
+ #include "../smpboot.h"
+ 
+-#include "pelt.h"
+-#include "smp.h"
+-
+ /*
+  * Export tracepoints that act as a bare tracehook (ie: have no trace event
+  * associated with them) to allow external modules to probe them.

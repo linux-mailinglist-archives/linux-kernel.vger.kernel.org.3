@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02464D93FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A218E4D93F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbiCOFiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 01:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        id S1344878AbiCOFgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 01:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345065AbiCOFhx (ORCPT
+        with ESMTP id S241159AbiCOFga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 01:37:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12F684990F;
-        Mon, 14 Mar 2022 22:36:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48D001476;
-        Mon, 14 Mar 2022 22:36:31 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.34.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BC7943F766;
-        Mon, 14 Mar 2022 22:36:25 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, acme@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH V4 10/10] perf/tools: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
-Date:   Tue, 15 Mar 2022 11:05:16 +0530
-Message-Id: <20220315053516.431515-11-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220315053516.431515-1-anshuman.khandual@arm.com>
-References: <20220315053516.431515-1-anshuman.khandual@arm.com>
+        Tue, 15 Mar 2022 01:36:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DD42A715;
+        Mon, 14 Mar 2022 22:35:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07D06611F2;
+        Tue, 15 Mar 2022 05:35:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA16C340E8;
+        Tue, 15 Mar 2022 05:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647322518;
+        bh=LdbNkZ4BJOe4jwda1t7OnYnnbOsaj1r77GEwuErKVaA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=R7sTkl9J4bV9GmqjQBOFs35WEfwOqCTEK3KmOggGrEfgJBzHs4KGY3b+C2ijpt0Ek
+         HQmGA4t4+9la8fctcMUtkYwVVzpbBpZSIC6odfR9QOGiChO9i+4vhvuMaHW1GwgkMl
+         m+rbqvZMfeEFa5U9dIpNc6Sy/w+MDJcRmvmQXmHFNOfg8iz1PduDmSTp8lDHp6k3HL
+         e7o1YMrd7kQHQ8jJALpfc8nud6goL9jYuDPIVeIG7rNSdp+nbzlnqJ7JRzxqkcmh95
+         rGv5ZMbX7ps29JKv8i6BxWyoDoIaskEuDv2CbAYSkkuGrs8kr0QDPVOPI0ZMRqjwEE
+         PpYDKZCaKWWNg==
+Date:   Mon, 14 Mar 2022 22:35:16 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     davem@davemloft.net, robh+dt@kernel.org,
+        thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/2] net: mvneta: Armada 98DX2530 SoC
+Message-ID: <20220314223516.000780cd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220315011742.2465356-1-chris.packham@alliedtelesis.co.nz>
+References: <20220315011742.2465356-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,31 +55,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This updates the perf tool with arch specific branch type classification
-used for BRBE on arm64 platform as added in the kernel earlier.
+On Tue, 15 Mar 2022 14:17:40 +1300 Chris Packham wrote:
+> This is split off from [1] to let it go in via net-next rather than waiting for
+> the rest of the series to land.
+> 
+> [1] - https://lore.kernel.org/lkml/20220314213143.2404162-1-chris.packham@alliedtelesis.co.nz/
 
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- tools/include/uapi/linux/perf_event.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+Patchwork says it doesn't apply cleanly to net-next [1].
+Could you double check?
 
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 193dba2ecdc1..4cf1c8e22cab 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -282,6 +282,12 @@ enum {
- 	PERF_BR_PRIV_HV		= 3,
- };
- 
-+#define PERF_BR_ARM64_FIQ		PERF_BR_NEW_ARCH_1
-+#define PERF_BR_ARM64_DEBUG_HALT	PERF_BR_NEW_ARCH_2
-+#define PERF_BR_ARM64_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
-+#define PERF_BR_ARM64_DEBUG_INST	PERF_BR_NEW_ARCH_4
-+#define PERF_BR_ARM64_DEBUG_DATA	PERF_BR_NEW_ARCH_5
-+
- #define PERF_SAMPLE_BRANCH_PLM_ALL \
- 	(PERF_SAMPLE_BRANCH_USER|\
- 	 PERF_SAMPLE_BRANCH_KERNEL|\
--- 
-2.25.1
-
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/

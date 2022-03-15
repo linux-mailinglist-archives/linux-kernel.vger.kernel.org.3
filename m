@@ -2,265 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD5E4DA325
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 905C04DA32B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351315AbiCOTPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S244965AbiCOTRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235851AbiCOTPQ (ORCPT
+        with ESMTP id S241304AbiCOTRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:15:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C676450;
-        Tue, 15 Mar 2022 12:14:03 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id hw13so41605710ejc.9;
-        Tue, 15 Mar 2022 12:14:03 -0700 (PDT)
+        Tue, 15 Mar 2022 15:17:31 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730AA3616C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:16:18 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s8so465974pfk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:16:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EFbNP0w17xl4ckdv5kSOTgg6lZ5fIOgNdcD9IrB7lZg=;
-        b=nEWTjh3R0qw2MipkYfZuI0wD5nIYhk9jDbUZJkU5yx/6WkTNzqOlh1+crJ1GxgbOpD
-         aFNTBS8E/wbdwQutDEHcHc/JiSLCaSYpAME4NbTiUyjUstDWJTTHeaH9ouA2jv4e96I7
-         6p84LWCSgC9SiVrA5FV1SX99MslJ/FDBERDu84cXu7NgDto6gFEBqoYjHWb8xFu5p16Q
-         lNBIJ+svxwtN57DVr2rLD7LprJxsvnJRw6Zacp8E0sauEPaoO1Pq0zWCroJjHoS8hP9+
-         atylVOW2c49WzA+9qdN07181oobuGKAxwi/1ESVnxYMcQSVHFy2/kz37UsNI2poGn3Ge
-         PDeQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VTb5ul+n4WT1sbDMlrbhLBcR/t69JrkdnmjdEtDHndE=;
+        b=gvQ9DlFYZSeKRGsPsrdJv82oAwqEruk9QS7vTAC6OKVJDyy8C1B/9E4dLMuljRdJVa
+         4BJkYvXrexW4Am2uV3t90FeD3+fXsA0orYHAD/A9bL6yK7N2JwPl7of52zjOfnme1A4s
+         Y3MQ1DAG27vvHYJh/szmyrCBXRtimwCPxG51KD8ADalMLMo1UTaNB9jeRyflX9YsTWRD
+         YjSYjVnpKgblC2S0Fj0SIAUOmGjRLXWHGmKyTzG5vGPjiTJ9rIzU5yHb743O7oiUfB1B
+         OVPBrvlKWtYlJEubRsGF0McbDRADTEu70XtDVfpH55Zg/Vg8hX6ah1JvKzzGYBGG2AGq
+         yeKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EFbNP0w17xl4ckdv5kSOTgg6lZ5fIOgNdcD9IrB7lZg=;
-        b=XtcOCnrc/sRcSC+noMgQnpTLMnDEGI/eidkQGNH1cAFli6zlr90dTTc4GZTYr0a4sq
-         DMIllINFiilcD0mtnzxkHCHjSctUZ5HymlYuzmjDa+QzRbiwkVbF21wJBaF0bNehfujP
-         KwNCHDOwEULAuhrckASAlyT1bBGRJymi3jbuzXip2GABeqTgvPEdqSmjjyYG35djE/Wj
-         qgtVZfx1QPeEEtkfLW7ViunWcB6q+sfUWxZL2mHFAfFFc7nTlnu9CKyxQvekvtztZZwM
-         6qfU+em6Jh/d46tU9m6ND6PMXvMFZoS4SIOzllKJAml/UDHzp4VPgj7YHsrxZkiu0IzO
-         9LlA==
-X-Gm-Message-State: AOAM530ULk8Jc+ruLrhOPrq31C5aFQZ1+CJkFodHUc1ZeotUlybBltRS
-        9paDVwcZwcrZ35m+fedL2fM=
-X-Google-Smtp-Source: ABdhPJyqnW/s/xxkoxZyQK1hpu8pU8gNgK4myEyJyvcj0jAlA6+BetXmfPBcIbP6vXrwUlJczymR1w==
-X-Received: by 2002:a17:906:a0ce:b0:6d1:cb30:3b3b with SMTP id bh14-20020a170906a0ce00b006d1cb303b3bmr23968745ejb.582.1647371641484;
-        Tue, 15 Mar 2022 12:14:01 -0700 (PDT)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm8408270ejj.74.2022.03.15.12.13.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VTb5ul+n4WT1sbDMlrbhLBcR/t69JrkdnmjdEtDHndE=;
+        b=EAl01aieF68U2fUN9f66xSHbJkuoJi7AdiqGeT2grS1tuJROoRET7lduxB/jRG53XU
+         JixBb1MxEYQLCiHKRVn/ZZO9eo+kAQNFpoPm3cQXTh7Efk/z9K+30h1ZKYW7VlFbSR+a
+         uWqSBNweJzPAL8KFM9nTqnmDbQQjhszzCkFocc7lhJYhpiRLz2tDTsmZeLlRT2wDk4J5
+         N4Tacc1cEhZxtB7NcEB/AELBbyWmJt9G2RDhiijpQoBJDOkYQzTh+101xMwyX6iAwHDh
+         sllGb4V5A1N4Co35cpS9qgEcjqewnvkE4TH8r1Mx/LE0a2luCzN1U4wxsADGTgfuXvKX
+         kEGA==
+X-Gm-Message-State: AOAM53028n/K+GM1cYEq2xtvsLNt130nHbB+yY5bqPlbhG7ibLyhetEZ
+        nOrbbdJ7ySiomiEo6K95Partew==
+X-Google-Smtp-Source: ABdhPJwnJnRXAHrQV+u5y2rkB0kmtCrYFBeyMiZMqPSrhBWuw59JeBaV01MG2y2G7Ig/Bz5uRxNbmA==
+X-Received: by 2002:a05:6a00:1c73:b0:4f7:83a7:25d8 with SMTP id s51-20020a056a001c7300b004f783a725d8mr26389413pfw.85.1647371777985;
+        Tue, 15 Mar 2022 12:16:17 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm25975573pfv.22.2022.03.15.12.16.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:14:00 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 21:13:58 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jianbo Liu <jianbol@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, rajur@chelsio.com,
-        claudiu.manoil@nxp.com, sgoutham@marvell.com, gakula@marvell.com,
-        sbhatta@marvell.com, hkelam@marvell.com, saeedm@nvidia.com,
-        leon@kernel.org, idosch@nvidia.com, petrm@nvidia.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        simon.horman@corigine.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        baowen.zheng@corigine.com, louis.peens@netronome.com,
-        peng.zhang@corigine.com, oss-drivers@corigine.com, roid@nvidia.com
-Subject: Re: [PATCH net-next v3 1/2] net: flow_offload: add tc police action
- parameters
-Message-ID: <20220315191358.taujzi2kwxlp6iuf@skbuf>
-References: <20220224102908.5255-1-jianbol@nvidia.com>
- <20220224102908.5255-2-jianbol@nvidia.com>
+        Tue, 15 Mar 2022 12:16:17 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-ext4@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
+Subject: [PATCH] ext4: check if offset+length is within a valid range in fallocate
+Date:   Tue, 15 Mar 2022 12:15:45 -0700
+Message-Id: <20220315191545.187366-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <d153bb2e-5f95-47d0-43db-b95c577e2b91@linaro.org>
+References: <d153bb2e-5f95-47d0-43db-b95c577e2b91@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224102908.5255-2-jianbol@nvidia.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jianbo,
+Syzbot found an issue [1] in ext4_fallocate().
+The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
+and offset 0x1000000ul, which, when added together exceed the disk size,
+and trigger a BUG in ext4_ind_remove_space() [3].
+According to the comment doc in ext4_ind_remove_space() the 'end'
+parameter needs to be one block after the last block to remove.
+In the case when the BUG is triggered it points to the last block on
+a 4GB virtual disk image. This is calculated in
+ext4_ind_remove_space() in [4].
+This patch adds a check that ensure the length + offest to be
+within the valid range and returns -ENOSPC error code in case
+it is invalid.
 
-On Thu, Feb 24, 2022 at 10:29:07AM +0000, Jianbo Liu wrote:
-> The current police offload action entry is missing exceed/notexceed
-> actions and parameters that can be configured by tc police action.
-> Add the missing parameters as a pre-step for offloading police actions
-> to hardware.
-> 
-> Signed-off-by: Jianbo Liu <jianbol@nvidia.com>
-> Signed-off-by: Roi Dayan <roid@nvidia.com>
-> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-> ---
->  include/net/flow_offload.h     |  9 +++++++
->  include/net/tc_act/tc_police.h | 30 ++++++++++++++++++++++
->  net/sched/act_police.c         | 46 ++++++++++++++++++++++++++++++++++
->  3 files changed, 85 insertions(+)
-> 
-> diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
-> index 5b8c54eb7a6b..74f44d44abe3 100644
-> --- a/include/net/flow_offload.h
-> +++ b/include/net/flow_offload.h
-> @@ -148,6 +148,8 @@ enum flow_action_id {
->  	FLOW_ACTION_MPLS_MANGLE,
->  	FLOW_ACTION_GATE,
->  	FLOW_ACTION_PPPOE_PUSH,
-> +	FLOW_ACTION_JUMP,
-> +	FLOW_ACTION_PIPE,
->  	NUM_FLOW_ACTIONS,
->  };
->  
-> @@ -235,9 +237,16 @@ struct flow_action_entry {
->  		struct {				/* FLOW_ACTION_POLICE */
->  			u32			burst;
->  			u64			rate_bytes_ps;
-> +			u64			peakrate_bytes_ps;
-> +			u32			avrate;
-> +			u16			overhead;
->  			u64			burst_pkt;
->  			u64			rate_pkt_ps;
->  			u32			mtu;
-> +			struct {
-> +				enum flow_action_id	act_id;
-> +				u32			extval;
-> +			} exceed, notexceed;
->  		} police;
->  		struct {				/* FLOW_ACTION_CT */
->  			int action;
-> diff --git a/include/net/tc_act/tc_police.h b/include/net/tc_act/tc_police.h
-> index 72649512dcdd..283bde711a42 100644
-> --- a/include/net/tc_act/tc_police.h
-> +++ b/include/net/tc_act/tc_police.h
-> @@ -159,4 +159,34 @@ static inline u32 tcf_police_tcfp_mtu(const struct tc_action *act)
->  	return params->tcfp_mtu;
->  }
->  
-> +static inline u64 tcf_police_peakrate_bytes_ps(const struct tc_action *act)
-> +{
-> +	struct tcf_police *police = to_police(act);
-> +	struct tcf_police_params *params;
-> +
-> +	params = rcu_dereference_protected(police->params,
-> +					   lockdep_is_held(&police->tcf_lock));
-> +	return params->peak.rate_bytes_ps;
-> +}
-> +
-> +static inline u32 tcf_police_tcfp_ewma_rate(const struct tc_action *act)
-> +{
-> +	struct tcf_police *police = to_police(act);
-> +	struct tcf_police_params *params;
-> +
-> +	params = rcu_dereference_protected(police->params,
-> +					   lockdep_is_held(&police->tcf_lock));
-> +	return params->tcfp_ewma_rate;
-> +}
-> +
-> +static inline u16 tcf_police_rate_overhead(const struct tc_action *act)
-> +{
-> +	struct tcf_police *police = to_police(act);
-> +	struct tcf_police_params *params;
-> +
-> +	params = rcu_dereference_protected(police->params,
-> +					   lockdep_is_held(&police->tcf_lock));
-> +	return params->rate.overhead;
-> +}
-> +
->  #endif /* __NET_TC_POLICE_H */
-> diff --git a/net/sched/act_police.c b/net/sched/act_police.c
-> index 0923aa2b8f8a..a2275eef6877 100644
-> --- a/net/sched/act_police.c
-> +++ b/net/sched/act_police.c
-> @@ -405,20 +405,66 @@ static int tcf_police_search(struct net *net, struct tc_action **a, u32 index)
->  	return tcf_idr_search(tn, a, index);
->  }
->  
-> +static int tcf_police_act_to_flow_act(int tc_act, u32 *extval)
-> +{
-> +	int act_id = -EOPNOTSUPP;
-> +
-> +	if (!TC_ACT_EXT_OPCODE(tc_act)) {
-> +		if (tc_act == TC_ACT_OK)
-> +			act_id = FLOW_ACTION_ACCEPT;
-> +		else if (tc_act ==  TC_ACT_SHOT)
-> +			act_id = FLOW_ACTION_DROP;
-> +		else if (tc_act == TC_ACT_PIPE)
-> +			act_id = FLOW_ACTION_PIPE;
-> +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_GOTO_CHAIN)) {
-> +		act_id = FLOW_ACTION_GOTO;
-> +		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
-> +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_JUMP)) {
-> +		act_id = FLOW_ACTION_JUMP;
-> +		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
-> +	}
-> +
-> +	return act_id;
-> +}
-> +
->  static int tcf_police_offload_act_setup(struct tc_action *act, void *entry_data,
->  					u32 *index_inc, bool bind)
->  {
->  	if (bind) {
->  		struct flow_action_entry *entry = entry_data;
-> +		struct tcf_police *police = to_police(act);
-> +		struct tcf_police_params *p;
-> +		int act_id;
-> +
-> +		p = rcu_dereference_protected(police->params,
-> +					      lockdep_is_held(&police->tcf_lock));
->  
->  		entry->id = FLOW_ACTION_POLICE;
->  		entry->police.burst = tcf_police_burst(act);
->  		entry->police.rate_bytes_ps =
->  			tcf_police_rate_bytes_ps(act);
-> +		entry->police.peakrate_bytes_ps = tcf_police_peakrate_bytes_ps(act);
-> +		entry->police.avrate = tcf_police_tcfp_ewma_rate(act);
-> +		entry->police.overhead = tcf_police_rate_overhead(act);
->  		entry->police.burst_pkt = tcf_police_burst_pkt(act);
->  		entry->police.rate_pkt_ps =
->  			tcf_police_rate_pkt_ps(act);
->  		entry->police.mtu = tcf_police_tcfp_mtu(act);
-> +
-> +		act_id = tcf_police_act_to_flow_act(police->tcf_action,
-> +						    &entry->police.exceed.extval);
+LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
+LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
+LINK: [3] https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/ext4/indirect.c#L1244
+LINK: [4] https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/ext4/indirect.c#L1234
 
-I don't know why just now, but I observed an apparent regression here
-with these commands:
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: Ritesh Harjani <riteshh@linux.ibm.com>
+Cc: <linux-ext4@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
 
-root@debian:~# tc qdisc add dev swp3 clsact
-root@debian:~# tc filter add dev swp3 ingress protocol ip flower skip_sw ip_proto icmp action police rate 100Mbit burst 10000
-[   45.767900] tcf_police_act_to_flow_act: 434: tc_act 1
-[   45.773100] tcf_police_offload_act_setup: 475, act_id -95
-Error: cls_flower: Failed to setup flow action.
-We have an error talking to the kernel, -1
+Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
+Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+ fs/ext4/inode.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-The reason why I'm not sure is because I don't know if this should have
-worked as intended or not. I am remarking just now in "man tc-police"
-that the default conform-exceed action is "reclassify".
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 01c9e4f743ba..dd9c35113efe 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -3924,7 +3924,8 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
+ 	struct super_block *sb = inode->i_sb;
+ 	ext4_lblk_t first_block, stop_block;
+ 	struct address_space *mapping = inode->i_mapping;
+-	loff_t first_block_offset, last_block_offset;
++	loff_t first_block_offset, last_block_offset, max_length;
++	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+ 	handle_t *handle;
+ 	unsigned int credits;
+ 	int ret = 0, ret2 = 0;
+@@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
+ 		   offset;
+ 	}
+ 
++	/*
++	 * For punch hole the length + offset needs to be at least within
++	 * one block before last
++	 */
++	max_length = sbi->s_bitmap_maxbytes - sbi->s_blocksize;
++	if (offset + length >= max_length) {
++		ret = -ENOSPC;
++		goto out_mutex;
++	}
++
+ 	if (offset & (sb->s_blocksize - 1) ||
+ 	    (offset + length) & (sb->s_blocksize - 1)) {
+ 		/*
+-- 
+2.35.1
 
-So if I specify "conform-exceed drop", things are as expected, but with
-the default (implicitly "conform-exceed reclassify") things fail with
--EOPNOTSUPP because tcf_police_act_to_flow_act() doesn't handle a
-police->tcf_action of TC_ACT_RECLASSIFY.
-
-Should it?
-
-> +		if (act_id < 0)
-> +			return act_id;
-> +
-> +		entry->police.exceed.act_id = act_id;
-> +
-> +		act_id = tcf_police_act_to_flow_act(p->tcfp_result,
-> +						    &entry->police.notexceed.extval);
-> +		if (act_id < 0)
-> +			return act_id;
-> +
-> +		entry->police.notexceed.act_id = act_id;
-> +
->  		*index_inc = 1;
->  	} else {
->  		struct flow_offload_action *fl_action = entry_data;
-> -- 
-> 2.26.2
-> 

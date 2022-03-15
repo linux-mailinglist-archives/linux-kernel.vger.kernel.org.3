@@ -2,104 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79694D9CDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CA54D9CDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348980AbiCOODM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S1348952AbiCOODG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348991AbiCOODC (ORCPT
+        with ESMTP id S1348959AbiCOOCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:03:02 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39135546A2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:01:36 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id q194so15535514qke.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:01:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YGgF9LWm/bth2hHo7Fl5/pn1/+WNkNT5qOPZV+7l+iA=;
-        b=Hz0MIq5llHrEeTTI1frLKAnv1sutQLuMBMAcAopGd+KLzjDYput7R/NuZQfAF+lDiT
-         gaenALOjUpfzPRyJXUSE6GHaVOJWarr/1fw87YKRwVTvCLNubs2ul1w5W79qRx0OnqKF
-         5jvlyN63U2QsTcsRZIrlo/c7kzfd1afh94UTJFa5n6tP4xLj9duqGYV9XkBJZNmXYk0M
-         9cL0Q9laB/J6Xez1hnFFjFC0E85atj+YA+DjnEvL3vAgWMaaK4kZtJdsQ+PXpWdGUez+
-         g+s22frPGB4Y8KovtvhTDrfOhilSXsL1Z6ybxfKJAawzvJBltnVKlUdPPRmGKwyqhnoa
-         7+zw==
-X-Gm-Message-State: AOAM531eVBLFZn7RjPBK2TFsPSvSi9+fBbJLMNC2S3pXdNJeHOSAEIvn
-        o0j5GICM6sJ1D+FoFxosLkEqMfFE9/dAbw==
-X-Google-Smtp-Source: ABdhPJxuJf9UqVcNQJ7ZZ5sGs66B0bM/cTyqLKgMSRkOWQiTalPXD+Yl0RiqP3YhRUdiOaYF3bSFhQ==
-X-Received: by 2002:a05:620a:244f:b0:67d:ccec:3eaa with SMTP id h15-20020a05620a244f00b0067dccec3eaamr6965710qkn.744.1647352895423;
-        Tue, 15 Mar 2022 07:01:35 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05620a108900b0067b13036bd5sm9294345qkk.52.2022.03.15.07.01.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 07:01:35 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id j2so37606281ybu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:01:34 -0700 (PDT)
-X-Received: by 2002:a25:4fc4:0:b0:633:25c8:7d9 with SMTP id
- d187-20020a254fc4000000b0063325c807d9mr11648807ybb.506.1647352894696; Tue, 15
- Mar 2022 07:01:34 -0700 (PDT)
+        Tue, 15 Mar 2022 10:02:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A6054698;
+        Tue, 15 Mar 2022 07:01:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2F8861688;
+        Tue, 15 Mar 2022 14:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB1BC340E8;
+        Tue, 15 Mar 2022 14:01:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647352891;
+        bh=u3LXU9B0NsFiJGyUROaEhGHNAJ3nalwJrXEmn9uAx90=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dh5YAluWC/gehGDENauMuW3AuXiumgI5vrvQUs+2RlNxMv4m5V5IpLmlRYFXvtGjk
+         rRIton8g4WXe1Z6J3XUH0gSRYheAQOBWnlqGfRrMI0n3R0AqE4bkeV05klmL86Rtd7
+         INjfQ8eHeAhf2t1EdPLfAzAbYxiPU1XkRZnkSPJWGKlBXJ7wPKcJD2irBzMGTVji1p
+         A/IagHkwCGdu1D5qx0cNhDdsZBH772f6U6kmgIjTfkM87M/DtFJiOgSc11I1WV/cA3
+         dZi9dKSY+ImM+oqqXJAmyPNqN4+K3k7jmsdh62OEm7WtE3Z/QDl6A93OjNWxe0CkHz
+         suJD8X2Xs2s/Q==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH v12 bpf-next 06/12] powerpc: Add rethook support
+Date:   Tue, 15 Mar 2022 23:01:25 +0900
+Message-Id: <164735288495.1084943.539630613772422267.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+References: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20220315110707.628166-1-geert@linux-m68k.org> <20220315110707.628166-5-geert@linux-m68k.org>
- <YjCZkkv//EhvxszH@smile.fi.intel.com>
-In-Reply-To: <YjCZkkv//EhvxszH@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 15:01:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXisdGd2QWPEpi0sUMP3ZZr1S82=S9A=BSYmeYHySGemQ@mail.gmail.com>
-Message-ID: <CAMuHMdXisdGd2QWPEpi0sUMP3ZZr1S82=S9A=BSYmeYHySGemQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] drm: ssd130x: Reduce temporary buffer sizes
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Add rethook powerpc64 implementation. Most of the code has been copied from
+kretprobes on powerpc64.
 
-On Tue, Mar 15, 2022 at 2:50 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Tue, Mar 15, 2022 at 12:07:06PM +0100, Geert Uytterhoeven wrote:
-> > ssd130x_clear_screen() allocates a temporary buffer sized to hold one
-> > byte per pixel, while it only needs to hold one bit per pixel.
-> >
-> > ssd130x_fb_blit_rect() allocates a temporary buffer sized to hold one
-> > byte per pixel for the whole frame buffer, while it only needs to hold
-> > one bit per pixel for the part that is to be updated.
-> > Pass dst_pitch to drm_fb_xrgb8888_to_mono_reversed(), as we have already
-> > calculated it anyway.
->
-> Can we use bitmap API? bitmap_zalloc() / etc ?
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ Changes in v10:
+  - Add a dummy @mcount to arch_rethook_prepare().
+---
+ arch/powerpc/Kconfig          |    1 +
+ arch/powerpc/kernel/Makefile  |    1 +
+ arch/powerpc/kernel/rethook.c |   72 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 74 insertions(+)
+ create mode 100644 arch/powerpc/kernel/rethook.c
 
-Why? There is no need to operate on an array of longs, only on an
-array of bytes. Going to longs would expose us to endianness.
-There's also no need to use any of the bitmap operations to modify the data.
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index b779603978e1..5feaa241fb56 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -229,6 +229,7 @@ config PPC
+ 	select HAVE_PERF_EVENTS_NMI		if PPC64
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
++	select HAVE_RETHOOK			if KPROBES
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RELIABLE_STACKTRACE
+ 	select HAVE_RSEQ
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index 4d7829399570..feb24ea83ca6 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -115,6 +115,7 @@ obj-$(CONFIG_SMP)		+= smp.o
+ obj-$(CONFIG_KPROBES)		+= kprobes.o
+ obj-$(CONFIG_OPTPROBES)		+= optprobes.o optprobes_head.o
+ obj-$(CONFIG_KPROBES_ON_FTRACE)	+= kprobes-ftrace.o
++obj-$(CONFIG_RETHOOK)		+= rethook.o
+ obj-$(CONFIG_UPROBES)		+= uprobes.o
+ obj-$(CONFIG_PPC_UDBG_16550)	+= legacy_serial.o udbg_16550.o
+ obj-$(CONFIG_SWIOTLB)		+= dma-swiotlb.o
+diff --git a/arch/powerpc/kernel/rethook.c b/arch/powerpc/kernel/rethook.c
+new file mode 100644
+index 000000000000..a8a128748efa
+--- /dev/null
++++ b/arch/powerpc/kernel/rethook.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * PowerPC implementation of rethook. This depends on kprobes.
++ */
++
++#include <linux/kprobes.h>
++#include <linux/rethook.h>
++
++/*
++ * Function return trampoline:
++ * 	- init_kprobes() establishes a probepoint here
++ * 	- When the probed function returns, this probe
++ * 		causes the handlers to fire
++ */
++asm(".global arch_rethook_trampoline\n"
++	".type arch_rethook_trampoline, @function\n"
++	"arch_rethook_trampoline:\n"
++	"nop\n"
++	"blr\n"
++	".size arch_rethook_trampoline, .-arch_rethook_trampoline\n");
++
++/*
++ * Called when the probe at kretprobe trampoline is hit
++ */
++static int trampoline_rethook_handler(struct kprobe *p, struct pt_regs *regs)
++{
++	unsigned long orig_ret_address;
++
++	orig_ret_address = rethook_trampoline_handler(regs, 0);
++	/*
++	 * We get here through one of two paths:
++	 * 1. by taking a trap -> kprobe_handler() -> here
++	 * 2. by optprobe branch -> optimized_callback() -> opt_pre_handler() -> here
++	 *
++	 * When going back through (1), we need regs->nip to be setup properly
++	 * as it is used to determine the return address from the trap.
++	 * For (2), since nip is not honoured with optprobes, we instead setup
++	 * the link register properly so that the subsequent 'blr' in
++	 * __kretprobe_trampoline jumps back to the right instruction.
++	 *
++	 * For nip, we should set the address to the previous instruction since
++	 * we end up emulating it in kprobe_handler(), which increments the nip
++	 * again.
++	 */
++	regs_set_return_ip(regs, orig_ret_address - 4);
++	regs->link = orig_ret_address;
++
++	return 0;
++}
++NOKPROBE_SYMBOL(trampoline_rethook_handler);
++
++void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
++{
++	rh->ret_addr = regs->link;
++	rh->frame = 0;
++
++	/* Replace the return addr with trampoline addr */
++	regs->link = (unsigned long)arch_rethook_trampoline;
++}
++NOKPROBE_SYMBOL(arch_prepare_kretprobe);
++
++static struct kprobe trampoline_p = {
++	.addr = (kprobe_opcode_t *) &arch_rethook_trampoline,
++	.pre_handler = trampoline_rethook_handler
++};
++
++static int init_arch_rethook(void)
++{
++	return register_kprobe(&trampoline_p);
++}
++
++core_initcall(init_arch_rethook);
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

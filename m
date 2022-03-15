@@ -2,122 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D0A4D9451
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2364D9454
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345105AbiCOGHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S1345114AbiCOGIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243546AbiCOGHP (ORCPT
+        with ESMTP id S1345131AbiCOGH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:07:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E779D49F0A;
-        Mon, 14 Mar 2022 23:06:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A883B80F96;
-        Tue, 15 Mar 2022 06:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0C8C340E8;
-        Tue, 15 Mar 2022 06:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647324361;
-        bh=QZSeIPPqcpDbCmahkEFz7bv6hHEXwmVyN9YGitV6Xok=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qC+o4y5XvxZV+TDdT9Moc9Y7mKtW5Jx4N1/HMZ1gnpLFbCNQAHo6ZtWNEPll4kiay
-         1d4b+b3Cummwbsp0D1Q31PnsWomNA11CyLvNsvmhWxb/N5aR7RFqYnaeU6CynL+5kg
-         abLsoId0YHJF7g24hebZCyJkcLZ6DpkLOxnhpzBJHMFaqLvLoGMm8ZUFyiih9UalHS
-         Fcrkys2LCuJMXzLSx7Vs42SG+VXx/nujoPXbIPXRTJgnAhOFYob2vAxbU2L124pwKc
-         leN5CFuSnrWDwqTWfRzOKgsMiOJlgYAUueJdmGkQy+pzTV7hSF/NmBtDMyXLxXiOsb
-         mttwe27roQXZA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nU0Ji-002BxR-Sp; Tue, 15 Mar 2022 07:05:58 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH 2/2] media: spi: Kconfig: Place SPI drivers on a single menu
-Date:   Tue, 15 Mar 2022 07:05:57 +0100
-Message-Id: <7064723b900730175fbeabf5d696ec21ee70b418.1647324346.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <f2d22b8cdf095b6b907eafa1b92c8c3a046b61be.1647324346.git.mchehab@kernel.org>
-References: <f2d22b8cdf095b6b907eafa1b92c8c3a046b61be.1647324346.git.mchehab@kernel.org>
+        Tue, 15 Mar 2022 02:07:57 -0400
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE30A49F0A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:06:39 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1647324388tpkqndkg
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Mar 2022 14:06:22 +0800 (CST)
+X-QQ-SSF: 01400000002000D0H000B00A0000000
+X-QQ-FEAT: LVBOaDZ5gPpMzvCJEg6pDN8IckuawBlvyYOya+4uTTD0CX+0I0yv5amwd3Xz/
+        P6QtKM695uyr6aXKOF1b5rsu5qVJhNP+Wd/eqw+45c+5xNrJKY0jI7mNQConJb43XrnAGj4
+        WN3wqgBPK9K1WJ1wJjKoMMercL1dASCb9b8TVs4SzSzGWcc/v63O/arcgSz/0gKXwvsevf2
+        bXDgiRSMnI6aQ6vIdYyA+hNAtdwm5jCIWFerKV5Y4J2ZrQjjsSGYma6z1Are69ZZfUqUBVD
+        U5uEdKEs6nFoXsRA1VzgsdvZJ2s55aythLhvGWOx9iMxauWNJPuH+zuuaVvroZookLvEFoI
+        UYRi1YnFOGy6AVTygw=
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dave@stgolabs.net, nixiaoming@huawei.com,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] fs/proc: Introduce list_for_each_table_entry for proc sysctl
+Date:   Tue, 15 Mar 2022 14:06:16 +0800
+Message-Id: <20220315060616.31850-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It makes no sense to have two menus for SPI drivers, each
-one with a single driver. Merge them and keep the Kconfig
-sorted.
+Use the list_for_each_table_entry macro to optimize the scenario
+of traverse ctl_table. This make the code neater and easier to
+understand.
 
-Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Suggested-by: Davidlohr Bueso<dave@stgolabs.net>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
 ---
- drivers/media/spi/Kconfig | 26 +++++++++-----------------
- 1 file changed, 9 insertions(+), 17 deletions(-)
+ fs/proc/proc_sysctl.c | 89 +++++++++++++++++++++++++------------------
+ 1 file changed, 51 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/media/spi/Kconfig b/drivers/media/spi/Kconfig
-index 01e4e6cce027..4656afae5bb4 100644
---- a/drivers/media/spi/Kconfig
-+++ b/drivers/media/spi/Kconfig
-@@ -1,25 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0-only
--if VIDEO_DEV
-+if VIDEO_DEV && SPI
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 6c87c99f0856..5b14db1f691d 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -19,6 +19,9 @@
+ #include <linux/kmemleak.h>
+ #include "internal.h"
  
- comment "SPI I2C drivers auto-selected by 'Autoselect ancillary drivers'"
- 	depends on MEDIA_HIDE_ANCILLARY_SUBDRV && SPI
- 
--menu "SPI helper chips"
--	visible if !MEDIA_HIDE_ANCILLARY_SUBDRV
--
--config VIDEO_GS1662
--	tristate "Gennum Serializers video"
--	depends on SPI && VIDEO_DEV
--	select MEDIA_CONTROLLER
--	select VIDEO_V4L2_SUBDEV_API
--	help
--	  Enable the GS1662 driver which serializes video streams.
--
--endmenu
--
--endif
--
--if SPI
- menu "Media SPI Adapters"
- 
- config CXD2880_SPI_DRV
-@@ -29,6 +13,14 @@ config CXD2880_SPI_DRV
- 	help
- 	  Choose if you would like to have SPI interface support for Sony CXD2880.
- 
-+config VIDEO_GS1662
-+	tristate "Gennum Serializers video"
-+	depends on SPI && VIDEO_DEV
-+	select MEDIA_CONTROLLER
-+	select VIDEO_V4L2_SUBDEV_API
-+	help
-+	  Enable the GS1662 driver which serializes video streams.
++#define list_for_each_table_entry(entry, table) \
++	for ((entry) = (table); (entry)->procname; (entry)++)
 +
- endmenu
+ static const struct dentry_operations proc_sys_dentry_operations;
+ static const struct file_operations proc_sys_file_operations;
+ static const struct inode_operations proc_sys_inode_operations;
+@@ -215,15 +218,19 @@ static void init_header(struct ctl_table_header *head,
+ 	INIT_HLIST_HEAD(&head->inodes);
+ 	if (node) {
+ 		struct ctl_table *entry;
+-		for (entry = table; entry->procname; entry++, node++)
++
++		list_for_each_table_entry(entry, table) {
+ 			node->header = head;
++			node++;
++		}
+ 	}
+ }
  
- endif
+ static void erase_header(struct ctl_table_header *head)
+ {
+ 	struct ctl_table *entry;
+-	for (entry = head->ctl_table; entry->procname; entry++)
++
++	list_for_each_table_entry(entry, head->ctl_table)
+ 		erase_entry(head, entry);
+ }
+ 
+@@ -248,7 +255,7 @@ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ 	err = insert_links(header);
+ 	if (err)
+ 		goto fail_links;
+-	for (entry = header->ctl_table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, header->ctl_table) {
+ 		err = insert_entry(header, entry);
+ 		if (err)
+ 			goto fail;
+@@ -1131,34 +1138,36 @@ static int sysctl_check_table_array(const char *path, struct ctl_table *table)
+ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ {
+ 	int err = 0;
+-	for (; table->procname; table++) {
+-		if (table->child)
+-			err |= sysctl_err(path, table, "Not a file");
+-
+-		if ((table->proc_handler == proc_dostring) ||
+-		    (table->proc_handler == proc_dointvec) ||
+-		    (table->proc_handler == proc_douintvec) ||
+-		    (table->proc_handler == proc_douintvec_minmax) ||
+-		    (table->proc_handler == proc_dointvec_minmax) ||
+-		    (table->proc_handler == proc_dou8vec_minmax) ||
+-		    (table->proc_handler == proc_dointvec_jiffies) ||
+-		    (table->proc_handler == proc_dointvec_userhz_jiffies) ||
+-		    (table->proc_handler == proc_dointvec_ms_jiffies) ||
+-		    (table->proc_handler == proc_doulongvec_minmax) ||
+-		    (table->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
+-			if (!table->data)
+-				err |= sysctl_err(path, table, "No data");
+-			if (!table->maxlen)
+-				err |= sysctl_err(path, table, "No maxlen");
++	struct ctl_table *entry;
++
++	list_for_each_table_entry(entry, table) {
++		if (entry->child)
++			err |= sysctl_err(path, entry, "Not a file");
++
++		if ((entry->proc_handler == proc_dostring) ||
++		    (entry->proc_handler == proc_dointvec) ||
++		    (entry->proc_handler == proc_douintvec) ||
++		    (entry->proc_handler == proc_douintvec_minmax) ||
++		    (entry->proc_handler == proc_dointvec_minmax) ||
++		    (entry->proc_handler == proc_dou8vec_minmax) ||
++		    (entry->proc_handler == proc_dointvec_jiffies) ||
++		    (entry->proc_handler == proc_dointvec_userhz_jiffies) ||
++		    (entry->proc_handler == proc_dointvec_ms_jiffies) ||
++		    (entry->proc_handler == proc_doulongvec_minmax) ||
++		    (entry->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
++			if (!entry->data)
++				err |= sysctl_err(path, entry, "No data");
++			if (!entry->maxlen)
++				err |= sysctl_err(path, entry, "No maxlen");
+ 			else
+-				err |= sysctl_check_table_array(path, table);
++				err |= sysctl_check_table_array(path, entry);
+ 		}
+-		if (!table->proc_handler)
+-			err |= sysctl_err(path, table, "No proc_handler");
++		if (!entry->proc_handler)
++			err |= sysctl_err(path, entry, "No proc_handler");
+ 
+-		if ((table->mode & (S_IRUGO|S_IWUGO)) != table->mode)
+-			err |= sysctl_err(path, table, "bogus .mode 0%o",
+-				table->mode);
++		if ((entry->mode & (S_IRUGO|S_IWUGO)) != entry->mode)
++			err |= sysctl_err(path, entry, "bogus .mode 0%o",
++				entry->mode);
+ 	}
+ 	return err;
+ }
+@@ -1174,7 +1183,7 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 
+ 	name_bytes = 0;
+ 	nr_entries = 0;
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		nr_entries++;
+ 		name_bytes += strlen(entry->procname) + 1;
+ 	}
+@@ -1191,14 +1200,16 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 	node = (struct ctl_node *)(links + 1);
+ 	link_table = (struct ctl_table *)(node + nr_entries);
+ 	link_name = (char *)&link_table[nr_entries + 1];
++	link = link_table;
+ 
+-	for (link = link_table, entry = table; entry->procname; link++, entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		int len = strlen(entry->procname) + 1;
+ 		memcpy(link_name, entry->procname, len);
+ 		link->procname = link_name;
+ 		link->mode = S_IFLNK|S_IRWXUGO;
+ 		link->data = link_root;
+ 		link_name += len;
++		link++;
+ 	}
+ 	init_header(links, dir->header.root, dir->header.set, node, link_table);
+ 	links->nreg = nr_entries;
+@@ -1213,7 +1224,7 @@ static bool get_links(struct ctl_dir *dir,
+ 	struct ctl_table *entry, *link;
+ 
+ 	/* Are there links available for every entry in table? */
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		if (!link)
+@@ -1226,7 +1237,7 @@ static bool get_links(struct ctl_dir *dir,
+ 	}
+ 
+ 	/* The checks passed.  Increase the registration count on the links */
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		head->nreg++;
+@@ -1329,7 +1340,7 @@ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_node *node;
+ 	int nr_entries = 0;
+ 
+-	for (entry = table; entry->procname; entry++)
++	list_for_each_table_entry(entry, table)
+ 		nr_entries++;
+ 
+ 	header = kzalloc(sizeof(struct ctl_table_header) +
+@@ -1456,7 +1467,7 @@ static int count_subheaders(struct ctl_table *table)
+ 	if (!table || !table->procname)
+ 		return 1;
+ 
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		if (entry->child)
+ 			nr_subheaders += count_subheaders(entry->child);
+ 		else
+@@ -1475,7 +1486,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 	int nr_dirs = 0;
+ 	int err = -ENOMEM;
+ 
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		if (entry->child)
+ 			nr_dirs++;
+ 		else
+@@ -1492,7 +1503,9 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 			goto out;
+ 
+ 		ctl_table_arg = files;
+-		for (new = files, entry = table; entry->procname; entry++) {
++		new = files;
++
++		list_for_each_table_entry(entry, table) {
+ 			if (entry->child)
+ 				continue;
+ 			*new = *entry;
+@@ -1516,7 +1529,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 	}
+ 
+ 	/* Recurse into the subdirectories. */
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		char *child_pos;
+ 
+ 		if (!entry->child)
+@@ -1670,7 +1683,7 @@ static void put_links(struct ctl_table_header *header)
+ 	if (IS_ERR(core_parent))
+ 		return;
+ 
+-	for (entry = header->ctl_table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, header->ctl_table) {
+ 		struct ctl_table_header *link_head;
+ 		struct ctl_table *link;
+ 		const char *name = entry->procname;
 -- 
-2.35.1
+2.20.1
+
+
 

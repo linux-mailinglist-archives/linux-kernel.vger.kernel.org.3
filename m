@@ -2,154 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CE24D9322
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 04:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA724D932F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 04:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344730AbiCODt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 23:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S241046AbiCOD7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 23:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237556AbiCODtY (ORCPT
+        with ESMTP id S235161AbiCOD7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 23:49:24 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65E1C120;
-        Mon, 14 Mar 2022 20:48:13 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22F3VgZW003078;
-        Tue, 15 Mar 2022 03:48:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=FxxPwtg+NxiYmANlmtXseSns695DdV4mzCactala+pw=;
- b=jT8QN3ODZ1tXddhFS3aXXNI1crKpPiVyLcORp+oROFznOclZPLY885QzRE3JpSl1u2Yy
- QAAj4vqCjrhvhgc3E1YahMlWiCe9oqjnVfM5Wsa+q520TQnLClorTsJqSyvIfUzAWsJH
- YleA3lUZ3yfPHDslEuE4L0VVNmOz6xZ2kxaEbrUmzwVOUh+B4iskq4Fza1nXgWL+1U+Z
- 99HzaJKOv4O2F1kYqMl5nCF0zBB0ZqJdX0LB5dbMyVVkiAo2KUN91qv/j5giFzXxwnk5
- RAa26v6SEUH+nYy717nPRqXS58D6SjOF82VK0KRDy8dWueCT09IH5SWLpEDSlx0wbays pw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5fu21dg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 03:48:08 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22F3konY177964;
-        Tue, 15 Mar 2022 03:48:07 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
-        by userp3030.oracle.com with ESMTP id 3et65p8n21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 03:48:07 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9iLhRTFt81mwBjbQ1jpKPQZlv0z4ivPC1bqe9jT+et+rw9lcBCvOBQCwPnyw3QClS9AZ+sxQFKSqMnNLEVSEzIs4ggUF7WhpWBF2J/tAGbIP2spvzVbrOsh2jetBmwSGf1hnywzcYE4QY9hw8nAAnDabvbhzM2QiI4OlgbBK5H8O/eYLbciaI1i3xg6n42yX8WRdULl19kAkuTkIiZEjHJXLalBpTADXF6yil8Jx1mzF67f31n+a6MVcXFFhxozk1dW77fajTwPNuM6pR7QsnxDjYPAvlH30iXDCaT6TMt4EVafZNGx1pTissfVmBmqU8I+XmwX4fa/xA6GENrWqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FxxPwtg+NxiYmANlmtXseSns695DdV4mzCactala+pw=;
- b=Vz4IqRX9K3sISXWJhKRbImIzwtM0jN6JBW1H+ilRnN9GPpnIhK13k9ad9RyziUooo1j322Ay6vSivH1nfTA0UfX07Go1ZYfR8hXQCQjGKOUDAVIXvRNZGxt9+TNLhrGO2gRBsM24Fghp+E6eh75klu/7mK+HV7IlDQugJz/02LETgt+IuFyUh6JEx7JhlCOLaJTmG8804ylK1Dx7x/l3JYR5Yu5nIB/XvbW1xdG+GFGm/MN8+yJs4X/Fqb6kQZ1cEfVnhqtAydPrnEWMjwI5d+SHN+3jKZDSXmSWylcLueBsGxUTLKFDyHcHcw6dy8MemXXKk8WEPIIlN0NVLBOIJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FxxPwtg+NxiYmANlmtXseSns695DdV4mzCactala+pw=;
- b=TQOHUw8yjCavp1FvZzbASyRuTMQWpVA2UK4QZxnAT3C0jZERIEWciLueHvdBS9u4BvAHfr0ngTWVGgcuITa+x5TP8O+z7T9RcVqBH5INEEEYmpG+drB6X59RghQWzEgYh6/gl9Cf9hlb3XFkvkLwr4VvslWt2w0hkH6Y10MW8VI=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DM5PR10MB1610.namprd10.prod.outlook.com (2603:10b6:4:7::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5061.22; Tue, 15 Mar 2022 03:48:04 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::48e3:d153:6df4:fbed]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::48e3:d153:6df4:fbed%4]) with mapi id 15.20.5061.029; Tue, 15 Mar 2022
- 03:48:04 +0000
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     aacraid@microsemi.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] scsi: aacraid: Clean up some inconsistent indenting
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1mthrdggn.fsf@ca-mkp.ca.oracle.com>
-References: <20220309005031.126504-1-jiapeng.chong@linux.alibaba.com>
-Date:   Mon, 14 Mar 2022 23:48:01 -0400
-In-Reply-To: <20220309005031.126504-1-jiapeng.chong@linux.alibaba.com>
-        (Jiapeng Chong's message of "Wed, 9 Mar 2022 08:50:31 +0800")
-Content-Type: text/plain
-X-ClientProxiedBy: DM5PR18CA0049.namprd18.prod.outlook.com
- (2603:10b6:3:22::11) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Mon, 14 Mar 2022 23:59:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345F547AE3;
+        Mon, 14 Mar 2022 20:58:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHflT4PCSz4xvY;
+        Tue, 15 Mar 2022 14:58:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647316709;
+        bh=pwlp4jtuRFgs4Txp6CSUd4Kyak3qcyeWoQf0bgb1veM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TI863rkamDY5uoitr4KBzv8bvr4fFktQHJteFjAjCd/V38oV3eONtmUuAKbu8I5IY
+         hXRuXc6zeTKY5jHBaI0JmyLGg7U6CiYhlGwnSjdM8QKMqcSSh4lTfefwDD2GhhU/zH
+         e0EUXYvbH4BA3h+UiyuMz0ATSruXelc0FvKuomOnwzvboOezTQGT8pT9BDkWd4OJAA
+         fo4JSg3a7SbkB6h1RKI8xc4APIyU2oWd82rr9YlWCnP2pb+c9laGs6HE1DH7rGM6zA
+         dsQTcVrPRT8kTJwYl42+zyPcDcwZxZgvpd5dIqbSwzTrTOe43CqcACDXeh0b+UHg40
+         1zDUUuEukTxvw==
+Date:   Tue, 15 Mar 2022 14:58:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the ftrace tree with the nfsd tree
+Message-ID: <20220315145828.413e9301@canb.auug.org.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1a678e1-8215-46cb-0940-08da06369c3f
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1610:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB161054FC4809F0D3879DED448E109@DM5PR10MB1610.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gV5L2ErMaCg1ce9r2I+7tiRbB0JMmEmzfuWQ4aFNmsfGqCnZmWL5sW7/pQ6ijGRPDTyhJ2fj/45dcbVpeLJ7waIBvvLWxwJVmdY4UTnf7EMSU2u7itfjtnKPTkHRCIUkeUML/osmp88mEnEj8pKAxF3rsNPJAhAUpRk8WUwEcIfqWdZ0+r9z/9LNjtZFFdPsr4oHitl8CCHN/nwhW8slhOL5YnZ9lca732rfCKd38wSHfdMIPBDfL+Wekvqsq7PJ6SUPyvFPDJlKAMPRiEwM/sgPYShyg6lWwNNqg0SD9fvEUhQxpzZA9YXnQwOH9FNKuTG3gHvKdQQltCxgKcn2jIbNDYSeqGdjIF8qoUSYoUQ9Je5+cKgszoAZrokONgxAItZZEL3BfsuO91KJVW+U4XeqrvIb1HLYWaKQMSiM/vV3nqZta+QwnOctUhOQLqDJh0wqkARcooDdxMi6gpAG6ZUfkOwcYa3zQKbFsNfNuztYIF+u5nFEu8JiiXwjneZhPP5jjNcePThtXNRzjGz2gDjKBKLVu6KEN9y48VyQGZBuxPT2z5SgfxQ2izLQ2svd2ro9wmcPsFNIxoV76+WSpkiVfMr4nJOl8lWmzvU7TET7DNVRVNGBEh6zc3rta+eR0YNjMOZ8TC+G+XNBHsVlLjyWBvCEW5gd4zMVYEbwtEWujxSFjGUxUwUBCDORuZEQO+8pmqwpAXJ4JJT1gGQpJg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(38350700002)(83380400001)(316002)(6916009)(5660300002)(6666004)(66946007)(66556008)(66476007)(6506007)(8936002)(558084003)(6512007)(52116002)(36916002)(508600001)(2906002)(186003)(6486002)(26005)(86362001)(4326008)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ENPWn7nFiL5GMySjoYatGdf6KPb/8mGRf+KvHKcGSXIIwVGo1bUgCtggPMW5?=
- =?us-ascii?Q?pQ/s8refVSjjX+QE6vmpBYeTqnNcoiZSpRjdZnZ3vW8xoKQjizfwJMaJFaZj?=
- =?us-ascii?Q?D+eG9J/1Lz2TuFZ8Q6rIhKMOdmPDZw6NvDwblFPXatNbW3bHlQaRBi1stqFe?=
- =?us-ascii?Q?3CltojlHqDXlqM1UeAH9wx9QUjiXuNo4QTgopj+db0/3jSDsIdLXWyRwH27d?=
- =?us-ascii?Q?uHmBdUzJTdvzVYTCujPt/fFndrW77qfrIpTiGHJplIgj6KAR+lgOftMwDUlS?=
- =?us-ascii?Q?O+4LivyczCkk0PxsaLNoBIdVAaeel+bDyGGN4PFGOVEZl0DqfD/BslJRjNhc?=
- =?us-ascii?Q?2Ot7KIwqBtaPtXwBg+dtUXVjv4Tfa2Beq7Ac1+0acvANhg8JFyMy6ngeSppg?=
- =?us-ascii?Q?6J6scPnkc0MylZXUCZXMz7PPMMjeVCx0/HsXbBa8szo3LE2RubxIdTN7UiLr?=
- =?us-ascii?Q?jREhhRewAfd5nF3wcjLLoyoyGDTBCzjOlRC1Ln8QpP8EJZQgdk/r7jQtT82B?=
- =?us-ascii?Q?2W6u2BE9gP0HKOnSa5JqEGzcKzUlE0tPL7uUQqOFZXvv9eidvkN8udHx6CpB?=
- =?us-ascii?Q?zzF0xRiDhxALSEizxUerY4f3dQQAMLujTgKlgW8rLPNEHHs8xxRd16fzvkXs?=
- =?us-ascii?Q?1wJaSAiKABpWbB+UMvZMI3tCS7RIAXOCS0yT8sbUT99GJbqw6+cbDKrbv1/G?=
- =?us-ascii?Q?BIvKJH4ha82hm0tvPqo9hYqF3/dROYN4QAe+H4/MmNn709zU6JWB13p96sXJ?=
- =?us-ascii?Q?3e1lGLKhn5i5LX8Mx6ypzGiNS+kb9lvP5AJw/MTp3iZjNiywB9pU3+Imy0O7?=
- =?us-ascii?Q?wLgWUwwriC1gpYFGCc2TAnzzKH58WY41wPIheK9m/+fy43Ix4RNFb3SA/UMB?=
- =?us-ascii?Q?RqbpAMRRo6lfYvXRCXs9BJ8IvLNz1Yt7ZiQTMDYnWN3ccu40b7KAlgY1QGf4?=
- =?us-ascii?Q?PYiHJJckyTEB61jJj8nYRjMfuueqc7mdEihidOgiqtTQPmpSRgFKHT64u5p0?=
- =?us-ascii?Q?4pJLhK69Zp5sjmYAhgtPdkDh/OiVHbjMuOiVV8wxE4261NGuWyY8HoVGH2zn?=
- =?us-ascii?Q?7g7Jy43AAyBPrERKJVfqIZP3O5OqF7vVh3M90X2Y/oCK+mUWLEJpXRZgdfpn?=
- =?us-ascii?Q?9xPGWY1xl0HxCfNjBo4oBelB/cPLAZc5/hwJW+dz89s5AFpEGPN5SF424oCn?=
- =?us-ascii?Q?eTyU2sAd/yEyS63D13mEO1IYDzgKP161o5RyqgCdmA9Bem5W+gBlc4SYYmva?=
- =?us-ascii?Q?hViFwm1a/EKRmuMo9uJw7PDJlTqtvjIVa67Gz9SE+ScfFdAbAhURHu/4O4kK?=
- =?us-ascii?Q?QFpMud+VHtfCE9IowCYiJdjfK5LElXmmUmtIlDd2nLyfKpP34x0UOtclENUr?=
- =?us-ascii?Q?fp+HgKOHzK+SG4XKtWkVr6AAcghY62oUnNm4UvfojoHM1M77e84tS5d1OuZz?=
- =?us-ascii?Q?lQlp53ho5Vkhrf0hYS+oZ5ym7HOj5SYKyQp34/M+1S7hEpzkCljcrg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1a678e1-8215-46cb-0940-08da06369c3f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2022 03:48:04.6805
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4n1mCPHmjiQJmr/ikUhLATOJjbfaCGu4iwNp3EobkZ+ROF50APa1D/+UBFT0cEbTDDz3xwUmnNJ3MCUtgXh+T61hZsqefwpZm4AOCswKhxE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1610
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10286 signatures=693139
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=718 phishscore=0
- suspectscore=0 adultscore=0 spamscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203150022
-X-Proofpoint-GUID: H52x_YLgxcQdtLNZ5frrZP6M-TyXVXbm
-X-Proofpoint-ORIG-GUID: H52x_YLgxcQdtLNZ5frrZP6M-TyXVXbm
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/l6_7Qz9X_bEJrHVs=ZnrHzt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/l6_7Qz9X_bEJrHVs=ZnrHzt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Jiapeng,
+Hi all,
 
-> Eliminate the follow smatch warning:
->
-> drivers/scsi/aacraid/linit.c:867 aac_eh_tmf_hard_reset_fib() warn:
-> inconsistent indenting.
+Today's linux-next merge of the ftrace tree got a conflict in:
 
-Applied to 5.18/scsi-staging, thanks!
+  include/trace/trace_events.h
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+between commit:
+
+  d07c9ad62247 ("tracing: Introduce helpers to safely handle dynamic-sized =
+sockaddrs")
+
+from the nfsd tree and commit:
+
+  af6b9668e85f ("tracing: Move the defines to create TRACE_EVENTS into thei=
+r own files")
+
+from the ftrace tree.
+
+Well, this is a pain :-(
+
+I fixed it up (I used the latter version of this file and then added
+the following merge fix patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 15 Mar 2022 14:47:18 +1100
+Subject: [PATCH] fix up for "tracing: Move the defines to create TRACE_EVEN=
+TS into their own files"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/trace/stages/stage1_defines.h |  6 ++++++
+ include/trace/stages/stage2_defines.h | 10 ++++++++--
+ include/trace/stages/stage3_defines.h |  6 ++++++
+ include/trace/stages/stage4_defines.h |  6 ++++++
+ include/trace/stages/stage5_defines.h |  6 ++++++
+ include/trace/stages/stage6_defines.h | 18 ++++++++++++++++++
+ include/trace/stages/stage7_defines.h |  2 ++
+ 7 files changed, 52 insertions(+), 2 deletions(-)
+
+diff --git a/include/trace/stages/stage1_defines.h b/include/trace/stages/s=
+tage1_defines.h
+index 8ab88c766d2b..a16783419687 100644
+--- a/include/trace/stages/stage1_defines.h
++++ b/include/trace/stages/stage1_defines.h
+@@ -29,6 +29,9 @@
+ #undef __bitmask
+ #define __bitmask(item, nr_bits) __dynamic_array(char, item, -1)
+=20
++#undef __sockaddr
++#define __sockaddr(field, len) __dynamic_array(u8, field, len)
++
+ #undef __rel_dynamic_array
+ #define __rel_dynamic_array(type, item, len) u32 __rel_loc_##item;
+=20
+@@ -41,5 +44,8 @@
+ #undef __rel_bitmask
+ #define __rel_bitmask(item, nr_bits) __rel_dynamic_array(char, item, -1)
+=20
++#undef __rel_sockaddr
++#define __rel_sockaddr(field, len) __rel_dynamic_array(u8, field, len)
++
+ #undef TP_STRUCT__entry
+ #define TP_STRUCT__entry(args...) args
+diff --git a/include/trace/stages/stage2_defines.h b/include/trace/stages/s=
+tage2_defines.h
+index 9f2341df40da..42fd1e8813ec 100644
+--- a/include/trace/stages/stage2_defines.h
++++ b/include/trace/stages/stage2_defines.h
+@@ -29,11 +29,14 @@
+ #undef __string
+ #define __string(item, src) __dynamic_array(char, item, -1)
+=20
++#undef __string_len
++#define __string_len(item, src, len) __dynamic_array(char, item, -1)
++
+ #undef __bitmask
+ #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
+=20
+-#undef __string_len
+-#define __string_len(item, src, len) __dynamic_array(char, item, -1)
++#undef __sockaddr
++#define __sockaddr(field, len) __dynamic_array(u8, field, len)
+=20
+ #undef __rel_dynamic_array
+ #define __rel_dynamic_array(type, item, len)	u32 item;
+@@ -46,3 +49,6 @@
+=20
+ #undef __rel_bitmask
+ #define __rel_bitmask(item, nr_bits) __rel_dynamic_array(unsigned long, it=
+em, -1)
++
++#undef __rel_sockaddr
++#define __rel_sockaddr(field, len) __rel_dynamic_array(u8, field, len)
+diff --git a/include/trace/stages/stage3_defines.h b/include/trace/stages/s=
+tage3_defines.h
+index 0bc131993b7a..e3b183e9d18e 100644
+--- a/include/trace/stages/stage3_defines.h
++++ b/include/trace/stages/stage3_defines.h
+@@ -51,6 +51,12 @@
+ 		trace_print_bitmask_seq(p, __bitmask, __bitmask_size);	\
+ 	})
+=20
++#undef __get_sockaddr
++#define __get_sockaddr(field)	((struct sockaddr *)__get_dynamic_array(fiel=
+d))
++
++#undef __get_rel_sockaddr
++#define __get_rel_sockaddr(field)	((struct sockaddr *)__get_rel_dynamic_ar=
+ray(field))
++
+ #undef __print_flags
+ #define __print_flags(flag, delim, flag_array...)			\
+ 	({								\
+diff --git a/include/trace/stages/stage4_defines.h b/include/trace/stages/s=
+tage4_defines.h
+index 780a10fa5279..e80cdc397a43 100644
+--- a/include/trace/stages/stage4_defines.h
++++ b/include/trace/stages/stage4_defines.h
+@@ -41,6 +41,9 @@
+ #undef __bitmask
+ #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
+=20
++#undef __sockaddr
++#define __sockaddr(field, len) __dynamic_array(u8, field, len)
++
+ #undef __rel_dynamic_array
+ #define __rel_dynamic_array(_type, _item, _len) {			\
+ 	.type =3D "__rel_loc " #_type "[]", .name =3D #_item,		\
+@@ -55,3 +58,6 @@
+=20
+ #undef __rel_bitmask
+ #define __rel_bitmask(item, nr_bits) __rel_dynamic_array(unsigned long, it=
+em, -1)
++
++#undef __rel_sockaddr
++#define __rel_sockaddr(field, len) __rel_dynamic_array(u8, field, len)
+diff --git a/include/trace/stages/stage5_defines.h b/include/trace/stages/s=
+tage5_defines.h
+index fb15394aae31..7ee5931300e6 100644
+--- a/include/trace/stages/stage5_defines.h
++++ b/include/trace/stages/stage5_defines.h
+@@ -81,3 +81,9 @@
+ #undef __rel_bitmask
+ #define __rel_bitmask(item, nr_bits) __rel_dynamic_array(unsigned long, it=
+em,	\
+ 					 __bitmask_size_in_longs(nr_bits))
++
++#undef __sockaddr
++#define __sockaddr(field, len) __dynamic_array(u8, field, len)
++
++#undef __rel_sockaddr
++#define __rel_sockaddr(field, len) __rel_dynamic_array(u8, field, len)
+diff --git a/include/trace/stages/stage6_defines.h b/include/trace/stages/s=
+tage6_defines.h
+index b3a1f26026be..2ac88e1a7677 100644
+--- a/include/trace/stages/stage6_defines.h
++++ b/include/trace/stages/stage6_defines.h
+@@ -45,6 +45,15 @@
+ #define __assign_bitmask(dst, src, nr_bits)					\
+ 	memcpy(__get_bitmask(dst), (src), __bitmask_size_in_bytes(nr_bits))
+=20
++#undef __sockaddr
++#define __sockaddr(field, len) __dynamic_array(u8, field, len)
++
++#undef __get_sockaddr
++#define __get_sockaddr(field)	((struct sockaddr *)__get_dynamic_array(fiel=
+d))
++
++#define __assign_sockaddr(dest, src, len)					\
++	memcpy(__get_dynamic_array(dest), src, len)
++
+ #undef __rel_dynamic_array
+ #define __rel_dynamic_array(type, item, len)				\
+ 	__entry->__rel_loc_##item =3D __data_offsets.item;
+@@ -76,6 +85,15 @@
+ #define __assign_rel_bitmask(dst, src, nr_bits)					\
+ 	memcpy(__get_rel_bitmask(dst), (src), __bitmask_size_in_bytes(nr_bits))
+=20
++#undef __rel_sockaddr
++#define __rel_sockaddr(field, len) __rel_dynamic_array(u8, field, len)
++
++#undef __get_rel_sockaddr
++#define __get_rel_sockaddr(field)	((struct sockaddr *)__get_rel_dynamic_ar=
+ray(field))
++
++#define __assign_rel_sockaddr(dest, src, len)					\
++	memcpy(__get_rel_dynamic_array(dest), src, len)
++
+ #undef TP_fast_assign
+ #define TP_fast_assign(args...) args
+=20
+diff --git a/include/trace/stages/stage7_defines.h b/include/trace/stages/s=
+tage7_defines.h
+index d65445328f18..8a7ec24c246d 100644
+--- a/include/trace/stages/stage7_defines.h
++++ b/include/trace/stages/stage7_defines.h
+@@ -13,10 +13,12 @@
+ #undef __get_dynamic_array_len
+ #undef __get_str
+ #undef __get_bitmask
++#undef __get_sockaddr
+ #undef __get_rel_dynamic_array
+ #undef __get_rel_dynamic_array_len
+ #undef __get_rel_str
+ #undef __get_rel_bitmask
++#undef __get_rel_sockaddr
+ #undef __print_array
+ #undef __print_hex_dump
+=20
+--=20
+2.34.1
+
+However, my x86_64 allmodconfig build then failed like this:
+
+In file included from include/trace/define_custom_trace.h:55,
+                 from samples/trace_events/trace_custom_sched.h:95,
+                 from samples/trace_events/trace_custom_sched.c:24:
+samples/trace_events/./trace_custom_sched.h: In function 'ftrace_test_custo=
+m_probe_sched_switch':
+include/trace/trace_custom_events.h:178:42: error: passing argument 1 of 'c=
+heck_trace_callback_type_sched_switch' from incompatible pointer type [-Wer=
+ror=3Dincompatible-pointer-types]
+  178 |         check_trace_callback_type_##call(trace_custom_event_raw_eve=
+nt_##template); \
+      |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~
+      |                                          |
+      |                                          void (*)(void *, bool,  st=
+ruct task_struct *, struct task_struct *) {aka void (*)(void *, _Bool,  str=
+uct task_struct *, struct task_struct *)}
+include/trace/trace_custom_events.h:34:9: note: in expansion of macro 'DEFI=
+NE_CUSTOM_EVENT'
+   34 |         DEFINE_CUSTOM_EVENT(name, name, PARAMS(proto), PARAMS(args)=
+);
+      |         ^~~~~~~~~~~~~~~~~~~
+samples/trace_events/./trace_custom_sched.h:21:1: note: in expansion of mac=
+ro 'TRACE_CUSTOM_EVENT'
+   21 | TRACE_CUSTOM_EVENT(sched_switch,
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/trace_events.h:11,
+                 from samples/trace_events/trace_custom_sched.c:10:
+include/linux/tracepoint.h:279:49: note: expected 'void (*)(void *, bool,  =
+unsigned int,  struct task_struct *, struct task_struct *)' {aka 'void (*)(=
+void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *)'=
+} but argument is of type 'void (*)(void *, bool,  struct task_struct *, st=
+ruct task_struct *)' {aka 'void (*)(void *, _Bool,  struct task_struct *, s=
+truct task_struct *)'}
+  279 |         check_trace_callback_type_##name(void (*cb)(data_proto))   =
+     \
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~
+include/linux/tracepoint.h:419:9: note: in expansion of macro '__DECLARE_TR=
+ACE'
+  419 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),         =
+     \
+      |         ^~~~~~~~~~~~~~~
+include/linux/tracepoint.h:553:9: note: in expansion of macro 'DECLARE_TRAC=
+E'
+  553 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~
+include/trace/events/sched.h:222:1: note: in expansion of macro 'TRACE_EVEN=
+T'
+  222 | TRACE_EVENT(sched_switch,
+      | ^~~~~~~~~~~
+
+So I gave up and uses the ftrace tree from next-20220310 for today.
+
+I am going to need some help with this mess, please.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/l6_7Qz9X_bEJrHVs=ZnrHzt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwDuQACgkQAVBC80lX
+0Gz7uAf+MNebB+0qCJ2+JNA0CMSPLfv3C6x1IjiaMqGL6TGm9/h43IZWVtlFzwLc
+dnRxVlCHE35Q1WnQqzWmxQZoOiVQGUm1TRYzoWJic9AiiReXRpc430JXw7U0TaCP
+O4r9GR7p6mOYZ7yeGM1qv2UCPj8DkcqhSQl404BB83gYQPVHIRaZ2+tlcLMSSWOD
+V8cY97zLF0+HAtNKgrJyE6qHTBO4fXb736u//jmNr1vOihERc4UDTdgWSSwHR/NQ
+eGKcjd0S36cTPrqmURrtLVO/n1o4/PpOegVJBmidPHr0zY9AxPhWyv2Sir2XDbun
+X6vl8fH7enrcOUT3fJqwtDjk3B/0lg==
+=C/Pt
+-----END PGP SIGNATURE-----
+
+--Sig_/l6_7Qz9X_bEJrHVs=ZnrHzt--

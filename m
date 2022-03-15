@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E8B4D9A49
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E014F4D9A52
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347559AbiCOLYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S1347876AbiCOL03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbiCOLYA (ORCPT
+        with ESMTP id S233729AbiCOL01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:24:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EBB631F;
-        Tue, 15 Mar 2022 04:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ul9b8YQaPGFJIzLg4O7EZ8BuJh4nEAPn8uLCo67QHe0=; b=Q7xpYHxRR2cIPtVMvd+GXrt1E4
-        M+7WVfOhHTLT7CrXI6JZTs2mSi2JnYwSgR5RGTK9odO9Tla4PsLVnjQYvn9GLdqDZ8ApxtXjXXQsH
-        giIuzg4sZ4Bsl8k5WEb0iMdE/Vw0DQG5fV0R6kdV3WePth0TDG/kt4DADd8xq/nfiqo7MlWjexAu8
-        dsWzQaOCVIqmIaaFvAx9TKrMmaPQqzh+00txpavVsEKq0EAfSsvveat9LbUOcmsiFhKcUum0bUT3A
-        AEPRAaKQe51KT1GhzQYPyyPEHtDZzXNHi9/ilKhCsqvWLwfhmkmxbCmRt+NcYaeKKjRRGac+CfsIP
-        w649oCkA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nU5G6-004ytk-K8; Tue, 15 Mar 2022 11:22:34 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C562B98620D; Tue, 15 Mar 2022 12:22:32 +0100 (CET)
-Date:   Tue, 15 Mar 2022 12:22:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V4 03/10] perf: Extend branch type classification
-Message-ID: <20220315112232.GF8939@worktop.programming.kicks-ass.net>
-References: <20220315053516.431515-1-anshuman.khandual@arm.com>
- <20220315053516.431515-4-anshuman.khandual@arm.com>
+        Tue, 15 Mar 2022 07:26:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEE64ECFC;
+        Tue, 15 Mar 2022 04:25:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 266CD21900;
+        Tue, 15 Mar 2022 11:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647343514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BKrRwVuw72BzaglAlmSnLaAKxBvpnYrC6+CTmMlmAIY=;
+        b=EyGdUI6H6HT3KSpuL20Nz2Xq2T3sTqiyHr3cEFJNr+TV5qrRUeuKiB3CW6pu25G57HuXJ/
+        f9irrfuh4q8+vHogrUkg4ftkzUvhIilHewfS96GI8dY6ZKr20CS9jtB3DXUHIMq/y/Z2mL
+        j0LQPboP5xGY3WEhRy2GzovrYV6bDPY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647343514;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BKrRwVuw72BzaglAlmSnLaAKxBvpnYrC6+CTmMlmAIY=;
+        b=rl1NWrhB7QGS7mg42YkFQ6lFLwSaqN4v4kXcpeh2QOTClGCUsqoXHAM/NA1lq8qcftsV/4
+        gE00On8d2rk7UqAQ==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 18941A3B87;
+        Tue, 15 Mar 2022 11:25:14 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 87835A0615; Tue, 15 Mar 2022 12:25:12 +0100 (CET)
+Date:   Tue, 15 Mar 2022 12:25:12 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the folio tree with the ext4 tree
+Message-ID: <20220315112512.yl7dewzglimjurh5@quack3.lan>
+References: <20220315204007.05ad4817@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220315053516.431515-4-anshuman.khandual@arm.com>
+In-Reply-To: <20220315204007.05ad4817@canb.auug.org.au>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,64 +65,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 11:05:09AM +0530, Anshuman Khandual wrote:
-> branch_entry.type now has ran out of space to accommodate more branch types
-> classification. This will prevent perf branch stack implementation on arm64
-> (via BRBE) to capture all available branch types. Extending this bit field
-> i.e branch_entry.type [4 bits] is not an option as it will break user space
-> ABI both for little and big endian perf tools.
+On Tue 15-03-22 20:40:07, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Extend branch classification with a new field branch_entry.new_type via a
-> new branch type PERF_BR_EXTEND_ABI in branch_entry.type. Perf tools which
-> could decode PERF_BR_EXTEND_ABI, will then parse branch_entry.new_type as
-> well.
+> Today's linux-next merge of the folio tree got a conflict in:
 > 
-> branch_entry.new_type is a 4 bit field which can hold upto 16 branch types.
-> The first three branch types will hold various generic page faults followed
-> by five architecture specific branch types, which can be overridden by the
-> platform for specific use cases. These architecture specific branch types
-> gets overridden on arm64 platform for BRBE implementation.
+>   fs/ext4/inode.c
+> 
+> between commit:
+> 
+>   2bb8dd401a4f ("ext4: warn when dirtying page w/o buffers in data=journal mode")
+> 
+> from the ext4 tree and commit:
+> 
+>   821405cf3ebb ("fs: Convert trivial uses of __set_page_dirty_nobuffers to filemap_dirty_folio")
+> 
+> from the folio tree.
+> 
+> I didn't know how to complete this fix up ans so just commented out the
+> new WARN_ON().
 
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index 26d8f0b5ac0d..d29280adc3c4 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -255,9 +255,22 @@ enum {
->  	PERF_BR_IRQ		= 12,	/* irq */
->  	PERF_BR_SERROR		= 13,	/* system error */
->  	PERF_BR_NO_TX		= 14,	/* not in transaction */
-> +	PERF_BR_EXTEND_ABI	= 15,	/* extend ABI */
->  	PERF_BR_MAX,
->  };
+Thanks for the notice Stephen! The resolution should be like:
+
+- 	WARN_ON_ONCE(!page_has_buffers(page));
++ 	WARN_ON_ONCE(!folio_buffers(folio));
+
+How are we going to handle this conflict Ted? Just tell Linus about the
+conflict and resolution?
+
+								Honza
+
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc fs/ext4/inode.c
+> index 3d0ca48d20c8,436efd31cc27..000000000000
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@@ -3573,31 -3541,30 +3573,32 @@@ const struct iomap_ops ext4_iomap_repor
+>   };
+>   
+>   /*
+> -  * Whenever the page is being dirtied, corresponding buffers should already be
+>  - * Folios can be marked dirty completely asynchronously from ext4's
+>  - * journalling activity.  By filemap_sync_pte(), try_to_unmap_one(), etc.
+>  - * We cannot do much here because ->dirty_folio may be called with the
+>  - * page table lock held.  The folio is not necessarily locked.
+> ++ * Whenever the folio is being dirtied, corresponding buffers should already be
+>  + * attached to the transaction (we take care of this in ext4_page_mkwrite() and
+>  + * ext4_write_begin()). However we cannot move buffers to dirty transaction
+> -  * lists here because ->set_page_dirty is called under VFS locks and the page
+> ++ * lists here because ->dirty_folio is called under VFS locks and the folio
+>  + * is not necessarily locked.
+>    *
+> -  * We cannot just dirty the page and leave attached buffers clean, because the
+> +  * We cannot just dirty the folio and leave attached buffers clean, because the
+>    * buffers' dirty state is "definitive".  We cannot just set the buffers dirty
+>    * or jbddirty because all the journalling code will explode.
+>    *
+> -  * So what we do is to mark the page "pending dirty" and next time writepage
+> +  * So what we do is to mark the folio "pending dirty" and next time writepage
+>    * is called, propagate that into the buffers appropriately.
+>    */
+> - static int ext4_journalled_set_page_dirty(struct page *page)
+> + static bool ext4_journalled_dirty_folio(struct address_space *mapping,
+> + 		struct folio *folio)
+>   {
+> - 	WARN_ON_ONCE(!page_has_buffers(page));
+> - 	SetPageChecked(page);
+> - 	return __set_page_dirty_nobuffers(page);
+> ++/*	WARN_ON_ONCE(!page_has_buffers(page)); */
+> + 	folio_set_checked(folio);
+> + 	return filemap_dirty_folio(mapping, folio);
+>   }
+>   
+> - static int ext4_set_page_dirty(struct page *page)
+> + static bool ext4_dirty_folio(struct address_space *mapping, struct folio *folio)
+>   {
+> - 	WARN_ON_ONCE(!PageLocked(page) && !PageDirty(page));
+> - 	WARN_ON_ONCE(!page_has_buffers(page));
+> - 	return __set_page_dirty_buffers(page);
+> + 	WARN_ON_ONCE(!folio_test_locked(folio) && !folio_test_dirty(folio));
+> + 	WARN_ON_ONCE(!folio_buffers(folio));
+> + 	return block_dirty_folio(mapping, folio);
+>   }
+>   
+>   static int ext4_iomap_swap_activate(struct swap_info_struct *sis,
 
 
->  #define PERF_SAMPLE_BRANCH_PLM_ALL \
->  	(PERF_SAMPLE_BRANCH_USER|\
->  	 PERF_SAMPLE_BRANCH_KERNEL|\
-> @@ -1372,7 +1385,8 @@ struct perf_branch_entry {
->  		abort:1,    /* transaction abort */
->  		cycles:16,  /* cycle count to last branch */
->  		type:4,     /* branch type */
-> -		reserved:40;
-> +		new_type:4, /* additional branch type */
-> +		reserved:36;
->  };
-
-Hurmpf... this will effectively give us 5 bits of space for the cost of
-8, that seems... unfortunate.
-
-Would something like:
-
-		type:4,
-		ext_type:4,
-		reserved:36;
-
-and have all software do:
-
-	type = pbe->type | (pbe->ext_type << 4);
-
-Then old software will only know about the old types. New software on
-old kernels will add 4 0's, which is harmless, while new software on new
-kernels will get 8 bytes of type.
-
-Would that work?
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

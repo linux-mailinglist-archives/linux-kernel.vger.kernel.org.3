@@ -2,99 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA60C4DA5C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8BC4DA5C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344538AbiCOW5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S244735AbiCOWxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344423AbiCOW5I (ORCPT
+        with ESMTP id S229888AbiCOWxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:57:08 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305E95D5E1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:55:55 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id u7so854454ljk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version:organization
-         :content-transfer-encoding;
-        bh=353ErsK+RGDyNPxQky3skb4+jiks6X7CPsq9uRQTVb4=;
-        b=L6/T4rpw8WvPr3573NYwtD1rNDtLBVQhNsCYrmwLv+NkgCN7Yw4pp3lP8uplbUZojD
-         pyOf8RRVzciVkb8rIBMWXnSu/Xr5Qx8oSbLjdj5lhNu4rQL+2SSQ+R9TeYG0Omq1TgFL
-         Sii7aIxy9lb0SUxbnzNauaFAEQNgf0B/Atzv6snv1iKF231IHrSfU3ln8FgGC+lJ7Y5o
-         yI1bUvJcYJjuDulZmw4h2tCHsEsLUqGOzXNrsKFVLaFfns29ns6pRL3CbFlLFbt7Wm+J
-         Ynt80jfSlsdVM54NIs/Ozbb8dzMfmcAzmImF4BO39/GRakEEr9yQRdnIvqTspZKxvClS
-         IdLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :organization:content-transfer-encoding;
-        bh=353ErsK+RGDyNPxQky3skb4+jiks6X7CPsq9uRQTVb4=;
-        b=2ZNVoaCA5m9VUjOWMu9Ia9hBtvaSEjfWXu9SO96ugfiWt8+w3Pw/KKoLEc/4wWcLhy
-         YnrwqmxqHPWgea7qrnpDIo4xDhD5qdmuCQCWRVHExeGW8bKh9b/PCv1jXVEFXh4I8WBu
-         DvVjv8urefZlRGD8gPjy7fP8ZswickVax7XjikmsCNKaO2suuy5CtjWp9j4pMCEnRMoX
-         vuhu0x1D5IaGVNzdImhTubNgDwdqcK2O6syRsO2wDa5iHGX5NJ7CcYi66HXMYWk3jbqI
-         XycxUmyFJ/3PPY3TECXt83wMmHSrjKXMw6iHnERiFb9TYF7Ka0pNPZxHpMzz9b0awFyP
-         xV1w==
-X-Gm-Message-State: AOAM530B2CCXvYR/QEASgWUUkXKeOJFuK2MmDA6tC7bCh93w4EDNV2Ny
-        ZXMISM1PXqW98NJz9qZIvMp7Ag==
-X-Google-Smtp-Source: ABdhPJzYA7g7r6z6hBDKdXhfFziYg1jj95qbG394ogx9KGZh1RJJ+T13V3Dd1E6WLqyyb5F/FAlF/w==
-X-Received: by 2002:a2e:b0f5:0:b0:249:2986:4fa8 with SMTP id h21-20020a2eb0f5000000b0024929864fa8mr10504755ljl.128.1647384953430;
-        Tue, 15 Mar 2022 15:55:53 -0700 (PDT)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id 5-20020a2e1445000000b002491768821asm29445lju.49.2022.03.15.15.55.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 15:55:52 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: dsa: Never offload FDB entries on standalone ports
-Date:   Tue, 15 Mar 2022 23:50:18 +0100
-Message-Id: <20220315225018.1399269-1-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Mar 2022 18:53:47 -0400
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7A456C21;
+        Tue, 15 Mar 2022 15:52:34 -0700 (PDT)
+Received: from [77.244.183.192] (port=63206 helo=[192.168.178.39])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nUG1o-0007pT-2P; Tue, 15 Mar 2022 23:52:32 +0100
+Message-ID: <59ee78c2-7d05-6d97-1ff2-36ea326be188@lucaceresoli.net>
+Date:   Tue, 15 Mar 2022 23:52:30 +0100
 MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [EXTERNAL] Re: [PATCH] clk: vc5: Enable VC5_HAS_PFD_FREQ_DBL on
+ 5p49v6965
+Content-Language: en-US
+To:     "Fillion, Claude" <Claude.Fillion@mksinst.com>,
+        Adam Ford <aford173@gmail.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Cc:     "aford@beaconembedded.com" <aford@beaconembedded.com>,
+        "cstevens@beaconembedded.com" <cstevens@beaconembedded.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>
+References: <20220313115704.301718-1-aford173@gmail.com>
+ <a146f554-837a-d19a-425c-b1fd790a0497@lucaceresoli.net>
+ <MN2PR03MB5008F8DDC6DD934074EBBC0E93109@MN2PR03MB5008.namprd03.prod.outlook.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <MN2PR03MB5008F8DDC6DD934074EBBC0E93109@MN2PR03MB5008.namprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a port joins a bridge that it can't offload, it will fallback to
-standalone mode and software bridging. In this case, we never want to
-offload any FDB entries to hardware either.
+Hi Claude,
 
-Fixes: c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
- net/dsa/slave.c | 3 +++
- 1 file changed, 3 insertions(+)
+[adding Marek in Cc:, the original author of the driver and also of the
+frequency doubler]
 
-diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-index f9cecda791d5..d24b6bf845c1 100644
---- a/net/dsa/slave.c
-+++ b/net/dsa/slave.c
-@@ -2847,6 +2847,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
- 	if (ctx && ctx != dp)
- 		return 0;
- 
-+	if (!dp->bridge)
-+		return 0;
-+
- 	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
- 		if (dsa_port_offloads_bridge_port(dp, orig_dev))
- 			return 0;
+On 15/03/22 20:34, Fillion, Claude wrote:
+> Hello Luca,
+> 
+> I will defer to Adam, but a few comments:
+> 
+>> -----Original Message-----
+>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>> Sent: Tuesday, March 15, 2022 4:55 AM
+>> To: Adam Ford <aford173@gmail.com>; linux-clk@vger.kernel.org
+>> Cc: aford@beaconembedded.com; cstevens@beaconembedded.com;
+>> Fillion, Claude <Claude.Fillion@mksinst.com>; Michael Turquette
+>> <mturquette@baylibre.com>; Stephen Boyd <sboyd@kernel.org>; linux-
+>> kernel@vger.kernel.org
+>> Subject: [EXTERNAL] Re: [PATCH] clk: vc5: Enable VC5_HAS_PFD_FREQ_DBL
+>> on 5p49v6965
+>>
+>> This email originated outside of MKS.  Use caution when sharing information
+>> or opening attachments and links.
+>>
+>> ----------------------------------------------------------------------------------------------
+>> ----------------------------------------------
+>> Hi Adam, Claude,
+>>
+>> thanks for your patch.
+>>
+>> On 13/03/22 12:57, Adam Ford wrote:
+>>> The 5p49v6965 has a reference clock frequency doubler.
+>>> Enabling it adds versaclock_som.dbl to the clock tree, but the output
+>>> frequency remains correct.
+>>>
+>>> Suggested-by: Claude Fillion <Claude.Fillion@mksinst.com>
+>>> Signed-off-by: Adam Ford <aford173@gmail.com>
+>>>
+>>> diff --git a/drivers/clk/clk-versaclock5.c
+>>> b/drivers/clk/clk-versaclock5.c index e7be3e54b9be..4d190579e874
+>>> 100644
+>>> --- a/drivers/clk/clk-versaclock5.c
+>>> +++ b/drivers/clk/clk-versaclock5.c
+>>> @@ -1211,7 +1211,7 @@ static const struct vc5_chip_info
+>> idt_5p49v6965_info = {
+>>>  	.model = IDT_VC6_5P49V6965,
+>>>  	.clk_fod_cnt = 4,
+>>>  	.clk_out_cnt = 5,
+>>> -	.flags = VC5_HAS_BYPASS_SYNC_BIT,
+>>> +	.flags = VC5_HAS_BYPASS_SYNC_BIT | VC5_HAS_PFD_FREQ_DBL,
+>>
+>>
+>> If my understanding is correct, the doubler is not mentioned by the
+>> datasheet, but it exists. Maybe it's worth a line of comment to help future
+>> readers not waste their time in finding out:
+>>   /* Frequency doubler not mentioned on datasheet */
+>>
+> 
+> I see the doubler bit mentioned in Table 25 of both v6 and v6e specs.  It is named differently, but appears to have the same purpose. 
+
+Well, literally speaking what I wrote is correct: the _datasheet_ does
+not mention the doubler. Table 25 you mention is on the "Register
+Description and Programming Guide".
+
+Practically speaking I would expect the datasheet to mention the
+hardware blocks including the doubler, but apparently Renesas has a
+different opinion and perhaps they are not alone.
+
+So I think you can forget about my proposal to add a comment.
+
+>> Can you confirm that:
+>>  - the en_ref_doubler bit value defaults to zero when reading it, as the
+>>    register guide says?
+>>  - if set to 1 the frequencies double?
+>>
+>> With that confirmed, the patch looks good.
+>>
+>> Thanks,
+>> --
+>> Luca
+> 
+> I played around a bit with the programming board today and did not see what I expected to see.
+> 
+> Using i2cget I see that the register in question (0x10) has a default value of 0xA0 for both 6901 and 6965.  Thus it seems disabled by default for both parts.
+
+Coherently with the Register guide. OK.
+
+> Starting at my base frequency of 46.8MHz, setting the bit to 1 (i2cset)  changes the output  frequency to 59.04MHz for the 6901 part, and to 47.7MHz for the 6965 part.  So setting the 'doubler' bit changes output frequency for both parts, but not the same amount.
+> 
+> Not sure of the meaning, just want to pass the information along.
+
+Me neither.
+
+I have no clever idea, only this one that I consider unlikely: by
+enabling the doubler you may have increased some internal frequency
+above its allowed range and thus the chip is not working properly
+anymore. Can you use a lower base frequency or check the PLL settings to
+ensure you are not exceeding some range?
+
+What output frequency are you measuring? OUT0 or another one? What
+frequency do you measure with en_ref_doubler = 0?
+
 -- 
-2.25.1
-
+Luca

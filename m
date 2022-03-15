@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B254D986D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CC84D986C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346983AbiCOKLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S1346976AbiCOKLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239017AbiCOKLC (ORCPT
+        with ESMTP id S232333AbiCOKLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 06:11:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227224FC63;
-        Tue, 15 Mar 2022 03:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647338991; x=1678874991;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fQdJwp3QYFB6RzA76W+Kf3fw3JbIyIWnKEdmFYEY0Rc=;
-  b=cnSZxhNOVfO8ZVqouCPZc6Krbti2zEcWE3Y8TUFAH5jLzE/lmosyvi2K
-   t9yyxC18zihIJnT3+phK+hM5dpzHwJgzM4kaFy8B1zr8Ef1JGnbmTFvB2
-   QxSqTOwiC5ndqAnDcrM7TQu2Go93QJGE3XOhXNnP5y0ALExKArqY/F3qh
-   gmhmlAtAc3nVIJa0+lzq+fUE0h/M1Rm0L15T+yksKh2UkqOWZPzfszmZ0
-   uuUYkDqLNEwFMur7PxrshDeIDDT/SunWTjQc6MQJy1+CH7IQ3kB9pSOTy
-   6Mlzz6keo+bpJsZMkUyJ4nC/LkLejKh7tVl+pknUiRt8sY5pWbOPFE8rB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253822133"
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="253822133"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:09:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="515807284"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:09:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nU472-000CDY-QY;
-        Tue, 15 Mar 2022 12:09:08 +0200
-Date:   Tue, 15 Mar 2022 12:09:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, micklorain@protonmail.com
-Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
-Message-ID: <YjBlxOi0ljZVUb/D@smile.fi.intel.com>
-References: <20220314101448.90074-1-andriy.shevchenko@linux.intel.com>
- <20220314194253.GA515821@bhelgaas>
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AA33A5F1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:09:49 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KHpzw3hG5z9sSq;
+        Tue, 15 Mar 2022 11:09:48 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YGMcKsXpEFIz; Tue, 15 Mar 2022 11:09:48 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KHpzv42Qhz9sSp;
+        Tue, 15 Mar 2022 11:09:47 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 77E4E8B763;
+        Tue, 15 Mar 2022 11:09:47 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id pG6GkzyZ-p5f; Tue, 15 Mar 2022 11:09:47 +0100 (CET)
+Received: from [192.168.202.50] (unknown [192.168.202.50])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E06898B774;
+        Tue, 15 Mar 2022 11:09:46 +0100 (CET)
+Message-ID: <c30b26fa-0495-89aa-c504-6fee09f86c56@csgroup.eu>
+Date:   Tue, 15 Mar 2022 11:09:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314194253.GA515821@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH linux-next] macintosh: fix warning comparing pointer to 0
+Content-Language: fr-FR
+To:     jing yangyang <cgel.zte@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Zeal Robot <zealci@zte.com.cn>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        jing yangyang <jing.yangyang@zte.com.cn>
+References: <b12b200502312957065a12f8d78e8d250c244d21.1629193159.git.jing.yangyang@zte.com.cn>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <b12b200502312957065a12f8d78e8d250c244d21.1629193159.git.jing.yangyang@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
-> On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
-> > ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
-> > Enable the respective quirk as it's done for other ATI devices on this chipset,
-> > 
-> > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+
+
+Le 20/08/2021 à 04:34, jing yangyang a écrit :
+> Fix the following coccicheck warning:
 > 
-> This is interesting because there must be a TON of these AMD/ATI SB600
-> USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
-> appeared in v5.9.
+> ./drivers/macintosh/windfarm_pm91.c:152:12-13:WARNING comparing pointer to 0
 > 
-> So why would we only get a report now, in February 2022?  Is there
-> some change more recent than 306c54d0edb6 that exposed this problem?
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: jing yangyang <jing.yangyang@zte.com.cn>
 
-I think it's a rhetorical question. To me it's as simple as the latency
-between getting the change into the kernel.
+WARNING:FROM_SIGN_OFF_MISMATCH: From:/Signed-off-by: email address 
+mismatch: 'From: jing yangyang <cgel.zte@gmail.com>' != 'Signed-off-by: 
+jing yangyang <jing.yangyang@zte.com.cn>'
 
-However, I'm a bit worried that in case of ATI there are not so many
-platforms that are kept up-to-dated.
+Please resend.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks
+Christophe
 
 
+> ---
+>   drivers/macintosh/windfarm_pm91.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/macintosh/windfarm_pm91.c b/drivers/macintosh/windfarm_pm91.c
+> index 3f346af..568f8a2 100644
+> --- a/drivers/macintosh/windfarm_pm91.c
+> +++ b/drivers/macintosh/windfarm_pm91.c
+> @@ -149,7 +149,7 @@ static void wf_smu_create_cpu_fans(void)
+>   
+>   	/* First, locate the PID params in SMU SBD */
+>   	hdr = smu_get_sdb_partition(SMU_SDB_CPUPIDDATA_ID, NULL);
+> -	if (hdr == 0) {
+> +	if (!hdr) {
+>   		printk(KERN_WARNING "windfarm: CPU PID fan config not found "
+>   		       "max fan speed\n");
+>   		goto fail;

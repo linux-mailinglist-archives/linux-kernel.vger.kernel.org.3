@@ -2,218 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F394D96B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C3C4D96B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346193AbiCOIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S1346213AbiCOIwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiCOIuM (ORCPT
+        with ESMTP id S1346207AbiCOIwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:50:12 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE704C795;
-        Tue, 15 Mar 2022 01:48:57 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id l20so31645781lfg.12;
-        Tue, 15 Mar 2022 01:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=0D/qDmhXs9KTVIVEd7/N1WYmWdmHzo+e42flk/d3j6Y=;
-        b=VjfewExNWrMUAD3TXnOWZyUf0JFHb5alzMKxnqU3tQLJt0c46OROW/LnmxgTYkzBdH
-         +2b3oAbbqnoHer/WwvLrzP7zhZPq75b8qYAw/4UsS6pFY7cmWYhcP0LQGgwQ8y8fnIXe
-         uWc/TMxGjqQijqhBpyZojRwzyr60GYtqcX1mLCwdHV6GhpTF0rvwNHvoQLOvnCaBfkaF
-         Iey5jaKWubfhtalV4lnAkvqv6teQuurDZ/l5hYY4xgTVqEc0+2ViUZBvEPdwrUTF/j2m
-         s+GHQwSylHF/szw7gqtgQV6CEZA3mLuz6IIJC9DFkKpcXvm0wGF0fN3RCuZp3Mqppf6h
-         OyKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=0D/qDmhXs9KTVIVEd7/N1WYmWdmHzo+e42flk/d3j6Y=;
-        b=rj1H0F0obMIaQeFH+MWwB6b+X6GyMdzWMGjorU2ZFsn/g/DYo5wJKQdJ60f7cmjzxB
-         Y0WzXk24A53Tk4MBt/DHdkGA2oyYqAD/kwFewJdA4WTZALpkzk5rHG2U+AmdhKitxqR3
-         mKVMSQ6z4tsFgdJPZb+wv+4sDE8eSr3OnjgyVBOS2HNf1ldYtctJx6i1R0x382qRDoRE
-         faZb4QgSVRPQbx8Cni57Cd07K4U5plpbB2Zb/MDOkCBcHJBlNJgLaXGvFQQDCIq8FyWm
-         FmnGgvDk3wWLBQsIqqmofz+2sR5xwgizhJyf0lLgBxZf8exZ7D3rnG6h2IbA0MQn6qZH
-         kJnQ==
-X-Gm-Message-State: AOAM530L+ebTiXrBKGHa2jrEDSz2fPBDymmyCSYNKJ2KWc78f/vnUlP0
-        D9ykTaky0GVG1AntGK5FVSk=
-X-Google-Smtp-Source: ABdhPJw47TdTPGbwo/hKYZZlDRipCHD9KyFgdy5zpJF5ozRV0tX2dBZwnYfVVDm6auIjroNp+h4RCw==
-X-Received: by 2002:ac2:410d:0:b0:443:7f40:47a8 with SMTP id b13-20020ac2410d000000b004437f4047a8mr15421619lfi.228.1647334135928;
-        Tue, 15 Mar 2022 01:48:55 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id i29-20020a0565123e1d00b004485c87722csm3198004lfv.171.2022.03.15.01.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:48:55 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 1/3] net: bridge: add fdb flag to extent locked
- port feature
-In-Reply-To: <Yi9fqkQ9wH3Duqhg@shredder>
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
- <20220310142320.611738-2-schultz.hans+netdev@gmail.com>
- <Yi9fqkQ9wH3Duqhg@shredder>
-Date:   Tue, 15 Mar 2022 09:48:52 +0100
-Message-ID: <86h77zha8b.fsf@gmail.com>
+        Tue, 15 Mar 2022 04:52:02 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397254D610;
+        Tue, 15 Mar 2022 01:50:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 84CF21F431AC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647334248;
+        bh=nHtwrinbUYWfO8AEIJvgFJxDJ2MMOOw46lB73jRrvj0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j8ZSSKC2rlQ2hJR/rrMrORiqHefuuTKjVJ+6oZ6/H/dIqY6Ezb7xpUEdZ50oHG5+U
+         DDPs4f1KP7egAC/NFH7A5amaajQ5B4tji3ANxS9+WVBgDoY86J4JXB98MFGP0HOSP5
+         uJlIUNWw6potGN9I+KHyV0c+mDCI3IQX/VDzDbESA6tCbcMIQ4FovIMIcLXuwDoh9X
+         LLMs5+DGGZGLCTWQHGwkPAK1cJIPncVOLoUkJLUabD04p/7aFBUAJveCRZjQ6xLOWM
+         mx0Ni5XYBSTHbh5Vy+zi7jdrw3+IB3mKNwIEG8vA3OO8rMdug3NtdjnCCOnnqkNRH6
+         RlIOGIS/1wgAw==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V4 1/2] selftests: vm: bring common functions to a new file
+Date:   Tue, 15 Mar 2022 13:50:11 +0500
+Message-Id: <20220315085014.1047291-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On m=C3=A5n, mar 14, 2022 at 17:30, Ido Schimmel <idosch@idosch.org> wrote:
-> On Thu, Mar 10, 2022 at 03:23:18PM +0100, Hans Schultz wrote:
->> Add an intermediate state for clients behind a locked port to allow for
->> possible opening of the port for said clients. This feature corresponds
->> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
->> latter defined by Cisco.
->>=20
->> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
->> ---
->>  include/uapi/linux/neighbour.h |  1 +
->>  net/bridge/br_fdb.c            |  6 ++++++
->>  net/bridge/br_input.c          | 11 ++++++++++-
->>  net/bridge/br_private.h        |  3 ++-
->>  4 files changed, 19 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbo=
-ur.h
->> index db05fb55055e..83115a592d58 100644
->> --- a/include/uapi/linux/neighbour.h
->> +++ b/include/uapi/linux/neighbour.h
->> @@ -208,6 +208,7 @@ enum {
->>  	NFEA_UNSPEC,
->>  	NFEA_ACTIVITY_NOTIFY,
->>  	NFEA_DONT_REFRESH,
->> +	NFEA_LOCKED,
->>  	__NFEA_MAX
->>  };
->>  #define NFEA_MAX (__NFEA_MAX - 1)
->> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
->> index 6ccda68bd473..396dcf3084cf 100644
->> --- a/net/bridge/br_fdb.c
->> +++ b/net/bridge/br_fdb.c
->> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const =
-struct net_bridge *br,
->>  	struct nda_cacheinfo ci;
->>  	struct nlmsghdr *nlh;
->>  	struct ndmsg *ndm;
->> +	u8 ext_flags =3D 0;
->>=20=20
->>  	nlh =3D nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
->>  	if (nlh =3D=3D NULL)
->> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, cons=
-t struct net_bridge *br,
->>  		ndm->ndm_flags |=3D NTF_EXT_LEARNED;
->>  	if (test_bit(BR_FDB_STICKY, &fdb->flags))
->>  		ndm->ndm_flags |=3D NTF_STICKY;
->> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
->> +		ext_flags |=3D 1 << NFEA_LOCKED;
->>=20=20
->>  	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
->>  		goto nla_put_failure;
->>  	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
->>  		goto nla_put_failure;
->> +	if (nla_put_u8(skb, NDA_FDB_EXT_ATTRS, ext_flags))
->> +		goto nla_put_failure;
->> +
->>  	ci.ndm_used	 =3D jiffies_to_clock_t(now - fdb->used);
->>  	ci.ndm_confirmed =3D 0;
->>  	ci.ndm_updated	 =3D jiffies_to_clock_t(now - fdb->updated);
->> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
->> index e0c13fcc50ed..897908484b18 100644
->> --- a/net/bridge/br_input.c
->> +++ b/net/bridge/br_input.c
->> @@ -75,6 +75,7 @@ int br_handle_frame_finish(struct net *net, struct soc=
-k *sk, struct sk_buff *skb
->>  	struct net_bridge_mcast *brmctx;
->>  	struct net_bridge_vlan *vlan;
->>  	struct net_bridge *br;
->> +	unsigned long flags =3D 0;
->>  	u16 vid =3D 0;
->>  	u8 state;
->>=20=20
->> @@ -94,8 +95,16 @@ int br_handle_frame_finish(struct net *net, struct so=
-ck *sk, struct sk_buff *skb
->>  			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
->>=20=20
->>  		if (!fdb_src || READ_ONCE(fdb_src->dst) !=3D p ||
->> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
->> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags)) {
->> +			if (!fdb_src) {
->> +				set_bit(BR_FDB_ENTRY_LOCKED, &flags);
->
-> This flag is read-only for user space, right? That is, the kernel needs
-> to reject it during netlink policy validation.
->
+Bring common functions to a new file. These functions can be used in the
+new tests. This helps in code duplication.
 
-Yes, the flag is only readable from user space, unless there is a wish
-to change that.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ tools/testing/selftests/vm/Makefile           |   7 +-
+ tools/testing/selftests/vm/madv_populate.c    |  34 +-----
+ .../selftests/vm/split_huge_page_test.c       |  77 +------------
+ tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
+ tools/testing/selftests/vm/vm_util.h          |  15 +++
+ 5 files changed, 125 insertions(+), 111 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/vm_util.c
+ create mode 100644 tools/testing/selftests/vm/vm_util.h
 
->> +				br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);
->> +			}
->>  			goto drop;
->> +		} else {
->
-> IIUC, we get here in case there is a non-local FDB entry with the SA
-> that points to our port. Can you write it as:
->
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 5e43f072f5b76..4e68edb26d6b6 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
+ TEST_GEN_FILES += hugepage-shm
+ TEST_GEN_FILES += hugepage-vmemmap
+ TEST_GEN_FILES += khugepaged
+-TEST_GEN_FILES += madv_populate
++TEST_GEN_PROGS = madv_populate
+ TEST_GEN_FILES += map_fixed_noreplace
+ TEST_GEN_FILES += map_hugetlb
+ TEST_GEN_FILES += map_populate
+@@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
+-TEST_GEN_FILES += split_huge_page_test
++TEST_GEN_PROGS += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
+ 
+ ifeq ($(MACHINE),x86_64)
+@@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
++$(OUTPUT)/madv_populate: vm_util.c
++$(OUTPUT)/split_huge_page_test: vm_util.c
++
+ ifeq ($(MACHINE),x86_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+diff --git a/tools/testing/selftests/vm/madv_populate.c b/tools/testing/selftests/vm/madv_populate.c
+index 3ee0e82756002..715a42e8e2cdb 100644
+--- a/tools/testing/selftests/vm/madv_populate.c
++++ b/tools/testing/selftests/vm/madv_populate.c
+@@ -18,6 +18,7 @@
+ #include <sys/mman.h>
+ 
+ #include "../kselftest.h"
++#include "vm_util.h"
+ 
+ /*
+  * For now, we're using 2 MiB of private anonymous memory for all tests.
+@@ -26,18 +27,6 @@
+ 
+ static size_t pagesize;
+ 
+-static uint64_t pagemap_get_entry(int fd, char *start)
+-{
+-	const unsigned long pfn = (unsigned long)start / pagesize;
+-	uint64_t entry;
+-	int ret;
+-
+-	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
+-	if (ret != sizeof(entry))
+-		ksft_exit_fail_msg("reading pagemap failed\n");
+-	return entry;
+-}
+-
+ static bool pagemap_is_populated(int fd, char *start)
+ {
+ 	uint64_t entry = pagemap_get_entry(fd, start);
+@@ -46,13 +35,6 @@ static bool pagemap_is_populated(int fd, char *start)
+ 	return entry & 0xc000000000000000ull;
+ }
+ 
+-static bool pagemap_is_softdirty(int fd, char *start)
+-{
+-	uint64_t entry = pagemap_get_entry(fd, start);
+-
+-	return entry & 0x0080000000000000ull;
+-}
+-
+ static void sense_support(void)
+ {
+ 	char *addr;
+@@ -258,20 +240,6 @@ static bool range_is_not_softdirty(char *start, ssize_t size)
+ 	return ret;
+ }
+ 
+-static void clear_softdirty(void)
+-{
+-	int fd = open("/proc/self/clear_refs", O_WRONLY);
+-	const char *ctrl = "4";
+-	int ret;
+-
+-	if (fd < 0)
+-		ksft_exit_fail_msg("opening clear_refs failed\n");
+-	ret = write(fd, ctrl, strlen(ctrl));
+-	if (ret != strlen(ctrl))
+-		ksft_exit_fail_msg("writing clear_refs failed\n");
+-	close(fd);
+-}
+-
+ static void test_softdirty(void)
+ {
+ 	char *addr;
+diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
+index 52497b7b9f1db..b6b381611fb6d 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
++++ b/tools/testing/selftests/vm/split_huge_page_test.c
+@@ -16,6 +16,7 @@
+ #include <sys/mount.h>
+ #include <malloc.h>
+ #include <stdbool.h>
++#include "vm_util.h"
+ 
+ uint64_t pagesize;
+ unsigned int pageshift;
+@@ -51,30 +52,6 @@ int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
+ 	return 0;
+ }
+ 
+-
+-static uint64_t read_pmd_pagesize(void)
+-{
+-	int fd;
+-	char buf[20];
+-	ssize_t num_read;
+-
+-	fd = open(PMD_SIZE_PATH, O_RDONLY);
+-	if (fd == -1) {
+-		perror("Open hpage_pmd_size failed");
+-		exit(EXIT_FAILURE);
+-	}
+-	num_read = read(fd, buf, 19);
+-	if (num_read < 1) {
+-		close(fd);
+-		perror("Read hpage_pmd_size failed");
+-		exit(EXIT_FAILURE);
+-	}
+-	buf[num_read] = '\0';
+-	close(fd);
+-
+-	return strtoul(buf, NULL, 10);
+-}
+-
+ static int write_file(const char *path, const char *buf, size_t buflen)
+ {
+ 	int fd;
+@@ -113,58 +90,6 @@ static void write_debugfs(const char *fmt, ...)
+ 	}
+ }
+ 
+-#define MAX_LINE_LENGTH 500
+-
+-static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
+-{
+-	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
+-		if (!strncmp(buf, pattern, strlen(pattern)))
+-			return true;
+-	}
+-	return false;
+-}
+-
+-static uint64_t check_huge(void *addr)
+-{
+-	uint64_t thp = 0;
+-	int ret;
+-	FILE *fp;
+-	char buffer[MAX_LINE_LENGTH];
+-	char addr_pattern[MAX_LINE_LENGTH];
+-
+-	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
+-		       (unsigned long) addr);
+-	if (ret >= MAX_LINE_LENGTH) {
+-		printf("%s: Pattern is too long\n", __func__);
+-		exit(EXIT_FAILURE);
+-	}
+-
+-
+-	fp = fopen(SMAP_PATH, "r");
+-	if (!fp) {
+-		printf("%s: Failed to open file %s\n", __func__, SMAP_PATH);
+-		exit(EXIT_FAILURE);
+-	}
+-	if (!check_for_pattern(fp, addr_pattern, buffer))
+-		goto err_out;
+-
+-	/*
+-	 * Fetch the AnonHugePages: in the same block and check the number of
+-	 * hugepages.
+-	 */
+-	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
+-		goto err_out;
+-
+-	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1) {
+-		printf("Reading smap error\n");
+-		exit(EXIT_FAILURE);
+-	}
+-
+-err_out:
+-	fclose(fp);
+-	return thp;
+-}
+-
+ void split_pmd_thp(void)
+ {
+ 	char *one_page;
+diff --git a/tools/testing/selftests/vm/vm_util.c b/tools/testing/selftests/vm/vm_util.c
+new file mode 100644
+index 0000000000000..c946e04df9236
+--- /dev/null
++++ b/tools/testing/selftests/vm/vm_util.c
+@@ -0,0 +1,103 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdbool.h>
++#include <string.h>
++#include "vm_util.h"
++
++uint64_t pagemap_get_entry(int fd, char *start)
++{
++	const unsigned long pfn = (unsigned long)start / getpagesize();
++	uint64_t entry;
++	int ret;
++
++	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
++	if (ret != sizeof(entry))
++		ksft_exit_fail_msg("reading pagemap failed\n");
++	return entry;
++}
++
++bool pagemap_is_softdirty(int fd, char *start)
++{
++	uint64_t entry = pagemap_get_entry(fd, start);
++
++	return ((entry >> DIRTY_BIT_LOCATION) & 1);
++}
++
++void clear_softdirty(void)
++{
++	int ret;
++	const char *ctrl = "4";
++	int fd = open("/proc/self/clear_refs", O_WRONLY);
++
++	if (fd < 0)
++		ksft_exit_fail_msg("opening clear_refs failed\n");
++	ret = write(fd, ctrl, strlen(ctrl));
++	close(fd);
++	if (ret != strlen(ctrl))
++		ksft_exit_fail_msg("writing clear_refs failed\n");
++}
++
++
++static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
++{
++	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
++		if (!strncmp(buf, pattern, strlen(pattern)))
++			return true;
++	}
++	return false;
++}
++
++uint64_t read_pmd_pagesize(void)
++{
++	int fd;
++	char buf[20];
++	ssize_t num_read;
++
++	fd = open(PMD_SIZE, O_RDONLY);
++	if (fd == -1)
++		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
++
++	num_read = read(fd, buf, 19);
++	if (num_read < 1) {
++		close(fd);
++		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
++	}
++	buf[num_read] = '\0';
++	close(fd);
++
++	return strtoul(buf, NULL, 10);
++}
++
++uint64_t check_huge(void *addr)
++{
++	uint64_t thp = 0;
++	int ret;
++	FILE *fp;
++	char buffer[MAX_LINE_LENGTH];
++	char addr_pattern[MAX_LINE_LENGTH];
++
++	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
++		       (unsigned long) addr);
++	if (ret >= MAX_LINE_LENGTH)
++		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
++
++	fp = fopen(SMAP, "r");
++	if (!fp)
++		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
++
++	if (!check_for_pattern(fp, addr_pattern, buffer))
++		goto err_out;
++
++	/*
++	 * Fetch the AnonHugePages: in the same block and check the number of
++	 * hugepages.
++	 */
++	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
++		goto err_out;
++
++	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
++		ksft_exit_fail_msg("Reading smap error\n");
++
++err_out:
++	fclose(fp);
++	return thp;
++}
+diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
+new file mode 100644
+index 0000000000000..7522dbb859f0f
+--- /dev/null
++++ b/tools/testing/selftests/vm/vm_util.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <stdint.h>
++#include <fcntl.h>
++#include "../kselftest.h"
++
++#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
++#define	SMAP			"/proc/self/smaps"
++#define	DIRTY_BIT_LOCATION	55
++#define	MAX_LINE_LENGTH		512
++
++uint64_t pagemap_get_entry(int fd, char *start);
++bool pagemap_is_softdirty(int fd, char *start);
++void clear_softdirty(void);
++uint64_t read_pmd_pagesize(void);
++uint64_t check_huge(void *addr);
+-- 
+2.30.2
 
-Yes, looks like that's more optimal. :)
-
-> if (!fdb_src || READ_ONCE(fdb_src->dst) !=3D p ||
->     test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
->     test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
->     	if (!fdb_src) {
-> 	...
-> 	}
-> 	goto drop;
-> }
->
->> +			if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags))
->> +				goto drop;
->> +		}
->>  	}
->>=20=20
->>  	nbp_switchdev_frame_mark(p, skb);
->> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
->> index 48bc61ebc211..f5a0b68c4857 100644
->> --- a/net/bridge/br_private.h
->> +++ b/net/bridge/br_private.h
->> @@ -248,7 +248,8 @@ enum {
->>  	BR_FDB_ADDED_BY_EXT_LEARN,
->>  	BR_FDB_OFFLOADED,
->>  	BR_FDB_NOTIFY,
->> -	BR_FDB_NOTIFY_INACTIVE
->> +	BR_FDB_NOTIFY_INACTIVE,
->> +	BR_FDB_ENTRY_LOCKED,
->>  };
->>=20=20
->>  struct net_bridge_fdb_key {
->> --=20
->> 2.30.2
->>=20

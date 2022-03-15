@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D364DA3F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C3E4DA3FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351685AbiCOU14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
+        id S1351711AbiCOU3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351698AbiCOU1w (ORCPT
+        with ESMTP id S241868AbiCOU3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:27:52 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4132A4FC40;
-        Tue, 15 Mar 2022 13:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mcJOribsJXhQyj45Qe1vGD7+4oE6RrBmBG5ytviDikg=; b=bno/Pnw2cLnL83fTu0OZi2cU8N
-        rMcAMSmWV5ssRAAuhv9qzRn5qTgeRXqZX8y2f9segAAblySf6EGvDSTLErm8+P4SZvxF+AhR5vd5I
-        Nn5MBIq3Gb/+AOq62KqMN4MuwoxHPUu+Nb09wptUchqKYCwIX/MhmsK6PqrDRjuG0rkk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nUDkS-00B2He-No; Tue, 15 Mar 2022 21:26:28 +0100
-Date:   Tue, 15 Mar 2022 21:26:28 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     cgel.zte@gmail.comf
-Cc:     kuba@kernel.org, sebastian.hesselbarth@gmail.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] net: mv643xx_eth: undo some opreations in
- mv643xx_eth_probe
-Message-ID: <YjD2dFwpF+esPs33@lunn.ch>
-References: <20220315023019.2118163-1-chi.minghao@zte.com.cn>
+        Tue, 15 Mar 2022 16:29:11 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BA713D79;
+        Tue, 15 Mar 2022 13:27:59 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id x15so155076wru.13;
+        Tue, 15 Mar 2022 13:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0qv9mDXmv5p2CFMjUqbXa1C/c2t8JyqpwfD6/zqQ/M=;
+        b=fjiVnzPc4UZCBBrTPKOfYYmoXaUOtGyPRHh4ux1ZLiyfmsCcqUiOe1IB/LzQ1CyQt3
+         IXGfKSN9eJrFDlOp3zY9DqxR38Qe1EK0Vvd62scS6r3EB2J6yW8x2+PINXyXpBQ9aGDV
+         Xxlj5UAK2kc9OwuNWBiSKufcxt25YGZWTq5SXvG8QdQcl1D9CfThWz0+GP9CF/HYRv9e
+         XveWpnYyXuESbrnUb6OZBQkG9nrFPE3N0ILVguJ4qPAB6+MSqTVaOHwj3OSyfXdFv5L0
+         Dnv+QVQkEQRXBtWeRjAqnZgvrWOepS+AeZ8P7dah3xMRuOUff8pWEcxnCHmsl552b+AH
+         A+3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0qv9mDXmv5p2CFMjUqbXa1C/c2t8JyqpwfD6/zqQ/M=;
+        b=Gyt70LKYAHC6gVxQb3WGnP8ZUZULa23i8AG2Bi8olrd3DaUZzH5fcd3EUpGM9yk314
+         b+y8RE5XVOvxA39ycR5+3iSbrEZtu5Sr5gXk2gWXC/kqrNl8BVRaolDYNKp69tEuXzD2
+         zeD7mNmGihECqW7QjPFA3zz+ROphio1mYO1pWNVSpQPJVejpGKGXcFGdeN3lfmJvgv48
+         /MntK9obr7zDVA6BcNky1218Dng8he5/H+VvIOivuHQ5kA+9eGDELaEqJFYkYdrSgvSE
+         Alu8qs3K3ViWQKr6LqF7s8ioAyZc6fahdlFVo+n4zYZGPNsFIS5kTS0TfF0ErEjKzVnq
+         YGMw==
+X-Gm-Message-State: AOAM530Izjw9etZ27J/tFqVJeHBd+G38kulzaJKItAVQow+crzpr+TaL
+        6jCFyftOO6JJObigp6LnU2+Tjmuod7QOlQ==
+X-Google-Smtp-Source: ABdhPJxWml19jK5phIRP74Sz6aAEW6VQiwapgaPeuLaXEULiFk2g8DMD+bAHm+XedIs+G/5tQnMSOQ==
+X-Received: by 2002:adf:b64c:0:b0:1e3:16d0:3504 with SMTP id i12-20020adfb64c000000b001e316d03504mr21433640wre.333.1647376077808;
+        Tue, 15 Mar 2022 13:27:57 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b00380deeaae72sm2300849wmb.1.2022.03.15.13.27.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 13:27:57 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-acpi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] mailbox: pcc: Fix spelling mistake "Plaform" -> "Platform"
+Date:   Tue, 15 Mar 2022 20:27:56 +0000
+Message-Id: <20220315202756.2953329-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315023019.2118163-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 02:30:19AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Cannot directly return platform_get_irq return irq, there
-> are operations that need to be undone.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/net/ethernet/marvell/mv643xx_eth.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-> index e6cd4e214d79..6cd81737786e 100644
-> --- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-> +++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-> @@ -3189,8 +3189,11 @@ static int mv643xx_eth_probe(struct platform_device *pdev)
->  
->  
->  	irq = platform_get_irq(pdev, 0);
-> -	if (WARN_ON(irq < 0))
-> +	if (WARN_ON(irq < 0)) {
-> +		clk_disable_unprepare(mp->clk);
-> +		free_netdev(dev);
->  		return irq;
-> +	}
+There is a spelling mistake in a pr_err error message. Fix it.
 
-Isn't this where i said you should:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/mailbox/pcc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	goto out;
+diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+index ed18936b8ce6..2b209acdbab2 100644
+--- a/drivers/mailbox/pcc.c
++++ b/drivers/mailbox/pcc.c
+@@ -676,7 +676,7 @@ static int pcc_mbox_probe(struct platform_device *pdev)
+ 
+ 		if (pcct_entry->type == ACPI_PCCT_TYPE_EXT_PCC_SLAVE_SUBSPACE &&
+ 		    !pcc_mbox_ctrl->txdone_irq) {
+-			pr_err("Plaform Interrupt flag must be set to 1");
++			pr_err("Platform Interrupt flag must be set to 1");
+ 			rc = -EINVAL;
+ 			goto err;
+ 		}
+-- 
+2.35.1
 
-You need to set err first.
-
-	Andrew

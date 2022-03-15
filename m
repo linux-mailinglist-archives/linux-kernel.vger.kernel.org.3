@@ -2,113 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C024D9546
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616B34D954D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345424AbiCOHaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S241302AbiCOHdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345411AbiCOHaQ (ORCPT
+        with ESMTP id S1345442AbiCOHc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:30:16 -0400
-Received: from smtp-out.xnet.cz (smtp-out.xnet.cz [178.217.244.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64464B1D1;
-        Tue, 15 Mar 2022 00:29:02 -0700 (PDT)
-Received: from meh.true.cz (meh.true.cz [108.61.167.218])
-        (Authenticated sender: petr@true.cz)
-        by smtp-out.xnet.cz (Postfix) with ESMTPSA id 420E01822C;
-        Tue, 15 Mar 2022 08:29:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=true.cz; s=xnet;
-        t=1647329340; bh=65xHoffDZObM2VcshT2400SVsaHk3C3lcItOW7dYiro=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-        b=LcIHGOxyWO+eN62q6QH5dSr84iz8ODEZ+2nhHHrUG1w6UE9Mbsyr0H+6UP3nbzIEz
-         iL4g6D3ZcfQvtl5m/BPl39+tqWEOqudRSbqqAc9/G/IA561CnJWYn4B635DHO7RPwP
-         FFTlRZGBFvEp1AbDNB2L8qBC5vk6B2GVeGlH8olY=
-Received: by meh.true.cz (OpenSMTPD) with ESMTP id 7ab44043;
-        Tue, 15 Mar 2022 08:28:36 +0100 (CET)
-Date:   Tue, 15 Mar 2022 08:28:58 +0100
-From:   Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Bastien =?utf-8?Q?Roucari=C3=A8s?= <rouca@debian.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, stable@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "ARM: dts: sun7i: A20-olinuxino-lime2: Fix
- ethernet phy-mode"
-Message-ID: <20220315072846.GA9129@meh.true.cz>
-Reply-To: Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
-References: <20220308125531.27305-1-ynezz@true.cz>
+        Tue, 15 Mar 2022 03:32:56 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DA6C4B1CA;
+        Tue, 15 Mar 2022 00:31:44 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.48:41014.619685907
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id 1D2D82800BD;
+        Tue, 15 Mar 2022 15:31:37 +0800 (CST)
+X-189-SAVE-TO-SEND: +sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.48])
+        by app0024 with ESMTP id c0602a13fffb4ad588a48c84e8f1aa50 for j.vosburgh@gmail.com;
+        Tue, 15 Mar 2022 15:31:41 CST
+X-Transaction-ID: c0602a13fffb4ad588a48c84e8f1aa50
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.48
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, oliver@neukum.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyd12@chinatelecom.cn, sunshouxin@chinatelecom.cn
+Subject: [PATCH v2 0/4] net:bonding:Add support for IPV6 RLB to balance-alb mode
+Date:   Tue, 15 Mar 2022 03:30:04 -0400
+Message-Id: <20220315073008.17441-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220308125531.27305-1-ynezz@true.cz>
-X-PGP-Key: https://gist.githubusercontent.com/ynezz/477f6d7a1623a591b0806699f9fc8a27/raw/a0878b8ed17e56f36ebf9e06a6b888a2cd66281b/pgp-key.pub
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Štetiar <ynezz@true.cz> [2022-03-08 13:55:30]:
+This patch is implementing IPV6 RLB for balance-alb mode.
 
-Hi Greg,
+Sun Shouxin (4):
+  net:ipv6:Refactor ndisc_send_na to support sending na by slave
+    directly
+  net:ipv6:Export inet6_ifa_finish_destroy and ipv6_get_ifaddr
+  net:bonding:Add support for IPV6 RLB to balance-alb mode
+  net: usb:Refactor ndisc_send_na
 
-one week has passed and as I didn't received any feedback, I'm providing more
-details in a hope to make it more clear, why I think, that this fix is wrong
-and should be reverted in LTS kernels 5.10 and 5.15.
+ drivers/net/bonding/bond_3ad.c     |   2 +-
+ drivers/net/bonding/bond_alb.c     | 591 ++++++++++++++++++++++++++++-
+ drivers/net/bonding/bond_debugfs.c |  14 +
+ drivers/net/bonding/bond_main.c    |   6 +-
+ drivers/net/usb/cdc_mbim.c         |   2 +-
+ include/net/bond_3ad.h             |   2 +-
+ include/net/bond_alb.h             |   7 +
+ include/net/bonding.h              |   6 +-
+ include/net/ipv6_stubs.h           |   3 +-
+ include/net/ndisc.h                |   9 +-
+ net/ipv6/addrconf.c                |   4 +-
+ net/ipv6/ndisc.c                   |  65 +++-
+ 12 files changed, 675 insertions(+), 36 deletions(-)
 
-> This reverts commit 55dd7e059098ce4bd0a55c251cb78e74604abb57 as it breaks
-> network on my A20-olinuxino-lime2 hardware revision "K" which has Micrel
-> KSZ9031RNXCC-TR Gigabit PHY. Bastien has probably some previous hardware
-> revisions which were based on RTL8211E-VB-CG1 PHY and thus this fix was
-> working on his board.
 
-Disclaimer, I don't own A20-olinuxino-lime2 board with earlier HW revisions
-G/G1/G2 utilizing RTL8211E PHY.
+base-commit: bdd6a89de44b9e07d0b106076260d2367fe0e49a
+-- 
+2.27.0
 
-My understanding is, that up to kernel version 5.9 and specifically commit
-bbc4d71d6354 ("net: phy: realtek: fix rtl8211e rx/tx delay config") it was
-likely possible to use same DTS for A20-olinuxino-lime2 with KSZ9031 or
-RTL8211E PHYs (all HW revisions).
-
-At least I was using my A20-olinuxino-lime2 HW revision K with KSZ9031 PHY
-just fine with 4.19 kernel. After upgrade to 5.10 LTS kernel my network
-stopped working, reverting stable backport commit a90398438517 ("ARM: dts:
-sun7i: A20-olinuxino-lime2: Fix ethernet phy-mode") fixed it.
-
-From my POV proper fix for earlier HW revisions G/G1/G2 is introduction of
-sun7i-a20-olinuxino-lime2-revG.dts with a proper `phy-mode` for RTL8211E PHY.
-
-Cheers,
-
-Petr
-
-> Cc: stable@vger.kernel.org
-> Cc: Bastien Roucariès <rouca@debian.org>
-> References: https://github.com/openwrt/openwrt/issues/9153
-> References: https://github.com/OLIMEX/OLINUXINO/blob/master/HARDWARE/A20-OLinuXino-LIME2/hardware_revision_changes_log.txt
-> Signed-off-by: Petr Štetiar <ynezz@true.cz>
-> ---
->  arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts b/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts
-> index ecb91fb899ff..8077f1716fbc 100644
-> --- a/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts
-> +++ b/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts
-> @@ -112,7 +112,7 @@ &gmac {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&gmac_rgmii_pins>;
->  	phy-handle = <&phy1>;
-> -	phy-mode = "rgmii-id";
-> +	phy-mode = "rgmii";
->  	status = "okay";
->  };

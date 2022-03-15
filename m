@@ -2,172 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D594D9700
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD6D4D9704
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346272AbiCOJDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S1346268AbiCOJDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346337AbiCOJDa (ORCPT
+        with ESMTP id S1346362AbiCOJDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:03:30 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF5B4D9D6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:02:15 -0700 (PDT)
-X-UUID: ac2722b40df14810ae1034e65c8fa3f5-20220315
-X-UUID: ac2722b40df14810ae1034e65c8fa3f5-20220315
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 167357179; Tue, 15 Mar 2022 17:02:07 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 15 Mar 2022 17:02:05 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Mar 2022 17:02:05 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>
-CC:     <lecopzer.chen@mediatek.com>, <andreyknvl@gmail.com>,
-        <anshuman.khandual@arm.com>, <ardb@kernel.org>, <arnd@arndb.de>,
-        <dvyukov@google.com>, <geert+renesas@glider.be>,
-        <glider@google.com>, <kasan-dev@googlegroups.com>,
-        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <lukas.bulwahn@gmail.com>, <mark.rutland@arm.com>,
-        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>,
-        <rmk+kernel@armlinux.org.uk>, <ryabinin.a.a@gmail.com>,
-        <yj.chiang@mediatek.com>
-Subject: [PATCH v4 2/2] arm: kconfig: fix MODULE_PLTS for KASAN with KASAN_VMALLOC
-Date:   Tue, 15 Mar 2022 17:01:57 +0800
-Message-ID: <20220315090157.27001-3-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220315090157.27001-1-lecopzer.chen@mediatek.com>
-References: <20220315090157.27001-1-lecopzer.chen@mediatek.com>
+        Tue, 15 Mar 2022 05:03:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E3C74D9FC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647334952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yp3qo6eiC6KxlqVnevYb4PouXujwadZ3BmfsYINZZ0E=;
+        b=XZZKKwvFLBXz0OHvzJLptbCUVTAEWBu1RqUxM68xa7C14EqsenTsbG9TTiuLoA5ijjDIp4
+        Vq6Wg4seLleXMJaxuJE3N/ttFV+guNN++tQUXCB+/tbGpRY+l+wu4VKcYpHoS1rQ69fOBU
+        FsUQe9E5yL+XVrHBkr0gStFU3GdF/xU=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-654-0PtwoCUWP_K0_kGAiMfPvw-1; Tue, 15 Mar 2022 05:02:30 -0400
+X-MC-Unique: 0PtwoCUWP_K0_kGAiMfPvw-1
+Received: by mail-qk1-f197.google.com with SMTP id l68-20020a378947000000b0067df0c430d8so2822448qkd.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:02:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=yp3qo6eiC6KxlqVnevYb4PouXujwadZ3BmfsYINZZ0E=;
+        b=8EVi8FqMTGuVPCQiHJI0L1NEIpg/z/ZpG+IwF++LrJyh0+Dx2UGyk1ow/15hontl46
+         AfgO4E5d915ksX3PD6fWVDxiALUou8s16yXzjWhRo5uVz4viJaRMuV17Nd7sdHX7paPO
+         /r/HHBI+ZJwx7ZWvDID+aKbbmAfxtDsi9oPpmJEYAFspKRsHZ/Y52GpjvS985fLVt/4h
+         OLlSFIT48mK/1wGfc13M6oacz1iJd4bjpZNuaRUvLina6sljHGMrHfLoqJ8RuPmNtzEH
+         SmG3iwE0+287Uc5JDMO4JmB1ER51m7ASnuYNHpV7FaAcJzgPshLLn64lzM7MQngFbZwb
+         9dcA==
+X-Gm-Message-State: AOAM533B3lElH5QbXolhtM0H5I2C5y3dmNIg1SlsqrqSgxYTtlwSMvh7
+        PfKTAkVFN/p4jA5R08cVKGJ8luyRHLBfHPijYSU61DIAVRlyVfUs1dbVxASujCxM6uvwXcMrN0V
+        os+08awRZw4XrR5osdcBEXgvY
+X-Received: by 2002:a05:622a:174f:b0:2e0:5a1f:9acf with SMTP id l15-20020a05622a174f00b002e05a1f9acfmr21617358qtk.304.1647334950426;
+        Tue, 15 Mar 2022 02:02:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw6IjTjiGxTtEsWKanwVTySC3RCciJFu1NEsC5/Zfj6KgnMFM46immWIoqflVXJmlw7RwwunA==
+X-Received: by 2002:a05:622a:174f:b0:2e0:5a1f:9acf with SMTP id l15-20020a05622a174f00b002e05a1f9acfmr21617341qtk.304.1647334950169;
+        Tue, 15 Mar 2022 02:02:30 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-232-135.dyn.eolo.it. [146.241.232.135])
+        by smtp.gmail.com with ESMTPSA id g5-20020ac87f45000000b002e125ef0ba3sm12395512qtk.82.2022.03.15.02.02.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 02:02:29 -0700 (PDT)
+Message-ID: <f8f41d9568b9fb7e2fb9cc755ff2e87db9c35f1f.camel@redhat.com>
+Subject: Re: [PATCH v4] net: ksz884x: optimize netdev_open flow and remove
+ static variable
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     wudaemon <wudaemon@163.com>, davem@davemloft.net, kuba@kernel.org,
+        m.grzeschik@pengutronix.de, chenhao288@hisilicon.com, arnd@arndb.de
+Cc:     shenyang39@huawei.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 15 Mar 2022 10:02:26 +0100
+In-Reply-To: <20220313032748.3642-1-wudaemon@163.com>
+References: <20220313032748.3642-1-wudaemon@163.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we run out of module space address with ko insertion,
-and with MODULE_PLTS, module would turn to try to find memory
-from VMALLOC address space.
+Hello,
 
-Unfortunately, with KASAN enabled, VMALLOC doesn't work without
-KASAN_VMALLOC, thus select KASAN_VMALLOC by default.
+On Sun, 2022-03-13 at 03:27 +0000, wudaemon wrote:
+> remove the static next_jiffies variable, and reinitialize next_jiffies to simplify netdev_open
+> 
+> Signed-off-by: wudaemon <wudaemon@163.com>
 
-8<--- cut here ---
- Unable to handle kernel paging request at virtual address bd300860
- [bd300860] *pgd=41cf1811, *pte=41cf26df, *ppte=41cf265f
- Internal error: Oops: 80f [#1] PREEMPT SMP ARM
- Modules linked in: hello(O+)
- CPU: 0 PID: 89 Comm: insmod Tainted: G           O      5.16.0-rc6+ #19
- Hardware name: Generic DT based system
- PC is at mmioset+0x30/0xa8
- LR is at 0x0
- pc : [<c077ed30>]    lr : [<00000000>]    psr: 20000013
- sp : c451fc18  ip : bd300860  fp : c451fc2c
- r10: f18042cc  r9 : f18042d0  r8 : 00000000
- r7 : 00000001  r6 : 00000003  r5 : 01312d00  r4 : f1804300
- r3 : 00000000  r2 : 00262560  r1 : 00000000  r0 : bd300860
- Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
- Control: 10c5387d  Table: 43e9406a  DAC: 00000051
- Register r0 information: non-paged memory
- Register r1 information: NULL pointer
- Register r2 information: non-paged memory
- Register r3 information: NULL pointer
- Register r4 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r5 information: non-paged memory
- Register r6 information: non-paged memory
- Register r7 information: non-paged memory
- Register r8 information: NULL pointer
- Register r9 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r10 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r11 information: non-slab/vmalloc memory
- Register r12 information: non-paged memory
- Process insmod (pid: 89, stack limit = 0xc451c000)
- Stack: (0xc451fc18 to 0xc4520000)
- fc00:                                                       f18041f0 c04803a4
- fc20: c451fc44 c451fc30 c048053c c0480358 f1804030 01312cff c451fc64 c451fc48
- fc40: c047f330 c0480500 f18040c0 c1b52ccc 00000001 c5be7700 c451fc74 c451fc68
- fc60: f1802098 c047f300 c451fcb4 c451fc78 c026106c f180208c c4880004 00000000
- fc80: c451fcb4 bf001000 c044ff48 c451fec0 f18040c0 00000000 c1b54cc4 00000000
- fca0: c451fdf0 f1804268 c451fe64 c451fcb8 c0264e88 c0260d48 ffff8000 00007fff
- fcc0: f18040c0 c025cd00 c451fd14 00000003 0157f008 f1804258 f180425c f1804174
- fce0: f1804154 f180424c f18041f0 f180414c f1804178 f18041c0 bf0025d4 188a3fa8
- fd00: 0000009e f1804170 f2b18000 c451ff10 c0d92e40 f180416c c451feec 00000001
- fd20: 00000000 c451fec8 c451fe20 c451fed0 f18040cc 00000000 f17ea000 c451fdc0
- fd40: 41b58ab3 c1387729 c0261c28 c047fb5c c451fe2c c451fd60 c0525308 c048033c
- fd60: 188a3fb4 c3ccb090 c451fe00 c3ccb080 00000000 00000000 00016920 00000000
- fd80: c02d0388 c047f55c c02d0388 00000000 c451fddc c451fda0 c02d0388 00000000
- fda0: 41b58ab3 c13a72d0 c0524ff0 c1705f48 c451fdfc c451fdc0 c02d0388 c047f55c
- fdc0: 00016920 00000000 00000003 c1bb2384 c451fdfc c3ccb080 c1bb2384 00000000
- fde0: 00000000 00000000 00000000 00000000 c451fe1c c451fe00 c04e9d70 c1705f48
- fe00: c1b54cc4 c1bbc71c c3ccb080 00000000 c3ccb080 00000000 00000003 c451fec0
- fe20: c451fe64 c451fe30 c0525918 c0524ffc c451feb0 c1705f48 00000000 c1b54cc4
- fe40: b78a3fd0 c451ff60 00000000 0157f008 00000003 c451fec0 c451ffa4 c451fe68
- fe60: c0265480 c0261c34 c451feb0 7fffffff 00000000 00000002 00000000 c4880000
- fe80: 41b58ab3 c138777b c02652cc c04803ec 000a0000 c451ff00 ffffff9c b6ac9f60
- fea0: c451fed4 c1705f48 c04a4a90 b78a3fdc f17ea000 ffffff9c b6ac9f60 c0100244
- fec0: f17ea21a f17ea300 f17ea000 00016920 f1800240 f18000ac f17fb7dc 01316000
- fee0: 013161b0 00002590 01316250 00000000 00000000 00000000 00002580 00000029
- ff00: 0000002a 00000013 00000000 0000000c 00000000 00000000 0157f004 c451ffb0
- ff20: c1719be0 aed6f410 c451ff74 c451ff38 c0c4103c c0c407d0 c451ff84 c451ff48
- ff40: 00000805 c02c8658 c1604230 c1719c30 00000805 0157f004 00000005 c451ffb0
- ff60: c1719be0 aed6f410 c451ffac c451ff78 c0122130 c1705f48 c451ffac 0157f008
- ff80: 00000006 0000005f 0000017b c0100244 c4880000 0000017b 00000000 c451ffa8
- ffa0: c0100060 c02652d8 0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
- ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
- ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60 a0000010 00000003 00000000 00000000
- Backtrace:
- [<c048034c>] (kasan_poison) from [<c048053c>] (kasan_unpoison+0x48/0x5c)
- [<c04804f4>] (kasan_unpoison) from [<c047f330>] (__asan_register_globals+0x3c/0x64)
-  r5:01312cff r4:f1804030
- [<c047f2f4>] (__asan_register_globals) from [<f1802098>] (_sub_I_65535_1+0x18/0xf80 [hello])
-  r7:c5be7700 r6:00000001 r5:c1b52ccc r4:f18040c0
- [<f1802080>] (_sub_I_65535_1 [hello]) from [<c026106c>] (do_init_module+0x330/0x72c)
- [<c0260d3c>] (do_init_module) from [<c0264e88>] (load_module+0x3260/0x32a8)
-  r10:f1804268 r9:c451fdf0 r8:00000000 r7:c1b54cc4 r6:00000000 r5:f18040c0
-  r4:c451fec0
- [<c0261c28>] (load_module) from [<c0265480>] (sys_finit_module+0x1b4/0x1e8)
-  r10:c451fec0 r9:00000003 r8:0157f008 r7:00000000 r6:c451ff60 r5:b78a3fd0
-  r4:c1b54cc4
- [<c02652cc>] (sys_finit_module) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
- Exception stack(0xc451ffa8 to 0xc451fff0)
- ffa0:                   0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
- ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
- ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60
-  r10:0000017b r9:c4880000 r8:c0100244 r7:0000017b r6:0000005f r5:00000006
-  r4:0157f008
- Code: e92d4100 e1a08001 e1a0e003 e2522040 (a8ac410a)
- ---[ end trace df6e12843197b6f5 ]---
+I'm sorry for tha late feedback, but the above looks like a pseudonyms,
+which is explicitly not allowed by the process - see
+Documentation/process/submitting-patches.rst.
 
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+If the above is guess is true, please respin the patch with your actual
+name. While at it, please limit the commit message description at 75
+chars and specify a target tree in the subj (net-next I guess?)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 78250e246cc6..d797a3699959 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1515,6 +1515,7 @@ config ARCH_WANT_GENERAL_HUGETLB
- config ARM_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
-+	select KASAN_VMALLOC if KASAN
- 	default y
- 	help
- 	  Allocate PLTs when loading modules so that jumps and calls whose
--- 
-2.18.0
+Thanks!
+
+Paolo
 

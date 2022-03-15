@@ -2,116 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0053B4DA10F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E68CA4DA116
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350531AbiCOR0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        id S1350552AbiCOR1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350023AbiCOR0A (ORCPT
+        with ESMTP id S1347737AbiCOR1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:26:00 -0400
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FB03916E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1647365083;
-        bh=8Dq3UHkiF8sKrd4rL50cJdnD1RwPcpD+6IhqnTkCDWc=;
-        h=From:To:Cc:Subject:Date;
-        b=MHYLIo4w5AyA/IaM7X3oPzZ5wMpg2vH+gyvvDhp/NHxfaG3hKD0a7ZWPZUuKfiuWm
-         E7i95f+U0nkqkH2fymr+m3GD7t5J8DFbwDJLSZ3Cdf0QXz9BBgGAg32R3quER5ZLII
-         Nqn+widP4l8DhOPA5/OTMbXr5/H4aDZ1oL99x/FQ=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
-        id 61E19C3B; Wed, 16 Mar 2022 01:24:30 +0800
-X-QQ-mid: xmsmtpt1647365070ty68a8iup
-Message-ID: <tencent_F721901366AB5C720E008AF7F02DA5D3FF07@qq.com>
-X-QQ-XMAILINFO: MyirvGjpKb1jQdcb8Zmu3PrYNR/0MQcRhpCOvUEuVfJxKw4fIwFXfZXYjfqlHU
-         twfs+UBPOw70nFBIBCOG8t0WK/dNeP3RlSbypp2XIntvVKB6RJNfs0w0tyRisMcQtInPC275fg3h
-         by3Yk0sfCzSdxjeiiNs48kp8VW+HW+b1G83RyK6VGUxVoOBLLLivQ/f+kvtQjuwO88YQJba5zJEY
-         /GGUJJvuF/nfiyhpeS4Uf6lF/A9PkXIVCYufTbdjRGQWXQdqsIO8jyIODupCGixUpPzZaLtL4Edc
-         UawjL+6m6oVibUSVOXYLk60WccIHvs9CZRf9djySUCZyayGZFi11/rQGmWmWnYv1gTgliCiso9j2
-         BDFfPm5UQlhb1xDVnEA0YyXwBGaHKogkby7PvXfERFEZP1ghxEWrZt7/K8C3+jF1+Ue0uAxgvm0d
-         aXkM22Dif/6dZGXK3CQnt439wWuzshxXih8LrNTyQcnT1a1vG5L5hY2JBON2sOSvc2gKKEHSCzRd
-         UpoO9xucGwNJZETdF7CGwjb6I6IFR6fdxHGthqQRoGJIKQ1YNY9u8+KTQAJQ/UJrSgei8cC5Fbs0
-         WMrKwhE5eWolYdQKDIFburkfbkz2SNlIg/iCisDsj9qx3LIaOx1W1ra/Stjp/ULYO0iWt1JigmzU
-         Gpsv//ZEJnfZgHXS8CXz1zJPVITpCE93FKO3cVmGJRBrHOQOWHLoZhEeqKdVgINSxYdYNmhljkT9
-         Lm/QwEIJgvvkVuWhTUXEaKZPIRmtWcbvdD1uKyjkztb1kTsSK1vc/XlYMfxu8nv55q8Ye+oiBTl2
-         qKy6TJZK2hAx13Dh4jHAkEdm8UZqkm1/1WhQQF2hEWs5EUV+PQNdGo5W7iTVrje258DV/5+GbPCC
-         /4LDOJ4fTJoOsdzT0lgStw1IKTCUWceLOuK+lm//hVxfKDJJgqK5Ql13ke6b5dfU06XdLoDRJC
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com,
-        nsaenz@kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: mmal-vchiq: clear redundant item named bulk_scratch
-Date:   Wed, 16 Mar 2022 01:24:12 +0800
-X-OQ-MSGID: <20220315172412.1024-1-xkernel.wang@foxmail.com>
+        Tue, 15 Mar 2022 13:27:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F748E78;
+        Tue, 15 Mar 2022 10:26:02 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FGflpB002387;
+        Tue, 15 Mar 2022 17:25:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=+m2zdRbNqsWkuVUHJWgaFa7AvKiQxrR+dHzT2AmUs8c=;
+ b=FgLVs4jsakxDnWHrcaOP1dImS1/6Z2Ewv1RslCPRKf/07SH6vavvTJIMmq6+q4zIWbPB
+ gC3ZURYKECyNRceFwPUl7Nrr16ETjAqZOBVJwRBVrKZeoWDVQuMicxzMPW4BbREkCqWb
+ 1EDgr1M+ywt043mZKEQQMg9JHjaRq2kJgWTMvsIK8/Izay+cPfjjB+mp4av0W/QnQ5hi
+ AWOihZZCeuFuBi7jY8dVq4gXhoBh7ecsMrrdjKXSW2yNbxV8p7YF/37d2eJhNTL5pQV8
+ iQjwENlMbzgHzTLH/EafygqoAU67OBi0l3UO3zmEi0t98zMDmhoHaTTxmh1ePHjrsDeX AA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3etxhtgy6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 17:25:51 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FHDKtp012855;
+        Tue, 15 Mar 2022 17:25:49 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3erk58p3n0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 17:25:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FHPktZ52167006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Mar 2022 17:25:46 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 772D2AE04D;
+        Tue, 15 Mar 2022 17:25:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 89863AE045;
+        Tue, 15 Mar 2022 17:25:41 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.211.32.147])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 15 Mar 2022 17:25:41 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Tue, 15 Mar 2022 22:55:39 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Kajol Jain <kjain@linux.ibm.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shivaprasad G Bhat <sbhat@linux.ibm.com>
+Subject: Re: linux-next: manual merge of the nvdimm tree with the powerpc tree
+In-Reply-To: <20220315191538.323eefbb@canb.auug.org.au>
+References: <20220315191538.323eefbb@canb.auug.org.au>
+Date:   Tue, 15 Mar 2022 22:55:39 +0530
+Message-ID: <87v8wfb018.fsf@vajain21.in.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -3J5cxA1rd3sxn56In5FZvp1n-T54dZQ
+X-Proofpoint-GUID: -3J5cxA1rd3sxn56In5FZvp1n-T54dZQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
+ suspectscore=0 impostorscore=0 clxscore=1011 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203150104
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-bulk_scratch is not used anywhere and the original allocation of it
-does not have proper check.
-Deleting it directly seems to be a good choice.
+> Hi all,
+>
+> Today's linux-next merge of the nvdimm tree got a conflict in:
+>
+>   arch/powerpc/platforms/pseries/papr_scm.c
+>
+> between commit:
+>
+>   bbbca72352bb ("powerpc/papr_scm: Implement initial support for injecting smart errors")
+>
+> from the powerpc tree and commit:
+>
+>   4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support")
+>
+> from the nvdimm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 7 -------
- 1 file changed, 7 deletions(-)
+Thanks for this correction Stephen and the change looks ok to me. I
+verified the functionality introduced by kernel commit bbbca72352bb
+("powerpc/papr_scm: Implement initial support for injecting smart
+errors") on the 'next-20220315' and found it to be working fine.
 
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 76d3f03..6615c7a 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -168,9 +168,6 @@ struct vchiq_mmal_instance {
- 	/* ensure serialised access to service */
- 	struct mutex vchiq_mutex;
- 
--	/* vmalloc page to receive scratch bulk xfers into */
--	void *bulk_scratch;
--
- 	struct idr context_map;
- 	/* protect accesses to context_map */
- 	struct mutex context_map_lock;
-@@ -1847,8 +1844,6 @@ int vchiq_mmal_finalise(struct vchiq_mmal_instance *instance)
- 	flush_workqueue(instance->bulk_wq);
- 	destroy_workqueue(instance->bulk_wq);
- 
--	vfree(instance->bulk_scratch);
--
- 	idr_destroy(&instance->context_map);
- 
- 	kfree(instance);
-@@ -1908,7 +1903,6 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out_instance)
- 
- 	mutex_init(&instance->vchiq_mutex);
- 
--	instance->bulk_scratch = vmalloc(PAGE_SIZE);
- 	instance->vchiq_instance = vchiq_instance;
- 
- 	mutex_init(&instance->context_map_lock);
-@@ -1939,7 +1933,6 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out_instance)
- 	vchiq_close_service(instance->service_handle);
- 	destroy_workqueue(instance->bulk_wq);
- err_free:
--	vfree(instance->bulk_scratch);
- 	kfree(instance);
- err_shutdown_vchiq:
- 	vchiq_shutdown(vchiq_instance);
+<snip>
+
 -- 
+Cheers
+~ Vaibhav

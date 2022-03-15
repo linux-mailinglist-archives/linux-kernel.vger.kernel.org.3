@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5978F4DA008
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E804DA01F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350049AbiCOQ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S1350055AbiCOQfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350029AbiCOQ3c (ORCPT
+        with ESMTP id S232897AbiCOQfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:29:32 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECD42BB2F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647361700; x=1678897700;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9NlMuHVWGQMaaogSGPp+bKQ4Qb4Uj1fNrUqrs9vh7KA=;
-  b=meVPf+2z9MaGY0dIh7bO4K15rO0tzigxrG8EhjRtSzpMmeu5iWxIxxBh
-   XDj+6oFkFDuTmH5cxlMmsFfR0EFr3BJd/LPKhw6zYdtZn8SlSdnmS9VqM
-   0DtucWCT5O4Ml+5d1YNItqWaSpFqIawbhrrfnOaUKHSyK+WOCS77euRWP
-   14LppnBh6DtmclGBR4UJ4/oLNRNktdnsbwpLvUI+SrfKT9EdA5VXHTRId
-   hZNmcBitM4QXXIB9aq3AbTX3UOugl/+pk0DtvbHNH9EUA7R0MFFdcqVQM
-   GW+HVswEMRGA2Ar7W+y7dZfB62rWwExnfN9oz1Bh2wYGucnmbw/FGWWEF
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255180783"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="255180783"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:28:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="646287929"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:28:20 -0700
-Date:   Tue, 15 Mar 2022 09:31:35 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 5/8] iommu: Add PASID support for DMA mapping API
- users
-Message-ID: <20220315093135.5c11066d@jacob-builder>
-In-Reply-To: <20220315142216.GV11336@nvidia.com>
-References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
-        <20220315050713.2000518-6-jacob.jun.pan@linux.intel.com>
-        <00286dbb-fe73-3604-4dec-340eb91912c3@arm.com>
-        <20220315142216.GV11336@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 15 Mar 2022 12:35:05 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C267340C7;
+        Tue, 15 Mar 2022 09:33:53 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bi12so42738044ejb.3;
+        Tue, 15 Mar 2022 09:33:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AWRbE0SqFuV4wqzStVfSF+dwgpeyvmT951OzMpXt1TM=;
+        b=GOxJ4n+XZnHOfmX6RhO0J0yhAZB3qFAqYS0ZkPj3UhB7tV95b9G5aJkNP9II9UeXsc
+         TjtS9FFQ7sJTO+DjyEwOA7VCcrRExK10UaGSOmo2UcHwbmVRv8KXwN5yPauEx2B6iEaS
+         SzgtTyAP4OpMsRy11YqQHQrPGfHzJg3K3AT9/ttb+KYo6Deu7rGHSl9fY9hWxfSY1umu
+         GDRuIjVG81XQd6M54gm2aPcvAWgghVgwWake3ZxRvBm2JiNPt+AX8BjM/jgM6Ujgiuvl
+         v1PXZ5SK0nWZVRs9orxXyBqf3qiQPCO7+fqjguw548b7vDXA94yqJ/ruUVb1ZmSBcDZf
+         7piA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AWRbE0SqFuV4wqzStVfSF+dwgpeyvmT951OzMpXt1TM=;
+        b=COSPyJZebozlFstVQqCWmklma4efGb4371u+50btzhi9c/+j4XAtuOWvUTJ8WZVBl0
+         VWdD/zVUMwajg9v5G3tuywxjIN9tRPLuJYi+w/sPPPdtZBQl9l+O+xz9GXlfWTNGBqWm
+         n9qtGuRaBDwoP3M8UrTLk+gvZ/fFFN2FzHonfDhF89ixFBXfpMdyiLI8M+plvWNi5Prk
+         xMgkZhOtVWKL3fjZaxozFLCG1HLSKXAyWkpPTSycYwubB8hNswSMRSfRSYa2RhfdZ3gL
+         wnUfQN+KtoQTJDcRm6331JaWsI5riVgwC52zDTS8eTgF0maw2xkC3Tm6tTO6vm5osLAE
+         u79g==
+X-Gm-Message-State: AOAM533AmBZmBcG3kToraSTaTyAomTZ8neh/sWBH2Y1GDeubmoktj2tP
+        O/o5U/1K4W/ln7RfmqBdEY3n/q/0Utw=
+X-Google-Smtp-Source: ABdhPJyxZ5Dj5nbD1iYsZlkTxc6XF5i/Wr9GefE4CWGt955QvEBj/tXmYZleja4Sh7ujs868a2K2Zw==
+X-Received: by 2002:a17:906:c1d6:b0:6d6:e0a3:bbc7 with SMTP id bw22-20020a170906c1d600b006d6e0a3bbc7mr23293709ejb.484.1647362031906;
+        Tue, 15 Mar 2022 09:33:51 -0700 (PDT)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id y12-20020a056402358c00b00418d7f02d63sm284290edc.53.2022.03.15.09.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 09:33:51 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 18:33:49 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v4 net-next 09/15] net: dsa: Never offload FDB entries on
+ standalone ports
+Message-ID: <20220315163349.k2rmfdzrd3jvzbor@skbuf>
+References: <20220315002543.190587-1-tobias@waldekranz.com>
+ <20220315002543.190587-10-tobias@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315002543.190587-10-tobias@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On Tue, 15 Mar 2022 11:22:16 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Tue, Mar 15, 2022 at 11:16:41AM +0000, Robin Murphy wrote:
-> > On 2022-03-15 05:07, Jacob Pan wrote:  
-> > > DMA mapping API is the de facto standard for in-kernel DMA. It
-> > > operates on a per device/RID basis which is not PASID-aware.
-> > > 
-> > > Some modern devices such as Intel Data Streaming Accelerator, PASID is
-> > > required for certain work submissions. To allow such devices use DMA
-> > > mapping API, we need the following functionalities:
-> > > 1. Provide device a way to retrieve a PASID for work submission within
-> > > the kernel
-> > > 2. Enable the kernel PASID on the IOMMU for the device
-> > > 3. Attach the kernel PASID to the device's default DMA domain, let it
-> > > be IOVA or physical address in case of pass-through.
-> > > 
-> > > This patch introduces a driver facing API that enables DMA API
-> > > PASID usage. Once enabled, device drivers can continue to use DMA
-> > > APIs as is. There is no difference in dma_handle between without
-> > > PASID and with PASID.  
-> > 
-> > Surely the main point of PASIDs is to be able to use more than one
-> > of them?  
+On Tue, Mar 15, 2022 at 01:25:37AM +0100, Tobias Waldekranz wrote:
+> If a port joins a bridge that it can't offload, it will fallback to
+> standalone mode and software bridging. In this case, we never want to
+> offload any FDB entries to hardware either.
 > 
-> IMHO, not for the DMA API.
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+
+When you resend, please send this patch separately, unless something
+breaks really ugly with your MST series in place.
+
+>  net/dsa/slave.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-Right, but we really need two here. One for DMA request w/o PASID (PASID 0)
-and a kernel PASID for DMA request tagged w/ PASID.
-Since DMA API is not per process, there is no need for more right now.
-
-> I can't think of good reasons why a single in-kernel device should
-> require more than one iommu_domain for use by the DMA API. Even with
-> the SIOV cases we have been looking at we don't really see a use case
-> for more than one DMA API iommu_domain on a single physical device.
-> Do you know of something on the horizon?
+> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> index a61a7c54af20..647adee97f7f 100644
+> --- a/net/dsa/slave.c
+> +++ b/net/dsa/slave.c
+> @@ -2624,6 +2624,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+>  	if (ctx && ctx != dp)
+>  		return 0;
+>  
+> +	if (!dp->bridge)
+> +		return 0;
+> +
+>  	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
+>  		if (dsa_port_offloads_bridge_port(dp, orig_dev))
+>  			return 0;
+> -- 
+> 2.25.1
 > 
-Not that I know.
-
-> From my view the main point of PASIDs is to assign iommu_domains that
-> are not used by the DMA API.
-> 
-Right, DMA API default to PASID 0. But IDXD device cannot use PASID 0 for
-enqcmds.
-
-> IMHO it is a device mis-design of IDXD to require all DMA be PASID
-> tagged. Devices should be able to do DMA on their RID when the PCI
-IDXD can do DMA w/ RID, the PASID requirement is only for shared WQ where
-ENQCMDS is used. ENQCMDS has the benefit of avoiding locking where work
-submission is done from multiple CPUs.
-Tony, Dave?
-
-> function is controlled by a kernel driver. I see this driver facing
-> API as addressing a device quirk by aliasing the DMA API of the RID
-> into a PASID and that is really all it is good for.
-> 
-> In any case I think we are better to wait for an actual user for multi
-> DMA API iommu_domains to come forward before we try to build an API
-> for it.
-> 
-What would you recommend in the interim?
-
-Shall we let VT-d driver set up a special global PASID for DMA API? Then
-IDXD driver can retrieve it somehow? But that still needs an API similar to
-what I did in the previous version where PASID #1 was used.
-
-Thanks,
-
-Jacob

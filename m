@@ -2,94 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5EC4D91D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE2F4D91D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344054AbiCOA6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S1344061AbiCOBAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 21:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235828AbiCOA6k (ORCPT
+        with ESMTP id S233143AbiCOBAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:58:40 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12032899A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:57:28 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id e186so34274939ybc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:57:28 -0700 (PDT)
+        Mon, 14 Mar 2022 21:00:20 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E12613E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:59:09 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id e186so34280219ybc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=URKjjowY0h/0Z8zQ1fAqigHaBDlWDlO+XfCZxksc+d4=;
-        b=RICGTgRYNylyisjerEuIWzJ8fZdKLcskLqhxucD/uGx3zgwwzUK+U00nyTB8KwDYpb
-         yuBtphxFdvM5/Jwd4YaSzSrW7tdFzaMhHvbGc4LbaFJvudS89VA+B9A65kb0PYPlgkdC
-         RWgfuEvV+dqfb4Jh/EmnSfmm4umVdB1tvi0FyP0hF8a99YqZGHtO2XJKpOVvZF18Xz1u
-         y+AHhFWztDgC6Gc2ioucRkoDth3cdTPIlK4AYeCqUudeIq/UpO0eD/WV4m1swNO2aRrM
-         jTdF6rZIrWK30Yl4v/e0OXHqa7ym1DBc6D+T+Pt4XyOt9aOQuG+Q0tdQleZBY4EF2qGa
-         Hhsg==
+        bh=ikYhV7JTpMGbcJ3HAQYCBxOfCzMhRoKXLswTSf9Y5sU=;
+        b=QJhi4LghX9e5JTgeh3z84BoLvpiFqJs4JOHdBLuVtbvYeISjglHa+vSa6RmNwOmkcl
+         2nFD1eIgx/Pkypz183cJWU+P7aLNA3kBS0vilsyPJBSw2n2LL4L4LCVTLImPhiQikuhb
+         PoR+IjN1U8ToLEx0OQPzOb7zaUpMZjFSnZKaS3Qp2lw69Jk9DlXnbafY9AGHV07l2x13
+         mgwT5uddh/UNH11rYbpj58NL8oV1Itcqo5sv3v3hqp1ih1xGzHjPUuQgrNmwwhKGZK6u
+         9LWXb88sLIHpBZghwBj7nNJBEv2U0oV6XrAUPCAbyRnhciNJvafF0Hd2VnzX8xKMaoRP
+         f7Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=URKjjowY0h/0Z8zQ1fAqigHaBDlWDlO+XfCZxksc+d4=;
-        b=6sd1l1UPbVdjA+9cfeqJ04ZL55UQxv4giSMQJbOVgZY5K2ZNun1gzdufnkNXsSgAzD
-         K5xIMv7O6DPVVWcrD8TzNLhyIrACIsIJMvGOVfoeNVTKAnVooUzmhzqr7TTNt/FyAYM4
-         4rXX6ukjrOng8YViOcrx8K95bFTE+JErJR3ME5XSQtiV7oImiaF/e81CfF6xOPOj9d9H
-         iGcCzorrrGRAsTTLRNMx8C/w6D/T2QDex72o5ugA6fetWPjxBYbQvweHYm+dbtQgphPe
-         cQbiAeg84fBqBaICntEIsVxbVYk7mMjD0qXiDx2XROoq5/xGKR4cwKZYHRjDv1eePqBE
-         uOaA==
-X-Gm-Message-State: AOAM533PhJunsAko96gW24W82l1vzLtMo5XuNgdW7E/OwrjOhgVlEh6k
-        Pa2MEqKK2kH5hth164ieK5XNQk5gbGb37ddvhCqXsY5kZm8=
-X-Google-Smtp-Source: ABdhPJzzoq1w5Z5Ax8LKyjNFwGBQHKqhXx+iO7JkJYga4JSoMD2kRDmPq24+htGemMNNEVXVseUw9tVaZmXH6imEkKM=
-X-Received: by 2002:a05:6902:203:b0:628:7b6f:2845 with SMTP id
- j3-20020a056902020300b006287b6f2845mr21211853ybs.533.1647305847868; Mon, 14
- Mar 2022 17:57:27 -0700 (PDT)
+        bh=ikYhV7JTpMGbcJ3HAQYCBxOfCzMhRoKXLswTSf9Y5sU=;
+        b=HiCq3PBYkA/FddwGInIb3fx57IffQY7sDH6TERgXpB5SKviE113rHSQ1F3QTfM8LRy
+         NenNQ1fX87SaIV52v54mJqDakHAL04Be7Nj7gHhxDg2Vvpq/jGAhlI3o7avZbaT2w00Y
+         vuhXd6ZGhMJUkqlk8s/xxd5emJLSLT5+olYpENSQKofRUKH7pfmipbTdrKMRxzXStp1E
+         3za6Wdcebr9lvzByWCUpWC4Rbdox2Y1ypTWeM9vWMMsqcUgDMVUTuRxHK+OrS5D+W4t/
+         cFZYg/F5TnFy4P4YFq5GVO1tjDF7Ds6KnHmZ0jtU75R5Lv8k0cd9EivrA4RFjenqGNsc
+         vNHQ==
+X-Gm-Message-State: AOAM532w3WmBiRXOP1s8xQvXqhYeN5a+Yr1JS4+fqg+nW2ZN1/GUoAYU
+        cFFDHL/jK5i55d+ASloGy/wtfpMVOazLfKtzvFEjUg==
+X-Google-Smtp-Source: ABdhPJx3xEUVpjCu1JSwjkBA+ddKZTdkWoJYWjLsNnyEB1VMrpkqg8go3K+tgjz5W3BcyJ2NTSKqrTJVaSndcW045BE=
+X-Received: by 2002:a25:6608:0:b0:628:d9bd:6245 with SMTP id
+ a8-20020a256608000000b00628d9bd6245mr21150433ybc.560.1647305948369; Mon, 14
+ Mar 2022 17:59:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220226204507.2511633-1-michael@walle.cc>
-In-Reply-To: <20220226204507.2511633-1-michael@walle.cc>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 15 Mar 2022 01:57:16 +0100
-Message-ID: <CACRpkdaDxYntOxnJiX-fwUU8UPFu7SFR_5UnoUPzhWG-xtJphQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] pinctrl: microchip-sgpio: locking and synchronous output
-To:     Michael Walle <michael@walle.cc>
-Cc:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Colin Foster <colin.foster@in-advantage.com>
+References: <20220311161406.23497-1-vincent.guittot@linaro.org> <20220311161406.23497-7-vincent.guittot@linaro.org>
+In-Reply-To: <20220311161406.23497-7-vincent.guittot@linaro.org>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 14 Mar 2022 17:58:57 -0700
+Message-ID: <CABk29Ns1=2kc3JAESx_Ce7PP86KqiDA4O9K+vaOLZbKfq_XVaQ@mail.gmail.com>
+Subject: Re: [RFC 6/6] sched/fair: Add sched group latency support
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>, parth@linux.ibm.com,
+        Qais Yousef <qais.yousef@arm.com>,
+        "Hyser,Chris" <chris.hyser@oracle.com>,
+        Pavan Kondeti <pkondeti@codeaurora.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        Paul Turner <pjt@google.com>, pavel@ucw.cz,
+        Tejun Heo <tj@kernel.org>,
+        Dhaval Giani <dhaval.giani@oracle.com>, qperret@google.com,
+        Tim Chen <tim.c.chen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 9:45 PM Michael Walle <michael@walle.cc> wrote:
-
-> There are boards which use the output of the SGPIO to drive I2C muxers.
-> SGPIO right now is broken in a way that when the software sets this bit
-> there is a rather large delay until that value ends up on the hardware
-> pin.
+On Fri, Mar 11, 2022 at 8:15 AM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 >
-> While digging into this, I've noticed that there is no locking at all
-> in this driver. Add locking for all RWM accesses.
+[snip]
 >
-> Please note, that parts of the modification of the first patch are
-> removed again in a later patch. This is because the first patch is
-> intended to be backported to the stable trees.
->
-> This was also just tested on a LAN9668 SoC. If you have additional
-> hardware, please test.
+>  static struct cftype cpu_legacy_files[] = {
+> @@ -10649,6 +10673,11 @@ static struct cftype cpu_legacy_files[] = {
+>                 .read_s64 = cpu_idle_read_s64,
+>                 .write_s64 = cpu_idle_write_s64,
+>         },
+> +       {
+> +               .name = "latency",
+> +               .read_s64 = cpu_latency_read_s64,
+> +               .write_s64 = cpu_latency_write_s64,
+> +       },
+>  #endif
+>  #ifdef CONFIG_CFS_BANDWIDTH
+>         {
+> @@ -10866,6 +10895,18 @@ static struct cftype cpu_files[] = {
+>                 .read_s64 = cpu_idle_read_s64,
+>                 .write_s64 = cpu_idle_write_s64,
+>         },
+> +       {
+> +               .name = "latency",
+> +               .flags = CFTYPE_NOT_ON_ROOT,
+> +               .read_s64 = cpu_latency_read_s64,
+> +               .write_s64 = cpu_latency_write_s64,
+> +       },
+> +       {
+> +               .name = "latency.nice",
+> +               .flags = CFTYPE_NOT_ON_ROOT,
+> +               .read_s64 = cpu_latency_nice_read_s64,
+> +               .write_s64 = cpu_latency_nice_write_s64,
+> +       },
 
-Nobody is protesting for three weeks or so, I just applied the patches
-for v5.18.
-
-If there are problems we can fix them in the v5.18-rc:s
-
-Yours,
-Linus Walleij
+Something I considered when adding cpu.idle was that negative values
+could be used to indicate increasing latency sensitivity. Folding the
+above latency property into cpu.idle could help consolidate the
+"latency" behavior, especially given that it shouldn't really be
+possible to configure an entity as both latency sensitive and idle.

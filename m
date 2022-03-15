@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E074DA60A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26A74DA61D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352525AbiCOXL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 19:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S1352532AbiCOXNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 19:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbiCOXLY (ORCPT
+        with ESMTP id S236985AbiCOXNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:11:24 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B8B52E6C;
-        Tue, 15 Mar 2022 16:10:11 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id B4A963201FDA;
-        Tue, 15 Mar 2022 19:10:08 -0400 (EDT)
-Received: from imap42 ([10.202.2.92])
-  by compute4.internal (MEProxy); Tue, 15 Mar 2022 19:10:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=nKjQkzPzNXMCrBv5rZd2TPMn58+ud5Ed8qE7Xp
-        7qsjw=; b=I6RTIHk8Zsx3TPDaTGo0z9yk1uNeRZu6rXreRrxDzhJGmVF6j4Zebc
-        sOX3Fqp5Hftz91zOgnwWWc5OZtD+0r1DurynvAZx7NwmBQxVcLUIVPzGjAmPkImL
-        ZLF03vNpZdgRBO2qkfZphUPw/u09eBJRIM22kAPvbzqTfwd0qFaJDRpn/YsOE4UY
-        MALX+yza10fyv1tranZKcofbu8EmviCW7eTtgFQ3Ue4boMucKWSvxIauA9a4J6W9
-        FShl6MCd1kOh+nHoag9LEghs9fahZuSJXIsZdlVDqUEIR8oWiT5C+bb2XiuC9UHO
-        ijXLonXBAY94TD4AOcUJaDk6nFSehLbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=nKjQkzPzNXMCrBv5r
-        Zd2TPMn58+ud5Ed8qE7Xp7qsjw=; b=Pv2ucQTI4Zdi0OnPFmDaADIFGCJLisE1y
-        bKY10UyrYlSnck3aUDvFVGHQHT4NcKeFX5IIT0lXk648lFpcqacAecvux6mDmIxI
-        1Vz9pU6ZCdkawh6eP64W+NK0YzQMCcMl5lB3oi5t0xyiyD17cx0+k89X+/39z1jZ
-        hkFsW/ZmpgJ61BShkc5T0NW1AWjy7ODaJTYA7qDMQGUX17UOZuCkaaB/P8z6nlFZ
-        4XnHMvl4nAgJfHMp38VnofcwitBW33AH8S9nkUD/myx+7aufIWLxGvt8/O2a4oQM
-        Aw5q/yIb9XZlk9ERKoXfP4d61Oi+85pm+YSBX2FfZDywB2NJT/0BQ==
-X-ME-Sender: <xms:zxwxYmOuWPrrNuiV8QHiAGFyRNAYYQvQBd4UkNpO8FfijhcRirWy_g>
-    <xme:zxwxYk9OqSlAQs_vMeRB-hrka4VmTKeVSw9f8Vj1SdRZAEoSQmIJlDu1dJMA415x6
-    Lgo56aHr3S4rBebog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefuddgtdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvufgtsehttdertder
-    redtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihii
-    eqnecuggftrfgrthhtvghrnhepjefgveethfejlefgfedvtdfhffefuedtffegiefhkeet
-    feehffegiedtieefhfegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:0BwxYtSppYNR4g_8PKGitE7oKBeFJAmwtVmxBi7U3WUBlj8CGg2tfw>
-    <xmx:0BwxYmszcZA1h1IbQhQvarFHTzfIbOz4nrmZI6rP8HEvCnlU1wu5Eg>
-    <xmx:0BwxYufKTKFJb1PMAE4HKi3YNt5rCXKVDNScLXMNYh4M7Z9hLBuw1g>
-    <xmx:0BwxYu64tOhGQtgrjDC04enJsSUbJdWa6EIqAsIAcY8r1q53DWH9ZQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E13882180085; Tue, 15 Mar 2022 19:10:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
-Mime-Version: 1.0
-Message-Id: <53a71699-3ffb-4a49-9d15-7fe4a0f51612@www.fastmail.com>
-In-Reply-To: <CAADnVQJUvfKmN6=j5hzhgE25XSa2uqR3MJyq+c=AGCKkTKD05g@mail.gmail.com>
-References: <1d2931e80c03f4d3f7263beaf8f19a4867e9fe32.1647212431.git.dxu@dxuuu.xyz>
- <CAADnVQJUvfKmN6=j5hzhgE25XSa2uqR3MJyq+c=AGCKkTKD05g@mail.gmail.com>
-Date:   Tue, 15 Mar 2022 16:10:46 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] bpftool: Add SPDX identifier to btf-dump-file output
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 19:13:53 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027BB2E0A7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 16:12:41 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id w16so1338718ybi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 16:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bY5xtSrH39029xqE3mOOcec5o9mj3nUWmGzVJpEccxo=;
+        b=Kd8Hv0JDmH3YkSwU8rpWKqK11gwQ5RHa2i26ofq5z9ax+InqOEKhrdmlftL5mlCHG5
+         jwk+gYxQeGW5zFpWK1LImFyaoTxjzGO2tJVtCaPzS97kLptqsz2lexAXlEGun6UleVpr
+         ZwyGMoN/HrFcIZfbPRVFXczcc1F/axmnlaCZywOX1zrb/6tvTeu925CdgSI9zhVTEB9i
+         AEsZBBMGbAE8qEhhLCCJhXUYpgKlqSr9nLQsZNh1TGk0iS78WY79WwrRZzt1991xIKmw
+         wQ7oWPzLQMpQ0BNWzic6O7cBBTlZPtbQTvEIAh791Ls5NFLsEEy8tySw8htT/ExgLOzX
+         kmOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bY5xtSrH39029xqE3mOOcec5o9mj3nUWmGzVJpEccxo=;
+        b=Q+3tZuFE5mLFQOfM4si+DUsHWDQ/8l2yUZoQu+HMtaDEyvqRlafo5Ylp3MyXoHEGlF
+         XPB+zdN4jnUWXSxqdyhzlxQwyLoNt1D9LPkSf/VkbesYAkiKbzPQ7ce40GehGKtdptZQ
+         y6dHHDCKEfnq5GWyZySRSbhMoeI8VZvzOn+hcQnAR7tHwa/uqU2vERaUr+7N/JGhq//z
+         cWBihxdKEOZNiwfa4nH1mk0879X+6A4G/jcFGmwDF373/SOWgmkEPEhiOTFHC8IM0z0i
+         cGdQUn5sa1jbr1PoKd5Z2jz+JnXjAa/fwV2OAVr6ybRr2hYoNp1qHzH7UbHAdVDnUms0
+         mjPg==
+X-Gm-Message-State: AOAM530ZliNIIxyccrNzCtqYoftS5Iqns8tWt3mI6MOi54+gpZzasenE
+        cCGRVpR1hoiP07Nb4VMgYHAa+P16EgnveJXlrwPT4Q==
+X-Google-Smtp-Source: ABdhPJw+a9V+CQ42uBU5RiZg8cgJJ4ma0rpA3cptTi+WEytuDbMct0Evs4q6GtxXBTEDrLJRR3pheOqaWghQ31HrSqY=
+X-Received: by 2002:a25:bf87:0:b0:622:1e66:e7fd with SMTP id
+ l7-20020a25bf87000000b006221e66e7fdmr25848318ybk.341.1647385959996; Tue, 15
+ Mar 2022 16:12:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220310164532.1821490-1-bgardon@google.com> <Yio8QtuMd6COcnEw@google.com>
+ <CANgfPd9xr5ev7fEiwBVUi89iHkuywq-Ba9zOeCMSTFmLkO243w@mail.gmail.com> <YiqxtIz+T1LGE1Ju@google.com>
+In-Reply-To: <YiqxtIz+T1LGE1Ju@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 15 Mar 2022 17:12:29 -0600
+Message-ID: <CANgfPd9N0UsA7_uMU4vs43gdH7A3UrcrY-OdmXoxQ2PyctwxsA@mail.gmail.com>
+Subject: Re: [PATCH 00/13] KVM: x86: Add a cap to disable NX hugepages on a VM
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexei,
+Okay, I'll hold off on the memslot refactor in v2, but if folks have
+feedback on the other aspects of the v1 patch series, I'd appreciate
+it.
+If not, I'll try to get a v2 sent out.
+I think that the commits adding utility functions for the binary stats
+interface to the binary stats test could be queued separately from the
+rest of this series and will be helpful for other folks working on new
+selftests.
 
-On Tue, Mar 15, 2022, at 2:38 PM, Alexei Starovoitov wrote:
-> On Sun, Mar 13, 2022 at 4:01 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->>
->> A concern about potential GPL violations came up at the new $DAYJOB when
->> I tried to vendor the vmlinux.h output. The central point was that the
->> generated vmlinux.h does not embed a license string -- making the
->> licensing of the file non-obvious.
->>
->> This commit adds a LGPL-2.1 OR BSD-2-Clause SPDX license identifier to
->> the generated vmlinux.h output. This is line with what bpftool generates
->> in object file skeletons.
->>
->> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->> ---
->>  tools/bpf/bpftool/btf.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
->> index a2c665beda87..fca810a27768 100644
->> --- a/tools/bpf/bpftool/btf.c
->> +++ b/tools/bpf/bpftool/btf.c
->> @@ -425,6 +425,7 @@ static int dump_btf_c(const struct btf *btf,
->>         if (err)
->>                 return err;
->>
->> +       printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n\n");
+On Thu, Mar 10, 2022 at 8:19 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> I don't think we can add any kind of license identifier
-> to the auto generated output.
-> vmlinux.h is a pretty printed dwarfdump.
-
-Just so I understand better, when you say "I don't think we can",
-do you mean:
-
-1) There may be legal issues w/ adding the license identifier
-2) It doesn't make sense to add the license header
-3) Something else?
-
-Thanks,
-Daniel
+> On Thu, Mar 10, 2022, Ben Gardon wrote:
+> > Those patches are a lot of churn, but at least to me, they make the
+> > code much more readable. Currently there are many functions which just
+> > pass along 0 for the memslot, and often have multiple other numerical
+> > arguments, which makes it hard to understand what the function is
+> > doing.
+>
+> Yeah, my solution for that was to rip out all the params.  E.g. the most used
+> function I ended up with is
+>
+>   static inline struct kvm_vm *vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
+>                                                      void *guest_code)
+>   {
+>         return __vm_create_with_one_vcpu(vcpu, 0, guest_code);
+>   }
+>
+> and then the usage is
+>
+>         vm = vm_create_with_one_vcpu(&vcpu, guest_main);
+>
+>         supp_cpuid = kvm_get_supported_cpuid();
+>         cpuid2 = vcpu_get_cpuid(vcpu);
+>
+> My overarching complaint with the selftests is that they make the hard things hard,
+> and the easy things harder.  If a test wants to be backed by hugepages, it shouldn't
+> have to manually specify a memslot.
+>
+> Let me post my selftests rework as RFC (_very_ RFC at this point).  I was hoping to
+> do more than compile test before posting anything, but it's going to be multiple
+> weeks before I'll get back to it.  Hopefully it'll start a discussion on actually
+> rewriting the framework so that writing new tests is less painful, and so that every
+> new thing that comes along doesn't require poking at 50 different tests.

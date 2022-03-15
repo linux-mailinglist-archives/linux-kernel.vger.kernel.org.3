@@ -2,88 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8CA4D982D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34794D9824
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346897AbiCOJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S1346843AbiCOJyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346856AbiCOJyR (ORCPT
+        with ESMTP id S1346854AbiCOJyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:54:17 -0400
-Received: from smtp-out.xnet.cz (smtp-out.xnet.cz [178.217.244.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414BECC0;
-        Tue, 15 Mar 2022 02:53:01 -0700 (PDT)
-Received: from meh.true.cz (meh.true.cz [108.61.167.218])
-        (Authenticated sender: petr@true.cz)
-        by smtp-out.xnet.cz (Postfix) with ESMTPSA id 943B218B19;
-        Tue, 15 Mar 2022 10:52:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=true.cz; s=xnet;
-        t=1647337979; bh=lxa537pBCjy7aFFmg6cgXQt1WGC8VIKt+cw8JKVK3cI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=b50Xk3blPN5MJYEGQFQwStNXKPj8VX4PAj++bU1yzDQIhg6FffLdTuyPPoG/Cn5lu
-         FE+EjzntjKu0Xpjv32bvbYotE12Z0kVqoKnyoMcTEMgVxO+23qagJWL4hpR2R0w59A
-         zoYILpQwZMj80D2zfsF5ruvyRNb9KSMT+o4vTeKA=
-Received: by meh.true.cz (OpenSMTPD) with ESMTP id 93d67bdf;
-        Tue, 15 Mar 2022 10:52:35 +0100 (CET)
-From:   =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>,
-        stable@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] dt-bindings: arm: sunxi: add A20-olinuxino-lime2 Revisions G/G1/G2
-Date:   Tue, 15 Mar 2022 10:52:44 +0100
-Message-Id: <20220315095244.29718-4-ynezz@true.cz>
-In-Reply-To: <20220315095244.29718-1-ynezz@true.cz>
-References: <20220315095244.29718-1-ynezz@true.cz>
+        Tue, 15 Mar 2022 05:54:12 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E4CDE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:52:57 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id qa43so39710868ejc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nzL1DPOauY6xrdeyfpwRODojKdw/bFm68FMajovYo6g=;
+        b=aPQtqBpjqL26lRUuA67dWSdBYZ+P/OnQD5b5DPaPCNVFC8mllI1F5Z4DrykGC7Nm52
+         NYVARAcB6EKihQiU3nR7auLh2RMcX5iG4aZzNurSihePLSCDNafmV6aDnPt7iohqmzPT
+         i+1RJQbOuQTUsiLaWuynMdfIp2D0pEXMbRgq3gppylA50fxe/er+TcNS8B7LqPy9DwNd
+         xK4POQpl6tAPqXHcYYhL9RoWDsmggj0qIBO3em3KQdtOCCzH995aYYhNiMf7y+PmHirW
+         gmes5oNZhwRimfcWiHSC/2oYzvBdzMMM04H84ESMBLL84WRaxdlbwsUak7eTTugCNdve
+         PEXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nzL1DPOauY6xrdeyfpwRODojKdw/bFm68FMajovYo6g=;
+        b=iB0LWXT7QoPghJLzoyNiL/nb9UxPpdAcxunzKTzlJFZEtU62e6CHDPl9Qw3KElAlHI
+         zGZBTgY2X//yaZWbjfVebio3VnZ/XALzvPdt8V62nyCTu7mDAF3tBfemt/bOZDexYfnb
+         UDGFAi2os+Edm8hYCyGaVSRfftoe41QvYUeaaGqumAsZwX45AUxOwFtFeD1GgAp+KbeV
+         1u62C9W4p9J99JFXZ0ejxWMmwGvsPNQ+XfFuoTRwiFOAUMcRlYLzRZU9C7z/tqasBYcp
+         6j36fY7G6uqZdv9qsd+tRPe4TGilf5wkcgS5LiNzUn65qyigNQJWwNs4ajL2gflKX8gY
+         Ys3Q==
+X-Gm-Message-State: AOAM533FQhdRHnXSFT3TUxGRaKpaxy/JqUtZKeAAWADe/uRLtQuiNlz1
+        PkWiQF5nj6vANeqfVCj4coTPTQ==
+X-Google-Smtp-Source: ABdhPJyQkxhiMyLn0VYaZCt9sQO44O40CE85NeRb10VArr61L3n9t7cm6DbwGGYW3nPA3mCgwXjBGg==
+X-Received: by 2002:a17:906:d555:b0:6da:ac8c:f66b with SMTP id cr21-20020a170906d55500b006daac8cf66bmr21422702ejc.107.1647337975509;
+        Tue, 15 Mar 2022 02:52:55 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id a102-20020a509eef000000b0041614c8f79asm9346624edf.88.2022.03.15.02.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 02:52:55 -0700 (PDT)
+Message-ID: <5c05d8b8-9c40-e38d-5c4d-e25526407e51@blackwall.org>
+Date:   Tue, 15 Mar 2022 11:52:53 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 net-next 03/15] net: bridge: mst: Support setting and
+ reporting MST port states
+Content-Language: en-US
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+References: <20220315002543.190587-1-tobias@waldekranz.com>
+ <20220315002543.190587-4-tobias@waldekranz.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220315002543.190587-4-tobias@waldekranz.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT bindings for A20-olinuxino-lime2 Revisions G/G1/G2 boards.
+On 15/03/2022 02:25, Tobias Waldekranz wrote:
+> Make it possible to change the port state in a given MSTI by extending
+> the bridge port netlink interface (RTM_SETLINK on PF_BRIDGE).The
+> proposed iproute2 interface would be:
+> 
+>     bridge mst set dev <PORT> msti <MSTI> state <STATE>
+> 
+> Current states in all applicable MSTIs can also be dumped via a
+> corresponding RTM_GETLINK. The proposed iproute interface looks like
+> this:
+> 
+> $ bridge mst
+> port              msti
+> vb1               0
+> 		    state forwarding
+> 		  100
+> 		    state disabled
+> vb2               0
+> 		    state forwarding
+> 		  100
+> 		    state forwarding
+> 
+> The preexisting per-VLAN states are still valid in the MST
+> mode (although they are read-only), and can be queried as usual if one
+> is interested in knowing a particular VLAN's state without having to
+> care about the VID to MSTI mapping (in this example VLAN 20 and 30 are
+> bound to MSTI 100):
+> 
+> $ bridge -d vlan
+> port              vlan-id
+> vb1               10
+> 		    state forwarding mcast_router 1
+> 		  20
+> 		    state disabled mcast_router 1
+> 		  30
+> 		    state disabled mcast_router 1
+> 		  40
+> 		    state forwarding mcast_router 1
+> vb2               10
+> 		    state forwarding mcast_router 1
+> 		  20
+> 		    state forwarding mcast_router 1
+> 		  30
+> 		    state forwarding mcast_router 1
+> 		  40
+> 		    state forwarding mcast_router 1
+> 
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>  include/uapi/linux/if_bridge.h |  16 +++++
+>  include/uapi/linux/rtnetlink.h |   1 +
+>  net/bridge/br_mst.c            | 127 +++++++++++++++++++++++++++++++++
+>  net/bridge/br_netlink.c        |  44 +++++++++++-
+>  net/bridge/br_private.h        |  23 ++++++
+>  5 files changed, 210 insertions(+), 1 deletion(-)
+> 
+[snip]
+> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
+> index 78ef5fea4d2b..355ad102d6b1 100644
+> --- a/net/bridge/br_mst.c
+> +++ b/net/bridge/br_mst.c
+> @@ -124,3 +124,130 @@ int br_mst_set_enabled(struct net_bridge *br, bool on,
+>  	br_opt_toggle(br, BROPT_MST_ENABLED, on);
+>  	return 0;
+>  }
+> +
+> +size_t br_mst_info_size(const struct net_bridge_vlan_group *vg)
+> +{
+> +	DECLARE_BITMAP(seen, VLAN_N_VID) = { 0 };
+> +	const struct net_bridge_vlan *v;
+> +	size_t sz;
+> +
+> +	/* IFLA_BRIDGE_MST */
+> +	sz = nla_total_size(0);
+> +
+> +	list_for_each_entry(v, &vg->vlan_list, vlist) {
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Petr Štetiar <ynezz@true.cz>
----
- Documentation/devicetree/bindings/arm/sunxi.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Note that rtnl_calcit() (which ends up indirectly using this function) is called
+only with rcu so you need to use list_for_each_entry_rcu() here.
 
-diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-index c8a3102c0fde..d142209e76a4 100644
---- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-+++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-@@ -610,11 +610,21 @@ properties:
-           - const: olimex,a20-olinuxino-lime2
-           - const: allwinner,sun7i-a20
- 
-+      - description: Olimex A20-OlinuXino LIME2 Revisions G/G1/G2
-+        items:
-+          - const: olimex,a20-olinuxino-lime2-revG
-+          - const: allwinner,sun7i-a20
-+
-       - description: Olimex A20-OlinuXino LIME2 (with eMMC)
-         items:
-           - const: olimex,a20-olinuxino-lime2-emmc
-           - const: allwinner,sun7i-a20
- 
-+      - description: Olimex A20-OlinuXino LIME2 Revisions G/G1/G2 (with eMMC)
-+        items:
-+          - const: olimex,a20-olinuxino-lime2-emmc-revG
-+          - const: allwinner,sun7i-a20
-+
-       - description: Olimex A20-OlinuXino Micro
-         items:
-           - const: olimex,a20-olinuxino-micro
+> +		if (test_bit(v->brvlan->msti, seen))
+> +			continue;
+> +
+> +		/* IFLA_BRIDGE_MST_ENTRY */
+> +		sz += nla_total_size(0) +
+> +			/* IFLA_BRIDGE_MST_ENTRY_MSTI */
+> +			nla_total_size(sizeof(u16)) +
+> +			/* IFLA_BRIDGE_MST_ENTRY_STATE */
+> +			nla_total_size(sizeof(u8));
+> +
+> +		__set_bit(v->brvlan->msti, seen);
+> +	}
+> +
+> +	return sz;
+> +}
+> +

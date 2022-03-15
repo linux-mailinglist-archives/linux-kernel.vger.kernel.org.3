@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA824D94C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C394D94D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345272AbiCOGpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S1345282AbiCOGua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiCOGpP (ORCPT
+        with ESMTP id S235086AbiCOGu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:45:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48713E8C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647326644; x=1678862644;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jR3MJL4gXTNQ576BRDKhPzca3lSZ3JltBv9pfDAGOa0=;
-  b=Unw28t3IzJUJ1DLPnF+j5Wm4kVy8R9i3er3qInT5upRZUFZzMI/6WZs7
-   Hggs37P+ww2ouKzMBN5tVowJoek16DJ6WuxP2fTXff1GFXzWVKAilos3c
-   BTwfVQU3T4HkxdLuJDi3WbNOS/DHi0O5QvTnlQVLC+1+FM5UF1eKg+lYx
-   l1d0UjxDA0ZVNahPiyh9FVpFvceWuU1/XtW0I+9bNrH0cWYBQm5xaMth7
-   XjVNtMWWG3JG0rec+7cSZrutFse+g800XLP7PJnsU9U5ebAk9syccpccV
-   tCXe/6M2QquWAW5wcPUWolEgZWd8Zzt1hJn3u8NYo0oWwpcd73mg9sM2y
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236831771"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="236831771"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:44:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="497907733"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Mar 2022 23:43:57 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nU0uS-000Aeg-OU; Tue, 15 Mar 2022 06:43:56 +0000
-Date:   Tue, 15 Mar 2022 14:43:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atish.patra@wdc.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: [esmil:visionfive 58/61] ERROR: modpost: "arch_setup_dma_ops"
- [drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.ko] undefined!
-Message-ID: <202203151435.QVWE4rZm-lkp@intel.com>
+        Tue, 15 Mar 2022 02:50:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D0A26100
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:49:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9D42612DC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA908C340EE;
+        Tue, 15 Mar 2022 06:49:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647326953;
+        bh=Ps6QwQcrZ+HhsjG/Mc4TDw0HHEPxpKdhpSA0IXDtV/4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xrrQHEHAAJEu23YkN6X6tgDw5G10skC2YVU+gLpR4csLETB3fRkSUV3Hygtv3pY/j
+         Jfa46bBWl1S9AahLeIZnuG+9wTYFvNhSBgFnMtFr/g/vJKiXtyiTXaLeNQZwUoEjEy
+         ZH/Z62wBZe+iKLgJPouzFsvJ5e1mqXDRMOoLtGEY=
+Date:   Tue, 15 Mar 2022 07:49:04 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     Li Fei1 <fei1.li@intel.com>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virt: acrn: fix a memory leak in acrn_dev_ioctl()
+Message-ID: <YjA24K4FVZU6fTMd@kroah.com>
+References: <20220308092047.1008409-1-butterflyhuangxx@gmail.com>
+ <YicoOC+WZhNLq+pX@kroah.com>
+ <CAFcO6XMy+rT_cnw2Q7Jzg=byKWQ8tcVU+8ZBCCfTD1-JNy7oLw@mail.gmail.com>
+ <Yics6JbQljlQXRED@kroah.com>
+ <CAFcO6XNLfOTp2M3B876YTt+atNTveuqH7Q3ePk3N-T=KkJkiTQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAFcO6XNLfOTp2M3B876YTt+atNTveuqH7Q3ePk3N-T=KkJkiTQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,30 +54,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/esmil/linux visionfive
-head:   ab93b1bae004d1d7f4c795e15ea6ed6478d2789c
-commit: 934d9f79bd88d515916fc39f0fa0c4c5d3e6d5ed [58/61] RISC-V: Support non-coherent DMA operations
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220315/202203151435.QVWE4rZm-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/esmil/linux/commit/934d9f79bd88d515916fc39f0fa0c4c5d3e6d5ed
-        git remote add esmil https://github.com/esmil/linux
-        git fetch --no-tags esmil visionfive
-        git checkout 934d9f79bd88d515916fc39f0fa0c4c5d3e6d5ed
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+On Tue, Mar 15, 2022 at 10:44:09AM +0800, butt3rflyh4ck wrote:
+> Hi, Greg, could you tell me how to test (like this)?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I have no context at all what "like this" is sorry.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-ERROR: modpost: missing MODULE_LICENSE() in drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.o
->> ERROR: modpost: "arch_setup_dma_ops" [drivers/dma/dw-axi-dmac-starfive/starfive_dmaengine_memcpy.ko] undefined!
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h

@@ -2,67 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAA24DA335
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E904DA337
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347277AbiCOTVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        id S1351294AbiCOTWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345039AbiCOTVk (ORCPT
+        with ESMTP id S1345039AbiCOTWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:21:40 -0400
-Received: from mail.nearlyone.de (mail.nearlyone.de [IPv6:2a01:488:66:1000:2ea3:7291:0:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D56B3A72A;
-        Tue, 15 Mar 2022 12:20:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 486CB5D30E;
-        Tue, 15 Mar 2022 20:20:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
-        t=1647372024; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-         in-reply-to:references; bh=dPNeZhQEBf2PMi45+dp4nB2zJ3oU/+iXDWONotEcGmc=;
-        b=Ec9xh1iHziUQdyFoG8JXLqFgo6E/AMTD++oBTTm3sJGo9lkNF6Br4eAuTxCU/08za9nFt2
-        t7ZXZtXpy2h7Geid+o+XkXPM4jUEu/tKpNJxf9F2UEZOvIgGaj+ctxYyTKLGE0F03uotrQ
-        5CVq/7yjth9BMPKT61j3Ww/N+D/2/ABzELCIS+oN/YYqixPZDErNWPwHOv1YDEb4E2kQYl
-        J5XZgacMGrmlEUQ5UJTgrdbCWtO62aaL6h4EN2ClzSCPpWs0z7G7lbzJo5Jynrs2Eg3Xrm
-        bB2mMPj/SMpFR8cPRYiDw8IAlCR20DuHUIWvIPdhNMNobGLvQwUFKqJcZKSGLg==
-Date:   Tue, 15 Mar 2022 20:20:19 +0100
-From:   Daniel Wagner <wagi@monom.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Clark Williams <williams@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>
-Subject: Re: [ANNOUNCE] 4.19.232-rt104
-Message-ID: <20220315192019.4yvkc4ts2rg5dc3q@carbon.lan>
-References: <164642254363.3441070.3803906129050387693@puck.lan>
- <20220315184005.GB30901@duo.ucw.cz>
+        Tue, 15 Mar 2022 15:22:48 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693DC3A703
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:21:35 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d10-20020a17090a7bca00b001c5ed9a196bso2292422pjl.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:cc:from:in-reply-to:content-transfer-encoding;
+        bh=3revWy2NpK6ECbDnOYqVuF2tDXXbaFT1az+SZDuKnXU=;
+        b=mJNattGinkcwvZjVRyzMU6hajqM8uOVCgCqfl4fj+Uehs0jA57xZClA9dRJN4jzQVp
+         cST26+DKNnbMUwvtKFq4uOsqjJnPC5c/NVbbbHNNSf18ACYIwq2Zmea8MjvcmlNSYr85
+         drUxZlaPKbKG+rS5Ij4ffcfcg98BtLPuWqZlvcI35QKD6k/g0tJnhybaWeYG7A1ZoaEX
+         nhnVoULZGsrVlY8WS5KEHfc9uQ8OzJaI71H9BqTH78f+2FJXtRivkzjrZGloYT6nWoYH
+         Rvqgj6GA6+eY5NSn7yfpbrxpoyIHhX2P16BZM6hMoouVNX955vckgZfOnPVq+oC4RCgl
+         dgqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:cc:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3revWy2NpK6ECbDnOYqVuF2tDXXbaFT1az+SZDuKnXU=;
+        b=tAk7CmlPaQeeqT/IoDAyzIkn1AP7yBARy1/TVsjwhPX5+MvB5sL8wE98E2sdLY9EPH
+         BR3HLK/i7u5lAUwJTDan057XVwrBekNd/3JOuOCw77F+dnScB72O+9gBh2f7GZPCvN6H
+         0IivUEQ6cZZoouCZ3pKK0mJ599Bjch6Ghzke5zfgcqmRuTU5PapeIpyqGFAv+dszixvn
+         PWscLvYLJD+oTC80cH4xGNPtnGYkNVkjWZk4NakskjjlMBKqt/AR6/v2w38XBfA4ZJHQ
+         fzxqik4g5F/OQTq1FnL7LprrvzXNm3QatrhR9QTwk7PKcQpi7DWJIisC0qAqx8lzoieJ
+         DEvQ==
+X-Gm-Message-State: AOAM530kGaF7ZzX04pB4Y6Y6EsGbRY2piMor5CTAFJZSGCZU7lBYbZaq
+        Il+bscRPuSb5eaj6WU5VOKwrJg==
+X-Google-Smtp-Source: ABdhPJw0EWEyUaTKRFCaOPzmM4AYdRJyyM9sZkmo4COwVEjE6+Uir81YQZ8DajOnMS+ZHr771xgIXA==
+X-Received: by 2002:a17:90a:77c9:b0:1c5:d5e5:a459 with SMTP id e9-20020a17090a77c900b001c5d5e5a459mr6280428pjs.191.1647372094928;
+        Tue, 15 Mar 2022 12:21:34 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm26254928pfl.44.2022.03.15.12.21.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 12:21:34 -0700 (PDT)
+Message-ID: <a30ec1e7-564f-665b-7c20-54dad6124418@linaro.org>
+Date:   Tue, 15 Mar 2022 12:21:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315184005.GB30901@duo.ucw.cz>
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [syzbot] kernel BUG in ext4_ind_remove_space
+Content-Language: en-US
+To:     syzbot <syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <00000000000042d70e05da43401f@google.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <00000000000042d70e05da43401f@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 07:40:05PM +0100, Pavel Machek wrote:
-> > I'm pleased to announce the 4.19.232-rt104 stable release.
+On 3/15/22 08:14, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-> Thanks for all the releases. I believe there's tag missing for
-> e9e0405cb34e459b713ed0aca4e3ab5ef61f540e aka 4.19.219-rt98. Tags are
-> there for for other releases.
+> HEAD commit:    09688c0166e7 Linux 5.17-rc8
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11a8bd61700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=fcc629d1a1ae8d3fe8a5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1205b189700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15dda4fe700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com
+> 
+> EXT4-fs warning (device sda1): ext4_block_to_path:105: block 1074791436 > max in inode 1137
+> ------------[ cut here ]------------
+> kernel BUG at fs/ext4/indirect.c:1244!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 3590 Comm: syz-executor391 Not tainted 5.17.0-rc8-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
+> Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
+> RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+> R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
+> R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
+> FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
+> Call Trace:
+>   <TASK>
+>   ext4_punch_hole+0xfe8/0x11d0 fs/ext4/inode.c:4044
+>   ext4_fallocate+0x1194/0x3ed0 fs/ext4/extents.c:4694
+>   vfs_fallocate+0x48d/0xe10 fs/open.c:308
+>   ksys_fallocate fs/open.c:331 [inline]
+>   __do_sys_fallocate fs/open.c:339 [inline]
+>   __se_sys_fallocate fs/open.c:337 [inline]
+>   __x64_sys_fallocate+0xcf/0x140 fs/open.c:337
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f699234cdf9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f69922ff308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
+> RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007f699234cdf9
+> RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000005
+> RBP: 00007f69923d5408 R08: 0000000000000000 R09: 0000000000000000
+> R10: 00000ffeffeff000 R11: 0000000000000246 R12: 00000ffeffeff000
+> R13: 00007f69923d5400 R14: 00007f69923a3004 R15: 0000000000022000
+>   </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
+> Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
+> RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+> R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
+> R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
+> FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
+> 
 
-Clark, if you still have the original tag on your local machine, could
-you push it? If not I can add the tag, but obviously, it's not matching
-then with your signature.
+#syz test:
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+
+===========================
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 01c9e4f743ba..dd9c35113efe 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -3924,7 +3924,8 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, 
+loff_t length)
+  	struct super_block *sb = inode->i_sb;
+  	ext4_lblk_t first_block, stop_block;
+  	struct address_space *mapping = inode->i_mapping;
+-	loff_t first_block_offset, last_block_offset;
++	loff_t first_block_offset, last_block_offset, max_length;
++	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+  	handle_t *handle;
+  	unsigned int credits;
+  	int ret = 0, ret2 = 0;
+@@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, 
+loff_t length)
+  		   offset;
+  	}
+
++	/*
++	 * For punch hole the length + offset needs to be at least within
++	 * one block before last
++	 */
++	max_length = sbi->s_bitmap_maxbytes - sbi->s_blocksize;
++	if (offset + length >= max_length) {
++		ret = -ENOSPC;
++		goto out_mutex;
++	}
++
+  	if (offset & (sb->s_blocksize - 1) ||
+  	    (offset + length) & (sb->s_blocksize - 1)) {
+  		/*
+--
+Thanks,
+Tadeusz

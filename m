@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEA94D9471
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AF04D9474
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244506AbiCOGOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S1345108AbiCOGQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbiCOGOv (ORCPT
+        with ESMTP id S230089AbiCOGQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:14:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92973A71E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:13:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 531CF210DD;
-        Tue, 15 Mar 2022 06:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647324819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7OQUAsHYpuDcIcBxp2yn2HNjgjPTj9XE8xl4qxKMMAE=;
-        b=eJHxa5DoERKoyDiKJ4QLQ9YlntA68Gvp6LAseIWjJyldLZ5rwrql0zS3U9Aq8ER3wYGkyP
-        9RZrwFRfAZBc4z2YpD0Lq+12y+8IKqtVoE/ibRVdvEuEmyi606Xy9u285TQogE47BDwb4w
-        /ibO9TUyY2M4dS5XeOm2Pakvhr3/gnE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647324819;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7OQUAsHYpuDcIcBxp2yn2HNjgjPTj9XE8xl4qxKMMAE=;
-        b=K6tOVG8A1GNRGorh2XeFUnwOCwRCurUNZ0/tKSqc1uyep3PuPKr5GrgxF1XO/dCU17xAP7
-        C7RhP90wr3PgBFBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFCAE13B4E;
-        Tue, 15 Mar 2022 06:13:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id O/0pK5IuMGKMMwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 15 Mar 2022 06:13:38 +0000
-Date:   Tue, 15 Mar 2022 07:13:37 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa
- node changes its N_CPU state
-Message-ID: <YjAukR2aPkZ0z7Z9@localhost.localdomain>
-References: <20220310120749.23077-1-osalvador@suse.de>
- <87mthxb514.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YisK2PEkKAqtZPfp@localhost.localdomain>
- <87czip73b4.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Yi9bhXSADpNt6WEC@localhost.localdomain>
- <6b63d2ad-9b21-3fd6-37b4-31d7ad804c30@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b63d2ad-9b21-3fd6-37b4-31d7ad804c30@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 15 Mar 2022 02:16:47 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E113CA5D;
+        Mon, 14 Mar 2022 23:15:35 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h13so22832232ede.5;
+        Mon, 14 Mar 2022 23:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=YTGTs0DjMy0hvQWXCmfeGu4I6rdTV43J4LhqCKCccmk=;
+        b=VAYwMlJhncErpZj1ddCZJhy4RuQhcodpnaD8EKiXXfSymN1jG3pIQj1MoYFjXZFkYU
+         xSADENl3rg3LEuh6I8RQ14FFqg3WygrgHXhTh4HA/wW2+TLJ/RE3Tr4wPEpiRjzh0ix3
+         LAbVGqDOIanUU90cHM5KPqapqulvvDsbOkgbwvAAzf5jfDZiWtMbg2W28Vn4/12bERR9
+         XEdbbM/e3sDbofnIgKHtUTisJennFBg8bTSieoLeL8NO6PNlH3l8U+teb2T+V1u3Wo8T
+         /B1muk0wLrzo3TEF7Hs5GA3KG4EaeR/g2Pznl0DmwMr0RWVBy4gTX6ZOA5A1ixwLRuu4
+         WsVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YTGTs0DjMy0hvQWXCmfeGu4I6rdTV43J4LhqCKCccmk=;
+        b=fYiIO+BluopSLBhk5ZrEkP0E3GOo+X6+nwRvRwGnY4ZBUrSTliaNofff9+OLpNIPNZ
+         75q33bw/ve3zxMrXZOStOhcfxguXaYxf5mLlFlgoh2INht8nEIIjMfmgUR7ePYDwSIYV
+         zRYYPC+RsJcFqJolTwImDYH8fM0uxUvXeeNS/8Kuiwo2Rmvazw/GH2Hu7niPfJzTG8GK
+         qUF7QKdEzOwTjs+DEGlGVfKyPFc0g/R/NTSl6x1ewxDg6jfT5AG6fTkxbrgyQnnDu50W
+         E2k9zHVXJ9denBaZluf8VygDhzLUUE/QVw0q+zo/uPqN0VlHEGYMVNjxUN8tZburwkKj
+         5T8g==
+X-Gm-Message-State: AOAM533B1PYwKjujucNcp1rZCncSLXfWedvlpQRF3cVTuiTG1nAshKiB
+        qYKiF58FFleaB7RSazuWNZg=
+X-Google-Smtp-Source: ABdhPJzA1/0wj3wjvlcpvJGfz22qoMu0Mkv5zCp/bmhAQ0W/8ceffGzHJb+1ovvOOO0pRixZhX8twQ==
+X-Received: by 2002:a05:6402:5243:b0:417:3a3:c6e with SMTP id t3-20020a056402524300b0041703a30c6emr17593629edd.211.1647324934470;
+        Mon, 14 Mar 2022 23:15:34 -0700 (PDT)
+Received: from felia.fritz.box (200116b8264e9400282aff0ca67bda3e.dip.versatel-1u1.de. [2001:16b8:264e:9400:282a:ff0c:a67b:da3e])
+        by smtp.gmail.com with ESMTPSA id h26-20020aa7cdda000000b0040f75ad0e60sm7562429edw.83.2022.03.14.23.15.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 23:15:34 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] scsi: scsi_ioctl:drop needless assignment in sg_io()
+Date:   Tue, 15 Mar 2022 07:15:20 +0100
+Message-Id: <20220315061520.30745-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 08:20:57AM -0700, Dave Hansen wrote:
-> Qemu, for instance, has a "mem-path" argument.  It's typically used for
-> using hugetlbfs as guest memory.  But, there's nothing stopping you from
-> pointing it to a DAX device or a file on a DAX filesystem that's backed
-> by pmem.
+Commit ce70fd9a551a ("scsi: core: Remove the cmd field from struct
+scsi_request") refactored sg_io(), so that it does not allocate directly
+and hence does not return -ENOMEM in its error case. That makes a
+remaining assignment of -ENOMEM to the return variable needless.
 
-Thanks Dave.
+Drop this needless assignment in sg_io().
 
-But that is somehow different, is not it?
-When you use pmem backed memory as a RAM for the guest, the guest is not
-seeing that as PMEM, but just as a normal RAM, right?
-IOW, the guest cannot use that memory for demotion, as we can use it in
-the host when configured.
+No functional change. No change in resulting object code.
 
-I might be missing something, I am using this qemu cmdline:
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Christoph, please ack.
 
-        $QEMU -enable-kvm -machine pc -smp 4 -cpu host -monitor pty -m 5G \
-	-object memory-backend-file,id=pc.ram,size=5G,mem-path=/mnt/pmem,share=off -machine memory-backend=pc.ram \
-	$IMAGE -boot c -vnc :0 
+Martin, please pick this minor clean-up on your -next tree on top of the
+commit above.
 
-(/mnt/pmem was mounted with "mount -o dax /dev/pmem1 /mnt/pmem/")
+ drivers/scsi/scsi_ioctl.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-My point is, if it is really true that the guest cannot use that memory for
-demotion, then we would still need CONFIG_MEMORY_HOTPLUG, as that is the
-only way to expose PMEM to any system to be used as a demotion option
-(via add_memory_driver_managed() through kmem driver).
-
-Or am I missing some qemu magic to use that memory as demotion in the
-guest as well?
-
-
+diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
+index 0613015cae39..a480c4d589f5 100644
+--- a/drivers/scsi/scsi_ioctl.c
++++ b/drivers/scsi/scsi_ioctl.c
+@@ -434,7 +434,6 @@ static int sg_io(struct scsi_device *sdev, struct sg_io_hdr *hdr, fmode_t mode)
+ 	if (hdr->flags & SG_FLAG_Q_AT_HEAD)
+ 		at_head = 1;
+ 
+-	ret = -ENOMEM;
+ 	rq = scsi_alloc_request(sdev->request_queue, writing ?
+ 			     REQ_OP_DRV_OUT : REQ_OP_DRV_IN, 0);
+ 	if (IS_ERR(rq))
 -- 
-Oscar Salvador
-SUSE Labs
+2.17.1
+

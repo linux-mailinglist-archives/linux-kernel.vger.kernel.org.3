@@ -2,164 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7804DA196
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F61C4DA19A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245048AbiCORxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S245154AbiCORy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbiCORxW (ORCPT
+        with ESMTP id S235290AbiCORyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:53:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F4B5370A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:52:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 214A461605
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:52:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33472C340EE;
-        Tue, 15 Mar 2022 17:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647366728;
-        bh=GfWeXmiwatM5isjJvbWUTXTOjbzvbYRa9uSBkgcYPIo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=drjL+GR2E/9f9uHw2y8yO6WfbmxNUMNpWuDFwnQoOVYcqNQvK2PjGoLo9MWFzs2z3
-         V4nd5nHUyyRkdg6+SeDsaUBADh0QHV2aPcQPcKGF6Q+s5hod+/G04JW3cp2oH0A7Pz
-         huz1T8jkrFEdUSsrAR3jqdofQjQWizazbqiwP4UN9ineddm/xVeaWjTe9oCj4NteDr
-         x8K8p5bhsUmUrw/NKzSgoaUjvEMwJ83y0xp4A7+hgd3RB+x3I5n6N8ou9CAThGUkut
-         HRUdGdd92Tf3T3pShzzjZ2Zgnmx9yl2BetPNiNrnQEoYQy22wSfhcEdgAVwONnA8UF
-         BXiMGp4fzA0Rw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BB6A640407; Tue, 15 Mar 2022 14:52:05 -0300 (-03)
-Date:   Tue, 15 Mar 2022 14:52:05 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     cclaudio@linux.ibm.com, Jiri Olsa <jolsa@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH] perf trace: Fix SIGSEGV when processing augmented args
-Message-ID: <YjDSRb1wwswKpJNJ@kernel.org>
-References: <20220310104741.209834-1-naveen.n.rao@linux.vnet.ibm.com>
- <Yi+9G1nK1shEIXVN@kernel.org>
- <1647364864.3xrhklc7kl.naveen@linux.ibm.com>
+        Tue, 15 Mar 2022 13:54:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6DB366AF;
+        Tue, 15 Mar 2022 10:53:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=52rHBF+vZNkINQkzy+dQdKO7m6EguFtfzcKt22qdjiM=; b=HPlL8HyK99RwRZsRjeZp9Cpjg4
+        kISmRHdkZ49afWq1i4XuJmFWaG55ZUixdCnFq6GiXS3Dum+u2pUiRYSDCexImxtj91un1A+z2DhRz
+        SANGmL9f1drkYJPxYA91MhQPebwpPhLoAef9WkkDOltg6gHJGUYOa4AEOAT1jtzA9XMPmfpBqwL3n
+        QBYuLtvZB6p+f82lu7MzZl8+16TmJDfHVaGFcQNnoVDv8EkpwMf3hmBKmbiRlm5Sxb7zs2BQo25BX
+        yOWqlIAWFs9fFXCIDsQFWb3L1HtUu2oBjf7uo2sbIDyxI+55Jvy6Jf3O2e6TthmbW0UR2Fwi8dVQH
+        /CZcrmAA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUBLk-00A6wK-1k; Tue, 15 Mar 2022 17:52:48 +0000
+Date:   Tue, 15 Mar 2022 10:52:48 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com
+Subject: Re: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Message-ID: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
+References: <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcas5p2.samsung.com>
+ <20220315155100.516107-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1647364864.3xrhklc7kl.naveen@linux.ibm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220315155100.516107-1-maninder1.s@samsung.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Mar 15, 2022 at 10:57:57PM +0530, Naveen N. Rao escreveu:
-> Arnaldo Carvalho de Melo wrote:
-> > Em Thu, Mar 10, 2022 at 04:17:41PM +0530, Naveen N. Rao escreveu:
-> > > On powerpc, 'perf trace' is crashing with a SIGSEGV when trying to
-> > > process a perf data file created with 'perf trace record -p':
-> > 
-> > >   #0  0x00000001225b8988 in syscall_arg__scnprintf_augmented_string <snip> at builtin-trace.c:1492
-> > >   #1  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1492
-> > >   #2  syscall_arg__scnprintf_filename <snip> at builtin-trace.c:1486
-> > >   #3  0x00000001225bdd9c in syscall_arg_fmt__scnprintf_val <snip> at builtin-trace.c:1973
-> > >   #4  syscall__scnprintf_args <snip> at builtin-trace.c:2041
-> > >   #5  0x00000001225bff04 in trace__sys_enter <snip> at builtin-trace.c:2319
-> > 
-> > > The size captured in the augmented arg looks corrupt, resulting in the
-> > > augmented arg pointer being adjusted incorrectly. Fix this by checking
-> > > that the size is reasonable.
-> > 
-> > > Reported-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> > > Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> > > ---
-> > > While this resolves the 'perf trace' crash, I'm not yet sure why the
-> > > size for the augmented arg is corrupt. This looks to be happening when
-> > > processing the sample for 'read' syscall. Any pointers?
-> > 
-> > Strange indeed, the augmented args code should kick in when the payload
-> > for some tracepoint is bigger than what is expected, i.e. more than the
-> > sum of its arguments, in which case it assumes that what is coming after
-> > the expected payload comes with, say, the pathname for an open, openat,
-> > etc syscall, that otherwise would be just a pointer.
-> > 
-> > This augmentation is done using something like
-> > tools/perf/examples/bpf/augmented_raw_syscalls.c, i.e.:
-> > 
-> > [root@quaco ~]# perf trace -e openat sleep 1
-> >      0.000 openat(dfd: CWD, filename: 0x1bbb0b6, flags: RDONLY|CLOEXEC) = 3
-> >      0.021 openat(dfd: CWD, filename: 0x1bc8e80, flags: RDONLY|CLOEXEC) = 3
-> >      0.201 openat(dfd: CWD, filename: 0x1b34f20, flags: RDONLY|CLOEXEC) = 3
-> > [root@quaco ~]# perf trace -e ~acme/git/perf/tools/perf/examples/bpf/augmented_raw_syscalls.c,openat sleep 1
-> >      0.000 openat(dfd: CWD, filename: "/etc/ld.so.cache", flags: RDONLY|CLOEXEC) = 3
-> >      0.023 openat(dfd: CWD, filename: "/lib64/libc.so.6", flags: RDONLY|CLOEXEC) = 3
-> >      0.225 openat(dfd: CWD, filename: "/usr/lib/locale/locale-archive", flags: RDONLY|CLOEXEC) = 3
-> > [root@quaco ~]#
- 
-> Thanks, that clarifies things a bit. I was under the impression that
-> syscalls are augmented through the bpf program by default. But, it looks
-> like that isn't the case (at least on the distro where this problem was
-> reported).
+On Tue, Mar 15, 2022 at 09:21:00PM +0530, Maninder Singh wrote:
+> print module information when KALLSYMS is disabled.
+> 
+> No change for %pB, as it needs to know symbol name to adjust address
+> value which can't be done without KALLSYMS.
+> 
+> (A) original output with KALLSYMS:
+> [8.842129] ps function_1 [crash]
+> [8.842735] pS function_1+0x4/0x2c [crash]
+> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> [8.843175] pB function_1+0x4/0x2c [crash]
+> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> 
+> (B) original output without KALLSYMS:
+> [12.487424] ps 0xffff800000eb008c
+> [12.487598] pS 0xffff800000eb008c
+> [12.487723] pSb 0xffff800000eb008c
+> [12.487850] pB 0xffff800000eb008c
+> [12.487967] pBb 0xffff800000eb008c
+> 
+> (C) With patched kernel 
+> with KALLYSMS:
+> [41.974576] ps function_1 [crash]
+> [41.975173] pS function_1+0x4/0x2c [crash]
+> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [41.975879] pB function_1+0x4/0x2c [crash]
+> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> 
+> without KALLSYMS:
+> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
+> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
+> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
+> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> 
+> with disable hashing:
+> [8.563916] ps 0xffff800000f2008c [crash]
+> [8.564574] pS 0xffff800000f20000+0x8c [crash]
+> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> [8.565008] pB 0xffff800000f20000+0x8c [crash]
+> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> 
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Co-developed-by: Vaneet Narang <v.narang@samsung.com>
+> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
+> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+> ---
+> commit id 'kallsyms: print module name in %ps/S case when KALLSYMS is disabled'
+> 	needs to be removed from mm(linux-next) tree, current change is
+> 	with ignorance of this commit. I was not sure how to send patch, with 2 patches
+> 	consisting reversal commit also, or current approach is correct.
+> 
+> v1->v2: hash base address of module, change *fmt to fmt[0] and removed
+>         copy paste.
+> v2->v3: fixed review comments from Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+>  include/linux/kallsyms.h |  2 +
+>  include/linux/module.h   | 20 ++++++++++
+>  kernel/kallsyms.c        | 27 +++++++------
+>  kernel/module.c          |  4 +-
+>  lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
 
-Its not by default at the moment.
+Hey Maninder, thanks for your patch!
 
-This was an experiment in getting perf to get assistance from eBPF, but
-this predates eBPF skeletons, sleepable tracepoints, tons of stuff that
-it should instead be using by now.
+Since this touches kernel/module.c and include/linux/module.h I'd prefer
+this go through modules-next [0], and as you will see that's a different
+world right now. I also have a set of at least 2 other patch sets to
+merge there before yours.
 
-We now have:
+Also, what is on modules-next is not intended to go to Linus for the
+next merge window as the changes there got merged only late, and I want
+at least 2 months of testing on linux-newt before any pull requiest is
+sent to Linus.
 
-⬢[acme@toolbox perf]$ ls -la tools/perf/util/bpf_skel/
-total 172
-drwxr-xr-x. 1 acme acme  232 Mar 14 17:56 .
-drwxr-xr-x. 1 acme acme 6978 Mar 14 19:15 ..
--rw-r--r--. 1 acme acme 4592 Mar 14 17:54 bperf_cgroup.bpf.c
--rw-r--r--. 1 acme acme 1764 Mar 14 17:55 bperf_follower.bpf.c
--rw-r--r--. 1 acme acme 1438 Mar 14 17:55 bperf_leader.bpf.c
--rw-r--r--. 1 acme acme  285 Mar 14 17:54 bperf_u.h
--rw-r--r--. 1 acme acme 2290 Mar 14 17:55 bpf_prog_profiler.bpf.c
--rw-r--r--. 1 acme acme 2115 Mar 14 17:56 func_latency.bpf.c
--rw-r--r--. 1 acme acme   53 Nov  6 17:43 .gitignore
-⬢[acme@toolbox perf]$
+Can you rebase to modules-next? I can evaluate the patches then for
+integration there once the other stuff gets merged into that tree too.
 
-'perf trace' needs to switch to using that method as well.
- 
-> > So it seems the perf.data file being processed is corrupted somehow...
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
 
-> > Perhaps we should check if the syscall has pointer args and if not don't
-> > kick in the augmented code and instead emit some warning about having
-> > more payload than expected.
- 
-> Yes, it looks like the current check in 'perf' isn't working. The below
-> patch also resolves the crash we are seeing:
- 
-> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-> index 2f1d20553a0aa3..86b459f4ebdd61 100644
-> --- a/tools/perf/builtin-trace.c
-> +++ b/tools/perf/builtin-trace.c
-> @@ -2326,7 +2326,7 @@ static int trace__sys_enter(struct trace *trace, struct evsel *evsel,
->         * thinking that the extra 2 u64 args are the augmented filename, so just check
->         * here and avoid using augmented syscalls when the evsel is the raw_syscalls one.
->         */
-> -       if (evsel != trace->syscalls.events.sys_enter)
-> +       if (strcmp(evsel__name(evsel), "raw_syscalls:sys_enter"))
->                augmented_args = syscall__augmented_args(sc, sample, &augmented_args_size, trace->raw_augmented_syscalls_args_size);
->        ttrace->entry_time = sample->time;
->        msg = ttrace->entry_str;
-
-Interesting, that should be equivalent :-\ humm, not really, understood,
-when processing perf.data files we don't setup
-trace->syscalls.events.sys_enter...
-
-switching from strcmp() to something cheaper but equivalent should be
-the fix for now.
-
-- Arnaldo
+  Luis

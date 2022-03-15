@@ -2,84 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924924DA5DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFC24DA5DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352405AbiCOXB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 19:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S1352450AbiCOXBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 19:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiCOXBZ (ORCPT
+        with ESMTP id S1343986AbiCOXBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:01:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C475D642;
-        Tue, 15 Mar 2022 16:00:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16989614D2;
-        Tue, 15 Mar 2022 23:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 76856C340ED;
-        Tue, 15 Mar 2022 23:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647385211;
-        bh=ZAYyb2ixDa5wRA9aD6CLX4whJw5yNMl4WGza8Ygu/uk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cqx/7SfYOQipYK12u0mJ9LQmAFjQPfH0UyLMKdV6yMQg763ezwP6mtB5kqiwFc2f/
-         z8nO8jJ/HsF6SlM1tGhbyl2K2GrDhsfs7qtRtdCEq6vAAQz3GP8uBbzoYRbp2s2Huu
-         1zyzvdtcuVrYybUq/7Kf3ECKmNTLeIUKDdFw+tBIWnM3eUFhIiwaVmrZZAwkMv6bjR
-         D6fdVr4rNUUbda57LGhfWZzBlCMOREN7QOpuy9RwD3wx9xjgqXaP67PidHYtq4JDWt
-         3HRhCoiTonfp24iT03HxpagYHOXdsqh4ANe6JQRpnn2ria5CW0u3vwqNUi3lp42NOU
-         9eCcIaYZAIozw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 587A1F0383F;
-        Tue, 15 Mar 2022 23:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 15 Mar 2022 19:01:31 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1D95D64E;
+        Tue, 15 Mar 2022 16:00:17 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id b19so562307wrh.11;
+        Tue, 15 Mar 2022 16:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hXQ+F8C3tNuXEKUAVGAOF2ZBmymUXm4wxo2Tm197Al4=;
+        b=Pf0/0dDbZEgm2sMgS6UYLQeiAX+t3B9PA6NGVxtpPQPqCPyyiGaYGbhuE3BtTF7GCH
+         5KBzpJerrXGxOR07Ss5wMjOlzQW4HMX1T76Oi1f70Z//abtMEo1zD6u/bXDlSEO7HXuu
+         vkDDnW3nDGcx6ZnDrVJe0S+d3pokRBVw84is3H5rVdDMK2YT41hs4wZfZDdUulf6ffau
+         8KGP7N9BacF1THivrCHPQGKMbLvQH+exsaj+aYOHHZMgPnPGloVphs/s1k20Apuk+4F5
+         MIlNhgzxrwHHvTUTEn8RDU1x+TiFd6TbFKRjtjzv6F2J5pHNiJ9dKWXii3TNO7kN7o+V
+         N+eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hXQ+F8C3tNuXEKUAVGAOF2ZBmymUXm4wxo2Tm197Al4=;
+        b=uIdkCw4EGIs+czibQtx9jyxrjeqA0wex85JtbnQ6oH6bMhduHR4GSH+ZGXrSOmkeF3
+         co0arunfbFAkNhAKrBlq0fsAtXS5OK3JUK23edszmgyCB/bcZKD4Ew/pq1iE5HEUWOnG
+         DLeJCeMk3iMLrpudCvJyawROdWdSLRo+unrQBIMX7poMEScD1LAC+/44kvWMddWl8ORw
+         Db9yf1xjgdY90ojMoTEZLEQ2PjtingS0GRPuEknvzhTRTjhk4Z4ghQ+mdZabApiXzzv9
+         MZrX5slsBzjM12SK67or2wxvsYm0nmbBNbnwPRBZlHUFovSH3ycSOREcSl4oiF9WbFrS
+         4ycA==
+X-Gm-Message-State: AOAM531n9ls80Bn9s7fcjPq3sihC4/42BzgQJvECXJrs2HUxVDvIBkLq
+        CtMqMB05QNsk12DuFBbK7d8gurMNsVjRYQ==
+X-Google-Smtp-Source: ABdhPJyGiJUjNwWcBJMHvTUlju1YCEutt2csJsCEM7FlpcXtsSYSvcUWFLbb0PWay9YsrTKo93+tvw==
+X-Received: by 2002:a5d:55c7:0:b0:1f0:48cf:9568 with SMTP id i7-20020a5d55c7000000b001f048cf9568mr22472526wrw.379.1647385215664;
+        Tue, 15 Mar 2022 16:00:15 -0700 (PDT)
+Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm3463642wmj.5.2022.03.15.16.00.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 16:00:15 -0700 (PDT)
+Message-ID: <5ea0e154-e06e-32b4-be86-f38ce07b8bec@gmail.com>
+Date:   Tue, 15 Mar 2022 23:00:14 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] power: supply: bq2415x: Fix spelling mistake "vender" ->
+ "vendor"
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220315223700.2961660-1-colin.i.king@gmail.com>
+ <20220315224645.ytcf7y7awc3q2y6j@pali>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+In-Reply-To: <20220315224645.ytcf7y7awc3q2y6j@pali>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpftool: man: Add missing top level docs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164738521135.3509.18445635022179222335.git-patchwork-notify@kernel.org>
-Date:   Tue, 15 Mar 2022 23:00:11 +0000
-References: <3049ef5dc509c0d1832f0a8b2dba2ccaad0af688.1647213551.git.dxu@dxuuu.xyz>
-In-Reply-To: <3049ef5dc509c0d1832f0a8b2dba2ccaad0af688.1647213551.git.dxu@dxuuu.xyz>
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sun, 13 Mar 2022 16:19:46 -0700 you wrote:
-> The top-level (bpftool.8) man page was missing docs for a few
-> subcommands and their respective sub-sub-commands.
+On 15/03/2022 22:46, Pali Rohár wrote:
+> On Tuesday 15 March 2022 22:37:00 Colin Ian King wrote:
+>> There are several spelling mistakes in comments, function names
+>> and literal strings. Fix these.
 > 
-> This commit brings the top level man page up to date. Note that I've
-> kept the ordering of the subcommands the same as in `bpftool help`.
+> I do not think that there are mistakes.
 > 
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> Please look at page 29 of the official bq24150 datasheet:
+> https://www.ti.com/lit/ds/symlink/bq24150.pdf
+
+Looks like TI are redefining the spelling in the language :-)
+
+
 > 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] bpftool: man: Add missing top level docs
-    https://git.kernel.org/bpf/bpf-next/c/6585abea98ae
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>> ---
+>>   drivers/power/supply/bq2415x_charger.c | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
+>> index 5724001e66b9..b35700071966 100644
+>> --- a/drivers/power/supply/bq2415x_charger.c
+>> +++ b/drivers/power/supply/bq2415x_charger.c
+>> @@ -71,7 +71,7 @@
+>>   #define BQ2415X_BIT_OTG_PL		1
+>>   #define BQ2415X_BIT_OTG_EN		0
+>>   
+>> -/* vender register */
+>> +/* vendor register */
+>>   #define BQ2415X_MASK_VENDER		(BIT(5)|BIT(6)|BIT(7))
+>>   #define BQ2415X_SHIFT_VENDER		5
+>>   #define BQ2415X_MASK_PN			(BIT(3)|BIT(4))
+>> @@ -491,8 +491,8 @@ static int bq2415x_detect_revision(struct bq2415x_device *bq)
+>>   	return -1;
+>>   }
+>>   
+>> -/* return chip vender code */
+>> -static int bq2415x_get_vender_code(struct bq2415x_device *bq)
+>> +/* return chip vendor code */
+>> +static int bq2415x_get_vendor_code(struct bq2415x_device *bq)
+>>   {
+>>   	int ret;
+>>   
+>> @@ -1501,9 +1501,9 @@ static int bq2415x_power_supply_init(struct bq2415x_device *bq)
+>>   		sprintf(revstr, "1.%d", ret);
+>>   
+>>   	bq->model = kasprintf(GFP_KERNEL,
+>> -				"chip %s, revision %s, vender code %.3d",
+>> +				"chip %s, revision %s, vendor code %.3d",
+>>   				bq2415x_chip_name[chip], revstr,
+>> -				bq2415x_get_vender_code(bq));
+>> +				bq2415x_get_vendor_code(bq));
+>>   	if (!bq->model) {
+>>   		dev_err(bq->dev, "failed to allocate model name\n");
+>>   		return -ENOMEM;
+>> -- 
+>> 2.35.1
+>>
 

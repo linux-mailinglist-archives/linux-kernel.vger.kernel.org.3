@@ -2,204 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD594D9E48
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7FC4D9E4B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349539AbiCOPA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S1349546AbiCOPB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiCOPAz (ORCPT
+        with ESMTP id S1349543AbiCOPBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:00:55 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92E53123C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:59:42 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y22so24586617eds.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=C6rTSVU1/3AbRjY15AsbPBs2HFvZP70FLbPlPV618gI=;
-        b=bK/gByB3xQBLF+F8Wcj07Avb2+VNj7934Px9Rzx3egIwaZN8N4j3RSb3T5ff2tEg3y
-         ekfTKaN9VKq2YU9izk0jsBax6oFHjAI+x7ZUtvqUNQTXKFDSAkmNhxHr2JJG7Y1Sl3Vy
-         Q2XfYe/86q4ha2MBOIHSgZ1e7B6nc5zvE2nSDwSehsdi2BdE9COXBZh719z/NwWoj94+
-         ueYZ2NUMbJ88B3xuKuxP/t9IBssyQEtw0/31n8V+SCzQLTVSCkppgJNU+AM9+Bnjee+N
-         akREYK3+LdobdAaz8WnCcKcPomCDsAw8hpusNtfQfTTWcqZjwNVWBTVFIkk6aj6FG9g2
-         /veQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C6rTSVU1/3AbRjY15AsbPBs2HFvZP70FLbPlPV618gI=;
-        b=IWex9DNvni28fEUxxsqAyBFDib8DAmSaSBlpXdb4a7pNqvx4pf41AS6dMn1x1cyXKT
-         hR+1xop7RLtqNoqqOHw6fQfcvD6Awc0znQVG3532Yv/DdKne6lODlz+nv+YDKTtwVngP
-         AvdZcGzlvjt5TNGeaq6VWRI64BPwzAzdUz2Y3gbC+/37yCS7hFmZmYSl1aM76Dok00od
-         o09eD4cs5IyCdTClvKvmy+bjaEfBjOAcmRzBcYIDyLGcvyUGgEp2GHOeSrPQ87a4rquE
-         5XV9Q+OhMAgMlss5vuKYa4ZzszPxf0inEkSIsIrVqRS5DsFeUFW+I5A7mg+K1cjfUamf
-         FXyg==
-X-Gm-Message-State: AOAM530L0V2pxSKJlCAvvUNP47ELrWkYZuNDdUSZKhYaY2TglgPe9Gbr
-        ACthx5C7e9N9PVgwIjKZTvpklg==
-X-Google-Smtp-Source: ABdhPJya/ViotW2aLhgJRm34MN9moeQCMci09wOx51mUSR6gqvjSidOnHOuS1rMgtDEReDytv6sz6g==
-X-Received: by 2002:aa7:c789:0:b0:413:605d:8d17 with SMTP id n9-20020aa7c789000000b00413605d8d17mr25669840eds.100.1647356380931;
-        Tue, 15 Mar 2022 07:59:40 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170906b10500b006ce6fa4f510sm8197418ejy.165.2022.03.15.07.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 07:59:40 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 22:59:35 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] arch_topology: Correct CPU capacity scaling
-Message-ID: <20220315145935.GA168726@leoy-ThinkPad-X240s>
-References: <20220313055512.248571-1-leo.yan@linaro.org>
- <Yi+FMrG9NyBnMX0i@arm.com>
- <20220315032919.GA217475@leoy-ThinkPad-X240s>
- <YjBlnMvcagdbKnEz@bogus>
+        Tue, 15 Mar 2022 11:01:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7224155BDA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:00:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647356410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=khFAaXb87QUv7Avz4IPJcQUVJx3txq8L5uNH3RG0cQ8=;
+        b=bhveUt2TQ5iiqwjwbLIR0v4InhwA84isramNTs4r16UmQ4ee5o5GwcS9QYPgv8QmDGSRFG
+        dvFbsdJhwDuqGCaNyeW6ZcjzaWsWAyeh8lddZm4xfY3YFYVspCLFeeauAS2DfMVmshjomc
+        4T+IkZDED3pcBiC2sOURp1Cnf6cWrmk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-516-y0UEwhkwNk2oVvrJ_is5Vw-1; Tue, 15 Mar 2022 11:00:07 -0400
+X-MC-Unique: y0UEwhkwNk2oVvrJ_is5Vw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FE39805F46;
+        Tue, 15 Mar 2022 15:00:06 +0000 (UTC)
+Received: from [10.22.34.226] (unknown [10.22.34.226])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2553A555C92;
+        Tue, 15 Mar 2022 15:00:05 +0000 (UTC)
+Message-ID: <2a77efcb-8dbb-732d-bc5d-d4cfe4c32184@redhat.com>
+Date:   Tue, 15 Mar 2022 11:00:04 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjBlnMvcagdbKnEz@bogus>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] lockdep: fix -Wunused-parameter for _THIS_IP_
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Joey Gouly <joey.gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220314221909.2027027-1-ndesaulniers@google.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220314221909.2027027-1-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+On 3/14/22 18:19, Nick Desaulniers wrote:
+> While looking into a bug related to the compiler's handling of addresses
+> of labels, I noticed some uses of _THIS_IP_ seemed unused in lockdep.
+> Drive by cleanup.
+>
+> -Wunused-parameter:
+> kernel/locking/lockdep.c:1383:22: warning: unused parameter 'ip'
+> kernel/locking/lockdep.c:4246:48: warning: unused parameter 'ip'
+> kernel/locking/lockdep.c:4844:19: warning: unused parameter 'ip'
+>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>   arch/arm64/kernel/entry-common.c |  8 ++++----
+>   include/linux/irqflags.h         |  4 ++--
+>   include/linux/kvm_host.h         |  2 +-
+>   kernel/entry/common.c            |  6 +++---
+>   kernel/locking/lockdep.c         | 22 ++++++++--------------
+>   kernel/sched/idle.c              |  2 +-
+>   kernel/trace/trace_preemptirq.c  |  4 ++--
+>   7 files changed, 21 insertions(+), 27 deletions(-)
+>
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index ef7fcefb96bd..8a4244316e25 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -73,7 +73,7 @@ static __always_inline void __exit_to_kernel_mode(struct pt_regs *regs)
+>   	if (interrupts_enabled(regs)) {
+>   		if (regs->exit_rcu) {
+>   			trace_hardirqs_on_prepare();
+> -			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +			lockdep_hardirqs_on_prepare();
+>   			rcu_irq_exit();
+>   			lockdep_hardirqs_on(CALLER_ADDR0);
+>   			return;
+> @@ -118,7 +118,7 @@ static __always_inline void enter_from_user_mode(struct pt_regs *regs)
+>   static __always_inline void __exit_to_user_mode(void)
+>   {
+>   	trace_hardirqs_on_prepare();
+> -	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +	lockdep_hardirqs_on_prepare();
+>   	user_enter_irqoff();
+>   	lockdep_hardirqs_on(CALLER_ADDR0);
+>   }
+> @@ -176,7 +176,7 @@ static void noinstr arm64_exit_nmi(struct pt_regs *regs)
+>   	ftrace_nmi_exit();
+>   	if (restore) {
+>   		trace_hardirqs_on_prepare();
+> -		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +		lockdep_hardirqs_on_prepare();
+>   	}
+>   
+>   	rcu_nmi_exit();
+> @@ -212,7 +212,7 @@ static void noinstr arm64_exit_el1_dbg(struct pt_regs *regs)
+>   
+>   	if (restore) {
+>   		trace_hardirqs_on_prepare();
+> -		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +		lockdep_hardirqs_on_prepare();
+>   	}
+>   
+>   	rcu_nmi_exit();
+> diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
+> index 4b140938b03e..5ec0fa71399e 100644
+> --- a/include/linux/irqflags.h
+> +++ b/include/linux/irqflags.h
+> @@ -20,13 +20,13 @@
+>   #ifdef CONFIG_PROVE_LOCKING
+>     extern void lockdep_softirqs_on(unsigned long ip);
+>     extern void lockdep_softirqs_off(unsigned long ip);
+> -  extern void lockdep_hardirqs_on_prepare(unsigned long ip);
+> +  extern void lockdep_hardirqs_on_prepare(void);
+>     extern void lockdep_hardirqs_on(unsigned long ip);
+>     extern void lockdep_hardirqs_off(unsigned long ip);
+>   #else
+>     static inline void lockdep_softirqs_on(unsigned long ip) { }
+>     static inline void lockdep_softirqs_off(unsigned long ip) { }
+> -  static inline void lockdep_hardirqs_on_prepare(unsigned long ip) { }
+> +  static inline void lockdep_hardirqs_on_prepare(void) { }
+>     static inline void lockdep_hardirqs_on(unsigned long ip) { }
+>     static inline void lockdep_hardirqs_off(unsigned long ip) { }
+>   #endif
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index f11039944c08..f32bed70a5c5 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -441,7 +441,7 @@ static __always_inline void guest_state_enter_irqoff(void)
+>   {
+>   	instrumentation_begin();
+>   	trace_hardirqs_on_prepare();
+> -	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +	lockdep_hardirqs_on_prepare();
+>   	instrumentation_end();
+>   
+>   	guest_context_enter_irqoff();
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index bad713684c2e..3ce3a0a6c762 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -124,7 +124,7 @@ static __always_inline void __exit_to_user_mode(void)
+>   {
+>   	instrumentation_begin();
+>   	trace_hardirqs_on_prepare();
+> -	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +	lockdep_hardirqs_on_prepare();
+>   	instrumentation_end();
+>   
+>   	user_enter_irqoff();
+> @@ -412,7 +412,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+>   			instrumentation_begin();
+>   			/* Tell the tracer that IRET will enable interrupts */
+>   			trace_hardirqs_on_prepare();
+> -			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +			lockdep_hardirqs_on_prepare();
+>   			instrumentation_end();
+>   			rcu_irq_exit();
+>   			lockdep_hardirqs_on(CALLER_ADDR0);
+> @@ -465,7 +465,7 @@ void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t irq_state)
+>   	ftrace_nmi_exit();
+>   	if (irq_state.lockdep) {
+>   		trace_hardirqs_on_prepare();
+> -		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +		lockdep_hardirqs_on_prepare();
+>   	}
+>   	instrumentation_end();
+>   
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index f8a0212189ca..05604795b39c 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -1378,7 +1378,7 @@ static struct lock_list *alloc_list_entry(void)
+>    */
+>   static int add_lock_to_list(struct lock_class *this,
+>   			    struct lock_class *links_to, struct list_head *head,
+> -			    unsigned long ip, u16 distance, u8 dep,
+> +			    u16 distance, u8 dep,
+>   			    const struct lock_trace *trace)
+>   {
+>   	struct lock_list *entry;
+> @@ -3131,19 +3131,15 @@ check_prev_add(struct task_struct *curr, struct held_lock *prev,
+>   	 * to the previous lock's dependency list:
+>   	 */
+>   	ret = add_lock_to_list(hlock_class(next), hlock_class(prev),
+> -			       &hlock_class(prev)->locks_after,
+> -			       next->acquire_ip, distance,
+> -			       calc_dep(prev, next),
+> -			       *trace);
+> +			       &hlock_class(prev)->locks_after, distance,
+> +			       calc_dep(prev, next), *trace);
+>   
+>   	if (!ret)
+>   		return 0;
+>   
+>   	ret = add_lock_to_list(hlock_class(prev), hlock_class(next),
+> -			       &hlock_class(next)->locks_before,
+> -			       next->acquire_ip, distance,
+> -			       calc_depb(prev, next),
+> -			       *trace);
+> +			       &hlock_class(next)->locks_before, distance,
+> +			       calc_depb(prev, next), *trace);
+>   	if (!ret)
+>   		return 0;
+>   
+> @@ -4234,14 +4230,13 @@ static void __trace_hardirqs_on_caller(void)
+>   
+>   /**
+>    * lockdep_hardirqs_on_prepare - Prepare for enabling interrupts
+> - * @ip:		Caller address
+>    *
+>    * Invoked before a possible transition to RCU idle from exit to user or
+>    * guest mode. This ensures that all RCU operations are done before RCU
+>    * stops watching. After the RCU transition lockdep_hardirqs_on() has to be
+>    * invoked to set the final state.
+>    */
+> -void lockdep_hardirqs_on_prepare(unsigned long ip)
+> +void lockdep_hardirqs_on_prepare(void)
+>   {
+>   	if (unlikely(!debug_locks))
+>   		return;
+> @@ -4838,8 +4833,7 @@ EXPORT_SYMBOL_GPL(__lockdep_no_validate__);
+>   
+>   static void
+>   print_lock_nested_lock_not_held(struct task_struct *curr,
+> -				struct held_lock *hlock,
+> -				unsigned long ip)
+> +				struct held_lock *hlock)
+>   {
+>   	if (!debug_locks_off())
+>   		return;
+> @@ -5015,7 +5009,7 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+>   	chain_key = iterate_chain_key(chain_key, hlock_id(hlock));
+>   
+>   	if (nest_lock && !__lock_is_held(nest_lock, -1)) {
+> -		print_lock_nested_lock_not_held(curr, hlock, ip);
+> +		print_lock_nested_lock_not_held(curr, hlock);
+>   		return 0;
+>   	}
+>   
+> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> index d17b0a5ce6ac..499a3e286cd0 100644
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -105,7 +105,7 @@ void __cpuidle default_idle_call(void)
+>   		 * last -- this is very similar to the entry code.
+>   		 */
+>   		trace_hardirqs_on_prepare();
+> -		lockdep_hardirqs_on_prepare(_THIS_IP_);
+> +		lockdep_hardirqs_on_prepare();
+>   		rcu_idle_enter();
+>   		lockdep_hardirqs_on(_THIS_IP_);
+>   
+> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+> index f4938040c228..95b58bd757ce 100644
+> --- a/kernel/trace/trace_preemptirq.c
+> +++ b/kernel/trace/trace_preemptirq.c
+> @@ -46,7 +46,7 @@ void trace_hardirqs_on(void)
+>   		this_cpu_write(tracing_irq_cpu, 0);
+>   	}
+>   
+> -	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +	lockdep_hardirqs_on_prepare();
+>   	lockdep_hardirqs_on(CALLER_ADDR0);
+>   }
+>   EXPORT_SYMBOL(trace_hardirqs_on);
+> @@ -94,7 +94,7 @@ __visible void trace_hardirqs_on_caller(unsigned long caller_addr)
+>   		this_cpu_write(tracing_irq_cpu, 0);
+>   	}
+>   
+> -	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+> +	lockdep_hardirqs_on_prepare();
+>   	lockdep_hardirqs_on(CALLER_ADDR0);
+>   }
+>   EXPORT_SYMBOL(trace_hardirqs_on_caller);
 
-On Tue, Mar 15, 2022 at 10:08:28AM +0000, Sudeep Holla wrote:
+LGTM
 
-[...]
+Acked-by: Waiman Long <longman@redhat.com>
 
-> > > In my opinion it's difficult to handle absent "capacity-dmips-mhz"
-> > > properties, as they can be a result of 3 scenarios: potential..
-> > >  1. bug in DT
-> > >  2. unwillingness to fill this information in DT
-> > >  3. suggestion that we're dealing with CPUs with same u-arch
-> > >     (same capacity-dmips-mhz)
-> > 
-> > For absent "capacity-dmips-mhz" properties, I think we could divide into
-> > two sub classes:
-> > 
-> > For all CPU nodes are absent "capacity-dmips-mhz" properties, it's
-> > likely all CPUs have the same micro architecture, thus developers are
-> > not necessarily to explictly set the property.
-> >
-> 
-> I completely disagree and NACK to deal with absence of the property in DT.
-> The binding clearly states:
-> 
-> "CPU capacity is a number that provides the scheduler information about CPUs
-> heterogeneity. Such heterogeneity can come from micro-architectural differences
-> (e.g., ARM big.LITTLE systems) or maximum frequency at which CPUs can run
-> (e.g., SMP systems with multiple frequency domains). Heterogeneity in this
-> context is about differing performance characteristics; this binding tries to
-> capture a first-order approximation of the relative performance of CPUs."
-> 
-> So it is clear that using same uarch can't be an excuse to miss this property.
-> So if you need the scheduler to be aware of this heterogeneity, better update
-> the DT with property. Absence will always means scheduler need not be aware
-> of this heterogeneity.
-
-Okay, understood your point and I am respect that.
-
-> > For partial CPUs absent "capacity-dmips-mhz" properties, this is an
-> > usage issue in DT and kernel should handle this as an error and report
-> > it.
-> >
-> 
-> That makes sense. As I mentioned in my earlier email, we can always flag
-> up error in the kernel, but it would be good to catch these much earlier
-> in DT via schema if possible.
-> 
-> > > I'm not sure it's up to us to interpret suggestions in the code so I
-> > > believe treating missing information as error is the right choice, which
-> > > is how we're handling this now.
-> > 
-> > Yes, current kernel means to treat missing info as error, whatever if
-> > all CPUs or partial CPUs are absent "capacity-dmips-mhz" properties.
-> >
-> 
-> OK, so no change needed ? I am confused as what is missing today.
-
-The different understanding between us is for the case when all CPUs
-absent "capacity-dmips-mhz" properties, seems to me we can take it as
-the same thing as all CPUs with binding "capacity-dmips-mhz" = 1024.
-
-Maybe I am is bit obsessive on this :)
-
-> > > For 3. (and patch 03), isn't it easier to populate capacity-dmips-mhz to
-> > > the same value (say 1024) in DT? That is a clear message that we're
-> > > dealing with CPUs with the same u-arch.
-> >
-> > "capacity-dmips-mhz" is defined as a _optional_ property in the DT
-> > document (see devicetree/bindings/arm/cpu-capacity.txt).
-> 
-> That means that the kernel can operate without the info and nothing more
-> than that. We are not providing guarantee that the same performance is
-> possible with or without this optional property.
-> 
-> > Current kernel rolls back every CPU raw capacity to 1024 if DT doesn't
-> > bind "capacity-dmips-mhz" properties, given many SoCs with same CPU
-> > u-arch this is right thing to do; here I think kernel should proceed to
-> > scale CPU capacity with its maximum frequency.
-> 
-> As stated above, I completely disagree and once again NACK.
-> 
-> > When I worked on a platform with a fast and a slow clusters (two clusters
-> > have different max frequencies and with the same CPU u-arch), it's a bit
-> > puzzle when I saw all CPU's capacities are always 1024.  In this case,
-> > since a platform have no CPU capacity modeling, and "capacity-dmips-mhz"
-> > property is not needed to populate in DT, but at the end the kernel
-> > should can reflect the scaled CPU capacity correctly.
-> >
-> 
-> Fix the broken DT with respect to this feature. I mean DT is not broken, but
-> if once needs this feature then they should teach the kernel the hardware
-> difference with this property.
-> 
-> Another possible issue I can see if this is dealt within the kernel is if
-> on some platform for thermal or any valid hardware errata reasons, one set
-> of CPUs can run at max one frequency while the other is restricted at a
-> suitable lower frequency, it may not be good idea to mark that as difference
-> in cpu capacity as they are SMP CPUs just in different perf domains with
-> different limits. I assume the scale invariance must deal with that.
-> I may be wrong here but that's my understanding, happy to be corrected.
-
-After looked a bit for the code, the short answer is we don't need to
-adjust "capacity-dmips-mhz" for any thermal capping or CPU frequency
-limit.
-
-Since "capacity-dmips-mhz"'s unit is DMIPS/MHz, it's a modeling value
-(e.g. generated by using Dhrystone, sysbench, etc).  This is why for
-the same micro architecture CPUs, we don't need to do any profiling
-and would be fine to directly set as 1024 for all CPUs (no matter the
-maximum frequency).
-
-In the kernel, there have two scale invariants: one is CPU capacity
-invariant, my understanding is it can allow us to compare capacity
-across CPUs; another is CPU frequency invariant, it's used to scale
-capacity for different OPPs on a CPU.
-
-So "capacity-dmips-mhz" is used to calculate CPU capacity invariant,
-the formual is:
-
-  cpu_scale(cpu) = capacity-dmips-mhz(cpu) * policy(cpu)->cpuinfo.max_freq
-
-policy(cpu)->cpuinfo.max_freq is the maximum frequency when register OPP
-table, it's no matter with thermal capping or CPU frequency limit.
-
-Thanks,
-Leo

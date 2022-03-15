@@ -2,186 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9AF4D9666
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280884D966F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240830AbiCOIgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
+        id S1345720AbiCOIiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbiCOIgf (ORCPT
+        with ESMTP id S1346178AbiCOIiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:36:35 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A6547554;
-        Tue, 15 Mar 2022 01:35:24 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 229ED51C;
-        Tue, 15 Mar 2022 09:35:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647333322;
-        bh=2B1abWspufHcU+WluNkys+YV9mGWKvBYO+9++Bkm3NY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pQshLCVv7y+XpgxHB+4/J8hdZXKj/9Ux7RpMusc18nIvYIbx2SbrZICKrYwDpbHz2
-         3g0l4lmMYeH+H+To1GCyd/U+HiiDvpKSaPoogxtT+pp5PE3d3V5w8Hg4JYnARcVw+p
-         6/kz7vCp33yNnqmwiapggEtyAhpU0Mv4ZJSbfB8o=
-Date:   Tue, 15 Mar 2022 10:35:05 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Ondrej Jirman <megous@megous.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 47/67] media: platform: rename sunxi/ to allwinner/
-Message-ID: <YjBPuafv1B5dbu/r@pendragon.ideasonboard.com>
-References: <cover.1647274406.git.mchehab@kernel.org>
- <85266b480902079391d4206b8aa276ff131a730f.1647274407.git.mchehab@kernel.org>
- <2816975.e9J7NaK4W3@kista>
- <20220315064005.10ecdab2@coco.lan>
- <YjA4IRD//lb8SKgs@pendragon.ideasonboard.com>
- <20220315092736.7e805c81@coco.lan>
+        Tue, 15 Mar 2022 04:38:11 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D34CD4F;
+        Tue, 15 Mar 2022 01:36:55 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 289265FD05;
+        Tue, 15 Mar 2022 11:36:51 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1647333411;
+        bh=zQ9KUNJidOTBi9mTlrAbIUsZPD9xnMaIuG+Kuj/2tcE=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=anSKvlDeqcVp9CUMnL3fjh9YutsByeHYXMpVn4YlJ3Aup6LVF3/utT3sYvaqFigwb
+         PhpjSNk2g2exhqm1LTsdHhzMetMw98GkEF8BQztzN5XdOVCOxivO4+31wN0EVBsO8y
+         y+jr9sguu74LNZSM7sN32T3ZUE7qfIdyJRXkOLENdLxSooUJ8/XYcNYh1mYLwhYqTQ
+         daIL9x+vaNDri0l1OFyr8301VH9B+MAy0WzNKnXd9Cv9t4nx0z8O0tOaKvjoRPlI99
+         qnLChCmmLBr+P1Wfm24HHRg7gC1Mw6s0w9kw7O/cDowUp5mjMRaFHjsctFjevXwPof
+         11AKiwweUvBCg==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 15 Mar 2022 11:36:41 +0300 (MSK)
+From:   Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
+        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 2/3] af_vsock: SOCK_SEQPACKET receive timeout test
+Thread-Topic: [RFC PATCH v1 2/3] af_vsock: SOCK_SEQPACKET receive timeout test
+Thread-Index: AQHYNTaJU61+cjcYFEaSzJHWUZnmpKy/7OSAgAAF6wA=
+Date:   Tue, 15 Mar 2022 08:35:44 +0000
+Message-ID: <457e03a0-7f74-4b9d-3699-ce8775ed69c0@sberdevices.ru>
+References: <1bb5ce91-da53-7de9-49ba-f49f76f45512@sberdevices.ru>
+ <6981b132-4121-62d8-7172-dca28ad1e498@sberdevices.ru>
+ <20220315081517.m7rvlpintqipdu6i@sgarzare-redhat>
+In-Reply-To: <20220315081517.m7rvlpintqipdu6i@sgarzare-redhat>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <10AC6C659A6A99489263F3BE18C16D3E@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220315092736.7e805c81@coco.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/15 06:52:00 #18973197
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 09:27:36AM +0100, Mauro Carvalho Chehab wrote:
-> Em Tue, 15 Mar 2022 08:54:25 +0200
-> Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
-> 
-> > Hi Mauro,
-> > 
-> > On Tue, Mar 15, 2022 at 06:40:05AM +0100, Mauro Carvalho Chehab wrote:
-> > > Em Mon, 14 Mar 2022 18:22:20 +0100 Jernej Škrabec escreveu:
-> > >   
-> > > > Dne ponedeljek, 14. marec 2022 ob 17:34:42 CET je Mauro Carvalho Chehab 
-> > > > napisal(a):  
-> > > > > As the end goal is to have platform drivers split by vendor,
-> > > > > rename sunxi/ to allwinner/.
-> > > > > 
-> > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>    
-> > > > 
-> > > > I would rather not do that. Everything related to Allwinner is called sunxi, 
-> > > > albeit there are a few outliers. This is similar to Amlogic/meson situation.  
-> > > 
-> > > The rationale of having one directory per manufacturer is that, if drivers
-> > > for newer platforms with different names from the same manufacturers are 
-> > > added, those will still fit under allwinner/ and amlogic/.
-> > > 
-> > > The Kconfig names for sunxi and meson didn't change, nor the driver's name. 
-> > > Also, the directories under allwinner preserve sun<x>i name on them:
-> > > 
-> > > 	drivers/media/platform/allwinner/
-> > > 	├── sun4i-csi
-> > > 	├── sun6i-csi
-> > > 	├── sun8i-di
-> > > 	└── sun8i-rotate
-> > > 
-> > > and so the directory under amlogic/:
-> > > 
-> > > 	drivers/media/platform/amlogic/
-> > > 	└── meson-ge2d
-> > > 
-> > > Now, if Allinner decides to release a new platforms named after another star,
-> > > let's say, "Vega" and "Rigel", it would be just a matter of adding 
-> > > "vega/" and "rigel/" directories under allwinner. No need to touch
-> > > media/platform/Kconfig and media/platform/Makefile. Everything will happen
-> > > on much more smaller vendor-specific Kconfig/Makefile.  
-> > 
-> > But the day Allwinner changes its name to Noloser, we'll have a similar
-> > problem. 
-> 
-> Not really. It will still be a single directory per vendor (whatever
-> name it is).
-> 
-> > Thnk about Freescale vs. NXP, or Altera bought by Intel.
-> 
-> Yeah, when some drivers move from one vendor to another one that
-> already exists there, we should probably move the directories, in
-> order to keep things well organized.
-
-I'm not sure we should. We still have arch/arm64/boot/dts/freescale/ for
-instance. We can answer that question later though, when confronted with
-the situation.
-
-> The worse case scenario is really if, let's say, TI decides to sell their
-> omap architecture to NXP, keeping the rest. On such case, the best would
-> be to move platform/ti/omap* to the directory of its newer owner.
-> 
-> That's said, when things like that happen, there are usually a change
-> at MAINTAINERS, as e-mails, mailing lists and contact people will
-> likely change. So, this will very likely generate patches anyway.
-> 
-> > No
-> > naming scheme is totally future-proof. If the accepted standard through
-> > the kernel is to use sunxi to refer to Allwinner SoCs, I don't think
-> > it's a bit idea to go with that.
-> 
-> I'm not too concerned about the name here, but rather about the
-> process. Needing to do reorg like this is painful, as it causes 
-> all pending work to fail merging against upstream, requiring rebases.
-> So, we should avoid needing to re-do it by trying our best to avoid
-> the need of another global change like that in the future.
-
-Most of the pain we'll go through in the immediate future comes from the
-fact that we never really cared about this. I think renames (of vendors
-or product lines) will be infrequent enough that picking sunxi for
-Allwinner drivers wouldn't be an issue.
-
-There's a similar think with Renesas, which had an SH product line and
-then moved to ARM, creating R-Mobile and R-Car (among other product
-liens). That's why we still have drivers/dma/sh/ for Renesas DMA
-drivers.
-
-> By organizing entries per vendor, while we may need to do puntual
-> per-vendor adjustments when they rename and change IP with other
-> vendors, the global platform Kconfig/Make will contain a single entry
-> per vendor. I can't foresee any need to change this in the future,
-> if we take care of keeping the entries there properly sorted.
-> 
-> With regards to naming the per-vendor directory, while I do prefer to have
-> the  directories named after the vendor, and not after a vendor's nick 
-> name, It should also be ok to use a vendor's nick name, provided that 
-> such name is meant to be used by all their current and future IP.
-> 
-> Not sure if "sunxi" is actually a vendor's nick name. It sounds
-> much likely that it is, instead, a brand name that covers their 
-> current media-related SoC. 
-> 
-> Can someone from the vendor shed a light on it?
-
-Maybe we can let the Allwinner upstream community tell us what name to
-pick ? I'm sure they know better than us :-)
-
--- 
-Regards,
-
-Laurent Pinchart
+T24gMTUuMDMuMjAyMiAxMToxNSwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBGcmks
+IE1hciAxMSwgMjAyMiBhdCAxMDo1NTo0MkFNICswMDAwLCBLcmFzbm92IEFyc2VuaXkgVmxhZGlt
+aXJvdmljaCB3cm90ZToNCj4+IFRlc3QgZm9yIHJlY2VpdmUgdGltZW91dCBjaGVjazogY29ubmVj
+dGlvbiBpcyBlc3RhYmxpc2hlZCwNCj4+IHJlY2VpdmVyIHNldHMgdGltZW91dCwgYnV0IHNlbmRl
+ciBkb2VzIG5vdGhpbmcuIFJlY2VpdmVyJ3MNCj4+ICdyZWFkKCknIGNhbGwgbXVzdCByZXR1cm4g
+RUFHQUlOLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92
+QHNiZXJkZXZpY2VzLnJ1Pg0KPj4gLS0tDQo+PiB0b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rl
+c3QuYyB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+PiAxIGZpbGUgY2hh
+bmdlZCwgNDkgaW5zZXJ0aW9ucygrKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5n
+L3Zzb2NrL3Zzb2NrX3Rlc3QuYyBiL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jDQo+
+PiBpbmRleCAyYTM2MzhjMGEwMDguLmFhMmRlMjdkMGY3NyAxMDA2NDQNCj4+IC0tLSBhL3Rvb2xz
+L3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jDQo+PiArKysgYi90b29scy90ZXN0aW5nL3Zzb2Nr
+L3Zzb2NrX3Rlc3QuYw0KPj4gQEAgLTM5MSw2ICszOTEsNTAgQEAgc3RhdGljIHZvaWQgdGVzdF9z
+ZXFwYWNrZXRfbXNnX3RydW5jX3NlcnZlcihjb25zdCBzdHJ1Y3QgdGVzdF9vcHRzICpvcHRzKQ0K
+Pj4gwqDCoMKgwqBjbG9zZShmZCk7DQo+PiB9DQo+Pg0KPj4gK3N0YXRpYyB2b2lkIHRlc3Rfc2Vx
+cGFja2V0X3RpbWVvdXRfY2xpZW50KGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMgKm9wdHMpDQo+PiAr
+ew0KPj4gK8KgwqDCoCBpbnQgZmQ7DQo+PiArwqDCoMKgIHN0cnVjdCB0aW1ldmFsIHR2Ow0KPj4g
+K8KgwqDCoCBjaGFyIGR1bW15Ow0KPj4gKw0KPj4gK8KgwqDCoCBmZCA9IHZzb2NrX3NlcXBhY2tl
+dF9jb25uZWN0KG9wdHMtPnBlZXJfY2lkLCAxMjM0KTsNCj4+ICvCoMKgwqAgaWYgKGZkIDwgMCkg
+ew0KPj4gK8KgwqDCoMKgwqDCoMKgIHBlcnJvcigiY29ubmVjdCIpOw0KPj4gK8KgwqDCoMKgwqDC
+oMKgIGV4aXQoRVhJVF9GQUlMVVJFKTsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCB0
+di50dl9zZWMgPSAxOw0KPj4gK8KgwqDCoCB0di50dl91c2VjID0gMDsNCj4+ICsNCj4+ICvCoMKg
+wqAgaWYgKHNldHNvY2tvcHQoZmQsIFNPTF9TT0NLRVQsIFNPX1JDVlRJTUVPLCAodm9pZCAqKSZ0
+diwgc2l6ZW9mKHR2KSkgPT0gLTEpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBwZXJyb3IoInNldHNv
+Y2tvcHQgJ1NPX1JDVlRJTUVPJyIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGV4aXQoRVhJVF9GQUlM
+VVJFKTsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoKHJlYWQoZmQsICZkdW1t
+eSwgc2l6ZW9mKGR1bW15KSkgIT0gLTEpIHx8DQo+PiArwqDCoMKgwqDCoMKgwqAgKGVycm5vICE9
+IEVBR0FJTikpIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBwZXJyb3IoIkVBR0FJTiBleHBlY3RlZCIp
+Ow0KPj4gK8KgwqDCoMKgwqDCoMKgIGV4aXQoRVhJVF9GQUlMVVJFKTsNCj4+ICvCoMKgwqAgfQ0K
+PiANCj4gVGhlIHBhdGNoIExHVE0sIG1heWJlIHRoZSBvbmx5IHRoaW5nIEkgd291bGQgYWRkIGhl
+cmUgaXMgYSBjaGVjayBvbiB0aGUgdGltZSBzcGVudCBpbiB0aGUgcmVhZCgpLCB0byBzZWUgdGhh
+dCBpdCBpcyBhcHByb3hpbWF0ZWx5IHRoZSB0aW1lb3V0IHdlIGhhdmUgc2V0Lg0KDQpBY2ssIEkn
+bGwgYWRkIGl0IG9uIHYyDQoNCj4gDQo+IFRoYW5rcywNCj4gU3RlZmFubw0KPiANCg0K

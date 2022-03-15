@@ -2,126 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9DB4D9C10
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B384D9C19
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348629AbiCONZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 09:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S1348644AbiCON1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 09:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344412AbiCONY5 (ORCPT
+        with ESMTP id S1348631AbiCON1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 09:24:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF00B3464B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647350625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IEpiYhsMGlq2ReYke60gfIQZ2QzqWJpfRL9F+OcYAMY=;
-        b=eTh/+BtUq8mkG3eLN+XzrwBClSIGZkA7ig53ycIRZfiDtSRDQzjBPWC7xbBnS7LfFbRFar
-        o9tPJ3styOFDEd71BxS9nUnMEZobNGjjvLDosa2tbua8a10xmRmVvKSvFI5Fs5xBi4KOZu
-        ciI++kvLZCTUSSzyxwrphkdbKJ3iFt0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-WdtXJOYxPZeEYqL04rYo3g-1; Tue, 15 Mar 2022 09:23:43 -0400
-X-MC-Unique: WdtXJOYxPZeEYqL04rYo3g-1
-Received: by mail-wr1-f69.google.com with SMTP id x15-20020a5d6b4f000000b001ee6c0aa287so5280999wrw.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:23:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IEpiYhsMGlq2ReYke60gfIQZ2QzqWJpfRL9F+OcYAMY=;
-        b=AfN/ZJKmSyFerh+txNf+7fwVvs7xLPBPznBAYm+KQvQ0/99JtpUq2ck7AFCUNWt/cb
-         vY8dsrTF4DltaJRCRH+fV0dPUP+ekk00uSVaHp493OlvpCpy5OGpYE7gTSowGhDDOMwE
-         hGuZlzunkAzv3Y94y5usVzOhJKuePqEwhz5K6iUl34uAnnxJSL2dMvlojXZhnVkoAeO5
-         xic+LlfC757WOKOSBHZ2EWmA1ApZZDLXgIZzFoSMhKTtOhLvwN4g9Huea+rp2wyNGMwX
-         ztwjTgDtfp9S6nFOfPkiFUyd3s85er9P+ODvsh86HwSTtD57uOxDBY3xjXMQTIEQC9jB
-         KLfw==
-X-Gm-Message-State: AOAM5305O4QXnNbpC0f+7VZT6pjpCdSJrDtKvqF09Xp9UDG1Z4zaG4oX
-        fYMB5IQasR+3xVN44ndaOly0Jyc3kCa23OoruQ4c9AIeWTXdfsU3TXI1lBH7NyGxXM1GnljKhp6
-        8WM4KzIJB1pn8fy+qpV/jYa2U
-X-Received: by 2002:a5d:47ac:0:b0:1fc:f09b:c258 with SMTP id 12-20020a5d47ac000000b001fcf09bc258mr20957692wrb.618.1647350622431;
-        Tue, 15 Mar 2022 06:23:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzhcNjWTrbaoqdRbx7Oloh29YUHJlQt1KnYFPeCC8VNb6iBtIWGW90Cdk830Tz31dWtDzSVEw==
-X-Received: by 2002:a5d:47ac:0:b0:1fc:f09b:c258 with SMTP id 12-20020a5d47ac000000b001fcf09bc258mr20957671wrb.618.1647350622165;
-        Tue, 15 Mar 2022 06:23:42 -0700 (PDT)
-Received: from redhat.com ([2.53.2.35])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm16230818wrh.87.2022.03.15.06.23.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 06:23:41 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 09:23:36 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     trix@redhat.com
-Cc:     jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
-        lingshan.zhu@intel.com, sgarzare@redhat.com,
-        xieyongji@bytedance.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
-Message-ID: <20220315092101-mutt-send-email-mst@kernel.org>
-References: <20220315124130.1710030-1-trix@redhat.com>
+        Tue, 15 Mar 2022 09:27:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2084D42ED0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647350761; x=1678886761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DUJkbhEMYFfC7vCg5ediYDdzNR4Ys1q6v/5bpfUlhlo=;
+  b=ldyBJymT44HD7cLPTGQ9hqxOHQiMRGL8YbRGSM86J6PvxiSyG3YRp1OS
+   PqkFgqFWrTjoFmCIthoDg7hMMzf3nOxNVPWc0cTeamf5YZyo3tz4ATKdc
+   oEd81U4hLPZqBkCD7w1vE93Gmj52kavcY6HFppQH1lf4cMCGWWwOdWF4+
+   JtR4xe/T5PY7lBxDU01i8DLphp01Gq7IIDuP3H2td2mAnkjmOOEoWi8rB
+   0ZK8w/Bv85FRww3+EsqgYbqCtxXZv5ZBU969iQQO3EP+47kCdZQEiBT+3
+   VFw3GcZlyJ8GmDBKzcCvAE1ddz0CI9+K/zc34uug+mLGe+fFic+0BX4IZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253856931"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="253856931"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:26:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="515864016"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Mar 2022 06:25:54 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nU7BS-000B1u-5i; Tue, 15 Mar 2022 13:25:54 +0000
+Date:   Tue, 15 Mar 2022 21:24:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qing Wang <wangqing@vivo.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Wang Qing <wangqing@vivo.com>
+Subject: Re: [PATCH] sched: dynamic config sd_flags if described in DT
+Message-ID: <202203152145.vPr4Qv42-lkp@intel.com>
+References: <1647331137-69890-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220315124130.1710030-1-trix@redhat.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1647331137-69890-1-git-send-email-wangqing@vivo.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang static analysis reports this issue
-> ifcvf_main.c:49:4: warning: Called function
->   pointer is null (null dereference)
->   vf->vring->cb.callback(vring->cb.private);
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> The check
->   vring = &vf->vring[i];
->   if (vring->cb.callback)
-> 
-> Does not match the use.  Change dereference so they match.
-> 
-> Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
-> index 3b48e717e89f7..4366320fb68d3 100644
-> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
-> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
-> @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
->  	for (i = 0; i < vf->nr_vring; i++) {
->  		vring = &vf->vring[i];
->  		if (vring->cb.callback)
-> -			vf->vring->cb.callback(vring->cb.private);
-> +			vring->cb.callback(vring->cb.private);
->  	}
->  
->  	return IRQ_HANDLED;
+Hi Qing,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on driver-core/driver-core-testing tip/sched/core linus/master v5.17-rc8 next-20220310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Qing-Wang/sched-dynamic-config-sd_flags-if-described-in-DT/20220315-160039
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: riscv-randconfig-r025-20220314 (https://download.01.org/0day-ci/archive/20220315/202203152145.vPr4Qv42-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/3322560249c42b0a3e719b19842a3ace7d5ffb6a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Qing-Wang/sched-dynamic-config-sd_flags-if-described-in-DT/20220315-160039
+        git checkout 3322560249c42b0a3e719b19842a3ace7d5ffb6a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/base/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/base/arch_topology.c:648:23: error: use of undeclared identifier 'cpu'
+                   if (!cache_topology[cpu][cache_level])
+                                       ^
+   drivers/base/arch_topology.c:654:23: error: use of undeclared identifier 'cpu'
+                           if (cache_topology[cpu][cache_level] == cache_topology[cpu_id][cache_level]) {
+                                              ^
+   2 errors generated.
 
 
-Oh, absolutely. In fact vf->vring->cb.callback is just
-vf->vring[0].cb.callback so it's wrong for any ring except 0. Does not
-make sense.
+vim +/cpu +648 drivers/base/arch_topology.c
 
-So how did it work in testing then? No idea.
-Zhu Lingshan, care to comment?
+   639	
+   640	int cpus_share_self_cache(const struct cpumask *cpu_map)
+   641	{
+   642		int cache_level, cpu_id;
+   643		int first, last;
+   644		int id = cpumask_first(cpu_map);
+   645		int size = cpumask_weight(cpu_map);
+   646	
+   647		for (cache_level = 0; cache_level < MAX_CACHE_LEVEL; cache_level++) {
+ > 648			if (!cache_topology[cpu][cache_level])
+   649				return -1;
+   650	
+   651			first = -1;
+   652			last = id;
+   653			for (cpu_id = 0; cpu_id < NR_CPUS; cpu_id++) {
+   654				if (cache_topology[cpu][cache_level] == cache_topology[cpu_id][cache_level]) {
+   655					if (cpu_id < id || cpu_id >= id + size)
+   656						return 0;
+   657	
+   658					first = (first == -1)?cpu_id:first;
+   659					last = cpu_id;
+   660				}
+   661			}
+   662	
+   663			if (first == id && last == id + size)
+   664				return 1;
+   665		}
+   666	
+   667		return 0;
+   668	}
+   669	
 
-
-> -- 
-> 2.26.3
-
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

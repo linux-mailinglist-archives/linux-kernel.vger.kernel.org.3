@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A054D9C6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BAF4D9C6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348661AbiCONlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 09:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S1348732AbiCONmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 09:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236089AbiCONlm (ORCPT
+        with ESMTP id S236089AbiCONmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 09:41:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9D352E49
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647351631; x=1678887631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DdbAPj3nXXTBOseL7TETjlOXpTqLIR2bDFn56wnS9No=;
-  b=RkBQCdHDVPJu4bbE6h9tXhMlxw5G7C3R+O7eAZL3R/fz8Dplsowm3qwJ
-   8byEZTgmI9mPTHaS86WrwSI1ar84FAqm3VwVhUpeoKthXqWnbqs0U5v4U
-   BULLOSHFswDNhrKn0ZkYJsg3wnx8k9AzismJQwKEWDS4TmlbmDJpitPuT
-   6wybzK4M8gFu7O+2EX+NBk3YyE5TV9Fd8D6dCk5dq8z84yr6cm3VHbBuG
-   aEhDehIwvA9hQ3YM6Mi2rSxoBMg3vMfLOa9/OR4jI5ivkTAFThxSKEIj6
-   eYvo2Y17lh3UwSM+Vuug5geRKSNtAkzx7MTEb8Eill1niPPdBOeJYPMoL
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238469603"
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="238469603"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:40:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="498016944"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:40:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nU7Op-000HiZ-9q;
-        Tue, 15 Mar 2022 15:39:43 +0200
-Date:   Tue, 15 Mar 2022 15:39:42 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] drm/format-helper: Fix XRGB888 to monochrome
- conversion
-Message-ID: <YjCXHg9lWs8LVAGs@smile.fi.intel.com>
-References: <20220315110707.628166-1-geert@linux-m68k.org>
- <20220315110707.628166-3-geert@linux-m68k.org>
- <27e1c911-798a-c14b-e5a0-622a7c5d8755@redhat.com>
+        Tue, 15 Mar 2022 09:42:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308F952E51
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:40:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E9F61646
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DFBC340E8;
+        Tue, 15 Mar 2022 13:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647351646;
+        bh=C/o2T8nJgf3Rnc5Q9iT/wcGUFU5ZGrsNC2dWsPGR7K4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UdxrzCsPqbbxkCeIoUMtBeHpiBEolJbIaeipPFlL47wev0K70DexdCnkIuF4RIYED
+         P6JsarA9Y7uFVzxlfarDe13HEMkrJ0dG3HVsJedmeXvC4tyJ3DWVW/l9snGwaa3ktC
+         4EUawKIxAx5mQSFUSSVBpRWzaKMer/D99cJBLFlvMYSrLK35EvNsufJyciBqQQ4sgY
+         ybzOkbnBgYqobzfW/itPPMSi9JTc1uFTl8qOqe06RjpNsm2yCQFk7sTtNaTNdywEXJ
+         gvcZNw4oZDJ9p1JdkaeLI8SWZ88zfbgHOHKG1CL4unO4jaNgZpA1cmLTuMq20yxz3V
+         U/FGgcngwQfuw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Nugraha <richiisei@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        kbuild-all@lists.01.org, Nathan Chancellor <nathan@kernel.org>,
+        llvm@lists.linux.dev,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+In-Reply-To: <20220315001848.3763534-1-alviro.iskandar@gnuweeb.org>
+References: <20220315001848.3763534-1-alviro.iskandar@gnuweeb.org>
+Subject: Re: [PATCH for-5.18 v2] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion` warning
+Message-Id: <164735164416.3687290.11047333931734060111.b4-ty@kernel.org>
+Date:   Tue, 15 Mar 2022 13:40:44 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27e1c911-798a-c14b-e5a0-622a7c5d8755@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 01:18:00PM +0100, Javier Martinez Canillas wrote:
-> On 3/15/22 12:07, Geert Uytterhoeven wrote:
-
-> > +		for (i = 0; i < bits; i++, pixels--) {
+On Tue, 15 Mar 2022 00:18:48 +0000, Alviro Iskandar Setiawan wrote:
+> In function mchp_pdmc_af_put(), Intel's kernel test robot reports the
+> following warning:
 > 
-> I think is worth to add a comment here explaining that the pixel is set to
-> 1 for brightness > 127 and to 0 for brightness < 128. Or as kernel-doc for
-> this helper function.
+>   sound/soc/atmel/mchp-pdmc.c:186:34: warning: address of array \
+>   'uvalue->value.integer.value' will always evaluate to 'true' \
+>   [-Wpointer-bool-conversion]
 > 
-> > +			if (*src++ & BIT(7))
-> 
-> Pekka also mentioned that if (*src++ > 127) would make this easier to read.
+> [...]
 
->= 128 ?
+Applied to
 
-> > +				byte |= BIT(i);
-> >  		}
-> >  		*dst++ = byte;
-> >  	}
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
 
+[1/1] ASoC: atmel: mchp-pdmc: Fix `-Wpointer-bool-conversion` warning
+      commit: a8ae15ead9c9d10671c3f76cb0749dec6e571ce7
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

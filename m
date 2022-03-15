@@ -2,28 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44344D946D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3164D946E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345176AbiCOGM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S234939AbiCOGND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345158AbiCOGMs (ORCPT
+        with ESMTP id S1345163AbiCOGMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:12:48 -0400
+        Tue, 15 Mar 2022 02:12:49 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8445949F9D;
-        Mon, 14 Mar 2022 23:11:36 -0700 (PDT)
-X-UUID: d2665ade1a2e4adea8bcb38f080e05cd-20220315
-X-UUID: d2665ade1a2e4adea8bcb38f080e05cd-20220315
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AFA49FA2;
+        Mon, 14 Mar 2022 23:11:37 -0700 (PDT)
+X-UUID: 9020a1ddc9f14415a324b4876df77003-20220315
+X-UUID: 9020a1ddc9f14415a324b4876df77003-20220315
 Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1878332883; Tue, 15 Mar 2022 14:11:28 +0800
+        with ESMTP id 104757173; Tue, 15 Mar 2022 14:11:28 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 15 Mar 2022 14:11:26 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Mar 2022 14:11:26 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Tue, 15 Mar 2022 14:11:26 +0800
@@ -55,9 +56,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v13 4/6] dt-bindings: soc: mediatek: add gce-client-reg for MUTEX
-Date:   Tue, 15 Mar 2022 14:10:29 +0800
-Message-ID: <20220315061031.21642-5-moudy.ho@mediatek.com>
+Subject: [PATCH v13 5/6] dts: arm64: mt8183: add GCE client property for Mediatek MUTEX
+Date:   Tue, 15 Mar 2022 14:10:30 +0800
+Message-ID: <20220315061031.21642-6-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220315061031.21642-1-moudy.ho@mediatek.com>
 References: <20220315061031.21642-1-moudy.ho@mediatek.com>
@@ -74,32 +75,25 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to allow modules with latency requirements such as MDP3
-to set registers through CMDQ, add the relevant GCE property.
+to set registers through CMDQ, add the relevant dts property.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml  | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-index 4adc67cafd29..06106779d129 100644
---- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-+++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-@@ -56,6 +56,14 @@ properties:
-       include/dt-bindings/gce/<chip>-gce.h of each chips.
-     $ref: /schemas/types.yaml#/definitions/phandle-array
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 4b08691ed39e..fc6ac2a46324 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -1514,6 +1514,7 @@
+ 			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+ 			mediatek,gce-events = <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+ 					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>;
++			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x6000 0x1000>;
+ 		};
  
-+  mediatek,gce-client-reg:
-+    description: The register of client driver can be configured by gce with
-+      4 arguments defined in this property, such as phandle of gce, subsys id,
-+      register offset and size. Each GCE subsys id is mapping to a client
-+      defined in the header include/dt-bindings/gce/<chip>-gce.h.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    maxItems: 1
-+
- required:
-   - compatible
-   - reg
+ 		larb0: larb@14017000 {
 -- 
 2.18.0
 

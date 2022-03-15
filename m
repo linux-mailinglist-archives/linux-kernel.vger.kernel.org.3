@@ -2,156 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7304D955C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C818E4D9560
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239389AbiCOHfo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Mar 2022 03:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S233563AbiCOHgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiCOHfl (ORCPT
+        with ESMTP id S232431AbiCOHgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:35:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8E71094
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:34:27 -0700 (PDT)
-Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M58OQ-1nV8A215Sm-001783 for <linux-kernel@vger.kernel.org>; Tue, 15 Mar
- 2022 08:34:26 +0100
-Received: by mail-wm1-f43.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso932017wmr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:34:26 -0700 (PDT)
-X-Gm-Message-State: AOAM532V6lRjsb/mJ3X4DTVHaOz9UURT0Eq+O89CcJWQsYncpQOu7e8F
-        SawNJGsI2WkMxrHlg4Wc7KGNp+QtxyiZW0Rimq0=
-X-Google-Smtp-Source: ABdhPJyHYO6m3LYdoowEdubGuU5nRdWd7VpbXsQW08uV/nmHFpfjxqH1DRzsbc5qBQnlKneUxOmPMErXyKaFhVYZd7s=
-X-Received: by 2002:a1c:f20b:0:b0:389:c99a:4360 with SMTP id
- s11-20020a1cf20b000000b00389c99a4360mr2172884wmc.174.1647329665889; Tue, 15
- Mar 2022 00:34:25 -0700 (PDT)
+        Tue, 15 Mar 2022 03:36:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7384B1C0;
+        Tue, 15 Mar 2022 00:34:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2852613DC;
+        Tue, 15 Mar 2022 07:34:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BA6C340E8;
+        Tue, 15 Mar 2022 07:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647329693;
+        bh=9t5nbjS6o46IYV0HqycSY7vUg/zpQpjyLn2xTnP5TPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u/OKLCXN+zqRQwxpMuvhRoVL7KZucbSVV/Qg665/NCRsHNj7b/kZNMB1x/9ARSknA
+         hS7mtBLvMgnVqF1frARHwFl5GT7PUmPkkgIjWBW9HMcoa3rJLRFvOdSBD02WE32FJV
+         d+fkNpzTwsZUws600ExqZVL7xWS7HUpDjs2znJn0=
+Date:   Tue, 15 Mar 2022 08:34:48 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Jithu Joseph <jithu.joseph@intel.com>, hdegoede@redhat.com,
+        markgross@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, corbet@lwn.net, andriy.shevchenko@linux.intel.com,
+        ashok.raj@intel.com, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [RFC 00/10] Introduce In Field Scan driver
+Message-ID: <YjBBmEjbIaqTbVt+@kroah.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <Yh59rOIH24X+6GyI@kroah.com>
+ <Yh5+om/Nr06V0+Qj@kroah.com>
+ <Yi/Lb5laEki0JHft@agluck-desk3.sc.intel.com>
 MIME-Version: 1.0
-References: <nick.hawkins@hpe.com> <20220216183704.42084-1-nick.hawkins@hpe.com>
- <CAK8P3a2Ryjr738XgLsGQngvc7j=Kk620LMjWpu-_HiwdK_fX4Q@mail.gmail.com> <9FE3F625-39FC-4ED7-A2CC-567EF0181886@hpe.com>
-In-Reply-To: <9FE3F625-39FC-4ED7-A2CC-567EF0181886@hpe.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 15 Mar 2022 08:34:10 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3sR98Ujk5AFA=F7aTWWEx93-Jjan1yXqaqaw-6x85NwQ@mail.gmail.com>
-Message-ID: <CAK8P3a3sR98Ujk5AFA=F7aTWWEx93-Jjan1yXqaqaw-6x85NwQ@mail.gmail.com>
-Subject: Re: [PATCH] [v1] arch: arm: configs: gxp_defconfig
-To:     "Verdun, Jean-Marie" <verdun@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Olof Johansson <olof@lixom.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:mxjrjP1Muj+Eod3fB6cpvNijtXu7wxQEobsDJ72hxehvwL5dj6M
- n6HAtDLfOlfEzyDkc81qZCCrattvd6p85lPsdHqpTtZlTqLZI02lx7rDVlSQPoXnzrgPil4
- D3wR2EdAlAkOj5IWkjNzyCfRpGYq3Z9pJyX/HqipX+/i0M6T6xMgQVD68+VYADdqMgJEKCh
- WF44X4LbVr5e8Kikx2BoQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:k3cggBCJRz4=:DbKVY/ROBWA6NlsKgWjSLs
- mtX2zRMBBGlzGQrcW7xVGqADivJyHkUmKQ/F6HQEBdIk1YnBfAnOjN9DFZ3pU+n5QCP/4c4o4
- N+5vSPdjuFVjSnd6DeD9DaeTfvgkdrdoDmjL22CAYT2UxZE8DBjcgr+RRBXl23meVD1v/+aw2
- cFPpI5kNVHf/jki30OPYH0DuKCnC7GeZz3VbkJ5rbo2gMio13C/rtVGN7dtnMWmHaDo4XHOqb
- GzR6Rq8M740GpkZrTjJxB8oxyWkRYgQZSdNV+G/L7n9JRDkguAF6zvU8xFL9s4EFlEIViX77J
- hRK07t2BMXLF7TvMmdS3vFR6yz5RxqhqaROLWIHGVZvhxlEQM0WwkLBkGqIiETt595ul6L8q5
- T1e/6JsCpL5JZYWgfKTziUACFSV6VsIvi8fzjxfPrV06HaJq8uS3qV2aLUhxM4qxVfJ4j22Bn
- n2nAvUP6yiWeSHM92yXcE5AZo8gSugcYUWHqqTOKRvnj+GJViqSvdqdJO5zyQQxIt6y0U/L5a
- iZFg/u++3FTzzfnhjLQHEL+wXQzaSGFqqQLLRix0HcgbkthkjC35S6iilp7ZQXVnithxp6/FW
- 7f0P7jyfri6jNqrbPqCG/EJfOzi4bzxORUYpgPsGNpHgjoEr29KT4hS9ADJDoP2Zn8h+rPQbB
- 26RTNlt3BsqbP0uT4t7O7Dpq3SomFgnI5t/dx944noMdEW9AEDr7MgboHdg7cwNoP4ro=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yi/Lb5laEki0JHft@agluck-desk3.sc.intel.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 11:47 PM Verdun, Jean-Marie <verdun@hpe.com> wrote:
-> ﻿On 2/16/22, 1:58 PM, "Arnd Bergmann" <arnd@arndb.de> wrote:
->
->
-> >    One bit of information that I would like to see in the defconfig patch
-> >    is an explanation about why you need a custom defconfig in the
-> >    first place, rather than using multi_v7_defconfig. Please also add
-> >    a patch to enable your platform in the multi_v7_defconfig, along with
-> >    the drivers you need (as loadable modules).
->
-> I took some time to look at the defconfig "challenge". Nick has updated the multi_v7_defconfig with our GXP in a new series of patches, but this won't execute on our ASIC (compilation is ok). The challenge is that we are missing a few features which are enabled by default, and I was wondering if the community would accept to disable them by default.
->
-> This is this
->
-> CONFIG_PERF_EVENTS=y
-> CONFIG_ARCH_VIRT=y
->
-> Both of them generate unknown instruction on our platform which lead to kernel crash.
+On Mon, Mar 14, 2022 at 04:10:39PM -0700, Luck, Tony wrote:
+> On Tue, Mar 01, 2022 at 09:14:26PM +0100, Greg KH wrote:
+> > On Tue, Mar 01, 2022 at 09:10:20PM +0100, Greg KH wrote:
+> > > On Tue, Mar 01, 2022 at 11:54:47AM -0800, Jithu Joseph wrote:
+> > > > Note to Maintainers:
+> > > > Requesting x86 Maintainers to take a look at patch01 as it
+> > > > touches arch/x86 portion of the kernel. Also would like to guide them
+> > > > to patch07 which sets up hotplug notifiers and creates kthreads.
+> > > > 
+> > > > Patch 2/10 - Adds Documentation. Requesting Documentation maintainer to review it.
+> > > > 
+> > > > Requesting Greg KH to review the sysfs changes added by patch08.
+> > > 
+> > > "RFC" means you are not comfortable submitting the changes yet, so you
+> > > don't need my review at this point in time.  Become confident in your
+> > > changes before asking for others to review the code please.
+> > 
+> > Hint, it needs work, sysfs_emit() for one thing, lack of reference
+> > counting on your cpu objects is another...
+> 
+> Greg,
+> 
+> Thanks for the comments. They triggered a bunch of internal
+> re-thinking of the interface.  One idea that has some traction
+> (Credit/Blame: Dan Williams) is to:
 
-If you get unknown instruction exceptions, that is clearly a bug that has to be
-fixed somewhere. Turning the options off should not be necessary, but we have
-to figure out why these crash, and make sure we have correct runtime detection
-in place that ensures that any driver code runs only on platforms that have the
-corresponding hardware.
+First off, I did not pay attention to this thread at all, given that the
+very basics of this patch series had such obvious problems.  I only saw
+the contents, not the context in which you wanted to make these changes.
 
-Do you have any more information about how and why these crash? My first
-guess would be that there is something in your DT that describes hardware
-that is not actually there. With a correct DTB file, the two options should
-not cause any code to run that wouldn't otherwise.
+So I have no real thoughts as to what your design should be, as I have
+no idea what it is you even want to accomplish at all.
 
-> With these options disabled, we can use the defconfig and add only
->
-> CONFIG_ARCH_HPE=y
-> CONFIG_ARCH_HPE_GXP=y
+That being said, I do have one comment:
 
-These are obviously ok
+> 1) Don't put anything in /sys/devices/system/cpu/*
+> 2) Driver creates some info/control files in its own
+>    corner of /sys/devices/.../ifs
+> 3) No per-cpu files ... run a test with:
+>    # echo ${cpu} > /sys/devices/.../ifs/run_test
+> 4) No test result files.
+>    When tests complete they report using uevents
+> 
+> Using uevent to report means that we can easily have
+> mutiple parts to the result (pass/fail/incomplete status, as well
+> as diagnostic details about the reason for the failure,
+> or why the test was not completed).
+> 
+> This seems a novel use of uevent ... is it OK, or is is abuse?
 
-> CONFIG_GXP_WATCHDOG=y
-> CONFIG_ATAGS=y
->
-> To it, as to get everything setup and get our new platform booting
-> without any issues, assuming the associated code is present. The
-> ATAGS is not mandatory it removed some warning messages during
-> kernel boot.
+Don't create "novel" uses of uevents.  They are there to express a
+change in state of a device so that userspace can then go and do
+something with that information.  If that pattern fits here, wonderful.
 
-Ok, good. I assume you need the watchdog driver to be built-in because
-the watchdog timer is active before we enter the kernel? In this case it
-is ok, otherwise it should be =m, like any other drivers for your hardware.
+I doubt you can report "test results" via a uevent in a way that the
+current uevent states and messages would properly convey, but hey, maybe
+I'm wrong.
 
-I don't think we should enable CONFIG_ATAGS here, the multi_v7_defconfig
-intentionally only supports DTB based booting. What is the warning you see
-without it?
+good luck!
 
-> I know this is removing some standard feature, but, I probably can't easily fix
->  the missing instructions. I can dig a little bit if needed without any issue.
-> If we want to have a working defconfig on HPE GXP platform, then we need
-> to either take this modification, or change the code from perf_events and
-> arch_virt to properly work if the required underlying hardware is unable to
-> support these features (could be probably a dummy test to identify the asic
-> at compilation time), or create a specific defconfig.
-
-ARCH_VIRT doesn't do anything itself but only enables a couple of other drivers:
-
-config ARCH_VIRT
-        bool "Dummy Virtual Machine"
-        depends on ARCH_MULTIPLATFORM
-        select ARM_AMBA
-        select ARM_GIC
-        select ARM_GIC_V2M if PCI
-        select ARM_GIC_V3
-        select ARM_GIC_V3_ITS if PCI
-        select ARM_PSCI
-        select HAVE_ARM_ARCH_TIMER
-        select ARCH_SUPPORTS_BIG_ENDIAN
-
-Aside from the big-endian option, these all just enable the compilation
-of drivers that in turn check the device tree before running any code.
-
-Invalid instructions point to either PSCI or ARCH_TIMER, so try
-disabling those first to narrow it down to one option causing the
-problem, and make sure you actually run with the DTB that you
-submitted, not a DTB that may contain incorrect nodes.
-
-        Arnd
+greg k-h

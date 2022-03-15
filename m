@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259364D9B5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9994D9B62
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348340AbiCOMkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S1348381AbiCOMks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348211AbiCOMkb (ORCPT
+        with ESMTP id S1348372AbiCOMko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:40:31 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E095630F53;
-        Tue, 15 Mar 2022 05:39:17 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 15 Mar
- 2022 20:39:12 +0800
-Received: from [10.29.8.53] (10.29.8.53) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 15 Mar
- 2022 20:39:10 +0800
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Message-ID: <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
-Date:   Tue, 15 Mar 2022 20:39:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 15 Mar 2022 08:40:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60B030F6C;
+        Tue, 15 Mar 2022 05:39:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FF5BB81630;
+        Tue, 15 Mar 2022 12:39:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270BBC340E8;
+        Tue, 15 Mar 2022 12:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647347969;
+        bh=Xu4F+fpf6Kj3aX2H8U9N2rdNJGG8OWcAEfEgX1uW+dA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=czJE0DAkoeNQWzjvQgvBeZIOR2dZ1jHu76CDKdg9CZKwO3pJ4+jLH5cFmwNqSXTDt
+         5jveE7WsX5hsp+lT324Qqn/OC3rz8Q0nPU2Eb+VFG6i4J0c2QHBrHuG6MW//GZ+g6o
+         kK5E1NArUtR8NxT3bFjooY8LAPPQIV0dQ/GXuWqI=
+Date:   Tue, 15 Mar 2022 13:39:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
+        Sasha Levin <sashal@kernel.org>, jasowang@redhat.com
+Subject: Re: [PATCH 5.15 015/110] vhost: fix hung thread due to erroneous
+ iotlb entries
+Message-ID: <YjCI/Gd6oFiC1J8Z@kroah.com>
+References: <20220314112743.029192918@linuxfoundation.org>
+ <20220314112743.460512435@linuxfoundation.org>
+ <Yi9p8xsrWV+GD9c3@anirudhrb.com>
+ <YjBaOClDdNQkxtM8@kroah.com>
+ <20220315074834-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.53]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315074834-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,166 +58,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/14 10:24, Alan Stern wrote:
-> On Mon, Mar 14, 2022 at 03:35:37PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->> In zhaoxin platform, some ehci projects will latch a wakeup signal
->> internal when plug in a device on port during system S0. This wakeup
->> signal will turn on when ehci runtime suspend, which will trigger a
->> system control interrupt that will resume ehci back to D0. As no
->> device connect, ehci will be set to runtime suspend and turn on the
->> internal latched wakeup signal again. It will cause a suspend-resume
->> loop and generate system control interrupt continuously.
->>
->> Fixed this issue by clear wakeup signal latched in ehci internal when
->> ehci resume callback is called.
->>
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->> ---
->>   drivers/usb/host/ehci-hcd.c | 26 ++++++++++++++++++++++++++
->>   drivers/usb/host/ehci-pci.c |  4 ++++
->>   drivers/usb/host/ehci.h     |  1 +
->>   3 files changed, 31 insertions(+)
->>
->> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
->> index 3d82e0b..e4840ef 100644
->> --- a/drivers/usb/host/ehci-hcd.c
->> +++ b/drivers/usb/host/ehci-hcd.c
->> @@ -1103,6 +1103,30 @@ static void ehci_remove_device(struct usb_hcd *hcd,
->> struct usb_device *udev)
->>
->>   #ifdef CONFIG_PM
->>
->> +/* Clear wakeup signal locked in zhaoxin platform when device plug in. */
->> +static void ehci_zx_wakeup_clear(struct ehci_hcd *ehci)
->> +{
->> +       u32 __iomem     *reg = &ehci->regs->port_status[4];
->> +       u32     t1 = ehci_readl(ehci, reg);
+On Tue, Mar 15, 2022 at 07:50:10AM -0400, Michael S. Tsirkin wrote:
+> On Tue, Mar 15, 2022 at 10:19:52AM +0100, Greg Kroah-Hartman wrote:
+> > On Mon, Mar 14, 2022 at 09:44:43PM +0530, Anirudh Rayabharam wrote:
+> > > Mon, Mar 14, 2022 at 12:53:17PM +0100, Greg Kroah-Hartman wrote:
+> > > > From: Anirudh Rayabharam <mail@anirudhrb.com>
+> > > > 
+> > > > [ Upstream commit e2ae38cf3d91837a493cb2093c87700ff3cbe667 ]
+> > > 
+> > > This breaks batching of IOTLB messages. [1] fixes it but hasn't landed in
+> > > Linus' tree yet.
+> > > 
+> > > [1]: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=linux-next&id=95932ab2ea07b79cdb33121e2f40ccda9e6a73b5
+> > 
+> > Why is this tree not in linux-next?  I don't see this commit there, so
+> > how can it get to Linus properly?
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> The "t1" in this line should start in the same column as the "*reg" in
-> the line above, to match the style of other variable declarations in
-> this file (see ehci_init() as an example).
+> It is in next normally. I was sure this commit was there too. I'm not sure
+> what happened, maybe I forgot to push :(
 > 
->> +
->> +       t1 &= (u32)~0xf0000;
->> +       t1 |= PORT_TEST_FORCE;
->> +       ehci_writel(ehci, t1, reg);
->> +       t1 = ehci_readl(ehci, reg);
->> +       msleep(1);
->> +       t1 &= (u32)~0xf0000;
->> +       ehci_writel(ehci, t1, reg);
->> +       ehci_readl(ehci, reg);
->> +       msleep(1);
->> +       t1 = ehci_readl(ehci, reg);
->> +       ehci_writel(ehci, t1 | PORT_CSC, reg);
->> +       ehci_readl(ehci, reg);
->> +       udelay(500);
->> +       t1 = ehci_readl(ehci, &ehci->regs->status);
->> +       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
->> +       ehci_readl(ehci, &ehci->regs->status);
-> 
-> You should not clear the STS_PCD bit.  What if some other port had a
-> status change at the same time?  Then because you cleared the
-> port-change-detect bit, the system would not realize that the other port
-> needed to be handled.
 
-I really didn't think about this case.
+It's on kernel.org already though.
 
-> Leaving the STS_PCD bit turned on will cause the driver to do a little
-> extra work, but it shouldn't cause any harm.
-> 
-I have encountered the following situation if EHCI runtime suspend is 
-enabled by default.
+Anyway, I'll just take it from here directly, thanks.
 
-
-
-1.Wake from system to disk and boot OS.
-
-2.EHCI will entry runtime suspend after enumerated by driver during boot 
-phase of suspend to disk
-
-
-3.EHCI will be placed to freeze state and ehci_resume is called after 
-image is loaded.
-
-
-4.If PCD flag is set(caused by patch), then HCD_FLAG_RH_RUNNING will be set.
-
-
-5.Pci_pm_freeze_noirq is called to check ehci root hub state and return 
-value is -EBUSY. which will cause
-  quiesce phase of suspend to disk fail.
-
-
-
-However,EHCI runtime suspend is default disabled by kernel, user can 
-enable runtime suspend after boot into OS.
-  So I guess turning on suspend during startup is not a real requirement 
-and I will take your advice.
-
-Weitao Wang
->> +}
->> +
->>   /* suspend/resume, section 4.3 */
->>
->>   /* These routines handle the generic parts of controller suspend/resume */
->> @@ -1154,6 +1178,8 @@ int ehci_resume(struct usb_hcd *hcd, bool force_reset)
->>          if (ehci->shutdown)
->>                  return 0;               /* Controller is dead */
->>
->> +       if (ehci->zx_wakeup_clear == 1)
-> 
-> You don't need to check that the value is equal to 1.  Treat this
-> more like a Boolean flag and just write:
-> 
-> 	if (ehci->zx_wakeup_clear)
-> 
-> Also, to make the flag's meaning more obvious, you might want to name
-> it "zx_wakeup_clear_needed" or "zx_clear_latched_wakeup".
-> 
-> Otherwise this patch looks okay.  Please submit a revised version,
-> without the whitespace damage.
-> 
-> Alan Stern
-
-Okay,I will take your advice
-Weitao Wang
-
-> 
->> +               ehci_zx_wakeup_clear(ehci);
->>          /*
->>           * If CF is still set and reset isn't forced
->>           * then we maintained suspend power.
->> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
->> index e87cf3a..a5e27de 100644
->> --- a/drivers/usb/host/ehci-pci.c
->> +++ b/drivers/usb/host/ehci-pci.c
->> @@ -222,6 +222,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
->>                          ehci->has_synopsys_hc_bug = 1;
->>                  }
->>                  break;
->> +       case PCI_VENDOR_ID_ZHAOXIN:
->> +               if (pdev->device == 0x3104 && (pdev->revision & 0xf0) ==
->> 0x90)
->> +                       ehci->zx_wakeup_clear = 1;
->> +               break;
->>          }
->>
->>          /* optional debug port, normally in the first BAR */
->> diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
->> index fdd073c..712fdd0 100644
->> --- a/drivers/usb/host/ehci.h
->> +++ b/drivers/usb/host/ehci.h
->> @@ -220,6 +220,7 @@ struct ehci_hcd {                   /* one per
->> controller */
->>          unsigned                imx28_write_fix:1; /* For Freescale i.MX28
->> */
->>          unsigned                spurious_oc:1;
->>          unsigned                is_aspeed:1;
->> +       unsigned                zx_wakeup_clear:1;
->>
->>          /* required for usb32 quirk */
->>          #define OHCI_CTRL_HCFS          (3 << 6)
->> -- 
->> 2.7.4
-> .
-> 
+greg k-h

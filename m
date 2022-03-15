@@ -2,237 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606EA4D9FE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049DE4D9FE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241023AbiCOQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S1350018AbiCOQXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239900AbiCOQXo (ORCPT
+        with ESMTP id S239900AbiCOQXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:23:44 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF27156777;
-        Tue, 15 Mar 2022 09:22:31 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FGEQbg019652;
-        Tue, 15 Mar 2022 16:21:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=UW+pjKjsIWdwIjUe8EKCM7nF6A55i4kkxk6KEUWHHTw=;
- b=VOEhXfV24hITYknHaw/91LuBkl5CFArG8mxjFbgCMaObzXkpr8ceek5tHxjI0OQBtUEk
- 8tCGGJ8saE0Ycxh/pGbhMujl/nzzGGRkoH8E67+Kg5MpPpv6SQsFUwu6Ue7Em/d1VsjL
- SRyNuSVTaBGZyUd6FNkzcYQ26+d18Br/wKuxZb14JpVnMBjL3dnPz3ZM2vBp1ycYMb/6
- A/bcSMWEa0Zgfeqcxp7kbTKb04ih3AdPtxsCdJbl3UJNxmYhLOBm+I6J322vwsZhTfci
- 8aGv75kavHaK6ldEgH60zyuOQSE9jyk4PoZDaYC+wqSa3u4WT7uX8fshnnky85VjXo7/ 1A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etvbmbbtx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 16:21:13 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22FGEq1i024701;
-        Tue, 15 Mar 2022 16:21:13 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etvbmbbs1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 16:21:12 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FFxLUG017851;
-        Tue, 15 Mar 2022 16:21:10 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3erk58p0g5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 16:21:10 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FGL6rF27066832
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 16:21:06 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4BC08AE055;
-        Tue, 15 Mar 2022 16:21:06 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8EE82AE045;
-        Tue, 15 Mar 2022 16:21:04 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.6.24])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue, 15 Mar 2022 16:21:04 +0000 (GMT)
-Date:   Tue, 15 Mar 2022 17:21:02 +0100
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v1 5/7] s390/pgtable: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <20220315172102.771bd2cf@thinkpad>
-In-Reply-To: <20220315141837.137118-6-david@redhat.com>
-References: <20220315141837.137118-1-david@redhat.com>
-        <20220315141837.137118-6-david@redhat.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Tue, 15 Mar 2022 12:23:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B512056743
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647361325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EPCxMOruGP4ECg9p3MjkBdYqTpnkjCbZPqgHjAnjze0=;
+        b=PLsiNrFto2tQBPwikAoazl8lWrTtM5z1cXB+lQtsueFcqBxUwPXcYSZOJJZNgJRbLNr40K
+        CWX0m+CufLXz4tDYInqfTBLtxbYt2qfFYk3lkel3D3N/y6ec3PGsr/y4gyjPnfm6DRkAYr
+        KTPS9xjrYctiW50I8VSjSQc2eRMPVaA=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-493-kX5gxdXSPbKtbIGU-ZEBMA-1; Tue, 15 Mar 2022 12:22:04 -0400
+X-MC-Unique: kX5gxdXSPbKtbIGU-ZEBMA-1
+Received: by mail-il1-f200.google.com with SMTP id b7-20020a056e020c8700b002c7c2711fa1so927109ile.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:22:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=EPCxMOruGP4ECg9p3MjkBdYqTpnkjCbZPqgHjAnjze0=;
+        b=XAREoRfH2+TExdyfnbgQGNVQR+UCZz+zFmyJxleFKJPH8ZoyP0g8SpButFQe67lJPi
+         RHYRYj+0eqwviKXJ1P1oeYk1fdty7cIubmGvq2tv4ZUBJibN9gNE9mmqqz2JM09HJOTm
+         yOkSTCAbJPwb3Cyl+nkScZXf1fLAbRnyf+OoHIIrHgsnOGBnq+/nGppbGQPzvd5xfD40
+         pWF9yS5HTMM7513SZShvJNUjlsolLrbR6RIn+I2YQpIK/7ms3Mm3l9W6uiRzo6rflnjd
+         Lx82GprKwECYLSlKhp78dk8D480kbe7mBwVc5ewxQgnZzITYJno160nUBe/O14dlWqCZ
+         4fRg==
+X-Gm-Message-State: AOAM531SZi3FDEYBbe4N+qUzgyDV+buxOsZaJv7NCI3Bw+YRH0fR2oSI
+        LZk/CLxEsLHCiQrQgvOZ591p52pnSPvD/qEjfWX6lUX4h+XkUr+ehwO5FW6DscdhajpoYiW1G+1
+        2G02bFNiNihv65ZT0NIy099AY
+X-Received: by 2002:a05:6602:3c5:b0:613:8644:591c with SMTP id g5-20020a05660203c500b006138644591cmr22941613iov.161.1647361323356;
+        Tue, 15 Mar 2022 09:22:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx6rk4BbKzeOLEUR+UXUmdhhJiZZFfUw0L0hpIM8fKgHXE7IUVbAFDE8s/iV9SZ6Qqtf5DcWw==
+X-Received: by 2002:a05:6602:3c5:b0:613:8644:591c with SMTP id g5-20020a05660203c500b006138644591cmr22941597iov.161.1647361323164;
+        Tue, 15 Mar 2022 09:22:03 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id k1-20020a056e021a8100b002c64cf94399sm11683708ilv.44.2022.03.15.09.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 09:22:02 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:22:00 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shameerali.kolothum.thodi@huawei.com,
+        kevin.tian@intel.com, yishaih@nvidia.com,
+        linux-doc@vger.kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v3] vfio-pci: Provide reviewers and acceptance criteria
+ for vendor drivers
+Message-ID: <20220315102200.15a86b16.alex.williamson@redhat.com>
+In-Reply-To: <20220315155304.GC11336@nvidia.com>
+References: <164728932975.54581.1235687116658126625.stgit@omen>
+        <87a6drh8hy.fsf@redhat.com>
+        <20220315155304.GC11336@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: eRCSI5w-tlE5sK1rQh4ufLQ4p6TxCS6h
-X-Proofpoint-ORIG-GUID: 7RtkXXw2cQTrBuz4kjlLUBH_amFhVLPx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- priorityscore=1501 clxscore=1011 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203150102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 15:18:35 +0100
-David Hildenbrand <david@redhat.com> wrote:
+On Tue, 15 Mar 2022 12:53:04 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> Let's steal one bit from the offset. While at it, document the meaning
-> of bit 62 for swap ptes.
-
-You define _PAGE_SWP_EXCLUSIVE as _PAGE_LARGE, which is bit 52, and
-this is not part of the swap pte offset IIUC. So stealing any bit might
-actually not be necessary, see below.
-
-Also, bit 62 should be the soft dirty bit for normal PTEs, and this
-doesn't seem to be used for swap PTEs at all. But I might be missing
-some use case where softdirty also needs to be preserved in swap PTEs.
-
+> On Tue, Mar 15, 2022 at 10:26:17AM +0100, Cornelia Huck wrote:
+> > On Mon, Mar 14 2022, Alex Williamson <alex.williamson@redhat.com> wrote:
+> >   
+> > > Vendor or device specific extensions for devices exposed to userspace
+> > > through the vfio-pci-core library open both new functionality and new
+> > > risks.  Here we attempt to provided formalized requirements and
+> > > expectations to ensure that future drivers both collaborate in their
+> > > interaction with existing host drivers, as well as receive additional
+> > > reviews from community members with experience in this area.
+> > >
+> > > Cc: Jason Gunthorpe <jgg@nvidia.com>
+> > > Cc: Yishai Hadas <yishaih@nvidia.com>
+> > > Cc: Kevin Tian <kevin.tian@intel.com>
+> > > Acked-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> > > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>  
+> > 
+> > (...)
+> >   
+> > > diff --git a/Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst b/Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst
+> > > new file mode 100644
+> > > index 000000000000..3a108d748681
+> > > +++ b/Documentation/driver-api/vfio-pci-vendor-driver-acceptance.rst  
+> > 
+> > What about Christoph's request to drop the "vendor" name?
+> > vfio-pci-device-specific-driver-acceptance.rst would match the actual
+> > title of the document, and the only drawback I see is that it is a bit
+> > longer.  
 > 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  arch/s390/include/asm/pgtable.h | 37 ++++++++++++++++++++++++++-------
->  1 file changed, 30 insertions(+), 7 deletions(-)
+> I agree we should not use the vendor name
 > 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 008a6c856fa4..c182212a2b44 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -181,6 +181,8 @@ static inline int is_module_addr(void *addr)
->  #define _PAGE_SOFT_DIRTY 0x000
->  #endif
->  
-> +#define _PAGE_SWP_EXCLUSIVE _PAGE_LARGE	/* SW pte exclusive swap bit */
-> +
->  /* Set of bits not changed in pte_modify */
->  #define _PAGE_CHG_MASK		(PAGE_MASK | _PAGE_SPECIAL | _PAGE_DIRTY | \
->  				 _PAGE_YOUNG | _PAGE_SOFT_DIRTY)
-> @@ -796,6 +798,24 @@ static inline int pmd_protnone(pmd_t pmd)
->  }
->  #endif
->  
-> +#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-> +static inline pte_t pte_swp_mkexclusive(pte_t pte)
-> +{
-> +	pte_val(pte) |= _PAGE_SWP_EXCLUSIVE;
-> +	return pte;
-> +}
-> +
-> +static inline int pte_swp_exclusive(pte_t pte)
-> +{
-> +	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
-> +}
-> +
-> +static inline pte_t pte_swp_clear_exclusive(pte_t pte)
-> +{
-> +	pte_val(pte) &= ~_PAGE_SWP_EXCLUSIVE;
-> +	return pte;
-> +}
-> +
->  static inline int pte_soft_dirty(pte_t pte)
->  {
->  	return pte_val(pte) & _PAGE_SOFT_DIRTY;
-> @@ -1675,16 +1695,19 @@ static inline int has_transparent_hugepage(void)
->   * information in the lowcore.
->   * Bits 54 and 63 are used to indicate the page type.
->   * A swap pte is indicated by bit pattern (pte & 0x201) == 0x200
-> - * This leaves the bits 0-51 and bits 56-62 to store type and offset.
-> - * We use the 5 bits from 57-61 for the type and the 52 bits from 0-51
-> + * This leaves the bits 0-50 and bits 56-61 to store type and offset.
-> + * We use the 5 bits from 57-61 for the type and the 51 bits from 0-50
->   * for the offset.
-> - * |			  offset			|01100|type |00|
-> - * |0000000000111111111122222222223333333333444444444455|55555|55566|66|
-> - * |0123456789012345678901234567890123456789012345678901|23456|78901|23|
-> + * |			  offset		       |E|01100|type |S0|
-> + * |000000000011111111112222222222333333333344444444445|5|55555|55566|66|
-> + * |012345678901234567890123456789012345678901234567890|1|23456|78901|23|
-> + *
-> + * S (bit 62) is used for softdirty tracking.
+> In general I wonder if this is a bit too specific to PCI, really this
+> is just review criteria for any driver making a struct vfio_device_ops
+> implementation, and we have some specific guidance for migration here
+> as well.
+> 
+> Like if IBM makes s390 migration drivers all of this applies just as
+> well even though they are not PCI.
 
-Unless there is some use for softdirty tracking in swap PTEs, I think
-this description does not belong here, to the swap PTE layout.
+Are you volunteering to be a reviewer under drivers/vfio/?  Careful,
+I'll add you ;)
 
-> + * E (bit 51) is used to remember PG_anon_exclusive.
+What you're saying is true of course and it could be argued that this
+sort of criteria is true for any new driver, I think the unique thing
+here that raises it to a point where we want to formalize the breadth
+of reviews is how significantly lower the bar is to create a device
+specific driver now that we have a vfio-pci-core library.  Shameer's
+stub driver is 100 LoC.  I also expect that the pool of people willing
+to volunteer to be reviewers for PCI related device specific drivers is
+large than we might see for arbitrary drivers.
 
-It is bit 52, at least with this patch, so I guess this could all be
-done w/o stealing anything. That is, of course, only if it is allowed
-to use bit 52 in this case. The POP says bit 52 has to be 0, or else
-a "translation-specification exception" is recognized. However, I think
-it could be OK for PTEs marked as invalid, like it is the case for swap
-PTEs.
+> > > +New driver submissions are therefore requested to have approval via
+> > > +Sign-off/Acked-by/etc for any interactions with parent drivers.  
+> > 
+> > s/Sign-off/Reviewed-by/ ?
+> > 
+> > I would not generally expect the reviewers listed to sign off on other
+> > people's patches.  
+> 
+> It happens quite a lot when those people help write the patches too :)
 
-The comment here says at the beginning:
-/*
- * 64 bit swap entry format:
- * A page-table entry has some bits we have to treat in a special way.
- * Bits 52 and bit 55 have to be zero, otherwise a specification
- * exception will occur instead of a page translation exception. The
- * specification exception has the bad habit not to store necessary
- * information in the lowcore.
+This is what "etc" is for, the owners are involved and have endorsed it
+in some way, that's all we care about.  Thanks,
 
-This would mean that it is not OK to have bit 52 not zero for swap PTEs.
-But if I read the POP correctly, all bits except for the DAT-protection
-would be ignored for invalid PTEs, so maybe this comment needs some update
-(for both bits 52 and also 55).
+Alex
 
-Heiko might also have some more insight.
-
-Anyway, stealing bit 51 might still be an option, but then
-_PAGE_SWP_EXCLUSIVE would need to be defined appropriately.

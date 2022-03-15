@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931494DA1C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A44E4DA1C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350855AbiCOSBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
+        id S1350876AbiCOSBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350830AbiCOSB3 (ORCPT
+        with ESMTP id S1350839AbiCOSBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:01:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE3958E7A;
-        Tue, 15 Mar 2022 11:00:16 -0700 (PDT)
-X-UUID: b121d24c9a0f431699757da28a3b5638-20220316
-X-UUID: b121d24c9a0f431699757da28a3b5638-20220316
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        Tue, 15 Mar 2022 14:01:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC744593A3;
+        Tue, 15 Mar 2022 11:00:17 -0700 (PDT)
+X-UUID: b3b294a419d54aa5afd5d4de896caa4b-20220316
+X-UUID: b3b294a419d54aa5afd5d4de896caa4b-20220316
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <sean.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1024522193; Wed, 16 Mar 2022 02:00:09 +0800
+        with ESMTP id 1381645645; Wed, 16 Mar 2022 02:00:13 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 02:00:08 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Mar 2022 02:00:09 +0800
 Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 02:00:08 +0800
+ Transport; Wed, 16 Mar 2022 02:00:09 +0800
 From:   <sean.wang@mediatek.com>
 To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
 CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
@@ -42,10 +43,11 @@ CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
         <mcchou@chromium.org>, <shawnku@google.com>,
         <linux-bluetooth@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Yake Yang <yake.yang@mediatek.com>
-Subject: [PATCH RESEND 3/5] Bluetooth: mt7921s: Add .get_data_path_id
-Date:   Wed, 16 Mar 2022 02:00:02 +0800
-Message-ID: <b790033dfbaded0ccec1247200dc2bc22a7a7cac.1647367024.git.objelf@gmail.com>
+        <linux-kernel@vger.kernel.org>,
+        "Yake Yang" <yake.yang@mediatek.com>
+Subject: [PATCH RESEND 4/5] Bluetooth: mt7921s: Add .btmtk_get_codec_config_data
+Date:   Wed, 16 Mar 2022 02:00:03 +0800
+Message-ID: <ba7eb1d029859bf47cb28391d5c8572df924ffc8.1647367024.git.objelf@gmail.com>
 X-Mailer: git-send-email 1.7.9.5
 In-Reply-To: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647367024.git.objelf@gmail.com>
 References: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647367024.git.objelf@gmail.com>
@@ -63,8 +65,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yake Yang <yake.yang@mediatek.com>
 
-Add .get_data_path_id to fetch data_path_id for MT7921 to support HFP
-offload use case.
+add .btmtk_get_codec_config_data to get codec configuration data.
+
+In HFP offload usecase, controllers need to be set codec details before
+opening SCO. This callback function is used to fetch vendor specific codec
+config data.
 
 This is a preliminary patch to add the WBS support to the MT7921 driver.
 
@@ -73,42 +78,77 @@ Co-developed-by: Sean Wang <sean.wang@mediatek.com>
 Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 Signed-off-by: Yake Yang <yake.yang@mediatek.com>
 ---
- drivers/bluetooth/btmtksdio.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/bluetooth/btmtksdio.c | 50 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
 diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index 034e55278c56..4000a994fe2c 100644
+index 4000a994fe2c..c28eb9fc6176 100644
 --- a/drivers/bluetooth/btmtksdio.c
 +++ b/drivers/bluetooth/btmtksdio.c
-@@ -936,6 +936,13 @@ static int btmtksdio_mtk_reg_write(struct hci_dev *hdev, u32 reg, u32 val, u32 m
- 	return err;
+@@ -943,6 +943,55 @@ static int btmtksdio_get_data_path_id(struct hci_dev *hdev, __u8 *data_path_id)
+ 	return 0;
  }
  
-+static int btmtksdio_get_data_path_id(struct hci_dev *hdev, __u8 *data_path_id)
++static int btmtksdio_get_codec_config_data(struct hci_dev *hdev,
++					   __u8 link, struct bt_codec *codec,
++					   __u8 *ven_len, __u8 **ven_data)
 +{
-+	/* uses 1 as data path id for all the usecases */
-+	*data_path_id = 1;
-+	return 0;
++	int err = 0;
++
++	if (!ven_data || !ven_len)
++		return -EINVAL;
++
++	*ven_len = 0;
++	*ven_data = NULL;
++
++	if (link != ESCO_LINK) {
++		bt_dev_err(hdev, "Invalid link type(%u)", link);
++		return -EINVAL;
++	}
++
++	*ven_data = kmalloc(sizeof(__u8), GFP_KERNEL);
++	if (!ven_data) {
++		err = -ENOMEM;
++		goto error;
++	}
++
++	/* supports only CVSD and mSBC offload codecs */
++	switch (codec->id) {
++	case 0x02:
++		**ven_data = 0x00;
++		break;
++	case 0x05:
++		**ven_data = 0x01;
++		break;
++	default:
++		err = -EINVAL;
++		bt_dev_err(hdev, "Invalid codec id(%u)", codec->id);
++		goto error;
++	}
++	/* codec and its capabilities are pre-defined to ids
++	 * preset id = 0x00 represents CVSD codec with sampling rate 8K
++	 * preset id = 0x01 represents mSBC codec with sampling rate 16K
++	 */
++	*ven_len = sizeof(__u8);
++	return err;
++
++error:
++	kfree(*ven_data);
++	*ven_data = NULL;
++	return err;
 +}
 +
  static int btmtksdio_sco_setting(struct hci_dev *hdev)
  {
  	const struct btmtk_sco sco_setting = {
-@@ -968,7 +975,13 @@ static int btmtksdio_sco_setting(struct hci_dev *hdev)
+@@ -980,6 +1029,7 @@ static int btmtksdio_sco_setting(struct hci_dev *hdev)
  		return err;
  
- 	val |= 0x00000101;
--	return btmtksdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0);
-+	err =  btmtksdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0);
-+	if (err < 0)
-+		return err;
-+
-+	hdev->get_data_path_id = btmtksdio_get_data_path_id;
-+
-+	return err;
- }
+ 	hdev->get_data_path_id = btmtksdio_get_data_path_id;
++	hdev->get_codec_config_data = btmtksdio_get_codec_config_data;
  
- static int btmtksdio_reset_setting(struct hci_dev *hdev)
+ 	return err;
+ }
 -- 
 2.25.1
 

@@ -2,177 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A424DA302
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD5E4DA325
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245232AbiCOTJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S1351315AbiCOTPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245487AbiCOTJC (ORCPT
+        with ESMTP id S235851AbiCOTPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:09:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79EAADA9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647371267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fBJf1R7kBM9gH+xhtNa/kOhtVdAYjEafv1mIR3CkHEI=;
-        b=a02ENoeAkU4H1SxZNuyf7cP0Rqd3nz3Nz1EWmF8nCz3aleTwmNLpN8V2YdlMaWeXn7zqb/
-        A+Fc/A+yBoU8P3SS1WOTK41LK2/DV6UzTa54p4+RnqhSaU7pb3sJLj8WOShX+vwKqLIT1K
-        LUn3wX3zqZNeIx/LMJT0O7tKsKjvKfI=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-488-Y4HYs6etMH-c-cgy4F4Y0w-1; Tue, 15 Mar 2022 15:07:46 -0400
-X-MC-Unique: Y4HYs6etMH-c-cgy4F4Y0w-1
-Received: by mail-wr1-f69.google.com with SMTP id a16-20020adff7d0000000b001f0473a6b25so5646306wrq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:07:45 -0700 (PDT)
+        Tue, 15 Mar 2022 15:15:16 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C676450;
+        Tue, 15 Mar 2022 12:14:03 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id hw13so41605710ejc.9;
+        Tue, 15 Mar 2022 12:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EFbNP0w17xl4ckdv5kSOTgg6lZ5fIOgNdcD9IrB7lZg=;
+        b=nEWTjh3R0qw2MipkYfZuI0wD5nIYhk9jDbUZJkU5yx/6WkTNzqOlh1+crJ1GxgbOpD
+         aFNTBS8E/wbdwQutDEHcHc/JiSLCaSYpAME4NbTiUyjUstDWJTTHeaH9ouA2jv4e96I7
+         6p84LWCSgC9SiVrA5FV1SX99MslJ/FDBERDu84cXu7NgDto6gFEBqoYjHWb8xFu5p16Q
+         lNBIJ+svxwtN57DVr2rLD7LprJxsvnJRw6Zacp8E0sauEPaoO1Pq0zWCroJjHoS8hP9+
+         atylVOW2c49WzA+9qdN07181oobuGKAxwi/1ESVnxYMcQSVHFy2/kz37UsNI2poGn3Ge
+         PDeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=fBJf1R7kBM9gH+xhtNa/kOhtVdAYjEafv1mIR3CkHEI=;
-        b=Qbq1waiA93gl6cJsaw0lbcexMShxYMwf5vcK3B5zjfYJI6p6+ziT7BqeLrdCvjpFfy
-         rhJWIdQyRlShlcfw2DR/3SLzppyFQX6zh2VnDZ9JsXDxN+OSpXk7/bLab9Opzw6ruYjT
-         dgzqa4XS438VVrKiyRtZAMoleUmhJ0QImEfJmnFS88W+58jwGPaMmSFAcU15tsJaTW73
-         y1PsGTB8bkr/wFgS0Q1uBKkj5E0MRUcABk+HY+GUQt7e/q4ezDZ2aIQ1biJZpou+Gxuk
-         MIE/X7G/aQZp4RIiNVVW/SrUNX8eQc6hmKfx/vFE8WJ+6V8PrbkoSJQrE4JgHI7GzRuP
-         bNzw==
-X-Gm-Message-State: AOAM531yzbY21jWDgSbnao4O/AXxjynR/0Ebg3rwEhOFUqsz3LIH06dQ
-        LWdVANBLSAl+ZGw/kzRgmIaueMWu6G3KuWknDxrXYmFmtWjxTajoYyjR4ZXMM6LDzkK7kpv4M5Z
-        jhT+QwozVco8+ha4b0I2cNGgK
-X-Received: by 2002:a05:600c:1c9f:b0:389:cf43:da64 with SMTP id k31-20020a05600c1c9f00b00389cf43da64mr4480395wms.206.1647371264797;
-        Tue, 15 Mar 2022 12:07:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyzLlJbwR1xveI8URJ60kP+00Vz8I0FYYiVHPL3IeEWq8UXFCK8AWIjfhzlGgS3nbkP0cs5A==
-X-Received: by 2002:a05:600c:1c9f:b0:389:cf43:da64 with SMTP id k31-20020a05600c1c9f00b00389cf43da64mr4480382wms.206.1647371264585;
-        Tue, 15 Mar 2022 12:07:44 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:1800:42bd:3cac:d22a:3c62? (p200300cbc708180042bd3cacd22a3c62.dip0.t-ipconnect.de. [2003:cb:c708:1800:42bd:3cac:d22a:3c62])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm16915200wrh.87.2022.03.15.12.07.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 12:07:43 -0700 (PDT)
-Message-ID: <a39c3fe4-3309-dbc4-77f9-f797e3131feb@redhat.com>
-Date:   Tue, 15 Mar 2022 20:07:42 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EFbNP0w17xl4ckdv5kSOTgg6lZ5fIOgNdcD9IrB7lZg=;
+        b=XtcOCnrc/sRcSC+noMgQnpTLMnDEGI/eidkQGNH1cAFli6zlr90dTTc4GZTYr0a4sq
+         DMIllINFiilcD0mtnzxkHCHjSctUZ5HymlYuzmjDa+QzRbiwkVbF21wJBaF0bNehfujP
+         KwNCHDOwEULAuhrckASAlyT1bBGRJymi3jbuzXip2GABeqTgvPEdqSmjjyYG35djE/Wj
+         qgtVZfx1QPeEEtkfLW7ViunWcB6q+sfUWxZL2mHFAfFFc7nTlnu9CKyxQvekvtztZZwM
+         6qfU+em6Jh/d46tU9m6ND6PMXvMFZoS4SIOzllKJAml/UDHzp4VPgj7YHsrxZkiu0IzO
+         9LlA==
+X-Gm-Message-State: AOAM530ULk8Jc+ruLrhOPrq31C5aFQZ1+CJkFodHUc1ZeotUlybBltRS
+        9paDVwcZwcrZ35m+fedL2fM=
+X-Google-Smtp-Source: ABdhPJyqnW/s/xxkoxZyQK1hpu8pU8gNgK4myEyJyvcj0jAlA6+BetXmfPBcIbP6vXrwUlJczymR1w==
+X-Received: by 2002:a17:906:a0ce:b0:6d1:cb30:3b3b with SMTP id bh14-20020a170906a0ce00b006d1cb303b3bmr23968745ejb.582.1647371641484;
+        Tue, 15 Mar 2022 12:14:01 -0700 (PDT)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm8408270ejj.74.2022.03.15.12.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 12:14:00 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 21:13:58 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jianbo Liu <jianbol@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, rajur@chelsio.com,
+        claudiu.manoil@nxp.com, sgoutham@marvell.com, gakula@marvell.com,
+        sbhatta@marvell.com, hkelam@marvell.com, saeedm@nvidia.com,
+        leon@kernel.org, idosch@nvidia.com, petrm@nvidia.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        simon.horman@corigine.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        baowen.zheng@corigine.com, louis.peens@netronome.com,
+        peng.zhang@corigine.com, oss-drivers@corigine.com, roid@nvidia.com
+Subject: Re: [PATCH net-next v3 1/2] net: flow_offload: add tc police action
+ parameters
+Message-ID: <20220315191358.taujzi2kwxlp6iuf@skbuf>
+References: <20220224102908.5255-1-jianbol@nvidia.com>
+ <20220224102908.5255-2-jianbol@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] mm/migrate: fix race between lock page and clear
- PG_Isolated
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrew Yang <andrew.yang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Yang Shi <shy828301@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com,
-        Nicholas Tang <nicholas.tang@mediatek.com>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-References: <20220315030515.20263-1-andrew.yang@mediatek.com>
- <20220314212127.a2797926ee0ef8a7ad05dcaa@linux-foundation.org>
- <4cb789a5-c49c-f095-1f7e-67be65ba508a@redhat.com>
- <YjDQRdShE6syVSnM@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YjDQRdShE6syVSnM@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224102908.5255-2-jianbol@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.03.22 18:43, Matthew Wilcox wrote:
-> On Tue, Mar 15, 2022 at 04:45:13PM +0100, David Hildenbrand wrote:
->> On 15.03.22 05:21, Andrew Morton wrote:
->>> On Tue, 15 Mar 2022 11:05:15 +0800 Andrew Yang <andrew.yang@mediatek.com> wrote:
->>>
->>>> When memory is tight, system may start to compact memory for large
->>>> continuous memory demands. If one process tries to lock a memory page
->>>> that is being locked and isolated for compaction, it may wait a long time
->>>> or even forever. This is because compaction will perform non-atomic
->>>> PG_Isolated clear while holding page lock, this may overwrite PG_waiters
->>>> set by the process that can't obtain the page lock and add itself to the
->>>> waiting queue to wait for the lock to be unlocked.
->>>>
->>>> CPU1                            CPU2
->>>> lock_page(page); (successful)
->>>>                                 lock_page(); (failed)
->>>> __ClearPageIsolated(page);      SetPageWaiters(page) (may be overwritten)
->>>> unlock_page(page);
->>>>
->>>> The solution is to not perform non-atomic operation on page flags while
->>>> holding page lock.
->>>
->>> Sure, the non-atomic bitop optimization is really risky and I suspect
->>> we reach for it too often.  Or at least without really clearly
->>> demonstrating that it is safe, and documenting our assumptions.
->>
->> I agree. IIRC, non-atomic variants are mostly only safe while the
->> refcount is 0. Everything else is just absolutely fragile.
-> 
-> We could add an assertion ... I just tried this:
-> 
-> +++ b/include/linux/page-flags.h
-> @@ -342,14 +342,16 @@ static __always_inline                                                    \
->  void __folio_set_##lname(struct folio *folio)                          \
->  { __set_bit(PG_##lname, folio_flags(folio, FOLIO_##policy)); }         \
->  static __always_inline void __SetPage##uname(struct page *page)                \
-> -{ __set_bit(PG_##lname, &policy(page, 1)->flags); }
-> +{ VM_BUG_ON_PGFLAGS(atomic_read(&policy(page, 1)->_refcount), page);   \
-> +  __set_bit(PG_##lname, &policy(page, 1)->flags); }
-> 
->  #define __CLEARPAGEFLAG(uname, lname, policy)                          \
->  static __always_inline                                                 \
->  void __folio_clear_##lname(struct folio *folio)                                \
->  { __clear_bit(PG_##lname, folio_flags(folio, FOLIO_##policy)); }       \
->  static __always_inline void __ClearPage##uname(struct page *page)      \
-> -{ __clear_bit(PG_##lname, &policy(page, 1)->flags); }
-> +{ VM_BUG_ON_PGFLAGS(atomic_read(&policy(page, 1)->_refcount), page);   \
-> +  __clear_bit(PG_##lname, &policy(page, 1)->flags); }
-> 
->  #define TESTSETFLAG(uname, lname, policy)                              \
->  static __always_inline                                                 \
-> 
-> ... but it dies _really_ early:
-> 
-> (gdb) bt
-> #0  0xffffffff820055e5 in native_halt ()
->     at ../arch/x86/include/asm/irqflags.h:57
-> #1  halt () at ../arch/x86/include/asm/irqflags.h:98
-> #2  early_fixup_exception (regs=regs@entry=0xffffffff81e03cf8,
->     trapnr=trapnr@entry=6) at ../arch/x86/mm/extable.c:283
-> #3  0xffffffff81ff243c in do_early_exception (regs=0xffffffff81e03cf8,
->     trapnr=6) at ../arch/x86/kernel/head64.c:419
-> #4  0xffffffff81ff214f in early_idt_handler_common ()
->     at ../arch/x86/kernel/head_64.S:417
-> #5  0x0000000000000000 in ?? ()
-> 
-> and honestly, I'm not sure how to debug something that goes wrong this
-> early.  Maybe I need to make that start warning 5 seconds after boot
-> or only if we're not in pid 1, or something ...
+Hello Jianbo,
 
-Maybe checking for "system_state >= SYSTEM_RUNNING" or "system_state >=
-SYSTEM_SCHEDULING" to exclude early boot where no (real) concurrency is
-happening. But I assume you'll still get plenty of such reports.
+On Thu, Feb 24, 2022 at 10:29:07AM +0000, Jianbo Liu wrote:
+> The current police offload action entry is missing exceed/notexceed
+> actions and parameters that can be configured by tc police action.
+> Add the missing parameters as a pre-step for offloading police actions
+> to hardware.
+> 
+> Signed-off-by: Jianbo Liu <jianbol@nvidia.com>
+> Signed-off-by: Roi Dayan <roid@nvidia.com>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+> ---
+>  include/net/flow_offload.h     |  9 +++++++
+>  include/net/tc_act/tc_police.h | 30 ++++++++++++++++++++++
+>  net/sched/act_police.c         | 46 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 85 insertions(+)
+> 
+> diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
+> index 5b8c54eb7a6b..74f44d44abe3 100644
+> --- a/include/net/flow_offload.h
+> +++ b/include/net/flow_offload.h
+> @@ -148,6 +148,8 @@ enum flow_action_id {
+>  	FLOW_ACTION_MPLS_MANGLE,
+>  	FLOW_ACTION_GATE,
+>  	FLOW_ACTION_PPPOE_PUSH,
+> +	FLOW_ACTION_JUMP,
+> +	FLOW_ACTION_PIPE,
+>  	NUM_FLOW_ACTIONS,
+>  };
+>  
+> @@ -235,9 +237,16 @@ struct flow_action_entry {
+>  		struct {				/* FLOW_ACTION_POLICE */
+>  			u32			burst;
+>  			u64			rate_bytes_ps;
+> +			u64			peakrate_bytes_ps;
+> +			u32			avrate;
+> +			u16			overhead;
+>  			u64			burst_pkt;
+>  			u64			rate_pkt_ps;
+>  			u32			mtu;
+> +			struct {
+> +				enum flow_action_id	act_id;
+> +				u32			extval;
+> +			} exceed, notexceed;
+>  		} police;
+>  		struct {				/* FLOW_ACTION_CT */
+>  			int action;
+> diff --git a/include/net/tc_act/tc_police.h b/include/net/tc_act/tc_police.h
+> index 72649512dcdd..283bde711a42 100644
+> --- a/include/net/tc_act/tc_police.h
+> +++ b/include/net/tc_act/tc_police.h
+> @@ -159,4 +159,34 @@ static inline u32 tcf_police_tcfp_mtu(const struct tc_action *act)
+>  	return params->tcfp_mtu;
+>  }
+>  
+> +static inline u64 tcf_police_peakrate_bytes_ps(const struct tc_action *act)
+> +{
+> +	struct tcf_police *police = to_police(act);
+> +	struct tcf_police_params *params;
+> +
+> +	params = rcu_dereference_protected(police->params,
+> +					   lockdep_is_held(&police->tcf_lock));
+> +	return params->peak.rate_bytes_ps;
+> +}
+> +
+> +static inline u32 tcf_police_tcfp_ewma_rate(const struct tc_action *act)
+> +{
+> +	struct tcf_police *police = to_police(act);
+> +	struct tcf_police_params *params;
+> +
+> +	params = rcu_dereference_protected(police->params,
+> +					   lockdep_is_held(&police->tcf_lock));
+> +	return params->tcfp_ewma_rate;
+> +}
+> +
+> +static inline u16 tcf_police_rate_overhead(const struct tc_action *act)
+> +{
+> +	struct tcf_police *police = to_police(act);
+> +	struct tcf_police_params *params;
+> +
+> +	params = rcu_dereference_protected(police->params,
+> +					   lockdep_is_held(&police->tcf_lock));
+> +	return params->rate.overhead;
+> +}
+> +
+>  #endif /* __NET_TC_POLICE_H */
+> diff --git a/net/sched/act_police.c b/net/sched/act_police.c
+> index 0923aa2b8f8a..a2275eef6877 100644
+> --- a/net/sched/act_police.c
+> +++ b/net/sched/act_police.c
+> @@ -405,20 +405,66 @@ static int tcf_police_search(struct net *net, struct tc_action **a, u32 index)
+>  	return tcf_idr_search(tn, a, index);
+>  }
+>  
+> +static int tcf_police_act_to_flow_act(int tc_act, u32 *extval)
+> +{
+> +	int act_id = -EOPNOTSUPP;
+> +
+> +	if (!TC_ACT_EXT_OPCODE(tc_act)) {
+> +		if (tc_act == TC_ACT_OK)
+> +			act_id = FLOW_ACTION_ACCEPT;
+> +		else if (tc_act ==  TC_ACT_SHOT)
+> +			act_id = FLOW_ACTION_DROP;
+> +		else if (tc_act == TC_ACT_PIPE)
+> +			act_id = FLOW_ACTION_PIPE;
+> +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_GOTO_CHAIN)) {
+> +		act_id = FLOW_ACTION_GOTO;
+> +		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
+> +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_JUMP)) {
+> +		act_id = FLOW_ACTION_JUMP;
+> +		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
+> +	}
+> +
+> +	return act_id;
+> +}
+> +
+>  static int tcf_police_offload_act_setup(struct tc_action *act, void *entry_data,
+>  					u32 *index_inc, bool bind)
+>  {
+>  	if (bind) {
+>  		struct flow_action_entry *entry = entry_data;
+> +		struct tcf_police *police = to_police(act);
+> +		struct tcf_police_params *p;
+> +		int act_id;
+> +
+> +		p = rcu_dereference_protected(police->params,
+> +					      lockdep_is_held(&police->tcf_lock));
+>  
+>  		entry->id = FLOW_ACTION_POLICE;
+>  		entry->police.burst = tcf_police_burst(act);
+>  		entry->police.rate_bytes_ps =
+>  			tcf_police_rate_bytes_ps(act);
+> +		entry->police.peakrate_bytes_ps = tcf_police_peakrate_bytes_ps(act);
+> +		entry->police.avrate = tcf_police_tcfp_ewma_rate(act);
+> +		entry->police.overhead = tcf_police_rate_overhead(act);
+>  		entry->police.burst_pkt = tcf_police_burst_pkt(act);
+>  		entry->police.rate_pkt_ps =
+>  			tcf_police_rate_pkt_ps(act);
+>  		entry->police.mtu = tcf_police_tcfp_mtu(act);
+> +
+> +		act_id = tcf_police_act_to_flow_act(police->tcf_action,
+> +						    &entry->police.exceed.extval);
 
--- 
-Thanks,
+I don't know why just now, but I observed an apparent regression here
+with these commands:
 
-David / dhildenb
+root@debian:~# tc qdisc add dev swp3 clsact
+root@debian:~# tc filter add dev swp3 ingress protocol ip flower skip_sw ip_proto icmp action police rate 100Mbit burst 10000
+[   45.767900] tcf_police_act_to_flow_act: 434: tc_act 1
+[   45.773100] tcf_police_offload_act_setup: 475, act_id -95
+Error: cls_flower: Failed to setup flow action.
+We have an error talking to the kernel, -1
 
+The reason why I'm not sure is because I don't know if this should have
+worked as intended or not. I am remarking just now in "man tc-police"
+that the default conform-exceed action is "reclassify".
+
+So if I specify "conform-exceed drop", things are as expected, but with
+the default (implicitly "conform-exceed reclassify") things fail with
+-EOPNOTSUPP because tcf_police_act_to_flow_act() doesn't handle a
+police->tcf_action of TC_ACT_RECLASSIFY.
+
+Should it?
+
+> +		if (act_id < 0)
+> +			return act_id;
+> +
+> +		entry->police.exceed.act_id = act_id;
+> +
+> +		act_id = tcf_police_act_to_flow_act(p->tcfp_result,
+> +						    &entry->police.notexceed.extval);
+> +		if (act_id < 0)
+> +			return act_id;
+> +
+> +		entry->police.notexceed.act_id = act_id;
+> +
+>  		*index_inc = 1;
+>  	} else {
+>  		struct flow_offload_action *fl_action = entry_data;
+> -- 
+> 2.26.2
+> 

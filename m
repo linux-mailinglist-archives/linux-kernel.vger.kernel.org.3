@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AE94D9F68
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FD84D9F76
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349866AbiCOPzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
+        id S1349889AbiCOP7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbiCOPzC (ORCPT
+        with ESMTP id S239248AbiCOP7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:55:02 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A8B6551
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:53:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647359630; x=1678895630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LVRCX0EQ30zWj1FtfHS0UtBgJd7k0IXdfU/D+Vm6e6I=;
-  b=gq+ay1ET7VAQ4iCg4TaV/dRYH2JXP459AOOs0Yi9rPaHgefiIvLYj3zs
-   Ic5L02qpJ2bGuonPPx84n+hvJb447lhN7U4AuHHzHdpN9UVvJ695y3ibC
-   T+hvcQnBa32X7wGLv3kDaRxU0f469zC7W52EmC7ONk2n49HU+epvyHFpP
-   xardtqX7kSOvnXn60J0+pFio0qo8CBPxXIylmJ+TKX6MWSg95ynFWUtU/
-   zPWT5FwHZLiDHDLMAgPuIs8XgMbCh/5sOSkOcs/GN7yAKIulefFgDGXkZ
-   YnwighFXGqTUidbY2EVr70LNfd8GkN0TfZmMJ+Wahp9KmOvJODM6MhB7Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238509252"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="238509252"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 08:53:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="512657426"
-Received: from jpgabald-mobl.amr.corp.intel.com (HELO localhost) ([10.212.75.31])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 08:53:50 -0700
-Date:   Tue, 15 Mar 2022 08:53:49 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] x86/pkeys: Standardize on u8 for pkey type
-Message-ID: <YjC2jcn7kJKdHrf3@iweiny-desk3>
-References: <20220311005742.1060992-1-ira.weiny@intel.com>
- <20220311005742.1060992-6-ira.weiny@intel.com>
- <42e0aa73-04c8-a4c2-2d64-80812634b627@intel.com>
+        Tue, 15 Mar 2022 11:59:50 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DD44B1EE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:58:34 -0700 (PDT)
+Received: from zn.tnic (p5de8e440.dip0.t-ipconnect.de [93.232.228.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 37D2C1EC0531;
+        Tue, 15 Mar 2022 16:58:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647359908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lC8jcaGts7r1gdMNNH3SVw263gKeOh6pMHTZ9Q+Ob4w=;
+        b=HlmIh0YB5agwSBo8lMcMAhj6VbkuvrMOsiZ+2Y6FM0m1kPYgMP7nIpW4JPRrJbCKsCQpqV
+        09dtU8CVDJWRyYqdbltPq4B++L9jY1sIPo0U37kVnWchdY5xBVhRowjc/p7QacYIIYlvze
+        XJAo/Wcot6q1p/SbkAbDN24mh06IZTE=
+Date:   Tue, 15 Mar 2022 16:56:14 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 03/30] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+Message-ID: <YjC3HuH7mrupwwwd@zn.tnic>
+References: <20220302142806.51844-1-kirill.shutemov@linux.intel.com>
+ <20220302142806.51844-4-kirill.shutemov@linux.intel.com>
+ <YioZnTYahkoy2Mxz@zn.tnic>
+ <20220310212059.6abpmnsgodqqqnfm@black.fi.intel.com>
+ <20220310214828.52etbjdo6ha3vozx@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <42e0aa73-04c8-a4c2-2d64-80812634b627@intel.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220310214828.52etbjdo6ha3vozx@black.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 04:49:12PM -0700, Dave Hansen wrote:
-> On 3/10/22 16:57, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > The number of pkeys supported on x86 and powerpc are much smaller than a
-> > u16 value can hold.  It is desirable to standardize on the type for
-> > pkeys.  powerpc currently supports the most pkeys at 32.  u8 is plenty
-> > large for that.
-> > 
-> > Standardize on the pkey types by changing u16 to u8.
+On Fri, Mar 11, 2022 at 12:48:28AM +0300, Kirill A. Shutemov wrote:
+> Here how it can look like. Is it what you want?
+
+Yap, that's better.
+
+> diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+> index f00fd3a39b64..b26eab2c3c59 100644
+> --- a/arch/x86/boot/compressed/tdx.c
+> +++ b/arch/x86/boot/compressed/tdx.c
+> @@ -3,6 +3,7 @@
+>  #include "../cpuflags.h"
+>  #include "../string.h"
+>  #include "../io.h"
+> +#include "error.h"
 > 
-> How widely was this intended to "standardize" things?  Looks like it may
-> have missed a few spots.
-
-Sorry I think the commit message is misleading you.  The justification of u8 as
-the proper type is that no arch has a need for more than 255 pkeys.
-
-This specific patch was intended to only change x86.  Per that goal I don't see
-any other places in x86 which uses u16 after this patch.
-
-$ git grep u16 arch/x86 | grep key
-arch/x86/events/intel/uncore_discovery.c:	const u16 *type_id = key;
-arch/x86/include/asm/intel_pconfig.h:	u16 keyid;
-arch/x86/include/asm/mmu.h:	u16 pkey_allocation_map;
-arch/x86/include/asm/pkeys.h:	u16 all_pkeys_mask = ((1U << arch_max_pkey()) - 1);
-
+>  #include <vdso/limits.h>
+>  #include <uapi/asm/vmx.h>
+> @@ -16,6 +17,11 @@ bool early_is_tdx_guest(void)
+>  	return tdx_guest_detected;
+>  }
 > 
-> Also if we're worried about the type needing to change or with the wrong
-> type being used, I guess we could just to a pkey_t typedef.
+> +void __tdx_hypercall_failed(void)
+> +{
+> +	error("TDVMCALL failed. TDX module bug?");
+> +}
+> +
+>  static inline unsigned int tdx_io_in(int size, u16 port)
+>  {
+>  	struct tdx_hypercall_args args = {
 
-I'm not 'worried' about it.  But I do think it makes the code cleaner and more
-self documenting.
 
-Ira
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 8e19694d33e2..29fc5941b80c 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -53,6 +53,11 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
+>  	return __tdx_hypercall(&args, 0);
+>  }
+> 
+> +void __tdx_hypercall_failed(void)
+> +{
+> +	panic("TDVMCALL failed. TDX module bug?");
+> +}
+
+Btw, if there's going to be more code duplication in TDX-land, I'd
+suggest doing a shared file like
+
+arch/x86/kernel/sev-shared.c
+
+which you can include in both kernel stages.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

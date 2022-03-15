@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4E04D969A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4454D9687
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346262AbiCOIqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S1345992AbiCOIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346184AbiCOIpn (ORCPT
+        with ESMTP id S1346002AbiCOIoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:45:43 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0674D625
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:06 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so1047779wmf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HtIgN6AdT+17GwfQORoopmuViWKlchoqVYSRUx3tKDQ=;
-        b=WWTl831h1hLrRHyCXf3DytETojLSGftQmq77K3b9N6eMDev4tsL2JkFygqgLTWg0T8
-         SSYTmW86s5aeqymS+/bdzXS5jBTr9c9k+xMjvYog9Ta3A7u8knfZufuQYCLqCV2J+MDj
-         /y94pG/ew0r8fACxrEUa/6vOd/l7uofCIGpV9cDAMTvSfFTVaPRVdHLLIBMCdU7ABEfR
-         DyuMGuIAMT+warBnYOcVmWtWqLYWeD6Fk60xMim05nVz/9FuXSsXWgSofWlP9/nWIUM6
-         y5JDj9wiBzcupoK1ANdeEWi+dPnkj7ntUdEwaJhrq0Rptt661684HD8VSF2U+YbLYdCC
-         bd4w==
+        Tue, 15 Mar 2022 04:44:13 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3DCCEB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:42:58 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id b19so5446387wrh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:42:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=HtIgN6AdT+17GwfQORoopmuViWKlchoqVYSRUx3tKDQ=;
-        b=h/Qf47MAfuHAqvjvhPBv333VChmFSHOGKm0VfhuXv4AbDSFKiwhq2AIfF0xbHQUyeT
-         cQQho0gBhElaZMP21SAhREdwsYhZnBe9Re2AptL+MNiQaaGAJD1s9c3z0LBLvvK0T+2n
-         5xgC2AExvB1m3X0/tPZ9vMjdgP4Ib7Pnm4y/UHoN0mM3uhqPmYakVH4HowkR9dMejYz9
-         nfYdi8FJxkRC09dJanugTlTeoBj50CipF1pMmVBifqc+F1H0zJo33qJM9pwYUWpcknYX
-         ogeCEgBdUV8+fuqqQ5oblg7dCspgXW16agIZ7yHwpkBvtTILrE+qQ0wtoUypZNFpC3Z8
-         wkGg==
-X-Gm-Message-State: AOAM53374RhRap1Obc288uUydnsxOhfcdcC5PldXlbSXrnEmdGe3ieJO
-        uGYZUZKHMdyduTB5F+Dc1kEXMBWw18U=
-X-Google-Smtp-Source: ABdhPJzI+uQwQtzHEiBagL8inR3+Kp0cko+5UjrbOcyh997XWjdXRe67i8cO6jBrnWrzU4G7Ulz26g==
-X-Received: by 2002:a05:600c:3203:b0:381:b544:7970 with SMTP id r3-20020a05600c320300b00381b5447970mr2354447wmp.144.1647333845370;
-        Tue, 15 Mar 2022 01:44:05 -0700 (PDT)
-Received: from kepler.. (0526F1FC.dsl.pool.telekom.hu. [5.38.241.252])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:44:04 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-From:   Ingo Molnar <mingo@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Mel Gorman <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 15/15] sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
-Date:   Tue, 15 Mar 2022 09:42:47 +0100
-Message-Id: <20220315084247.40783-16-mingo@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220315084247.40783-1-mingo@kernel.org>
-References: <20220315084247.40783-1-mingo@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SQaJGlyMxDxM92vESERhjv5rcWAKZ6ex7RCbOXz8fBQ=;
+        b=cxkf+zwzED48eNZ3U9UMbxgxLBoDmyb/DDbCr62aZ8V3HYkteoeXj5stXxClB+qzi8
+         TMu6uH/uLigXnPoKT0f60LyPulfejrGgaEaA0U2mOPR5B5eL8XylOgahcL9w4Buj4UlO
+         N9tF8+X6C8bq17r1S15QQGuKcb4rOsnZQ99WtriWZ9mITbeD+kQIzz9/vCpltn6VoObh
+         IV5V1k1T7LOLGQNjZW8xusU5PACsVx4qgamvQNVfUCzHd357iv8nFlokmf5j5fxEMjHV
+         xImYq5foXMdfTNj9aoyZs/E8wxqOHKWTx/JMHzICG7PXVmovm4pCJMEb77VYPnDH4pl0
+         NERw==
+X-Gm-Message-State: AOAM5328StfStnSQ/wGKb6n05gFcH2dRveAtcsqHew3QuG65thLnb8KI
+        nyymFn8aFgMi8v5AEkT3k47tSmGRylI=
+X-Google-Smtp-Source: ABdhPJwz23JwJGrmvxcd66EAJx6dzWlFeuh9jhCzDYWmqMSJXBX+pe4A9nWcHI6GAH4fuHhjqvsRkg==
+X-Received: by 2002:a5d:5986:0:b0:1f1:f971:f02 with SMTP id n6-20020a5d5986000000b001f1f9710f02mr18678032wri.578.1647333777502;
+        Tue, 15 Mar 2022 01:42:57 -0700 (PDT)
+Received: from [192.168.64.180] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id u25-20020a05600c211900b00389d4bdb3d2sm2517865wml.36.2022.03.15.01.42.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 01:42:57 -0700 (PDT)
+Message-ID: <6ac83f8b-01e6-5394-0570-023ac6b1a71d@grimberg.me>
+Date:   Tue, 15 Mar 2022 10:42:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] driver/nvme/host: Support duplicated nsid for the
+ private ns
+Content-Language: en-US
+To:     "hch@lst.de" <hch@lst.de>
+Cc:     Sungup Moon <sungup.moon@samsung.com>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20220314110545epcms2p4a227eac7c4652445050e70ee2350635d@epcms2p4>
+ <20220314110545epcms2p4a227eac7c4652445050e70ee2350635d@epcms2p4>
+ <20220315071230.GA2069@lst.de> <20220315071926.GA2137@lst.de>
+ <a3051d85-c08e-a273-c7cc-2eb3e21df717@grimberg.me>
+ <20220315084035.GA3834@lst.de>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20220315084035.GA3834@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,324 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove all headers, except the ones required to make this header
-build standalone.
 
-Also include stats.h in sched.h explicitly - dependencies already
-require this.
+>>> +static struct nvme_ns_head *nvme_find_ns_head(struct nvme_ctrl *ctrl,
+>>>    		unsigned nsid)
+>>>    {
+>>> +	struct nvme_subsystem *subsys = ctrl->subsys;
+>>>    	struct nvme_ns_head *h;
+>>>      	lockdep_assert_held(&subsys->lock);
+>>
+>> IMO it is a bit strange that we now don't pass in the subsystem but
+>> require that the subsys->lock is taken...
+> 
+> We do things like that in various places, mostly because information
+> needed that is subsystem-wide hangs of the nvme_ctrl structure, in
+> this case the various feature bitmaps.  We could move them to the
+> subsystem structure, which would be the right thing to do but a fair
+> amout of churn for little savings.
 
-Summary of the build speedup gained through the last ~15 scheduler build &
-header dependency patches:
+Yea I understand its not universally enforced, just popped up.
 
-Cumulative scheduler (kernel/sched/) build time speedup on a
-Linux distribution's config, which enables all scheduler features,
-compared to the vanilla kernel:
+>>> +++ b/drivers/nvme/host/multipath.c
+>>> @@ -504,10 +504,11 @@ int nvme_mpath_alloc_disk(struct nvme_ctrl *ctrl, struct nvme_ns_head *head)
+>>>      	/*
+>>>    	 * Add a multipath node if the subsystems supports multiple controllers.
+>>> -	 * We also do this for private namespaces as the namespace sharing data could
+>>> -	 * change after a rescan.
+>>> +	 * We also do this for private namespaces as the namespace sharing flag
+>>> +	 * could change after a rescan.
+>>
+>> What happens in this case? we now have non-unique shared namespaces?
+> 
+> The non-uniqueue NSIDs can only happen for private namespaces.
 
-  _____________________________________________________________________________
- |
- |  Vanilla kernel (v5.13-rc7):
- |_____________________________________________________________________________
- |
- |  Performance counter stats for 'make -j96 kernel/sched/' (3 runs):
- |
- |   126,975,564,374      instructions              #    1.45  insn per cycle           ( +-  0.00% )
- |    87,637,847,671      cycles                    #    3.959 GHz                      ( +-  0.30% )
- |         22,136.96 msec cpu-clock                 #    7.499 CPUs utilized            ( +-  0.29% )
- |
- |            2.9520 +- 0.0169 seconds time elapsed  ( +-  0.57% )
- |_____________________________________________________________________________
- |
- |  Patched kernel:
- |_____________________________________________________________________________
- |
- | Performance counter stats for 'make -j96 kernel/sched/' (3 runs):
- |
- |    50,420,496,914      instructions              #    1.47  insn per cycle           ( +-  0.00% )
- |    34,234,322,038      cycles                    #    3.946 GHz                      ( +-  0.31% )
- |          8,675.81 msec cpu-clock                 #    3.053 CPUs utilized            ( +-  0.45% )
- |
- |            2.8420 +- 0.0181 seconds time elapsed  ( +-  0.64% )
- |_____________________________________________________________________________
-
-Summary:
-
-  - CPU time used to build the scheduler dropped by -60.9%, a reduction
-    from 22.1 clock-seconds to 8.7 clock-seconds.
-
-  - Wall-clock time to build the scheduler dropped by -3.9%, a reduction
-    from 2.95 seconds to 2.84 seconds.
-
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Peter Zijlstra <peterz@infradead.org>
----
- kernel/sched/build_policy.c  |   4 --
- kernel/sched/build_utility.c |   6 +--
- kernel/sched/sched.h         | 147 +++++++++++++++++++--------------------------------------------
- kernel/sched/stats.h         |   2 -
- 4 files changed, 46 insertions(+), 113 deletions(-)
-
-diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-index a2e4023771a0..e0104b45029a 100644
---- a/kernel/sched/build_policy.c
-+++ b/kernel/sched/build_policy.c
-@@ -28,10 +28,6 @@
- #include <linux/tsacct_kern.h>
- #include <linux/vtime.h>
- 
--#ifdef CONFIG_PARAVIRT
--# include <asm/paravirt.h>
--#endif
--
- #include <uapi/linux/sched/types.h>
- 
- #include "sched.h"
-diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
-index bc2f4d648209..eec0849b2aae 100644
---- a/kernel/sched/build_utility.c
-+++ b/kernel/sched/build_utility.c
-@@ -44,13 +44,11 @@
- #include <linux/wait_api.h>
- #include <linux/workqueue_api.h>
- 
--#ifdef CONFIG_PARAVIRT
--# include <asm/paravirt.h>
--#endif
--
- #include <uapi/linux/prctl.h>
- #include <uapi/linux/sched/types.h>
- 
-+#include <asm/switch_to.h>
-+
- #include "sched.h"
- #include "sched-pelt.h"
- #include "stats.h"
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f255ec2afeca..0d4217965561 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -5,158 +5,97 @@
- #ifndef _KERNEL_SCHED_SCHED_H
- #define _KERNEL_SCHED_SCHED_H
- 
--#include <linux/sched.h>
--#include <linux/cpumask.h>
--#include <linux/ktime_api.h>
--#include <linux/cgroup_api.h>
--#include <linux/topology.h>
--#include <linux/prctl.h>
--#include <linux/ptrace_api.h>
--#include <linux/gfp_api.h>
--#include <linux/posix-timers.h>
--#include <linux/sched/clock.h>
--#include <linux/workqueue_api.h>
--#include <linux/tick.h>
--#include <linux/ktime_api.h>
--#include <linux/swait_api.h>
--#include <linux/hashtable_api.h>
--#include <linux/cpufreq.h>
--#include <linux/utsname.h>
--
--#include <asm/irq_regs.h>
--
- #include <linux/sched/affinity.h>
- #include <linux/sched/autogroup.h>
--#include <linux/sched/clock.h>
--#include <linux/sched/coredump.h>
- #include <linux/sched/cpufreq.h>
--#include <linux/sched/cputime.h>
- #include <linux/sched/deadline.h>
--#include <linux/sched/debug.h>
--#include <linux/sched/hotplug.h>
--#include <linux/sched/idle.h>
--#include <linux/sched/init.h>
--#include <linux/sched/isolation.h>
--#include <linux/sched/jobctl.h>
-+#include <linux/sched.h>
- #include <linux/sched/loadavg.h>
- #include <linux/sched/mm.h>
--#include <linux/sched/nohz.h>
--#include <linux/sched/numa_balancing.h>
--#include <linux/sched/prio.h>
- #include <linux/sched/rseq_api.h>
--#include <linux/sched/rt.h>
- #include <linux/sched/signal.h>
- #include <linux/sched/smt.h>
- #include <linux/sched/stat.h>
- #include <linux/sched/sysctl.h>
-+#include <linux/sched/task_flags.h>
- #include <linux/sched/task.h>
--#include <linux/sched/task_stack.h>
--#include <linux/sched/thread_info_api.h>
- #include <linux/sched/topology.h>
--#include <linux/sched/user.h>
--#include <linux/sched/wake_q.h>
--#include <linux/sched/xacct.h>
--
--#include <uapi/linux/sched/types.h>
--
--#include <linux/binfmts.h>
--#include <linux/bitops.h>
--#include <linux/compat.h>
--#include <linux/context_tracking.h>
--#include <linux/cpufreq.h>
--#include <linux/cpuidle.h>
--#include <linux/cpuset.h>
--#include <linux/ctype.h>
--#include <linux/debugfs.h>
--#include <linux/delayacct.h>
--#include <linux/energy_model.h>
--#include <linux/init_task.h>
--#include <linux/kprobes.h>
--#include <linux/kthread.h>
--#include <linux/membarrier.h>
--#include <linux/migrate.h>
--#include <linux/mmu_context.h>
--#include <linux/nmi.h>
--#include <linux/proc_fs.h>
--#include <linux/prefetch.h>
--#include <linux/profile.h>
--#include <linux/psi.h>
--#include <linux/ratelimit.h>
--#include <linux/rcupdate_wait.h>
--#include <linux/security.h>
--#include <linux/stop_machine.h>
--#include <linux/suspend.h>
--#include <linux/swait.h>
--#include <linux/syscalls.h>
--#include <linux/task_work.h>
--#include <linux/tsacct_kern.h>
--#include <linux/hrtimer_api.h>
--
--#ifdef CONFIG_PARAVIRT
--# include <asm/paravirt.h>
--#endif
--
--#include <trace/events/sched.h>
--
--#ifdef CONFIG_CGROUP_SCHED
--#include <linux/cgroup.h>
--#include <linux/psi.h>
--#endif
--
--#ifdef CONFIG_SCHED_DEBUG
--# include <linux/static_key.h>
--#endif
--
--#include "cpupri.h"
--#include "cpudeadline.h"
--
--#ifdef CONFIG_SCHED_DEBUG
--# define SCHED_WARN_ON(x)	WARN_ONCE(x, #x)
--#else
--# define SCHED_WARN_ON(x)	({ (void)(x), 0; })
--#endif
- 
-+#include <linux/atomic.h>
- #include <linux/bitmap.h>
-+#include <linux/bug.h>
- #include <linux/capability.h>
-+#include <linux/cgroup_api.h>
- #include <linux/cgroup.h>
- #include <linux/cpufreq.h>
- #include <linux/cpumask_api.h>
- #include <linux/ctype.h>
- #include <linux/file.h>
-+#include <linux/fs_api.h>
- #include <linux/hrtimer_api.h>
- #include <linux/interrupt.h>
-+#include <linux/irq_work.h>
- #include <linux/jiffies.h>
- #include <linux/kref_api.h>
-+#include <linux/kthread.h>
- #include <linux/ktime_api.h>
- #include <linux/lockdep_api.h>
-+#include <linux/lockdep.h>
-+#include <linux/minmax.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/mutex_api.h>
-+#include <linux/plist.h>
- #include <linux/poll.h>
- #include <linux/proc_fs.h>
-+#include <linux/profile.h>
- #include <linux/psi.h>
--#include <linux/sched/affinity.h>
--#include <linux/sched.h>
--#include <linux/sched/loadavg.h>
--#include <linux/sched/mm.h>
--#include <linux/sched/rseq_api.h>
--#include <linux/sched/signal.h>
-+#include <linux/rcupdate.h>
- #include <linux/seq_file.h>
- #include <linux/seqlock.h>
- #include <linux/softirq.h>
- #include <linux/spinlock_api.h>
-+#include <linux/static_key.h>
-+#include <linux/stop_machine.h>
- #include <linux/syscalls_api.h>
- #include <linux/syscalls.h>
-+#include <linux/tick.h>
- #include <linux/topology.h>
- #include <linux/types.h>
- #include <linux/u64_stats_sync_api.h>
- #include <linux/uaccess.h>
- #include <linux/wait_api.h>
-+#include <linux/wait_bit.h>
- #include <linux/workqueue_api.h>
- 
- #include <trace/events/power.h>
-+#include <trace/events/sched.h>
- 
- #include "../workqueue_internal.h"
- 
-+#ifdef CONFIG_CGROUP_SCHED
-+#include <linux/cgroup.h>
-+#include <linux/psi.h>
-+#endif
-+
-+#ifdef CONFIG_SCHED_DEBUG
-+# include <linux/static_key.h>
-+#endif
-+
-+#ifdef CONFIG_PARAVIRT
-+# include <asm/paravirt.h>
-+# include <asm/paravirt_api_clock.h>
-+#endif
-+
-+#include "cpupri.h"
-+#include "cpudeadline.h"
-+
-+#ifdef CONFIG_SCHED_DEBUG
-+# define SCHED_WARN_ON(x)      WARN_ONCE(x, #x)
-+#else
-+# define SCHED_WARN_ON(x)      ({ (void)(x), 0; })
-+#endif
-+
- struct rq;
- struct cpuidle_state;
- 
-@@ -1925,6 +1864,8 @@ extern void flush_smp_call_function_from_idle(void);
- static inline void flush_smp_call_function_from_idle(void) { }
- #endif
- 
-+#include "stats.h"
-+
- #if defined(CONFIG_SCHED_CORE) && defined(CONFIG_SCHEDSTATS)
- 
- extern void __sched_core_account_forceidle(struct rq *rq);
-diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
-index a0df79e6038c..baa839c1ba96 100644
---- a/kernel/sched/stats.h
-+++ b/kernel/sched/stats.h
-@@ -2,8 +2,6 @@
- #ifndef _KERNEL_STATS_H
- #define _KERNEL_STATS_H
- 
--#include "sched.h"
--
- #ifdef CONFIG_SCHEDSTATS
- 
- extern struct static_key_false sched_schedstats;
--- 
-2.32.0
-
+But what happens if this changes upon a rescan as you commented?

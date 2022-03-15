@@ -2,155 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCAB4D9B8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D904D9B8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348481AbiCOMt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S1348483AbiCOMuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348456AbiCOMtQ (ORCPT
+        with ESMTP id S235032AbiCOMuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:49:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21113BF51;
-        Tue, 15 Mar 2022 05:47:59 -0700 (PDT)
-X-UUID: 6176232bef0040b18e8b657291c8e1f8-20220315
-X-UUID: 6176232bef0040b18e8b657291c8e1f8-20220315
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 699758180; Tue, 15 Mar 2022 20:47:53 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 15 Mar 2022 20:47:51 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Mar 2022 20:47:51 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-Subject: [PATCH v6 2/2] remoteproc: mediatek: Support mt8186 scp
-Date:   Tue, 15 Mar 2022 20:47:47 +0800
-Message-ID: <20220315124747.30144-3-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220315124747.30144-1-allen-kh.cheng@mediatek.com>
-References: <20220315124747.30144-1-allen-kh.cheng@mediatek.com>
+        Tue, 15 Mar 2022 08:50:15 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E4ADF3F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:02 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id b67so15343013qkc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CKZh5yP21BRJU6B3iVZohrjJUcGpXAcyv437fSYRC0Y=;
+        b=Yv1MkmspeBbwsRJ2pamOnZE1WC5H25bDWwOngkXuqoBHKv1RwetJKfDBhO5KC+CN6f
+         G7nJo/AwN6nt3dBgrnuryWu2c9Lmu3AHoKrRmwJRug27mzXAp5IH7WVNR4KlpUs1YAY+
+         mP1ayzFjodrY5qk3bTXnLTzZmX6VNRdv3ZwUw0zsJKvb31VTVSNau2cg5pGcBLfNAo2c
+         +SnnHvign1o6aTjFrq9NQj0w6YeFbHWNxMG/Y8X2M4YbQVpUtUv1nLFczkpk/7nQfI6W
+         9bE4NMi3JkkcOuMXg2P/Mpq838BnD0nJTA8x4sWQpDzchM+iOQd4EwrERdudzh+azoBh
+         W3cg==
+X-Gm-Message-State: AOAM533yefA24/Ti/tKuYaHUR+qIOwi1wA9ZWhaJWwmOuXl8WIPgeY4D
+        h2fZ7b/nDQ6ioErb/F7h9HUPhMg2RLs3Xw==
+X-Google-Smtp-Source: ABdhPJyxGcR73e86Ig648PVGCnCHgzdK7E53jVPCTyd9yJ037yU9qLMTKRmCFYoFn4dCiYm704M8+A==
+X-Received: by 2002:a05:620a:f03:b0:67b:1465:d447 with SMTP id v3-20020a05620a0f0300b0067b1465d447mr17756793qkl.364.1647348541477;
+        Tue, 15 Mar 2022 05:49:01 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05622a051200b002e1e5e57e0csm406063qtx.11.2022.03.15.05.49.00
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 05:49:00 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2dbd97f9bfcso199791827b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:00 -0700 (PDT)
+X-Received: by 2002:a81:49d0:0:b0:2db:dc6d:445d with SMTP id
+ w199-20020a8149d0000000b002dbdc6d445dmr24764496ywa.512.1647348539863; Tue, 15
+ Mar 2022 05:48:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220315110707.628166-1-geert@linux-m68k.org> <20220315110707.628166-3-geert@linux-m68k.org>
+ <27e1c911-798a-c14b-e5a0-622a7c5d8755@redhat.com>
+In-Reply-To: <27e1c911-798a-c14b-e5a0-622a7c5d8755@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Mar 2022 13:48:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUQ=A1uRYdO+da9wFpzLbGEDprVjnuFcD8B=MPkOePEKw@mail.gmail.com>
+Message-ID: <CAMuHMdUQ=A1uRYdO+da9wFpzLbGEDprVjnuFcD8B=MPkOePEKw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] drm/format-helper: Fix XRGB888 to monochrome conversion
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+Hi Javier,
 
-Add SCP support for mt8186
+On Tue, Mar 15, 2022 at 1:18 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> On 3/15/22 12:07, Geert Uytterhoeven wrote:
+> > The conversion functions drm_fb_xrgb8888_to_mono() and
+> > drm_fb_gray8_to_mono_line() do not behave correctly when the
+> > horizontal boundaries of the clip rectangle are not multiples of 8:
+> >   a. When x1 % 8 != 0, the calculated pitch is not correct,
+> >   b. When x2 % 8 != 0, the pixel data for the last byte is wrong.
+> >
+>
+> Thanks a lot for tracking down and fixing these issues.
+>
+> > Simplify the code and fix (a) by:
+> >   1. Removing start_offset, and always storing the first pixel in the
+> >      first bit of the monochrome destination buffer.
+> >      Drivers that require the first pixel in a byte to be located at an
+> >      x-coordinate that is a multiple of 8 can always align the clip
+> >      rectangle before calling drm_fb_xrgb8888_to_mono().
+> >      Note that:
+> >        - The ssd130x driver does not need the alignment, as the
+> >        monochrome buffer is a temporary format,
+> >        - The repaper driver always updates the full screen, so the clip
+> >        rectangle is always aligned.
+> >   2. Passing the number of pixels to drm_fb_gray8_to_mono_line(),
+> >      instead of the number of bytes, and the number of pixels in the
+> >      last byte.
+> >
+> > Fix (b) by explicitly setting the target bit, instead of always setting
+> > bit 7 and shifting the value in each loop iteration.
+> >
+> > Remove the bogus pitch check, which operates on bytes instead of pixels,
+> > and triggers when e.g. flashing the cursor on a text console with a font
+> > that is 8 pixels wide.
+> >
+> > Drop the confusing comment about scanlines, as a pitch in bytes always
+> > contains a multiple of 8 pixels.
+> >
+> > While at it, use the drm_rect_height() helper instead of open-coding the
+> > same operation.
+> >
+> > Update the comments accordingly.
+> >
+> > Fixes: bcf8b616deb87941 ("drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()")
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > ---
+>
+> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/remoteproc/mtk_common.h |  3 +++
- drivers/remoteproc/mtk_scp.c    | 42 +++++++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+Thanks!
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 5ff3867c72f3..71ce4977cb0b 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -32,6 +32,9 @@
- #define MT8183_SCP_CACHESIZE_8KB	BIT(8)
- #define MT8183_SCP_CACHE_CON_WAYEN	BIT(10)
- 
-+#define MT8186_SCP_L1_SRAM_PD_P1	0x40B0
-+#define MT8186_SCP_L1_SRAM_PD_p2	0x40B4
-+
- #define MT8192_L2TCM_SRAM_PD_0		0x10C0
- #define MT8192_L2TCM_SRAM_PD_1		0x10C4
- #define MT8192_L2TCM_SRAM_PD_2		0x10C8
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index dcddb33e9997..11be6b4235eb 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -383,6 +383,35 @@ static void mt8192_power_off_sram(void __iomem *addr)
- 		writel(GENMASK(i, 0), addr);
- }
- 
-+static int mt8186_scp_before_load(struct mtk_scp *scp)
-+{
-+	/* Clear SCP to host interrupt */
-+	writel(MT8183_SCP_IPC_INT_BIT, scp->reg_base + MT8183_SCP_TO_HOST);
-+
-+	/* Reset clocks before loading FW */
-+	writel(0x0, scp->reg_base + MT8183_SCP_CLK_SW_SEL);
-+	writel(0x0, scp->reg_base + MT8183_SCP_CLK_DIV_SEL);
-+
-+	/* Turn on the power of SCP's SRAM before using it. Enable 1 block per time*/
-+	mt8192_power_on_sram(scp->reg_base + MT8183_SCP_SRAM_PDN);
-+
-+	/* Initialize TCM before loading FW. */
-+	writel(0x0, scp->reg_base + MT8183_SCP_L1_SRAM_PD);
-+	writel(0x0, scp->reg_base + MT8183_SCP_TCM_TAIL_SRAM_PD);
-+	writel(0x0, scp->reg_base + MT8186_SCP_L1_SRAM_PD_P1);
-+	writel(0x0, scp->reg_base + MT8186_SCP_L1_SRAM_PD_p2);
-+
-+	/*
-+	 * Set I-cache and D-cache size before loading SCP FW.
-+	 * SCP SRAM logical address may change when cache size setting differs.
-+	 */
-+	writel(MT8183_SCP_CACHE_CON_WAYEN | MT8183_SCP_CACHESIZE_8KB,
-+	       scp->reg_base + MT8183_SCP_CACHE_CON);
-+	writel(MT8183_SCP_CACHESIZE_8KB, scp->reg_base + MT8183_SCP_DCACHE_CON);
-+
-+	return 0;
-+}
-+
- static int mt8192_scp_before_load(struct mtk_scp *scp)
- {
- 	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-@@ -874,6 +903,18 @@ static const struct mtk_scp_of_data mt8183_of_data = {
- 	.ipi_buf_offset = 0x7bdb0,
- };
- 
-+static const struct mtk_scp_of_data mt8186_of_data = {
-+	.scp_clk_get = mt8195_scp_clk_get,
-+	.scp_before_load = mt8186_scp_before_load,
-+	.scp_irq_handler = mt8183_scp_irq_handler,
-+	.scp_reset_assert = mt8183_scp_reset_assert,
-+	.scp_reset_deassert = mt8183_scp_reset_deassert,
-+	.scp_stop = mt8183_scp_stop,
-+	.scp_da_to_va = mt8183_scp_da_to_va,
-+	.host_to_scp_reg = MT8183_HOST_TO_SCP,
-+	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
-+};
-+
- static const struct mtk_scp_of_data mt8192_of_data = {
- 	.scp_clk_get = mt8192_scp_clk_get,
- 	.scp_before_load = mt8192_scp_before_load,
-@@ -900,6 +941,7 @@ static const struct mtk_scp_of_data mt8195_of_data = {
- 
- static const struct of_device_id mtk_scp_of_match[] = {
- 	{ .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
-+	{ .compatible = "mediatek,mt8186-scp", .data = &mt8186_of_data },
- 	{ .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
- 	{ .compatible = "mediatek,mt8195-scp", .data = &mt8195_of_data },
- 	{},
--- 
-2.18.0
+> I just have a small comment below.
+>
+> [snip]
+>
+> > +static void drm_fb_gray8_to_mono_line(u8 *dst, const u8 *src, unsigned int pixels)
+> > +{
+> > +     while (pixels) {
+> > +             unsigned int i, bits = min(pixels, 8U);
+> > +             u8 byte = 0;
+> >
+> > -                     byte >>= 1;
+> > -                     if (src[x] >> 7)
+> > -                             byte |= BIT(7);
+> > +             for (i = 0; i < bits; i++, pixels--) {
+>
+> I think is worth to add a comment here explaining that the pixel is set to
+> 1 for brightness > 127 and to 0 for brightness < 128. Or as kernel-doc for
+> this helper function.
+>
+> > +                     if (*src++ & BIT(7))
+>
+> Pekka also mentioned that if (*src++ > 127) would make this easier to read.
 
+Sure, will update. Nicely removes the need for a comment.
+
+> > +                             byte |= BIT(i);
+> >               }
+> >               *dst++ = byte;
+> >       }
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

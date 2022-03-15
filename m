@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2924DA3E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E1A4DA3E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244955AbiCOUXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S1346823AbiCOUXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240623AbiCOUXT (ORCPT
+        with ESMTP id S241737AbiCOUXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:23:19 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFCF3467A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:22:06 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so58994iox.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:22:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=WEkhoTVVedY5DexXEQJJfW/um3h2zWtR80MaPcoaP2Q=;
-        b=bYL4rbmAjtreqjrIlNxYQFxLgexilbWut/gnjPv8KCjwNrjwEFat8OqWF4U1OSnISD
-         ehrTkDyTpsjhL0+FVaLeCE8sATx6bVpuJW2hrgrSHuywGW7p3zWRAsEN1+SokRt/rIjn
-         Jc8TqBpT5296JhdzR9JuVxhRjX6tUo/PsV3knTZcgOXFdAGigKnYHy3dTvo0r02hbVQR
-         spI2B9KSTf1jfn6Pb+nhCx87u0jCcgdRPsx1iAksBxoIBN71XJBUqLHRqPWhH0a60rJl
-         NS+UvSasYxRu6d9H3OwV+PUepkaYAt0qb/TxvW7Qe8FXYcVXEPo117XcSzDfQgF250gF
-         0GGQ==
-X-Gm-Message-State: AOAM530eB6yfLwG0ar31OfnORktECEs6ALRNgEU37J47b8gdnpPU+pLv
-        ts0uD05Gox9hB4scJ6UPNq1sIYokImfaTbTO3vRVZ1rNaBRC
-X-Google-Smtp-Source: ABdhPJy27TvSFLmnt7700rf9BDQ+MGeQcOZFU2USh3j36Mwz659RgtdxE7YraE1wqVt42BhXVM+2W4Iz7z9xA/vdB+E2ah1B6o8H
+        Tue, 15 Mar 2022 16:23:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2341138BF4;
+        Tue, 15 Mar 2022 13:22:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B41FA60ADC;
+        Tue, 15 Mar 2022 20:22:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB780C340EE;
+        Tue, 15 Mar 2022 20:22:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647375753;
+        bh=0ut9v8Mofhd/tDzKnf+CcR23DD7IKhRDy7v5nmBCQRs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QSX4VnegdduIPQ4gZD4KPnc7tYVCALT6gbLR4n2oxiLXu8TC0gn3fNF2mjlEaaNPU
+         PFNwEFFoB6RoHY7prjq/OeRY+Xym5US9MnVzdmfY8u7uLVVSr5VAXcm6JW8wklQagU
+         oQC8VrspRe1pVoHw8opM6drZhiOLb/eCIPbOHh7HXZdB0wl1aQNHEW/DndgeULJINr
+         6ipaC17b9LCDSVTSOErcvcUqjUQq0kci9XdrXbon7/q/IVkS0AqS6xwXDuwNOV/UBY
+         1imP6DMySbw3eDWF7z2q79RDZuHnWJTmBAtRJmqWELwBt+seMzAVZ9P7fN3DDjbaUk
+         wLSStbBQ4Bn9w==
+Date:   Tue, 15 Mar 2022 15:22:31 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, micklorain@protonmail.com
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+Message-ID: <20220315202231.GA629970@bhelgaas>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8552:0:b0:63d:8cae:b2ca with SMTP id
- b18-20020a5d8552000000b0063d8caeb2camr23112544ios.81.1647375725894; Tue, 15
- Mar 2022 13:22:05 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 13:22:05 -0700
-In-Reply-To: <a30ec1e7-564f-665b-7c20-54dad6124418@linaro.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f422ca05da478cae@google.com>
-Subject: Re: [syzbot] kernel BUG in ext4_ind_remove_space
-From:   syzbot <syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjBlxOi0ljZVUb/D@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
+> > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> > > ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
+> > > Enable the respective quirk as it's done for other ATI devices on this chipset,
+> > > 
+> > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+> > 
+> > This is interesting because there must be a TON of these AMD/ATI SB600
+> > USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
+> > appeared in v5.9.
+> > 
+> > So why would we only get a report now, in February 2022?  Is there
+> > some change more recent than 306c54d0edb6 that exposed this problem?
+> 
+> I think it's a rhetorical question. To me it's as simple as the latency
+> between getting the change into the kernel.
+> 
+> However, I'm a bit worried that in case of ATI there are not so many
+> platforms that are kept up-to-dated.
 
-syzbot tried to test the proposed patch but the build/boot failed:
+This would be a rhetorical question if I were not interested in the
+answer but asking only to make a point.  That's not the case at all.
 
-failed to apply patch:
-checking file fs/ext4/inode.c
-patch: **** unexpected end of file in patch
+If these SB600 USB devices stopped working in v5.9 (October 2020),
+that would affect lots of keyboards and mice, and I would be surprised
+if we didn't hear about it until February, 2022.
 
+I looked through https://github.com/linuxhw/Dmesg, and there are at
+least 40 dmesg logs from v5.9 or later with SB600 USB, so I'm
+still a little skeptical that 306c54d0edb6 by itself is enough to
+explain this.
 
+Anyway, I applied this to pci/msi for v5.18 with the following commit
+log:
 
-Tested on:
+    PCI: Disable broken MSI on ATI SB600 USB adapters
 
-commit:         56e337f2 Revert "gpio: Revert regression in sysfs-gpio..
-git tree:       upstream
-dashboard link: https://syzkaller.appspot.com/bug?extid=fcc629d1a1ae8d3fe8a5
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14bf8361700000
+    Some ATI SB600 USB adapters advertise MSI, but MSI doesn't work if INTx is
+    disabled.  Disable MSI on these adapters.
 

@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AB04D9411
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB324D9410
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344992AbiCOFoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 01:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S1344878AbiCOFoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 01:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245552AbiCOFoF (ORCPT
+        with ESMTP id S236070AbiCOFoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 01:44:05 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12515F68
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647322974; x=1678858974;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vKLqgdrX1D20OabK5vs+RVD+2WZZSvXBVFAyEtLfaKw=;
-  b=b29XfvGsy03LMYJrM4G8BvIAXI7M1CKhOfvZ2/ep35HTngn5Piiw3yMU
-   iLzG1NEPfsjJ1EW6LNfZE0XUofkg2725mSwv/EZ8CsLYySKHfKRxvvE+Z
-   MXFHbjUdhjmtszfkQT8WyGU5zKT62lPX89j6tNDfGheaf77JTjA460ZYt
-   cBkdwhr8g0eDKQOEcfQeOFSlfia32P7nJ6r9V/99Pv+ym5Tiadm7Rno4d
-   tcBnYjXOC7Duy0bW9Pat//ikyPG21g1aKsHxvLW68WjXoNYwdv/IGLtHE
-   rh/LfPgzACdfs1eMFYP4dnnEtlb1Dcpdn05fMJPhlxKdpgWPTMFRsM1n+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253778780"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="253778780"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 22:42:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="515730299"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Mar 2022 22:42:52 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTzxL-000Abh-IO; Tue, 15 Mar 2022 05:42:51 +0000
-Date:   Tue, 15 Mar 2022 13:41:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: [toke:xdp-queueing-03 7/9] filter.c:undefined reference to `bpf_log'
-Message-ID: <202203151336.iJ9Hu2Wo-lkp@intel.com>
+        Tue, 15 Mar 2022 01:44:00 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AF542EC8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:42:44 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nTzx9-00020F-RU; Tue, 15 Mar 2022 06:42:39 +0100
+Message-ID: <e5302bda-ba48-4308-2b3a-a686e9430055@leemhuis.info>
+Date:   Tue, 15 Mar 2022 06:42:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Linux 5.17-rc8
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Edmond Chung <edmondchung@google.com>,
+        Andrew Chant <achant@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Michael Walle <michael@walle.cc>
+References: <CAHk-=wiHa0vsZseZES=1T0rJ4Z_bC5cwHMUJfqFL9hVpvB283g@mail.gmail.com>
+ <20220314192522.GA3031157@roeck-us.net>
+ <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
+ <CACjc_5paC=X4znTty8LBtobqBW2nq4mbQYnw_TMgVEFb1A7mhA@mail.gmail.com>
+ <CAHk-=wh0QBksyaTEn4gk=mn6hgAhp3e8i9mRsr657Dd-kQ3MKg@mail.gmail.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+In-Reply-To: <CAHk-=wh0QBksyaTEn4gk=mn6hgAhp3e8i9mRsr657Dd-kQ3MKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1647322964;af7b6a34;
+X-HE-SMSGID: 1nTzx9-00020F-RU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +58,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-03
-head:   a043a41b1a69e5d034c8bdc1cdcce2f3df28a833
-commit: 581e3988251592601ab763f144f827b71296beb9 [7/9] bpf: Enable direct packet access for dequeue packets
-config: arm-randconfig-r004-20220313 (https://download.01.org/0day-ci/archive/20220315/202203151336.iJ9Hu2Wo-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=581e3988251592601ab763f144f827b71296beb9
-        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
-        git fetch --no-tags toke xdp-queueing-03
-        git checkout 581e3988251592601ab763f144f827b71296beb9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+[CCing regressions list and Michael Walle]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+FWIW, I was a bit surprised to see this, I had assumed the revert that
+causing trouble (fc328a7d1fcc) would go in the next merge window. Seems
+my regression tracking work did more harm then good here. :-/ Whatever:
 
-All errors (new ones prefixed by >>):
+On 15.03.22 02:47, Linus Torvalds wrote:
+> On Mon, Mar 14, 2022 at 5:45 PM Marcelo Roberto Jimenez
+> <marcelo.jimenez@gmail.com> wrote:
+>>
+>> At a certain point, I tried Thorsten's suggestion to add a gpio-ranges
+>> property in a way similar to another patch, but the kernel went into
+>> an EPROBE_DEFER deadlock. Thierry Reding made some comments about this
+>> in the sequence.
+> 
+> Hmm. The problem does sound like that particular driver doesn't use
+> the pin_ranges thing, so then the tests for an empty pin_ranges will
+> always be true.
+>
+> [...]
+>
+> IOW, it looks like either a gpio controller has to implement that
+> 'add_pin_ranges()' function (only tegra), or it needs to always add
+> the pin ranges at probe time.
+> 
+> Am I guessing right that the driver that you use does neither?
+> 
+> LinusW/Bartoz - this all really sounds strange to me. Maybe I'm
+> misreading the situation entirely. Should there be some sanity-test
+> that any gpio/pinctrl driver that uses gpiochip_generic_request()
+> would either have to have that add_pin_ranges() callback, or a
+> successful probe needs to always populate that 'gpiodev->pin_ranges'
+> list?
+> 
+> Or maybe I'm misreading the situation entirely. I don't know the code
+> - I'm just grepping for things and trying to make sense of how that
+> '->pin_ranges' list is supposed to work.
+> 
+> But for now, I think that patch has to be reverted.
 
-   arm-linux-gnueabi-ld: net/core/filter.o: in function `dequeue_btf_struct_access':
->> filter.c:(.text+0xc994): undefined reference to `bpf_log'
+There is a another reason to do so: Michael Walle reported that the
+revert is causing a regression for him:
+https://lore.kernel.org/stable/20220314155509.552218-1-michael@walle.cc/
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+To quote:
+
+```
+> This breaks the pinctrl-microchip-sgpio driver as far as I can see.
+> 
+> I tried to debug it and this is what I have discovered so far:
+>  (1) the sgpio driver will use the gpio_stub_drv for its child nodes.
+>      Looks like a workaround, see [1].
+>  (2) these will have an empty gpio range
+>  (3) with the changes of this patch, pinctrl_gpio_request() will now
+>      be called and will fail with -EPROBE_DEFER.
+> 
+> I'm not exactly sure what to do here. Saravana Kannan once suggested
+> to use devm_of_platform_populate() to probe the child nodes [2]. But
+> I haven't found any other driver doing that.
+> 
+> Also, I'm not sure if there are any other other driver which get
+> broken by this. I.e. ones falling into the gpio_stub_drv category.
+> 
+> [1] https://lore.kernel.org/lkml/20210122193600.1415639-1-saravanak@google.com/
+> [2] https://lore.kernel.org/lkml/CAGETcx9PiX==mLxB9PO8Myyk6u2vhPVwTMsA5NkD-ywH5xhusw@mail.gmail.com/
+> 
+> -michael
+> 
+> NB. this patch doesn't contain a Fixes tag. Was this on purpose?
+```
+
+Ciao, Thorsten

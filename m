@@ -2,127 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76774DA014
+	by mail.lfdr.de (Postfix) with ESMTP id 21D1A4DA012
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350069AbiCOQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
+        id S1350065AbiCOQar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350067AbiCOQat (ORCPT
+        with ESMTP id S1350010AbiCOQap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:30:49 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAF657142;
-        Tue, 15 Mar 2022 09:29:36 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FGEM4Y029688;
-        Tue, 15 Mar 2022 16:29:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cbkYVQbQRRtLfFZ4wdGkiRutFnpOquBvZJYoshzzZi4=;
- b=caTfq98QMeGQf248z9VAEzG1kRAcOYKzm+X1QOZ5FmuJtUaEx+k71YYYAk1Wz/FgIs4+
- YRKcQSi26TjPnDq5zu+/6QTTt0FrN8brPa1+p/5DGaP575dA+oaBTKybXXhm8Mibft+F
- qYqrSQ2o2k1UKco4FK8nJA9lkEiMG4mM8gcCHm6LAOV4z1CRBfQlrHXtefLglzKEdzHx
- btiTfqQucAH9RE/q8SKADdWYcfLVJELHfwGlPZgQKAEn41AJqzjW0W3y1dzSLD3D9RGI
- pcGyDmwAPx135bzu91zAVrKoK1VyNue49E3vA8BHroMDjsy63McaODciBVrDNuyMlGD4 +A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etw7p24wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 16:29:18 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22FGEw13007435;
-        Tue, 15 Mar 2022 16:29:18 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3etw7p24wm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 16:29:18 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FGRDhn009206;
-        Tue, 15 Mar 2022 16:29:17 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04wdc.us.ibm.com with ESMTP id 3erk59pkqa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 16:29:17 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FGTFtc25297208
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 16:29:15 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D2482AC06D;
-        Tue, 15 Mar 2022 16:29:15 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8898FAC05E;
-        Tue, 15 Mar 2022 16:29:04 +0000 (GMT)
-Received: from [9.211.32.184] (unknown [9.211.32.184])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Mar 2022 16:29:04 +0000 (GMT)
-Message-ID: <5a1c64ac-df10-fb66-ad6d-39adf786f32b@linux.ibm.com>
-Date:   Tue, 15 Mar 2022 12:29:02 -0400
+        Tue, 15 Mar 2022 12:30:45 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D4A56C3E;
+        Tue, 15 Mar 2022 09:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647361773; x=1678897773;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5bWJ1aLHhnxNHrTHdW/lDQbheo4ws+MyK4EncLb5sbM=;
+  b=KvA5YrFx2G3CWHBYBaMaGVg4YJiB5keas9t0cFEsg/KYBk8nj5f7PlT2
+   pTCIQ7j8m+XRM8oC835CmeZM8gnjMyO1r3U3VP4MXdtk/ZQTA0iNoxp1l
+   T5P+S5Gi+cpz2HQZCgmL+Cf7Kbj6MFDvl7QK6gMsTMXOQKiP/6+FC/OH9
+   jsD1BM6kQdHqPlbqg1Qwr8skEi7CKPhYpsq0+SSM5itpK5fwgEwahJF0I
+   WFPGzUQ4GkpC1fxAoCGRxN3POkrJ9irLvVlh0b39sqv/y8zfDjXbmMmcQ
+   tVBVg8VveMqafE/jyMWbVJ/WTR2MB2DErzTgbUDHzicxDL2OXBjJ1qTCR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281125062"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="281125062"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:29:19 -0700
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="690255507"
+Received: from lepple-mobl1.ger.corp.intel.com (HELO [10.252.56.30]) ([10.252.56.30])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:29:14 -0700
+Message-ID: <daf2136a-d6ff-558c-e9bb-c7a45dd1c43f@linux.intel.com>
+Date:   Tue, 15 Mar 2022 18:29:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4 15/32] vfio: introduce KVM-owned IOMMU type
+ Thunderbird/91.5.0
+Subject: Re: [PATCH bpf-next v2 03/28] HID: hook up with bpf
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>, borntraeger@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, joro@8bytes.org, will@kernel.org,
-        pbonzini@redhat.com, corbet@lwn.net, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-doc@vger.kernel.org
-References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
- <20220314194451.58266-16-mjrosato@linux.ibm.com>
- <20220314213808.GI11336@nvidia.com>
- <decc5320-eb3e-af25-fd2b-77fabe56a897@linux.ibm.com>
- <20220315143858.GY11336@nvidia.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220315143858.GY11336@nvidia.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-4-benjamin.tissoires@redhat.com>
+From:   Tero Kristo <tero.kristo@linux.intel.com>
+In-Reply-To: <20220304172852.274126-4-benjamin.tissoires@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XovYpnHnN8X7XvZsXcj1wbC8jRUcunWF
-X-Proofpoint-GUID: VyCBJft7M62L1ZwToTemOEV0VPlk6L0Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
- phishscore=0 impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203150102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 10:38 AM, Jason Gunthorpe wrote:
-> On Tue, Mar 15, 2022 at 09:49:01AM -0400, Matthew Rosato wrote:
-> 
->> The rationale for splitting steps 1 and 2 are that VFIO_SET_IOMMU doesn't
->> have a mechanism for specifying more than the type as an arg, no?  Otherwise
->> yes, you could specify a kvm fd at this point and it would have some other
->> advantages (e.g. skip notifier).  But we still can't use the IOMMU for
->> mapping until step 3.
-> 
-> Stuff like this is why I'd be much happier if this could join our
-> iommfd project so we can have clean modeling of the multiple iommu_domains.
-> 
+Hi Benjamin,
 
-I'd certainly be willing to collaborate so feel free to loop me in on 
-the discussions; but I got the impression that iommufd is not close to 
-ready (maybe I'm wrong?) -- if so I really don't want to completely 
-delay this zPCI support behind it as it has a significant benefit for 
-kvm guests on s390x :(
+On 04/03/2022 19:28, Benjamin Tissoires wrote:
+> Now that BPF can be compatible with HID, add the capability into HID.
+> drivers/hid/hid-bpf.c takes care of the glue between bpf and HID, and
+> hid-core can then inject any incoming event from the device into a BPF
+> program to filter/analyze it.
+>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> ---
+>
+> changes in v2:
+> - split the series by bpf/libbpf/hid/selftests and samples
+> - addressed review comments from v1
+> ---
+>   drivers/hid/Makefile   |   1 +
+>   drivers/hid/hid-bpf.c  | 157 +++++++++++++++++++++++++++++++++++++++++
+>   drivers/hid/hid-core.c |  21 +++++-
+>   include/linux/hid.h    |  11 +++
+>   4 files changed, 187 insertions(+), 3 deletions(-)
+>   create mode 100644 drivers/hid/hid-bpf.c
+>
+> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+> index 6d3e630e81af..08d2d7619937 100644
+> --- a/drivers/hid/Makefile
+> +++ b/drivers/hid/Makefile
+> @@ -4,6 +4,7 @@
+>   #
+>   hid-y			:= hid-core.o hid-input.o hid-quirks.o
+>   hid-$(CONFIG_DEBUG_FS)		+= hid-debug.o
+> +hid-$(CONFIG_BPF)		+= hid-bpf.o
+>   
+>   obj-$(CONFIG_HID)		+= hid.o
+>   obj-$(CONFIG_UHID)		+= uhid.o
+> diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
+> new file mode 100644
+> index 000000000000..8120e598de9f
+> --- /dev/null
+> +++ b/drivers/hid/hid-bpf.c
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + *  BPF in HID support for Linux
+> + *
+> + *  Copyright (c) 2022 Benjamin Tissoires
+> + */
+> +
+> +#include <linux/filter.h>
+> +#include <linux/mutex.h>
+> +#include <linux/slab.h>
+> +
+> +#include <uapi/linux/bpf_hid.h>
+> +#include <linux/hid.h>
+> +
+> +static int __hid_bpf_match_sysfs(struct device *dev, const void *data)
+> +{
+> +	struct kernfs_node *kn = dev->kobj.sd;
+> +	struct kernfs_node *uevent_kn;
+> +
+> +	uevent_kn = kernfs_find_and_get_ns(kn, "uevent", NULL);
+> +
+> +	return uevent_kn == data;
+> +}
+> +
+> +static struct hid_device *hid_bpf_fd_to_hdev(int fd)
+> +{
+> +	struct device *dev;
+> +	struct hid_device *hdev;
+> +	struct fd f = fdget(fd);
+> +	struct inode *inode;
+> +	struct kernfs_node *node;
+> +
+> +	if (!f.file) {
+> +		hdev = ERR_PTR(-EBADF);
+> +		goto out;
+> +	}
+> +
+> +	inode = file_inode(f.file);
+> +	node = inode->i_private;
+> +
+> +	dev = bus_find_device(&hid_bus_type, NULL, node, __hid_bpf_match_sysfs);
+> +
+> +	if (dev)
+> +		hdev = to_hid_device(dev);
+> +	else
+> +		hdev = ERR_PTR(-EINVAL);
+> +
+> + out:
+> +	fdput(f);
+> +	return hdev;
+> +}
+> +
+> +static int hid_bpf_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> +{
+> +	int err = 0;
+> +
+> +	switch (type) {
+> +	case BPF_HID_ATTACH_DEVICE_EVENT:
+> +		if (!hdev->bpf.ctx) {
+> +			hdev->bpf.ctx = bpf_hid_allocate_ctx(hdev, HID_BPF_MAX_BUFFER_SIZE);
+> +			if (IS_ERR(hdev->bpf.ctx)) {
+> +				err = PTR_ERR(hdev->bpf.ctx);
+> +				hdev->bpf.ctx = NULL;
+> +			}
+> +		}
+> +		break;
+> +	default:
+> +		/* do nothing */
+
+These cause following error:
+
+
+   CC      drivers/hid/hid-bpf.o
+drivers/hid/hid-bpf.c: In function ‘hid_bpf_link_attach’:
+drivers/hid/hid-bpf.c:88:2: error: label at end of compound statement
+    88 |  default:
+       |  ^~~~~~~
+drivers/hid/hid-bpf.c: In function ‘hid_bpf_link_attached’:
+drivers/hid/hid-bpf.c:101:2: error: label at end of compound statement
+   101 |  default:
+       |  ^~~~~~~
+drivers/hid/hid-bpf.c: In function ‘hid_bpf_array_detached’:
+drivers/hid/hid-bpf.c:116:2: error: label at end of compound statement
+   116 |  default:
+       |  ^~~~~~~
+make[2]: *** [scripts/Makefile.build:288: drivers/hid/hid-bpf.o] Error 1
+make[1]: *** [scripts/Makefile.build:550: drivers/hid] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1831: drivers] Error 2
+
+To fix that, you need to add a break statement at end:
+
+default:
+
+     /* do nothing */
+
+     break;
+
+Same for couple of other occurrences in the file.
+
+-Tero
+
 

@@ -2,110 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3247E4DA59F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CD44DA5A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242937AbiCOWsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
+        id S1352364AbiCOWtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352334AbiCOWsR (ORCPT
+        with ESMTP id S1350376AbiCOWtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:48:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F21E5D1A7;
-        Tue, 15 Mar 2022 15:47:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91D4461456;
-        Tue, 15 Mar 2022 22:47:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE7E8C340E8;
-        Tue, 15 Mar 2022 22:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647384424;
-        bh=86orAlnXxtfNaGMM9WoOgNr7cI+roJgX2Retc4ANSZU=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=CUfkDOMp7/G9aS7ZJK8VXoEGwpow29KDhCIiBkqyRUEJoOI4lU/V32HfVdz4XwYJW
-         9R9s5KFsCQ/d2P6EhvyV0CDyhfAYE0F9Vs59OX/ml0dlmZuUCUHswBJ97BF0WFO6A/
-         wsF/fGWdQ/tMdYCw9AT2h9mIl94OPkdW4SYh4taBsqZvc9lwWIqIGGg4SrzE4fzAHD
-         IrIlwsyy5qu7VnGRbmFlfKVGktuJaZF3aBiTWl78xEhU9Gby5ZnxTT4rfm51g89fBN
-         hnnOd/xur0WmQBHO0325k72C8OsunMLmuLN+0UJ4u17EB6NMr2LnqogM0mHbU1Y8Ah
-         fnlhFZ6E8dSAA==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220313190419.2207-12-ansuelsmth@gmail.com>
-References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-12-ansuelsmth@gmail.com>
-Subject: Re: [PATCH 11/16] clk: qcom: krait-cc: force sec_mux to QSB
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
+        Tue, 15 Mar 2022 18:49:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FE238BD5;
+        Tue, 15 Mar 2022 15:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647384499; x=1678920499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P9qMja6/fAMvM2ugsrl1pMMJHX9GWLFIsNE39aB8ACc=;
+  b=lYAZCEqQF/XjKWym3CuxUKQqkPAOZRnZPcNb86AfUTzCJqy6nyl51PoD
+   kltMw7N4v43wVHP5JNV+q+K509r6brylvyVg5eGEgZkjWPjIwmn2pzfyM
+   wsw4XrtucRbGYWY70eWpXyaKb6ivQGOq1BhZ6fjZsf+pfkjqdUo63mhoa
+   2QyDnABOq+fAFRDnvWtsjXDFcKQGnopmHl90ccaVcxEAaeGbkrjuHULJI
+   Hzg8nmV+gd2XatDE7uuYHtozecsRPqZkgGC9u0CNwwtEdpeBw7YZZfAOq
+   tPpli5+AcPoPDJnG83KiFA8Rbcxw4jy9J52z5qezM2SrVx5ZmQutct6QM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281213578"
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="281213578"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 15:48:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="516072862"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Mar 2022 15:48:16 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUFxf-000Bag-Nu; Tue, 15 Mar 2022 22:48:15 +0000
+Date:   Wed, 16 Mar 2022 06:47:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Date:   Tue, 15 Mar 2022 15:47:02 -0700
-User-Agent: alot/0.10
-Message-Id: <20220315224703.EE7E8C340E8@smtp.kernel.org>
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        arnaud.pouliquen@foss.st.com
+Subject: Re: [PATCH] rpmsg: virtio: set dst address on first message received
+Message-ID: <202203160614.sjUMuSy8-lkp@intel.com>
+References: <20220315153856.3117676-1-arnaud.pouliquen@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315153856.3117676-1-arnaud.pouliquen@foss.st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-03-13 12:04:14)
-> Now that we have converted every driver to parent_data, it was
-> notice that the bootloader can't really leave the system in a
-> strange state where l2 or the cpu0/1 can be sourced in a number of ways
-> for example cpu1 sourcing out of qsb, l2 sourcing out of pxo.
-> To correctly reset the mux and the HFPLL force the sec_mux to QSB.
->=20
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/clk/qcom/krait-cc.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
-> index 6530f10a546f..1bdc89c097e6 100644
-> --- a/drivers/clk/qcom/krait-cc.c
-> +++ b/drivers/clk/qcom/krait-cc.c
-> @@ -15,6 +15,8 @@
-> =20
->  #include "clk-krait.h"
-> =20
-> +#define QSB_RATE       1
-> +
->  static unsigned int sec_mux_map[] =3D {
->         2,
->         0,
-> @@ -178,6 +180,12 @@ krait_add_sec_mux(struct device *dev, struct clk *qs=
-b, int id,
->         if (ret)
->                 clk =3D ERR_PTR(ret);
-> =20
-> +       /* Force the sec_mux to be set to QSB rate.
+Hi Arnaud,
 
-The comment start should be on a line alone
+I love your patch! Perhaps something to improve:
 
-	/*
-	 * Force the ...
+[auto build test WARNING on remoteproc/rpmsg-next]
+[also build test WARNING on v5.17-rc8 next-20220315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> +        * This is needed to correctly set the parents and
-> +        * to later reset mux and HFPLL to a known freq.
-> +        */
-> +       clk_set_rate(clk, QSB_RATE);
-> +
->  err_clk:
->         if (unique_aux)
->                 kfree(parent_name);
+url:    https://github.com/0day-ci/linux/commits/Arnaud-Pouliquen/rpmsg-virtio-set-dst-address-on-first-message-received/20220315-234049
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rpmsg-next
+config: s390-randconfig-s031-20220313 (https://download.01.org/0day-ci/archive/20220316/202203160614.sjUMuSy8-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/ef182a34773917f6bf876b37485031962393a1cd
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Arnaud-Pouliquen/rpmsg-virtio-set-dst-address-on-first-message-received/20220315-234049
+        git checkout ef182a34773917f6bf876b37485031962393a1cd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/rpmsg/virtio_rpmsg_bus.c:756:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] dst @@     got restricted __rpmsg32 [usertype] src @@
+   drivers/rpmsg/virtio_rpmsg_bus.c:756:36: sparse:     expected unsigned int [usertype] dst
+   drivers/rpmsg/virtio_rpmsg_bus.c:756:36: sparse:     got restricted __rpmsg32 [usertype] src
+
+vim +756 drivers/rpmsg/virtio_rpmsg_bus.c
+
+   727	
+   728		/*
+   729		 * We currently use fixed-sized buffers, so trivially sanitize
+   730		 * the reported payload length.
+   731		 */
+   732		if (len > vrp->buf_size ||
+   733		    msg_len > (len - sizeof(struct rpmsg_hdr))) {
+   734			dev_warn(dev, "inbound msg too big: (%d, %d)\n", len, msg_len);
+   735			return -EINVAL;
+   736		}
+   737	
+   738		/* use the dst addr to fetch the callback of the appropriate user */
+   739		mutex_lock(&vrp->endpoints_lock);
+   740	
+   741		ept = idr_find(&vrp->endpoints, __rpmsg32_to_cpu(little_endian, msg->dst));
+   742	
+   743		/* let's make sure no one deallocates ept while we use it */
+   744		if (ept)
+   745			kref_get(&ept->refcount);
+   746	
+   747		mutex_unlock(&vrp->endpoints_lock);
+   748	
+   749		if (ept) {
+   750			rpdev = ept->rpdev;
+   751			if (rpdev->ept == ept && rpdev->dst == RPMSG_ADDR_ANY) {
+   752				/*
+   753				 * First message received from the remote side on the default endpoint,
+   754				 * update channel destination address.
+   755				 */
+ > 756				rpdev->dst = msg->src;
+   757			}
+   758	
+   759			/* make sure ept->cb doesn't go away while we use it */
+   760			mutex_lock(&ept->cb_lock);
+   761	
+   762			if (ept->cb)
+   763				ept->cb(ept->rpdev, msg->data, msg_len, ept->priv,
+   764					__rpmsg32_to_cpu(little_endian, msg->src));
+   765	
+   766			mutex_unlock(&ept->cb_lock);
+   767	
+   768			/* farewell, ept, we don't need you anymore */
+   769			kref_put(&ept->refcount, __ept_release);
+   770		} else
+   771			dev_warn_ratelimited(dev, "msg received with no recipient\n");
+   772	
+   773		/* publish the real size of the buffer */
+   774		rpmsg_sg_init(&sg, msg, vrp->buf_size);
+   775	
+   776		/* add the buffer back to the remote processor's virtqueue */
+   777		err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, msg, GFP_KERNEL);
+   778		if (err < 0) {
+   779			dev_err(dev, "failed to add a virtqueue buffer: %d\n", err);
+   780			return err;
+   781		}
+   782	
+   783		return 0;
+   784	}
+   785	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

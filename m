@@ -2,43 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC994D9FE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606EA4D9FE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350037AbiCOQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S241023AbiCOQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiCOQWf (ORCPT
+        with ESMTP id S239900AbiCOQXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:22:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FDB237C9;
-        Tue, 15 Mar 2022 09:21:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 808AFB81770;
-        Tue, 15 Mar 2022 16:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E0BC340E8;
-        Tue, 15 Mar 2022 16:21:19 +0000 (UTC)
-From:   Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 5.15.28-rt36
-Date:   Tue, 15 Mar 2022 16:20:39 -0000
-Message-ID: <164736123954.3997068.7163237580661006943@puck.lan>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Tue, 15 Mar 2022 12:23:44 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF27156777;
+        Tue, 15 Mar 2022 09:22:31 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FGEQbg019652;
+        Tue, 15 Mar 2022 16:21:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=UW+pjKjsIWdwIjUe8EKCM7nF6A55i4kkxk6KEUWHHTw=;
+ b=VOEhXfV24hITYknHaw/91LuBkl5CFArG8mxjFbgCMaObzXkpr8ceek5tHxjI0OQBtUEk
+ 8tCGGJ8saE0Ycxh/pGbhMujl/nzzGGRkoH8E67+Kg5MpPpv6SQsFUwu6Ue7Em/d1VsjL
+ SRyNuSVTaBGZyUd6FNkzcYQ26+d18Br/wKuxZb14JpVnMBjL3dnPz3ZM2vBp1ycYMb/6
+ A/bcSMWEa0Zgfeqcxp7kbTKb04ih3AdPtxsCdJbl3UJNxmYhLOBm+I6J322vwsZhTfci
+ 8aGv75kavHaK6ldEgH60zyuOQSE9jyk4PoZDaYC+wqSa3u4WT7uX8fshnnky85VjXo7/ 1A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3etvbmbbtx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 16:21:13 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22FGEq1i024701;
+        Tue, 15 Mar 2022 16:21:13 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3etvbmbbs1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 16:21:12 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FFxLUG017851;
+        Tue, 15 Mar 2022 16:21:10 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3erk58p0g5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 16:21:10 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FGL6rF27066832
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Mar 2022 16:21:06 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4BC08AE055;
+        Tue, 15 Mar 2022 16:21:06 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8EE82AE045;
+        Tue, 15 Mar 2022 16:21:04 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.6.24])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 15 Mar 2022 16:21:04 +0000 (GMT)
+Date:   Tue, 15 Mar 2022 17:21:02 +0100
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_HI,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v1 5/7] s390/pgtable: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+Message-ID: <20220315172102.771bd2cf@thinkpad>
+In-Reply-To: <20220315141837.137118-6-david@redhat.com>
+References: <20220315141837.137118-1-david@redhat.com>
+        <20220315141837.137118-6-david@redhat.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eRCSI5w-tlE5sK1rQh4ufLQ4p6TxCS6h
+X-Proofpoint-ORIG-GUID: 7RtkXXw2cQTrBuz4kjlLUBH_amFhVLPx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 clxscore=1011 phishscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 spamscore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203150102
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,196 +130,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Tue, 15 Mar 2022 15:18:35 +0100
+David Hildenbrand <david@redhat.com> wrote:
 
-I'm pleased to announce the 5.15.28-rt36 stable release.
+> Let's steal one bit from the offset. While at it, document the meaning
+> of bit 62 for swap ptes.
 
-You can get this release via the git tree at:
+You define _PAGE_SWP_EXCLUSIVE as _PAGE_LARGE, which is bit 52, and
+this is not part of the swap pte offset IIUC. So stealing any bit might
+actually not be necessary, see below.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+Also, bit 62 should be the soft dirty bit for normal PTEs, and this
+doesn't seem to be used for swap PTEs at all. But I might be missing
+some use case where softdirty also needs to be preserved in swap PTEs.
 
-  branch: v5.15-rt
-  Head SHA1: 42ea71f324239aff9351a401974c9781ebacda4c
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  arch/s390/include/asm/pgtable.h | 37 ++++++++++++++++++++++++++-------
+>  1 file changed, 30 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+> index 008a6c856fa4..c182212a2b44 100644
+> --- a/arch/s390/include/asm/pgtable.h
+> +++ b/arch/s390/include/asm/pgtable.h
+> @@ -181,6 +181,8 @@ static inline int is_module_addr(void *addr)
+>  #define _PAGE_SOFT_DIRTY 0x000
+>  #endif
+>  
+> +#define _PAGE_SWP_EXCLUSIVE _PAGE_LARGE	/* SW pte exclusive swap bit */
+> +
+>  /* Set of bits not changed in pte_modify */
+>  #define _PAGE_CHG_MASK		(PAGE_MASK | _PAGE_SPECIAL | _PAGE_DIRTY | \
+>  				 _PAGE_YOUNG | _PAGE_SOFT_DIRTY)
+> @@ -796,6 +798,24 @@ static inline int pmd_protnone(pmd_t pmd)
+>  }
+>  #endif
+>  
+> +#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+> +static inline pte_t pte_swp_mkexclusive(pte_t pte)
+> +{
+> +	pte_val(pte) |= _PAGE_SWP_EXCLUSIVE;
+> +	return pte;
+> +}
+> +
+> +static inline int pte_swp_exclusive(pte_t pte)
+> +{
+> +	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
+> +}
+> +
+> +static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+> +{
+> +	pte_val(pte) &= ~_PAGE_SWP_EXCLUSIVE;
+> +	return pte;
+> +}
+> +
+>  static inline int pte_soft_dirty(pte_t pte)
+>  {
+>  	return pte_val(pte) & _PAGE_SOFT_DIRTY;
+> @@ -1675,16 +1695,19 @@ static inline int has_transparent_hugepage(void)
+>   * information in the lowcore.
+>   * Bits 54 and 63 are used to indicate the page type.
+>   * A swap pte is indicated by bit pattern (pte & 0x201) == 0x200
+> - * This leaves the bits 0-51 and bits 56-62 to store type and offset.
+> - * We use the 5 bits from 57-61 for the type and the 52 bits from 0-51
+> + * This leaves the bits 0-50 and bits 56-61 to store type and offset.
+> + * We use the 5 bits from 57-61 for the type and the 51 bits from 0-50
+>   * for the offset.
+> - * |			  offset			|01100|type |00|
+> - * |0000000000111111111122222222223333333333444444444455|55555|55566|66|
+> - * |0123456789012345678901234567890123456789012345678901|23456|78901|23|
+> + * |			  offset		       |E|01100|type |S0|
+> + * |000000000011111111112222222222333333333344444444445|5|55555|55566|66|
+> + * |012345678901234567890123456789012345678901234567890|1|23456|78901|23|
+> + *
+> + * S (bit 62) is used for softdirty tracking.
 
-Or to build 5.15.28-rt36 directly, the following patches should be applied:
+Unless there is some use for softdirty tracking in swap PTEs, I think
+this description does not belong here, to the swap PTE layout.
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.tar.xz
+> + * E (bit 51) is used to remember PG_anon_exclusive.
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.15.28.xz
+It is bit 52, at least with this patch, so I guess this could all be
+done w/o stealing anything. That is, of course, only if it is allowed
+to use bit 52 in this case. The POP says bit 52 has to be 0, or else
+a "translation-specification exception" is recognized. However, I think
+it could be OK for PTEs marked as invalid, like it is the case for swap
+PTEs.
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.28-rt36.patch.xz
+The comment here says at the beginning:
+/*
+ * 64 bit swap entry format:
+ * A page-table entry has some bits we have to treat in a special way.
+ * Bits 52 and bit 55 have to be zero, otherwise a specification
+ * exception will occur instead of a page translation exception. The
+ * specification exception has the bad habit not to store necessary
+ * information in the lowcore.
 
+This would mean that it is not OK to have bit 52 not zero for swap PTEs.
+But if I read the POP correctly, all bits except for the DAT-protection
+would be ignored for invalid PTEs, so maybe this comment needs some update
+(for both bits 52 and also 55).
 
-You can also build from 5.15.27-rt35 by applying the incremental patch:
+Heiko might also have some more insight.
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.15/incr/patch-5.15.27-rt35-rt36.patch.xz
-
-Enjoy!
-Clark
-
-Changes from v5.15.27-rt35:
----
-
-Anshuman Khandual (1):
-      arm64: Add Cortex-X2 CPU part definition
-
-Clark Williams (2):
-      Merge tag 'v5.15.28' into v5.15-rt
-      Linux 5.15.28-rt36
-
-Emmanuel Gil Peyrot (1):
-      ARM: fix build error when BPF_SYSCALL is disabled
-
-Greg Kroah-Hartman (2):
-      Revert "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-      Linux 5.15.28
-
-Huang Pei (1):
-      slip: fix macro redefine warning
-
-James Morse (20):
-      arm64: entry.S: Add ventry overflow sanity checks
-      arm64: spectre: Rename spectre_v4_patch_fw_mitigation_conduit
-      KVM: arm64: Allow indirect vectors to be used without SPECTRE_V3A
-      arm64: entry: Make the trampoline cleanup optional
-      arm64: entry: Free up another register on kpti's tramp_exit path
-      arm64: entry: Move the trampoline data page before the text page
-      arm64: entry: Allow tramp_alias to access symbols after the 4K boundary
-      arm64: entry: Don't assume tramp_vectors is the start of the vectors
-      arm64: entry: Move trampoline macros out of ifdef'd section
-      arm64: entry: Make the kpti trampoline's kpti sequence optional
-      arm64: entry: Allow the trampoline text to occupy multiple pages
-      arm64: entry: Add non-kpti __bp_harden_el1_vectors for mitigations
-      arm64: entry: Add vectors that have the bhb mitigation sequences
-      arm64: entry: Add macro for reading symbol addresses from the trampoline
-      arm64: Add percpu vectors for EL1
-      arm64: proton-pack: Report Spectre-BHB vulnerabilities as part of Spectre-v2
-      arm64: Mitigate spectre style branch history side channels
-      KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
-      arm64: Use the clearbhb instruction in mitigations
-      arm64: proton-pack: Include unprivileged eBPF status in Spectre v2 mitigation reporting
-
-Joey Gouly (3):
-      arm64: add ID_AA64ISAR2_EL1 sys register
-      arm64: cpufeature: add HWCAP for FEAT_AFP
-      arm64: cpufeature: add HWCAP for FEAT_RPRES
-
-Josh Poimboeuf (3):
-      x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
-      x86/speculation: Warn about Spectre v2 LFENCE mitigation
-      x86/speculation: Warn about eIBRS + LFENCE + Unprivileged eBPF + SMT
-
-Juergen Gross (11):
-      xen/xenbus: don't let xenbus_grant_ring() remove grants in error case
-      xen/grant-table: add gnttab_try_end_foreign_access()
-      xen/blkfront: don't use gnttab_query_foreign_access() for mapped status
-      xen/netfront: don't use gnttab_query_foreign_access() for mapped status
-      xen/scsifront: don't use gnttab_query_foreign_access() for mapped status
-      xen/gntalloc: don't use gnttab_query_foreign_access()
-      xen: remove gnttab_query_foreign_access()
-      xen/9p: use alloc/free_pages_exact()
-      xen/pvcalls: use alloc/free_pages_exact()
-      xen/gnttab: fix gnttab_end_foreign_access() without page specified
-      xen/netfront: react properly to failing gnttab_end_foreign_access_ref()
-
-Kim Phillips (2):
-      x86/speculation: Use generic retpoline by default on AMD
-      x86/speculation: Update link to AMD speculation whitepaper
-
-Marc Zyngier (1):
-      arm64: Add HWCAP for self-synchronising virtual counter
-
-Nathan Chancellor (2):
-      ARM: Do not use NOCROSSREFS directive with ld.lld
-      arm64: Do not include __READ_ONCE() block in assembly files
-
-Peter Zijlstra (3):
-      x86,bugs: Unconditionally allow spectre_v2=retpoline,amd
-      x86/speculation: Add eIBRS + Retpoline options
-      Documentation/hw-vuln: Update spectre doc
-
-Peter Zijlstra (Intel) (1):
-      x86/speculation: Rename RETPOLINE_AMD to RETPOLINE_LFENCE
-
-Russell King (Oracle) (7):
-      ARM: report Spectre v2 status through sysfs
-      ARM: early traps initialisation
-      ARM: use LOADADDR() to get load address of sections
-      ARM: Spectre-BHB workaround
-      ARM: include unprivileged BPF status in Spectre V2 reporting
-      ARM: fix co-processor register typo
-      ARM: fix build warning in proc-v7-bugs.c
-
-Suzuki K Poulose (1):
-      arm64: Add Neoverse-N2, Cortex-A710 CPU part definition
----
-Documentation/admin-guide/hw-vuln/spectre.rst   |  48 ++-
- Documentation/admin-guide/kernel-parameters.txt |   8 +-
- Documentation/arm64/cpu-feature-registers.rst   |  29 +-
- Documentation/arm64/elf_hwcaps.rst              |  12 +
- Makefile                                        |   2 +-
- arch/arm/include/asm/assembler.h                |  10 +
- arch/arm/include/asm/spectre.h                  |  32 ++
- arch/arm/include/asm/vmlinux.lds.h              |  43 ++-
- arch/arm/kernel/Makefile                        |   2 +
- arch/arm/kernel/entry-armv.S                    |  79 ++++-
- arch/arm/kernel/entry-common.S                  |  24 ++
- arch/arm/kernel/spectre.c                       |  71 +++++
- arch/arm/kernel/traps.c                         |  65 +++-
- arch/arm/mm/Kconfig                             |  11 +
- arch/arm/mm/proc-v7-bugs.c                      | 208 ++++++++++---
- arch/arm64/Kconfig                              |   9 +
- arch/arm64/include/asm/assembler.h              |  53 ++++
- arch/arm64/include/asm/cpu.h                    |   1 +
- arch/arm64/include/asm/cpufeature.h             |  29 ++
- arch/arm64/include/asm/cputype.h                |  14 +
- arch/arm64/include/asm/fixmap.h                 |   6 +-
- arch/arm64/include/asm/hwcap.h                  |   3 +
- arch/arm64/include/asm/insn.h                   |   1 +
- arch/arm64/include/asm/kvm_host.h               |   5 +
- arch/arm64/include/asm/rwonce.h                 |   4 +-
- arch/arm64/include/asm/sections.h               |   5 +
- arch/arm64/include/asm/spectre.h                |   4 +
- arch/arm64/include/asm/sysreg.h                 |  18 ++
- arch/arm64/include/asm/vectors.h                |  73 +++++
- arch/arm64/include/uapi/asm/hwcap.h             |   3 +
- arch/arm64/include/uapi/asm/kvm.h               |   5 +
- arch/arm64/kernel/cpu_errata.c                  |   7 +
- arch/arm64/kernel/cpufeature.c                  |  28 +-
- arch/arm64/kernel/cpuinfo.c                     |   4 +
- arch/arm64/kernel/entry.S                       | 214 +++++++++----
- arch/arm64/kernel/image-vars.h                  |   4 +
- arch/arm64/kernel/proton-pack.c                 | 391 +++++++++++++++++++++++-
- arch/arm64/kernel/vmlinux.lds.S                 |   2 +-
- arch/arm64/kvm/arm.c                            |   5 +-
- arch/arm64/kvm/hyp/hyp-entry.S                  |   9 +
- arch/arm64/kvm/hyp/nvhe/mm.c                    |   4 +-
- arch/arm64/kvm/hyp/vhe/switch.c                 |   9 +-
- arch/arm64/kvm/hypercalls.c                     |  12 +
- arch/arm64/kvm/psci.c                           |  18 +-
- arch/arm64/kvm/sys_regs.c                       |   2 +-
- arch/arm64/mm/mmu.c                             |  12 +-
- arch/arm64/tools/cpucaps                        |   1 +
- arch/x86/include/asm/cpufeatures.h              |   2 +-
- arch/x86/include/asm/nospec-branch.h            |  16 +-
- arch/x86/kernel/cpu/bugs.c                      | 205 +++++++++----
- arch/x86/lib/retpoline.S                        |   2 +-
- drivers/acpi/ec.c                               |  10 -
- drivers/acpi/sleep.c                            |  14 +-
- drivers/block/xen-blkfront.c                    |  63 ++--
- drivers/net/slip/slip.h                         |   2 +
- drivers/net/xen-netfront.c                      |  54 ++--
- drivers/scsi/xen-scsifront.c                    |   3 +-
- drivers/xen/gntalloc.c                          |  25 +-
- drivers/xen/grant-table.c                       |  71 +++--
- drivers/xen/pvcalls-front.c                     |   8 +-
- drivers/xen/xenbus/xenbus_client.c              |  24 +-
- include/linux/arm-smccc.h                       |   5 +
- include/linux/bpf.h                             |  12 +
- include/xen/grant_table.h                       |  19 +-
- kernel/sysctl.c                                 |   7 +
- localversion-rt                                 |   2 +-
- net/9p/trans_xen.c                              |  14 +-
- tools/arch/x86/include/asm/cpufeatures.h        |   2 +-
- 68 files changed, 1800 insertions(+), 359 deletions(-)
----
+Anyway, stealing bit 51 might still be an option, but then
+_PAGE_SWP_EXCLUSIVE would need to be defined appropriately.

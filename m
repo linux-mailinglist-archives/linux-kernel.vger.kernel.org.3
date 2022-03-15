@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B0F4D9E9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304934D9EA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346240AbiCOP1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S1349588AbiCOP1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240296AbiCOP1g (ORCPT
+        with ESMTP id S1349589AbiCOP1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:27:36 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A271506CB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:26:24 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id y3-20020a056602178300b00645d25c30c1so14726663iox.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:26:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=vdTQDBC3Jklh96eo2Y2NGd8ppWKF8RaZ4ErDmGq8gGk=;
-        b=6zQKREgydPIZy5xQiFx3sfd8qmftVgfZrtVFAUxIox4hU6Re012GwoM9G1hRZgUMjk
-         ZO2pWeqORvVBpnhL0lJJNkW1lCziTGV8R/tPRFqEZJWbAXKdFRc2R//h3kBhcFEjr8gU
-         tWa8oeCrrsffcnNCJwNnlCGVrKkcY8gYPytTHMdX4g70iLL1dnnMOxaO2RIlwxRqlcTl
-         qi8HOOwWxoDJ0lCLMXwb493L+ZDuIpr3hnmNWW2GFxyUWh26MXa/mm6Kc+z/sddtKkp4
-         yWgXdDelRnVnEYlTz0C7u3p/dp8lLGy0u8pQSHLS3LKXM0JnAJLjs+y+MfMRRwNRZrwF
-         YakA==
-X-Gm-Message-State: AOAM533PEIxdAQsjzKM7QVupSINtJmf6q6RBU+JKA3/UqTCmlTf+t2Ie
-        g3NwNoxaKNkIZ42e06s2n7dbPFh5HPoWh5FlQHI5ESdVEhvp
-X-Google-Smtp-Source: ABdhPJxRlEiUerv7gDBygAznUFLNS8dEjNh8w4wUD1854dHWrJtxtiWpX1Ofn8b9ntKMGI5XtebtNVYiHhzz9+6TcpL8z7tKBfdj
+        Tue, 15 Mar 2022 11:27:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A456506E6;
+        Tue, 15 Mar 2022 08:26:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 82CBBCE1B5C;
+        Tue, 15 Mar 2022 15:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC64C340E8;
+        Tue, 15 Mar 2022 15:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647357993;
+        bh=1qZvbzMNRKv0qve5g7XZi7lfN+NjMPizyZXg7d9qImM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2P+oJGeEKL480UE+3P8IkGKwHtbTrpp8jjvHca1milkij2fwwFx5bLc0iwI1KumeK
+         HYoouOQ04UG/98KISLGDoYiCxCxEv/f85Mn+4h2xN9o+n7sh1ATROmhV2M2VcqJ3jc
+         GLTTmsA0p7+AO6qOr4qKWpWPGpqmGBWYsb3I7bww=
+Date:   Tue, 15 Mar 2022 16:26:27 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [RFC 00/10] Introduce In Field Scan driver
+Message-ID: <YjCwI4N00reBuIqA@kroah.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <Yh59rOIH24X+6GyI@kroah.com>
+ <Yh5+om/Nr06V0+Qj@kroah.com>
+ <Yi/Lb5laEki0JHft@agluck-desk3.sc.intel.com>
+ <YjBBmEjbIaqTbVt+@kroah.com>
+ <c4af81bd788e43dda915a1052af0be55@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:6c09:0:b0:2c7:a105:d426 with SMTP id
- h9-20020a926c09000000b002c7a105d426mr7213685ilc.111.1647357983549; Tue, 15
- Mar 2022 08:26:23 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 08:26:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006d718005da436bcc@google.com>
-Subject: [syzbot] KMSAN: uninit-value in asix_mdio_write_nopm
-From:   syzbot <syzbot+737f7d251877e50f3dce@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4af81bd788e43dda915a1052af0be55@intel.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,82 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Mar 15, 2022 at 02:59:03PM +0000, Luck, Tony wrote:
+> >> This seems a novel use of uevent ... is it OK, or is is abuse?
+> >
+> > Don't create "novel" uses of uevents.  They are there to express a
+> > change in state of a device so that userspace can then go and do
+> > something with that information.  If that pattern fits here, wonderful.
+> 
+> Maybe Dan will chime in here to better explain his idea. I think for
+> the case where the core test fails, there is a good match with uevent.
+> The device (one CPU core) has changed state from "working" to
+> "untrustworthy". Userspace can do things like: take the logical CPUs
+> on that core offline, initiate a service call, or in a VMM cluster environment
+> migrate work to a different node.
 
-syzbot found the following issue on:
+Again, I have no idea what you are doing at all with this driver, nor
+what you want to do with it.
 
-HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=151d8ea9700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=28718f555f258365
-dashboard link: https://syzkaller.appspot.com/bug?extid=737f7d251877e50f3dce
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+Start over please.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+What is the hardware you have to support?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+737f7d251877e50f3dce@syzkaller.appspotmail.com
+What is the expectation from userspace with regards to using the
+hardware?
 
-usb 6-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 6-1: Product: syz
-usb 6-1: Manufacturer: syz
-usb 6-1: SerialNumber: syz
-usb 6-1: config 0 descriptor??
-asix 6-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x0000: -71
-=====================================================
-BUG: KMSAN: uninit-value in asix_check_host_enable drivers/net/usb/asix_common.c:84 [inline]
-BUG: KMSAN: uninit-value in asix_mdio_write_nopm+0x556/0x9d0 drivers/net/usb/asix_common.c:605
- asix_check_host_enable drivers/net/usb/asix_common.c:84 [inline]
- asix_mdio_write_nopm+0x556/0x9d0 drivers/net/usb/asix_common.c:605
- ax88772a_hw_reset+0xa67/0x12e0 drivers/net/usb/asix_devices.c:524
- ax88772_bind+0x750/0x1770 drivers/net/usb/asix_devices.c:762
- usbnet_probe+0x1251/0x4160 drivers/net/usb/usbnet.c:1747
- usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
- usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
- really_probe+0x653/0x14b0 drivers/base/dd.c:596
- __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
- driver_probe_device drivers/base/dd.c:782 [inline]
- __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
- bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
- __device_attach+0x593/0x8e0 drivers/base/dd.c:970
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
- bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
- device_add+0x1fff/0x26e0 drivers/base/core.c:3405
- usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5358 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
- port_event drivers/usb/core/hub.c:5660 [inline]
- hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
- process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
- worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
- kthread+0x3c7/0x500 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
+> > I doubt you can report "test results" via a uevent in a way that the
+> > current uevent states and messages would properly convey, but hey, maybe
+> > I'm wrong.
+> 
+> But here things get a bit sketchy. Reporting "pass", or "didn't complete the test"
+> isn't a state change.  But it seems like a poor interface if there is no feedback
+> that the test was run. Using different methods to report pass/fail/incomplete
+> also seems user hostile.
 
-Local variable smsr.i created at:
- asix_mdio_write_nopm+0xe7/0x9d0 drivers/net/usb/asix_common.c:605
- ax88772a_hw_reset+0xa67/0x12e0 drivers/net/usb/asix_devices.c:524
+We have an in-kernel "test" framework.  Yes, it's for kernel code, but
+why not extend that to also include hardware tests?
 
-CPU: 1 PID: 3515 Comm: kworker/1:3 Not tainted 5.17.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-=====================================================
+thanks,
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h

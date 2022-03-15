@@ -2,140 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505B34D977F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 096A54D977E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346520AbiCOJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S1346523AbiCOJT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346527AbiCOJUC (ORCPT
+        with ESMTP id S1346538AbiCOJT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:20:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D329B1C911
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647335928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2b9QpGNlzLlPNztQY8QsHO4+YlZtG/kDWHOkJSbcmqM=;
-        b=aEbeqxK27nshuV3hPmVy6sDhn38Q50olu/1u30e0rZe6/s90U7conW5KmovVlezN7IC1yo
-        lMbnk3GNJpg5IohPNWVuKZQK9HPORVphiOlFVcZSeEIxa4cg8WPPCgW3Y3fqpOIb6gD51J
-        51vsV2a22yox8tuluNN9S/3H8qLnewg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-AfFaYcxpP6auWLahOtqCfA-1; Tue, 15 Mar 2022 05:18:45 -0400
-X-MC-Unique: AfFaYcxpP6auWLahOtqCfA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 15 Mar 2022 05:19:57 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9596F13D3F;
+        Tue, 15 Mar 2022 02:18:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 325C6802809;
-        Tue, 15 Mar 2022 09:18:45 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF5075B4237;
-        Tue, 15 Mar 2022 09:18:41 +0000 (UTC)
-From:   =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     edumazet@google.com, bigeasy@linutronix.de, atenart@kernel.org,
-        imagedong@tencent.com, petrm@nvidia.com, arnd@arndb.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
-Subject: [PATCH net-next] net: set default rss queues num to physical cores / 2
-Date:   Tue, 15 Mar 2022 10:18:32 +0100
-Message-Id: <20220315091832.13873-1-ihuguet@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHnrx2HZnz4xvg;
+        Tue, 15 Mar 2022 20:18:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647335923;
+        bh=qKRtZYhERZZIQ1+1ePZpbu07BiR32VleXFJbK5n6jcg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=drez3G/AgYNVI8zRiawEaZIoTQjqQC4iLs/D0+HU/CF23pJdl8Ofo2DJhrSIhXWBW
+         gCJfp9VpAKxk0i8KuRda7z7avBe+vutiYGcy1u68lc5zgFqTMaHWbBmd8t+393fPPt
+         Dq3+/yPXmMvWG0qxVS6KBpwqyMhzbo6+QOfTqI0ApbTw+m4huM4HNlWoc423cl7gFH
+         UMQPw0Z9LmnbyETnvmQ5QpiAB1o8mzYiTvSn92v1wzj8xtKJ+vE3U7dJcqfOR+yooG
+         uSHriS0ON1Ye/ynFOA98bRAuVq3zL3fMfLtM0isv2nt1T2YqfYvstrc8iElK/Wn25k
+         lybrO1ci+EPYw==
+Date:   Tue, 15 Mar 2022 20:18:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: linux-next: manual merge of the sysctl tree with the tip tree
+Message-ID: <20220315201840.6146f234@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/vj6a5IykJBDqtYDTjRghcBq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Network drivers can call to netif_get_num_default_rss_queues to get the
-default number of receive queues to use. Right now, this default number
-is min(8, num_online_cpus()).
+--Sig_/vj6a5IykJBDqtYDTjRghcBq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Instead, as suggested by Jakub, use the number of physical cores divided
-by 2 as a way to avoid wasting CPU resources and to avoid using both CPU
-threads, but still allowing to scale for high-end processors with many
-cores.
+Hi all,
 
-As an exception, select 2 queues for processors with 2 cores, because
-otherwise it won't take any advantage of RSS despite being SMP capable.
+Today's linux-next merge of the sysctl tree got a conflict in:
 
-Tested: Processor Intel Xeon E5-2620 (2 sockets, 6 cores/socket, 2
-threads/core). NIC Broadcom NetXtreme II BCM57810 (10GBps). Ran some
-tests with `perf stat iperf3 -R`, with parallelisms of 1, 8 and 24,
-getting the following results:
-- Number of queues: 6 (instead of 8)
-- Network throughput: not affected
-- CPU usage: utilized 0.05-0.12 CPUs more than before (having 24 CPUs
-  this is only 0.2-0.5% higher)
-- Reduced the number of context switches by 7-50%, being more noticeable
-  when using a higher number of parallel threads.
+  kernel/sched/deadline.c
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
----
- include/linux/netdevice.h |  1 -
- net/core/dev.c            | 20 ++++++++++++++++----
- 2 files changed, 16 insertions(+), 5 deletions(-)
+between commit:
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 0d994710b335..db9874ed79d9 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3664,7 +3664,6 @@ static inline unsigned int get_netdev_rx_queue_index(
- }
- #endif
- 
--#define DEFAULT_MAX_NUM_RSS_QUEUES	(8)
- int netif_get_num_default_rss_queues(void);
- 
- enum skb_free_reason {
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 75bab5b0dbae..8e0cc5f2020d 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -2990,13 +2990,25 @@ EXPORT_SYMBOL(netif_set_real_num_queues);
- /**
-  * netif_get_num_default_rss_queues - default number of RSS queues
-  *
-- * This routine should set an upper limit on the number of RSS queues
-- * used by default by multiqueue devices.
-+ * Default value is the number of physical cores if there are only 1 or 2, or
-+ * divided by 2 if there are more.
-  */
- int netif_get_num_default_rss_queues(void)
- {
--	return is_kdump_kernel() ?
--		1 : min_t(int, DEFAULT_MAX_NUM_RSS_QUEUES, num_online_cpus());
-+	cpumask_var_t cpus;
-+	int cpu, count = 0;
-+
-+	if (unlikely(is_kdump_kernel() || !zalloc_cpumask_var(&cpus, GFP_KERNEL)))
-+		return 1;
-+
-+	cpumask_copy(cpus, cpu_online_mask);
-+	for_each_cpu(cpu, cpus) {
-+		++count;
-+		cpumask_andnot(cpus, cpus, topology_sibling_cpumask(cpu));
-+	}
-+	free_cpumask_var(cpus);
-+
-+	return count > 2 ? DIV_ROUND_UP(count, 2) : count;
- }
- EXPORT_SYMBOL(netif_get_num_default_rss_queues);
- 
--- 
-2.34.1
+  eb77cf1c151c ("sched/deadline: Remove unused def_dl_bandwidth")
 
+from the tip tree and commit:
+
+  ebb891f03580 ("sched: Move deadline_period sysctls to deadline.c")
+
+from the sysctl tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/sched/deadline.c
+index 11cdc6d0c45f,9ed9ace11151..000000000000
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@@ -18,6 -18,42 +18,40 @@@
+  #include "sched.h"
+  #include "pelt.h"
+ =20
+ -struct dl_bandwidth def_dl_bandwidth;
+ -
++ /*
++  * Default limits for DL period; on the top end we guard against small ut=
+il
++  * tasks still getting ridiculously long effective runtimes, on the botto=
+m end we
++  * guard against timer DoS.
++  */
++ static unsigned int sysctl_sched_dl_period_max =3D 1 << 22; /* ~4 seconds=
+ */
++ static unsigned int sysctl_sched_dl_period_min =3D 100;     /* 100 us */
++ #ifdef CONFIG_SYSCTL
++ static struct ctl_table sched_dl_sysctls[] =3D {
++ 	{
++ 		.procname       =3D "sched_deadline_period_max_us",
++ 		.data           =3D &sysctl_sched_dl_period_max,
++ 		.maxlen         =3D sizeof(unsigned int),
++ 		.mode           =3D 0644,
++ 		.proc_handler   =3D proc_dointvec,
++ 	},
++ 	{
++ 		.procname       =3D "sched_deadline_period_min_us",
++ 		.data           =3D &sysctl_sched_dl_period_min,
++ 		.maxlen         =3D sizeof(unsigned int),
++ 		.mode           =3D 0644,
++ 		.proc_handler   =3D proc_dointvec,
++ 	},
++ 	{}
++ };
++=20
++ static int __init sched_dl_sysctl_init(void)
++ {
++ 	register_sysctl_init("kernel", sched_dl_sysctls);
++ 	return 0;
++ }
++ late_initcall(sched_dl_sysctl_init);
++ #endif
++=20
+  static inline struct task_struct *dl_task_of(struct sched_dl_entity *dl_s=
+e)
+  {
+  	return container_of(dl_se, struct task_struct, dl);
+
+--Sig_/vj6a5IykJBDqtYDTjRghcBq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwWfAACgkQAVBC80lX
+0GxLfQf/V/cFLNKZxqqa7AsbySP1m/9D9gKx0p6A/nWc12vo6lMBPGDYhFr+GWfg
+LG1YEePaysIDSFDrAXOFFcrNGlpIvJIT/22cQiog30tODq+pOOeTEUUO70ajVOwI
+pd9ijBl/pMG14eFDmdzeV8/CuYNrR3O5/g/VBWXRMV6FyFFFnPb/W+4KJXHiG7uW
+ZMNMwOpJzIylR3e9quDXh5TX9FG2qNNjHTsZ+yZoeEKjGCsfdbtSVc0S4TaErcyx
+l4vruB8I6url4v0v5XsJZui8Le+TyCVIIgnoG6s1v8YLL8gUBlpxtBSmkEAdL8u8
+WTdj+mK0zVFOJKUc8xhbijse0cSzsw==
+=jn33
+-----END PGP SIGNATURE-----
+
+--Sig_/vj6a5IykJBDqtYDTjRghcBq--

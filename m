@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772074D98E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D744D98ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347088AbiCOKiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S1347154AbiCOKkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiCOKiC (ORCPT
+        with ESMTP id S233588AbiCOKkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:38:02 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AC64504B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:36:50 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 98B053F366
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647340609;
-        bh=TEi9FBbJRZ98ujLdP/Lz9ClVk8P7w5er1AYT1Hftf6A=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=MfwiNKli0xUAvhwoAWkyB2P22xn0Zd7WiLuT0f2DBv7yZ8vKvUNMocqO4NypKd/m2
-         KhaE/vtty+f/XTK/lSBBdUD7HaiES2sdJewEY5l00TQXlcUEM/xic2KhdbL30/LHn4
-         iV/0oQHUMONKcY8WE4nFDbMKyGazxcjiPdiyLDuKRBW7rir7JUWc91jiRobP6FiClR
-         7L1Qw7eC7upNWlhP+NBZ04Y/raoHHfbnK2J4puxvlT9w7VYIQxkH9UE1qqBNiB6xNs
-         8lWK5+zQjH0qdZrLucovfpuHZqvmBkHrryebCZ8KKGA9/KT5sDkAN3cDOnA62szP+D
-         Grc+77YMKCLlg==
-Received: by mail-ej1-f70.google.com with SMTP id y5-20020a1709060a8500b006da9258a34cso9424207ejf.21
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:36:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TEi9FBbJRZ98ujLdP/Lz9ClVk8P7w5er1AYT1Hftf6A=;
-        b=7l+532FWQVueGehICdgunmYvrbJKEGU5X5fWlKeWcSO0Le/f6Qb6AQlmF9oZ2Ea5Sy
-         6zQqikIbh6mXlLptUrTeOzitwwy3q5F1mHzLmwr3NznJ+Q3qZi1xJWIXKAzKf/nZdYmf
-         r+DWXiYUOVWW/9aLfpw/u2N/kuqo3GejWtyJsX2UAyb3NzVgCJvynUkG1C/DKCS4MarG
-         9SuiYNqSJmtOkQBn7OpmuyjB0qpW1udJiweVeTSJ40/l2v5okhgGMCU7flAbXxkPcOLu
-         DNkf65+gYXCdxMf1W6d0jUsRcOFLdQa6fIJR1vI/fuwR2OHc3TvppSCfMZ05XrLof6jL
-         JxiQ==
-X-Gm-Message-State: AOAM530HsvgyKRLhitxQousRBWEPTw6nGWGmgeGdn8uTcmqATSWjy+hH
-        8xuHRICsyBDcsI+pCOPVdM0qLXXowoozkuL4Fy/lCzg+dRlX+FpGvPcnVyYiUmyJp8ej0izWXFf
-        Hrut7l5bFUFCFc/+sWohvPbTTEh07tua9jYJW1gK54g==
-X-Received: by 2002:aa7:d295:0:b0:416:438e:d9c4 with SMTP id w21-20020aa7d295000000b00416438ed9c4mr25157405edq.98.1647340609086;
-        Tue, 15 Mar 2022 03:36:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNAdezzJXlvUWpVXxB4T7w7pvN/7+3r1jrwVFjSzPbTqD5zxBdf5ZWDjZyxsdEDeC/bjygzg==
-X-Received: by 2002:aa7:d295:0:b0:416:438e:d9c4 with SMTP id w21-20020aa7d295000000b00416438ed9c4mr25157391edq.98.1647340608923;
-        Tue, 15 Mar 2022 03:36:48 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id o3-20020a17090637c300b006d8631b2935sm7869716ejc.186.2022.03.15.03.36.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 03:36:48 -0700 (PDT)
-Message-ID: <bcda63b6-16cd-6514-42e7-fe09f5a5fb34@canonical.com>
-Date:   Tue, 15 Mar 2022 11:36:47 +0100
+        Tue, 15 Mar 2022 06:40:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B899040E65;
+        Tue, 15 Mar 2022 03:38:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id C63431F41BCA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647340732;
+        bh=0Ayx2ck3KklerDtSR4xP/Yhxts6NZBaufUlBtW0oRvU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YFtQr2t9RxvdrDk6j5Dk4gPKK0fkc9d1H4DaHAl7U931gjBv+F/sZRPwpfJA6PTnP
+         vYb80IkieuQo7s+DsNr4a3A9V44Xf2S2Ksigkthe4geF4A2y8ncxcRuA8xvCz7CzkR
+         VKXwwAqD9tnxgE4b5pYrUlGv4adqaNQFwziH9smQ3ZEOxlrytSBEaK6y/kXk4Sww8O
+         eT1zps2TlL+lfvc3aelsG2M3464T5EWu/wkqXVueEljxq+us34muafVNVQjkN2wrLu
+         erxAAIk8URm3cTW8HVGOzP1tSpvBIlrUYuKrwiklyqlNJRtpnKHLKtF2Z5e/xYHxjt
+         IWtCkTb6lCVdg==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, krisman@collabora.com,
+        andy.shevchenko@gmail.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH v2] gpio: Restrict usage of gc irq members before initialization
+Date:   Tue, 15 Mar 2022 16:08:13 +0530
+Message-Id: <20220315103813.84407-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/3] dt-bindings: edac: nuvoton: add NPCM memory
- controller
-Content-Language: en-US
-To:     Medad CChien <medadyoung@gmail.com>, rric@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, mchehab@kernel.org,
-        bp@alien8.de, robh+dt@kernel.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        ctcchien@nuvoton.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
-References: <20220315055504.27671-1-ctcchien@nuvoton.com>
- <20220315055504.27671-3-ctcchien@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220315055504.27671-3-ctcchien@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 06:55, Medad CChien wrote:
-> Added device tree binding documentation for Nuvoton BMC
-> NPCM memory controller.
-> 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> ---
->  .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> 
+gc irq members are exposed before they could be completely
+initialized and this leads to race conditions.
+
+One such issue was observed for the gc->irq.domain variable which
+was accessed through the I2C interface in gpiochip_to_irq() before
+it could be initialized by gpiochip_add_irqchip(). This resulted in
+Kernel NULL pointer dereference.
+
+To avoid such scenarios, restrict usage of gc irq members before
+they are completely initialized.
+
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+---
+
+Changes in v2 :-
+  - Make gc_irq_initialized flag a member of gpio_irq_chip structure.
+  - Make use of barrier() to avoid reordering of flag initialization before
+other gc irq members are initialized.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+ drivers/gpio/gpiolib.c      | 11 ++++++++++-
+ include/linux/gpio/driver.h |  9 +++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index defb7c464b87..3973146736a1 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1593,6 +1593,15 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+ 
+ 	acpi_gpiochip_request_interrupts(gc);
+ 
++	/*
++	 * Using barrier() here to prevent compiler from reordering
++	 * gc->irq.gc_irq_initialized before initialization of above
++	 * gc irq members.
++	 */
++	barrier();
++
++	gc->irq.gc_irq_initialized = true;
++
+ 	return 0;
+ }
+ 
+@@ -3138,7 +3147,7 @@ int gpiod_to_irq(const struct gpio_desc *desc)
+ 
+ 	gc = desc->gdev->chip;
+ 	offset = gpio_chip_hwgpio(desc);
+-	if (gc->to_irq) {
++	if (gc->to_irq && gc->irq.gc_irq_initialized) {
+ 		int retirq = gc->to_irq(gc, offset);
+ 
+ 		/* Zero means NO_IRQ */
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index b0728c8ad90c..e93de63feece 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -203,6 +203,15 @@ struct gpio_irq_chip {
+ 	 */
+ 	unsigned int *map;
+ 
++	/**
++	 * @gc_irq_initialized:
++	 *
++	 * Flag to track gc irq member's initialization.
++	 * This flag will make sure gc irq members are not used before
++	 * they are initialized.
++	 */
++	bool gc_irq_initialized;
++
+ 	/**
+ 	 * @threaded:
+ 	 *
+-- 
+2.30.2
 
-Best regards,
-Krzysztof

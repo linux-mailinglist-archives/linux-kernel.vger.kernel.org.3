@@ -2,88 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CD44D9D6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3194A4D9D80
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348996AbiCOO13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S1349160AbiCOOaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiCOO12 (ORCPT
+        with ESMTP id S233525AbiCOOaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:27:28 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409CC54FA0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647354376; x=1678890376;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xf8O2CSFPHkJl2l4dsMsAB+UtUVKliQySS04oxYD/BU=;
-  b=elc3P5ARpGV9/EPwVPhFB1KlKangDkoQjegjXpoenb7njWm4rxySR7M9
-   8+oS69x8AIAIsE88qs4PrblagFtiQJv+G5w0XkzzqAxqskwmKtF+AoZb5
-   SyRoOMj15tvtuM3NTPar90SxlUMyAChRk/onglBa0dLiJLLkMVQw+ElOn
-   w=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Mar 2022 07:26:15 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 07:26:15 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Mar 2022 07:26:15 -0700
-Received: from [10.216.32.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 15 Mar
- 2022 07:26:10 -0700
-Message-ID: <3b1626e7-3a32-5733-2a4f-e782c87b8e58@quicinc.com>
-Date:   Tue, 15 Mar 2022 19:56:05 +0530
+        Tue, 15 Mar 2022 10:30:16 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1457344779;
+        Tue, 15 Mar 2022 07:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=GxMzfNRQtZ04+lHo/O1UCEwaB2Ydbfpf2yzGh5HPxHc=; b=olC8YY+DSx6sXmlZVmrtQDGF50
+        04E3CKz3W/4CMUH8fsWmF8Mu0+RcSMZEzzPIkruCbYjw5rkXzg0lzMSycIvLuXicr9N9VEON67G9l
+        lxmB3rRgBHTIH85AAh/Vjr9VDBs+sZLs3TteZ/CveoanmoAm0TA4/npRKzTXwCXWz8Xg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nU8AM-00AyZC-FB; Tue, 15 Mar 2022 15:28:50 +0100
+Date:   Tue, 15 Mar 2022 15:28:50 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 7/8] arm64: dts: marvell: Add Armada 98DX2530 SoC and
+ RD-AC5X board
+Message-ID: <YjCiot+PSv3ZRS4J@lunn.ch>
+References: <20220314213143.2404162-1-chris.packham@alliedtelesis.co.nz>
+ <20220314213143.2404162-8-chris.packham@alliedtelesis.co.nz>
+ <Yi/cyUJ6oIs96UW2@lunn.ch>
+ <7b78853e-71ec-7c57-4cac-5cd6303f3b13@alliedtelesis.co.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2,0/2]mm: madvise: return correct bytes processed with
- process_madvise
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <surenb@google.com>, <vbabka@suse.cz>, <rientjes@google.com>,
-        <sfr@canb.auug.org.au>, <edgararriaga@google.com>,
-        <minchan@kernel.org>, <nadav.amit@gmail.com>, <mhocko@suse.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <cover.1647008754.git.quic_charante@quicinc.com>
- <20220311134203.47cbeab087b731bada12d0f1@linux-foundation.org>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <20220311134203.47cbeab087b731bada12d0f1@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b78853e-71ec-7c57-4cac-5cd6303f3b13@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Andrew!!
-
-On 3/12/2022 3:12 AM, Andrew Morton wrote:
->> With the process_madvise(), always choose to return non zero processed
->> bytes over an error. This can help the user to know on which VMA, passed
->> in the 'struct iovec' vector list, is failed to advise thus can take the
->> decission of retrying/skipping on that VMA.
-> Thanks, this is not good.
+On Tue, Mar 15, 2022 at 02:11:56AM +0000, Chris Packham wrote:
 > 
-> We should have added userspace tests for process_madvise() along with
-> the syscall itself.  But evidently that was omitted.  If someone
-> decides to contribute such tests, hopefully they will include checks
-> for these return values.
+> On 15/03/22 13:24, Andrew Lunn wrote:
+> >> diff --git a/arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi b/arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi
+> >> new file mode 100644
+> >> index 000000000000..ebe464b9ebd2
+> >> --- /dev/null
+> >> +++ b/arch/arm64/boot/dts/marvell/armada-98dx2530.dtsi
+> >> @@ -0,0 +1,343 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> >> +/*
+> >> + * Device Tree For AC5.
+> >> + *
+> >> + * Copyright (C) 2021 Marvell
+> >> + *
+> >> + */
+> >> +
+> >> +/dts-v1/;
+> >> +	memory@0 {
+> >> +		device_type = "memory";
+> >> +		reg = <0x2 0x00000000 0x0 0x40000000>;
+> >> +		// linux,usable-memory = <0x2 0x00000000 0x0 0x80000000>;
+> >> +	};
+> > Is the memory part of the SoC, or is it on the board? Normally it is
+> > on the board, so should be in the .dts file. But Apple M1 etc...
 
-We are happy to contribute here.
+> I also wasn't sure about linux,usable-memory. It's commented out so it's 
+> obviously doing nothing but should it? No other in-tree dts files have it.
 
-> 
+Hi Chris
+
+I've no idea what it means. Maybe search the SDK and see if they have
+some code and what it does. But i would drop it.
+
+     Andrew

@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1382F4D99C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B584D99C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347705AbiCOK7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S1347721AbiCOK74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347748AbiCOK6G (ORCPT
+        with ESMTP id S1347711AbiCOK7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:58:06 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E6A35269
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:56:54 -0700 (PDT)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5FEE13F220
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647341811;
-        bh=ht8KpCSDXfMeLKk1Iy9OjwDkeWKdnRpzH0Z8PU+F89M=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=LSDzC0deInfWjrGAItDnx4m/E5k6DCq6tWecLyJ4YhEooqeREvuPhb+4GYTT5NeYG
-         t0tVG2+hX9U9/ytDV/AhjC/oYZFQkbKAyUTzea48+YXxlcCMJYSIoeZBoavgQNDBbP
-         7dc9HdzAWeKM0RVFROooP5t3YgWV00Eh57aRbfXkzXcfyocZRDty2UxtD5muiTdxOa
-         hnsQYy0NHqJAVomjhMv8RieBND6DFGRdFEpxxYKenGzKGMJn6rksDmEZN0Xw/ule0q
-         r6Q1ZYtHCRngqmVDgl6Wvp1Kj8ClUcSVNfcc748Ko8aTE4A3+ZJ55sUh7OAydDiB1b
-         oXlHYbvuYeO2A==
-Received: by mail-ej1-f71.google.com with SMTP id jy20-20020a170907763400b006db62b6f4e0so9463161ejc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:56:51 -0700 (PDT)
+        Tue, 15 Mar 2022 06:59:53 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCF93B540;
+        Tue, 15 Mar 2022 03:58:41 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id v4so17479502pjh.2;
+        Tue, 15 Mar 2022 03:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/dt0ki5c6TsVjagp5Hw0a3dDEKUn0j8kFSzZZMT3VYc=;
+        b=CUDzMgF/OnISw5WwvUlQdrwi1EXa0YCf1QhjvMTcHVlUXcy6VD8ZMlvFF7tJPBlWeN
+         eXhBpHgzxx1VwCLELmr8U06RnfrwTSbfaob1hWjaAu2YCWq2fs+OcavFOehs+UZJy+C7
+         w01sbeAnRq/XESe7cVEIXbUHrpQYDM64/taogeCxQkjSii1x1lDoKskiorsjXyjCT+M/
+         xxU7kLu3uinGfMGrXub9XdJquPoDC8YwgKVDAHlVm4hfHWveEWWMKssQH0bcGT5Clm0G
+         77FK5UGD3uDYI/0MQvAH3AtOKQhR63sBI0RA68+DxXfJv680L1LEsc0KgkgcyZ3d31oj
+         4o4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ht8KpCSDXfMeLKk1Iy9OjwDkeWKdnRpzH0Z8PU+F89M=;
-        b=4ULbswoU/TVWbtHhqCt6RX73sPtIV9Vmmc9wCH/CoOANPW+7mnC0JdjHCwr4vDcsAQ
-         8fhmmWiWq1OuCYjK+/IC+/cRzoeHvwM/VAXzg5O0YMX28TZ6aLipFiIa3kfNN26pM9Hh
-         ZRUK9TaiEsNHnoR6E6i9t+JZKGnlXkrAAWjFykxkrC9StGehAl5NGEP8iJ2sqRojyRG5
-         /ji8KA/oU+pu0dx8GVCfgCZTjtkIg4CNn72C9AjREMcbiAkGpImOh0ZnTVImXAiSj2YN
-         trDQASEKPrVnA48ot03TyMjKG4ubE38PSjBCJRlENMOWgWwc49KmalnQwgzUuIQOISTr
-         vO/g==
-X-Gm-Message-State: AOAM530p5a50gDXI1xzwN0u7yY3aCrIzF8R7wcwT0ate5Ap6CBi1HAuC
-        cyMyZluvqH+R5o92lm55mhGY/GlAdktKcfCrbMR92W8ac8/vNF0b2ISfBVpxlibHOSuStJ0fr59
-        mbgPzuZyFCSboakEsSPCS0bpJffwzfdSLblHhUypqKg==
-X-Received: by 2002:a17:906:1f11:b0:685:d50e:3bf9 with SMTP id w17-20020a1709061f1100b00685d50e3bf9mr22467081ejj.275.1647341811109;
-        Tue, 15 Mar 2022 03:56:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx1Vc0VBi8iyHSnXP0SjQn1EF5R+EUhGiixvRk7hd4/4ka6soIYQAQL/knRyeFkxKGN4H/zyg==
-X-Received: by 2002:a17:906:1f11:b0:685:d50e:3bf9 with SMTP id w17-20020a1709061f1100b00685d50e3bf9mr22467063ejj.275.1647341810849;
-        Tue, 15 Mar 2022 03:56:50 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id e9-20020a170906c00900b006d4a45869basm8011143ejz.199.2022.03.15.03.56.49
+        bh=/dt0ki5c6TsVjagp5Hw0a3dDEKUn0j8kFSzZZMT3VYc=;
+        b=20HIGvyHTJRtYtMTmeSledLGK5sDgvvyXDY59D7P8WoK5vuf7QkdgEMX/FRok7kVWJ
+         YBmMDShvsLVDbMDQh4wsanjqCuhk4VvH2BEopgVs52XvzVqvAbNfiH0mhWwrAiiWax6P
+         OFRVKNvDUnebYxTRLn4Hgfl9dFyg7axLjeApNq7KjJa1dvKcXDpeg+0pIZk6zDUnO+Hh
+         3OhmFXoIyp8SiGBh4yKuXBaBM9Utt1wlF3UZVy8BM99J7fwuuxUuOmS7BuUx1Otfaikx
+         gw9pnhPvkGs6IR2oftuQnpXlHSWXay8626JOIt2YbIIDDoL2qZ9MKt/O5Edr1Q5s4Hew
+         a0tA==
+X-Gm-Message-State: AOAM530PEDvLUeL77vmv/PgTRoqbX0P2UhBz3+UJJ7wWsxU4PP7TIz73
+        JW41NShO+BADIWrUjz9ShAo=
+X-Google-Smtp-Source: ABdhPJzxzlIcZjlz6fGRY/LxU0q1FUkEgjIQpU6PvljMdgXtNt10RS8iX1wrCcKfc74jdMCdCJSyHw==
+X-Received: by 2002:a17:902:ead2:b0:153:85ac:abc9 with SMTP id p18-20020a170902ead200b0015385acabc9mr6305446pld.173.1647341921264;
+        Tue, 15 Mar 2022 03:58:41 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-1.three.co.id. [180.214.233.1])
+        by smtp.gmail.com with ESMTPSA id s15-20020a63af4f000000b0037c8875108dsm20078684pgo.45.2022.03.15.03.58.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 03:56:50 -0700 (PDT)
-Message-ID: <095b4dad-ade6-c742-1993-e5dc89f5cb93@canonical.com>
-Date:   Tue, 15 Mar 2022 11:56:49 +0100
+        Tue, 15 Mar 2022 03:58:40 -0700 (PDT)
+Message-ID: <c2692f8d-20f5-e310-e26e-087a9f82aa0d@gmail.com>
+Date:   Tue, 15 Mar 2022 17:58:34 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V7 1/5] dt-bindings: display: mediatek: add aal binding
- for MT8183
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.15 000/110] 5.15.29-rc1 review
 Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        jassisinghbrar@gmail.com, fparent@baylibre.com,
-        yongqiang.niu@mediatek.com, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220314090033.25773-1-rex-bc.chen@mediatek.com>
- <20220314090033.25773-2-rex-bc.chen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220314090033.25773-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220314112743.029192918@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 10:00, Rex-BC Chen wrote:
-> Add aal binding for MT8183.
+On 14/03/22 18.53, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.29 release.
+> There are 110 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/display/mediatek/mediatek,aal.yaml      | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yaml
-> index 61f0ed1e388f..6c8c83988a24 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,aal.yaml
-> @@ -23,6 +23,8 @@ properties:
->      oneOf:
->        - items:
->            - const: mediatek,mt8173-disp-aal
-> +      - items:
-> +          - const: mediatek,mt8183-disp-aal
 
-Use enum in previous entry. This is weird setup to have items with one
-element and then duplicate it for another oneOf entry.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
->        - items:
->            - enum:
->                - mediatek,mt2712-disp-aal
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-
-Best regards,
-Krzysztof
+-- 
+An old man doll... just what I always wanted! - Clara

@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1584D9E45
+	by mail.lfdr.de (Postfix) with ESMTP id 87F2F4D9E46
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349525AbiCOPAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S1349536AbiCOPAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiCOPAI (ORCPT
+        with ESMTP id S1349545AbiCOPAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:00:08 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCE122BE0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:58:55 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id q7-20020a7bce87000000b00382255f4ca9so1586536wmj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=POhFPKDu05rnolEnCMUfGWyfG7SKY0U5Ki6iIBt2QSc=;
-        b=IBHTPOQcn29kklQGIliTcHYKIlLy1dPyQq5MpQtQ8Rur3tD04R7Y+eUXGEt1fzLVQx
-         YIZL2dYJxijss5RL7iOr9hlNcGqQT33rAntIGNNjyH/O5yI5OdL9zZYFi+FpumuGVt17
-         tmg9yV0NlLZEpcDrhh60IiQQcnlIkltBGP9tfOgyQRPExk+dLmcFoSnEiU775LZOU7+S
-         Hg/lKJ7Ge0hO9wW31M6fXsQRogJIf38lBdD2kS47wH0P1vj9PhRYJ+ZItuDjO3P7hfqq
-         zpzziIwKe+EYrLat07rpOVazT0RRsZ4ybUb81s3QBbqI9Qln6+f9XEPRutI7nD6brxY8
-         I9YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=POhFPKDu05rnolEnCMUfGWyfG7SKY0U5Ki6iIBt2QSc=;
-        b=FomRksPSeNB27zw1Lozq+KJuf4sX+gPgSzZULC/vsyGonBtXWB2yzZdWKsz2BEv1/B
-         1frk+cRGVjfgu0Lzbe3dpgzd9+FYa5IuA4xNpOkZB8F1kYt0aVVPcdlE7iAcFESCmcLj
-         kuyEcLhkOmMjQuQdd56H2ylUVmDl5P1IV+rnZE0n0tcCvOHh1Kv1VMG/nxxTmd6e3jNf
-         aWWaH/TIIXdw/lFIy9in6OumCtYOqp0P5zheOZc89iVh9grismtmBq2xNrqibjcFzrLD
-         Bd3CBTNcV0c2w65Ft3JzOvSHoJW4MzY2/nicofSSx0BrEhMW7IdYWmSySu0xORz1OmzM
-         EUvw==
-X-Gm-Message-State: AOAM5323dw0qJV8FI63jTQYQwLiCOWKjaE9vSXK2dzQFG5vdbsM4f3QR
-        Wjm9BWZ2fM82PVDeZKZCF0trvQ==
-X-Google-Smtp-Source: ABdhPJxmiznixQ5WYnAHb2k3VoyxMtuqDjeDIZk/Mm1XFptDScHBiIL7knyiv2Vf5YursjLargeEbw==
-X-Received: by 2002:a05:600c:4608:b0:38c:6ba3:1c9f with SMTP id m8-20020a05600c460800b0038c6ba31c9fmr93477wmo.39.1647356333964;
-        Tue, 15 Mar 2022 07:58:53 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id y12-20020adff14c000000b001f04d1959easm15759411wro.13.2022.03.15.07.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 07:58:53 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 14:58:51 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Jan-Niklas Burfeind <kernel@aiyionpri.me>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, gunar@schorcht.net
-Subject: Re: [PATCH v3] mfd: ch341: add driver for the WCH CH341 in I2C/GPIO
- mode
-Message-ID: <YjCpq8YVwmZzOzwE@google.com>
-References: <20220314030937.22762-1-frank@zago.net>
+        Tue, 15 Mar 2022 11:00:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8C32655F;
+        Tue, 15 Mar 2022 07:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647356346; x=1678892346;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=GyNyfKahJzTHsEIBBRJIhFWT/tnEv+2kPDiw/r6E+k4=;
+  b=HQLlDw9qtrAfxhh7fFJY3uga7lyOQJf7GrhSSKj1r86OqsEGXdsXuWpj
+   mCKkk5bE+X3p/zEf9LhvwLrqmo/Y8CVZb5kBJBLdHUNvpoWhK0MrCpqBP
+   jTcrMH2VFFwJe7sdrE789dutF7l1BC5ud4SOv+GZ3+gQWBJmDj0dRCCpA
+   AQs4O36GnYFy4mHak25NoxKYJwyGBwgzQY5+viwiKR15n9GHtw2Q5VXto
+   6CE3CVeegHf7DUXGT9O/WhlWueB7vVwanaAdu09yKIBDEv4unl+ZyJZBp
+   IUL6uwunywTC1h14xcOrt26gOsHk1mkOOvSdcl1NtKPWsXd+RdIudJoSE
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236929303"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="236929303"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 07:59:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="644286209"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Mar 2022 07:59:06 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Mar 2022 07:59:05 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Mar 2022 07:59:04 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
+ Tue, 15 Mar 2022 07:59:04 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: RE: [RFC 00/10] Introduce In Field Scan driver
+Thread-Topic: [RFC 00/10] Introduce In Field Scan driver
+Thread-Index: AQHYLaZcmKq0UuRYGU6xp1k7P7vRw6yre5AAgAABJQCAFBlxgIABAjIAgAAEKTA=
+Date:   Tue, 15 Mar 2022 14:59:03 +0000
+Message-ID: <c4af81bd788e43dda915a1052af0be55@intel.com>
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <Yh59rOIH24X+6GyI@kroah.com> <Yh5+om/Nr06V0+Qj@kroah.com>
+ <Yi/Lb5laEki0JHft@agluck-desk3.sc.intel.com> <YjBBmEjbIaqTbVt+@kroah.com>
+In-Reply-To: <YjBBmEjbIaqTbVt+@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220314030937.22762-1-frank@zago.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +101,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Mar 2022, frank zago wrote:
+>> This seems a novel use of uevent ... is it OK, or is is abuse?
+>
+> Don't create "novel" uses of uevents.  They are there to express a
+> change in state of a device so that userspace can then go and do
+> something with that information.  If that pattern fits here, wonderful.
 
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new driver manages I2C
-> and GPIO.
-> 
-> The I2C interface can run at 4 different speeds. This driver currently
-> only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
-> subsystem.
-> 
-> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
-> read-only.
-> 
-> Signed-off-by: frank zago <frank@zago.net>
-> ---
-> 
-> Changes from v2:
->   - bug fixes
->   - more robust USB enumeration
->   - Changed to an MFD driver as suggested
+Maybe Dan will chime in here to better explain his idea. I think for
+the case where the core test fails, there is a good match with uevent.
+The device (one CPU core) has changed state from "working" to
+"untrustworthy". Userspace can do things like: take the logical CPUs
+on that core offline, initiate a service call, or in a VMM cluster environm=
+ent
+migrate work to a different node.
 
-Perhaps you should have engaged with me before potentially wasting
-your valuable time.
+> I doubt you can report "test results" via a uevent in a way that the
+> current uevent states and messages would properly convey, but hey, maybe
+> I'm wrong.
 
-MFD is designed to take a parent platform driver and split it out into
-various sub-systems.  If you don't use the MFD Core API (which is the
-case here) it is not an MFD.  MFD is not a dumping ground for
-collections of random device drivers.
+But here things get a bit sketchy. Reporting "pass", or "didn't complete th=
+e test"
+isn't a state change.  But it seems like a poor interface if there is no fe=
+edback
+that the test was run. Using different methods to report pass/fail/incomple=
+te
+also seems user hostile.
 
-I have no problem with you placing registration and core code inside
-MFD (that *is* what it was designed for), but the leaf 'functionality'
-should be placed in more appropriate locations.
+> good luck!
+Thanks ... we may need it :-)
 
-I2C  => drivers/i2c
-SPI  => drivers/spi
-GPIO => drivers/gpio (or perhaps drivers/pinctrl)
-USB  => drivers/usb
-UART => drivers/tty/serial
+-Tony
 
-Etc ... Find places for everything.
-
-Anything left over, give to Greg (drivers/misc). :)
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

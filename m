@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51F24DA3CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1904DA3CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351611AbiCOUPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S1351619AbiCOUQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbiCOUPu (ORCPT
+        with ESMTP id S234688AbiCOUQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:15:50 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3CF5AA7A;
-        Tue, 15 Mar 2022 13:14:38 -0700 (PDT)
-Received: from g550jk.localnet (a246182.upc-a.chello.nl [62.163.246.182])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id AF31CCB556;
-        Tue, 15 Mar 2022 20:14:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1647375275; bh=invxskIdOgqfDDwWrwC5sBLhuscbs9Z9OfNld5S4mXY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=L2oeOX4C6bkNHEBFWrmsaM2MWMfl0hw6j0WEXU/4cTem9TJB/VvFX3esSLGbqLMVL
-         /DRvGBKccPcqoyQ1ywoB04lPUYRS1MaVXJtBSius4TJ81oCYncEcV9rjqpaWl4epA7
-         t4WYPkpyP+GXyty/f1eHTaV3vks5fDawj+qSJw6s=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] rpmsg: smd: allow opening rpm_requests even if already opened
-Date:   Tue, 15 Mar 2022 21:14:35 +0100
-Message-ID: <5558411.DvuYhMxLoT@g550jk>
-In-Reply-To: <2630587.mvXUDI8C0e@g550jk>
-References: <20220220201909.445468-1-luca@z3ntu.xyz> <20220220201909.445468-6-luca@z3ntu.xyz> <2630587.mvXUDI8C0e@g550jk>
+        Tue, 15 Mar 2022 16:16:24 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91555AA7E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647375311; x=1678911311;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xUG0hkzS/goC/5xJ5P5hK1fpovrTJ9ohyd+Jj2FR0m8=;
+  b=BXmkftudbLENdTpRQPk0rX+OwN5EkpPbDfrYzaj8NDQy6N2hvbNv6g9U
+   OAinzVEoXHu1zxVmMt/gmHVqPed4dIhyD9aNyNmLWt4I6eu8F+EXiHsVd
+   uSArBQy0aJ6gzMrb1kzPM9/hmA/UJH1lw9yatX9GXQFCGAaqmJ2xrtHex
+   8UGWNUG/FEcpsaTZQK9Uhq8+bw6zteAdctv/45FHA+5ydV5ul/4aHa037
+   95Og/F1aL06h6fT7nPWUQ5+gTGtiZHgsxl2mD5HJyTDCH4Nf25oedeN1G
+   O800ZRUOtlxC8zX0Q/yF4Mz7aKP4F/m4YtiS0Q37DIT0f9KG9P0UzFV5C
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="237021855"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="237021855"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 13:15:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="540596143"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Mar 2022 13:15:09 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUDZV-000BT6-6Z; Tue, 15 Mar 2022 20:15:09 +0000
+Date:   Wed, 16 Mar 2022 04:14:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     hch <hch@lst.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: drivers/nvme/host/core.c:3629:64: error: 'ctrl' undeclared
+Message-ID: <202203160425.CZRSa5uF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 14. M=E4rz 2022 20:08:20 CET Luca Weiss wrote:
-> Hi all,
->=20
-> any feedback on this patch? It's needed for msm8953 to boot properly.
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220315-151414/Sungup-Moon/driver-nvme-host-Support-duplicated-nsid-for-the-private-ns/20220314-191232
+head:   7101b34f72a97926495a7befec1c27c502c1f792
+commit: 7101b34f72a97926495a7befec1c27c502c1f792 driver/nvme/host: Support duplicated nsid for the private ns
+date:   13 hours ago
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220316/202203160425.CZRSa5uF-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7101b34f72a97926495a7befec1c27c502c1f792
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review UPDATE-20220315-151414/Sungup-Moon/driver-nvme-host-Support-duplicated-nsid-for-the-private-ns/20220314-191232
+        git checkout 7101b34f72a97926495a7befec1c27c502c1f792
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-I was informed that the patch has already been applied and is now also pres=
-ent=20
-in linux-next, so please disregard my last email.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?
-id=3Da8f8cc6b39b7ee0dbaccbebd1268c9d3458ebf13
+All errors (new ones prefixed by >>):
 
-Regards
-Luca
-
->=20
-> Regards
-> Luca
->=20
-> On Sonntag, 20. Februar 2022 21:18:58 CET Luca Weiss wrote:
-> > On msm8953 the channel seems to be already opened when booting Linux but
-> > we still need to open it for communication with regulators etc.
-> >=20
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > Changes in v2:
-> > - rework original patch, don't drop condition completely but allow force
-> >=20
-> >   opening rpm_requests channel
-> > =20
-> >  drivers/rpmsg/qcom_smd.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-> > index 540e027f08c4..887e21ca51f2 100644
-> > --- a/drivers/rpmsg/qcom_smd.c
-> > +++ b/drivers/rpmsg/qcom_smd.c
-> > @@ -1288,9 +1288,14 @@ static void qcom_channel_state_worker(struct
-> > work_struct *work) if (channel->state !=3D SMD_CHANNEL_CLOSED)
-> >=20
-> >  			continue;
-> >=20
-> > +		/*
-> > +		 * Always open rpm_requests, even when already opened
->=20
-> which is
->=20
-> > +		 * required on some SoCs like msm8953.
-> > +		 */
-> >=20
-> >  		remote_state =3D GET_RX_CHANNEL_INFO(channel, state);
-> >  		if (remote_state !=3D SMD_CHANNEL_OPENING &&
-> >=20
-> > -		    remote_state !=3D SMD_CHANNEL_OPENED)
-> > +		    remote_state !=3D SMD_CHANNEL_OPENED &&
-> > +		    strcmp(channel->name, "rpm_requests"))
-> >=20
-> >  			continue;
-> >  	=09
-> >  		if (channel->registered)
+   drivers/nvme/host/core.c: In function 'nvme_find_ns_head':
+>> drivers/nvme/host/core.c:3629:64: error: 'ctrl' undeclared (first use in this function)
+    3629 |                 if (h->ns_id != nsid || !nvme_is_uniqueue_nsid(ctrl, head))
+         |                                                                ^~~~
+   drivers/nvme/host/core.c:3629:64: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/nvme/host/core.c:3629:70: error: 'head' undeclared (first use in this function)
+    3629 |                 if (h->ns_id != nsid || !nvme_is_uniqueue_nsid(ctrl, head))
+         |                                                                      ^~~~
 
 
+vim +/ctrl +3629 drivers/nvme/host/core.c
 
+  3615	
+  3616	static struct nvme_ns_head *nvme_find_ns_head(struct nvme_subsystem *subsys,
+  3617			unsigned nsid)
+  3618	{
+  3619		struct nvme_ns_head *h;
+  3620	
+  3621		lockdep_assert_held(&subsys->lock);
+  3622	
+  3623		list_for_each_entry(h, &subsys->nsheads, entry) {
+  3624			/*
+  3625			 * Private namespaces can share NSIDs under some conditions.
+  3626			 * In that case we can't use the same ns_head for namespaces
+  3627			 * with the same NSID.
+  3628			 */
+> 3629			if (h->ns_id != nsid || !nvme_is_uniqueue_nsid(ctrl, head))
+  3630				continue;
+  3631			if (!list_empty(&h->list) && nvme_tryget_ns_head(h))
+  3632				return h;
+  3633		}
+  3634	
+  3635		return NULL;
+  3636	}
+  3637	
 
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

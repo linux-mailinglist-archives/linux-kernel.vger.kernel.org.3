@@ -2,98 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B2F4D9CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C96C4D9CA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbiCONvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 09:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S1348829AbiCONw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 09:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348820AbiCONu5 (ORCPT
+        with ESMTP id S1346656AbiCONw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 09:50:57 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B253136D;
-        Tue, 15 Mar 2022 06:49:45 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id b5so13321507ilj.9;
-        Tue, 15 Mar 2022 06:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=GxhzMMCRxWyv25ftHfQam+a9DFEwcb//2QAxW1fgZ20=;
-        b=okbP8FUeE+Uf0s1bOeO+nY7pBYjFoilHSVwjTJVqAzNefcyDe7OyA4eveKnCj8Rbup
-         IjhOfcVim3fkXbWditJdJ9oeKSW6A/G/Bz2uIe9Y4Gio5YyAyEtrbt6MO03TXwgamjNK
-         IIUY0Uo9avKXwFqjZ44133zM/YLhuK7ZJv9iY2lvWt/xrlZKNBQKO3662WXzZh4oZE1k
-         opEj5yoUr3PL+5K1eUwwF/5fn6TXI+lcT3fnvFbRNTSKznpBrsKLLKSSVajmE+GR3zLv
-         oFxZ7eC6MMjBcok5aTQQyaP6IzvyjKKQPr4NksC0vlfkt/ySS0KefFSAx1edK1/pAUJ9
-         SgeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=GxhzMMCRxWyv25ftHfQam+a9DFEwcb//2QAxW1fgZ20=;
-        b=wrs8dhcjlGpwPsrT0i7WecjwSzAWdfVIG/XFtRj2Xw53ymagw6aWHbz9SoOc3LgEjc
-         9M40p/jTPwppDC+DXmMrTzqxGi/IXZVY2ayQvl10xdNJHUgBx0AmJX9fClO4aRg0ePCf
-         /YE2Zcl4VFgLftHvcqpI0jRLQG/mSl6xP3DDzpeVM+RbzeBnXwf1GzUT7SayjGlB9Jxq
-         1NdRGPJ5HoocR2Ah5xCeVQQ2FBeLxtV8JQvTmavGcpa2aq72EtAYKPuwMTkPUfPibZbW
-         nDT+PNuHf6lJyyWI4xYHBTZP6hMwV3u2QVRBxPGub1NI6tj1/r1QXZ7z1VnSz5sFcrWK
-         3nIA==
-X-Gm-Message-State: AOAM533FMdx7OJdtF8xx5796WFtelG4hJcRERYB+Dde6j//a+axMc03m
-        2hKvEGBFbImFYgyFxq3qVpQh/liAjhT1L1zzwX6X+A==
-X-Google-Smtp-Source: ABdhPJyR08WmRAm4o3b1HF2TWQyeADX5eTi3c+So0rVTxfSKnFwFQCFiUZOW6QX5+u79X2w7uCmobQ==
-X-Received: by 2002:a05:6e02:216f:b0:2c7:7a3f:2a94 with SMTP id s15-20020a056e02216f00b002c77a3f2a94mr16039753ilv.267.1647352184335;
-        Tue, 15 Mar 2022 06:49:44 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id i3-20020a056602134300b0064620a85b6dsm10360674iov.12.2022.03.15.06.49.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 06:49:43 -0700 (PDT)
-Message-ID: <62309977.1c69fb81.71db4.bed2@mx.google.com>
-Date:   Tue, 15 Mar 2022 06:49:43 -0700 (PDT)
-X-Google-Original-Date: Tue, 15 Mar 2022 13:49:42 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-Subject: RE: [PATCH 5.15 000/110] 5.15.29-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 09:52:28 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F2253704
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647352276; x=1678888276;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z8cDmbmlZNdInmwIqDtaFr4bVtO7m8JUzG7iHYr21qA=;
+  b=IXXfXQTheWdiLCuMIXd95S/VN6FT/J0hvA6S9nxdaddLZKx7fzGIvYt/
+   2iYkcxuZrfbtvcoX/Tp0zFWMCOUF964pc+aL0hs9PqKaE8E7WphUJjhMz
+   TubOIdYsDecn99Q9erIlat+HAxIDfjmSuJdOWzHiyBI1KBghaPV4bWjJZ
+   NG8oxVFGlvNktOaLpBrwwDSbNQXb+YKJ9jOvcuJmG7ftafXcRWvIYxuLn
+   oBH2Of4v9XFutZhCNPSCuKnPiQdfmoiEDoYPcGXghMVbmaigkXKaecAs5
+   Re8AyTkzuxUCrL9F8xc+aiL+uxX3c7/A49a5W3AO013I9VYBOoQmODR2k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342732429"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="342732429"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:50:54 -0700
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="690201870"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 06:50:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nU7Yx-000I0A-0v;
+        Tue, 15 Mar 2022 15:50:11 +0200
+Date:   Tue, 15 Mar 2022 15:50:10 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] drm: ssd130x: Reduce temporary buffer sizes
+Message-ID: <YjCZkkv//EhvxszH@smile.fi.intel.com>
+References: <20220315110707.628166-1-geert@linux-m68k.org>
+ <20220315110707.628166-5-geert@linux-m68k.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315110707.628166-5-geert@linux-m68k.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 12:53:02 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.15.29 release.
-> There are 110 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Mar 15, 2022 at 12:07:06PM +0100, Geert Uytterhoeven wrote:
+> ssd130x_clear_screen() allocates a temporary buffer sized to hold one
+> byte per pixel, while it only needs to hold one bit per pixel.
 > 
-> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.29-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> ssd130x_fb_blit_rect() allocates a temporary buffer sized to hold one
+> byte per pixel for the whole frame buffer, while it only needs to hold
+> one bit per pixel for the part that is to be updated.
+> Pass dst_pitch to drm_fb_xrgb8888_to_mono_reversed(), as we have already
+> calculated it anyway.
 
-5.15.29-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Can we use bitmap API? bitmap_zalloc() / etc ?
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

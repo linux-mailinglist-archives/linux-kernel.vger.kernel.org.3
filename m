@@ -2,242 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D4D4DA342
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7A34DA349
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351359AbiCOT2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S1351373AbiCOTbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbiCOT2h (ORCPT
+        with ESMTP id S233489AbiCOTbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:28:37 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF604C40C;
-        Tue, 15 Mar 2022 12:27:24 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id yy13so43743544ejb.2;
-        Tue, 15 Mar 2022 12:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B3AyzWaFZRULv9IcF5V5hNAd0c4hd9W8uiPRsiJrx04=;
-        b=Gi1Fqufb/YtSv2Jek0777ak0qYzQWn99w1ffk1/iCwA0ZUKSHYuOWYmjaPLp9kTYKt
-         8YPt2ojzPPSft/6SFm94hW/2FwPBAHFFPZEOmfCMHH2TxAOv8hV+ud2hPr8piRvsKRUb
-         cppWlxMGeXpuB/8UZT7N84GmeyPgLJKttEU99qfuDgqGpqNxfFNPW9AUQvRkUZynk3c1
-         zetaSxZtKu/B2gmWNizI7gL6zXWfHXiUTE2HgUrnK5lKPaahdKxVWOoveWOSS85EDK4w
-         H9O03q4dCJCHfxwvAwWdF4UIXwheqBHaYe+VwNjP+ErxVvPSevoyJvXIw+Wj6qMUvhDu
-         ttoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B3AyzWaFZRULv9IcF5V5hNAd0c4hd9W8uiPRsiJrx04=;
-        b=r+Wz2HHWqQd+dstXjoFrA9X6lLdiu/e7ZuhR0EADXJSK1ubl0SeyXobcSzR/IDlEff
-         15Q6UvcBP7xrkMpU+lLA3O5GS6z1sncs3GFqeXhAnjAeG+MqpguFt9ltxao29wuljLSB
-         QZthxO0gYO7ngMVz2/OC2CQV1tOI3f94z5TrQDx8ybHThg8ni632mwysNq1J4W7PEcUC
-         R6/KyrV3DuskcmuQg7T9fppWnv/jnN4h0Bm42YyiBGLgM2VaBjQCNkk//HSZFdEnR+rL
-         irKWy+UTdxc9wCTGn62CvizPpQ2ozC52bPQ4FEJO2jIn5Q3btAjmwCKiv7+df5Uh/CZz
-         9DsA==
-X-Gm-Message-State: AOAM532EdTkJ52uhj0VGTB7BX9kxAQu7bEGVQdvN6paqdtyNWi+HbHWQ
-        Z/GfwdK8Y1EcfddpqSyAmWDLS5TE/ocCYA==
-X-Google-Smtp-Source: ABdhPJxpdCS3ExM+NJiBm4cT8iFlgpK/7HumnCZ73juniDL5IM4fOcaFPVCL76tYwQmLRW8ZevmGCw==
-X-Received: by 2002:a17:907:7e96:b0:6da:f7ee:4a25 with SMTP id qb22-20020a1709077e9600b006daf7ee4a25mr24241525ejc.436.1647372442842;
-        Tue, 15 Mar 2022 12:27:22 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id oz10-20020a1709077d8a00b006dd5103bac9sm1065690ejc.107.2022.03.15.12.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:27:22 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 05/46] media: sun6i-csi: Always set exclusive module clock rate
-Date:   Tue, 15 Mar 2022 20:27:21 +0100
-Message-ID: <823687335.0ifERbkFSE@kista>
-In-Reply-To: <20220311143532.265091-6-paul.kocialkowski@bootlin.com>
-References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com> <20220311143532.265091-6-paul.kocialkowski@bootlin.com>
+        Tue, 15 Mar 2022 15:31:09 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2052.outbound.protection.outlook.com [40.107.102.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273BA50E33;
+        Tue, 15 Mar 2022 12:29:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BG2DzL9Ucs6aTbCWB6wpY51q/GM9QuR0frNZODqnYI5YBbp8+BpY+L72MDruK+uGh9ZQTnK+KlAIlwuZR0XQXc7aBBmsuhcGx9uoP2ZHhBdNDoYEFZJiMnTyKyzT2z4/2oLFeb+LOmVuWQxkTuA+T2J/wpgrqKXRMJM0jjmH7/gd7w5q72oM/xeM7P7D5G+Eej5qGv/h4d/Ep4JyyuhRnCddnmphW+S+Tww3wkF5adR6u1ctb0v1ByUKRhYRfxkRh8ca5+tlNrKSlvOmYKt1r4yPI5DB9bg9Vpdbr+UtaPLh0pJyqPD6RoMzBrNGL4tCOn6uVgdzmxjVpRSWV9WSLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k651dwRkCdE9EfT/MWFMlQh7PbO9TuXlZ+sRuH11XQg=;
+ b=V8UxNouL3DJcicgcrM2MaJug1x0yHpX2M9Kn6Xr6W64je8pbuVepwq4p3RZSg2IXAEFPjR7tWh6cRGld/yonJvIU9I21aCNq13gqBg1++pNcCC3CwEQzkDM5cUPUp2GK/zcbtqaRNuWfHeFrtF6KXPvzJ0anZpRNwjEt127z4q7MAs7BsCyM3ApDKlsHqRpSFqxxScpO/E+p3zR0ld1k30kGk38H3+Kymsn2xghLyY0iLg6WNf9lS3Zsf1ZYhd3MNwVn9q2oFuwkd8H6jmYX86+DMgObYLbQpPRVAEgaWf+Xbp/bHthqlWREUzyzIs5959WWO6AW6yyWEOlNokhGJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k651dwRkCdE9EfT/MWFMlQh7PbO9TuXlZ+sRuH11XQg=;
+ b=rTRk+USe2tsj7keBhUGj9NV2qfZLAz2hcGgJLywZaHTyDDcvSIhfqGbU1l++fmUvKPGn5B4L72qoDFO6d/N3ns+EqWx5GAOdYDjqjs5xK0NMwTnUIKVzyhzmzWS2Q1dBAdhc+yIIh2H3DN7pZKdY2A/Yh8wFsUOVcusktHqen/DnPuCYviOgTr1gCnzcIX7/LeOlKSG66EoFDB8Uzr0VXpKI5oRl56UCraLeMreDo9AIgIe/w8ruWPaLjEwSo9gZhxTAlmYYh06hfAmFUPnQNHA90T83dd+vbmdTPNY0urJtwQZdICnOJvjBNYd+jUoQh22MjGx7HlDK17l9olf+WA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM5PR12MB2453.namprd12.prod.outlook.com (2603:10b6:4:b5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.21; Tue, 15 Mar
+ 2022 19:29:53 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::51a0:4aee:2b4c:ca28]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::51a0:4aee:2b4c:ca28%4]) with mapi id 15.20.5061.029; Tue, 15 Mar 2022
+ 19:29:53 +0000
+Date:   Tue, 15 Mar 2022 16:29:52 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Joao Martins <joao.m.martins@oracle.com>
+Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        yuzenghui <yuzenghui@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: Re: iommufd(+vfio-compat) dirty tracking (Was: Re: [RFC v2 0/4]
+ vfio/hisilicon: add acc live migration driver)
+Message-ID: <20220315192952.GN11336@nvidia.com>
+References: <8338fe24-04ab-130a-1324-ab8f8e14816d@oracle.com>
+ <20220214140649.GC4160@nvidia.com>
+ <6198d35c-f810-cab1-8b43-2f817de2c1ea@oracle.com>
+ <20220215162133.GV4160@nvidia.com>
+ <7db79281-e72a-29f8-7192-07b739a63897@oracle.com>
+ <20220223010303.GK10061@nvidia.com>
+ <e4dba6f8-7f5b-e0d5-8ea8-5588459816f7@oracle.com>
+ <20220225204424.GA219866@nvidia.com>
+ <30066724-b100-a14e-e3d8-092645298d8a@oracle.com>
+ <8448d7fb-3808-c4e8-66cf-4a3184c24ec0@oracle.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8448d7fb-3808-c4e8-66cf-4a3184c24ec0@oracle.com>
+X-ClientProxiedBy: MN2PR15CA0007.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::20) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a360dd74-9171-4ff1-8234-08da06ba2dcb
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2453:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2453E0C66F9F88D1C8CCB041C2109@DM5PR12MB2453.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qUBi0lDy0P0eCHo4YFr2fpUc9tFKeFIhO4IKpDthFOr+PP9/hpWLUCtYhzhay7WG9hWSdUIuVHdKLyZXAZxCnjnvl8HQDaK7d++52N1wSyvEqJWa16/rGAR+dpG3fHmDFJcXvR2g0u3Oaylnrn0PIBP/gf70pU7w+Z8XWAUjAESilvOLnTR5HhdXshHosfarbHsyEHBCs5QskjupLVsfKdveHBSNg60mwmJWhXP2NDq27rPCW3ycaKcstxLAkd2JIjeaY8sdN5FlQhxEBoubd71ASRaJYfqQPmPnbRf2fN8RdTzi29QeUhF/65PdAlbWIVfK+B+8eOXj2CQPnCxv/YBhAyMDuehTiadjzcghx/GXaWjd7uPmA7unO6eKtKY4G7vxwkCfMQWADuTgf9juyRAi29dvdl1a9+hSD2uPeXJmX5nWLUqswJQWoqA6WMZ+pVxrY3pk0i3KcVFqVKxBHyxNtQhdmPBfexdjQAmHC6QmuBzcK43war7W5VirfqhqUxJ93T90YYYzUr8ydgr21w/9YQmv8klvFQVJD7TQqVa+v238YaR0FID1SIOkjC6kxrXAdSuL01csKP7ky3FakFWtl3gWUW50fTjzfEBJY/NF+xnC/HecE4yozspiC2OO2sofX3GWrWwtAO643OqgNrBFlQvYL8NPNWEHbnZIMhuiYiGBmBVKWDlG3BOT0EGx8pdc+0Kc5aUrJJCex3R2eg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(86362001)(6512007)(1076003)(508600001)(38100700002)(8676002)(4326008)(33656002)(66556008)(7416002)(6486002)(2616005)(66476007)(66946007)(316002)(6916009)(54906003)(36756003)(26005)(83380400001)(186003)(6506007)(53546011)(2906002)(8936002)(14143004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MIHd0AW3QXYmlLdMnHzrU9wtIxVD97dwGdOxurMRvA4fgl1v3aLUyK8mhS+E?=
+ =?us-ascii?Q?P/x7HEyma9bLJioixIa9IXjVw2J7on1zkfiDGfRvtXBHocIh2VaMXYC/U5PE?=
+ =?us-ascii?Q?mO9Urk7g0hALOH7iiCdsGI5MNURvFCQbVuKNF6yhelUOhbHGMmXOWKKHEQPH?=
+ =?us-ascii?Q?dv1iev7CQUpp+SAylg5oCZySWfuzd8ei+rzEqM0SY8ON8lcnVMreyuAPa8Gj?=
+ =?us-ascii?Q?SChqIvzvsx12IAmkx0MuN7q1wlXb5nVRlWVw4wfJxYcGWUk+lTcF3zRwt/86?=
+ =?us-ascii?Q?uK5BxKwWBK10xl8Xc0vk6H7BgQRyXsl3JxdbhIKkvMsPnUUclHM5IZ/OqL5b?=
+ =?us-ascii?Q?Hf0nrgipOICtjRYYuy3lWXAwFykimmMe8aZ1f5c5ZtqO2dn1CMaGjWOFv4fq?=
+ =?us-ascii?Q?g6oSt4RAcpQ2KiTXJoWksOPPeU0ZAgdGsvhFZUNUZs8D5dUgSmnmqk37W0s7?=
+ =?us-ascii?Q?XJdrNyXCtkPuhfzpLhpveP7bNaj2uH5g2furMfvJrIobqCyUhjkkQT8LQRX3?=
+ =?us-ascii?Q?+7U+BCt+Vsc3jIO28gVVUp6QBj6QoxxxD7o15nHOh4tPizbXFlI2nwTAKXn8?=
+ =?us-ascii?Q?JbUh4JEDpg3zBu5aaU3qjMBr/aCbHVh69PSq4h1UyeF/rS4uWjJAEWQjAzFc?=
+ =?us-ascii?Q?UMyi2hSnGsm66Fiy7FgN5ybUqCY6LVN/erW8W+1RPR/3cPyQ5bhGwACuZQS4?=
+ =?us-ascii?Q?ugKrOaBfE1VsChPaxVBLsBmNzMNlw82XWHolwlFUm3YMt8AQ+6ZT+dtSXfHS?=
+ =?us-ascii?Q?Pm5bApcPEqcYK+GmmQwmx+BylFOt3ojSTkEH1Z3ukBXNNIsU+K7dfuu+tWl/?=
+ =?us-ascii?Q?jORJxwJ027PbUo1g5qNv98yYN0pGrYJmVTd/xtrPT6MaXnxpm33A5nnw2Mku?=
+ =?us-ascii?Q?WWbH/sIl8mKsg9ubLNjrNaYvEmKjwjfANJZT10n7h26ZrvptmYR/jpM3Za5u?=
+ =?us-ascii?Q?Cg6KY8lhQx5oziyX+QQ9huFX7fH6p70blGD6B6/3oPF00SDtkjbxb+BJoZI/?=
+ =?us-ascii?Q?4NcseZpBQ4h7uZSvqJvkFNOSddLD5DhGt/DvsJXq1/lmMLccGmGQ6KWaGOs6?=
+ =?us-ascii?Q?HMyBvLfaO0hk0ewmfAjm4+JhE3n/qGwCmwJB5v/xY0S2Ez1Ge+tcNB9tIpt1?=
+ =?us-ascii?Q?HmSYxKb4rDQTBdcGs5r83Pp6n7A3/bMYO5fd2SK6uLzI2gk4a+9Cr5BGHKLq?=
+ =?us-ascii?Q?ZO1IP1jhuc9Du+hjPX5tA7h4Wsl03+Ht8nfm8hCzgl38QhCrmqjMz/zEo3+O?=
+ =?us-ascii?Q?McPHQx5WEbTmWc0ZfTAQTd5kJZ2lUhwiorb1l6xWW3sRAwK9FPU1l5FQiuSK?=
+ =?us-ascii?Q?3+iqm09iSgaDRlD7nNe7SXkqqRqZEvmSffJf+t9tIOXafqtLzq5GsuyhvmJr?=
+ =?us-ascii?Q?l1eQ/AHjIU2CRwBvOkuuU2FILeQLEcjt1kQuQaP7p/EmhLnByq3Mn9ZWK//G?=
+ =?us-ascii?Q?iZYxyH6I1I/3q0WGDgvIgPgfRdrMeuLq?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a360dd74-9171-4ff1-8234-08da06ba2dcb
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2022 19:29:53.0361
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pmVLLWScVs9YBFf50L2k0sRg2oRAbQiqrpUrlCdYAB4nxBpKyyX6Nz8HERjqNYZ5
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2453
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 11. marec 2022 ob 15:34:51 CET je Paul Kocialkowski napisal(a):
-> In some situations the default rate of the module clock is not the
-> required one for operation (for example when reconfiguring the clock
-> tree to use a different parent). As a result, always set the correct
-> rate for the clock (and take care of cleanup).
+On Fri, Mar 11, 2022 at 01:51:32PM +0000, Joao Martins wrote:
+> On 2/28/22 13:01, Joao Martins wrote:
+> > On 2/25/22 20:44, Jason Gunthorpe wrote:
+> >> On Fri, Feb 25, 2022 at 07:18:37PM +0000, Joao Martins wrote:
+> >>> On 2/23/22 01:03, Jason Gunthorpe wrote:
+> >>>> On Tue, Feb 22, 2022 at 11:55:55AM +0000, Joao Martins wrote:
+> >>> I'll be simplifying the interface in the other type1 series I had and making it
+> >>> a simple iommu_set_feature(domain, flag, value) behind an ioctl for iommufd that can
+> >>> enable/disable over a domain. Perhaps same trick could be expanded to other
+> >>> features to have a bit more control on what userspace is allowed to use. I think
+> >>> this just needs to set/clear a feature bit in the domain, for VFIO or userspace
+> >>> to have full control during the different stages of migration of dirty tracking.
+> >>> In all of the IOMMU implementations/manuals I read it means setting a protection
+> >>> domain descriptor flag: AMD is a 2-bit field in the DTE, on Intel likewise but on
+> >>> the PASID table only for scalable-mode PTEs, on SMMUv3.2 there's an equivalent
+> >>> (albeit past work had also it always-on).
+> >>>
+> >>> Provided the iommufd does /separately/ more finer granularity on what we can
+> >>> do with page tables. Thus the VMM can demote/promote the ioptes to a lower page size
+> >>> at will as separate operations, before and after migration respectivally. That logic
+> >>> would probably be better to be in separate iommufd ioctls(), as that it's going to be
+> >>> expensive.
+> >>
+> >> This all sounds right to me
+> >>
+> >> Questions I have:
+> >>  - Do we need ranges for some reason? You mentioned ARM SMMU wants
+> >>    ranges? how/what/why?
+> >>
+> > Ignore that. I got mislead by the implementation and when I read the SDM
+> > I realized that the implementation was doing the same thing I was doing
+> > i.e. enabling dirty-bit in the protection domain at start rather than
+> > dynamic toggling. So ARM is similar to Intel/AMD in which you set CD.HD
+> > bit in the context descriptor to enable dirty bits or the STE.S2HD in the
+> > stream table entry for the stage2 equivalent. Nothing here is per-range
+> > basis. And the ranges was only used by the implementation for the eager
+> > splitting/merging of IO page table levels.
+> > 
+> >>  - What about the unmap and read dirty without races operation that
+> >>    vfio has?
+> >>
+> > I am afraid that might need a new unmap iommu op that reads the dirty bit
+> > after clearing the page table entry. It's marshalling the bits from
+> > iopte into a bitmap as opposed to some logic added on top. As far as I
+> > looked for AMD this isn't difficult to add, (same for Intel) it can
+> > *I think* reuse all of the unmap code.
+> > 
 > 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> OK, made some progress.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Nice!
 
-Best regards,
-Jernej
+ 
+> It's a WIP (here be dragons!) and still missing things e.g. iommufd selftests,
+> revising locking, bugs, and more -- works with my emulated qemu patches which
+> is a good sign. But hopefully starts some sort of skeleton of what we were
+> talking about in the above thread.
 
-> ---
->  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 54 ++++++++++++++-----
->  1 file changed, 41 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/
-media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> index 8155e9560164..2355088fdc37 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> @@ -154,9 +154,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device 
-*csi_dev, bool enable)
->  		regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 
-0);
->  
->  		clk_disable_unprepare(csi_dev->clk_ram);
-> -		if (of_device_is_compatible(dev->of_node,
-> -					    "allwinner,sun50i-
-a64-csi"))
-> -			clk_rate_exclusive_put(csi_dev->clk_mod);
->  		clk_disable_unprepare(csi_dev->clk_mod);
->  		reset_control_assert(csi_dev->reset);
->  		return 0;
-> @@ -168,9 +165,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device 
-*csi_dev, bool enable)
->  		return ret;
->  	}
->  
-> -	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-
-csi"))
-> -		clk_set_rate_exclusive(csi_dev->clk_mod, 300000000);
-> -
->  	ret = clk_prepare_enable(csi_dev->clk_ram);
->  	if (ret) {
->  		dev_err(csi_dev->dev, "Enable clk_dram_csi clk err 
-%d\n", ret);
-> @@ -190,8 +184,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device 
-*csi_dev, bool enable)
->  clk_ram_disable:
->  	clk_disable_unprepare(csi_dev->clk_ram);
->  clk_mod_disable:
-> -	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-
-csi"))
-> -		clk_rate_exclusive_put(csi_dev->clk_mod);
->  	clk_disable_unprepare(csi_dev->clk_mod);
->  	return ret;
->  }
-> @@ -819,6 +811,7 @@ static int sun6i_csi_resources_setup(struct 
-sun6i_csi_device *csi_dev,
->  				     struct platform_device 
-*platform_dev)
->  {
->  	struct device *dev = csi_dev->dev;
-> +	unsigned long clk_mod_rate;
->  	void __iomem *io_base;
->  	int ret;
->  	int irq;
-> @@ -856,28 +849,53 @@ static int sun6i_csi_resources_setup(struct 
-sun6i_csi_device *csi_dev,
->  		return PTR_ERR(csi_dev->clk_ram);
->  	}
->  
-> +	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-
-csi"))
-> +		clk_mod_rate = 300000000;
-> +	else
-> +		clk_mod_rate = 297000000;
-> +
-> +	ret = clk_set_rate_exclusive(csi_dev->clk_mod, clk_mod_rate);
-> +	if (ret) {
-> +		dev_err(dev, "failed to set mod clock rate\n");
-> +		return ret;
-> +	}
-> +
->  	/* Reset */
->  
->  	csi_dev->reset = devm_reset_control_get_shared(dev, NULL);
->  	if (IS_ERR(csi_dev->reset)) {
->  		dev_err(dev, "failed to acquire reset\n");
-> -		return PTR_ERR(csi_dev->reset);
-> +		ret = PTR_ERR(csi_dev->reset);
-> +		goto error_clk_rate_exclusive;
->  	}
->  
->  	/* Interrupt */
->  
->  	irq = platform_get_irq(platform_dev, 0);
-> -	if (irq < 0)
-> -		return -ENXIO;
-> +	if (irq < 0) {
-> +		dev_err(dev, "failed to get interrupt\n");
-> +		ret = -ENXIO;
-> +		goto error_clk_rate_exclusive;
-> +	}
->  
->  	ret = devm_request_irq(dev, irq, sun6i_csi_isr, 0, SUN6I_CSI_NAME,
->  			       csi_dev);
->  	if (ret) {
->  		dev_err(dev, "failed to request interrupt\n");
-> -		return ret;
-> +		goto error_clk_rate_exclusive;
->  	}
->  
->  	return 0;
-> +
-> +error_clk_rate_exclusive:
-> +	clk_rate_exclusive_put(csi_dev->clk_mod);
-> +
-> +	return ret;
-> +}
-> +
-> +static void sun6i_csi_resources_cleanup(struct sun6i_csi_device *csi_dev)
-> +{
-> +	clk_rate_exclusive_put(csi_dev->clk_mod);
->  }
->  
->  static int sun6i_csi_probe(struct platform_device *platform_dev)
-> @@ -897,7 +915,16 @@ static int sun6i_csi_probe(struct platform_device 
-*platform_dev)
->  	if (ret)
->  		return ret;
->  
-> -	return sun6i_csi_v4l2_init(csi_dev);
-> +	ret = sun6i_csi_v4l2_init(csi_dev);
-> +	if (ret)
-> +		goto error_resources;
-> +
-> +	return 0;
-> +
-> +error_resources:
-> +	sun6i_csi_resources_cleanup(csi_dev);
-> +
-> +	return ret;
->  }
->  
->  static int sun6i_csi_remove(struct platform_device *pdev)
-> @@ -905,6 +932,7 @@ static int sun6i_csi_remove(struct platform_device 
-*pdev)
->  	struct sun6i_csi_device *csi_dev = platform_get_drvdata(pdev);
->  
->  	sun6i_csi_v4l2_cleanup(csi_dev);
-> +	sun6i_csi_resources_cleanup(csi_dev);
->  
->  	return 0;
->  }
-> -- 
-> 2.35.1
-> 
-> 
+I'm a bit bogged with the coming merge window right now, but will have
+more to say in a bit
+ 
+> The bigger TODO, though is the equivalent UAPI for IOMMUFD; I started with
+> the vfio-compat one as it was easier provided there's existing userspace to work
+> with (Qemu). To be fair the API is not that "far" from what would be IOMMUFD onto
+> steering the dirty tracking, read-clear the dirty bits, unmap and
+> get dirty. 
 
+I think this is fine to start experimenting with
 
+> But as we discussed earlier, the one gap of VFIO dirty API is that
+> it lacks controls for upgrading/downgrading area/IOPTE sizes which
+> is where IOMMUFD would most likely shine. When that latter part is
+> done we can probably adopt an eager-split approach inside
+> vfio-compat.
+
+I think the native API should be new ioctls that operate on the
+hw_pagetable object to:
+  - enable/disable dirty tracking 
+  - read&clear a bitmap from a range
+  - read&unmap a bitmap from a range
+  - Manipulate IOPTE sizes
+
+As you say it should not be much distance from the VFIO compat stuff
+
+Most probably I would say to leave dirty tracking out of the type1 api
+and compat for it. Maybe we can make some limited cases work back
+compat, like the whole ioas supports iommu dirty tracking or
+something..
+
+Need to understand if it is wortwhile - remember to use any of this
+you need a qemu that is updated to the v2 migration interface,
+so there is little practical value in back compat to old qemu if we
+expect qemu will use the native interface anyhow.
+
+> Additionally I also sort of want to skeleton ARM and Intel to see how it looks.
+> Some of the commits made notes of some of research I made, so *I think* the APIs
+> introduced capture h/w semantics for all the three IOMMUs supporting dirty
+> tracking.
+
+I think the primitives are pretty basic, I'd be surprised if there is
+something different :)
+
+Though things to be thinking about are how does this work with nested
+translation and other advanced features.
+
+Thanks,
+Jason

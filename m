@@ -2,188 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A314D92E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 04:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5444D4D92E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 04:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344085AbiCODQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 23:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S243351AbiCODXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 23:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiCODQ2 (ORCPT
+        with ESMTP id S230445AbiCODXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 23:16:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456A2A711;
-        Mon, 14 Mar 2022 20:15:13 -0700 (PDT)
-X-UUID: 0bf839b975b74ae2af7fd70c83912443-20220315
-X-UUID: 0bf839b975b74ae2af7fd70c83912443-20220315
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1543633687; Tue, 15 Mar 2022 11:15:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 15 Mar 2022 11:15:09 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Mar 2022 11:15:08 +0800
-Message-ID: <5a797c608b6eb29e6fba41fafc5f78f75b4ba1d3.camel@mediatek.com>
-Subject: Re: [PATCH 2/2] dt-bindings: phy: mediatek: Add YAML schema for
- PCIe PHY
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
-        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Tue, 15 Mar 2022 11:15:08 +0800
-In-Reply-To: <e7765c888e6fc8eb4b15fa01d19afda335b16c26.camel@mediatek.com>
-References: <20220311133527.5914-1-jianjun.wang@mediatek.com>
-         <20220311133527.5914-3-jianjun.wang@mediatek.com>
-         <0454647b-7aa3-ed70-0b92-1e5c98d0adc0@canonical.com>
-         <e7765c888e6fc8eb4b15fa01d19afda335b16c26.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 14 Mar 2022 23:23:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4A9643EC1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 20:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647314540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6ypJCil04CfaW3VomauJXpYfaEKwnBls7PLMuFbkqEc=;
+        b=czWNV5qV2NCjqeV4aXs9HFKdWGIWbOHVy2v9XRc8Z/6cIENFmtL0i1CxYPAyMrQX/1aT0P
+        HClwcfOlUXV0ExLJT8/GuPrhg0nKyMZONBA5aoEQ8vswQbOzJq0xoxmGruUMnnZZmnDKSO
+        8QEWLe8Iyf8AFKYKfXkSyd530G8Zat4=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-92-uuJqeJJ1Pw6SMR8pp3PCjQ-1; Mon, 14 Mar 2022 23:22:18 -0400
+X-MC-Unique: uuJqeJJ1Pw6SMR8pp3PCjQ-1
+Received: by mail-lj1-f199.google.com with SMTP id x3-20020a05651c104300b00247ebe980b7so7197351ljm.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 20:22:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6ypJCil04CfaW3VomauJXpYfaEKwnBls7PLMuFbkqEc=;
+        b=Ng+k3HmYY7411EmJ8iruI8sDtqLPDM2zRa0N5vyxbAny6YUslf9hbaQENAy8YK2sRx
+         EkR+ZUb4a7sCrQ4EjI5t4YXp0z+tAye4t3zgHHDf+SxCcYnvQiaWAESHLNsslKAw9lU3
+         hLZAAf+w5fb76OJeXEPoZKv0gcd2iZ8aAp8VJNmznhcaW/Nw46IypwOsYBN2asrzOS1v
+         Uxio4i/cbReuvdKu3jqwrAMUSiayi5pw93/eCymedVnaObHy8Pf+6GM7KW6OLAuMfen5
+         N3dERbKJOm9CwTfbFEa+hOAT7I15GReWIGQxdE4IcGakcDJK/TEmUOMDk0+9JqOMAKfh
+         BG4Q==
+X-Gm-Message-State: AOAM532vc0gf4dsnaBTM0jHa2DDGVmJiE2OPkVMBx5glrm9+bVm7Z2Hl
+        izYQYjCX+wMRRZUyw8XtYwbLE0XD6lIDU+z6I9ezwBru+rLxnn+4hv6vxboBZJpV/wU58Klhluh
+        G746lIXP82xt391lZ9Y5bEpU=
+X-Received: by 2002:a05:6512:1115:b0:448:6c0b:d1f with SMTP id l21-20020a056512111500b004486c0b0d1fmr11687875lfg.94.1647314537395;
+        Mon, 14 Mar 2022 20:22:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwY3CCDk9ukH2U+Kr/8vGYwVnK5BsS8X6MQn5V8KteHKP7+4yht4SnmJrDlzhjnpAN/lgS5cg==
+X-Received: by 2002:a05:6512:1115:b0:448:6c0b:d1f with SMTP id l21-20020a056512111500b004486c0b0d1fmr11687861lfg.94.1647314537143;
+        Mon, 14 Mar 2022 20:22:17 -0700 (PDT)
+Received: from [192.168.1.121] (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
+        by smtp.gmail.com with ESMTPSA id j15-20020a2e3c0f000000b00247e9bafa20sm4272092lja.99.2022.03.14.20.22.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 20:22:16 -0700 (PDT)
+Message-ID: <d9b9c82e-4012-cf0a-d966-d9669a684a27@redhat.com>
+Date:   Tue, 15 Mar 2022 05:22:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] mm/hmm/test: simplify hmm test code: use miscdevice
+ instead of char dev
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
+        vbabka@suse.cz
+References: <20220311033050.22724-1-mpenttil@redhat.com>
+ <20220314182439.GB64706@ziepe.ca>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <20220314182439.GB64706@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-14 at 09:42 +0800, Jianjun Wang wrote:
-> Hi Krzysztof,
+Hi Jason and thanks for your comments..
+
+On 14.3.2022 20.24, Jason Gunthorpe wrote:
+> On Fri, Mar 11, 2022 at 05:30:50AM +0200, mpenttil@redhat.com wrote:
+>> From: Mika Penttilä <mpenttil@redhat.com>
+>>
+>> HMM selftests use an in-kernel pseudo device to emulate device private
+>> memory. The pseudo device registers a major device range for two pseudo
+>> device instances. User space has a script that reads /proc/devices in
+>> order to find the assigned major number, and sends that to mknod(1),
+>> once for each node.
+>>
+>> This duplicates a fair amount of boilerplate that misc device can do
+>> instead.
+>>
+>> Change this to use misc device, which makes the device node names appear
+>> for us. This also enables udev-like processing if desired.
 > 
-> On Fri, 2022-03-11 at 15:28 +0100, Krzysztof Kozlowski wrote:
-> > On 11/03/2022 14:35, Jianjun Wang wrote:
-> > > Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
-> > > 
-> > > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > > ---
-> > >  .../bindings/phy/mediatek,pcie-phy.yaml       | 71
-> > > +++++++++++++++++++
-> > >  1 file changed, 71 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/phy/mediatek,pcie-
-> > > phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,pcie-
-> > > phy.yaml
-> > > new file mode 100644
-> > > index 000000000000..da15b4bf3117
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/phy/mediatek,pcie-
-> > > phy.yaml
-> > > @@ -0,0 +1,71 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/phy/mediatek,pcie-phy.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: MediaTek PCIe PHY Device Tree Binding
-> > 
-> > Title is for hardware, so s/Device Tree Binding//
-> > 
-> > > +
-> > > +maintainers:
-> > > +  - Jianjun Wang <jianjun.wang@mediatek.com>
-> > > +
-> > > +description: |
-> > > +  The PCIe PHY supports physical layer functionality for PCIe
-> > > Gen3
-> > > port.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: mediatek,pcie-phy
-> > 
-> > Is it going to be exactly one pcie-phy for all Mediatek chipsets
-> > for
-> > next years? Are you sure about that? It sounds highly unlikely....
-> 
-> We have only one pcie-phy for now, but if this is not recommended, I
-> will replace it with a specific name in the next version, thanks for
-> your review.
-Prefer to add specific ones
+> This is borderline the wrong way to use misc devices, they should
+> never be embedded into other structs like this. It works out here
+> because they are eventually only placed in a static array, but still
+> it is a generally bad pattern to see.
+
+Could you elaborate on this one? We have many in-tree usages of the same 
+pattern, like:
+
+drivers/video/fbdev/pxa3xx-gcu.c
+drivers/platform/goldfish/goldfish_pipe.c
+drivers/virt/vboxguest/vboxguest_linux.c
+drivers/virt/nitro_enclaves/ne_pci_dev.c
+drivers/watchdog/cpwd.c
+drivers/platform/x86/toshiba_acpi.c
+drivers/platform/x86/wmi.c
+drivers/platform/surface/surface_dtx.c
+drivers/bus/fsl-mc/fsl-mc-uapi.c
+drivers/misc/dw-xdata-pcie.c
+drivers/input/serio/serio_raw.c
+fs/dlm/user.c
+lib/test_kmod.c
+
+You mention "placed in a static array", are you seeing a potential 
+lifetime issue or what? Many of the examples above embed miscdevice in a 
+dynamically allocated object also.
+
+The file object's private_data holds a pointer to the miscdevice, and 
+fops_get() pins the module. So freeing the objects miscdevice is 
+embedded in at module_exit time should be fine. But, as you said, in 
+this case the miscdevices are statically allocated, so that shouldn't be 
+an issue either. But maybe I'm missing something?
 
 > 
-> Thanks.
+>> Delete the /proc/devices parsing from the user-space test script, now
+>> that it is unnecessary.
 > 
-> > 
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  reg-names:
-> > > +    items:
-> > > +      - const: sif
-> > > +
-> > > +  "#phy-cells":
-> > > +    const: 0
-> > > +
-> > > +  nvmem-cells:
-> > > +    maxItems: 7
-> > > +    description:
-> > > +      Phandles to nvmem cell that contains the efuse data, if
-> > > unspecified,
-> > > +      default value is used.
-> > > +
-> > > +  nvmem-cell-names:
-> > > +    items:
-> > > +      - const: glb_intr
-> > > +      - const: tx_ln0_pmos
-> > > +      - const: tx_ln0_nmos
-> > > +      - const: rx_ln0
-> > > +      - const: tx_ln1_pmos
-> > > +      - const: tx_ln1_nmos
-> > > +      - const: rx_ln1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - reg-names
-> > > +  - "#phy-cells"
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    pciephy: phy@11e80000 {
-> > > +        compatible = "mediatek,pcie-phy";
-> > > +        #phy-cells = <0>;
-> > > +        reg = <0x11e80000 0x10000>;
-> > > +        reg-names = "sif";
-> > > +        nvmem-cells = <&pciephy_glb_intr>,
-> > > +                      <&pciephy_tx_ln0_pmos>,
-> > > +                      <&pciephy_tx_ln0_nmos>,
-> > > +                      <&pciephy_rx_ln0>,
-> > > +                      <&pciephy_tx_ln1_pmos>,
-> > > +                      <&pciephy_tx_ln1_nmos>,
-> > > +                      <&pciephy_rx_ln1>;
-> > > +        nvmem-cell-names = "glb_intr", "tx_ln0_pmos",
-> > > +                           "tx_ln0_nmos", "rx_ln0",
-> > > +                           "tx_ln1_pmos", "tx_ln1_nmos",
-> > > +                           "rx_ln1";
-> > > +    };
-> > 
-> > 
-> > Best regards,
-> > Krzysztof
+> This is all because the cdev is being used wrong - it get all this
+> stuff it should be done via cdev_device_add() and a dmirror_device
+> needs a struct device to hold the sysfs.
 > 
+
+I think using cdev_add ends up in the same results in device_* api 
+sense. miscdevice acting like a mux at a higher abstraction level 
+simplifies the code.
+
+
+> Jason
 > 
+
+
+Thanks,
+
+Mika
 

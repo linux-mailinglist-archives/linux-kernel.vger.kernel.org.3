@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAC74D9425
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B114D9429
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiCOFxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 01:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S1345039AbiCOFyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 01:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239679AbiCOFwt (ORCPT
+        with ESMTP id S237121AbiCOFyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 01:52:49 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE68049F0D;
-        Mon, 14 Mar 2022 22:51:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHjFy07k0z4xRB;
-        Tue, 15 Mar 2022 16:51:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647323496;
-        bh=JL3qPG79Sr2Y4eycu712fjbW83NobsBalx/XzRU79Ik=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dCGPANzHpehEHrWcflKcL9tonj5uvFdh3SO76dI5r8sl4xLLq3mgvfSHYztr/hxoe
-         qtWjWRop+1gDVwav2plJJkCju7/Yxg/ZgsRaIexR9bgj6NY3TltP/cm0o7eEdegl/s
-         6m330WMYjccOYKOrgZuCN8emzs5ut11iQH+2JFCBTVkpd+53ksTAcXlbgTanaIT6rv
-         oEP3lchqCW8Akc1QdBWTGprlMiGggc8A8mFfMrgkpT8TAVjVZ2Bc0yldUrfONuFa1q
-         dA3NoQSMAvFpJy6/oYkwMt4PurXZwatSBRKjFEFzVlcKsf9VP+0jEFUivjChLjBR1T
-         2cjpPpi+Xj0ww==
-Date:   Tue, 15 Mar 2022 16:51:33 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Heidelberg <david@ixit.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Vinod Koul <vkoul@kernel.org>
-Subject: linux-next: manual merge of the char-misc tree with the arm-soc
- tree
-Message-ID: <20220315165133.5b720984@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vlQWi6Spi=EEm0AnZUqo5ey";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 15 Mar 2022 01:54:52 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08B2275C0;
+        Mon, 14 Mar 2022 22:53:40 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t1so22574950edc.3;
+        Mon, 14 Mar 2022 22:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=gcxe7Q67Er+91W8CGkt9CKVxyZovdKpQHbbislZxMaI=;
+        b=T8t6aNIF28F/RLXMTBj4EVH+NN/fLhb23LBLmy2AgzTgdRtQajf0XbbzbYVGJOQNxb
+         B8zbxhg6kZzPaHWpSLtJdo+OtDUq4HEqLmHRw4nBl2bOVFo3vhmy9QeTSYpZOiKsphs6
+         RDuMWsztvWsB+WF0Hx1X9ihSKaTn4YcGUsD8w7xW68/vTky6JO9CWVibNvDDtmZyW4S7
+         JX5DxR5ERSQ7AeeXbjtBYQsO9Eo/fE2kpAu6DwTrXQ+ybbRUyNyC4WDPV+EUgMAbMt9G
+         ynqbM94johYsXzLB22ZyWK4pG2pLi8MzagEeIIvHo6yfNIWirShdjWxhxbpAqD7ZRY9f
+         tehg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gcxe7Q67Er+91W8CGkt9CKVxyZovdKpQHbbislZxMaI=;
+        b=apf9MEZIZg53/0XnEh7AIqg8utECby3B/cZvNaMfpA4YHq/EY/iACuyZSW3bafwbzG
+         Dukeeo0jniZKGdakIBA59hvy9tVmyVVkAt8EzcRUuxAZv1+vwXNScdnDURelt2vneZki
+         uw4kX0ZVKy5FDv4PyNR6zuQ5aE4rsYnmFSNR9A+KfB0sGC/4HXHgsL8bIiiusvca8OLs
+         7H002f2aOcsq8UfdJjvDCiRWOkmak9xIlLoRPxj+23ZZj/nIlqIqesr0Z440jD0dhxMI
+         hAOg9FdT2N7wdmIAh0d17erMh7jcK15q73CHkwv7/aPP65C8uZVbePhuaAdIzO+M7ixL
+         haJQ==
+X-Gm-Message-State: AOAM5324s/rMm/w5L/DWTWjVuyB8I90630kkAnyb1tLAxktYZbXzYYSg
+        ctkuH+kWZu/p7cIeNekncpU=
+X-Google-Smtp-Source: ABdhPJyzYgQANwP4WOlef1dijASUQbxEe0O+IhciGaJOsPldIamf22MbJdJIkmlxSd2c3ZBPJ/5hXA==
+X-Received: by 2002:a05:6402:2896:b0:418:58c2:7254 with SMTP id eg22-20020a056402289600b0041858c27254mr13663551edb.283.1647323619067;
+        Mon, 14 Mar 2022 22:53:39 -0700 (PDT)
+Received: from felia.fritz.box (200116b8264e9400282aff0ca67bda3e.dip.versatel-1u1.de. [2001:16b8:264e:9400:282a:ff0c:a67b:da3e])
+        by smtp.gmail.com with ESMTPSA id re27-20020a170906d8db00b006d76251f4e7sm7613799ejb.109.2022.03.14.22.53.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 22:53:38 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] scsi: bsg: drop needless assignment in scsi_bsg_sg_io_fn()
+Date:   Tue, 15 Mar 2022 06:53:25 +0100
+Message-Id: <20220315055325.14974-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,77 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vlQWi6Spi=EEm0AnZUqo5ey
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Commit ce70fd9a551a ("scsi: core: Remove the cmd field from struct
+scsi_request") refactored scsi_bsg_sg_io_fn(), so that it does not
+allocate directly and hence does not return -ENOMEM in its error case.
+That makes a remaining assignment of -ENOMEM to the return variable
+needless.
 
-Hi all,
+Drop this needless assignment in scsi_bsg_sg_io_fn().
 
-Today's linux-next merge of the char-misc tree got a conflict in:
+No functional change. No change in resulting object code.
 
-  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.txt
-
-between commit:
-
-  c04421c68fd4 ("dt-bindings: phy: qcom,usb-hs-phy: add MSM8226 compatible")
-
-from the arm-soc tree and commit:
-
-  e7393b60a14f ("dt-bindings: phy: convert Qualcomm USB HS phy to yaml")
-
-from the char-misc tree.
-
-I fixed it up (I removed the file and added the following patch) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 15 Mar 2022 16:48:51 +1100
-Subject: [PATCH] fixup for "dt-bindings: phy: convert Qualcomm USB HS phy t=
-o yaml"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Christoph, please ack.
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/D=
-ocumentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-index a60386bd19b2..e23e5590eaa3 100644
---- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
-@@ -38,6 +38,7 @@ properties:
-     items:
-       - enum:
-           - qcom,usb-hs-phy-apq8064
-+          - qcom,usb-hs-phy-msm8226
-           - qcom,usb-hs-phy-msm8916
-           - qcom,usb-hs-phy-msm8974
-       - const: qcom,usb-hs-phy
---=20
-2.34.1
+Martin, please pick this minor clean-up on your -next tree on top of the
+commit above.
 
---=20
-Cheers,
-Stephen Rothwell
+ drivers/scsi/scsi_bsg.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---Sig_/vlQWi6Spi=EEm0AnZUqo5ey
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index 8039c3c11a6e..96ee35256a16 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -31,7 +31,6 @@ static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
+ 		return PTR_ERR(rq);
+ 	rq->timeout = timeout;
+ 
+-	ret = -ENOMEM;
+ 	scmd = blk_mq_rq_to_pdu(rq);
+ 	scmd->cmd_len = hdr->request_len;
+ 	if (scmd->cmd_len > sizeof(scmd->cmnd)) {
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwKWUACgkQAVBC80lX
-0GzG6QgAlhDh7mcaLuRSpI0SaVPGJLNJ8ungAyYqoIMPNPnnQ9fKQdoPw6lSqY+B
-NMAFMlJGoVvg6KDAP6jF7/74eyYKUp2UNWAgbdzTjYyicsqssaeHBEQEo2nAkVlw
-OJMVnrKeVtaUoEszR8sLzFQSpgC/A0eXg9h0QLdn+cVGFssUZRIPQohZjYgx3ey+
-3/3tUz6z/KEKp8k7U0OC4AwdNeviOaXl2r/1ZqEU7VB04t85A1mDRazInlyM0WIP
-PtSLKLT9rZWSKqpYl93zJ/ee6lL16CsTuopHxrpotvAVQVlO7vRF0EU/q8HTzp1S
-qYAmSvKA33E29lBsnS4rx43UuIMWZg==
-=g458
------END PGP SIGNATURE-----
-
---Sig_/vlQWi6Spi=EEm0AnZUqo5ey--

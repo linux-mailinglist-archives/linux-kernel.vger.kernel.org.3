@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FC64DA583
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A584DA587
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352303AbiCOWmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
+        id S1352318AbiCOWnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240275AbiCOWmj (ORCPT
+        with ESMTP id S234029AbiCOWnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:42:39 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD55D5C9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:41:26 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id t2so1199801pfj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:41:26 -0700 (PDT)
+        Tue, 15 Mar 2022 18:43:22 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5835D19A;
+        Tue, 15 Mar 2022 15:42:09 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b15so643319edn.4;
+        Tue, 15 Mar 2022 15:42:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LDxK/xi7kYY9tmPdyRz28nRjjbfnzSTylZ2lhhKTPXk=;
-        b=sUf+nm8vjmNbUAtPL2AR6ZApsYGsLRgv5MM0cr7Ja39tfGmJ4yMWWrhgJeyHZqgggS
-         UYjfKVPbb99KayMwn/imKckbSVm/hGUUQN9c/rhVAz+/mYlqAiQzq6EDqOJMrt04mX0Q
-         PoPGju0IZtwgGA3RISA2z01k43sMYR2tNGPWfBXQKB0RyyeKRTLE/Iwya2EJ7ioupL2l
-         4vQXuI7mXL8x2E+Uz/h8/nLWetwur9Ve5jJ7Z73sPyHSsnNpp2RtFuqYnucYs5eoN159
-         yxAwRMSF8EUxXafYPgpS7S0xL0JGNKLe94xL0rEBAGGK6OigDJaQgQArk1PM4qfum2Cx
-         fs8A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QwK4SCTHESWH9opGqBpp4sqUaushZIwW8QXUMdBftVo=;
+        b=ESShF7zVcCseeQJQL5/QUswiIDZA0RkSF/Mz/5ZlrdvpAPx3bb9w3stSHYXfSfz4Wb
+         KKfwZRCzYv341ZNom9QXqC3iWs/ISy2yeKhyjxgxEDEUuTBnbAeu8wObNKLlOnwlA8V1
+         JYjauXCU7JAl1mVlW5xLg2n55+qoj0W/NGI1icJKpmp598LMGBZQS5bGfU5pdX4UWQkc
+         G+gb1tV8zSFItGNLH0QxEdseVK8fGj1g79QBRT9Px5KG/+lyGLezcd2QshqV0RlEe34g
+         5kCWpPeZtVUNhlObG5x0SelyY4WcZfznWK0C7lJr5BRrorRDkjJgfDaAfoDjnscWhBtm
+         fkew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LDxK/xi7kYY9tmPdyRz28nRjjbfnzSTylZ2lhhKTPXk=;
-        b=u+5O0VPojo+c7MIggJ3fBpvNLtTGTTTTi/nDfdN5zL1fwsn/TGE/ZwpNdtAn0LRNLA
-         21iY0xbI4uTMRB4BHFxb9bk8Q3fyM6rKhmczwHRexJbquk0RvHvmkEbSGgdGdddZNwXH
-         DEfEqjFS2hVoTmDi7KFq5ZN6VMwuuNXGczRYz7JY4uhgmW3anUG4Hx0TdRJB42oLLkHl
-         DH7t9/8/eI7JTpwTIYmaxlccV6PijYfSX/Dg+co75Vh25x4wqyLBRFKeXHFzFm+DyXKX
-         UwgPGdH6zP7hgbx5olsWEm00XfsC/UkifJQH6Agg4mgBVP04pv09bvAvMML2+SF3Pptj
-         417g==
-X-Gm-Message-State: AOAM531D21ZOVDsrivanckuIeyddwwckNUwRM5pOarTjhJERgmNJpByL
-        masZfvdyYh6DgOciFZs+sc5VvQ==
-X-Google-Smtp-Source: ABdhPJz/dgdutvWHvVq0ljcWISsh0FoaUzN895aVcdgT/4ZucZW+zp+WPouMKfev/ndQL7N2cX98qg==
-X-Received: by 2002:aa7:8432:0:b0:4f6:6dcd:4f19 with SMTP id q18-20020aa78432000000b004f66dcd4f19mr31222248pfn.53.1647384085703;
-        Tue, 15 Mar 2022 15:41:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:38d4:55df:2366:8a7e:9fa2:44e6? ([2600:1700:38d4:55df:2366:8a7e:9fa2:44e6])
-        by smtp.gmail.com with ESMTPSA id d6-20020a17090a6f0600b001c64b1bcd50sm229582pjk.39.2022.03.15.15.41.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 15:41:25 -0700 (PDT)
-Message-ID: <87db9dbe-c7f1-deec-9c24-7d4bda406f2c@google.com>
-Date:   Tue, 15 Mar 2022 15:41:23 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QwK4SCTHESWH9opGqBpp4sqUaushZIwW8QXUMdBftVo=;
+        b=ghfTxRc0hDFdilw+ftkq59JyZat2mLtfVv4ecZN2A0kUL+U00UY0yNumiquocWiSHW
+         QZGkebVefJleP1gIQWkWHFfGaW+gntd2LjnAgfE+nExQ7EC0qwh1p/GWZLUpsLLAlX1G
+         C1KtwQdFVQvymO9GevnpbxMVZbUZB8QA0nfOUpO+6yCk4TH0otUW40axP9kvfXxf5r/M
+         D94RelkhhxjrF+h/qtN85GewF2WJhhxrcdEfQqkLiu8pFySSCH55Z7E6aPSJxatELvI7
+         ctdkpRZayorLgg3BGYYN9stOVFerwGIgobKZMmbWxSCB0dMubsOGQzmSf8yrVnmbYASI
+         xKcA==
+X-Gm-Message-State: AOAM532O6Jtipr+VD9PjQ+gXpbcJtsQHPgoOMtD8yeWZQOqEZPL/jy7T
+        uwtgkEPS4nr703UQuJGWJLM=
+X-Google-Smtp-Source: ABdhPJxtb/mBc8Sd8bAUcjJEexSgJAO9RoI75nDxUE0MpzKX7svF4MnsInMPdRxYDO0jYV4OATPBzg==
+X-Received: by 2002:a05:6402:5179:b0:415:d7f3:c270 with SMTP id d25-20020a056402517900b00415d7f3c270mr27019343ede.259.1647384127745;
+        Tue, 15 Mar 2022 15:42:07 -0700 (PDT)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id jg28-20020a170907971c00b006dbd9d72c03sm127164ejc.128.2022.03.15.15.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 15:42:07 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 00:42:05 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v4 net-next 09/15] net: dsa: Never offload FDB entries on
+ standalone ports
+Message-ID: <20220315224205.jzz3m2mroytanesh@skbuf>
+References: <20220315002543.190587-1-tobias@waldekranz.com>
+ <20220315002543.190587-10-tobias@waldekranz.com>
+ <20220315163349.k2rmfdzrd3jvzbor@skbuf>
+ <87ee32lumk.fsf@waldekranz.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH 04/47] mm: asi: ASI support in interrupts/exceptions
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
-        pjt@google.com, oweisse@google.com, alexandre.chartre@oracle.com,
-        rppt@linux.ibm.com, dave.hansen@linux.intel.com,
-        peterz@infradead.org, luto@kernel.org, linux-mm@kvack.org
-References: <20220223052223.1202152-1-junaids@google.com>
- <20220223052223.1202152-5-junaids@google.com> <87pmmofs83.ffs@tglx>
- <9f2f1226-f398-f132-06f4-c21a2a2d1033@google.com> <877d8v74tw.ffs@tglx>
-From:   Junaid Shahid <junaids@google.com>
-In-Reply-To: <877d8v74tw.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ee32lumk.fsf@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgVGhvbWFzLA0KDQpPbiAzLzE1LzIyIDA1OjU1LCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
-DQo+Pj4NCj4+PiBUaGlzIGlzIHdyb25nLiBZb3UgY2Fubm90IGludm9rZSBhcmJpdHJhcnkg
-Y29kZSB3aXRoaW4gYSBub2luc3RyDQo+Pj4gc2VjdGlvbi4NCj4+Pg0KPj4+IFBsZWFzZSBl
-bmFibGUgQ09ORklHX1ZNTElOVVhfVkFMSURBVElPTiBhbmQgd2F0Y2ggdGhlIGJ1aWxkIHJl
-c3VsdCB3aXRoDQo+Pj4gYW5kIHdpdGhvdXQgeW91ciBwYXRjaGVzLg0KPj4+DQo+PiBUaGFu
-ayB5b3UgZm9yIHRoZSBwb2ludGVyLiBJdCBzZWVtcyB0aGF0IG1hcmtpbmcgYXNpX2ludHJf
-ZW50ZXIvZXhpdA0KPj4gYW5kIGFzaV9lbnRlci9leGl0LCBhbmQgdGhlIGZldyBmdW5jdGlv
-bnMgdGhhdCB0aGV5IGluIHR1cm4gY2FsbCwgYXMNCj4+IG5vaW5zdHIgd291bGQgZml4IHRo
-aXMsIGNvcnJlY3Q/IChBbG9uZyB3aXRoIHJlbW92aW5nIHRoZSBWTV9CVUdfT05zDQo+PiBm
-cm9tIHRob3NlIGZ1bmN0aW9ucyBhbmQgdXNpbmcgbm90cmFjZS9ub2RlYnVnIHZhcmlhbnRz
-IG9mIGEgY291cGxlIG9mDQo+PiBmdW5jdGlvbnMpLg0KPiANCj4geW91IGNhbiBrZWVwIHRo
-ZSBCVUdfT04oKXMuIElmIHN1Y2ggYSBidWcgaGFwcGVucyB0aGUgbm9pbnN0cg0KPiBjb3Jy
-ZWN0bmVzcyBpcyB0aGUgbGVhc3Qgb2YgeW91ciB3b3JyaWVzLCBidXQgaXQncyBpbXBvcnRh
-bnQgdG8gZ2V0IHRoZQ0KPiBpbmZvcm1hdGlvbiBvdXQsIHJpZ2h0Pw0KDQpZZXMsIHRoYXQg
-bWFrZXMgc2Vuc2UgOikNCg0KPiANCj4gVnMuIGFkZGluZyBub2luc3RyLiBZZXMsIG1ha2lu
-ZyB0aGUgZnVsbCBjYWxsY2hhaW4gbm9pbnN0ciBpcyBnb2luZyB0bw0KPiBjdXJlIGl0LCBi
-dXQgeW91IHJlYWxseSB3YW50IHRvIHRoaW5rIGhhcmQgd2hldGhlciB0aGVzZSBjYWxscyBu
-ZWVkIHRvDQo+IGJlIGluIHRoaXMgc2VjdGlvbiBvZiB0aGUgZXhjZXB0aW9uIGhhbmRsZXJz
-Lg0KPiANCj4gVGhlc2UgY29kZSBzZWN0aW9ucyBoYXZlIG90aGVyIGNvbnN0cmFpbnRzIGFz
-aWRlIG9mIGJlaW5nIGV4Y2x1ZGVkIGZyb20NCj4gaW5zdHJ1bWVudGF0aW9uLCB0aGUgbWFp
-biBvbmUgYmVpbmcgdGhhdCB5b3UgY2Fubm90IHVzZSBSQ1UgdGhlcmUuDQoNCk5laXRoZXIg
-b2YgdGhlc2UgZnVuY3Rpb25zIG5lZWQgdG8gdXNlIFJDVSwgc28gdGhhdCBzaG91bGQgYmUg
-b2suIEFyZSB0aGVyZSBhbnkgb3RoZXIgY29uc3RyYWludHMgdGhhdCBjb3VsZCBtYXR0ZXIg
-aGVyZT8NCg0KPiANCj4gSSdtIG5vdCB5ZXQgY29udmluY2VkIHRoYXQgYXNpX2ludHJfZW50
-ZXIoKS9leGl0KCkgbmVlZCB0byBiZSBpbnZva2VkIGluDQo+IGV4YWN0bHkgdGhlIHBsYWNl
-cyB5b3UgcHV0IGl0LiBUaGUgY2hhbmdlbG9nIGRvZXMgbm90IGdpdmUgYW55IGNsdWUNCj4g
-YWJvdXQgdGhlIHdoeS4uLg0KDQpJIGhhZCB0byBwbGFjZSB0aGVzZSBjYWxscyBlYXJseSBp
-biB0aGUgZXhjZXB0aW9uL2ludGVycnVwdCBoYW5kbGVycyBhbmQgc3BlY2lmaWNhbGx5IGJl
-Zm9yZSB0aGUgcG9pbnQgd2hlcmUgdGhpbmdzIGxpa2UgdHJhY2luZyBhbmQgbG9ja2RlcCBl
-dGMuIGNhbiBiZSB1c2VkIChhbmQgYWZ0ZXIgdGhlIHBvaW50IHdoZXJlIHRoZXkgY2FuIG5v
-IGxvbmdlciBiZSB1c2VkLCBmb3IgdGhlIGFzaV9pbnRyX2V4aXQoKSBjYWxscykuIE90aGVy
-d2lzZSwgd2Ugd291bGQgbmVlZCB0byBtYXAgYWxsIGRhdGEgc3RydWN0dXJlcyB0b3VjaGVk
-IGJ5IHRoZSB0cmFjaW5nL2xvY2tkZXAgaW5mcmFzdHJ1Y3R1cmUgaW50byB0aGUgQVNJIHJl
-c3RyaWN0ZWQgYWRkcmVzcyBzcGFjZXMuDQoNCkJhc2ljYWxseSwgaW4gZ2VuZXJhbCwgaWYg
-d2hpbGUgcnVubmluZyBpbiBhIHJlc3RyaWN0ZWQgYWRkcmVzcyBzcGFjZSwgc29tZSBrZXJu
-ZWwgY29kZSB0b3VjaGVzIHNvbWUgbWVtb3J5IHdoaWNoIGlzIG5vdCBtYXBwZWQgaW4gdGhl
-IHJlc3RyaWN0ZWQgYWRkcmVzcyBzcGFjZSwgaXQgd2lsbCB0YWtlIGFuIGltcGxpY2l0IEFT
-SSBFeGl0IHZpYSB0aGUgcGFnZSBmYXVsdCBoYW5kbGVyIGFuZCBjb250aW51ZSBydW5uaW5n
-LCBzbyBpdCB3b3VsZCBqdXN0IGJlIGEgc21hbGwgcGVyZm9ybWFuY2UgaGl0LCBidXQgbm90
-IGEgZmF0YWwgaXNzdWUuIEJ1dCB0aGVyZSBhcmUgMyBjcml0aWNhbCBjb2RlIHJlZ2lvbnMg
-d2hlcmUgdGhpcyBpbXBsaWNpdCBBU0kgRXhpdCBtZWNoYW5pc20gZG9lc24ndCBhcHBseS4g
-VGhlIGZpcnN0IGlzIHRoZSByZWdpb24gYmV0d2VlbiBhbiBhc2lfZW50ZXIoKSBjYWxsIGFu
-ZCB0aGUgYXNpX3NldF90YXJnZXRfdW5yZXN0cmljdGVkKCkgY2FsbC4gVGhlIHNlY29uZCBp
-cyB0aGUgcmVnaW9uIGJldHdlZW4gdGhlIHN0YXJ0IG9mIGFuIGludGVycnVwdC9leGNlcHRp
-b24gaGFuZGxlciBhbmQgdGhlIGFzaV9pbnRyX2VudGVyKCkgY2FsbCwgYW5kIHRoZSB0aGly
-ZCBpcyB0aGUgcmVnaW9uIGJldHdlZW4gdGhlIGFzaV9pbnRyX2V4aXQoKSBjYWxsIGFuZCB0
-aGUgSVJFVC4gU28gYW55IG1lbW9yeSB0aGF0IGlzIGFjY2Vzc2VkIGJ5IHRoZSBjb2RlIGlu
-IHRoZXNlIHJlZ2lvbnMgaGFzIHRvIGJlIG1hcHBlZCBpbiB0aGUgcmVzdHJpY3RlZCBhZGRy
-ZXNzIHNwYWNlLCB3aGljaCBpcyB3aHkgSSB0cmllZCB0byBwbGFjZSB0aGUgYXNpX2ludHJf
-ZW50ZXIvZXhpdCBjYWxscyBmYWlybHkgZWFybHkvbGF0ZSBpbiB0aGUgaGFuZGxlcnMuIEl0
-IGlzIHBvc3NpYmxlIHRvIG1vdmUgdGhlbSBmdXJ0aGVyIGluLCBidXQgaWYgd2UgYWNjaWRl
-bnRhbGx5IG1pc3MgYW5ub3RhdGluZyBzb21lIGRhdGEgbmVlZGVkIGluIHRoYXQgcmVnaW9u
-LCB0aGVuIGl0IGNvdWxkIHBvdGVudGlhbGx5IGJlIGZhdGFsIGluIHNvbWUgc2l0dWF0aW9u
-cy4NCg0KVGhhbmtzLA0KSnVuYWlkDQoNCj4gDQo+IFRoYW5rcywNCj4gDQo+ICAgICAgICAg
-IHRnbHgNCj4gDQo+IA0KPiANCg0K
+On Tue, Mar 15, 2022 at 11:26:59PM +0100, Tobias Waldekranz wrote:
+> On Tue, Mar 15, 2022 at 18:33, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > On Tue, Mar 15, 2022 at 01:25:37AM +0100, Tobias Waldekranz wrote:
+> >> If a port joins a bridge that it can't offload, it will fallback to
+> >> standalone mode and software bridging. In this case, we never want to
+> >> offload any FDB entries to hardware either.
+> >> 
+> >> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> >> ---
+> >
+> > When you resend, please send this patch separately, unless something
+> > breaks really ugly with your MST series in place.
+> 
+> Sure. I found this while testing the software fallback. It prevents a
+> segfault in dsa_port_bridge_host_fdb_add, which (rightly, I think)
+> assumes that dp->bridge is valid. I feel like this should have a Fixes:
+> tag, but I'm not sure which commit to blame. Any suggestions?
+
+Ok, makes sense. So far, unoffloaded bridge ports meant that the DSA
+switch driver didn't have a ->port_bridge_join() implementation.
+Presumably that also came along with a missing ->port_fdb_add()
+implementation. So probably no NPD for the existing code paths, it is
+just your unoffloaded MST support that opens up new possibilities.
+
+Anyway, the dereference of dp->bridge first appeared in commit
+c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
+which is still just in net-next.
+
+> >>  net/dsa/slave.c | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >> 
+> >> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> >> index a61a7c54af20..647adee97f7f 100644
+> >> --- a/net/dsa/slave.c
+> >> +++ b/net/dsa/slave.c
+> >> @@ -2624,6 +2624,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+> >>  	if (ctx && ctx != dp)
+> >>  		return 0;
+> >>  
+> >> +	if (!dp->bridge)
+> >> +		return 0;
+> >> +
+> >>  	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
+> >>  		if (dsa_port_offloads_bridge_port(dp, orig_dev))
+> >>  			return 0;
+> >> -- 
+> >> 2.25.1
+> >> 

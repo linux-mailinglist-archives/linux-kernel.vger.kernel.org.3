@@ -2,94 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1274D9E01
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDB14D9DF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349414AbiCOOpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S236761AbiCOOnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349425AbiCOOpO (ORCPT
+        with ESMTP id S1349382AbiCOOnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:45:14 -0400
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C364E1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1647355433;
-        bh=wovb6kZT2Sne2tbxUxcchS5UK7kD/TEn0ztb8HjtObQ=;
-        h=From:To:Cc:Subject:Date;
-        b=fMaSrYd98a92qYeqSobQ5oDmyXHDa9ke+pGM0pi73PG6fuQSItulnA3ek+4n5lzqN
-         hefDeur3lPjM9NTU4nK1ehjF7ay0ebepUIKF/QBoN7cVHLSFSzTdsz+RUS3zf0t+nw
-         Uie6xnIIGfk2NMgfaauv7dyh/gu6KBLO6Gtyq3hk=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id AA5BCE99; Tue, 15 Mar 2022 22:42:37 +0800
-X-QQ-mid: xmsmtpt1647355357tmli9xpaz
-Message-ID: <tencent_7F2A8AAFF05125C6FF159033E69B5C108E07@qq.com>
-X-QQ-XMAILINFO: OZZSS56D9fAjLrdrsX39shVro39worYR1UDLSN2cTyEArcFFifoOABgXifLxwX
-         6JFdXmQ7B/PQCQbi0Z5tftnnOjpmVgZD8RCJnkc0ADg5oiDEqwS4lcakdY7R4gdtg0YUSrlF44FE
-         IEBz08CP03lfcyTGcinz1HXZlHUzXdSi26BEKEVLWCe3PSpcUOPeMWg+HSgXlbSUaHUr6a7OSaPg
-         ty5Wn9GRqRls5YcCMRraDw9jBN1xXZ+N3yrryrhRKq3fJ8og86F3Dc7RZ/bqYxZa3NW/Upvxw608
-         U6u1DNffgjKSp+sMcyENm7FT+DWY/NPSC86MwjroOuSgb4TnQSDG5qnDemkhXhxeSJOsfOyH/cVh
-         MaQYgU1dYv/akE2ojDUWB2gbCipRN6opdoyQpYBZu52lToH3IOMiH1j1mluS4qdL1zMCyg3wP92S
-         r91pM7JpAAoNdbzF1TUSlTXRB9QL3rkh/hoRdKZGMEWaLFD1RU8sud4YyLmHnpF/NSxJ6l+v/Wru
-         Gf5kDwnbJxtlShFh1Bi/9KfNqd6wSg8ymYH0aFp+Jf9+pOgX25i096QFdpOKy3/wctohsLnrZpL/
-         eaVP+QGpYTDJrkRWymozTM0pNLnP/TnrRQYwWsXk/eb54mNty/xOhAsy1XqiJX+1m/WBe2E5TNMH
-         bvfFM+gj59CLjM5LlGsHv+SLbQG+zGnuPmM8vWrOX+y+Ym/S9FSAIdJTVITZBeJX84vThfzuCpz7
-         OecP4pIQypCJwJtqewUwqlTqdueZJr4UYRIMhm00ER+Lm7tVnk6JSgl9xA4Dev/6iPG57sunKNRs
-         3eIL1EGLVPb+aFHuFOvE+Sovup3Hd7jpJTi8CxLeHo5AiW/8cUZsBrtQYn7Mu+gVY43CpxJgI5T3
-         ZzrFKCPBJDsgJgFNnaw9u6eo+75KUTXQpvJvMutOE9+SPH7DTdHMIA3oAemwkp0cpQ3UHta8AgPz
-         jmFyPeWMNv7fDu+FwSyVYX2xFw4Qaynv2O9VtkDQU=
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org, nsaenz@kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v2] staging: mmal-vchiq: add a check for the return of vmalloc()
-Date:   Tue, 15 Mar 2022 22:42:07 +0800
-X-OQ-MSGID: <20220315144207.623-1-xkernel.wang@foxmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 10:43:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C383355BD1;
+        Tue, 15 Mar 2022 07:42:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6008A60EF2;
+        Tue, 15 Mar 2022 14:42:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 417C9C340EE;
+        Tue, 15 Mar 2022 14:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647355340;
+        bh=5n0xBkaFOIdU9mVDR5qVSvVvGAOz04JEo64OXCp4opI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dP17JQFCg6ehWM3a7uT5yOW6ACxF0Ek+UH8tru8urs9QSY0gIhAHmY5uowM0ooSIW
+         GOa/KLnQwB+vdUEjNK1nbrKM1FdixTo0ME9pgz63pXjbkaI4eCEyCOh1bQBRu86vOL
+         ppI04yj6SxB9sorGMppVnKDdgvjVsS09HGD8JG33WfDYeY/LMByiBDaPb3oNkmEUIe
+         BNs5/p/9nsUpmxsbLMbdRddaa2vhiz44usjk4XicDi9mDG4XYMCVooB1Y8+MvEjygx
+         OcZkFv4BeKUZRl2rkM0xTpN1E/prEJN4pbEId1D2IEr/g+UPqihOwUuHdI+5hyrfpS
+         qvx6IrOmSvPfA==
+Date:   Tue, 15 Mar 2022 23:42:14 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v12 bpf-next 00/12] fprobe: Introduce fprobe function
+ entry/exit probe
+Message-Id: <20220315234214.c9dee345347be30450061ac8@kernel.org>
+In-Reply-To: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+References: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Tue, 15 Mar 2022 23:00:14 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-vmalloc() is a memory allocation API which can return NULL when some
-internal memory errors happen. So it is better to check the return
-value of it to catch the error in time.
+> Hi,
+> 
+> Here is the 12th version of fprobe. This version fixes a possible gcc-11 issue which
+> was reported as kretprobes on arm issue, and also I updated the fprobe document.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
-ChangeLog:
-v1->v2  jump to the proper location and remove redundant instruction.
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Here is the gcc-11 build issue thread for reference.
 
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 76d3f03..ff4b484 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -1909,6 +1909,10 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out_instance)
- 	mutex_init(&instance->vchiq_mutex);
- 
- 	instance->bulk_scratch = vmalloc(PAGE_SIZE);
-+	if (!instance->bulk_scratch) {
-+		err = -ENOMEM;
-+		goto err_free;
-+	}
- 	instance->vchiq_instance = vchiq_instance;
- 
- 	mutex_init(&instance->context_map_lock);
+https://lore.kernel.org/all/202203150516.KTorSVVU-lkp@intel.com/T/#u
+
+Thank you,
+
+> 
+> The previous version (v11) is here[1];
+> 
+> [1] https://lore.kernel.org/all/164701432038.268462.3329725152949938527.stgit@devnote2/T/#u
+> 
+> This series introduces the fprobe, the function entry/exit probe
+> with multiple probe point support for x86, arm64 and powerpc64le.
+> This also introduces the rethook for hooking function return as same as
+> the kretprobe does. This abstraction will help us to generalize the fgraph
+> tracer, because we can just switch to it from the rethook in fprobe,
+> depending on the kernel configuration.
+> 
+> The patch [1/12] is from Jiri's series[2].
+> 
+> [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+> 
+> And the patch [9/10] adds the FPROBE_FL_KPROBE_SHARED flag for the case
+> if user wants to share the same code (or share a same resource) on the
+> fprobe and the kprobes.
+> 
+> I forcibly updated my kprobes/fprobe branch, you can pull this series
+> from:
+> 
+>  https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fprobe
+> 
+> Thank you,
+> 
+> ---
+> 
+> Jiri Olsa (1):
+>       ftrace: Add ftrace_set_filter_ips function
+> 
+> Masami Hiramatsu (11):
+>       fprobe: Add ftrace based probe APIs
+>       rethook: Add a generic return hook
+>       rethook: x86: Add rethook x86 implementation
+>       arm64: rethook: Add arm64 rethook implementation
+>       powerpc: Add rethook support
+>       ARM: rethook: Add rethook arm implementation
+>       fprobe: Add exit_handler support
+>       fprobe: Add sample program for fprobe
+>       fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+>       docs: fprobe: Add fprobe description to ftrace-use.rst
+>       fprobe: Add a selftest for fprobe
+> 
+> 
+>  Documentation/trace/fprobe.rst                |  174 +++++++++++++
+>  Documentation/trace/index.rst                 |    1 
+>  arch/arm/Kconfig                              |    1 
+>  arch/arm/include/asm/stacktrace.h             |    4 
+>  arch/arm/kernel/stacktrace.c                  |    6 
+>  arch/arm/probes/Makefile                      |    1 
+>  arch/arm/probes/rethook.c                     |  103 ++++++++
+>  arch/arm64/Kconfig                            |    1 
+>  arch/arm64/include/asm/stacktrace.h           |    2 
+>  arch/arm64/kernel/probes/Makefile             |    1 
+>  arch/arm64/kernel/probes/rethook.c            |   25 ++
+>  arch/arm64/kernel/probes/rethook_trampoline.S |   87 +++++++
+>  arch/arm64/kernel/stacktrace.c                |    7 -
+>  arch/powerpc/Kconfig                          |    1 
+>  arch/powerpc/kernel/Makefile                  |    1 
+>  arch/powerpc/kernel/rethook.c                 |   72 +++++
+>  arch/x86/Kconfig                              |    1 
+>  arch/x86/include/asm/unwind.h                 |    8 +
+>  arch/x86/kernel/Makefile                      |    1 
+>  arch/x86/kernel/kprobes/common.h              |    1 
+>  arch/x86/kernel/rethook.c                     |  119 +++++++++
+>  include/linux/fprobe.h                        |  105 ++++++++
+>  include/linux/ftrace.h                        |    3 
+>  include/linux/kprobes.h                       |    3 
+>  include/linux/rethook.h                       |  100 ++++++++
+>  include/linux/sched.h                         |    3 
+>  kernel/exit.c                                 |    2 
+>  kernel/fork.c                                 |    3 
+>  kernel/trace/Kconfig                          |   26 ++
+>  kernel/trace/Makefile                         |    2 
+>  kernel/trace/fprobe.c                         |  332 +++++++++++++++++++++++++
+>  kernel/trace/ftrace.c                         |   58 ++++
+>  kernel/trace/rethook.c                        |  317 ++++++++++++++++++++++++
+>  lib/Kconfig.debug                             |   12 +
+>  lib/Makefile                                  |    2 
+>  lib/test_fprobe.c                             |  174 +++++++++++++
+>  samples/Kconfig                               |    7 +
+>  samples/Makefile                              |    1 
+>  samples/fprobe/Makefile                       |    3 
+>  samples/fprobe/fprobe_example.c               |  120 +++++++++
+>  40 files changed, 1876 insertions(+), 14 deletions(-)
+>  create mode 100644 Documentation/trace/fprobe.rst
+>  create mode 100644 arch/arm/probes/rethook.c
+>  create mode 100644 arch/arm64/kernel/probes/rethook.c
+>  create mode 100644 arch/arm64/kernel/probes/rethook_trampoline.S
+>  create mode 100644 arch/powerpc/kernel/rethook.c
+>  create mode 100644 arch/x86/kernel/rethook.c
+>  create mode 100644 include/linux/fprobe.h
+>  create mode 100644 include/linux/rethook.h
+>  create mode 100644 kernel/trace/fprobe.c
+>  create mode 100644 kernel/trace/rethook.c
+>  create mode 100644 lib/test_fprobe.c
+>  create mode 100644 samples/fprobe/Makefile
+>  create mode 100644 samples/fprobe/fprobe_example.c
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
+
+
 -- 
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,123 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428DC4D9E69
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD2F4D9E6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349464AbiCOPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S1349481AbiCOPRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbiCOPPf (ORCPT
+        with ESMTP id S231292AbiCOPRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:15:35 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FA127FE2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:14:21 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so5552056ilt.21
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:14:21 -0700 (PDT)
+        Tue, 15 Mar 2022 11:17:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ADC24E3BE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647357358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kyz2RUFrfzcWwytFdN8JKP5rzgj6KOwPxkBy/7oRIpU=;
+        b=Cy3r530evXgrG340mX7jJxJ5swqRPFdF0k8tvOlQVj/Ik7ZAOS6tL1kL3+uwZUUIvpTAzZ
+        guc0+v+Zx5ezZotq2S56/7iMpkndyOL+zxEKvX+Gagmgwd3+jn9QDSqt4HH3PNMFxx67ds
+        re3iEz8FjOOo4IILh7RC2LQeyxGMypA=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-5HhUcH77MxGnxjSdmOjeqg-1; Tue, 15 Mar 2022 11:15:57 -0400
+X-MC-Unique: 5HhUcH77MxGnxjSdmOjeqg-1
+Received: by mail-wr1-f70.google.com with SMTP id a5-20020adfdd05000000b001f023fe32ffso5382057wrm.18
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:15:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fzzxtMFFTEHBKO10X/j+nayURnj7o4HNsDU04+QEw4M=;
-        b=McCkZjVAj2CVG0c00t0/YQzkmdCpRavFJowQzIz6fC78l6dfsHVh8+SdofA3cmP87L
-         246tzUp++L0o2U5w5ElQw2eSxVcvymMV8fmUBjUOY35/WYTjtkjNYkv1UrpflZVPNJnT
-         dtitS1Y9ch7To4bK36F1syiZEINFRIqLFJbQ0q0pgAflNgnP4dK+41Ebrr63U2iHdpvW
-         wEo4u/37ibRaL1BfcZ20vBI1urb2Krk2pYouvVvNedP/M7hw3rowh0mMfAfPcr27Avgz
-         7vO23fW4fAIFYO0GCPEti1V6w7kZxeynPq/YohOxsjuY2IFm9J1oMY+GSbUpxdUbziWv
-         h9hg==
-X-Gm-Message-State: AOAM5325o2sAC/9TwVuXB1E2ZbI+KLonBIxjj+jRXPAogwPqgC574NOD
-        bdcmgVtUhkHJx0KrvvuRh7PFuni0V0skqHj0Y/i9eFXZbynQ
-X-Google-Smtp-Source: ABdhPJxox0C2PaY29+M9+IrDL4j7x3FcuzHBnxkxYfgMfeGLxSo5WaaBnQnVVwRXAhLxBL3tg34w9fYkcf2NBZxSjfue4Fq28l8s
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kyz2RUFrfzcWwytFdN8JKP5rzgj6KOwPxkBy/7oRIpU=;
+        b=QtIWRToIp85bA9SxJSBR3oyK+bEJuwl8gBqibcFTZw8vLvDXmNPB9X2kXyLJT9d2+X
+         MNtI9Bq0xiXzVYen31teqMJSmMRilz2JyPjD42nO3OheapsK1J28s11enCmtb8KOTzKy
+         tT1X8GhgfJL74D9oA1jFw86sa3wpq6SWL03tUGIrDthbDd6AkFEInvH11ZOkghCGkD6y
+         A0cCpEiUAuM2MMYBtKNLAK1bf8A6Si/4h/FFxec+a3Cx1rSiRltuaCGZL/sjGIJA0s+k
+         KuheVq/mfSrsdRKji2h7j0FfPnDS11YWcfigZlCgDlHDsL2UqJvGxmJGLW6qG50A41th
+         8HjA==
+X-Gm-Message-State: AOAM531TQbklhtE6yf91IYD1F5PHsOnpOSLidAFTJU5STXuk6z+VQQ2j
+        aWwGaegar/N35lMN/uMAT040Ca8ccV0AinbTXP+WcyHrfwTbwTzN4OkqXHuEKMONxnJWio52wIL
+        CXp+LakGYbghCXFpwaBt0o/Sz
+X-Received: by 2002:a05:6000:3c3:b0:203:6976:6942 with SMTP id b3-20020a05600003c300b0020369766942mr20348016wrg.584.1647357355931;
+        Tue, 15 Mar 2022 08:15:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJypmXByJXceCvTyDTeaeG4rtFjn8ylgA1heE6UhT+IFbX4r7V634CRa98A5VvIu9kER2FggTQ==
+X-Received: by 2002:a05:6000:3c3:b0:203:6976:6942 with SMTP id b3-20020a05600003c300b0020369766942mr20347991wrg.584.1647357355683;
+        Tue, 15 Mar 2022 08:15:55 -0700 (PDT)
+Received: from redhat.com ([2.53.2.35])
+        by smtp.gmail.com with ESMTPSA id ay24-20020a05600c1e1800b00389a420e1ecsm2498962wmb.37.2022.03.15.08.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 08:15:55 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 11:15:51 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        lingshan.zhu@intel.com, sgarzare@redhat.com,
+        xieyongji@bytedance.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
+Message-ID: <20220315111456-mutt-send-email-mst@kernel.org>
+References: <20220315124130.1710030-1-trix@redhat.com>
+ <20220315092656-mutt-send-email-mst@kernel.org>
+ <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:344a:b0:319:fca7:7361 with SMTP id
- q10-20020a056638344a00b00319fca77361mr9592119jav.225.1647357259337; Tue, 15
- Mar 2022 08:14:19 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 08:14:19 -0700
-In-Reply-To: <000000000000183d9e05d7f0c0ee@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000042d70e05da43401f@google.com>
-Subject: Re: [syzbot] kernel BUG in ext4_ind_remove_space
-From:   syzbot <syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, Mar 15, 2022 at 08:03:26AM -0700, Tom Rix wrote:
+> 
+> On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
+> > On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > > 
+> > > Clang static analysis reports this issue
+> > > ifcvf_main.c:49:4: warning: Called function
+> > >    pointer is null (null dereference)
+> > >    vf->vring->cb.callback(vring->cb.private);
+> > >    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > 
+> > > The check
+> > >    vring = &vf->vring[i];
+> > >    if (vring->cb.callback)
+> > > 
+> > > Does not match the use.  Change dereference so they match.
+> > > 
+> > > Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
+> > Thanks a lot! I squashed this into the offending patch - no point in
+> > breaking bisect. Pushed to linux. However I'm now
+> > having second thoughts about applying that patchset - I'd like
+> > soma analysis explaining how this got through testing.
+> 
+> static analysis is something i do treewide.
+> 
+> There are currently ~2500 issues in linux-next, do not panic! many are false
+> positives.
+> 
+> It is pretty easy to setup and once you have a baseline you can filter only
+> your files.
+> 
+> Tom
 
-HEAD commit:    09688c0166e7 Linux 5.17-rc8
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a8bd61700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=fcc629d1a1ae8d3fe8a5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1205b189700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15dda4fe700000
+Thanks for that info! I was actually directing this question to the
+contributor since the code does not look like it could have ever
+worked. I don't have the hardware in question myself.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com
 
-EXT4-fs warning (device sda1): ext4_block_to_path:105: block 1074791436 > max in inode 1137
-------------[ cut here ]------------
-kernel BUG at fs/ext4/indirect.c:1244!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 3590 Comm: syz-executor391 Not tainted 5.17.0-rc8-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
-Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
-RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
-R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
-FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- ext4_punch_hole+0xfe8/0x11d0 fs/ext4/inode.c:4044
- ext4_fallocate+0x1194/0x3ed0 fs/ext4/extents.c:4694
- vfs_fallocate+0x48d/0xe10 fs/open.c:308
- ksys_fallocate fs/open.c:331 [inline]
- __do_sys_fallocate fs/open.c:339 [inline]
- __se_sys_fallocate fs/open.c:337 [inline]
- __x64_sys_fallocate+0xcf/0x140 fs/open.c:337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f699234cdf9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f69922ff308 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007f699234cdf9
-RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000005
-RBP: 00007f69923d5408 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000ffeffeff000 R11: 0000000000000246 R12: 00000ffeffeff000
-R13: 00007f69923d5400 R14: 00007f69923a3004 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
-Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 3c bb ff ff e9 02 f6 ff ff e8 c2 26 66 ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 b1 26 66 ff 48 8b 7c 24 10
-RSP: 0018:ffffc90001adfab8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff888021523a00 RSI: ffffffff8212996e RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff82128bea R11: 0000000000000000 R12: 0000000000001000
-R13: ffffc90001adfb68 R14: ffffc90001adfb88 R15: ffff8880751fa088
-FS:  00007f69922ff700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000080 CR3: 0000000021605000 CR4: 0000000000350ef0
+> > > Signed-off-by: Tom Rix <trix@redhat.com>
+> > > ---
+> > >   drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+> > > index 3b48e717e89f7..4366320fb68d3 100644
+> > > --- a/drivers/vdpa/ifcvf/ifcvf_main.c
+> > > +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+> > > @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
+> > >   	for (i = 0; i < vf->nr_vring; i++) {
+> > >   		vring = &vf->vring[i];
+> > >   		if (vring->cb.callback)
+> > > -			vf->vring->cb.callback(vring->cb.private);
+> > > +			vring->cb.callback(vring->cb.private);
+> > >   	}
+> > >   	return IRQ_HANDLED;
+> > > -- 
+> > > 2.26.3
 

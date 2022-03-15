@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650534D9698
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5864F4D9699
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346167AbiCOIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S1346153AbiCOIp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346127AbiCOIpN (ORCPT
+        with ESMTP id S1346139AbiCOIpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:45:13 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2107B4D268
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:01 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id r6so27369252wrr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:00 -0700 (PDT)
+        Tue, 15 Mar 2022 04:45:20 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7D4D275
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:02 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id r10so27820450wrp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Jb1wu8pDJ30xgS1p+JPjCnyezWwWH0sm2Zu2NeRcVsA=;
-        b=hiISU3x0fZ/PLJtBtmT6kraBpYArjPnEZTjKqMEXYBVi5vD1bSvfR0TaB/fakO7xaC
-         308VW9fw5gqwyPOt5aALo93mgIX2QyXIYmVlguXGPRmUtqPYdoPgIFQ3y2HdVGLTloSq
-         mTrKAnB7pyf9ve12QGtD8JzTa7Rz2+jfFaaQm+fGnqPJZDcsjGdBljgQX52NIurOofxF
-         CYE7VD6o+kAqImxYsLZushXLomhlw1q9LKAR5WEBct8qmvRa9PlqHdla5JH2IEF1rvSj
-         j8hOjMqI4sPov4P5YgjqR9KBmEi/YwYXac+uqVFkFO1Uh8fUd4C0YEw1KPBYGMaQ5awE
-         6A0Q==
+        bh=fCdjHXVX+BAOQ2yVcrI7SyvzKpdkdL/11OuCDg14XLo=;
+        b=pIoE/HpKDdHiDncMIJAbB18zsxa2+6s5W62t4oa1Y3KZPU1hnm3RlyVbVFTafXOiFi
+         9uMb9qYgjpDw0JoGpR/Bvmu6DOK8h45ntkOUgnksb63A26Z4bfTPnvW7IbFGwXRUfegE
+         Jq1inoXxj5oFK7e4YRXs9Q46XfSoI+R3/tPl+v5mwGklXKn+17+msaWm9cZLSigUs3jz
+         mdJ5uFQ+IQWdsrFovLn5Z7G/1xIr2dmsqqauhcIJEm0keuqGn6d93f1WbkbAdnXZMLYN
+         VISi88HThFwyPNMekw2oxz7u7PaF5xUw5lCJaH34H99c7XWCaVC7G7sGZ8mBe1sWqLNy
+         1JaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Jb1wu8pDJ30xgS1p+JPjCnyezWwWH0sm2Zu2NeRcVsA=;
-        b=1o+dD1O8hAn1UX/sYpNcDQcJOXXQNudeVmdcvCQPTFIkvyvQxNUmStUKiQ5g6V/h7V
-         /Vjp1QCFGfBZcWKO2OBR7VB/ExsoDOYWJRwk9UL24xLQAokKdIWtGlwOmDgMloJFrOuO
-         YaaHL2PEvybW3BspH6j0lICdmkSc0i33GrqYqcXMVoBuosWUcTREgVTI1Uhix9fioMN3
-         TWevK1UZk9pBmECzel7lQAiV9MFi5JsitwGrsHu1BZZMxBumRMoTk943A63IRYIuIKSX
-         VdI/+BcVlaNvjGjB/LZmELvUmZxtPwDzJMb5Q8VxmLIGAWr+xBLT9bxA/VKpxoYz9kfY
-         pkkQ==
-X-Gm-Message-State: AOAM533zmksvC8PUSScDqIq8berkvhBJ765FeKMVPuMmIyZI2iZDgEG4
-        LTVgKV4ZsLWh6Xs7WGmz5hd5kYm31DI=
-X-Google-Smtp-Source: ABdhPJy1HhMqexQddfHuV8F1Eb/P08ZosKRgUc5SqbEdhbVmTksB7SahuD4T6EBfFmXjL6+Ok1+itA==
-X-Received: by 2002:a5d:678f:0:b0:1f0:2471:5a93 with SMTP id v15-20020a5d678f000000b001f024715a93mr19670842wru.164.1647333839676;
-        Tue, 15 Mar 2022 01:43:59 -0700 (PDT)
+        bh=fCdjHXVX+BAOQ2yVcrI7SyvzKpdkdL/11OuCDg14XLo=;
+        b=Hd8rBZH++XQdZq6pEmsWraMZWsPU4NLK3gOIYL+1uJOVKAiRsPs8+7T08Utqm+OeN9
+         e4OTYRiE9Fhg9ewYBt1ayDnrPu4Z8NJMPEAqfL5Al/4Xxf1Nf2ozZxUBuylGH6F/gcdc
+         mtYxrdIVGXftJBWLOX+GaRswi+qtPoLSwajp743iJvKJwYTLDyyW7xfi9rUho9BmTrt4
+         qZO00j+I0UT1PJtIEMY2oFF+F2KJUYurgyKgDAd0VOdCvbHx9jRzravYGhNRxwhs3JVw
+         XZ81nnu25ltlJxSPbnu1ynx46TyzJ8reQljTIWvYd1UMB/BtyeIUhZ6snyd708b9ElHh
+         xysA==
+X-Gm-Message-State: AOAM533pQ+Qt6uSox8VgzoaeS+UTGB9P6UL8b9yWvrEhNMbOvC1UJ1nt
+        SJhaThFyyeZXCBZNemWShICvGnbfiWo=
+X-Google-Smtp-Source: ABdhPJyemeY0/o2nSnMGQ5BDTo0VP4OpLZAfb/wOMSpDMHfsSXqvpvYlGzRedJ6ux92PFPJDYOPQtw==
+X-Received: by 2002:a5d:6d8a:0:b0:203:6efe:7961 with SMTP id l10-20020a5d6d8a000000b002036efe7961mr19866602wrs.367.1647333840864;
+        Tue, 15 Mar 2022 01:44:00 -0700 (PDT)
 Received: from kepler.. (0526F1FC.dsl.pool.telekom.hu. [5.38.241.252])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.43.58
+        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.43.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:43:59 -0700 (PDT)
+        Tue, 15 Mar 2022 01:44:00 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
 From:   Ingo Molnar <mingo@kernel.org>
 To:     linux-kernel@vger.kernel.org
@@ -61,9 +61,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Borislav Petkov <bp@alien8.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 10/15] sched/headers: Standardize kernel/sched/sched.h header dependencies
-Date:   Tue, 15 Mar 2022 09:42:42 +0100
-Message-Id: <20220315084247.40783-11-mingo@kernel.org>
+Subject: [PATCH 11/15] sched/headers: Reorganize, clean up and optimize kernel/sched/core.c dependencies
+Date:   Tue, 15 Mar 2022 09:42:43 +0100
+Message-Id: <20220315084247.40783-12-mingo@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220315084247.40783-1-mingo@kernel.org>
 References: <20220315084247.40783-1-mingo@kernel.org>
@@ -80,157 +80,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel/sched/sched.h is a weird mix of ad-hoc headers included
-in the middle of the header.
+Use all generic headers from kernel/sched/sched.h that are required
+for it to build.
 
-Two of them rely on being included in the middle of kernel/sched/sched.h,
-due to definitions they require:
-
- - "stat.h" needs the rq definitions.
- - "autogroup.h" needs the task_group definition.
-
-Move the inclusion of these two files out of kernel/sched/sched.h, and
-include them in all files that require them.
-
-Move of the rest of the header dependencies to the top of the
-kernel/sched/sched.h file.
+Sort the sections alphabetically.
 
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Reviewed-by: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/build_policy.c  |  3 +++
- kernel/sched/build_utility.c |  2 ++
- kernel/sched/core.c          |  2 ++
- kernel/sched/fair.c          |  2 ++
- kernel/sched/sched.h         | 20 +++++++++++---------
- kernel/sched/stats.h         |  4 ++--
- 6 files changed, 22 insertions(+), 11 deletions(-)
+ kernel/sched/core.c | 81 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 70 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-index 6bb384ddcfab..9a169b2f97e6 100644
---- a/kernel/sched/build_policy.c
-+++ b/kernel/sched/build_policy.c
-@@ -13,6 +13,9 @@
-  */
- 
- #include "sched.h"
-+
-+#include "autogroup.h"
-+#include "stats.h"
- #include "pelt.h"
- 
- #include "idle.c"
-diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
-index 31216ce0b4b3..8b2b199983bf 100644
---- a/kernel/sched/build_utility.c
-+++ b/kernel/sched/build_utility.c
-@@ -12,6 +12,8 @@
- 
- #include "sched.h"
- #include "sched-pelt.h"
-+#include "stats.h"
-+#include "autogroup.h"
- 
- #include <linux/sched_clock.h>
- 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ef946123e9af..22de53710ee9 100644
+index 22de53710ee9..5eaa4211d93c 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -11,6 +11,8 @@
+@@ -6,7 +6,73 @@
+  *
+  *  Copyright (C) 1991-2002  Linus Torvalds
+  */
++#include <linux/highmem.h>
++#include <linux/hrtimer_api.h>
++#include <linux/ktime_api.h>
++#include <linux/sched/signal.h>
++#include <linux/syscalls_api.h>
++#include <linux/debug_locks.h>
++#include <linux/prefetch.h>
++#include <linux/capability.h>
++#include <linux/pgtable_api.h>
++#include <linux/wait_bit.h>
++#include <linux/jiffies.h>
++#include <linux/spinlock_api.h>
++#include <linux/cpumask_api.h>
++#include <linux/lockdep_api.h>
++#include <linux/hardirq.h>
++#include <linux/softirq.h>
++#include <linux/refcount_api.h>
++#include <linux/topology.h>
++#include <linux/sched/clock.h>
++#include <linux/sched/cond_resched.h>
++#include <linux/sched/debug.h>
++#include <linux/sched/isolation.h>
++#include <linux/sched/loadavg.h>
++#include <linux/sched/mm.h>
++#include <linux/sched/nohz.h>
++#include <linux/sched/rseq_api.h>
++#include <linux/sched/rt.h>
++
++#include <linux/blkdev.h>
++#include <linux/context_tracking.h>
++#include <linux/cpuset.h>
++#include <linux/delayacct.h>
++#include <linux/init_task.h>
++#include <linux/interrupt.h>
++#include <linux/ioprio.h>
++#include <linux/kallsyms.h>
++#include <linux/kcov.h>
++#include <linux/kprobes.h>
++#include <linux/llist_api.h>
++#include <linux/mmu_context.h>
++#include <linux/mmzone.h>
++#include <linux/mutex_api.h>
++#include <linux/nmi.h>
++#include <linux/nospec.h>
++#include <linux/perf_event_api.h>
++#include <linux/profile.h>
++#include <linux/psi.h>
++#include <linux/rcuwait_api.h>
++#include <linux/sched/wake_q.h>
++#include <linux/scs.h>
++#include <linux/slab.h>
++#include <linux/syscalls.h>
++#include <linux/vtime.h>
++#include <linux/wait_api.h>
++#include <linux/workqueue_api.h>
++
++#ifdef CONFIG_PREEMPT_DYNAMIC
++# include <linux/entry-common.h>
++#endif
++
++#include <uapi/linux/sched/types.h>
++
++#include <asm/switch_to.h>
++#include <asm/tlb.h>
++
+ #define CREATE_TRACE_POINTS
++#include <linux/sched/rseq_api.h>
+ #include <trace/events/sched.h>
  #undef CREATE_TRACE_POINTS
  
- #include "sched.h"
-+#include "stats.h"
+@@ -14,22 +80,15 @@
+ #include "stats.h"
+ #include "autogroup.h"
+ 
+-#include <linux/nospec.h>
+-#include <linux/blkdev.h>
+-#include <linux/jump_label.h>
+-#include <linux/kcov.h>
+-#include <linux/scs.h>
+-
+-#include <asm/switch_to.h>
+-#include <asm/tlb.h>
 +#include "autogroup.h"
- 
- #include <linux/nospec.h>
- #include <linux/blkdev.h>
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 16874e112fe6..7391c9287503 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -21,6 +21,8 @@
-  *  Copyright (C) 2007 Red Hat, Inc., Peter Zijlstra
-  */
- #include "sched.h"
++#include "pelt.h"
++#include "smp.h"
 +#include "stats.h"
-+#include "autogroup.h"
  
+ #include "../workqueue_internal.h"
+ #include "../../fs/io-wq.h"
+ #include "../smpboot.h"
+ 
+-#include "pelt.h"
+-#include "smp.h"
+-
  /*
-  * Targeted preemption latency for CPU-bound tasks:
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f7d10b98e911..f255ec2afeca 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -96,11 +96,20 @@
- # include <asm/paravirt.h>
- #endif
- 
-+#include <trace/events/sched.h>
-+
-+#ifdef CONFIG_CGROUP_SCHED
-+#include <linux/cgroup.h>
-+#include <linux/psi.h>
-+#endif
-+
-+#ifdef CONFIG_SCHED_DEBUG
-+# include <linux/static_key.h>
-+#endif
-+
- #include "cpupri.h"
- #include "cpudeadline.h"
- 
--#include <trace/events/sched.h>
--
- #ifdef CONFIG_SCHED_DEBUG
- # define SCHED_WARN_ON(x)	WARN_ONCE(x, #x)
- #else
-@@ -417,9 +426,6 @@ extern bool dl_cpu_busy(unsigned int cpu);
- 
- #ifdef CONFIG_CGROUP_SCHED
- 
--#include <linux/cgroup.h>
--#include <linux/psi.h>
--
- struct cfs_rq;
- struct rt_rq;
- 
-@@ -1919,9 +1925,6 @@ extern void flush_smp_call_function_from_idle(void);
- static inline void flush_smp_call_function_from_idle(void) { }
- #endif
- 
--#include "stats.h"
--#include "autogroup.h"
--
- #if defined(CONFIG_SCHED_CORE) && defined(CONFIG_SCHEDSTATS)
- 
- extern void __sched_core_account_forceidle(struct rq *rq);
-@@ -2016,7 +2019,6 @@ static inline void __set_task_cpu(struct task_struct *p, unsigned int cpu)
-  * Tunables that become constants when CONFIG_SCHED_DEBUG is off:
-  */
- #ifdef CONFIG_SCHED_DEBUG
--# include <linux/static_key.h>
- # define const_debug __read_mostly
- #else
- # define const_debug const
-diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
-index edc0d13fc61b..a0df79e6038c 100644
---- a/kernel/sched/stats.h
-+++ b/kernel/sched/stats.h
-@@ -2,10 +2,10 @@
- #ifndef _KERNEL_STATS_H
- #define _KERNEL_STATS_H
- 
--#ifdef CONFIG_SCHEDSTATS
--
- #include "sched.h"
- 
-+#ifdef CONFIG_SCHEDSTATS
-+
- extern struct static_key_false sched_schedstats;
- 
- /*
+  * Export tracepoints that act as a bare tracehook (ie: have no trace event
+  * associated with them) to allow external modules to probe them.
 -- 
 2.32.0
 

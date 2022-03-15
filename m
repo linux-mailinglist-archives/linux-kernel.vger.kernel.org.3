@@ -2,147 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8986C4DA069
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB124DA075
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350134AbiCOQuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S1350248AbiCOQwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350203AbiCOQt6 (ORCPT
+        with ESMTP id S1350232AbiCOQwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:49:58 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D42517D0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:48:45 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id qa43so42410003ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qheZ1ENvb9x/0d1hNVlELAPpvFkCjTkbEefvApG+abE=;
-        b=YcBDtxazXi0/rbjjeFXc0/+X6MOk72vz+oc9wZNmmn/hyEyD5oDZ7/AFOtAUlfpJvx
-         zvgLtC1TjtUmIfQiW2e35EfuMYVxo8igY34EIWuJEvC0eQFMdcRv//N2etI/2VA7mS1J
-         Bk6WIPQUFn5kuQlrCq5PRwBxaphVupZiUFKvI9w4Y1s2szE78fIh7jJbCNLpwH7Ix/Ok
-         2vTiQdu2VUqkkQfiZw9dWkJhWTtgsjYbtHrUzmQZEMxDhUAp7DTW3ICVJvlrav7065jX
-         b2AKguiStJ5f8kWKa7DwXAUV8xIPITyxe6XR8jaBaM1MH3Z1cNaJY8I8lD/HVVkmwdof
-         2bow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qheZ1ENvb9x/0d1hNVlELAPpvFkCjTkbEefvApG+abE=;
-        b=XWF2HN1Gh9nHoNvbfzmuCIitD88B8jOb+rBkMu9i8C8KeagAaytJJIOTHUabVzUbBE
-         AoDmYVOnwiX9TDjqv6+lKMW9El7ZiDiV1vBG8KUb5JKE/C0qIv29UGvbOn8rDdU5dio1
-         9391PBvpo1Eb+ZW6nKS2JYOeDTwncRxWnfl7gMp84JffMiq03Dxj1uwSipU0pyN9I5N7
-         V46k4xvvZduNKpryXXLzrL1yU/HoRWL1k44NLmWfFAtAsdGSWaSTUY2CmYps1JabuD32
-         a/yt/5E6JGl6MrEou3SPjD6c7O2NRYWsdTR9Dptb+nPVLa/zDbbFNaco3sqGXLgFSZQn
-         bHMA==
-X-Gm-Message-State: AOAM530KX7dng31mTDET67qFgb4m03J1JKteHicNvjRZR011hk0Z0KHX
-        wPz90tgikIYduXY+XBkWKbRUU+ZVlc2eGnxONiCu+w==
-X-Google-Smtp-Source: ABdhPJy/j/+WVGZMrpefriH/4KTxPVQAncdabGacEKN41CTV4aFHTGEr8BLYhNPCvCOkv0N/tiEAP018t4ftP0pkVPE=
-X-Received: by 2002:a17:907:3f24:b0:6da:68fa:b2cc with SMTP id
- hq36-20020a1709073f2400b006da68fab2ccmr23711912ejc.734.1647362923497; Tue, 15
- Mar 2022 09:48:43 -0700 (PDT)
+        Tue, 15 Mar 2022 12:52:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC48C57B01;
+        Tue, 15 Mar 2022 09:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647363051; x=1678899051;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XXGgXF6pP41ECoDy55xbWxdrjJohWNzgAweyr9Pk7XA=;
+  b=DhBZAayiRaLFUPU1yXDT9lXszXsSVQrDy632mVs00kgJShHFWS/BKh5Y
+   s95EsOWrMzyuAKTLpgr995q8YF/mzZqMm4yhe1ypK3qyZZDPVIvLZH4jc
+   Dt8klpecVenpOk4zDBZTACbz+BlvUBL9KlrIS6Xrs96EkzjIbbH6fG+2D
+   B09MPSKoyFm5PdgL5P+j2Ftqp9kBZYkH/w6FXJgjRi4DipqwnO/tCSRCC
+   jC5oTlSnGNsA0bn9Hw0gnXI2Dc4q9kcl5DlG21V2pj9U8EffwgoLi+b8D
+   4y00fbtB3V9ivAgqkxaAO85UYRBiBVAZnW5T5vUhimDkuN34TVfvMDvPx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256548470"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="256548470"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:49:27 -0700
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="690261831"
+Received: from lepple-mobl1.ger.corp.intel.com (HELO [10.252.56.30]) ([10.252.56.30])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:49:23 -0700
+Message-ID: <e1acd50f-fe67-14a8-846f-66b52e77abc0@linux.intel.com>
+Date:   Tue, 15 Mar 2022 18:49:20 +0200
 MIME-Version: 1.0
-References: <CAHk-=wiHa0vsZseZES=1T0rJ4Z_bC5cwHMUJfqFL9hVpvB283g@mail.gmail.com>
- <20220314192522.GA3031157@roeck-us.net> <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
- <CACjc_5paC=X4znTty8LBtobqBW2nq4mbQYnw_TMgVEFb1A7mhA@mail.gmail.com> <CAHk-=wh0QBksyaTEn4gk=mn6hgAhp3e8i9mRsr657Dd-kQ3MKg@mail.gmail.com>
-In-Reply-To: <CAHk-=wh0QBksyaTEn4gk=mn6hgAhp3e8i9mRsr657Dd-kQ3MKg@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 15 Mar 2022 17:48:32 +0100
-Message-ID: <CAMRc=MfK1ak6BN27BuLAV3cyD8kRSdfQOovOsKqF35GBhJqpWQ@mail.gmail.com>
-Subject: Re: Linux 5.17-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Edmond Chung <edmondchung@google.com>,
-        Andrew Chant <achant@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH bpf-next v2 14/28] selftests/bpf: add tests for
+ hid_{get|set}_data helpers
+Content-Language: en-US
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
+ <20220304172852.274126-15-benjamin.tissoires@redhat.com>
+From:   Tero Kristo <tero.kristo@linux.intel.com>
+In-Reply-To: <20220304172852.274126-15-benjamin.tissoires@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 2:47 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Mon, Mar 14, 2022 at 5:45 PM Marcelo Roberto Jimenez
-> <marcelo.jimenez@gmail.com> wrote:
-> >
-> > At a certain point, I tried Thorsten's suggestion to add a gpio-ranges
-> > property in a way similar to another patch, but the kernel went into
-> > an EPROBE_DEFER deadlock. Thierry Reding made some comments about this
-> > in the sequence.
->
-> Hmm. The problem does sound like that particular driver doesn't use
-> the pin_ranges thing, so then the tests for an empty pin_ranges will
-> always be true.
->
-> The EPROBE_DEFER deadlock then sounds like something went wrong in the
-> gpio-ranges patch when you tried to fix it - but I don't actually find
-> that patch or that attempt, so I can't even guess at it.
->
-> This whole code pin_ranges code looks very odd:
-> gpiochip_add_pin{group}_range() seems to add the pin ranges properly,
-> but that actual gpiochip_add_pin_ranges() function does *not*.
->
-> It just expects that that the 'add_pin_ranges()' callback exists, and
-> if it doesn't, does nothing at all.
->
-> Which then makes those
->
->         if (list_empty(&gc->gpiodev->pin_ranges))
->                 return 0;
->
-> tests very suspicious - because if some doesn't implement that
-> add_pin_ranges() callback, it looks like nothing at all ever gets
-> done, because nothing calls the function to actually add the pinrange.
-> And then that "list_empty()" test very much will trigger.
->
-> IOW, it looks like either a gpio controller has to implement that
-> 'add_pin_ranges()' function (only tegra), or it needs to always add
-> the pin ranges at probe time.
->
-> Am I guessing right that the driver that you use does neither?
->
+Hi Benjamin,
 
-There are more drivers than just tegra that implement add_pin_ranges()
-but you're right, pinctrl-at91.c used by Marcelo does not.
-
-> LinusW/Bartoz - this all really sounds strange to me. Maybe I'm
-
-It's BartoSz actually. :)
-
-> misreading the situation entirely. Should there be some sanity-test
-> that any gpio/pinctrl driver that uses gpiochip_generic_request()
-> would either have to have that add_pin_ranges() callback, or a
-> successful probe needs to always populate that 'gpiodev->pin_ranges'
-> list?
+On 04/03/2022 19:28, Benjamin Tissoires wrote:
+> Simple test added here, with one use of each helper.
 >
-
-This sounds right to me but I need to spend some more time on this, I
-didn't author the code in question.
-
-> Or maybe I'm misreading the situation entirely. I don't know the code
-> - I'm just grepping for things and trying to make sense of how that
-> '->pin_ranges' list is supposed to work.
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 >
-> But for now, I think that patch has to be reverted.
+> ---
 >
+> changes in v2:
+> - split the patch with libbpf left outside.
+> ---
+>   tools/testing/selftests/bpf/prog_tests/hid.c | 65 ++++++++++++++++++++
+>   tools/testing/selftests/bpf/progs/hid.c      | 45 ++++++++++++++
+>   2 files changed, 110 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
+> index 91543b8078ca..74426523dd6f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/hid.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+> @@ -297,6 +297,68 @@ static int test_hid_raw_event(struct hid *hid_skel, int uhid_fd, int sysfs_fd)
+>   	return ret;
+>   }
+>   
+> +/*
+> + * Attach hid_set_get_data to the given uhid device,
+> + * retrieve and open the matching hidraw node,
+> + * inject one event in the uhid device,
+> + * check that the program makes correct use of bpf_hid_{set|get}_data.
+> + */
+> +static int test_hid_set_get_data(struct hid *hid_skel, int uhid_fd, int sysfs_fd)
+> +{
+> +	int err, hidraw_ino, hidraw_fd = -1;
+> +	char hidraw_path[64] = {0};
+> +	u8 buf[10] = {0};
+> +	int ret = -1;
+> +
+> +	/* attach hid_set_get_data program */
+> +	hid_skel->links.hid_set_get_data =
+> +		bpf_program__attach_hid(hid_skel->progs.hid_set_get_data, sysfs_fd);
+> +	if (!ASSERT_OK_PTR(hid_skel->links.hid_set_get_data,
+> +			   "attach_hid(hid_set_get_data)"))
+> +		return PTR_ERR(hid_skel->links.hid_set_get_data);
+> +
+> +	hidraw_ino = get_hidraw(hid_skel->links.hid_set_get_data);
+> +	if (!ASSERT_GE(hidraw_ino, 0, "get_hidraw"))
+> +		goto cleanup;
+> +
+> +	/* open hidraw node to check the other side of the pipe */
+> +	sprintf(hidraw_path, "/dev/hidraw%d", hidraw_ino);
+> +	hidraw_fd = open(hidraw_path, O_RDWR | O_NONBLOCK);
+> +
+> +	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
+> +		goto cleanup;
+> +
+> +	/* inject one event */
+> +	buf[0] = 1;
+> +	buf[1] = 42;
+> +	send_event(uhid_fd, buf, 6);
+> +
+> +	/* read the data from hidraw */
+> +	memset(buf, 0, sizeof(buf));
+> +	err = read(hidraw_fd, buf, sizeof(buf));
+> +	if (!ASSERT_EQ(err, 6, "read_hidraw"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_EQ(buf[2], (42 >> 2), "hid_set_get_data"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_EQ(buf[3], 1, "hid_set_get_data"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_EQ(buf[4], 42, "hid_set_get_data"))
+> +		goto cleanup;
+> +
+> +	ret = 0;
+> +
+> +cleanup:
+> +	if (hidraw_fd >= 0)
+> +		close(hidraw_fd);
+> +
+> +	hid__detach(hid_skel);
+> +
+> +	return ret;
+> +}
+> +
+>   /*
+>    * Attach hid_rdesc_fixup to the given uhid device,
+>    * retrieve and open the matching hidraw node,
+> @@ -395,6 +457,9 @@ void serial_test_hid_bpf(void)
+>   	err = test_hid_raw_event(hid_skel, uhid_fd, sysfs_fd);
+>   	ASSERT_OK(err, "hid");
+>   
+> +	err = test_hid_set_get_data(hid_skel, uhid_fd, sysfs_fd);
+> +	ASSERT_OK(err, "hid_set_get_data");
+> +
+>   	err = test_rdesc_fixup(hid_skel, uhid_fd, sysfs_fd);
+>   	ASSERT_OK(err, "hid_rdesc_fixup");
+>   
+> diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+> index 2270448d0d3f..de6668471940 100644
+> --- a/tools/testing/selftests/bpf/progs/hid.c
+> +++ b/tools/testing/selftests/bpf/progs/hid.c
+> @@ -66,3 +66,48 @@ int hid_rdesc_fixup(struct hid_bpf_ctx *ctx)
+>   
+>   	return 0;
+>   }
+> +
+> +SEC("hid/device_event")
+> +int hid_set_get_data(struct hid_bpf_ctx *ctx)
+> +{
+> +	int ret;
+> +	__u8 *buf;
+> +
+> +	buf = bpf_ringbuf_reserve(&ringbuf, 8, 0);
 
-Sounds good, I'll send a revert and make another PR with fixes before v5.17.
+Ordering of patches is probably wrong, it seems the ringbuf is defined 
+in patch #21 but used here.
 
-Bartosz
+Also, this usage of ringbuf leads into running out of available memory 
+in the buffer if used for long time, it is not evident from the test 
+case written here but I spent a couple of hours debugging my own BPF 
+program that used ringbuf in similar way as what is done here. Basically 
+the producer idx is increased with the bpf_ringbuf_reserve / discard, 
+but the consumer index is not if you don't have a consumer in place.
 
->                Linus
+I ended up using a global statically allocated buffer for the purpose 
+for now.
+
+-Tero
+
+
+> +	if (!buf)
+> +		return -12; /* -ENOMEM */
+> +
+> +	/* first try read/write with n > 32 */
+> +	ret = bpf_hid_get_data(ctx, 0, 64, buf, 8);
+> +	if (ret < 0)
+> +		goto discard;
+> +
+> +	/* reinject it */
+> +	ret = bpf_hid_set_data(ctx, 24, 64, buf, 8);
+> +	if (ret < 0)
+> +		goto discard;
+> +
+> +	/* extract data at bit offset 10 of size 4 (half a byte) */
+> +	ret = bpf_hid_get_data(ctx, 10, 4, buf, 8);  /* expected to fail */
+> +	if (ret > 0) {
+> +		ret = -1;
+> +		goto discard;
+> +	}
+> +
+> +	ret = bpf_hid_get_data(ctx, 10, 4, buf, 4);
+> +	if (ret < 0)
+> +		goto discard;
+> +
+> +	/* reinject it */
+> +	ret = bpf_hid_set_data(ctx, 16, 4, buf, 4);
+> +	if (ret < 0)
+> +		goto discard;
+> +
+> +	ret = 0;
+> +
+> + discard:
+> +
+> +	bpf_ringbuf_discard(buf, 0);
+> +
+> +	return ret;
+> +}

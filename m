@@ -2,128 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FEC4D9E06
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6674D9E09
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349417AbiCOOrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S1349423AbiCOOsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238359AbiCOOrN (ORCPT
+        with ESMTP id S1349534AbiCOOsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:47:13 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BAD5549B;
-        Tue, 15 Mar 2022 07:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647355561; x=1678891561;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=79o5gBeuclgkLLR0bESNlJlpxKJpRWFQRiAB8i6yArY=;
-  b=KxaJGYj0aijlyQ7wPQWA+W7/YDJ94FmWhDxqNaTDWz+FXiWhrWYTNyBA
-   i8AEvPGVC15+J62yYSvfhg2FH8YRwm/upr/+xyKxlod21QoSJzZ0vurkk
-   bFUJ6JlkOlpYDzAZyisTA0H7ev7a+FItIhCOkUNWxKEvlYDF4DOEDHg7q
-   k=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 15 Mar 2022 07:46:01 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 07:46:00 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 15 Mar 2022 07:45:53 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 15 Mar 2022 07:45:47 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH] ASoC: codecs: Fix misplaced lpass_macro_pds_exit call
-Date:   Tue, 15 Mar 2022 20:15:31 +0530
-Message-ID: <1647355531-4150-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 15 Mar 2022 10:48:17 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70F755748;
+        Tue, 15 Mar 2022 07:47:05 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E1B6E1F42EAA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647355624;
+        bh=IR+pW29vwKpjjmBqvGZ3LB+SNS5bnCefYbo8aC6sJWU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Bp3ievLV+eSSIagMLXGDCH2WguJGGv8p1YZZ5fPggMAEwsjBquzlreWjWmAlZKdNZ
+         njRq5g5+0I7cSuTF+tDy6VmrjgocrqQWTR8VNLdYgXIX87rVv6AfYdRkXpuYuyJBH6
+         Db0eVvAjg/i8fGlRSTsJ77NgF0RMd6OX3kk6+ME/yG54eFdSFf9PhEqrqZl01faLtm
+         /cl9mn0vxZwO9sJN30LsPPqS2NrgKy401mULFcuOOWk1+GHRCwgJzsgLMpyh4rd1iw
+         RuByvbMU3EE84RjXbeW8BBZBbIK+J4lRoMq8HrhS7HiYej0pf3LuX1xx3w6TaQK738
+         CPncbaJEzLcjA==
+Message-ID: <dc4ce2b5-bf8e-ea20-f9b1-9034caff421b@collabora.com>
+Date:   Tue, 15 Mar 2022 15:47:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 12/21] arm64: dts: mt8192: Add mmc device nodes
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        Hui Liu <hui.liu@mediatek.com>
+References: <20220304130809.12924-1-allen-kh.cheng@mediatek.com>
+ <20220304130809.12924-13-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220304130809.12924-13-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update power domains exit function calling from runtime resume
-to remove function which was wrongly placed and causing crash in
-device suspend and resume.
+Il 04/03/22 14:08, Allen-KH Cheng ha scritto:
+> Add mmc nodes for mt8192 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 +++++++++++++++++++++---
+>   1 file changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 6220d6962f58..4e4081ea7db5 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -1150,10 +1150,36 @@
+>   			#clock-cells = <1>;
+>   		};
+>   
+> -		msdc: clock-controller@11f60000 {
+> -			compatible = "mediatek,mt8192-msdc";
+> -			reg = <0 0x11f60000 0 0x1000>;
+> -			#clock-cells = <1>;
+> +		mmc0: mmc@11f60000 {
+> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0 0x1000>;
+> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
+> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
+> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
+> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>;
+> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
+> +				      "axi_cg", "ahb_cg", "pclk_cg";
 
-Fixes: 9e3d83c52844 ("ASoC: codecs: Add power domains support in digital macro codecs")
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- sound/soc/codecs/lpass-tx-macro.c | 4 ++--
- sound/soc/codecs/lpass-va-macro.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Can you please use the same clock order as specified in the dt-bindings?
+This means that "pclk_cg" goes before "axi_cg".
 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index b492d598..714a411 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -1920,6 +1920,8 @@ static int tx_macro_remove(struct platform_device *pdev)
- 	clk_disable_unprepare(tx->npl);
- 	clk_disable_unprepare(tx->fsgen);
- 
-+	lpass_macro_pds_exit(tx->pds);
-+
- 	return 0;
- }
- 
-@@ -1964,8 +1966,6 @@ static int __maybe_unused tx_macro_runtime_resume(struct device *dev)
- 	regcache_sync(tx->regmap);
- 	tx->reset_swr = true;
- 
--	lpass_macro_pds_exit(tx->pds);
--
- 	return 0;
- err_fsgen:
- 	clk_disable_unprepare(tx->npl);
-diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
-index 300f4f6..f3cb596 100644
---- a/sound/soc/codecs/lpass-va-macro.c
-+++ b/sound/soc/codecs/lpass-va-macro.c
-@@ -1503,6 +1503,8 @@ static int va_macro_remove(struct platform_device *pdev)
- 	clk_disable_unprepare(va->dcodec);
- 	clk_disable_unprepare(va->macro);
- 
-+	lpass_macro_pds_exit(va->pds);
-+
- 	return 0;
- }
- 
-@@ -1532,8 +1534,6 @@ static int __maybe_unused va_macro_runtime_resume(struct device *dev)
- 	regcache_cache_only(va->regmap, false);
- 	regcache_sync(va->regmap);
- 
--	lpass_macro_pds_exit(va->pds);
--
- 	return 0;
- }
- 
--- 
-2.7.4
+				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>,
+				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
+				 <&msdc_top CLK_MSDC_TOP_AXI>;
+		clock-names = "source", "hclk", "source_cg", "sys_cg",
+			      "pclk_cg", "axi_cg", "ahb_cg";
 
+> +			status = "disabled";
+> +		};
+> +
+> +		mmc1: mmc@11f70000 {
+> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
+> +			reg = <0 0x11f70000 0 0x1000>, <0 0x11c70000 0 0x1000>;
+> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
+> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
+> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
+> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
+> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>;
+
+same here please.
+
+> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
+> +				      "axi_cg", "ahb_cg", "pclk_cg";
+> +			status = "disabled";
+>   		};
+>   
+>   		mfgcfg: clock-controller@13fbf000 {
+
+After applying the requested changes,
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Thanks,
+Angelo

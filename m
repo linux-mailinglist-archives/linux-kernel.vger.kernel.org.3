@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859E84DA599
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243D64DA596
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352340AbiCOWrC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Mar 2022 18:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S1352332AbiCOWqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352334AbiCOWrA (ORCPT
+        with ESMTP id S1352303AbiCOWqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:47:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0045213DEB;
-        Tue, 15 Mar 2022 15:45:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FBB41474;
-        Tue, 15 Mar 2022 15:45:47 -0700 (PDT)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A52363F66F;
-        Tue, 15 Mar 2022 15:45:45 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 22:44:44 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
-        Petr =?UTF-8?B?xaB0ZXRpYXI=?= <ynezz@true.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, stable@vger.kernel.org,
-        Bastien =?UTF-8?B?Um91Y2FyacOocw==?= <rouca@debian.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] Revert "ARM: dts: sun7i: A20-olinuxino-lime2:
- Fix ethernet phy-mode"
-Message-ID: <20220315224444.1825833e@slackpad.lan>
-In-Reply-To: <44524634.fMDQidcC6G@kista>
-References: <20220315095244.29718-1-ynezz@true.cz>
-        <20220315095244.29718-2-ynezz@true.cz>
-        <44524634.fMDQidcC6G@kista>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-slackware-linux-gnu)
+        Tue, 15 Mar 2022 18:46:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7796911A15;
+        Tue, 15 Mar 2022 15:45:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1560E61414;
+        Tue, 15 Mar 2022 22:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730A1C340E8;
+        Tue, 15 Mar 2022 22:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647384335;
+        bh=cYclWpMxswvt/yfS3sPBTJxa4eBcQg9zM+hFxSEdXSM=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=jbfCZMD2H2ftEG9x8xLSn/CNBktQV5PDxEC7hGDay8N9wqCh+ApYymzz3TMWwuXJU
+         jrDLP7Ugrrd7Nk9vHf9PXKj/DP8++4WjEaywcB+U7CoHnw9t7q67w6YtIk5lDMdopW
+         HZEi2rMn+BgOIRGjBAiWqs7g9RLWYdBi1IqvdZmxEJR1h0YZDmC7vzneJb39ttkI/y
+         P/1dHohXtoQ5ZlyR99x0q1LxhpEnum23nwTfNnFZOseRyT/62B1YTUawqZi9dyeLjb
+         nBJ1MlJsD9ym8rGGj7wjFEGPXS4UXCFaYM172vBFje86b5X/F0pnV3sXrDEiKY3A37
+         FL0UN/Sodo97g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220313190419.2207-10-ansuelsmth@gmail.com>
+References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-10-ansuelsmth@gmail.com>
+Subject: Re: [PATCH 09/16] clk: qcom: krait-cc: drop pr_info and register qsb only if needed
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Date:   Tue, 15 Mar 2022 15:45:33 -0700
+User-Agent: alot/0.10
+Message-Id: <20220315224535.730A1C340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,80 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 19:50:23 +0100
-Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
+Quoting Ansuel Smith (2022-03-13 12:04:12)
+> Drop pr_info and change them to dev_info.
 
-> Hi Petr!
-> 
-> Dne torek, 15. marec 2022 ob 10:52:42 CET je Petr Štetiar napisal(a):
-> > This reverts commit 55dd7e059098ce4bd0a55c251cb78e74604abb57 as it
-> > breaks network on my A20-olinuxino-lime2 hardware revision "K" which has
-> > Micrel KSZ9031RNXCC-TR Gigabit PHY. Bastien has probably some previous
-> > hardware revisions which were based on RTL8211E-VB-CG1 PHY and thus this
-> > fix was working on his board.  
-> 
-> NAK.
-> 
-> As Corentin mentioned in another discussion, new DT variant should be 
-> introduced for newer board model. Otherwise we can play this revert game with 
-> each new revision which changes Ethernet PHY behaviour. It also makes most 
-> sense to have naming chronologically sorted. If board name in DT file doesn't 
-> have any postfix, it should be compatible with earliest publicly available 
-> board. If board manufacturer releases new board variant with incompatible 
-> changes, new DT with appropriate postfix should be introduced.
-> 
-> I understand that this is frustrating for you, but whole situation around 
-> mentioned commit is unfortunate and we can't satisfy everyone.
-> 
-> Also good way to solve such issues is to apply DT overlay in bootloader based 
-> on board revision number. I know Olimex implemented DT fixup in their 
-> downstream U-Boot fork.
+Replace pr_info() with dev_info() to provide better diagnostics.
 
-I agree with Jernej's here.
-I had a quick look into the U-Boot source, and it seem like the Micrel
-PHY should work there, since its phy_driver.config routine seems to
-ignore the phy-mode property (in contrast to its 9131 sibling in the
-same file). So we can go with the Realtek setting in the DT.
+> Register qsb fixed clk only if it's not declared in DTS.
+> Also reorganize variable order.
 
-If U-Boot's networking itself is fine, we can just try to fix up the
-DT. Looks like board/sunxi/board.c:ft_board_setup() is the place. The
-PHY is autodetected, I am pretty sure we can somehow read the PHY
-driver name, and depending on that just patch the phy-mode property.
-
-Does that sound like a way out?
-
-Cheers,
-Andre
-
-> Best regards,
-> Jernej
-> 
-> > 
-> > Cc: stable@vger.kernel.org
-> > Cc: Bastien Roucariès <rouca@debian.org>
-> > References: https://github.com/openwrt/openwrt/issues/9153
-> > References: https://github.com/OLIMEX/OLINUXINO/blob/master/HARDWARE/A20-OLinuXino-LIME2/hardware_revision_changes_log.txt
-> > Signed-off-by: Petr Štetiar <ynezz@true.cz>
-> > ---
-> >  arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts b/arch/arm/boot/  
-> dts/sun7i-a20-olinuxino-lime2.dts
-> > index ecb91fb899ff..8077f1716fbc 100644
-> > --- a/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts
-> > +++ b/arch/arm/boot/dts/sun7i-a20-olinuxino-lime2.dts
-> > @@ -112,7 +112,7 @@ &gmac {
-> >  	pinctrl-names = "default";
-> >  	pinctrl-0 = <&gmac_rgmii_pins>;
-> >  	phy-handle = <&phy1>;
-> > -	phy-mode = "rgmii-id";
-> > +	phy-mode = "rgmii";
-> >  	status = "okay";
-> >  };
-> >  
-> >   
-> 
-> 
-> 
-
+Please don't reorganize variable order.

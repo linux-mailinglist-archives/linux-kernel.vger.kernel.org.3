@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDF24D90E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAD34D90EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244656AbiCOAJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
+        id S244670AbiCOAME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 20:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244580AbiCOAJk (ORCPT
+        with ESMTP id S244248AbiCOAMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:09:40 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5518AE00B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:08:30 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id e2so14881802pls.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DNOHO0MxND9U5QYTutXy4JWYuAASnDKcx8vBDjMeWwg=;
-        b=jfdXT7xBd71Bf8/eabDPpUSNh/yhLcRlOu/GD8JBy9t/2EcozNl/l17+OX54PVXx2/
-         yCogKYYNHbNaLUlu6Sq6+0YBR+72hqjyciROITBwSPeN+J2+Oyh81Riw4me8fBrEWn7l
-         T60BJ96mUNSwc1GfufqglTy4cgW025PyRo+L3+9W1f56Z4C/Qd5M60m2R2U/JArt6Sx3
-         r55Q+tZ7bvL5FvygXzx5IPqMITqRuzZvgql5vFjlgNy+9it0ACkdpLPbeojfCaWOi3VL
-         Vjt5kIxCNa3vsE7ylPwYw2txJ+sADmU5/y/Dylexxv2QxCst2Z4uRQMz5yz0GoL/AmNz
-         DuzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DNOHO0MxND9U5QYTutXy4JWYuAASnDKcx8vBDjMeWwg=;
-        b=zm40faobXujAL/8jVq3mTJQ1+vJn63LYTOF0sYKjd8AwHRKx0O6mLqBDdnxFu+KsTw
-         DaPxxcBALRRx3PNZQmCNEnerNoCrCJYG40wpJlLrE3ZYGNfDO4McgHs/+KcQLRUOdp08
-         etFXgIEK3snUU+odhyDaGeHiPwuor/ewYOX6g/sJPYiRCFWsvserW5mg7AcIPz8R1N96
-         jvDgRAjhbf6RqydIuf1aSRkb6na2qrIp9Y9mYMzGK4Bx7LUnFjT4xcSJuBypMr59D9Jr
-         rMGlFWX7DOHOzPCWw2czWTMv8N5LuJ45/pFIg3fpSAZL99NKO/xoFrRzG3lmmghWNKUF
-         Z0ow==
-X-Gm-Message-State: AOAM5331E37LySJm5tWQwW9WWgFZCFxQsJzhwb35vhv/4XFEBaZfwoZB
-        uRVZ2buVT8uAYDn4Epyv5cADkeeqEd4zUl+NtLx+
-X-Google-Smtp-Source: ABdhPJyTl2dscitxyL5B/Z6MzR7vvqUpFfY6Hae/3AEMYiqXzeVQQ6vEgbpH4fs+TS9zcFfCzRRQIBqPXzjTGccstk0=
-X-Received: by 2002:a17:90a:c252:b0:1bc:52a8:cac8 with SMTP id
- d18-20020a17090ac25200b001bc52a8cac8mr1599760pjx.61.1647302909598; Mon, 14
- Mar 2022 17:08:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211215211847.206208-1-morbo@google.com> <87mtl1l63m.ffs@tglx>
- <CAGG=3QV2sw1w+j2NDqPVAbobGj04QXfOF0VcSCebRbs6y-L5WA@mail.gmail.com> <dccb0cf2-edc1-fb98-d4ca-4f76687b7e6c@zytor.com>
-In-Reply-To: <dccb0cf2-edc1-fb98-d4ca-4f76687b7e6c@zytor.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 14 Mar 2022 17:08:18 -0700
-Message-ID: <CAGG=3QUHSRHNKsibezy6NSaJea3uJhnHE61k1+W384tbPzuMrA@mail.gmail.com>
-Subject: Re: [PATCH] x86: use builtins to read eflags
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Mon, 14 Mar 2022 20:12:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D19C2DA9A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=eCpP1iW/jtoz0bKchozNJkBQv1g6tIp2uQhpL5P71Hg=; b=j1ean3W6r1CCv8EjVPLBCYaxbu
+        WjTTFCLkKPRvRh72mTxTyhyp8VnRkj+i4s6+EJRPhWb2hSDJ+4bWAcd2Bsk+vC6u1TTkMVZ0N4PAH
+        16C6fsEQw7eqw8UY+dIMAFDaFsKzC7EgmjsTkZeA3905T3kW2SuMmjA9o1ZHK8KNTK+hRvu143/v0
+        J8/MLkgaXKtm4cA0+wiaNvNLgMvMbei8QdTckvRDH1o6T4qFZbhKfHJBygPjg2C4ebIMUeZYWveR3
+        Lu9SbbPUmEFvLRKsKRpNZZ4hfXrnClyrZ/bt+9G0LMaqY37hmdWEg7aTq4kb24DS2lMZTTyt5jRHM
+        QQind9tg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nTum0-007GMw-93; Tue, 15 Mar 2022 00:10:48 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
+Subject: [PATCH] x86, amd: modify the control_va_addr_alignment __setup handler
+Date:   Mon, 14 Mar 2022 17:10:45 -0700
+Message-Id: <20220315001045.7680-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 4:10 PM H. Peter Anvin <hpa@zytor.com> wrote:
->
-> On 12/16/21 11:55, Bill Wendling wrote:
-> > On Wed, Dec 15, 2021 at 4:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >>
-> >> Bill,
-> >>
-> >> On Wed, Dec 15 2021 at 13:18, Bill Wendling wrote:
-> >>
-> >> please always CC the relevant mailing lists, i.e. this lacks a cc:
-> >> linux-kernel@vger.kernel.org
-> >>
-> > I thought that was automatically added. But as Peter pointed out in
-> > another email thread, no one has time to read the LKML, so it seems a
-> > bit pointless? Nonetheless it's added now.
-> >
->
-> Consider linux-kernel a distributed archive. Noone reads it in real
-> time, but it is really great to be able to search for someone specific
-> in one place.
->
-Ah! Okay. That makes more sense then. :-)
+Clean up control_va_addr_alignment():
 
--bw
+a. Make '=' required instead of optional (as documented).
+b. Print a warning if an invalid option value is used.
+c. Return 1 from the __setup handler when an invalid option value is
+   used. This prevents the kernel from polluting init's (limited)
+   environment space with the entire string.
+
+Fixes: dfb09f9b7ab0 ("x86, amd: Avoid cache aliasing penalties on AMD family 15h")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+---
+ arch/x86/kernel/sys_x86_64.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+--- lnx-517-rc8.orig/arch/x86/kernel/sys_x86_64.c
++++ lnx-517-rc8/arch/x86/kernel/sys_x86_64.c
+@@ -68,9 +68,6 @@ static int __init control_va_addr_alignm
+ 	if (*str == 0)
+ 		return 1;
+ 
+-	if (*str == '=')
+-		str++;
+-
+ 	if (!strcmp(str, "32"))
+ 		va_align.flags = ALIGN_VA_32;
+ 	else if (!strcmp(str, "64"))
+@@ -80,11 +77,11 @@ static int __init control_va_addr_alignm
+ 	else if (!strcmp(str, "on"))
+ 		va_align.flags = ALIGN_VA_32 | ALIGN_VA_64;
+ 	else
+-		return 0;
++		pr_warn("invalid option value: 'align_va_addr=%s'\n", str);
+ 
+ 	return 1;
+ }
+-__setup("align_va_addr", control_va_addr_alignment);
++__setup("align_va_addr=", control_va_addr_alignment);
+ 
+ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+ 		unsigned long, prot, unsigned long, flags,

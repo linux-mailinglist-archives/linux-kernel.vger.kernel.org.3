@@ -2,205 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255784D94B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0EC4D94B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345233AbiCOGmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S1345256AbiCOGm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235433AbiCOGmI (ORCPT
+        with ESMTP id S1345254AbiCOGmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:42:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A913D04
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647326457; x=1678862457;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=8I1wLnG20Ik3u34S3KwlGd2TYvCo27NadTKc1KIB5X8=;
-  b=XlXxiMx3rG2RdYSy5mjj1tCCQ+bh47gc+Xbdsyvh0/YiueOteEwc18w9
-   BM/UGCAkT+8GOWg/ipQgxb0zdkmTYx2a3qyJS0cJspALj1hj4MZlgeE8k
-   +Dfcn7KmELmNO7qDkAEm4BzF67ekB9IrP9dozYW8hdDp3UM81cYiI/c1G
-   ow72F8eVi4beaIHqyrq1Gr2tVbpmUutOROOEp0oKvy0k+/n6qjTgUQ4MM
-   mMInYUKcraSECRPVKcfy4EZur/tV83qZZ08fpZ2UFfI9YLlZwwruD6DH8
-   F/ev8h4GsjrIPi+31dRurdKyoQuhdqMDYSXMTlu4pxm4z1vwmHY0svdyr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256177689"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="256177689"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:40:57 -0700
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="515746056"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:40:55 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm: Only re-generate demotion targets when a numa
- node changes its N_CPU state
-References: <20220314150945.12694-1-osalvador@suse.de>
-Date:   Tue, 15 Mar 2022 14:40:53 +0800
-In-Reply-To: <20220314150945.12694-1-osalvador@suse.de> (Oscar Salvador's
-        message of "Mon, 14 Mar 2022 16:09:45 +0100")
-Message-ID: <87pmmn3eh6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 15 Mar 2022 02:42:23 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67DD2DAA3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:41:11 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id r2so21044154iod.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=praixL3ItJFtmdPKsgH4n7ORPNUpESQrK/7qrWdA+ho=;
+        b=lEQAc/v08E6AwDhWfulfFcNd8tzucwEf+jG16hcoA9W0P9Yw+MZltz9DofyETCVm/t
+         hTusPZF1sMRONhVj84b92IVJxWhnmdSKEym1WAyDLf2JlToU0P4FctfCukxQZQX5Bdvn
+         KuCo29jjofjNYDl7S0ixHNG7GqB360TwbpUeXxNxg2vafj/46jDZELTFMVY9zJISF7/G
+         XYzbaFDuTo7XjmF00UuV6e1AgOw3PlLDfCecVgoeDg2t2ncH8wO4De/t8iVDVJMcNEVU
+         52pT8D7r+ENGrrRxDQII83GWsg9zfp9+RwwxCJOtA6zn7WEOdsoGOutoP+/2Gx1aGwPR
+         5cmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=praixL3ItJFtmdPKsgH4n7ORPNUpESQrK/7qrWdA+ho=;
+        b=QtrMLEigftN4Kr/Svlui8ECuyABquSw8ahOzFW00+FK6na9yxN4W/zfhHxV+eHkapq
+         Uokk/Sj8tVao6YOu8WUIClZVfFGjHKGm6IzXvqEszyqitt3ncEmcb9aKHpIZUoM3OwIN
+         HwqQV8yR4kHuN2GNEiUPxxO229dXoc1qOyg/JwzVYxO02gl2rT+guPFfhtM4Qn6CPhvU
+         rYKo21E7HSGdp9g7q3+vytQyPfpNfxCEn/72/4SRooK5wskyC043PebhmPO/A1vE/EFE
+         ga/XWSgK2u9NLm/wi9KE/4HcLOGWyi3O5eW9+uZ5xof8S1ZsCeWpjXnu8GHCBY2jfBSh
+         KI6A==
+X-Gm-Message-State: AOAM532gPUGRWWK8E46hTdPxC8uA7CKOZgx4GC7np1UUc85cMoy1SR7s
+        SNtowoxWyhJaCWSefAvt7Lz1RA==
+X-Google-Smtp-Source: ABdhPJzGw3MWOYCShKsr1ywd6MRtFM/Sr9KCp9JfLknWvwZc7HbyopAHPsPdckbFVpnSMaPRzDK1qA==
+X-Received: by 2002:a05:6638:a2f:b0:314:b8b9:1c21 with SMTP id 15-20020a0566380a2f00b00314b8b91c21mr22666749jao.22.1647326470893;
+        Mon, 14 Mar 2022 23:41:10 -0700 (PDT)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id a13-20020a056e020e0d00b002c61ec2817fsm10053865ilk.57.2022.03.14.23.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 23:41:10 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 06:41:07 +0000
+From:   Oliver Upton <oupton@google.com>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 07/13] KVM: arm64: Add vendor hypervisor firmware
+ register
+Message-ID: <YjA1AzZPlPV20kMj@google.com>
+References: <20220224172559.4170192-1-rananta@google.com>
+ <20220224172559.4170192-8-rananta@google.com>
+ <Yi+eoHWYgt6A5z+1@google.com>
+ <CAJHc60z7wZmABs3Z0LVP9SJnu9T7tU-VK5=F0=tSjy9ScEdqOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJHc60z7wZmABs3Z0LVP9SJnu9T7tU-VK5=F0=tSjy9ScEdqOQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oscar Salvador <osalvador@suse.de> writes:
+On Mon, Mar 14, 2022 at 05:30:15PM -0700, Raghavendra Rao Ananta wrote:
+> On Mon, Mar 14, 2022 at 12:59 PM Oliver Upton <oupton@google.com> wrote:
+> >
+> > On Thu, Feb 24, 2022 at 05:25:53PM +0000, Raghavendra Rao Ananta wrote:
+> > > Introduce the firmware register to hold the vendor specific
+> > > hypervisor service calls (owner value 6) as a bitmap. The
+> > > bitmap represents the features that'll be enabled for the
+> > > guest, as configured by the user-space. Currently, this
+> > > includes support only for Precision Time Protocol (PTP),
+> > > represented by bit-0.
+> > >
+> > > The register is also added to the kvm_arm_vm_scope_fw_regs[]
+> > > list as it maintains its state per-VM.
+> > >
+> > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > ---
+> > >  arch/arm64/include/asm/kvm_host.h |  2 ++
+> > >  arch/arm64/include/uapi/asm/kvm.h |  4 ++++
+> > >  arch/arm64/kvm/guest.c            |  1 +
+> > >  arch/arm64/kvm/hypercalls.c       | 22 +++++++++++++++++++++-
+> > >  include/kvm/arm_hypercalls.h      |  3 +++
+> > >  5 files changed, 31 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > > index 318148b69279..d999456c4604 100644
+> > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
+> > >   *
+> > >   * @hvc_std_bmap: Bitmap of standard secure service calls
+> > >   * @hvc_std_hyp_bmap: Bitmap of standard hypervisor service calls
+> > > + * @hvc_vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
+> > >   */
+> > >  struct kvm_hvc_desc {
+> > >       u64 hvc_std_bmap;
+> > >       u64 hvc_std_hyp_bmap;
+> > > +     u64 hvc_vendor_hyp_bmap;
+> > >  };
+> > >
+> > >  struct kvm_arch {
+> > > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> > > index 9a2caead7359..ed470bde13d8 100644
+> > > --- a/arch/arm64/include/uapi/asm/kvm.h
+> > > +++ b/arch/arm64/include/uapi/asm/kvm.h
+> > > @@ -299,6 +299,10 @@ struct kvm_arm_copy_mte_tags {
+> > >  #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME              BIT(0)
+> > >  #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX     0       /* Last valid bit */
+> > >
+> > > +#define KVM_REG_ARM_VENDOR_HYP_BMAP          KVM_REG_ARM_FW_BMAP_REG(2)
+> > > +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP               BIT(0)
+> > > +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX  0       /* Last valid bit */
+> > > +
+> > >  /* SVE registers */
+> > >  #define KVM_REG_ARM64_SVE            (0x15 << KVM_REG_ARM_COPROC_SHIFT)
+> > >
+> > > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> > > index c42426d6137e..fc3656f91aed 100644
+> > > --- a/arch/arm64/kvm/guest.c
+> > > +++ b/arch/arm64/kvm/guest.c
+> > > @@ -67,6 +67,7 @@ static const u64 kvm_arm_vm_scope_fw_regs[] = {
+> > >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> > >       KVM_REG_ARM_STD_BMAP,
+> > >       KVM_REG_ARM_STD_HYP_BMAP,
+> > > +     KVM_REG_ARM_VENDOR_HYP_BMAP,
+> > >  };
+> > >
+> > >  /**
+> > > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > > index ebc0cc26cf2e..5c5098c8f1f9 100644
+> > > --- a/arch/arm64/kvm/hypercalls.c
+> > > +++ b/arch/arm64/kvm/hypercalls.c
+> > > @@ -79,6 +79,9 @@ static bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
+> > >       case ARM_SMCCC_HV_PV_TIME_ST:
+> > >               return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_hyp_bmap,
+> > >                                       KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
+> > > +     case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> > > +             return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_vendor_hyp_bmap,
+> > > +                                     KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
+> > >       default:
+> > >               /* By default, allow the services that aren't listed here */
+> > >               return true;
+> > > @@ -162,7 +165,14 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> > >               break;
+> > >       case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+> > >               val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
+> > > -             val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
+> > > +
+> > > +             /*
+> > > +              * The feature bits exposed to user-space doesn't include
+> > > +              * ARM_SMCCC_KVM_FUNC_FEATURES. However, we expose this to
+> > > +              * the guest as bit-0. Hence, left-shift the user-space
+> > > +              * exposed bitmap by 1 to accommodate this.
+> > > +              */
+> > > +             val[0] |= hvc_desc->hvc_vendor_hyp_bmap << 1;
+> >
+> > Having an off-by-one difference between the userspace and guest
+> > representations of this bitmap seems like it could be a source of bugs
+> > in the future. Its also impossible for the guest to completely hide the
+> > vendor range if it so chooses.
+> >
+> > Why not tie ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID and
+> > ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID to BIT(0)? PTP would then
+> > become BIT(1).
+> >
+> I agree it's a little asymmetrical. But exposing a bit for the
+> func_ids that you mentioned means providing a capability to disable
+> them by the userspace. This would block the guests from even
+> discovering the space. If it's not too ugly, we can maintain certain
+> bits to always remain read-only to the user-space. On the other hand,
+> we can simply ignore what the userspace configure and simply treat it
+> as a userspace bug. What do you think?
 
-> Abhishek reported that after patch [1], hotplug operations are
-> taking ~double the expected time. [2]
->
-> The reason behind is that the CPU callbacks that migrate_on_reclaim_init()
-> sets always call set_migration_target_nodes() whenever a CPU is brought
-> up/down.
-> But we only care about numa nodes going from having cpus to become
-> cpuless, and vice versa, as that influences the demotion_target order.
->
-> We do already have two CPU callbacks (vmstat_cpu_online() and vmstat_cpu_dead())
-> that check exactly that, so get rid of the CPU callbacks in
-> migrate_on_reclaim_init() and only call set_migration_target_nodes() from
-> vmstat_cpu_{dead,online}() whenever a numa node change its N_CPU state.
->
-> [1] https://lore.kernel.org/linux-mm/20210721063926.3024591-2-ying.huang@intel.com/
-> [2] https://lore.kernel.org/linux-mm/eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com/
->
-> Fixes: 884a6e5d1f93b ("mm/migrate: update node demotion order on hotplug events")
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reported-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
-> Signed-off-by: Oscar Salvador <osalvador@suse.de>
-> ---
->  v2 -> v3:
->            - Add feedback from Huang Ying
-> 	   - Add tags
->  v1 -> v2:
->            - Add fedback from Huang Ying
->            - Add feedback from Baolin Wang
-> ---
->  include/linux/migrate.h |  8 +++++++
->  mm/migrate.c            | 47 +++++++++--------------------------------
->  mm/vmstat.c             | 13 +++++++++++-
->  3 files changed, 30 insertions(+), 38 deletions(-)
->
-> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-> index db96e10eb8da..90e75d5a54d6 100644
-> --- a/include/linux/migrate.h
-> +++ b/include/linux/migrate.h
-> @@ -48,7 +48,15 @@ int folio_migrate_mapping(struct address_space *mapping,
->  		struct folio *newfolio, struct folio *folio, int extra_count);
->  
->  extern bool numa_demotion_enabled;
-> +extern void migrate_on_reclaim_init(void);
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +extern void set_migration_target_nodes(void);
->  #else
-> +static inline void set_migration_target_nodes(void) {}
-> +#endif
-> +#else
-> +
-> +static inline void set_migration_target_nodes(void) {}
->  
->  static inline void putback_movable_pages(struct list_head *l) {}
->  static inline int migrate_pages(struct list_head *l, new_page_t new,
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index e8a6933af68d..2561881f03b2 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -3193,7 +3193,7 @@ static void __set_migration_target_nodes(void)
->  /*
->   * For callers that do not hold get_online_mems() already.
->   */
-> -static void set_migration_target_nodes(void)
-> +void set_migration_target_nodes(void)
->  {
->  	get_online_mems();
->  	__set_migration_target_nodes();
-> @@ -3257,51 +3257,24 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
->  	return notifier_from_errno(0);
->  }
->  
-> -/*
-> - * React to hotplug events that might affect the migration targets
-> - * like events that online or offline NUMA nodes.
-> - *
-> - * The ordering is also currently dependent on which nodes have
-> - * CPUs.  That means we need CPU on/offline notification too.
-> - */
-> -static int migration_online_cpu(unsigned int cpu)
-> -{
-> -	set_migration_target_nodes();
-> -	return 0;
-> -}
-> -
-> -static int migration_offline_cpu(unsigned int cpu)
-> +void __init migrate_on_reclaim_init(void)
->  {
-> -	set_migration_target_nodes();
-> -	return 0;
-> -}
-> -
-> -static int __init migrate_on_reclaim_init(void)
-> -{
-> -	int ret;
-> -
->  	node_demotion = kmalloc_array(nr_node_ids,
->  				      sizeof(struct demotion_nodes),
->  				      GFP_KERNEL);
->  	WARN_ON(!node_demotion);
->  
-> -	ret = cpuhp_setup_state_nocalls(CPUHP_MM_DEMOTION_DEAD, "mm/demotion:offline",
+I think that assigning a bit to the aforementioned hypercalls would be
+best. If userspace decides to hide all the features enumerated in the
+subrange then there isn't much point to the guest knowing that the range
+even exists. It shouldn't amount to much for userspace, as it will
+likely just keep the default value and only worry about these registers
+when migrating.
 
-CPUHP_MM_DEMOTION_DEAD and CPUHP_AP_MM_DEMOTION_ONLINE needs to be
-deleted from include/linux/cpuhotplug.h too.
+Apologies if I'm being pedantic, but such a subtle implementation detail
+could be overlooked in future changes.
 
-Best Regards,
-Huang, Ying
+--
+Oliver
 
-> -					NULL, migration_offline_cpu);
-> +	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
->  	/*
-> -	 * In the unlikely case that this fails, the automatic
-> -	 * migration targets may become suboptimal for nodes
-> -	 * where N_CPU changes.  With such a small impact in a
-> -	 * rare case, do not bother trying to do anything special.
-> +	 * At this point, all numa nodes with memory/CPus have their state
-> +	 * properly set, so we can build the demotion order now.
-> +	 * Let us hold the cpu_hotplug lock just, as we could possibily have
-> +	 * CPU hotplug events during boot.
->  	 */
-> -	WARN_ON(ret < 0);
-> -	ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
-> -				migration_online_cpu, NULL);
-> -	WARN_ON(ret < 0);
-> -
-> -	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
-> -	return 0;
-> +	cpus_read_lock();
-> +	set_migration_target_nodes();
-> +	cpus_read_unlock();
->  }
-> -late_initcall(migrate_on_reclaim_init);
->  #endif /* CONFIG_HOTPLUG_CPU */
->  
->  bool numa_demotion_enabled = false;
-
-[snip]
+> > >               break;
+> > >       case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
+> > >               kvm_ptp_get_time(vcpu, val);
+> > > @@ -188,6 +198,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
+> > >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> > >       KVM_REG_ARM_STD_BMAP,
+> > >       KVM_REG_ARM_STD_HYP_BMAP,
+> > > +     KVM_REG_ARM_VENDOR_HYP_BMAP,
+> > >  };
+> > >
+> > >  void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > > @@ -196,6 +207,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
+> > >
+> > >       hvc_desc->hvc_std_bmap = ARM_SMCCC_STD_FEATURES;
+> > >       hvc_desc->hvc_std_hyp_bmap = ARM_SMCCC_STD_HYP_FEATURES;
+> > > +     hvc_desc->hvc_vendor_hyp_bmap = ARM_SMCCC_VENDOR_HYP_FEATURES;
+> > >  }
+> > >
+> > >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> > > @@ -285,6 +297,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > >       case KVM_REG_ARM_STD_HYP_BMAP:
+> > >               val = READ_ONCE(hvc_desc->hvc_std_hyp_bmap);
+> > >               break;
+> > > +     case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > > +             val = READ_ONCE(hvc_desc->hvc_vendor_hyp_bmap);
+> > > +             break;
+> > >       default:
+> > >               return -ENOENT;
+> > >       }
+> > > @@ -311,6 +326,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
+> > >               fw_reg_bmap = &hvc_desc->hvc_std_hyp_bmap;
+> > >               fw_reg_features = ARM_SMCCC_STD_HYP_FEATURES;
+> > >               break;
+> > > +     case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > > +             fw_reg_bmap = &hvc_desc->hvc_vendor_hyp_bmap;
+> > > +             fw_reg_features = ARM_SMCCC_VENDOR_HYP_FEATURES;
+> > > +             break;
+> > >       default:
+> > >               return -ENOENT;
+> > >       }
+> > > @@ -416,6 +435,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+> > >               return 0;
+> > >       case KVM_REG_ARM_STD_BMAP:
+> > >       case KVM_REG_ARM_STD_HYP_BMAP:
+> > > +     case KVM_REG_ARM_VENDOR_HYP_BMAP:
+> > >               return kvm_arm_set_fw_reg_bmap(vcpu, reg_id, val);
+> > >       default:
+> > >               return -ENOENT;
+> > > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> > > index a1cb6e839c74..91be758ca58e 100644
+> > > --- a/include/kvm/arm_hypercalls.h
+> > > +++ b/include/kvm/arm_hypercalls.h
+> > > @@ -12,6 +12,9 @@
+> > >  #define ARM_SMCCC_STD_HYP_FEATURES \
+> > >       GENMASK_ULL(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
+> > >
+> > > +#define ARM_SMCCC_VENDOR_HYP_FEATURES \
+> > > +     GENMASK_ULL(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
+> > > +
+> > >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> > >
+> > >  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+> > > --
+> > > 2.35.1.473.g83b2b277ed-goog
+> > >

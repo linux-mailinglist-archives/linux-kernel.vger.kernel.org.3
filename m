@@ -2,148 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0844D9A16
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09DC4D9A11
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347893AbiCOLN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S1347876AbiCOLNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbiCOLN6 (ORCPT
+        with ESMTP id S231292AbiCOLNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:13:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62960C2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647342765; x=1678878765;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VKFgjfudXHmL9h7/gvou1SgAx5x1ypUkfwPHc05EsB4=;
-  b=NLJhseKCFc0n/0XjFBUp3rf8AGVR4viz1lOLMiWkWCwKS0r3kdAPtkQT
-   vLn8C4c2WtS4xjhHy8XmlN4RAY25Cj1oLegSk/Zo+DLM0l+b+mll42BnA
-   rtVUR7EsiTtg6zRgGw99E8Y1BmEHZp1mEscLn9N3W6/iwKsHHQR4xIlKJ
-   5YPjC17ZNewpdyK1bPOgaUVT25QLVMO/vMG6Ox3iugmWlbR5NYoyIewSh
-   PdsT1mnYfhWeZZr9Pn5j9Xyow5Yot+b+s2RCjeD635XRFT/EXfH6rvbki
-   UBtiSCvjznwC7QHFGphorUbbJniL08KXtO7lNIkUs7KkX2VUwH8fXxj77
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238439269"
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="238439269"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 04:12:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="634549010"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Mar 2022 04:12:27 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nU56I-000AtF-QY; Tue, 15 Mar 2022 11:12:26 +0000
-Date:   Tue, 15 Mar 2022 19:11:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [willy-pagecache:for-next 174/179] fs/nilfs2/inode.c:227:13:
- warning: variable 'nr_dirty' is used uninitialized whenever 'if' condition
- is false
-Message-ID: <202203151941.WVgUZDhE-lkp@intel.com>
+        Tue, 15 Mar 2022 07:13:08 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06194F474;
+        Tue, 15 Mar 2022 04:11:56 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 11C663200E18;
+        Tue, 15 Mar 2022 07:11:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 15 Mar 2022 07:11:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=PFSNAaQ3b1RcaB6X84veMT1/sBRoeUjyrqfGf9I6k
+        Og=; b=bYoQ3qBUijQDWuiMSLzE4q+q+z0Gnv/45k26R0Y4upBMft9FoRm+QqoV1
+        L1tAP8N8P9Z5rlqJRm3EU+5auE2ltko4YoRFav8LqT7z3zAKZYuqTql9Ywt3kJl4
+        kWIxH0uZtyJSdm60O2fzzwSHjr0bp7QoxUjm8RAkWJioY9HlGFN/5Oc9YIbPTnU2
+        7xBEqbuWoig5fUNRaIsF+kP9+TuJARZsIsL1rYThScoqMdPfDHC9CPZuJjmG6o5i
+        5UJNrcakzAlg69TJU92fjvXKeFF/xLxT7Ts7FZKLdhok6brI6q0XMCShbIFCe4nB
+        JnZNUx0Gmy6gdhu0XfF/rvUW3eVVQ==
+X-ME-Sender: <xms:eXQwYr2zUUvqBdxITSJZUzz5xfwE3VacwoS5MUd9bSohpzOv6xtRZw>
+    <xme:eXQwYqFxd1k2zx0khHdNK5XsyJ1SVoAu8uc1Rh6TjgrYLLSFN8PsBHlwG06M6yR-6
+    6y8oCGs_iP_lmM>
+X-ME-Received: <xmr:eXQwYr5fvr3KyesJQEeW6147h0FGtUpXoHlevOrhckESwOWwonV_sjhjPzdi2C2B5YlxS6jET7fIARamx7ihMq85VrU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeftddgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvdffveekfeeiieeuieetudefkeevkeeuhfeuieduudetkeegleefvdegheej
+    hefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:eXQwYg3kHiD1cyJsbYxllslnZ16TnXP3kOSjBeqFMMjIEHj65uh7sw>
+    <xmx:eXQwYuGLSiywBAGrd1KAxWS30bcA-dWbHmLFJAsNoK9hFYnXlwPw9A>
+    <xmx:eXQwYh9RvGf7fu_IK5FqagOq8ib7rjIQo3UR6qnkkvexkH8uEQpTrw>
+    <xmx:enQwYqHoZD87zr1hps7lLHJJKI61WRsmaWH0MQYzPZmMAbJfb-kfJg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Mar 2022 07:11:53 -0400 (EDT)
+Date:   Tue, 15 Mar 2022 13:11:49 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 0/3] Extend locked port feature with FDB locked
+ flag (MAC-Auth/MAB)
+Message-ID: <YjB0ddhesVOEucYG@shredder>
+References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
+ <Yi9kTh6XZu3OiCz0@shredder>
+ <86ee33h9q2.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <86ee33h9q2.fsf@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   af564d7369d44fbbe697a5f631fe3bba5ebecd59
-commit: 248cfe55743b4293f9fa06384e35581121d60ee1 [174/179] nilfs: Convert nilfs_set_page_dirty() to nilfs_dirty_folio()
-config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220315/202203151941.WVgUZDhE-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout 248cfe55743b4293f9fa06384e35581121d60ee1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/nilfs2/ mm/
+On Tue, Mar 15, 2022 at 09:59:49AM +0100, Hans Schultz wrote:
+> On mån, mar 14, 2022 at 17:50, Ido Schimmel <idosch@idosch.org> wrote:
+> > On Thu, Mar 10, 2022 at 03:23:17PM +0100, Hans Schultz wrote:
+> >> This patch set extends the locked port feature for devices
+> >> that are behind a locked port, but do not have the ability to
+> >> authorize themselves as a supplicant using IEEE 802.1X.
+> >> Such devices can be printers, meters or anything related to
+> >> fixed installations. Instead of 802.1X authorization, devices
+> >> can get access based on their MAC addresses being whitelisted.
+> >> 
+> >> For an authorization daemon to detect that a device is trying
+> >> to get access through a locked port, the bridge will add the
+> >> MAC address of the device to the FDB with a locked flag to it.
+> >> Thus the authorization daemon can catch the FDB add event and
+> >> check if the MAC address is in the whitelist and if so replace
+> >> the FDB entry without the locked flag enabled, and thus open
+> >> the port for the device.
+> >> 
+> >> This feature is known as MAC-Auth or MAC Authentication Bypass
+> >> (MAB) in Cisco terminology, where the full MAB concept involves
+> >> additional Cisco infrastructure for authorization. There is no
+> >> real authentication process, as the MAC address of the device
+> >> is the only input the authorization daemon, in the general
+> >> case, has to base the decision if to unlock the port or not.
+> >> 
+> >> With this patch set, an implementation of the offloaded case is
+> >> supplied for the mv88e6xxx driver. When a packet ingresses on
+> >> a locked port, an ATU miss violation event will occur. When
+> >
+> > When do you get an ATU miss violation? In case there is no FDB entry for
+> > the SA or also when there is an FDB entry, but it points to a different
+> > port? I see that the bridge will only create a "locked" FDB entry in
+> > case there is no existing entry, but it will not transition an existing
+> > entry to "locked" state. I guess ATU miss refers to an actual miss and
+> > not mismatch.
+> >
+> 
+> On a locked port, I get ATU miss violations when there is no FDB entry
+> for the SA, while if there is an entry but it is not assigned to the
+> port, then I get an ATU member violation (which I have now masked on
+> locked ports to limit unwanted interrupts).
+> 
+> So it seems to me that my 'ATU miss' corresponds to your MISS and my
+> 'ATU member' corresponds to your MISMATCH. Since I inject an entry with
+> destination port vector (DPV) zero I get member violations after the
+> first miss violation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Which causes packets to be silently dropped by the device? Sounds OK, I
+just want to verify I understand the behavior.
 
-All warnings (new ones prefixed by >>):
+> 
+> > The HW I work with doesn't have the ability to generate such
+> > notifications, but it can trap packets on MISS (no entry) or MISMATCH
+> > (exists, but with different port). I believe that in order to support
+> > this feature we need to inject MISS-ed packets to the Rx path so that
+> > eventually the bridge itself will create the "locked" entry as opposed
+> > to notifying the bridge about the entry as in your case.
+> >
+> 
+> This seems to me to be the way forward in your case. What kind or family
+> of chips is your HW based on?
 
->> fs/nilfs2/inode.c:227:13: warning: variable 'nr_dirty' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (ret) {
-                      ^~~
-   fs/nilfs2/inode.c:232:6: note: uninitialized use occurs here
-           if (nr_dirty)
-               ^~~~~~~~
-   fs/nilfs2/inode.c:227:9: note: remove the 'if' if its condition is always true
-           } else if (ret) {
-                  ^~~~~~~~~
-   fs/nilfs2/inode.c:207:23: note: initialize the variable 'nr_dirty' to silence this warning
-           unsigned int nr_dirty;
-                                ^
-                                 = 0
-   1 warning generated.
+Nvidia Spectrum ASICs. Some users mentioned 802.1X support, but a
+requirement never materialized so we didn't work on it.
 
+> 
+> >> handling such ATU miss violation interrupts, the MAC address of
+> >> the device is added to the FDB with a zero destination port
+> >> vector (DPV) and the MAC address is communicated through the
+> >> switchdev layer to the bridge, so that a FDB entry with the
+> >> locked flag enabled can be added.
+> >> 
+> >> Hans Schultz (3):
+> >>   net: bridge: add fdb flag to extent locked port feature
+> >>   net: switchdev: add support for offloading of fdb locked flag
+> >>   net: dsa: mv88e6xxx: mac-auth/MAB implementation
+> >
+> > Please extend tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> > with new test cases for this code.
+> >
+> 
+> Shall do.
 
-vim +227 fs/nilfs2/inode.c
+Thanks!
 
-05fe58fdc10df9e Ryusuke Konishi         2009-04-06  201  
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  202) static bool nilfs_dirty_folio(struct address_space *mapping,
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  203) 		struct folio *folio)
-05fe58fdc10df9e Ryusuke Konishi         2009-04-06  204  {
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  205) 	struct inode *inode = mapping->host;
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  206) 	struct buffer_head *head;
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  207) 	unsigned int nr_dirty;
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  208) 	bool ret = filemap_dirty_folio(mapping, folio);
-05fe58fdc10df9e Ryusuke Konishi         2009-04-06  209  
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  210  	/*
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  211) 	 * The page may not be locked, eg if called from try_to_unmap_one()
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  212  	 */
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  213) 	spin_lock(&mapping->private_lock);
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  214) 	head = folio_buffers(folio);
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  215) 	if (head) {
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  216) 		struct buffer_head *bh = head;
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  217) 
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  218) 		nr_dirty = 0;
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  219  		do {
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  220  			/* Do not mark hole blocks dirty */
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  221  			if (buffer_dirty(bh) || !buffer_mapped(bh))
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  222  				continue;
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  223  
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  224  			set_buffer_dirty(bh);
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  225  			nr_dirty++;
-136e8770cd5d1fe Ryusuke Konishi         2013-05-24  226  		} while (bh = bh->b_this_page, bh != head);
-56d7acc792c0d98 Andreas Rohner          2014-09-25 @227  	} else if (ret) {
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  228) 		nr_dirty = 1 << (PAGE_SHIFT - inode->i_blkbits);
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  229) 	}
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  230) 	spin_unlock(&mapping->private_lock);
-56d7acc792c0d98 Andreas Rohner          2014-09-25  231  
-248cfe55743b429 Matthew Wilcox (Oracle  2022-02-09  232) 	if (nr_dirty)
-bcbc8c648d6cc88 Ryusuke Konishi         2010-12-27  233  		nilfs_set_file_dirty(inode, nr_dirty);
-05fe58fdc10df9e Ryusuke Konishi         2009-04-06  234  	return ret;
-05fe58fdc10df9e Ryusuke Konishi         2009-04-06  235  }
-05fe58fdc10df9e Ryusuke Konishi         2009-04-06  236  
-
-:::::: The code at line 227 was first introduced by commit
-:::::: 56d7acc792c0d98f38f22058671ee715ff197023 nilfs2: fix data loss with mmap()
-
-:::::: TO: Andreas Rohner <andreas.rohner@gmx.net>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> >> 
+> >>  drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
+> >>  drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
+> >>  drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
+> >>  drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
+> >>  drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
+> >>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
+> >>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
+> >>  drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
+> >>  drivers/net/dsa/mv88e6xxx/port.h              |  1 +
+> >>  include/net/switchdev.h                       |  3 +-
+> >>  include/uapi/linux/neighbour.h                |  1 +
+> >>  net/bridge/br.c                               |  3 +-
+> >>  net/bridge/br_fdb.c                           | 13 +++-
+> >>  net/bridge/br_input.c                         | 11 ++-
+> >>  net/bridge/br_private.h                       |  5 +-
+> >>  15 files changed, 167 insertions(+), 14 deletions(-)
+> >>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+> >>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+> >> 
+> >> -- 
+> >> 2.30.2
+> >> 

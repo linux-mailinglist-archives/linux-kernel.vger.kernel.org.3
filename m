@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F584DA530
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22EC4DA537
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352173AbiCOWUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S1352189AbiCOWWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352174AbiCOWUp (ORCPT
+        with ESMTP id S234097AbiCOWWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:20:45 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E095C647;
-        Tue, 15 Mar 2022 15:19:31 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id i8so483922wrr.8;
-        Tue, 15 Mar 2022 15:19:31 -0700 (PDT)
+        Tue, 15 Mar 2022 18:22:08 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFE15C656;
+        Tue, 15 Mar 2022 15:20:55 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id t2so1132050pfj.10;
+        Tue, 15 Mar 2022 15:20:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8T8z6iflW4XiGgdmUlJWREss0zwpqrW7ArvyzTkY4zM=;
-        b=lxEl0y0ShtAvyYuhvNC8Q/4+oXxFjSyp28eUVJDpMW6CQEjUnM6BMGVmpYW3th8nkd
-         euW34T+fWPWl284pgF6SHEkSvIGa4Hbb0QhBRT/qPaUvE5l0HwSkfbAPUnjiV4Ir/uzD
-         NGrLammWYvTAXL3fCpJLmXqqCELSnRwjI+wauZiAp5GexK4nrqLKfSPwakEC9azelsta
-         mVN6gTlo3j3fS+kGTEx1suFgJ3kvKl2jsj55HiMPSqfUm2ZjAUmnN9H8wt3/0xsMM8Cb
-         uedz/YRd7rRlnsOY+ROrjiV6OFypkesLWvJhNaLbx3L3hip8k3oVsjR4y+808zdcRwPe
-         AdDQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=84kFTOf9/F1bpdxHLGKdmzF1pTCG4mq3396ASbcsPH0=;
+        b=S6cKaJtz5ujUV0DCCwnZC3p3N4rVdwVp2PLbBPZAmCuTZTB0i6HNT8QMptZSHmuGkp
+         lsv0iFjmSkdLqJcNKzqKUUDyvKpS9W34al05N1tqh39whL1PwZIZsOdUwqHJQKCJe8gn
+         YlzqJQfNKUMiwF9PIELmslwzxkeICml7G7Epms9FgQC0Ap5rqviMF6GX3Xn4dtNx4px5
+         ZrQvK8E9518ngBf5PwMEGXnaOyWOz9kcHkL4lnPNZn+k3/MwY33VpSlnkLQoEeTDwIcu
+         VMjI7mBxz28QWTqH64lJj2AZZWZIC2a28yJvuEMcq0ZQtQwN0Nmtuy9X9nBWm4H5PIJL
+         JttQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8T8z6iflW4XiGgdmUlJWREss0zwpqrW7ArvyzTkY4zM=;
-        b=cQEzYT4J+cmnvdMzIyX6pT/19Y0uz88K59wcinbXz+9DZK3xMBDxE/IG36cY+LPNo9
-         tA70npqVokB4BFEdG3mMbdi6DUkPwWxw+oGJJMckZ7Jd9D0WWDlV9PkinxAIHGs0Xm80
-         tzevVcFTWRLSxaVd0AGHPAfzR1oE/lm7p400kxE66yur47qejKr+MnHWRFDDLyh6wqac
-         j2lqyCHa1upTPeavyueGTjBK28gQe6uHGMuWa54iSeEtuEXMBGd8PR7mcqeC2p+YqoDB
-         5PddydIJZvnzZxsDQVF1xfcCnXekV+eDYGgWTldG35RF/MRIPTIoSR3mX7jQXyxdvkCZ
-         x5OA==
-X-Gm-Message-State: AOAM5313dZavEW6FkhGoLO7v020svYNpTdjxKqfMqqOwdJiHnoUFwT3Q
-        FQLEDgJLvFqLu2hIjqN5hpQ=
-X-Google-Smtp-Source: ABdhPJyXK/m628DIv4EB8bxcG/ulR9do+Vkrf7eORkrGXSrrF/fzSZiewYbv/kCVjR8iw1vQkAVUvg==
-X-Received: by 2002:a5d:4e51:0:b0:203:dc47:24c2 with SMTP id r17-20020a5d4e51000000b00203dc4724c2mr1236474wrt.628.1647382770264;
-        Tue, 15 Mar 2022 15:19:30 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600011cf00b001edc2966dd4sm159780wrx.47.2022.03.15.15.19.29
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=84kFTOf9/F1bpdxHLGKdmzF1pTCG4mq3396ASbcsPH0=;
+        b=tWDOAwkwH85GK5Ov1wuSowdk+anP06aUWf43v6mrXwvXM5PHW0HMnr6SZVZ+3dYvAD
+         OaPBfN7FHG9W/jPow3v3JAlgljde3+9G56YuKRS056n9dRYrNW64z/o4Kq8S3dJI0/vP
+         qfuINNIwAowLeUTfX7h3ouqv4NIPOgExo277L6xGT/J/nyg7c9N2j8VUFHnr4AMovT3z
+         a1jVsZToJOaPPQvR4AG+GtaJh2P3GE7MUaj+kCIvRGTDSt++OMJaoHcAC6eFeaVfp1CP
+         KaOPcYc3+O/1ksX/2v8G4e4xgx3oDRngR/chJPtpnMNtoUxcpXC521j/yS8fHqCTx+V0
+         Nx2A==
+X-Gm-Message-State: AOAM530iBwvoH+kN/VpI4E21TnkGmtMyOqnOZ+O5SSBfZqwJXF5FLJy8
+        6P/hFQ3XTRqXiRDduySPCuE=
+X-Google-Smtp-Source: ABdhPJxPhbkHWHq5TAaAy1B2Kg+asrvXDmUsyIHvqWnKaqzN5CfQMU5J53F1xwWQl7jWU5H2aeS6jA==
+X-Received: by 2002:a65:424a:0:b0:375:6d8b:8d44 with SMTP id d10-20020a65424a000000b003756d8b8d44mr26272327pgq.170.1647382855304;
+        Tue, 15 Mar 2022 15:20:55 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:7484:dc22:fe49:91cb])
+        by smtp.gmail.com with ESMTPSA id y32-20020a056a001ca000b004fa201a613fsm85131pfw.196.2022.03.15.15.20.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 15:19:29 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau: Fix spelling mistake "endianess" -> "endianness"
-Date:   Tue, 15 Mar 2022 22:19:29 +0000
-Message-Id: <20220315221929.2959700-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 15 Mar 2022 15:20:54 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 15 Mar 2022 15:20:52 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, surenb@google.com, vbabka@suse.cz,
+        rientjes@google.com, sfr@canb.auug.org.au, edgararriaga@google.com,
+        nadav.amit@gmail.com, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, "# 5 . 10+" <stable@vger.kernel.org>
+Subject: Re: [PATCH V2,1/2] mm: madvise: return correct bytes advised with
+ process_madvise
+Message-ID: <YjERRJn/2GZOt4b7@google.com>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a nvdev_error error message. Fix it.
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/nouveau/nvkm/engine/device/base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c b/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
-index 88d262ba648c..62efbd0f3846 100644
---- a/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/base.c
-@@ -2935,7 +2935,7 @@ nvkm_device_ctor(const struct nvkm_device_func *func,
- 		/* switch mmio to cpu's native endianness */
- 		if (!nvkm_device_endianness(device)) {
- 			nvdev_error(device,
--				    "Couldn't switch GPU to CPUs endianess\n");
-+				    "Couldn't switch GPU to CPUs endianness\n");
- 			ret = -ENOSYS;
- 			goto done;
- 		}
--- 
-2.35.1
-
+On Fri, Mar 11, 2022 at 08:59:05PM +0530, Charan Teja Kalla wrote:
+> The process_madvise() system call returns error even after processing
+> some VMA's passed in the 'struct iovec' vector list which leaves the
+> user confused to know where to restart the advise next. It is also
+> against this syscall man page[1] documentation where it mentions that
+> "return value may be less than the total number of requested bytes, if
+> an error occurred after some iovec elements were already processed.".
+> 
+> Consider a user passed 10 VMA's in the 'struct iovec' vector list of
+> which 9 are processed but one. Then it just returns the error caused on
+> that failed VMA despite the first 9 VMA's processed, leaving the user
+> confused about on which VMA it is failed. Returning the number of bytes
+> processed here can help the user to know which VMA it is failed on and
+> thus can retry/skip the advise on that VMA.
+> 
+> [1]https://man7.org/linux/man-pages/man2/process_madvise.2.html.
+> 
+> Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
+> Cc: <stable@vger.kernel.org> # 5.10+
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+Acked-by: Minchan Kim <minchan@kernel.org>

@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8244D91F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 02:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D394D91F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 02:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344164AbiCOBF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 21:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
+        id S1344153AbiCOBFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 21:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244827AbiCOBFk (ORCPT
+        with ESMTP id S238946AbiCOBFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Mar 2022 21:05:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009D328999;
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA51186EA;
         Mon, 14 Mar 2022 18:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647306270; x=1678842270;
+  t=1647306269; x=1678842269;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VI+nwOGBY1F4nf8CO+rm2Eo6mglQSNN3eSB1ZecEdas=;
-  b=dKRcR0zbOAbHLnmvhsJo4NEc1JfXM8WzFgrqxF/7uA8Z0jgN3cLi8SF1
-   SaJqjwSl4O7MoQ6WgYB89yVno5EtOgvH1tVrYC+WtBZDWer+A7NLuq+0/
-   tG1gVqHoEW3aGReaCVMJTzYgxLOuiJkiUqDz0L6I5AcukOow6+G+n4QqA
-   CsvljnzcjJ9+j7RT1wKSobktaIFTgvcvRqMj8p+yKaEkZLFr2h1GlMSCW
-   us4ULDcefycSS7Z8lDnCBOwR9HI3C9zvH1h5r145wr+JF21mnEnKiaL4X
-   RR7c99OPWQqp7eJ92jJxjdRxgOqxqifmFoQ026zg8PAKh6+3XC2dfiO6W
+  bh=ZNYQ7heN8BZ4EC7hZMx6llfWJHtr84HIFJSjDVxDUx0=;
+  b=MQeHdsy8UEdK9IM9/RJg8Il8+3w+oKM+O8tcuZaJ9XhtZv/hh6bjRg1u
+   RjZwuTmsGc8M2zRIN8Sb9Q76Uum/42rG1u67/DQo1TbMDhM7uRtNEfbXV
+   DooBfl8LSwfp9j0FtezyX7Aqoujb3EY2XkwziItpb3Pt4U+QVwLVUUpdk
+   IqZoaHEOvS/RLEf7NoWmcRmRM9K8ZUHwgg/fm8yv+R44w99dcujHToHbw
+   IB2r1O0foqotJtBLST4a2tqcHQgjPWrEHKrh0lHQCFzRlTXDGf6YlBa5v
+   xoBh/ekgPJgbP7mIeQOdUvkwwrHpQhcm9iKDYxgc8eAdvkQ/15/FbcEXN
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243635571"
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253744814"
 X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="243635571"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 18:04:29 -0700
+   d="scan'208";a="253744814"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 18:04:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
-   d="scan'208";a="634415278"
+   d="scan'208";a="690026465"
 Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Mar 2022 18:04:27 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 14 Mar 2022 18:04:27 -0700
 Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nTvbu-000AOb-DX; Tue, 15 Mar 2022 01:04:26 +0000
-Date:   Tue, 15 Mar 2022 09:03:44 +0800
+        id 1nTvbu-000AOe-Iw; Tue, 15 Mar 2022 01:04:26 +0000
+Date:   Tue, 15 Mar 2022 09:03:47 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Paul Menzel <pmenzel@molgen.mpg.de>,
         Adam Radford <aradford@gmail.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
+Cc:     kbuild-all@lists.01.org, Paul Menzel <pmenzel@molgen.mpg.de>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] scsi: 3w-sas: Correct log level of several messages
-Message-ID: <202203150825.QbKs1io1-lkp@intel.com>
+Message-ID: <202203150933.HeolPUBM-lkp@intel.com>
 References: <20220314195728.119160-1-pmenzel@molgen.mpg.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220314195728.119160-1-pmenzel@molgen.mpg.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,63 +79,208 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Paul-Menzel/scsi-3w-sas-Correct-log-level-of-several-messages/20220315-035918
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220315/202203150825.QbKs1io1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+config: x86_64-randconfig-a004-20220314 (https://download.01.org/0day-ci/archive/20220315/202203150933.HeolPUBM-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
         # https://github.com/0day-ci/linux/commit/8d5baa500eb6500560660c4c5c355f9556cc4a51
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Paul-Menzel/scsi-3w-sas-Correct-log-level-of-several-messages/20220315-035918
         git checkout 8d5baa500eb6500560660c4c5c355f9556cc4a51
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/scsi/3w-sas.c:876:11: error: use of undeclared identifier 'KERN_ERROR'; did you mean 'KERN_PROF'?
-                           printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-                                  ^~~~~~~~~~
-                                  KERN_PROF
-   include/linux/printk.h:446:53: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ^
-   include/linux/printk.h:418:11: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ^
-   include/uapi/linux/sysctl.h:90:2: note: 'KERN_PROF' declared here
-           KERN_PROF=6,            /* table: profiling information */
-           ^
-   drivers/scsi/3w-sas.c:883:11: error: use of undeclared identifier 'KERN_ERROR'; did you mean 'KERN_PROF'?
-                           printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
-                                  ^~~~~~~~~~
-                                  KERN_PROF
-   include/linux/printk.h:446:53: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ^
-   include/linux/printk.h:418:11: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ^
-   include/uapi/linux/sysctl.h:90:2: note: 'KERN_PROF' declared here
-           KERN_PROF=6,            /* table: profiling information */
-           ^
-   drivers/scsi/3w-sas.c:1569:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   drivers/scsi/3w-sas.c:1786:49: warning: shift count >= width of type [-Wshift-count-overflow]
-           retval = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 2 errors generated.
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from drivers/scsi/3w-sas.c:53:
+   drivers/scsi/3w-sas.c: In function 'twl_fill_sense':
+>> drivers/scsi/3w-sas.c:876:11: error: 'KERN_ERROR' undeclared (first use in this function); did you mean 'KERN_ERR'?
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |           ^~~~~~~~~~
+   include/linux/printk.h:370:28: note: in definition of macro '__printk_index_emit'
+     370 |   if (__builtin_constant_p(_fmt) && __builtin_constant_p(_level)) { \
+         |                            ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   drivers/scsi/3w-sas.c:876:11: note: each undeclared identifier is reported only once for each function it appears in
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |           ^~~~~~~~~~
+   include/linux/printk.h:370:28: note: in definition of macro '__printk_index_emit'
+     370 |   if (__builtin_constant_p(_fmt) && __builtin_constant_p(_level)) { \
+         |                            ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+>> drivers/scsi/3w-sas.c:876:22: error: expected ')' before string constant
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:370:28: note: in definition of macro '__printk_index_emit'
+     370 |   if (__builtin_constant_p(_fmt) && __builtin_constant_p(_level)) { \
+         |                            ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from drivers/scsi/3w-sas.c:53:
+>> drivers/scsi/3w-sas.c:876:22: error: expected ')' before string constant
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:379:33: note: in definition of macro '__printk_index_emit'
+     379 |     .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                 ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+>> drivers/scsi/3w-sas.c:876:22: error: expected ')' before string constant
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:379:42: note: in definition of macro '__printk_index_emit'
+     379 |     .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                          ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   include/linux/printk.h:379:41: note: to match this '('
+     379 |     .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                         ^
+   include/linux/printk.h:417:3: note: in expansion of macro '__printk_index_emit'
+     417 |   __printk_index_emit(_fmt, NULL, NULL);   \
+         |   ^~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+>> drivers/scsi/3w-sas.c:876:22: error: expected ')' before string constant
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:418:11: note: in definition of macro 'printk_index_wrap'
+     418 |   _p_func(_fmt, ##__VA_ARGS__);    \
+         |           ^~~~
+   drivers/scsi/3w-sas.c:876:4: note: in expansion of macro 'printk'
+     876 |    printk(KERN_ERROR "3w-sas: scsi%d: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from drivers/scsi/3w-sas.c:53:
+   drivers/scsi/3w-sas.c:883:22: error: expected ')' before string constant
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:370:28: note: in definition of macro '__printk_index_emit'
+     370 |   if (__builtin_constant_p(_fmt) && __builtin_constant_p(_level)) { \
+         |                            ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:883:4: note: in expansion of macro 'printk'
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from drivers/scsi/3w-sas.c:53:
+   drivers/scsi/3w-sas.c:883:22: error: expected ')' before string constant
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:379:33: note: in definition of macro '__printk_index_emit'
+     379 |     .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                 ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:883:4: note: in expansion of macro 'printk'
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   drivers/scsi/3w-sas.c:883:22: error: expected ')' before string constant
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:379:42: note: in definition of macro '__printk_index_emit'
+     379 |     .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                          ^~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:883:4: note: in expansion of macro 'printk'
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   include/linux/printk.h:379:41: note: to match this '('
+     379 |     .fmt = __builtin_constant_p(_fmt) ? (_fmt) : NULL, \
+         |                                         ^
+   include/linux/printk.h:417:3: note: in expansion of macro '__printk_index_emit'
+     417 |   __printk_index_emit(_fmt, NULL, NULL);   \
+         |   ^~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                          ^~~~~~~~~~~~~~~~~
+   drivers/scsi/3w-sas.c:883:4: note: in expansion of macro 'printk'
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+   drivers/scsi/3w-sas.c:883:22: error: expected ')' before string constant
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:418:11: note: in definition of macro 'printk_index_wrap'
+     418 |   _p_func(_fmt, ##__VA_ARGS__);    \
+         |           ^~~~
+   drivers/scsi/3w-sas.c:883:4: note: in expansion of macro 'printk'
+     883 |    printk(KERN_ERROR "3w-sas: ERROR: (0x%02X:0x%04X): %s:%s.\n",
+         |    ^~~~~~
+>> drivers/scsi/3w-sas.c:864:8: warning: variable 'error_str' set but not used [-Wunused-but-set-variable]
+     864 |  char *error_str;
+         |        ^~~~~~~~~
 
 
 vim +876 drivers/scsi/3w-sas.c
@@ -148,7 +292,7 @@ vim +876 drivers/scsi/3w-sas.c
    861		TW_Command_Apache_Header *header;
    862		TW_Command_Full *full_command_packet;
    863		unsigned short error;
-   864		char *error_str;
+ > 864		char *error_str;
    865	
    866		header = tw_dev->sense_buffer_virt[i];
    867		full_command_packet = tw_dev->command_packet_virt[request_id];

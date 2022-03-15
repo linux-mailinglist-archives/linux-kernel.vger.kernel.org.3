@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177BD4D967E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9324D9683
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344502AbiCOIna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S1345953AbiCOInt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbiCOIn3 (ORCPT
+        with ESMTP id S1343500AbiCOInr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:43:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C391E4CD62;
-        Tue, 15 Mar 2022 01:42:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68DAF1474;
-        Tue, 15 Mar 2022 01:42:17 -0700 (PDT)
-Received: from [10.57.22.32] (unknown [10.57.22.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 706CD3F766;
-        Tue, 15 Mar 2022 01:42:15 -0700 (PDT)
-Message-ID: <99845680-c2a5-2538-a57c-6fbf395faa8b@arm.com>
-Date:   Tue, 15 Mar 2022 08:42:13 +0000
+        Tue, 15 Mar 2022 04:43:47 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B262B4CD62;
+        Tue, 15 Mar 2022 01:42:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHn3C5Dkrz4xvg;
+        Tue, 15 Mar 2022 19:42:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647333752;
+        bh=3LBWFpfo5KWICck/UJ51RLvAZ87sUmvXzLs4u5w3HjE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AkD5MiHn21Wk1lb1TEiUPo8CEmmxIcVq+vVvh6k8IuU/4iV0tK2vAAJ5P0vlAHnDa
+         b94dvSpyXaXMqHR6ZIDE0sa46PlUH8pFQEBNz1MtOgzFzTTHALirDAJOndOsSV6Ynr
+         kHxYyc7Nha/kV6tVxJPeq9PQJFrb3qbZMQGReeSdn6W/AWhtLx7mcCsaBb6lkwtVIS
+         +/4NCO5Yyr04hOZn/yP1zcqRr0xFKe7c/L4JdWNplJ3VvgwshIsW+pBh7U0CjbBjkt
+         1IC8BjNHgTMFj2Eovm//2YZIc/4CqjbdyAlPjSHVTB50r7OZYadzTw2OjLLfstOzjI
+         kKHTWK2B5epyw==
+Date:   Tue, 15 Mar 2022 19:42:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20220315194230.62aec8ce@canb.auug.org.au>
+In-Reply-To: <20220315163747.3e11ad15@canb.auug.org.au>
+References: <20220315140644.369d98d6@canb.auug.org.au>
+        <20220315162327.53f7139f@canb.auug.org.au>
+        <20220315163747.3e11ad15@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v3] coresight: core: Fix coresight device probe failure
- issue
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-References: <20220309142206.15632-1-quic_jinlmao@quicinc.com>
- <a1790ad9-b5e0-9a00-debc-fc8ef2c757cb@arm.com>
- <9cbb2e86-640f-4b5d-22ff-00c63a1b9743@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <9cbb2e86-640f-4b5d-22ff-00c63a1b9743@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/xUX22JvAl0N4LuI3+MZnM1d";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,43 +57,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 08:36, Jinlong Mao wrote:
-> On 3/10/2022 5:10 PM, Suzuki K Poulose wrote:
->> Hi Jinlong
->>
->>
->> On 09/03/2022 14:22, Mao Jinlong wrote:
->>> It is possibe that probe failure issue happens when the device
->>> and its child_device's probe happens at the same time.
->>> In coresight_make_links, has_conns_grp is true for parent, but
->>> has_conns_grp is false for child device as has_conns_grp is set
->>> to true in coresight_create_conns_sysfs_group. The probe of parent
->>> device will fail at this condition. Add has_conns_grp check for
->>> child device before make the links and make the process from
->>> device_register to connection_create be atomic to avoid this
->>> probe failure issue.
->>>
->>> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->>> Suggested-by: Mike Leach <mike.leach@linaro.org>
->>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->>
->> Thanks for the rework. The patch looks good to me.
->>
->> Suzuki
-> Thanks Suzuki.
-> 
-> Hi Mathieu & Mike,
-> 
-> Could you please help to review and provide your comments for the PATCH 
-> V3 ?
+--Sig_/xUX22JvAl0N4LuI3+MZnM1d
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thats what I just said above. The patch looks good to me, I can queue
-this in the next cycle.
+Hi all,
 
-Kind regards
-Suzuki
+On Tue, 15 Mar 2022 16:37:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Tue, 15 Mar 2022 16:23:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > On Tue, 15 Mar 2022 14:06:44 +1100 Stephen Rothwell <sfr@canb.auug.org.=
+au> wrote: =20
+> > >
+> > > After merging the irqchip tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >=20
+> > > arch/x86/kernel/cpuid.o: warning: objtool: file already has .orc_unwi=
+nd section, skipping
+> > > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/=
+x86/kernel/cpuid.ko] Error 255
+> > > arch/x86/kernel/msr.o: warning: objtool: file already has .orc_unwind=
+ section, skipping
+> > > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/=
+x86/kernel/msr.ko] Error 255
+> > > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already =
+has .retpoline_sites, skipping
+> > > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already =
+has .ibt_endbr_seal, skipping
+> > > arch/x86/events/intel/intel-uncore.o: warning: objtool: file already =
+has .orc_unwind section, skipping
+> > > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: arch/=
+x86/events/intel/intel-uncore.ko] Error 255
+> > >=20
+> > > I couldn't see anything int the irqchip tree that would cause this,
+> > > so I deleted my object directory and redid the build and this time
+> > > it succeeded.
+> > >=20
+> > > I suspect some change in the tip tree has brought this on (it is merg=
+ed
+> > > just a bit before the irqchip tree).   =20
+> >=20
+> > This time after the merging usb trees:
+> >=20
+> > drivers/phy/qualcomm/phy-qcom-usb-hs.o: warning: objtool: file already =
+has .orc_unwind section, skipping
+> > make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qc=
+om-usb-hs.ko] Error 255
+> > drivers/phy/qualcomm/phy-qcom-usb-hsic.o: warning: objtool: file alread=
+y has .orc_unwind section, skipping
+> > make[3]: *** [scripts/Makefile.modfinal:61: drivers/phy/qualcomm/phy-qc=
+om-usb-hsic.ko] Error 255
+> >=20
+> > I just removed the drivers/phy/qualcomm directory from the object tree
+> > and rebuilt.
+> >=20
+> > Then got this:
+> >=20
+> > drivers/phy/ti/phy-tusb1210.o: warning: objtool: file already has .orc_=
+unwind section, skipping
+> > make[3]: *** [/home/sfr/next/next/scripts/Makefile.modfinal:61: drivers=
+/phy/ti/phy-tusb1210.ko] Error 255
+> >=20
+> > So removed the drivers/phy/ti directory and rebuilt and the build
+> > succeeded.
+> >=20
+> > I assume that something is being left around or reprocessed when it
+> > should not be. =20
+>=20
+> Maybe commit
+>=20
+>   8856dadf7ad3 ("Kbuild: Allow whole module objtool runs")
+>=20
+> ?
 
-> 
-> Thanks
-> Jinlong Mao
+And after merging the scsi tree:
 
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .stati=
+c_call_sites section, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .retpo=
+line_sites, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .ibt_e=
+ndbr_seal, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .orc_u=
+nwind section, skipping
+arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .static_c=
+all_sites section, skipping
+arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .ibt_endb=
+r_seal, skipping
+arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .orc_unwi=
+nd section, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .stati=
+c_call_sites section, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .retpo=
+line_sites, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .ibt_e=
+ndbr_seal, skipping
+arch/x86/crypto/aegis128-aesni.o: warning: objtool: file already has .orc_u=
+nwind section, skipping
+arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .static_c=
+all_sites section, skipping
+arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .ibt_endb=
+r_seal, skipping
+arch/x86/crypto/aesni-intel.o: warning: objtool: file already has .orc_unwi=
+nd section, skipping
+arch/x86/kernel/cpu/mce/mce-inject.o: warning: objtool: file already has .s=
+tatic_call_sites section, skipping
+arch/x86/kernel/cpu/mce/mce-inject.o: warning: objtool: file already has .r=
+etpoline_sites, skipping
+arch/x86/kernel/cpu/mce/mce-inject.o: warning: objtool: file already has .o=
+rc_unwind section, skipping
+arch/x86/kernel/cpuid.o: warning: objtool: file already has .orc_unwind sec=
+tion, skipping
+arch/x86/kernel/msr.o: warning: objtool: file already has .orc_unwind secti=
+on, skipping
+crypto/aegis128.o: warning: objtool: file already has .static_call_sites se=
+ction, skipping
+crypto/aegis128.o: warning: objtool: file already has .orc_unwind section, =
+skipping
+crypto/arc4.o: warning: objtool: file already has .orc_unwind section, skip=
+ping
+crypto/async_tx/async_memcpy.o: warning: objtool: file already has .static_=
+call_sites section, skipping
+crypto/async_tx/async_memcpy.o: warning: objtool: file already has .retpoli=
+ne_sites, skipping
+crypto/async_tx/async_memcpy.o: warning: objtool: file already has .orc_unw=
+ind section, skipping
+
+and so on ...
+
+I finally got fed up with rebuilding and so reverted these commits
+
+  c7d90e15b895 ("x86: Fix {int3,ibt}_selftest() vs LTO")
+  8959fcf5650e ("x86/alternative: Use .ibt_endbr_seal to seal indirect call=
+s")
+  49f8cb48085d ("objtool: Find unused ENDBR instructions")
+  b87d2fcee362 ("objtool: Validate IBT assumptions")
+  df280fcb49f9 ("objtool: Add IBT/ENDBR decoding")
+  51727f8e4a1a ("objtool: Read the NOENDBR annotation")
+  8856dadf7ad3 ("Kbuild: Allow whole module objtool runs")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xUX22JvAl0N4LuI3+MZnM1d
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwUXcACgkQAVBC80lX
+0GzM2Af+K92PRl+zHuxwYC66rCvOeqikgiVklVadTooAEDjBlqXRblt0ODiRkSmD
+aKOKe9R3vdnSnh/J7jAT6AvH5CGtkPaxAzcaf8PSJYQGydAL4W0kItcDikThiCVK
+SUh8ud//UA9CxNhcY8c6hxRqyDvpphMNPsNcGluIeJGBT5oFh4RgijwBXbdqeM8M
+3pZNfSb7THCUjnDOgKDDT7Z1G1ulf54emHMR2ggIv6BKnz07Cl6/k4CjIcHx3hl6
+9JEetwehAjazzdOse5Ng6NF65SN9V4EFZgJ0D996HqJZSrBxg3OGJnF4areKXbDm
+C+zixvyXA3YZ4c1CGpBGtTNyl8bZUQ==
+=Fu1e
+-----END PGP SIGNATURE-----
+
+--Sig_/xUX22JvAl0N4LuI3+MZnM1d--

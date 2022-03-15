@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4514DA467
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8614DA469
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351892AbiCOVOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 17:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S1351237AbiCOVQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 17:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351896AbiCOVON (ORCPT
+        with ESMTP id S241843AbiCOVQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 17:14:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 679D6140BC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647378779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/Oxo2Zf/jCAmwn2Cz21fK7yT+TLG75ZLqETpuHgIms=;
-        b=BvK14RQ/2l7S0xMuuzI5ox50lG84ZiNeurwHCsw9vw1F+Z6yGNwqpnYqusoT4prWiwy2Io
-        LZsw0OvAzVXPRnf2C5bemkm+Q8bzvZA+nKQYXLYZnxwqUyKsmlv0YCPgufvWuaUs5diJpo
-        zU6f9q2Mfsh+t4VAiKY0EXJjpfMawyw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-bdde6Y_jOjaqzviGGfdnYw-1; Tue, 15 Mar 2022 17:12:57 -0400
-X-MC-Unique: bdde6Y_jOjaqzviGGfdnYw-1
-Received: by mail-wm1-f70.google.com with SMTP id z16-20020a05600c0a1000b0038bebbd8548so1063004wmp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:12:57 -0700 (PDT)
+        Tue, 15 Mar 2022 17:16:22 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68B55B3F2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:15:09 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id kj21so467985qvb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=northvilleschools.net; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=zt1OL2xVjdGJFHy645jKL0xvPay0033GOEEzUn5jKUk=;
+        b=JA2HFkl3fdUjf7ZUvsQjSrBfMjNMYm45ExJngSlwKbgHuGZ6gAuggePkU4GaS8G5Yr
+         t8t2rv8yK6YrP9CocZTAS0BYabjqpfxeY5+jmITqSPQk+0b6fhvTh0JqkF7/C8qPwFyG
+         UUB9U+111KZI9Cc2+4klhNj0Y8XBX2GGkYUcAW9RyRlq8+zpUDBXxyK9Tg9JGtzBstW1
+         608BqV+ykIUOjhq3hp4PXJ8YlAZKNJE60W7acWsABP79xoipU3EedX7I/xw6w8WCuhOC
+         9tx79V8FOskkWxFrwBlhootPqYh/siYqpVnB7BDm3DBWM71JqCSMR41Ftww2nQqVTCXm
+         velw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=S/Oxo2Zf/jCAmwn2Cz21fK7yT+TLG75ZLqETpuHgIms=;
-        b=TfhDAFN//TmrCwrpjziUH919QGWecV20jM7TlthDK2i7TdFF861UHFT55uEl9wn9r+
-         O/ioJR/dssZgxkSm9wQ9omg1erOVAWQ8GVDNDim9E3oVuSqk6QWei8wHBuk9V66sz4xq
-         i0XnJBs7uqwQQCop3dMGpSbhE5kzSO8636Bj6TiKGDbWl3C6AgvyGUBQ+C5m+qPiV7YV
-         PJN/nqwCxvlhv9xPUKVVrIEI9tv6xDQRzUasInjPa2bjoOoIBPQwQ166dvyw176pu48C
-         1gChdTmu8vXe2sPYDhv2i7UGPs44OOb5pRgWtnQ0erq7N/o5m1205A2D/a6BeD4cGYTy
-         s7NA==
-X-Gm-Message-State: AOAM531hXGt6oaxAyUsEFv2vKWToGmMoviCegxmwKnThKeiUTbW+jEvo
-        5R6Fd3YrWcrCSE7+JNtGff/5NBl2/U1O1/YYXGi5+rKRNCBjlz7Z/bh0N5zKG+lBDxQKdczIzkf
-        aUfMaEwflroy/HxPpTuNqkg7V
-X-Received: by 2002:a05:600c:42c1:b0:389:8310:1128 with SMTP id j1-20020a05600c42c100b0038983101128mr4868248wme.3.1647378776703;
-        Tue, 15 Mar 2022 14:12:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3Rs6Zc4YkLmBuIxVEDciW9Wq9T9wjxv8N/ar8OuoX76JXewHflmabVT9DwIW65yRsimPGKQ==
-X-Received: by 2002:a05:600c:42c1:b0:389:8310:1128 with SMTP id j1-20020a05600c42c100b0038983101128mr4868241wme.3.1647378776522;
-        Tue, 15 Mar 2022 14:12:56 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id j42-20020a05600c1c2a00b00389d2ca24c9sm9638wms.30.2022.03.15.14.12.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 14:12:55 -0700 (PDT)
-Message-ID: <61684923-30eb-96eb-7c76-bab9119667bd@redhat.com>
-Date:   Tue, 15 Mar 2022 22:12:50 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=zt1OL2xVjdGJFHy645jKL0xvPay0033GOEEzUn5jKUk=;
+        b=Cq9Trx1Uny3zvzBYuAS03A3NJhtbKe/SLRaYKM1FK7njA51ZKWUybePkwrjsEq2PRS
+         RM1GEFICaf981g3Icy3qimBpamx7xEkyHXUmpC9c2DzPFuDllf7yzmsOzhyWECNm3tMu
+         8k2+mepeE9+jhY5CqUqv/X2kA4RyAjoHflbwDE1uH4EMsKIPEWrc5WF34VTivzegam+A
+         okucpwo0YzRGwB9liIAxtl2Icro5i9g//xLiDqsG2Lb69hQyeh+G1Ww8WsZgTc5ToTAa
+         H21/bjjVW72zDUYOXQbW9SCFENvujZXCJeN1MT8iy1H3ngG8nAFfdfYj9pkbMiUu9E0X
+         yU4Q==
+X-Gm-Message-State: AOAM530v6wtdFoYNob2A7d/6m6rmkhSwI1iAhN0RtT1Ihe2qSM5q21SH
+        5E+tXl9zCZEByGUr8Xyb2fbf3GgHOkkvSdPlCzk=
+X-Google-Smtp-Source: ABdhPJw92dYbx3bTvF1/mjzabEzXu4uY4Sg0EurCPJyw1tU73GVyCe9WguChpVIbDumk5rWpihQtqA==
+X-Received: by 2002:a05:6214:2309:b0:435:374d:4bbb with SMTP id gc9-20020a056214230900b00435374d4bbbmr22022590qvb.105.1647378908702;
+        Tue, 15 Mar 2022 14:15:08 -0700 (PDT)
+Received: from sckzor-linux (d4-50-247-168.col.wideopenwest.com. [50.4.168.247])
+        by smtp.gmail.com with ESMTPSA id k10-20020a05622a03ca00b002e0684cf81fsm58022qtx.73.2022.03.15.14.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 14:15:08 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 17:15:07 -0400
+From:   Charlie Sands <sandsch@northvilleschools.net>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rts5208: Resolve checkpath.pl issues.
+Message-ID: <YjEB27xzf+krm3ew@sckzor-linux.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] KVM: x86: Trace all APICv inhibit changes and capture
- overall status
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220311043517.17027-1-seanjc@google.com>
- <20220311043517.17027-4-seanjc@google.com> <20220315144249.GA5496@gao-cwp>
- <57c2d5d64f9d65e442744fa8b7f188ed3fd37c1c.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <57c2d5d64f9d65e442744fa8b7f188ed3fd37c1c.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 15:48, Maxim Levitsky wrote:
->> Note that some calls may not toggle any bit. Do you want to log them?
->> I am afraid that a VM with many vCPUs may get a lot of traces that actually
->> doesn't change inhibits.
-> I also think so.
+> Always test-build your patches. Applying this change results in a build 
+> failure :(
+My apologies, I ran a build test on a copy of the repository with my changes
+stashed in order to look at the original checkpatch warnings.
 
-Let's keep Sean's version for now, it may also be useful to see the 
-state changes for all vCPU threads (based on the pid field in the 
-trace).  We can always change it later if it's too noisy.
+> Please fix up and resend.
+It should now fix the below issues without build warnings.
 
-Paolo
+WARNING: Unnecessary ftrace-like logging - prefer using ftrace
++ dev_info(&dev->pci->dev, "%s called\n", __func__);
+
+WARNING: Unnecessary ftrace-like logging - prefer using ftrace
++ dev_info(&dev->pci->dev, "%s called\n", __func__);
+
+WARNING: Unnecessary ftrace-like logging - prefer using ftrace
++ dev_info(&pci->dev, "%s called\n", __func__);
+
+Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
+---
+ drivers/staging/rts5208/rtsx.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
+index 5a58dac76c88..2284a96abcff 100644
+--- a/drivers/staging/rts5208/rtsx.c
++++ b/drivers/staging/rts5208/rtsx.c
+@@ -159,8 +159,6 @@ static int command_abort(struct scsi_cmnd *srb)
+ 	struct rtsx_dev *dev = host_to_rtsx(host);
+ 	struct rtsx_chip *chip = dev->chip;
+ 
+-	dev_info(&dev->pci->dev, "%s called\n", __func__);
+-
+ 	scsi_lock(host);
+ 
+ 	/* Is this command still active? */
+@@ -186,10 +184,6 @@ static int command_abort(struct scsi_cmnd *srb)
+  */
+ static int device_reset(struct scsi_cmnd *srb)
+ {
+-	struct rtsx_dev *dev = host_to_rtsx(srb->device->host);
+-
+-	dev_info(&dev->pci->dev, "%s called\n", __func__);
+-
+ 	return SUCCESS;
+ }
+ 
+@@ -968,8 +962,6 @@ static void rtsx_remove(struct pci_dev *pci)
+ {
+ 	struct rtsx_dev *dev = pci_get_drvdata(pci);
+ 
+-	dev_info(&pci->dev, "%s called\n", __func__);
+-
+ 	quiesce_and_remove_host(dev);
+ 	release_everything(dev);
+ 	pci_release_regions(pci);
+-- 
+2.35.1
 

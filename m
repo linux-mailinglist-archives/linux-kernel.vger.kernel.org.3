@@ -2,178 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F1A4D921A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 02:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4601E4D9225
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 02:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344185AbiCOBOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 21:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S1344209AbiCOBQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 21:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344174AbiCOBOc (ORCPT
+        with ESMTP id S238261AbiCOBQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 21:14:32 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985701E3E6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 18:13:21 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 1E4EB57F07
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 20:13:21 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id TvkWnqTr022u3TvkXnSHUA; Mon, 14 Mar 2022 20:13:21 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DXP5JTjRTZHXHEflX1M4RFaX6Uy10l6RP6cpHIAW9yo=; b=Q+HFwr4+FAAH5TodBobY37uxg0
-        SAYyU3K8i+ctOKnEFSyGzdX1k0aN3bEpvabZkw14cfDxiet8znRuqxqV3ycVInzM1ykgyYCTl+VfA
-        U2OdirD+YwwoUn2UB+oTXnZpckTIxTijj5E5ZQ1pN30D/7M2a0dHxoVVzKrU2uuTFg/+pL4Xmhfyw
-        K62xX1ImZFfUvyUP5uyM7VVtChC3g9b7DzbrSzs7hT8QvxgESs+6+dF4GkBPIzvwJjMYqM3N/enxN
-        rJgN7ywMc8IHTUoODoEHLxwOQbBXCNd4cBu8Hd3mQmQzW6kTkhDBVlYQfBsW+OhW1zEhSiU7yF4WY
-        fZyHfqpQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54264)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nTvkW-004A0G-Gq; Tue, 15 Mar 2022 01:13:20 +0000
-Message-ID: <f313f998-3f5e-51f8-31fe-4214446a6c69@roeck-us.net>
-Date:   Mon, 14 Mar 2022 18:13:18 -0700
+        Mon, 14 Mar 2022 21:16:17 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCEDB2C102;
+        Mon, 14 Mar 2022 18:15:03 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 15 Mar 2022 09:14:46
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.64.209]
+Date:   Tue, 15 Mar 2022 09:14:46 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5ZGo5aSa5piO?= <duoming@zju.edu.cn>
+To:     "Dan Carpenter" <dan.carpenter@oracle.com>
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jreuter@yaina.de, kuba@kernel.org,
+        davem@davemloft.net, ralf@linux-mips.org, thomas@osterried.de
+Subject: Re: Re: Re: [PATCH V3] ax25: Fix refcount leaks caused by
+ ax25_cb_del()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20220314110256.GL3293@kadam>
+References: <20220311014624.51117-1-duoming@zju.edu.cn>
+ <20220311105344.GI3293@kadam>
+ <4364e68e.77f.17f81875881.Coremail.duoming@zju.edu.cn>
+ <20220314110256.GL3293@kadam>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Edmond Chung <edmondchung@google.com>,
-        Andrew Chant <achant@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-References: <CAHk-=wiHa0vsZseZES=1T0rJ4Z_bC5cwHMUJfqFL9hVpvB283g@mail.gmail.com>
- <20220314192522.GA3031157@roeck-us.net>
- <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
- <CACjc_5paC=X4znTty8LBtobqBW2nq4mbQYnw_TMgVEFb1A7mhA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 5.17-rc8
-In-Reply-To: <CACjc_5paC=X4znTty8LBtobqBW2nq4mbQYnw_TMgVEFb1A7mhA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nTvkW-004A0G-Gq
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54264
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 2
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <5bf6c167.1ed9.17f8b244e74.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgCHTrCG6C9itk0NAA--.1042W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg4KAVZdtYrGSAABs8
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/22 17:45, Marcelo Roberto Jimenez wrote:
-> Hi Linus,
-> 
-> I am the author of the "gpio: Revert regression..." patch.
-> 
-> On Mon, Mar 14, 2022 at 5:14 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> [ Adding more people to the cc, since this last change was triggered
->> by earlier changes.
->>
->> On Mon, Mar 14, 2022 at 12:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>> Build results:
->>>          total: 155 pass: 155 fail: 0
->>> Qemu test results:
->>>          total: 488 pass: 484 fail: 4
->>
->> Uhhuh. We got all the previous problems sorted out, but a new one instead.
->>
->>> This is a new problem. It bisects to commit fc328a7d1fcc ("gpio: Revert
->>> regression in sysfs-gpio (gpiolib.c)"). The network connection fails
->>> in the affected tests. Reverting the offending commit (ie reverting the
->>> revert) fixes the problem.
->>
->> Hmm. Looking at the changes since 5.16, that commit fc328a7d1fcc looks
->> somewhat suspicious.
->>
->> It claims to "revert" things, but the behavior it reverts goes
->> basically all the way back to v5.7 (with one of the patches going into
->> 5.10).
->>
->> And it clearly breaks things that used to work much more recently (ie
->> this worked in rc7, but it was also the state in every release since
->> 5.10).
->>
->> So unless somebody can find the _real_ issue here, I suspect very
->> strongly that that "fix" that came in last week was just wrong.
->>
->> It is also very non-specific "Some GPIO lines have stopped working"
->> with no pointer to actual reports.
-> 
-> The original message in which I posted the patch also had a small
-> report. I listed the board in which the problem appeared and a small
-> test script to show the error, which I have used to bisect the issue.
-> 
-> The whole thread is here, the test is in the first message:
-> https://lore.kernel.org/all/a7fbb773-eb85-ccc7-8bfb-0bfab062ffe1@leemhuis.info/t/
-> 
->> LinusW? Thierry? Bartoz? Anybody?
->>
->> Yes, there;s something bad going on here, but we can't randomly "fix"
->> things in an rc8 that have worked for several releases by now.
-> 
-> The original patch just reverted the patch that introduced the problem
-> I found. But if the reversion introduces problems at this point, then
-> the sane thing to do is to revert the reversion.
-> 
-> At a certain point, I tried Thorsten's suggestion to add a gpio-ranges
-> property in a way similar to another patch, but the kernel went into
-> an EPROBE_DEFER deadlock. Thierry Reding made some comments about this
-> in the sequence.
-> 
-> Following Linus Walleij's suggestion, we are moving the code from the
-> sysfs interface to the character device. But in the meantime, we are
-> using this "revert patch" in a 5.10.80 kernel, so maybe someone could
-> point me to details of the network misbehaviour so that I can also
-> check it?
-> 
-
-See https://kerneltests.org/builders/qemu-arm-master/builds/2030/steps/qemubuildcommand/logs/stdio
-for logs.
-
-There are two problem with your patch:
-- The Ethernet interface on imx25's qemu emulation does not come online.
-- The mmc does not come online (I just noticed this one)
-
-Looking into the devicetree file, my guess is that the gpio
-lines attached to the Ethernet PHY and the sdhci controller
-don't report pin status changes. I did not try to confirm this,
-though.
-
-Your patch may work for you on top of v5.10.y, but it doesn't
-work there for imx25 either.
-
-Guenter
+SGVsbG8sCgpPbiBNb24sIDE0IE1hciAyMDIyIDE0OjAyOjU2ICswMzAwLCBEYW4gQ2FycGVuIHdy
+b3RlOgoKPiA+ID4gQnV0IGV2ZW4gaGVyZSwgbXkgaW5zdGluY3QgaXMgdGhhdCBpZiB0aGUgcmVm
+Y291bnRpbmcgaXMgd2VyZSBkb25lIGluCj4gPiA+IHRoZSBjb3JyZWN0IHBsYWNlIHdlIHdvdWxk
+IG5vdCBuZWVkIGFueSBhZGRpdGlvbmFsIHZhcmlhYmxlcy4gIElzIHRoZXJlCj4gPiA+IG5vIHNp
+bXBsZXIgc29sdXRpb24/CgpJIHRoaW5rIHRoZXJlIGlzIGEgc2ltcGxlciBzb2x1dGlvbiBpbnN0
+ZWFkIG9mIHVzaW5nIGFueSBhZGRpdGlvbmFsIHZhcmlhYmxlcywKd2hpY2ggaXMgc2hvd24gYmVs
+b3c6CgpkaWZmIC0tZ2l0IGEvbmV0L2F4MjUvYWZfYXgyNS5jIGIvbmV0L2F4MjUvYWZfYXgyNS5j
+CmluZGV4IDZiZDA5NzE4MDc3Li4wODg2MTA5NDIxYSAxMDA2NDQKLS0tIGEvbmV0L2F4MjUvYWZf
+YXgyNS5jCisrKyBiL25ldC9heDI1L2FmX2F4MjUuYwpAQCAtOTgsOCArOTgsMTAgQEAgc3RhdGlj
+IHZvaWQgYXgyNV9raWxsX2J5X2RldmljZShzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQogCQkJc3Bp
+bl91bmxvY2tfYmgoJmF4MjVfbGlzdF9sb2NrKTsKIAkJCWxvY2tfc29jayhzayk7CiAJCQlzLT5h
+eDI1X2RldiA9IE5VTEw7Ci0JCQlkZXZfcHV0X3RyYWNrKGF4MjVfZGV2LT5kZXYsICZheDI1X2Rl
+di0+ZGV2X3RyYWNrZXIpOwotCQkJYXgyNV9kZXZfcHV0KGF4MjVfZGV2KTsKKwkJCWlmIChzay0+
+c2tfd3EpIHsKKwkJCQlkZXZfcHV0X3RyYWNrKGF4MjVfZGV2LT5kZXYsICZheDI1X2Rldi0+ZGV2
+X3RyYWNrZXIpOworCQkJCWF4MjVfZGV2X3B1dChheDI1X2Rldik7CisJCQl9CiAJCQlheDI1X2Rp
+c2Nvbm5lY3QocywgRU5FVFVOUkVBQ0gpOwogCQkJcmVsZWFzZV9zb2NrKHNrKTsKIAkJCXNwaW5f
+bG9ja19iaCgmYXgyNV9saXN0X2xvY2spOwpAQCAtOTc5LDE0ICs5ODEsMjAgQEAgc3RhdGljIGlu
+dCBheDI1X3JlbGVhc2Uoc3RydWN0IHNvY2tldCAqc29jaykKIHsKIAlzdHJ1Y3Qgc29jayAqc2sg
+PSBzb2NrLT5zazsKIAlheDI1X2NiICpheDI1OworCWF4MjVfZGV2ICpheDI1X2RldjsKIAogCWlm
+IChzayA9PSBOVUxMKQogCQlyZXR1cm4gMDsKIAogCXNvY2tfaG9sZChzayk7Ci0Jc29ja19vcnBo
+YW4oc2spOwogCWxvY2tfc29jayhzayk7CisJc29ja19vcnBoYW4oc2spOwogCWF4MjUgPSBza190
+b19heDI1KHNrKTsKKwlheDI1X2RldiA9IGF4MjUtPmF4MjVfZGV2OworCWlmIChheDI1X2Rldikg
+eworCQlkZXZfcHV0X3RyYWNrKGF4MjVfZGV2LT5kZXYsICZheDI1X2Rldi0+ZGV2X3RyYWNrZXIp
+OworCQlheDI1X2Rldl9wdXQoYXgyNV9kZXYpOworCX0KIAogCWlmIChzay0+c2tfdHlwZSA9PSBT
+T0NLX1NFUVBBQ0tFVCkgewogCQlzd2l0Y2ggKGF4MjUtPnN0YXRlKSB7Cgp3ZSBhZGQgZGVjcmVt
+ZW50cyBvZiByZWZjb3VudHMgaW4gYXgyNV9yZWxlYXNlKCksIGFuZCB1c2UgbG9ja19zb2NrKCkg
+dG8gZG8gc3luY2hyb25pemF0aW9uLiAKSWYgcmVmY291bnRzIGRlY3JlYXNlIGluIGF4MjVfcmVs
+ZWFzZSgpLCB0aGUgZGVjcmVtZW50cyBvZiByZWZjb3VudHMgaW4gYXgyNV9raWxsX2J5X2Rldmlj
+ZSgpIAp3aWxsIG5vdCBiZSBleGVjdXRlZCBhbmQgdmljZSB2ZXJzYS4gCgoxLiBJZiB3ZSBkZWNy
+ZWFzZSB0aGUgcmVmY291bnRzIGluIGF4MjVfcmVsZWFzZSgpLCB0aGUgZGVjcmVtZW50cyBvZiBy
+ZWZjb3VudHMgaW4gCmF4MjVfa2lsbF9ieV9kZXZpY2UoKSB3aWxsIG5vdCBleGVjdXRlLiBCZWNh
+dXNlIHdlIHNldCBOVUxMIHRvIHNrLT5za193cSBpbiBzb2NrX29ycGhhbigpCmFuZCB3ZSBjaGVj
+ayB3aGV0aGVyIHNrLT5za193cSBpcyBOVUxMIGluIGF4MjVfa2lsbF9ieV9kZXZpY2UoKS4gT25s
+eSBwb3NpdGlvbnMgKDMpIGFuZCAoNCkKY291bGQgZXhlY3V0ZS4KCiAgICAgKFRocmVhZCAxKSAg
+ICAgICAgICAgICAgICAgICAgICB8ICAgICAgCmF4MjVfYmluZCgpICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8CiAuLi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8CiBheDI1X2Fk
+ZHJfYXgyNWRldigpICAgICAgICAgICAgICAgICB8CiAgYXgyNV9kZXZfaG9sZCgpICAgLy8oMSkg
+ICAgICAgICAgICB8CiAgLi4uICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8CiBkZXZf
+aG9sZF90cmFjaygpICAgLy8oMikgICAgICAgICAgICB8ICAgICAoVGhyZWFkIDIpCiAuLi4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IGF4MjVfcmVsZWFzZSgpCiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAuLi4KICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgICBsb2NrX3NvY2soc2spCiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAgc29ja19vcnBoYW4oc2spCiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAgICBzay0+c2tfd3EgID0gTlVMTCAvL3NldCBOVUxMCiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgLi4uCiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgaWYgKGF4MjVfZGV2KSB7CiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAgIGRldl9wdXRfdHJhY2soKSAvLygzKQogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgICBheDI1X2Rldl9wdXQoKSAvLyg0KQogICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfAogICAgICh0aHJlYWQgMykgICAgICAgICAgICAg
+ICAgICAgICAgfApheDI1X2tpbGxfYnlfZGV2aWNlKCkgICAgICAgICAgICAgICAgfAogLi4uICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfAogbG9ja19zb2NrKHNrKSAgICAgICAgICAg
+ICAgICAgICAgICAgfAogcy0+YXgyNV9kZXYgPSBOVUxMICAgICAgICAgICAgICAgICAgfAogaWYg
+KHNrLT5za193cSkgeyAvL2NoZWNrICAgICAgICAgICAgfAogIGRldl9wdXRfdHJhY2soKSAvLyg1
+KSAgICAgICAgICAgICAgfAogIGF4MjVfZGV2X3B1dCgpIC8vKDYpICAgICAgICAgICAgICAgfAoK
+CjIuIElmIHdlIGRlY3JlYXNlIHJlZmNvdW50cyBpbiBheDI1X2tpbGxfYnlfZGV2aWNlKCksIHRo
+ZSBkZWNyZW1lbnRzIG9mIHJlZmNvdW50cyAKaW4gYXgyNV9yZWxlYXNlKCkgd2lsbCBub3QgZXhl
+Y3V0ZS4gQmVjYXVzZSB3ZSBzZXQgTlVMTCB0byBzLT5heDI1X2RldiBpbiBheDI1X2tpbGxfYnlf
+ZGV2aWNlKCkKYW5kIHdlIGNoZWNrIHdoZXRoZXIgYXgyNV9kZXYgaXMgTlVMTCBpbiBheDI1X3Jl
+bGVhc2UoKS4gT25seSBwb3NpdGlvbnMgKDMpIGFuZCAoNCkKY291bGQgZXhlY3V0ZS4KCiAgICAg
+KFRocmVhZCAxKSAgICAgICAgICAgICAgICAgICAgICB8IApheDI1X2JpbmQoKSAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfAogLi4uICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfAog
+YXgyNV9hZGRyX2F4MjVkZXYoKSAgICAgICAgICAgICAgICAgfAogIGF4MjVfZGV2X2hvbGQoKSAg
+IC8vKDEpICAgICAgICAgICAgfAogIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fAogZGV2X2hvbGRfdHJhY2soKSAgIC8vKDIpICAgICAgICAgICAgfCAgICAgIChUaHJlYWQgMikK
+IC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgYXgyNV9raWxsX2J5X2Rldmlj
+ZSgpCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAuLi4KICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICBsb2NrX3NvY2soc2spCiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgcy0+YXgyNV9kZXYgPSBOVUxMIC8vc2V0IE5V
+TEwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICBpZiAoc2stPnNrX3dx
+KSB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIGRldl9wdXRfdHJh
+Y2soKSAvLygzKQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICBheDI1
+X2Rldl9wdXQoKSAvLyg0KQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAg
+ICAuLi4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwKICAgICAodGhyZWFk
+IDMpICAgICAgICAgICAgICAgICAgICAgIHwKYXgyNV9yZWxlYXNlKCkgICAgICAgICAgICAgICAg
+ICAgICAgIHwKIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwKIGxvY2tfc29j
+ayhzayk7ICAgICAgICAgICAgICAgICAgICAgIHwKIHNvY2tfb3JwaGFuKHNrKTsgICAgICAgICAg
+ICAgICAgICAgIHwKIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwKIGlmIChh
+eDI1X2RldikgeyAvL2NoZWNrICAgICAgICAgICAgIHwKICBkZXZfcHV0X3RyYWNrKCkgLy8oNSkg
+ICAgICAgICAgICAgIHwKICBheDI1X2Rldl9wdXQoKSAvLyg2KSAgICAgICAgICAgICAgIHwKCj4g
+PiBJIHNlbnQgIltQQVRDSCBuZXQgVjIgMS8yXSBheDI1OiBGaXggcmVmY291bnQgbGVha3MgY2F1
+c2VkIGJ5IGF4MjVfY2JfZGVsKCkiCj4gPiBvbiBPbiBGcmksIE1hciAxMSwgMjAyMi4gQ291bGQg
+dGhpcyBwYXRjaCBzb2x2ZSB5b3VyIHF1ZXN0aW9uPwo+IAo+IEkgaGFkIGEgYnVuY2ggb2YgcXVl
+c3Rpb25zLi4uICBZb3UganVzdCBpZ25vcmVkIHRoZW0sIGFuZCBzZW50IGEgcGF0Y2gKPiBjYWxs
+ZWQgdjIgaW5zdGVhZCBvZiB2NCBzbyBJIHdhcyBwdXp6bGVkIGFuZCBjb25mdXNlZC4gSSBndWVz
+cyB0aGUKPiBhbnN3ZXIgaXMgbm8sIGNvdWxkIHlvdSBwbGVhc2UgYW5zd2VyIHRoZSBxdWVzdGlv
+bnM/CgpJIGhvcGUgbXkgYW5zd2VyIGNvdWxkIHNvbHZlIHlvdXIgcXVlc3Rpb25zLiBJZiB5b3Ug
+c3RpbGwgaGF2ZSBhbnkgcXVlc3Rpb25zCndlbGNvbWUgdG8gc2VuZCBlbWFpbCB0byBtZS4gSSB3
+aWxsIHNlbmQgIltQQVRDSCBuZXQgVjQgMS8yXSBheDI1OiBGaXgKcmVmY291bnQgbGVha3MgY2F1
+c2VkIGJ5IGF4MjVfY2JfZGVsKCkiIGFzIHNvb24gYXMgcG9zc2libGUuIAoKV2hhdGBzIG1vcmUs
+IEkgZm91bmQgTlBEIGJ1Z3MgaW4gYXgyNSB0aW1lcnMsIEkgd2lsbCBzZW5kCiJbUEFUQ0ggbmV0
+IFY0IDIvMl0gYXgyNTogRml4IE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZXMgaW4gYXgyNSB0aW1l
+cnMiIHRvZ2V0aGVyLgoKQmVzdCB3aXNoZXMsCkR1b21pbmcgWmhvdQ==

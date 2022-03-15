@@ -2,149 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C32E4DA2BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E614DA2C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351176AbiCOSyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S1351181AbiCOS5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351164AbiCOSyw (ORCPT
+        with ESMTP id S233823AbiCOS5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:54:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4C52DD7B;
-        Tue, 15 Mar 2022 11:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647370420; x=1678906420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m3cKAwOJqOsA7eAOkUV4eguAJkZnzQNcLpMZ96NtvPk=;
-  b=XMx5IBbe+W1MRVCJJN1smoN4sp/VP69GmCt/jPRTIYUAWzT7j1/Qmfyc
-   INiuPNHIrwp8MHzCuqi4njGQHQhmHcOsV6b9i2boaykQiybgpB4RdKTvA
-   JgcTK1ts34W5skmYrHJxjNC/Zng5qLfuBz0x00jWPDtP296ZClL5qHxEd
-   0ga4xZg9Fpv8iyvMSwaxEmodhA1pN1mTr6++3oNyd7Ma6yxWGBKXJCc42
-   02IDIWHNML7tnoiNIAl6SY2kA+u41f7aVtYEs+yaoC3keBZaIsFFE5uNX
-   4hJUKdNuCJJbgL7aGxq1VhYXOAtXUWP0SUzGdwzgC9ZgaJqYEsvpKuL+i
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319620075"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="319620075"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 11:53:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="690312679"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2022 11:53:37 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUCIa-000BNG-Gw; Tue, 15 Mar 2022 18:53:36 +0000
-Date:   Wed, 16 Mar 2022 02:52:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shreeya Patel <shreeya.patel@collabora.com>,
-        linus.walleij@linaro.org, brgl@bgdev.pl, krisman@collabora.com,
-        andy.shevchenko@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Shreeya Patel <shreeya.patel@collabora.com>
-Subject: Re: [PATCH v2] gpio: Restrict usage of gc irq members before
- initialization
-Message-ID: <202203160247.JiwK1pqP-lkp@intel.com>
-References: <20220315103813.84407-1-shreeya.patel@collabora.com>
+        Tue, 15 Mar 2022 14:57:40 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D714E393;
+        Tue, 15 Mar 2022 11:56:27 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id 11so2931qtt.9;
+        Tue, 15 Mar 2022 11:56:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x1R6MexnAYDRxJBUb0QgsDJ7MygsbxDZQB18nTdrN9k=;
+        b=zsKLQZVmMlABXEa4cZ2YMoJAGJVQ673L6ghBnwPWKtAL+GwsEts0zqp9R164LRxKcx
+         KydyC9yZfvnhbaPgstS1tHeyX9cWM0Z5ZDDKup6sDEYdFxZP6cpO/5SQF/0x94qSY81a
+         WPE60yp2S2uLwqKiOMYSNXKtZUq8alqlYgzeLKuMRU55WW7RZpivZ47GJTwt+ib8+FII
+         zE1VoHAZ0dhv0ArCxiWkjx1LywikG4tg9c7sgKbZN339oLow9aeyxUvp2ArTdASEeTpC
+         5gyseyGCZF7EddIsjzLhJycIMGDyyLiOXmtDUZnXHzgCVXqDtDmsEbtU4QZgc/lLz3tG
+         5Y7A==
+X-Gm-Message-State: AOAM532ulcFFpic5uaZRguyjwSq8yRfvOzXUJTqlMF0kH+dcHrrXTFoS
+        NjGAHE11z7yVpkxpMIfyCVkIPak5oT5+HQ==
+X-Google-Smtp-Source: ABdhPJzm94DKiM/MVYEHZOrTxKXpLow5k0BvpABrrV9RCaueeaHtasWKDreg/aRQIjvHq0YXKEqfHg==
+X-Received: by 2002:ac8:5c90:0:b0:2de:37cd:8af6 with SMTP id r16-20020ac85c90000000b002de37cd8af6mr23372119qta.437.1647370586013;
+        Tue, 15 Mar 2022 11:56:26 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id a13-20020a05622a064d00b002e1b8d9d6cfsm10246974qtb.32.2022.03.15.11.56.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 11:56:25 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id y142so275695ybe.11;
+        Tue, 15 Mar 2022 11:56:25 -0700 (PDT)
+X-Received: by 2002:a25:aa0e:0:b0:633:7c3b:94a0 with SMTP id
+ s14-20020a25aa0e000000b006337c3b94a0mr3416103ybi.546.1647370585424; Tue, 15
+ Mar 2022 11:56:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315103813.84407-1-shreeya.patel@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310121327.63C6FC340E8@smtp.kernel.org> <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
+ <YinzW413m6p0H/i1@sirena.org.uk> <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
+ <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
+In-Reply-To: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Mar 2022 19:56:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
+Message-ID: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
+Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shreeya,
+Hi Linus,
 
-Thank you for the patch! Yet something to improve:
+On Tue, Mar 15, 2022 at 5:48 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Tue, Mar 15, 2022 at 2:08 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > I had noticed while reviewing the patch, but changing to size_t wouldn't
+> > help much, as other related code paths treat the value as unsigned int
+> > anyway.
+>
+> .. but it really would.
+>
+> Note that the paths *after* this code don't matter. Because the result
+> is guaranteed to fit in 'unsigned int' anyway.
+>
+> Put another way:
+>
+>     min_t(unsigned int,x,y)
+>
+> is buggy if one of x/y is 'size_t'. Why? Because if that one gets
+> truncated, you're doing 'min()' with a value that may be artificially
+> much too small (that was exactly the problem commit 1a4e53d2fc4f:
+> "spi: Fix invalid sgs value")fixed).
+>
+> But the situation is _not_ true in the reverse. Look:
+>
+>     min(size_t,x,y)
+>
+> is guaranteed to fit in 'unsigned int' as long as _one_ of x,y fits in
+> 'unsigned int' - even if the other doesn't. Because then 'min()' will
+> just pick the one that already had the right size.
+>
+> To make it really concrete, compare
+>
+>     min_t(unsigned int, 5, 0x100000001);
+>     min_t(size_t, 5, 0x100000001);
+>
+> on a 64-bit machine (ie size_t is 64-bits, and unsigned int is 32-bit).
+>
+> One returns 1. The other returns 5. Both fit the result in 'unsigned
+> int', but one of them is wrong.
 
-[auto build test ERROR on linusw-gpio/for-next]
-[also build test ERROR on v5.17-rc8 next-20220315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+You're absolutely right. So the code should be changed to:
 
-url:    https://github.com/0day-ci/linux/commits/Shreeya-Patel/gpio-Restrict-usage-of-gc-irq-members-before-initialization/20220315-183950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git for-next
-config: arm-palmz72_defconfig (https://download.01.org/0day-ci/archive/20220316/202203160247.JiwK1pqP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/9f566a088a6f5fcb8830b07020294835072d516c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Shreeya-Patel/gpio-Restrict-usage-of-gc-irq-members-before-initialization/20220315-183950
-        git checkout 9f566a088a6f5fcb8830b07020294835072d516c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        if (vmalloced_buf || kmap_buf) {
+-                desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
++               desc_len = min_t(unsigned long, max_seg_size, PAGE_SIZE);
+                sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
+        } else if (virt_addr_valid(buf)) {
+-               desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
++               desc_len = min_t(size_t, max_seg_size, ctlr->max_dma_len);
+                sgs = DIV_ROUND_UP(len, desc_len);
+        } else {
+                return -EINVAL;
+        }
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Gr{oetje,eeting}s,
 
-All errors (new ones prefixed by >>):
+                        Geert
 
->> drivers/gpio/gpiolib.c:3068:24: error: no member named 'irq' in 'struct gpio_chip'
-           if (gc->to_irq && gc->irq.gc_irq_initialized) {
-                             ~~  ^
-   1 error generated.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-vim +3068 drivers/gpio/gpiolib.c
-
-  3045	
-  3046	/**
-  3047	 * gpiod_to_irq() - return the IRQ corresponding to a GPIO
-  3048	 * @desc: gpio whose IRQ will be returned (already requested)
-  3049	 *
-  3050	 * Return the IRQ corresponding to the passed GPIO, or an error code in case of
-  3051	 * error.
-  3052	 */
-  3053	int gpiod_to_irq(const struct gpio_desc *desc)
-  3054	{
-  3055		struct gpio_chip *gc;
-  3056		int offset;
-  3057	
-  3058		/*
-  3059		 * Cannot VALIDATE_DESC() here as gpiod_to_irq() consumer semantics
-  3060		 * requires this function to not return zero on an invalid descriptor
-  3061		 * but rather a negative error number.
-  3062		 */
-  3063		if (!desc || IS_ERR(desc) || !desc->gdev || !desc->gdev->chip)
-  3064			return -EINVAL;
-  3065	
-  3066		gc = desc->gdev->chip;
-  3067		offset = gpio_chip_hwgpio(desc);
-> 3068		if (gc->to_irq && gc->irq.gc_irq_initialized) {
-  3069			int retirq = gc->to_irq(gc, offset);
-  3070	
-  3071			/* Zero means NO_IRQ */
-  3072			if (!retirq)
-  3073				return -ENXIO;
-  3074	
-  3075			return retirq;
-  3076		}
-  3077		return -ENXIO;
-  3078	}
-  3079	EXPORT_SYMBOL_GPL(gpiod_to_irq);
-  3080	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

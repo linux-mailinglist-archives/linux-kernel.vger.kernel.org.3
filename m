@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE2F4D91D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BD84D91DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344061AbiCOBAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 21:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S1344070AbiCOBBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 21:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbiCOBAU (ORCPT
+        with ESMTP id S233143AbiCOBBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 21:00:20 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E12613E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:59:09 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id e186so34280219ybc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ikYhV7JTpMGbcJ3HAQYCBxOfCzMhRoKXLswTSf9Y5sU=;
-        b=QJhi4LghX9e5JTgeh3z84BoLvpiFqJs4JOHdBLuVtbvYeISjglHa+vSa6RmNwOmkcl
-         2nFD1eIgx/Pkypz183cJWU+P7aLNA3kBS0vilsyPJBSw2n2LL4L4LCVTLImPhiQikuhb
-         PoR+IjN1U8ToLEx0OQPzOb7zaUpMZjFSnZKaS3Qp2lw69Jk9DlXnbafY9AGHV07l2x13
-         mgwT5uddh/UNH11rYbpj58NL8oV1Itcqo5sv3v3hqp1ih1xGzHjPUuQgrNmwwhKGZK6u
-         9LWXb88sLIHpBZghwBj7nNJBEv2U0oV6XrAUPCAbyRnhciNJvafF0Hd2VnzX8xKMaoRP
-         f7Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ikYhV7JTpMGbcJ3HAQYCBxOfCzMhRoKXLswTSf9Y5sU=;
-        b=HiCq3PBYkA/FddwGInIb3fx57IffQY7sDH6TERgXpB5SKviE113rHSQ1F3QTfM8LRy
-         NenNQ1fX87SaIV52v54mJqDakHAL04Be7Nj7gHhxDg2Vvpq/jGAhlI3o7avZbaT2w00Y
-         vuhXd6ZGhMJUkqlk8s/xxd5emJLSLT5+olYpENSQKofRUKH7pfmipbTdrKMRxzXStp1E
-         3za6Wdcebr9lvzByWCUpWC4Rbdox2Y1ypTWeM9vWMMsqcUgDMVUTuRxHK+OrS5D+W4t/
-         cFZYg/F5TnFy4P4YFq5GVO1tjDF7Ds6KnHmZ0jtU75R5Lv8k0cd9EivrA4RFjenqGNsc
-         vNHQ==
-X-Gm-Message-State: AOAM532w3WmBiRXOP1s8xQvXqhYeN5a+Yr1JS4+fqg+nW2ZN1/GUoAYU
-        cFFDHL/jK5i55d+ASloGy/wtfpMVOazLfKtzvFEjUg==
-X-Google-Smtp-Source: ABdhPJx3xEUVpjCu1JSwjkBA+ddKZTdkWoJYWjLsNnyEB1VMrpkqg8go3K+tgjz5W3BcyJ2NTSKqrTJVaSndcW045BE=
-X-Received: by 2002:a25:6608:0:b0:628:d9bd:6245 with SMTP id
- a8-20020a256608000000b00628d9bd6245mr21150433ybc.560.1647305948369; Mon, 14
- Mar 2022 17:59:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220311161406.23497-1-vincent.guittot@linaro.org> <20220311161406.23497-7-vincent.guittot@linaro.org>
-In-Reply-To: <20220311161406.23497-7-vincent.guittot@linaro.org>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 14 Mar 2022 17:58:57 -0700
-Message-ID: <CABk29Ns1=2kc3JAESx_Ce7PP86KqiDA4O9K+vaOLZbKfq_XVaQ@mail.gmail.com>
-Subject: Re: [RFC 6/6] sched/fair: Add sched group latency support
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>, parth@linux.ibm.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        "Hyser,Chris" <chris.hyser@oracle.com>,
-        Pavan Kondeti <pkondeti@codeaurora.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        Paul Turner <pjt@google.com>, pavel@ucw.cz,
-        Tejun Heo <tj@kernel.org>,
-        Dhaval Giani <dhaval.giani@oracle.com>, qperret@google.com,
-        Tim Chen <tim.c.chen@linux.intel.com>
+        Mon, 14 Mar 2022 21:01:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65272AC69;
+        Mon, 14 Mar 2022 17:59:45 -0700 (PDT)
+X-UUID: b0f5c08aee674351a40c3cd27ab70739-20220315
+X-UUID: b0f5c08aee674351a40c3cd27ab70739-20220315
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1162513404; Tue, 15 Mar 2022 08:59:38 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 15 Mar 2022 08:59:36 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Mar 2022 08:59:35 +0800
+Message-ID: <b681a7e0abc76e196c6bc3afa14402af23bba454.camel@mediatek.com>
+Subject: Re: [PATCH net-next v2 9/9] net: ethernet: mtk-star-emac: separate
+ tx/rx handling with two NAPIs
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Fabien Parent <fparent@baylibre.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Date:   Tue, 15 Mar 2022 08:59:35 +0800
+In-Reply-To: <20220314085705.32033308@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20220127015857.9868-1-biao.huang@mediatek.com>
+         <20220127015857.9868-10-biao.huang@mediatek.com>
+         <20220127194338.01722b3c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+         <2bdb6c9b5ec90b6c606b7db8c13f8acb34910b36.camel@mediatek.com>
+         <20220128074454.46d0ca29@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+         <2d0ab5290e63069f310987a4423ef2a46f02f1b3.camel@mediatek.com>
+         <20220314085705.32033308@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 8:15 AM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-[snip]
->
->  static struct cftype cpu_legacy_files[] = {
-> @@ -10649,6 +10673,11 @@ static struct cftype cpu_legacy_files[] = {
->                 .read_s64 = cpu_idle_read_s64,
->                 .write_s64 = cpu_idle_write_s64,
->         },
-> +       {
-> +               .name = "latency",
-> +               .read_s64 = cpu_latency_read_s64,
-> +               .write_s64 = cpu_latency_write_s64,
-> +       },
->  #endif
->  #ifdef CONFIG_CFS_BANDWIDTH
->         {
-> @@ -10866,6 +10895,18 @@ static struct cftype cpu_files[] = {
->                 .read_s64 = cpu_idle_read_s64,
->                 .write_s64 = cpu_idle_write_s64,
->         },
-> +       {
-> +               .name = "latency",
-> +               .flags = CFTYPE_NOT_ON_ROOT,
-> +               .read_s64 = cpu_latency_read_s64,
-> +               .write_s64 = cpu_latency_write_s64,
-> +       },
-> +       {
-> +               .name = "latency.nice",
-> +               .flags = CFTYPE_NOT_ON_ROOT,
-> +               .read_s64 = cpu_latency_nice_read_s64,
-> +               .write_s64 = cpu_latency_nice_write_s64,
-> +       },
+Dear Jakub,
+	Thanks for your comments~
 
-Something I considered when adding cpu.idle was that negative values
-could be used to indicate increasing latency sensitivity. Folding the
-above latency property into cpu.idle could help consolidate the
-"latency" behavior, especially given that it shouldn't really be
-possible to configure an entity as both latency sensitive and idle.
+On Mon, 2022-03-14 at 08:57 -0700, Jakub Kicinski wrote:
+> On Mon, 14 Mar 2022 15:01:23 +0800 Biao Huang wrote:
+> > > Drivers are expected to stop their queues at the end of xmit
+> > > routine
+> > > if
+> > > the ring can't accommodate another frame. It's more efficient to
+> > > stop
+> > > the queues early than have to put skbs already dequeued from the
+> > > qdisc
+> > > layer back into the qdiscs.  
+> > 
+> > Yes, if descriptors ring is full, it's meaningful to stop the
+> > queue 
+> > at the end of xmit; 
+> > But driver seems hard to know how many descriptors the next skb
+> > will
+> > request, e.g. 3 descriptors are available for next round send, but
+> > the
+> > next skb may need 4 descriptors, in this case, we still need judge
+> > whether descriptors are enough for skb transmission, then decide
+> > stop
+> > the queue or not, at the beginning of xmit routine.
+> > 
+> > Maybe we should judge ring is full or not at the beginning and the
+> > end
+> > of xmit routine(seems a little redundancy).
+> 
+> Assume the worst case scenario. You set the default ring size to 512,
+> skb can have at most MAX_SKB_FRAGS fragments (usually 17) so the max
+> number of descriptors should not be very high, hard to pre-compute,
+> or problematic compared to the total ring size.
+Yes, we'll check the available descriptor number at the end of xmit
+routine, and ensure it will larger than (MAX_SKB_FRAGS + 1) in next
+send. (refer to stmmac_main.c)
+
+Regards!
+

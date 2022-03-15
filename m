@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBB44D9B46
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3644D9B4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348340AbiCOMda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S1348344AbiCOMeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348331AbiCOMd1 (ORCPT
+        with ESMTP id S1348343AbiCOMeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:33:27 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E9553723;
-        Tue, 15 Mar 2022 05:32:15 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id i8so28748708wrr.8;
-        Tue, 15 Mar 2022 05:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KM4XwBUogsooi4yJ541eYsrpo8lcj3lydQ59nOWeD14=;
-        b=Uy3jmElRUk9qhWFP2igEevDSL+gDln/8vwvBp2/IU5kg/4ONK/ZQ/t7HGiQlJZDNkY
-         ETwDffArvCDm78BP9Y6SJ36VkQEjfRlkTsamOsmy4amjX2WLOp2oVLA9ClzPWHTpzkm6
-         qqj67OQINwFr4DGBixQMc9d4ib4BlkHhSt2QX1RtzRbCIv0ExRvnPpxxWXn8JmLbvq2e
-         fmUfPNSy0Qwtf69WW2HdkIweNsge1WDYsYvM2qgAgPZiUqZCmRx3jFOcir0JeTUAzu7v
-         EMSQ94wPDrnN3FEMKAeaAwiLHZPQ+5O59zdGasDiIEgbpHfQPr52UqsCJjlP5gMuP/8u
-         03cQ==
+        Tue, 15 Mar 2022 08:34:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC047F4B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647347568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ng50kpxzvtPViXgByyIi4u1+YwPTs56W0iaR9U1Up70=;
+        b=if5HgabsrImU1fNYfoxHLtbogDZIBmDPGV3wpsAFsgfXds0gSSWpFbKDEbT/T/nAo1Nh+S
+        16gAEqqAeaJHEDodn5unC28ugyPfyMa5qVIb857/nH6iBRqIgUYcm73nh3wyYo3tpGR1Or
+        mznQ+2eVrrWdao2Hq1K69ivB2y4GAL0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-82-nezV7TLDMGeM4Ns3kq7Eow-1; Tue, 15 Mar 2022 08:32:47 -0400
+X-MC-Unique: nezV7TLDMGeM4Ns3kq7Eow-1
+Received: by mail-wm1-f72.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so1106008wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:32:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KM4XwBUogsooi4yJ541eYsrpo8lcj3lydQ59nOWeD14=;
-        b=UhZm4KYmX5kGy1ul0H7H/qcv5VkPnGPfYNltrxB4dqMIMW2kISzapck77/QCwniZk5
-         t/Sj/CCHHj3jWvs5XdZh3yOsMqIcFQ9blkgCWrIB0GXG1yYFTs7vLK2rMTZUCnQ1VhfW
-         u44PXvC/ZePzY70pgXA/KRspOZBcU0NsURH/udfiu/1RK5uGHss3wIUSA3xMHXc8x1Ci
-         LF9mwLsIQlvcEhj5Rcqje5DtO2wz8H4EbPxARK4GT/UGiz4chPienzrI1+aoe/BTdFZi
-         i+B8iymYBiP0wtMclRqbBrQ2P6kDW7woBGpluv2kjQtk58wpZNORu+sZVZdz5XNAkDu3
-         YmVw==
-X-Gm-Message-State: AOAM533E4BzJM622cNRDaEVR0/c8X0ciavOiI3r/P589qO/Up+W2I9ad
-        PixPACcDHcYtU3greEdBpZ4=
-X-Google-Smtp-Source: ABdhPJwdW3nEBCD7NgiE3+1XdBwDH/XokwsyFefqVd+z/2JH2X0m3QMELYZCYM36HZ9mL9luTOCxow==
-X-Received: by 2002:a5d:508d:0:b0:203:dac9:d301 with SMTP id a13-20020a5d508d000000b00203dac9d301mr143038wrt.441.1647347534080;
-        Tue, 15 Mar 2022 05:32:14 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id i74-20020adf90d0000000b0020373ba7beesm25454610wri.0.2022.03.15.05.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 05:32:13 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 12:32:11 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/110] 5.15.29-rc1 review
-Message-ID: <YjCHSwkhM8yEjloW@debian>
-References: <20220314112743.029192918@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ng50kpxzvtPViXgByyIi4u1+YwPTs56W0iaR9U1Up70=;
+        b=cpb+u0WuNTtsGyFzBLkadq9NYhn/QB+VL1XPguUJ/DPPRzr5hrK+H3yJJzgka4Di8D
+         uofOOi++gEUWbJLfV9NaeE0rwmKn1JjzKmHiI2ZFZrKmSs2cIAUY19vcHkc/AHXyXjVx
+         btiALS78dzD5qmOrKGeIXmu0T9eYKjhNhXTp0ODYye3IqaCPg6Tcst3wnVhbjm5cghsi
+         d5OAMit3WzkotuzsHwlQKOxC7+NE0QQWpUVzXY8/tPhqeOCZVc835ZswOk6MTLRre7L3
+         mzDwlsDc8rgnzd+koJ4VLTtsNRNw7DXhGm/vafhqh4fj1CX2dbkyYWoGyxyxbtL6T67m
+         +2UA==
+X-Gm-Message-State: AOAM530bpllAVl11dzJh7a/NmgETyGSoSuNeVyyBO1tFaK2+LFj8oalv
+        6YHMIITuFPV6s96toq00VIO2PUvMsqpx4eDPk4TOCEackcbLpauzI+PN/qYkS+ksbAW3h9fpLAA
+        ejbMj0jORrHLzDZufZHNOJS3V
+X-Received: by 2002:a7b:c8d7:0:b0:389:c84c:55be with SMTP id f23-20020a7bc8d7000000b00389c84c55bemr3214923wml.135.1647347566210;
+        Tue, 15 Mar 2022 05:32:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz+lXekobfF9QCg8WpZMIKVPdif6vtRisJZFsCWd/H1zYb7+OeE/XTzOvT+FKqf410LGkjKjg==
+X-Received: by 2002:a7b:c8d7:0:b0:389:c84c:55be with SMTP id f23-20020a7bc8d7000000b00389c84c55bemr3214909wml.135.1647347565967;
+        Tue, 15 Mar 2022 05:32:45 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id k10-20020adfe3ca000000b001f0329ba94csm24459727wrm.18.2022.03.15.05.32.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 05:32:45 -0700 (PDT)
+Message-ID: <43b88d77-bcba-e6d5-b51f-56c5c8c0318c@redhat.com>
+Date:   Tue, 15 Mar 2022 13:32:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314112743.029192918@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/5] drm: ssd130x: Reduce temporary buffer sizes
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220315110707.628166-1-geert@linux-m68k.org>
+ <20220315110707.628166-5-geert@linux-m68k.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220315110707.628166-5-geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Mar 14, 2022 at 12:53:02PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.29 release.
-> There are 110 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 3/15/22 12:07, Geert Uytterhoeven wrote:
+> ssd130x_clear_screen() allocates a temporary buffer sized to hold one
+> byte per pixel, while it only needs to hold one bit per pixel.
 > 
-> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
-> Anything received after that time might be too late.
+> ssd130x_fb_blit_rect() allocates a temporary buffer sized to hold one
+> byte per pixel for the whole frame buffer, while it only needs to hold
+> one bit per pixel for the part that is to be updated.
+> Pass dst_pitch to drm_fb_xrgb8888_to_mono_reversed(), as we have already
 
-Build test:
-mips (gcc version 11.2.1 20220301): 62 configs -> no new failure
-arm (gcc version 11.2.1 20220301): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220301): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
+Just drm_fb_xrgb8888_to_mono() since you already fixed the name in patch 1/5.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+> calculated it anyway.
+> 
+> Fixes: a61732e808672cfa ("drm: Add driver for Solomon SSD130x OLED displays")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
 
-[1]. https://openqa.qa.codethink.co.uk/tests/883
-[2]. https://openqa.qa.codethink.co.uk/tests/886
-[3]. https://openqa.qa.codethink.co.uk/tests/888
+Indeed. I haven't noticed that got the calculation wrong until you pointed out.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Acked-by: Javier Martinez Canillas <javierm@redhat.com>
 
---
-Regards
-Sudip
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

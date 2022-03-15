@@ -2,166 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D5F4DA08B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DC44DA090
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350303AbiCOQ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S1350316AbiCOQ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbiCOQ4L (ORCPT
+        with ESMTP id S1346638AbiCOQ42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:56:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67643193D7;
-        Tue, 15 Mar 2022 09:54:59 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id r13so42822226ejd.5;
-        Tue, 15 Mar 2022 09:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Qy5CIGpbJUXBMUFax/Gs3JPDrYnJFLZ0SC9FvW5pKqk=;
-        b=Zxs5hIHUnMp/4fwLFETPt0dMafEJXaocxaxZgCDCk9TWRRs61CJfUF9bxG8HbgcZ6Q
-         e/5TMX7xjIpoR9C/esaQ1wEPeLclV9Vv3ugpyEEzVw7tJORwHM4nNgN98ul0DtddsvCM
-         f7eDB5bwAIV27Vvo1y9TcJ/mD9yPRtKGU4QDfR9QIbwSeMho6rGfeOrT9BZ4rnPtieuO
-         eWzuiqRoiG05vRmarHaDXofQKhEcU3/qm8cD2KbY6tQicNqFnR/HNnwGmon2CTgC6a6y
-         r3ndEiDPdB1dBDwHGjDMLWLyfUHxHIh/afK3GgSRzUCcxaDxUPSzZsIqMwBji3f2qQg1
-         k5Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qy5CIGpbJUXBMUFax/Gs3JPDrYnJFLZ0SC9FvW5pKqk=;
-        b=FRbm+Br3lmwFxfH0/6BPrtSLSJf1hjbl8bflKzaglN0R79AE8xXQAuPx72KkamzDMI
-         nNjefuYiQYWe+9+vnw9F8NuhCw7WXLIFpmomxzjoeGKCDwLD2WRnzePrQN/JOtOvsns7
-         U/WE0MzOLuy/1k3TEMvx8ONLKRWQ1J+W6467mjg8npuD1fVt10nFjTW5IpVu4KOjTvuo
-         zD7jhi6zdzbaBp847qsxu/6fs+BeDWg6WM1a23lEsZLBnbOV3auJ+9k8vGxXhpFs1NZv
-         2io97gXt2ZFBdnv5QUJfSTgScBXyoccKNlf6Xto9OxaM3CW+lNHfC/2hY01P6Tj/E9jY
-         0YEQ==
-X-Gm-Message-State: AOAM531QwZtKaCHJlfGXNmnRp4+irw/NZe42X5feKeefE5jj/Kiy4fYs
-        44/bYCo+m+LAXyBy2woc2xU=
-X-Google-Smtp-Source: ABdhPJwna+ZLplFZlfRYqNUJoffRemCmoeW6sb8yKaOsz5iQNy38QNP7G1ir+ePEw61BJavMlsJ37A==
-X-Received: by 2002:a17:907:8a04:b0:6b6:1f22:a5e with SMTP id sc4-20020a1709078a0400b006b61f220a5emr23443729ejc.528.1647363297897;
-        Tue, 15 Mar 2022 09:54:57 -0700 (PDT)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id l2-20020aa7cac2000000b003f9b3ac68d6sm9820877edt.15.2022.03.15.09.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 09:54:57 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 18:54:55 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v4 net-next 03/15] net: bridge: mst: Support setting and
- reporting MST port states
-Message-ID: <20220315165455.3nakoccbm7c7d2w5@skbuf>
-References: <20220315002543.190587-1-tobias@waldekranz.com>
- <20220315002543.190587-4-tobias@waldekranz.com>
+        Tue, 15 Mar 2022 12:56:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E233C57175;
+        Tue, 15 Mar 2022 09:55:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 800B36151A;
+        Tue, 15 Mar 2022 16:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC74C340E8;
+        Tue, 15 Mar 2022 16:55:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647363314;
+        bh=4/4meff/CpbpeDNPdU8cdYwo3SLLEYH924E980n1MDw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GaqStFCrMp/uSzIr87GGMrRYbG937Mos4z6s0giobTP8u1WAeAevvkPlFmzyfzugg
+         BEHzXKV51E+HR7zPsTp57Nb0DfA2UFcSKuy10y/XnkffE2q17/HPDjGuOshN3ZY9on
+         9zErblYe+2/TTEvhBRJ6nMsbBhnH57pRx+hd5/jQAuc8ErHXxFAkDS/QZkI3pRH6Hi
+         6UUrD9qCyKb5O++gCzpylI6BLHOwIHkz2vfJI1+y+exEWY0/qcT0Jz9jR4T2v9hGI2
+         8ogMdE/c13XUEr/693jtGULlHp4ZDZ7CTqH6t8Gwh0Yvs30Kd4BIqZzofGDo7AisX1
+         R7L/dQd4TaEFg==
+Date:   Tue, 15 Mar 2022 09:55:14 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     fstests <fstests@vger.kernel.org>, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 3/4] generic/676: Add a new shutdown recovery test
+Message-ID: <20220315165514.GC8200@magnolia>
+References: <cover.1647342932.git.riteshh@linux.ibm.com>
+ <3d8c4f7374e97ccee285474efd04b093afe3ee16.1647342932.git.riteshh@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220315002543.190587-4-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3d8c4f7374e97ccee285474efd04b093afe3ee16.1647342932.git.riteshh@linux.ibm.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 01:25:31AM +0100, Tobias Waldekranz wrote:
-> Make it possible to change the port state in a given MSTI by extending
-> the bridge port netlink interface (RTM_SETLINK on PF_BRIDGE).The
-> proposed iproute2 interface would be:
+On Tue, Mar 15, 2022 at 07:58:58PM +0530, Ritesh Harjani wrote:
+> In certain cases (it is noted with ext4 fast_commit feature) that, replay phase
+> may not delete the right range of blocks (after sudden FS shutdown)
+> due to some operations which depends on inode->i_size (which during replay of
+> an inode with fast_commit could be 0 for sometime).
+> This fstest is added to test for such scenarios for all generic fs.
 > 
->     bridge mst set dev <PORT> msti <MSTI> state <STATE>
+> This test case is based on the test case shared via Xin Yin.
 > 
-> Current states in all applicable MSTIs can also be dumped via a
-> corresponding RTM_GETLINK. The proposed iproute interface looks like
-> this:
-> 
-> $ bridge mst
-> port              msti
-> vb1               0
-> 		    state forwarding
-> 		  100
-> 		    state disabled
-> vb2               0
-> 		    state forwarding
-> 		  100
-> 		    state forwarding
-> 
-> The preexisting per-VLAN states are still valid in the MST
-> mode (although they are read-only), and can be queried as usual if one
-> is interested in knowing a particular VLAN's state without having to
-> care about the VID to MSTI mapping (in this example VLAN 20 and 30 are
-> bound to MSTI 100):
-> 
-> $ bridge -d vlan
-> port              vlan-id
-> vb1               10
-> 		    state forwarding mcast_router 1
-> 		  20
-> 		    state disabled mcast_router 1
-> 		  30
-> 		    state disabled mcast_router 1
-> 		  40
-> 		    state forwarding mcast_router 1
-> vb2               10
-> 		    state forwarding mcast_router 1
-> 		  20
-> 		    state forwarding mcast_router 1
-> 		  30
-> 		    state forwarding mcast_router 1
-> 		  40
-> 		    state forwarding mcast_router 1
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
 > ---
-> +static int br_mst_process_one(struct net_bridge_port *p,
-> +			      const struct nlattr *attr,
-> +			      struct netlink_ext_ack *extack)
+>  tests/generic/676     | 72 +++++++++++++++++++++++++++++++++++++++++++
+>  tests/generic/676.out |  7 +++++
+>  2 files changed, 79 insertions(+)
+>  create mode 100755 tests/generic/676
+>  create mode 100644 tests/generic/676.out
+> 
+> diff --git a/tests/generic/676 b/tests/generic/676
+> new file mode 100755
+> index 00000000..315edcdf
+> --- /dev/null
+> +++ b/tests/generic/676
+> @@ -0,0 +1,72 @@
+> +#! /bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (c) 2022 IBM Corporation.  All Rights Reserved.
+> +#
+> +# FS QA Test 676
+> +#
+> +# This test with ext4 fast_commit feature w/o below patch missed to delete the right
+> +# range during replay phase, since it depends upon inode->i_size (which might not be
+> +# stable during replay phase, at least for ext4).
+> +# 0b5b5a62b945a141: ext4: use ext4_ext_remove_space() for fast commit replay delete range
+> +# (Based on test case shared by Xin Yin <yinxin.x@bytedance.com>)
+> +#
+> +
+> +. ./common/preamble
+> +_begin_fstest auto shutdown quick log recoveryloop
+
+This isn't a looping recovery test.  Maybe we should create a 'recovery'
+group for tests that only run once?  I think we already have a few
+fstests like that.
+
+> +
+> +# Override the default cleanup function.
+> +_cleanup()
 > +{
-> +	struct nlattr *tb[IFLA_BRIDGE_MST_ENTRY_MAX + 1];
-> +	u16 msti;
-> +	u8 state;
-> +	int err;
-> +
-> +	err = nla_parse_nested(tb, IFLA_BRIDGE_MST_ENTRY_MAX, attr,
-> +			       br_mst_nl_policy, extack);
-> +	if (err)
-> +		return err;
-> +
-> +	if (!tb[IFLA_BRIDGE_MST_ENTRY_MSTI]) {
-> +		NL_SET_ERR_MSG_MOD(extack, "MSTI not specified");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!tb[IFLA_BRIDGE_MST_ENTRY_STATE]) {
-> +		NL_SET_ERR_MSG_MOD(extack, "State not specified");
-> +		return -EINVAL;
-> +	}
-> +
-> +	msti = nla_get_u16(tb[IFLA_BRIDGE_MST_ENTRY_MSTI]);
-> +	state = nla_get_u8(tb[IFLA_BRIDGE_MST_ENTRY_STATE]);
-> +
-> +	br_mst_set_state(p, msti, state);
+> +	cd /
+> +	rm -r -f $tmp.*
+> +   _scratch_unmount > /dev/null 2>&1
 
-Is there any reason why this isn't propagating the error?
+I think the test harness does this for you already, right?
 
-> +	return 0;
 > +}
+> +
+> +# Import common functions.
+> +. ./common/filter
+> +. ./common/punch
+> +
+> +# real QA test starts here
+> +
+> +# Modify as appropriate.
+> +_supported_fs generic
+> +_require_scratch
+> +_require_xfs_io_command "fpunch"
+> +_require_xfs_io_command "fzero"
+> +_require_xfs_io_command "fiemap"
+
+_require_scratch_shutdown
+
+> +
+> +t1=$SCRATCH_MNT/foo
+> +t2=$SCRATCH_MNT/bar
+> +
+> +_scratch_mkfs > $seqres.full 2>&1
+> +
+> +_scratch_mount >> $seqres.full 2>&1
+> +
+> +bs=$(_get_block_size $SCRATCH_MNT)
+
+_get_file_block_size, in case the file allocation unit isn't the same as
+the fs blocksize?  (e.g. bigalloc, xfs realtime, etc.)
+
+--D
+
+> +
+> +# create and write data to t1
+> +$XFS_IO_PROG -f -c "pwrite 0 $((100*$bs))" $t1 | _filter_xfs_io_numbers
+> +
+> +# fzero certain range in between with -k
+> +$XFS_IO_PROG -c "fzero -k  $((40*$bs)) $((20*$bs))" $t1
+> +
+> +# create and fsync a new file t2
+> +$XFS_IO_PROG -f -c "fsync" $t2
+> +
+> +# fpunch within the i_size of a file
+> +$XFS_IO_PROG -c "fpunch $((30*$bs)) $((20*$bs))" $t1
+> +
+> +# fsync t1 to trigger journal operation
+> +$XFS_IO_PROG -c "fsync" $t1
+> +
+> +# shutdown FS now for replay journal to kick in next mount
+> +_scratch_shutdown -v >> $seqres.full 2>&1
+> +
+> +_scratch_cycle_mount
+> +
+> +# check fiemap reported is valid or not
+> +$XFS_IO_PROG -c "fiemap -v" $t1 | _filter_fiemap_flags $bs
+> +
+> +# success, all done
+> +status=0
+> +exit
+> diff --git a/tests/generic/676.out b/tests/generic/676.out
+> new file mode 100644
+> index 00000000..78375940
+> --- /dev/null
+> +++ b/tests/generic/676.out
+> @@ -0,0 +1,7 @@
+> +QA output created by 676
+> +wrote XXXX/XXXX bytes at offset XXXX
+> +XXX Bytes, X ops; XX:XX:XX.X (XXX YYY/sec and XXX ops/sec)
+> +0: [0..29]: none
+> +1: [30..49]: hole
+> +2: [50..59]: unwritten
+> +3: [60..99]: nonelast
+> --
+> 2.31.1
+> 

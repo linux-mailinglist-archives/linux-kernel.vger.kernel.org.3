@@ -2,144 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F294DA603
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E074DA60A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352537AbiCOXKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 19:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S1352525AbiCOXL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 19:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244097AbiCOXKe (ORCPT
+        with ESMTP id S239447AbiCOXLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:10:34 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C0F3BA4E;
-        Tue, 15 Mar 2022 16:09:20 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 7-20020a05600c228700b00385fd860f49so487745wmf.0;
-        Tue, 15 Mar 2022 16:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NDxeJbMELpkB0S650ke8FX0JhjXboLEVtYjcfZSkP5A=;
-        b=NA7/uARo+bkXEOd0lPiQc1Zn+x/IdLkcUS3zHaMxZTcihOPZPRSoxoo1TicoCa8aSO
-         35L0x42Tg9coDof1uiqBYJVLhnoXNdjgy3g2R0bJYIBGdrU1QLuqKONAOjdO1RxjNTju
-         8pHRv7ZUAsbubaAjal5yK/dzULtFNJluas1nGd5KZT6Hn0ZXhYhVGMWyxhBWkWKY+RkP
-         2Rn/k6Rk1srfuZVhlpJTkEIObgfxczxRj5VxQ5txmzlHaBapZ7hRfdLGaSpya7QzhQrk
-         9XNNLhDr/FCDBWHtEs/zdhHmFJCRhDe64QmhmmvEhbJf/MkiOc500wfoX2yPwpbjY2Rx
-         XRNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NDxeJbMELpkB0S650ke8FX0JhjXboLEVtYjcfZSkP5A=;
-        b=5DDp6SdeKM2PQkbYjiZdxveQWTf1MiPd5VwRHd1IQCreEm0digQdObH1tYDlrequyI
-         VXkYYWXfav+kyXUWico5RvrQmgN1wZb4ubNovoLFLl4BYjOK1haWugOJha6c6hA1KCoh
-         xpVpf5XYoDW3HVGrZqWXUo61l/THEOvo8+EaMEXdkD+yGP+UMBbbFfndz1ruZbNFT14Y
-         tHtp8qe/okqX8sc1aOLvVHbMAj00JWMZOPK4DHSICEG07Pvz1tMK2eNeLO9pX7JqAppS
-         lQBt8OgLK808GPLSN9BY+baXE7W3XFZQ+e4X5vGlr6Bd4EB+XilSIfRuUT187U3YO3c/
-         la2A==
-X-Gm-Message-State: AOAM530fPiV/109kXc1EEonubtrFZZLche0wmnjxGSpetVe0bFkodsUn
-        1U7cOJ4BekHbrT1Wp4TaNMcy+0jhE81aYw==
-X-Google-Smtp-Source: ABdhPJz84ds+bVUwZunt36TBvu7IcZ2YPD3wPYKLtuRe7Z/jRuHsOZItSVf/L/z95pxaGUsYFRboSQ==
-X-Received: by 2002:a7b:c1d3:0:b0:38c:5b15:de91 with SMTP id a19-20020a7bc1d3000000b0038c5b15de91mr2055624wmj.40.1647385759075;
-        Tue, 15 Mar 2022 16:09:19 -0700 (PDT)
-Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id l1-20020a05600c4f0100b00387369f380bsm3819005wmq.41.2022.03.15.16.09.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 16:09:18 -0700 (PDT)
-Message-ID: <9e2ac011-72e8-977c-00c9-5fa862a4e5f6@gmail.com>
-Date:   Tue, 15 Mar 2022 23:09:17 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] power: supply: bq2415x: Fix spelling mistake "vender" ->
- "vendor"
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220315223700.2961660-1-colin.i.king@gmail.com>
- <20220315224645.ytcf7y7awc3q2y6j@pali>
- <5ea0e154-e06e-32b4-be86-f38ce07b8bec@gmail.com>
- <20220315230753.6xymu77uirjbnn3u@pali>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <20220315230753.6xymu77uirjbnn3u@pali>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 19:11:24 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B8B52E6C;
+        Tue, 15 Mar 2022 16:10:11 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B4A963201FDA;
+        Tue, 15 Mar 2022 19:10:08 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+  by compute4.internal (MEProxy); Tue, 15 Mar 2022 19:10:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=nKjQkzPzNXMCrBv5rZd2TPMn58+ud5Ed8qE7Xp
+        7qsjw=; b=I6RTIHk8Zsx3TPDaTGo0z9yk1uNeRZu6rXreRrxDzhJGmVF6j4Zebc
+        sOX3Fqp5Hftz91zOgnwWWc5OZtD+0r1DurynvAZx7NwmBQxVcLUIVPzGjAmPkImL
+        ZLF03vNpZdgRBO2qkfZphUPw/u09eBJRIM22kAPvbzqTfwd0qFaJDRpn/YsOE4UY
+        MALX+yza10fyv1tranZKcofbu8EmviCW7eTtgFQ3Ue4boMucKWSvxIauA9a4J6W9
+        FShl6MCd1kOh+nHoag9LEghs9fahZuSJXIsZdlVDqUEIR8oWiT5C+bb2XiuC9UHO
+        ijXLonXBAY94TD4AOcUJaDk6nFSehLbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=nKjQkzPzNXMCrBv5r
+        Zd2TPMn58+ud5Ed8qE7Xp7qsjw=; b=Pv2ucQTI4Zdi0OnPFmDaADIFGCJLisE1y
+        bKY10UyrYlSnck3aUDvFVGHQHT4NcKeFX5IIT0lXk648lFpcqacAecvux6mDmIxI
+        1Vz9pU6ZCdkawh6eP64W+NK0YzQMCcMl5lB3oi5t0xyiyD17cx0+k89X+/39z1jZ
+        hkFsW/ZmpgJ61BShkc5T0NW1AWjy7ODaJTYA7qDMQGUX17UOZuCkaaB/P8z6nlFZ
+        4XnHMvl4nAgJfHMp38VnofcwitBW33AH8S9nkUD/myx+7aufIWLxGvt8/O2a4oQM
+        Aw5q/yIb9XZlk9ERKoXfP4d61Oi+85pm+YSBX2FfZDywB2NJT/0BQ==
+X-ME-Sender: <xms:zxwxYmOuWPrrNuiV8QHiAGFyRNAYYQvQBd4UkNpO8FfijhcRirWy_g>
+    <xme:zxwxYk9OqSlAQs_vMeRB-hrka4VmTKeVSw9f8Vj1SdRZAEoSQmIJlDu1dJMA415x6
+    Lgo56aHr3S4rBebog>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefuddgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvufgtsehttdertder
+    redtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnhepjefgveethfejlefgfedvtdfhffefuedtffegiefhkeet
+    feehffegiedtieefhfegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:0BwxYtSppYNR4g_8PKGitE7oKBeFJAmwtVmxBi7U3WUBlj8CGg2tfw>
+    <xmx:0BwxYmszcZA1h1IbQhQvarFHTzfIbOz4nrmZI6rP8HEvCnlU1wu5Eg>
+    <xmx:0BwxYufKTKFJb1PMAE4HKi3YNt5rCXKVDNScLXMNYh4M7Z9hLBuw1g>
+    <xmx:0BwxYu64tOhGQtgrjDC04enJsSUbJdWa6EIqAsIAcY8r1q53DWH9ZQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E13882180085; Tue, 15 Mar 2022 19:10:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
+Mime-Version: 1.0
+Message-Id: <53a71699-3ffb-4a49-9d15-7fe4a0f51612@www.fastmail.com>
+In-Reply-To: <CAADnVQJUvfKmN6=j5hzhgE25XSa2uqR3MJyq+c=AGCKkTKD05g@mail.gmail.com>
+References: <1d2931e80c03f4d3f7263beaf8f19a4867e9fe32.1647212431.git.dxu@dxuuu.xyz>
+ <CAADnVQJUvfKmN6=j5hzhgE25XSa2uqR3MJyq+c=AGCKkTKD05g@mail.gmail.com>
+Date:   Tue, 15 Mar 2022 16:10:46 -0700
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] bpftool: Add SPDX identifier to btf-dump-file output
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 23:07, Pali Rohár wrote:
-> On Tuesday 15 March 2022 23:00:14 Colin King (gmail) wrote:
->> On 15/03/2022 22:46, Pali Rohár wrote:
->>> On Tuesday 15 March 2022 22:37:00 Colin Ian King wrote:
->>>> There are several spelling mistakes in comments, function names
->>>> and literal strings. Fix these.
->>>
->>> I do not think that there are mistakes.
->>>
->>> Please look at page 29 of the official bq24150 datasheet:
->>> https://www.ti.com/lit/ds/symlink/bq24150.pdf
+Hi Alexei,
+
+On Tue, Mar 15, 2022, at 2:38 PM, Alexei Starovoitov wrote:
+> On Sun, Mar 13, 2022 at 4:01 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >>
->> Looks like TI are redefining the spelling in the language :-)
-> 
-> Well, that could be truth, or maybe it just means something different.
-> It is about 10 years ago and I do not remember more details about it.
-> Anyway, in any case register name is vender and kernel code should match
-> official register naming for which driver was written...
-
-I'm fine with that. Apologies for the noise.
-
-> 
->>>
->>>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->>>> ---
->>>>    drivers/power/supply/bq2415x_charger.c | 10 +++++-----
->>>>    1 file changed, 5 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
->>>> index 5724001e66b9..b35700071966 100644
->>>> --- a/drivers/power/supply/bq2415x_charger.c
->>>> +++ b/drivers/power/supply/bq2415x_charger.c
->>>> @@ -71,7 +71,7 @@
->>>>    #define BQ2415X_BIT_OTG_PL		1
->>>>    #define BQ2415X_BIT_OTG_EN		0
->>>> -/* vender register */
->>>> +/* vendor register */
->>>>    #define BQ2415X_MASK_VENDER		(BIT(5)|BIT(6)|BIT(7))
->>>>    #define BQ2415X_SHIFT_VENDER		5
->>>>    #define BQ2415X_MASK_PN			(BIT(3)|BIT(4))
->>>> @@ -491,8 +491,8 @@ static int bq2415x_detect_revision(struct bq2415x_device *bq)
->>>>    	return -1;
->>>>    }
->>>> -/* return chip vender code */
->>>> -static int bq2415x_get_vender_code(struct bq2415x_device *bq)
->>>> +/* return chip vendor code */
->>>> +static int bq2415x_get_vendor_code(struct bq2415x_device *bq)
->>>>    {
->>>>    	int ret;
->>>> @@ -1501,9 +1501,9 @@ static int bq2415x_power_supply_init(struct bq2415x_device *bq)
->>>>    		sprintf(revstr, "1.%d", ret);
->>>>    	bq->model = kasprintf(GFP_KERNEL,
->>>> -				"chip %s, revision %s, vender code %.3d",
->>>> +				"chip %s, revision %s, vendor code %.3d",
->>>>    				bq2415x_chip_name[chip], revstr,
->>>> -				bq2415x_get_vender_code(bq));
->>>> +				bq2415x_get_vendor_code(bq));
->>>>    	if (!bq->model) {
->>>>    		dev_err(bq->dev, "failed to allocate model name\n");
->>>>    		return -ENOMEM;
->>>> -- 
->>>> 2.35.1
->>>>
+>> A concern about potential GPL violations came up at the new $DAYJOB when
+>> I tried to vendor the vmlinux.h output. The central point was that the
+>> generated vmlinux.h does not embed a license string -- making the
+>> licensing of the file non-obvious.
 >>
+>> This commit adds a LGPL-2.1 OR BSD-2-Clause SPDX license identifier to
+>> the generated vmlinux.h output. This is line with what bpftool generates
+>> in object file skeletons.
+>>
+>> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>> ---
+>>  tools/bpf/bpftool/btf.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+>> index a2c665beda87..fca810a27768 100644
+>> --- a/tools/bpf/bpftool/btf.c
+>> +++ b/tools/bpf/bpftool/btf.c
+>> @@ -425,6 +425,7 @@ static int dump_btf_c(const struct btf *btf,
+>>         if (err)
+>>                 return err;
+>>
+>> +       printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n\n");
+>
+> I don't think we can add any kind of license identifier
+> to the auto generated output.
+> vmlinux.h is a pretty printed dwarfdump.
 
+Just so I understand better, when you say "I don't think we can",
+do you mean:
+
+1) There may be legal issues w/ adding the license identifier
+2) It doesn't make sense to add the license header
+3) Something else?
+
+Thanks,
+Daniel

@@ -2,141 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905C04DA32B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAA24DA335
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244965AbiCOTRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S1347277AbiCOTVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241304AbiCOTRb (ORCPT
+        with ESMTP id S1345039AbiCOTVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:17:31 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730AA3616C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:16:18 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id s8so465974pfk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VTb5ul+n4WT1sbDMlrbhLBcR/t69JrkdnmjdEtDHndE=;
-        b=gvQ9DlFYZSeKRGsPsrdJv82oAwqEruk9QS7vTAC6OKVJDyy8C1B/9E4dLMuljRdJVa
-         4BJkYvXrexW4Am2uV3t90FeD3+fXsA0orYHAD/A9bL6yK7N2JwPl7of52zjOfnme1A4s
-         Y3MQ1DAG27vvHYJh/szmyrCBXRtimwCPxG51KD8ADalMLMo1UTaNB9jeRyflX9YsTWRD
-         YjSYjVnpKgblC2S0Fj0SIAUOmGjRLXWHGmKyTzG5vGPjiTJ9rIzU5yHb743O7oiUfB1B
-         OVPBrvlKWtYlJEubRsGF0McbDRADTEu70XtDVfpH55Zg/Vg8hX6ah1JvKzzGYBGG2AGq
-         yeKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VTb5ul+n4WT1sbDMlrbhLBcR/t69JrkdnmjdEtDHndE=;
-        b=EAl01aieF68U2fUN9f66xSHbJkuoJi7AdiqGeT2grS1tuJROoRET7lduxB/jRG53XU
-         JixBb1MxEYQLCiHKRVn/ZZO9eo+kAQNFpoPm3cQXTh7Efk/z9K+30h1ZKYW7VlFbSR+a
-         uWqSBNweJzPAL8KFM9nTqnmDbQQjhszzCkFocc7lhJYhpiRLz2tDTsmZeLlRT2wDk4J5
-         N4Tacc1cEhZxtB7NcEB/AELBbyWmJt9G2RDhiijpQoBJDOkYQzTh+101xMwyX6iAwHDh
-         sllGb4V5A1N4Co35cpS9qgEcjqewnvkE4TH8r1Mx/LE0a2luCzN1U4wxsADGTgfuXvKX
-         kEGA==
-X-Gm-Message-State: AOAM53028n/K+GM1cYEq2xtvsLNt130nHbB+yY5bqPlbhG7ibLyhetEZ
-        nOrbbdJ7ySiomiEo6K95Partew==
-X-Google-Smtp-Source: ABdhPJwnJnRXAHrQV+u5y2rkB0kmtCrYFBeyMiZMqPSrhBWuw59JeBaV01MG2y2G7Ig/Bz5uRxNbmA==
-X-Received: by 2002:a05:6a00:1c73:b0:4f7:83a7:25d8 with SMTP id s51-20020a056a001c7300b004f783a725d8mr26389413pfw.85.1647371777985;
-        Tue, 15 Mar 2022 12:16:17 -0700 (PDT)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm25975573pfv.22.2022.03.15.12.16.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:16:17 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-ext4@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Subject: [PATCH] ext4: check if offset+length is within a valid range in fallocate
-Date:   Tue, 15 Mar 2022 12:15:45 -0700
-Message-Id: <20220315191545.187366-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <d153bb2e-5f95-47d0-43db-b95c577e2b91@linaro.org>
-References: <d153bb2e-5f95-47d0-43db-b95c577e2b91@linaro.org>
+        Tue, 15 Mar 2022 15:21:40 -0400
+Received: from mail.nearlyone.de (mail.nearlyone.de [IPv6:2a01:488:66:1000:2ea3:7291:0:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D56B3A72A;
+        Tue, 15 Mar 2022 12:20:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 486CB5D30E;
+        Tue, 15 Mar 2022 20:20:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
+        t=1647372024; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         in-reply-to:references; bh=dPNeZhQEBf2PMi45+dp4nB2zJ3oU/+iXDWONotEcGmc=;
+        b=Ec9xh1iHziUQdyFoG8JXLqFgo6E/AMTD++oBTTm3sJGo9lkNF6Br4eAuTxCU/08za9nFt2
+        t7ZXZtXpy2h7Geid+o+XkXPM4jUEu/tKpNJxf9F2UEZOvIgGaj+ctxYyTKLGE0F03uotrQ
+        5CVq/7yjth9BMPKT61j3Ww/N+D/2/ABzELCIS+oN/YYqixPZDErNWPwHOv1YDEb4E2kQYl
+        J5XZgacMGrmlEUQ5UJTgrdbCWtO62aaL6h4EN2ClzSCPpWs0z7G7lbzJo5Jynrs2Eg3Xrm
+        bB2mMPj/SMpFR8cPRYiDw8IAlCR20DuHUIWvIPdhNMNobGLvQwUFKqJcZKSGLg==
+Date:   Tue, 15 Mar 2022 20:20:19 +0100
+From:   Daniel Wagner <wagi@monom.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Clark Williams <williams@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>
+Subject: Re: [ANNOUNCE] 4.19.232-rt104
+Message-ID: <20220315192019.4yvkc4ts2rg5dc3q@carbon.lan>
+References: <164642254363.3441070.3803906129050387693@puck.lan>
+ <20220315184005.GB30901@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315184005.GB30901@duo.ucw.cz>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found an issue [1] in ext4_fallocate().
-The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-and offset 0x1000000ul, which, when added together exceed the disk size,
-and trigger a BUG in ext4_ind_remove_space() [3].
-According to the comment doc in ext4_ind_remove_space() the 'end'
-parameter needs to be one block after the last block to remove.
-In the case when the BUG is triggered it points to the last block on
-a 4GB virtual disk image. This is calculated in
-ext4_ind_remove_space() in [4].
-This patch adds a check that ensure the length + offest to be
-within the valid range and returns -ENOSPC error code in case
-it is invalid.
+On Tue, Mar 15, 2022 at 07:40:05PM +0100, Pavel Machek wrote:
+> > I'm pleased to announce the 4.19.232-rt104 stable release.
+> 
+> Thanks for all the releases. I believe there's tag missing for
+> e9e0405cb34e459b713ed0aca4e3ab5ef61f540e aka 4.19.219-rt98. Tags are
+> there for for other releases.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
-LINK: [3] https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/ext4/indirect.c#L1244
-LINK: [4] https://elixir.bootlin.com/linux/v5.17-rc8/source/fs/ext4/indirect.c#L1234
-
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Andreas Dilger <adilger.kernel@dilger.ca>
-Cc: Ritesh Harjani <riteshh@linux.ibm.com>
-Cc: <linux-ext4@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-
-Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
- fs/ext4/inode.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 01c9e4f743ba..dd9c35113efe 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -3924,7 +3924,8 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
- 	struct super_block *sb = inode->i_sb;
- 	ext4_lblk_t first_block, stop_block;
- 	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	handle_t *handle;
- 	unsigned int credits;
- 	int ret = 0, ret2 = 0;
-@@ -3967,6 +3968,16 @@ int ext4_punch_hole(struct inode *inode, loff_t offset, loff_t length)
- 		   offset;
- 	}
- 
-+	/*
-+	 * For punch hole the length + offset needs to be at least within
-+	 * one block before last
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - sbi->s_blocksize;
-+	if (offset + length >= max_length) {
-+		ret = -ENOSPC;
-+		goto out_mutex;
-+	}
-+
- 	if (offset & (sb->s_blocksize - 1) ||
- 	    (offset + length) & (sb->s_blocksize - 1)) {
- 		/*
--- 
-2.35.1
-
+Clark, if you still have the original tag on your local machine, could
+you push it? If not I can add the tag, but obviously, it's not matching
+then with your signature.

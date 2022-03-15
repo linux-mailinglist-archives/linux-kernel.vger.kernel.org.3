@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4024D9FBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8D44D9FA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349952AbiCOQRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
+        id S1349909AbiCOQKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240489AbiCOQRH (ORCPT
+        with ESMTP id S238095AbiCOQKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:17:07 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECA749CA9;
-        Tue, 15 Mar 2022 09:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647360955; x=1678896955;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2GljXTe3wNrzf4qT4Ab198zPDt4+ZO0/lR6hJ/aDYaw=;
-  b=U/Gaevzzq5Mxys1ay4tvV/Tvc3E81tRaYw0pqQbqjyeyQwTB8K3Kl12S
-   8KfpEYuJkTbp2xzf29K0lauWXGAXtSnilDFoocIInhByGCPWQ5hbyFLvu
-   2M3hhRodNOgi9sxcSSDXVmWwNg5CnD9zqxUc0T48epQolhin6rMlCQ1FW
-   XfHTLmSSk3h6WMRZS89wPwQExu4H9G8pdojxaCYQ9l/EWe/FOEZ68Yd8H
-   DJxiJucRdifRTxm6Y9ez5Oa8/7Nr+5jnI6Io6pl28Q5yv2CzHcwQVG4nW
-   GMoHUEKCt5ucwkUFIEN2/Eu2QugWKRkCWWIrrECF74V3VGFMj2p1GUkra
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256074638"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="256074638"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:15:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="556997948"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2022 09:15:53 -0700
-Date:   Wed, 16 Mar 2022 00:08:55 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <navam@xilinx.com>
-Cc:     "mdf@kernel.org" <mdf@kernel.org>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/6] fpga: zynqmp: Initialized variables before using it
-Message-ID: <20220315160855.GA121107@yilunxu-OptiPlex-7050>
-References: <20220308094519.1816649-1-nava.manne@xilinx.com>
- <20220308094519.1816649-3-nava.manne@xilinx.com>
- <20220311142814.GA97487@yilunxu-OptiPlex-7050>
- <SN6PR02MB4576FB4490F96E593E09D4B9C2109@SN6PR02MB4576.namprd02.prod.outlook.com>
+        Tue, 15 Mar 2022 12:10:42 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ECD42A3A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:09:29 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id p8so20448449pfh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L/3evLoiUxyduQgTRbFtXBiM1S258zVm+UJtnMloKak=;
+        b=0YcD70QC0MgG+ea9Hyfe1KDOhrj7ONcEkvDRV6M9sMdA6lBfa3vlxGaB1+hzovZQOs
+         nurK8WNaWNkB/vGSQtA4Lq31WE9AExhGngDlI+yUnN8qWySuU6IBhWONrdiHFdV6PG6B
+         sbLG2d10zU9EuEgpQQ637mwVNaUrgXnqa/6yF3t6jaDhmTRw/xdLrWfPkJvFyDNuy3Xk
+         WomPnsVYKvLH1B+xPE4kDOTzN85NvKrs+YT5dfMGxH9GSbsYL7HmtJwNrMD/6pGis5Js
+         F89yrxdEhLffsaTI1cft4JLc1BxFIVR1hgR2KurWjoapaPEJuPPbvYpjO/lpEfCcpLue
+         sU7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L/3evLoiUxyduQgTRbFtXBiM1S258zVm+UJtnMloKak=;
+        b=pp7sz5dQ4LKPOnN1HqxvTHebZNBqXqSmUMeamvmMYVzB1TCDJvywiya21pIVseXtrk
+         dHcTukfAro3EcaoyZMGWqII96fbclOiAgMidP0Gcw/4e0QqEVsMWOimFONRxWF2cFwpo
+         UYIr21cznUv0xw/Xgfmxpc560pIAeGFhXdmiWkoBlF9E+UIH1G6ZSobos3gZqhzIsybk
+         dpDY9niKstQweGlUzNPCPDeBqDpfdhkvFGgt+bUgcV0srDl91ANPEBlILMzIy8lXqsn/
+         s8WZP1znFqN2nqZvqEJiwnQ9tjUg2WuMU1gQPR2AZS9qM+XM2d55xT3Qh52bvMKqFOba
+         30Xw==
+X-Gm-Message-State: AOAM530La2Vb4tQFbkKZI7Ip2uPDMsrbStQ/QVRSCepqd+G6lAwEWaXU
+        7UnEy+xyv8l+MF/OnvchP4J/QPdnJ8XCN3eu92c72g==
+X-Google-Smtp-Source: ABdhPJyMgwt0K1/knvdgQkdrvVvr4QZNZtkwOk/zi74i6418fAFiBNttZxLgdpHinFyQTs23rFNvPhfWer6YMjV+1IM=
+X-Received: by 2002:a05:6a00:8ca:b0:4e0:2ed3:5630 with SMTP id
+ s10-20020a056a0008ca00b004e02ed35630mr29577774pfu.3.1647360568827; Tue, 15
+ Mar 2022 09:09:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB4576FB4490F96E593E09D4B9C2109@SN6PR02MB4576.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220301195457.21152-1-jithu.joseph@intel.com>
+ <Yh59rOIH24X+6GyI@kroah.com> <Yh5+om/Nr06V0+Qj@kroah.com> <Yi/Lb5laEki0JHft@agluck-desk3.sc.intel.com>
+ <YjBBmEjbIaqTbVt+@kroah.com> <c4af81bd788e43dda915a1052af0be55@intel.com>
+ <YjCwI4N00reBuIqA@kroah.com> <CAPcyv4iU5mXAjkUe-c_-Ba4Ejse90gqd=db+00jybnkV1-K6=g@mail.gmail.com>
+In-Reply-To: <CAPcyv4iU5mXAjkUe-c_-Ba4Ejse90gqd=db+00jybnkV1-K6=g@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 15 Mar 2022 09:09:18 -0700
+Message-ID: <CAPcyv4gdbjHem9zwoCjj+6a2KJ5dyYro3OwPvNLSPTKpjeF0hg@mail.gmail.com>
+Subject: Re: [RFC 00/10] Introduce In Field Scan driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 11:48:11AM +0000, Nava kishore Manne wrote:
-> Hi Yilun,
-> 
-> 	Thanks for providing the review comments.
-> Please find my response inline.
-> 
-> > -----Original Message-----
-> > From: Xu Yilun <yilun.xu@intel.com>
-> > Sent: Friday, March 11, 2022 7:58 PM
-> > To: Nava kishore Manne <navam@xilinx.com>
-> > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
-> > <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > Subject: Re: [PATCH 2/6] fpga: zynqmp: Initialized variables before using it
-> > 
-> > On Tue, Mar 08, 2022 at 03:15:15PM +0530, Nava kishore Manne wrote:
-> > > This patch initialized variables with the proper value.
-> > > Addresses-Coverity: "uninit_use: Using uninitialized value"
+On Tue, Mar 15, 2022 at 9:04 AM Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> On Tue, Mar 15, 2022 at 8:27 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Mar 15, 2022 at 02:59:03PM +0000, Luck, Tony wrote:
+> > > >> This seems a novel use of uevent ... is it OK, or is is abuse?
+> > > >
+> > > > Don't create "novel" uses of uevents.  They are there to express a
+> > > > change in state of a device so that userspace can then go and do
+> > > > something with that information.  If that pattern fits here, wonderful.
 > > >
-> > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> > > ---
-> > >  drivers/fpga/zynqmp-fpga.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-> > > index c60f20949c47..e931d69819a7 100644
-> > > --- a/drivers/fpga/zynqmp-fpga.c
-> > > +++ b/drivers/fpga/zynqmp-fpga.c
-> > > @@ -41,7 +41,7 @@ static int zynqmp_fpga_ops_write(struct
-> > fpga_manager *mgr,
-> > >  				 const char *buf, size_t size)
-> > >  {
-> > >  	struct zynqmp_fpga_priv *priv;
-> > > -	dma_addr_t dma_addr;
-> > > +	dma_addr_t dma_addr = 0;
-> > 
-> > The first use of this variable is as an output parameter:
-> > 
-> > 	kbuf = dma_alloc_coherent(priv->dev, size, &dma_addr,
-> > GFP_KERNEL);
-> > 
-> > So I don't think it needs to be initialized as 0.
-> > 
-> 
-> This issue is found by Coverity Scan, Whether this param is input/output this fix will not impact the actual functionality.
-> In order to fix the issues reported by the Coverity tool, this fix is needed.
+> > > Maybe Dan will chime in here to better explain his idea. I think for
+> > > the case where the core test fails, there is a good match with uevent.
+> > > The device (one CPU core) has changed state from "working" to
+> > > "untrustworthy". Userspace can do things like: take the logical CPUs
+> > > on that core offline, initiate a service call, or in a VMM cluster environment
+> > > migrate work to a different node.
+> >
+> > Again, I have no idea what you are doing at all with this driver, nor
+> > what you want to do with it.
+> >
+> > Start over please.
+> >
+> > What is the hardware you have to support?
+> >
+> > What is the expectation from userspace with regards to using the
+> > hardware?
+>
+> Here is what I have learned about this driver since engaging on this
+> patch set. Cores go bad at run time. Datacenters can detect them at
+> scale.
 
-I didn't see issues about this piece of code, so I don't think we need
-the fix just to make the tool happy. Maybe the tool could be improved to
-help us better.
+Tony pointed me to this video if you have not seen it:
 
-Thanks,
-Yilun
-
-> 
-> Regards,
-> Navakishore.
+https://www.youtube.com/watch?v=QMF3rqhjYuM

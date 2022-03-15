@@ -2,152 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CDD4D9A69
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978D84D9A5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347932AbiCOLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S1347342AbiCOL2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347342AbiCOLcb (ORCPT
+        with ESMTP id S229821AbiCOL2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:32:31 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383954DF57
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:31:15 -0700 (PDT)
-X-UUID: 5540667e3a5a4bf3a40b41640f294bf4-20220315
-X-UUID: 5540667e3a5a4bf3a40b41640f294bf4-20220315
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <cheng-jui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 741151367; Tue, 15 Mar 2022 19:26:00 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 15 Mar 2022 19:25:53 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Mar 2022 19:25:52 +0800
-From:   Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-To:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Bart Van Assche" <bvanassche@acm.org>,
-        <wsd_upstream@mediatek.com>,
-        Eason-YH Lin <eason-yh.lin@mediatek.com>,
-        Kobe-CP Wu <kobe-cp.wu@mediatek.com>,
-        "Jeff-cc Hsu" <jeff-cc.hsu@mediatek.com>,
-        Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-Subject: [PATCH] lockdep: Zap lock classes with debug_locks == false again
-Date:   Tue, 15 Mar 2022 19:25:21 +0800
-Message-ID: <20220315112521.29093-1-cheng-jui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 15 Mar 2022 07:28:38 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E280F4F9F9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:27:26 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r6so28040382wrr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Xsy+hdBDmUEEW9oGx4D4eHqInkltCSE2p0AuseWmMgg=;
+        b=NN5nqsh5i2xYRMZXD4nVNF44ylsoZUN1zOSa8Vzd4saL/27OcGoHbKQSfiEqQbnx7+
+         Eft7dWXkDfTrx7LuODBh7+p3+qJQDwsy5n5Jp8eoWvlZWGulbQqK27lYw4cgD2fxDdGK
+         jlgVl5VVl0GV/w8Mw7cV7mLIU8CG4phu5pwPOm0orA8CQFVFWTDgZC8MoGspUSQ46AKx
+         lkGZ/fpYCyerOUjUbrFm5lyOmIoRNE2Aqa5mU92mx3ZjtED1k8eFhJaIldK6mkV34T30
+         afZlNazQE9o5zyTKePlKUNCHT73/Fm3P+amBqUwUPPUjeSkCHyCfbDz2fHFIqQEgW+/p
+         NYPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xsy+hdBDmUEEW9oGx4D4eHqInkltCSE2p0AuseWmMgg=;
+        b=IMhspA3iT8B/caNKgB0J6xeJ9OoHXJ3PzdNe16qP+nTMqCz3Y0L/bSn3QN28AH+BjJ
+         sQ8pPMiKthTyux2jVMrfvd/OasFfZKJ0CDwhBXCoynZkvhJjT1PMuWt+qkh9FK5PEDVN
+         LUrvFInK53O+xLOYhx9f+zRN/KjotswU5eiwu+aRv8th7O7M1WOj/VpohBoBZAy/z/qr
+         mLXJCt7En8Y1ZpqMZ+8tDfkuOYMn2QMtTIQGOJbEzoOb4pAWeGTFUF3rNfnpHXr5olvh
+         +BIDMz//KeVCa7AkcCWKCCuts2nL2943REE/s7ROTYm3ugixb3bqiWuKcJwkQr4WaIhu
+         PSug==
+X-Gm-Message-State: AOAM533BNGPkM5p8hR5Lnxau7vxJAWn2pEijnrSJR1FHLQobVV9+ZL6/
+        MzIJQUPyDcHDdElc3ABrxFipBA==
+X-Google-Smtp-Source: ABdhPJxjD95iUAyVMeq2yyB+8Hz8TYrdwXdaaEoOsEgDVOLullCXgK01LaViQhsTRhCAEfA2ljtKjw==
+X-Received: by 2002:adf:cd8f:0:b0:1ed:af02:2295 with SMTP id q15-20020adfcd8f000000b001edaf022295mr19238184wrj.226.1647343645473;
+        Tue, 15 Mar 2022 04:27:25 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id n8-20020a5d5988000000b00203d5f1f3e4sm1348294wri.105.2022.03.15.04.27.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 04:27:25 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 11:26:59 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 2/8] iommu: Add attach/detach_dev_pasid domain ops
+Message-ID: <YjB4AyrgsnbUrlLe@myrica>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+ <20220315050713.2000518-3-jacob.jun.pan@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315050713.2000518-3-jacob.jun.pan@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a lock_class_key has been registered but lockdep_unregister_key() is
-called with debug_locks == false. The lockdep_unregister_key() will not
-unregister the key and just return without error.
-Users may assume lockdep_unregister_key() always succeed and free the
-lock_class_key even if it is still remained in lockdep structures.
+On Mon, Mar 14, 2022 at 10:07:06PM -0700, Jacob Pan wrote:
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> 
+> An IOMMU domain represents an address space which can be attached by
+> devices that perform DMA within a domain. However, for platforms with
+> PASID capability the domain attachment needs be handled at device+PASID
+> level. There can be multiple PASIDs within a device and multiple devices
+> attached to a given domain.
+> This patch introduces a new IOMMU op which support device, PASID, and
+> IOMMU domain attachment. The immediate use case is for PASID capable
+> devices to perform DMA under DMA APIs.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+>  include/linux/iommu.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 369f05c2a4e2..fde5b933dbe3 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -227,6 +227,8 @@ struct iommu_iotlb_gather {
+>   * @aux_get_pasid: get the pasid given an aux-domain
+>   * @sva_bind: Bind process address space to device
+>   * @sva_unbind: Unbind process address space from device
+> + * @attach_dev_pasid: attach an iommu domain to a pasid of device
+> + * @detach_dev_pasid: detach an iommu domain from a pasid of device
 
-Which lead to following crash when 'cat /proc/lockdep' after
-debug_locks == false:
+Isn't that operation "assign a PASID to a domain" instead?  In patch 5,
+the domain is already attached to the device, so set_domain_pasid() might
+be clearer and to the point. If the IOMMU driver did the allocation we
+could also avoid patch 1.
 
-==================================================================
-BUG: KASAN: invalid-access in string+0x50/0x10c
-Read at addr f2ffff81ac61c880 by ...
-Pointer tag: [f2], memory tag: [fb]
-...
-Call trace:
- dump_backtrace.cfi_jt+0x0/0x8
- show_stack+0x1c/0x2c
- dump_stack_lvl+0xd8/0x16c
- print_address_description+0x90/0x2e8
- __kasan_report+0x144/0x224
- kasan_report+0x50/0xa0
- __do_kernel_fault+0xf4/0x2a8
- do_bad_area+0x34/0xf8
- do_tag_check_fault+0x24/0x38
- do_mem_abort+0x68/0x168
- el1_abort+0x4c/0x74
- el1_sync_handler+0x4c/0x8c
- el1_sync+0x8c/0x140
- string+0x50/0x10c
- vsnprintf+0x468/0x69c
- seq_printf+0x8c/0xd8
- print_name+0x64/0xf4
- l_show+0x1a8/0x278
- seq_read_iter+0x3cc/0x5fc
- proc_reg_read_iter+0xdc/0x1d4
- vfs_read+0x2e0/0x354
- ksys_read+0x7c/0xec
- __arm64_sys_read+0x20/0x30
- el0_svc_common.llvm.8008154191216078041+0xd8/0x20c
- do_el0_svc+0x28/0xa0
- el0_svc+0x24/0x38
- el0_sync_handler+0x88/0xec
- el0_sync+0x1b4/0x1c0
+If I understand correctly this series is not about a generic PASID API
+that allows drivers to manage multiple DMA address spaces, because there
+still doesn't seem to be any interest in that. It's about the specific
+IDXD use-case, so let's focus on that. We can introduce a specialized call
+such as (iommu|dma)_set_device_pasid(), which will be easy to consolidate
+later into a more generic "dma_enable_pasid()" API if that ever seems
+useful.
 
-...
-==================================================================
+Thanks,
+Jean
 
-Allow lockdep_unregister_key to zap lock classes with
-debug_locks == false again.
-Remove the WARN_ON_ONCE(!found) and only zap lock classes when the key
-can be found.
-
-Fixes: 8b39adbee805 ("locking/lockdep: Make lockdep_unregister_key() honor 'debug_locks' again")
-Signed-off-by: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
----
- kernel/locking/lockdep.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index f8a0212189ca..90dadecb2577 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -6305,8 +6305,7 @@ void lockdep_unregister_key(struct lock_class_key *key)
- 		return;
- 
- 	raw_local_irq_save(flags);
--	if (!graph_lock())
--		goto out_irq;
-+	lockdep_lock();
- 
- 	pf = get_pending_free();
- 	hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
-@@ -6316,11 +6315,11 @@ void lockdep_unregister_key(struct lock_class_key *key)
- 			break;
- 		}
- 	}
--	WARN_ON_ONCE(!found);
--	__lockdep_free_key_range(pf, key, 1);
--	call_rcu_zapped(pf);
--	graph_unlock();
--out_irq:
-+	if (found) {
-+		__lockdep_free_key_range(pf, key, 1);
-+		call_rcu_zapped(pf);
-+	}
-+	lockdep_unlock();
- 	raw_local_irq_restore(flags);
- 
- 	/* Wait until is_dynamic_key() has finished accessing k->hash_entry. */
--- 
-2.18.0
-
+>   * @sva_get_pasid: Get PASID associated to a SVA handle
+>   * @page_response: handle page request response
+>   * @cache_invalidate: invalidate translation caches
+> @@ -296,6 +298,10 @@ struct iommu_ops {
+>  	struct iommu_sva *(*sva_bind)(struct device *dev, struct mm_struct *mm,
+>  				      void *drvdata);
+>  	void (*sva_unbind)(struct iommu_sva *handle);
+> +	int (*attach_dev_pasid)(struct iommu_domain *domain,
+> +				struct device *dev, ioasid_t id);
+> +	void (*detach_dev_pasid)(struct iommu_domain *domain,
+> +				 struct device *dev, ioasid_t id);
+>  	u32 (*sva_get_pasid)(struct iommu_sva *handle);
+>  
+>  	int (*page_response)(struct device *dev,
+> -- 
+> 2.25.1
+> 

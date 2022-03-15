@@ -2,182 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456E24DA433
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F774DA438
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351763AbiCOUrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S1351791AbiCOUuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235380AbiCOUr3 (ORCPT
+        with ESMTP id S1351743AbiCOUuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:47:29 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D5E51E5B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:46:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647377174; x=1678913174;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JS8e0yVWcXTi/n5NTFQIXUWYwL7puOFZOxs9LM+HZ+c=;
-  b=n0MkbXUWYaUYaq8eSf3hEaWb0BIcsDLUSxasn7kH6qy6M3N2EpyEJcgm
-   G8EWQ2z/Lgfao6L8k/UDc8zfv0IV9kEQHrvwrm8t1pnJgvVNkIvlmyDJf
-   NCY8vS+av+xdChY+oubngu20NIAWHBvfudksrWzZjnCJdk/MQEF5AG+3E
-   6V/BKjS70lwiDuSyH6eX7bKP+fa39mJKoj8NE8gBB9PqMhi43aCfRpHb3
-   bJPaX8cVbe3EaLYJYErjvxgKduYAi9LOkAAAb9p1VjPMoVTtoLqxCkjAE
-   33u3szzSsg88wcw7wQQFYvAPcJzAUGLkFU6B6UwsEY6rIX6+xtbl7pe3l
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281194025"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="281194025"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 13:46:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="498179912"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 15 Mar 2022 13:46:11 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUE3W-000BUi-9q; Tue, 15 Mar 2022 20:46:10 +0000
-Date:   Wed, 16 Mar 2022 04:45:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Zhen Lei <thunder.leizhen@huawei.com>,
-        James Morse <james.morse@arm.com>,
-        Christoffer Dall <cdall@linaro.org>
-Subject: Re: [PATCH] arm64: add the printing of tpidr_elx in __show_regs()
-Message-ID: <202203160424.FIKayRYG-lkp@intel.com>
-References: <20220315110926.1060-1-thunder.leizhen@huawei.com>
+        Tue, 15 Mar 2022 16:50:14 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B69624F06;
+        Tue, 15 Mar 2022 13:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1647377335;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=mfqGnB/NorIrBYocK370TVdnZ90hKH4/cEEo32hkWwY=;
+    b=BGDAm1EZRYfYZ4KX1kNZ5aurOwJ7JMSKWmS1K0SMwjlZ5on3oITcZJy9WqgHYP/Es7
+    2Fb6FwO/kXt1K6J0eWpdSnNDf0VHUGbe+58QPyWnluDsVJQLPrOmjINwCJeAk6ff/0mc
+    8yocIlUDGyyVUI263MSiGKA8HqLvMP1qwIHaHqoUOqwhkCrUQeGFa8iQVL0pRNKKl4zz
+    H31elYe2yV4yEgS/Lyly2mvv+uVTSzUISksYPG4yMSiUXigsarTkg1flX92Nlq5PDKh3
+    oDInwP2sO/zigM77E8oc1Iqr55l6bwTIafIBAduGrC7B3LyriTEs79hD/veDgih3BODu
+    LkeQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.41.0 AUTH)
+    with ESMTPSA id a046a1y2FKms13o
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 15 Mar 2022 21:48:54 +0100 (CET)
+Message-ID: <9bdaf3f2-3edc-5cd5-1184-55387344881d@hartkopp.net>
+Date:   Tue, 15 Mar 2022 21:48:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315110926.1060-1-thunder.leizhen@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: net-next Re: [syzbot] WARNING in isotp_tx_timer_handler (2)
+Content-Language: en-US
+To:     syzbot <syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000004e53a505da08501e@google.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <0000000000004e53a505da08501e@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhen,
+Hi all,
 
-Thank you for the patch! Perhaps something to improve:
+thanks for the report!
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on arm-perf/for-next/perf arm/for-next xilinx-xlnx/master soc/for-next kvmarm/next v5.17-rc8 next-20220315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+A patch to fix the issue has been posted for the "net-next" tree here:
 
-url:    https://github.com/0day-ci/linux/commits/Zhen-Lei/arm64-add-the-printing-of-tpidr_elx-in-__show_regs/20220315-191234
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-config: arm64-randconfig-r024-20220313 (https://download.01.org/0day-ci/archive/20220316/202203160424.FIKayRYG-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1a42e34104d70b0b90fe074ba96f2c04d33ffb23
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zhen-Lei/arm64-add-the-printing-of-tpidr_elx-in-__show_regs/20220315-191234
-        git checkout 1a42e34104d70b0b90fe074ba96f2c04d33ffb23
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+https://lore.kernel.org/netdev/20220315203748.1892-1-socketcan@hartkopp.net/T/#u
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I sent it to the net-next tree as it fits best to get it into upstream 
+before the merge window opens IMO.
 
-All warnings (new ones prefixed by >>):
+Linus' tree (and the stable kernels) need a different patch due to 
+current changes in net-next. A patch for the non net-next kernels is 
+available too.
 
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/arm64/include/asm/bug.h:26,
-                    from include/linux/bug.h:5,
-                    from arch/arm64/include/asm/cpufeature.h:19,
-                    from arch/arm64/include/asm/hwcap.h:9,
-                    from arch/arm64/include/asm/arch_timer.h:12,
-                    from arch/arm64/include/asm/timex.h:8,
-                    from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/compat.h:10,
-                    from arch/arm64/kernel/process.c:9:
-   arch/arm64/kernel/process.c: In function '__show_regs':
->> arch/arm64/kernel/process.c:220:24: warning: format '%lx' expects argument of type 'long unsigned int', but argument 2 has type 'void *' [-Wformat=]
-     220 |                 printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
-         |                        ^~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   arch/arm64/kernel/process.c:220:17: note: in expansion of macro 'printk'
-     220 |                 printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
-         |                 ^~~~~~
-   arch/arm64/kernel/process.c:220:38: note: format string is defined here
-     220 |                 printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
-         |                                 ~~~~~^
-         |                                      |
-         |                                      long unsigned int
-         |                                 %016p
+The fix is not critical. So there's no hurry to get it into Linus' tree 
+and the stable trees.
+
+Best regards,
+Oliver
 
 
-vim +220 arch/arm64/kernel/process.c
-
-   200	
-   201	void __show_regs(struct pt_regs *regs)
-   202	{
-   203		int i, top_reg;
-   204		u64 lr, sp;
-   205	
-   206		if (compat_user_mode(regs)) {
-   207			lr = regs->compat_lr;
-   208			sp = regs->compat_sp;
-   209			top_reg = 12;
-   210		} else {
-   211			lr = regs->regs[30];
-   212			sp = regs->sp;
-   213			top_reg = 29;
-   214		}
-   215	
-   216		show_regs_print_info(KERN_DEFAULT);
-   217		print_pstate(regs);
-   218	
-   219		if (IS_ENABLED(CONFIG_SMP))
- > 220			printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
-   221	
-   222		if (!user_mode(regs)) {
-   223			printk("pc : %pS\n", (void *)regs->pc);
-   224			printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
-   225		} else {
-   226			printk("pc : %016llx\n", regs->pc);
-   227			printk("lr : %016llx\n", lr);
-   228		}
-   229	
-   230		printk("sp : %016llx\n", sp);
-   231	
-   232		if (system_uses_irq_prio_masking())
-   233			printk("pmr_save: %08llx\n", regs->pmr_save);
-   234	
-   235		i = top_reg;
-   236	
-   237		while (i >= 0) {
-   238			printk("x%-2d: %016llx", i, regs->regs[i]);
-   239	
-   240			while (i-- % 3)
-   241				pr_cont(" x%-2d: %016llx", i, regs->regs[i]);
-   242	
-   243			pr_cont("\n");
-   244		}
-   245	}
-   246	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 12.03.22 17:55, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    46b348fd2d81 alx: acquire mutex for alx_reinit in alx_chan..
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15da96e5700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2339c27f5c66c652843e
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165c76ad700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143da461700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 19 at net/can/isotp.c:852 isotp_tx_timer_handler+0x717/0xcd0 net/can/isotp.c:852
+> Modules linked in:
+> CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.17.0-rc7-syzkaller-00198-g46b348fd2d81 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:isotp_tx_timer_handler+0x717/0xcd0 net/can/isotp.c:852
+> Code: f9 44 0f b6 25 3b 23 56 05 31 ff 44 89 e6 e8 f0 56 4f f9 45 84 e4 0f 85 9d fa ff ff e9 4e 01 20 01 85 ed 75 52 e8 59 54 4f f9 <0f> 0b 45 31 e4 e8 4f 54 4f f9 48 8b 74 24 40 48 b8 00 00 00 00 00
+> RSP: 0018:ffffc90000d97c40 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: ffff88806f490568 RCX: 0000000000000100
+> RDX: ffff888011945700 RSI: ffffffff88296bd7 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: ffffffff8ac3c440 R09: ffffffff8829656f
+> R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000000
+> R13: ffff8880b9d2a880 R14: ffff8880b9d2a600 R15: ffffffff882964c0
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f5c3133d1d8 CR3: 000000006b70d000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   <TASK>
+>   __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+>   __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
+>   hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
+>   __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+>   run_ksoftirqd kernel/softirq.c:921 [inline]
+>   run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+>   smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+>   kthread+0x2e9/0x3a0 kernel/kthread.c:377
+>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>   </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

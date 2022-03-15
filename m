@@ -2,184 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34794D9824
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659EF4D982E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346843AbiCOJyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
+        id S1346890AbiCOJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346854AbiCOJyM (ORCPT
+        with ESMTP id S1346857AbiCOJyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:54:12 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999E4CDE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:52:57 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id qa43so39710868ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nzL1DPOauY6xrdeyfpwRODojKdw/bFm68FMajovYo6g=;
-        b=aPQtqBpjqL26lRUuA67dWSdBYZ+P/OnQD5b5DPaPCNVFC8mllI1F5Z4DrykGC7Nm52
-         NYVARAcB6EKihQiU3nR7auLh2RMcX5iG4aZzNurSihePLSCDNafmV6aDnPt7iohqmzPT
-         i+1RJQbOuQTUsiLaWuynMdfIp2D0pEXMbRgq3gppylA50fxe/er+TcNS8B7LqPy9DwNd
-         xK4POQpl6tAPqXHcYYhL9RoWDsmggj0qIBO3em3KQdtOCCzH995aYYhNiMf7y+PmHirW
-         gmes5oNZhwRimfcWiHSC/2oYzvBdzMMM04H84ESMBLL84WRaxdlbwsUak7eTTugCNdve
-         PEXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nzL1DPOauY6xrdeyfpwRODojKdw/bFm68FMajovYo6g=;
-        b=iB0LWXT7QoPghJLzoyNiL/nb9UxPpdAcxunzKTzlJFZEtU62e6CHDPl9Qw3KElAlHI
-         zGZBTgY2X//yaZWbjfVebio3VnZ/XALzvPdt8V62nyCTu7mDAF3tBfemt/bOZDexYfnb
-         UDGFAi2os+Edm8hYCyGaVSRfftoe41QvYUeaaGqumAsZwX45AUxOwFtFeD1GgAp+KbeV
-         1u62C9W4p9J99JFXZ0ejxWMmwGvsPNQ+XfFuoTRwiFOAUMcRlYLzRZU9C7z/tqasBYcp
-         6j36fY7G6uqZdv9qsd+tRPe4TGilf5wkcgS5LiNzUn65qyigNQJWwNs4ajL2gflKX8gY
-         Ys3Q==
-X-Gm-Message-State: AOAM533FQhdRHnXSFT3TUxGRaKpaxy/JqUtZKeAAWADe/uRLtQuiNlz1
-        PkWiQF5nj6vANeqfVCj4coTPTQ==
-X-Google-Smtp-Source: ABdhPJyQkxhiMyLn0VYaZCt9sQO44O40CE85NeRb10VArr61L3n9t7cm6DbwGGYW3nPA3mCgwXjBGg==
-X-Received: by 2002:a17:906:d555:b0:6da:ac8c:f66b with SMTP id cr21-20020a170906d55500b006daac8cf66bmr21422702ejc.107.1647337975509;
-        Tue, 15 Mar 2022 02:52:55 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id a102-20020a509eef000000b0041614c8f79asm9346624edf.88.2022.03.15.02.52.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 02:52:55 -0700 (PDT)
-Message-ID: <5c05d8b8-9c40-e38d-5c4d-e25526407e51@blackwall.org>
-Date:   Tue, 15 Mar 2022 11:52:53 +0200
+        Tue, 15 Mar 2022 05:54:17 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B34EBED;
+        Tue, 15 Mar 2022 02:53:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHpcX0jwhz4xRB;
+        Tue, 15 Mar 2022 20:53:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647337981;
+        bh=oXrKZHFPKEFYK64Or/Hu81ZPN5Pi5Yx/O8XNN8iQ1us=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AOd3pjFYC5QO1JCRGxvsiDdugjt3b8gCg0PQaxR4tL0xBYgn1+YImbXmLmeM9kxpx
+         RVD/eIrVesKZHEU7TeO4Ax7DXrGkLZBHNPGujjzOkdJpIyhBkF9E7xkBrkHjuS8Abk
+         OtbcttJiguhmUglb/UNCTrpLvQObHPrNHUIBtSGABSe5TFTd0oauHIyw2IJNsG/VMQ
+         9sdhWGwWmQ/8cwaoGvFaMDqXf7KSoNriYwg+1Ph0ZlRCXmIrS8hNSrUosnQqX3Ib5N
+         Rtypr2NRA/EDUurONCLcL7X2yH/Oq7Ch1IVUXQLteg/k2V9S7dRas9NEVRKqD9BRow
+         XbQb/rpB0G8xA==
+Date:   Tue, 15 Mar 2022 20:52:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhihao Cheng <chengzhihao1@huawei.com>
+Subject: linux-next: manual merge of the folio tree with the ubifs-fixes
+ tree
+Message-ID: <20220315205259.71b4238a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 net-next 03/15] net: bridge: mst: Support setting and
- reporting MST port states
-Content-Language: en-US
-To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-References: <20220315002543.190587-1-tobias@waldekranz.com>
- <20220315002543.190587-4-tobias@waldekranz.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220315002543.190587-4-tobias@waldekranz.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.wP75LYaKDQTnOQ7mCg.KJi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 02:25, Tobias Waldekranz wrote:
-> Make it possible to change the port state in a given MSTI by extending
-> the bridge port netlink interface (RTM_SETLINK on PF_BRIDGE).The
-> proposed iproute2 interface would be:
-> 
->     bridge mst set dev <PORT> msti <MSTI> state <STATE>
-> 
-> Current states in all applicable MSTIs can also be dumped via a
-> corresponding RTM_GETLINK. The proposed iproute interface looks like
-> this:
-> 
-> $ bridge mst
-> port              msti
-> vb1               0
-> 		    state forwarding
-> 		  100
-> 		    state disabled
-> vb2               0
-> 		    state forwarding
-> 		  100
-> 		    state forwarding
-> 
-> The preexisting per-VLAN states are still valid in the MST
-> mode (although they are read-only), and can be queried as usual if one
-> is interested in knowing a particular VLAN's state without having to
-> care about the VID to MSTI mapping (in this example VLAN 20 and 30 are
-> bound to MSTI 100):
-> 
-> $ bridge -d vlan
-> port              vlan-id
-> vb1               10
-> 		    state forwarding mcast_router 1
-> 		  20
-> 		    state disabled mcast_router 1
-> 		  30
-> 		    state disabled mcast_router 1
-> 		  40
-> 		    state forwarding mcast_router 1
-> vb2               10
-> 		    state forwarding mcast_router 1
-> 		  20
-> 		    state forwarding mcast_router 1
-> 		  30
-> 		    state forwarding mcast_router 1
-> 		  40
-> 		    state forwarding mcast_router 1
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  include/uapi/linux/if_bridge.h |  16 +++++
->  include/uapi/linux/rtnetlink.h |   1 +
->  net/bridge/br_mst.c            | 127 +++++++++++++++++++++++++++++++++
->  net/bridge/br_netlink.c        |  44 +++++++++++-
->  net/bridge/br_private.h        |  23 ++++++
->  5 files changed, 210 insertions(+), 1 deletion(-)
-> 
-[snip]
-> diff --git a/net/bridge/br_mst.c b/net/bridge/br_mst.c
-> index 78ef5fea4d2b..355ad102d6b1 100644
-> --- a/net/bridge/br_mst.c
-> +++ b/net/bridge/br_mst.c
-> @@ -124,3 +124,130 @@ int br_mst_set_enabled(struct net_bridge *br, bool on,
->  	br_opt_toggle(br, BROPT_MST_ENABLED, on);
->  	return 0;
->  }
-> +
-> +size_t br_mst_info_size(const struct net_bridge_vlan_group *vg)
-> +{
-> +	DECLARE_BITMAP(seen, VLAN_N_VID) = { 0 };
-> +	const struct net_bridge_vlan *v;
-> +	size_t sz;
-> +
-> +	/* IFLA_BRIDGE_MST */
-> +	sz = nla_total_size(0);
-> +
-> +	list_for_each_entry(v, &vg->vlan_list, vlist) {
+--Sig_/.wP75LYaKDQTnOQ7mCg.KJi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Note that rtnl_calcit() (which ends up indirectly using this function) is called
-only with rcu so you need to use list_for_each_entry_rcu() here.
+Hi all,
 
-> +		if (test_bit(v->brvlan->msti, seen))
-> +			continue;
-> +
-> +		/* IFLA_BRIDGE_MST_ENTRY */
-> +		sz += nla_total_size(0) +
-> +			/* IFLA_BRIDGE_MST_ENTRY_MSTI */
-> +			nla_total_size(sizeof(u16)) +
-> +			/* IFLA_BRIDGE_MST_ENTRY_STATE */
-> +			nla_total_size(sizeof(u8));
-> +
-> +		__set_bit(v->brvlan->msti, seen);
-> +	}
-> +
-> +	return sz;
-> +}
-> +
+Today's linux-next merge of the folio tree got a conflict in:
+
+  fs/ubifs/file.c
+
+between commit:
+
+  3b67db8a6ca8 ("ubifs: Fix to add refcount once page is set private")
+
+from the ubifs-fixes tree and commit:
+
+  c337f2f4f746 ("ubifs: Convert from invalidatepage to invalidate_folio")
+
+from the folio tree.
+
+I fixed it up (I hope - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/ubifs/file.c
+index 6b45a037a047,8a9ffc2d4167..000000000000
+--- a/fs/ubifs/file.c
++++ b/fs/ubifs/file.c
+@@@ -1304,8 -1304,8 +1304,8 @@@ static void ubifs_invalidate_folio(stru
+  		release_existing_page_budget(c);
+ =20
+  	atomic_long_dec(&c->dirty_pg_cnt);
+- 	detach_page_private(page);
+- 	ClearPageChecked(page);
+ -	folio_clear_private(folio);
+++	folio_detach_private(folio);
++ 	folio_clear_checked(folio);
+  }
+ =20
+  int ubifs_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+
+--Sig_/.wP75LYaKDQTnOQ7mCg.KJi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwYfsACgkQAVBC80lX
+0Gwq/wf/WHT8NhSMG7gMJw8I4Js39P21jI4SVNqZjOErX1hAIk8h3OZlt4j3wJNw
+GamvJU3tNCVkDSYNBSCOBoRDipPbBX0Wy7fCNuKHmvO5iORrAFEzd3Yfes5cJuPS
+iKkoTG4cViwaNxy9Izs8OX8IIabMCjb+xgqyzDAJYfmiU02ilsQ7pK+fcfAJTFTT
+GB1L1JtKIw0pf0O12Yzngqfe9gc9itOMmHIEOJdgZhmGyg/I0QHu3zMm+1vbsWHD
+Phpek9H3jn4/8cakWp4lnRzGNFNrGiokY/u5ZOuQ2nwd2e6nRwIPeG03EFqYbPJj
+CYY8Pm56jSdljASAxfG60VffxprY0A==
+=1t4B
+-----END PGP SIGNATURE-----
+
+--Sig_/.wP75LYaKDQTnOQ7mCg.KJi--

@@ -2,154 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8764E4D9FF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021594DA003
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350042AbiCOQ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S1349983AbiCOQ2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241810AbiCOQ1Q (ORCPT
+        with ESMTP id S241023AbiCOQ2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:27:16 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2055.outbound.protection.outlook.com [40.107.220.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F6D56C13;
-        Tue, 15 Mar 2022 09:26:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jlntoGGSX+mz6V8B+wjrC65QuucXjCGREJnBSKJHfGFUGddNKQtZTHxfw9SEwouTaoVSsdH9kpQMuWW3UDiSeI84xoUZZa1Si/aXqpDRxTi65LmrvSWn8fhrWOgRET5/6GhgsudRohg4L2BBRMoDh3xcJkiV01uhSMiqBMBPPJhG0ZKQGg48q+QbBQGaood5A6ojIldLiHxDTl+Wzz4kYa7zvTSYjhYD9IJSdhtwVM+FlHHsHljtBamddVKW6nogGB6YkpHucwMK88CPleX7NvFXTtiCaj6jBu9d+kWYPzoFatywRRwZxppEcn7w09akMMBakK0rP5L77v+MYC0HVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v0EQHHkf/VTb3rmTlnfa9a41JED/3nfcpRaIod8f4ZI=;
- b=J18CJ4E7zg5r9g0FJvXeVfsRgqYwHTnh3ujsS3KHMAIw/TpIoAyrSyK7e8sdoAIwIHVZEAg7SY9ehOcjBFRqVZTB5Fny+khj1U7L5xWz9z1pfzAt8eSkTC4cxmW2PhnFNia+cKk+uAF4HP22b063o901hSrMKURkaabkwB4l6dbWTCMsAnsvhgiifAn9QX7IoBQeCGBlhkg7jiGmNSiz4ONh4B+XdUEPu5dduUW9VEWjTHwufM0vWnKtQNUrAhFtUaFQRKnL0LIOxmg4BUHcsXcdp1OUdQsFT7JmBsC2r+2prAaa0aEEKv/uI//n0NvHBYKwM6lzfHMS31Ve9i6Ojg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=8bytes.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v0EQHHkf/VTb3rmTlnfa9a41JED/3nfcpRaIod8f4ZI=;
- b=TbN6yMdU/zdwgvbZj0V95yC0Rn70ujV7vWDFW/Sooj4kep8YIEmNhxrj3zj+b64nO4kmU6pAaKqviq0sN5vfC5z8o82eUMXvyGRg1EKVRTD0dqkK2VMjGhfROBERiuqw4WBiH+f6lgw38muwPeJVqZI4tt5iAtfb8SSei93aHiA=
-Received: from MWHPR19CA0078.namprd19.prod.outlook.com (2603:10b6:320:1f::16)
- by DM6PR12MB3228.namprd12.prod.outlook.com (2603:10b6:5:18c::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.25; Tue, 15 Mar
- 2022 16:26:02 +0000
-Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
- (2603:10b6:320:1f:cafe::62) by MWHPR19CA0078.outlook.office365.com
- (2603:10b6:320:1f::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.28 via Frontend
- Transport; Tue, 15 Mar 2022 16:26:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5061.22 via Frontend Transport; Tue, 15 Mar 2022 16:26:01 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 15 Mar
- 2022 11:25:54 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Will Deacon <will@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 2/2] thunderbolt: Use pre-boot DMA protection on AMD systems
-Date:   Tue, 15 Mar 2022 11:24:55 -0500
-Message-ID: <20220315162455.5190-2-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220315162455.5190-1-mario.limonciello@amd.com>
-References: <20220315162455.5190-1-mario.limonciello@amd.com>
+        Tue, 15 Mar 2022 12:28:35 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4589956C13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:27:21 -0700 (PDT)
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 22FGR9dr025638;
+        Wed, 16 Mar 2022 01:27:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 22FGR9dr025638
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1647361630;
+        bh=BOExbP66O/Uw83XDrn7rpBs8+RR88II8AzpWN9E7Ij8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rA9hroOKKerr19Bw4b7PXizh9fqj0afiUYGVwhUHwpvJ2bkD1AYoPUizxA26Hehgc
+         4dTPwZUXzvwb30kBQtUoKeA7DxBP1/7E95zjiSoSfF8Heaoodu5RJuxEh8OH5gIklh
+         QRgjv5lW9jT1sgrMdYdVhK5UW9KnC2Gl5EwUTRuD5fVtttbD308l1nye5TUqa27Ft9
+         6KJncFlXCu5RFVCiYPPj/T98I+0w9ENcCTdhuWpXxthBuTLlk7Dd7WX9nDIt/UyppB
+         6uWPQTY0d/FAKufm7eHTX4rxsEUSXmAlt5ePMfKIY75EL6sSXIeSpzfoYt3CwubmnL
+         OWoCzGmIKkBcg==
+X-Nifty-SrcIP: [209.85.214.173]
+Received: by mail-pl1-f173.google.com with SMTP id n15so16682437plh.2;
+        Tue, 15 Mar 2022 09:27:09 -0700 (PDT)
+X-Gm-Message-State: AOAM533EcG/ATJT6Mzg0mkGYmxbZEFYnxGtltclLqR5an4GjbFAaxZzm
+        24N7XFk9LNrofoFnm0VtnnSPB0kVtfRbFRj6M4A=
+X-Google-Smtp-Source: ABdhPJxBZNGNRIITAORFdnjsxJn8chKL2ZYd6FUuJo3h2ECaHhs7DII5mfIECrcrNqbnXKgYHaifSPRjWImr0MzXGYY=
+X-Received: by 2002:a17:902:eb84:b0:151:f80e:e98b with SMTP id
+ q4-20020a170902eb8400b00151f80ee98bmr29180354plg.99.1647361628703; Tue, 15
+ Mar 2022 09:27:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 472eb2b1-7116-4328-ef7a-08da06a07ec0
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3228:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB32283DBCE8E03DED9030F78AE2109@DM6PR12MB3228.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wRQAOn4gwvOYRZ5ykALdvyzpzcbE5LXmfCj+q93zQSlPMbBgaBNrdNvtpfTsihEW8jnyuU31chubo0KbhTzvNP84IZcqV1PGbyebOQPh1yCPZIi1Fkt87Fx7wXKKYoUM5t+tTavHIZkvpDAgn5qaa8lAQ7OGYKfyinUpIlGRYfXggBggF200h3tRWMyItmujMJNTkrlAQKPL8U7WWpvXtpdCDtSZxg56qw23J3Lg/+3r0UkPGTlb0V+3j6YY0O5w4EAeI6iaZni2NRguc8xuVNNl4Sr4vhcmRofaTG7KxLqDlv3CPUM66OVhbhs9/DccwPUgtMCeYP7Tqc8lZ0vkOjsHc0/gC0wee219uezgP0UKDXorX2wKyjewVn3TCRJBF2dPLKvEzeV6gKXdyhncnpYdqbkHupJnGeTkDv3puTBRO+K3el3jwXiQZtF96OFq9Jz+wyzfVExTlLirVxX48FR6QiEqpfEJrAhrWG/zjg+u8vqvGKv7+kch/R77blUbtxG3O9oEz/M8gitEsUEDgVeP3Dd7wbykheRxat5E4IxpJbOtKpC2BaeZe7Pw185AkLvFfFj3dnS2g94FaUB491rW/H2hj+7Oeo5vNxat5RDuFdcaxQaYECf7hUmSbS0hJI1tR2+cmJEWVg4ToFOMHgS186i2GqfiQCbqezzDCTJYYiytcBliN3CIqCCpKrKTm6FSBB1nKXjWl0tD3REK1FVYMppHb47Tva2f/rnHa+jfZS/7rujwW3oUCf4qBuQzBvsrY3ezZNU9uNQz8j8apzEN9cGQWTzv7lvlhYB+EuSTrhe4Yy1yuLj8F5uQG8vHDKHguERoilOkKwJ0CYBKOw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(54906003)(110136005)(316002)(36756003)(36860700001)(508600001)(82310400004)(70586007)(70206006)(966005)(8936002)(44832011)(5660300002)(2906002)(40460700003)(8676002)(4326008)(81166007)(7696005)(356005)(2616005)(86362001)(16526019)(26005)(1076003)(47076005)(336012)(426003)(83380400001)(186003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2022 16:26:01.5579
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 472eb2b1-7116-4328-ef7a-08da06a07ec0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3228
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
+ <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net> <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net> <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+ <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
+ <20220312154407.GF28057@worktop.programming.kicks-ass.net>
+ <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
+ <20220313085214.GK28057@worktop.programming.kicks-ass.net> <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 16 Mar 2022 01:26:25 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASOjsSRixifxxUBKiFdR_Q_pSoBu98zYU_u_z1rtUD=zA@mail.gmail.com>
+Message-ID: <CAK7LNASOjsSRixifxxUBKiFdR_Q_pSoBu98zYU_u_z1rtUD=zA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The information is exported from the IOMMU driver whether or not
-pre-boot DMA protection has been enabled on AMD systems.  Use this
-information to properly set iomma_dma_protection.
+On Mon, Mar 14, 2022 at 11:59 PM Peter Zijlstra <peterz@infradead.org> wrot=
+e:
+>
+> On Sun, Mar 13, 2022 at 09:52:14AM +0100, Peter Zijlstra wrote:
+> > On Sat, Mar 12, 2022 at 05:33:39PM -0800, Alexei Starovoitov wrote:
+> > > During the build with gcc 8.5 I see:
+> > >
+> > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > > .ibt_endbr_seal, skipping
+> > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > > .orc_unwind section, skipping
+> > >   LD [M]  crypto/async_tx/async_xor.ko
+> > >   LD [M]  crypto/authenc.ko
+> > > make[3]: *** [../scripts/Makefile.modfinal:61:
+> > > arch/x86/crypto/crc32c-intel.ko] Error 255
+> > > make[3]: *** Waiting for unfinished jobs....
+> > >
+> > > but make clean cures it.
+> > > I suspect it's some missing makefile dependency.
+> >
+> > Yes, I recently ran into it; I've been trying to kick Makefile into
+> > submission but have not had success yet. Will try again on Monday.
+> >
+> > Problem appears to be that it will re-link .ko even though .o hasn't
+> > changed, resulting in duplicate objtool runs. I've been trying to have
+> > makefile generate .o.objtool empty file to serve as dependency marker t=
+o
+> > avoid doing second objtool run, but like said, no luck yet.
+>
+> Masahiro-san, I'm trying the below, but afaict it's not working because
+> the rule for the .o file itself:
+>
+> $(multi-obj-m): FORCE
+>         $(call if_changed,link_multi-m)
+>
+> will in fact update the timestamp of the .o file, even if if_changed
+> nops out the cmd. Concequently all rules that try to use if_changed with
+> this .o file as a dependency will find it newer and run anyway.
+>
+>
+> remake -x output of a fs/f2fs/ module (re)build:
+>
+>      Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.o' does not exist.
+>     Must remake target 'fs/f2fs/f2fs.o'.
+> ../scripts/Makefile.build:454: target 'fs/f2fs/f2fs.o' does not exist
+> ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> :
+> ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>     Successfully remade target file 'fs/f2fs/f2fs.o'.
+>    Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.mod'.
+>    Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.mod' does not exist.
+>   Must remake target 'fs/f2fs/f2fs.mod'.
+> ../scripts/Makefile.build:281: update target 'fs/f2fs/f2fs.mod' due to: f=
+s/f2fs/f2fs.o
+> ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> set -e;   { echo  fs/f2fs/dir.o fs/f2fs/file.o fs/f2fs/inode.o fs/f2fs/na=
+mei.o fs/f2fs/hash.o fs/f2fs/super.o fs/f2fs/inline.o fs/f2fs/checkpoint.o =
+fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node.o fs/f2fs/segment.o fs/f2fs/recove=
+ry.o fs/f2fs/shrinker.o fs/f2fs/extent_cache.o fs/f2fs/sysfs.o fs/f2fs/debu=
+g.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2fs/iostat.o;  echo; } > fs/f2fs/f2fs=
+.mod; printf '%s\n' 'cmd_fs/f2fs/f2fs.mod :=3D { echo  fs/f2fs/dir.o fs/f2f=
+s/file.o fs/f2fs/inode.o fs/f2fs/namei.o fs/f2fs/hash.o fs/f2fs/super.o fs/=
+f2fs/inline.o fs/f2fs/checkpoint.o fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node=
+.o fs/f2fs/segment.o fs/f2fs/recovery.o fs/f2fs/shrinker.o fs/f2fs/extent_c=
+ache.o fs/f2fs/sysfs.o fs/f2fs/debug.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2f=
+s/iostat.o;  echo; } > fs/f2fs/f2fs.mod' > fs/f2fs/.f2fs.mod.cmd
+> ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>   Successfully remade target file 'fs/f2fs/f2fs.mod'.
+>    Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.objto=
+ol'.
+>    Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.objtool' does not exist.
+>   Must remake target 'fs/f2fs/f2fs.objtool'.
+> ../scripts/Makefile.build:287: update target 'fs/f2fs/f2fs.objtool' due t=
+o: fs/f2fs/f2fs.o
+> ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> set -e;   { echo fs/f2fs/f2fs.o  ; ./tools/objtool/objtool orc generate  =
+--module  --lto --ibt  --no-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/=
+f2fs.objtool; printf '%s\n' 'cmd_fs/f2fs/f2fs.objtool :=3D { echo fs/f2fs/f=
+2fs.o  ; ./tools/objtool/objtool orc generate  --module  --lto --ibt  --no-=
+fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/f2fs.objtool' > fs/f2fs/.f2f=
+s.objtool.cmd
+> ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> fs/f2fs/f2fs.o: warning: objtool: file already has .static_call_sites sec=
+tion, skipping
+> fs/f2fs/f2fs.o: warning: objtool: file already has .ibt_endbr_seal, skipp=
+ing
+> fs/f2fs/f2fs.o: warning: objtool: file already has .orc_unwind section, s=
+kipping
+> ../scripts/Makefile.build:286: *** [fs/f2fs/f2fs.objtool] error 255
+>
+>
+> Where we can see that we don't re-generate f2fs.o (empty command), but
+> then we do re-generate f2fs.mod because f2fs.o is newer and the same
+> happens for the new f2fs.objtool.
+>
+> Help?
 
-Link: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection
-Link: https://www.amd.com/system/files/TechDocs/48882_IOMMU.pdf
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/thunderbolt/domain.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
-index 7018d959f775..e03790735c12 100644
---- a/drivers/thunderbolt/domain.c
-+++ b/drivers/thunderbolt/domain.c
-@@ -6,6 +6,7 @@
-  * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
-  */
- 
-+#include <linux/amd-iommu.h>
- #include <linux/device.h>
- #include <linux/dmar.h>
- #include <linux/idr.h>
-@@ -259,11 +260,15 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
- {
- 	/*
- 	 * Kernel DMA protection is a feature where Thunderbolt security is
--	 * handled natively using IOMMU. It is enabled when IOMMU is
--	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
-+	 * handled natively using IOMMU. It is enabled when the IOMMU is
-+	 * enabled and either:
-+	 * ACPI DMAR table has DMAR_PLATFORM_OPT_IN set
-+	 * or
-+	 * ACPI IVRS table has DMA_REMAP bitset
- 	 */
- 	return sprintf(buf, "%d\n",
--		       iommu_present(&pci_bus_type) && dmar_platform_optin());
-+		       iommu_present(&pci_bus_type) &&
-+		       (dmar_platform_optin() || amd_ivrs_remap_support()));
- }
- static DEVICE_ATTR_RO(iommu_dma_protection);
- 
--- 
-2.34.1
+Help?
 
+I had never noticed this thread before because
+you did not CC me or kbuild ML.
+
+
+Looking at the build system changes:
+https://lore.kernel.org/all/20220308154319.528181453@infradead.org/
+https://lore.kernel.org/all/20220308154319.822545231@infradead.org/
+
+Both patches are wrong.
+So is the fix-up you appended lator in this thread.
+
+Apparently, you were screwing up Kbuild in a brown paper bag.
+So scared.
+
+
+
+
+
+
+
+>
+> ---
+> Index: linux-2.6/scripts/Makefile.build
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-2.6.orig/scripts/Makefile.build
+> +++ linux-2.6/scripts/Makefile.build
+> @@ -92,6 +92,10 @@ ifdef CONFIG_LTO_CLANG
+>  targets-for-modules +=3D $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)=
+))
+>  endif
+>
+> +ifdef CONFIG_X86_KERNEL_IBT
+> +targets-for-modules +=3D $(patsubst %.o, %.objtool, $(filter %.o, $(obj-=
+m)))
+> +endif
+> +
+>  ifdef need-modorder
+>  targets-for-modules +=3D $(obj)/modules.order
+>  endif
+> @@ -276,6 +280,12 @@ cmd_mod =3D { \
+>  $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
+>         $(call if_changed,mod)
+>
+> +cmd_objtool_mod =3D                                                     =
+ \
+> +       { echo $< $(cmd_objtool) ; } > $@
+> +
+> +$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
+> +       $(call if_changed,objtool_mod)
+> +
+>  quiet_cmd_cc_lst_c =3D MKLST   $@
+>        cmd_cc_lst_c =3D $(CC) $(c_flags) -g -c -o $*.o $< && \
+>                      $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
+> Index: linux-2.6/scripts/Makefile.lib
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-2.6.orig/scripts/Makefile.lib
+> +++ linux-2.6/scripts/Makefile.lib
+> @@ -552,9 +552,8 @@ objtool_args =3D                                     =
+                         \
+>         $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+>         $(if $(CONFIG_SLS), --sls)
+>
+> -cmd_objtool =3D $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@=
+)
+> -cmd_objtool_mod =3D $(if $(objtool-enabled), $(objtool) $(objtool_args) =
+$(@:.ko=3D.o) ; )
+> -cmd_gen_objtooldep =3D $(if $(objtool-enabled), { echo ; echo '$@: $$(wi=
+ldcard $(objtool))' ; } >> $(dot-target).cmd)
+> +cmd_objtool =3D $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(=
+@:.objtool=3D.o))
+> +cmd_gen_objtooldep =3D $(if $(objtool-enabled), { echo ; echo '$(@:.objt=
+ool=3D.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+>
+>  endif # CONFIG_STACK_VALIDATION
+>
+> @@ -575,8 +574,8 @@ $(obj)/%.o: objtool-enabled :=3D
+>
+>  # instead run objtool on the module as a whole, right before
+>  # the final link pass with the linker script.
+> -%.ko: objtool-enabled =3D y
+> -%.ko: part-of-module :=3D y
+> +$(obj)/%.objtool: objtool-enabled =3D y
+> +$(obj)/%.objtool: part-of-module :=3D y
+>
+>  else
+>
+> Index: linux-2.6/scripts/Makefile.modfinal
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-2.6.orig/scripts/Makefile.modfinal
+> +++ linux-2.6/scripts/Makefile.modfinal
+> @@ -32,7 +32,6 @@ ARCH_POSTLINK :=3D $(wildcard $(srctree)/a
+>
+>  quiet_cmd_ld_ko_o =3D LD [M]  $@
+>        cmd_ld_ko_o +=3D                                                  =
+ \
+> -       $(cmd_objtool_mod)                                              \
+>         $(LD) -r $(KBUILD_LDFLAGS)                                      \
+>                 $(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)              \
+>                 -T scripts/module.lds -o $@ $(filter %.o, $^);          \
+
+
+
+--=20
+Best Regards
+Masahiro Yamada

@@ -2,156 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943C74D9864
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F8F4D986A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346953AbiCOKJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S1346966AbiCOKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238877AbiCOKJo (ORCPT
+        with ESMTP id S1346967AbiCOKKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:09:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AB6212604
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:08:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21DC71474;
-        Tue, 15 Mar 2022 03:08:32 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A1DA3F66F;
-        Tue, 15 Mar 2022 03:08:30 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:08:28 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] arch_topology: Correct CPU capacity scaling
-Message-ID: <YjBlnMvcagdbKnEz@bogus>
-References: <20220313055512.248571-1-leo.yan@linaro.org>
- <Yi+FMrG9NyBnMX0i@arm.com>
- <20220315032919.GA217475@leoy-ThinkPad-X240s>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315032919.GA217475@leoy-ThinkPad-X240s>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 06:10:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E783AA4F;
+        Tue, 15 Mar 2022 03:08:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EDECB811F5;
+        Tue, 15 Mar 2022 10:08:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D348C340ED;
+        Tue, 15 Mar 2022 10:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647338935;
+        bh=lxm00edtpi4RNpe+KpYSEsp9DryXournPvBPfHZkDbs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KgM3jzk7pJpT27wth91xf1pluNMZZ9jgxdtCX7VqlZ8Exa/euL0490cSGWMUzNyKI
+         feytnWZACE/JXw8UJtTURfUpS0oyAkjflalkXraP3u0Iior9/1+TQPyvtxHpzeqI7f
+         nn0DCLsUlkdLEyy5S1yLSPKD9zNfyaFZhl3ga/ylqKzNAnNYH2a2GQz5zC7Onkn9cU
+         e4WnBvGR7QUXPHhrmCX/D5a3hLb2pOQYzxsZvsYS0LuFVfiAdxYM3pcoC+kdgBlpsT
+         318usooFXgjgA+MGkwA+2AyGfk2YvDfj0jT1pzm9xKuH70EhWOQ7gx6/7cUDcAPzYE
+         HgNvtCYUMSEnA==
+Date:   Tue, 15 Mar 2022 19:08:48 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v11 07/12] ARM: rethook: Add rethook arm implementation
+Message-Id: <20220315190848.a28a889802b71820650f5478@kernel.org>
+In-Reply-To: <164701440314.268462.2664594020245236625.stgit@devnote2>
+References: <164701432038.268462.3329725152949938527.stgit@devnote2>
+        <164701440314.268462.2664594020245236625.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 11:29:19AM +0800, Leo Yan wrote:
-> Hi Ionela,
+On Sat, 12 Mar 2022 01:00:03 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+
+> +void __naked arch_rethook_trampoline(void)
+> +{
+> +	__asm__ __volatile__ (
+> +#ifdef CONFIG_FRAME_POINTER
+> +		"ldr	lr, =arch_rethook_trampoline	\n\t"
+
+Oops, this must have the same issue reported by 0day build bot recently[1].
+
+[1] https://lore.kernel.org/all/202203150516.KTorSVVU-lkp@intel.com/T/#u
+
+I'll update this series with same fix.
+
+Thank you,
+
+> +	/* this makes a framepointer on pt_regs. */
+> +#ifdef CONFIG_CC_IS_CLANG
+> +		"stmdb	sp, {sp, lr, pc}	\n\t"
+> +		"sub	sp, sp, #12		\n\t"
+> +		/* In clang case, pt_regs->ip = lr. */
+> +		"stmdb	sp!, {r0 - r11, lr}	\n\t"
+> +		/* fp points regs->r11 (fp) */
+> +		"add	fp, sp,	#44		\n\t"
+> +#else /* !CONFIG_CC_IS_CLANG */
+> +		/* In gcc case, pt_regs->ip = fp. */
+> +		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
+> +		"sub	sp, sp, #16		\n\t"
+> +		"stmdb	sp!, {r0 - r11}		\n\t"
+> +		/* fp points regs->r15 (pc) */
+> +		"add	fp, sp, #60		\n\t"
+> +#endif /* CONFIG_CC_IS_CLANG */
+> +#else /* !CONFIG_FRAME_POINTER */
+> +		"sub	sp, sp, #16		\n\t"
+> +		"stmdb	sp!, {r0 - r11}		\n\t"
+> +#endif /* CONFIG_FRAME_POINTER */
+> +		"mov	r0, sp			\n\t"
+> +		"bl	arch_rethook_trampoline_callback	\n\t"
+> +		"mov	lr, r0			\n\t"
+> +		"ldmia	sp!, {r0 - r11}		\n\t"
+> +		"add	sp, sp, #16		\n\t"
+> +#ifdef CONFIG_THUMB2_KERNEL
+> +		"bx	lr			\n\t"
+> +#else
+> +		"mov	pc, lr			\n\t"
+> +#endif
+> +		: : : "memory");
+> +}
+> +NOKPROBE_SYMBOL(arch_rethook_trampoline);
+> +
+> +/*
+> + * At the entry of function with mcount. The stack and registers are prepared
+> + * for the mcount function as below.
+> + *
+> + * mov     ip, sp
+> + * push    {fp, ip, lr, pc}
+> + * sub     fp, ip, #4	; FP[0] = PC, FP[-4] = LR, and FP[-12] = call-site FP.
+> + * push    {lr}
+> + * bl      <__gnu_mcount_nc> ; call ftrace
+> + *
+> + * And when returning from the function, call-site FP, SP and PC are restored
+> + * from stack as below;
+> + *
+> + * ldm     sp, {fp, sp, pc}
+> + *
+> + * Thus, if the arch_rethook_prepare() is called from real function entry,
+> + * it must change the LR and save FP in pt_regs. But if it is called via
+> + * mcount context (ftrace), it must change the LR on stack, which is next
+> + * to the PC (= FP[-4]), and save the FP value at FP[-12].
+> + */
+> +void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
+> +{
+> +	unsigned long *ret_addr, *frame;
+> +
+> +	if (mcount) {
+> +		ret_addr = (unsigned long *)(regs->ARM_fp - 4);
+> +		frame = (unsigned long *)(regs->ARM_fp - 12);
+> +	} else {
+> +		ret_addr = &regs->ARM_lr;
+> +		frame = &regs->ARM_fp;
+> +	}
+> +
+> +	rh->ret_addr = *ret_addr;
+> +	rh->frame = *frame;
+> +
+> +	/* Replace the return addr with trampoline addr. */
+> +	*ret_addr = (unsigned long)arch_rethook_trampoline;
+> +}
+> +NOKPROBE_SYMBOL(arch_rethook_prepare);
 > 
-> On Mon, Mar 14, 2022 at 06:10:58PM +0000, Ionela Voinescu wrote:
-> 
-> [...]
-> 
-> > > Patch 03 is to handle the case for absenting "capacity-dmips-mhz"
-> > > property in CPU nodes, the patch proceeds to do CPU capacity scaling based
-> > > on CPU maximum capacity.  Thus it can reflect the correct CPU capacity for
-> > > Arm platforms with "fast" and "slow" clusters (CPUs in two clusters have
-> > > the same raw capacity but with different maximum frequencies).
-> > > 
-> > 
-> > In my opinion it's difficult to handle absent "capacity-dmips-mhz"
-> > properties, as they can be a result of 3 scenarios: potential..
-> >  1. bug in DT
-> >  2. unwillingness to fill this information in DT
-> >  3. suggestion that we're dealing with CPUs with same u-arch
-> >     (same capacity-dmips-mhz)
-> 
-> For absent "capacity-dmips-mhz" properties, I think we could divide into
-> two sub classes:
-> 
-> For all CPU nodes are absent "capacity-dmips-mhz" properties, it's
-> likely all CPUs have the same micro architecture, thus developers are
-> not necessarily to explictly set the property.
->
 
-I completely disagree and NACK to deal with absence of the property in DT.
-The binding clearly states:
 
-"CPU capacity is a number that provides the scheduler information about CPUs
-heterogeneity. Such heterogeneity can come from micro-architectural differences
-(e.g., ARM big.LITTLE systems) or maximum frequency at which CPUs can run
-(e.g., SMP systems with multiple frequency domains). Heterogeneity in this
-context is about differing performance characteristics; this binding tries to
-capture a first-order approximation of the relative performance of CPUs."
-
-So it is clear that using same uarch can't be an excuse to miss this property.
-So if you need the scheduler to be aware of this heterogeneity, better update
-the DT with property. Absence will always means scheduler need not be aware
-of this heterogeneity.
-
-> For partial CPUs absent "capacity-dmips-mhz" properties, this is an
-> usage issue in DT and kernel should handle this as an error and report
-> it.
->
-
-That makes sense. As I mentioned in my earlier email, we can always flag
-up error in the kernel, but it would be good to catch these much earlier
-in DT via schema if possible.
-
-> > I'm not sure it's up to us to interpret suggestions in the code so I
-> > believe treating missing information as error is the right choice, which
-> > is how we're handling this now.
-> 
-> Yes, current kernel means to treat missing info as error, whatever if
-> all CPUs or partial CPUs are absent "capacity-dmips-mhz" properties.
->
-
-OK, so no change needed ? I am confused as what is missing today.
-
-> > For 3. (and patch 03), isn't it easier to populate capacity-dmips-mhz to
-> > the same value (say 1024) in DT? That is a clear message that we're
-> > dealing with CPUs with the same u-arch.
->
-> "capacity-dmips-mhz" is defined as a _optional_ property in the DT
-> document (see devicetree/bindings/arm/cpu-capacity.txt).
->
-
-That means that the kernel can operate without the info and nothing more
-than that. We are not providing guarantee that the same performance is
-possible with or without this optional property.
-
-> Current kernel rolls back every CPU raw capacity to 1024 if DT doesn't
-> bind "capacity-dmips-mhz" properties, given many SoCs with same CPU
-> u-arch this is right thing to do; here I think kernel should proceed to
-> scale CPU capacity with its maximum frequency.
->
-
-As stated above, I completely disagree and once again NACK.
-
-> When I worked on a platform with a fast and a slow clusters (two clusters
-> have different max frequencies and with the same CPU u-arch), it's a bit
-> puzzle when I saw all CPU's capacities are always 1024.  In this case,
-> since a platform have no CPU capacity modeling, and "capacity-dmips-mhz"
-> property is not needed to populate in DT, but at the end the kernel
-> should can reflect the scaled CPU capacity correctly.
->
-
-Fix the broken DT with respect to this feature. I mean DT is not broken, but
-if once needs this feature then they should teach the kernel the hardware
-difference with this property.
-
-Another possible issue I can see if this is dealt within the kernel is if
-on some platform for thermal or any valid hardware errata reasons, one set
-of CPUs can run at max one frequency while the other is restricted at a
-suitable lower frequency, it may not be good idea to mark that as difference
-in cpu capacity as they are SMP CPUs just in different perf domains with
-different limits. I assume the scale invariance must deal with that.
-I may be wrong here but that's my understanding, happy to be corrected.
-
---
-Regards,
-Sudeep
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

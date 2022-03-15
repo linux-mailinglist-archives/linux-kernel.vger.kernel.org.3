@@ -2,209 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700144D9EB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D553B4D9EB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349626AbiCOPak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S1349642AbiCOPb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239769AbiCOPai (ORCPT
+        with ESMTP id S245691AbiCOPbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:30:38 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA5E5370C;
-        Tue, 15 Mar 2022 08:29:25 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id s195so10308258vkb.10;
-        Tue, 15 Mar 2022 08:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7QiioueBGiOIuXR1TForrmYshtIumcfKD/Q+8bN+bPs=;
-        b=BlK4Eytdv88OQIPGYetVLdwJxwKc07/BF92EljIZDBSoJ5i10DsnoPqKuCNKAN2VPG
-         w3LKMIrkWxKXzuYE/ZifTYWzNj0F0zrKFvsNu7c/nF3IRbGuL6VN4Ze5t+SAumKgce83
-         nuQDXnB9fnPVI1iF+0zv9r94u4YxaD1PtaeKRtMYu5OkxrfSBXPp+UUVvlCkl7tNeYRs
-         82eUN5tS/U5qe709sFIETEqsEnubCFTfwfQIimLhgjheL6WPrdtTdgm7vguJrXLdmRTp
-         hG6lQgoqzR4lWnS/AuxqOwzrGttbwDkfAvRdnU74jRPVYhTfZJFttoHRRvHs3hdF7N1d
-         WmyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7QiioueBGiOIuXR1TForrmYshtIumcfKD/Q+8bN+bPs=;
-        b=qtRgFvgF6BW2NsT0gYm7IwEYIyTmTmm322JRxahUFJKiX20GMK+IEzo5gb0xJsYsL4
-         Txe60K4mhktVsGn2SWwErH7YtUQ2XSf0ciSe2akFNBW/zwQuEv7lSG63Kc2fk1mjNe+r
-         GUU+N6hNG0UR1+p/IVUFDxehijvNxPkYsZQj1BHMuN9Jw/uxllKbJKBFCwghCfMpZdOJ
-         g2rLSTROHIFFdI4AdoVqgEbSQKh0BSokyErMEI93wNnO+lS2l8fuSwnPUo171d2Bsdl1
-         XOhDekj7TYZpBYKjewqmBrRkS5MjxJSLyXNaj1nr+ARuk+3hfpJyWBtT5oOlGal1d7x0
-         /gRA==
-X-Gm-Message-State: AOAM532NW2S/4Fma1e/bLg61G9N1AGNv1B7u9lVFKD7iqSUzTqAkvQZ1
-        vdLzkEDQ02L4lS+IcAwWkNLRAw6ZluzvErYTLPU=
-X-Google-Smtp-Source: ABdhPJxK5uRZtITwqTp15UR6XS+nsS8HGKr3p9VPre2Ow3vhScF/CY69F9sBwhfyTgZEg6FaOa4Twd6125OskJaDgsQ=
-X-Received: by 2002:a05:6122:734:b0:337:3fa1:c149 with SMTP id
- 52-20020a056122073400b003373fa1c149mr12186121vki.18.1647358164004; Tue, 15
- Mar 2022 08:29:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220310045358.224350-1-jeremy.linton@arm.com>
- <f831a4c6-58c9-20bd-94e8-e221369609e8@gmail.com> <de28c0ec-56a7-bfff-0c41-72aeef097ee3@arm.com>
- <2167202d-327c-f87d-bded-702b39ae49e1@gmail.com>
-In-Reply-To: <2167202d-327c-f87d-bded-702b39ae49e1@gmail.com>
-From:   Peter Robinson <pbrobinson@gmail.com>
-Date:   Tue, 15 Mar 2022 15:29:12 +0000
-Message-ID: <CALeDE9MerhZWwJrkg+2OEaQ=_9C6PHYv7kQ_XEQ6Kp7aV2R31A@mail.gmail.com>
-Subject: Re: [PATCH] net: bcmgenet: Use stronger register read/writes to
- assure ordering
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jeremy Linton <jeremy.linton@arm.com>, netdev@vger.kernel.org,
-        opendmb@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+        Tue, 15 Mar 2022 11:31:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1565C5372C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647358242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L47ys7Ju+ra6uvzgdggF4XXVDzazg4VAs7Nuc4o2sMU=;
+        b=IXnrp7nrX4/UZzSLqeMT2R6UBdm1dJd6fLnh3rJiQoThAf4HXFPVnpVtDE83+0Zd2C7rgW
+        yp69kzw+rPHqRnbQx1nTp+ip6YV9Eyh3ZoMHz9SwIUDBtBZiZzjiwHpdy/fLA7bZkMzYLn
+        ku+hWN+Rby3fK1zCLJrtEbBE2hhi6E4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-262-nmT2wb9tMqizw23om19_jA-1; Tue, 15 Mar 2022 11:30:38 -0400
+X-MC-Unique: nmT2wb9tMqizw23om19_jA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAB44106655C;
+        Tue, 15 Mar 2022 15:30:37 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28B50C33260;
+        Tue, 15 Mar 2022 15:30:32 +0000 (UTC)
+Message-ID: <c903e82ed2a1e98f66910c35b5aabdcf56e08e72.camel@redhat.com>
+Subject: Re: [PATCH v6 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Zeng Guang <guang.zeng@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>
+Date:   Tue, 15 Mar 2022 17:30:32 +0200
+In-Reply-To: <20220315151033.GA6038@gao-cwp>
+References: <Yifg4bea6zYEz1BK@google.com> <20220309052013.GA2915@gao-cwp>
+         <YihCtvDps/qJ2TOW@google.com>
+         <6dc7cff15812864ed14b5c014769488d80ce7f49.camel@redhat.com>
+         <YirPkr5efyylrD0x@google.com>
+         <29c76393-4884-94a8-f224-08d313b73f71@intel.com>
+         <01586c518de0c72ff3997d32654b8fa6e7df257d.camel@redhat.com>
+         <2900660d947a878e583ebedf60e7332e74a1af5f.camel@redhat.com>
+         <20220313135335.GA18405@gao-cwp>
+         <fbf929e0793a6b4df59ec9d95a018d1f6737db35.camel@redhat.com>
+         <20220315151033.GA6038@gao-cwp>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 3:57 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
->
->
-> On 3/10/2022 5:09 PM, Jeremy Linton wrote:
-> > On 3/10/22 12:59, Florian Fainelli wrote:
-> >> On 3/9/22 8:53 PM, Jeremy Linton wrote:
-> >>> GCC12 appears to be much smarter about its dependency tracking and is
-> >>> aware that the relaxed variants are just normal loads and stores and
-> >>> this is causing problems like:
-> >>>
-> >>> [  210.074549] ------------[ cut here ]------------
-> >>> [  210.079223] NETDEV WATCHDOG: enabcm6e4ei0 (bcmgenet): transmit
-> >>> queue 1 timed out
-> >>> [  210.086717] WARNING: CPU: 1 PID: 0 at net/sched/sch_generic.c:529
-> >>> dev_watchdog+0x234/0x240
-> >>> [  210.095044] Modules linked in: genet(E) nft_fib_inet nft_fib_ipv4
-> >>> nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6
-> >>> nft_reject nft_ct nft_chain_nat]
-> >>> [  210.146561] ACPI CPPC: PCC check channel failed for ss: 0. ret=-110
-> >>> [  210.146927] CPU: 1 PID: 0 Comm: swapper/1 Tainted: G
-> >>> E     5.17.0-rc7G12+ #58
-> >>> [  210.153226] CPPC Cpufreq:cppc_scale_freq_workfn: failed to read
-> >>> perf counters
-> >>> [  210.161349] Hardware name: Raspberry Pi Foundation Raspberry Pi 4
-> >>> Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 02/08/2022
-> >>> [  210.161353] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS
-> >>> BTYPE=--)
-> >>> [  210.161358] pc : dev_watchdog+0x234/0x240
-> >>> [  210.161364] lr : dev_watchdog+0x234/0x240
-> >>> [  210.161368] sp : ffff8000080a3a40
-> >>> [  210.161370] x29: ffff8000080a3a40 x28: ffffcd425af87000 x27:
-> >>> ffff8000080a3b20
-> >>> [  210.205150] x26: ffffcd425aa00000 x25: 0000000000000001 x24:
-> >>> ffffcd425af8ec08
-> >>> [  210.212321] x23: 0000000000000100 x22: ffffcd425af87000 x21:
-> >>> ffff55b142688000
-> >>> [  210.219491] x20: 0000000000000001 x19: ffff55b1426884c8 x18:
-> >>> ffffffffffffffff
-> >>> [  210.226661] x17: 64656d6974203120 x16: 0000000000000001 x15:
-> >>> 6d736e617274203a
-> >>> [  210.233831] x14: 2974656e65676d63 x13: ffffcd4259c300d8 x12:
-> >>> ffffcd425b07d5f0
-> >>> [  210.241001] x11: 00000000ffffffff x10: ffffcd425b07d5f0 x9 :
-> >>> ffffcd4258bdad9c
-> >>> [  210.248171] x8 : 00000000ffffdfff x7 : 000000000000003f x6 :
-> >>> 0000000000000000
-> >>> [  210.255341] x5 : 0000000000000000 x4 : 0000000000000000 x3 :
-> >>> 0000000000001000
-> >>> [  210.262511] x2 : 0000000000001000 x1 : 0000000000000005 x0 :
-> >>> 0000000000000044
-> >>> [  210.269682] Call trace:
-> >>> [  210.272133]  dev_watchdog+0x234/0x240
-> >>> [  210.275811]  call_timer_fn+0x3c/0x15c
-> >>> [  210.279489]  __run_timers.part.0+0x288/0x310
-> >>> [  210.283777]  run_timer_softirq+0x48/0x80
-> >>> [  210.287716]  __do_softirq+0x128/0x360
-> >>> [  210.291392]  __irq_exit_rcu+0x138/0x140
-> >>> [  210.295243]  irq_exit_rcu+0x1c/0x30
-> >>> [  210.298745]  el1_interrupt+0x38/0x54
-> >>> [  210.302334]  el1h_64_irq_handler+0x18/0x24
-> >>> [  210.306445]  el1h_64_irq+0x7c/0x80
-> >>> [  210.309857]  arch_cpu_idle+0x18/0x2c
-> >>> [  210.313445]  default_idle_call+0x4c/0x140
-> >>> [  210.317470]  cpuidle_idle_call+0x14c/0x1a0
-> >>> [  210.321584]  do_idle+0xb0/0x100
-> >>> [  210.324737]  cpu_startup_entry+0x30/0x8c
-> >>> [  210.328675]  secondary_start_kernel+0xe4/0x110
-> >>> [  210.333138]  __secondary_switched+0x94/0x98
-> >>>
-> >>> The assumption when these were relaxed seems to be that device memory
-> >>> would be mapped non reordering, and that other constructs
-> >>> (spinlocks/etc) would provide the barriers to assure that packet data
-> >>> and in memory rings/queues were ordered with respect to device
-> >>> register reads/writes. This itself seems a bit sketchy, but the real
-> >>> problem with GCC12 is that it is moving the actual reads/writes around
-> >>> at will as though they were independent operations when in truth they
-> >>> are not, but the compiler can't know that. When looking at the
-> >>> assembly dumps for many of these routines its possible to see very
-> >>> clean, but not strictly in program order operations occurring as the
-> >>> compiler would be free to do if these weren't actually register
-> >>> reads/write operations.
-> >>>
-> >>> Its possible to suppress the timeout with a liberal bit of dma_mb()'s
-> >>> sprinkled around but the device still seems unable to reliably
-> >>> send/receive data. A better plan is to use the safer readl/writel
-> >>> everywhere.
-> >>>
-> >>> Since this partially reverts an older commit, which notes the use of
-> >>> the relaxed variants for performance reasons. I would suggest that
-> >>> any performance problems with this commit are targeted at relaxing only
-> >>> the performance critical code paths after assuring proper barriers.
-> >>>
-> >>> Fixes: 69d2ea9c79898 ("net: bcmgenet: Use correct I/O accessors")
-> >>> Reported-by: Peter Robinson <pbrobinson@gmail.com>
-> >>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> >>
-> >> I think this is the correct approach in that it favors correctness over
-> >> speed, however there is an opportunity for maintaining the speed and
-> >> correctness on non-2711 and non-7712 chips where the GENET core is
-> >> interfaced to a system bus (GISB) that guarantees no re-ordering and no
-> >> buffering. I suppose that until we prove that the extra barrier is
-> >> harmful to performance on those chips, we should go with your patch.
-> >>
-> >> It seems like we missed the GENET_IO_MACRO() in bcmgenet.h, while most
-> >> of them deal with the control path which likely does not have any
-> >> re-ordering problem, there is an exception to that which are the
-> >> intrl2_0 and intrl2_1 macros, which I believe *have* to be ordered as
-> >> well in order to avoid spurious or missed interrupts, or maybe there is
-> >> enough barriers in the interrupt processing code that this is moot?
-> >
-> >
-> > Ok, so I spent some time and tracked down exactly which barrier "fixes"
-> > this immediate problem on the rpi4.
-> >
-> > static void bcmgenet_enable_dma(struct bcmgenet_priv *priv, u32 dma_ctrl)
-> >   {
-> >          u32 reg;
-> >
-> > +       dma_mb(); //timeout fix
-> >          reg = bcmgenet_rdma_readl(priv, DMA_CTRL);
-> >          reg |= dma_ctrl;
-> >
-> >
-> > fixes it as well, and keeps all the existing code. Although, granted I
-> > didn't stress the adapter beyond a couple interactive ssh sessions. And
-> > as you mention there are a fair number of other accessors that I didn't
-> > touch which are still relaxed.
->
-> Thanks! This is really helpful. Doug told me earlier today that he
-> wanted to take a closer look since your initial approach while correct
-> appears a bit heavy handed.
+On Tue, 2022-03-15 at 23:10 +0800, Chao Gao wrote:
+> On Sun, Mar 13, 2022 at 05:09:08PM +0200, Maxim Levitsky wrote:
+> > > > > This won't work with nested AVIC - we can't just inhibit a nested guest using its own AVIC,
+> > > > > because migration happens.
+> > > > 
+> > > > I mean because host decided to change its apic id, which it can in theory do any time,
+> > > > even after the nested guest has started. Seriously, the only reason guest has to change apic id,
+> > > > is to try to exploit some security hole.
+> > > 
+> > > Hi
+> > > 
+> > > Thanks for the information.  
+> > > 
+> > > IIUC, you mean KVM applies APICv inhibition only to L1 VM, leaving APICv
+> > > enabled for L2 VM. Shouldn't KVM disable APICv for L2 VM in this case?
+> > > It looks like a generic issue in dynamically toggling APICv scheme,
+> > > e.g., qemu can set KVM_GUESTDBG_BLOCKIRQ after nested guest has started.
+> > > 
+> > 
+> > That is the problem - you can't disable it for L2, unless you are willing to emulate it in software.
+> > Or in other words, when nested guest uses a hardware feature, you can't at some point say to it:
+> > sorry buddy - hardware feature disappeared.
+> 
+> Hi Maxim,
+> 
+> I may miss something. When reading Sean's APICv inhibition cleanups, I
+> find AVIC is disabled for L1 when nested is enabled (SVM is advertised
+> to L1). Then, I think the new inhibition introduced for changed xAPIC ID
+> shouldn't be a problem for L2 VM. Or, you plan to remove
+> APICV_INHIBIT_REASON_NESTED and expose AVIC to L1?
 
-With 5.17 due in a couple of days could we get a fix in so it works
-for users and optimise the approach with a follow up so that it's not
-broken for common device?
+Yep, I  have a patch for this ( which I hope to be accepted really soon
+(KVM: x86: SVM: allow AVIC to co-exist with a nested guest running)
+ 
+I also implemented working support for nested AVIC, which includes support for IPI without vm exits
+between L2's vCPUs. I had sent an RFC for that.
+ 
+With all patches applied both L1 and L2 switch hands on AVIC, L1's avic is inhibited
+(only locally) on the vCPU which runs nested, and while it runs nested, L2 uses AVIC
+to target other vCPUs which also run nested.
+ 
+I and Paolo talked about this, and we reached a very promising conclusion.
 
-Peter
+I will add new KVM cap, say KVM_CAP_READ_ONLY_APIC, which userspace will set
+prior to creating a vCPU, and which will make APIC ID fully readonly when set.
+ 
+As a bonus, if you don't object, I will also make this cap, make APIC base read-only,
+since this feature is also broken in kvm, optional in x86 spec, and not really
+used by guests just like writable apic id.
+
+I hope to have patches in day or two for this.
+ 
+When this cap is not set, it is fair to disable both IPIv, my nested AVIC,
+or even better inhibit AVIC completely, including any nested support.
+ 
+Best regards,
+	Maxim Levitsky
+
+> 
+> svm_vcpu_after_set_cpuid:
+>                 /*
+>                  * Currently, AVIC does not work with nested virtualization.
+>                  * So, we disable AVIC when cpuid for SVM is set in the L1 guest.
+>                  */
+>                 if (nested && guest_cpuid_has(vcpu, X86_FEATURE_SVM))
+>                         kvm_request_apicv_update(vcpu->kvm, false,
+>                                                  APICV_INHIBIT_REASON_NESTED);
+> 
+
+

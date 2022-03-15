@@ -2,260 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFF14D97CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDEC4D97D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346719AbiCOJj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S1346724AbiCOJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346697AbiCOJjQ (ORCPT
+        with ESMTP id S1346714AbiCOJjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:39:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC76112609;
-        Tue, 15 Mar 2022 02:38:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id D71161F436D5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647337082;
-        bh=hZ3Ozc14j72XOG+b1t+GWcovi4uvCyAsuQVFavKh/sc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R7SGXBVCLCthgJfbqNC649m2NSEhAmzxNhj9UIBmYiQfZ+UuBx+Om3Ph9ejXUlrGw
-         b3sXqViSiqFKuv92g78KV63TidJpbB7q23XrfzGhKoY5rvrEGoo8xEKWi80Ukv+4TF
-         LBsQ/APy3skr+3tXnNAAsd2HWPsORbBSUO7w3a3sC4yCs1/2Atuw6PmU1KZnPfQEOr
-         ibYvS3dTk98lYZx8W1zV8i69uwnjgE5JLnpirElozBMPaCwbYWKnjk8K/nGWN0Kw1A
-         ul+x+ebjfR25QCMP2jrkrvxR19DzFopWAvDUy79jhlrRSBJCNQcUa5BsK5yaMc4MXN
-         5GC8jvbUL72Jw==
-Message-ID: <e3facd86-9e93-bda7-b6dd-c18f1660466a@collabora.com>
-Date:   Tue, 15 Mar 2022 10:37:59 +0100
+        Tue, 15 Mar 2022 05:39:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B15CB1AF2C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647337089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K47SKj8REwLbfMI9yH8wvkO0kp+/XEGwzSW8IdK+acE=;
+        b=c1A0l369zQdmVbC2Yltu3jIHeUdZSSwx/Wx9FNWxFfsCI1f6MyD0ikY0tAgAAnJwhLkeNN
+        39JSCClQNjdJsvVNtwec0yDqJucCbd3iF12AmQFqV56ONmxyqIU/RP3OjpIit1YihheP+T
+        pNquQGsce4m11vzpcn7kmahoTFa6RDM=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-wQYYDtOXPoy-401DoOLwIA-1; Tue, 15 Mar 2022 05:38:08 -0400
+X-MC-Unique: wQYYDtOXPoy-401DoOLwIA-1
+Received: by mail-qt1-f199.google.com with SMTP id a24-20020ac81098000000b002e1e06a72aeso1319828qtj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:38:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=K47SKj8REwLbfMI9yH8wvkO0kp+/XEGwzSW8IdK+acE=;
+        b=NtZxWj1CRArr63pUHbi+v4hYU3U+2ppAzvF2cbx06+48IE4L05MNiySz+frmsBW8xs
+         O0n1DR3ygm+/IYrUuFdsOK+Dkz4AXgJkppP16Y4lA2pydnossqKOtIDwaK8KoeIxy1eV
+         u9irq4jerhAffZgL5yxgV0nNZA9keywCcG5eYzXZXDvdxvaYLYniO1MsRaxKn8ZHk6/E
+         tpemCI7Gh9krLDM80RrcP7waBflw8w0jFylVVWv9poSkczpibKcFcfPzDyR3Vpm2u9jx
+         HxFblONVVtjLDJC2MFTPO8oWHXXolr4rAyOGpWUMnu86p3aJyTy8vEgz5qMrL97DDB9O
+         WStA==
+X-Gm-Message-State: AOAM53343AHbeDDDGq1kIKg7V6PxT0pX8pM4yLvMRxr9RaQSzpQwP7ab
+        mK9prmu+1mbYvvgDoguMceVEjsRxzHiKqQvTRrrPyod+Lq0A9mave82+RbNJovcTw1DBNktSGP+
+        /ItPmvzSGs8fYaswg16v+p6y7
+X-Received: by 2002:a05:6214:1c87:b0:42d:20cb:e484 with SMTP id ib7-20020a0562141c8700b0042d20cbe484mr19923074qvb.10.1647337087873;
+        Tue, 15 Mar 2022 02:38:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyhF9QDkgfvW6/9vLgmCoy3wh/Jj8hmyEKNU4aC+B4FAY1JaTiHxB1dMqDy5xYqVzFmJloaeA==
+X-Received: by 2002:a05:6214:1c87:b0:42d:20cb:e484 with SMTP id ib7-20020a0562141c8700b0042d20cbe484mr19923055qvb.10.1647337087684;
+        Tue, 15 Mar 2022 02:38:07 -0700 (PDT)
+Received: from sgarzare-redhat (host-212-171-187-184.pool212171.interbusiness.it. [212.171.187.184])
+        by smtp.gmail.com with ESMTPSA id s21-20020a05620a16b500b0067b1205878esm8908043qkj.7.2022.03.15.02.38.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 02:38:07 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:38:01 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>
+Cc:     stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] vdpa: support exposing the config size to
+ userspace
+Message-ID: <20220315093801.ngyizwf7blkhutug@sgarzare-redhat>
+References: <20220315032553.455-1-longpeng2@huawei.com>
+ <20220315032553.455-2-longpeng2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH V4 6/6] spi: mediatek: support hclk
-Content-Language: en-US
-To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220315032411.2826-1-leilk.liu@mediatek.com>
- <20220315032411.2826-7-leilk.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220315032411.2826-7-leilk.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220315032553.455-2-longpeng2@huawei.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/03/22 04:24, Leilk Liu ha scritto:
-> this patch adds hclk support.
-> 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> ---
->   drivers/spi/spi-mt65xx.c | 85 ++++++++++++++++++++++++++++++++--------
->   1 file changed, 69 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> index 8958c3fa4fea..d4a602e78aa7 100644
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -130,7 +130,7 @@ struct mtk_spi {
->   	u32 state;
->   	int pad_num;
->   	u32 *pad_sel;
-> -	struct clk *parent_clk, *sel_clk, *spi_clk;
-> +	struct clk *parent_clk, *sel_clk, *spi_clk, *spi_hclk;
->   	struct spi_transfer *cur_transfer;
->   	u32 xfer_len;
->   	u32 num_xfered;
-> @@ -1252,25 +1252,38 @@ static int mtk_spi_probe(struct platform_device *pdev)
->   		goto err_put_master;
->   	}
->   
-> +	mdata->spi_hclk = devm_clk_get(&pdev->dev, "hclk");
-> +	if (!IS_ERR(mdata->spi_hclk)) {
+On Tue, Mar 15, 2022 at 11:25:51AM +0800, Longpeng(Mike) wrote:
+>From: Longpeng <longpeng2@huawei.com>
+>
+>- GET_CONFIG_SIZE: return the size of the virtio config space.
+>
+>The size contains the fields which are conditional on feature
+>bits.
+>
+>Acked-by: Jason Wang <jasowang@redhat.com>
+>Signed-off-by: Longpeng <longpeng2@huawei.com>
+>---
+> drivers/vhost/vdpa.c       | 17 +++++++++++++++++
+> include/linux/vdpa.h       |  3 ++-
+> include/uapi/linux/vhost.h |  4 ++++
+> 3 files changed, 23 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+>index ec5249e..605c7ae 100644
+>--- a/drivers/vhost/vdpa.c
+>+++ b/drivers/vhost/vdpa.c
+>@@ -355,6 +355,20 @@ static long vhost_vdpa_get_iova_range(struct vhost_vdpa *v, u32 __user *argp)
+> 	return 0;
+> }
+>
+>+static long vhost_vdpa_get_config_size(struct vhost_vdpa *v, u32 __user *argp)
+>+{
+>+	struct vdpa_device *vdpa = v->vdpa;
+>+	const struct vdpa_config_ops *ops = vdpa->config;
+>+	u32 size;
+>+
+>+	size = ops->get_config_size(vdpa);
 
-What you're doing here can be simplified by using devm_clk_get_optional() instead.
-Please use that.
+get_config_size() returns a size_t, perhaps we could have a comment here 
+where we say we don't expect there to be an overflow.
 
-> +		ret = clk_prepare_enable(mdata->spi_hclk);
-> +		if (ret < 0) {
-> +			dev_err(&pdev->dev, "failed to enable hclk (%d)\n", ret);
-> +			goto err_put_master;
-> +		}
-> +	}
-> +
->   	ret = clk_prepare_enable(mdata->spi_clk);
->   	if (ret < 0) {
->   		dev_err(&pdev->dev, "failed to enable spi_clk (%d)\n", ret);
-> -		goto err_put_master;
-> +		goto err_disable_spi_hclk;
->   	}
->   
->   	ret = clk_set_parent(mdata->sel_clk, mdata->parent_clk);
->   	if (ret < 0) {
->   		dev_err(&pdev->dev, "failed to clk_set_parent (%d)\n", ret);
-> -		clk_disable_unprepare(mdata->spi_clk);
-> -		goto err_put_master;
-> +		goto err_disable_spi_clk;
->   	}
->   
->   	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		clk_disable(mdata->spi_clk);
-> -	else
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable(mdata->spi_hclk);
-> +	} else {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	pm_runtime_enable(&pdev->dev);
->   
-> @@ -1310,6 +1323,11 @@ static int mtk_spi_probe(struct platform_device *pdev)
->   
->   err_disable_runtime_pm:
->   	pm_runtime_disable(&pdev->dev);
-> +err_disable_spi_clk:
-> +	clk_disable_unprepare(mdata->spi_clk);
-> +err_disable_spi_hclk:
-> +	if (!IS_ERR(mdata->spi_hclk))
+I don't have a strong opinion on this, and I wouldn't want to get you to 
+repin just for that, so:
 
-When using devm_clk_get_optional(), you can simply omit this check, since it will
-be impossible to reach this point with an error pointer stored in spi_hclk.
-
-> +		clk_disable_unprepare(mdata->spi_hclk);
->   err_put_master:
->   	spi_master_put(master);
->   
-> @@ -1325,8 +1343,11 @@ static int mtk_spi_remove(struct platform_device *pdev)
->   
->   	mtk_spi_reset(mdata);
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		clk_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return 0;
->   }
-> @@ -1342,8 +1363,11 @@ static int mtk_spi_suspend(struct device *dev)
->   	if (ret)
->   		return ret;
->   
-> -	if (!pm_runtime_suspended(dev))
-> +	if (!pm_runtime_suspended(dev)) {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return ret;
->   }
-> @@ -1360,11 +1384,23 @@ static int mtk_spi_resume(struct device *dev)
->   			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
->   			return ret;
->   		}
-> +
-> +		if (!IS_ERR(mdata->spi_hclk)) {
-
-Since you will be using devm_clk_get_optional(), you can also omit this check.
-
-> +			clk_prepare_enable(mdata->spi_hclk);
-
-There's a typo. ret = clk_prepare_enable....
-
-> +			if (ret < 0) {
-> +				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-> +				clk_disable_unprepare(mdata->spi_clk);
-> +				return ret;
-> +			}
-> +		}
->   	}
->   
->   	ret = spi_master_resume(master);
-> -	if (ret < 0)
-> +	if (ret < 0) {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-
-Same here and everywhere else, no error check if you set this as optional clock.
-
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return ret;
->   }
-> @@ -1376,10 +1412,15 @@ static int mtk_spi_runtime_suspend(struct device *dev)
->   	struct spi_master *master = dev_get_drvdata(dev);
->   	struct mtk_spi *mdata = spi_master_get_devdata(master);
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		clk_disable(mdata->spi_clk);
-> -	else
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable(mdata->spi_hclk);
-> +	} else {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return 0;
->   }
-> @@ -1390,13 +1431,25 @@ static int mtk_spi_runtime_resume(struct device *dev)
->   	struct mtk_spi *mdata = spi_master_get_devdata(master);
->   	int ret;
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		ret = clk_enable(mdata->spi_clk);
-> -	else
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_enable(mdata->spi_hclk);
-> +	} else {
->   		ret = clk_prepare_enable(mdata->spi_clk);
-> -	if (ret < 0) {
-> -		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-> -		return ret;
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		if (!IS_ERR(mdata->spi_hclk)) {
-> +			ret = clk_prepare_enable(mdata->spi_hclk);
-> +			if (ret < 0) {
-> +				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-> +				clk_disable_unprepare(mdata->spi_clk);
-> +				return ret;
-> +			}
-> +		}
->   	}
->   
->   	return 0;
-> 
-
-
-Regards,
-Angelo
-
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 

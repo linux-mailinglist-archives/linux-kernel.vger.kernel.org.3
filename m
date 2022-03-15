@@ -2,137 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C9B4DA5D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B6B4DA5D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352429AbiCOW6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S1349951AbiCOW7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244735AbiCOW6R (ORCPT
+        with ESMTP id S237649AbiCOW7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:58:17 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E165D5FE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:57:04 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id l20so898398lfg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:57:04 -0700 (PDT)
+        Tue, 15 Mar 2022 18:59:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1551C4BFFF;
+        Tue, 15 Mar 2022 15:58:32 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso3200801pjb.0;
+        Tue, 15 Mar 2022 15:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=AckR/coIxOb10tv+spqnXBr+Bpips1bwCHH84e6FTSM=;
-        b=FCVeUrS472oDWiDqhyo4Ws4t2jUTRUzskbKDGjh1i4yV9sGjgTDZPif753HOrdYB1v
-         +IoBKY5p+5LMXn4pzvHYzgUjCG9MlulNyimV9n4tTkdI41HZLW2Lm/nJZOEBpiyk1ZnQ
-         lNPJNIavokMhsayNWMImIfqVk/j9xYgjjg2sUwwdLZC57cPqPPeD8LE9MO3aBqnIDS+X
-         pihRjdSJFuj4TE/JRq4fZvSUQiM10UijL305ffL1EfHnSbTlbe7FI8MmSfxhveFUBzCJ
-         OXx1sZbUrYln41S3aDx+/5r793aunkI+XLWkywP+v8/X+e7U0haSNfobmO7oekIDfqtu
-         yNUw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tpBIy3wDvQGfwH9ls4xR2jLiqxVzU1kgqh+8V0SkolM=;
+        b=qhVli5fhBKxbJaOS2y1VJDUNLLAHqtWf2jL00Tb9InM7nKWn4akLb4Dppd9KqCQKqi
+         29cdJh6WElt9yN+hN0MGEAy86fyKb97KzWJeXa5y5Py0+U53ADdqfSOIUXPz/3KD0aCx
+         LYg309WkcuTmxoUEewGSXr5AmEYfaMpG17srZRwbk1T6+BZTFGLsmTPDE4D11BJMD5lF
+         7qtxuk/B1mwpl/dYL30r5UXrw4xtVlhwUSI9lz/0KcxWl9SWxD02iBLzrQqIOYNa3U0a
+         8tzs9T/kBvbHrxh92yWpOTQmjEta9rsFny/9HualjYsEDQlNDdMilYFxEO84SAEQjnO9
+         OffQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=AckR/coIxOb10tv+spqnXBr+Bpips1bwCHH84e6FTSM=;
-        b=rtFL0+dfGeRnSBB5WlIbgmw0Own4Z6Ze+s/TkJv3+0BXJ582JIbbM8I4jYejQ3omA6
-         DeL0Q2rb+GVS54cfuM+bph1ugqUma7Hncm8/Bcsriw0PeevWZ89NX7Hqg9cNHvJ4R6/R
-         gIb/UORfuCEZUwi8p8k0hObpemTH++FOFURGy7iDcsnfisDLdrfqUSe8KrKjKa5mGWIt
-         aNdc+EBs8MrwciZZng8YyrjKRaciskbr76TojMVAhcV3oifcKYMkIJkzASUPKUfpqEE9
-         k1JX3JyEqnFqXyttEGDU/x+FWbQiXYJ/2Vukds3pSw7jxK0YEOOBMzVNLvAr93Gd9Bh8
-         btpg==
-X-Gm-Message-State: AOAM532fajlH5V+oQi9RNWrpcv5ktpx8h5wAaIGq6f7Un7aB8y17SzF9
-        p5zRPfvPiwg7/wOPwIIr8p0rFNSB+A9urXK9
-X-Google-Smtp-Source: ABdhPJw2KWlYZiyQRjRnqb4/L4mhvft8SvJA9g41H5Uxa1E1S0kNfhbTWB2cHcRvCCOCdthsakGn4Q==
-X-Received: by 2002:ac2:55a7:0:b0:448:3023:e645 with SMTP id y7-20020ac255a7000000b004483023e645mr18084066lfg.266.1647385022741;
-        Tue, 15 Mar 2022 15:57:02 -0700 (PDT)
-Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
-        by smtp.gmail.com with ESMTPSA id p11-20020a19f10b000000b004488b82a87esm25531lfh.39.2022.03.15.15.57.01
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=tpBIy3wDvQGfwH9ls4xR2jLiqxVzU1kgqh+8V0SkolM=;
+        b=iU611Tun+AOcpaD5GdclD5ZLwIN0f5/F6MBOWHY1RuWvEj9C2tXNBZNQ+CpmqyZmHN
+         sjve7JwPVQGbhstK64zp6TVe9Y8uMYtsvyg45RVmBuKENKWyThY+l7owRW7EZUqn7j2C
+         VFDm/MbxJcabwTLd/y76a4Xxfkf6y8Wkanti4v3ohbqzCGTMhup/Rx+4ZupAPuchM6Zd
+         TizuigVxg8/AD2/yGUW1qBYh/32/GZdtE5u5h/0x7XEp3dW9yAEPJVRXuaco5YHDj40n
+         jo3eRCQ5dGr8NgAeSQJEq3YDygumrx26WUWBtoYYiisdeDV++LBsGYrGwBBZlfL6GhGJ
+         jyIQ==
+X-Gm-Message-State: AOAM532BSuLxttdDiVJX3/1DpCtMrI80mKsnuMOlbQ4jZmf7J9bwMdg1
+        qQhjiJo6HDIf2Q9bnqTxbkA=
+X-Google-Smtp-Source: ABdhPJzvr4L3c32sdszzPbBKgCVWu3n+sX8w08P6WyBLH8X2gU41vVQJ2efLIV0AJFg2T4fNGpVv0A==
+X-Received: by 2002:a17:90b:4c41:b0:1be:f5d3:78eb with SMTP id np1-20020a17090b4c4100b001bef5d378ebmr7001311pjb.187.1647385111454;
+        Tue, 15 Mar 2022 15:58:31 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:7484:dc22:fe49:91cb])
+        by smtp.gmail.com with ESMTPSA id k3-20020a056a00168300b004f7e60da26csm139387pfc.182.2022.03.15.15.58.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 15:57:02 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v4 net-next 09/15] net: dsa: Never offload FDB entries
- on standalone ports
-In-Reply-To: <20220315224205.jzz3m2mroytanesh@skbuf>
-References: <20220315002543.190587-1-tobias@waldekranz.com>
- <20220315002543.190587-10-tobias@waldekranz.com>
- <20220315163349.k2rmfdzrd3jvzbor@skbuf> <87ee32lumk.fsf@waldekranz.com>
- <20220315224205.jzz3m2mroytanesh@skbuf>
-Date:   Tue, 15 Mar 2022 23:57:01 +0100
-Message-ID: <875yoelt8i.fsf@waldekranz.com>
+        Tue, 15 Mar 2022 15:58:30 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 15 Mar 2022 15:58:28 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, surenb@google.com, vbabka@suse.cz,
+        rientjes@google.com, sfr@canb.auug.org.au, edgararriaga@google.com,
+        nadav.amit@gmail.com, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, "# 5 . 10+" <stable@vger.kernel.org>
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+Message-ID: <YjEaFBWterxc3Nzf@google.com>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 00:42, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Tue, Mar 15, 2022 at 11:26:59PM +0100, Tobias Waldekranz wrote:
->> On Tue, Mar 15, 2022 at 18:33, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Tue, Mar 15, 2022 at 01:25:37AM +0100, Tobias Waldekranz wrote:
->> >> If a port joins a bridge that it can't offload, it will fallback to
->> >> standalone mode and software bridging. In this case, we never want to
->> >> offload any FDB entries to hardware either.
->> >> 
->> >> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
->> >> ---
->> >
->> > When you resend, please send this patch separately, unless something
->> > breaks really ugly with your MST series in place.
->> 
->> Sure. I found this while testing the software fallback. It prevents a
->> segfault in dsa_port_bridge_host_fdb_add, which (rightly, I think)
->> assumes that dp->bridge is valid. I feel like this should have a Fixes:
->> tag, but I'm not sure which commit to blame. Any suggestions?
->
-> Ok, makes sense. So far, unoffloaded bridge ports meant that the DSA
-> switch driver didn't have a ->port_bridge_join() implementation.
-> Presumably that also came along with a missing ->port_fdb_add()
-> implementation. So probably no NPD for the existing code paths, it is
-> just your unoffloaded MST support that opens up new possibilities.
->
-> Anyway, the dereference of dp->bridge first appeared in commit
-> c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
-> which is still just in net-next.
+On Fri, Mar 11, 2022 at 08:59:06PM +0530, Charan Teja Kalla wrote:
+> The process_madvise() system call is expected to skip holes in vma
+> passed through 'struct iovec' vector list. But do_madvise, which
+> process_madvise() calls for each vma, returns ENOMEM in case of unmapped
+> holes, despite the VMA is processed.
+> Thus process_madvise() should treat ENOMEM as expected and consider the
+> VMA passed to as processed and continue processing other vma's in the
+> vector list. Returning -ENOMEM to user, despite the VMA is processed,
+> will be unable to figure out where to start the next madvise.
+> Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
+> Cc: <stable@vger.kernel.org> # 5.10+
 
-Thanks, I just sent it separately:
+Hmm, not sure whether it's stable material since it changes semantic of
+API. It would be better to change the semantic from 5.19 with man page
+update to specify the change.
 
-https://lore.kernel.org/netdev/20220315225018.1399269-1-tobias@waldekranz.com
 
->> >>  net/dsa/slave.c | 3 +++
->> >>  1 file changed, 3 insertions(+)
->> >> 
->> >> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
->> >> index a61a7c54af20..647adee97f7f 100644
->> >> --- a/net/dsa/slave.c
->> >> +++ b/net/dsa/slave.c
->> >> @@ -2624,6 +2624,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->> >>  	if (ctx && ctx != dp)
->> >>  		return 0;
->> >>  
->> >> +	if (!dp->bridge)
->> >> +		return 0;
->> >> +
->> >>  	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
->> >>  		if (dsa_port_offloads_bridge_port(dp, orig_dev))
->> >>  			return 0;
->> >> -- 
->> >> 2.25.1
->> >> 
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+> ---
+> Changes in V2:
+>   -- Fixed handling of ENOMEM by process_madvise().
+>   -- Patch doesn't exist in V1.
+> 
+>  mm/madvise.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index e97e6a9..14fb76d 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1426,9 +1426,16 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+>  
+>  	while (iov_iter_count(&iter)) {
+>  		iovec = iov_iter_iovec(&iter);
+> +		/*
+> +		 * do_madvise returns ENOMEM if unmapped holes are present
+> +		 * in the passed VMA. process_madvise() is expected to skip
+> +		 * unmapped holes passed to it in the 'struct iovec' list
+> +		 * and not fail because of them. Thus treat -ENOMEM return
+> +		 * from do_madvise as valid and continue processing.
+> +		 */
+>  		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
+>  					iovec.iov_len, behavior);
+> -		if (ret < 0)
+> +		if (ret < 0 && ret != -ENOMEM)
+>  			break;
+>  		iov_iter_advance(&iter, iovec.iov_len);
+>  	}
+> -- 
+> 2.7.4
+> 

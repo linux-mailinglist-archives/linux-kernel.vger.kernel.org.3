@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459DE4D9B6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3C74D9B6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348398AbiCOMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S1348396AbiCOMmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235627AbiCOMnJ (ORCPT
+        with ESMTP id S235627AbiCOMms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:43:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1571D31207
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647348117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=L8qSvNcazquKGgqZpfRwZOK5T4G+V/7nPQSKEnK7vHo=;
-        b=GYjAdNkpiPI7aD7p2UZk1mWt/J+J2WY1j3htNOI0iof4RzuDpILSWF92Sv7c888IyoeR4/
-        WcTqpPtxNSVY251gzpllzBZNZW5hE/UL6vbMnlArWkdBAEuAfEm/gqd9tsGMblOV/gxT7B
-        LnERTm5ESjoJ0K8EtdkjzSTG3VyX9BU=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-qG6vepp7O9emXuKbiup0tw-1; Tue, 15 Mar 2022 08:41:55 -0400
-X-MC-Unique: qG6vepp7O9emXuKbiup0tw-1
-Received: by mail-oo1-f72.google.com with SMTP id r63-20020a4a3742000000b00320d9025595so15417385oor.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:41:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L8qSvNcazquKGgqZpfRwZOK5T4G+V/7nPQSKEnK7vHo=;
-        b=NcZDCzuZ04wUhZB72nWzoP6VfKhpvcCifoVt8Up8nbsWwd+OO9JTMv7t6eIrytMsiv
-         6ItJ79heWUep4JOVJsjb4boQHUsJaIMUkZeEtFU5TDCgjLilRKiPZK9A3T+iwQaOx8Nl
-         3iRo7LHYvlGSFK/xIH6hd7iUbh+ATH6bvDIY753HAtgRrvAMcx/NmxqmoA2PvO4LfQ9+
-         cSJrvrjYXqIP/fCWt2zJNOhrSERVxJHdCDrKUYp16wSDKlIGJ5ffLTVzUIbnTgBzCrbQ
-         lPJWafstPKovSsPMX6jvFPq2LlDiUe7G/q8CKrCctNKKRbJJ/dpeS7hXIV+g/UtCnJOr
-         TD3A==
-X-Gm-Message-State: AOAM531AGhc3qXGA7aSkIDVDlcwKdNJZHjNq6P+VJhYlM/viEJIIN9/l
-        exeSZHT+LU1kZ6pLJQlriV3Gml1f+R4imluTa0D4nsKrSWNaWAM7H+T2U1/IafzZlkBhY4bwiqh
-        5ECPreNK/izgNv9jNmNNbUgB9
-X-Received: by 2002:a05:6830:2a13:b0:5b2:4818:9e47 with SMTP id y19-20020a0568302a1300b005b248189e47mr12799092otu.246.1647348115058;
-        Tue, 15 Mar 2022 05:41:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxcpL+Gz6iIXjMEkxLwJ/eu0PZYTQsZg4Pa8CgHWGB+zJNMcXTr1+Z1m4WKMcLCOWc4CCmSkw==
-X-Received: by 2002:a05:6830:2a13:b0:5b2:4818:9e47 with SMTP id y19-20020a0568302a1300b005b248189e47mr12799084otu.246.1647348114840;
-        Tue, 15 Mar 2022 05:41:54 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056870b00f00b000d75f1d9b81sm7762654oae.46.2022.03.15.05.41.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 05:41:54 -0700 (PDT)
-From:   trix@redhat.com
-To:     mst@redhat.com, jasowang@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com, lingshan.zhu@intel.com,
-        sgarzare@redhat.com, xieyongji@bytedance.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] vDPA/ifcvf: match pointer check to use
-Date:   Tue, 15 Mar 2022 05:41:30 -0700
-Message-Id: <20220315124130.1710030-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Tue, 15 Mar 2022 08:42:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323EC31207;
+        Tue, 15 Mar 2022 05:41:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC96DB8122D;
+        Tue, 15 Mar 2022 12:41:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE235C340E8;
+        Tue, 15 Mar 2022 12:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647348094;
+        bh=zAhNw43eKx/s14dsMwTsXrVFhTIKJTj9xC310UWpx30=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Eh/3Y7XfzsMWfqrWEhkY8RvxH8YHSETrBx1+6StYSccdCZ5bne2u5X71gHWYJb8ke
+         LBPRfbHBoDnO+noqw77wlYMdqHO87vx8XbcXcPZTPokV9ZTua3tkQ/SwE5gQcnfPJJ
+         RttRv8qLngJ3CV7JU7dXz2Hu6Zgk156mwlRYJR9E=
+Date:   Tue, 15 Mar 2022 13:41:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     Pavel Machek <pavel@denx.de>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH 5.10 38/58] KVM: arm64: Allow indirect vectors to be used
+ without SPECTRE_V3A
+Message-ID: <YjCJejmCTOYZkVj5@kroah.com>
+References: <20220310140812.869208747@linuxfoundation.org>
+ <20220310140813.956533242@linuxfoundation.org>
+ <20220310234858.GB16308@amd>
+ <YirvObKn0ADrEOk+@kroah.com>
+ <ef538a31-5f73-dfc5-12a9-f5222514035c@arm.com>
+ <dcce2353-d20b-eed3-fac1-420b4cad7152@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dcce2353-d20b-eed3-fac1-420b4cad7152@arm.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Tue, Mar 15, 2022 at 12:27:29PM +0000, James Morse wrote:
+> On 3/15/22 12:20 PM, James Morse wrote:
+> > On 3/11/22 6:42 AM, Greg Kroah-Hartman wrote:
+> > > On Fri, Mar 11, 2022 at 12:48:59AM +0100, Pavel Machek wrote:
+> > > > What is going on here?
+> > > > 
+> > > > > commit 5bdf3437603d4af87f9c7f424b0c8aeed2420745 upstream.
+> > > > 
+> > > > Upstream commit 5bdf is very different from this. In particular,
+> > > > 
+> > > > >   arch/arm64/kvm/hyp/smccc_wa.S    |   66 +++++++++++++++++++++++++++++++++++++++
+> > > > 
+> > > > I can't find smccc_wa.S, neither in mainline, nor in -next. And it
+> > > > looks buggy. I suspect loop_k24 should loop 24 times, but it does 8
+> > > > loops AFAICT. Same problem with loop_k32.
+> > 
+> > Yup, that's a bug. Thanks for spotting it!
+> > I'll post a replacement for this patch.
+> 
+> Looking more closely at this: when I originally did this the 'new' code for stable was
+> in a separate patch to make it clear it was new code. Here it looks like Greg has merged
+> it into this patch.
 
-Clang static analysis reports this issue
-ifcvf_main.c:49:4: warning: Called function
-  pointer is null (null dereference)
-  vf->vring->cb.callback(vring->cb.private);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I did?  I don't recall doing that at all, sorry.  But getting the 5.10
+arm64 tree into the stable queue was not easy from what I recall.
 
-The check
-  vring = &vf->vring[i];
-  if (vring->cb.callback)
+> I'm not sure what the 'rules' are for this sort of thing, obviously Greg gets the last say.
+> 
+> I'll try and restructure the other backports to look like this, it is certainly simpler
+> than trrying to pull all the prerequisites for all the upstream patches in.
 
-Does not match the use.  Change dereference so they match.
+I tried to also take a lot of prerequisite patches for the cpu id stuff,
+to make those merges easier, so I have no problem with taking what is in
+Linus's tree to make backports simpler.  But it's a balencing act,
+especially for tougher stuff like this :(
 
-Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
-index 3b48e717e89f7..4366320fb68d3 100644
---- a/drivers/vdpa/ifcvf/ifcvf_main.c
-+++ b/drivers/vdpa/ifcvf/ifcvf_main.c
-@@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
- 	for (i = 0; i < vf->nr_vring; i++) {
- 		vring = &vf->vring[i];
- 		if (vring->cb.callback)
--			vf->vring->cb.callback(vring->cb.private);
-+			vring->cb.callback(vring->cb.private);
- 	}
- 
- 	return IRQ_HANDLED;
--- 
-2.26.3
-
+greg k-h

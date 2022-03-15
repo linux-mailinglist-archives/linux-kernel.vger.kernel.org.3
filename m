@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E15F4D96FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D3C4D96FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346265AbiCOJCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S1346322AbiCOJD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238477AbiCOJCd (ORCPT
+        with ESMTP id S238477AbiCOJDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:02:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638604D9E9;
-        Tue, 15 Mar 2022 02:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ky05SS0dLP9h7QzHiJvGTANI4WZNzfmgs3YRQLEcx58=; b=curqcvVdYc3eIzjLKBHdPBB9+s
-        G3CwawKkSnWcWe6FAT9Vz/58zfyVv4TM8srf1+VSlJPsk3Aahsqii4DBP1/rb6wr65CiyLm13zRe3
-        ElM5AeTzBAdRDPr3XWS3mefEnMhKdRwfB4MXMbXoyYMnk5zTu7BFKjskib6kon2UVE85hkVc73af1
-        smWSajASTzMJKZsausXwWrtVdjkLWaYDroy0Ovq5molIR90WGUNnSBaiAdFbCRI38BkiP412HDAne
-        eYfgh5WA+y2vKx0ZMh95NyHBnv1HrOjdzMJGRuFXgsnXabC0Imcq1LWDdqoTguIens/OQ/TxUZxRe
-        A5LWBuVA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nU32r-004ro6-Eg; Tue, 15 Mar 2022 09:00:45 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 42AC8986205; Tue, 15 Mar 2022 10:00:43 +0100 (CET)
-Date:   Tue, 15 Mar 2022 10:00:43 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
-        hjl.tools@gmail.com, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <20220315090043.GB8939@worktop.programming.kicks-ass.net>
-References: <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
- <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
- <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
- <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
- <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net>
- <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
- <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
- <20220312154407.GF28057@worktop.programming.kicks-ass.net>
- <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
- <20220314204402.rpd5hqzzev4ugtdt@apollo>
+        Tue, 15 Mar 2022 05:03:24 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC944D9D6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:02:09 -0700 (PDT)
+X-UUID: 54457aaeeeae4d3aad0dffd452a40eb0-20220315
+X-UUID: 54457aaeeeae4d3aad0dffd452a40eb0-20220315
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 914556803; Tue, 15 Mar 2022 17:02:04 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 15 Mar 2022 17:02:02 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Mar 2022 17:02:02 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>
+CC:     <lecopzer.chen@mediatek.com>, <andreyknvl@gmail.com>,
+        <anshuman.khandual@arm.com>, <ardb@kernel.org>, <arnd@arndb.de>,
+        <dvyukov@google.com>, <geert+renesas@glider.be>,
+        <glider@google.com>, <kasan-dev@googlegroups.com>,
+        <linus.walleij@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <lukas.bulwahn@gmail.com>, <mark.rutland@arm.com>,
+        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>,
+        <rmk+kernel@armlinux.org.uk>, <ryabinin.a.a@gmail.com>,
+        <yj.chiang@mediatek.com>
+Subject: [PATCH v4 0/2] arm: kasan: support CONFIG_KASAN_VMALLOC
+Date:   Tue, 15 Mar 2022 17:01:55 +0800
+Message-ID: <20220315090157.27001-1-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314204402.rpd5hqzzev4ugtdt@apollo>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 02:14:02AM +0530, Kumar Kartikeya Dwivedi wrote:
 
-> [ Note: I have no experience with trampoline code or IBT so what follows might
-> 	be incorrect. ]
-> 
-> In case of fexit and fmod_ret, we call original function (but skip
-> X86_PATCH_SIZE bytes), with ENDBR we must also skip those 4 bytes, but in some
-> cases like bpf_fentry_test1, for which this test has fmod_ret prog, compiler
-> (gcc 11) emits endbr64, but not for do_init_module, for which we do fexit.
-> 
-> This means for do_init_module module, orig_call += X86_PATCH_SIZE +
-> ENDBR_INSN_SIZE would skip more bytes than needed to emit call to original
-> function, which explains why I was seeing crash in the middle of
-> 'mov edx, 0x10' instruction.
-> 
-> The diff below fixes the problem for me, and allows the test to pass.
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index b98e1c95bcc4..760c9a3c075f 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -2031,11 +2031,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
-> 
->         ip_off = stack_size;
-> 
-> -       if (flags & BPF_TRAMP_F_SKIP_FRAME)
-> +       if (flags & BPF_TRAMP_F_SKIP_FRAME) {
->                 /* skip patched call instruction and point orig_call to actual
->                  * body of the kernel function.
->                  */
-> -               orig_call += X86_PATCH_SIZE + ENDBR_INSN_SIZE;
-> +               if (is_endbr(*(u32 *)orig_call))
-> +                       orig_call += ENDBR_INSN_SIZE;
-> +               orig_call += X86_PATCH_SIZE;
-> +       }
-> 
->         prog = image;
+Since the framework of KASAN_VMALLOC is well-developed,
+It's easy to support for ARM that simply not to map shadow of VMALLOC
+area on kasan_init.
 
-Hmm, so I was under the impression that this was targeting the NOP from
-emit_prologue(), and that has an unconditional ENDBR. If this is instead
-targeting the 'start of random kernel function' then yes, what you
-propose will work.
+Since the virtual address of vmalloc for Arm is also between
+MODULE_VADDR and 0x100000000 (ZONE_HIGHMEM), which means the shadow
+address has already included between KASAN_SHADOW_START and
+KASAN_SHADOW_END.
+Thus we need to change nothing for memory map of Arm.
 
-(obviously, once we go do more complicated CFI schemes, all this needs
-revisiting yet again).
+This can fix ARM_MODULE_PLTS with KASan, support KASan for higmem
+and support CONFIG_VMAP_STACK with KASan.
+    
 
-I don't seem able to run this mod_race test, it keeps saying:
+Test on
+1. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping.
+2. Qemu with memory 2G and vmalloc=500M for 3G/1G mapping + LPAE.
+3. Qemu with memory 2G and vmalloc=500M for 2G/2G mapping.
 
-  tgl-build# ./test_progs -v -t mod_race
-  bpf_testmod.ko is already unloaded.
-  Loading bpf_testmod.ko...
-  Successfully loaded bpf_testmod.ko.
-  Summary: 0/0 PASSED, 0 SKIPPED, 0 FAILED
-  Successfully unloaded bpf_testmod.ko.
+v4:
+    rebase on 5.17-rc8.
+    remove simple doc for "arm: kasan: support CONFIG_KASAN_VMALLOC"
+    rewrite the description for VMAP_STACK
 
-Which I'm taking to mean I'm doing it wrong... so I can't immediately
-verify, but your proposal looks sane so I'll fold it in.
+v3:
+    rebase on 5.17-rc5.
+    Add simple doc for "arm: kasan: support CONFIG_KASAN_VMALLOC"
+    Tweak commit message.
 
-Thanks!
+https://lore.kernel.org/lkml/20220227134726.27584-1-lecopzer.chen@mediatek.com/
+
+v2:
+    rebase on 5.17-rc3
+
+
+Lecopzer Chen (2):
+  arm: kasan: support CONFIG_KASAN_VMALLOC
+  arm: kconfig: fix MODULE_PLTS for KASAN with KASAN_VMALLOC
+
+ arch/arm/Kconfig         | 2 ++
+ arch/arm/mm/kasan_init.c | 6 +++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+-- 
+2.18.0
+

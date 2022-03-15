@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DB44D95D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0641B4D95DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345748AbiCOICY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S1345767AbiCOIDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiCOICV (ORCPT
+        with ESMTP id S1345671AbiCOIDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:02:21 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5242A4BBA8;
-        Tue, 15 Mar 2022 01:01:08 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 15 Mar
- 2022 16:01:07 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 15 Mar
- 2022 16:01:06 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <freude@linux.ibm.com>, <hca@linux.ibm.com>, <gor@linux.ibm.com>,
-        <agordeev@linux.ibm.com>
-CC:     <linux-s390@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH v2] s390: crypto: Use min() instead of doing it manually
-Date:   Tue, 15 Mar 2022 16:01:04 +0800
-Message-ID: <1647331264-13853-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 15 Mar 2022 04:03:22 -0400
+Received: from smtp-out.xnet.cz (smtp-out.xnet.cz [178.217.244.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CD84BBBE;
+        Tue, 15 Mar 2022 01:02:10 -0700 (PDT)
+Received: from meh.true.cz (meh.true.cz [108.61.167.218])
+        (Authenticated sender: petr@true.cz)
+        by smtp-out.xnet.cz (Postfix) with ESMTPSA id AF527183A2;
+        Tue, 15 Mar 2022 09:02:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=true.cz; s=xnet;
+        t=1647331329; bh=Owgjpt9llFly8+dfQ/MyEmdugi3jXELC/2QOvA1Yplw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+        b=RksBD10DTBfymcyc0tskKWTanzG6CEDK8a+QhF0EhUkiSh1bldkhga8ViEOgnnthc
+         Nzs9BB4sVW25Df5/L+nrQkSAZmyvD4oum9Ej+IRCYrePc/YELButYksL9ODTppiKaK
+         8XvCrce2WNdoX7QtlftDvNI5rvlq2FWV8G7QIlYg=
+Received: by meh.true.cz (OpenSMTPD) with SMTP id 36d5bdad;
+        Tue, 15 Mar 2022 09:01:44 +0100 (CET)
+Date:   Tue, 15 Mar 2022 09:02:06 +0100
+From:   Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Bastien =?utf-8?Q?Roucari=C3=A8s?= <rouca@debian.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, stable@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "ARM: dts: sun7i: A20-olinuxino-lime2: Fix
+ ethernet phy-mode"
+Message-ID: <20220315080206.GA12404@meh.true.cz>
+Reply-To: Petr =?utf-8?Q?=C5=A0tetiar?= <ynezz@true.cz>
+References: <20220308125531.27305-1-ynezz@true.cz>
+ <20220315072846.GA9129@meh.true.cz>
+ <YjBCImqGsbIZ3IF4@Red>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjBCImqGsbIZ3IF4@Red>
+X-PGP-Key: https://gist.githubusercontent.com/ynezz/477f6d7a1623a591b0806699f9fc8a27/raw/a0878b8ed17e56f36ebf9e06a6b888a2cd66281b/pgp-key.pub
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,27 +59,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck warning:
-drivers/s390/crypto/zcrypt_ep11misc.c:1112:25-26: WARNING opportunity for min()
+Corentin Labbe <clabbe.montjoie@gmail.com> [2022-03-15 08:37:06]:
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/s390/crypto/zcrypt_ep11misc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/s390/crypto/zcrypt_ep11misc.c b/drivers/s390/crypto/zcrypt_ep11misc.c
-index 9ce5a71..bb2a527 100644
---- a/drivers/s390/crypto/zcrypt_ep11misc.c
-+++ b/drivers/s390/crypto/zcrypt_ep11misc.c
-@@ -1109,7 +1109,7 @@ static int ep11_wrapkey(u16 card, u16 domain,
- 	if (kb->head.type == TOKTYPE_NON_CCA &&
- 	    kb->head.version == TOKVER_EP11_AES) {
- 		has_header = true;
--		keysize = kb->head.len < keysize ? kb->head.len : keysize;
-+		keysize = min((size_t)kb->head.len, keysize);
- 	}
- 
- 	/* request cprb and payload */
--- 
-2.7.4
+> If your patch is applied, older revisions will stop working, right ?
 
+correct, in the same way new revisions stopped working when that wrong fix was
+applied.
+
+> What about adding a new dtb like sun7i-a20-olinuxino-lime2-revk.dts ?
+
+From my POV proper fix for earlier HW revisions G/G1/G2 is introduction of
+sun7i-a20-olinuxino-lime2-revG.dts with a proper `phy-mode` for RTL8211E PHY.
+
+Cheers,
+
+Petr

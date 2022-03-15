@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C4C4DA1AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7F04DA1B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350793AbiCOR4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S1350802AbiCOR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbiCOR4d (ORCPT
+        with ESMTP id S237133AbiCOR6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:56:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D9A522C5;
-        Tue, 15 Mar 2022 10:55:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7C8F61634;
-        Tue, 15 Mar 2022 17:55:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E1AC340EE;
-        Tue, 15 Mar 2022 17:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647366920;
-        bh=DnJBRB69KPEnIPM6pi87Ym+S0PQ45uLanLNzMJWai8c=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=CIHKi2eDxeLTRpDkaifVYJP3UoodHCktIhnCjwUdmYcF+N50KnGjE2KdUfGQbabkY
-         e9UmgBf5/TErJtxiLrCwuyf3sBZxFhIDoJ/Gg4TrXW/JXcpB7soflew1EDG0+WNJ75
-         e2kIqZ7EiURge5ibuELBkb9TBAwM5jSz8Dqtv7aVMz/Mag8+cbcW3m3N1vi+o98TrZ
-         viLW4/VDukMZ+rjqCiH6IelYRlAzVqI+dQMoh1chXKwzGOTTc7VbJ0np+5SKcePbLh
-         TyAcBDVIq5hBEVW0vsRzbFIJyPyz8znuH4fxPWH9F347Bk3yITn66aTvorKWgNMoM8
-         rSS5L1K24Tyfw==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 15 Mar 2022 13:58:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8510058E76
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647367058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fMedA9WfDLM5Ii8pfrj6jSSL52RCVYUyNjTGE84uBgM=;
+        b=fD0wGxnzALVJENVAk+tvxD+OaD/Fv25/TdIN/LpwHGUTV816dxcBXUqblnF59KrhB9qUqK
+        WcwLF6SbA2PxNOX8a0zNBFke5yFTGYjic+e4/dHpejaAOzNY34z/TK0zv41lun00rAJjr4
+        U6PsOzkh8ZD+4WoK0K7Z5TPpao5CPn8=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-ajtI6GhIPs2tWNC9cpEA8g-1; Tue, 15 Mar 2022 13:57:37 -0400
+X-MC-Unique: ajtI6GhIPs2tWNC9cpEA8g-1
+Received: by mail-ot1-f72.google.com with SMTP id v7-20020a05683018c700b005af147b47beso14449492ote.22
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:57:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=fMedA9WfDLM5Ii8pfrj6jSSL52RCVYUyNjTGE84uBgM=;
+        b=ye6XJDyLYXgb+5guw5Cr2RQ3vmnApD9Rqcsiyawk0ToW+3nt5TWOpW0bKKCfjL0E/R
+         PFY23hc+1X9Qg4i5bhiKBYFGJCuuz7rO8/xSGH3d6vFwuIMifDVhLTnNrTmC6YrLeD5P
+         F29w8VT3GBu1tt91CFT4+p8651YgbLrPFNV/Mo3YOXdkXP/CmU7q12kTb9ByHb6m3k9G
+         0gxPKe6mga5C6mnrfpDLL9LjUeCI2iv/MZSqBbteGZEwRwblRXS0QcJAPeNW/Ur0gmS5
+         RA26YK1LkfpgX8b+B2Y+kzUEVPtFpt9NEsC0ugIwWh65EhJ++K7JTzaqsWLDOANxAkp3
+         meGg==
+X-Gm-Message-State: AOAM530XFg9E/tztlP0kHHxcv/DCW4hzhSdVzhZzTvDeggBMv7Wqz16t
+        I3GYH236gYHuxzuir1zsA7rrEkfpmLmZA4ALqk9Qobp+Kk9oj+JfhV/KI1NCZOU/Q/R2Ut7pAHF
+        AGHugx6Kh/tih/NCxiW5GPz83
+X-Received: by 2002:a05:6870:f21a:b0:dd:9bec:caf8 with SMTP id t26-20020a056870f21a00b000dd9beccaf8mr873945oao.78.1647367056640;
+        Tue, 15 Mar 2022 10:57:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzE0G+Iyi868FpnRpeqpjvFcGN9EznuWhCxB2z8lLfYG22OepTHiVkPgi+Sek7WhuBRDRt2Cw==
+X-Received: by 2002:a05:6870:f21a:b0:dd:9bec:caf8 with SMTP id t26-20020a056870f21a00b000dd9beccaf8mr873941oao.78.1647367056433;
+        Tue, 15 Mar 2022 10:57:36 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id q39-20020a4a88ea000000b0032165eb3af8sm7321527ooh.42.2022.03.15.10.57.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 10:57:36 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 11:57:34 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        yishaih@nvidia.com, linux-doc@vger.kernel.org, corbet@lwn.net,
+        hch@infradead.org
+Subject: Re: [PATCH v4] vfio-pci: Provide reviewers and acceptance criteria
+ for variant drivers
+Message-ID: <20220315115734.71facb10.alex.williamson@redhat.com>
+In-Reply-To: <20220315175039.GL11336@nvidia.com>
+References: <164736509088.181560.2887686123582116702.stgit@omen>
+        <20220315175039.GL11336@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220313190419.2207-2-ansuelsmth@gmail.com>
-References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-2-ansuelsmth@gmail.com>
-Subject: Re: [PATCH 01/16] clk: permit to define a custom parent for clk_hw_get_parent_index
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Date:   Tue, 15 Mar 2022 10:55:18 -0700
-User-Agent: alot/0.10
-Message-Id: <20220315175520.32E1AC340EE@smtp.kernel.org>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-03-13 12:04:04)
-> Clk can have multiple parents. Some clk may require to get the cached
-> index of other parent that are not current associated with the clk.
-> Extend clk_hw_get_parent_index() with an optional parent to permit a
-> driver to get the cached index. If parent is NULL, the parent associated
-> with the provided hw clk is used.
->=20
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/clk/clk.c                 | 14 +++++++++-----
->  drivers/clk/tegra/clk-periph.c    |  2 +-
->  drivers/clk/tegra/clk-sdmmc-mux.c |  2 +-
->  drivers/clk/tegra/clk-super.c     |  4 ++--
->  include/linux/clk-provider.h      |  2 +-
->  5 files changed, 14 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 8de6a22498e7..fe42f56bfbdf 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -1711,15 +1711,19 @@ static int clk_fetch_parent_index(struct clk_core=
- *core,
->  /**
->   * clk_hw_get_parent_index - return the index of the parent clock
->   * @hw: clk_hw associated with the clk being consumed
-> + * @parent: optional clk_hw of the parent to be fetched
->   *
-> - * Fetches and returns the index of parent clock. Returns -EINVAL if the=
- given
-> - * clock does not have a current parent.
-> + * Fetches and returns the index of parent clock. If parent is not
-> + * provided the parent of hw is used.
-> + * Returns -EINVAL if the given clock does not have a current parent.
->   */
-> -int clk_hw_get_parent_index(struct clk_hw *hw)
-> +int clk_hw_get_parent_index(struct clk_hw *hw, struct clk_hw *parent)
+On Tue, 15 Mar 2022 14:50:39 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Please introduce another API vs. tacking on an "output" argument to this
-API. That makes the patch less invasive. And it can also return a
-pointer instead of an integer in that case.
+> On Tue, Mar 15, 2022 at 11:29:57AM -0600, Alex Williamson wrote:
+> > Device specific extensions for devices exposed to userspace through
+> > the vfio-pci-core library open both new functionality and new risks.
+> > Here we attempt to provided formalized requirements and expectations
+> > to ensure that future drivers both collaborate in their interaction
+> > with existing host drivers, as well as receive additional reviews
+> > from community members with experience in this area.
+> > 
+> > Cc: Jason Gunthorpe <jgg@nvidia.com>
+> > Acked-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> > Reviewed-by: Yishai Hadas <yishaih@nvidia.com>
+> > Acked-by: Kevin Tian <kevin.tian@intel.com>
+> > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+> > 
+> > v4:
+> > 
+> > Banish the word "vendor", replace with "device specific"
+> > Minor wording changes in docs file
+> > Add sign-offs from Kevin and Yishai
+> > 
+> > I'll drop Jason from reviewers if there's no positive approval
+> > after this round.  
+> 
+> Sorry, you are looking for this?
+> 
+> Acked-by: Jason Gunthorpe <jgg@nvidia.com>
 
->  {
-> -       struct clk_hw *parent =3D clk_hw_get_parent(hw);
-> +       /* With parent NULL get the current parent of hw */
-> +       if (!parent)
-> +               parent =3D clk_hw_get_parent(hw);
+Yup, thanks for volunteering!
+

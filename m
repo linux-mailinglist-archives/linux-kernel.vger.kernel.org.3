@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A734D92AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C13EF4D92AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344493AbiCOCfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 22:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S1344498AbiCOCis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 22:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiCOCfa (ORCPT
+        with ESMTP id S237373AbiCOCir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 22:35:30 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734D44754F;
-        Mon, 14 Mar 2022 19:34:19 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so1039548pjb.5;
-        Mon, 14 Mar 2022 19:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jv/uO4ktRhHgJvY0t9qThitrZmG/d53V0zX21g8e8ks=;
-        b=IvCkPDBcj3XHekHZSIEmUfeoOwo5PQoUgdF9NMN0BZ6hse1Gvhr+Lgz4EjZM/1rRf1
-         LI0CxvyJHHy5HOxvNGPWjYudiSnKW/mC+Ffw3cQqjzE+yMN/aOUkmXN1YF+pBz50s8OU
-         eaxMA27/d/Z5hydW5QFhjbQJdpCjRMsUmiTRxTFOKYF2FXWUWjGWUD+6+230UBNWwVyC
-         zplXG+cVFXaBUuY8LLjfHdWokC02rCXPpIhcd6uquiIK3D12myiJXHGamCdqidQZB+98
-         VUliAGfIFvWKHD480hyp4Kbr1zptNMZx3cknMfyEy/sRS1WfVCe4+y+IdKhwfeJk6ld/
-         wmMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jv/uO4ktRhHgJvY0t9qThitrZmG/d53V0zX21g8e8ks=;
-        b=SXZlATPFPd0ZZfkzc/Yvf7P8WOqSFX8DyXp31ftjsVXiaIJGQx1kIgROh1KteJeaDM
-         NPIBCvVvJlBRFqqyjum5UJFKaephaazB0GQX/0bmLSUr5KxIe2aTivt9HJeqo1ClpZP9
-         fThWUH6XtEyrLix4d/vFz0iZ/J/M20YEmvdsisy66NZpkX03DJYs90gAzq/kFLHGlxyG
-         3G2oHXC09R33moUiYqWhyEt/Mk6uVOYOxO48ehTyHutjAC1YmOxMokz7/s3TGhtJgleT
-         /89lMCNzOeVUDyA6ATffV0tVVLLJZBCER0SCNYFMiHfyfXkDX5QvAEyjP8/MszVfkeV+
-         9ZOw==
-X-Gm-Message-State: AOAM533LOlC0Jp9XmNh7t6/0WN/MB7+XjbKfpURTdeva3OGZSKgXLxRg
-        M59UQmiPuphHvUWgFlEHHbY=
-X-Google-Smtp-Source: ABdhPJx6LgLHKafIvEvSSeHextJqmzgrHBJJsu3z9XjfEglz0xHEf5YQwhEC2yYUdbu7u2Sft+XxCQ==
-X-Received: by 2002:a17:902:7fc5:b0:151:863e:44ee with SMTP id t5-20020a1709027fc500b00151863e44eemr25924553plb.163.1647311658821;
-        Mon, 14 Mar 2022 19:34:18 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id oj2-20020a17090b4d8200b001bef79ea006sm875759pjb.29.2022.03.14.19.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 19:34:18 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jdelvare@suse.com
-Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] hwmon: (scpi-hwmon): Use of_device_get_match_data()
-Date:   Tue, 15 Mar 2022 02:34:12 +0000
-Message-Id: <20220315023412.2118415-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Mar 2022 22:38:47 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF14755F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647311856; x=1678847856;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4zB0EluaBLUlbrJtFNQECe8zx0RpNQBtFyPNsRfg9xI=;
+  b=EJyASLzGsHuKHWg4+3KUkTWuwiu5KQ7X7DkfVsAIv/gV3lyGlJY7CvhG
+   VwfZ1Wn/KOCi2lgt3XUgLxsJJZY6n5zHvF6EIByEoV7CUIpCkcj97rYz2
+   Z7tlTLUhEOAuw8VO+hsIJokJXkxAsLTLU0+9ehdCJl1rfy8+/nMY9zeVu
+   Yl7JfPWj25gGK7fQH+MnDyMMIAYUtR3CoILCJLT103TWU1jExqkLvYmWW
+   toCC98738JZJNVobBBq0sqjCCumF1hZIykZElMDk5sJHNelCn+LJGD6us
+   9L+keYGyo42AAwX5pgzR7HwSzbor1vMmF1QrjWPko8RZoe3r8uMHuf7Nj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255923655"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="255923655"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 19:37:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="497852010"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 14 Mar 2022 19:37:34 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nTx41-000ATL-8a; Tue, 15 Mar 2022 02:37:33 +0000
+Date:   Tue, 15 Mar 2022 10:36:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:netdev/net-next/master 111/126]
+ drivers/net/ethernet/mscc/ocelot.c:2920:14: error: use of undeclared
+ identifier 'IEEE_8021QAZ_MAX_TCS'
+Message-ID: <202203151054.NrsDHU0t-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
+head:   5e7350e8a618ebfea0713b30986976fcbb90b8bb
+commit: 978777d0fb06663523281aa50a5040c3aa31fbe7 [111/126] net: dsa: felix: configure default-prio and dscp priorities
+config: hexagon-randconfig-r032-20220313 (https://download.01.org/0day-ci/archive/20220315/202203151054.NrsDHU0t-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/978777d0fb06663523281aa50a5040c3aa31fbe7
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
+        git checkout 978777d0fb06663523281aa50a5040c3aa31fbe7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mscc/
 
-Use of_device_get_match_data() to simplify the code.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/mscc/ocelot.c:2920:14: error: use of undeclared identifier 'IEEE_8021QAZ_MAX_TCS'
+           if (prio >= IEEE_8021QAZ_MAX_TCS)
+                       ^
+   drivers/net/ethernet/mscc/ocelot.c:2962:14: error: use of undeclared identifier 'IEEE_8021QAZ_MAX_TCS'
+           if (prio >= IEEE_8021QAZ_MAX_TCS)
+                       ^
+   2 errors generated.
+
+
+vim +/IEEE_8021QAZ_MAX_TCS +2920 drivers/net/ethernet/mscc/ocelot.c
+
+  2917	
+  2918	int ocelot_port_set_default_prio(struct ocelot *ocelot, int port, u8 prio)
+  2919	{
+> 2920		if (prio >= IEEE_8021QAZ_MAX_TCS)
+  2921			return -ERANGE;
+  2922	
+  2923		ocelot_rmw_gix(ocelot,
+  2924			       ANA_PORT_QOS_CFG_QOS_DEFAULT_VAL(prio),
+  2925			       ANA_PORT_QOS_CFG_QOS_DEFAULT_VAL_M,
+  2926			       ANA_PORT_QOS_CFG,
+  2927			       port);
+  2928	
+  2929		return 0;
+  2930	}
+  2931	EXPORT_SYMBOL_GPL(ocelot_port_set_default_prio);
+  2932	
+
 ---
- drivers/hwmon/scpi-hwmon.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-index 919877970ae3..5187c6dd5a4f 100644
---- a/drivers/hwmon/scpi-hwmon.c
-+++ b/drivers/hwmon/scpi-hwmon.c
-@@ -141,7 +141,6 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 	struct scpi_ops *scpi_ops;
- 	struct device *hwdev, *dev = &pdev->dev;
- 	struct scpi_sensors *scpi_sensors;
--	const struct of_device_id *of_id;
- 	int idx, ret;
- 
- 	scpi_ops = get_scpi_ops();
-@@ -171,12 +170,11 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
- 
- 	scpi_sensors->scpi_ops = scpi_ops;
- 
--	of_id = of_match_device(scpi_of_match, &pdev->dev);
--	if (!of_id) {
-+	scale = of_device_get_match_data(&pdev->dev);
-+	if (!scale) {
- 		dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
- 		return -ENODEV;
- 	}
--	scale = of_id->data;
- 
- 	for (i = 0, idx = 0; i < nr_sensors; i++) {
- 		struct sensor_data *sensor = &scpi_sensors->data[idx];
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

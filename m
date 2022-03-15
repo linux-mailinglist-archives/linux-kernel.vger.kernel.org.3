@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896504D9A07
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D905E4D9A09
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347833AbiCOLLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S1347859AbiCOLLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237946AbiCOLLE (ORCPT
+        with ESMTP id S237946AbiCOLLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:11:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C77B434B7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:09:52 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KHrCT5Gwpzcb5C;
-        Tue, 15 Mar 2022 19:04:53 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 19:09:50 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 19:09:50 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        James Morse <james.morse@arm.com>,
-        Christoffer Dall <cdall@linaro.org>
-Subject: [PATCH] arm64: add the printing of tpidr_elx in __show_regs()
-Date:   Tue, 15 Mar 2022 19:09:26 +0800
-Message-ID: <20220315110926.1060-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Tue, 15 Mar 2022 07:11:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F69434B7;
+        Tue, 15 Mar 2022 04:10:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B78346145E;
+        Tue, 15 Mar 2022 11:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19B87C340ED;
+        Tue, 15 Mar 2022 11:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647342610;
+        bh=fyncz9knArlPVdM2eNnFsxp1qMHErh9T5x3IgawobFQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CBp0dd4mOYGoVeRdK5hl0ZRgEbLtlLIDg5tu6xCZI56lJrnHGqt3qgJFdK8A4AVad
+         Oz5om8EaKuraYZovk4wK+y2KYKMBGkWmnNFy5f12rw3uqTwdWJaXWKyGUYY+AGnRge
+         gqS4x/+yKGOzjY38lJtGPS50AmUwpcwj8eGBEQ1ozNltWj13vWLwmIdorX1Iww5vNN
+         M/Ze5vJdLhNPODLh2TQEHJyHz4+34+iBdcBdbEIlrp7K1VyVOlg2qcAK05HkH9AKZ5
+         FGI7H0gw5aUipu0CxTnNM30MsOoUrTGHbsFMjZvKwMWgj9JTknhqEi5dUNG8kSG4+z
+         VRXcboSf+bYiw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE3D5E8DD5B;
+        Tue, 15 Mar 2022 11:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] atm: eni: Add check for dma_map_single
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164734260997.13207.6190809851379875722.git-patchwork-notify@kernel.org>
+Date:   Tue, 15 Mar 2022 11:10:09 +0000
+References: <20220314013448.2340361-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220314013448.2340361-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kuba@kernel.org, 3chas3@gmail.com,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
-using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
-tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
-pcpu access. However, when performing reverse execution based on the
-registers and the memory contents in kdump, this information is sometimes
-required if there is a pcpu access.
+Hello:
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- arch/arm64/kernel/process.c | 3 +++
- 1 file changed, 3 insertions(+)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 5369e649fa79ff8..14924810a1d9d76 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -216,6 +216,9 @@ void __show_regs(struct pt_regs *regs)
- 	show_regs_print_info(KERN_DEFAULT);
- 	print_pstate(regs);
- 
-+	if (IS_ENABLED(CONFIG_SMP))
-+		printk("tpidr : %016lx\n", this_cpu_ptr(NULL));
-+
- 	if (!user_mode(regs)) {
- 		printk("pc : %pS\n", (void *)regs->pc);
- 		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
+On Mon, 14 Mar 2022 09:34:48 +0800 you wrote:
+> As the potential failure of the dma_map_single(),
+> it should be better to check it and return error
+> if fails.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] atm: eni: Add check for dma_map_single
+    https://git.kernel.org/netdev/net/c/0f74b29a4f53
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

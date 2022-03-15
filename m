@@ -2,49 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B854D9DE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76334D9DC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349363AbiCOOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
+        id S243907AbiCOOjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239969AbiCOOmh (ORCPT
+        with ESMTP id S244198AbiCOOjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:42:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CB75575C;
-        Tue, 15 Mar 2022 07:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=NzRQEYorEzhHA8+YGei5in7doe6fNvniOav5T3IGlHI=; b=iywvkP5vvRsHHWJPUl8sHRfV5L
-        Iqwe3lhwZ37xHttx2D+ENj+YKRPQissd/3nRrzKDY6Er0bDWFLBRLHBGGTWrr6q424/BAj2K6jxvx
-        SnEzqpL2V8luY2VWFkxaeLuD+TSwl3yD9fzCpPjOge0FyJMhrgtttI/1hBatsRB98ZmbhrjAmF3YJ
-        5re6wc+TFUOykMqPIGyHmxslYaow3Lah6mrfkIOQAhp6OHeIyCV04F5lxZJxETCyeAmbzbLjmEear
-        979FeKg7sk6k0imCS4xKb+vIaSBsLCSEbFeideWGtoFmjGNvBCOxHIKWw0w26/MvLeyQf/rOMttUX
-        n46f/Q4w==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nU8MV-009VjT-Ix; Tue, 15 Mar 2022 14:41:23 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org
-Subject: [PATCH v3] clocksource: acpi_pm: fix return value of __setup handler
-Date:   Tue, 15 Mar 2022 07:41:22 -0700
-Message-Id: <20220315144122.23144-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 15 Mar 2022 10:39:00 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2FF2E7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:37:47 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so24588596ooj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rpmKOoeraRuQGQUThehNRRx57Aisb5avAtGzINvQREA=;
+        b=btYHhIM/2AcNT2mHGxMQPLP23iKlNVDyc/vZohM3qpDd7+3O/i/a2gd+sL94O0MNmE
+         as02/VxgKVf31ZMRpUKgErJLODlFTaVhOcYu2+ESfiqlzPXtbyWkfTDpNmxPt3xVMhOn
+         iL2pIzOqtP63EW/rpznJdR20E2Czy/P7+hFV+9+d7A9r1IsR6el4+qICVp6d9tudWqyy
+         PU5vc4wCDO0tSwkcVXStOPm02tVPmKINAIcxy/vE4Kljap5BICXGKBemh4RtgicAlEgS
+         ZUA/oAcTydN2vOzeCEFHuwNx1PP/KdrPv2syTmdHRAvKTtjKivWUkdgXTfsJM+NddxMG
+         1msQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rpmKOoeraRuQGQUThehNRRx57Aisb5avAtGzINvQREA=;
+        b=UrrbEMJN3MPbjEq/c2aOhhPkBgZMOJUf8bwDIzMgbH70Sdmt3vyjZkUsO+7aK0K5go
+         W/3iFwW8oLTuMP44lJfMIjYYPJPIbFWrcstwUqVpYmz9UvNCeBKCXW5QUAmwZemq533R
+         ZNQrM2fin2/Am0f+4bbyGXM5WcauPC9jt9GPpkjut9Y6Qt5DgSlcn7t/NUWo7Sjh4O/Q
+         3nW4dArdcjNoxo14pvNOYDHvVD75tDdq0GFkWg/fPasqQNzOG/fA+frZpLtvyWl+9ip6
+         /IRMp4V+D5b6SmustWoFXUCHCSQICacZy2FtGhf4ibMjMp9SOIxkQU2AML8W0CdIngj3
+         5BTQ==
+X-Gm-Message-State: AOAM533HxL2LIsBxozyZlehg5SPOUybiAQFPHhV4vlZiCYX2ZBtxzlm4
+        xCychKCJQoCb4CJBCuQo0i3H0g==
+X-Google-Smtp-Source: ABdhPJyvcljfmAWOAbxTQiajM8RYB5b1DsFb2rJguap6VrzxZaYDzEGfjeZQOutf0ny2oZHd4aTvXw==
+X-Received: by 2002:a05:6870:4251:b0:d9:b7ee:f0ab with SMTP id v17-20020a056870425100b000d9b7eef0abmr1726880oac.56.1647355066566;
+        Tue, 15 Mar 2022 07:37:46 -0700 (PDT)
+Received: from [192.168.86.188] ([136.62.4.88])
+        by smtp.gmail.com with ESMTPSA id f10-20020a4a8f4a000000b00320e5ecfecdsm8863070ool.46.2022.03.15.07.37.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 07:37:46 -0700 (PDT)
+Subject: Re: [PATCH v13 1/6] soc: mediatek: mutex: add common interface to
+ accommodate multiple modules operationg MUTEX
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        menghui.lin@mediatek.com, sj.huang@mediatek.com,
+        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
+        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
+        river.cheng@mediatek.com, srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220315061031.21642-1-moudy.ho@mediatek.com>
+ <20220315061031.21642-2-moudy.ho@mediatek.com>
+ <ed5418b4-e353-d879-f9b0-7a9de8fed862@collabora.com>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <4fa1dd33-adeb-a8ae-0ded-51a813347252@landley.net>
+Date:   Tue, 15 Mar 2022 09:41:25 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <ed5418b4-e353-d879-f9b0-7a9de8fed862@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,46 +98,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
 
-The __setup() handler interface isn't meant to handle negative return
-values -- they are non-zero, so they mean "handled" (like a return
-value of 1 does), but that's just a quirk. So return 1 from
-parse_pmtmr(). Also print a warning message if kstrtouint() returns
-an error.
 
-Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-From: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: John Stultz <john.stultz@linaro.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-acpi@vger.kernel.org
----
-v3: also cc: linux-acpi (Rafael)
-v2: correct the Fixes: tag (Dan Carpenter)
+On 3/15/22 4:10 AM, AngeloGioacchino Del Regno wrote:
+> Il 15/03/22 07:10, Moudy Ho ha scritto:
+>> In order to allow multiple modules to operate MUTEX hardware through
+>> a common interfrace, a flexible index "mtk_mutex_table_index" needs to
+>> be added to replace original component ID so that like DDP and MDP
+>> can add their own MUTEX table settings independently.
+>> 
+>> In addition, 4 generic interface "mtk_mutex_set_mod", "mtk_mutex_set_sof",
+>> "mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added, which is
+>> expected to replace the "mtk_mutex_add_comp" and "mtk_mutex_remove_comp"
+>> pair originally dedicated to DDP in the future.
+>> 
+>> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+>> ---
+>>   drivers/soc/mediatek/mtk-mutex.c       | 122 +++++++++++++++++++++++++
+>>   include/linux/soc/mediatek/mtk-mutex.h |  33 +++++++
+>>   2 files changed, 155 insertions(+)
+>> 
+>> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
+>> index aaf8fc1abb43..778b01ce9e8f 100644
+>> --- a/drivers/soc/mediatek/mtk-mutex.c
+>> +++ b/drivers/soc/mediatek/mtk-mutex.c
+>> @@ -156,6 +156,7 @@ struct mtk_mutex_data {
+>>   	const unsigned int *mutex_sof;
+>>   	const unsigned int mutex_mod_reg;
+>>   	const unsigned int mutex_sof_reg;
+>> +	const unsigned long long *mutex_table_mod;
+> 
+> Can we change this to u64 instead?
 
- drivers/clocksource/acpi_pm.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Linux is still LP64, correct?
 
---- linux-next-20220315.orig/drivers/clocksource/acpi_pm.c
-+++ linux-next-20220315/drivers/clocksource/acpi_pm.c
-@@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
- 	int ret;
- 
- 	ret = kstrtouint(arg, 16, &base);
--	if (ret)
--		return ret;
-+	if (ret) {
-+		pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
-+		return 1;
-+	}
- 
- 	pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
- 		base);
+Rob

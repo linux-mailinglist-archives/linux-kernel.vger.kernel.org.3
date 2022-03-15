@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7564D9961
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD624D9987
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347882AbiCOKsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S1347566AbiCOKrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347342AbiCOKpv (ORCPT
+        with ESMTP id S1347408AbiCOKpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:45:51 -0400
+        Tue, 15 Mar 2022 06:45:53 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA3951307;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A51351316;
         Tue, 15 Mar 2022 03:44:14 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:44:11 -0000
+Date:   Tue, 15 Mar 2022 10:44:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647341052;
+        s=2020; t=1647341053;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7w22ewF/sZZTEyflW/gj5x6yonLrI1py02WQhrVh2wU=;
-        b=s6F10Mz7404KLvrhhdnEokwdbiTOHcMkVcqKrVgITNnu8ySmq0jelDdAb6LJ6MAhhGz5ts
-        0A9fnZqeJYC1JodBy+Z0j8VqSlPsXoQ1wf5O64T/tsbKbFlP9ygpXen7AYP1zT/mXtPxQu
-        CNMh1Izl1/qTpqyJ3y5iMxxBKTnB00+UPpX7o18lzuByLl7DtNUORrlC0Xis+0t0Lnfmxw
-        13CZOiQp82ok5/nKnEAg0Z5qYF11guzkobU3JTkx0yqTZJjf1VtnwhbfyPvvprqnghTCDR
-        R7Sy6pfS6jzxL19gsA91wFaL/+gHCa357PXEt6wnjH/97huUM/RHbbeTxo/tOw==
+        bh=th9wlFvuAi/z/VLkuNyschT/woD6lbuLfOlTayI0RL4=;
+        b=nPiaZGD7oDWS8JSHm4Q/RdgezPDID0BmbOcd+edy9NCAOcR6r/IzqBI5k1/gUdO9NRQjmC
+        WspQ4qypoEpbxciVi8eiOlwOJ12J6m6mMeOyDjBjSJy33I2+teNFfzXL5MSFgFbFJHtHel
+        w/dwCEJkifjE14k3pAH6xDjED40536UM3vGVlw+N7szar2GDHMTjf6VhGH/pMvjZBpXGoJ
+        O/UqPXtv4tXPWH6NH+ndDPPXaD9YuwLLpyRnn2axuluI85zJ5nYNlhnPyUfkvTuZ4/NyF0
+        zM6zUaJ2PDlQGeSBB/7d74qovEQeEwBSzPEQo11KVmtSU3aRCOUPPrmO2gTfRw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647341052;
+        s=2020e; t=1647341053;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7w22ewF/sZZTEyflW/gj5x6yonLrI1py02WQhrVh2wU=;
-        b=1eRFx6Lt1zA2DnWnkLnGqHDPBmvST4HAeEXPfyeCIPTx3N5NbwqfVa9HUt3acTPsznXbkU
-        m/FCAwQ6sUCuORDg==
+        bh=th9wlFvuAi/z/VLkuNyschT/woD6lbuLfOlTayI0RL4=;
+        b=0H1EV1T2JePPQxOmWz3AepJu4oQxWjvaS+GnugrciYPavSf5tUdYe59zN4bxqEirKv/u7L
+        u+lwzyaeZdroBUAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/text-patching: Make text_gen_insn() play nice
- with ANNOTATE_NOENDBR
+Subject: [tip: x86/core] x86/ibt: Add ANNOTATE_NOENDBR
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154317.638561109@infradead.org>
-References: <20220308154317.638561109@infradead.org>
+In-Reply-To: <20220308154317.578968224@infradead.org>
+References: <20220308154317.578968224@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164734105145.16921.4325353361593937451.tip-bot2@tip-bot2>
+Message-ID: <164734105230.16921.2670196975839251214.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,46 +68,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     bbf92368b0b1fe472d489e62d3340d7897e9c697
-Gitweb:        https://git.kernel.org/tip/bbf92368b0b1fe472d489e62d3340d7897e9c697
+Commit-ID:     c8c301abeae58ec756b8fcb2178a632bd3c9e284
+Gitweb:        https://git.kernel.org/tip/c8c301abeae58ec756b8fcb2178a632bd3c9e284
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:19 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:18 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 15 Mar 2022 10:32:33 +01:00
 
-x86/text-patching: Make text_gen_insn() play nice with ANNOTATE_NOENDBR
+x86/ibt: Add ANNOTATE_NOENDBR
+
+In order to have objtool warn about code references to !ENDBR
+instruction, we need an annotation to allow this for non-control-flow
+instances -- consider text range checks, text patching, or return
+trampolines etc.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154317.638561109@infradead.org
+Link: https://lore.kernel.org/r/20220308154317.578968224@infradead.org
 ---
- arch/x86/include/asm/text-patching.h | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ include/linux/objtool.h       | 16 ++++++++++++++++
+ tools/include/linux/objtool.h | 16 ++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index b742178..1c4cfb1 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -101,13 +101,21 @@ void *text_gen_insn(u8 opcode, const void *addr, const void *dest)
- 	static union text_poke_insn insn; /* per instance */
- 	int size = text_opcode_size(opcode);
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index aca52db..f797368 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -77,6 +77,12 @@ struct unwind_hint {
+ #define STACK_FRAME_NON_STANDARD_FP(func)
+ #endif
  
-+	/*
-+	 * Hide the addresses to avoid the compiler folding in constants when
-+	 * referencing code, these can mess up annotations like
-+	 * ANNOTATE_NOENDBR.
-+	 */
-+	OPTIMIZER_HIDE_VAR(addr);
-+	OPTIMIZER_HIDE_VAR(dest);
++#define ANNOTATE_NOENDBR					\
++	"986: \n\t"						\
++	".pushsection .discard.noendbr\n\t"			\
++	_ASM_PTR " 986b\n\t"					\
++	".popsection\n\t"
 +
- 	insn.opcode = opcode;
+ #else /* __ASSEMBLY__ */
  
- 	if (size > 1) {
- 		insn.disp = (long)dest - (long)(addr + size);
- 		if (size == 2) {
- 			/*
--			 * Ensure that for JMP9 the displacement
-+			 * Ensure that for JMP8 the displacement
- 			 * actually fits the signed byte.
- 			 */
- 			BUG_ON((insn.disp >> 31) != (insn.disp >> 7));
+ /*
+@@ -129,6 +135,13 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro ANNOTATE_NOENDBR
++.Lhere_\@:
++	.pushsection .discard.noendbr
++	.quad	.Lhere_\@
++	.popsection
++.endm
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #else /* !CONFIG_STACK_VALIDATION */
+@@ -139,12 +152,15 @@ struct unwind_hint {
+ 	"\n\t"
+ #define STACK_FRAME_NON_STANDARD(func)
+ #define STACK_FRAME_NON_STANDARD_FP(func)
++#define ANNOTATE_NOENDBR
+ #else
+ #define ANNOTATE_INTRA_FUNCTION_CALL
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
+ .endm
+ .macro STACK_FRAME_NON_STANDARD func:req
+ .endm
++.macro ANNOTATE_NOENDBR
++.endm
+ #endif
+ 
+ #endif /* CONFIG_STACK_VALIDATION */
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index aca52db..f797368 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -77,6 +77,12 @@ struct unwind_hint {
+ #define STACK_FRAME_NON_STANDARD_FP(func)
+ #endif
+ 
++#define ANNOTATE_NOENDBR					\
++	"986: \n\t"						\
++	".pushsection .discard.noendbr\n\t"			\
++	_ASM_PTR " 986b\n\t"					\
++	".popsection\n\t"
++
+ #else /* __ASSEMBLY__ */
+ 
+ /*
+@@ -129,6 +135,13 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro ANNOTATE_NOENDBR
++.Lhere_\@:
++	.pushsection .discard.noendbr
++	.quad	.Lhere_\@
++	.popsection
++.endm
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #else /* !CONFIG_STACK_VALIDATION */
+@@ -139,12 +152,15 @@ struct unwind_hint {
+ 	"\n\t"
+ #define STACK_FRAME_NON_STANDARD(func)
+ #define STACK_FRAME_NON_STANDARD_FP(func)
++#define ANNOTATE_NOENDBR
+ #else
+ #define ANNOTATE_INTRA_FUNCTION_CALL
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
+ .endm
+ .macro STACK_FRAME_NON_STANDARD func:req
+ .endm
++.macro ANNOTATE_NOENDBR
++.endm
+ #endif
+ 
+ #endif /* CONFIG_STACK_VALIDATION */

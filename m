@@ -2,85 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD154D9B03
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1255F4D9B08
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348200AbiCOMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S241936AbiCOMXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241209AbiCOMVt (ORCPT
+        with ESMTP id S1348225AbiCOMXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:21:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 828AB522DC;
-        Tue, 15 Mar 2022 05:20:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 218971474;
-        Tue, 15 Mar 2022 05:20:37 -0700 (PDT)
-Received: from [10.57.90.210] (unknown [10.57.90.210])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BF293F66F;
-        Tue, 15 Mar 2022 05:20:36 -0700 (PDT)
-Subject: Re: [PATCH 5.10 38/58] KVM: arm64: Allow indirect vectors to be used
- without SPECTRE_V3A
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-References: <20220310140812.869208747@linuxfoundation.org>
- <20220310140813.956533242@linuxfoundation.org> <20220310234858.GB16308@amd>
- <YirvObKn0ADrEOk+@kroah.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <ef538a31-5f73-dfc5-12a9-f5222514035c@arm.com>
-Date:   Tue, 15 Mar 2022 12:20:31 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 15 Mar 2022 08:23:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C826852B05
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647346907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AXboPqU1D0WQ3MWcUTFOVkR/M0ow9vS7S0ofpF7HN+U=;
+        b=TfBs6GeYMowVe85X9H8LXQ2NQSPQFxJeMNIqL8til1w12MNijUHZeH4wRsvxkn/0oIihcA
+        31jqL1Oh66M7PTE2cwOYxssk2ymEoSRfnXus8NVcasgS3rx3/1z9B+IMbE3wQUi9yrNNNE
+        WYgqmvj9O+c0aUOWOHrXznpAs9mS0cA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-152-65-ms_gAPJqQqa2udcNlUg-1; Tue, 15 Mar 2022 08:21:42 -0400
+X-MC-Unique: 65-ms_gAPJqQqa2udcNlUg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9FDA833961;
+        Tue, 15 Mar 2022 12:21:41 +0000 (UTC)
+Received: from localhost (ovpn-12-225.pek2.redhat.com [10.72.12.225])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 32F18426322;
+        Tue, 15 Mar 2022 12:21:40 +0000 (UTC)
+Date:   Tue, 15 Mar 2022 20:21:37 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v21 1/5] kdump: return -ENOENT if required cmdline option
+ does not exist
+Message-ID: <YjCE0Scp2YiEJXBM@MiWiFi-R3L-srv>
+References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
+ <20220227030717.1464-2-thunder.leizhen@huawei.com>
+ <YjB/QILintgvo1AL@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-In-Reply-To: <YirvObKn0ADrEOk+@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjB/QILintgvo1AL@MiWiFi-R3L-srv>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi guys,
+On 03/15/22 at 07:57pm, Baoquan He wrote:
+> On 02/27/22 at 11:07am, Zhen Lei wrote:
+> > The crashkernel=Y,low is an optional command-line option. When it doesn't
+> > exist, kernel will try to allocate minimum required memory below 4G
+> > automatically. Give it a unique error code to distinguish it from other
+> > error scenarios.
+> > 
+> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > ---
+> >  kernel/crash_core.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> > index 256cf6db573cd09..4d57c03714f4e13 100644
+> > --- a/kernel/crash_core.c
+> > +++ b/kernel/crash_core.c
+> > @@ -243,9 +243,8 @@ static int __init __parse_crashkernel(char *cmdline,
+> >  	*crash_base = 0;
+> >  
+> >  	ck_cmdline = get_last_crashkernel(cmdline, name, suffix);
+> > -
+> >  	if (!ck_cmdline)
+> > -		return -EINVAL;
+> > +		return -ENOENT;
+> 
+> Firstly, I am not sure if '-ENOENT' is a right value to return. From the
+> code comment of ENOENT, it's used for file or dir?
+> #define ENOENT           2      /* No such file or directory */
+> 
+> Secondly, we ever discussed the case including
+>  - no crashkernel=,low is provided;
+>  - messy code is provied, e.g crashkernel=aaaaaabbbb,low
 
-On 3/11/22 6:42 AM, Greg Kroah-Hartman wrote:
-> On Fri, Mar 11, 2022 at 12:48:59AM +0100, Pavel Machek wrote:
->> What is going on here?
->>
->>> commit 5bdf3437603d4af87f9c7f424b0c8aeed2420745 upstream.
->>
->> Upstream commit 5bdf is very different from this. In particular,
->>
->>>   arch/arm64/kvm/hyp/smccc_wa.S    |   66 +++++++++++++++++++++++++++++++++++++++
->>
->> I can't find smccc_wa.S, neither in mainline, nor in -next. And it
->> looks buggy. I suspect loop_k24 should loop 24 times, but it does 8
->> loops AFAICT. Same problem with loop_k32.
+Checking the 3rd pach, this is handled. Take back my below words,
+continue reviewing.
 
-Yup, that's a bug. Thanks for spotting it!
-I'll post a replacement for this patch.
+> 
+> The 2nd one is not handled in this patchset. How about taking the
+> handling into another round of patches. This patchset just adds
+> crashkernel=,high purely.
+> 
+> >  
+> >  	ck_cmdline += strlen(name);
+> >  
+> > -- 
+> > 2.25.1
+> > 
+> 
 
-I only have A57 I can test this on, guess what its K value is.
-
-
-> The kvm portion of these patches is the "trickiest" portions.  I'll let
-> James explain them, as he did so to me when sending the backports.
-
-KVM gets re-written fairly frequently. Earlier kernels don't have any of the infrastructure
-for generating the vectors at compile time and selecting a pre-built vector at boot. Instead,
-kernels of this vintage have bunch of empty vectors, and some templates they use to create
-the appropriate vector at boot. See commit b881cdce77b4.
-I've looked at backporting all that - its about 60 patches. I don't think its a good idea.
-
-
-Thanks,
-
-James

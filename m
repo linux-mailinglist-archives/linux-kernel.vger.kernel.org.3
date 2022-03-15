@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C25E4D96D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C324C4D96D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346244AbiCOIzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S1346249AbiCOI4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346236AbiCOIzu (ORCPT
+        with ESMTP id S241081AbiCOI4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:55:50 -0400
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5310615D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:54:39 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id e24so27788157wrc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:54:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WjT/xBU7Jfr905EpqGcI41n9yUBAmerdU0vll5TSzS8=;
-        b=SME3SvfglcVwcvmv8pssd956EqM96zNhSEF6CrjXkR4uQtMkDZ+ztn54P8H+2wOc5+
-         nqxIqS5BSxT0dtXBEqo+LajFeOuws2nRudAFHdc02JqLhOWRIT48Lz47ELujLg0c1cAN
-         XRKsyG3qkWAxWLhe6aOv+GTPnh3o4Gj2ctiSshhvqQKMr6tIHTBVVdx8qE/4xBxJ96BE
-         DWJ9NsZi7qroQajilPxLtgd69LoLZlaVIRyXxi4BCANkei1uhk2kAnI1QbDGnPtvvwic
-         oOm3Bw4+6KuFdMdL58Udqd7wPmYBuVCuazzvfuQ3CCzlfSTPVmBKm9Ei7nq+fTQlqWyl
-         ShGw==
-X-Gm-Message-State: AOAM530wGgKNjyjhHvTol+0BH1Q3Lm8pL33J13eYO4oASD9SUaJPoqfC
-        U9o3ZH/awfQn0gioqXo2KeMr+gfdewc=
-X-Google-Smtp-Source: ABdhPJwQCW3S9eLVWohbpnF8eE4wiMojBQmCJs6SOjxhI7Rlta5L3+ZsqTKJ0wyYSNRTKsAozmZPNQ==
-X-Received: by 2002:a5d:4892:0:b0:1ed:beaa:778a with SMTP id g18-20020a5d4892000000b001edbeaa778amr19040043wrq.35.1647334478252;
-        Tue, 15 Mar 2022 01:54:38 -0700 (PDT)
-Received: from [192.168.64.180] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id m3-20020a5d6243000000b001e33760776fsm15139021wrv.10.2022.03.15.01.54.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 01:54:37 -0700 (PDT)
-Message-ID: <af6cdc21-761a-fa4d-a45c-a0eb6cc1efab@grimberg.me>
-Date:   Tue, 15 Mar 2022 10:54:36 +0200
+        Tue, 15 Mar 2022 04:56:30 -0400
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F508642E;
+        Tue, 15 Mar 2022 01:55:18 -0700 (PDT)
+Received: from [77.244.183.192] (port=63198 helo=[192.168.178.39])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nU2xY-0006YT-GB; Tue, 15 Mar 2022 09:55:16 +0100
+Message-ID: <a146f554-837a-d19a-425c-b1fd790a0497@lucaceresoli.net>
+Date:   Tue, 15 Mar 2022 09:55:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2] driver/nvme/host: Support duplicated nsid for the
- private ns
+Subject: Re: [PATCH] clk: vc5: Enable VC5_HAS_PFD_FREQ_DBL on 5p49v6965
 Content-Language: en-US
-To:     "hch@lst.de" <hch@lst.de>
-Cc:     Sungup Moon <sungup.moon@samsung.com>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20220314110545epcms2p4a227eac7c4652445050e70ee2350635d@epcms2p4>
- <20220314110545epcms2p4a227eac7c4652445050e70ee2350635d@epcms2p4>
- <20220315071230.GA2069@lst.de> <20220315071926.GA2137@lst.de>
- <a3051d85-c08e-a273-c7cc-2eb3e21df717@grimberg.me>
- <20220315084035.GA3834@lst.de>
- <6ac83f8b-01e6-5394-0570-023ac6b1a71d@grimberg.me>
- <20220315084611.GA3961@lst.de>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20220315084611.GA3961@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org
+Cc:     aford@beaconembedded.com, cstevens@beaconembedded.com,
+        Claude Fillion <Claude.Fillion@mksinst.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220313115704.301718-1-aford173@gmail.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <20220313115704.301718-1-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Adam, Claude,
 
-> Well, it can't change to shared as the nsids are non-unique.  If we
-> want to be paranoid we could add a sanity check for that, but then
-> again there are a bunch of other things where we could be more paranoid.
+thanks for your patch.
 
-*** paranoid person looking over his shoulder meme ***
+On 13/03/22 12:57, Adam Ford wrote:
+> The 5p49v6965 has a reference clock frequency doubler.
+> Enabling it adds versaclock_som.dbl to the clock tree,
+> but the output frequency remains correct.
+>
+> Suggested-by: Claude Fillion <Claude.Fillion@mksinst.com>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> 
+> diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+> index e7be3e54b9be..4d190579e874 100644
+> --- a/drivers/clk/clk-versaclock5.c
+> +++ b/drivers/clk/clk-versaclock5.c
+> @@ -1211,7 +1211,7 @@ static const struct vc5_chip_info idt_5p49v6965_info = {
+>  	.model = IDT_VC6_5P49V6965,
+>  	.clk_fod_cnt = 4,
+>  	.clk_out_cnt = 5,
+> -	.flags = VC5_HAS_BYPASS_SYNC_BIT,
+> +	.flags = VC5_HAS_BYPASS_SYNC_BIT | VC5_HAS_PFD_FREQ_DBL,
+
+
+If my understanding is correct, the doubler is not mentioned by the
+datasheet, but it exists. Maybe it's worth a line of comment to help
+future readers not waste their time in finding out:
+  /* Frequency doubler not mentioned on datasheet */
+
+Can you confirm that:
+ - the en_ref_doubler bit value defaults to zero when reading it, as the
+   register guide says?
+ - if set to 1 the frequencies double?
+
+With that confirmed, the patch looks good.
+
+Thanks,
+-- 
+Luca

@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64534DA44D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084B04DA44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351477AbiCOVDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 17:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
+        id S1351237AbiCOVFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 17:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238045AbiCOVDg (ORCPT
+        with ESMTP id S237862AbiCOVFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 17:03:36 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFEE5548A;
-        Tue, 15 Mar 2022 14:02:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KJ5Sm0Hjzz4xQv;
-        Wed, 16 Mar 2022 08:02:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647378137;
-        bh=Gm2eAN7xlsgYpEui8WvbndX2aWAB9/rz42dMesvEeB4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sjdO5JcjDd9mq4GPHK2V5zY6q6bi/By6OxBxGEsLuRTibCb9GDqWFSpKIgJH/0z03
-         6AFDQj+w75zChe0+7gXu/eFDQztp+84zjs+PK9lmOQ7bTxt8X+cpUDogaiv4sRtOS2
-         Q6CHv5IAlLv7B2FocXHDJYFN0H50/JWr8I5HjwuVnKR3OVJraA3gl4pX9CZttGrxjS
-         DxOm16kGscx+T33f7uqwxLBMLoDC6LgsQ2Zehv20k+hUYF/XYnorA3r80C1xDEKxYf
-         gQhTgcmDimdRm7CWGZ2VBYx2G5L6n5adjbzBkzTv2/Ng1pzJrVguQesoFc/49HQELU
-         qLY+T4382avEw==
-Date:   Wed, 16 Mar 2022 08:02:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhen Ni <nizhen@uniontech.com>
-Subject: Re: linux-next: manual merge of the sysctl tree with the tip tree
-Message-ID: <20220316080215.46eb8cd5@canb.auug.org.au>
-In-Reply-To: <YjD0Z7UQ0psJT7b0@bombadil.infradead.org>
-References: <20220315201840.6146f234@canb.auug.org.au>
-        <YjD0Z7UQ0psJT7b0@bombadil.infradead.org>
+        Tue, 15 Mar 2022 17:05:06 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE3532043;
+        Tue, 15 Mar 2022 14:03:53 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id z3so157142plg.8;
+        Tue, 15 Mar 2022 14:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2S1vKrodTPj0beAXtPYJjM5KYwEQpjwd/LYAjdYuoww=;
+        b=BGu4z5+PIndZT8KU6V8POD8KqZM/yBbhBZ26PEopHrWwbDM7+sQSNvA4t6BEpaeXeC
+         IBYTNy5+e7iAssJCEVbTbYs3X7Jk+xs3h5IVNK/6WiXfa+68oy6oaxewfkwaKtTRlaDV
+         Ej4Tlv3JRsyHb3n/2kU7S+zKYeAfhvTbS7FMjwfBDwN8Ex8Uy8eX3xc2DE/nMM6kMuYg
+         0UjVqCbwzY1UnimI/8XbXVJDNC2eOlYqEvgfaaK3nchI8SflRq4yHKBg0Nhb/5Az6QYj
+         EEK8PHP3p4TKHwvD1AZcDhiA452ycGKFgMZgnBnl8gY3+wfmlLCEtcaGDl1flK/rpaw1
+         XaDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2S1vKrodTPj0beAXtPYJjM5KYwEQpjwd/LYAjdYuoww=;
+        b=7bxBlBgXQOr1kN53EjKZOc1juL0XvgPqMvZC/uO0946fjfsznpWagutwg5oME6RmUQ
+         3Xu/NxMJ272FOVi+4MaWsqp5SwfvERo5uu2A3qmCZGlUL5y40VdvExxucw2YeOF2JQCM
+         VSPqVs8zKUzl1LejP652i0haQY3Wrlhf4Po9w/Ti7KrMrexE40Wdk7gmZsOFBvga94OI
+         1hgCtorv6YcUZXj7ne0Kly7Nxqq6brQLSlm6JHEXDcBe8n2npylRAC1ScYEqRTzWW3TV
+         i9sqW7lNvbusOxiD3u6r1kT2cS3rvpJtVLSccIXT+b6mQ5G0Kbfg2cUyA/hMJku6KhGq
+         6MYQ==
+X-Gm-Message-State: AOAM533r/eao/ZlhUSG6HU5hMP6jvnVPar3/CJaG/giwL14vQ+NY6RWv
+        E1fEV0zMf0S/MnbO4dRRfP8=
+X-Google-Smtp-Source: ABdhPJxfCYyF4CYcUWYTz493jWdYPQ8nlKCEOPGlTw5prrKIDMvoX9y86TdKwm+oQG1SokVQCmgiSQ==
+X-Received: by 2002:a17:902:76ca:b0:153:ad09:9c73 with SMTP id j10-20020a17090276ca00b00153ad099c73mr2352138plt.63.1647378232846;
+        Tue, 15 Mar 2022 14:03:52 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id j17-20020a634a51000000b00378f9c90e66sm150745pgl.39.2022.03.15.14.03.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 14:03:52 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 14:03:50 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 010/104] KVM: TDX: Make TDX VM type supported
+Message-ID: <20220315210350.GE1964605@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <0596db2913da40660e87d5005167c623cee14765.1646422845.git.isaku.yamahata@intel.com>
+ <18a150fd2e0316b4bae283d244f856494e0dfefd.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2s/VgC65/hy.AlCy7EIlsbf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <18a150fd2e0316b4bae283d244f856494e0dfefd.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,63 +76,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2s/VgC65/hy.AlCy7EIlsbf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Mar 14, 2022 at 12:08:59PM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
 
-Hi Luis,
+> On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > 
+> > As first step TDX VM support, return that TDX VM type supported to device
+> > model, e.g. qemu.  The callback to create guest TD is vm_init callback for
+> > KVM_CREATE_VM.  Add a place holder function and call a function to
+> > initialize TDX module on demand because in that callback VMX is enabled by
+> > hardware_enable callback (vmx_hardware_enable).
+> 
+> Should we put this patch at the end of series until all changes required to run
+> TD are introduced?  This patch essentially tells userspace KVM is ready to
+> support a TD but actually it's not ready.  And this might also cause bisect
+> issue I suppose?
 
-On Tue, 15 Mar 2022 13:17:43 -0700 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
->
-> On Tue, Mar 15, 2022 at 08:18:40PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Today's linux-next merge of the sysctl tree got a conflict in:
-> >=20
-> >   kernel/sched/deadline.c
-> >=20
-> > between commit:
-> >=20
-> >   eb77cf1c151c ("sched/deadline: Remove unused def_dl_bandwidth")
-> >=20
-> > from the tip tree and commit:
-> >=20
-> >   ebb891f03580 ("sched: Move deadline_period sysctls to deadline.c")
-> >=20
-> > from the sysctl tree. =20
->=20
-> Peter,
->=20
-> to help avoid conflicts I spinned up a sysctl-next tree to collect
-> different cleanups going on kernel/sysctl.c. I can drop=20
-> ebb891f03580 ("sched: Move deadline_period sysctls to deadline.c")
-> but I think we'd still run into conflicts as other sysctls are
-> trimmed out. Would you be OK in me taking in eb77cf1c151c
-> ("sched/deadline: Remove unused def_dl_bandwidth") to avoid this
-> conflict?
+The intention is that developers can exercise the new code step-by-step even if
+the TDX KVM isn't complete.
+How about introducing new config and remove it at the last of the patch series?
 
-Its really a trivial conflict and just needs to be mentioned to Linus
-in the pull requests.
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index 2b1548da00eb..a3287440aa9e 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -98,6 +98,20 @@ config X86_SGX_KVM
+ 
+          If unsure, say N.
+ 
++config X86_TDX_KVM_EXPERIMENTAL
++       bool "EXPERIMENTAL Trust Domian Extensions (TDX) KVM support"
++       default n
++       depends on INTEL_TDX_HOST
++       depends on KVM_INTEL
++       help
++         Enable experimental TDX KVM support.  TDX KVM needs many patches and
++         the patches will be merged step by step, not at once. Even if TDX KVM
++         support is incomplete, enable TDX KVM support so that developper can
++         exercise TDX KVM code.  TODO: Remove this configuration once the
++         (first step of) TDX KVM support is complete.
++
++         If unsure, say N.
++
+ config KVM_AMD
+        tristate "KVM for AMD processors support"
+        depends on KVM
+diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+index b16e2ed3b204..e31d6902e49c 100644
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -170,7 +170,11 @@ int tdx_module_setup(void)
+ 
+ bool tdx_is_vm_type_supported(unsigned long type)
+ {
++#ifdef CONFIG_X86_TDX_KVM_EXPERIMENTAL
+        return type == KVM_X86_TDX_VM && READ_ONCE(enable_tdx);
++#else
++       return false;
++#endif
+ }
+ 
+ static int __init __tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/2s/VgC65/hy.AlCy7EIlsbf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIw/tcACgkQAVBC80lX
-0Gypagf9H/tgOqzqZsyB29ooKqHda7RDR4QQF2XjVQx/AoeL/IVHJ50YQdgGfLdS
-SyDz7+mNHDTswwwKxg+WF8VKQeixDQXuTun81zpPgoT1F4aUVWZbEt9JtkHxqB/J
-sEtQYOE2NT4yuvWdI6Jv/6IDm8q2shazTtZpg8GH8LGkk4zgHGy0AQHch668j/WA
-6lvCNvlp2WuVDHSXB05sKw0CAGxpNI61LJ3ZxuxDuRfMAv6Szg8x1L+iEY9x1PrS
-C3lWv4qXgerLZxOGzQ1gONTGtiFSHpmOlVMxsDmyw4Xt1MrTFaw6NFJtdvTp9T4k
-9xuxn5AZzcqdtZl6FhQoUbYe1FxsYg==
-=wzXP
------END PGP SIGNATURE-----
-
---Sig_/2s/VgC65/hy.AlCy7EIlsbf--
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

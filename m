@@ -2,459 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861464D9385
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1904D9399
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343509AbiCOFGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 01:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S1344860AbiCOFMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 01:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbiCOFGg (ORCPT
+        with ESMTP id S1344839AbiCOFMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 01:06:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877084830B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647320720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LpaY41RUgZVBHlRW7zy8TaucsTlfM3HCA3YyfpfoIp0=;
-        b=DF5rsCKaASkpvObDIiNpIDiHpx1p1XDPv7NeSzlcNukgrLYh0B4U0wKjVaKRZAea1Ku1Gn
-        ZZm1W1b7Zzkb0DtN5z9599lMPDQyOCsSvYZ6t5OWOZezon+u/hZtsmJlGaK8nRLeVdjoPH
-        TNmZ/IrIhzdF2zWbuoUGyIrJKDD4UUY=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-PTXnAnw8NhCLJf9UhkJzFA-1; Tue, 15 Mar 2022 01:05:18 -0400
-X-MC-Unique: PTXnAnw8NhCLJf9UhkJzFA-1
-Received: by mail-pl1-f200.google.com with SMTP id u8-20020a170903124800b0015195a5826cso7648749plh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:05:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=LpaY41RUgZVBHlRW7zy8TaucsTlfM3HCA3YyfpfoIp0=;
-        b=3DumzapXcQPkYmF7HEKVgHjcsHbIW52Qmk+Yw8fXfw7Dfc0tIMvBWuXLumKkczXQlO
-         yMD8eSQL9xIYR/hc+aNbjlkJbG2wjPR9VPznG5AMyDLV9uX149weEvuHL4uf5gQvMbWg
-         nk+sqJ9rW1NwRC+hYXV53XgtQqEwlG+7g8EGDfhZMHQW/W+7LiBl4CV28TtV4FHveMfA
-         gFfbXYN4+qxfQYBPf5B/gVcy4KhRCPGlyk2hEkFamsEpd3YqLK3EUgfSoY3hs7DqEe2k
-         bQqNeeC0INUXnKqQNU9AfiWLJ6X9XYW/bw6UbR2cXtzrKv8nY4Y5BFMwtc1YNkOOyYBA
-         XGQg==
-X-Gm-Message-State: AOAM530CGPql1fTMQg5F891bTXXSFMLaPgghg3sCJes6IMgt1ZBzy/Fl
-        itD55Pqa9Dh9V6mVw8rDYsnabBTmIlIsP7nexborA3sN+IW0HuWVPFcL8/9nbV7esf07RNH13x3
-        5dtmwcN/5iBbKrfyAjtEkrKnJ
-X-Received: by 2002:a63:8ac8:0:b0:37f:fcb8:a43c with SMTP id y191-20020a638ac8000000b0037ffcb8a43cmr22994440pgd.370.1647320717691;
-        Mon, 14 Mar 2022 22:05:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxV+WxHraWNPkuUEHha9zofOHtHsxooDP1QdfXiwSlKQ9sucWo21eR56WUqVkVtbXOffjOf0Q==
-X-Received: by 2002:a63:8ac8:0:b0:37f:fcb8:a43c with SMTP id y191-20020a638ac8000000b0037ffcb8a43cmr22994426pgd.370.1647320717349;
-        Mon, 14 Mar 2022 22:05:17 -0700 (PDT)
-Received: from [10.72.12.110] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id mm17-20020a17090b359100b001bef7e5bdffsm1240837pjb.20.2022.03.14.22.05.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Mar 2022 22:05:16 -0700 (PDT)
-Subject: Re: [jlayton:ceph-fscrypt-sparse 66/74] fs/ceph/dir.c:424:31: error:
- implicit declaration of function 'ceph_encode_encrypted_dname'; did you mean
- 'ceph_encode_encrypted_fname'?
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>
-References: <202203151243.JKEqZf3z-lkp@intel.com>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <2ca7487c-eea9-8ddb-f689-39def89c4422@redhat.com>
-Date:   Tue, 15 Mar 2022 13:05:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 15 Mar 2022 01:12:17 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6183849245
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647321064; x=1678857064;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tpMOnF3L21oRMXjbylyNzJFTycaw/Dvgw48xE8xN/vo=;
+  b=ff/BKFLexkH7MWANopPTcbf6zZoExGNNPjkFLDPT+anmlb2HFA2z9qV4
+   IaWbAzQxj+5Isux1vBJfhRqaY98yGuVpKgywLvlwfFlcXYcWGjyvmsf86
+   aYCUHGCbSqasS22XBbfMif0IG+PpYPS28myYI+PYqx/EhNaasAY/3N2Dy
+   Lowe24c101GssxGvLnNEdQvsm3DqpDzCHJ3sm6AizQOIOtEyUvWvmmwq0
+   ul6zjBnDIjg8aiun1rUESyu9d/t5VNLsctfryyWAtorVt27LMQ2IQIDZa
+   OC1dCifYoUpMQjwVU1yoLUwaKIISxKlraD4AT8FD560D0obFVoM07gImD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236159098"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="236159098"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 22:03:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="580383563"
+Received: from otc-wp-03.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.79])
+  by orsmga001.jf.intel.com with ESMTP; 14 Mar 2022 22:03:58 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+Cc:     Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: [PATCH v2 0/8] Enable PASID for DMA API users
+Date:   Mon, 14 Mar 2022 22:07:04 -0700
+Message-Id: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <202203151243.JKEqZf3z-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It failed without the FSCRYPT config, and the following patch will fix it:
+Some modern accelerators such as Intel's Data Streaming Accelerator (DSA)
+require PASID in DMA requests to be operational. Specifically, the work
+submissions with ENQCMD on shared work queues require PASIDs. The use cases
+include both user DMA with shared virtual addressing (SVA) and in-kernel
+DMA similar to legacy DMA w/o PASID. Here we address the latter.
+
+DMA mapping API is the de facto standard for in-kernel DMA. However, it
+operates on a per device or Requester ID(RID) basis which is not
+PASID-aware. To leverage DMA API for devices relies on PASIDs, this
+patchset introduces the following APIs
+
+1. A driver facing API that enables DMA API PASID usage:
+iommu_enable_pasid_dma(struct device *dev, ioasid_t &pasid);
+
+2. An IOMMU op that allows attaching device-domain-PASID generically (will
+be used beyond DMA API PASID support)
+
+Once PASID DMA is enabled and attached to the appropriate IOMMU domain,
+device drivers can continue to use DMA APIs as-is. There is no difference
+in terms of mapping in dma_handle between without PASID and with PASID.
+The DMA mapping performed by IOMMU will be identical for both requests, let
+it be IOVA or PA in case of pass-through.
+
+In addition, this set converts DSA driver in-kernel DMA with PASID from SVA
+lib to DMA API. There have been security and functional issues with the
+kernel SVA approach:
+(https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/)
+The highlights are as the following:
+ - The lack of IOTLB synchronization upon kernel page table updates.
+   (vmalloc, module/BPF loading, CONFIG_DEBUG_PAGEALLOC etc.)
+ - Other than slight more protection, using kernel virtual address (KVA)
+has little advantage over physical address. There are also no use cases yet
+where DMA engines need kernel virtual addresses for in-kernel DMA.
+
+Subsequently, cleanup is done around the usage of sva_bind_device() for
+in-kernel DMA. Removing special casing code in VT-d driver and tightening
+SVA lib API.
+
+This work and idea behind it is a collaboration with many people, many
+thanks to Baolu Lu, Jason Gunthorpe, Dave Jiang, and others.
 
 
-diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
-index ee593b8ad07c..1ed318565d86 100644
---- a/fs/ceph/crypto.h
-+++ b/fs/ceph/crypto.h
-@@ -172,6 +172,13 @@ static inline void 
-ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req,
-  {
-  }
+ChangeLog:
+v2
+	- Do not reserve a special PASID for DMA API usage. Use IOASID
+	  allocation instead.
+	- Introduced a generic device-pasid-domain attachment IOMMU op.
+	  Replaced the DMA API only IOMMU op.
+	- Removed supervisor SVA support in VT-d
+	- Removed unused sva_bind_device parameters
+	- Use IOMMU specific data instead of struct device to store PASID
+	  info
 
-+static inline int ceph_encode_encrypted_dname(const struct inode *parent,
-+                                             struct qstr *d_name, char 
-*buf)
-+{
-+       memcpy(buf, d_name->name, d_name->len);
-+       return d_name->len;
-+}
-+
-  static inline int ceph_encode_encrypted_fname(const struct inode *parent,
-                                                 struct dentry *dentry, 
-char *buf)
-  {
+Jacob Pan (6):
+  iommu/vt-d: Implement device_pasid domain attach ops
+  iommu/vt-d: Use device_pasid attach op for RID2PASID
+  iommu: Add PASID support for DMA mapping API users
+  dmaengine: idxd: Use DMA API for in-kernel DMA with PASID
+  iommu/vt-d: Delete supervisor/kernel SVA
+  iommu: Remove unused driver data in sva_bind_device
 
+Lu Baolu (2):
+  iommu: Assign per device max PASID
+  iommu: Add attach/detach_dev_pasid domain ops
 
+ drivers/dma/idxd/cdev.c                       |   2 +-
+ drivers/dma/idxd/idxd.h                       |   1 -
+ drivers/dma/idxd/init.c                       |  34 +--
+ drivers/dma/idxd/sysfs.c                      |   7 -
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |   2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |   5 +-
+ drivers/iommu/dma-iommu.c                     |  65 ++++++
+ drivers/iommu/intel/iommu.c                   | 214 ++++++++++++++++--
+ drivers/iommu/intel/svm.c                     |  51 +----
+ drivers/iommu/iommu.c                         |   4 +-
+ drivers/misc/uacce/uacce.c                    |   2 +-
+ include/linux/dma-iommu.h                     |   7 +
+ include/linux/intel-iommu.h                   |  15 +-
+ include/linux/iommu.h                         |  37 ++-
+ 14 files changed, 338 insertions(+), 108 deletions(-)
 
-
-On 3/15/22 12:18 PM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt-sparse
-> head:   0d355bda666e44314f11974167e8d9bb010a539e
-> commit: 4378b10dd7df64ef085e3fe2a2251034ee98c4dc [66/74] ceph: dencrypt the dentry names early and once for readdir
-> config: openrisc-randconfig-m031-20220314 (https://download.01.org/0day-ci/archive/20220315/202203151243.JKEqZf3z-lkp@intel.com/config)
-> compiler: or1k-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=4378b10dd7df64ef085e3fe2a2251034ee98c4dc
->          git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
->          git fetch --no-tags jlayton ceph-fscrypt-sparse
->          git checkout 4378b10dd7df64ef085e3fe2a2251034ee98c4dc
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash fs/ceph/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->     fs/ceph/dir.c: In function 'ceph_readdir':
->>> fs/ceph/dir.c:424:31: error: implicit declaration of function 'ceph_encode_encrypted_dname'; did you mean 'ceph_encode_encrypted_fname'? [-Werror=implicit-function-declaration]
->       424 |                         err = ceph_encode_encrypted_dname(inode, &d_name, req->r_path2);
->           |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->           |                               ceph_encode_encrypted_fname
->     cc1: some warnings being treated as errors
->
->
-> vim +424 fs/ceph/dir.c
->
->     307	
->     308	static int ceph_readdir(struct file *file, struct dir_context *ctx)
->     309	{
->     310		struct ceph_dir_file_info *dfi = file->private_data;
->     311		struct inode *inode = file_inode(file);
->     312		struct ceph_inode_info *ci = ceph_inode(inode);
->     313		struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
->     314		struct ceph_mds_client *mdsc = fsc->mdsc;
->     315		int i;
->     316		int err;
->     317		unsigned frag = -1;
->     318		struct ceph_mds_reply_info_parsed *rinfo;
->     319	
->     320		dout("readdir %p file %p pos %llx\n", inode, file, ctx->pos);
->     321		if (dfi->file_info.flags & CEPH_F_ATEND)
->     322			return 0;
->     323	
->     324		/* always start with . and .. */
->     325		if (ctx->pos == 0) {
->     326			dout("readdir off 0 -> '.'\n");
->     327			if (!dir_emit(ctx, ".", 1, ceph_present_inode(inode),
->     328				    inode->i_mode >> 12))
->     329				return 0;
->     330			ctx->pos = 1;
->     331		}
->     332		if (ctx->pos == 1) {
->     333			u64 ino;
->     334			struct dentry *dentry = file->f_path.dentry;
->     335	
->     336			spin_lock(&dentry->d_lock);
->     337			ino = ceph_present_inode(dentry->d_parent->d_inode);
->     338			spin_unlock(&dentry->d_lock);
->     339	
->     340			dout("readdir off 1 -> '..'\n");
->     341			if (!dir_emit(ctx, "..", 2, ino, inode->i_mode >> 12))
->     342				return 0;
->     343			ctx->pos = 2;
->     344		}
->     345	
->     346		err = fscrypt_prepare_readdir(inode);
->     347		if (err)
->     348			return err;
->     349	
->     350		spin_lock(&ci->i_ceph_lock);
->     351		/* request Fx cap. if have Fx, we don't need to release Fs cap
->     352		 * for later create/unlink. */
->     353		__ceph_touch_fmode(ci, mdsc, CEPH_FILE_MODE_WR);
->     354		/* can we use the dcache? */
->     355		if (ceph_test_mount_opt(fsc, DCACHE) &&
->     356		    !ceph_test_mount_opt(fsc, NOASYNCREADDIR) &&
->     357		    ceph_snap(inode) != CEPH_SNAPDIR &&
->     358		    __ceph_dir_is_complete_ordered(ci) &&
->     359		    __ceph_caps_issued_mask_metric(ci, CEPH_CAP_FILE_SHARED, 1)) {
->     360			int shared_gen = atomic_read(&ci->i_shared_gen);
->     361	
->     362			spin_unlock(&ci->i_ceph_lock);
->     363			err = __dcache_readdir(file, ctx, shared_gen);
->     364			if (err != -EAGAIN)
->     365				return err;
->     366		} else {
->     367			spin_unlock(&ci->i_ceph_lock);
->     368		}
->     369	
->     370		/* proceed with a normal readdir */
->     371	more:
->     372		/* do we have the correct frag content buffered? */
->     373		if (need_send_readdir(dfi, ctx->pos)) {
->     374			struct ceph_mds_request *req;
->     375			int op = ceph_snap(inode) == CEPH_SNAPDIR ?
->     376				CEPH_MDS_OP_LSSNAP : CEPH_MDS_OP_READDIR;
->     377	
->     378			/* discard old result, if any */
->     379			if (dfi->last_readdir) {
->     380				ceph_mdsc_put_request(dfi->last_readdir);
->     381				dfi->last_readdir = NULL;
->     382			}
->     383	
->     384			if (is_hash_order(ctx->pos)) {
->     385				/* fragtree isn't always accurate. choose frag
->     386				 * based on previous reply when possible. */
->     387				if (frag == (unsigned)-1)
->     388					frag = ceph_choose_frag(ci, fpos_hash(ctx->pos),
->     389								NULL, NULL);
->     390			} else {
->     391				frag = fpos_frag(ctx->pos);
->     392			}
->     393	
->     394			dout("readdir fetching %llx.%llx frag %x offset '%s'\n",
->     395			     ceph_vinop(inode), frag, dfi->last_name);
->     396			req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
->     397			if (IS_ERR(req)) {
->     398				err = PTR_ERR(req);
->     399				goto out;
->     400			}
->     401			err = ceph_alloc_readdir_reply_buffer(req, inode);
->     402			if (err) {
->     403				ceph_mdsc_put_request(req);
->     404				goto out;
->     405			}
->     406			/* hints to request -> mds selection code */
->     407			req->r_direct_mode = USE_AUTH_MDS;
->     408			if (op == CEPH_MDS_OP_READDIR) {
->     409				req->r_direct_hash = ceph_frag_value(frag);
->     410				__set_bit(CEPH_MDS_R_DIRECT_IS_HASH, &req->r_req_flags);
->     411				req->r_inode_drop = CEPH_CAP_FILE_EXCL;
->     412			}
->     413			if (dfi->last_name) {
->     414				struct qstr d_name = { .name = dfi->last_name,
->     415						       .len = strlen(dfi->last_name) };
->     416	
->     417				req->r_path2 = kzalloc(NAME_MAX + 1, GFP_KERNEL);
->     418				if (!req->r_path2) {
->     419					ceph_mdsc_put_request(req);
->     420					err = -ENOMEM;
->     421					goto out;
->     422				}
->     423	
->   > 424				err = ceph_encode_encrypted_dname(inode, &d_name, req->r_path2);
->     425				if (err < 0) {
->     426					ceph_mdsc_put_request(req);
->     427					goto out;
->     428				}
->     429			} else if (is_hash_order(ctx->pos)) {
->     430				req->r_args.readdir.offset_hash =
->     431					cpu_to_le32(fpos_hash(ctx->pos));
->     432			}
->     433	
->     434			req->r_dir_release_cnt = dfi->dir_release_count;
->     435			req->r_dir_ordered_cnt = dfi->dir_ordered_count;
->     436			req->r_readdir_cache_idx = dfi->readdir_cache_idx;
->     437			req->r_readdir_offset = dfi->next_offset;
->     438			req->r_args.readdir.frag = cpu_to_le32(frag);
->     439			req->r_args.readdir.flags =
->     440					cpu_to_le16(CEPH_READDIR_REPLY_BITFLAGS);
->     441	
->     442			req->r_inode = inode;
->     443			ihold(inode);
->     444			req->r_dentry = dget(file->f_path.dentry);
->     445			err = ceph_mdsc_do_request(mdsc, NULL, req);
->     446			if (err < 0) {
->     447				ceph_mdsc_put_request(req);
->     448				goto out;
->     449			}
->     450			dout("readdir got and parsed readdir result=%d on "
->     451			     "frag %x, end=%d, complete=%d, hash_order=%d\n",
->     452			     err, frag,
->     453			     (int)req->r_reply_info.dir_end,
->     454			     (int)req->r_reply_info.dir_complete,
->     455			     (int)req->r_reply_info.hash_order);
->     456	
->     457			rinfo = &req->r_reply_info;
->     458			if (le32_to_cpu(rinfo->dir_dir->frag) != frag) {
->     459				frag = le32_to_cpu(rinfo->dir_dir->frag);
->     460				if (!rinfo->hash_order) {
->     461					dfi->next_offset = req->r_readdir_offset;
->     462					/* adjust ctx->pos to beginning of frag */
->     463					ctx->pos = ceph_make_fpos(frag,
->     464								  dfi->next_offset,
->     465								  false);
->     466				}
->     467			}
->     468	
->     469			dfi->frag = frag;
->     470			dfi->last_readdir = req;
->     471	
->     472			if (test_bit(CEPH_MDS_R_DID_PREPOPULATE, &req->r_req_flags)) {
->     473				dfi->readdir_cache_idx = req->r_readdir_cache_idx;
->     474				if (dfi->readdir_cache_idx < 0) {
->     475					/* preclude from marking dir ordered */
->     476					dfi->dir_ordered_count = 0;
->     477				} else if (ceph_frag_is_leftmost(frag) &&
->     478					   dfi->next_offset == 2) {
->     479					/* note dir version at start of readdir so
->     480					 * we can tell if any dentries get dropped */
->     481					dfi->dir_release_count = req->r_dir_release_cnt;
->     482					dfi->dir_ordered_count = req->r_dir_ordered_cnt;
->     483				}
->     484			} else {
->     485				dout("readdir !did_prepopulate\n");
->     486				/* disable readdir cache */
->     487				dfi->readdir_cache_idx = -1;
->     488				/* preclude from marking dir complete */
->     489				dfi->dir_release_count = 0;
->     490			}
->     491	
->     492			/* note next offset and last dentry name */
->     493			if (rinfo->dir_nr > 0) {
->     494				struct ceph_mds_reply_dir_entry *rde =
->     495						rinfo->dir_entries + (rinfo->dir_nr-1);
->     496				unsigned next_offset = req->r_reply_info.dir_end ?
->     497						2 : (fpos_off(rde->offset) + 1);
->     498				err = note_last_dentry(dfi, rde->name, rde->name_len,
->     499						       next_offset);
->     500				if (err) {
->     501					ceph_mdsc_put_request(dfi->last_readdir);
->     502					dfi->last_readdir = NULL;
->     503					goto out;
->     504				}
->     505			} else if (req->r_reply_info.dir_end) {
->     506				dfi->next_offset = 2;
->     507				/* keep last name */
->     508			}
->     509		}
->     510	
->     511		rinfo = &dfi->last_readdir->r_reply_info;
->     512		dout("readdir frag %x num %d pos %llx chunk first %llx\n",
->     513		     dfi->frag, rinfo->dir_nr, ctx->pos,
->     514		     rinfo->dir_nr ? rinfo->dir_entries[0].offset : 0LL);
->     515	
->     516		i = 0;
->     517		/* search start position */
->     518		if (rinfo->dir_nr > 0) {
->     519			int step, nr = rinfo->dir_nr;
->     520			while (nr > 0) {
->     521				step = nr >> 1;
->     522				if (rinfo->dir_entries[i + step].offset < ctx->pos) {
->     523					i +=  step + 1;
->     524					nr -= step + 1;
->     525				} else {
->     526					nr = step;
->     527				}
->     528			}
->     529		}
->     530		for (; i < rinfo->dir_nr; i++) {
->     531			struct ceph_mds_reply_dir_entry *rde = rinfo->dir_entries + i;
->     532	
->     533			BUG_ON(rde->offset < ctx->pos);
->     534			BUG_ON(!rde->inode.in);
->     535	
->     536			ctx->pos = rde->offset;
->     537			dout("readdir (%d/%d) -> %llx '%.*s' %p\n",
->     538			     i, rinfo->dir_nr, ctx->pos,
->     539			     rde->name_len, rde->name, &rde->inode.in);
->     540	
->     541			if (!dir_emit(ctx, rde->name, rde->name_len,
->     542				      ceph_present_ino(inode->i_sb, le64_to_cpu(rde->inode.in->ino)),
->     543				      le32_to_cpu(rde->inode.in->mode) >> 12)) {
->     544				/*
->     545				 * NOTE: Here no need to put the 'dfi->last_readdir',
->     546				 * because when dir_emit stops us it's most likely
->     547				 * doesn't have enough memory, etc. So for next readdir
->     548				 * it will continue.
->     549				 */
->     550				dout("filldir stopping us...\n");
->     551				err = 0;
->     552				goto out;
->     553			}
->     554	
->     555			/* Reset the lengths to their original allocated vals */
->     556			ctx->pos++;
->     557		}
->     558	
->     559		ceph_mdsc_put_request(dfi->last_readdir);
->     560		dfi->last_readdir = NULL;
->     561	
->     562		if (dfi->next_offset > 2) {
->     563			frag = dfi->frag;
->     564			goto more;
->     565		}
->     566	
->     567		/* more frags? */
->     568		if (!ceph_frag_is_rightmost(dfi->frag)) {
->     569			frag = ceph_frag_next(dfi->frag);
->     570			if (is_hash_order(ctx->pos)) {
->     571				loff_t new_pos = ceph_make_fpos(ceph_frag_value(frag),
->     572								dfi->next_offset, true);
->     573				if (new_pos > ctx->pos)
->     574					ctx->pos = new_pos;
->     575				/* keep last_name */
->     576			} else {
->     577				ctx->pos = ceph_make_fpos(frag, dfi->next_offset,
->     578								false);
->     579				kfree(dfi->last_name);
->     580				dfi->last_name = NULL;
->     581			}
->     582			dout("readdir next frag is %x\n", frag);
->     583			goto more;
->     584		}
->     585		dfi->file_info.flags |= CEPH_F_ATEND;
->     586	
->     587		/*
->     588		 * if dir_release_count still matches the dir, no dentries
->     589		 * were released during the whole readdir, and we should have
->     590		 * the complete dir contents in our cache.
->     591		 */
->     592		if (atomic64_read(&ci->i_release_count) ==
->     593						dfi->dir_release_count) {
->     594			spin_lock(&ci->i_ceph_lock);
->     595			if (dfi->dir_ordered_count ==
->     596					atomic64_read(&ci->i_ordered_count)) {
->     597				dout(" marking %p complete and ordered\n", inode);
->     598				/* use i_size to track number of entries in
->     599				 * readdir cache */
->     600				BUG_ON(dfi->readdir_cache_idx < 0);
->     601				i_size_write(inode, dfi->readdir_cache_idx *
->     602					     sizeof(struct dentry*));
->     603			} else {
->     604				dout(" marking %p complete\n", inode);
->     605			}
->     606			__ceph_dir_set_complete(ci, dfi->dir_release_count,
->     607						dfi->dir_ordered_count);
->     608			spin_unlock(&ci->i_ceph_lock);
->     609		}
->     610		err = 0;
->     611		dout("readdir %p file %p done.\n", inode, file);
->     612	out:
->     613		return err;
->     614	}
->     615	
->
-> ---
-> 0-DAY CI Kernel Test Service
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->
+-- 
+2.25.1
 

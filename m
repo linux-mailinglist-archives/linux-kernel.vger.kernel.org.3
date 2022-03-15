@@ -2,106 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B4F4D9596
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9594D9599
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345631AbiCOHuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S1345640AbiCOHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345578AbiCOHt5 (ORCPT
+        with ESMTP id S1345634AbiCOHua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:49:57 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778C212AB9;
-        Tue, 15 Mar 2022 00:48:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHls46bHmz4xLQ;
-        Tue, 15 Mar 2022 18:48:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647330521;
-        bh=PjW0biCXKc+qhAUU1W64I2QO1DH1Q3qwwuBjyuH73l0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oTNgpjOLSzbXg6giVOWNixTiYAiVltCaD6UUs8oVbDpSvkDOexSujsrODeqNe2rPF
-         QQ8tLRtEj4HyEjOxK9gWn05ypDCH0AkkKbDaHnrqoiBOc2QONiEuUu8vdRNZGmCgaA
-         6Ub9oXaVz1p1lA4EbXIbVn2CYeJnaqxIHpx/du22bwmOHtQviZ+VTKZrrlnCmV5LG7
-         G2YoPb2pbISHNyNY4//RHnPvNLAj/xSG7b2ZzFwyEXhjVrjJrtbrBvumAFLFNHGpS0
-         91SdZTBmd2GNrBv/Jvx9M0/brvFwY+HTb0Tv8thlkW9uabdASclLI4pzB0lkYHbWCt
-         snZDi5Na7L1jg==
-Date:   Tue, 15 Mar 2022 18:48:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Alan Kao <alankao@andestech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the userns tree with the asm-generic
- tree
-Message-ID: <20220315184840.506dd8bf@canb.auug.org.au>
+        Tue, 15 Mar 2022 03:50:30 -0400
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893F512ACD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:49:15 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1647330538t2e5fnkr
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Mar 2022 15:48:52 +0800 (CST)
+X-QQ-SSF: 01400000002000D0H000B00A0000000
+X-QQ-FEAT: 2/V7nd32TUNNL9VZeRdmamHW/40ftL9nCkS+SA2Cjt/VReeEKtayf5eld+pEV
+        S4ppc/UoEjWTLGfmglppM+tlrceAEQKUT8GYjsIS12xW8iba2jYmD1uiIvf192fiOtMtPEC
+        YmvtbesERPpeWv/c+7il+ErWeI48CQ29Id0af1WL2j9uc8X4IS1SNQ4eQW+LGYHNqnEdBIA
+        w04yePwuzg+XufdJPMJS7dni4c7k8ALBFJDuUZN8k8+PZvjhjbXtDvoQn6aWeSwpWL8KBVn
+        Tz8S5IFOUZo8TDYAA08sE/IXH+t65ZqrvyXWTf22Q4k8Es8qEE61J1HI+7HD7hOVez3lPJu
+        jryYjzT43Ney0ju5jnA02tpZErfIx0ha3o6OKCP
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     t.sailer@alumni.ethz.ch, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] hamradio: Fix wrong assignment of 'bbc->cfg.loopback'
+Date:   Tue, 15 Mar 2022 15:48:51 +0800
+Message-Id: <20220315074851.6456-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/D+yOLGB9bBd3vZbGt7X1f2z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/D+yOLGB9bBd3vZbGt7X1f2z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+In file hamradio/baycom_epp.c, the baycom_setmode interface, there
+is a problem with improper use of strstr.
 
-Hi all,
+Suppose that when modestr="noloopback", both conditions which are
+'strstr(modestr,"noloopback")' and 'strstr(modestr,"loopback")'
+will be true(not NULL), this lead the bc->cfg.loopback variable
+will be first assigned to 0, and then reassigned to 1.
 
-Today's linux-next merge of the userns tree got conflicts in:
+This will cause 'bc->cfg.loopback = 0' will never take effect. That
+obviously violates the logic of the code, so adjust the order of
+their execution to solve the problem.
 
-  arch/nds32/include/asm/syscall.h
-  arch/nds32/kernel/ptrace.c
-  arch/nds32/kernel/signal.c
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ drivers/net/hamradio/baycom_epp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-between commit:
+diff --git a/drivers/net/hamradio/baycom_epp.c b/drivers/net/hamradio/baycom_epp.c
+index a03d0b474641..36e6de42ae77 100644
+--- a/drivers/net/hamradio/baycom_epp.c
++++ b/drivers/net/hamradio/baycom_epp.c
+@@ -982,10 +982,10 @@ static int baycom_setmode(struct baycom_state *bc, const char *modestr)
+ 		bc->cfg.extmodem = 0;
+ 	if (strstr(modestr,"extmodem"))
+ 		bc->cfg.extmodem = 1;
+-	if (strstr(modestr,"noloopback"))
+-		bc->cfg.loopback = 0;
+ 	if (strstr(modestr,"loopback"))
+ 		bc->cfg.loopback = 1;
++	if (strstr(modestr, "noloopback"))
++		bc->cfg.loopback = 0;
+ 	if ((cp = strstr(modestr,"fclk="))) {
+ 		bc->cfg.fclk = simple_strtoul(cp+5, NULL, 0);
+ 		if (bc->cfg.fclk < 1000000)
+-- 
+2.20.1
 
-  aec499c75cf8 ("nds32: Remove the architecture")
 
-from the asm-generic tree and commits:
 
-  153474ba1a4a ("ptrace: Create ptrace_report_syscall_{entry,exit} in ptrac=
-e.h")
-  03248addadf1 ("resume_user_mode: Move to resume_user_mode.h")
-
-from the userns tree.
-
-I fixed it up (I just removed the files) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/D+yOLGB9bBd3vZbGt7X1f2z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwRNgACgkQAVBC80lX
-0GyiYAf8C3TK+RMjoQI/hU4mMA2keWDe+NgKM0pZT13sfLgGarm3kOheRDW52+pX
-epFS5BlqufPbF5IjQRr8ZySNnVa1CgLOrvbnTLa9yYBpLEi64DObqoHANR5D/TFp
-k3A6ka2MGJBhd+a9qKaXhHPf1ww0MoGCYPTS/9BA0dFtkIdSeg284WRXPpe+o80q
-iYL9iHvK0BISk1IG3b3LFDCxV4+j6c0K5Pk9UtNhzL5+l0oonCoVD+zR27UEmrOx
-uk0C7XyZj9RoRKfiWUbAlZVLWr/kXZ0HnubYs5XlOh7SKtMK0wz7fPAMyFvqE/nK
-s+2Q0sLdP1xBTU5NAPsRStJgaLoYoA==
-=2Rid
------END PGP SIGNATURE-----
-
---Sig_/D+yOLGB9bBd3vZbGt7X1f2z--

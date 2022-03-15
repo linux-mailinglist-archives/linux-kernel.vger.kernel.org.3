@@ -2,90 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DC14DA2EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8784DA2DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351339AbiCOTFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S1351215AbiCOTDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351249AbiCOTEG (ORCPT
+        with ESMTP id S1351187AbiCOTDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:04:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35A0593AA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:02:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 431E7616DB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBFDC340F4;
-        Tue, 15 Mar 2022 19:02:46 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.95)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1nUCRR-003jmn-8B;
-        Tue, 15 Mar 2022 15:02:45 -0400
-Message-ID: <20220315190245.078380319@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Tue, 15 Mar 2022 15:02:27 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [for-next][PATCH 13/15] rtla/osnoise: Fix osnoise hist stop tracing message
-References: <20220315190214.613102181@goodmis.org>
+        Tue, 15 Mar 2022 15:03:49 -0400
+Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE315A155
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:02:36 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id D16F9C8008E;
+        Tue, 15 Mar 2022 20:02:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        tuxedocomputers.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from; s=
+        default; t=1647370954; x=1649185355; bh=SDMsvOzENIieUNEp14igHQgf
+        Yk6hEsxarU/8u6JCPek=; b=Xmht9Yt31/xX84N3BI4QfPWZFF1qrcABq1GuqNMY
+        PZXJ0OKxXwGRvVTpF9YFhwxHZq3a/8jVuUn78cXL/qv4Ao32SgUuxCa5ShFSVSgE
+        sw1yK3vXp2dZfS7oXbZNheRB/fasHineS86j8FTXzHx4GXTm2d0nhkjulpMJ05y+
+        68M=
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id k9S9ehrr8x_d; Tue, 15 Mar 2022 20:02:34 +0100 (CET)
+Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPA id 7757BC80086;
+        Tue, 15 Mar 2022 20:02:34 +0100 (CET)
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ACPI/backlight: Force backlight native for Clevo NL5xRU and
+Date:   Tue, 15 Mar 2022 20:02:27 +0100
+Message-Id: <20220315190228.1503866-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+This patch works around a bug appearing on at least two Clevo devices.
+I also put some effort in finding the root cause for this bug to fix it in
+general: https://bugzilla.kernel.org/show_bug.cgi?id=215683
+I could pinpoint it down where it happens, but could use some ideas for
+cleanly fixing it.
 
-rtla osnoise hist is printing the following message when hitting stop
-tracing:
 
-  printf("rtla timelat hit stop tracing\n");
-
-which is obviosly wrong.
-
-s/timerlat/osnoise/ fixing the printf.
-
-Link: https://lkml.kernel.org/r/2b8f090556fe37b81d183b74ce271421f131c77b.1646247211.git.bristot@kernel.org
-
-Fixes: 829a6c0b5698 ("rtla/osnoise: Add the hist mode")
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Clark Williams <williams@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/tracing/rtla/src/osnoise_hist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
-index b73b919bd6b4..c47780fedbaf 100644
---- a/tools/tracing/rtla/src/osnoise_hist.c
-+++ b/tools/tracing/rtla/src/osnoise_hist.c
-@@ -859,7 +859,7 @@ int osnoise_hist_main(int argc, char *argv[])
- 	return_value = 0;
- 
- 	if (trace_is_off(&tool->trace, &record->trace)) {
--		printf("rtla timelat hit stop tracing\n");
-+		printf("rtla osnoise hit stop tracing\n");
- 		if (params->trace_output) {
- 			printf("  Saving trace to %s\n", params->trace_output);
- 			save_trace_to_file(record->trace.inst, params->trace_output);
--- 
-2.35.1

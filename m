@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCE64D91C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB264D91C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343976AbiCOAw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S234246AbiCOAwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 20:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbiCOAw2 (ORCPT
+        with ESMTP id S1343980AbiCOAwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:52:28 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3525A42A01
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:51:17 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id w16so34225401ybi.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p0UlhLg5UKZcX2aQVdSXvgppoO3cZOrtQ6eoO0oL/Q0=;
-        b=QUiGPPJzn7kEVNBbdRGZN7y1wEnZ8PE99wDVRUYPdG7npO00a1a5tmuWBvfD4CYcIY
-         0zY/Cj1/jMwmWfhNIUuJcoqQiaR/bJOC74zjK4OGSbmz3/DpS+qTv7gCvTK7yNSoT1Tt
-         vQRQ5BHHLORdPrO+a7cLptIZvGk96R6ebiS8UpPXhSWY1n9I4xesAORcmo9READeJDHW
-         IW0RZy8yeI2Mh6XeU8GHrWncZvU/65MBWKd3C+167ykIh1Qf9Bzy70QI4L1TnZCFV5ac
-         ZQK9DpAIRcp9bNsZ+PpY/oiRanLk9WLkFQea9uhasoQr4uMlDVl+ytiMloy6E9L+dA9J
-         GH/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p0UlhLg5UKZcX2aQVdSXvgppoO3cZOrtQ6eoO0oL/Q0=;
-        b=XSSXKxn5bxvSkfInfbYKWdMuyEeLILG3qb5KCxMDXTMZWRI0NaIoCTbMPA7hEyZuCo
-         KKWgRzpfol09DR/KBmJ47VCSzJ8yo6gKO/+8KFc7v7ZZ+jSNUIJCqSI1OzFo7MX7Q0mo
-         kr9IM3j4VdrB7n2Q2oVybJQDm6hB9lKHMypupp0aGov4SkbZEyTfEK6iFGC2M3zhK3kX
-         Y8byPJqxj60/tSKBVTZFOyVb/PSyi1+QRXtAlKbv1paWwOCOTreFrHcyK8S4Bkc/z/QA
-         g2vKDXLsvUaQ4jZw1UWrrI1K8RsMpDSmcishvjITm1lgM/72FNz3RUqELoHnc9adyqTL
-         53EA==
-X-Gm-Message-State: AOAM533BYBvkKr8GMoFaKf4WK21U+vQyQoU1g24XhwzHRAtrg6wNgQKx
-        gDijqqbaY3a2NBMQcUoQNPyscanz0Z/wI98CO3HKZA==
-X-Google-Smtp-Source: ABdhPJzWvSlEl+Nt8Y9+wYpryt91TF+QUhuMcfghjrafkVrwylfkmDpe2Ot72osvoz1Yng0YyEpiqOLFpGHghLqrox8=
-X-Received: by 2002:a25:2308:0:b0:628:9a66:7327 with SMTP id
- j8-20020a252308000000b006289a667327mr20333278ybj.626.1647305476388; Mon, 14
- Mar 2022 17:51:16 -0700 (PDT)
+        Mon, 14 Mar 2022 20:52:37 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB1242ED3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:51:26 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id E30208CFA9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:51:25 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id TvPJnQmQjdx86TvPJnNnbf; Mon, 14 Mar 2022 19:51:25 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pCQyhKIzdwJRZj5d+qeDKkVBVrWjlQZ56RLSsmiAbCQ=; b=AnXYisVKcO6CUM3k8PJoI76cuZ
+        QyrghgBaUVLRW6RL/zE95KefEucKtWaHPIjCzvD+F5a328nG+twEuZoHlxrAroVNkByh2y9qLwhLT
+        nLlgovDXBPYXi3ftwPHVjENNWeJWuvEfBzCuWdSf4/pdo5FRcEyYRBhupqc8v3j100GRrPtV3hH24
+        /w+OvBQG3CVkw+BtAPJ9rrieEmzFQI9QDL2rzCpWu9DTGVdUl3dOrkz1WGOpUyXArLccZRjoZm7c7
+        4fL7kOAH6tMT2at8MNnaoOJX00MBhME67TdkEoHAbMvMOWMGeug5xFuTCHJ+shKPBK9vg3ozsciDa
+        SS8UMFQA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57470 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nTvPJ-003q7Z-3W; Tue, 15 Mar 2022 00:51:25 +0000
+Date:   Mon, 14 Mar 2022 17:51:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/29] 4.19.235-rc2 review
+Message-ID: <20220315005123.GC1943350@roeck-us.net>
+References: <20220314145920.247358804@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220304144432.3397621-2-horatiu.vultur@microchip.com>
- <20220307124501.3487932-1-michael@walle.cc> <20220308083023.frr7qz2xga2tas5r@soft-dev3-1.localhost>
- <691cc39a667d6284fa25bc47f6855152@walle.cc>
-In-Reply-To: <691cc39a667d6284fa25bc47f6855152@walle.cc>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 15 Mar 2022 01:51:05 +0100
-Message-ID: <CACRpkdYMV+-_MXyHi2LXgGMCo8a+fpFWcEPQRgE2k1oRi_aRMw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] pinctrl: ocelot: Fix the pincfg resource.
-To:     Michael Walle <michael@walle.cc>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        andriy.shevchenko@linux.intel.com, colin.foster@in-advantage.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314145920.247358804@linuxfoundation.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nTvPJ-003q7Z-3W
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57470
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 38
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 9:32 AM Michael Walle <michael@walle.cc> wrote:
-> Am 2022-03-08 09:30, schrieb Horatiu Vultur:
-> > The 03/07/2022 13:45, Michael Walle wrote:
-> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know
-> >> the content is safe
-> >>
-> >> > The pincfg resources are in the second memory resource. But the driver
-> >> > still tries to access the first memory resource to get the pincfg. This
-> >> > is wrong therefore fix to access the second memory resource.
-> >> >
-> >> > Reviewed-by: Colin Foster <colin.foster@in-advantage.com>
-> >> > Fixes: ad96111e658a95 ("pinctrl: ocelot: combine get resource and ioremap into single call")
-> >> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> >>
-> >> There is already this patch pending, which does exactly
-> >> the same:
-> >> https://lore.kernel.org/linux-gpio/20220216082020.981797-1-michael@walle.cc/
-> >
-> > Sorry, I have missed your patch.
-> > Should I resend this series where I will drop this patch? What is the
-> > correct approach?
->
-> Actually, I don't know. Maybe you don't need to do anything, Linus?
+On Mon, Mar 14, 2022 at 04:00:14PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.235 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 16 Mar 2022 14:59:12 +0000.
+> Anything received after that time might be too late.
+> 
 
-I'll just apply 2/2 if applicable.
+Build results:
+	total: 156 pass: 153 fail: 3
+Failed builds:
+	ia64:defconfig
+	ia64:allnoconfig
+	ia64:tinyconfig
+Qemu test results:
+	total: 425 pass: 425 fail: 0
 
-Yours,
-Linus Walleij
+Build failures as already reported.
+
+arch/ia64/kernel/acpi.c: In function 'acpi_numa_fixup':
+arch/ia64/kernel/acpi.c:540:17: error: implicit declaration of function 'slit_distance'; did you mean 'node_distance'? [-Werror=implicit-function-declaration]
+  540 |                 slit_distance(0, 0) = LOCAL_DISTANCE;
+      |                 ^~~~~~~~~~~~~
+      |                 node_distance
+arch/ia64/kernel/acpi.c:540:37: error: lvalue required as left operand of assignment
+  540 |                 slit_distance(0, 0) = LOCAL_DISTANCE;
+      |                                     ^
+
+Tested-and-reported-failed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

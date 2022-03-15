@@ -2,205 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79FA4D9463
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEA94D9471
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345161AbiCOGMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S244506AbiCOGOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345150AbiCOGMq (ORCPT
+        with ESMTP id S232012AbiCOGOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:12:46 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D9549F9D;
-        Mon, 14 Mar 2022 23:11:34 -0700 (PDT)
-X-UUID: 230ce68ff8de41ce8536dc9c7ad97e54-20220315
-X-UUID: 230ce68ff8de41ce8536dc9c7ad97e54-20220315
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2061439537; Tue, 15 Mar 2022 14:11:28 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 15 Mar 2022 14:11:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 15 Mar
- 2022 14:11:27 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Mar 2022 14:11:26 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <moudy.ho@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v13 6/6] soc: mediatek: mutex: add functions that operate registers by CMDQ
-Date:   Tue, 15 Mar 2022 14:10:31 +0800
-Message-ID: <20220315061031.21642-7-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220315061031.21642-1-moudy.ho@mediatek.com>
-References: <20220315061031.21642-1-moudy.ho@mediatek.com>
+        Tue, 15 Mar 2022 02:14:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92973A71E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:13:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 531CF210DD;
+        Tue, 15 Mar 2022 06:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647324819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7OQUAsHYpuDcIcBxp2yn2HNjgjPTj9XE8xl4qxKMMAE=;
+        b=eJHxa5DoERKoyDiKJ4QLQ9YlntA68Gvp6LAseIWjJyldLZ5rwrql0zS3U9Aq8ER3wYGkyP
+        9RZrwFRfAZBc4z2YpD0Lq+12y+8IKqtVoE/ibRVdvEuEmyi606Xy9u285TQogE47BDwb4w
+        /ibO9TUyY2M4dS5XeOm2Pakvhr3/gnE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647324819;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7OQUAsHYpuDcIcBxp2yn2HNjgjPTj9XE8xl4qxKMMAE=;
+        b=K6tOVG8A1GNRGorh2XeFUnwOCwRCurUNZ0/tKSqc1uyep3PuPKr5GrgxF1XO/dCU17xAP7
+        C7RhP90wr3PgBFBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFCAE13B4E;
+        Tue, 15 Mar 2022 06:13:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id O/0pK5IuMGKMMwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 15 Mar 2022 06:13:38 +0000
+Date:   Tue, 15 Mar 2022 07:13:37 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: Only re-generate demotion targets when a numa
+ node changes its N_CPU state
+Message-ID: <YjAukR2aPkZ0z7Z9@localhost.localdomain>
+References: <20220310120749.23077-1-osalvador@suse.de>
+ <87mthxb514.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <YisK2PEkKAqtZPfp@localhost.localdomain>
+ <87czip73b4.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Yi9bhXSADpNt6WEC@localhost.localdomain>
+ <6b63d2ad-9b21-3fd6-37b4-31d7ad804c30@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b63d2ad-9b21-3fd6-37b4-31d7ad804c30@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to hardware limitations, MDP3 is necessary to enable MUTEX in
-each frame for SOF triggering and cooperate with CMDQ control to
-reduce the amount of interrupts generated(also, reduce frame latency).
+On Mon, Mar 14, 2022 at 08:20:57AM -0700, Dave Hansen wrote:
+> Qemu, for instance, has a "mem-path" argument.  It's typically used for
+> using hugetlbfs as guest memory.  But, there's nothing stopping you from
+> pointing it to a DAX device or a file on a DAX filesystem that's backed
+> by pmem.
 
-In response to the above situation, a new interface
-"mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
+Thanks Dave.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- drivers/soc/mediatek/mtk-mutex.c       | 42 +++++++++++++++++++++++++-
- include/linux/soc/mediatek/mtk-mutex.h |  2 ++
- 2 files changed, 43 insertions(+), 1 deletion(-)
+But that is somehow different, is not it?
+When you use pmem backed memory as a RAM for the guest, the guest is not
+seeing that as PMEM, but just as a normal RAM, right?
+IOW, the guest cannot use that memory for demotion, as we can use it in
+the host when configured.
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index 88fb4fc8f216..0d85111cfbe2 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -7,10 +7,16 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
-+
-+#define MTK_MUTEX_ENABLE			BIT(0)
-+#define MTK_MUTEX_MOD_MASK			0x07FFFFFF
-+#define MTK_MUTEX_SOF_MASK			0x00000007
- 
- #define MT2701_MUTEX0_MOD0			0x2c
- #define MT2701_MUTEX0_SOF0			0x30
-@@ -167,6 +173,7 @@ struct mtk_mutex_data {
- 	const unsigned int mutex_sof_reg;
- 	const unsigned long long *mutex_table_mod;
- 	const bool no_clk;
-+	const bool has_gce_client_reg;
- };
- 
- struct mtk_mutex_ctx {
-@@ -175,6 +182,8 @@ struct mtk_mutex_ctx {
- 	void __iomem			*regs;
- 	struct mtk_mutex		mutex[10];
- 	const struct mtk_mutex_data	*data;
-+	phys_addr_t			addr;
-+	struct cmdq_client_reg		cmdq_reg;
- };
- 
- static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-@@ -357,6 +366,7 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
- 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
- 	.mutex_table_mod = mt8183_mutex_table_mod,
- 	.no_clk = true,
-+	.has_gce_client_reg = true,
- };
- 
- static const struct mtk_mutex_data mt8186_mutex_driver_data = {
-@@ -639,6 +649,22 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable);
- 
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct cmdq_pkt *pkt)
-+{
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	cmdq_pkt_write_mask(pkt, mtx->cmdq_reg.subsys,
-+			    mtx->aaddr + DISP_REG_MUTEX_EN(mutex->id),
-+			    MTK_MUTEX_ENABLE, MTK_MUTEX_ENABLE);
-+#endif
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-+
- void mtk_mutex_disable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -677,7 +703,7 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
--	struct resource *regs;
-+	struct resource *regs, addr;
- 	int i;
- 
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
-@@ -698,6 +724,20 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-+		mtx->addr = 0L;
-+	else
-+		mtx->addr = addr.start;
-+
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	if (mtx->data->has_gce_client_reg) {
-+		if (cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0)) {
-+			dev_err(dev, "No mediatek,gce-client-reg!\n");
-+			return ret;
-+		}
-+	}
-+#endif
-+
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mtx->regs = devm_ioremap_resource(dev, regs);
- 	if (IS_ERR(mtx->regs)) {
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index c8355bb0e6d6..18a4b1dc3773 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -45,6 +45,8 @@ void mtk_mutex_set_mod(struct mtk_mutex *mutex,
- void mtk_mutex_set_sof(struct mtk_mutex *mutex,
- 		       enum mtk_mutex_table_index idx);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      struct cmdq_pkt *pkt);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
+I might be missing something, I am using this qemu cmdline:
+
+        $QEMU -enable-kvm -machine pc -smp 4 -cpu host -monitor pty -m 5G \
+	-object memory-backend-file,id=pc.ram,size=5G,mem-path=/mnt/pmem,share=off -machine memory-backend=pc.ram \
+	$IMAGE -boot c -vnc :0 
+
+(/mnt/pmem was mounted with "mount -o dax /dev/pmem1 /mnt/pmem/")
+
+My point is, if it is really true that the guest cannot use that memory for
+demotion, then we would still need CONFIG_MEMORY_HOTPLUG, as that is the
+only way to expose PMEM to any system to be used as a demotion option
+(via add_memory_driver_managed() through kmem driver).
+
+Or am I missing some qemu magic to use that memory as demotion in the
+guest as well?
+
+
 -- 
-2.18.0
-
+Oscar Salvador
+SUSE Labs

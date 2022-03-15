@@ -2,120 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB074D9C89
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ECB4D9C94
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 14:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346314AbiCONns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 09:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S1344575AbiCONsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 09:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237033AbiCONno (ORCPT
+        with ESMTP id S1348845AbiCONsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 09:43:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692E052E5D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 06:42:32 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KHvgg1wSXzfYxQ;
-        Tue, 15 Mar 2022 21:41:03 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 21:42:30 +0800
-Subject: Re: [PATCH] mm/mempolicy: fix potential mpol_new leak in
- shared_policy_replace
-To:     Michal Hocko <mhocko@suse.com>
-CC:     <akpm@linux-foundation.org>, <kosaki.motohiro@jp.fujitsu.com>,
-        <mgorman@suse.de>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220311093624.39546-1-linmiaohe@huawei.com>
- <Yi9w7TCYbj+OLGXJ@dhcp22.suse.cz>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <26577566-ae1e-801c-8c64-89c2c89a487d@huawei.com>
-Date:   Tue, 15 Mar 2022 21:42:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 15 Mar 2022 09:48:06 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A87B52E68;
+        Tue, 15 Mar 2022 06:46:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a8so41434475ejc.8;
+        Tue, 15 Mar 2022 06:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=52KupTNckoTiW8mqVp3XaNIUEo5xHI2O53gUBo/w4bY=;
+        b=QV37BBlCAFf8+y0GnPcl7xfC72mhwaTLyyn3UdPWnY/QgD3M6YXFlsTox+8Sr0aM50
+         YKF8p/nicNpsxb16CkJ/Rgj/ZcVBDmz552ZTRZXKVtJX6Y1+JNZ3VesqXLUsmrIifYPE
+         RCfaipaUkL8a4RODT7XzcMQRJVLZ8Om4tHUpKeiPf1spDLP0QX9u9gsHEKJfCzgurpIi
+         EpLmEG7ztqvdwNX3HtwZ/I8yrE+13OqzXC5dFqYJQpC+pPMYvbbfsNxDK1eJ/CEuJWUz
+         bn0vMJtpOL3Cwcp0E/e7RpYoG80dZwvmuKYthDYqVbVXiRDAdhaztY13RmCrX+HCk0Hf
+         V9zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=52KupTNckoTiW8mqVp3XaNIUEo5xHI2O53gUBo/w4bY=;
+        b=203r7F0SJGSGpvNAj7PzgaiDnFKn+3YOdr92DNaq7JWrZVxCgflWTXh9gGMnq70zvw
+         tJGysimPzPIXfIfqvFAnO5GFAqwHiX2+liX7KbylJwmn2yKDxOGAo6WdsqOh/v2vl4n4
+         IkCWn/PpGCCMeMZfq1yJr+L09q2Usp2/KwRz8QcHcYnGG9kL7zUMSKevcbPwjPqtUn0M
+         AFrF2rX6LWsXRIVL4CZlO1Fq9mv05gYPABJvpmp8P5MR7guVF2tcs4nzO0xlwOuMHf+7
+         UvMvzdiot9icer8wbnbAiOZi7HthyN7aJJT4io+NrmjroRo68Zccxhob+guz/WTRLRxO
+         x9rw==
+X-Gm-Message-State: AOAM53037+Ep8I+Vv3Hv1HfEdwCwojj0fmh5l5czKdzPVM9RaCFD/vLC
+        9F2R12jYnq2VtHEE6nnHTCgqveAFsAJj64tVEJqV4poG3b8=
+X-Google-Smtp-Source: ABdhPJx74T1WC4KSLoavOvF2J087dYXRj2sBoADsQZx4rR3MZwKXVin3AJ8oFLeTGhdwdWC7AmRRqGC45z63osz7Blo=
+X-Received: by 2002:a17:907:e93:b0:6df:10b3:4fc0 with SMTP id
+ ho19-20020a1709070e9300b006df10b34fc0mr1821009ejc.44.1647352012953; Tue, 15
+ Mar 2022 06:46:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Yi9w7TCYbj+OLGXJ@dhcp22.suse.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220315103813.84407-1-shreeya.patel@collabora.com>
+ <CAHp75VdoN+iSu1GLnxWW9BtL-p9uF1sfAw3ZxkFWNpoo44+bZg@mail.gmail.com> <b22cea07-aa2e-f5b5-d5aa-071e1084f00b@collabora.com>
+In-Reply-To: <b22cea07-aa2e-f5b5-d5aa-071e1084f00b@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 15 Mar 2022 15:45:39 +0200
+Message-ID: <CAHp75VfsenJ64tTMdAG=CRFkwWjxf5hKpWWSa4hRxkF4ReQdHg@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: Restrict usage of gc irq members before initialization
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, krisman@collabora.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/15 0:44, Michal Hocko wrote:
-> On Fri 11-03-22 17:36:24, Miaohe Lin wrote:
->> If mpol_new is allocated but not used in restart loop, mpol_new will be
->> freed via mpol_put before returning to the caller. But refcnt is not
->> initialized yet, so mpol_put could not do the right things and might
->> leak the unused mpol_new.
-> 
-> The code is really hideous but is there really any bug there? AFAICS the
-> new policy is only allocated in if (n->end > end) branch and that one
-> will set the reference count on the retry. Or am I missing something?
-> 
+On Tue, Mar 15, 2022 at 2:32 PM Shreeya Patel
+<shreeya.patel@collabora.com> wrote:
+> On 15/03/22 4:30 pm, Andy Shevchenko wrote:
+> > On Tue, Mar 15, 2022 at 12:38 PM Shreeya Patel
+> > <shreeya.patel@collabora.com> wrote:
+> >
+> > Thanks for the update, my comments below.
+> >
+> >> gc irq members are exposed before they could be completely
+> > gc --> GPIO chip
+> >
+> >> initialized and this leads to race conditions.
+> > Any example here. like ~3-4 lines of the Oops in question?
+> >
+> >> One such issue was observed for the gc->irq.domain variable which
+> >> was accessed through the I2C interface in gpiochip_to_irq() before
+> >> it could be initialized by gpiochip_add_irqchip(). This resulted in
+> >> Kernel NULL pointer dereference.
+> >>
+> >> To avoid such scenarios, restrict usage of gc irq members before
+> > gc --> GPIO chip
+> >
+> >> they are completely initialized.
+> > ...
+> >
+> >> +       /*
+> >> +        * Using barrier() here to prevent compiler from reordering
+> >> +        * gc->irq.gc_irq_initialized before initialization of above
+> >> +        * gc irq members.
+> >> +        */
+> >> +       barrier();
+> >> +
+> >> +       gc->irq.gc_irq_initialized = true;
+> > There are too many duplications. Why not simply call it 'initialized'?
+> >
+> >> -       if (gc->to_irq) {
+> >> +       if (gc->to_irq && gc->irq.gc_irq_initialized) {
+> > Why can't this check be added into gpiochip_to_irq() ?
+> >
+> >      if (!gc->irq.initialized)
+> >          return -ENXIO;
+> >
+> > ...
+>
+>
+> Because we don't want to return -ENXIO in case of race condition.
+>
+> It should return -EPROBE_DEFER similar to how we are doing when gc->to_irq
+> is NULL.
 
-Many thanks for your comment.
-IIUC, new policy is allocated via the below code:
+> So in this case when both gc->to_irq = NULL and gc->irq.initialized = FALSE,
+> we will be returning -EPROBE_DEFER.
 
-shared_policy_replace:
-	alloc_new:
-		write_unlock(&sp->lock);
-		ret = -ENOMEM;
-		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
-		if (!n_new)
-			goto err_out;
-		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
-		if (!mpol_new)
-			goto err_out;
-		goto restart;
+This is not true. The return code relies on an IRQ chip which may be
+assigned (not NULL).
 
-And mpol_new' reference count will be set before used in n->end > end case. But
-if that is "not" the case, i.e. mpol_new is not inserted into the rb_tree, mpol_new
-will be freed via mpol_put before return:
+> This will make sure that devices
+> like touchscreen
+> do not become fatal due to returning -ENXIO.
 
-shared_policy_replace:
-	err_out:
-		if (mpol_new)
-			mpol_put(mpol_new);
-		if (n_new)
-			kmem_cache_free(sn_cache, n_new);
+So, then you need to move it to to_irq() and return there deferred
+probe with a good comment in the code.
 
-But mpol_new' reference count is not set yet, we have trouble now.
-Does this makes sense for you? Or am I miss something?
+> >> +       bool gc_irq_initialized;
+> > Can you move it closer to .init_hw so it will be weakly grouped by
+> > logic similarities?
+> > Also see above.
+>
+> Thanks for your comments, I'll make the necessary changes and send a v3.
 
-Thanks.
-
->> Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/mempolicy.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
->> index 34d2b29c96ad..f19f19d3558b 100644
->> --- a/mm/mempolicy.c
->> +++ b/mm/mempolicy.c
->> @@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
->>  	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
->>  	if (!mpol_new)
->>  		goto err_out;
->> +	refcount_set(&mpol_new->refcnt, 1);
->>  	goto restart;
->>  }
->>  
->> -- 
->> 2.23.0
-> 
-
+-- 
+With Best Regards,
+Andy Shevchenko

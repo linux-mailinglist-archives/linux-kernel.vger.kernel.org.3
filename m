@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166C44DA182
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB614DA195
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350692AbiCORqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S1350742AbiCORwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238809AbiCORqF (ORCPT
+        with ESMTP id S1350696AbiCORwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:46:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BB94ECD5;
-        Tue, 15 Mar 2022 10:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+TV4u+fka6NmbVTg8AiuGEnj8KksGrxh2QycKle+auE=; b=mU8BsnmCdFVS0xbV8+QIe5FBhG
-        xnk/PFuUpA6SmByVnVwctQI5JM+09DS6kRPtaE64zXhePkamEy07A5wY/dDDddTUDaZAwsmf0xqrA
-        HLoQt9pzKNHLcNZy3RQ23DY3z1QLlSb1T8bXsXw5BISSL9e5Er0qlCDeILYFfMjqqNZbPiOnsD+TU
-        AdEai8gGPXocgfYC4z7MgsMkJMPQ/EthBZ6Ny9NUmDswqWkP1se19PjnZ/n8kBDd0MGntpVhICZ5W
-        n4A7D8RGbs3vGpkepFccxf0NNDSww8RMVYpl+QLxxrzFS7z/BIyVhdtLWzEKLnts7iqI/Veo4GHMq
-        ZqcBdv/Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUBDz-005FDw-Ut; Tue, 15 Mar 2022 17:44:47 +0000
-Date:   Tue, 15 Mar 2022 17:44:47 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] zram: Add a huge_idle writeback mode
-Message-ID: <YjDQj9dr34Jpw3cU@casper.infradead.org>
-References: <20220315172221.9522-1-bgeffon@google.com>
- <YjDMo35Q/cvPLkxu@casper.infradead.org>
- <CADyq12yK+qODV2ut1acjwkyXKDbh_YS3MHpRoJaq_g9G1HAyEw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADyq12yK+qODV2ut1acjwkyXKDbh_YS3MHpRoJaq_g9G1HAyEw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Tue, 15 Mar 2022 13:52:37 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650065130A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647366685; x=1678902685;
+  h=from:to:cc:subject:date:message-id;
+  bh=ieGZVhI/VzY48Bcfet0/X/Fgn6U47WZ9MOR+fcSYFxE=;
+  b=lR7c8dYn+e8uGeTwJEe0W3fghwGui+DESS4AQ5pzlQb7QnNyPBig4+8N
+   6jXFRCdWHfBdUhG7eI0Tvb06dmFTNxFphjQxfUPHJV1aJQTwoLIG+c9eX
+   wkoUH56S+HwSD/pDMw2t3l+91amTTwp0RN5h9B4qk0ehGLljFhZMuXovi
+   p8RabhY9A+P8b3CdQAvz7kxlpD+nx3DFMAsz0Xj+t5QDL1nEmsczO2paP
+   ZDZaqxu+aUA+idrv40JaUGq8L7NgAPFvY2He+jqF/2fyPEaMyNxmuVBh7
+   RjkQ4mrP2UucpS/ZZUqy1Qbg47rfj+9V2UB+ZcX8F0fpg0vB8ZDp47Btl
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="317106855"
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="317106855"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 10:46:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
+   d="scan'208";a="613358387"
+Received: from otc-lr-04.jf.intel.com ([10.54.39.41])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Mar 2022 10:46:37 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V2 1/4] perf/x86: Add Intel Raptor Lake support
+Date:   Tue, 15 Mar 2022 10:45:57 -0700
+Message-Id: <1647366360-82824-1-git-send-email-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,27 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 01:34:21PM -0400, Brian Geffon wrote:
-> On Tue, Mar 15, 2022 at 1:28 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Tue, Mar 15, 2022 at 10:22:21AM -0700, Brian Geffon wrote:
-> > > Today it's only possible to write back as a page, idle, or huge.
-> > > A user might want to writeback pages which are huge and idle first
-> > > as these idle pages do not require decompression and make a good
-> > > first pass for writeback.
-> >
-> > We're moving towards having many different sizes of page in play,
-> > not just PMD and PTE sizes.  Is this patch actually a good idea in
-> > a case where we have, eg, a 32kB anonymous page on a system with 4kB
-> > pages?  How should zram handle this case?  What's our cut-off for
-> > declaring a page to be "huge"?
-> >
-> 
-> Huge isn't a great term IMO, but it is what it is. ZRAM_HUGE is used
-> to identify pages which are incompressible. Since zram is a block
-> device which presents PAGE_SIZED blocks, do these new changes which
-> involve many different page sizes matter as that seems orthogonal to
-> the block subsystem. Correct me if I'm misunderstanding.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Oh, so ZRAM's concept of huge is not the same as the "huge" in
-"hugetlbfs" or "THP"?  That's not at all confusing ...
+From PMU's perspective, Raptor Lake is the same as the Alder Lake. The
+only difference is the event list, which will be supported in the perf
+tool later.
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
+
+No changes since V1
+
+ arch/x86/events/intel/core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 88dcfb4..24a4a75 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -6199,6 +6199,7 @@ __init int intel_pmu_init(void)
+ 
+ 	case INTEL_FAM6_ALDERLAKE:
+ 	case INTEL_FAM6_ALDERLAKE_L:
++	case INTEL_FAM6_RAPTORLAKE:
+ 		/*
+ 		 * Alder Lake has 2 types of CPU, core and atom.
+ 		 *
+-- 
+2.7.4
+

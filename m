@@ -2,221 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315164D9CC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354DF4D9CC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348910AbiCOOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348894AbiCOOBs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1348897AbiCOOBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 15 Mar 2022 10:01:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0818853E13;
-        Tue, 15 Mar 2022 07:00:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4465B815E5;
-        Tue, 15 Mar 2022 14:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A89C340E8;
-        Tue, 15 Mar 2022 14:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647352833;
-        bh=RsDHmXZhUkUqXQm90YfwcTD4LIpS2YJRqfj/Ma2sdKE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izbgmSJMUPiqLNhuqDt4Fq1A2VAswvFhcM32tmZyII8ARNxwfAJCbitmX4HartdWs
-         r2+KCgUutBZMseHJp5wvDmM4jknZotBKgPH4sLHNm32LoVGAgpHRkL68trM4XxwVI6
-         a9RI2hSuQdzcKLryvB9aSdePG6EpcMQwzlwo9yC12feMvh4OF4wbZ6yaqkyUAkPEbd
-         Bzgev9tZoKMMfs02RmUmvSvUcCXWahjJBCcG7FxzwWQyNGwmC7Rg5WVn1unJohjljw
-         8S9oi06gexsE96Rs241oZbveAaxw5ehaRb4+bDlOQ0/y4dfKTeCDLsxzHMKpkGdvIV
-         mFhdCtEdsbi7A==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v12 bpf-next 01/12] ftrace: Add ftrace_set_filter_ips function
-Date:   Tue, 15 Mar 2022 23:00:26 +0900
-Message-Id: <164735282673.1084943.18310504594134769804.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164735281449.1084943.12438881786173547153.stgit@devnote2>
-References: <164735281449.1084943.12438881786173547153.stgit@devnote2>
-User-Agent: StGit/0.19
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348896AbiCOOBp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 15 Mar 2022 10:01:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBA354183
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:00:32 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KHw4R3Bw9zfYq8;
+        Tue, 15 Mar 2022 21:59:03 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Mar 2022 22:00:30 +0800
+Subject: Re: [PATCH v2] mm/hwpoison: set PageHWPoison after taking page lock
+ in memory_failure_hugetlb()
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220314021337.333781-1-naoya.horiguchi@linux.dev>
+ <58732610-36a4-1f05-c09d-a5536013772d@huawei.com>
+ <20220315054935.GA3454497@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <1770029b-fd59-4eb1-c891-5a2ba4beef9c@huawei.com>
+Date:   Tue, 15 Mar 2022 22:00:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20220315054935.GA3454497@hori.linux.bs1.fc.nec.co.jp>
 Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Olsa <jolsa@redhat.com>
+On 2022/3/15 13:49, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, Mar 14, 2022 at 03:10:25PM +0800, Miaohe Lin wrote:
+>> On 2022/3/14 10:13, Naoya Horiguchi wrote:
+>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>
+>>> There is a race condition between memory_failure_hugetlb() and hugetlb
+>>> free/demotion, which causes setting PageHWPoison flag on the wrong page
+>>> (which was a hugetlb when memory_failure() was called, but was removed
+>>> or demoted when memory_failure_hugetlb() is called).  This results in
+>>> killing wrong processes.  So set PageHWPoison flag with holding page lock,
+>>
+>> It seems hold page lock could not help solve this race condition as hugetlb
+>> page demotion is not required to hold the page lock. Could you please explain
+>> this a bit more?
+> 
+> Sorry, the last line in the paragraph need change. What prevents the current
+> race is hugetlb_lock, not page lock.  The page lock is here to prevent the
+> race with hugepage allocation (not directly related to the current issue,
+> but it's still necessary).
 
-Adding ftrace_set_filter_ips function to be able to set filter on
-multiple ip addresses at once.
+Many thanks for clarifying this.
 
-With the kprobe multi attach interface we have cases where we need to
-initialize ftrace_ops object with thousands of functions, so having
-single function diving into ftrace_hash_move_and_update_ops with
-ftrace_lock is faster.
+> 
+>>
+>> BTW:Is there some words missing or here should be 'page lock.' instead of 'page lock,' ?
+> 
+> I should use a period here, I'll fix it.
+> 
+> [...]
+> 
+>>> @@ -1503,24 +1502,11 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+>>>  	int res;
+>>>  	unsigned long page_flags;
+>>>  
+>>> -	if (TestSetPageHWPoison(head)) {
+>>> -		pr_err("Memory failure: %#lx: already hardware poisoned\n",
+>>> -		       pfn);
+>>> -		res = -EHWPOISON;
+>>> -		if (flags & MF_ACTION_REQUIRED)
+>>> -			res = kill_accessing_process(current, page_to_pfn(head), flags);
+>>> -		return res;
+>>> -	}
+>>> -
+>>> -	num_poisoned_pages_inc();
+>>> -
+>>>  	if (!(flags & MF_COUNT_INCREASED)) {
+>>>  		res = get_hwpoison_page(p, flags);
+>>>  		if (!res) {
+>>
+>> In this (res == 0) case, hugetlb page could be dissolved via __page_handle_poison.
+>> But since PageHWPoison is not set yet, we can't set the PageHWPoison to the correct
+>> page. Think about the below code in dissolve_free_huge_page:
+>> 	/*
+>> 	 * Move PageHWPoison flag from head page to the raw
+>> 	 * error page, which makes any subpages rather than
+>> 	 * the error page reusable.
+>> 	 */
+>> 	if (PageHWPoison(head) && page != head) {
+>> 		SetPageHWPoison(page);
+>> 		ClearPageHWPoison(head);
+>> 	}
+>>
+>> SetPageHWPoison won't be called for the error page. Or am I miss something?
+> 
+> No, you're right.  We need call page_handle_poison() instead of
+> __page_handle_poison().
+> 
+> @@ -1512,7 +1512,7 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+>  			}
+>  			unlock_page(head);
+>  			res = MF_FAILED;
+> -			if (__page_handle_poison(p)) {
+> +			if (page_handle_poison(p, true, false)) {
+>  				page_ref_inc(p);
+>  				res = MF_RECOVERED;
+>  			}
+> 
 
-The functions ips are passed as unsigned long array with count.
+This one looks good to me.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- Changes in v6: [Masami]
-  - Fix a typo and add a comment.
----
- include/linux/ftrace.h |    3 ++
- kernel/trace/ftrace.c  |   58 +++++++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 52 insertions(+), 9 deletions(-)
+> 
+> 
+>>
+>>>  			lock_page(head);
+>>>  			if (hwpoison_filter(p)) {
+>>> -				if (TestClearPageHWPoison(head))
+>>> -					num_poisoned_pages_dec();
+>>>  				unlock_page(head);
+>>>  				return -EOPNOTSUPP;
+>>>  			}
+>>> @@ -1553,13 +1539,16 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+>>>  	page_flags = head->flags;
+>>>  
+>>>  	if (hwpoison_filter(p)) {
+>>> -		if (TestClearPageHWPoison(head))
+>>> -			num_poisoned_pages_dec();
+>>>  		put_page(p);
+>>>  		res = -EOPNOTSUPP;
+>>>  		goto out;
+>>>  	}
+>>>  
+>>> +	if (TestSetPageHWPoison(head))
+>>> +		goto already_hwpoisoned;
+>>> +
+>>> +	num_poisoned_pages_inc();
+>>> +
+>>>  	/*
+>>>  	 * TODO: hwpoison for pud-sized hugetlb doesn't work right now, so
+>>>  	 * simply disable it. In order to make it work properly, we need
+>>> @@ -1585,6 +1574,14 @@ static int memory_failure_hugetlb(unsigned long pfn, int flags)
+>>>  out:
+>>>  	unlock_page(head);
+>>>  	return res;
+>>> +already_hwpoisoned:
+>>> +	put_page(p);
+>>> +	unlock_page(head);
+>>
+>> Generally speaking, we should do unlock_page before put_page or page might be disappeared
+>> before we unlock the page. This should be ok when memory_failure succeeds to handle the
+>> page previously as it holds one extra page refcnt. But it might be problematic when
+>> memory_failure failed to handle the page last time. We might be the last user here.
+> 
+> OK, so another code path in "if (hwpoison_filter)@ block seems to need
+> the same change in the order.
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 9999e29187de..60847cbce0da 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -512,6 +512,8 @@ struct dyn_ftrace {
- 
- int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
- 			 int remove, int reset);
-+int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
-+			  unsigned int cnt, int remove, int reset);
- int ftrace_set_filter(struct ftrace_ops *ops, unsigned char *buf,
- 		       int len, int reset);
- int ftrace_set_notrace(struct ftrace_ops *ops, unsigned char *buf,
-@@ -802,6 +804,7 @@ static inline unsigned long ftrace_location(unsigned long ip)
- #define ftrace_regex_open(ops, flag, inod, file) ({ -ENODEV; })
- #define ftrace_set_early_filter(ops, buf, enable) do { } while (0)
- #define ftrace_set_filter_ip(ops, ip, remove, reset) ({ -ENODEV; })
-+#define ftrace_set_filter_ips(ops, ips, cnt, remove, reset) ({ -ENODEV; })
- #define ftrace_set_filter(ops, buf, len, reset) ({ -ENODEV; })
- #define ftrace_set_notrace(ops, buf, len, reset) ({ -ENODEV; })
- #define ftrace_free_filter(ops) do { } while (0)
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index a4b462b6f944..93e992962ada 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -4958,7 +4958,7 @@ ftrace_notrace_write(struct file *file, const char __user *ubuf,
- }
- 
- static int
--ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
-+__ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
- {
- 	struct ftrace_func_entry *entry;
- 
-@@ -4976,9 +4976,30 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
- 	return add_hash_entry(hash, ip);
- }
- 
-+static int
-+ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
-+		  unsigned int cnt, int remove)
-+{
-+	unsigned int i;
-+	int err;
-+
-+	for (i = 0; i < cnt; i++) {
-+		err = __ftrace_match_addr(hash, ips[i], remove);
-+		if (err) {
-+			/*
-+			 * This expects the @hash is a temporary hash and if this
-+			 * fails the caller must free the @hash.
-+			 */
-+			return err;
-+		}
-+	}
-+	return 0;
-+}
-+
- static int
- ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
--		unsigned long ip, int remove, int reset, int enable)
-+		unsigned long *ips, unsigned int cnt,
-+		int remove, int reset, int enable)
- {
- 	struct ftrace_hash **orig_hash;
- 	struct ftrace_hash *hash;
-@@ -5008,8 +5029,8 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
- 		ret = -EINVAL;
- 		goto out_regex_unlock;
- 	}
--	if (ip) {
--		ret = ftrace_match_addr(hash, ip, remove);
-+	if (ips) {
-+		ret = ftrace_match_addr(hash, ips, cnt, remove);
- 		if (ret < 0)
- 			goto out_regex_unlock;
- 	}
-@@ -5026,10 +5047,10 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
- }
- 
- static int
--ftrace_set_addr(struct ftrace_ops *ops, unsigned long ip, int remove,
--		int reset, int enable)
-+ftrace_set_addr(struct ftrace_ops *ops, unsigned long *ips, unsigned int cnt,
-+		int remove, int reset, int enable)
- {
--	return ftrace_set_hash(ops, NULL, 0, ip, remove, reset, enable);
-+	return ftrace_set_hash(ops, NULL, 0, ips, cnt, remove, reset, enable);
- }
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-@@ -5634,10 +5655,29 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
- 			 int remove, int reset)
- {
- 	ftrace_ops_init(ops);
--	return ftrace_set_addr(ops, ip, remove, reset, 1);
-+	return ftrace_set_addr(ops, &ip, 1, remove, reset, 1);
- }
- EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
- 
-+/**
-+ * ftrace_set_filter_ips - set functions to filter on in ftrace by addresses
-+ * @ops - the ops to set the filter with
-+ * @ips - the array of addresses to add to or remove from the filter.
-+ * @cnt - the number of addresses in @ips
-+ * @remove - non zero to remove ips from the filter
-+ * @reset - non zero to reset all filters before applying this filter.
-+ *
-+ * Filters denote which functions should be enabled when tracing is enabled
-+ * If @ips array or any ip specified within is NULL , it fails to update filter.
-+ */
-+int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
-+			  unsigned int cnt, int remove, int reset)
-+{
-+	ftrace_ops_init(ops);
-+	return ftrace_set_addr(ops, ips, cnt, remove, reset, 1);
-+}
-+EXPORT_SYMBOL_GPL(ftrace_set_filter_ips);
-+
- /**
-  * ftrace_ops_set_global_filter - setup ops to use global filters
-  * @ops - the ops which will use the global filters
-@@ -5659,7 +5699,7 @@ static int
- ftrace_set_regex(struct ftrace_ops *ops, unsigned char *buf, int len,
- 		 int reset, int enable)
- {
--	return ftrace_set_hash(ops, buf, len, 0, 0, reset, enable);
-+	return ftrace_set_hash(ops, buf, len, NULL, 0, 0, reset, enable);
- }
- 
- /**
+You're right.
 
+> 
+> Thanks,
+> Naoya Horiguchi
+> 
+
+Many thanks for your patch.

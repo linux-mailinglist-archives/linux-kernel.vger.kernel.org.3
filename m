@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0614DA440
+	by mail.lfdr.de (Postfix) with ESMTP id B837E4DA441
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 21:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351844AbiCOUw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 16:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S1351850AbiCOUw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 16:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351808AbiCOUwQ (ORCPT
+        with ESMTP id S1351813AbiCOUwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 16:52:16 -0400
+        Tue, 15 Mar 2022 16:52:18 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5440B54BF9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:51:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6E154F9C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 13:51:05 -0700 (PDT)
 Received: from ipservice-092-217-079-029.092.217.pools.vodafone-ip.de ([92.217.79.29] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nUE8B-00084h-VD; Tue, 15 Mar 2022 21:51:00 +0100
+        id 1nUE8D-00084h-Lf; Tue, 15 Mar 2022 21:51:01 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2 5/6] staging: r8188eu: remove some unused local ieee80211 macros
-Date:   Tue, 15 Mar 2022 21:50:40 +0100
-Message-Id: <20220315205041.2714168-6-martin@kaiser.cx>
+Subject: [PATCH v2 6/6] staging: r8188eu: remove local BIT macro
+Date:   Tue, 15 Mar 2022 21:50:41 +0100
+Message-Id: <20220315205041.2714168-7-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220315205041.2714168-1-martin@kaiser.cx>
 References: <20220315205041.2714168-1-martin@kaiser.cx>
@@ -44,82 +44,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some macros from wifi.h which are not used by this driver.
+The r8188eu driver defines a local BIT(x) macro. Remove this local macro
+and use the one from include/linux/bits.h.
+
+The global BIT macro returns an unsigned long value. Therefore, we have to
+cast DYNAMIC_BB_DYNAMIC_TXPWR to u32 explicitly. This define is used with
+the bitwise not operator.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/include/wifi.h | 27 --------------------------
- 1 file changed, 27 deletions(-)
+v2:
+ - cast DYNAMIC_BB_DYNAMIC_TXPWR to u32, fix build error on 64-bit systems
 
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h | 2 +-
+ drivers/staging/r8188eu/include/wifi.h         | 7 +------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index 0c555ea6719b..2b5089be5156 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -34,7 +34,7 @@
+ /*  BB ODM section BIT 0-15 */
+ #define	DYNAMIC_BB_DIG				BIT(0)
+ #define	DYNAMIC_BB_RA_MASK			BIT(1)
+-#define	DYNAMIC_BB_DYNAMIC_TXPWR	BIT(2)
++#define	DYNAMIC_BB_DYNAMIC_TXPWR	((u32)BIT(2))
+ #define	DYNAMIC_BB_BB_FA_CNT			BIT(3)
+ 
+ #define		DYNAMIC_BB_RSSI_MONITOR		BIT(4)
 diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-index c1c9bae58d6d..c331be19ff83 100644
+index c331be19ff83..299553351246 100644
 --- a/drivers/staging/r8188eu/include/wifi.h
 +++ b/drivers/staging/r8188eu/include/wifi.h
-@@ -167,17 +167,11 @@ enum WIFI_REG_DOMAIN {
+@@ -4,14 +4,9 @@
+ #ifndef _WIFI_H_
+ #define _WIFI_H_
  
- #define GetToDs(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_TO_DS_)) != 0)
++#include <linux/bits.h>
+ #include <linux/ieee80211.h>
  
--#define ClearToDs(pbuf)	\
--	*(__le16 *)(pbuf) &= (~cpu_to_le16(_TO_DS_))
+-#ifdef BIT
+-/* error	"BIT define occurred earlier elsewhere!\n" */
+-#undef BIT
+-#endif
+-#define BIT(x)	(1 << (x))
 -
- #define SetFrDs(pbuf)	\
- 	*(__le16 *)(pbuf) |= cpu_to_le16(_FROM_DS_)
- 
- #define GetFrDs(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_FROM_DS_)) != 0)
- 
--#define ClearFrDs(pbuf)	\
--	*(__le16 *)(pbuf) &= (~cpu_to_le16(_FROM_DS_))
--
- #define get_tofr_ds(pframe)	((GetToDs(pframe) << 1) | GetFrDs(pframe))
- 
- #define SetMFrag(pbuf)	\
-@@ -186,46 +180,25 @@ enum WIFI_REG_DOMAIN {
- #define ClearMFrag(pbuf)	\
- 	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_))
- 
--#define SetRetry(pbuf)	\
--	*(__le16 *)(pbuf) |= cpu_to_le16(_RETRY_)
--
- #define GetRetry(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_RETRY_)) != 0)
- 
--#define ClearRetry(pbuf)	\
--	*(__le16 *)(pbuf) &= (~cpu_to_le16(_RETRY_))
--
- #define SetPwrMgt(pbuf)	\
- 	*(__le16 *)(pbuf) |= cpu_to_le16(_PWRMGT_)
- 
- #define GetPwrMgt(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_PWRMGT_)) != 0)
- 
--#define ClearPwrMgt(pbuf)	\
--	*(__le16 *)(pbuf) &= (~cpu_to_le16(_PWRMGT_))
--
- #define SetMData(pbuf)	\
- 	*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_DATA_)
- 
--#define ClearMData(pbuf)	\
--	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_DATA_))
--
- #define SetPrivacy(pbuf)	\
- 	*(__le16 *)(pbuf) |= cpu_to_le16(_PRIVACY_)
- 
- #define GetPrivacy(pbuf)					\
- 	(((*(__le16 *)(pbuf)) & cpu_to_le16(_PRIVACY_)) != 0)
- 
--#define ClearPrivacy(pbuf)	\
--	*(__le16 *)(pbuf) &= (~cpu_to_le16(_PRIVACY_))
--
- #define GetFrameType(pbuf)				\
- 	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(3) | BIT(2)))
- 
--#define SetFrameType(pbuf, type)	\
--	do {	\
--		*(unsigned short *)(pbuf) &= __constant_cpu_to_le16(~(BIT(3) | BIT(2))); \
--		*(unsigned short *)(pbuf) |= __constant_cpu_to_le16(type); \
--	} while (0)
--
- #define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
- 	 BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2)))
- 
+ #define WLAN_ETHHDR_LEN		14
+ #define WLAN_HDR_A3_LEN		24
+ #define WLAN_HDR_A3_QOS_LEN	26
 -- 
 2.30.2
 

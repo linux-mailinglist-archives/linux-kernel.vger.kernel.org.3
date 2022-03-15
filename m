@@ -2,278 +2,659 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DD04D9A7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C234D9A7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347967AbiCOLjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
+        id S1347963AbiCOLjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347948AbiCOLjM (ORCPT
+        with ESMTP id S235775AbiCOLjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:39:12 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB32C1093
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:37:58 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h15so28486794wrc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:37:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ahx7UKZv0OoL24Ag2nb4+cGfcAOKb10fU0eUtMYyFm0=;
-        b=oNyYmghoO8s47essImFCeMVvf9Lwty1wLVtvs+FnbiU/CrfsQNMzuXtgpP5GDS1vVJ
-         k5Q/OmwV/Ww6UvQ/bt0Zh+K8ayrXy288SL1GvFmZg+5otu5v0ZlKXW90l+4o4/DthgC6
-         t+G8flZRiUhSSNKNvyVOLHFCb2kh8QQ7K9Q6iHRzNb7CS1FgKN0aasGCA0d+zfH0Xj++
-         LHcVs/vZwSdCE4QPKmV7EE3afy3qeGu0btjUhuWfriqEMfgRSgTr3uzl65XTKveWH3oY
-         Mhjb0CewGkyoZEV9Sx5HDO9/c+tpHd04Yx3hxv8oj8J9aTQuUjXuxzHSnenpPxmo6Nj7
-         a+sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ahx7UKZv0OoL24Ag2nb4+cGfcAOKb10fU0eUtMYyFm0=;
-        b=vrenAPXKG9FA7vM3qT0K+fFKeJXa8psbhjNNMnAtdKdlbHGoS2wrtX0ktHzS4euM3q
-         0E0e3ZQ6rDGY9inovM+XxBeVo03Qqz/cDCfEQx4IChtpQLdKhftZyEF3rSUdjHOeV25b
-         qjZZ9CxlsnHQrIfFlgM8fU+Noiu17mB1SJO5HJP7yxYSWwsi1XpY3gnNCEupdqR5CYTc
-         fthr0O/SSLSJuXRgyrjKrDaycIyKnmM945kCvJiOeQoIt0LbYxHkMrJNXVM88XaKQ58F
-         1xrsp2kX4eMDw30gTrReZrvsuqGqa/rN4eT1fEoarmbvdT1kkNDyJlPV9mK+U7ov4Oka
-         /ZVA==
-X-Gm-Message-State: AOAM532SudrJWXRbEBctI1tHflLlbnjHZatPNd/cNE/i79QZDOVfLC/Q
-        tb39Mwbic4j3J+E/CXUnC7urhw==
-X-Google-Smtp-Source: ABdhPJzVyTk9rbag8GQe4T4tKekK4pTCAy2iYJXtULFol/QinSOn1Gmbq4I1+NoJCpN/wq6kurGSWw==
-X-Received: by 2002:a5d:5342:0:b0:1ef:7f26:df46 with SMTP id t2-20020a5d5342000000b001ef7f26df46mr19373979wrv.600.1647344277114;
-        Tue, 15 Mar 2022 04:37:57 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05600c4f8f00b003842f011bc5sm2263815wmq.2.2022.03.15.04.37.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 04:37:56 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 11:37:30 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v2 8/8] iommu: Remove unused driver data in
- sva_bind_device
-Message-ID: <YjB6ettzNkHZ7EnW@myrica>
-References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
- <20220315050713.2000518-9-jacob.jun.pan@linux.intel.com>
+        Tue, 15 Mar 2022 07:39:11 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF192DF96
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:37:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dZDdZ+DmUaKXhKynzG9ChJQWlo0RzYjpEQa5HUXgkfPH3z+jhDwVQQLSvHP2RUk2ERUnmOShjYq4N21jo4/xE9u/Aa1BP04zlfoNMYbemiOQmXvJ4eeg28XUQzUpKnr9C3aFnhjbRK2iEIuph70BFzKp46hiCowtzjAA7ApjX1qghnkH+zCi8xMWQAgkZ29+ZSuAtdO7HSiktP22pN0YADmeRnSS4UIvfHbSbuvtuA6oR2XX5jjyVgMHCpX7rJTAx9erkQ58GVnTAMhDh171esjN+KZaCBBSLeXnuCl0iue5W/JCNfmVJH33BE338PPurF4i3tMUK7b/4WGlLY2Onw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rfw2AiLu/VTaN0oQPL05SqqxAQEA4SUj2k8xBZfwQvg=;
+ b=mCgjiloR6+4P3D034NYXgXqzoGntMiEbWnHFYxg4Q2PC8psdIhKHVp1ZO9LB/GKC3VcT5MmWIL0uSSTWSxuHjLoT83j7WsZwmsbtdG20SIDpCti4Snm+Fh2b2AKWcM6XI/wbB9VuTgLcjrK/aZtQlFj/MVOafmDJAwIHqG4mlezwZOelzVqPtSdqVn5S/6W198FRgeLUiJlRlPaSjZig26Cx/Hh3WsMijCvhCS2onWBZETeragiZF9ouLNY3gn270w/nBUIMDRMiu5wQ2CDcTqO1EJkvK+VdBASyJ9Byx4m+65rm9bOGE/oy4TtrGR6V6Fz0joRml4HWmGAP6hC5Gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rfw2AiLu/VTaN0oQPL05SqqxAQEA4SUj2k8xBZfwQvg=;
+ b=ichUniJsSppz9GuDjPtCm715ZB/sLJau6I2GlJHzULGZDk0P6dlSV86+KZzxC4i0ZzfQz6S0vzjPVRGd4ob3DrYxlt0skxc/XGA+jEDx5eI2swTN/NK16K+ReBO1KnkhJdAXSKw1T/Yj6u0pFOHKJ/g5Mc5przvwEqH/SCjidqw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
+ by DM5PR12MB1851.namprd12.prod.outlook.com (2603:10b6:3:109::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.24; Tue, 15 Mar
+ 2022 11:37:54 +0000
+Received: from MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::7446:3a0f:f807:f5b2]) by MW2PR12MB2379.namprd12.prod.outlook.com
+ ([fe80::7446:3a0f:f807:f5b2%6]) with mapi id 15.20.5061.028; Tue, 15 Mar 2022
+ 11:37:54 +0000
+Message-ID: <50315795-c2cf-fc1a-6698-752b0c26cb96@amd.com>
+Date:   Tue, 15 Mar 2022 17:07:35 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2][RFC] sched/fair: Change SIS_PROP to search idle CPU
+ based on sum of util_avg
+Content-Language: en-US
+To:     Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+Cc:     Tim Chen <tim.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Aubrey Li <aubrey.li@intel.com>
+References: <20220310005228.11737-1-yu.c.chen@intel.com>
+From:   K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <20220310005228.11737-1-yu.c.chen@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BMXPR01CA0028.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:c::14) To MW2PR12MB2379.namprd12.prod.outlook.com
+ (2603:10b6:907:9::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315050713.2000518-9-jacob.jun.pan@linux.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8b4bc23b-f9a5-4bc3-286d-08da06783e39
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1851:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB18515B789658A2B1C43DF8FE98109@DM5PR12MB1851.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B4RFr87yZwh/EeisI+YGHnOGSXODda02rxixlkMjXJAz/qCsqF3T6ZXZYn/qKurHnJaFWX97siNQS7ac3m4MLEt8j3pznzdZZOnTidtUhiXoG9TOr2/8CLZ783/Dj3tBVvfEUz/tVa/qIt4L6Ci/Ik63Cs6cQ7zWHu+OrcJDiRg+CFbc3+IH5d2hutM3kH5vdzNzUvIhCB8NEddnxd1WDn6IF+Z0E58mXIUQDYvPQoIPO9vWPeN2sk+nnK5IVDQI2VdOoErOAKuM0Xf2IxBI4Qv8+bTs6h7dZQCMMqlcRU1f8uSiCytyjYsNEkIgUA+pMiXzzsfqaypYEs48PGtc5ug5u4ihB3ftD47uqBvdIvel1jkZ08bwYJuLXWKv0Sf3bYi8zACiJWpLAevqpiTZVzLJ+LVASkOyW4Rqv7dpPbwXgN6Ng+L0C4c6cVbc7uP12kOs3Uk4/gyXT4yXoKdFFtbJ7Ng79JY70uUztngul7MfWLZve6oX5fw9VQwDx+OJqUlupUMK2XC3As9QOzVyQpH0DvvJN4nccC7aCM+qUqKm/Xm1KVApv3be65mZaMXaA4575/eVbjXWAiQDXoFCT8PBEhTpm8e3kkyIJu/77OqgeuiGTAzp+Cv1SpYJIB4PHOVN8UrqGPG4mdHlNiWF8vAv7HnkY9ObBosAyEmyme5+apum12wZKzovP9RVgI2kHgEMTvwnzqZCnImY3F3gg1KrG4TleRWkqESRJcoSjJk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(30864003)(7416002)(8936002)(2906002)(66946007)(66556008)(4326008)(8676002)(66476007)(36756003)(5660300002)(31686004)(31696002)(6486002)(508600001)(53546011)(316002)(83380400001)(54906003)(86362001)(26005)(2616005)(186003)(6666004)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TElmRHl0M0NnN0lnbUtNTTZFNUxKZmwzV0l5UnZkM3puS2ZVSHVlRXZCSTVY?=
+ =?utf-8?B?K0JMcms1OHk0dWMwcmM0MEVqUFQxOGVqWWxpTUNGbVUyQzdKalJFMzNzTUZY?=
+ =?utf-8?B?aDZkNkVhSXBwcTFVNk51c2wwVnFiZWxyWDFaWXRKWVFidFJ1S2xGdDRuNUxB?=
+ =?utf-8?B?VXFnQkh4VjJuL3VySE1kVlRXY0xHVGIxV29JeFBhL2FPak9CVHFIY3ErWTV4?=
+ =?utf-8?B?Ym5FOEM3R0FXUHRiWkZzUCtuZmxramd1WWVqbFJINVQvMlhnZWFGWXJNWnJZ?=
+ =?utf-8?B?L1NTN0RpV3U1elVuOUUwYWc3Szhzbm5JNXlIL1A1ejJXYjE0c2hLNmptQXU5?=
+ =?utf-8?B?Q25SaUs0cHJwUkdtdFR4alkzQ0VHNGc5WEZKVG83RTJnUUQvRGhxa1JzMzVB?=
+ =?utf-8?B?Z0U0REJ5SUY4dndzcXB5U3JJK3pOT2Q3SllLeFhwQ2h1RGQ1ZHVxcnc3NTNS?=
+ =?utf-8?B?ajFzajRQOWdvZlRDUnQ0SFpWaDBaMHIwbzRxc0dJNmJvSkV1bjlYbTB3aWNh?=
+ =?utf-8?B?dGRxOFZnMktWZjFya2hSWjd3QTA1bWNzYzFJbUxJRk5oazU4RkZidXh0Qmpq?=
+ =?utf-8?B?TVRZU056dHdmNUFiWndPUGFhemVrb1FrdVQ3OTd4RlFVNGYyRUJmOFFhOWM0?=
+ =?utf-8?B?TGR5KzJiY05qTGx1YWhqYnBOZmtSTWtDVEowME03VUJYU3dzbUMyUDhoMVBS?=
+ =?utf-8?B?UDhpLzdaQkZaVnBXYXB0Wks5U0tETGFNTGpudjROYXRKZHJYOC8xa09zaGhX?=
+ =?utf-8?B?WFQyV1UzTHRIM3NIQnhBTE94NWVQM0xZeXN4U3U2Ynl0ZDBWb3ZsSEZxUGxP?=
+ =?utf-8?B?WlZ4MW9JYVpyZ2xNNGZDTk5sTk9jSnNuRmxlU3VtdG1GTHEzamJOTS9iUFh6?=
+ =?utf-8?B?OEhEUlV2TGNXNmRKc3ZxRzd3ZmtJMGtSZmMrYjByU2EzejVrbmJySjlXLytH?=
+ =?utf-8?B?ZUwycGJqeGRRbjQ1K282aEVtOHp1bEEyZnRTVGRrUDAzcmVZdUFUSWRRcEor?=
+ =?utf-8?B?dnk1WmJmSnFhQ0V4VTdWdWhVTk9uNFdOcEd2UUlHeXo0R2x5NWxkRldINEdv?=
+ =?utf-8?B?U1AxQUdDN20rTzJobnY4NE4wdk8zVk85c3lTUXJETC9UQkxsYVUzbzM1OU9s?=
+ =?utf-8?B?V0FLMndYUC93TGRpaEIxbTF6bC9hZ0lqMnpJSDlTMGUvQ0txRXp6V2NGWlNH?=
+ =?utf-8?B?dzRnN0JZOHJIS09TNStSOWRVZ245UzdaNFcrMFMzc2ZrTWNyYXEra0dadUpY?=
+ =?utf-8?B?WnIxV0Q4aCtma1RpU3doWXZ0TmtUV1BDRU5lSTJRVkZHdWJTVzcwNCtxd25R?=
+ =?utf-8?B?R0pMbEgxUDg5UzJYNmF6NXlwNU90SklCWi9sZ1JDNVg3dEJBNkFSalJMKzBy?=
+ =?utf-8?B?UUdzSUt6VE95L0tPaW1NbmcrcXc1M25aR2w0TVp3RFNPSm1TNkdpekJ1d0VO?=
+ =?utf-8?B?VERNRTZ2TDZlOUc1Q0ZIOGtpSGVFaHdCb1dNQVkrQnRzbndsMUJqSXZoTzh4?=
+ =?utf-8?B?MHd1Yi9rZ05vSnB4OGRZQmx4VmEvVEVhWjllN2d6dHBoSStlSTZ6OW4relhi?=
+ =?utf-8?B?QVY2UnczNHVSdWZIRE16WGtvUXJDV2FYa0E2a2xWYkJWdTRROGVkQXVzcnBy?=
+ =?utf-8?B?dnBNckY4SjFlSWpkNGFxK1BaRTkvcTlINTdscU5mNVpaQTcxa2tleGFuc1ZJ?=
+ =?utf-8?B?VFpMajRpbXZNRFBuT1ZNUk1xTkRFSlcxaXM2aVVGQTZvelJ2TEdQVWpBLzU2?=
+ =?utf-8?B?ZVE5WUxZTzlBMFNWSW05Ym5tTU0vYll4KzQwbkhJMnBjdVNnbGtmL1Joa1Er?=
+ =?utf-8?B?SkxETzhhSnRITXdaTWFZTW13Sk1MSmV3MmZaRVpSU2JGK3RHNlg5Zm56cnRw?=
+ =?utf-8?B?cnJPcFJQM2lIV3NtdDN4SHlZZWtMRkptdFRhaklvQTBBcHpLR0JkRmxmYjRG?=
+ =?utf-8?Q?k9JZAuzjwQ7jf2EH/lsPsOAELJb7LBD6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b4bc23b-f9a5-4bc3-286d-08da06783e39
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2022 11:37:54.0652
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u0plkoSZmX4oP2gYVoJJiJafB8WMtu4H+4GQukF2BjwvYSrHH/crHGSKkioW+7YjznoyE8oUUsRkaHD6QgOChA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1851
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:07:12PM -0700, Jacob Pan wrote:
-> No one is using drvdata for sva_bind_device after kernel SVA support is
-> removed from VT-d driver. Remove the drvdata parameter as well.
-> 
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Hello Chenyu,
 
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+On 3/10/2022 6:22 AM, Chen Yu wrote:
+> [Problem Statement]
+> Currently select_idle_cpu() uses the percpu average idle time to
+> estimate the total LLC domain idle time, and calculate the number
+> of CPUs to be scanned. This might be inconsistent because idle time
+> of a CPU does not necessarily correlate with idle time of a domain.
+> As a result, the load could be underestimated and causes over searching
+> when the system is very busy.
+>
+> The following histogram is the time spent in select_idle_cpu(),
+> when running 224 instance of netperf on a system with 112 CPUs
+> per LLC domain:
+>
+> @usecs:
+> [0]                  533 |                                                    |
+> [1]                 5495 |                                                    |
+> [2, 4)             12008 |                                                    |
+> [4, 8)            239252 |                                                    |
+> [8, 16)          4041924 |@@@@@@@@@@@@@@                                      |
+> [16, 32)        12357398 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+> [32, 64)        14820255 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> [64, 128)       13047682 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       |
+> [128, 256)       8235013 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@                        |
+> [256, 512)       4507667 |@@@@@@@@@@@@@@@                                     |
+> [512, 1K)        2600472 |@@@@@@@@@                                           |
+> [1K, 2K)          927912 |@@@                                                 |
+> [2K, 4K)          218720 |                                                    |
+> [4K, 8K)           98161 |                                                    |
+> [8K, 16K)          37722 |                                                    |
+> [16K, 32K)          6715 |                                                    |
+> [32K, 64K)           477 |                                                    |
+> [64K, 128K)            7 |                                                    |
+>
+> netperf latency:
+> =======
+> case            	load    	    Lat_99th	    std%
+> TCP_RR          	thread-224	      257.39	(  0.21)
+> UDP_RR          	thread-224	      242.83	(  6.29)
+>
+> The netperf 99th latency(usec) above is comparable with the time spent in
+> select_idle_cpu(). That is to say, when the system is overloaded, searching
+> for idle CPU could be a bottleneck.
+>
+> [Proposal]
+> The main idea is to replace percpu average idle time with the domain
+> based metric. Choose average CPU utilization(util_avg) as the candidate.
+> In general, the number of CPUs to be scanned should be inversely
+> proportional to the sum of util_avg in this domain. That is, the lower
+> the util_avg is, the more select_idle_cpu() should scan for idle CPU,
+> and vice versa. The benefit of choosing util_avg is that, it is a metric
+> of accumulated historic activity, which seems to be more accurate than
+> instantaneous metrics(such as rq->nr_running).
+>
+> Furthermore, borrow the util_avg from periodic load balance,
+> which could offload the overhead of select_idle_cpu().
+>
+> According to last discussion[1], introduced the linear function
+> for experimental purpose:
+>
+> f(x) = a - bx
+>
+>      llc_size
+> x = \Sum      util_avg[cpu] / llc_cpu_capacity
+>      1
+> f(x) is the number of CPUs to be scanned, x is the sum util_avg.
+> To decide a and b, the following condition should be met:
+>
+> [1] f(0) = llc_size
+> [2] f(x) = 4,  x >= 50%
+>
+> That is to say, when the util_avg is 0, we should search for
+> the whole LLC domain. And if util_avg ratio reaches 50% or higher,
+> it should search at most 4 CPUs.
+>
+> Yes, there would be questions like:
+> Why using this linear function to calculate the number of CPUs to
+> be scanned? Why choosing 50% as the threshold? These questions will
+> be discussed in the [Limitations] section.
+>
+> [Benchmark]
+> netperf, hackbench, schbench, tbench
+> were tested with 25% 50% 75% 100% 125% 150% 175% 200% instance
+> of CPU number (these ratios are not CPU utilization). Each test lasts
+> for 100 seconds, and repeats 3 times. The system would reboot into a
+> fresh environment for each benchmark.
+>
+> The following is the benchmark result comparison between
+> baseline:vanilla and compare:patched kernel. Positive compare%
+> indicates better performance.
+>
+> netperf
+> =======
+> case            	load    	baseline(std%)	compare%( std%)
+> TCP_RR          	28 threads	 1.00 (  0.30)	 -1.26 (  0.32)
+> TCP_RR          	56 threads	 1.00 (  0.35)	 -1.26 (  0.41)
+> TCP_RR          	84 threads	 1.00 (  0.46)	 -0.15 (  0.60)
+> TCP_RR          	112 threads	 1.00 (  0.36)	 +0.44 (  0.41)
+> TCP_RR          	140 threads	 1.00 (  0.23)	 +0.95 (  0.21)
+> TCP_RR          	168 threads	 1.00 (  0.20)	+177.77 (  3.78)
+> TCP_RR          	196 threads	 1.00 (  0.18)	+185.43 ( 10.08)
+> TCP_RR          	224 threads	 1.00 (  0.16)	+187.86 (  7.32)
+> UDP_RR          	28 threads	 1.00 (  0.43)	 -0.93 (  0.27)
+> UDP_RR          	56 threads	 1.00 (  0.17)	 -0.39 ( 10.91)
+> UDP_RR          	84 threads	 1.00 (  6.36)	 +1.03 (  0.92)
+> UDP_RR          	112 threads	 1.00 (  5.55)	 +1.47 ( 17.67)
+> UDP_RR          	140 threads	 1.00 ( 18.17)	 +0.31 ( 15.48)
+> UDP_RR          	168 threads	 1.00 ( 15.00)	+153.87 ( 13.20)
+> UDP_RR          	196 threads	 1.00 ( 16.26)	+169.19 ( 13.78)
+> UDP_RR          	224 threads	 1.00 ( 51.81)	+76.72 ( 10.95)
+>
+> hackbench
+> =========
+> (each group has 1/4 * 112 tasks)
+> case            	load    	baseline(std%)	compare%( std%)
+> process-pipe    	1 group 	 1.00 (  0.47)	 -0.46 (  0.16)
+> process-pipe    	2 groups 	 1.00 (  0.42)	 -0.61 (  0.74)
+> process-pipe    	3 groups 	 1.00 (  0.42)	 +0.38 (  0.20)
+> process-pipe    	4 groups 	 1.00 (  0.15)	 -0.36 (  0.56)
+> process-pipe    	5 groups 	 1.00 (  0.20)	 -5.08 (  0.01)
+> process-pipe    	6 groups 	 1.00 (  0.28)	 -2.98 (  0.29)
+> process-pipe    	7 groups 	 1.00 (  0.08)	 -1.18 (  0.28)
+> process-pipe    	8 groups 	 1.00 (  0.11)	 -0.40 (  0.07)
+> process-sockets 	1 group 	 1.00 (  0.43)	 -1.93 (  0.58)
+> process-sockets 	2 groups 	 1.00 (  0.23)	 -1.10 (  0.49)
+> process-sockets 	3 groups 	 1.00 (  1.10)	 -0.96 (  1.12)
+> process-sockets 	4 groups 	 1.00 (  0.59)	 -0.08 (  0.88)
+> process-sockets 	5 groups 	 1.00 (  0.45)	 +0.31 (  0.34)
+> process-sockets 	6 groups 	 1.00 (  0.23)	 +0.06 (  0.66)
+> process-sockets 	7 groups 	 1.00 (  0.12)	 +1.72 (  0.20)
+> process-sockets 	8 groups 	 1.00 (  0.11)	 +1.98 (  0.02)
+> threads-pipe    	1 group 	 1.00 (  1.07)	 +0.03 (  0.40)
+> threads-pipe    	2 groups 	 1.00 (  1.05)	 +0.19 (  1.27)
+> threads-pipe    	3 groups 	 1.00 (  0.32)	 -0.42 (  0.48)
+> threads-pipe    	4 groups 	 1.00 (  0.42)	 -0.76 (  0.79)
+> threads-pipe    	5 groups 	 1.00 (  0.19)	 -4.97 (  0.07)
+> threads-pipe    	6 groups 	 1.00 (  0.05)	 -4.11 (  0.04)
+> threads-pipe    	7 groups 	 1.00 (  0.10)	 -1.13 (  0.16)
+> threads-pipe    	8 groups 	 1.00 (  0.03)	 -0.08 (  0.05)
+> threads-sockets 	1 group 	 1.00 (  0.33)	 -1.93 (  0.69)
+> threads-sockets 	2 groups 	 1.00 (  0.20)	 -1.55 (  0.30)
+> threads-sockets 	3 groups 	 1.00 (  0.37)	 -1.29 (  0.59)
+> threads-sockets 	4 groups 	 1.00 (  1.83)	 +0.31 (  1.17)
+> threads-sockets 	5 groups 	 1.00 (  0.28)	+15.73 (  0.24)
+> threads-sockets 	6 groups 	 1.00 (  0.15)	 +5.02 (  0.34)
+> threads-sockets 	7 groups 	 1.00 (  0.10)	 +2.29 (  0.14)
+> threads-sockets 	8 groups 	 1.00 (  0.17)	 +2.22 (  0.12)
+>
+> tbench
+> ======
+> case            	load    	baseline(std%)	compare%( std%)
+> loopback        	28 threads	 1.00 (  0.05)	 -1.39 (  0.04)
+> loopback        	56 threads	 1.00 (  0.08)	 -0.37 (  0.04)
+> loopback        	84 threads	 1.00 (  0.03)	 +0.20 (  0.13)
+> loopback        	112 threads	 1.00 (  0.04)	 +0.69 (  0.04)
+> loopback        	140 threads	 1.00 (  0.13)	 +1.15 (  0.21)
+> loopback        	168 threads	 1.00 (  0.03)	 +1.62 (  0.08)
+> loopback        	196 threads	 1.00 (  0.08)	 +1.50 (  0.30)
+> loopback        	224 threads	 1.00 (  0.05)	 +1.62 (  0.05)
+>
+> schbench
+> ========
+> (each mthread group has 1/4 * 112 tasks)
+> case            	load    	baseline(std%)	compare%( std%)
+> normal          	1 mthread group	 1.00 ( 17.92)	+19.23 ( 23.67)
+> normal          	2 mthread groups 1.00 ( 21.10)	 +8.32 ( 16.92)
+> normal          	3 mthread groups 1.00 ( 10.80)	+10.03 (  9.21)
+> normal          	4 mthread groups 1.00 (  2.67)	 +0.11 (  3.00)
+> normal          	5 mthread groups 1.00 (  0.08)	 +0.00 (  0.13)
+> normal          	6 mthread groups 1.00 (  2.99)	 -2.66 (  3.87)
+> normal          	7 mthread groups 1.00 (  2.16)	 -0.83 (  2.24)
+> normal          	8 mthread groups 1.00 (  1.75)	 +0.18 (  3.18)
+Following are the results on benchmarks from Zen3 system (2 x 64C/128T)
+on different NPS modes.
 
-> ---
->  drivers/dma/idxd/cdev.c                         | 2 +-
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h     | 5 ++---
->  drivers/iommu/intel/svm.c                       | 9 ++++-----
->  drivers/iommu/iommu.c                           | 4 ++--
->  drivers/misc/uacce/uacce.c                      | 2 +-
->  include/linux/intel-iommu.h                     | 3 +--
->  include/linux/iommu.h                           | 9 +++------
->  8 files changed, 15 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
-> index b9b2b4a4124e..312ec37ebf91 100644
-> --- a/drivers/dma/idxd/cdev.c
-> +++ b/drivers/dma/idxd/cdev.c
-> @@ -100,7 +100,7 @@ static int idxd_cdev_open(struct inode *inode, struct file *filp)
->  	filp->private_data = ctx;
->  
->  	if (device_pasid_enabled(idxd)) {
-> -		sva = iommu_sva_bind_device(dev, current->mm, NULL);
-> +		sva = iommu_sva_bind_device(dev, current->mm);
->  		if (IS_ERR(sva)) {
->  			rc = PTR_ERR(sva);
->  			dev_err(dev, "pasid allocation failed: %d\n", rc);
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> index a737ba5f727e..eb2f5cb0701a 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> @@ -354,7 +354,7 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
->  }
->  
->  struct iommu_sva *
-> -arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
-> +arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
->  {
->  	struct iommu_sva *handle;
->  	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> index cd48590ada30..d2ba86470c42 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> @@ -754,8 +754,7 @@ bool arm_smmu_master_sva_enabled(struct arm_smmu_master *master);
->  int arm_smmu_master_enable_sva(struct arm_smmu_master *master);
->  int arm_smmu_master_disable_sva(struct arm_smmu_master *master);
->  bool arm_smmu_master_iopf_supported(struct arm_smmu_master *master);
-> -struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm,
-> -				    void *drvdata);
-> +struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm);
->  void arm_smmu_sva_unbind(struct iommu_sva *handle);
->  u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle);
->  void arm_smmu_sva_notifier_synchronize(void);
-> @@ -791,7 +790,7 @@ static inline bool arm_smmu_master_iopf_supported(struct arm_smmu_master *master
->  }
->  
->  static inline struct iommu_sva *
-> -arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
-> +arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
->  {
->  	return ERR_PTR(-ENODEV);
->  }
-> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-> index 37d6218f173b..94deb58375f5 100644
-> --- a/drivers/iommu/intel/svm.c
-> +++ b/drivers/iommu/intel/svm.c
-> @@ -500,8 +500,7 @@ int intel_svm_unbind_gpasid(struct device *dev, u32 pasid)
->  	return ret;
->  }
->  
-> -static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm,
-> -				 unsigned int flags)
-> +static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm)
->  {
->  	ioasid_t max_pasid = dev_is_pci(dev) ?
->  			pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
-> @@ -1002,20 +1001,20 @@ static irqreturn_t prq_event_thread(int irq, void *d)
->  	return IRQ_RETVAL(handled);
->  }
->  
-> -struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
-> +struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm)
->  {
->  	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
->  	struct iommu_sva *sva;
->  	int ret;
->  
->  	mutex_lock(&pasid_mutex);
-> -	ret = intel_svm_alloc_pasid(dev, mm, flags);
-> +	ret = intel_svm_alloc_pasid(dev, mm);
->  	if (ret) {
->  		mutex_unlock(&pasid_mutex);
->  		return ERR_PTR(ret);
->  	}
->  
-> -	sva = intel_svm_bind_mm(iommu, dev, mm, flags);
-> +	sva = intel_svm_bind_mm(iommu, dev, mm);
->  	if (IS_ERR_OR_NULL(sva))
->  		intel_svm_free_pasid(mm);
->  	mutex_unlock(&pasid_mutex);
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 107dcf5938d6..fef34879bc0c 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -3049,7 +3049,7 @@ EXPORT_SYMBOL_GPL(iommu_aux_get_pasid);
->   * On error, returns an ERR_PTR value.
->   */
->  struct iommu_sva *
-> -iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
-> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
->  {
->  	struct iommu_group *group;
->  	struct iommu_sva *handle = ERR_PTR(-EINVAL);
-> @@ -3074,7 +3074,7 @@ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
->  	if (iommu_group_device_count(group) != 1)
->  		goto out_unlock;
->  
-> -	handle = ops->sva_bind(dev, mm, drvdata);
-> +	handle = ops->sva_bind(dev, mm);
->  
->  out_unlock:
->  	mutex_unlock(&group->mutex);
-> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-> index 281c54003edc..3238a867ea51 100644
-> --- a/drivers/misc/uacce/uacce.c
-> +++ b/drivers/misc/uacce/uacce.c
-> @@ -99,7 +99,7 @@ static int uacce_bind_queue(struct uacce_device *uacce, struct uacce_queue *q)
->  	if (!(uacce->flags & UACCE_DEV_SVA))
->  		return 0;
->  
-> -	handle = iommu_sva_bind_device(uacce->parent, current->mm, NULL);
-> +	handle = iommu_sva_bind_device(uacce->parent, current->mm);
->  	if (IS_ERR(handle))
->  		return PTR_ERR(handle);
->  
-> diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-> index 3f4c98f170ec..9dc855d7479d 100644
-> --- a/include/linux/intel-iommu.h
-> +++ b/include/linux/intel-iommu.h
-> @@ -777,8 +777,7 @@ extern int intel_svm_finish_prq(struct intel_iommu *iommu);
->  int intel_svm_bind_gpasid(struct iommu_domain *domain, struct device *dev,
->  			  struct iommu_gpasid_bind_data *data);
->  int intel_svm_unbind_gpasid(struct device *dev, u32 pasid);
-> -struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm,
-> -				 void *drvdata);
-> +struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm);
->  void intel_svm_unbind(struct iommu_sva *handle);
->  u32 intel_svm_get_pasid(struct iommu_sva *handle);
->  int intel_svm_page_response(struct device *dev, struct iommu_fault_event *evt,
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index fb011722e4f8..b570b37181ad 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -294,9 +294,7 @@ struct iommu_ops {
->  	int (*aux_attach_dev)(struct iommu_domain *domain, struct device *dev);
->  	void (*aux_detach_dev)(struct iommu_domain *domain, struct device *dev);
->  	int (*aux_get_pasid)(struct iommu_domain *domain, struct device *dev);
-> -
-> -	struct iommu_sva *(*sva_bind)(struct device *dev, struct mm_struct *mm,
-> -				      void *drvdata);
-> +	struct iommu_sva *(*sva_bind)(struct device *dev, struct mm_struct *mm);
->  	void (*sva_unbind)(struct iommu_sva *handle);
->  	int (*attach_dev_pasid)(struct iommu_domain *domain,
->  				struct device *dev, ioasid_t id);
-> @@ -705,8 +703,7 @@ void iommu_aux_detach_device(struct iommu_domain *domain, struct device *dev);
->  int iommu_aux_get_pasid(struct iommu_domain *domain, struct device *dev);
->  
->  struct iommu_sva *iommu_sva_bind_device(struct device *dev,
-> -					struct mm_struct *mm,
-> -					void *drvdata);
-> +					struct mm_struct *mm);
->  void iommu_sva_unbind_device(struct iommu_sva *handle);
->  u32 iommu_sva_get_pasid(struct iommu_sva *handle);
->  
-> @@ -1065,7 +1062,7 @@ iommu_aux_get_pasid(struct iommu_domain *domain, struct device *dev)
->  }
->  
->  static inline struct iommu_sva *
-> -iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
-> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
->  {
->  	return NULL;
->  }
-> -- 
-> 2.25.1
-> 
+NPS Configurations:
+
+NPS Modes are used to logically divide single socket into
+multiple NUMA region.
+Following is the NUMA configuration for each NPS mode on the system:
+
+NPS1: Each socket is a NUMA node.
+    Total 2 NUMA nodes in the dual socket machine.
+
+    Node 0: 0-63,   128-191
+    Node 1: 64-127, 192-255
+
+NPS2: Each socket is further logically divided into 2 NUMA regions.
+    Total 4 NUMA nodes exist over 2 socket.
+   
+    Node 0: 0-31,   128-159
+    Node 1: 32-63,  160-191
+    Node 2: 64-95,  192-223
+    Node 3: 96-127, 223-255
+
+NPS4: Each socket is logically divided into 4 NUMA regions.
+    Total 8 NUMA nodes exist over 2 socket.
+   
+    Node 0: 0-15,    128-143
+    Node 1: 16-31,   144-159
+    Node 2: 32-47,   160-175
+    Node 3: 48-63,   176-191
+    Node 4: 64-79,   192-207
+    Node 5: 80-95,   208-223
+    Node 6: 96-111,  223-231
+    Node 7: 112-127, 232-255
+
+Benchmark Results:
+
+Kernel versions:
+- sched-tip:      5.17-rc5 tip sched/core
+- v2_sis_prop:    5.17-rc5 tip sched/core + this patch
+
+~~~~~~~~~
+hackbench
+~~~~~~~~~
+
+NPS1
+
+Test:                   sched-tip              v2_sis_prop
+ 1-groups:         5.05 (0.00 pct)         5.00 (0.99 pct)
+ 2-groups:         5.72 (0.00 pct)         5.63 (1.57 pct)
+ 4-groups:         6.34 (0.00 pct)         6.21 (2.05 pct)
+ 8-groups:         7.89 (0.00 pct)         7.80 (1.14 pct)
+16-groups:        11.80 (0.00 pct)        11.62 (1.52 pct)
+
+NPS2
+
+Test:                   sched-tip              v2_sis_prop
+ 1-groups:         4.94 (0.00 pct)         4.93 (0.20 pct)
+ 2-groups:         5.64 (0.00 pct)         5.55 (1.59 pct)
+ 4-groups:         6.23 (0.00 pct)         6.07 (2.56 pct)
+ 8-groups:         7.70 (0.00 pct)         7.46 (3.11 pct)
+16-groups:        10.49 (0.00 pct)        10.12 (3.52 pct)
+
+NPS4
+
+Test:                   sched-tip              v2_sis_prop
+ 1-groups:         4.89 (0.00 pct)         4.97 (-1.63 pct)
+ 2-groups:         5.43 (0.00 pct)         5.48 (-0.92 pct)
+ 4-groups:         6.15 (0.00 pct)         6.21 (-0.97 pct)
+ 8-groups:         7.54 (0.00 pct)         8.07 (-7.02 pct)
+16-groups:        10.20 (0.00 pct)        10.13 ( 0.68 pct)
+
+~~~~~~~~
+schbench
+~~~~~~~~
+
+NPS 1
+
+#workers:        sched-tip               v2_sis_prop
+  1:      13.00 (0.00 pct)        14.50 (-11.53 pct)
+  2:      31.50 (0.00 pct)        35.00 (-11.11 pct)
+  4:      43.00 (0.00 pct)        44.50 (-3.48 pct)
+  8:      52.50 (0.00 pct)        52.00 (0.95 pct)
+ 16:      69.00 (0.00 pct)        68.00 (1.44 pct)
+ 32:     108.50 (0.00 pct)       108.50 (0.00 pct)
+ 64:     195.00 (0.00 pct)       192.50 (1.28 pct)
+128:     395.50 (0.00 pct)       399.00 (-0.88 pct)
+256:     950.00 (0.00 pct)       944.00 (0.63 pct)
+512:     60352.00 (0.00 pct)     60608.00 (-0.42 pct)
+
+NPS2
+
+#workers:        sched-tip             v2_sis_prop
+  1:      10.00 (0.00 pct)        10.00 (0.00 pct)
+  2:      25.00 (0.00 pct)        28.00 (-12.00 pct)
+  4:      37.00 (0.00 pct)        37.50 (-1.35 pct)
+  8:      50.50 (0.00 pct)        52.50 (-3.96 pct)
+ 16:      65.50 (0.00 pct)        67.50 (-3.05 pct)
+ 32:     104.00 (0.00 pct)       104.50 (-0.48 pct)
+ 64:     190.00 (0.00 pct)       186.50 (1.84 pct)
+128:     394.50 (0.00 pct)       398.50 (-1.01 pct)
+256:     959.00 (0.00 pct)       979.00 (-2.08 pct)
+512:     60352.00 (0.00 pct)     60480.00 (-0.21 pct)
+
+NPS4
+
+#workers:        sched-tip              v2_sis_prop
+  1:       9.50 (0.00 pct)        10.00 (-5.26 pct)
+  2:      28.00 (0.00 pct)        30.00 (-7.14 pct)
+  4:      32.00 (0.00 pct)        36.50 (-14.06 pct)
+  8:      42.00 (0.00 pct)        43.00 (-2.38 pct)
+ 16:      68.00 (0.00 pct)        75.50 (-11.02 pct)
+ 32:     104.50 (0.00 pct)       106.50 (-1.91 pct)
+ 64:     186.00 (0.00 pct)       191.50 (-2.95 pct)
+128:     382.50 (0.00 pct)       392.50 (-2.61 pct)
+256:     966.00 (0.00 pct)       963.00 (0.31 pct)
+512:     60480.00 (0.00 pct)     60416.00 (0.10 pct)
+
+~~~~~~
+tbench
+~~~~~~
+
+NPS 1
+
+Clients:          sched-tip              v2_sis_prop
+    1    477.85 (0.00 pct)       470.68 (-1.50 pct)
+    2    924.07 (0.00 pct)       910.82 (-1.43 pct)
+    4    1778.95 (0.00 pct)      1743.64 (-1.98 pct)
+    8    3244.81 (0.00 pct)      3200.35 (-1.37 pct)
+   16    5837.06 (0.00 pct)      5808.36 (-0.49 pct)
+   32    9339.33 (0.00 pct)      8648.03 (-7.40 pct)
+   64    14761.19 (0.00 pct)     15803.13 (7.05 pct)
+  128    27806.11 (0.00 pct)     27510.69 (-1.06 pct)
+  256    35262.03 (0.00 pct)     34135.78 (-3.19 pct)
+  512    52459.78 (0.00 pct)     51630.53 (-1.58 pct)
+ 1024    52480.67 (0.00 pct)     52439.37 (-0.07 pct)
+
+NPS 2
+
+Clients:          sched-tip              v2_sis_prop
+    1    478.98 (0.00 pct)       472.98 (-1.25 pct)
+    2    930.52 (0.00 pct)       914.48 (-1.72 pct)
+    4    1743.26 (0.00 pct)      1711.16 (-1.84 pct)
+    8    3297.07 (0.00 pct)      3161.12 (-4.12 pct)
+   16    5779.10 (0.00 pct)      5738.38 (-0.70 pct)
+   32    10708.42 (0.00 pct)     10748.26 (0.37 pct)
+   64    16965.21 (0.00 pct)     16894.42 (-0.41 pct)
+  128    29152.49 (0.00 pct)     28287.31 (-2.96 pct)
+  256    27408.75 (0.00 pct)     33680.59 (22.88 pct)
+  512    51453.64 (0.00 pct)     47546.87 (-7.59 pct)
+ 1024    52156.85 (0.00 pct)     51233.28 (-1.77 pct)
+
+NPS 4
+
+Clients:          sched-tip              v2_sis_prop
+    1    480.29 (0.00 pct)       473.75 (-1.36 pct)
+    2    940.23 (0.00 pct)       915.60 (-2.61 pct)
+    4    1760.21 (0.00 pct)      1687.99 (-4.10 pct)
+    8    3269.75 (0.00 pct)      3154.02 (-3.53 pct)
+   16    5503.71 (0.00 pct)      5485.01 (-0.33 pct)
+   32    10633.93 (0.00 pct)     10276.21 (-3.36 pct)
+   64    16304.44 (0.00 pct)     15351.17 (-5.84 pct)
+  128    26893.95 (0.00 pct)     25337.08 (-5.78 pct)
+  256    24469.94 (0.00 pct)     32178.33 (31.50 pct)
+  512    46343.65 (0.00 pct)     49607.28 (7.04 pct)
+ 1024    51496.80 (0.00 pct)     51791.27 (0.57 pct)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Stream with 16 threads.
+built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=10
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NPS1
+
+Test:               sched-tip             v2_sis_prop
+ Copy:   204020.95 (0.00 pct)    211802.20 (3.81 pct)
+Scale:   208261.03 (0.00 pct)    210809.40 (1.22 pct)
+  Add:   243944.45 (0.00 pct)    249801.81 (2.40 pct)
+Triad:   237033.90 (0.00 pct)    242273.45 (2.21 pct)
+
+NPS2
+
+Test:               sched-tip              v2_sis_prop
+ Copy:   171679.21 (0.00 pct)    153853.24 (-10.38 pct)
+Scale:   191362.43 (0.00 pct)    188219.32 (-1.64 pct)
+  Add:   218986.47 (0.00 pct)    204766.66 (-6.49 pct)
+Triad:   215118.01 (0.00 pct)    202370.69 (-5.92 pct)
+
+NPS4
+
+Test:               sched-tip              v2_sis_prop
+ Copy:   133829.00 (0.00 pct)    125722.97 (-6.05 pct)
+Scale:   192074.89 (0.00 pct)    187164.95 (-2.55 pct)
+  Add:   186288.73 (0.00 pct)    175316.23 (-5.89 pct)
+Triad:   185469.53 (0.00 pct)    175985.74 (-5.11 pct)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Stream with 16 threads.
+built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=100
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NPS1
+
+Test:               sched-tip             v2_sis_prop
+ Copy:   217592.30 (0.00 pct)    231684.51 (6.47 pct)
+Scale:   217269.78 (0.00 pct)    218632.93 (0.62 pct)
+  Add:   265842.95 (0.00 pct)    266692.50 (0.31 pct)
+Triad:   252647.10 (0.00 pct)    253462.69 (0.32 pct)
+
+NPS2
+
+Test:               sched-tip             v2_sis_prop
+ Copy:   226948.55 (0.00 pct)    242576.78 (6.88 pct)
+Scale:   217968.87 (0.00 pct)    220613.96 (1.21 pct)
+  Add:   274839.22 (0.00 pct)    277389.36 (0.92 pct)
+Triad:   261920.73 (0.00 pct)    263849.95 (0.73 pct)
+
+NPS4
+
+Test:               sched-tip              v2_sis_prop
+ Copy:   256162.84 (0.00 pct)    238881.35 (-6.74 pct)
+Scale:   228251.12 (0.00 pct)    228669.16 (0.18 pct)
+  Add:   292794.77 (0.00 pct)    293700.42 (0.30 pct)
+Triad:   274152.69 (0.00 pct)    274900.77 (0.27 pct)
+
+~~~~~~~~~~~~
+ycsb-mongodb
+~~~~~~~~~~~~
+
+NPS1
+
+sched-tip:      304934.67 (var: 0.88)
+v2_sis_prop:    301560.0  (var: 2.0)    (-1.1%)
+
+NPS2
+
+sched-tip:      303757.0 (var: 1.0)
+v2_sis_prop:    302283.0 (var: 0.58)    (-0.48%)
+
+NPS4
+
+sched-tip:      308106.67 (var: 2.88)
+v2_sis_prop:    302302.67 (var: 1.12)   (-1.88%)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+schbench, tbench - System 50% loaded to fully loaded
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~
+schbench
+~~~~~~~~
+
+NPS1
+
+#workers:        sched-tip              v2_sis_prop
+128:     395.50 (0.00 pct)       399.00 (-0.88 pct)
+144:     441.50 (0.00 pct)       450.00 (-1.92 pct)
+160:     488.00 (0.00 pct)       513.00 (-5.12 pct)
+176:     549.00 (0.00 pct)       547.00 (0.36 pct)
+192:     601.00 (0.00 pct)       589.00 (1.99 pct)
+208:     653.00 (0.00 pct)       736.00 (-12.71 pct)
+224:     740.00 (0.00 pct)       757.00 (-2.29 pct)
+240:     835.00 (0.00 pct)       808.00 (3.23 pct)
+256:     950.00 (0.00 pct)       944.00 (0.63 pct)
+
+NPS2:
+#workers:        sched-tip              v2_sis_prop
+128:     394.50 (0.00 pct)       398.50 (-1.01 pct)
+144:     454.50 (0.00 pct)       443.50 (2.42 pct)
+160:     500.00 (0.00 pct)       494.00 (1.20 pct)
+176:     547.00 (0.00 pct)       530.00 (3.10 pct)
+192:     595.00 (0.00 pct)       609.00 (-2.35 pct)
+208:     739.00 (0.00 pct)       738.00 (0.13 pct)
+224:     781.00 (0.00 pct)       794.00 (-1.66 pct)
+240:     894.00 (0.00 pct)       890.00 (0.44 pct)
+256:     959.00 (0.00 pct)       979.00 (-2.08 pct)
+
+NPS4
+
+#workers:        sched-tip              v2_sis_prop
+128:     382.50 (0.00 pct)       392.50 (-2.61 pct)
+144:     451.50 (0.00 pct)       459.00 (-1.66 pct)
+160:     491.00 (0.00 pct)       497.00 (-1.22 pct)
+176:     578.00 (0.00 pct)       564.00 (2.42 pct)
+192:     593.00 (0.00 pct)       612.00 (-3.20 pct)
+208:     737.00 (0.00 pct)       720.00 (2.30 pct)
+224:     786.00 (0.00 pct)       796.00 (-1.27 pct)
+240:     893.00 (0.00 pct)       890.00 (0.33 pct)
+256:     966.00 (0.00 pct)       963.00 (0.31 pct)
+
+~~~~~~
+tbench
+~~~~~~
+
+NPS1
+
+Clients:         sched-tip              v2_sis_prop
+128    28369.07 (0.00 pct)     25649.26 (-9.58 pct)
+144    25794.95 (0.00 pct)     25464.33 (-1.28 pct)
+160    23905.48 (0.00 pct)     23507.18 (-1.66 pct)
+176    24219.13 (0.00 pct)     22664.99 (-6.41 pct)
+192    23978.71 (0.00 pct)     22506.50 (-6.13 pct)
+208    24045.91 (0.00 pct)     22592.62 (-6.04 pct)
+224    21961.21 (0.00 pct)     22154.28 (0.87 pct)
+240    22001.05 (0.00 pct)     26245.06 (19.29 pct)
+256    26866.60 (0.00 pct)     33064.10 (23.06 pct)
+
+NPS2
+
+Clients:         sched-tip              v2_sis_prop
+128    25229.75 (0.00 pct)     26396.32 (4.62 pct)
+144    27488.16 (0.00 pct)     24596.76 (-10.51 pct)
+160    23765.03 (0.00 pct)     23945.55 (0.75 pct)
+176    22230.05 (0.00 pct)     22207.84 (-0.09 pct)
+192    21383.39 (0.00 pct)     22385.72 (4.68 pct)
+208    23920.96 (0.00 pct)     22323.24 (-6.67 pct)
+224    22212.38 (0.00 pct)     24108.90 (8.53 pct)
+240    22143.36 (0.00 pct)     25655.54 (15.86 pct)
+256    29923.16 (0.00 pct)     32570.60 (8.84 pct)
+
+NPS4
+
+Clients:         sched-tip              v2_sis_prop
+128    26336.35 (0.00 pct)     24604.90 (-6.57 pct)
+144    24469.64 (0.00 pct)     24685.57 (0.88 pct)
+160    23742.98 (0.00 pct)     23381.86 (-1.52 pct)
+176    22512.46 (0.00 pct)     22602.49 (0.39 pct)
+192    21141.71 (0.00 pct)     22752.25 (7.61 pct)
+208    21803.07 (0.00 pct)     22280.24 (2.18 pct)
+224    21174.10 (0.00 pct)     23582.49 (11.37 pct)
+240    21510.36 (0.00 pct)     26295.92 (22.24 pct)
+256    25170.50 (0.00 pct)     34215.08 (35.93 pct)
+
+Hackbench shows improvements in NPS1 and NPS2 modes. tbench sees good
+improvement when system is close to fully loaded. Stream values are very
+close to the baseline. YCSB MongoDB shows slight regression and schbench
+is a mixed bag.
+
+This strategy would probably work better on systems with large number of
+CPUs per LLC but from our observations, I believe it is worthwhile to
+search for an idle CPUs in the entire LLC on Zen3 systems as we have
+16 CPUs per LLC.
+Only when the system is close to fully loaded, we see a good uplift by not
+searching the entire LLC in tbench which is what we saw with the v1 too.
+--
+Thanks and Regards,
+Prateek

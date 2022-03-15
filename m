@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E8E4DA362
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 268EB4DA367
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351466AbiCOTkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S1351464AbiCOTkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351422AbiCOTkX (ORCPT
+        with ESMTP id S1351443AbiCOTka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:40:23 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AAA2A254;
-        Tue, 15 Mar 2022 12:39:10 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id s11so131419qtc.3;
-        Tue, 15 Mar 2022 12:39:10 -0700 (PDT)
+        Tue, 15 Mar 2022 15:40:30 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F6A2B1AD;
+        Tue, 15 Mar 2022 12:39:12 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 13so299637qvq.8;
+        Tue, 15 Mar 2022 12:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=y2zVgXnlF97kfQZU4hBwzTBXD9p1KQnPsEAJ23W9Aok=;
-        b=nk8cRuI60pQJMdDFYScVdGyJhYGw3hyQEwlLkjLcK1rqyLbjSb41CodrEz7M91a/86
-         viGjTEkHnjKF3djf7ieqbT/3sEhDFJm0139+x41ruH3IyyBYoOdl5knGUHiD4pt/F6mz
-         bMREAkcW209ChB+fwye7FistKPobJkOmBSWYK0/nJWuyz/fs0YTnJtdX7eGc2JIZAGaH
-         cw2XJ/8JZu4A+M72bW9ufmC9TCTl2AugQOVMO7N258yynpuoHXFIAVxjXTyG2d2V+92g
-         a4B27660vAIWA9EkPWnLrYr4skqhp1ReM0kyo3r0LnA/+XBG93odDRxpWTghGoFyrf+f
-         4r2A==
+        bh=vtpi8KqEblfOcUZ0Pw5p0t2W/KlA+6v+4V+RQUI8IgQ=;
+        b=ANAUT6DcYlkHmQleHKtW+nR4/iCBpy7Rfe7yv/ZfiacbzPp9P1eGNXLYpYzX2rA0tc
+         V7FwAuUBRLttYV4TTs33laSYXdtzLtzAFBejd755ZYZVbGH75mIVidrx+VCIm3XZq1qk
+         T9Gu58gVqDWjtcAuZgIHsqtPrYsBck4P5ENUf75dxOXMuGbuDWh2wpeZtlYEJlWM7aVp
+         4F1Bju+Dke/itdxE07b/GiW1v4EIVZrHkqqdlThItvpMD9TzkgU/6VOnLt0+/A5wol16
+         X7QqKH3kop0RiHxN5abv3o7NTVqk0HmCFPey0vIXCXjKr9XLvDTcYyF8dRyRVGZ5Cczr
+         cMHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=y2zVgXnlF97kfQZU4hBwzTBXD9p1KQnPsEAJ23W9Aok=;
-        b=y/tO2pN5L2PqcPB0LJEmk9KTZ9am99HpNL21he1mny1Gpm0cFKYWdeWf3hbeeQOGfV
-         iR8vVYu1dZYeLZ2qgz0Mxn3sPm20IeDiHHW5hVE+k5tGr1UzPbZfVeJWXs6g3QJTlNMX
-         l5+K0TImi/txVBAe8hWioshlITJ/+cAleupBrkG9I4Qc+tq6HUAadakNX40N8k52fkfL
-         N5spKXo6ffRRXEvFAGz5YrQgYk7KjFKdyYnK6OE1nE9kp0viQe0AZsSp3WFi4IpOplT/
-         7YyLTrgAhkPVtacRfh6LDP3jDm5gVEn1NlBwookV7jDqqvPUMTY27XGdzSNvcE1DSCae
-         y+Gg==
-X-Gm-Message-State: AOAM532qf1D4wSa9Wfp8p1Jp+N30JzyP9ClyHIGuy05iRI6eXrmLzICR
-        eSd3HHXSJOZBWdnQYPpi3No=
-X-Google-Smtp-Source: ABdhPJzRFXiGL4qJknqCgskM7Cd5tXnRJZPk8pOuyRG9nhU+lbPKvIIjh2AYUnUMMdZvOJv7jT7svQ==
-X-Received: by 2002:a05:622a:189e:b0:2e1:dcd4:d01c with SMTP id v30-20020a05622a189e00b002e1dcd4d01cmr5781103qtc.1.1647373150034;
-        Tue, 15 Mar 2022 12:39:10 -0700 (PDT)
+        bh=vtpi8KqEblfOcUZ0Pw5p0t2W/KlA+6v+4V+RQUI8IgQ=;
+        b=w3dNkNqiHq4bE7jMprtjng1dRCPJwabYPuRLFy+fjVEWegjPi7PGPCQe3xakkTRIQg
+         t2wO0aCwVtN2LN735gu5L+bpLZTZNeqJYRyKNxT7untI2/JG1ueb4OWyC2WS9Qw8x3OL
+         5IEYobikBSRIVDkQlDE/mgcM/tiO74sOmkhSlAIdl29e48NVBeRylIVRjrxAfWdLx38S
+         wut3VE8UVyOOF/5ZSMif9JTVm3HRZo4Wz/SeFY+6m638n6hU/R3rE+bideEc1J3MzmP9
+         M1ygNQgbVfDwga2TaHnBxxiQOqmy99KDL09JzG9fjN+ItTmPiD4KNQFQpXQOOnDJqPvd
+         y/uw==
+X-Gm-Message-State: AOAM533dHF6TX6vHjgeWWRve7yGOLH1t8DU0ao25lK7Q0H/d4CijuPe8
+        4GhES3rGtb7JtFASEGXXJLo=
+X-Google-Smtp-Source: ABdhPJw3c0Gc+qsu1VcCFc5QY6piefkAaumx9XPYdozaQ4sDIixhK9+tK9nKpu6duS8AbGUkbfknFQ==
+X-Received: by 2002:ad4:5d4c:0:b0:435:41df:faa2 with SMTP id jk12-20020ad45d4c000000b0043541dffaa2mr22679848qvb.73.1647373151431;
+        Tue, 15 Mar 2022 12:39:11 -0700 (PDT)
 Received: from ishi.. (072-189-064-222.res.spectrum.com. [72.189.64.222])
-        by smtp.gmail.com with ESMTPSA id o4-20020a05620a22c400b0067e02a697e0sm1440798qki.33.2022.03.15.12.39.09
+        by smtp.gmail.com with ESMTPSA id o4-20020a05620a22c400b0067e02a697e0sm1440798qki.33.2022.03.15.12.39.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:39:09 -0700 (PDT)
+        Tue, 15 Mar 2022 12:39:11 -0700 (PDT)
 From:   William Breathitt Gray <vilhelm.gray@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Tom Rix <trix@redhat.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         William Breathitt Gray <vilhelm.gray@gmail.com>
-Subject: [RESEND PATCH 5/6] MAINTAINERS: Add Counter subsystem git tree
-Date:   Tue, 15 Mar 2022 15:38:56 -0400
-Message-Id: <41db1ea7bd9384da99fb332019ddc03067fe5311.1647373009.git.vilhelm.gray@gmail.com>
+Subject: [RESEND PATCH 6/6] counter: add defaults to switch-statements
+Date:   Tue, 15 Mar 2022 15:38:57 -0400
+Message-Id: <b98d1a3ed4b0b324b261b23defd1bdddddba4d44.1647373009.git.vilhelm.gray@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647373009.git.vilhelm.gray@gmail.com>
 References: <cover.1647373009.git.vilhelm.gray@gmail.com>
@@ -70,25 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Counter subsystem tree is now separate from the IIO tree.
+From: Tom Rix <trix@redhat.com>
 
+Clang static analysis reports this representative problem
+counter-chrdev.c:482:3: warning: Undefined or garbage value
+  returned to caller
+  return ret;
+  ^~~~~~~~~~
+
+counter_get_data() has a multilevel switches, some without
+defaults, so ret is sometimes not set.
+Add returning -EINVAL similar to other defaults.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Link: https://lore.kernel.org/r/20220227161746.82776-1-trix@redhat.com
 Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/counter/counter-chrdev.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1ba1e4af2cbc..f4875a9faa2d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4951,6 +4951,7 @@ COUNTER SUBSYSTEM
- M:	William Breathitt Gray <vilhelm.gray@gmail.com>
- L:	linux-iio@vger.kernel.org
- S:	Maintained
-+T:	git git@gitlab.com:vilhelmgray/counter.git
- F:	Documentation/ABI/testing/sysfs-bus-counter
- F:	Documentation/driver-api/generic-counter.rst
- F:	drivers/counter/
+diff --git a/drivers/counter/counter-chrdev.c b/drivers/counter/counter-chrdev.c
+index b7c62f957a6a..69d340be9c93 100644
+--- a/drivers/counter/counter-chrdev.c
++++ b/drivers/counter/counter-chrdev.c
+@@ -477,6 +477,8 @@ static int counter_get_data(struct counter_device *const counter,
+ 		case COUNTER_SCOPE_COUNT:
+ 			ret = comp->count_u8_read(counter, parent, &value_u8);
+ 			break;
++		default:
++			return -EINVAL;
+ 		}
+ 		*value = value_u8;
+ 		return ret;
+@@ -496,6 +498,8 @@ static int counter_get_data(struct counter_device *const counter,
+ 		case COUNTER_SCOPE_COUNT:
+ 			ret = comp->count_u32_read(counter, parent, &value_u32);
+ 			break;
++		default:
++			return -EINVAL;
+ 		}
+ 		*value = value_u32;
+ 		return ret;
 -- 
 2.35.1
 

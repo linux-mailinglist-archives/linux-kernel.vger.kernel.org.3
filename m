@@ -2,130 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377C74D9627
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372BE4D9628
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345889AbiCOI2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S1345897AbiCOI2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239420AbiCOI17 (ORCPT
+        with ESMTP id S1345878AbiCOI17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 04:27:59 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267454BFD7;
-        Tue, 15 Mar 2022 01:26:45 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22F4JVqv027247;
-        Tue, 15 Mar 2022 09:26:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=oDQ0bPSs1kEQPGA4aIXxaRySi/P2J26ASVpVIJPCOfw=;
- b=eCCUCU3ckkjg9JZogaLrJW4bezRHw/mjZBIHhc9DDxaL78yvZ/BafbdZQPDnl81zrBbw
- oD5Gnarfz/xDPmKyulwxiKLb/EbAgrir1PJgnqCHblXu6B7r2oIUym5/jte3hgVn0ZlC
- niCX3zel4DKTke6eYb2627c/hzZxLkv83G93CX5zcfSvIRDqklqNW817kvikFPt1d401
- A8FBfs3AEfWbl/SO0C4Wc1cnYBa2tTz6iiS+VhI2ezSrgY9NxOnn7GY6y0wCOmikD/Fr
- 3SKmphfBhfhbn14vDgjV+W6Hy2LCFfF3DeHYksxjqaeecvvQu6c+4G918U/XsxG8+Z38 bw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3etj2ahghy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 09:26:03 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8560B10002A;
-        Tue, 15 Mar 2022 09:26:02 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7B789212FC5;
-        Tue, 15 Mar 2022 09:26:02 +0100 (CET)
-Received: from [10.201.21.172] (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Mar
- 2022 09:26:01 +0100
-Message-ID: <0bc53018-fce4-4104-fa47-6e60d2367d69@foss.st.com>
-Date:   Tue, 15 Mar 2022 09:26:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/3] dt-bindings: mmc: mmci: add a property to disable DMA
- LLI
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <devicetree@vger.kernel.org>,
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00056.outbound.protection.outlook.com [40.107.0.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506073981F;
+        Tue, 15 Mar 2022 01:26:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oRMPzjgBSufYr3CIyqqmvTpOV1Z/W9kwAPCrF+tIRD38V7+fpE/f961KdNvjEcBLRwODhsD8aCuurFYRu03GW3vi+8sKxIiRqqHZr6PybxKA6Oqq2GqY6XO5+tGzt81TiWCVfWcBBN7nbggLLgl+aDRtlQPugMMgqjYDDRf5FgUw2DRil7Y+gSVulRVFNBfJmbD/55NEKh/JrIq8gM2GECbZY74C+xXQDKTZXKOVCBam7k+SLOyA8JlSb1CtjbJmXOxIpMmbdhpkEQ9RTnOSc+fjNKiVoDXckCCBlmUU8Qp6Opjt1eiOiTy3d4xPhbiXEv182fe/jfnXqNSIsKBEgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VYHkpDpjLp1Uk+qaqbDDTcJkS0u6zneC43dypOzScCc=;
+ b=exWN9D1wtJwZaD4RHejnR255ctWwDZq30zJxvjEHcqZ9PyUxBehOj/NdUglmgHHTzJjOIHd4ObDxjcRMx+skNUHsQM7IFP/ElADch9x6f3wzowlATjSsvrQptKuLJXCsZJ6MlyLVVPsfuKONmCU3e/JcchT5QolGHk5kvMZHwDv7qGRbZJZ1k0vadSiE1yjUsAGj7EcyiD+uSV88wUbQt1Dwa6iPzm2j1NklnWQHV321/CEH25UBMtf4ne0X0l2FLd6jWmskGemvspVMj+Ha4GtRjLWx8dZDuB4uFaW7EKAnI1/8zdR709P2+Lb9zBVfXN23kn3AoQcSfhcpY22lsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VYHkpDpjLp1Uk+qaqbDDTcJkS0u6zneC43dypOzScCc=;
+ b=TkOOAHuY3cgoZjdmfOZt1aYS7W1BwirPONCnN5G+e108FA6lPNz1izTA1px1SdOeEuLnCof03lz/MJ2d1dxYFcJDDSqL0MqI+YPPhfrXM/l1W8Cz2EViJpYb1RoMiLm/Tlx5WYDjo7sIhlGIKzuP553RMifrrACRP7SQ5PepQQI=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by HE1PR0402MB2921.eurprd04.prod.outlook.com (2603:10a6:3:d5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.28; Tue, 15 Mar
+ 2022 08:26:43 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::5538:7e34:6843:2bc7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::5538:7e34:6843:2bc7%6]) with mapi id 15.20.5061.028; Tue, 15 Mar 2022
+ 08:26:43 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Abel Vesa <abel.vesa@nxp.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>
-References: <20220304135134.47827-1-yann.gautier@foss.st.com>
- <20220304135134.47827-2-yann.gautier@foss.st.com>
- <CACRpkdYQz+-im3n-r0_8RKL7so2bHS=aZobty4BbzixmPzms-Q@mail.gmail.com>
-From:   Yann Gautier <yann.gautier@foss.st.com>
-In-Reply-To: <CACRpkdYQz+-im3n-r0_8RKL7so2bHS=aZobty4BbzixmPzms-Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_14,2022-03-14_02,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: RE: [PATCH] clk: imx: Select MXC_CLK for i.MX93 clock driver
+Thread-Topic: [PATCH] clk: imx: Select MXC_CLK for i.MX93 clock driver
+Thread-Index: AQHYOEY1Pi9g1puP8E+W1GR7t9RdXKzAHCCA
+Date:   Tue, 15 Mar 2022 08:26:43 +0000
+Message-ID: <DU0PR04MB94178847ACC8BC6E5D1ADBDF88109@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220315082446.3120850-1-abel.vesa@nxp.com>
+In-Reply-To: <20220315082446.3120850-1-abel.vesa@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 755aaaa1-537b-4d11-bc74-08da065d8997
+x-ms-traffictypediagnostic: HE1PR0402MB2921:EE_
+x-microsoft-antispam-prvs: <HE1PR0402MB2921A765398F0581C11203A188109@HE1PR0402MB2921.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: W3n9hL1McU2Vfxnp7+zrij9ZRkn93F5OsAjdJ85tfj4PdiO+oNG4IQIO8HrWHsTFmTF2Z9g6Fd7irY6tkTeLq53NCSlKkE6VNXmjwCcxBuNpTDMG3iqSl9WnohrZEkDi5NfQQdaE1wN/m7sI7QAaEZfFFmPOQmd7pmhnJocRZRomldGVBPp4/BmsEZnuULCwteRDHZUHNxS6v42tggHt5GPxziYPBM4FcFlyO/wQxsdgirJQlLzVUPUkaMLauZTT9wmIT1j5lASYoeQs3tOo83f3FFRAK/uLyVA8pXuflBDk5E8loNnkNspec4CN64zOXoT20BWjY3WC63c5GhCYvlSdfKfccESmXbOQ4ZNQ+dWkt2enpBXjgyZSXxV7o7y6H4e9zUw3oEtypCE9x0UW2psvBQUMXub3xAx5eYtAavy6oxUMulE1QyKN9+/dIpjo7hEJI2lqagOW17/hln8XaMEQQIUutPD9ZIOhKFA8Yo/4jPLzSult+Yt1xAxY1cwazkTLn8wg/aHYDSHC8476TGrB7/b/r/7EtPpuE9YPQS5sbfNf1g2WDKWqceMyYadzcWUg1L7fiMVeuA+RsPCAC0HdRzKU4WrBb5hxeMit3SHod9CurzUG6/EMK3ETgGqS1NQ5sjbxauV5cbV60p0vGmetWlKk4+HJkCPNuxt3/kX7h4Ky3VJtJc1B/5+y3gl229zM3AxZvZ/smYYEbQV2LQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(122000001)(38100700002)(83380400001)(86362001)(76116006)(66946007)(66556008)(66446008)(71200400001)(55016003)(64756008)(4326008)(66476007)(38070700005)(316002)(110136005)(54906003)(186003)(7696005)(6506007)(26005)(8936002)(52536014)(508600001)(44832011)(33656002)(9686003)(5660300002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NSYhqI2AMXcLv2xFqP+enW3n6M4Ot9ijgvQ4PmP/tcDfJ4yyt25YXVoq9vv6?=
+ =?us-ascii?Q?axPVu2gnw07WwxVZBkGh/CUqjQYPxwitf+t9KOcjrORtXA5H6jSOIzDtaf63?=
+ =?us-ascii?Q?fSKkVfd9v+qHaMUtsfmi3t01yOyAFtatjxF0hQzCENHPPPpYWsb5SiYt5w0k?=
+ =?us-ascii?Q?bRl3UbgRMxEKirt56XXV4E9ELtQnEV0g+uRdbtrigJM5wqb5Vi//9UVvKGTB?=
+ =?us-ascii?Q?20X/eQaRjkijbGcDOK9lG3cHtaeJrreH5pXsG/K9Wgi5y6vK+VTYZzlLhPgi?=
+ =?us-ascii?Q?o+OeXNNxNfEXG0ExixMvYVbRUeaJdqLgJDAKpli8q2lJ5lOSXOMcR5NmTGod?=
+ =?us-ascii?Q?UUtExDj+VaNfSF7mevGb7aFnnxesM/Ux2SYid5CpDQpLCXpZQF32dNfz3CeN?=
+ =?us-ascii?Q?0h8U8OVTe1YeoinSvtmI2p6ZvbfrJ+1BErBUUPy47MjxhBVDlYQCQc+pTgoP?=
+ =?us-ascii?Q?6+mrvpBQUuuWDmG5nm7P8u+XvHbp8OkmjY/e/bixki3Ec+wmiwWk5DrNoy9B?=
+ =?us-ascii?Q?tTU30csqYXrPx0ymBr87VV2DROB5j97QPLr1AuIs7blwcOdOClYEBAb8Tm3J?=
+ =?us-ascii?Q?N3ta8os+7CraF4PJ6yF6Y6gPYtKVcFVK4QaJrv17e54pHjkqlZ9/VeSAHlxI?=
+ =?us-ascii?Q?974crw4BBadjHOmrgViXL8WePJjIVxD+5KroMdZE092/GMZZ54nREqdyLmQf?=
+ =?us-ascii?Q?E1P+GdB3nqlz4UHpUL2oxcDihNGZlXWfef0XS79pIPE2//qok/P1jHd8UagX?=
+ =?us-ascii?Q?i+h83eo5cG3d3fyjduhZfIX+erGc8LqIzRWDxwr2p+GlkLPP532o/5kw/Elg?=
+ =?us-ascii?Q?GDnMU8vF0g/jlc0qu0zIAjb3+NN0iXmShJPQ9NjSkASZnb+z0vNXOJnnX1C0?=
+ =?us-ascii?Q?6QCO1Z3yxbxUQSM2Fn0voMr+k4D/JR46i/fhx7K5zGOYn21FwNSRL7FIepEi?=
+ =?us-ascii?Q?KHfxspm2p2dr6K1vnNP/17VBPD+GeNpLJoLIs/oj8O6EQ9rT52Sn9XWwFCdX?=
+ =?us-ascii?Q?zkqpqeTCY58k2KEEC9BbN6lE4t9z3gmq1oZsd3uWPr78Un3w55CO1eV+uJgq?=
+ =?us-ascii?Q?oVeJDClAprTbzF4UeBcynEdTqNCGNJcom7Lq3ma62ITDOuDW68vMmFKHnyPZ?=
+ =?us-ascii?Q?3OhIRjSBwyuX8CkoVT/TDjChg+arw26Plx0AWkxE5mNyInO4ulRMjaF4Ci8L?=
+ =?us-ascii?Q?smMTNji2W2nNbcVI71wf2pBWaqlucoGCRyo+8B0y/8TL4DgtsVhVVXenDKra?=
+ =?us-ascii?Q?dXMJf8lXf2yRESTmBum4j9jVYjxfMaoYh6itwM06dxg0JdjSehX+k8g7n2Zy?=
+ =?us-ascii?Q?mlWeknFz2d8Nk/tQmgNtOv1j7vM0cubbafNyc9lWf3PdyB+A/Tz19a/kq9Bg?=
+ =?us-ascii?Q?ruVDryrlG5yfAqif6PMQ1MjlC5ahwE9UZFFWzkwCXZVbki8NAo4CyFBRjDJ1?=
+ =?us-ascii?Q?vkjTa/Z6/Sg=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 755aaaa1-537b-4d11-bc74-08da065d8997
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2022 08:26:43.5713
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /J9mZquO6Pj5XY5vQzC5XqDfRHAmjwdSBUOCs+h08j0q8WkvFOduoeYWM+FhNv1STewbjteMmwiknmipXoo26Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0402MB2921
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/22 23:43, Linus Walleij wrote:
-> "On Fri, Mar 4, 2022 at 2:52 PM Yann Gautier <yann.gautier@foss.st.com> wrote:
-> 
->> On STMicroelectronics variant of PL18x, the DMA Linked Lists are supported
->> starting from revision v2 of the peripheral. But it has limitations,
->> as all the buffers should be aligned on block size (except the last one).
->> But this cannot be guaranteed with SDIO. We should then have a property
->> to disable the support of LLI.
->>
->> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-> 
-> Actually I think this is present also on the ux500 variants. See:
-> commit 2253ed4b36dc876d1598c4dab5587e537ec68c34
-> "mmc: mmci: Support any block sizes for ux500v2 and qcom variant"
-> 
-> Spot the variant data "dma_power_of_2".
-> 
-> So whatever property you add
-> to the variant data (not in the device tree please) should
-> be added to the ux500 variants as well, it will *VERY* likely
-> have a problem with LLI elements not being a power of 2
-> as it is the ancestor of later STMicro variants.
-> 
-> It might actually be the reason for some annoying WiFi error
-> messages I have seen :/
-> 
-> Yours,
-> Linus Walleij
+> Subject: [PATCH] clk: imx: Select MXC_CLK for i.MX93 clock driver
+>=20
+> Most of the i.MX clock generic API is built by selecting MXC_CLK.
+> Without it, the i.MX93 clock driver will fail to build:
+>=20
+> aarch64-linux-gnu-ld: drivers/clk/imx/clk-imx93.o:
+> in function `imx93_clocks_probe': clk-imx93.c:(.text+0xa8):
+> undefined reference to `imx_obtain_fixed_clk_hw'
+>=20
+> So fix this by selecting MXC_CLK for the CLK_IMX93.
+>=20
+> Fixes: 24defbe194b6 ("clk: imx: add i.MX93 clk")
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Hi Linus,
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
 
-The STM32 variant uses an internal DMA, and the DMA functions are in its 
-dedicated file. So I was planning to do the same as what is done in 
-meson-gx-mmc.c: using a bounce buffer to copy from/to in case DMA 
-constraints are not fulfilled. Not sure it can help for Ux500.
+> ---
+>  drivers/clk/imx/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig index
+> cc464a42d646..25785ec9c276 100644
+> --- a/drivers/clk/imx/Kconfig
+> +++ b/drivers/clk/imx/Kconfig
+> @@ -109,6 +109,7 @@ config CLK_IMX8ULP
+>  config CLK_IMX93
+>  	tristate "IMX93 CCM Clock Driver"
+>  	depends on ARCH_MXC || COMPILE_TEST
+> +	select MXC_CLK
+>  	help
+>  	    Build the driver for i.MX93 CCM Clock Driver
+>=20
+> --
+> 2.34.1
 
-Ulf, before I send my new series (although it is not ready yet), would 
-you be OK with the bounce buffer idea?
-
-
-Best regards,
-Yann

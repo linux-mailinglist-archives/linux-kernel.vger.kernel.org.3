@@ -2,93 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728704D97C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFF14D97CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346685AbiCOJir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S1346719AbiCOJj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240794AbiCOJiq (ORCPT
+        with ESMTP id S1346697AbiCOJjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:38:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D015B4BFF7;
-        Tue, 15 Mar 2022 02:37:34 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 09:37:31 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647337052;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=3ia0ZuKoip7niW7Mhr46uK+h9ZAMkW+kBjY4r4FRun4=;
-        b=l+S9KaTSTUNeD4yQOqpNNRK6bXM706vYrwXWVwLDW3SQRZInOPQ+N3irGsdNeX4/NUDztR
-        p6fT6804tjzAzWsycpDKGBmAzPhUiRR5thjHVNISh22jTOxBq0YGbq3hlFeqc/2Vd0ydi8
-        kCk44iwk1D9KAe526gc++G6ShFJtKPn1/XBgffTWY9kMm6EVfU11hVpkwYFcIs+6xpcomt
-        +gpFW/euvn1+ilzAFoaYQ2GK1KpGhcA5MVkvCCr2iJIkPnkW739xbB/0WmhWkOl8PvalQT
-        gA75fOCRcNV7oIHI05E9TI1KgtJW1VJcI0qWanP2bCx1SRz1qxf8XS58KNISTw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647337052;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=3ia0ZuKoip7niW7Mhr46uK+h9ZAMkW+kBjY4r4FRun4=;
-        b=OXO3u/R67vk8o5tI0QT8q1Tqq76RiUZt7zGdz1GjFpRz5olpV4orM6OTKRCg8N6wvhXFc/
-        oW32MPH5Gy9GaIDQ==
-From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/headers: Only include <linux/entry-common.h>
- when CONFIG_GENERIC_ENTRY=y
-Cc:     Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Tue, 15 Mar 2022 05:39:16 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC76112609;
+        Tue, 15 Mar 2022 02:38:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id D71161F436D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647337082;
+        bh=hZ3Ozc14j72XOG+b1t+GWcovi4uvCyAsuQVFavKh/sc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R7SGXBVCLCthgJfbqNC649m2NSEhAmzxNhj9UIBmYiQfZ+UuBx+Om3Ph9ejXUlrGw
+         b3sXqViSiqFKuv92g78KV63TidJpbB7q23XrfzGhKoY5rvrEGoo8xEKWi80Ukv+4TF
+         LBsQ/APy3skr+3tXnNAAsd2HWPsORbBSUO7w3a3sC4yCs1/2Atuw6PmU1KZnPfQEOr
+         ibYvS3dTk98lYZx8W1zV8i69uwnjgE5JLnpirElozBMPaCwbYWKnjk8K/nGWN0Kw1A
+         ul+x+ebjfR25QCMP2jrkrvxR19DzFopWAvDUy79jhlrRSBJCNQcUa5BsK5yaMc4MXN
+         5GC8jvbUL72Jw==
+Message-ID: <e3facd86-9e93-bda7-b6dd-c18f1660466a@collabora.com>
+Date:   Tue, 15 Mar 2022 10:37:59 +0100
 MIME-Version: 1.0
-Message-ID: <164733705116.16921.7469552933423482732.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH V4 6/6] spi: mediatek: support hclk
+Content-Language: en-US
+To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220315032411.2826-1-leilk.liu@mediatek.com>
+ <20220315032411.2826-7-leilk.liu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220315032411.2826-7-leilk.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+Il 15/03/22 04:24, Leilk Liu ha scritto:
+> this patch adds hclk support.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>   drivers/spi/spi-mt65xx.c | 85 ++++++++++++++++++++++++++++++++--------
+>   1 file changed, 69 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> index 8958c3fa4fea..d4a602e78aa7 100644
+> --- a/drivers/spi/spi-mt65xx.c
+> +++ b/drivers/spi/spi-mt65xx.c
+> @@ -130,7 +130,7 @@ struct mtk_spi {
+>   	u32 state;
+>   	int pad_num;
+>   	u32 *pad_sel;
+> -	struct clk *parent_clk, *sel_clk, *spi_clk;
+> +	struct clk *parent_clk, *sel_clk, *spi_clk, *spi_hclk;
+>   	struct spi_transfer *cur_transfer;
+>   	u32 xfer_len;
+>   	u32 num_xfered;
+> @@ -1252,25 +1252,38 @@ static int mtk_spi_probe(struct platform_device *pdev)
+>   		goto err_put_master;
+>   	}
+>   
+> +	mdata->spi_hclk = devm_clk_get(&pdev->dev, "hclk");
+> +	if (!IS_ERR(mdata->spi_hclk)) {
 
-Commit-ID:     a7b2553b5ece1aba4b5994eef150d0a1269b5805
-Gitweb:        https://git.kernel.org/tip/a7b2553b5ece1aba4b5994eef150d0a1269b5805
-Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Tue, 15 Mar 2022 10:33:53 +01:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 15 Mar 2022 10:33:53 +01:00
+What you're doing here can be simplified by using devm_clk_get_optional() instead.
+Please use that.
 
-sched/headers: Only include <linux/entry-common.h> when CONFIG_GENERIC_ENTRY=y
+> +		ret = clk_prepare_enable(mdata->spi_hclk);
+> +		if (ret < 0) {
+> +			dev_err(&pdev->dev, "failed to enable hclk (%d)\n", ret);
+> +			goto err_put_master;
+> +		}
+> +	}
+> +
+>   	ret = clk_prepare_enable(mdata->spi_clk);
+>   	if (ret < 0) {
+>   		dev_err(&pdev->dev, "failed to enable spi_clk (%d)\n", ret);
+> -		goto err_put_master;
+> +		goto err_disable_spi_hclk;
+>   	}
+>   
+>   	ret = clk_set_parent(mdata->sel_clk, mdata->parent_clk);
+>   	if (ret < 0) {
+>   		dev_err(&pdev->dev, "failed to clk_set_parent (%d)\n", ret);
+> -		clk_disable_unprepare(mdata->spi_clk);
+> -		goto err_put_master;
+> +		goto err_disable_spi_clk;
+>   	}
+>   
+>   	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
+>   
+> -	if (mdata->dev_comp->no_need_unprepare)
+> +	if (mdata->dev_comp->no_need_unprepare) {
+>   		clk_disable(mdata->spi_clk);
+> -	else
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_disable(mdata->spi_hclk);
+> +	} else {
+>   		clk_disable_unprepare(mdata->spi_clk);
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_disable_unprepare(mdata->spi_hclk);
+> +	}
+>   
+>   	pm_runtime_enable(&pdev->dev);
+>   
+> @@ -1310,6 +1323,11 @@ static int mtk_spi_probe(struct platform_device *pdev)
+>   
+>   err_disable_runtime_pm:
+>   	pm_runtime_disable(&pdev->dev);
+> +err_disable_spi_clk:
+> +	clk_disable_unprepare(mdata->spi_clk);
+> +err_disable_spi_hclk:
+> +	if (!IS_ERR(mdata->spi_hclk))
 
-This header is not (yet) standalone.
+When using devm_clk_get_optional(), you can simply omit this check, since it will
+be impossible to reach this point with an error pointer stored in spi_hclk.
 
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- kernel/sched/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> +		clk_disable_unprepare(mdata->spi_hclk);
+>   err_put_master:
+>   	spi_master_put(master);
+>   
+> @@ -1325,8 +1343,11 @@ static int mtk_spi_remove(struct platform_device *pdev)
+>   
+>   	mtk_spi_reset(mdata);
+>   
+> -	if (mdata->dev_comp->no_need_unprepare)
+> +	if (mdata->dev_comp->no_need_unprepare) {
+>   		clk_unprepare(mdata->spi_clk);
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_unprepare(mdata->spi_hclk);
+> +	}
+>   
+>   	return 0;
+>   }
+> @@ -1342,8 +1363,11 @@ static int mtk_spi_suspend(struct device *dev)
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (!pm_runtime_suspended(dev))
+> +	if (!pm_runtime_suspended(dev)) {
+>   		clk_disable_unprepare(mdata->spi_clk);
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_disable_unprepare(mdata->spi_hclk);
+> +	}
+>   
+>   	return ret;
+>   }
+> @@ -1360,11 +1384,23 @@ static int mtk_spi_resume(struct device *dev)
+>   			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
+>   			return ret;
+>   		}
+> +
+> +		if (!IS_ERR(mdata->spi_hclk)) {
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index aa9e14c..bf443f4 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -63,7 +63,9 @@
- #include <linux/workqueue_api.h>
- 
- #ifdef CONFIG_PREEMPT_DYNAMIC
--# include <linux/entry-common.h>
-+# ifdef CONFIG_GENERIC_ENTRY
-+#  include <linux/entry-common.h>
-+# endif
- #endif
- 
- #include <uapi/linux/sched/types.h>
+Since you will be using devm_clk_get_optional(), you can also omit this check.
+
+> +			clk_prepare_enable(mdata->spi_hclk);
+
+There's a typo. ret = clk_prepare_enable....
+
+> +			if (ret < 0) {
+> +				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
+> +				clk_disable_unprepare(mdata->spi_clk);
+> +				return ret;
+> +			}
+> +		}
+>   	}
+>   
+>   	ret = spi_master_resume(master);
+> -	if (ret < 0)
+> +	if (ret < 0) {
+>   		clk_disable_unprepare(mdata->spi_clk);
+> +		if (!IS_ERR(mdata->spi_hclk))
+
+Same here and everywhere else, no error check if you set this as optional clock.
+
+> +			clk_disable_unprepare(mdata->spi_hclk);
+> +	}
+>   
+>   	return ret;
+>   }
+> @@ -1376,10 +1412,15 @@ static int mtk_spi_runtime_suspend(struct device *dev)
+>   	struct spi_master *master = dev_get_drvdata(dev);
+>   	struct mtk_spi *mdata = spi_master_get_devdata(master);
+>   
+> -	if (mdata->dev_comp->no_need_unprepare)
+> +	if (mdata->dev_comp->no_need_unprepare) {
+>   		clk_disable(mdata->spi_clk);
+> -	else
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_disable(mdata->spi_hclk);
+> +	} else {
+>   		clk_disable_unprepare(mdata->spi_clk);
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_disable_unprepare(mdata->spi_hclk);
+> +	}
+>   
+>   	return 0;
+>   }
+> @@ -1390,13 +1431,25 @@ static int mtk_spi_runtime_resume(struct device *dev)
+>   	struct mtk_spi *mdata = spi_master_get_devdata(master);
+>   	int ret;
+>   
+> -	if (mdata->dev_comp->no_need_unprepare)
+> +	if (mdata->dev_comp->no_need_unprepare) {
+>   		ret = clk_enable(mdata->spi_clk);
+> -	else
+> +		if (!IS_ERR(mdata->spi_hclk))
+> +			clk_enable(mdata->spi_hclk);
+> +	} else {
+>   		ret = clk_prepare_enable(mdata->spi_clk);
+> -	if (ret < 0) {
+> -		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
+> -		return ret;
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
+> +			return ret;
+> +		}
+> +
+> +		if (!IS_ERR(mdata->spi_hclk)) {
+> +			ret = clk_prepare_enable(mdata->spi_hclk);
+> +			if (ret < 0) {
+> +				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
+> +				clk_disable_unprepare(mdata->spi_clk);
+> +				return ret;
+> +			}
+> +		}
+>   	}
+>   
+>   	return 0;
+> 
+
+
+Regards,
+Angelo
+
+

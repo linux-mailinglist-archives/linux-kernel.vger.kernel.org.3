@@ -2,86 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2EB4DA4DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7042E4DA4E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352087AbiCOVvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 17:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S1352119AbiCOVxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 17:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347332AbiCOVvD (ORCPT
+        with ESMTP id S1351288AbiCOVx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 17:51:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5B25BE69
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647380989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GVTno3uwaKedC5z7RdpUfqlKxBXLrWKbeKGbJ46ufWc=;
-        b=Bo9N7Bep0Lfa69BQUnKJ/vhw7QOADqhkpFGRyIaSRJaaoo5ed9Aek+s0fS8PHdOtlh1xyL
-        JECMFlnyuZorO+JEtRZS4v4tPGkpQwzGCFw2gxiCD1T5BeHpRHIKG1KRGg1iIrI0Th/bpV
-        QIiLeRPta068FFCyMMa/V1BSyo36084=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-8hyl80z_NWCBWopVBPi0UQ-1; Tue, 15 Mar 2022 17:49:48 -0400
-X-MC-Unique: 8hyl80z_NWCBWopVBPi0UQ-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso194773edt.20
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:49:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GVTno3uwaKedC5z7RdpUfqlKxBXLrWKbeKGbJ46ufWc=;
-        b=FUvxjqkb58eUVL0maobURunxBhCsj9feSqgEHUqoB0WAd6+2phbwEhNg9ai7aaU9Gj
-         k0lXcm8I+mLLu0OOb2AkOGqy5fA5LpgPQqBIAM1MJnCWj8eRUzMWE9P2SAdS4tW/m4z6
-         QNTPqmJoODn0c5KG9Hw/s8bm1243FhxnZloKdVSBo4DBKluIWlsN/xfrpu3sArppcXLX
-         BIJhwpKvrgTjgPAlgqCedYoFp2rrDUAMugDeTMEceFmRrtbfqgYS71+yVAdfc3ZhxkNS
-         1f7rRrecKEz36CzZsyAA7Z6tdxNTq1tv8dgIziS2hLMrkSc0zNwyA75jSb39T+zpeFK9
-         Igng==
-X-Gm-Message-State: AOAM531M54M5p+FhCYpJj7Dx/hr3le8PWzmSwMhWQRlW9EjwDBRMWBSE
-        hxQ4NR9gYjk1x/CaFdQthAm75ftXYEW3MajKTNvKVG+kTjOMMq1zUFBAU4ATySnAIhYs7HfsbBp
-        luZInqUFdiBb1Sfee3/1524hN
-X-Received: by 2002:a17:907:1c0a:b0:6da:7ac4:5349 with SMTP id nc10-20020a1709071c0a00b006da7ac45349mr24637599ejc.596.1647380987409;
-        Tue, 15 Mar 2022 14:49:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwjb4JGyQJec/pMSJpOYHm1OGNj4Mo/pMqjdAHmpdwTdrKZ/ktCxntndWmQuh4d7xILgPsZkQ==
-X-Received: by 2002:a17:907:1c0a:b0:6da:7ac4:5349 with SMTP id nc10-20020a1709071c0a00b006da7ac45349mr24637585ejc.596.1647380987193;
-        Tue, 15 Mar 2022 14:49:47 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id o3-20020a17090637c300b006d8631b2935sm79932ejc.186.2022.03.15.14.49.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 14:49:46 -0700 (PDT)
-Message-ID: <bfd4c023-a40e-2f1b-0a02-adc6cb61f5ae@redhat.com>
-Date:   Tue, 15 Mar 2022 22:49:44 +0100
+        Tue, 15 Mar 2022 17:53:29 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661C55C340
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 14:52:16 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 901BA2C02D7;
+        Tue, 15 Mar 2022 21:52:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647381133;
+        bh=jSMP2GY+BRoJAPT7lfNXwJIj8MAuXDNowgEYi4n43ns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n6nW6xqPYwnBezn4EgfzYCG/6Y0w9W9QhJ9x5z387YCTNgMGL6P/ZuSbHGI1/v3dC
+         th5VHzZIl0RbaNiSetN8EuN0HzWnkJPUWGx5xpKcIpx0d0wwIquKMKwJJzTWC5fQ9j
+         QE1UO+9fhDLZ5uuKezeCz56LQEaHI+uMhK4JM1M7I1yeZqSmSUgp4/EteJ+sB2PDRx
+         UmIyGRZm/AUN51PioGtlUyJd4CN1AjuBie8NTvdGfElTrDm9h1jw7OpgjtORepxvUn
+         aNN375stJfhBxpMvfi4ZIj0pusWaQhZS78M3Olgetqc3YSwCHmqsJrjZMnNDRoYvUk
+         S+j+DnMFEswDg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B62310a8d0000>; Wed, 16 Mar 2022 10:52:13 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 4B86C13EDD7;
+        Wed, 16 Mar 2022 10:52:13 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 018C32A2678; Wed, 16 Mar 2022 10:52:09 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        thomas.petazzoni@bootlin.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH net-next v4 0/2] net: mvneta: Armada 98DX2530 SoC
+Date:   Wed, 16 Mar 2022 10:52:05 +1300
+Message-Id: <20220315215207.2746793-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v5 010/104] KVM: TDX: Make TDX VM type supported
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <0596db2913da40660e87d5005167c623cee14765.1646422845.git.isaku.yamahata@intel.com>
- <18a150fd2e0316b4bae283d244f856494e0dfefd.camel@intel.com>
- <20220315210350.GE1964605@ls.amr.corp.intel.com>
- <9b90aaac2d55674550d35ce5a4ddd604825423c3.camel@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <9b90aaac2d55674550d35ce5a4ddd604825423c3.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=fHwNDZncxhfn92sU-sUA:9 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,16 +63,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 22:47, Kai Huang wrote:
->> The intention is that developers can exercise the new code step-by-step even if
->> the TDX KVM isn't complete.
-> What is the purpose/value to allow developers to exercise the new code step-by-
-> step?  Userspace cannot create TD successfully anyway until all patches are
-> ready.
+This is split off from [1] to let it go in via net-next rather than waiti=
+ng for
+the rest of the series to land.
 
-We can move this to the end when the patch is committed, but I think 
-there is value in showing that the series works (for partial definitions 
-of "work") at every step of the enablement process.
+[1] - https://lore.kernel.org/lkml/20220314213143.2404162-1-chris.packham=
+@alliedtelesis.co.nz/
 
-Paolo
+Chris Packham (2):
+  dt-bindings: net: mvneta: Add marvell,armada-ac5-neta
+  net: mvneta: Add support for 98DX2530 Ethernet port
+
+ .../bindings/net/marvell-armada-370-neta.txt         |  1 +
+ drivers/net/ethernet/marvell/mvneta.c                | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
+
+--=20
+2.35.1
 

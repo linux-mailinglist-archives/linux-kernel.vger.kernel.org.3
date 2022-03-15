@@ -2,182 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA294D96F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7044D96F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346319AbiCOJBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
+        id S1346334AbiCOJBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346309AbiCOJBG (ORCPT
+        with ESMTP id S1346315AbiCOJBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:01:06 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082A74D9E9;
+        Tue, 15 Mar 2022 05:01:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169A74D9F4;
         Tue, 15 Mar 2022 01:59:54 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w27so31780637lfa.5;
-        Tue, 15 Mar 2022 01:59:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=ukbnAUQjfQmZquXzHCodp/JfMlu/zmqeVJIOCholY1c=;
-        b=BykOrWxDkeWJeNwGSGYJURUJwQX8TVxEqhevNo6+PxvHXdnAteHwmV8vLBhvGayuos
-         cSHhZ2JFbD3SnRtUWXxjEtqjfCaigwIwpIhxfhQ0Il+8N+4eMKhRbD/wQ1Q+FyYO2Yq8
-         d3BCZZfuDTQP6pZxs2T2QHoTyF22S8b5duEglj6McClMSqIk6ySKiR69LnrBgoAehp+U
-         JkYvy2l1F7uTyCapGkOt7RttHuwOmJcPGUtF88ty0rzOkV2MWLTv6/6d5joJc+dnNwR7
-         mwjnMeVo6M9EPtSpxNJiK0uPvchlJwL096GEOxGdOu2TNXF6CT9WRX6F75cZ5upLS25z
-         JcBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=ukbnAUQjfQmZquXzHCodp/JfMlu/zmqeVJIOCholY1c=;
-        b=i8nDosFcHhxRCbeOiMaRYpffCVWiept9s9hkFRkUNo5MVE3Vk+VfXB3Wq2+M/Fwil6
-         8hPQ/dihaVxaWEoFOZBOh2XyrtxXFDcri/mBTtffUrLVqfgsgEg0C5NPMMo3x3HXtWGG
-         dj8g+68RvbrB0F3GUv5kH8YLyvH1mqCWOh/iYzn6aPcrS9tMZEHCjc1Ha51dnbZYuTKI
-         rQC6Ne0g2moxX701PH61fu4OP9niVcQ9cECev9dnaBkiOZCuKCnqiBCKf8ETBuGYiVAc
-         1PT2G1vEKzxzbKXpca7HdUQwUNVvGVeruOHiu5uWeKv7x1rHET9TTITD5Z2QQBF8plQZ
-         3mZw==
-X-Gm-Message-State: AOAM532AwMZVXRXhJtjy/35unjU5JSgj+IsVDBWMSMZ6UD8XzKiAUxIc
-        +qSKHN2eqgWn9dX29u0rpAU=
-X-Google-Smtp-Source: ABdhPJxaM6ka4dJB61Mq1RZohGKXoabghxef6jICNptv60IT4o9QpvFLaNDqZHSYXYlET6vMm6CPgw==
-X-Received: by 2002:a05:6512:a88:b0:445:ce77:33d1 with SMTP id m8-20020a0565120a8800b00445ce7733d1mr15230697lfu.389.1647334792293;
-        Tue, 15 Mar 2022 01:59:52 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id l10-20020ac2554a000000b004482df2a1cdsm3599022lfk.259.2022.03.15.01.59.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:59:51 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 0/3] Extend locked port feature with FDB locked
- flag (MAC-Auth/MAB)
-In-Reply-To: <Yi9kTh6XZu3OiCz0@shredder>
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
- <Yi9kTh6XZu3OiCz0@shredder>
-Date:   Tue, 15 Mar 2022 09:59:49 +0100
-Message-ID: <86ee33h9q2.fsf@gmail.com>
+Received: from kwepemi100021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KHnPY5tNbzfZ20;
+        Tue, 15 Mar 2022 16:58:25 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
+ kwepemi100021.china.huawei.com (7.221.188.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 15 Mar 2022 16:59:52 +0800
+Received: from [10.174.177.238] (10.174.177.238) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Mar 2022 16:59:51 +0800
+Message-ID: <217995a1-10c2-7406-cd05-17c9ac0ec273@huawei.com>
+Date:   Tue, 15 Mar 2022 16:59:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.2
+Subject: Re: [PATCH] iomap: fix an infinite loop in iomap_fiemap
+To:     <willy@infradead.org>, <viro@zeniv.linux.org.uk>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <houtao1@huawei.com>, <fangwei1@huawei.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+References: <20220315065745.3441989-1-guoxuenan@huawei.com>
+ <YjBIq3hFg+RlyAOF@B-P7TQMD6M-0146.local>
+From:   Guo Xuenan <guoxuenan@huawei.com>
+In-Reply-To: <YjBIq3hFg+RlyAOF@B-P7TQMD6M-0146.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.238]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On m=C3=A5n, mar 14, 2022 at 17:50, Ido Schimmel <idosch@idosch.org> wrote:
-> On Thu, Mar 10, 2022 at 03:23:17PM +0100, Hans Schultz wrote:
->> This patch set extends the locked port feature for devices
->> that are behind a locked port, but do not have the ability to
->> authorize themselves as a supplicant using IEEE 802.1X.
->> Such devices can be printers, meters or anything related to
->> fixed installations. Instead of 802.1X authorization, devices
->> can get access based on their MAC addresses being whitelisted.
->>=20
->> For an authorization daemon to detect that a device is trying
->> to get access through a locked port, the bridge will add the
->> MAC address of the device to the FDB with a locked flag to it.
->> Thus the authorization daemon can catch the FDB add event and
->> check if the MAC address is in the whitelist and if so replace
->> the FDB entry without the locked flag enabled, and thus open
->> the port for the device.
->>=20
->> This feature is known as MAC-Auth or MAC Authentication Bypass
->> (MAB) in Cisco terminology, where the full MAB concept involves
->> additional Cisco infrastructure for authorization. There is no
->> real authentication process, as the MAC address of the device
->> is the only input the authorization daemon, in the general
->> case, has to base the decision if to unlock the port or not.
->>=20
->> With this patch set, an implementation of the offloaded case is
->> supplied for the mv88e6xxx driver. When a packet ingresses on
->> a locked port, an ATU miss violation event will occur. When
+Hi,
+
+在 2022/3/15 16:04, Gao Xiang 写道:
+> Hi Xuenan,
 >
-> When do you get an ATU miss violation? In case there is no FDB entry for
-> the SA or also when there is an FDB entry, but it points to a different
-> port? I see that the bridge will only create a "locked" FDB entry in
-> case there is no existing entry, but it will not transition an existing
-> entry to "locked" state. I guess ATU miss refers to an actual miss and
-> not mismatch.
+> (+ Cc Darrick.. )
 >
+> On Tue, Mar 15, 2022 at 02:57:45PM +0800, Guo Xuenan wrote:
+>> when get fiemap starting from MAX_LFS_FILESIZE, (maxbytes - *len) < start
+>> will always true , then *len set zero. because of start offset is byhond
+>> file size, for erofs filesystem it will always return iomap.length with
+>> zero,iomap iterate will be infinite loop.
+> Thanks! If my understanding is correct, we once had a similar
+> behavior in compressed inodes and it has been worked around with
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/erofs/zmap.c?h=v5.17-rc8#n762
 
-On a locked port, I get ATU miss violations when there is no FDB entry
-for the SA, while if there is an entry but it is not assigned to the
-port, then I get an ATU member violation (which I have now masked on
-locked ports to limit unwanted interrupts).
+Yes, your understanding is accurate. But non-compressed inode,still has 
+the same problem, In my testcase,
 
-So it seems to me that my 'ATU miss' corresponds to your MISS and my
-'ATU member' corresponds to your MISMATCH. Since I inject an entry with
-destination port vector (DPV) zero I get member violations after the
-first miss violation.
+set filemap start offset "0x7fffffffffffffff", filemap len will always 
+be reset to 0;
 
-> The HW I work with doesn't have the ability to generate such
-> notifications, but it can trap packets on MISS (no entry) or MISMATCH
-> (exists, but with different port). I believe that in order to support
-> this feature we need to inject MISS-ed packets to the Rx path so that
-> eventually the bridge itself will create the "locked" entry as opposed
-> to notifying the bridge about the entry as in your case.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/erofs/data.c?h=v5.17-rc8#n267
+
+will always set iomap->length. But i don't think this is the problem of 
+erofs.
+
+In my opinion, for this situation,  when filemap len is 0, there is no 
+point to enter a specific filesystem.
+
+
+Thanks!
+
+> But yeah, if iomap can define or handle post-EOF extent length
+> behavior exactly, it would be much better!
 >
-
-This seems to me to be the way forward in your case. What kind or family
-of chips is your HW based on?
-
->> handling such ATU miss violation interrupts, the MAC address of
->> the device is added to the FDB with a zero destination port
->> vector (DPV) and the MAC address is communicated through the
->> switchdev layer to the bridge, so that a FDB entry with the
->> locked flag enabled can be added.
->>=20
->> Hans Schultz (3):
->>   net: bridge: add fdb flag to extent locked port feature
->>   net: switchdev: add support for offloading of fdb locked flag
->>   net: dsa: mv88e6xxx: mac-auth/MAB implementation
+> So on my side,
 >
-> Please extend tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> with new test cases for this code.
+> Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 >
-
-Shall do.
-
->>=20
->>  drivers/net/dsa/mv88e6xxx/Makefile            |  1 +
->>  drivers/net/dsa/mv88e6xxx/chip.c              | 10 +--
->>  drivers/net/dsa/mv88e6xxx/chip.h              |  5 ++
->>  drivers/net/dsa/mv88e6xxx/global1.h           |  1 +
->>  drivers/net/dsa/mv88e6xxx/global1_atu.c       | 29 +++++++-
->>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 67 +++++++++++++++++++
->>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   | 20 ++++++
->>  drivers/net/dsa/mv88e6xxx/port.c              | 11 +++
->>  drivers/net/dsa/mv88e6xxx/port.h              |  1 +
->>  include/net/switchdev.h                       |  3 +-
->>  include/uapi/linux/neighbour.h                |  1 +
->>  net/bridge/br.c                               |  3 +-
->>  net/bridge/br_fdb.c                           | 13 +++-
->>  net/bridge/br_input.c                         | 11 ++-
->>  net/bridge/br_private.h                       |  5 +-
->>  15 files changed, 167 insertions(+), 14 deletions(-)
->>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
->>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
->>=20
->> --=20
->> 2.30.2
->>=20
+> (Also you might need to inform iomap maintainer Darrick as well..)
+>
+> Thanks,
+> Gao Xiang
+>
+>
+>> In order to avoid this situation, it is better to calculate the actual
+>> mapping length at first. If the len is 0, there is no need to continue
+>> the operation.
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 7 PID: 905 at fs/iomap/iter.c:35 iomap_iter+0x97f/0xc70
+>> Modules linked in: xfs erofs
+>> CPU: 7 PID: 905 Comm: iomap Tainted: G        W         5.17.0-rc8 #27
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+>> RIP: 0010:iomap_iter+0x97f/0xc70
+>> Code: 85 a1 fc ff ff e8 71 be 9c ff 0f 1f 44 00 00 e9 92 fc ff ff e8 62 be 9c ff 0f 0b b8 fb ff ff ff e9 fc f8 ff ff e8 51 be 9c ff <0f> 0b e9 2b fc ff ff e8 45 be 9c ff 0f 0b e9 e1 fb ff ff e8 39 be
+>> RSP: 0018:ffff888060a37ab0 EFLAGS: 00010293
+>> RAX: 0000000000000000 RBX: ffff888060a37bb0 RCX: 0000000000000000
+>> RDX: ffff88807e19a900 RSI: ffffffff81a7da7f RDI: ffff888060a37be0
+>> RBP: 7fffffffffffffff R08: 0000000000000000 R09: ffff888060a37c20
+>> R10: ffff888060a37c67 R11: ffffed100c146f8c R12: 7fffffffffffffff
+>> R13: 0000000000000000 R14: ffff888060a37bd8 R15: ffff888060a37c20
+>> FS:  00007fd3cca01540(0000) GS:ffff888108780000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000000020010820 CR3: 0000000054b92000 CR4: 00000000000006e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   iomap_fiemap+0x1c9/0x2f0
+>>   erofs_fiemap+0x64/0x90 [erofs]
+>>   do_vfs_ioctl+0x40d/0x12e0
+>>   __x64_sys_ioctl+0xaa/0x1c0
+>>   do_syscall_64+0x35/0x80
+>>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>>   </TASK>
+>> ---[ end trace 0000000000000000 ]---
+>> watchdog: BUG: soft lockup - CPU#7 stuck for 26s! [iomap:905]
+>>
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
+>> ---
+>>   fs/ioctl.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/ioctl.c b/fs/ioctl.c
+>> index 1ed097e94af2..7f70e90766ed 100644
+>> --- a/fs/ioctl.c
+>> +++ b/fs/ioctl.c
+>> @@ -171,8 +171,6 @@ int fiemap_prep(struct inode *inode, struct fiemap_extent_info *fieinfo,
+>>   	u32 incompat_flags;
+>>   	int ret = 0;
+>>   
+>> -	if (*len == 0)
+>> -		return -EINVAL;
+>>   	if (start > maxbytes)
+>>   		return -EFBIG;
+>>   
+>> @@ -182,6 +180,9 @@ int fiemap_prep(struct inode *inode, struct fiemap_extent_info *fieinfo,
+>>   	if (*len > maxbytes || (maxbytes - *len) < start)
+>>   		*len = maxbytes - start;
+>>   
+>> +	if (*len == 0)
+>> +		return -EINVAL;
+>> +
+>>   	supported_flags |= FIEMAP_FLAG_SYNC;
+>>   	supported_flags &= FIEMAP_FLAGS_COMPAT;
+>>   	incompat_flags = fieinfo->fi_flags & ~supported_flags;
+>> -- 
+>> 2.22.0
+> .

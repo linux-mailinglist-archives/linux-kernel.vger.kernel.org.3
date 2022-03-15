@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDC94D92A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CF94D92A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344478AbiCOCdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 22:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S1344488AbiCOCeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 22:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiCOCdl (ORCPT
+        with ESMTP id S237373AbiCOCeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 22:33:41 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08B647398
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so1041163pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UisOO7Q5sWcTyT6YGXIaBwA+2hXKA5zA0oioUT8I7D0=;
-        b=GTEc8J50ZYn6y/baRDpqB9hxBgnQuXZskdpa3JoDVSVvdYYM7wfVnFY6S8hnEPVohx
-         joDYJjS8jnXWq6nqY6ttRVmX2LHgIYLaT0HVT6ZyLyovJgWdinXFX9gfM43cLZwU4vl+
-         ePUXEltdKnI5iR8jDAR8LU32uFlP5/BDB/O+jyHrv/iFythb3WNV1aFD2r4YbSgeDsYi
-         VdioSeQvK9Vw22hcNhyJGyNTzHRMsvgeAfgHRW2/xW+YGq9/j0F7ZGZ/74wGMX6y+7Te
-         Equf0m6AuMHCLgK1Xtoutq4yc3JtaOLGRFvo1y69+8pST22viSiCmVy9nUzZUzmXomh6
-         eI4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UisOO7Q5sWcTyT6YGXIaBwA+2hXKA5zA0oioUT8I7D0=;
-        b=v41K0Woml+ttGRxP42GMJjepWOY/Giwsq9/qpZJVN18Xnc5vxSv+FPYKEbbJ8+y8LU
-         gwaBWaML0QtyBrRKSKxAFrjAQP4rltWydFFzRs1yUYO17xQVYSwaHIrTVceRphWir+Xn
-         y27MKHghb0QkHl+1hRUrS5H99/pSexvxhrjNk8e/XgI8Y6zy6ky0GClVeukfuIoitSqG
-         qtr9XQZnz9RdDTkVa1Bj9LgC1kBfGai4ybhE3vTLZfDLWatYolXXcZWHQOKDvKBCf8ln
-         K4UwG/H3j+zn+qaCphMDUqBCFg4sVQBgJJ3IV1qcC233FtG+Bb8dmq943WIScRXM/tIm
-         /SOQ==
-X-Gm-Message-State: AOAM532OAaS1R6uXySXBWOAGjPUv5gQH2kQSkZRAxFmscZJyGcKeyzMv
-        qViAYc9wZx6livd8ZxbjdIM=
-X-Google-Smtp-Source: ABdhPJzUWiTgcfMjzsN+iQA9b8xgnqGDJdPduixz6F8CAvVouD8nSKSZmWCti0JMDhaZ5GQA5KNzvQ==
-X-Received: by 2002:a17:90a:8595:b0:1bf:4592:a819 with SMTP id m21-20020a17090a859500b001bf4592a819mr2084621pjn.183.1647311550493;
-        Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l188-20020a6225c5000000b004f715e38283sm21291197pfl.63.2022.03.14.19.32.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 19:32:30 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ASoC: ak4642: Use of_device_get_match_data()
-Date:   Tue, 15 Mar 2022 02:32:26 +0000
-Message-Id: <20220315023226.2118354-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Mar 2022 22:34:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8A62AE0;
+        Mon, 14 Mar 2022 19:32:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHcrd6mM9z4xv5;
+        Tue, 15 Mar 2022 13:32:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647311570;
+        bh=L+cNl27lhFxbaGy+Y7296fmSWIVWSTPRwGSVOwmVTVs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VJxRIC4ksKA1S0XDBIA/mt5tDj1sUSCLBnPdUxsPkidROp1bTVWBJPgxPuQ0jBNO3
+         vQucnmQf/mYcwU5jEPVqQUfqRBGsrPleJdkccEnWy2hfe9w4ic5Coz6xE9wxTTwSVw
+         EYgLdro2cv7uvlUhQL6kkccv/5mcteJFlkpKq7wBKQnuLJ+Hr/CC9lXlRCJ0/o82Hu
+         xmBQD1Nq4sO3wzwLHB4Ap2kpW45CwCgpwQiT9oSD0UqAbWD//WOjUQaWfDPiG2kBYT
+         f9eajp1b7Pg3jW6IrER4jRGp7pBDFPGrAu5noiqpLsY/liOxwFVHDUMBTDEHQJEvaw
+         IvrstC5D8EWBw==
+Date:   Tue, 15 Mar 2022 13:32:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220315133249.146b8bac@canb.auug.org.au>
+In-Reply-To: <20220122105806.3b710900@canb.auug.org.au>
+References: <20211217144004.0c00fabc@canb.auug.org.au>
+        <20220122105806.3b710900@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/fa=9QQeq4JL5lCcjlNPD_LS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,39 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+--Sig_/fa=9QQeq4JL5lCcjlNPD_LS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Use of_device_get_match_data() to simplify the code.
+Hi all,
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- sound/soc/codecs/ak4613.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+On Sat, 22 Jan 2022 10:58:06 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Fri, 17 Dec 2021 14:40:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconf=
+ig)
+> > produced these warnings:
+> >=20
+> > lib/strnlen_user.o: warning: objtool: strnlen_user()+0xc9: call to do_s=
+trnlen_user() with UACCESS enabled
+> > lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x129: c=
+all to do_strncpy_from_user() with UACCESS enabled
+> > vmlinux.o: warning: objtool: mce_start()+0x5c: call to __kasan_check_wr=
+ite() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode=
+.constprop.0() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg()=
+ leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: do_machine_check()+0x192: call to mce_no_w=
+ay_out() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: mce_severity_amd.constprop.0()+0xca: call =
+to mce_severity_amd_smca() leaves .noinstr.text section
+> >=20
+> > I am not sure which changes caused the above. =20
+>=20
+> I currently still get the following warnings from an x86_64
+> allmodconfig build fo Linus' tree:
+>=20
+> vmlinux.o: warning: objtool: mce_start()+0x5c: call to __kasan_check_writ=
+e() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: mce_gather_info()+0x5f: call to v8086_mode.c=
+onstprop.0() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: mce_read_aux()+0x8a: call to mca_msr_reg() l=
+eaves .noinstr.text section
+> vmlinux.o: warning: objtool: do_machine_check()+0x192: call to mce_no_way=
+_out() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: mce_severity_amd.constprop.0()+0xca: call to=
+ mce_severity_amd_smca() leaves .noinstr.text section
+>=20
+> $ x86_64-linux-gnu-gcc --version
+> x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
+> $ x86_64-linux-gnu-ld --version
+> GNU ld (GNU Binutils for Debian) 2.37
 
-diff --git a/sound/soc/codecs/ak4613.c b/sound/soc/codecs/ak4613.c
-index 4d2e78101f28..e4c643724dd9 100644
---- a/sound/soc/codecs/ak4613.c
-+++ b/sound/soc/codecs/ak4613.c
-@@ -653,15 +653,10 @@ static int ak4613_i2c_probe(struct i2c_client *i2c,
- 	struct ak4613_priv *priv;
- 
- 	regmap_cfg = NULL;
--	if (np) {
--		const struct of_device_id *of_id;
--
--		of_id = of_match_device(ak4613_of_match, dev);
--		if (of_id)
--			regmap_cfg = of_id->data;
--	} else {
-+	if (np)
-+		regmap_cfg = of_device_get_match_data(dev);
-+	else
- 		regmap_cfg = (const struct regmap_config *)id->driver_data;
--	}
- 
- 	if (!regmap_cfg)
- 		return -EINVAL;
--- 
-2.25.1
+I gained these new ones after merging today's tip tree:
 
+arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_2block_xor_avx512=
+vl() falls through to next function chacha_8block_xor_avx512vl()
+arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_4block_xor_avx512=
+vl() falls through to next function chacha_8block_xor_avx512vl()
+arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx() =
+falls through to next function poly1305_blocks_x86_64()
+arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() fa=
+lls through to next function poly1305_emit_x86_64()
+arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2()=
+ falls through to next function poly1305_blocks_x86_64()
+arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx512=
+() falls through to next function poly1305_blocks_x86_64()
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fa=9QQeq4JL5lCcjlNPD_LS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIv+tEACgkQAVBC80lX
+0GyRBAgAgmNjs0824Yd3XY9U01ZlbgSDODCHolJelw5GH0KrBuYJd4z426YLBNsi
+eeeZxyOUoBI4YH5xxLY+4XJWT1xokLz4OqcpzOvWui8kbFl1lajz3lF6MZRkwS/g
+1LaapEmAXwBGHEmfbXF26uhUaEJnAwXLmQ8dZBZlr07bJ6/NUJ00kQp/1PSHrdLX
+8i91tyvKTQJvadpL16CZgU+L3XbqtzPFadAk1xQnfh+lQ+Xw8H2TkGim+BQ+wJ+r
+w0T0Zz96erB1OTTvhpRnSvHfa+wPu0pJ5qbLe9l2kD4L9BauH87Kewz7raefgTt1
+BRKoPj6PuNY61vqN6Ru5Ad+mGyrSbQ==
+=yJOT
+-----END PGP SIGNATURE-----
+
+--Sig_/fa=9QQeq4JL5lCcjlNPD_LS--

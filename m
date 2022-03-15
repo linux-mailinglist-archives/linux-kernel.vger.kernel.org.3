@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82144D9722
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400324D972A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346117AbiCOJI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S1346384AbiCOJJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbiCOJIy (ORCPT
+        with ESMTP id S1346376AbiCOJJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:08:54 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1D34D249
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:07:42 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id g17so31790606lfh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zeeeJfWkS5svYpn4HoxGdh9ciDWv9LeSzory1b+B2SY=;
-        b=Lguir7+cdxtMoTZewkioJxEtHGNhM9VYzYPuNv0Zkv6l8LPQqhI1JbHWhTvJaZr7Iv
-         w5pKN21tWrKVA0imsDR+eix7wbRQ/1sdLV9jZZ9C3iODy0hm6yHTzGlMhZGI3+vOmSQq
-         uPRp9jsfu+1pCPwvydWSM1iqDCDyVkJvPsVCM7LoT7Bth5PrsYvvFwomMu7bsN8eqESa
-         Sksbb2zIowZaJ3A4aRZghSl5m4IdIAcJpyDuNPsL8KCMHTda0A8yNLcGosT/UGBEEOq7
-         DmMIRvbN3Ydzz5DohLHu9F7hIVkbOVf4MILPhvKFxLiWyQq2DopYrCN69vSk2r0x8Ucq
-         OFtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zeeeJfWkS5svYpn4HoxGdh9ciDWv9LeSzory1b+B2SY=;
-        b=udlU+3awEHVFZeb7dOhgOwBCCtFyXF8bpQOT6xAzT0bC2jyf1ajd9U1e/8V923muYT
-         ms7mF1xr3u9Mo7P7EeOai7/LwUZ5CjF4WMNLBoqcrCNlmlsl0f2GqGAhVoyerw0146wt
-         VIbSIqfQ2xtDgS0KWeZI/JTKDF0hANXuQthwN4q+0SjvkZtzoH8EW3s/soYL6mYO7FEH
-         i8VX4hn3/fOkZxulWl1dfwSCKQKzXf+5APk7jf3ux6DFqRLdZsDW4G89zLZYLx2aLyiY
-         9MtESFD+5ZrBu+oi5FD5xT+wZ5uWLuWT8Jri+a20C/izEKLrcSXbBTxCUTvF9llIeaOf
-         M19A==
-X-Gm-Message-State: AOAM5304W94szVmOCg5uGntUPvsQPL+tddjlt9oevUKapzLWaLL5YfOE
-        ihnYX96Z2JLlpOLo8XL9LvrU/XpWTxFtyizkLlBcdg==
-X-Google-Smtp-Source: ABdhPJwMXDC4aNor5zLv9pw8OVQFFJXZ1VbOemFJnvj+EVSvjVIz4oxBW0h2HW79H2IdIi/HGrG+DumX2QL04EqSRW8=
-X-Received: by 2002:a05:6512:260b:b0:445:c54c:4157 with SMTP id
- bt11-20020a056512260b00b00445c54c4157mr16046322lfb.254.1647335260309; Tue, 15
- Mar 2022 02:07:40 -0700 (PDT)
+        Tue, 15 Mar 2022 05:09:35 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E268213F47;
+        Tue, 15 Mar 2022 02:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647335302; x=1678871302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BOGkV1R9jATnmy60k4Z2w/p9Ncg9ruX8vcR8NretwAE=;
+  b=hMTy10pEa7Fye0HKvuAqLsGr2cqpZZZ9kEPAZib+erD11gZzUyJ9TNsy
+   fpTchjXXMlqy9Bc3Virq1+s0CexVd2aFeG4wDK+lYmu6krNOGGto08e8k
+   S+6rBFQcYb79MeQ+nJalcSrERWWyapxp/Y71wsklzkwVBhlxI33SlRZla
+   D9z25QQn8BTcliQ+WMpzDyTx7wympg8sqP4xs/qVocMjUkxfQ/EUXROsp
+   Vsr8yrwQSXvczs/w5JGsiUrTVTWi2kS6ucTm70d/tqLb33S4iYoZVamGX
+   +i9DjwQ4yifPE3nzkToNLmqrg4LNGnB/8Jdbv+iY7pM+QYMn3JiaDVGpp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="316973356"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="316973356"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 02:08:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="634518597"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Mar 2022 02:08:19 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nU3AA-000AmE-Hz; Tue, 15 Mar 2022 09:08:18 +0000
+Date:   Tue, 15 Mar 2022 17:07:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dmitry.baryshkov@linaro.org, dianders@chromium.org,
+        quic_kalyant@quicinc.com
+Subject: Re: [PATCH v4] drm/msm/disp/dpu1: add inline rotation support for
+ sc7280 target
+Message-ID: <202203151751.ov7gCUZI-lkp@intel.com>
+References: <1647319394-11426-1-git-send-email-quic_vpolimer@quicinc.com>
 MIME-Version: 1.0
-References: <20220314095225.53563-1-yann.gautier@foss.st.com>
- <20220314125554.190574-1-yann.gautier@foss.st.com> <CAPDyKFruN9Xwk4uqFumwBdcn4SjKQcSQVBbALa3kVxY4mVzOnQ@mail.gmail.com>
- <9e4fbf6a-1309-3aee-fcb0-be7c2c683892@foss.st.com> <CAPDyKFq2Du1UWpvRFpVF_qL65SP0DfEV872U9Xe-9i7xKxXhqg@mail.gmail.com>
- <ce29e53a-59ff-000a-6b88-0b7ae538c515@foss.st.com>
-In-Reply-To: <ce29e53a-59ff-000a-6b88-0b7ae538c515@foss.st.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 15 Mar 2022 10:07:03 +0100
-Message-ID: <CAPDyKFq29+nwxXkV-Fyn91WD62-6REk+5UryVAK6XC4xKhcsfg@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: mmci: manage MMC_PM_KEEP_POWER per variant config
-To:     Yann Gautier <yann.gautier@foss.st.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647319394-11426-1-git-send-email-quic_vpolimer@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,143 +70,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 at 17:52, Yann Gautier <yann.gautier@foss.st.com> wrote:
->
-> On 3/14/22 17:18, Ulf Hansson wrote:
-> > On Mon, 14 Mar 2022 at 15:34, Yann Gautier <yann.gautier@foss.st.com> wrote:
-> >>
-> >> On 3/14/22 14:03, Ulf Hansson wrote:
-> >>> On Mon, 14 Mar 2022 at 13:56, Yann Gautier <yann.gautier@foss.st.com> wrote:
-> >>>>
-> >>>> Add a disable_keep_power field in variant_data struct. The
-> >>>> MMC_PM_KEEP_POWER flag will be enabled if disable_keep_power is not set.
-> >>>> It is only set to true for stm32_sdmmc variants.
-> >>>>
-> >>>> The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
-> >>>> It doesn't correctly support low power on this board. The Wifi chip
-> >>>> awaits an always-on regulator, but it was connected to v3v3 which is off
-> >>>> in low-power sequence. MMC_PM_KEEP_POWER should then be disabled.
-> >>>
-> >>> Just to make sure I get this correct.
-> >>>
-> >>> Why can't the regulator stay on during system suspend? The point is,
-> >>> we don't need an always on regulator to cope with this.
-> >>>
-> >>> Kind regards
-> >>> Uffe
-> >>
-> >> Hi Ulf,
-> >>
-> >> This v3v3 regulator powers most of the devices on this board. So we need
-> >> to switch it off to gain power in suspend mode.
-> >
-> > I see. Thanks for sharing that information.
-> >
-> > The MMC_PM_KEEP_POWER flag is there to describe what is supported by
-> > the platform/host. It doesn't mean that the card *must* stay powered
-> > on during system suspend. Instead that depends on whether system
-> > wakeup for the SDIO/WiFi is supported too - and if that is enabled by
-> > userspace. If not, the regulator will be turned off for the SDIO card
-> > during system suspend.
-> >
-> > Assuming the regulator is implemented as a proper regulator and can
-> > remain on during system suspend, the right thing would be to keep the
-> > MMC_PM_KEEP_POWER flag around.
-> >
-> > Kind regards
-> > Uffe
-> >
->
-> OK, but in the wifi driver we use on this platform (brcmfmac), the
-> suspend/resume functions (brcmf_ops_sdio_suspend/brcmf_ops_sdio_resume)
-> use the flag to check regu was off, and then call probe function during
-> resume, to re-init Wifi chip and reload its firmware.
+Hi Vinod,
 
-I had a closer look at the brcmfmac driver, thanks for the pointers.
+Thank you for the patch! Perhaps something to improve:
 
-In my opinion, I think we should change the brcmfmac driver, so it
-decides to power off the SDIO card, unless the WiFi chip is configured
-to serve us with system wakeups.
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip drm-exynos/exynos-drm-next next-20220310]
+[cannot apply to tegra-drm/drm/tegra/for-next airlied/drm-next v5.17-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I can send a patch for brcmfmac that we can try, unless you want to
-send it yourself?
+url:    https://github.com/0day-ci/linux/commits/Vinod-Polimera/drm-msm-disp-dpu1-add-inline-rotation-support-for-sc7280-target/20220315-124423
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm64-buildonly-randconfig-r002-20220313 (https://download.01.org/0day-ci/archive/20220315/202203151751.ov7gCUZI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2f50fb47da3baeee10b1906da6e30ac5d26ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/1582b1f4a0b79f64b61b217ea6c3bb0591da0fab
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Vinod-Polimera/drm-msm-disp-dpu1-add-inline-rotation-support-for-sc7280-target/20220315-124423
+        git checkout 1582b1f4a0b79f64b61b217ea6c3bb0591da0fab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/
 
->
->
-> Best regards,
-> Yann
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Kind regards
-Uffe
+All warnings (new ones prefixed by >>):
 
->
-> >>
-> >>
-> >> Yann
-> >>
-> >>>
-> >>>>
-> >>>> The flag can still be enabled through DT property:
-> >>>> keep-power-in-suspend.
-> >>>>
-> >>>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-> >>>> ---
-> >>>> Update in v2:
-> >>>> Reword commit message to better explain the issue.
-> >>>>
-> >>>> Resend the patch alone. It was previoulsy in a series [1] for which the
-> >>>> other patches will be reworked.
-> >>>>
-> >>>> [1] https://lore.kernel.org/lkml/20220304135134.47827-1-yann.gautier@foss.st.com/
-> >>>>
-> >>>>    drivers/mmc/host/mmci.c | 5 ++++-
-> >>>>    drivers/mmc/host/mmci.h | 1 +
-> >>>>    2 files changed, 5 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
-> >>>> index 45b8608c935c..0e2f2f5d6a52 100644
-> >>>> --- a/drivers/mmc/host/mmci.c
-> >>>> +++ b/drivers/mmc/host/mmci.c
-> >>>> @@ -274,6 +274,7 @@ static struct variant_data variant_stm32_sdmmc = {
-> >>>>           .busy_detect            = true,
-> >>>>           .busy_detect_flag       = MCI_STM32_BUSYD0,
-> >>>>           .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
-> >>>> +       .disable_keep_power     = true,
-> >>>>           .init                   = sdmmc_variant_init,
-> >>>>    };
-> >>>>
-> >>>> @@ -301,6 +302,7 @@ static struct variant_data variant_stm32_sdmmcv2 = {
-> >>>>           .busy_detect            = true,
-> >>>>           .busy_detect_flag       = MCI_STM32_BUSYD0,
-> >>>>           .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
-> >>>> +       .disable_keep_power     = true,
-> >>>>           .init                   = sdmmc_variant_init,
-> >>>>    };
-> >>>>
-> >>>> @@ -2172,7 +2174,8 @@ static int mmci_probe(struct amba_device *dev,
-> >>>>           host->stop_abort.flags = MMC_RSP_R1B | MMC_CMD_AC;
-> >>>>
-> >>>>           /* We support these PM capabilities. */
-> >>>> -       mmc->pm_caps |= MMC_PM_KEEP_POWER;
-> >>>> +       if (!variant->disable_keep_power)
-> >>>> +               mmc->pm_caps |= MMC_PM_KEEP_POWER;
-> >>>>
-> >>>>           /*
-> >>>>            * We can do SGIO
-> >>>> diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
-> >>>> index e1a9b96a3396..2cad1ef9766a 100644
-> >>>> --- a/drivers/mmc/host/mmci.h
-> >>>> +++ b/drivers/mmc/host/mmci.h
-> >>>> @@ -361,6 +361,7 @@ struct variant_data {
-> >>>>           u32                     opendrain;
-> >>>>           u8                      dma_lli:1;
-> >>>>           u32                     stm32_idmabsize_mask;
-> >>>> +       u8                      disable_keep_power:1;
-> >>>>           void (*init)(struct mmci_host *host);
-> >>>>    };
-> >>>>
-> >>>> --
-> >>>> 2.25.1
-> >>>>
-> >>
->
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:686:39: warning: unused variable 'msm8998_vig_sblk_0' [-Wunused-const-variable]
+   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =
+                                         ^
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:688:39: warning: unused variable 'msm8998_vig_sblk_1' [-Wunused-const-variable]
+   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =
+                                         ^
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:690:39: warning: unused variable 'msm8998_vig_sblk_2' [-Wunused-const-variable]
+   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_2 =
+                                         ^
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:692:39: warning: unused variable 'msm8998_vig_sblk_3' [-Wunused-const-variable]
+   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =
+                                         ^
+   4 warnings generated.
+
+
+vim +/msm8998_vig_sblk_0 +686 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+
+5334087ee7438fa Loic Poulain               2022-02-14  647  
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  648  /*************************************************************
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  649   * SSPP sub blocks config
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  650   *************************************************************/
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  651  
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  652  /* SSPP common configuration */
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  653  #define _VIG_SBLK(num, sdma_pri, qseed_ver, rot_cfg) \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  654  	{ \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  655  	.maxdwnscale = MAX_DOWNSCALE_RATIO, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  656  	.maxupscale = MAX_UPSCALE_RATIO, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  657  	.smart_dma_priority = sdma_pri, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  658  	.src_blk = {.name = STRCAT("sspp_src_", num), \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  659  		.id = DPU_SSPP_SRC, .base = 0x00, .len = 0x150,}, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  660  	.scaler_blk = {.name = STRCAT("sspp_scaler", num), \
+b75ab05a34792fc Shubhashree Dhar           2019-11-27  661  		.id = qseed_ver, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  662  		.base = 0xa00, .len = 0xa0,}, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  663  	.csc_blk = {.name = STRCAT("sspp_csc", num), \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  664  		.id = DPU_SSPP_CSC_10BIT, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  665  		.base = 0x1a00, .len = 0x100,}, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  666  	.format_list = plane_formats_yuv, \
+e6b63a7bb6cd9cd Fritz Koenig               2018-12-11  667  	.num_formats = ARRAY_SIZE(plane_formats_yuv), \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  668  	.virt_format_list = plane_formats, \
+e6b63a7bb6cd9cd Fritz Koenig               2018-12-11  669  	.virt_num_formats = ARRAY_SIZE(plane_formats), \
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  670  	.rotation_cfg = rot_cfg, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  671  	}
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  672  
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  673  #define _DMA_SBLK(num, sdma_pri) \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  674  	{ \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  675  	.maxdwnscale = SSPP_UNITY_SCALE, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  676  	.maxupscale = SSPP_UNITY_SCALE, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  677  	.smart_dma_priority = sdma_pri, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  678  	.src_blk = {.name = STRCAT("sspp_src_", num), \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  679  		.id = DPU_SSPP_SRC, .base = 0x00, .len = 0x150,}, \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  680  	.format_list = plane_formats, \
+e6b63a7bb6cd9cd Fritz Koenig               2018-12-11  681  	.num_formats = ARRAY_SIZE(plane_formats), \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  682  	.virt_format_list = plane_formats, \
+e6b63a7bb6cd9cd Fritz Koenig               2018-12-11  683  	.virt_num_formats = ARRAY_SIZE(plane_formats), \
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  684  	}
+25fdd5933e4c0f5 Jeykumar Sankaran          2018-06-27  685  
+94391a14fc27383 AngeloGioacchino Del Regno 2022-01-13 @686  static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  687  				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+94391a14fc27383 AngeloGioacchino Del Regno 2022-01-13 @688  static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  689  				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+94391a14fc27383 AngeloGioacchino Del Regno 2022-01-13 @690  static const struct dpu_sspp_sub_blks msm8998_vig_sblk_2 =
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  691  				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+94391a14fc27383 AngeloGioacchino Del Regno 2022-01-13 @692  static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  693  				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+1582b1f4a0b79f6 Vinod Polimera             2022-03-15  694  
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

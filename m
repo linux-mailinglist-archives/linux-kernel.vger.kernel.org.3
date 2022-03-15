@@ -2,134 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E614DA2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F254DA2D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351181AbiCOS5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S1351185AbiCOTBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiCOS5k (ORCPT
+        with ESMTP id S1343730AbiCOTBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:57:40 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D714E393;
-        Tue, 15 Mar 2022 11:56:27 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id 11so2931qtt.9;
-        Tue, 15 Mar 2022 11:56:26 -0700 (PDT)
+        Tue, 15 Mar 2022 15:01:00 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DF650E32;
+        Tue, 15 Mar 2022 11:59:48 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id e3so255626pjm.5;
+        Tue, 15 Mar 2022 11:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P75noemU3nNM9QREmpWEOIwo6AUAf43zc7dC9ZROgxU=;
+        b=ieoeLFUClHFCNmE61XYmhfqH7JJ9Y6zrtBkhzQvZc/mecvz4an6xlpq4SFiDPrN3Ga
+         Dnm9xmvDjgGJf2MJtScduCG7fQlWJ4eXHclFNRPyswzAyro8UryJAnQD+N06b+7BKqp/
+         8WFC8eLzZiLB8dWerH2e40Zs6h+1UV7LfToNHVO9tGakihPBLG2vgOaoVfGtAa/5iegr
+         kcp/jkm7hFDZ99GMAu3d3l2JE3HvS+nJwMrrAWu60POVVSE5ascgZjj8PYqbRB+koYw/
+         furxvYiQ2zosuFLWXlANqaqK+rvAGE+868qVRctXNOykYG66OEBj8UPGibuqfJNU41q4
+         6gxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=x1R6MexnAYDRxJBUb0QgsDJ7MygsbxDZQB18nTdrN9k=;
-        b=zsKLQZVmMlABXEa4cZ2YMoJAGJVQ673L6ghBnwPWKtAL+GwsEts0zqp9R164LRxKcx
-         KydyC9yZfvnhbaPgstS1tHeyX9cWM0Z5ZDDKup6sDEYdFxZP6cpO/5SQF/0x94qSY81a
-         WPE60yp2S2uLwqKiOMYSNXKtZUq8alqlYgzeLKuMRU55WW7RZpivZ47GJTwt+ib8+FII
-         zE1VoHAZ0dhv0ArCxiWkjx1LywikG4tg9c7sgKbZN339oLow9aeyxUvp2ArTdASEeTpC
-         5gyseyGCZF7EddIsjzLhJycIMGDyyLiOXmtDUZnXHzgCVXqDtDmsEbtU4QZgc/lLz3tG
-         5Y7A==
-X-Gm-Message-State: AOAM532ulcFFpic5uaZRguyjwSq8yRfvOzXUJTqlMF0kH+dcHrrXTFoS
-        NjGAHE11z7yVpkxpMIfyCVkIPak5oT5+HQ==
-X-Google-Smtp-Source: ABdhPJzm94DKiM/MVYEHZOrTxKXpLow5k0BvpABrrV9RCaueeaHtasWKDreg/aRQIjvHq0YXKEqfHg==
-X-Received: by 2002:ac8:5c90:0:b0:2de:37cd:8af6 with SMTP id r16-20020ac85c90000000b002de37cd8af6mr23372119qta.437.1647370586013;
-        Tue, 15 Mar 2022 11:56:26 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id a13-20020a05622a064d00b002e1b8d9d6cfsm10246974qtb.32.2022.03.15.11.56.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 11:56:25 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id y142so275695ybe.11;
-        Tue, 15 Mar 2022 11:56:25 -0700 (PDT)
-X-Received: by 2002:a25:aa0e:0:b0:633:7c3b:94a0 with SMTP id
- s14-20020a25aa0e000000b006337c3b94a0mr3416103ybi.546.1647370585424; Tue, 15
- Mar 2022 11:56:25 -0700 (PDT)
+        bh=P75noemU3nNM9QREmpWEOIwo6AUAf43zc7dC9ZROgxU=;
+        b=4z3NUxGsrqGqxOpr+NeOJjJtlqOOFdLxHyRlOpKeGFsS6tazDIhY5/yWWf3f+GvUZw
+         i2M+u4FFdy9Z+WxReN0Xu6c9pA9hRaQDZrFmjQoWrQc8HQSJnOkt/2Oqt+tF8WOpH6iO
+         TAIsbZSwVZdIHxzjqoXknYMFgSRQ/YAEU3Jb7kDVehL5/Ksumo6e2dJOUAClKVcuBRVv
+         2Ot2IK8V7xhDiF0Rdw7/kvjzoA7VW2cvVPTmYmJ/npW7iXO08+99N9HHP/KTvmtwUHyb
+         TimWPZwDWEbigAqGKiYcI14UmZ2CQ8MHCcG7U46uwp9iLHx8GfGzvRoAN5iK2LybQNhD
+         4tHQ==
+X-Gm-Message-State: AOAM5331qVmPJMtfy22yh+LTJ1KN1EoeuLmVF8rbLaZ1fh6pHCEiWUrQ
+        I9crjV/khUDwl+J/lqNQP4w6yx/x2ruJ1xG/9Ec=
+X-Google-Smtp-Source: ABdhPJyqwD5pEKOAOgA9+l/w1ne5fuCUngwds7DQol2eaWRZcg4mrm9sqF19+ahu81x1RdeiECyWYI4RF/sdosJZFmE=
+X-Received: by 2002:a17:903:32d2:b0:153:9c6a:5750 with SMTP id
+ i18-20020a17090332d200b001539c6a5750mr4104519plr.34.1647370787936; Tue, 15
+ Mar 2022 11:59:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220310121327.63C6FC340E8@smtp.kernel.org> <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
- <YinzW413m6p0H/i1@sirena.org.uk> <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
- <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 19:56:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
-Message-ID: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
-Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk> <CA+khW7g+T2sAkP1aycmts_82JKWgYk5Y0ZJp+EvjFUyNY8W_5w@mail.gmail.com>
+ <Yi/LaZ5id4ZjqFmL@zeniv-ca.linux.org.uk> <CA+khW7jhD0+s9kivrd6PsNEaxmDCewhk_egrsxwdHPZNkubJYA@mail.gmail.com>
+In-Reply-To: <CA+khW7jhD0+s9kivrd6PsNEaxmDCewhk_egrsxwdHPZNkubJYA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 15 Mar 2022 11:59:36 -0700
+Message-ID: <CAADnVQJSMqcv3GPmUDcNKs23veqU-HWQQA5ECqdriMtjTpdv3w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Hao Luo <haoluo@google.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, Josh Don <joshdon@google.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Mar 15, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
+>
+> On Mon, Mar 14, 2022 at 4:12 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > On Mon, Mar 14, 2022 at 10:07:31AM -0700, Hao Luo wrote:
+> > > Hello Al,
+> >
+> > > > In which contexts can those be called?
+> > > >
+> > >
+> > > In a sleepable context. The plan is to introduce a certain tracepoints
+> > > as sleepable, a program that attaches to sleepable tracepoints is
+> > > allowed to call these functions. In particular, the first sleepable
+> > > tracepoint introduced in this patchset is one at the end of
+> > > cgroup_mkdir(). Do you have any advices?
+> >
+> > Yes - don't do it, unless you really want a lot of user-triggerable
+> > deadlocks.
+> >
+> > Pathname resolution is not locking-agnostic.  In particular, you can't
+> > do it if you are under any ->i_rwsem, whether it's shared or exclusive.
+> > That includes cgroup_mkdir() callchains.  And if the pathname passed
+> > to these functions will have you walk through the parent directory,
+> > you would get screwed (e.g. if the next component happens to be
+> > inexistent, triggering a lookup, which takes ->i_rwsem shared).
+>
+> I'm thinking of two options, let's see if either can work out:
+>
+> Option 1: We can put restrictions on the pathname passed into this
+> helper. We can explicitly require the parameter dirfd to be in bpffs
+> (we can verify). In addition, we check pathname to be not containing
+> any dot or dotdot, so the resolved path will end up inside bpffs,
+> therefore won't take ->i_rwsem that is in the callchain of
+> cgroup_mkdir().
+>
+> Option 2: We can avoid pathname resolution entirely. Like above, we
+> can adjust the semantics of this helper to be: making an immediate
+> directory under the dirfd passed in. In particular, like above, we can
+> enforce the dirfd to be in bpffs and pathname to consist of only
+> alphabet and numbers. With these restrictions, we call vfs_mkdir() to
+> create directories.
+>
+> Being able to mkdir from bpf has useful use cases, let's try to make
+> it happen even with many limitations.
 
-On Tue, Mar 15, 2022 at 5:48 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Tue, Mar 15, 2022 at 2:08 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > I had noticed while reviewing the patch, but changing to size_t wouldn't
-> > help much, as other related code paths treat the value as unsigned int
-> > anyway.
->
-> .. but it really would.
->
-> Note that the paths *after* this code don't matter. Because the result
-> is guaranteed to fit in 'unsigned int' anyway.
->
-> Put another way:
->
->     min_t(unsigned int,x,y)
->
-> is buggy if one of x/y is 'size_t'. Why? Because if that one gets
-> truncated, you're doing 'min()' with a value that may be artificially
-> much too small (that was exactly the problem commit 1a4e53d2fc4f:
-> "spi: Fix invalid sgs value")fixed).
->
-> But the situation is _not_ true in the reverse. Look:
->
->     min(size_t,x,y)
->
-> is guaranteed to fit in 'unsigned int' as long as _one_ of x,y fits in
-> 'unsigned int' - even if the other doesn't. Because then 'min()' will
-> just pick the one that already had the right size.
->
-> To make it really concrete, compare
->
->     min_t(unsigned int, 5, 0x100000001);
->     min_t(size_t, 5, 0x100000001);
->
-> on a 64-bit machine (ie size_t is 64-bits, and unsigned int is 32-bit).
->
-> One returns 1. The other returns 5. Both fit the result in 'unsigned
-> int', but one of them is wrong.
-
-You're absolutely right. So the code should be changed to:
-
-        if (vmalloced_buf || kmap_buf) {
--                desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
-+               desc_len = min_t(unsigned long, max_seg_size, PAGE_SIZE);
-                sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
-        } else if (virt_addr_valid(buf)) {
--               desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
-+               desc_len = min_t(size_t, max_seg_size, ctlr->max_dma_len);
-                sgs = DIV_ROUND_UP(len, desc_len);
-        } else {
-                return -EINVAL;
-        }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Option 3. delegate vfs_mkdir to a worker and wait in the helper.

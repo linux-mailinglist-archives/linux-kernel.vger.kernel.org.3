@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B4A4D959C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D648D4D959B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345648AbiCOHwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S1345642AbiCOHva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiCOHwA (ORCPT
+        with ESMTP id S232675AbiCOHv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:52:00 -0400
-Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD16E12AD8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:50:47 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1647330599t5jaxgpj
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 15 Mar 2022 15:49:53 +0800 (CST)
-X-QQ-SSF: 01400000002000D0H000B00A0000000
-X-QQ-FEAT: F3yR32iATbgMpCjbikc3BWSKeichddKAGID8W5xikXF3OmtDM7BGzcFt33YO1
-        Bl123JlrOMf2XGDP9jYKyTX29QEBr4qU+cbjYb4/z1x0YZy/OElwmyMj2wsE83OekJNjX5l
-        XGt4Nl59hWdWuqD2ExSFSrRrRQtDOpcdCi5x4Ng4pSqUK6ouzIr21OVYcXlmE7cabFs6C2i
-        jHkeROi0AC6KMwhqqCJc9Wte26kq4GfGBPfojflnUxlqZ+eT3J23mVzwpoKqnXiGrt3+Gjh
-        WuE2onOmnqJugzMoXfC+Bcw6Q6sdzxXSnt/5Bg87rIh2f4YcY5BknCME4LinZD0a/eoUHXL
-        OjFo53XoCpiuXJYo4CM+4x1zgxrL21PgTDttKSX
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] net: tulip: de4x5: Optimize if branch in de4x5_parse_params
-Date:   Tue, 15 Mar 2022 15:49:52 +0800
-Message-Id: <20220315074952.6577-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 15 Mar 2022 03:51:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5A812AD8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 230DBB81115
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34440C340EE;
+        Tue, 15 Mar 2022 07:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647330614;
+        bh=SYyFnHdQnLb5UOzpXR0K5y/08yWJ9rcxPxc2nwwQ/y8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O6T6VZFe4yMs+yJ3dTApjuZKh6DuqkJqvBuYuEn7wPImC7QrC5P0XRqx/U/yUBZ90
+         UxH1vGFONm9oB7+p7hWaqh6kuwxMNAG3nY+CVvFmyQVzfvC6Jzo3F9hr3kzXArRbE7
+         tRzx79xo9+qp/BldrCp745BZHB6vc8P5TztKKDnk=
+Date:   Tue, 15 Mar 2022 08:50:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     Li Fei1 <fei1.li@intel.com>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] virt: acrn: fix a memory leak in acrn_dev_ioctl()
+Message-ID: <YjBFMnLIgrFngBTQ@kroah.com>
+References: <20220308092047.1008409-1-butterflyhuangxx@gmail.com>
+ <YicoOC+WZhNLq+pX@kroah.com>
+ <CAFcO6XMy+rT_cnw2Q7Jzg=byKWQ8tcVU+8ZBCCfTD1-JNy7oLw@mail.gmail.com>
+ <Yics6JbQljlQXRED@kroah.com>
+ <CAFcO6XNLfOTp2M3B876YTt+atNTveuqH7Q3ePk3N-T=KkJkiTQ@mail.gmail.com>
+ <YjA24K4FVZU6fTMd@kroah.com>
+ <CAFcO6XNTSoDdQA-4U91VyZqXkjUL+zyoceN7VGwWQKn+HrbbBA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFcO6XNTSoDdQA-4U91VyZqXkjUL+zyoceN7VGwWQKn+HrbbBA@mail.gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the de4x5_parse_params, 'if (strstr(p, "BNC_AUI"))' condition and
-'if (strstr(p, "BNC_AUI"))' condition are both execute the statement
-'lp->params.autosense = BNC', these two conditions can be combined.
+On Tue, Mar 15, 2022 at 03:36:11PM +0800, butt3rflyh4ck wrote:
+> Ok, thanks.  By the way, I want to explain, Firstly there is just some
+> parameter that should be freed before func returns the -EINVAL error
+> in the patch.
 
-In addition, in the current code logic, when p = "BNC", the judgments
-need to be executed four times. In order to simplify the execution
-process and keep the original code design, I used the statement which
-is 'if (strstr(p, "BNC") || strstr(p, "BNC_AUI"))' to deal with it,
-after that once 'strstr(p, "BNC")' is established, we no longer need
-to judge whether 'strstr(p, "BNC_AUI")' is true(not NULL).
+What patch?  I see nothing here :(
 
-In this way, we can execute the judgment statement one time less.
+> I think it was correct, no need to test it. And  secondly the commitor
+> Li Fei1 also reviewed the patch code. finally I am sorry that  no arcn
+> hso hardware to test it.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- drivers/net/ethernet/dec/tulip/de4x5.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I still have no context at all.  Please properly quote your email
+threads so that we can all understand and respond properly.
 
-diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
-index 71730ef4cd57..5900b8ef7f6f 100644
---- a/drivers/net/ethernet/dec/tulip/de4x5.c
-+++ b/drivers/net/ethernet/dec/tulip/de4x5.c
-@@ -5208,9 +5208,7 @@ de4x5_parse_params(struct net_device *dev)
- 		lp->params.autosense = TP_NW;
- 	    } else if (strstr(p, "TP")) {
- 		lp->params.autosense = TP;
--	    } else if (strstr(p, "BNC_AUI")) {
--		lp->params.autosense = BNC;
--	    } else if (strstr(p, "BNC")) {
-+	    } else if (strstr(p, "BNC") || strstr(p, "BNC_AUI")) {
- 		lp->params.autosense = BNC;
- 	    } else if (strstr(p, "AUI")) {
- 		lp->params.autosense = AUI;
--- 
-2.20.1
+thanks,
 
-
-
+greg k-h

@@ -2,239 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AE34DA097
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4673A4DA09C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350336AbiCOQ5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S1350353AbiCOQ6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346711AbiCOQ5o (ORCPT
+        with ESMTP id S245084AbiCOQ6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:57:44 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F97574B2;
-        Tue, 15 Mar 2022 09:56:31 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id hw13so40844606ejc.9;
-        Tue, 15 Mar 2022 09:56:31 -0700 (PDT)
+        Tue, 15 Mar 2022 12:58:36 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA10457B31
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:57:23 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id p10-20020a056820044a00b00320d7d4af22so7200550oou.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:57:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c0Q22kpGLVZq/R4WLU6kl2JzaO/emU6B5qw6iFxTTnk=;
-        b=nkppdkb4w3W3RmuSkaW7X7X834GwEP8BcqYaHW6IbiaIjIOLtdoFISOpGh+UFyvkpK
-         rgvHTlRpftx+n5OtJipmyqcyI0fg+M5Nd3qz0npsXTH3lhrIMJImrzY/3ikee2oHNrE0
-         HZzrwOlsLlsVbRGwZQNC5VmbFWAaRAvEVPpfo7UWIJ1bk+5SM6E4qOaT9HfIlQ08acfS
-         90bxgjQ01adADEFBdG8HugC6qkGlZ+djyyUsUNV43bCtdWnTgfuuuedwt1kij5s2y7eQ
-         UiEbkb3bTbv2rIMVrhCXNb4TyftlwOwojvrueDvj4fgi82Rtfn0a6u8wa81DnP0hE1nG
-         GzhA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iwyi6l6mAU8+nYjyk/K7oCC0ixMS0VKyBpljmAjIxm0=;
+        b=EtQQA78G9e7DaQ2Bpd2WTtbGypI1MZf7hjLWoX4nrzjd6fi5v2IY5SGEBlkou+L24u
+         dKygIqkA9WrpD6R+7NPqxvFwCcj4UdOE7TTyRzItaiP0y6oT1apVV2M4KJp8KQpdetk3
+         hLBaaAXh5cOaCm/33y2DLPrD/fjJ/192e1fLW94ZLEKRXgjmLUqPpCLFdFZK4aVd0avP
+         YapIkT6wweXDRnGP3BijGy31W8uqrfbtJZYbqDhKU9pm4uArET+9mEJ9TBRC/4XbqyHo
+         LUIO9AhepMFLbJx3Aqwe3dWbIm88glVW0mi97CRZ6nudgs9fJtmkJPljBeA+j4HBncJ5
+         +FNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c0Q22kpGLVZq/R4WLU6kl2JzaO/emU6B5qw6iFxTTnk=;
-        b=GQzxrBEuOpYMgNdy4duNZnczBXBTaFU46xiYEN4g47oRI02MJHQX4Y4JfcWr0xDdLO
-         fNC/vNNKEUxhixAmNM8d5EEq82FargRrYSj8JtEeK3N2kMOaEvpataiPUNkNxFwZpuH8
-         YBqNe3FoMqqNtfm8OOz5tAwcvxyXlmvaPka3C3/DSTybVm/qDbgv/s0xozqEr7edKhTg
-         GcFI4vmg32Zm1Rd51JwL+wF6y9ZBwg4OwTFsWDmIsQiMboDeYfglVAIhaZiqfVRfQ/Nq
-         w0z4unmFMZdEKYPlhWDjj0k6MUq5/16v1SX4NPbBoMjl8TBD8I3YevCllyi9gIvblUyq
-         iA+A==
-X-Gm-Message-State: AOAM532vX/C/ZOnzqCMEzqnuRYrsIIZsuhoeyuwkuwP5Y08LPbv5FS0T
-        luxt+GbGK4mzQ+sv74K4oKU=
-X-Google-Smtp-Source: ABdhPJwKxr5OccFB7rrLAlG9vuFY6y4EcCrPoPUEU4VBoGHbde2eqW38JFpRTIzyeXetqTfwmHmJpg==
-X-Received: by 2002:a17:906:c211:b0:6ce:e221:4c21 with SMTP id d17-20020a170906c21100b006cee2214c21mr23819148ejz.691.1647363384322;
-        Tue, 15 Mar 2022 09:56:24 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm9813056edu.51.2022.03.15.09.56.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iwyi6l6mAU8+nYjyk/K7oCC0ixMS0VKyBpljmAjIxm0=;
+        b=r02xe8FD2PeY4e/qXuOAPo2t8pqo0Rwt25oXJRnikI/SSXVGp/0oEGOn2dCCbiOWFU
+         DhuvYImNcmYv06XzgqYAQo9n36YDGPMrvBDtpD+zGCIfIGS6DWqCZM1bMxQzpetrvbl7
+         jrZVJvKYrkJVPVL3XoaPRZlu6mCKkehMvN9YVNpaj2QK4hZaQqWle7FAU8WfKz94aRt7
+         9W3/DskHdiFHFJceCaZttHngfsrg4uhsacdqoumtT7r78yJfB3myYJIEaUlWFQNGIVyX
+         u2RhltcllFNdP8b9Oij0gmmXSjlm0/et/sX6hi+UnvdQuMktsdQTUV9Y5JiKlg67/HJx
+         R7YA==
+X-Gm-Message-State: AOAM532IR2rwKyvJKoWB/MLxI4i0NKP0ljzXOMPuJ8tP++GklHssfEkK
+        iz+4l043IkTzZRvgbhOaXiLtHA==
+X-Google-Smtp-Source: ABdhPJzzqNiHdVXVH0CXBoLP1udVE9MYmYPmQcCKBtA1PAprIUkgp+/UWSfjGSEtXdadUx3fdyEGxA==
+X-Received: by 2002:a05:6871:60e:b0:da:b3f:2b85 with SMTP id w14-20020a056871060e00b000da0b3f2b85mr2048202oan.292.1647363443260;
+        Tue, 15 Mar 2022 09:57:23 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id l12-20020a056808020c00b002da28c240dfsm9665261oie.16.2022.03.15.09.57.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 09:56:23 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ming Qian <ming.qian@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 37/67] media: platform: Kconfig: sort entries
-Date:   Tue, 15 Mar 2022 17:56:22 +0100
-Message-ID: <3163040.44csPzL39Z@kista>
-In-Reply-To: <76c0f364de11dc6a9a27f2d294145f261b7d0e61.1647274406.git.mchehab@kernel.org>
-References: <cover.1647274406.git.mchehab@kernel.org> <76c0f364de11dc6a9a27f2d294145f261b7d0e61.1647274406.git.mchehab@kernel.org>
+        Tue, 15 Mar 2022 09:57:22 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 11:57:20 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v11 7/7] pinctrl: qcom: Update clock voting as optional
+Message-ID: <YjDFcJOA8An58iTe@builder.lan>
+References: <1647359413-31662-1-git-send-email-quic_srivasam@quicinc.com>
+ <1647359413-31662-8-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647359413-31662-8-git-send-email-quic_srivasam@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 14. marec 2022 ob 17:34:32 CET je Mauro Carvalho Chehab 
-napisal(a):
-> Now that each non-generic driver has their own directory,
-> sort the entries.
+On Tue 15 Mar 10:50 CDT 2022, Srinivasa Rao Mandadapu wrote:
+
+> Update bulk clock voting to optional voting as ADSP bypass platform doesn't
+> need macro and decodec clocks, as these macro and dcodec GDSC switches are
+> maintained as power domains and operated from lpass clock drivers.
 > 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+
+Sorry for missing your reply on my question on the previous version, I
+think this sounds reasonable.
+
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 > ---
-
-For sunxi:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
+>  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c        | 12 +++++++++---
+>  drivers/pinctrl/qcom/pinctrl-lpass-lpi.h        |  1 +
+>  drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c |  1 +
+>  3 files changed, 11 insertions(+), 3 deletions(-)
 > 
-> To avoid mailbombing on a large number of people, only mailing lists were C/
-C on the cover.
-> See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.
-1647274406.git.mchehab@kernel.org/
-> 
->  drivers/media/platform/Kconfig | 98 +++++++++++++++-------------------
->  1 file changed, 43 insertions(+), 55 deletions(-)
-> 
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index d5aedc6b5ca3..b7c60969c974 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -29,84 +29,72 @@ config V4L_MEM2MEM_DRIVERS
->  	  to capture and output drivers, which use memory buffers for just
->  	  one of those.
+> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+> index 0216ca1..3fc473a 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+> @@ -401,9 +401,15 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
+>  		return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
+>  				     "Slew resource not provided\n");
 >  
-> +# Ancillary drivers
-> +
-> +config VIDEO_MEM2MEM_DEINTERLACE
-> +	tristate "Deinterlace support"
-> +	depends on V4L_MEM2MEM_DRIVERS
-> +	depends on VIDEO_DEV && VIDEO_V4L2
-> +	depends on HAS_DMA
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select V4L2_MEM2MEM_DEV
-> +	help
-> +	    Generic deinterlacing V4L2 driver.
-> +
-> +config VIDEO_MUX
-> +	tristate "Video Multiplexer"
-> +	depends on V4L_PLATFORM_DRIVERS
-> +	select MULTIPLEXER
-> +	depends on VIDEO_V4L2 && OF
-> +	select MEDIA_CONTROLLER
-> +	select VIDEO_V4L2_SUBDEV_API
-> +	select REGMAP
-> +	select V4L2_FWNODE
-> +	help
-> +	  This driver provides support for N:1 video bus multiplexers.
-> +
-> +# Platform drivers - Please keep it alphabetically sorted
-> +
-> +# TODO: create per-manufacturer directories
-> +
->  source "drivers/media/platform/allegro-dvt/Kconfig"
-> -source "drivers/media/platform/nxp/Kconfig"
-> -
-> -source "drivers/media/platform/renesas/Kconfig"
-> -
-> -# V4L platform drivers
-> -
-> -source "drivers/media/platform/marvell-ccic/Kconfig"
-> -
-> -source "drivers/media/platform/via/Kconfig"
-> -
-> +source "drivers/media/platform/am437x/Kconfig"
->  source "drivers/media/platform/amphion/Kconfig"
-> +source "drivers/media/platform/aspeed/Kconfig"
-> +source "drivers/media/platform/atmel/Kconfig"
->  source "drivers/media/platform/cadence/Kconfig"
-> -
->  source "drivers/media/platform/coda/Kconfig"
->  source "drivers/media/platform/davinci/Kconfig"
-> -
->  source "drivers/media/platform/exynos-gsc/Kconfig"
-> +source "drivers/media/platform/exynos4-is/Kconfig"
-> +source "drivers/media/platform/intel/Kconfig"
-> +source "drivers/media/platform/marvell-ccic/Kconfig"
->  source "drivers/media/platform/meson/ge2d/Kconfig"
->  source "drivers/media/platform/mtk-jpeg/Kconfig"
->  source "drivers/media/platform/mtk-mdp/Kconfig"
->  source "drivers/media/platform/mtk-vcodec/Kconfig"
->  source "drivers/media/platform/mtk-vpu/Kconfig"
-> -source "drivers/media/platform/omap3isp/Kconfig"
-> +source "drivers/media/platform/nxp/Kconfig"
->  source "drivers/media/platform/omap/Kconfig"
-> +source "drivers/media/platform/omap3isp/Kconfig"
->  source "drivers/media/platform/qcom/camss/Kconfig"
->  source "drivers/media/platform/qcom/venus/Kconfig"
-> -
-> -source "drivers/media/platform/aspeed/Kconfig"
-> +source "drivers/media/platform/renesas/Kconfig"
->  source "drivers/media/platform/rockchip/rga/Kconfig"
->  source "drivers/media/platform/rockchip/rkisp1/Kconfig"
->  source "drivers/media/platform/s3c-camif/Kconfig"
->  source "drivers/media/platform/s5p-g2d/Kconfig"
->  source "drivers/media/platform/s5p-jpeg/Kconfig"
-> +source "drivers/media/platform/s5p-mfc/Kconfig"
-> +source "drivers/media/platform/sti/bdisp/Kconfig"
-> +source "drivers/media/platform/sti/c8sectpfe/Kconfig"
-> +source "drivers/media/platform/sti/delta/Kconfig"
->  source "drivers/media/platform/sti/hva/Kconfig"
->  source "drivers/media/platform/stm32/Kconfig"
-> +source "drivers/media/platform/sunxi/Kconfig"
->  source "drivers/media/platform/sunxi/sun8i-di/Kconfig"
->  source "drivers/media/platform/sunxi/sun8i-rotate/Kconfig"
->  source "drivers/media/platform/tegra/vde/Kconfig"
->  source "drivers/media/platform/ti-vpe/Kconfig"
-> -
-> -config VIDEO_MUX
-> -	tristate "Video Multiplexer"
-> -	depends on V4L_PLATFORM_DRIVERS
-> -	select MULTIPLEXER
-> -	depends on VIDEO_V4L2 && OF
-> -	select MEDIA_CONTROLLER
-> -	select VIDEO_V4L2_SUBDEV_API
-> -	select REGMAP
-> -	select V4L2_FWNODE
-> -	help
-> -	  This driver provides support for N:1 video bus multiplexers.
-> -
-> -source "drivers/media/platform/intel/Kconfig"
-> -
-> -source "drivers/media/platform/exynos4-is/Kconfig"
-> -source "drivers/media/platform/am437x/Kconfig"
-> +source "drivers/media/platform/via/Kconfig"
->  source "drivers/media/platform/xilinx/Kconfig"
-> -source "drivers/media/platform/atmel/Kconfig"
-> -source "drivers/media/platform/sunxi/Kconfig"
-> -
-> -# Mem2mem drivers
-> -
-> -config VIDEO_MEM2MEM_DEINTERLACE
-> -	tristate "Deinterlace support"
-> -	depends on V4L_MEM2MEM_DRIVERS
-> -	depends on VIDEO_DEV && VIDEO_V4L2
-> -	depends on HAS_DMA
-> -	select VIDEOBUF2_DMA_CONTIG
-> -	select V4L2_MEM2MEM_DEV
-> -	help
-> -	    Generic deinterlacing V4L2 driver.
-> -
-> -source "drivers/media/platform/s5p-mfc/Kconfig"
-> -
-> -source "drivers/media/platform/sti/bdisp/Kconfig"
-> -
-> -source "drivers/media/platform/sti/delta/Kconfig"
-> -
-> -# DVB platform drivers
-> -source "drivers/media/platform/sti/c8sectpfe/Kconfig"
+> -	ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+> -	if (ret)
+> -		return dev_err_probe(dev, ret, "Can't get clocks\n");
+> +	if (data->is_clk_optional) {
+> +		ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "Can't get clocks\n");
+
+Dug into the clk_bulk_get() functions, and __clk_bulk_get() will print
+an error telling you which clock it failed to get. So I don't think your
+more generic error here doesn't add any value.
+
+Just return ret;
+
+> +	} else {
+> +		ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "Can't get clocks\n");
+> +	}
+
+Depending on your taste, you could do:
+
+	if (data->is_clk_optional)
+		ret = devm_clk_bulk_get_optional();
+	else
+		ret = devm_clk_bulk_get();
+
+	if (ret)
+		return ret;
+
+>  
+>  	ret = clk_bulk_prepare_enable(MAX_LPI_NUM_CLKS, pctrl->clks);
+>  	if (ret)
+> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
+> index afbac2a..3bcede6 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
+> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
+> @@ -77,6 +77,7 @@ struct lpi_pinctrl_variant_data {
+>  	int ngroups;
+>  	const struct lpi_function *functions;
+>  	int nfunctions;
+> +	int is_clk_optional;
+
+bool here please.
+
+>  };
+>  
+>  int lpi_pinctrl_probe(struct platform_device *pdev);
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+> index d67ff25..304d8a2 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+> @@ -142,6 +142,7 @@ static const struct lpi_pinctrl_variant_data sc7280_lpi_data = {
+>  	.ngroups = ARRAY_SIZE(sc7280_groups),
+>  	.functions = sc7280_functions,
+>  	.nfunctions = ARRAY_SIZE(sc7280_functions),
+> +	.is_clk_optional = 1,
+
+true
+
+Regards,
+Bjorn
+
+>  };
+>  
+>  static const struct of_device_id lpi_pinctrl_of_match[] = {
 > -- 
-> 2.35.1
+> 2.7.4
 > 
-> 
-
-

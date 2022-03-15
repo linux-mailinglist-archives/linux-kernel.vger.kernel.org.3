@@ -2,207 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E3E4D9710
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E1E4D971E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346338AbiCOJFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S1346366AbiCOJHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239046AbiCOJFL (ORCPT
+        with ESMTP id S234309AbiCOJHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:05:11 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAA3DEEB;
-        Tue, 15 Mar 2022 02:03:59 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22F4JpZr013528;
-        Tue, 15 Mar 2022 10:03:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=0ouzyT1rFXeSjPxJyzhJcbxpSD0Ueawx3dFZ0P2dIG0=;
- b=NlBqvGPm9NAUgA1qN+TGAL45p5hlHEsUU1xX9ZQpHndbTIOIccCQunO7+JOEHJRrWUv2
- NHBGgvynWPmRc2LQ9EMxTUrniKfMdxU4bsNRJRQ0MK2+Nt90eVr3nFtYGfpUF2Y2cWZc
- zuL9BMUvRPVUOJyc1/hHSLSIOsvfCTI8sDY9YSbM74Gq0Q6mYzgWsse3esOeAw4suKRd
- ml/bWeIDJPAEbA+YcTlDLXYYNESC1D9csFhT7bpqGagAOJMnruNYi9qFMNg+5BUEuTpm
- AGG/mVvzVVOyj5da/gy3XRlz3u/XLSUy8z2p7ILWKbCSUQjvwZXPCOCzRWMR3uilDjwm 8w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et63h54ra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Mar 2022 10:03:00 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 77A3810002A;
-        Tue, 15 Mar 2022 10:02:54 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A39C92138E7;
-        Tue, 15 Mar 2022 10:02:54 +0100 (CET)
-Received: from [10.201.23.19] (10.75.127.49) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 15 Mar
- 2022 10:02:53 +0100
-Subject: Re: [PATCH 17/24] media: platform: rename stm32/ to sti/stm32/
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Alain Volmat <alain.volmat@foss.st.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Dmitriy Ulitin <ulitin@ispras.ru>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ming Qian <ming.qian@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <cover.1647167750.git.mchehab@kernel.org>
- <dc5be62a56ac19c6f49f4c8432558fd7b0efe7e6.1647167750.git.mchehab@kernel.org>
- <20220314083942.GA526468@gnbcxd0016.gnb.st.com>
- <20220314121454.7432e231@coco.lan>
- <1122a956-0650-f948-512b-d3447e34df30@foss.st.com>
- <20220314141008.13e32acd@coco.lan>
-From:   Hugues FRUCHET - FOSS <hugues.fruchet@foss.st.com>
-Message-ID: <8a4782f3-53d0-7af7-2034-e31879efbc45@foss.st.com>
-Date:   Tue, 15 Mar 2022 10:02:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 15 Mar 2022 05:07:13 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B734BB8B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:06:01 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id im7so14517529qvb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:06:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z3LfIJkfGS6Zp6FqW3s9C0kvNrJ6zr2A5j+g5hiGGpA=;
+        b=yT3DiYXx5xIveRAN13zHZKCRgoYGnjZBxqvT3eLk6oVb7AEXKw7kg0iaZcM1VEQ78P
+         aXgVSbXiRgf4CxFg3L5IDH8xiyP+wT5k2iJwLtfDRPgmYMGbpcVOibW9EO1um4xu70Bk
+         xwXjcKRA+Y6IpOZou2jOJQn+1bMRR7palv+Y6Jils7vRrrsjIvIUiSovYCFB2f/GdnxI
+         6oo9ht7zMh9wkAd7cU08VDPpUTWIY7V/GTL8V8N7Py0NVeZgReor2a+/bQm1CWucNCZl
+         TGiqtW505nBfrUxb1SnHs1g0yPQGF0n8rzBBbP+gFiyVGHsXBBYOFqcftWxEveGe6BY5
+         ufuQ==
+X-Gm-Message-State: AOAM531M3Bj0PTgMBSFjZRs0gS2LTKslnNPQI52wh058lh2P9LW/h+6Q
+        3keHF1Wa7Sts0/aJJIia/IjjT61XcI9hIQ==
+X-Google-Smtp-Source: ABdhPJwCqDtU3KUtJ8pCzzIQhFqFdVh/RXPgHo13bWQ2T8mvcfwoRoW2m9KTzAT5I0k3IFfzniABGg==
+X-Received: by 2002:a05:6214:2487:b0:435:92e5:7f with SMTP id gi7-20020a056214248700b0043592e5007fmr20423488qvb.76.1647335159578;
+        Tue, 15 Mar 2022 02:05:59 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac85fc1000000b002e1c6420790sm7706027qta.40.2022.03.15.02.05.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 02:05:58 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2dc242a79beso193134457b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:05:58 -0700 (PDT)
+X-Received: by 2002:a81:49d0:0:b0:2db:dc6d:445d with SMTP id
+ w199-20020a8149d0000000b002dbdc6d445dmr23815441ywa.512.1647335158278; Tue, 15
+ Mar 2022 02:05:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220314141008.13e32acd@coco.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-14_14,2022-03-14_02,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAHk-=wiHa0vsZseZES=1T0rJ4Z_bC5cwHMUJfqFL9hVpvB283g@mail.gmail.com>
+ <20220314192522.GA3031157@roeck-us.net> <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
+In-Reply-To: <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Mar 2022 10:05:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUzCckOXNPpucG5HEHwJ6LzGGJis30m+trX7fibyQU8vw@mail.gmail.com>
+Message-ID: <CAMuHMdUzCckOXNPpucG5HEHwJ6LzGGJis30m+trX7fibyQU8vw@mail.gmail.com>
+Subject: Re: Linux 5.17-rc8
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Edmond Chung <edmondchung@google.com>,
+        Andrew Chant <achant@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On Tue, Mar 15, 2022 at 9:43 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> [ Adding more people to the cc, since this last change was triggered
+> by earlier changes.
+>
+> On Mon, Mar 14, 2022 at 12:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Build results:
+> >         total: 155 pass: 155 fail: 0
+> > Qemu test results:
+> >         total: 488 pass: 484 fail: 4
+>
+> Uhhuh. We got all the previous problems sorted out, but a new one instead.
+>
+> > This is a new problem. It bisects to commit fc328a7d1fcc ("gpio: Revert
+> > regression in sysfs-gpio (gpiolib.c)"). The network connection fails
+> > in the affected tests. Reverting the offending commit (ie reverting the
+> > revert) fixes the problem.
+>
+> Hmm. Looking at the changes since 5.16, that commit fc328a7d1fcc looks
+> somewhat suspicious.
+>
+> It claims to "revert" things, but the behavior it reverts goes
+> basically all the way back to v5.7 (with one of the patches going into
+> 5.10).
+>
+> And it clearly breaks things that used to work much more recently (ie
+> this worked in rc7, but it was also the state in every release since
+> 5.10).
+>
+> So unless somebody can find the _real_ issue here, I suspect very
+> strongly that that "fix" that came in last week was just wrong.
+>
+> It is also very non-specific "Some GPIO lines have stopped working"
+> with no pointer to actual reports.
+>
+> LinusW? Thierry? Bartoz? Anybody?
+>
+> Yes, there;s something bad going on here, but we can't randomly "fix"
+> things in an rc8 that have worked for several releases by now.
 
-sti and stm32 architectures don't have the same maintainers nor same 
-mailing list as you can see below:
+People really need to learn[1] to add proper Link tags to each and every
+commit:
+https://lore.kernel.org/all/20211217153555.9413-1-marcelo.jimenez@gmail.com
+The last mail in that thread is a regression report for the fix.
+Note that this "fix" has only been in next-20220308 and later, so
+more breakage may show up soon...
 
-ARM/STM32 ARCHITECTURE
-M:    Maxime Coquelin <mcoquelin.stm32@gmail.com>
-M:    Alexandre Torgue <alexandre.torgue@foss.st.com>
-L:    linux-stm32@st-md-mailman.stormreply.com (moderated for 
-non-subscribers)
-L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-S:    Maintained
-T:    git 
-git://git.kernel.org/pub/scm/linux/kernel/git/atorgue/stm32.git stm32-next
-F:    arch/arm/boot/dts/stm32*
-F:    arch/arm/mach-stm32/
-F:    drivers/clocksource/armv7m_systick.c
-N:    stm32
-N:    stm
+[1] https://www.kernel.org/doc/html/v5.6/maintainer/configure-git.html#creating-commit-links-to-lore-kernel-org
 
-ARM/STI ARCHITECTURE
-M:    Patrice Chotard <patrice.chotard@foss.st.com>
-L:    linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-S:    Maintained
-W:    http://www.stlinux.com
-F:    Documentation/devicetree/bindings/i2c/i2c-st.txt
-F:    arch/arm/boot/dts/sti*
-F:    arch/arm/mach-sti/
-F:    drivers/ata/ahci_st.c
-F:    drivers/char/hw_random/st-rng.c
-F:    drivers/clocksource/arm_global_timer.c
-F:    drivers/clocksource/clksrc_st_lpc.c
-F:    drivers/cpufreq/sti-cpufreq.c
-F:    drivers/dma/st_fdma*
-F:    drivers/i2c/busses/i2c-st.c
-F:    drivers/media/platform/sti/c8sectpfe/
-F:    drivers/media/rc/st_rc.c
-F:    drivers/mmc/host/sdhci-st.c
-F:    drivers/phy/st/phy-miphy28lp.c
-F:    drivers/phy/st/phy-stih407-usb.c
-F:    drivers/pinctrl/pinctrl-st.c
-F:    drivers/remoteproc/st_remoteproc.c
-F:    drivers/remoteproc/st_slim_rproc.c
-F:    drivers/reset/sti/
-F:    drivers/rtc/rtc-st-lpc.c
-F:    drivers/tty/serial/st-asc.c
-F:    drivers/usb/dwc3/dwc3-st.c
-F:    drivers/usb/host/ehci-st.c
-F:    drivers/usb/host/ohci-st.c
-F:    drivers/watchdog/st_lpc_wdt.c
-F:    include/linux/remoteproc/st_slim_rproc.h
+Gr{oetje,eeting}s,
 
+                        Geert
 
-but anyway, if this is really important for you to have a top folder to 
-group all ST stuff, we prefer to have "st" prefix than "stm":
- > 	./drivers/media/platform/st/sti/
- > 	./drivers/media/platform/st/stm32/
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-But one more time, our flavour is to stick to:
- > 	./drivers/media/platform/sti/
- > 	./drivers/media/platform/stm32/
-
-
-Best regards,
-Hugues.
-
-On 3/14/22 2:10 PM, Mauro Carvalho Chehab wrote:
-> Em Mon, 14 Mar 2022 12:34:47 +0100
-> Hugues FRUCHET - FOSS <hugues.fruchet@foss.st.com> escreveu:
-> 
->> Hi Mauro,
->>
->> Ideally we would like to stick to sti/ and stm32/ at same level, as it
->> is done in various other locations:
->>
->> ./Documentation/arm/sti/
->> ./Documentation/arm/stm32/
->>
->> ./arch/arm/mach-sti
->> ./arch/arm/mach-stm32
->>
->> ./drivers/media/cec/platform/sti/
->> ./drivers/media/cec/platform/stm32/
->>
->> ./drivers/gpu/drm/sti/
->> ./drivers/gpu/drm/stm/
->>
->> ./sound/soc/sti/
->> ./sound/soc/stm/
->>
->> Is this possible to keep those media folders as is ?
-> 
-> If we add them under:
-> 	./drivers/media/platform/stm/sti/
-> 	./drivers/media/platform/stm/stm32/
-> 
-> They'll both be at the same level.
-> 
-> It has been increasingly hard to maintain media/platform, as the file
-> become too big and disorganized. Sorting it per-vendor seems to be the
-> best thing, as it will keep things better organized.
-> 
-> As a side effect, with such kind of change, it is now possible to
-> have a MAINTAINERS entry that would point to a mailing list and/or
-> some SoC maintainers/reviewers that should be c/c to all patches
-> affecting drivers/media/platform/<vendor>.
-> 
-> Thanks,
-> Mauro
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

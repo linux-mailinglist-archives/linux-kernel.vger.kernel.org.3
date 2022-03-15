@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A6B4D9691
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADF44D9694
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245406AbiCOIp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S1346162AbiCOIpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346113AbiCOIpJ (ORCPT
+        with ESMTP id S1346091AbiCOIpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:45:09 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E404D25D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:43:56 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id u10so27808024wra.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:43:56 -0700 (PDT)
+        Tue, 15 Mar 2022 04:45:12 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E591EEC5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:43:57 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d7so757224wrb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ET+xzNuDp+rklrBcyzEb7KUpoGOfUFW9oXFXIwsaP18=;
-        b=M4XtYpV5xFKZ4/LNkeOtZBubF/ujdqqBVP0ZGQl7RSTLeL/aG/4xHxy64MpcOIxKAh
-         dMQwxjhM3apB124dNFN06+tNT9zquawoM8m9gwZ6l+PCOVmZzzQJla23s8YlW8EF+JZw
-         /TlkHlulcN597e9nqXWbaly8yS94+YUtf4W/KiKddaJLfjq23stIpdQl/XR2vQUPRtor
-         REwQUbG+PsRShQDmSoZ3jz4d1w+KZZuTVZcVBA3La5bGcFfxZ0MyW0Lu4BIkVGx5w0x0
-         La1EvHQFx4BsPxB/CBCAyO7qwSjcy4+t/biXrck/wCMBKLzyIR0hYgtAV7Y75TCYAxqP
-         t/ng==
+        bh=vrlnakmn5fLlGT/co3zd6+O92fe3JgVqL1zsEXzLWMY=;
+        b=ekiKDaiPvPmyaAHma2KjNi2hG70kvvZHOu0AyAI+rcQ0NFHAUd9FTfE1W1n4NKORwv
+         Ca+W+ConXG7ciFXJIbfopOHifeisT3X0U/fxljw/6xuI4RaLipQJreuQM9qfubp/pgnG
+         a4XcQ9sWQm5E3/zxBYwNUlpyHpGkEf6qagmjy3+RxbJzO8m2Qs9MBQmsshMMsTrvZ5s9
+         1XxhuW9tqW5Rp5yagzoO26dlL7Q7/WxbJjVuyfaCPRq2AewGqXDRVEvExRh8Gslpj+YH
+         45TwrpgqRll3c6QYeMEMC4mnrDyTUJSvNEOKQccGKfL1pOLP0u5WhvOia9ljKdpilQXP
+         Peog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=ET+xzNuDp+rklrBcyzEb7KUpoGOfUFW9oXFXIwsaP18=;
-        b=67T98FfGq9kBJT/WS/JHVsLF7Q+8SVbkr6jb6Pm1EwGicnSqrgnU0CO4c3nLUNS1NQ
-         k8HxSpz8xcjLcQstB3VYNlzqt5Fy1gdL5Yw19ok7/NekZuMavcNMRAGl9OwdGI+Seiv6
-         UKA5njR4dBxUchmDIzoRRd0Oi5P0Jq62pnyuSckoDonHqY6n7Iujd7bmX8shZBdnXckn
-         x5js5bQ/M+LoDojgUaSbbiozxmD4asmqIINOSnC/8ZNGAjiz4kjPrm9fOeYDLAoEqBoG
-         8r//s03GtAbCCE8fV5iGqx+5dcNz+4NfCGp4U8g0SFoKv9m+QRS3ae7cNftgWDfH7lk+
-         7Lfw==
-X-Gm-Message-State: AOAM531WDLIsA5+1iBamPtpUoz7QgfXvt+8j5j6XDZV42buQIlPbshby
-        XXUHAXOaAtz6MvCY8IMOgOKHD2mAgzU=
-X-Google-Smtp-Source: ABdhPJybolAvSP49vOrZeZ9n8J8ok1utvPDcT4CrohBtOagn/YDIxN1Mm9qdhawUQQ4rXQoQUJWBew==
-X-Received: by 2002:a5d:4dca:0:b0:1f0:2543:e10e with SMTP id f10-20020a5d4dca000000b001f02543e10emr19388697wru.60.1647333835073;
-        Tue, 15 Mar 2022 01:43:55 -0700 (PDT)
+        bh=vrlnakmn5fLlGT/co3zd6+O92fe3JgVqL1zsEXzLWMY=;
+        b=CnwEhpna9IuLfz4qJmeMtIRoHxL9QJkl7eddF2RAh5hzQSd/b+CRyuajsTZz8zk948
+         9ghXG91kWfqxZUtkR1hVb9yodihkfWu7JBMENbAJc/1j3absGqHOR74Yv8ppcqy5m34i
+         z7iu4D2yyM4lsKgECFCw7Wgd13C4GSKMUDUNvLNT4LqMXSDqDyy6lPTqUZrv/zq4N/GI
+         rE7rEhoLux01dBoN8OhYA2TGChrfUAIf67F0UHFgRNWXZR2jxuTBWBfweweHbv9rLq4i
+         imNtXtsFePzhArhqxScOo7ED/5ivbvettYgbX7QKNze2X9hSS9bVk/dMWnXRPJS6UCc4
+         be5Q==
+X-Gm-Message-State: AOAM5326MgDqFvjQgRLLhKDJW2QlYmKtP273boP31ASH6zZG4ggzPTz7
+        Y/aS2BUBReV3srjUCwH4y3sEFVXt/EY=
+X-Google-Smtp-Source: ABdhPJzQ+XVKQ/F66KPlrLtzGhy9sc21PAGcwHUkbjZgYcq5BBa2K8solVtOhiURc+kyN9CiS+7GoQ==
+X-Received: by 2002:a5d:6c67:0:b0:203:bf25:f311 with SMTP id r7-20020a5d6c67000000b00203bf25f311mr5452652wrz.108.1647333836233;
+        Tue, 15 Mar 2022 01:43:56 -0700 (PDT)
 Received: from kepler.. (0526F1FC.dsl.pool.telekom.hu. [5.38.241.252])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.43.54
+        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.43.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:43:54 -0700 (PDT)
+        Tue, 15 Mar 2022 01:43:55 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
 From:   Ingo Molnar <mingo@kernel.org>
 To:     linux-kernel@vger.kernel.org
@@ -61,9 +61,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Borislav Petkov <bp@alien8.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 06/15] sched/headers: Fix comment typo in kernel/sched/cpudeadline.c
-Date:   Tue, 15 Mar 2022 09:42:38 +0100
-Message-Id: <20220315084247.40783-7-mingo@kernel.org>
+Subject: [PATCH 07/15] sched/headers: Make the <linux/sched/deadline.h> header build standalone
+Date:   Tue, 15 Mar 2022 09:42:39 +0100
+Message-Id: <20220315084247.40783-8-mingo@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220315084247.40783-1-mingo@kernel.org>
 References: <20220315084247.40783-1-mingo@kernel.org>
@@ -80,26 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-File name changed.
+This header depends on various scheduler definitions.
 
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Reviewed-by: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/cpudeadline.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/sched/deadline.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/sched/cpudeadline.c b/kernel/sched/cpudeadline.c
-index ceb03d76c0cc..0e196f0de492 100644
---- a/kernel/sched/cpudeadline.c
-+++ b/kernel/sched/cpudeadline.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- *  kernel/sched/cpudl.c
-+ *  kernel/sched/cpudeadline.c
-  *
-  *  Global CPU deadline management
-  *
+diff --git a/include/linux/sched/deadline.h b/include/linux/sched/deadline.h
+index 1aff00b65f3c..7c83d4d5a971 100644
+--- a/include/linux/sched/deadline.h
++++ b/include/linux/sched/deadline.h
+@@ -6,6 +6,8 @@
+  * NORMAL/BATCH tasks.
+  */
+ 
++#include <linux/sched.h>
++
+ #define MAX_DL_PRIO		0
+ 
+ static inline int dl_prio(int prio)
 -- 
 2.32.0
 

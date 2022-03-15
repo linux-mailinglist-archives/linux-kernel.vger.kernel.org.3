@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FD64D9B0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8924D9B12
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348211AbiCOMYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S1348222AbiCOMYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348201AbiCOMYi (ORCPT
+        with ESMTP id S1348204AbiCOMYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:24:38 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479D563D8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:23:26 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id h11so26217417ljb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:23:26 -0700 (PDT)
+        Tue, 15 Mar 2022 08:24:46 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23EA63CE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:23:31 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id s25so26214104lji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GoskkRaS3xKbqK2gaYIRk1KTtxNlFqgeuXFN+AZZnLY=;
-        b=Q37V0853LSlk5ZhEq0VoQgmGV9DHPIeQ+ZEwwGw4B/yZytSozSz7Jj22JHt8/f5l/v
-         80Ja0WVYDd3/ojuQXVwZu1FBWVl0DBDuzuyjIfzbrY8j3L5nIUrNvMAu59C3JdIkDSgC
-         +7fyHRV+lyzsFAZrr2ZRRNaoxeTTc3N6kesSzMV8sr7c/WBjDIn+Gx/5jFhxjl+jb13C
-         uL+qlcJIYklvdXK9XZOG4vhnLB+qLHaA0C7qwIzxBT9LnqAQ9EmTqd5ncgkURRP8ISGD
-         2iQXeKrVyxy+lifc5n6aCv+UcvTmoOEXm8KM/imo2FptfV9ySDMdkrzAmlK2iRg0Xoep
-         aVIg==
+        bh=cPnb1ATRmSI8xZX+veYE4aEfgSHzzxZV5zRVXcuyhkU=;
+        b=MyzIMcUTwXxiaAMPib2hzET3b2cxFOda5RQjUnVvckRXHSqJouuvENc6OiZeEO3ztp
+         HA9qUIM8jD4siqP0DvJW4clgq3NdrqWdX2g3rNEP4SAfZwQNf3Ijx5z/DA8wXLdArYXx
+         OZfmRzA3CBNjxBzdCxoI0U12ok4oTTMCAlyxjqFXCCsvPhtJCDO7rO0zPyuepsqppvZx
+         UJVuHW1nXQLNX67ohVhl1lYk4pm6P9/9z3wU1MTHEN5tBPstKXAGSbqpPtxaLMLvjiV6
+         FGq8rAwXOZixu40ziJoyXF23TFGmu/feAktE2VO+dQ14wkxPGuPl0LILRZkXBbYUdlEW
+         OkwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GoskkRaS3xKbqK2gaYIRk1KTtxNlFqgeuXFN+AZZnLY=;
-        b=ZzZeo91v+z73KE8aPXp2JqfLKj4pph0cGjxOjBhgVdPJEALNhdhiZrs2nVJdZL2Idn
-         D3ey7pklgK4psVyKolfJaftuefaBp+ZffH2IG4DsGDmUeB3Lsvb4SItmRu+Y1XtIBZjn
-         BPM2SsRP+8oBMXvtOILxZgZvagVbbHmU/NpQ9wjsYsNIRIuCIvksAxPfGwgLtSy2yW2l
-         GBJ5myWs+5eSKw8N8wlWI/3RSGP9SAmv5pqV44DypYrb/beRFYsahcLkZEBz12Bb2cy2
-         wksr0I57ym3ob0tUjnSOoDWHAxqDNGnppFCPPnmmyZk2d2bsUHS/EIjeKrgMpkNGXJwD
-         clPA==
-X-Gm-Message-State: AOAM5323xQyydQH4tzJ1lvpzlhlECRvE1JnaVb+yYprM9W0l2nAZuZtk
-        c56R8080fcs+wiDw9aWSrr3mV6e8IcZJQ4CEXfrRqzjp+VI=
-X-Google-Smtp-Source: ABdhPJyw6ZJVayVjzWxqOjk9MssbxAdG+fFQBGuSUslZ2HTumnLArfhj8jb0uGkUUduJOpNoBRtgFn7mGSzSpqfF5oE=
-X-Received: by 2002:a2e:9cc5:0:b0:239:da6e:290d with SMTP id
- g5-20020a2e9cc5000000b00239da6e290dmr17257479ljj.4.1647347004620; Tue, 15 Mar
- 2022 05:23:24 -0700 (PDT)
+        bh=cPnb1ATRmSI8xZX+veYE4aEfgSHzzxZV5zRVXcuyhkU=;
+        b=s+xMl383SnsOnzMOTf/vwMYGnBUizo2Xnl/IKbohc2Iv487ZWwW/i4KPYlCD3doGTp
+         e2Vp08shX6SGaH6c00ocKteamlmgE36T2nzw4bbyV5NjxqD3zGY5P3nu/L1O/KBYD1zc
+         vpimP/flBY+93pY4wCJ+1tZgBqpMcsUtpQRr3J9C5UINPFhiuzNBVWl3fbUMYUHl2GT4
+         AW4Y1EtwX3Uu/eFLPF292WYi49vJdm0sI9YL/QTpoc3gI+Bai3X7KwzLOvWr/aaHJbEW
+         GNOznj/f5D/kFZHlZv1HfNx2k2SiR63Yn5yIjsv4R06jULdQ75UaIJNY8PmLZhSBsyqM
+         Yjuw==
+X-Gm-Message-State: AOAM532gl4amuveSMhMUE6W4yfDsyImVFf7v7U6og4rVOaTpHJh1OQnE
+        RVeCNwoLQKJM9re6FHfZuYF2f1puUqRMNkT+YRir8Q==
+X-Google-Smtp-Source: ABdhPJzvZgzztoUTLaSHmueiCTGTfSPqCknLmUmw+wNq7wRGhWufTTo6/FZarCRlzAyJi8R7+Rl557qFFdU5IwbOkAs=
+X-Received: by 2002:a2e:8603:0:b0:246:24c:b79c with SMTP id
+ a3-20020a2e8603000000b00246024cb79cmr17459702lji.367.1647347009946; Tue, 15
+ Mar 2022 05:23:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220307090009.1386876-1-benchuanggli@gmail.com>
-In-Reply-To: <20220307090009.1386876-1-benchuanggli@gmail.com>
+References: <20220308071415.1093393-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220308071415.1093393-1-jiasheng@iscas.ac.cn>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 15 Mar 2022 13:22:48 +0100
-Message-ID: <CAPDyKFpYSTsA5wtTA83QvAaK+Teyshz_PssddE2DJyuM-MLHMA@mail.gmail.com>
-Subject: Re: [PATCH V2] mmc: sdhci-pci-gli: Add runtime PM for GL9763E
-To:     Ben Chuang <benchuanggli@gmail.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, greg.tu@genesyslogic.com.tw,
-        ben.chuang@genesyslogic.com.tw, SeanHY.Chen@genesyslogic.com.tw,
-        hl.liu@genesyslogic.com.tw,
-        Kevin Chang <kevin.chang@lcfuturecenter.com>
+Date:   Tue, 15 Mar 2022 13:22:53 +0100
+Message-ID: <CAPDyKFoJXErrVyY3EJim3Yvn7ReeBzU5F+ic83KRBNJ1riROpg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: davinci_mmc: Handle error for clk_enable
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,17 +65,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Mar 2022 at 10:00, Ben Chuang <benchuanggli@gmail.com> wrote:
+On Tue, 8 Mar 2022 at 08:14, Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
 >
-> From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> As the potential failure of the clk_enable(),
+> it should be better to check it and return error
+> if fails.
 >
-> Add runtime PM for GL9763E and disable PLL in runtime suspend. So power
-> gated of upstream port can be enabled. GL9763E has an auxiliary power
-> so it keep states in runtime suspend. In runtime resume, PLL is enabled
-> and waits for it to stabilize.
->
-> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> Tested-by: Kevin Chang <kevin.chang@lcfuturecenter.com>
+> Fixes: bbce5802afc5 ("davinci: mmc: updates to suspend/resume implementation")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
 Applied for next, thanks!
 
@@ -87,86 +80,29 @@ Kind regards
 Uffe
 
 
+
 > ---
-> Changes in v2:
-> * modify commit messages
-> * Use read_poll_timeout() instead of while loop
-> ---
->  drivers/mmc/host/sdhci-pci-gli.c | 47 ++++++++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
+>  drivers/mmc/host/davinci_mmc.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-> index 97035d77c18c..c854c8db32e4 100644
-> --- a/drivers/mmc/host/sdhci-pci-gli.c
-> +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> @@ -13,6 +13,7 @@
->  #include <linux/mmc/mmc.h>
->  #include <linux/delay.h>
->  #include <linux/of.h>
-> +#include <linux/iopoll.h>
->  #include "sdhci.h"
->  #include "sdhci-pci.h"
->  #include "cqhci.h"
-> @@ -873,6 +874,47 @@ static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
->         pci_write_config_dword(pdev, PCIE_GLI_9763E_VHS, value);
->  }
->
-> +#ifdef CONFIG_PM
-> +static int gl9763e_runtime_suspend(struct sdhci_pci_chip *chip)
-> +{
-> +       struct sdhci_pci_slot *slot = chip->slots[0];
-> +       struct sdhci_host *host = slot->host;
-> +       u16 clock;
-> +
-> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> +       clock &= ~(SDHCI_CLOCK_PLL_EN | SDHCI_CLOCK_CARD_EN);
-> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
-> +
-> +       return 0;
-> +}
-> +
-> +static int gl9763e_runtime_resume(struct sdhci_pci_chip *chip)
-> +{
-> +       struct sdhci_pci_slot *slot = chip->slots[0];
-> +       struct sdhci_host *host = slot->host;
-> +       u16 clock;
-> +
-> +       clock = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> +
-> +       clock |= SDHCI_CLOCK_PLL_EN;
-> +       clock &= ~SDHCI_CLOCK_INT_STABLE;
-> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
-> +
-> +       /* Wait max 150 ms */
-> +       if (read_poll_timeout(sdhci_readw, clock, (clock & SDHCI_CLOCK_INT_STABLE),
-> +                             1000, 150000, false, host, SDHCI_CLOCK_CONTROL)) {
-> +               pr_err("%s: PLL clock never stabilised.\n",
-> +                      mmc_hostname(host->mmc));
-> +               sdhci_dumpregs(host);
-> +       }
-> +
-> +       clock |= SDHCI_CLOCK_CARD_EN;
-> +       sdhci_writew(host, clock, SDHCI_CLOCK_CONTROL);
-> +
-> +       return 0;
-> +}
-> +#endif
-> +
->  static int gli_probe_slot_gl9763e(struct sdhci_pci_slot *slot)
+> diff --git a/drivers/mmc/host/davinci_mmc.c b/drivers/mmc/host/davinci_mmc.c
+> index 2a757c88f9d2..80de660027d8 100644
+> --- a/drivers/mmc/host/davinci_mmc.c
+> +++ b/drivers/mmc/host/davinci_mmc.c
+> @@ -1375,8 +1375,12 @@ static int davinci_mmcsd_suspend(struct device *dev)
+>  static int davinci_mmcsd_resume(struct device *dev)
 >  {
->         struct pci_dev *pdev = slot->chip->pdev;
-> @@ -982,6 +1024,11 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
->  #ifdef CONFIG_PM_SLEEP
->         .resume         = sdhci_cqhci_gli_resume,
->         .suspend        = sdhci_cqhci_gli_suspend,
-> +#endif
-> +#ifdef CONFIG_PM
-> +       .runtime_suspend = gl9763e_runtime_suspend,
-> +       .runtime_resume  = gl9763e_runtime_resume,
-> +       .allow_runtime_pm = true,
->  #endif
->         .add_host       = gl9763e_add_host,
->  };
+>         struct mmc_davinci_host *host = dev_get_drvdata(dev);
+> +       int ret;
+> +
+> +       ret = clk_enable(host->clk);
+> +       if (ret)
+> +               return ret;
+>
+> -       clk_enable(host->clk);
+>         mmc_davinci_reset_ctrl(host, 0);
+>
+>         return 0;
 > --
-> 2.35.1
+> 2.25.1
 >

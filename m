@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64324D998C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6B04D9964
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347453AbiCOKrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S1347766AbiCOKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347414AbiCOKpx (ORCPT
+        with ESMTP id S1347439AbiCOKqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:45:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E65133A;
-        Tue, 15 Mar 2022 03:44:18 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:44:16 -0000
+        Tue, 15 Mar 2022 06:46:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34F8517EB;
+        Tue, 15 Mar 2022 03:44:20 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:44:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647341057;
+        s=2020; t=1647341058;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q09XAzJjkLf7Xkw/YaQeeAhtQSprnJ4QqL0hxdYpv9w=;
-        b=jm+NsyMeVGDdT45J/XRWYZq7kUoPzTeVHqmRA5gK9JhSEo/tKkXzLcPJ3qGVkHKMivJOag
-        vJW3T5wZjIn7MWcAcOtiXytn+pKvER7x28ijfve48Xle+1NIDvPhAkfajl97zWeTZFAZIS
-        spL7xi2Ptk7My908+AQ0kO0YXbH+C3tuJ1R7Ls9hG7bUJrIAxdzHrOSTYnS/GBG4A541DZ
-        FjNK/Y6Ua0H+lh+8WkYuW4UHdg6zui+pdHAtB1RqDIB7wgzlHu6PwOoILcgX6px11haPo9
-        YfVgGJUsdjFkFMEXzrHTxoz7NO4KkoaimEyiJWOx+RVFFiH7Oz0/MvMFjawPgw==
+        bh=EZC3/kc1HTY+XXoQPROWdI9AV7DgxswUrZQiDvHRmSQ=;
+        b=wkP6R//JdhXK+fS9vM2rUcstzrQqroC6LZR2GQiK5FMghlmIztCfJaEJrJWFK4VigmrLv9
+        glsOHbL2kA9oCafyLbJJ/9sSUTaLQREDZVdL3LrbPeayoHYW1UoIxbYt8vjlRlwtN6G2fX
+        9NUduiowRx+KLuS5btXI8bSizZPCM1/h7/jZdRDv0EX06nANCtMdzBSjNpvh0ElqgMiEUw
+        bGdzWy7Z3pwPlHOjpsN+8cn3NeDuhVcUbD1ku2Pg/C3CI2NKKtStDWNZOPOGNa1GglcEeS
+        j0/E5GCfN337MAMTA2doevGTPpMzcQypPjzkii7w6h4jamPOcNU809m1Sj5Rww==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647341057;
+        s=2020e; t=1647341058;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q09XAzJjkLf7Xkw/YaQeeAhtQSprnJ4QqL0hxdYpv9w=;
-        b=7FyjIflxZqyWuiQm/1adrVylrNGVrMO/ek4XxSDTPaHR+FrQnwlVwc7uSVP40zdlEmTeGW
-        HWtPbufwadoI0tCg==
+        bh=EZC3/kc1HTY+XXoQPROWdI9AV7DgxswUrZQiDvHRmSQ=;
+        b=cHduqrcOx1GMlJBKhGL49kGdpyGFthsZb1S+ZUnIuaC89/I3LhjuNAF0I3+QPUWwt/pWm7
+        7CvQdXlgPwRxjLCw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Add --dry-run
+Subject: [tip: x86/core] static_call: Avoid building empty .static_call_sites
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Miroslav Benes <mbenes@suse.cz>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154317.282720146@infradead.org>
-References: <20220308154317.282720146@infradead.org>
+In-Reply-To: <20220308154317.223798256@infradead.org>
+References: <20220308154317.223798256@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164734105637.16921.360308990098148427.tip-bot2@tip-bot2>
+Message-ID: <164734105718.16921.7882247983946373837.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,74 +67,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     f2d3a250897133cc36c13a641bd6a9b4dd5ad234
-Gitweb:        https://git.kernel.org/tip/f2d3a250897133cc36c13a641bd6a9b4dd5ad234
+Commit-ID:     b44544fe0298ee2224960a31f795e317029e2a60
+Gitweb:        https://git.kernel.org/tip/b44544fe0298ee2224960a31f795e317029e2a60
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:13 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:12 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 15 Mar 2022 10:32:32 +01:00
+CommitterDate: Tue, 15 Mar 2022 10:32:31 +01:00
 
-objtool: Add --dry-run
+static_call: Avoid building empty .static_call_sites
 
-Add a --dry-run argument to skip writing the modifications. This is
-convenient for debugging.
+Without CONFIG_HAVE_STATIC_CALL_INLINE there's no point in creating
+the .static_call_sites section and it's related symbols.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154317.282720146@infradead.org
+Link: https://lore.kernel.org/r/20220308154317.223798256@infradead.org
 ---
- tools/objtool/builtin-check.c           | 3 ++-
- tools/objtool/elf.c                     | 3 +++
- tools/objtool/include/objtool/builtin.h | 2 +-
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 38070f2..853af93 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -20,7 +20,7 @@
- #include <objtool/objtool.h>
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866..a41e623 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -404,6 +404,7 @@
+ 	KEEP(*(__jump_table))						\
+ 	__stop___jump_table = .;
  
- bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
--     validate_dup, vmlinux, mcount, noinstr, backup, sls;
-+     validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++#ifdef CONFIG_HAVE_STATIC_CALL_INLINE
+ #define STATIC_CALL_DATA						\
+ 	. = ALIGN(8);							\
+ 	__start_static_call_sites = .;					\
+@@ -412,6 +413,9 @@
+ 	__start_static_call_tramp_key = .;				\
+ 	KEEP(*(.static_call_tramp_key))					\
+ 	__stop_static_call_tramp_key = .;
++#else
++#define STATIC_CALL_DATA
++#endif
  
- static const char * const check_usage[] = {
- 	"objtool check [<options>] file.o",
-@@ -46,6 +46,7 @@ const struct option check_options[] = {
- 	OPT_BOOLEAN('M', "mcount", &mcount, "generate __mcount_loc"),
- 	OPT_BOOLEAN('B', "backup", &backup, "create .orig files before modification"),
- 	OPT_BOOLEAN('S', "sls", &sls, "validate straight-line-speculation"),
-+	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
- 	OPT_END(),
- };
- 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 4b384c9..456ac22 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -1019,6 +1019,9 @@ int elf_write(struct elf *elf)
- 	struct section *sec;
- 	Elf_Scn *s;
- 
-+	if (dryrun)
-+		return 0;
-+
- 	/* Update changed relocation sections and section headers: */
- 	list_for_each_entry(sec, &elf->sections, list) {
- 		if (sec->changed) {
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index 89ba869..7b4b124 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -9,7 +9,7 @@
- 
- extern const struct option check_options[];
- extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
--            validate_dup, vmlinux, mcount, noinstr, backup, sls;
-+            validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
- 
- extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
- 
+ /*
+  * Allow architectures to handle ro_after_init data on their

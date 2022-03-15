@@ -2,551 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2D04D98C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FD54D98C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347108AbiCOKbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S1347116AbiCOKcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345266AbiCOKbD (ORCPT
+        with ESMTP id S242353AbiCOKcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:31:03 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E084EA28;
-        Tue, 15 Mar 2022 03:29:51 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2e5757b57caso39788197b3.4;
-        Tue, 15 Mar 2022 03:29:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/b90Vp2Om8gjduKDwpSxivCY2jfdTN5BJWNgMniUKoE=;
-        b=dg5PX/zIgricxvcv0+7Wkd6zxLEIhqxHX9aN1lowezPBJOcL/Bc9VDRU1jWAIOuJzM
-         YkmYmzE13YlJbtLNWnavhhe+E4tZUO5tJZWqLrS4jyALdfsSN8UQNtRhDdWxoFT0VvE+
-         jbJ40v0S9SOG97CZ5By7XlW2/FmsominuKY8k+1G9WP7OvZCFWyys4EnxxYZhtEOnB21
-         AqconvgYT65ZDMrA43+hiuWM4w3M8+KGpTTYNEbL6J9J7BfBhpcoC6+wyoXui2SaGjLP
-         gGfyH8u+kM4sCZNC167qG3jX8x94UES8pHuf6/WyW0/QhEWDlm343ph0T5aoib6PPca+
-         T4Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/b90Vp2Om8gjduKDwpSxivCY2jfdTN5BJWNgMniUKoE=;
-        b=uhpaBqPwmOBFB1i0q+1l8wwp1zM5UDIq8liUnMCRxbttqR8s4IlOgGdtGAjC5ozgjG
-         cpBO7+40Ntd3Z8eaypDzxUZpcKjt6u/J+vEdwcjsm3pkRIVzdgsq/or8KHIv0I0tTCKJ
-         8Od6gpQl0Zdv7U6SBBqD9if7JoCA8e5oh1hJWj8gqHEvGPSUoeJB6Plc3IsviRadT0ki
-         KAozbAI8bxOSAsrjttSEJFkzRpy21yBZ3tCIYbpwJywpFilGE4mLl7TXjAo/2AA3qqS2
-         55joZXeE67I1rzIQNH39lTRvg4YwSafuIoVOdhTUT6LoWKc6TuLGvPpHWdX6caxLBsYE
-         zXmw==
-X-Gm-Message-State: AOAM531Hs4n2JJoBJl0Vy6oCZjwaD1hxYo7wqLjd9pZBtxkKKePvJ48/
-        ITpeC81kH53qoX/ydh8vSyVqj/t3L5YdiY2if8w=
-X-Google-Smtp-Source: ABdhPJzZm+AJ+CohIfmFl+oYVrqbMw+m4k317aS3wJahPER5V7Yl61tondx+UFVt8RVujE5/xTpOiqqsnLYXNIEXaUU=
-X-Received: by 2002:a81:9806:0:b0:2dc:5953:4d13 with SMTP id
- p6-20020a819806000000b002dc59534d13mr23231790ywg.233.1647340190137; Tue, 15
- Mar 2022 03:29:50 -0700 (PDT)
+        Tue, 15 Mar 2022 06:32:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F04EA2B;
+        Tue, 15 Mar 2022 03:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647340293; x=1678876293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0dNmYUFs9nRuMrk1s4mw2ka06WKswNmTkimhAQ++6/g=;
+  b=gGAMnLW41HpadH9Gufd7lF4pIBWUsw7H7trf2oq+rGKFLFXTg7NOBhi7
+   pbuIPXs/0g0ApCvEkZCiuroRO8DSAzTmE/zal9Cikuf0NEcQEJukbxD6R
+   kNlVUrhYhQG4sfc3hpM5eD+a4AUHx/q5XQXYMpVHArYuhV3etxdQiOamv
+   mJy3iiqrtMN/dFPI0GBeTMB9omchDDLkrQJsWxVOKefq6Slo5RheWd6fM
+   5rGH7NsyYcP+/is+qxAyvG8I+grnz4gpqSoIKmnd8gEbD0RzsTHMap72F
+   xklbveSsMyrHb0zvwB2EAebUp/0vVL598/fKWWOuj/CRNZ4E3zD2w6UJK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319486285"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="319486285"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:31:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="598262614"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:31:28 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nU4Rz-000CgM-3g;
+        Tue, 15 Mar 2022 12:30:47 +0200
+Date:   Tue, 15 Mar 2022 12:30:46 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     mcgrof@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com
+Subject: Re: [PATCH v2] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Message-ID: <YjBq1jg9cNgEqB8T@smile.fi.intel.com>
+References: <CGME20220315095129epcas5p230b94ea10517d148c9cae0669229b0fc@epcas5p2.samsung.com>
+ <20220315095112.439580-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-References: <CAOUHufbN_56UJBkgA2LjAfbTt9nzPOCHaSeS4P3GHcYst+Y+eg@mail.gmail.com>
- <20220314233812.9011-1-21cnbao@gmail.com> <CAOUHufa9eY44QadfGTzsxa2=hEvqwahXd7Canck5Gt-N6c4UKA@mail.gmail.com>
- <CAGsJ_4zvj5rmz7DkW-kJx+jmUT9G8muLJ9De--NZma9ey0Oavw@mail.gmail.com>
-In-Reply-To: <CAGsJ_4zvj5rmz7DkW-kJx+jmUT9G8muLJ9De--NZma9ey0Oavw@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 15 Mar 2022 23:29:39 +1300
-Message-ID: <CAGsJ_4zZc0oFSmBKAN77vm7VstQH=ieaQ0cfyvcMi3OQRrEpSg@mail.gmail.com>
-Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Brian Geffon <bgeffon@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Donald Carr <d@chaos-reins.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Huang Ying <ying.huang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315095112.439580-1-maninder1.s@samsung.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 10:27 PM Barry Song <21cnbao@gmail.com> wrote:
->
-> On Tue, Mar 15, 2022 at 6:18 PM Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > On Mon, Mar 14, 2022 at 5:38 PM Barry Song <21cnbao@gmail.com> wrote:
-> > >
-> > > On Tue, Mar 15, 2022 at 5:45 AM Yu Zhao <yuzhao@google.com> wrote:
-> > > >
-> > > > On Mon, Mar 14, 2022 at 5:12 AM Barry Song <21cnbao@gmail.com> wrote:
-> > > > >
-> > > > > > > > >
-> > > > > > > > > > We used to put a faulted file page in inactive, if we access it a
-> > > > > > > > > > second time, it can be promoted
-> > > > > > > > > > to active. then in recent years, we have also applied this to anon
-> > > > > > > > > > pages while kernel adds
-> > > > > > > > > > workingset protection for anon pages. so basically both anon and file
-> > > > > > > > > > pages go into the inactive
-> > > > > > > > > > list for the 1st time, if we access it for the second time, they go to
-> > > > > > > > > > the active list. if we don't access
-> > > > > > > > > > it any more, they are likely to be reclaimed as they are inactive.
-> > > > > > > > > > we do have some special fastpath for code section, executable file
-> > > > > > > > > > pages are kept on active list
-> > > > > > > > > > as long as they are accessed.
-> > > > > > > > >
-> > > > > > > > > Yes.
-> > > > > > > > >
-> > > > > > > > > > so all of the above concerns are actually not that correct?
-> > > > > > > > >
-> > > > > > > > > They are valid concerns but I don't know any popular workloads that
-> > > > > > > > > care about them.
-> > > > > > > >
-> > > > > > > > Hi Yu,
-> > > > > > > > here we can get a workload in Kim's patchset while he added workingset
-> > > > > > > > protection
-> > > > > > > > for anon pages:
-> > > > > > > > https://patchwork.kernel.org/project/linux-mm/cover/1581401993-20041-1-git-send-email-iamjoonsoo.kim@lge.com/
-> > > > > > >
-> > > > > > > Thanks. I wouldn't call that a workload because it's not a real
-> > > > > > > application. By popular workloads, I mean applications that the
-> > > > > > > majority of people actually run on phones, in cloud, etc.
-> > > > > > >
-> > > > > > > > anon pages used to go to active rather than inactive, but kim's patchset
-> > > > > > > > moved to use inactive first. then only after the anon page is accessed
-> > > > > > > > second time, it can move to active.
-> > > > > > >
-> > > > > > > Yes. To clarify, the A-bit doesn't really mean the first or second
-> > > > > > > access. It can be many accesses each time it's set.
-> > > > > > >
-> > > > > > > > "In current implementation, newly created or swap-in anonymous page is
-> > > > > > > >
-> > > > > > > > started on the active list. Growing the active list results in rebalancing
-> > > > > > > > active/inactive list so old pages on the active list are demoted to the
-> > > > > > > > inactive list. Hence, hot page on the active list isn't protected at all.
-> > > > > > > >
-> > > > > > > > Following is an example of this situation.
-> > > > > > > >
-> > > > > > > > Assume that 50 hot pages on active list and system can contain total
-> > > > > > > > 100 pages. Numbers denote the number of pages on active/inactive
-> > > > > > > > list (active | inactive). (h) stands for hot pages and (uo) stands for
-> > > > > > > > used-once pages.
-> > > > > > > >
-> > > > > > > > 1. 50 hot pages on active list
-> > > > > > > > 50(h) | 0
-> > > > > > > >
-> > > > > > > > 2. workload: 50 newly created (used-once) pages
-> > > > > > > > 50(uo) | 50(h)
-> > > > > > > >
-> > > > > > > > 3. workload: another 50 newly created (used-once) pages
-> > > > > > > > 50(uo) | 50(uo), swap-out 50(h)
-> > > > > > > >
-> > > > > > > > As we can see, hot pages are swapped-out and it would cause swap-in later."
-> > > > > > > >
-> > > > > > > > Is MGLRU able to avoid the swap-out of the 50 hot pages?
-> > > > > > >
-> > > > > > > I think the real question is why the 50 hot pages can be moved to the
-> > > > > > > inactive list. If they are really hot, the A-bit should protect them.
-> > > > > >
-> > > > > > This is a good question.
-> > > > > >
-> > > > > > I guess it  is probably because the current lru is trying to maintain a balance
-> > > > > > between the sizes of active and inactive lists. Thus, it can shrink active list
-> > > > > > even though pages might be still "hot" but not the recently accessed ones.
-> > > > > >
-> > > > > > 1. 50 hot pages on active list
-> > > > > > 50(h) | 0
-> > > > > >
-> > > > > > 2. workload: 50 newly created (used-once) pages
-> > > > > > 50(uo) | 50(h)
-> > > > > >
-> > > > > > 3. workload: another 50 newly created (used-once) pages
-> > > > > > 50(uo) | 50(uo), swap-out 50(h)
-> > > > > >
-> > > > > > the old kernel without anon workingset protection put workload 2 on active, so
-> > > > > > pushed 50 hot pages from active to inactive. workload 3 would further contribute
-> > > > > > to evict the 50 hot pages.
-> > > > > >
-> > > > > > it seems mglru doesn't demote pages from the youngest generation to older
-> > > > > > generation only in order to balance the list size? so mglru is probably safe
-> > > > > > in these cases.
-> > > > > >
-> > > > > > I will run some tests mentioned in Kim's patchset and report the result to you
-> > > > > > afterwards.
-> > > > > >
-> > > > >
-> > > > > Hi Yu,
-> > > > > I did find putting faulted pages to the youngest generation lead to some
-> > > > > regression in the case ebizzy Kim's patchset mentioned while he tried
-> > > > > to support workingset protection for anon pages.
-> > > > > i did a little bit modification for rand_chunk() which is probably similar
-> > > > > with the modifcation() Kim mentioned in his patchset. The modification
-> > > > > can be found here:
-> > > > > https://github.com/21cnbao/ltp/commit/7134413d747bfa9ef
-> > > > >
-> > > > > The test env is a x86 machine in which I have set memory size to 2.5GB and
-> > > > > set zRAM to 2GB and disabled external disk swap.
-> > > > >
-> > > > > with the vanilla kernel:
-> > > > > \time -v ./a.out -vv -t 4 -s 209715200 -S 200000
-> > > > >
-> > > > > so we have 10 chunks and 4 threads, each trunk is 209715200(200MB)
-> > > > >
-> > > > > typical result:
-> > > > >         Command being timed: "./a.out -vv -t 4 -s 209715200 -S 200000"
-> > > > >         User time (seconds): 36.19
-> > > > >         System time (seconds): 229.72
-> > > > >         Percent of CPU this job got: 371%
-> > > > >         Elapsed (wall clock) time (h:mm:ss or m:ss): 1:11.59
-> > > > >         Average shared text size (kbytes): 0
-> > > > >         Average unshared data size (kbytes): 0
-> > > > >         Average stack size (kbytes): 0
-> > > > >         Average total size (kbytes): 0
-> > > > >         Maximum resident set size (kbytes): 2166196
-> > > > >         Average resident set size (kbytes): 0
-> > > > >         Major (requiring I/O) page faults: 9990128
-> > > > >         Minor (reclaiming a frame) page faults: 33315945
-> > > > >         Voluntary context switches: 59144
-> > > > >         Involuntary context switches: 167754
-> > > > >         Swaps: 0
-> > > > >         File system inputs: 2760
-> > > > >         File system outputs: 8
-> > > > >         Socket messages sent: 0
-> > > > >         Socket messages received: 0
-> > > > >         Signals delivered: 0
-> > > > >         Page size (bytes): 4096
-> > > > >         Exit status: 0
-> > > > >
-> > > > > with gen_lru and lru_gen/enabled=0x3:
-> > > > > typical result:
-> > > > > Command being timed: "./a.out -vv -t 4 -s 209715200 -S 200000"
-> > > > > User time (seconds): 36.34
-> > > > > System time (seconds): 276.07
-> > > > > Percent of CPU this job got: 378%
-> > > > > Elapsed (wall clock) time (h:mm:ss or m:ss): 1:22.46
-> > > > >            **** 15% time +
-> > > > > Average shared text size (kbytes): 0
-> > > > > Average unshared data size (kbytes): 0
-> > > > > Average stack size (kbytes): 0
-> > > > > Average total size (kbytes): 0
-> > > > > Maximum resident set size (kbytes): 2168120
-> > > > > Average resident set size (kbytes): 0
-> > > > > Major (requiring I/O) page faults: 13362810
-> > > > >              ***** 30% page fault +
-> > > > > Minor (reclaiming a frame) page faults: 33394617
-> > > > > Voluntary context switches: 55216
-> > > > > Involuntary context switches: 137220
-> > > > > Swaps: 0
-> > > > > File system inputs: 4088
-> > > > > File system outputs: 8
-> > > > > Socket messages sent: 0
-> > > > > Socket messages received: 0
-> > > > > Signals delivered: 0
-> > > > > Page size (bytes): 4096
-> > > > > Exit status: 0
-> > > > >
-> > > > > with gen_lru and lru_gen/enabled=0x7:
-> > > > > typical result:
-> > > > > Command being timed: "./a.out -vv -t 4 -s 209715200 -S 200000"
-> > > > > User time (seconds): 36.13
-> > > > > System time (seconds): 251.71
-> > > > > Percent of CPU this job got: 378%
-> > > > > Elapsed (wall clock) time (h:mm:ss or m:ss): 1:16.00
-> > > > >          *****better than enabled=0x3, worse than vanilla
-> > > > > Average shared text size (kbytes): 0
-> > > > > Average unshared data size (kbytes): 0
-> > > > > Average stack size (kbytes): 0
-> > > > > Average total size (kbytes): 0
-> > > > > Maximum resident set size (kbytes): 2120988
-> > > > > Average resident set size (kbytes): 0
-> > > > > Major (requiring I/O) page faults: 12706512
-> > > > > Minor (reclaiming a frame) page faults: 33422243
-> > > > > Voluntary context switches: 49485
-> > > > > Involuntary context switches: 126765
-> > > > > Swaps: 0
-> > > > > File system inputs: 2976
-> > > > > File system outputs: 8
-> > > > > Socket messages sent: 0
-> > > > > Socket messages received: 0
-> > > > > Signals delivered: 0
-> > > > > Page size (bytes): 4096
-> > > > > Exit status: 0
-> > > > >
-> > > > > I can also reproduce the problem on arm64.
-> > > > >
-> > > > > I am not saying this is going to block mglru from being mainlined. But  I am
-> > > > > still curious if this is an issue worth being addressed somehow in mglru.
-> > > >
-> > > > You've missed something very important: *thoughput* :)
-> > > >
-> > >
-> > > noop :-)
-> > > in the test case, there are 4 threads. they are searching a key in 10 chunks
-> > > of memory. for each chunk, the size is 200MB.
-> > > a "random" chunk index is returned for those threads to search. but chunk2
-> > > is the hottest, and chunk3, 7, 4 are relatively hotter than others.
-> > > static inline unsigned int rand_chunk(void)
-> > > {
-> > >         /* simulate hot and cold chunk */
-> > >         unsigned int rand[16] = {2, 2, 3, 4, 5, 2, 6, 7, 9, 2, 8, 3, 7, 2, 2, 4};
-> >
-> > This is sequential access, not what you claim above, because you have
-> > a repeating sequence.
-> >
-> > In this case MGLRU is expected to be slower because it doesn't try to
-> > optimize it, as discussed before [1]. The reason is, with a manageable
-> > complexity, we can only optimize so many things. And MGLRU chose to
-> > optimize (arguably) popular workloads, since, AFAIK, no real-world
-> > applications streams anon memory.
-> >
-> > To verify this is indeed sequential access, you could make rand[]
-> > larger, e.g., 160, with the same portions of 2s, 3s, 4s, etc, but
-> > their positions are random. The following change shows MGLRU is ~20%
-> > faster on my Snapdragon 7c + 2.5G DRAM + 2GB zram.
-> >
-> >  static inline unsigned int rand_chunk(void)
-> >  {
-> >         /* simulate hot and cold chunk */
-> > -       unsigned int rand[16] = {2, 2, 3, 4, 5, 2, 6, 7, 9, 2, 8, 3,
-> > 7, 2, 2, 4};
-> > +       unsigned int rand[160] = {
-> > +               2, 4, 7, 3, 4, 2, 7, 2, 7, 8, 6, 9, 7, 6, 5, 4,
-> > +               6, 2, 6, 4, 2, 9, 2, 5, 5, 4, 7, 2, 7, 7, 5, 2,
-> > +               4, 4, 3, 3, 2, 4, 2, 2, 5, 2, 4, 2, 8, 2, 2, 3,
-> > +               2, 2, 2, 2, 2, 8, 4, 2, 2, 4, 2, 2, 2, 2, 3, 2,
-> > +               8, 5, 2, 2, 3, 2, 8, 2, 6, 2, 4, 8, 5, 2, 9, 2,
-> > +               8, 7, 9, 2, 4, 4, 3, 3, 2, 8, 2, 2, 3, 3, 2, 7,
-> > +               7, 5, 2, 2, 8, 2, 2, 2, 5, 2, 4, 3, 2, 3, 6, 3,
-> > +               3, 3, 9, 4, 2, 3, 9, 7, 7, 6, 2, 2, 4, 2, 6, 2,
-> > +               9, 7, 7, 7, 9, 3, 4, 2, 3, 2, 7, 3, 2, 2, 2, 6,
-> > +               8, 3, 7, 6, 2, 2, 2, 4, 7, 2, 5, 7, 4, 7, 9, 9,
-> > +       };
-> >         static int nr = 0;
-> > -       return rand[nr++%16];
-> > +       return rand[nr++%160];
-> >  }
-> >
-> > Yet better, you could use some standard benchmark suites, written by
-> > reputable organizations, e.g., memtier, YCSB, to generate more
-> > realistic distributions, as I've suggested before [2].
-> >
-> > >         static int nr = 0;
-> > >         return rand[nr++%16];
-> > > }
-> > >
-> > > each thread does search_mem():
-> > > static unsigned int search_mem(void)
-> > > {
-> > >         record_t key, *found;
-> > >         record_t *src, *copy;
-> > >         unsigned int chunk;
-> > >         size_t copy_size = chunk_size;
-> > >         unsigned int i;
-> > >         unsigned int state = 0;
-> > >
-> > >         /* run 160 loops or till timeout */
-> > >         for (i = 0; threads_go == 1 && i < 160; i++) {
-> >
-> > I see you've modified the original benchmark. But with "-S 200000",
-> > should this test finish within an hour instead of the following?
-> >     Elapsed (wall clock) time (h:mm:ss or m:ss): 1:11.59
-> >
-> > >                 chunk = rand_chunk();
-> > >                 src = mem[chunk];
-> > >                 ...
-> > >                 copy = alloc_mem(copy_size);
-> > >                 ...
-> > >                 memcpy(copy, src, copy_size);
-> > >
-> > >                 key = rand_num(copy_size / record_size, &state);
-> > >
-> > >                 bsearch(&key, copy, copy_size / record_size,
-> > >                         record_size, compare);
-> > >
-> > >                         /* Below check is mainly for memory corruption or other bug */
-> > >                         if (found == NULL) {
-> > >                                 fprintf(stderr, "Couldn't find key %zd\n", key);
-> > >                                 exit(1);
-> > >                         }
-> > >                 }               /* end if ! touch_pages */
-> > >
-> > >                 free_mem(copy, copy_size);
-> > >         }
-> > >
-> > >         return (i);
-> > > }
-> > >
-> > > each thread picks up a chunk, then allocates a new memory and copies the chunk to the
-> > > new allocated memory, and searches a key in the allocated memory.
-> > >
-> > > as i have set time to rather big by -S, so each thread actually exits while it
-> > > completes 160 loops.
-> > > $ \time -v ./ebizzy -t 4 -s $((200*1024*1024)) -S 6000000
-> >
-> > Ok, you actually used "-S 6000000".
->
-> I have two exits, either 160 loops have been done or -S gets timeout.
-> Since -S is very big, the process exits from the completion of 160
-> loops.
->
-> I am seeing mglru is getting very similar speed with vanilla lru by
-> using your rand_chunk() with 160 entries. the command is like:
-> \time -v ./a.out -t 4 -s $((200*1024*1024)) -S 600000 -m
->
-> The time to complete jobs begins to be more random, but on average,
-> mglru seems to be 5% faster. actually, i am seeing mglru can be faster
-> than vanilla even with more page faults. for example,
->
-> MGLRU:
->         Command being timed: "./mt.out -t 4 -s 209715200 -S 600000 -m"
->         User time (seconds): 32.68
->         System time (seconds): 227.19
->         Percent of CPU this job got: 370%
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 1:10.23
->         Average shared text size (kbytes): 0
->         Average unshared data size (kbytes): 0
->         Average stack size (kbytes): 0
->         Average total size (kbytes): 0
->         Maximum resident set size (kbytes): 2175292
->         Average resident set size (kbytes): 0
->         Major (requiring I/O) page faults: 10977244
->         Minor (reclaiming a frame) page faults: 33447638
->         Voluntary context switches: 44466
->         Involuntary context switches: 108413
->         Swaps: 0
->         File system inputs: 7704
->         File system outputs: 8
->         Socket messages sent: 0
->         Socket messages received: 0
->         Signals delivered: 0
->         Page size (bytes): 4096
->         Exit status: 0
->
->
-> VANILLA:
->         Command being timed: "./mt.out -t 4 -s 209715200 -S 600000 -m"
->         User time (seconds): 32.20
->         System time (seconds): 248.18
->         Percent of CPU this job got: 371%
->         Elapsed (wall clock) time (h:mm:ss or m:ss): 1:15.55
->         Average shared text size (kbytes): 0
->         Average unshared data size (kbytes): 0
->         Average stack size (kbytes): 0
->         Average total size (kbytes): 0
->         Maximum resident set size (kbytes): 2174384
->         Average resident set size (kbytes): 0
->         Major (requiring I/O) page faults: 10002206
->         Minor (reclaiming a frame) page faults: 33392151
->         Voluntary context switches: 76966
->         Involuntary context switches: 184841
->         Swaps: 0
->         File system inputs: 2032
->         File system outputs: 8
->         Socket messages sent: 0
->         Socket messages received: 0
->         Signals delivered: 0
->         Page size (bytes): 4096
->         Exit status: 0
->
+On Tue, Mar 15, 2022 at 03:21:12PM +0530, Maninder Singh wrote:
+> print module information when KALLSYMS is disabled.
+> 
+> No change for %pB, as it needs to know symbol name to adjust address
+> value which can't be done without KALLSYMS.
 
-basically a perf comparison:
-vanilla:
-    23.81%  [lz4_compress]  [k] LZ4_compress_fast_extState
-    14.15%  [kernel]        [k] LZ4_decompress_safe
-    10.48%  libc-2.33.so    [.] __memmove_avx_unaligned_erms
-     2.49%  [kernel]        [k] native_queued_spin_lock_slowpath
-     2.05%  [kernel]        [k] clear_page_erms
-     1.69%  [kernel]        [k] native_irq_return_iret
-     1.49%  [kernel]        [k] mem_cgroup_css_rstat_flush
-     1.05%  [kernel]        [k] _raw_spin_lock
-     1.05%  [kernel]        [k] sync_regs
-     1.00%  [kernel]        [k] smp_call_function_many_cond
-     0.97%  [kernel]        [k] memset_erms
-     0.95%  [zram]          [k] zram_bvec_rw.constprop.0
-     0.91%  [kernel]        [k] down_read_trylock
-     0.90%  [kernel]        [k] memcpy_erms
-     0.89%  [zram]          [k] __zram_bvec_read.constprop.0
-     0.88%  [kernel]        [k] psi_group_change
-     0.84%  [kernel]        [k] isolate_lru_pages
-     0.78%  [kernel]        [k] zs_map_object
-     0.76%  [kernel]        [k] __handle_mm_fault
-     0.72%  [kernel]        [k] page_vma_mapped_walk
+...
 
-mglru:
-    23.43%  [lz4_compress]  [k] LZ4_compress_fast_extState
-    16.90%  [kernel]        [k] LZ4_decompress_safe
-    12.60%  libc-2.33.so    [.] __memmove_avx_unaligned_erms
-     2.26%  [kernel]        [k] clear_page_erms
-     2.06%  [kernel]        [k] native_queued_spin_lock_slowpath
-     1.77%  [kernel]        [k] native_irq_return_iret
-     1.18%  [kernel]        [k] sync_regs
-     1.12%  [zram]          [k] __zram_bvec_read.constprop.0
-     0.98%  [kernel]        [k] psi_group_change
-     0.97%  [zram]          [k] zram_bvec_rw.constprop.0
-     0.96%  [kernel]        [k] memset_erms
-     0.95%  [kernel]        [k] isolate_folios
-     0.92%  [kernel]        [k] zs_map_object
-     0.92%  [kernel]        [k] _raw_spin_lock
-     0.87%  [kernel]        [k] memcpy_erms
-     0.83%  [kernel]        [k] smp_call_function_many_cond
-     0.83%  [kernel]        [k] __handle_mm_fault
-     0.78%  [kernel]        [k] unmap_page_range
-     0.71%  [kernel]        [k] rmqueue_bulk
-     0.70%  [kernel]        [k] page_counter_uncharge
+> +int sprint_kallsym_common(char *buffer, unsigned long address, int build_id,
+> +			    int backtrace, int symbol)
+> +{
+> +	if (backtrace)
+> +		return __sprint_symbol(buffer, address, -1, 1, build_id);
 
-it seems vanilla kernel puts more time on native_queued_spin_lock_slowpath(),
-down_read_trylock(), mem_cgroup_css_rstat_flush(), isolate_lru_pages() and
-page_vma_mapped_walk(), but mglru puts more time on decompress, memmove
-and isolate_folios().
+> +	else if (symbol)
+> +		return __sprint_symbol(buffer, address, 0, 1, build_id);
+> +	else
+> +		return __sprint_symbol(buffer, address, 0, 0, 0);
 
-That is probably why mglru can be a bit faster even with more major page
-faults.
+Redundant 'else' in both cases.
 
->
-> I guess the main cause of the regression for the previous sequence
-> with 16 entries is that the ebizzy has a new allocated copy in
-> search_mem(), which is mapped and used only once in each loop.
-> and the temp copy can push out those hot chunks.
->
-> Anyway, I understand it is a trade-off between warmly embracing new
-> pages and holding old pages tightly. Real user cases from phone, server,
-> desktop will be judging this better.
->
-> >
-> > [1] https://lore.kernel.org/linux-mm/YhNJ4LVWpmZgLh4I@google.com/
-> > [2] https://lore.kernel.org/linux-mm/YgggI+vvtNvh3jBY@google.com/
->
+> +}
 
-Thanks
-Barry
+...
+
+> +static int sprint_module_info(char *buf, char *end, unsigned long value,
+> +			     const char *fmt, int modbuildid, int backtrace, int symbol)
+
+fmt is not used.
+
+> +{
+> +	struct module *mod;
+> +	unsigned long offset = 0;
+
+> +	unsigned long base;
+
+Can it be the same type as core_layout.base? Why not?
+
+> +	char *modname;
+> +	int len;
+> +	const unsigned char *buildid = NULL;
+> +
+> +	if (is_ksym_addr(value))
+> +		return 0;
+> +
+> +	if (backtrace || symbol)
+> +		offset = 1;
+
+I would expect here to have
+
+	else
+		offset = 0;
+
+But see below.
+
+> +	preempt_disable();
+> +	mod = __module_address(value);
+> +	if (mod) {
+> +		modname = mod->name;
+> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> +		if (modbuildid)
+> +			buildid = mod->build_id;
+> +#endif
+
+> +		if (offset) {
+
+This seems quite confusing because semantically you use offset as a boolean
+flag and offset. Why not add a boolean variable with a clear name?
+
+> +			base = (unsigned long)mod->core_layout.base;
+> +			offset = value - base;
+> +		}
+> +	}
+
+> +
+
+Probably you can drop this blank line to group entire critical section,
+or add a blank line above.
+
+> +	preempt_enable();
+> +	if (!mod)
+> +		return 0;
+> +
+> +	/* address belongs to module */
+> +	if (offset)
+> +		len = sprintf(buf, "0x%p+0x%lx", (void *)base, offset);
+> +	else
+
+> +		len = sprintf(buf, "0x%lx", (void *)value);
+
+What this casting is for? Don't you have a compilation warning?
+
+> +	len += fill_name_build_id(buf, modname, modbuildid, buildid, len);
+> +	return len;
+
+	return len + ...;
+
+?
+
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

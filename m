@@ -2,228 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781434D98A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993EA4D98A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346912AbiCOKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S1347051AbiCOKZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243390AbiCOKXq (ORCPT
+        with ESMTP id S1347006AbiCOKZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:23:46 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C52506CC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:22:34 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e5969bdf31so710217b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9O1QfHi1I0g1rKMxOGzWpZRk1RXFbwE7xufKq2/FhEs=;
-        b=ShFdeB8w8gvB1NNpEKZoaVhE/7zTtC75kc9Ay4V7ehH5nnrABGbkhXgtK/Gv4xXgXL
-         XFxrf+5exDfnh4z7iGQbvkkRpRZSeGk2FpItDxq0TEG2xEmXZflPkHdCJjYpQZBTWuQt
-         tkcQwG3rpjv2qWMQWwuwpNGzlz/4ztMQI8cGF8r1cyWqBqH4n35F8i0SXSYhCMvXYVT/
-         bmqj0rvTstc5JHG7YszcLCLL5IHrdDnTm9F64PfMMhdi3JPlzPE21QUwUOu40bNIG8IK
-         5INy0k+ENNPyFySvNpAzB7uFeu6sRq60Qf51l+N4Fcc9GI027ilWt42SzarIE4/tzT1T
-         W2zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9O1QfHi1I0g1rKMxOGzWpZRk1RXFbwE7xufKq2/FhEs=;
-        b=DRYbvbvo0kHsd9IkSYvgHEzI7mclHuOhElvif/NGZoTFCtBHyhdYSeXOqgt6a3OhuW
-         uaSSQ+uC6+ivL4qPqStdj7oLEgmf5RaZ2w2ntuASSWJjXNAcst/Pur9Kz1yS0rpTBq5G
-         nfpC2gsEBokZdqwRfUju0n+lCezdvrkbWJBho4r/w92u8EuVnp64z9ZxM+5sHuISI+y3
-         wDfWGKIOCtdlBYw6KbYzVQPZZfNAt+BL61O6hhOu4oHDEJWhWDjXTegLwtMiLqdiZpkc
-         lxPnpTC405e2x72vWzpL5zpRblByzSsy7CluCqPbyL3bEJlBba9kxfA9Fa9NJEueWOvV
-         elDA==
-X-Gm-Message-State: AOAM531r/1i4pxP5IMJM9QHucoWPluwFl+oPjxCXnv5aB73NE6MLn7EK
-        Nhwm1cJDlviseKj1Toaj2fWBkBmseNjygkvkCyzQyA==
-X-Google-Smtp-Source: ABdhPJzJrqXtYFwq1O2AGJSKQaGeunuur6ljYmtRJs+3qUKIYokBmodVRHbXm/ToYTmHU5gLQuY5LU/AhYqZON1s7kQ=
-X-Received: by 2002:a0d:f347:0:b0:2d6:916b:eb3f with SMTP id
- c68-20020a0df347000000b002d6916beb3fmr23287723ywf.141.1647339753523; Tue, 15
- Mar 2022 03:22:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220314145907.257355309@linuxfoundation.org>
-In-Reply-To: <20220314145907.257355309@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 15 Mar 2022 15:52:22 +0530
-Message-ID: <CA+G9fYuWRag7wAPOpyE5nhb6GCWVjm=z8=e87AgYNmcs38BnuA@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/22] 4.14.272-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 15 Mar 2022 06:25:56 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FEA39178
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:24:43 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220315102441epoutp01a112b20a120110ac9abb6a9760aeb210~chuUGkG4w2368023680epoutp01R
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:24:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220315102441epoutp01a112b20a120110ac9abb6a9760aeb210~chuUGkG4w2368023680epoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647339881;
+        bh=FsfyjBB7q0DvWz2A7F3Mgvw46I0WUKQTNbFMUprKeZk=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=YHb6fcMMr+9gns/uCN/Mv1JofKy7uuGGK4TSzGp9iDG/nAdOB+7HN2XDiNQcO24lB
+         2/YiC36uQ2PeumOx+QMJlB7G6XgW36+pHc/zhE8Hj5d+R6R2ZGSvTZ9n4r/Ct5+OLM
+         Gg3mGmryc9MwuN4sAKRDu8N7/bjeahwzKIaqOik8=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220315102441epcas2p430a23fe2dfd556a81ea6cb5d396c9ee6~chuTxNEQs1275912759epcas2p4c;
+        Tue, 15 Mar 2022 10:24:41 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KHqK24xDvz4x9Pt; Tue, 15 Mar
+        2022 10:24:38 +0000 (GMT)
+X-AuditID: b6c32a45-513ff700000228cc-43-62306966ea6c
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        64.A1.10444.66960326; Tue, 15 Mar 2022 19:24:38 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH v2] driver/nvme/host: Support duplicated nsid for the
+ private ns
+Reply-To: sungup.moon@samsung.com
+Sender: Sungup Moon <sungup.moon@samsung.com>
+From:   Sungup Moon <sungup.moon@samsung.com>
+To:     "hch@lst.de" <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>
+CC:     "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220315084611.GA3961@lst.de>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220315102438epcms2p68d757d1863b5582778f8c89517b82a70@epcms2p6>
+Date:   Tue, 15 Mar 2022 19:24:38 +0900
+X-CMS-MailID: 20220315102438epcms2p68d757d1863b5582778f8c89517b82a70
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphk+LIzCtJLcpLzFFi42LZdljTVDct0yDJYFanqsX/PcfYLFauPspk
+        MenQNUaLy7vmsFnMX/aU3WLd6/csDmweE5vfsXucv7eRxWPTqk42j81L6j1232xg8/i8SS6A
+        LSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoCiWF
+        ssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgXmBXnFibnFpXrpeXmqJlaGBgZEpUGFC
+        dsaLywvZClYKVZy+3sPWwNgq2MXIySEhYCLxcPlCpi5GLg4hgR2MEmt37GPsYuTg4BUQlPi7
+        QxikRlggUuLc0ptsILaQgKLE32d9jBBxXYk1/6cwg9hsAtoS9868ZQKxRQTsJXp/TGUFmcks
+        cIFR4urjpWwQy3glZrQ/ZYGwpSW2L98KNogTqHnO9dNMEHENiR/LepkhbFGJm6vfssPY74/N
+        Z4SwRSRa752FqhGUePBzN1RcUuLpyQ9Q8XyJtt+L2ECOkBDoYJQ4//AI1AJziT8vr4MN5RXw
+        lei4vgSsgUVAVWJp/yRmkOclBFwkTuxLBgkzA922bOFrsDCzgKbE+l36EBXKEkdusUBU8El0
+        HP7LDvPhjnlPoBapSlyc0MMG8+3KeQ2MEK0eEmteBE9gVJyFCOdZSFbNQli1gJF5FaNYakFx
+        bnpqsVGBITxqk/NzNzGCk6OW6w7GyW8/6B1iZOJgPMQowcGsJMJ75oV+khBvSmJlVWpRfnxR
+        aU5q8SFGU6AfJzJLiSbnA9NzXkm8oYmlgYmZmaG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKY
+        PiYOTqkGJl++7R/E+R9ke9fnrN2u9b0u0DpfvCw3c4L/02PX9/G8YPq/umua4FZ2ryXBGozO
+        d6VZn/y9+EUx/MWWXPHkZYlfZ5f0HGI26rq0V+Ka6J+F5mYOAl8lLfY07k3OWVkVHzl9EZ8E
+        0xQ+qdVhp+P+PXxpmrDc7Fb0b0kLF3XL53uKp3Zme6SzZbRK3jR7O4eJ8cHySyFbyh94bRW6
+        mHhVKf7dFt+rx39uk37B9f5bifOprE86juGrF9gETl4fFTKdTbN6hnfgjdpfes90/6/flZ4r
+        2rrjqO28Fo0u++6T/dnCHAtsamrnNnS5xP39oflnZfSPVWeCpi4/sypZ5dQXe+avJnE7Jyxg
+        bPC6s8TUQ4mlOCPRUIu5qDgRAPIC7x0XBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220314110545epcms2p4a227eac7c4652445050e70ee2350635d
+References: <20220315084611.GA3961@lst.de>
+        <20220314110545epcms2p4a227eac7c4652445050e70ee2350635d@epcms2p4>
+        <20220315071230.GA2069@lst.de> <20220315071926.GA2137@lst.de>
+        <a3051d85-c08e-a273-c7cc-2eb3e21df717@grimberg.me>
+        <20220315084035.GA3834@lst.de>
+        <6ac83f8b-01e6-5394-0570-023ac6b1a71d@grimberg.me>
+        <CGME20220314110545epcms2p4a227eac7c4652445050e70ee2350635d@epcms2p6>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 at 20:30, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.272 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Mar 2022 14:58:59 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.272-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+First of all private namespace should be created by the vendor specific com=
+mand,
+because namespace management, ANA and NVM Set should be disabled on the con=
+troller
+level. So Normal namespace managed NVMe deivce should return true using the
+namespace management field (ctrl->oacs & NVME_CTRL_OACS_NS_MNGT_SUPP).
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If user create using the namespace management admin command, my patch
+check the namespace management field and that sub-system should be managed
+like multi-path nvme device route.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+So, if user create shared namespace on that nvme subsystem, should
+distroy all namespace with target nsid, and create the new shared namespace
+using the vendor specific admin command.
 
-## Build
-* kernel: 4.14.272-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: e991f498ccbf4fc46e0525c0ca02e4134f253706
-* git describe: v4.14.271-23-ge991f498ccbf
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.271-23-ge991f498ccbf
-
-## Test Regressions (compared to v4.14.271)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.271)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.271)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.271)
-No metric fixes found.
-
-## Test result summary
-total: 77914, pass: 65222, fail: 257, skip: 11064, xfail: 1371
-
-## Build Summary
-* arm: 280 total, 270 passed, 10 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 60 total, 12 passed, 48 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+=C2=A0=0D=0A=C2=A0=0D=0A---------=20Original=20Message=20---------=0D=0ASen=
+der=20:=20hch=40lst.de=C2=A0<hch=40lst.de>=0D=0ADate=20:=202022-03-15=2017:=
+46=20(GMT+9)=0D=0ATitle=20:=20Re:=20=5BPATCH=20v2=5D=20driver/nvme/host:=20=
+Support=20duplicated=20nsid=20for=20the=20private=20ns=0D=0A=C2=A0=0D=0AOn=
+=C2=A0Tue,=C2=A0Mar=C2=A015,=C2=A02022=C2=A0at=C2=A010:42:56AM=C2=A0+0200,=
+=C2=A0Sagi=C2=A0Grimberg=C2=A0wrote:=0D=0A>>>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*=C2=A0We=C2=A0also=C2=A0do=C2=A0this=C2=
+=A0for=C2=A0private=C2=A0namespaces=C2=A0as=C2=A0the=C2=A0namespace=C2=A0sh=
+aring=C2=A0flag=0D=0A>>>>=C2=A0+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0*=C2=A0could=C2=A0change=C2=A0after=C2=A0a=C2=A0rescan.=0D=0A>>=
+>=0D=0A>>>=C2=A0What=C2=A0happens=C2=A0in=C2=A0this=C2=A0case?=C2=A0we=C2=
+=A0now=C2=A0have=C2=A0non-unique=C2=A0shared=C2=A0namespaces?=0D=0A>>=0D=0A=
+>>=C2=A0The=C2=A0non-uniqueue=C2=A0NSIDs=C2=A0can=C2=A0only=C2=A0happen=C2=
+=A0for=C2=A0private=C2=A0namespaces.=0D=0A>=0D=0A>=C2=A0But=C2=A0what=C2=A0=
+happens=C2=A0if=C2=A0this=C2=A0changes=C2=A0upon=C2=A0a=C2=A0rescan=C2=A0as=
+=C2=A0you=C2=A0commented?=0D=0A=C2=A0=0D=0AWell,=C2=A0it=C2=A0can't=C2=A0ch=
+ange=C2=A0to=C2=A0shared=C2=A0as=C2=A0the=C2=A0nsids=C2=A0are=C2=A0non-uniq=
+ue.=C2=A0=C2=A0If=C2=A0we=0D=0Awant=C2=A0to=C2=A0be=C2=A0paranoid=C2=A0we=
+=C2=A0could=C2=A0add=C2=A0a=C2=A0sanity=C2=A0check=C2=A0for=C2=A0that,=C2=
+=A0but=C2=A0then=0D=0Aagain=C2=A0there=C2=A0are=C2=A0a=C2=A0bunch=C2=A0of=
+=C2=A0other=C2=A0things=C2=A0where=C2=A0we=C2=A0could=C2=A0be=C2=A0more=C2=
+=A0paranoid.=0D=0A=C2=A0

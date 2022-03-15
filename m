@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369C24D94A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255784D94B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 07:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345233AbiCOGdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 02:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        id S1345233AbiCOGmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 02:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345231AbiCOGdN (ORCPT
+        with ESMTP id S235433AbiCOGmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 02:33:13 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C524A927
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:32:00 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id h126so35397632ybc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bC/2gCrAoQ2lchEZ5qkbyu3pFJoZ4KVQMge0RpKDA9Q=;
-        b=dfcISV5u5AKS+WLviKJJ9yxoVPnO9wGv3w6PnUxuoXTV7+6LK0J+AIDXJDHkKhQ1d3
-         ir6uUEJHl2lTMTzGfQ0qv4SihDkwnbHGFio5F08ow//yVlO0GyRAkQCWUvQr6EJAViUF
-         mTM/bhkCkRkrqRws+5KsKd3yunwnf+yK6LEqgvuLBqG+fkYWNsWtBxbVEkW0i7HIkE3k
-         8RYmRJh6Kx626bqgB9yV9sN8dxg72CptSuajdMoO7TrMDReqg7vuR9iMtIq2iHJDDzKB
-         fFYTc1c7xV6WTwDEsXZqb708FyiZ86CZ+m3OBm/KqyC2BsHFIN0LMe60dv7oI1vH+MvM
-         pM8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bC/2gCrAoQ2lchEZ5qkbyu3pFJoZ4KVQMge0RpKDA9Q=;
-        b=A+49+JhPbGZuzXRXNkBZaI7COvWmTCLu4gXh/OFavTllVe/t+1wzshk4/8szUzWfCz
-         pPj5yPUH5Q6AlOS4h6OoYJPECQL1x5lUd+sUpFa5WuWQFTO60G+8NCi7oUf2KDJrfPYl
-         iZYTto+D+CNefmzUK8trzk6yzs4MjEQ8pvgQNJsNW0xtja696pibRQL5W/2wtAGKGJmV
-         ODBUI0BsGcPTnSNCJ0kCkWo0FUlMHZKQc6NUfwIjtIzXG0/x8irJvEwGKj8LACXJnIh0
-         tpAWDGnggNlXwTf20Ij7EILqd90bCUzJBaHD64811PsiZ8I/T27nbfSm4oKNfU1SSje4
-         FYdw==
-X-Gm-Message-State: AOAM532DnIMAw6qGEZWEmlDAFUZN/h6dcPWwym9KSk0qr4Zrf0aY8UsB
-        yrz2foyFM9YcSqIws9pVPN7bSvrJ/iLyQEhoM/y2NLNn04aEPLvr
-X-Google-Smtp-Source: ABdhPJwczPmgdFMqwJ3G7OLF06gZjRwRikJpmCznYjngqHJyY2IZLI8W8Tn326sJ0ZeUmBltKZ0joGqM34rnuAFylzM=
-X-Received: by 2002:a25:9846:0:b0:61a:3deb:4d39 with SMTP id
- k6-20020a259846000000b0061a3deb4d39mr21859369ybo.537.1647325919690; Mon, 14
- Mar 2022 23:31:59 -0700 (PDT)
+        Tue, 15 Mar 2022 02:42:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A913D04
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 23:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647326457; x=1678862457;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=8I1wLnG20Ik3u34S3KwlGd2TYvCo27NadTKc1KIB5X8=;
+  b=XlXxiMx3rG2RdYSy5mjj1tCCQ+bh47gc+Xbdsyvh0/YiueOteEwc18w9
+   BM/UGCAkT+8GOWg/ipQgxb0zdkmTYx2a3qyJS0cJspALj1hj4MZlgeE8k
+   +Dfcn7KmELmNO7qDkAEm4BzF67ekB9IrP9dozYW8hdDp3UM81cYiI/c1G
+   ow72F8eVi4beaIHqyrq1Gr2tVbpmUutOROOEp0oKvy0k+/n6qjTgUQ4MM
+   mMInYUKcraSECRPVKcfy4EZur/tV83qZZ08fpZ2UFfI9YLlZwwruD6DH8
+   F/ev8h4GsjrIPi+31dRurdKyoQuhdqMDYSXMTlu4pxm4z1vwmHY0svdyr
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256177689"
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="256177689"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:40:57 -0700
+X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
+   d="scan'208";a="515746056"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 23:40:55 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm: Only re-generate demotion targets when a numa
+ node changes its N_CPU state
+References: <20220314150945.12694-1-osalvador@suse.de>
+Date:   Tue, 15 Mar 2022 14:40:53 +0800
+In-Reply-To: <20220314150945.12694-1-osalvador@suse.de> (Oscar Salvador's
+        message of "Mon, 14 Mar 2022 16:09:45 +0100")
+Message-ID: <87pmmn3eh6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220314112737.929694832@linuxfoundation.org>
-In-Reply-To: <20220314112737.929694832@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 15 Mar 2022 12:01:47 +0530
-Message-ID: <CA+G9fYutPYhZ9nbYeZ2-ttdJ4fbbCj=hEhUr_3NodYVTPH5Wqw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/71] 5.10.106-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,177 +64,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 at 17:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Oscar Salvador <osalvador@suse.de> writes:
+
+> Abhishek reported that after patch [1], hotplug operations are
+> taking ~double the expected time. [2]
 >
-> This is the start of the stable review cycle for the 5.10.106 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> The reason behind is that the CPU callbacks that migrate_on_reclaim_init()
+> sets always call set_migration_target_nodes() whenever a CPU is brought
+> up/down.
+> But we only care about numa nodes going from having cpus to become
+> cpuless, and vice versa, as that influences the demotion_target order.
 >
-> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
-> Anything received after that time might be too late.
+> We do already have two CPU callbacks (vmstat_cpu_online() and vmstat_cpu_dead())
+> that check exactly that, so get rid of the CPU callbacks in
+> migrate_on_reclaim_init() and only call set_migration_target_nodes() from
+> vmstat_cpu_{dead,online}() whenever a numa node change its N_CPU state.
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.106-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
+> [1] https://lore.kernel.org/linux-mm/20210721063926.3024591-2-ying.huang@intel.com/
+> [2] https://lore.kernel.org/linux-mm/eb438ddd-2919-73d4-bd9f-b7eecdd9577a@linux.vnet.ibm.com/
 >
-> thanks,
+> Fixes: 884a6e5d1f93b ("mm/migrate: update node demotion order on hotplug events")
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reported-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+> Signed-off-by: Oscar Salvador <osalvador@suse.de>
+> ---
+>  v2 -> v3:
+>            - Add feedback from Huang Ying
+> 	   - Add tags
+>  v1 -> v2:
+>            - Add fedback from Huang Ying
+>            - Add feedback from Baolin Wang
+> ---
+>  include/linux/migrate.h |  8 +++++++
+>  mm/migrate.c            | 47 +++++++++--------------------------------
+>  mm/vmstat.c             | 13 +++++++++++-
+>  3 files changed, 30 insertions(+), 38 deletions(-)
 >
-> greg k-h
+> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+> index db96e10eb8da..90e75d5a54d6 100644
+> --- a/include/linux/migrate.h
+> +++ b/include/linux/migrate.h
+> @@ -48,7 +48,15 @@ int folio_migrate_mapping(struct address_space *mapping,
+>  		struct folio *newfolio, struct folio *folio, int extra_count);
+>  
+>  extern bool numa_demotion_enabled;
+> +extern void migrate_on_reclaim_init(void);
+> +#ifdef CONFIG_HOTPLUG_CPU
+> +extern void set_migration_target_nodes(void);
+>  #else
+> +static inline void set_migration_target_nodes(void) {}
+> +#endif
+> +#else
+> +
+> +static inline void set_migration_target_nodes(void) {}
+>  
+>  static inline void putback_movable_pages(struct list_head *l) {}
+>  static inline int migrate_pages(struct list_head *l, new_page_t new,
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index e8a6933af68d..2561881f03b2 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -3193,7 +3193,7 @@ static void __set_migration_target_nodes(void)
+>  /*
+>   * For callers that do not hold get_online_mems() already.
+>   */
+> -static void set_migration_target_nodes(void)
+> +void set_migration_target_nodes(void)
+>  {
+>  	get_online_mems();
+>  	__set_migration_target_nodes();
+> @@ -3257,51 +3257,24 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
+>  	return notifier_from_errno(0);
+>  }
+>  
+> -/*
+> - * React to hotplug events that might affect the migration targets
+> - * like events that online or offline NUMA nodes.
+> - *
+> - * The ordering is also currently dependent on which nodes have
+> - * CPUs.  That means we need CPU on/offline notification too.
+> - */
+> -static int migration_online_cpu(unsigned int cpu)
+> -{
+> -	set_migration_target_nodes();
+> -	return 0;
+> -}
+> -
+> -static int migration_offline_cpu(unsigned int cpu)
+> +void __init migrate_on_reclaim_init(void)
+>  {
+> -	set_migration_target_nodes();
+> -	return 0;
+> -}
+> -
+> -static int __init migrate_on_reclaim_init(void)
+> -{
+> -	int ret;
+> -
+>  	node_demotion = kmalloc_array(nr_node_ids,
+>  				      sizeof(struct demotion_nodes),
+>  				      GFP_KERNEL);
+>  	WARN_ON(!node_demotion);
+>  
+> -	ret = cpuhp_setup_state_nocalls(CPUHP_MM_DEMOTION_DEAD, "mm/demotion:offline",
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+CPUHP_MM_DEMOTION_DEAD and CPUHP_AP_MM_DEMOTION_ONLINE needs to be
+deleted from include/linux/cpuhotplug.h too.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Best Regards,
+Huang, Ying
 
-## Build
-* kernel: 5.10.106-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 1ef0e2b3149031c288a85198919cc1778754e515
-* git describe: v5.10.105-72-g1ef0e2b31490
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.105-72-g1ef0e2b31490
+> -					NULL, migration_offline_cpu);
+> +	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
+>  	/*
+> -	 * In the unlikely case that this fails, the automatic
+> -	 * migration targets may become suboptimal for nodes
+> -	 * where N_CPU changes.  With such a small impact in a
+> -	 * rare case, do not bother trying to do anything special.
+> +	 * At this point, all numa nodes with memory/CPus have their state
+> +	 * properly set, so we can build the demotion order now.
+> +	 * Let us hold the cpu_hotplug lock just, as we could possibily have
+> +	 * CPU hotplug events during boot.
+>  	 */
+> -	WARN_ON(ret < 0);
+> -	ret = cpuhp_setup_state(CPUHP_AP_MM_DEMOTION_ONLINE, "mm/demotion:online",
+> -				migration_online_cpu, NULL);
+> -	WARN_ON(ret < 0);
+> -
+> -	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
+> -	return 0;
+> +	cpus_read_lock();
+> +	set_migration_target_nodes();
+> +	cpus_read_unlock();
+>  }
+> -late_initcall(migrate_on_reclaim_init);
+>  #endif /* CONFIG_HOTPLUG_CPU */
+>  
+>  bool numa_demotion_enabled = false;
 
-## Test Regressions (compared to v5.10.105)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.105)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.105)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.105)
-No metric fixes found.
-
-## Test result summary
-total: 95856, pass: 82843, fail: 543, skip: 11705, xfail: 765
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 46 passed, 14 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+[snip]

@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6674D9E09
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E541B4D9E0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349423AbiCOOsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S1349428AbiCOOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349534AbiCOOsR (ORCPT
+        with ESMTP id S238359AbiCOOtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:48:17 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70F755748;
-        Tue, 15 Mar 2022 07:47:05 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E1B6E1F42EAA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647355624;
-        bh=IR+pW29vwKpjjmBqvGZ3LB+SNS5bnCefYbo8aC6sJWU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Bp3ievLV+eSSIagMLXGDCH2WguJGGv8p1YZZ5fPggMAEwsjBquzlreWjWmAlZKdNZ
-         njRq5g5+0I7cSuTF+tDy6VmrjgocrqQWTR8VNLdYgXIX87rVv6AfYdRkXpuYuyJBH6
-         Db0eVvAjg/i8fGlRSTsJ77NgF0RMd6OX3kk6+ME/yG54eFdSFf9PhEqrqZl01faLtm
-         /cl9mn0vxZwO9sJN30LsPPqS2NrgKy401mULFcuOOWk1+GHRCwgJzsgLMpyh4rd1iw
-         RuByvbMU3EE84RjXbeW8BBZBbIK+J4lRoMq8HrhS7HiYej0pf3LuX1xx3w6TaQK738
-         CPncbaJEzLcjA==
-Message-ID: <dc4ce2b5-bf8e-ea20-f9b1-9034caff421b@collabora.com>
-Date:   Tue, 15 Mar 2022 15:47:01 +0100
+        Tue, 15 Mar 2022 10:49:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD71740E65
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647355698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZnF7RElcuXdfPSzWNjGS7zFij6QjXShEfRCK1+fTBZY=;
+        b=RTALE2mLJzT5ZjaJ+PNs//LxDFCmyhceEti5s1wEb9pOAqO5A+fOpUr9ITLK3rO019+xCR
+        pjkh8qCdJzY3ODZqfQcmdlJhvIEECKAEtsvRw2y9oGrxWZbcqG+KkKVj6rdz6mkSFLOlUD
+        HGnGZ7aNFKtlkmGBIsHcyLTnz2Ex8sM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-573-5xNwKlzZNH2YhHZEef272w-1; Tue, 15 Mar 2022 10:48:17 -0400
+X-MC-Unique: 5xNwKlzZNH2YhHZEef272w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C48DF101AA52;
+        Tue, 15 Mar 2022 14:48:16 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4FEDC401B28E;
+        Tue, 15 Mar 2022 14:48:14 +0000 (UTC)
+Message-ID: <57c2d5d64f9d65e442744fa8b7f188ed3fd37c1c.camel@redhat.com>
+Subject: Re: [PATCH 3/3] KVM: x86: Trace all APICv inhibit changes and
+ capture overall status
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Chao Gao <chao.gao@intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 15 Mar 2022 16:48:12 +0200
+In-Reply-To: <20220315144249.GA5496@gao-cwp>
+References: <20220311043517.17027-1-seanjc@google.com>
+         <20220311043517.17027-4-seanjc@google.com> <20220315144249.GA5496@gao-cwp>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 12/21] arm64: dts: mt8192: Add mmc device nodes
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-References: <20220304130809.12924-1-allen-kh.cheng@mediatek.com>
- <20220304130809.12924-13-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220304130809.12924-13-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/03/22 14:08, Allen-KH Cheng ha scritto:
-> Add mmc nodes for mt8192 SoC.
+On Tue, 2022-03-15 at 22:42 +0800, Chao Gao wrote:
+> On Fri, Mar 11, 2022 at 04:35:17AM +0000, Sean Christopherson wrote:
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -9053,15 +9053,29 @@ bool kvm_apicv_activated(struct kvm *kvm)
+> > }
+> > EXPORT_SYMBOL_GPL(kvm_apicv_activated);
+> > 
+> > +
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 34 +++++++++++++++++++++---
->   1 file changed, 30 insertions(+), 4 deletions(-)
+> stray newline.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 6220d6962f58..4e4081ea7db5 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -1150,10 +1150,36 @@
->   			#clock-cells = <1>;
->   		};
->   
-> -		msdc: clock-controller@11f60000 {
-> -			compatible = "mediatek,mt8192-msdc";
-> -			reg = <0 0x11f60000 0 0x1000>;
-> -			#clock-cells = <1>;
-> +		mmc0: mmc@11f60000 {
-> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11f60000 0 0x1000>, <0 0x11f50000 0 0x1000>;
-> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
-> +				 <&msdc_top CLK_MSDC_TOP_H_MST_0P>,
-> +				 <&msdc_top CLK_MSDC_TOP_SRC_0P>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
-> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>;
-> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
-> +				      "axi_cg", "ahb_cg", "pclk_cg";
+> > +static void set_or_clear_apicv_inhibit(unsigned long *inhibits,
+> > +				       enum kvm_apicv_inhibit reason, bool set)
+> > +{
+> > +	if (set)
+> > +		__set_bit(reason, inhibits);
+> > +	else
+> > +		__clear_bit(reason, inhibits);
+> > +
+> > +	trace_kvm_apicv_inhibit_changed(reason, set, *inhibits);
+> 
+> Note that some calls may not toggle any bit. Do you want to log them?
+> I am afraid that a VM with many vCPUs may get a lot of traces that actually
+> doesn't change inhibits.
 
-Can you please use the same clock order as specified in the dt-bindings?
-This means that "pclk_cg" goes before "axi_cg".
+I also think so.
 
-				 <&msdc_top CLK_MSDC_TOP_P_MSDC0>,
-				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
-				 <&msdc_top CLK_MSDC_TOP_AXI>;
-		clock-names = "source", "hclk", "source_cg", "sys_cg",
-			      "pclk_cg", "axi_cg", "ahb_cg";
+Best regards,
+	Maxim Levitsky
 
-> +			status = "disabled";
-> +		};
-> +
-> +		mmc1: mmc@11f70000 {
-> +			compatible = "mediatek,mt8192-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11f70000 0 0x1000>, <0 0x11c70000 0 0x1000>;
-> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
-> +				 <&msdc_top CLK_MSDC_TOP_H_MST_1P>,
-> +				 <&msdc_top CLK_MSDC_TOP_SRC_1P>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_CFG>,
-> +				 <&msdc_top CLK_MSDC_TOP_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_AHB2AXI_BRG_AXI>,
-> +				 <&msdc_top CLK_MSDC_TOP_P_MSDC1>;
+> 
+> Anyway, this series looks good to me.
+> 
 
-same here please.
 
-> +			clock-names = "source", "hclk", "source_cg", "sys_cg",
-> +				      "axi_cg", "ahb_cg", "pclk_cg";
-> +			status = "disabled";
->   		};
->   
->   		mfgcfg: clock-controller@13fbf000 {
-
-After applying the requested changes,
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Thanks,
-Angelo

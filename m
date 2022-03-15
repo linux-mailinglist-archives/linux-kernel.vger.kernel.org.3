@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F24C4D95B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BD64D95C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345705AbiCOH4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S1345723AbiCOH5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343497AbiCOH4x (ORCPT
+        with ESMTP id S235395AbiCOH5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:56:53 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B5D4BB95;
-        Tue, 15 Mar 2022 00:55:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id s11so18306649pfu.13;
-        Tue, 15 Mar 2022 00:55:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QHSZIG+RYTCoSU7g3G2vhk0zPZz5xdBXJmdaVeF2FQc=;
-        b=WpRExcQZ2oJRGbTE4iawonQ/UFuxcyfdbxG7vnwZuYboTrVodWofNu9ITXPkK9ykzR
-         ove6te24iAGQljWqWFRhG3xe8zk5jIpOrqeQqIWsb5EUfRkCIQSl/ZqJMH37IzlDwM27
-         T1Pe/VGEXEKAvR8zFUx1MUQW9Ew6lSg1nTfRyjqEHXXWscEMDRBDHhb234BD7hum7Bzx
-         OC8WGLzWujuzIPTQiViAfhohcYNOAQVPJqTWDe0xacHlWmJH7CvPpbMheoD/xsdE+e+u
-         9ptwybUFlE6UpFS1spqJbf1Yt8Zs+JN+afXEjecMCEv6kuKVt1jHDuvl/p8FreJAw7vm
-         Vg1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QHSZIG+RYTCoSU7g3G2vhk0zPZz5xdBXJmdaVeF2FQc=;
-        b=pSKw9bCabIuAW0txrrDiVahU0LWrRy7pWE+tfXaDaNQmnH3NRgrMiYEsyDeBV/Bvpg
-         d7q1sV4IqUNSsGn0JlrtEPSQ5kl6N1YIzSYVYsAgkD1gZrde8VxS1pIl2JHrw1IS5Inn
-         aVyU3BfRDDc/d/KDOmkDVPJGY7UhPgxny5F0SmW9WGLT1JZakSjDj2AhEBjP5ow3cjAw
-         RwDjpb2W1RcIrtAPCZ/9gBVTlUVVvqOlnTddKyEM1iG5jNI43o141d5u+63rj/+03o5s
-         /Rp448EHQC+b0tfnlG9SZEK3biIvfwD4UpNj1nD/0x+8vad9z3I/qNKG5NsjTljl2YO4
-         px7g==
-X-Gm-Message-State: AOAM53241WKMcO5ODvLA0g4pLS+j7W9z9PA9HB/54BpxGsLbPcbgv/6+
-        zFWOe0tfwmba9gQj0uEsaVz9yQ9h0eFQcQ==
-X-Google-Smtp-Source: ABdhPJwNq3saFA+VPFYdL6A+EbrsrcQQk4WMnlZ0KPZJHnBq1V7Yr1n5wVJTpG0afaKHlLCbPFltVQ==
-X-Received: by 2002:a63:c50:0:b0:381:5118:62d6 with SMTP id 16-20020a630c50000000b00381511862d6mr3962933pgm.420.1647330941329;
-        Tue, 15 Mar 2022 00:55:41 -0700 (PDT)
-Received: from ubuntu.mate (subs03-180-214-233-94.three.co.id. [180.214.233.94])
-        by smtp.gmail.com with ESMTPSA id me5-20020a17090b17c500b001c63699ff60sm1754906pjb.57.2022.03.15.00.55.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 00:55:40 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tue, 15 Mar 2022 03:57:44 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F9374BBB3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:56:31 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-216-xYBwVrWXPkuS3LcJVzhFpQ-1; Tue, 15 Mar 2022 07:56:28 +0000
+X-MC-Unique: xYBwVrWXPkuS3LcJVzhFpQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 15 Mar 2022 07:56:27 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 15 Mar 2022 07:56:26 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'T.J. Mercier'" <tjmercier@google.com>,
+        Todd Kjos <tkjos@google.com>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: add missing page title for kernel-doc.rst and sphinx.rst
-Date:   Tue, 15 Mar 2022 14:55:27 +0700
-Message-Id: <20220315075527.229918-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        =?utf-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "Hridya Valsaraju" <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Sumit Semwal" <sumit.semwal@linaro.org>,
+        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        "Brian Starkey" <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        "Tejun Heo" <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        "Kenny.Ho@amd.com" <Kenny.Ho@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for
+ userspace
+Thread-Topic: [RFC v3 7/8] binder: use __kernel_pid_t and __kernel_uid_t for
+ userspace
+Thread-Index: AQHYN/2hnJZ5hPm3HkKIFJirFaEIKazAEl4g
+Date:   Tue, 15 Mar 2022 07:56:26 +0000
+Message-ID: <a365a5f6c7864a879b133b99d1f43fb2@AcuMS.aculab.com>
+References: <20220309165222.2843651-1-tjmercier@google.com>
+ <20220309165222.2843651-8-tjmercier@google.com>
+ <CAHRSSEy5_h9LJB4q5_OJA7fSq=ROo68UaK+hdPz-Vj-wac1Qhg@mail.gmail.com>
+ <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com>
+In-Reply-To: <CABdmKX1G0Rwmz7=BP1ER+TmtrnkGiE0nROsPTHKxnj=6bHhY3Q@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sphinx.rst and kernel-doc.rst are missing page title, thus top-level
-headings in the respective documentation is displayed in the table of
-contents for doc-guide.
-
-Add the title.
-
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/doc-guide/kernel-doc.rst | 4 ++++
- Documentation/doc-guide/sphinx.rst     | 4 ++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
-index 79aaa55d6bc..de47b20c806 100644
---- a/Documentation/doc-guide/kernel-doc.rst
-+++ b/Documentation/doc-guide/kernel-doc.rst
-@@ -1,3 +1,7 @@
-+==========================
-+kernel-doc Comments Format
-+==========================
-+
- Writing kernel-doc comments
- ===========================
- 
-diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-index bb36f18ae9a..140507de5a8 100644
---- a/Documentation/doc-guide/sphinx.rst
-+++ b/Documentation/doc-guide/sphinx.rst
-@@ -1,5 +1,9 @@
- .. _sphinxdoc:
- 
-+=============
-+Sphinx Primer
-+=============
-+
- Introduction
- ============
- 
-
-base-commit: 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
--- 
-An old man doll... just what I always wanted! - Clara
+RnJvbTogVC5KLiBNZXJjaWVyDQo+IFNlbnQ6IDE0IE1hcmNoIDIwMjIgMjM6NDUNCj4gDQo+IE9u
+IFRodSwgTWFyIDEwLCAyMDIyIGF0IDExOjMzIEFNIFRvZGQgS2pvcyA8dGtqb3NAZ29vZ2xlLmNv
+bT4gd3JvdGU6DQo+ID4NCj4gPiBPbiBXZWQsIE1hciA5LCAyMDIyIGF0IDg6NTIgQU0gVC5KLiBN
+ZXJjaWVyIDx0am1lcmNpZXJAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+ID4gPg0KPiA+ID4gVGhlIGtl
+cm5lbCBpbnRlcmZhY2Ugc2hvdWxkIHVzZSB0eXBlcyB0aGF0IHRoZSBrZXJuZWwgZGVmaW5lcyBp
+bnN0ZWFkIG9mDQo+ID4gPiBwaWRfdCBhbmQgdWlkX3QsIHdob3NlIGRlZmluaXRvbiBpcyBvd25l
+ZCBieSBsaWJjLiBUaGlzIGZpeGVzIHRoZSBoZWFkZXINCj4gPiA+IHNvIHRoYXQgaXQgY2FuIGJl
+IGluY2x1ZGVkIHdpdGhvdXQgZmlyc3QgaW5jbHVkaW5nIHN5cy90eXBlcy5oLg0KPiA+ID4NCj4g
+PiA+IFNpZ25lZC1vZmYtYnk6IFQuSi4gTWVyY2llciA8dGptZXJjaWVyQGdvb2dsZS5jb20+DQo+
+ID4gPiAtLS0NCj4gPiA+ICBpbmNsdWRlL3VhcGkvbGludXgvYW5kcm9pZC9iaW5kZXIuaCB8IDQg
+KystLQ0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
+KC0pDQo+ID4gPg0KPiA+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvdWFwaS9saW51eC9hbmRyb2lk
+L2JpbmRlci5oIGIvaW5jbHVkZS91YXBpL2xpbnV4L2FuZHJvaWQvYmluZGVyLmgNCj4gPiA+IGlu
+ZGV4IDE2OWZkNTA2OWExYS4uYWEyODQ1NGRiY2EzIDEwMDY0NA0KPiA+ID4gLS0tIGEvaW5jbHVk
+ZS91YXBpL2xpbnV4L2FuZHJvaWQvYmluZGVyLmgNCj4gPiA+ICsrKyBiL2luY2x1ZGUvdWFwaS9s
+aW51eC9hbmRyb2lkL2JpbmRlci5oDQo+ID4gPiBAQCAtMjg5LDggKzI4OSw4IEBAIHN0cnVjdCBi
+aW5kZXJfdHJhbnNhY3Rpb25fZGF0YSB7DQo+ID4gPg0KPiA+ID4gICAgICAgICAvKiBHZW5lcmFs
+IGluZm9ybWF0aW9uIGFib3V0IHRoZSB0cmFuc2FjdGlvbi4gKi8NCj4gPiA+ICAgICAgICAgX191
+MzIgICAgICAgICAgIGZsYWdzOw0KPiA+ID4gLSAgICAgICBwaWRfdCAgICAgICAgICAgc2VuZGVy
+X3BpZDsNCj4gPiA+IC0gICAgICAgdWlkX3QgICAgICAgICAgIHNlbmRlcl9ldWlkOw0KPiA+ID4g
+KyAgICAgICBfX2tlcm5lbF9waWRfdCAgc2VuZGVyX3BpZDsNCj4gPiA+ICsgICAgICAgX19rZXJu
+ZWxfdWlkX3QgIHNlbmRlcl9ldWlkOw0KPiA+DQo+ID4gQXJlIHdlIGd1YXJhbnRlZWQgdGhhdCB0
+aGlzIGRvZXMgbm90IGFmZmVjdCB0aGUgVUFQSSBhdCBhbGw/IFVzZXJzcGFjZQ0KPiA+IGNvZGUg
+dXNpbmcgdGhpcyBkZWZpbml0aW9uIHdpbGwgaGF2ZSB0byBydW4gd2l0aCBrZXJuZWxzIHVzaW5n
+IHRoZSBvbGQNCj4gPiBkZWZpbml0aW9uIGFuZCB2aXNhLXZlcnNhLg0KPiANCj4gQSBzdGFuZGFy
+ZHMgY29tcGxpYW50IHVzZXJzcGFjZSBzaG91bGQgYmUgZXhwZWN0aW5nIGEgc2lnbmVkIGludGVn
+ZXINCj4gdHlwZSBoZXJlLiBTbyB0aGUgb25seSB3YXkgSSBjYW4gdGhpbmsgdXNlcnNwYWNlIHdv
+dWxkIGJlIGFmZmVjdGVkIGlzDQo+IGlmOg0KPiAxKSBwaWRfdCBpcyBhIGxvbmcgQU5EDQo+IDIp
+IHNpemVvZihsb25nKSA+IHNpemVvZihpbnQpIEFORA0KPiAzKSBDb25zdW1lcnMgb2YgdGhlIHBp
+ZF90IGRlZmluaXRpb24gYWN0dWFsbHkgYXR0ZW1wdCB0byBtdXRhdGUgdGhlDQo+IHJlc3VsdCB0
+byBtYWtlIHVzZSBvZiBleHRyYSBiaXRzIGluIHRoZSB2YXJpYWJsZSAod2hpY2ggYXJlIG5vdCB0
+aGVyZSkNCg0KT3IgdGhlIHVzZXJzcGFjZSBoZWFkZXJzIGhhdmUgYSAxNmJpdCBwaWRfdC4NCg0K
+SSBjYW4ndCBoZWxwIGZlZWxpbmcgdGhhdCB1YXBpIGhlYWRlcnMgc2hvdWxkIG9ubHkgdXNlIGV4
+cGxpY2l0DQpmaXhlZCBzaXplZCB0eXBlcy4NClRoZXJlIGlzIG5vIHBvaW50IGluZGlyZWN0aW5n
+IHRoZSB0eXBlIG5hbWVzIC0gdGhlIHNpemVzIHN0aWxsDQpjYW4ndCBiZSBjaGFuZ2VzLg0KDQoJ
+RGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1v
+dW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEz
+OTczODYgKFdhbGVzKQ0K
 

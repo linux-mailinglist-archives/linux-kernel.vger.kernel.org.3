@@ -2,218 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110874DA0D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEE74DA0CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350470AbiCORIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
+        id S1350421AbiCORGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350485AbiCORHy (ORCPT
+        with ESMTP id S241768AbiCORGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:07:54 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474C5580C0;
-        Tue, 15 Mar 2022 10:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647364002; x=1678900002;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0XG+gX0DCjUrifLHVo4uvhwaHh2d9IKH+kZXF/KXoOE=;
-  b=O0Wh72+SxpnY1kunIVWqpRmr4AoABFX7eBbg6y+nSJgqUhsBCnEzaG8k
-   CkiKrh4J0d+op01OFDYi7NSYbt2AZoblb8vOYGgjfeXa5uOmCCdTTDPQf
-   sCrvxbs/tamlcpN8vfo0SiPc3BcYFBDzIbtR06QihMJtb6PGuSQXR3PQT
-   CwvRoLg8D/gOfFUHOFsVO7+eQWVQX0qiiuk/ELn7Bxu7eeIiaF/DTKICF
-   X9Xl+kDS9gY29uor9gAaWFpl+cVlmxl4VzX1uPhLBcPt+XUQqYPEAY1vi
-   OgGFKcBoRk1mU1i4prehYC61GUjh0bsg4CUs9dCcHvL8DNiyTDYm86NkR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="317085653"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="317085653"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 10:04:26 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="690269219"
-Received: from lepple-mobl1.ger.corp.intel.com (HELO [10.252.56.30]) ([10.252.56.30])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 10:04:21 -0700
-Message-ID: <84435254-b072-661f-f108-81a00178d7bc@linux.intel.com>
-Date:   Tue, 15 Mar 2022 19:04:19 +0200
+        Tue, 15 Mar 2022 13:06:05 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564F6764D;
+        Tue, 15 Mar 2022 10:04:53 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d07ae0b1c0so210248987b3.2;
+        Tue, 15 Mar 2022 10:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r+2Wx94qR8PPYpieBxCaSAJOgTPVSgK4NLclIZE2QSE=;
+        b=VU2ZTPE4gsQsOfyPkhKPVHADz9GDZAE/HlAGRCEUu+xUDcx/Wf2ta1VdEEEq7t756w
+         fsFJ0cvcNp7ucnzA2PC/KlAPaW93HjwlujXe8zJKny8YHiS2mmY0ny/OjLModqDJ1too
+         2kjjl7r1KQj7a9CGx8+yfIBIUBTZSmgj5z4tjkaLbywUQvPosXlryEUGRtNQpwDX6MJ4
+         8vVF5S8FVXCi7SmoZAhAmLCdLjMOjvk1D+lPRxi+Y5z5Gb0gOI1K5XjZBcoTnl5YmoLa
+         OvdRqcIcOQ1YZ2m6FHLyU7jjtHldTA6Zn3uZjIlDmvRLFjJW0a49qj/5nwHdBXSyGiag
+         sYOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r+2Wx94qR8PPYpieBxCaSAJOgTPVSgK4NLclIZE2QSE=;
+        b=j/WJm1zNImPoSjbhnDpT9RAgu+Jt0kWusPxmLnGLSOldTRUL4wQsKTxImn0bzbll29
+         ECU4FjJha67iXof0QP81rNVvWVY+HaXY7X0yhN73tP8H0oJx0qnD1VFoTKeH2ejJ9g+l
+         QaML+6ZSlFkqOPlbqzhv1XfdLh8GPocSdJdd6LpWOIP20nLS5uCzeF3mcdp5Lq6XOSum
+         rbMZSfIbaIzNMz9tzxMUxRYXB96LCI3nYyht2QRO8v8lMdlY2JiVhT3rFhob+V9gX9rN
+         XViu/72EtB07PzlG442JjRRJrm2XwRfQ2DavS66uuylkPcj9JIAqLBuwUb4tz2PV1gfz
+         FKKQ==
+X-Gm-Message-State: AOAM533G1BqxXZE/tLJKv6x6LFy3Wq1oN1UArDUgBDiW6xmpgPOIxIvf
+        8cXVKdI44ywK5K4Pqz2Il/l0dJXJyGye7YIu4Pw=
+X-Google-Smtp-Source: ABdhPJyNXyKLd6XUld5HuAr0JLq083IQ0Kq+tt6eTffugaX0Zc++5S7Oc9JYPGLEx9Rc+UIeW91TAIkUVjWrceahyTY=
+X-Received: by 2002:a81:196:0:b0:2dc:73c9:925 with SMTP id 144-20020a810196000000b002dc73c90925mr25025274ywb.481.1647363892467;
+ Tue, 15 Mar 2022 10:04:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH bpf-next v2 00/28] Introduce eBPF support for HID devices
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220315085549.22033-1-lukas.bulwahn@gmail.com> <20220315165228.GD4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220315165228.GD4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Tue, 15 Mar 2022 18:04:41 +0100
+Message-ID: <CAKXUXMy7TqCZjVMKwiQJj5bYUDpdGZE2hhbB2WfSA2AX1hM=zQ@mail.gmail.com>
+Subject: Re: [PATCH] srcu: drop the needless initialization in srcu_gp_start()
+To:     Paul McKenny <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On Tue, Mar 15, 2022 at 5:52 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Tue, Mar 15, 2022 at 09:55:49AM +0100, Lukas Bulwahn wrote:
+> > Commit 9c7ef4c30f12 ("srcu: Make Tree SRCU able to operate without snp_node
+> > array") initializes the local variable sdp differently depending on the
+> > srcu's state in srcu_gp_start().
+> >
+> > Hence, the initialization of sdp with the variable definition is not used
+> > before its second initialization.
+> >
+> > Drop the needless initialization in srcu_gp_start() to have clear code.
+> >
+> > No functional change. Some changes in the resulting object code due to
+> > various rearrangements by the compiler.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> > Paul, please pick this minor non-urgent clean-up patch.
+>
+> Good eyes, thank you!
+>
+> I have pulled this in for testing and review.  If things go will,
+> I expect to push it into the v5.19 merge window (that is, not the one
+> that will likely open next week, but the one after that).
+>
+> As usual, I could not resist wordsmithing the commit log.  Could you
+> please check out the wordsmithed version below to make sure that I did
+> not mess something up?
+>
 
-On 04/03/2022 19:28, Benjamin Tissoires wrote:
-> Hi,
->
-> This is a followup of my v1 at [0].
->
-> The short summary of the previous cover letter and discussions is that
-> HID could benefit from BPF for the following use cases:
->
-> - simple fixup of report descriptor:
->    benefits are faster development time and testing, with the produced
->    bpf program being shipped in the kernel directly (the shipping part
->    is *not* addressed here).
->
-> - Universal Stylus Interface:
->    allows a user-space program to define its own kernel interface
->
-> - Surface Dial:
->    somehow similar to the previous one except that userspace can decide
->    to change the shape of the exported device
->
-> - firewall:
->    still partly missing there, there is not yet interception of hidraw
->    calls, but it's coming in a followup series, I promise
->
-> - tracing:
->    well, tracing.
->
->
-> I tried to address as many comments as I could and here is the short log
-> of changes:
->
-> v2:
-> ===
->
-> - split the series by subsystem (bpf, HID, libbpf, selftests and
->    samples)
->
-> - Added an extra patch at the beginning to not require CAP_NET_ADMIN for
->    BPF_PROG_TYPE_LIRC_MODE2 (please shout if this is wrong)
->
-> - made the bpf context attached to HID program of dynamic size:
->    * the first 1 kB will be able to be addressed directly
->    * the rest can be retrieved through bpf_hid_{set|get}_data
->      (note that I am definitivey not happy with that API, because there
->      is part of it in bits and other in bytes. ouch)
->
-> - added an extra patch to prevent non GPL HID bpf programs to be loaded
->    of type BPF_PROG_TYPE_HID
->    * same here, not really happy but I don't know where to put that check
->      in verifier.c
->
-> - added a new flag BPF_F_INSERT_HEAD for BPF_LINK_CREATE syscall when in
->    used with HID program types.
->    * this flag is used for tracing, to be able to load a program before
->      any others that might already have been inserted and that might
->      change the data stream.
->
-> Cheers,
-> Benjamin
+Wordsmithing was good. I am basically still reading in your versions
+what I intended to state with my commit message; +1!
 
-I posted a couple of comments to the series, but other than that for the 
-whole series you can use:
+And of course, you are a native speaker; so, I trust your English is
+better than mine.
 
-Reviewed-by: Tero Kristo <tero.kristo@linux.intel.com>
+Lukas
 
-Tested-by: Tero Kristo <tero.kristo@linux.intel.com>
-
-I did test this with my USI-BPF program + userspace code, they work with 
-few minor updates compared to previous version.
-
--Tero
-
+>                                                         Thanx, Paul
 >
+> ------------------------------------------------------------------------
 >
+> commit a0c59d99e87c52d6832e1ad39421b4a4386cdfd6
+> Author: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Date:   Tue Mar 15 09:55:49 2022 +0100
 >
-> [0] https://lore.kernel.org/linux-input/20220224110828.2168231-1-benjamin.tissoires@redhat.com/T/#t
+>     srcu: Drop needless initialization of sdp in srcu_gp_start()
 >
+>     Commit 9c7ef4c30f12 ("srcu: Make Tree SRCU able to operate without
+>     snp_node array") initializes the local variable sdp differently depending
+>     on the srcu's state in srcu_gp_start().  Either way, this initialization
+>     overwrites the value used when sdp is defined.
 >
-> Benjamin Tissoires (28):
->    bpf: add new is_sys_admin_prog_type() helper
->    bpf: introduce hid program type
->    HID: hook up with bpf
->    libbpf: add HID program type and API
->    selftests/bpf: add tests for the HID-bpf initial implementation
->    samples/bpf: add new hid_mouse example
->    bpf/hid: add a new attach type to change the report descriptor
->    HID: allow to change the report descriptor from an eBPF program
->    libbpf: add new attach type BPF_HID_RDESC_FIXUP
->    selftests/bpf: add report descriptor fixup tests
->    samples/bpf: add a report descriptor fixup
->    bpf/hid: add hid_{get|set}_data helpers
->    HID: bpf: implement hid_bpf_get|set_data
->    selftests/bpf: add tests for hid_{get|set}_data helpers
->    bpf/hid: add new BPF type to trigger commands from userspace
->    libbpf: add new attach type BPF_HID_USER_EVENT
->    selftests/bpf: add test for user call of HID bpf programs
->    selftests/bpf: hid: rely on uhid event to know if a test device is
->      ready
->    bpf/hid: add bpf_hid_raw_request helper function
->    HID: add implementation of bpf_hid_raw_request
->    selftests/bpf: add tests for bpf_hid_hw_request
->    bpf/verifier: prevent non GPL programs to be loaded against HID
->    HID: bpf: compute only the required buffer size for the device
->    HID: bpf: only call hid_bpf_raw_event() if a ctx is available
->    bpf/hid: Add a flag to add the program at the beginning of the list
->    libbpf: add handling for BPF_F_INSERT_HEAD in HID programs
->    selftests/bpf: Add a test for BPF_F_INSERT_HEAD
->    samples/bpf: fix bpf_program__attach_hid() api change
+>     This commit therefore drops this pointless definition-time initialization.
+>     Although there is no functional change, compiler code generation may
+>     be affected.
 >
->   drivers/hid/Makefile                         |   1 +
->   drivers/hid/hid-bpf.c                        | 361 +++++++++
->   drivers/hid/hid-core.c                       |  34 +-
->   include/linux/bpf-hid.h                      | 129 +++
->   include/linux/bpf_types.h                    |   4 +
->   include/linux/hid.h                          |  25 +
->   include/uapi/linux/bpf.h                     |  59 ++
->   include/uapi/linux/bpf_hid.h                 |  50 ++
->   kernel/bpf/Makefile                          |   3 +
->   kernel/bpf/hid.c                             | 652 +++++++++++++++
->   kernel/bpf/syscall.c                         |  26 +-
->   kernel/bpf/verifier.c                        |   7 +
->   samples/bpf/.gitignore                       |   1 +
->   samples/bpf/Makefile                         |   4 +
->   samples/bpf/hid_mouse_kern.c                 |  91 +++
->   samples/bpf/hid_mouse_user.c                 | 129 +++
->   tools/include/uapi/linux/bpf.h               |  59 ++
->   tools/lib/bpf/libbpf.c                       |  22 +-
->   tools/lib/bpf/libbpf.h                       |   2 +
->   tools/lib/bpf/libbpf.map                     |   1 +
->   tools/testing/selftests/bpf/prog_tests/hid.c | 788 +++++++++++++++++++
->   tools/testing/selftests/bpf/progs/hid.c      | 216 +++++
->   22 files changed, 2649 insertions(+), 15 deletions(-)
->   create mode 100644 drivers/hid/hid-bpf.c
->   create mode 100644 include/linux/bpf-hid.h
->   create mode 100644 include/uapi/linux/bpf_hid.h
->   create mode 100644 kernel/bpf/hid.c
->   create mode 100644 samples/bpf/hid_mouse_kern.c
->   create mode 100644 samples/bpf/hid_mouse_user.c
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
->   create mode 100644 tools/testing/selftests/bpf/progs/hid.c
+>     Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 >
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index e78b1c7929d6..3bc8267c5d0b 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -609,7 +609,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
+>   */
+>  static void srcu_gp_start(struct srcu_struct *ssp)
+>  {
+> -       struct srcu_data *sdp = this_cpu_ptr(ssp->sda);
+> +       struct srcu_data *sdp;
+>         int state;
+>
+>         if (smp_load_acquire(&ssp->srcu_size_state) < SRCU_SIZE_WAIT_BARRIER)

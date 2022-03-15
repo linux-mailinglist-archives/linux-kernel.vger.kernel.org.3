@@ -2,130 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4E84DA0E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E3F4DA0E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350467AbiCORJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S1350477AbiCORKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242353AbiCORJD (ORCPT
+        with ESMTP id S242353AbiCORKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:09:03 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0A4639C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:07:50 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id w7so34153246lfd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:07:50 -0700 (PDT)
+        Tue, 15 Mar 2022 13:10:09 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10CF13CE4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:08:56 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id s25so27419057lji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8OwTI3UtdnqUESoKlohwZIL3xHHO7DnZYdKpKk+9gN8=;
-        b=T+8KXwJOwXVyiorrQqYAEcy7XHZKpO6ojbZEyPTVsXpl1EMi8Uklm6Fupyz0/zXQ3t
-         s70j/5coRJYMChxYcdoJSi+mobg6Zrk0EBVr+odk8Rhko8jE54yeCVH50apvJx5fuCGB
-         UXVSqgIT0M14ZwNPtk8DGNiXL2zvr8UU9JkRdUdrP+W1VQB7fwT50tMM9xi8hOVzrRNc
-         15dGLzoO0y/G+rc/+CTXwpQ+ONpVfKJdegMC3A1VjEUb1Ym5rc9t9Ul/HO09WU//bNbs
-         cbWymF7b899NetmXvns0IyzfU3tn8PJuop1pZnP713Xa6vWWvCyrLlE16b2g97HAU6xI
-         50iA==
+        bh=89AapUKE/1pFpkNlzVSvl0gcg/r2kqLZ2/9LmCBzmGw=;
+        b=eIytPWVlHZG2c+3ssVjE3ER93sxCwkcHLBBjPEF/CN2OkYiJ1qyEanUT5e2Fng/dvQ
+         cTz2EqvgfhPaL6KT/YJ1aKcd5EWDAWbwCu0qrNrZPRj+zxQ4mZzMCdTXGsGsPQfjic5y
+         /a8HTCfZuBmRijJeDeSHHPfXo3cwN72mlQj5Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8OwTI3UtdnqUESoKlohwZIL3xHHO7DnZYdKpKk+9gN8=;
-        b=8Pi+3KRSahG69sT/H5aqNYupIhSL4WHvKQaL1FFxwXwWZjgW7yTLwCbxzoyRbC3Y4f
-         IL3qkK/37hmslrcZJnzfBCDzmJUT+83b5nH4G/57/q09gyjEKieUJ76CgctHfqr/DxF+
-         RqATWMOkrwyp0c+pMq3tCLvXxtBNKyHRlCuFXXzb7Ib9MB+/DTrdPyhI+wabKmF8pXOO
-         uQW1aJCez/USNwMqNizf2TwUaL6puLAa5QJDuXbkDVuoZur78OlsJy0oFNBAIHHOQ8lf
-         vV686wU7fVde47fu3QJUtXPXvjbo4gLtTDNa4Tgo5Z+tQ5ZLDlx10CSsnCOniJJquEqu
-         zIVA==
-X-Gm-Message-State: AOAM531Xam0z9qNDmB9DbQDQg57TLIBuNEi7y5x3fhHUuDk85JU3Z5xh
-        JiqhfaMgaC5173Yy8Utkh4QWo6ULcnEXTR9sltoAgw==
-X-Google-Smtp-Source: ABdhPJw9hAhG0DNB8EFqKWQtVHVToNYXk82biM84hBl1YWN/4P4/jEnTwAL/yHV5wIyR52SApMeCUusq51PrfjEraBI=
-X-Received: by 2002:a05:6512:3f99:b0:447:1ef5:408a with SMTP id
- x25-20020a0565123f9900b004471ef5408amr17117476lfa.490.1647364068619; Tue, 15
- Mar 2022 10:07:48 -0700 (PDT)
+        bh=89AapUKE/1pFpkNlzVSvl0gcg/r2kqLZ2/9LmCBzmGw=;
+        b=75L/yVC7xtuyf9MCilbL3aO1OGRrqOeJUhIuVzEDJ72zwSe/WCM1zc2+4IU9kZ8HAW
+         C5J6Nmg/05gOLa6KhJGAaxOFemDPzNxTqK/gAcmtkMvNU2BtyHgiYstHX2j7h6r4F41O
+         mR373iv2A7pdv5g+guzOwCqrAiJ+mSEP3/JSVK3tAHkDHzvvbDrY8dNTbiWULffhdavC
+         AEKoQpWvtbfdRyxg0cy0gnYuXA2pdzAjgmvQIQgVFaLqVGdOqj3wMJoxdO3k5i7r8Vng
+         b77Kmfg4/zoAB9f1Hef0QJ+FCmlA16FMx1VJoq+TZseptlEztfBGu/d/yZJaxVeTjknH
+         o8hg==
+X-Gm-Message-State: AOAM531raoS26y/hijV6njCvOZmCFVVTxvcn5m8e1ROvgNgCJB8WQTAH
+        rntVjOk03HFpBfOtf8yGyIYu5QrP+b0ePZIw
+X-Google-Smtp-Source: ABdhPJweFlMIOCyhwZYMyY/Mr1f7aHLjwy2OkY4N6UjQPhHfC1d22XqyfJ+dCY8ozDleVCetrzxu8Q==
+X-Received: by 2002:a2e:a4c8:0:b0:249:28d3:27c1 with SMTP id p8-20020a2ea4c8000000b0024928d327c1mr10157074ljm.447.1647364133957;
+        Tue, 15 Mar 2022 10:08:53 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id i22-20020a196d16000000b004488b86e7bdsm1660188lfc.225.2022.03.15.10.08.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 10:08:53 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id w7so34158865lfd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:08:53 -0700 (PDT)
+X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
+ y3-20020ac24203000000b004488053d402mr10011514lfh.687.1647364132924; Tue, 15
+ Mar 2022 10:08:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311161406.23497-1-vincent.guittot@linaro.org>
- <20220311161406.23497-7-vincent.guittot@linaro.org> <CABk29Ns1=2kc3JAESx_Ce7PP86KqiDA4O9K+vaOLZbKfq_XVaQ@mail.gmail.com>
-In-Reply-To: <CABk29Ns1=2kc3JAESx_Ce7PP86KqiDA4O9K+vaOLZbKfq_XVaQ@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 15 Mar 2022 18:07:37 +0100
-Message-ID: <CAKfTPtAZVred+GqR5Uj0eGeawhhbSQR5+N4GFvtkM-KsYrcSpw@mail.gmail.com>
-Subject: Re: [RFC 6/6] sched/fair: Add sched group latency support
-To:     Josh Don <joshdon@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>, parth@linux.ibm.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        "Hyser,Chris" <chris.hyser@oracle.com>,
-        Pavan Kondeti <pkondeti@codeaurora.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        Paul Turner <pjt@google.com>, pavel@ucw.cz,
-        Tejun Heo <tj@kernel.org>,
-        Dhaval Giani <dhaval.giani@oracle.com>, qperret@google.com,
-        Tim Chen <tim.c.chen@linux.intel.com>
+References: <0000000000009e7a1905b8295829@google.com> <00000000000003887a05da3e872c@google.com>
+In-Reply-To: <00000000000003887a05da3e872c@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 15 Mar 2022 10:08:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
+Message-ID: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
+To:     syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        ath9k-devel@qca.qualcomm.com, chouhan.shreyansh630@gmail.com,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
+        <linux-usb@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 at 01:59, Josh Don <joshdon@google.com> wrote:
+On Tue, Mar 15, 2022 at 2:36 AM syzbot
+<syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com> wrote:
 >
-> On Fri, Mar 11, 2022 at 8:15 AM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> [snip]
-> >
-> >  static struct cftype cpu_legacy_files[] = {
-> > @@ -10649,6 +10673,11 @@ static struct cftype cpu_legacy_files[] = {
-> >                 .read_s64 = cpu_idle_read_s64,
-> >                 .write_s64 = cpu_idle_write_s64,
-> >         },
-> > +       {
-> > +               .name = "latency",
-> > +               .read_s64 = cpu_latency_read_s64,
-> > +               .write_s64 = cpu_latency_write_s64,
-> > +       },
-> >  #endif
-> >  #ifdef CONFIG_CFS_BANDWIDTH
-> >         {
-> > @@ -10866,6 +10895,18 @@ static struct cftype cpu_files[] = {
-> >                 .read_s64 = cpu_idle_read_s64,
-> >                 .write_s64 = cpu_idle_write_s64,
-> >         },
-> > +       {
-> > +               .name = "latency",
-> > +               .flags = CFTYPE_NOT_ON_ROOT,
-> > +               .read_s64 = cpu_latency_read_s64,
-> > +               .write_s64 = cpu_latency_write_s64,
-> > +       },
-> > +       {
-> > +               .name = "latency.nice",
-> > +               .flags = CFTYPE_NOT_ON_ROOT,
-> > +               .read_s64 = cpu_latency_nice_read_s64,
-> > +               .write_s64 = cpu_latency_nice_write_s64,
-> > +       },
->
-> Something I considered when adding cpu.idle was that negative values
-> could be used to indicate increasing latency sensitivity. Folding the
-> above latency property into cpu.idle could help consolidate the
-> "latency" behavior, especially given that it shouldn't really be
-> possible to configure an entity as both latency sensitive and idle.
+> syzbot suspects this issue was fixed by commit
+> 09688c0166e7 ("Linux 5.17-rc8")
 
-The range of latency nice is [-19:20] and it doesn't touch on the
-weight whereas sched_idle behavior impacts both the shares and the
-preemption so I was afraid of possible confusion with what latency
-nice is doing
+No, I'm afraid that means that the bisection is broken:
+
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140283ad700000
+
+and yeah, looking at that log it looks like every single run has
+
+  testing commit [...]
+  run #0: crashed: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb
+  ...
+  # git bisect good [...]
+
+and you never saw a "bad" commit that didn't have the issue, so the
+top-of-tree gets marked "good" (and I suspect you intentionally mark
+the broken case "good" in order to find where it got fixed, so you're
+using "git bisect" in a reverse way).
+
+I didn't look closer, but it does seem to not reproduce very reliably,
+maybe that is what confused the bot originally.
+
+                   Linus

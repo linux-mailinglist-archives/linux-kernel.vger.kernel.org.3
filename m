@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30014DA67D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A634DA689
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352668AbiCOX5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 19:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S1352691AbiCPAA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 20:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344372AbiCOX5V (ORCPT
+        with ESMTP id S1344372AbiCPAA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:57:21 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0F8BCA9;
-        Tue, 15 Mar 2022 16:56:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V7JsXvb_1647388565;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7JsXvb_1647388565)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Mar 2022 07:56:05 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     ioana.ciornei@nxp.com
-Cc:     kishon@ti.com, vkoul@kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] phy: Remove duplicated include in phy-fsl-lynx-28g.c
-Date:   Wed, 16 Mar 2022 07:56:03 +0800
-Message-Id: <20220315235603.59481-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 15 Mar 2022 20:00:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C6655750;
+        Tue, 15 Mar 2022 16:59:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F313361537;
+        Tue, 15 Mar 2022 23:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCC8C340E8;
+        Tue, 15 Mar 2022 23:59:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647388783;
+        bh=9b4hTTeP0bR6aPn4lwbDneU/xQj2l5nU58aIBNZnOSY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=hw5xvUyuMU09/78n9pIJpYJYkgzXnqi279u8niki5jTOGhhNFGXaIaG7MvawTgj7/
+         XdwFQT0HMYISTpkUvALPzJxtcHB1NRvJULZYPq6WCFWS9DTSjJZsogT+B27HN0/y98
+         MRFooug6KIHow/XqbcVyonJyB4oOj3UPdUQ0iYC93dhTj+BG+PNRJCqhGAG+Iod2JJ
+         I5AUrgVHJP4vEmHFfSjLbIAls02GHDCQr7KE8GnBZmqsJoQnB82RFWs+fQsHLsqQTy
+         jbVNT5nIB7g7TyygYi89ov29KlfaNbaL1Ym28m0bsf4nQMUKF9FMn71wHvoaEay1Z8
+         8sSI8kfH5YEOQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8cfd57f01cfb59adb716eb13ca0c8250c246dcb2.1646388139.git.zong.li@sifive.com>
+References: <cover.1646388139.git.zong.li@sifive.com> <8cfd57f01cfb59adb716eb13ca0c8250c246dcb2.1646388139.git.zong.li@sifive.com>
+Subject: Re: [PATCH v2 1/5] clk: sifive: duplicate the macro definitions for the time being
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Zong Li <zong.li@sifive.com>
+To:     Zong Li <zong.li@sifive.com>, devicetree@vger.kernel.org,
+        lee.jones@linaro.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        mturquette@baylibre.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robh+dt@kernel.org
+Date:   Tue, 15 Mar 2022 16:59:40 -0700
+User-Agent: alot/0.10
+Message-Id: <20220315235943.4FCC8C340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following includecheck warning:
-./drivers/phy/freescale/phy-fsl-lynx-28g.c: linux/workqueue.h is
-included more than once.
+Quoting Zong Li (2022-03-04 02:03:17)
+> This is a temporary patch in whole patch set. We are going to change the
+> macro name in dt-binding, in order to avoid breaking the driver build
+> and git bisect, add these macro definitions for the time being, and we
+> will remove them later.
+>=20
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> ---
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/phy/freescale/phy-fsl-lynx-28g.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/phy/freescale/phy-fsl-lynx-28g.c b/drivers/phy/freescale/phy-fsl-lynx-28g.c
-index a2b060e9e284..569f12af2aaf 100644
---- a/drivers/phy/freescale/phy-fsl-lynx-28g.c
-+++ b/drivers/phy/freescale/phy-fsl-lynx-28g.c
-@@ -6,7 +6,6 @@
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
- #include <linux/workqueue.h>
--#include <linux/workqueue.h>
- 
- #define LYNX_28G_NUM_LANE			8
- #define LYNX_28G_NUM_PLL			2
--- 
-2.20.1.7.g153144c
-
+Applied to clk-next

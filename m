@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2C04D9F29
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8F14D9F2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349771AbiCOPvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S1349782AbiCOPvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349762AbiCOPvo (ORCPT
+        with ESMTP id S1349776AbiCOPvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:51:44 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C93F541B9;
-        Tue, 15 Mar 2022 08:50:31 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so24925173oot.11;
-        Tue, 15 Mar 2022 08:50:31 -0700 (PDT)
+        Tue, 15 Mar 2022 11:51:49 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04C854687
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:50:35 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id h16-20020a4a6f10000000b00320507b9ccfso24840616ooc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:50:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vz6iB+JIu3yJYB4hqkWbRgwU/6tHLowf4D8LoA0UiMw=;
-        b=TEgQpnrWDc42J4tF0pQgCnTLq0H6A9/UzGwgZHtFi41RTPbMqg47bgBSG90lUlObUs
-         ukznRNm+2cUYPvHhMkeg6MZcBPxDsQFKRaLwDOwDh+ewmeGwTZ3inz0O8T2F0Ze6LWm6
-         QFZgBt1MptFnCfuUzXf6LoFz0aMZmpG199g8IsMHYWnrNvSD4WhAG99utpAthyc+9goQ
-         LTJxDnKNP6yDsjxhYrRQpRAoiEZSxs7+S7CRWrP6S3L4z73qrWebPTQtK3a64ynL/i92
-         DwF5sfRRJNoqKHBw7PWBSL82GPxeCz0IZACZkZZzo4p8AmxlObwmlEHiFBp938rnsOwM
-         Y0lw==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=I4c51xsdjxSyFom4STgtqxq6o6AKdTW8OLe7O5/jVnI=;
+        b=RdbsXMNlP8wYdG7quqOUWkNI912I8J8v2dI1CpPrFRzvPMlqWvYUjRZcc3CPAOO29S
+         Yge/Doop6f6uEsSFKCqhOIsjsvZ/KqP+eWOLjwNC9rSDGozrfKDRjbcvxa5z0pCPEIve
+         c5NtXIfspKzVJ4hupGwMTdkiQ23FjnfxTBn9w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vz6iB+JIu3yJYB4hqkWbRgwU/6tHLowf4D8LoA0UiMw=;
-        b=AB7y2FMF+ebfLNhQlVhs7vIK7kXjvtky+xjOZyK1cCDicPPgF334nAZFlQFDMGPqlO
-         pSGx3iOKpBK3A4cQVhuj61e496U4X54y5zWMR1Ob7Qmtqnet225Bsdo39iIwN7b0qj5U
-         8GV8VbvPU6O8BL0GQbSWY8L/VUGc+lYHrarq1xCqV7QvxkxK7qS8EklkBttAe5H/lJaZ
-         F09ADXffH1H2xuL22zKCacK/4LaCxqoZVGURWoHFZMJQeh5PQsaRKncVmkXct7nckkDb
-         9JepZdKN4SZCDR9+4zPA8RouiTJoWPf23mCzJGxM0RZx9CtutoQU4bZhMB+XdWpZpmCe
-         1s2w==
-X-Gm-Message-State: AOAM532tn1vgKbLt7keStMGqlNru1WyYXt8gBdatyV5Fnrs/erQXAta9
-        CLjo2ZNVYQeh0/rP7+AlzD4WGzkzu6bTrSE0VUsJ/GH8
-X-Google-Smtp-Source: ABdhPJw7QSRbDRqTG+6Ui/vWDvMRavfyAT4JEfkuFfTtnQk5gqxtvGs/iiAAzRMmyjzdBv7fgSI5YeVaINK7RgsXysc=
-X-Received: by 2002:a05:6870:630c:b0:da:b3f:324d with SMTP id
- s12-20020a056870630c00b000da0b3f324dmr1819828oao.253.1647359430402; Tue, 15
- Mar 2022 08:50:30 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=I4c51xsdjxSyFom4STgtqxq6o6AKdTW8OLe7O5/jVnI=;
+        b=5oAJevrWWnqSb0ajXxj+qdoDtqYnpNz2/DzrbqVeB0i7nmA5X4qxVkeNv8XfpFjH90
+         AOlqgBrBBX1FGvC0Ea012hU/J31CZqzrBfxkvaYakNbojynN9CnXkp3oGSacCgfDmxSK
+         Pn8kSTSVnWEi29262ha0PpjyNftwdWdGbil7mxYfAGnzPxjlu+HbpDLYxJwHpUjdwD69
+         j1+VboWHCc0Q/mt9lGHVQ3wSstFYmgEinKnj/u0tpPnXBP1JndtimMOcv61wim/RJkjK
+         6QWH7zfTGPYEtU+ZI70+qFFucEkHrUBjXNMB3mPZXe0okC/6K6/GlHIObK/RzXV31bi0
+         oCNQ==
+X-Gm-Message-State: AOAM53392r5+5KJcJompVR0l2uXBYkdDuh5SS1HaCSmpYZ8yphUgQNs3
+        8V/S+vXR4AAjJxk7wsDSIHFRYOGbVDqLin7Ee1oOtw==
+X-Google-Smtp-Source: ABdhPJyHK2Q+ikMVle/mFHZsw86q2VaSnh4TIjabq9UlQBoV+QZTX64BB1/3Nt6dBd6/Mt4xS0Vdwi/ekXUmIzZbJxQ=
+X-Received: by 2002:a05:6870:c0cb:b0:da:2bcc:aa09 with SMTP id
+ e11-20020a056870c0cb00b000da2bccaa09mr1821164oad.63.1647359435184; Tue, 15
+ Mar 2022 08:50:35 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 15 Mar 2022 10:50:34 -0500
 MIME-Version: 1.0
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr> <20220314115354.144023-30-Julia.Lawall@inria.fr>
-In-Reply-To: <20220314115354.144023-30-Julia.Lawall@inria.fr>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 15 Mar 2022 11:50:19 -0400
-Message-ID: <CADnq5_O_YRtkZz5s3mkdVa24THYqMTZPZFVsQpS-+T_cDttj4g@mail.gmail.com>
-Subject: Re: [PATCH 29/30] drm/amdgpu: fix typos in comments
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAHNYxRwFYBbgxUqz79jYXbDxSd-r+NdHWQPucEyuNK83U577xw@mail.gmail.com>
+References: <20220314232214.4183078-1-swboyd@chromium.org> <20220314232214.4183078-2-swboyd@chromium.org>
+ <CAHNYxRwFYBbgxUqz79jYXbDxSd-r+NdHWQPucEyuNK83U577xw@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 15 Mar 2022 10:50:34 -0500
+Message-ID: <CAE-0n50A2yrSbQJA8EMum3AoLf+w263ddFh6sA5d+tfMMMkarA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: Add ChromeOS fingerprint binding
+To:     Alexandru M Stan <amstan@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Quoting Alexandru M Stan (2022-03-14 17:23:38)
+> On Mon, Mar 14, 2022 at 4:22 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > +        compatible = "google,cros-ec-fp";
+> > +        reg = <0>;
+> > +        interrupt-parent = <&gpio_controller>;
+> > +        interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
+> > +        spi-max-frequency = <3000000>;
+> > +        google,cros-ec-spi-msg-delay = <37>;
+> > +        google,cros-ec-spi-pre-delay = <5>;
+> > +        reset-gpios = <&gpio_controller 5 GPIO_ACTIVE_LOW>;
+> > +        boot0-gpios = <&gpio_controller 10 GPIO_ACTIVE_LOW>;
+> This should say GPIO_ACTIVE_HIGH, since there's no inverting going on
+> either with a real inverter, or the convention (of 'N' being in the
+> pin name).
+>
+> It might be easier to reason about if there's no invesion going for this signal.
+>
+> Consider it like an enum instead of a verb (unlike active_low
+> reset-gpios which can be considered: in reset if it's set):
+>
+> enum boot0 {
+>         normal = 0,
+>         bootloader = 1,
+> };
 
-Alex
-
-On Mon, Mar 14, 2022 at 8:01 AM Julia Lawall <Julia.Lawall@inria.fr> wrote:
->
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> index fe660a8e150f..970b065e9a6b 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> @@ -340,7 +340,7 @@ static void amdgpu_cs_get_threshold_for_moves(struct amdgpu_device *adev,
->         if (free_vram >= 128 * 1024 * 1024 || free_vram >= total_vram / 8) {
->                 s64 min_us;
->
-> -               /* Be more aggresive on dGPUs. Try to fill a portion of free
-> +               /* Be more aggressive on dGPUs. Try to fill a portion of free
->                  * VRAM now.
->                  */
->                 if (!(adev->flags & AMD_IS_APU))
-> @@ -1280,7 +1280,7 @@ static int amdgpu_cs_submit(struct amdgpu_cs_parser *p,
->                         continue;
->
->                 /*
-> -                * Work around dma_resv shortcommings by wrapping up the
-> +                * Work around dma_resv shortcomings by wrapping up the
->                  * submission in a dma_fence_chain and add it as exclusive
->                  * fence.
->                  */
->
+Ok got it! I have in my notes that physically high line means normal
+boot mode and physically low is bootloader mode. I confused myself. I'll
+fix this.

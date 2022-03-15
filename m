@@ -2,136 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E1E4D971E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82144D9722
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 10:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346366AbiCOJHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 05:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S1346117AbiCOJI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 05:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234309AbiCOJHN (ORCPT
+        with ESMTP id S236992AbiCOJIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 05:07:13 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B734BB8B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:06:01 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id im7so14517529qvb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:06:01 -0700 (PDT)
+        Tue, 15 Mar 2022 05:08:54 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1D34D249
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:07:42 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id g17so31790606lfh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zeeeJfWkS5svYpn4HoxGdh9ciDWv9LeSzory1b+B2SY=;
+        b=Lguir7+cdxtMoTZewkioJxEtHGNhM9VYzYPuNv0Zkv6l8LPQqhI1JbHWhTvJaZr7Iv
+         w5pKN21tWrKVA0imsDR+eix7wbRQ/1sdLV9jZZ9C3iODy0hm6yHTzGlMhZGI3+vOmSQq
+         uPRp9jsfu+1pCPwvydWSM1iqDCDyVkJvPsVCM7LoT7Bth5PrsYvvFwomMu7bsN8eqESa
+         Sksbb2zIowZaJ3A4aRZghSl5m4IdIAcJpyDuNPsL8KCMHTda0A8yNLcGosT/UGBEEOq7
+         DmMIRvbN3Ydzz5DohLHu9F7hIVkbOVf4MILPhvKFxLiWyQq2DopYrCN69vSk2r0x8Ucq
+         OFtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=z3LfIJkfGS6Zp6FqW3s9C0kvNrJ6zr2A5j+g5hiGGpA=;
-        b=yT3DiYXx5xIveRAN13zHZKCRgoYGnjZBxqvT3eLk6oVb7AEXKw7kg0iaZcM1VEQ78P
-         aXgVSbXiRgf4CxFg3L5IDH8xiyP+wT5k2iJwLtfDRPgmYMGbpcVOibW9EO1um4xu70Bk
-         xwXjcKRA+Y6IpOZou2jOJQn+1bMRR7palv+Y6Jils7vRrrsjIvIUiSovYCFB2f/GdnxI
-         6oo9ht7zMh9wkAd7cU08VDPpUTWIY7V/GTL8V8N7Py0NVeZgReor2a+/bQm1CWucNCZl
-         TGiqtW505nBfrUxb1SnHs1g0yPQGF0n8rzBBbP+gFiyVGHsXBBYOFqcftWxEveGe6BY5
-         ufuQ==
-X-Gm-Message-State: AOAM531M3Bj0PTgMBSFjZRs0gS2LTKslnNPQI52wh058lh2P9LW/h+6Q
-        3keHF1Wa7Sts0/aJJIia/IjjT61XcI9hIQ==
-X-Google-Smtp-Source: ABdhPJwCqDtU3KUtJ8pCzzIQhFqFdVh/RXPgHo13bWQ2T8mvcfwoRoW2m9KTzAT5I0k3IFfzniABGg==
-X-Received: by 2002:a05:6214:2487:b0:435:92e5:7f with SMTP id gi7-20020a056214248700b0043592e5007fmr20423488qvb.76.1647335159578;
-        Tue, 15 Mar 2022 02:05:59 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id k1-20020ac85fc1000000b002e1c6420790sm7706027qta.40.2022.03.15.02.05.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 02:05:58 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2dc242a79beso193134457b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 02:05:58 -0700 (PDT)
-X-Received: by 2002:a81:49d0:0:b0:2db:dc6d:445d with SMTP id
- w199-20020a8149d0000000b002dbdc6d445dmr23815441ywa.512.1647335158278; Tue, 15
- Mar 2022 02:05:58 -0700 (PDT)
+        bh=zeeeJfWkS5svYpn4HoxGdh9ciDWv9LeSzory1b+B2SY=;
+        b=udlU+3awEHVFZeb7dOhgOwBCCtFyXF8bpQOT6xAzT0bC2jyf1ajd9U1e/8V923muYT
+         ms7mF1xr3u9Mo7P7EeOai7/LwUZ5CjF4WMNLBoqcrCNlmlsl0f2GqGAhVoyerw0146wt
+         VIbSIqfQ2xtDgS0KWeZI/JTKDF0hANXuQthwN4q+0SjvkZtzoH8EW3s/soYL6mYO7FEH
+         i8VX4hn3/fOkZxulWl1dfwSCKQKzXf+5APk7jf3ux6DFqRLdZsDW4G89zLZYLx2aLyiY
+         9MtESFD+5ZrBu+oi5FD5xT+wZ5uWLuWT8Jri+a20C/izEKLrcSXbBTxCUTvF9llIeaOf
+         M19A==
+X-Gm-Message-State: AOAM5304W94szVmOCg5uGntUPvsQPL+tddjlt9oevUKapzLWaLL5YfOE
+        ihnYX96Z2JLlpOLo8XL9LvrU/XpWTxFtyizkLlBcdg==
+X-Google-Smtp-Source: ABdhPJwMXDC4aNor5zLv9pw8OVQFFJXZ1VbOemFJnvj+EVSvjVIz4oxBW0h2HW79H2IdIi/HGrG+DumX2QL04EqSRW8=
+X-Received: by 2002:a05:6512:260b:b0:445:c54c:4157 with SMTP id
+ bt11-20020a056512260b00b00445c54c4157mr16046322lfb.254.1647335260309; Tue, 15
+ Mar 2022 02:07:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wiHa0vsZseZES=1T0rJ4Z_bC5cwHMUJfqFL9hVpvB283g@mail.gmail.com>
- <20220314192522.GA3031157@roeck-us.net> <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiEhs+4P1TNh2sNnk04D1FFdNThk6XLOMxzkRL72PEXFw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 10:05:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUzCckOXNPpucG5HEHwJ6LzGGJis30m+trX7fibyQU8vw@mail.gmail.com>
-Message-ID: <CAMuHMdUzCckOXNPpucG5HEHwJ6LzGGJis30m+trX7fibyQU8vw@mail.gmail.com>
-Subject: Re: Linux 5.17-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <treding@nvidia.com>,
+References: <20220314095225.53563-1-yann.gautier@foss.st.com>
+ <20220314125554.190574-1-yann.gautier@foss.st.com> <CAPDyKFruN9Xwk4uqFumwBdcn4SjKQcSQVBbALa3kVxY4mVzOnQ@mail.gmail.com>
+ <9e4fbf6a-1309-3aee-fcb0-be7c2c683892@foss.st.com> <CAPDyKFq2Du1UWpvRFpVF_qL65SP0DfEV872U9Xe-9i7xKxXhqg@mail.gmail.com>
+ <ce29e53a-59ff-000a-6b88-0b7ae538c515@foss.st.com>
+In-Reply-To: <ce29e53a-59ff-000a-6b88-0b7ae538c515@foss.st.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 15 Mar 2022 10:07:03 +0100
+Message-ID: <CAPDyKFq29+nwxXkV-Fyn91WD62-6REk+5UryVAK6XC4xKhcsfg@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: mmci: manage MMC_PM_KEEP_POWER per variant config
+To:     Yann Gautier <yann.gautier@foss.st.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Edmond Chung <edmondchung@google.com>,
-        Andrew Chant <achant@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thorsten Leemhuis <linux@leemhuis.info>
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Grzegorz Szymaszek <gszymaszek@short.pl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 9:43 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> [ Adding more people to the cc, since this last change was triggered
-> by earlier changes.
+On Mon, 14 Mar 2022 at 17:52, Yann Gautier <yann.gautier@foss.st.com> wrote:
 >
-> On Mon, Mar 14, 2022 at 12:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 3/14/22 17:18, Ulf Hansson wrote:
+> > On Mon, 14 Mar 2022 at 15:34, Yann Gautier <yann.gautier@foss.st.com> wrote:
+> >>
+> >> On 3/14/22 14:03, Ulf Hansson wrote:
+> >>> On Mon, 14 Mar 2022 at 13:56, Yann Gautier <yann.gautier@foss.st.com> wrote:
+> >>>>
+> >>>> Add a disable_keep_power field in variant_data struct. The
+> >>>> MMC_PM_KEEP_POWER flag will be enabled if disable_keep_power is not set.
+> >>>> It is only set to true for stm32_sdmmc variants.
+> >>>>
+> >>>> The issue was seen on STM32MP157C-DK2 board, which embeds a wifi chip.
+> >>>> It doesn't correctly support low power on this board. The Wifi chip
+> >>>> awaits an always-on regulator, but it was connected to v3v3 which is off
+> >>>> in low-power sequence. MMC_PM_KEEP_POWER should then be disabled.
+> >>>
+> >>> Just to make sure I get this correct.
+> >>>
+> >>> Why can't the regulator stay on during system suspend? The point is,
+> >>> we don't need an always on regulator to cope with this.
+> >>>
+> >>> Kind regards
+> >>> Uffe
+> >>
+> >> Hi Ulf,
+> >>
+> >> This v3v3 regulator powers most of the devices on this board. So we need
+> >> to switch it off to gain power in suspend mode.
 > >
-> > Build results:
-> >         total: 155 pass: 155 fail: 0
-> > Qemu test results:
-> >         total: 488 pass: 484 fail: 4
+> > I see. Thanks for sharing that information.
+> >
+> > The MMC_PM_KEEP_POWER flag is there to describe what is supported by
+> > the platform/host. It doesn't mean that the card *must* stay powered
+> > on during system suspend. Instead that depends on whether system
+> > wakeup for the SDIO/WiFi is supported too - and if that is enabled by
+> > userspace. If not, the regulator will be turned off for the SDIO card
+> > during system suspend.
+> >
+> > Assuming the regulator is implemented as a proper regulator and can
+> > remain on during system suspend, the right thing would be to keep the
+> > MMC_PM_KEEP_POWER flag around.
+> >
+> > Kind regards
+> > Uffe
+> >
 >
-> Uhhuh. We got all the previous problems sorted out, but a new one instead.
->
-> > This is a new problem. It bisects to commit fc328a7d1fcc ("gpio: Revert
-> > regression in sysfs-gpio (gpiolib.c)"). The network connection fails
-> > in the affected tests. Reverting the offending commit (ie reverting the
-> > revert) fixes the problem.
->
-> Hmm. Looking at the changes since 5.16, that commit fc328a7d1fcc looks
-> somewhat suspicious.
->
-> It claims to "revert" things, but the behavior it reverts goes
-> basically all the way back to v5.7 (with one of the patches going into
-> 5.10).
->
-> And it clearly breaks things that used to work much more recently (ie
-> this worked in rc7, but it was also the state in every release since
-> 5.10).
->
-> So unless somebody can find the _real_ issue here, I suspect very
-> strongly that that "fix" that came in last week was just wrong.
->
-> It is also very non-specific "Some GPIO lines have stopped working"
-> with no pointer to actual reports.
->
-> LinusW? Thierry? Bartoz? Anybody?
->
-> Yes, there;s something bad going on here, but we can't randomly "fix"
-> things in an rc8 that have worked for several releases by now.
+> OK, but in the wifi driver we use on this platform (brcmfmac), the
+> suspend/resume functions (brcmf_ops_sdio_suspend/brcmf_ops_sdio_resume)
+> use the flag to check regu was off, and then call probe function during
+> resume, to re-init Wifi chip and reload its firmware.
 
-People really need to learn[1] to add proper Link tags to each and every
-commit:
-https://lore.kernel.org/all/20211217153555.9413-1-marcelo.jimenez@gmail.com
-The last mail in that thread is a regression report for the fix.
-Note that this "fix" has only been in next-20220308 and later, so
-more breakage may show up soon...
+I had a closer look at the brcmfmac driver, thanks for the pointers.
 
-[1] https://www.kernel.org/doc/html/v5.6/maintainer/configure-git.html#creating-commit-links-to-lore-kernel-org
+In my opinion, I think we should change the brcmfmac driver, so it
+decides to power off the SDIO card, unless the WiFi chip is configured
+to serve us with system wakeups.
 
-Gr{oetje,eeting}s,
+I can send a patch for brcmfmac that we can try, unless you want to
+send it yourself?
 
-                        Geert
+>
+>
+> Best regards,
+> Yann
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Kind regards
+Uffe
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
+> >>
+> >>
+> >> Yann
+> >>
+> >>>
+> >>>>
+> >>>> The flag can still be enabled through DT property:
+> >>>> keep-power-in-suspend.
+> >>>>
+> >>>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+> >>>> ---
+> >>>> Update in v2:
+> >>>> Reword commit message to better explain the issue.
+> >>>>
+> >>>> Resend the patch alone. It was previoulsy in a series [1] for which the
+> >>>> other patches will be reworked.
+> >>>>
+> >>>> [1] https://lore.kernel.org/lkml/20220304135134.47827-1-yann.gautier@foss.st.com/
+> >>>>
+> >>>>    drivers/mmc/host/mmci.c | 5 ++++-
+> >>>>    drivers/mmc/host/mmci.h | 1 +
+> >>>>    2 files changed, 5 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/mmc/host/mmci.c b/drivers/mmc/host/mmci.c
+> >>>> index 45b8608c935c..0e2f2f5d6a52 100644
+> >>>> --- a/drivers/mmc/host/mmci.c
+> >>>> +++ b/drivers/mmc/host/mmci.c
+> >>>> @@ -274,6 +274,7 @@ static struct variant_data variant_stm32_sdmmc = {
+> >>>>           .busy_detect            = true,
+> >>>>           .busy_detect_flag       = MCI_STM32_BUSYD0,
+> >>>>           .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
+> >>>> +       .disable_keep_power     = true,
+> >>>>           .init                   = sdmmc_variant_init,
+> >>>>    };
+> >>>>
+> >>>> @@ -301,6 +302,7 @@ static struct variant_data variant_stm32_sdmmcv2 = {
+> >>>>           .busy_detect            = true,
+> >>>>           .busy_detect_flag       = MCI_STM32_BUSYD0,
+> >>>>           .busy_detect_mask       = MCI_STM32_BUSYD0ENDMASK,
+> >>>> +       .disable_keep_power     = true,
+> >>>>           .init                   = sdmmc_variant_init,
+> >>>>    };
+> >>>>
+> >>>> @@ -2172,7 +2174,8 @@ static int mmci_probe(struct amba_device *dev,
+> >>>>           host->stop_abort.flags = MMC_RSP_R1B | MMC_CMD_AC;
+> >>>>
+> >>>>           /* We support these PM capabilities. */
+> >>>> -       mmc->pm_caps |= MMC_PM_KEEP_POWER;
+> >>>> +       if (!variant->disable_keep_power)
+> >>>> +               mmc->pm_caps |= MMC_PM_KEEP_POWER;
+> >>>>
+> >>>>           /*
+> >>>>            * We can do SGIO
+> >>>> diff --git a/drivers/mmc/host/mmci.h b/drivers/mmc/host/mmci.h
+> >>>> index e1a9b96a3396..2cad1ef9766a 100644
+> >>>> --- a/drivers/mmc/host/mmci.h
+> >>>> +++ b/drivers/mmc/host/mmci.h
+> >>>> @@ -361,6 +361,7 @@ struct variant_data {
+> >>>>           u32                     opendrain;
+> >>>>           u8                      dma_lli:1;
+> >>>>           u32                     stm32_idmabsize_mask;
+> >>>> +       u8                      disable_keep_power:1;
+> >>>>           void (*init)(struct mmci_host *host);
+> >>>>    };
+> >>>>
+> >>>> --
+> >>>> 2.25.1
+> >>>>
+> >>
+>

@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FD24DA5E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E716F4DA6B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352462AbiCOXCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 19:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S1352744AbiCPALb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 20:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbiCOXCF (ORCPT
+        with ESMTP id S1344394AbiCPAL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:02:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2885D655;
-        Tue, 15 Mar 2022 16:00:52 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id m12so642957edc.12;
-        Tue, 15 Mar 2022 16:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1tIkuOSCc+qFWcv2z4RMZ2bxB/GyvFYB7yDb+c65+EA=;
-        b=Y9FnwbvplYaVf2XpGWfLEJlBBRR8QNaaR/MkZrtTtE4+qRxzWVs47vpw/S1yzoAgic
-         CXcVS6JjKiZJJI5xmfJxriOy21lDK45mSoIDpJHzZvpiu+zl16JuxdnMzBQzxPuQOW0m
-         kxSIUuZszUqhgBTnZDzFTkeKZNOZaoUxRETGAsyLhF787KlJ026n/o8cEkRorGd/oIQw
-         uOWqZIRVOPhHy17kRxlu13TdF4UHQGeXqOKMVQmvn4Rj+US6zx35H5AG1e3uBc7PmfR0
-         fDEqZTnOrwpuCoLRCCbHsN1f6N+HPv8fX+tLDUbxVEU35hWJleRvhoTc7f23XMmVcriq
-         7LzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1tIkuOSCc+qFWcv2z4RMZ2bxB/GyvFYB7yDb+c65+EA=;
-        b=2T29FrLuIZVAdW3sSsPd9VJ1ZYNgo6IaWF8/OoR4R9/I28dJk0r48SJgNBzrQ4WIJK
-         HkuBsZIES1XFmirh/eg/bEQ+MaSLfZzhNOd9hUDL2qMW7vFRi4D/aJto14AtEdpT2vNQ
-         CrFmlsu5o6S7/HrmkgNjX1AZz/ZSt1j1zdy2LCJzsSwosuddMV+EER8LRWOj8w2xoUM5
-         URB+ZFkJdzel+O7c24vaIxj/5BXuLiJWczkc1DiUyzne1lggxi+UXam1l0MBHDYS7lh5
-         SKk4EJtXhvC4ZWonF3zSkU/96PG/HgZqIbzQMLvU3DnCNlYwqzuBeMevExfv+hYm9eP2
-         hMVQ==
-X-Gm-Message-State: AOAM530/EI7vmYRTjj6kbCmgELK/PPZ5sMWu/O0y8CF7Xs22LZI2R06o
-        Vbl6503Bqj1tihVVjN/+jXY=
-X-Google-Smtp-Source: ABdhPJxB0FqblRgEMEZaZinlMoFZSZj/DFpjD0krEKm/hRyktHCjXszrM7xXyy+0ighQkqr7eYWbQA==
-X-Received: by 2002:a05:6402:2750:b0:416:29dd:1d17 with SMTP id z16-20020a056402275000b0041629dd1d17mr27355656edd.387.1647385251210;
-        Tue, 15 Mar 2022 16:00:51 -0700 (PDT)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id fq6-20020a1709069d8600b006db088ca6d0sm140390ejc.126.2022.03.15.16.00.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 16:00:50 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 01:00:49 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net: dsa: Never offload FDB entries on
- standalone ports
-Message-ID: <20220315230049.pw5r5e5pnd6o5hus@skbuf>
-References: <20220315225018.1399269-1-tobias@waldekranz.com>
+        Tue, 15 Mar 2022 20:11:29 -0400
+X-Greylist: delayed 92 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 17:10:16 PDT
+Received: from wfbtwtsd.outbound-mail.sendgrid.net (wfbtwtsd.outbound-mail.sendgrid.net [159.183.151.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B62B580C7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:10:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sendgrid.net;
+        h=content-type:mime-version:content-transfer-encoding:
+        content-description:subject:from:reply-to:to;
+        s=smtpapi; bh=+XubWEXK/BJXXu61uT3EnBHqUsglhUBFcnaVp7zG7/4=;
+        b=zSSl4T15hCJTSO8S9RCNdQGxW4vKvp/3mtIvlQDwvLFe6TPVzVyfN05UWrezoSdheSo8
+        RdV1QSwccW1NvO8pRK23SOFg1f4q7usPStVt+dz+q+lhe2yAMyaQwa034uS23ycFm2VIMY
+        S595Kwl+LSoid93RkEGhLFS1XiSZZ2HU0=
+Received: by filterdrecv-7485957b4c-fwntq with SMTP id filterdrecv-7485957b4c-fwntq-1-6230DD34-4
+        2022-03-15 18:38:44.221903997 +0000 UTC m=+15792074.441215522
+Received: from [2.56.56.17] (unknown)
+        by geopod-ismtpd-5-0 (SG) with ESMTP
+        id 5x57wNFQQ4-wq9bHngupPw
+        Tue, 15 Mar 2022 18:38:44.003 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315225018.1399269-1-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Mutual Partnership
+From:   David Hilton <hradmin@barakaoman.com>
+Date:   Tue, 15 Mar 2022 18:38:44 +0000 (UTC)
+Message-ID: <5x57wNFQQ4-wq9bHngupPw@geopod-ismtpd-5-0>
+Reply-To: davidhilton711@gmail.com
+X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1m=2Fou=2FD6aClT4gB2IKO=2FcGJodugcVOzezUDLmaoUxx?=
+ =?us-ascii?Q?whgzor+vtRre5NhSKi0mjk6l7vyldhqVw7B8GE+?=
+ =?us-ascii?Q?j43qODHw4IXzZ2g5TUwdm4wZjRv1ert+Srt6XWr?=
+ =?us-ascii?Q?=2FtnoUjNxDWsFUVa2uA6GdKm=2F5JxBx7zO3w50ciK?=
+ =?us-ascii?Q?ktwke5D6ToiH8n0130ts5rrOupV8Fph7qnbEBMp?=
+ =?us-ascii?Q?MOC6=2FlTdRz=2FsTLCnbZ8vNnslhdrdDVyR7sUBYff?=
+ =?us-ascii?Q?+KhQqr0Yx2QdcO3jqF0FQ=3D=3D?=
+To:     Recipients <hradmin@barakaoman.com>
+X-Entity-ID: 8J2mwNnjfs/vn1aSz7UEJg==
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_GREY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 11:50:18PM +0100, Tobias Waldekranz wrote:
-> If a port joins a bridge that it can't offload, it will fallback to
-> standalone mode and software bridging. In this case, we never want to
-> offload any FDB entries to hardware either.
-> 
-> Fixes: c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
+Terveisi=C3=A4,
 
-Do you mind if you resend and you explain in the commit message what is
-the impact and why you chose this Fixes: tag?
+Toivon, ett=C3=A4 t=C3=A4m=C3=A4 s=C3=A4hk=C3=B6posti saapuu sinulle eritt=
+=C3=A4in hyv=C3=A4ss=C3=A4 kunnossa. Olen David Hilton, Credit Suisse Banki=
+n kirjanpito-/tarkastusosaston p=C3=A4=C3=A4llikk=C3=B6, Cabot Square Londo=
+n Iso-Britannia. Otin sinuun yhteytt=C3=A4 koskien yritysehdotusta, josta o=
+n valtavasti hy=C3=B6ty=C3=A4 sek=C3=A4 meille ett=C3=A4 v=C3=A4hemm=C3=A4n=
+ etuoikeutetuille. P=C3=A4=C3=A4llik=C3=B6n kirjanpito-/tarkastusosastona S=
+uur-Lontoon aluetoimistossa l=C3=B6ysin 15 800 000,00 punnan (15 miljoonaa =
+kahdeksansataa tuhatta Englannin puntaa) summan tililt=C3=A4, =E2=80=8B=E2=
+=80=8Bjoka kuuluu yhdelle ulkomaiselle asiakkaallemme edesmenneen herra Man=
+zoor Hassanille. H=C3=A4n oli yritysmoguli, joka kuoli helikopterionnettomu=
+udessa vuonna 2014. Mr. Hassan oli 54-vuotias, kun molemmat h=C3=A4nen vaim=
+onsa, ainoa poikansa Avraham (Albert) ja mini=C3=A4ns=C3=A4 kuolivat heliko=
+pterionnettomuudessa.
 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  net/dsa/slave.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-> index f9cecda791d5..d24b6bf845c1 100644
-> --- a/net/dsa/slave.c
-> +++ b/net/dsa/slave.c
-> @@ -2847,6 +2847,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->  	if (ctx && ctx != dp)
->  		return 0;
->  
-> +	if (!dp->bridge)
-> +		return 0;
-> +
->  	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
->  		if (dsa_port_offloads_bridge_port(dp, orig_dev))
->  			return 0;
-> -- 
-> 2.25.1
-> 
+Valinta ottaa sinuun yhteytt=C3=A4 johtui asuinpaikkasi maantieteellisest=
+=C3=A4 luonteesta erityisesti tapahtuman arkaluonteisuuden ja sen luottamuk=
+sellisuuden vuoksi. Nyt pankkimme on odottanut jonkun sukulaisen hakevan pe=
+rint=C3=B6rahastoa, mutta valitettavasti kaikki ponnistelut ovat olleet tur=
+hia. Itse en ole onnistunut l=C3=B6yt=C3=A4m=C3=A4=C3=A4n herra Hassanin su=
+kulaisia =E2=80=8B=E2=80=8Btai l=C3=A4hisukulaisia. T=C3=A4lt=C3=A4 osin py=
+yd=C3=A4n suostumustasi esitell=C3=A4 sinut vainajan l=C3=A4hiomaisena / tu=
+levana edunsaajana, jotta t=C3=A4m=C3=A4n tilin tuotto, jonka arvo on 15,8 =
+miljoonaa Englannin puntaa, voidaan maksaa sinulle.
+
+T=C3=A4m=C3=A4 maksetaan tai jaetaan n=C3=A4iss=C3=A4 prosenteissa 60 % min=
+ulle ja 40 % sinulle. Kaikki tarvittavat lakiasiakirjat, joita voidaan k=C3=
+=A4ytt=C3=A4=C3=A4 t=C3=A4m=C3=A4n perint=C3=B6vaatimuksen varmuuskopioimis=
+eksi, eiv=C3=A4t ole ongelma ollenkaan. Minun tarvitsee vain ladata nimesi =
+asiakirjoihin ja laillistaa ne Britannian korkeimmassa oikeudessa todistaak=
+seni, ett=C3=A4 olet t=C3=A4m=C3=A4n rahaston laillinen edunsaaja. Tarvitse=
+n nyt vain rehellist=C3=A4 yhteisty=C3=B6t=C3=A4si, luottamuksellisuuttasi =
+ja luottamusta, jotta voimme toteuttaa t=C3=A4m=C3=A4n kaupan. Takaan sinul=
+le 100 % menestyksen ja sen, ett=C3=A4 t=C3=A4m=C3=A4 liiketoimi toteutetaa=
+n lain mukaisesti.
+
+Anna minulle alla seuraavat tiedot, sill=C3=A4 meill=C3=A4 on 5 ty=C3=B6p=
+=C3=A4iv=C3=A4=C3=A4 aikaa suorittaa se:
+
+1. Koko nimesi
+2. Puhelinnumero
+3. Yhteysosoite
+
+K=C3=A4vitty=C3=A4ni j=C3=A4rjestelm=C3=A4llisen haun l=C3=A4pi, p=C3=A4=C3=
+=A4tin ottaa sinuun yhteytt=C3=A4 toivoen, ett=C3=A4 t=C3=A4m=C3=A4 ehdotus=
+ kiinnostaa sinua. Pyyd=C3=A4n sinua vahvistamaan t=C3=A4m=C3=A4n viestin j=
+a osoittamaan kiinnostuksesi, annan sinulle yksityiskohtaiset tiedot.
+
+Arvostamme suuresti suostumustasi t=C3=A4h=C3=A4n s=C3=A4hk=C3=B6postiin ja=
+ yritysehdotukseen.
+
+Odotan kuulevani sinusta pian.
+
+Parhain terveisin,
+David Hilton.

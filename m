@@ -2,86 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4CD4DA171
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A264DA172
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 18:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350677AbiCORmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 13:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
+        id S1349536AbiCORmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350675AbiCORmP (ORCPT
+        with ESMTP id S236628AbiCORmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 13:42:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC43C58E5E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 10:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647366062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p0OvKN4Kp+DENpb0oYxjZoPGzpqBUztEkUuhECDJkJo=;
-        b=cV8hP6YVY+9kA7CzQ0necSJ+OoGbI9z/Ej4vVFZRHXUDdhBO7AYRoH59M8ou126vS99txy
-        fCIyvXxEfFd3txr0DVJ0se9W/AsmddWQQmpgHBVvwDXXFHOsXl6RspPhmR/CLaihSBx1sj
-        CUSqk4bM945++kObl3RBfcCrnGEUnvU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-d1TZQUZ2Pr2KESL0ZfZYeA-1; Tue, 15 Mar 2022 13:40:59 -0400
-X-MC-Unique: d1TZQUZ2Pr2KESL0ZfZYeA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 15 Mar 2022 13:42:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2339A58E4F;
+        Tue, 15 Mar 2022 10:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3277D3C18523;
-        Tue, 15 Mar 2022 17:40:59 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DDE6740D1B9A;
-        Tue, 15 Mar 2022 17:40:58 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        alex.williamson@redhat.com, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        yishaih@nvidia.com, linux-doc@vger.kernel.org, corbet@lwn.net,
-        hch@infradead.org
-Subject: Re: [PATCH v4] vfio-pci: Provide reviewers and acceptance criteria
- for variant drivers
-In-Reply-To: <164736509088.181560.2887686123582116702.stgit@omen>
-Organization: Red Hat GmbH
-References: <164736509088.181560.2887686123582116702.stgit@omen>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Tue, 15 Mar 2022 18:40:57 +0100
-Message-ID: <87wngvf712.fsf@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C9A6615AF;
+        Tue, 15 Mar 2022 17:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2B7C340E8;
+        Tue, 15 Mar 2022 17:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647366077;
+        bh=EmukrZJTdPmX8L6VDOzfmJxS+zks3StStKzljU+KjtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vieN7aSfas4bwleZQHaaKc295kUVhZzTXvlvwVkk4vzdb7Wgna7FFSScJko73nmLs
+         8AvMlkMjJuD+XC6wp6kbCMKA5XWcYPdqvQp3rI6nRLi7VBwkLIpauQ06Nik/oDH9ol
+         XP+Ps48LyJwWQ7Kz6051771iMJwhU/gqzkoze/Qk=
+Date:   Tue, 15 Mar 2022 18:41:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xen/usb: harden xen_hcd against malicious backends
+Message-ID: <YjDPtRhdrtY6tpvc@kroah.com>
+References: <20220311103509.12908-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220311103509.12908-1-jgross@suse.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15 2022, Alex Williamson <alex.williamson@redhat.com> wrote:
+On Fri, Mar 11, 2022 at 11:35:09AM +0100, Juergen Gross wrote:
+> Make sure a malicious backend can't cause any harm other than wrong
+> I/O data.
+> 
+> Missing are verification of the request id in a response, sanitizing
+> the reported actual I/O length, and protection against interrupt storms
+> from the backend.
+> 
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+>  drivers/usb/host/xen-hcd.c | 57 ++++++++++++++++++++++++++++----------
+>  1 file changed, 43 insertions(+), 14 deletions(-)
 
-> Device specific extensions for devices exposed to userspace through
-> the vfio-pci-core library open both new functionality and new risks.
-> Here we attempt to provided formalized requirements and expectations
-> to ensure that future drivers both collaborate in their interaction
-> with existing host drivers, as well as receive additional reviews
-> from community members with experience in this area.
->
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Acked-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> Reviewed-by: Yishai Hadas <yishaih@nvidia.com>
-> Acked-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+Fails to apply to my tree:
 
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+checking file drivers/usb/host/xen-hcd.c
+Hunk #2 succeeded at 720 (offset -1 lines).
+Hunk #3 succeeded at 807 (offset -3 lines).
+Hunk #4 succeeded at 934 (offset -5 lines).
+Hunk #5 FAILED at 986.
+Hunk #6 succeeded at 1003 with fuzz 1 (offset -10 lines).
+Hunk #7 succeeded at 1048 (offset -10 lines).
+Hunk #8 succeeded at 1072 (offset -10 lines).
+Hunk #9 succeeded at 1161 (offset -10 lines).
+Hunk #10 succeeded at 1516 (offset -10 lines).
+1 out of 10 hunks FAILED
 
-[obviously modulo the missing ack]
+Any hints?
 
+thanks,
+
+greg k-h

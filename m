@@ -2,163 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F8F4D986A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B254D986D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346966AbiCOKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S1346983AbiCOKLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346967AbiCOKKK (ORCPT
+        with ESMTP id S239017AbiCOKLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:10:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E783AA4F;
-        Tue, 15 Mar 2022 03:08:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EDECB811F5;
-        Tue, 15 Mar 2022 10:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D348C340ED;
-        Tue, 15 Mar 2022 10:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647338935;
-        bh=lxm00edtpi4RNpe+KpYSEsp9DryXournPvBPfHZkDbs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KgM3jzk7pJpT27wth91xf1pluNMZZ9jgxdtCX7VqlZ8Exa/euL0490cSGWMUzNyKI
-         feytnWZACE/JXw8UJtTURfUpS0oyAkjflalkXraP3u0Iior9/1+TQPyvtxHpzeqI7f
-         nn0DCLsUlkdLEyy5S1yLSPKD9zNfyaFZhl3ga/ylqKzNAnNYH2a2GQz5zC7Onkn9cU
-         e4WnBvGR7QUXPHhrmCX/D5a3hLb2pOQYzxsZvsYS0LuFVfiAdxYM3pcoC+kdgBlpsT
-         318usooFXgjgA+MGkwA+2AyGfk2YvDfj0jT1pzm9xKuH70EhWOQ7gx6/7cUDcAPzYE
-         HgNvtCYUMSEnA==
-Date:   Tue, 15 Mar 2022 19:08:48 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v11 07/12] ARM: rethook: Add rethook arm implementation
-Message-Id: <20220315190848.a28a889802b71820650f5478@kernel.org>
-In-Reply-To: <164701440314.268462.2664594020245236625.stgit@devnote2>
-References: <164701432038.268462.3329725152949938527.stgit@devnote2>
-        <164701440314.268462.2664594020245236625.stgit@devnote2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 06:11:02 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227224FC63;
+        Tue, 15 Mar 2022 03:09:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647338991; x=1678874991;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fQdJwp3QYFB6RzA76W+Kf3fw3JbIyIWnKEdmFYEY0Rc=;
+  b=cnSZxhNOVfO8ZVqouCPZc6Krbti2zEcWE3Y8TUFAH5jLzE/lmosyvi2K
+   t9yyxC18zihIJnT3+phK+hM5dpzHwJgzM4kaFy8B1zr8Ef1JGnbmTFvB2
+   QxSqTOwiC5ndqAnDcrM7TQu2Go93QJGE3XOhXNnP5y0ALExKArqY/F3qh
+   gmhmlAtAc3nVIJa0+lzq+fUE0h/M1Rm0L15T+yksKh2UkqOWZPzfszmZ0
+   uuUYkDqLNEwFMur7PxrshDeIDDT/SunWTjQc6MQJy1+CH7IQ3kB9pSOTy
+   6Mlzz6keo+bpJsZMkUyJ4nC/LkLejKh7tVl+pknUiRt8sY5pWbOPFE8rB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253822133"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="253822133"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:09:50 -0700
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="515807284"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 03:09:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nU472-000CDY-QY;
+        Tue, 15 Mar 2022 12:09:08 +0200
+Date:   Tue, 15 Mar 2022 12:09:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, micklorain@protonmail.com
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+Message-ID: <YjBlxOi0ljZVUb/D@smile.fi.intel.com>
+References: <20220314101448.90074-1-andriy.shevchenko@linux.intel.com>
+ <20220314194253.GA515821@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314194253.GA515821@bhelgaas>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Mar 2022 01:00:03 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> +void __naked arch_rethook_trampoline(void)
-> +{
-> +	__asm__ __volatile__ (
-> +#ifdef CONFIG_FRAME_POINTER
-> +		"ldr	lr, =arch_rethook_trampoline	\n\t"
-
-Oops, this must have the same issue reported by 0day build bot recently[1].
-
-[1] https://lore.kernel.org/all/202203150516.KTorSVVU-lkp@intel.com/T/#u
-
-I'll update this series with same fix.
-
-Thank you,
-
-> +	/* this makes a framepointer on pt_regs. */
-> +#ifdef CONFIG_CC_IS_CLANG
-> +		"stmdb	sp, {sp, lr, pc}	\n\t"
-> +		"sub	sp, sp, #12		\n\t"
-> +		/* In clang case, pt_regs->ip = lr. */
-> +		"stmdb	sp!, {r0 - r11, lr}	\n\t"
-> +		/* fp points regs->r11 (fp) */
-> +		"add	fp, sp,	#44		\n\t"
-> +#else /* !CONFIG_CC_IS_CLANG */
-> +		/* In gcc case, pt_regs->ip = fp. */
-> +		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
-> +		"sub	sp, sp, #16		\n\t"
-> +		"stmdb	sp!, {r0 - r11}		\n\t"
-> +		/* fp points regs->r15 (pc) */
-> +		"add	fp, sp, #60		\n\t"
-> +#endif /* CONFIG_CC_IS_CLANG */
-> +#else /* !CONFIG_FRAME_POINTER */
-> +		"sub	sp, sp, #16		\n\t"
-> +		"stmdb	sp!, {r0 - r11}		\n\t"
-> +#endif /* CONFIG_FRAME_POINTER */
-> +		"mov	r0, sp			\n\t"
-> +		"bl	arch_rethook_trampoline_callback	\n\t"
-> +		"mov	lr, r0			\n\t"
-> +		"ldmia	sp!, {r0 - r11}		\n\t"
-> +		"add	sp, sp, #16		\n\t"
-> +#ifdef CONFIG_THUMB2_KERNEL
-> +		"bx	lr			\n\t"
-> +#else
-> +		"mov	pc, lr			\n\t"
-> +#endif
-> +		: : : "memory");
-> +}
-> +NOKPROBE_SYMBOL(arch_rethook_trampoline);
-> +
-> +/*
-> + * At the entry of function with mcount. The stack and registers are prepared
-> + * for the mcount function as below.
-> + *
-> + * mov     ip, sp
-> + * push    {fp, ip, lr, pc}
-> + * sub     fp, ip, #4	; FP[0] = PC, FP[-4] = LR, and FP[-12] = call-site FP.
-> + * push    {lr}
-> + * bl      <__gnu_mcount_nc> ; call ftrace
-> + *
-> + * And when returning from the function, call-site FP, SP and PC are restored
-> + * from stack as below;
-> + *
-> + * ldm     sp, {fp, sp, pc}
-> + *
-> + * Thus, if the arch_rethook_prepare() is called from real function entry,
-> + * it must change the LR and save FP in pt_regs. But if it is called via
-> + * mcount context (ftrace), it must change the LR on stack, which is next
-> + * to the PC (= FP[-4]), and save the FP value at FP[-12].
-> + */
-> +void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
-> +{
-> +	unsigned long *ret_addr, *frame;
-> +
-> +	if (mcount) {
-> +		ret_addr = (unsigned long *)(regs->ARM_fp - 4);
-> +		frame = (unsigned long *)(regs->ARM_fp - 12);
-> +	} else {
-> +		ret_addr = &regs->ARM_lr;
-> +		frame = &regs->ARM_fp;
-> +	}
-> +
-> +	rh->ret_addr = *ret_addr;
-> +	rh->frame = *frame;
-> +
-> +	/* Replace the return addr with trampoline addr. */
-> +	*ret_addr = (unsigned long)arch_rethook_trampoline;
-> +}
-> +NOKPROBE_SYMBOL(arch_rethook_prepare);
+On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
+> On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> > ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
+> > Enable the respective quirk as it's done for other ATI devices on this chipset,
+> > 
+> > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
 > 
+> This is interesting because there must be a TON of these AMD/ATI SB600
+> USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
+> appeared in v5.9.
+> 
+> So why would we only get a report now, in February 2022?  Is there
+> some change more recent than 306c54d0edb6 that exposed this problem?
 
+I think it's a rhetorical question. To me it's as simple as the latency
+between getting the change into the kernel.
+
+However, I'm a bit worried that in case of ATI there are not so many
+platforms that are kept up-to-dated.
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+With Best Regards,
+Andy Shevchenko
+
+

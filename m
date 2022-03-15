@@ -2,165 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77AA4D9AC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79454D9AC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348119AbiCOMBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S1348114AbiCOMA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348090AbiCOMBJ (ORCPT
+        with ESMTP id S1348110AbiCOMA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:01:09 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BFB52B3C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:59:57 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w4so23857275edc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0IagKtBfxcpixmoMTBMoMWqgkvRfAgiw9IXMcNoH3GM=;
-        b=Jc9BG6ebO65hDOwsgATtbOXJvK1Nwh0MvD9yTfeAlBn09fSSqU5uLdc0yYMD/CzYjF
-         JnA11+NIRsQUEwt9kiwjEFDlZwfCrWxDFwUDSNYSXIhoDCPaIyZIKuL27gkfcOFZiCQm
-         z9FBxmOYVeOM0ikZxPziEZMZ8mdLjim6v/ApfuIpGgWeDuBUmdY0DId/ie9x+DfpIGcg
-         nPPGw6ALMItE3tm6tnPloiV4VNVxqYBmbjS9zwf4NDHUirNgj/B5SEw3QIF2tMCvKZ8k
-         oMcOJ+Xuc38ORVemUSrVid3OJZTTygqvkM7UeN9391ASp0+4BaJ2h//dGllAYKUp6FA3
-         TutA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0IagKtBfxcpixmoMTBMoMWqgkvRfAgiw9IXMcNoH3GM=;
-        b=yRgRPu/9Qns1V2CJid3NkaikgIzI3sY55fwopxNZSct7O5kyvSDri6kIZJgngXO0bI
-         MAYylvbUrW7JlxxbbPVVKQc0kSASOHTQzmK7dK6vDQ8FRgr1XlXdq6pk91PWkNEfSqDz
-         iHSS5G95ztttTw7jQoCRNO9QTY9geSzNwmzhkoCCMJK5+70Ft0J91co3Vro4yIFFIJKj
-         6kJuLNGZtl5qmY74rGIZoVMEY4qeeMJRRlpD+3+ORbS36oNCJbFoBTCsendj6XwSaBOH
-         3BqM3VQfh0aWqD3PW73HDd5mmBhpQofiJ7PKXti6EJho93M4flsRgFtoG2tfBYpBCE4U
-         NRtw==
-X-Gm-Message-State: AOAM5334rAGn2YZ6iXEntPl3sTfEapsf+bDx+V/9gNF6/nK3cbRjsElc
-        NqG6hyvOSwM8+TlUpWmSKHq3U4qs2owoIIUEgRk=
-X-Google-Smtp-Source: ABdhPJw3vTWKpyc85/05ZqjGiVLTuKEo7jyXrBXqyusgxTgudMfdBBD+qF4ycHQkWAL3HNHktvM2aSHO8cd+cELAabI=
-X-Received: by 2002:a05:6402:5cb:b0:415:e04a:5230 with SMTP id
- n11-20020a05640205cb00b00415e04a5230mr25066821edx.352.1647345595723; Tue, 15
- Mar 2022 04:59:55 -0700 (PDT)
+        Tue, 15 Mar 2022 08:00:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C98B52B31
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647345584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kt3DJA4isK0c4GS/JPeqMKduS9oS6ZcarVp783V2EyA=;
+        b=DfXGuEzvGqR/gczbhA/4PdEF+sPPxZ1KkG8RKhtLt1WdhFR9E5lICqQRFzvBdwXBTx0Ndv
+        pBCtK63HQqt9ViXuQNosvkyGAMzEXuBHdZAlEjVRqIrr3KZBvmnEqdr03G0AIE45jYU5gy
+        ZUIvZsd9AFZ5hhBXqXy1iOoTkMD8sfQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-184-ytsku21pNCybtc2XlFXeOg-1; Tue, 15 Mar 2022 07:59:39 -0400
+X-MC-Unique: ytsku21pNCybtc2XlFXeOg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F15B899EC2;
+        Tue, 15 Mar 2022 11:59:38 +0000 (UTC)
+Received: from localhost (ovpn-12-225.pek2.redhat.com [10.72.12.225])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1BF8340D1B9A;
+        Tue, 15 Mar 2022 11:59:37 +0000 (UTC)
+Date:   Tue, 15 Mar 2022 19:59:33 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v21 5/5] docs: kdump: Update the crashkernel description
+ for arm64
+Message-ID: <YjB/pTWF8wKcATaq@MiWiFi-R3L-srv>
+References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
+ <20220227030717.1464-6-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-References: <20220315075152.63789-1-dzm91@hust.edu.cn> <bca8f865-bc3e-44d7-7298-c2c7e8973580@gmail.com>
- <YjBwtqsEOZ5JbqvS@B-P7TQMD6M-0146.local> <8d832e7a-c8da-d2fa-571a-ea150b8deb1b@gmail.com>
-In-Reply-To: <8d832e7a-c8da-d2fa-571a-ea150b8deb1b@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 15 Mar 2022 19:59:26 +0800
-Message-ID: <CAD-N9QX2cajf0LXKcOji_Em26-0bw9wfhx7KDV_TLDWhgQ90hQ@mail.gmail.com>
-Subject: Re: [PATCH] fs: erofs: remember if kobject_init_and_add was done
-To:     Huang Jianan <jnhuang95@gmail.com>
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        linux-erofs@lists.ozlabs.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227030717.1464-6-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 7:05 PM Huang Jianan <jnhuang95@gmail.com> wrote:
->
-> =E5=9C=A8 2022/3/15 18:55, Gao Xiang =E5=86=99=E9=81=93:
-> > On Tue, Mar 15, 2022 at 06:43:01PM +0800, Huang Jianan wrote:
-> >> =E5=9C=A8 2022/3/15 15:51, Dongliang Mu =E5=86=99=E9=81=93:
-> >>> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >>>
-> >>> Syzkaller hit 'WARNING: kobject bug in erofs_unregister_sysfs'. This =
-bug
-> >>> is triggered by injecting fault in kobject_init_and_add of
-> >>> erofs_unregister_sysfs.
-> >>>
-> >>> Fix this by remembering if kobject_init_and_add is successful.
-> >>>
-> >>> Note that I've tested the patch and the crash does not occur any more=
-.
-> >>>
-> >>> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> >>> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> >>> ---
-> >>>    fs/erofs/internal.h | 1 +
-> >>>    fs/erofs/sysfs.c    | 9 ++++++---
-> >>>    2 files changed, 7 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> >>> index 5aa2cf2c2f80..9e20665e3f68 100644
-> >>> --- a/fs/erofs/internal.h
-> >>> +++ b/fs/erofs/internal.h
-> >>> @@ -144,6 +144,7 @@ struct erofs_sb_info {
-> >>>     u32 feature_incompat;
-> >>>     /* sysfs support */
-> >>> +   bool s_sysfs_inited;
-> >> Hi Dongliang,
-> >>
-> >> How about using sbi->s_kobj.state_in_sysfs to avoid adding a extra mem=
-ber in
-> >> sbi ?
-> > Ok, I have no tendency of these (I'm fine with either ways).
-> > I've seen some usage like:
-> >
-> > static inline int device_is_registered(struct device *dev)
-> > {
-> >          return dev->kobj.state_in_sysfs;
-> > }
-> >
-> > But I'm still not sure if we need to rely on such internal
-> > interface.. More thoughts?
->
-> Yeah... It seems that it is better to use some of the interfaces
-> provided by kobject,
-> otherwise we should still maintain this state in sbi.
->
+On 02/27/22 at 11:07am, Zhen Lei wrote:
+> Now arm64 has added support for "crashkernel=X,high" and
+> "crashkernel=Y,low", and implements "crashkernel=X[@offset]" in the
+> same way as x86. So update the Documentation.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-I am fine with either way. Let me know if you reach to an agreement.
+Looks good to me, thx.
 
-> Thanks,
-> Jianan
->
-> > Thanks,
-> > Gao Xiang
-> >> Thanks,
-> >> Jianan
-> >>
-> >>>     struct kobject s_kobj;          /* /sys/fs/erofs/<devname> */
-> >>>     struct completion s_kobj_unregister;
-> >>>    };
-> >>> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> >>> index dac252bc9228..2b48a4df19b4 100644
-> >>> --- a/fs/erofs/sysfs.c
-> >>> +++ b/fs/erofs/sysfs.c
-> >>> @@ -209,6 +209,7 @@ int erofs_register_sysfs(struct super_block *sb)
-> >>>                                "%s", sb->s_id);
-> >>>     if (err)
-> >>>             goto put_sb_kobj;
-> >>> +   sbi->s_sysfs_inited =3D true;
-> >>>     return 0;
-> >>>    put_sb_kobj:
-> >>> @@ -221,9 +222,11 @@ void erofs_unregister_sysfs(struct super_block *=
-sb)
-> >>>    {
-> >>>     struct erofs_sb_info *sbi =3D EROFS_SB(sb);
-> >>> -   kobject_del(&sbi->s_kobj);
-> >>> -   kobject_put(&sbi->s_kobj);
-> >>> -   wait_for_completion(&sbi->s_kobj_unregister);
-> >>> +   if (sbi->s_sysfs_inited) {
-> >>> +           kobject_del(&sbi->s_kobj);
-> >>> +           kobject_put(&sbi->s_kobj);
-> >>> +           wait_for_completion(&sbi->s_kobj_unregister);
-> >>> +   }
-> >>>    }
-> >>>    int __init erofs_init_sysfs(void)
->
+Acked-by: Baoquan He <bhe@redhat.com>
+
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f5a27f067db9ed9..63098786c93828c 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -789,7 +789,7 @@
+>  			memory region [offset, offset + size] for that kernel
+>  			image. If '@offset' is omitted, then a suitable offset
+>  			is selected automatically.
+> -			[KNL, X86-64] Select a region under 4G first, and
+> +			[KNL, X86-64, ARM64] Select a region under 4G first, and
+>  			fall back to reserve region above 4G when '@offset'
+>  			hasn't been specified.
+>  			See Documentation/admin-guide/kdump/kdump.rst for further details.
+> @@ -802,20 +802,20 @@
+>  			Documentation/admin-guide/kdump/kdump.rst for an example.
+>  
+>  	crashkernel=size[KMG],high
+> -			[KNL, X86-64] range could be above 4G. Allow kernel
+> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+>  			to allocate physical memory region from top, so could
+>  			be above 4G if system have more than 4G ram installed.
+>  			Otherwise memory region will be allocated below 4G, if
+>  			available.
+>  			It will be ignored if crashkernel=X is specified.
+>  	crashkernel=size[KMG],low
+> -			[KNL, X86-64] range under 4G. When crashkernel=X,high
+> +			[KNL, X86-64, ARM64] range under 4G. When crashkernel=X,high
+>  			is passed, kernel could allocate physical memory region
+>  			above 4G, that cause second kernel crash on system
+>  			that require some amount of low memory, e.g. swiotlb
+>  			requires at least 64M+32K low memory, also enough extra
+>  			low memory is needed to make sure DMA buffers for 32-bit
+> -			devices won't run out. Kernel would try to allocate at
+> +			devices won't run out. Kernel would try to allocate
+>  			at least 256M below 4G automatically.
+>  			This one let user to specify own low range under 4G
+>  			for second kernel instead.
+> -- 
+> 2.25.1
+> 
+

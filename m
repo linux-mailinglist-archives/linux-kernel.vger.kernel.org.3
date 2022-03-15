@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050E34D969B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650534D9698
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346143AbiCOIpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S1346167AbiCOIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346111AbiCOIpN (ORCPT
+        with ESMTP id S1346127AbiCOIpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 04:45:13 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F5A4D258
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:43:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l10so10789894wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:43:59 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2107B4D268
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:01 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r6so27369252wrr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=nlVYMMSP2xWTbAi9uYhO2iUBFbCtcGFMf2JOCAezQ90=;
-        b=IwemIK41Dsrg8TVJykVmeoghF2X+0wRUO9JJOxfU2Eh0gRDPTr01b8s3rCY5Hz7uAE
-         rKWfRZVFwvks/QaPbMjT8+iaja/udQUeDQe0vky3+MSFCqFoi9S3bIoZ6l5lZOgv85El
-         rb/4zQjCnVLqsj0Si7Dv68hZdKaOzujj1CyIPfJE9su1+LpxjQKKm2H2xVDpLQSpvGQg
-         XQnExKBdtWIWOc4C+ubXG4xFPOb8aUzkMmdD+XCiS2e1pU34CI6gJa3j4AwcLux/zp6j
-         xPtlcIXnSIdAWY7CxsCzas/UFOaW3w6I2kuFH3MCBsIfEZh5rdtQJoL8P+FH+pBwj8xR
-         uakw==
+        bh=Jb1wu8pDJ30xgS1p+JPjCnyezWwWH0sm2Zu2NeRcVsA=;
+        b=hiISU3x0fZ/PLJtBtmT6kraBpYArjPnEZTjKqMEXYBVi5vD1bSvfR0TaB/fakO7xaC
+         308VW9fw5gqwyPOt5aALo93mgIX2QyXIYmVlguXGPRmUtqPYdoPgIFQ3y2HdVGLTloSq
+         mTrKAnB7pyf9ve12QGtD8JzTa7Rz2+jfFaaQm+fGnqPJZDcsjGdBljgQX52NIurOofxF
+         CYE7VD6o+kAqImxYsLZushXLomhlw1q9LKAR5WEBct8qmvRa9PlqHdla5JH2IEF1rvSj
+         j8hOjMqI4sPov4P5YgjqR9KBmEi/YwYXac+uqVFkFO1Uh8fUd4C0YEw1KPBYGMaQ5awE
+         6A0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=nlVYMMSP2xWTbAi9uYhO2iUBFbCtcGFMf2JOCAezQ90=;
-        b=YxWixRXIywjDdtm34cVsLeFHJZB8mo9Dx61V5+RO3bCHoqTq5kup+NSuzeO3V7hmFX
-         H63WLfVSZmPrZRcPio+VVYh4PRw8g11fowwudgChnwUG30+WQ+WF+8FixlcX0eZL13Cs
-         PYD9qizyCMdg5w89ThaBiTb+u2Kv9ytwfpx0/8meIYk7RB1skaSH/vESDlv9IBkTwnqk
-         sthu/DyOalHEODiyrGMTBdIo2mgOK1XADp3x5Hk+qz2ZFWmDN2O0snPWHtC58PhDp0n1
-         LEEoRJ5ZwzqJkhz80CkSIxaNeDjrAPJMFwLaPg8/KYpDnKpYgHkM+pyBch4k4ZtK1UWD
-         wHaQ==
-X-Gm-Message-State: AOAM533R8elywXoUM+KNAcqOEwhzfv6QayRrUnQH5zdPnBQql9fbiYKf
-        pFfxfOTbW+DLKy7cn2mGuNf0hw+AwZA=
-X-Google-Smtp-Source: ABdhPJwjLwJ9GOzz9TxX9I/+xv9p8HLRvBvXZvoczTZgrEU+eh/1QkELA39vtewkcr28fiE3PnmwbQ==
-X-Received: by 2002:a05:600c:3556:b0:389:f440:50e6 with SMTP id i22-20020a05600c355600b00389f44050e6mr2355961wmq.159.1647333838486;
-        Tue, 15 Mar 2022 01:43:58 -0700 (PDT)
+        bh=Jb1wu8pDJ30xgS1p+JPjCnyezWwWH0sm2Zu2NeRcVsA=;
+        b=1o+dD1O8hAn1UX/sYpNcDQcJOXXQNudeVmdcvCQPTFIkvyvQxNUmStUKiQ5g6V/h7V
+         /Vjp1QCFGfBZcWKO2OBR7VB/ExsoDOYWJRwk9UL24xLQAokKdIWtGlwOmDgMloJFrOuO
+         YaaHL2PEvybW3BspH6j0lICdmkSc0i33GrqYqcXMVoBuosWUcTREgVTI1Uhix9fioMN3
+         TWevK1UZk9pBmECzel7lQAiV9MFi5JsitwGrsHu1BZZMxBumRMoTk943A63IRYIuIKSX
+         VdI/+BcVlaNvjGjB/LZmELvUmZxtPwDzJMb5Q8VxmLIGAWr+xBLT9bxA/VKpxoYz9kfY
+         pkkQ==
+X-Gm-Message-State: AOAM533zmksvC8PUSScDqIq8berkvhBJ765FeKMVPuMmIyZI2iZDgEG4
+        LTVgKV4ZsLWh6Xs7WGmz5hd5kYm31DI=
+X-Google-Smtp-Source: ABdhPJy1HhMqexQddfHuV8F1Eb/P08ZosKRgUc5SqbEdhbVmTksB7SahuD4T6EBfFmXjL6+Ok1+itA==
+X-Received: by 2002:a5d:678f:0:b0:1f0:2471:5a93 with SMTP id v15-20020a5d678f000000b001f024715a93mr19670842wru.164.1647333839676;
+        Tue, 15 Mar 2022 01:43:59 -0700 (PDT)
 Received: from kepler.. (0526F1FC.dsl.pool.telekom.hu. [5.38.241.252])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.43.57
+        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b0020374784350sm15078503wrt.64.2022.03.15.01.43.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 01:43:57 -0700 (PDT)
+        Tue, 15 Mar 2022 01:43:59 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
 From:   Ingo Molnar <mingo@kernel.org>
 To:     linux-kernel@vger.kernel.org
@@ -61,9 +61,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Borislav Petkov <bp@alien8.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 09/15] sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
-Date:   Tue, 15 Mar 2022 09:42:41 +0100
-Message-Id: <20220315084247.40783-10-mingo@kernel.org>
+Subject: [PATCH 10/15] sched/headers: Standardize kernel/sched/sched.h header dependencies
+Date:   Tue, 15 Mar 2022 09:42:42 +0100
+Message-Id: <20220315084247.40783-11-mingo@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220315084247.40783-1-mingo@kernel.org>
 References: <20220315084247.40783-1-mingo@kernel.org>
@@ -80,203 +80,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similarly to kernel/sched/build_utility.c, collect all 'scheduling policy' related
-source code files into kernel/sched/build_policy.c:
+kernel/sched/sched.h is a weird mix of ad-hoc headers included
+in the middle of the header.
 
-    kernel/sched/idle.c
+Two of them rely on being included in the middle of kernel/sched/sched.h,
+due to definitions they require:
 
-    kernel/sched/rt.c
+ - "stat.h" needs the rq definitions.
+ - "autogroup.h" needs the task_group definition.
 
-    kernel/sched/cpudeadline.c
-    kernel/sched/pelt.c
+Move the inclusion of these two files out of kernel/sched/sched.h, and
+include them in all files that require them.
 
-    kernel/sched/cputime.c
-    kernel/sched/deadline.c
-
-With the exception of fair.c, which we continue to build as a separate file
-for build efficiency and parallelism reasons.
+Move of the rest of the header dependencies to the top of the
+kernel/sched/sched.h file.
 
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Reviewed-by: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/Makefile       |  2 +-
- kernel/sched/build_policy.c | 29 +++++++++++++++++++++++++++++
- kernel/sched/cpudeadline.c  |  1 -
- kernel/sched/cputime.c      |  1 -
- kernel/sched/deadline.c     |  2 --
- kernel/sched/idle.c         |  3 ---
- kernel/sched/pelt.c         |  4 ----
- kernel/sched/rt.c           |  3 ---
- kernel/sched/sched.h        |  8 ++++++++
- 9 files changed, 38 insertions(+), 15 deletions(-)
+ kernel/sched/build_policy.c  |  3 +++
+ kernel/sched/build_utility.c |  2 ++
+ kernel/sched/core.c          |  2 ++
+ kernel/sched/fair.c          |  2 ++
+ kernel/sched/sched.h         | 20 +++++++++++---------
+ kernel/sched/stats.h         |  4 ++--
+ 6 files changed, 22 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
-index 4a4785cb3cd2..976092b7bd45 100644
---- a/kernel/sched/Makefile
-+++ b/kernel/sched/Makefile
-@@ -30,5 +30,5 @@ endif
- #
- obj-y += core.o
- obj-y += fair.o
-+obj-y += build_policy.o
- obj-y += build_utility.o
--obj-y += idle.o rt.o deadline.o cputime.o cpudeadline.o pelt.o
 diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-new file mode 100644
-index 000000000000..6bb384ddcfab
---- /dev/null
+index 6bb384ddcfab..9a169b2f97e6 100644
+--- a/kernel/sched/build_policy.c
 +++ b/kernel/sched/build_policy.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * These are the scheduling policy related scheduler files, built
-+ * in a single compilation unit for build efficiency reasons.
-+ *
-+ * ( Incidentally, the size of the compilation unit is roughly
-+ *   comparable to core.c and fair.c, the other two big
-+ *   compilation units. This helps balance build time, while
-+ *   coalescing source files to amortize header inclusion
-+ *   cost. )
-+ *
-+ * core.c and fair.c are built separately.
-+ */
-+
-+#include "sched.h"
-+#include "pelt.h"
-+
-+#include "idle.c"
-+
-+#include "rt.c"
-+
-+#ifdef CONFIG_SMP
-+# include "cpudeadline.c"
-+# include "pelt.c"
-+#endif
-+
-+#include "cputime.c"
-+#include "deadline.c"
-+
-diff --git a/kernel/sched/cpudeadline.c b/kernel/sched/cpudeadline.c
-index 0e196f0de492..02d970a879ed 100644
---- a/kernel/sched/cpudeadline.c
-+++ b/kernel/sched/cpudeadline.c
-@@ -6,7 +6,6 @@
-  *
-  *  Author: Juri Lelli <j.lelli@sssup.it>
+@@ -13,6 +13,9 @@
   */
--#include "sched.h"
  
- static inline int parent(int i)
- {
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index b7ec42732b28..78a233d43757 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -2,7 +2,6 @@
+ #include "sched.h"
++
++#include "autogroup.h"
++#include "stats.h"
+ #include "pelt.h"
+ 
+ #include "idle.c"
+diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
+index 31216ce0b4b3..8b2b199983bf 100644
+--- a/kernel/sched/build_utility.c
++++ b/kernel/sched/build_utility.c
+@@ -12,6 +12,8 @@
+ 
+ #include "sched.h"
+ #include "sched-pelt.h"
++#include "stats.h"
++#include "autogroup.h"
+ 
+ #include <linux/sched_clock.h>
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ef946123e9af..22de53710ee9 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11,6 +11,8 @@
+ #undef CREATE_TRACE_POINTS
+ 
+ #include "sched.h"
++#include "stats.h"
++#include "autogroup.h"
+ 
+ #include <linux/nospec.h>
+ #include <linux/blkdev.h>
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 16874e112fe6..7391c9287503 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -21,6 +21,8 @@
+  *  Copyright (C) 2007 Red Hat, Inc., Peter Zijlstra
+  */
+ #include "sched.h"
++#include "stats.h"
++#include "autogroup.h"
+ 
  /*
-  * Simple CPU accounting cgroup controller
-  */
--#include "sched.h"
- 
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
- 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index d2c072b0ef01..fca2d7de4d3d 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -15,8 +15,6 @@
-  *                    Michael Trimarchi <michael@amarulasolutions.com>,
-  *                    Fabio Checconi <fchecconi@gmail.com>
-  */
--#include "sched.h"
--#include "pelt.h"
- 
- struct dl_bandwidth def_dl_bandwidth;
- 
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index d17b0a5ce6ac..8f8b5020e76a 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -6,9 +6,6 @@
-  * (NOTE: these are not related to SCHED_IDLE batch scheduled
-  *        tasks which are handled in sched/fair.c )
-  */
--#include "sched.h"
--
--#include <trace/events/power.h>
- 
- /* Linker adds these: start and end of __cpuidle functions */
- extern char __cpuidle_text_start[], __cpuidle_text_end[];
-diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-index a554e3bbab2b..0f310768260c 100644
---- a/kernel/sched/pelt.c
-+++ b/kernel/sched/pelt.c
-@@ -24,10 +24,6 @@
-  *  Author: Vincent Guittot <vincent.guittot@linaro.org>
-  */
- 
--#include <linux/sched.h>
--#include "sched.h"
--#include "pelt.h"
--
- /*
-  * Approximate:
-  *   val * y^n,    where y^32 ~= 0.5 (~1 scheduling period)
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 7b4f4fbbb404..ff4c044aed12 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -3,9 +3,6 @@
-  * Real-Time Scheduling Class (mapped to the SCHED_FIFO and SCHED_RR
-  * policies)
-  */
--#include "sched.h"
--
--#include "pelt.h"
- 
- int sched_rr_timeslice = RR_TIMESLICE;
- int sysctl_sched_rr_timeslice = (MSEC_PER_SEC / HZ) * RR_TIMESLICE;
+  * Targeted preemption latency for CPU-bound tasks:
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 79c7a8a2be65..f7d10b98e911 100644
+index f7d10b98e911..f255ec2afeca 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -13,6 +13,7 @@
- #include <linux/prctl.h>
- #include <linux/ptrace_api.h>
- #include <linux/gfp_api.h>
-+#include <linux/posix-timers.h>
- #include <linux/sched/clock.h>
- #include <linux/workqueue_api.h>
- #include <linux/tick.h>
-@@ -113,8 +114,11 @@
- #include <linux/cpumask_api.h>
- #include <linux/ctype.h>
- #include <linux/file.h>
-+#include <linux/hrtimer_api.h>
-+#include <linux/interrupt.h>
- #include <linux/jiffies.h>
- #include <linux/kref_api.h>
-+#include <linux/ktime_api.h>
- #include <linux/lockdep_api.h>
- #include <linux/module.h>
- #include <linux/mutex_api.h>
-@@ -126,12 +130,16 @@
- #include <linux/sched/loadavg.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/rseq_api.h>
-+#include <linux/sched/signal.h>
- #include <linux/seq_file.h>
- #include <linux/seqlock.h>
-+#include <linux/softirq.h>
-+#include <linux/spinlock_api.h>
- #include <linux/syscalls_api.h>
- #include <linux/syscalls.h>
- #include <linux/topology.h>
- #include <linux/types.h>
-+#include <linux/u64_stats_sync_api.h>
- #include <linux/uaccess.h>
- #include <linux/wait_api.h>
- #include <linux/workqueue_api.h>
+@@ -96,11 +96,20 @@
+ # include <asm/paravirt.h>
+ #endif
+ 
++#include <trace/events/sched.h>
++
++#ifdef CONFIG_CGROUP_SCHED
++#include <linux/cgroup.h>
++#include <linux/psi.h>
++#endif
++
++#ifdef CONFIG_SCHED_DEBUG
++# include <linux/static_key.h>
++#endif
++
+ #include "cpupri.h"
+ #include "cpudeadline.h"
+ 
+-#include <trace/events/sched.h>
+-
+ #ifdef CONFIG_SCHED_DEBUG
+ # define SCHED_WARN_ON(x)	WARN_ONCE(x, #x)
+ #else
+@@ -417,9 +426,6 @@ extern bool dl_cpu_busy(unsigned int cpu);
+ 
+ #ifdef CONFIG_CGROUP_SCHED
+ 
+-#include <linux/cgroup.h>
+-#include <linux/psi.h>
+-
+ struct cfs_rq;
+ struct rt_rq;
+ 
+@@ -1919,9 +1925,6 @@ extern void flush_smp_call_function_from_idle(void);
+ static inline void flush_smp_call_function_from_idle(void) { }
+ #endif
+ 
+-#include "stats.h"
+-#include "autogroup.h"
+-
+ #if defined(CONFIG_SCHED_CORE) && defined(CONFIG_SCHEDSTATS)
+ 
+ extern void __sched_core_account_forceidle(struct rq *rq);
+@@ -2016,7 +2019,6 @@ static inline void __set_task_cpu(struct task_struct *p, unsigned int cpu)
+  * Tunables that become constants when CONFIG_SCHED_DEBUG is off:
+  */
+ #ifdef CONFIG_SCHED_DEBUG
+-# include <linux/static_key.h>
+ # define const_debug __read_mostly
+ #else
+ # define const_debug const
+diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
+index edc0d13fc61b..a0df79e6038c 100644
+--- a/kernel/sched/stats.h
++++ b/kernel/sched/stats.h
+@@ -2,10 +2,10 @@
+ #ifndef _KERNEL_STATS_H
+ #define _KERNEL_STATS_H
+ 
+-#ifdef CONFIG_SCHEDSTATS
+-
+ #include "sched.h"
+ 
++#ifdef CONFIG_SCHEDSTATS
++
+ extern struct static_key_false sched_schedstats;
+ 
+ /*
 -- 
 2.32.0
 

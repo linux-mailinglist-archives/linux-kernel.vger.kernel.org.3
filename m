@@ -2,123 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087124D94FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D4A4D9508
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 08:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343546AbiCOHGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 03:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S1345295AbiCOHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 03:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238411AbiCOHGS (ORCPT
+        with ESMTP id S233703AbiCOHMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 03:06:18 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412C634642
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647327906; x=1678863906;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aCLvxFHzMVflejNSYWs6bl3tgEDd+bP4jqHmtxth9zA=;
-  b=UBaI0e7hs+rfgxnOKHo7+4p96q9n477MHXHmU2k+cX8NeoTG/c7v5jK4
-   U42CPcUZvF9J3ikWXzxzh/9Jv0LgiFlShhJXcVJZ3ZeiqpBm3PehbAWDt
-   RqV17pactaUEcU2H1QV9Ny//iWqM78YKY4BL6pJOklSrNtuLHIgpdnoOU
-   tUDzfWgQEtY/RGLmsHXqHsc6QRJgQcfvJiDGyFX+OEXTWYsmNE+ix8yCl
-   vnNjaQq9tztwpGz8X2C2mJzzTcE1y/bv4iHi+1qox7EY7I+42h+VdRYQp
-   MIFiNznQ0Xc9Cxs6O64Codi8KbY3r/xLvdMWdHSDzJwZrty4Bj1XtcmdX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256420761"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="256420761"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 00:05:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="556795067"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2022 00:04:59 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nU1Ep-000Afo-2K; Tue, 15 Mar 2022 07:04:59 +0000
-Date:   Tue, 15 Mar 2022 15:04:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [willy-pagecache:for-next 131/179] mm/readahead.c:54:3: error:
- implicit declaration of function 'do_invalidatepage'; did you mean
- 'noop_invalidatepage'?
-Message-ID: <202203151544.J2Qcx5YQ-lkp@intel.com>
+        Tue, 15 Mar 2022 03:12:44 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D4A4707B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 00:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=kRXc10mj4iAzNDgbV827VRY+diRakdhxQqhu23sesQY=;
+  b=WhUAh8KUR42l/eMMBxti1B9jFIaBRKg7WcRfh5uo8eh2cksLquqzKq8k
+   k024UQWQM8fi6SwNA0Dj92BtaHovgeukny/x36c4qtmbdAlfryqkGuJW6
+   T8lS7zIXkt4AvpHe/FIj+vwYtZmkjtQTamWKdsv8Bm+qcyZLCLRuFolVW
+   I=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,182,1643670000"; 
+   d="py'?scan'208";a="26137696"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 08:11:30 +0100
+Date:   Tue, 15 Mar 2022 08:11:30 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Joe Perches <joe@perches.com>
+cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/30] fix typos in comments
+In-Reply-To: <b9c4dba1af41d8ef618267a1bd2a8497b3aa51a9.camel@perches.com>
+Message-ID: <alpine.DEB.2.22.394.2203150803540.2907@hadrien>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr> <b9c4dba1af41d8ef618267a1bd2a8497b3aa51a9.camel@perches.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-762518402-1647328290=:2907"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   af564d7369d44fbbe697a5f631fe3bba5ebecd59
-commit: f1fdabbaae8eb5c9a95a3747065a40297e7d2736 [131/179] fs: Turn do_invalidatepage() into folio_invalidate()
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220315/202203151544.J2Qcx5YQ-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout f1fdabbaae8eb5c9a95a3747065a40297e7d2736
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   mm/readahead.c: In function 'read_cache_pages_invalidate_page':
->> mm/readahead.c:54:3: error: implicit declaration of function 'do_invalidatepage'; did you mean 'noop_invalidatepage'? [-Werror=implicit-function-declaration]
-      54 |   do_invalidatepage(page, 0, PAGE_SIZE);
-         |   ^~~~~~~~~~~~~~~~~
-         |   noop_invalidatepage
-   cc1: some warnings being treated as errors
+--8323329-762518402-1647328290=:2907
+Content-Type: text/plain; charset=US-ASCII
 
 
-vim +54 mm/readahead.c
 
-^1da177e4c3f415 Linus Torvalds     2005-04-16  39  
-03fb3d2af96c278 David Howells      2009-04-03  40  /*
-03fb3d2af96c278 David Howells      2009-04-03  41   * see if a page needs releasing upon read_cache_pages() failure
-266cf658efcf6ac David Howells      2009-04-03  42   * - the caller of read_cache_pages() may have set PG_private or PG_fscache
-266cf658efcf6ac David Howells      2009-04-03  43   *   before calling, such as the NFS fs marking pages that are cached locally
-266cf658efcf6ac David Howells      2009-04-03  44   *   on disk, thus we need to give the fs a chance to clean up in the event of
-266cf658efcf6ac David Howells      2009-04-03  45   *   an error
-03fb3d2af96c278 David Howells      2009-04-03  46   */
-03fb3d2af96c278 David Howells      2009-04-03  47  static void read_cache_pages_invalidate_page(struct address_space *mapping,
-03fb3d2af96c278 David Howells      2009-04-03  48  					     struct page *page)
-03fb3d2af96c278 David Howells      2009-04-03  49  {
-266cf658efcf6ac David Howells      2009-04-03  50  	if (page_has_private(page)) {
-03fb3d2af96c278 David Howells      2009-04-03  51  		if (!trylock_page(page))
-03fb3d2af96c278 David Howells      2009-04-03  52  			BUG();
-03fb3d2af96c278 David Howells      2009-04-03  53  		page->mapping = mapping;
-09cbfeaf1a5a67b Kirill A. Shutemov 2016-04-01 @54  		do_invalidatepage(page, 0, PAGE_SIZE);
-03fb3d2af96c278 David Howells      2009-04-03  55  		page->mapping = NULL;
-03fb3d2af96c278 David Howells      2009-04-03  56  		unlock_page(page);
-03fb3d2af96c278 David Howells      2009-04-03  57  	}
-09cbfeaf1a5a67b Kirill A. Shutemov 2016-04-01  58  	put_page(page);
-03fb3d2af96c278 David Howells      2009-04-03  59  }
-03fb3d2af96c278 David Howells      2009-04-03  60  
+On Mon, 14 Mar 2022, Joe Perches wrote:
 
-:::::: The code at line 54 was first introduced by commit
-:::::: 09cbfeaf1a5a67bfb3201e0c83c810cecb2efa5a mm, fs: get rid of PAGE_CACHE_* and page_cache_{get,release} macros
+> Care to describe _how_ coccinelle was helpful in finding
+> these typos in comments?
 
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+First, Coccinelle can bind a metavariable to the comments before, within
+and after anohter kind of term.  So I collected the comments before,
+within, and after statements and declarations.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Second, I also used Coccinelle to collect all of the identifiers
+referenced in the same file, and discarded all of these words from
+consideration.
+
+Otherwise, it's the python library enchant for a dictionary, and some
+hacks to reduce the number of false positives, including dropping words
+that occur multiple times.  The results are still maybe 90% false
+positives, though.
+
+The semantic patch is attached.  It gives around 30K results for the
+current linux-next.
+
+julia
+--8323329-762518402-1647328290=:2907
+Content-Type: text/x-python; name=nlp2.py
+Content-Transfer-Encoding: BASE64
+Content-ID: <alpine.DEB.2.22.394.2203150811300.2907@hadrien>
+Content-Description: 
+Content-Disposition: attachment; filename=nlp2.py
+
+ZnJvbSBfX2Z1dHVyZV9fIGltcG9ydCBwcmludF9mdW5jdGlvbg0KZnJvbSBu
+bHRrLnN0ZW0gaW1wb3J0ICoNCmZyb20gc3lzIGltcG9ydCBhcmd2DQppbXBv
+cnQgZW5jaGFudA0KDQpkID0gZW5jaGFudC5EaWN0KCJlbl9VUyIpDQp3aXRo
+IG9wZW4oYXJndlsxXSkgYXMgZjoNCiAgZm9yIGxpbmUgaW4gZjoNCiAgICAg
+d29yZCA9IGxpbmUuc3BsaXQoKVswXQ0KICAgICBpZiBub3QoZC5jaGVjayh3
+b3JkKSk6DQogICAgICAgICBwcmludCh3b3JkKQ0K
+
+--8323329-762518402-1647328290=:2907
+Content-Type: text/plain; charset=US-ASCII; name=checkspell.cocci
+Content-Transfer-Encoding: BASE64
+Content-ID: <alpine.DEB.2.22.394.2203150811301.2907@hadrien>
+Content-Description: 
+Content-Disposition: attachment; filename=checkspell.cocci
+
+QGluaXRpYWxpemU6b2NhbWxADQpAQA0KDQpsZXQgc2VlbiA9IEhhc2h0Ymwu
+Y3JlYXRlIDEwMQ0KbGV0IGJzZWVuID0gSGFzaHRibC5jcmVhdGUgMTAxDQps
+ZXQgd3NlZW4gPSBIYXNodGJsLmNyZWF0ZSAxMDENCmxldCBpZHMgPSBIYXNo
+dGJsLmNyZWF0ZSAxMDENCmV4Y2VwdGlvbiBOb3RPSw0KDQpsZXQgb2t3ID0g
+WyJhcmVuIjsiaXNuIjsid2FzbiI7ImRvZXNuIjsiZGlkbiI7IndlcmVuIjsi
+c2hvdWxkbiI7ImNvdWxkbiI7IndvdWxkbiI7Imhhc24iOyJoYXZlbiI7Imxp
+bnV4IjsiaG90cGx1ZyI7ImNwdSI7ImlmZGVmIjsiaWZuZGVmIjsiZW5kaWYi
+OyJzdHJ1Y3QiXQ0KDQpsZXQgYWRkIGkgPQ0KICAoaWYgbm90IChIYXNodGJs
+Lm1lbSBpZHMgaSkgdGhlbiBIYXNodGJsLmFkZCBpZHMgaSAoKSk7DQogIGxl
+dCBwaWVjZXMgPSBTdHIuc3BsaXQgKFN0ci5yZWdleHAgIl8iKSBpIGluDQog
+IExpc3QuaXRlcg0KICAgIChmdW4gaSAtPiBpZiBub3QgKEhhc2h0YmwubWVt
+IGlkcyBpKSB0aGVuIEhhc2h0YmwuYWRkIGlkcyBpICgpKQ0KICAgIHBpZWNl
+czsNCiAgZmFsc2UNCg0KbGV0IGhhc3Zvd2VsIHMgPQ0KICBsZXQgdm93ZWxz
+ID0gWydhJzsnZSc7J2knOydvJzsndSc7J3knOydBJzsnRSc7J0knOydPJzsn
+VSc7J1knXSBpbg0KICB0cnkNCiAgICBTdHJpbmcuaXRlcg0KICAgICAgKGZ1
+biBjIC0+DQoJaWYgTGlzdC5tZW0gYyB2b3dlbHMNCgl0aGVuIHJhaXNlIE5v
+dE9LKQ0KICAgICAgczsNCiAgICBmYWxzZQ0KICB3aXRoIE5vdE9LIC0+IHRy
+dWUNCg0KbGV0IG9ubHlfbGV0dGVycyBzID0NCiAgbGV0IGlzbG93ZXIgYyA9
+ICdhJyA8PSBjICYmIGMgPD0gJ3onIGluDQogIGxldCBpc3VwcGVyIGMgPSAn
+QScgPD0gYyAmJiBjIDw9ICdaJyBpbg0KICB0cnkNCiAgICBTdHJpbmcuaXRl
+cmkNCiAgICAgIChmdW4gaSBjIC0+DQoJbGV0IG9rID0NCgkgIGlmIGkgPSAw
+DQoJICB0aGVuIGlzbG93ZXIgYyB8fCBpc3VwcGVyIGMNCgkgIGVsc2UgaXNs
+b3dlciBjIGluDQoJaWYgbm90IG9rDQoJdGhlbiByYWlzZSBOb3RPSykNCiAg
+ICAgIHM7DQogICAgdHJ1ZQ0KICB3aXRoIE5vdE9LIC0+IGZhbHNlDQoNCmxl
+dCBjaGVjayBiYWQgbG9jIHAgYyA9DQogIGlmIG5vdChIYXNodGJsLm1lbSBz
+ZWVuIGMpDQogIHRoZW4NCiAgYmVnaW4NCiAgSGFzaHRibC5hZGQgc2VlbiBj
+ICgpOw0KICBsZXQgcGllY2VzID0gU3RyLnNwbGl0IChTdHIucmVnZXhwICJc
+XGIiKSBjIGluDQogIExpc3QuaXRlcg0KICAgIChmdW4gd29yZCAtPg0KICAg
+ICAgaWYgU3RyaW5nLmxlbmd0aCB3b3JkIDw9IDIgfHwgbm90KG9ubHlfbGV0
+dGVycyB3b3JkKSB8fCBIYXNodGJsLm1lbSBpZHMgd29yZCB8fCBMaXN0Lm1l
+bSB3b3JkICFiYWQgfHwgbm90KGhhc3Zvd2VsIHdvcmQpDQogICAgICB0aGVu
+ICgpDQogICAgICBlbHNlDQoJbGV0IHdvcmQgPSBTdHJpbmcudW5jYXBpdGFs
+aXplX2FzY2lpIHdvcmQgaW4NCglpZiBMaXN0Lm1lbSB3b3JkIG9rdw0KCXRo
+ZW4gKCkNCgllbHNlDQoJbGV0IHJlcyA9DQoJICB0cnkgSGFzaHRibC5maW5k
+IHdzZWVuIHdvcmQNCgkgIHdpdGggTm90X2ZvdW5kIC0+DQoJICAgIGxldCBj
+bWQgPQ0KCSAgICAgIFByaW50Zi5zcHJpbnRmICJweXRob24gc3BlbGwucHkg
+JXMiIHdvcmQgaW4NCgkgICAgbGV0IHYgPSBDb21tb24uY21kX3RvX2xpc3Qg
+Y21kIGluDQoJICAgIEhhc2h0YmwuYWRkIHdzZWVuIHdvcmQgdjsNCgkgICAg
+diBpbg0KCUxpc3QuaXRlcg0KCSAgKGZ1biB3ZCAtPg0KCSAgICBiYWQgOj0g
+d29yZCA6OiAhYmFkOw0KCSAgICBDb21tb24uaGFzaGFkZCBic2VlbiB3b3Jk
+IChsb2Msd29yZCxwKSkNCgkgIHJlcykNCiAgICBwaWVjZXMNCiAgZW5kDQoN
+CkBzY3JpcHQ6b2NhbWxADQpAQA0KSGFzaHRibC5jbGVhciBzZWVuDQoNCkBp
+ZGVudGlmaWVyQA0KaWRlbnRpZmllciBpIDogc2NyaXB0Om9jYW1sKCkgeyBh
+ZGQgaSB9Ow0KQEANCmkNCg0KQHIxQA0KY29tbWVudHMgYzsNCnN0YXRlbWVu
+dCBTOw0KcG9zaXRpb24gcDsNCkBADQoNClNAY0BwDQoNCkBzY3JpcHQ6b2Nh
+bWxADQpjIDw8IHIxLmM7DQpwIDw8IHIxLnA7DQpAQA0KDQpsZXQgYmFkID0g
+cmVmIFtdIGluDQpMaXN0Lml0ZXINCihmdW5jdGlvbiBjLT4NCmxldCAoY2Is
+Y2ksY2EpID0gYyBpbg0KTGlzdC5pdGVyIChjaGVjayBiYWQgImJlZm9yZSIg
+cCkgY2I7DQpMaXN0Lml0ZXIgKGNoZWNrIGJhZCAid2l0aGluIiBwKSBjaTsN
+Ckxpc3QuaXRlciAoY2hlY2sgYmFkICJhZnRlciIgcCkgY2EpDQpjDQoNCkBy
+MkANCmNvbW1lbnRzIGM7DQpkZWNsYXJhdGlvbiBkOw0KcG9zaXRpb24gcDsN
+CkBADQoNCmRAY0BwDQoNCkBzY3JpcHQ6b2NhbWxADQpjIDw8IHIyLmM7DQpw
+IDw8IHIyLnA7DQpAQA0KDQpsZXQgYmFkID0gcmVmIFtdIGluDQpMaXN0Lml0
+ZXINCihmdW5jdGlvbiBjLT4NCmxldCAoY2IsY2ksY2EpID0gYyBpbg0KTGlz
+dC5pdGVyIChjaGVjayBiYWQgImJlZm9yZSIgcCkgY2I7DQpMaXN0Lml0ZXIg
+KGNoZWNrIGJhZCAid2l0aGluIiBwKSBjaTsNCkxpc3QuaXRlciAoY2hlY2sg
+YmFkICJhZnRlciIgcCkgY2EpDQpjDQoNCkBmaW5hbGl6ZTpvY2FtbEANCmJz
+ZWVuIDw8IG1lcmdlLmJzZWVuOw0KQEANCg0KTGlzdC5pdGVyDQogIChmdW4g
+YnNlZW4gLT4NCiAgICBIYXNodGJsLml0ZXINCiAgICAgIChmdW4gd29yZCBs
+IC0+DQoJbWF0Y2ggIWwgd2l0aA0KCSAgWyhsb2Msd29yZCxwKV0gLT4NCgkg
+ICAgQ29jY2lsaWIucHJpbnRfbWFpbg0KCSAgICAgIChQcmludGYuc3ByaW50
+ZiAicHJvYmxlbSB3aXRoICVzIGNvbW1lbnQgd29yZDogJXMiIGxvYyB3b3Jk
+KQ0KCSAgICAgIHANCgl8IF8gLT4gKCkpDQogICAgICBic2VlbikNCiAgYnNl
+ZW4NCg==
+
+--8323329-762518402-1647328290=:2907--

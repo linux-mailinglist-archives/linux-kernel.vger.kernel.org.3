@@ -2,104 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00E04D9D6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CD44D9D6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245568AbiCOO1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
+        id S1348996AbiCOO13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233291AbiCOO1F (ORCPT
+        with ESMTP id S232757AbiCOO12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:27:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7D854BF0;
-        Tue, 15 Mar 2022 07:25:50 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647354348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bP10MpKxp2H+M/GICvTgdjWhCdPc/61K93sUgprsw14=;
-        b=R9dSK34+A6a4Ngrt975mHLqphrmRbJYGz1P//s/pJjXsXkKVfxFykpUze3PlZaYkUDPA8J
-        3jSsx9qfMD1DVdv9rDajElQieQq/TOBBgwPOKK4trrYleKQw7/YDNaBDi2HRBPU0q8emiK
-        fjtH5yTzNinXRgl/rPjKi3roPp166Rw9j9Z1CiN8Rm6b0tJlwhN6bYpQdjgxRcr0OKZYpx
-        HyPrIGxxgznRVeAkqQ05qJ22+wNrUCfYgcKT02TXYwnpGftrBXzgUziCaLWyxTPZKBDaij
-        6Pj59kG1tq2C5B28N/wdmQ2vRnyFXmM9vFOyk3tm+ZRdmkeLM6/Qk3L2mAhBVg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647354348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bP10MpKxp2H+M/GICvTgdjWhCdPc/61K93sUgprsw14=;
-        b=sgaCCUxImjUe2XSPk4Jm5E49wfVVvvbrFICQNNpmvNTk7jPlK8mm3ZROom0zll17aPyCsk
-        C5Auf9mvdXKfIrCA==
-To:     John Garry <john.garry@huawei.com>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel-team@android.com
-Subject: Re: [PATCH 1/2] genirq: Extract irq_set_affinity_masks() from
- devm_platform_get_irqs_affinity()
-In-Reply-To: <eee8d4b8-6b47-d675-aa6c-b0376b693e87@huawei.com>
-References: <20220216090845.1278114-1-maz@kernel.org>
- <20220216090845.1278114-2-maz@kernel.org>
- <bdfe935b-6ee0-b588-e1e8-776d85f91813@huawei.com>
- <b502141b201a68eb4896c1653b67663a@kernel.org>
- <eee8d4b8-6b47-d675-aa6c-b0376b693e87@huawei.com>
-Date:   Tue, 15 Mar 2022 15:25:48 +0100
-Message-ID: <871qz370nn.ffs@tglx>
+        Tue, 15 Mar 2022 10:27:28 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409CC54FA0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647354376; x=1678890376;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xf8O2CSFPHkJl2l4dsMsAB+UtUVKliQySS04oxYD/BU=;
+  b=elc3P5ARpGV9/EPwVPhFB1KlKangDkoQjegjXpoenb7njWm4rxySR7M9
+   8+oS69x8AIAIsE88qs4PrblagFtiQJv+G5w0XkzzqAxqskwmKtF+AoZb5
+   SyRoOMj15tvtuM3NTPar90SxlUMyAChRk/onglBa0dLiJLLkMVQw+ElOn
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Mar 2022 07:26:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 07:26:15 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Mar 2022 07:26:15 -0700
+Received: from [10.216.32.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 15 Mar
+ 2022 07:26:10 -0700
+Message-ID: <3b1626e7-3a32-5733-2a4f-e782c87b8e58@quicinc.com>
+Date:   Tue, 15 Mar 2022 19:56:05 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V2,0/2]mm: madvise: return correct bytes processed with
+ process_madvise
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <surenb@google.com>, <vbabka@suse.cz>, <rientjes@google.com>,
+        <sfr@canb.auug.org.au>, <edgararriaga@google.com>,
+        <minchan@kernel.org>, <nadav.amit@gmail.com>, <mhocko@suse.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <20220311134203.47cbeab087b731bada12d0f1@linux-foundation.org>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <20220311134203.47cbeab087b731bada12d0f1@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18 2022 at 08:41, John Garry wrote:
-> On 17/02/2022 17:17, Marc Zyngier wrote:
->>> I know you mentioned it in 2/2, but it would be interesting to see how
->>> network controller drivers can handle the problem of missing in-flight
->>> IO completions for managed irq shutdown. For storage controllers this
->>> is all now safely handled in the block layer.
->> 
->> Do you have a pointer to this? It'd be interesting to see if there is
->> a common pattern.
->
-> Check blk_mq_hctx_notify_offline() and other hotplug handler friends in 
-> block/blk-mq.c and also blk_mq_get_ctx()/blk_mq_map_queue()
->
-> So the key steps in CPU offlining are:
-> - when the last CPU in HW queue context cpumask is going offline we mark 
-> the HW queue as inactive and no longer queue requests there
-> - drain all in-flight requests before we allow that last CPU to go 
-> offline, meaning that we always have a CPU online to service any 
-> completion interrupts
->
-> This scheme relies on symmetrical HW submission and completion queues 
-> and also that the blk-mq HW queue context cpumask is same as the HW 
-> queue's IRQ affinity mask (see blk_mq_pci_map_queues()).
->
-> I am not sure how much this would fit with the networking stack or that 
-> marvell driver.
+Thanks Andrew!!
 
-The problem with networking is RX flow steering.
+On 3/12/2022 3:12 AM, Andrew Morton wrote:
+>> With the process_madvise(), always choose to return non zero processed
+>> bytes over an error. This can help the user to know on which VMA, passed
+>> in the 'struct iovec' vector list, is failed to advise thus can take the
+>> decission of retrying/skipping on that VMA.
+> Thanks, this is not good.
+> 
+> We should have added userspace tests for process_madvise() along with
+> the syscall itself.  But evidently that was omitted.  If someone
+> decides to contribute such tests, hopefully they will include checks
+> for these return values.
 
-The driver in question initializes the RX flows in
-mvpp22_port_rss_init() by default so the packets are evenly distributed
-accross the RX queues.
+We are happy to contribute here.
 
-So without actually steering the RX flow away from the RX queue which is
-associated to the to be unplugged CPU, this does not really work well.
-
-Thanks,
-
-        tglx
+> 

@@ -2,140 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD2F4D9E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED094D9E71
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349481AbiCOPRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S1349532AbiCOPRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiCOPRL (ORCPT
+        with ESMTP id S241716AbiCOPRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:17:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ADC24E3BE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647357358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kyz2RUFrfzcWwytFdN8JKP5rzgj6KOwPxkBy/7oRIpU=;
-        b=Cy3r530evXgrG340mX7jJxJ5swqRPFdF0k8tvOlQVj/Ik7ZAOS6tL1kL3+uwZUUIvpTAzZ
-        guc0+v+Zx5ezZotq2S56/7iMpkndyOL+zxEKvX+Gagmgwd3+jn9QDSqt4HH3PNMFxx67ds
-        re3iEz8FjOOo4IILh7RC2LQeyxGMypA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-362-5HhUcH77MxGnxjSdmOjeqg-1; Tue, 15 Mar 2022 11:15:57 -0400
-X-MC-Unique: 5HhUcH77MxGnxjSdmOjeqg-1
-Received: by mail-wr1-f70.google.com with SMTP id a5-20020adfdd05000000b001f023fe32ffso5382057wrm.18
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:15:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kyz2RUFrfzcWwytFdN8JKP5rzgj6KOwPxkBy/7oRIpU=;
-        b=QtIWRToIp85bA9SxJSBR3oyK+bEJuwl8gBqibcFTZw8vLvDXmNPB9X2kXyLJT9d2+X
-         MNtI9Bq0xiXzVYen31teqMJSmMRilz2JyPjD42nO3OheapsK1J28s11enCmtb8KOTzKy
-         tT1X8GhgfJL74D9oA1jFw86sa3wpq6SWL03tUGIrDthbDd6AkFEInvH11ZOkghCGkD6y
-         A0cCpEiUAuM2MMYBtKNLAK1bf8A6Si/4h/FFxec+a3Cx1rSiRltuaCGZL/sjGIJA0s+k
-         KuheVq/mfSrsdRKji2h7j0FfPnDS11YWcfigZlCgDlHDsL2UqJvGxmJGLW6qG50A41th
-         8HjA==
-X-Gm-Message-State: AOAM531TQbklhtE6yf91IYD1F5PHsOnpOSLidAFTJU5STXuk6z+VQQ2j
-        aWwGaegar/N35lMN/uMAT040Ca8ccV0AinbTXP+WcyHrfwTbwTzN4OkqXHuEKMONxnJWio52wIL
-        CXp+LakGYbghCXFpwaBt0o/Sz
-X-Received: by 2002:a05:6000:3c3:b0:203:6976:6942 with SMTP id b3-20020a05600003c300b0020369766942mr20348016wrg.584.1647357355931;
-        Tue, 15 Mar 2022 08:15:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJypmXByJXceCvTyDTeaeG4rtFjn8ylgA1heE6UhT+IFbX4r7V634CRa98A5VvIu9kER2FggTQ==
-X-Received: by 2002:a05:6000:3c3:b0:203:6976:6942 with SMTP id b3-20020a05600003c300b0020369766942mr20347991wrg.584.1647357355683;
-        Tue, 15 Mar 2022 08:15:55 -0700 (PDT)
-Received: from redhat.com ([2.53.2.35])
-        by smtp.gmail.com with ESMTPSA id ay24-20020a05600c1e1800b00389a420e1ecsm2498962wmb.37.2022.03.15.08.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 08:15:55 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 11:15:51 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
-        lingshan.zhu@intel.com, sgarzare@redhat.com,
-        xieyongji@bytedance.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
-Message-ID: <20220315111456-mutt-send-email-mst@kernel.org>
-References: <20220315124130.1710030-1-trix@redhat.com>
- <20220315092656-mutt-send-email-mst@kernel.org>
- <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
+        Tue, 15 Mar 2022 11:17:35 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65BD4E3BC;
+        Tue, 15 Mar 2022 08:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647357383; x=1678893383;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K/5VIbFRNZyUAomyRkJcvu1MFWQjXYbL+i+2czloWR4=;
+  b=SMD8zHgMZYwIBnj97DMhDOQ49ebbIw2s54El9kIsRjph3iksRhuODVHv
+   WGmQahLaicmYNjg0ievLMf0z8UZR8a1DAiBXymkvB6dfLPp4YM9S6/KVz
+   aQI7r8U0kJPGwzefClNDYe4//isha20CblcUhH4yVrviLWyNSvieJm78V
+   E=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 15 Mar 2022 08:16:23 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 08:16:21 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Mar 2022 08:16:21 -0700
+Received: from [10.216.59.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 15 Mar
+ 2022 08:16:15 -0700
+Message-ID: <35e43f3a-8d48-5c2a-b5f6-9220cead7ff0@quicinc.com>
+Date:   Tue, 15 Mar 2022 20:46:11 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v10 4/7] pinctrl: qcom: Update lpi pin group structure
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <quic_plai@quicinc.com>,
+        <bgoswami@codeaurora.org>, <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1646737394-4740-1-git-send-email-quic_srivasam@quicinc.com>
+ <1646737394-4740-5-git-send-email-quic_srivasam@quicinc.com>
+ <YieYr00MRUfeSE1B@ripper>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YieYr00MRUfeSE1B@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 08:03:26AM -0700, Tom Rix wrote:
-> 
-> On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
-> > On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
-> > > From: Tom Rix <trix@redhat.com>
-> > > 
-> > > Clang static analysis reports this issue
-> > > ifcvf_main.c:49:4: warning: Called function
-> > >    pointer is null (null dereference)
-> > >    vf->vring->cb.callback(vring->cb.private);
-> > >    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > The check
-> > >    vring = &vf->vring[i];
-> > >    if (vring->cb.callback)
-> > > 
-> > > Does not match the use.  Change dereference so they match.
-> > > 
-> > > Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
-> > Thanks a lot! I squashed this into the offending patch - no point in
-> > breaking bisect. Pushed to linux. However I'm now
-> > having second thoughts about applying that patchset - I'd like
-> > soma analysis explaining how this got through testing.
-> 
-> static analysis is something i do treewide.
-> 
-> There are currently ~2500 issues in linux-next, do not panic! many are false
-> positives.
-> 
-> It is pretty easy to setup and once you have a baseline you can filter only
-> your files.
-> 
-> Tom
 
-Thanks for that info! I was actually directing this question to the
-contributor since the code does not look like it could have ever
-worked. I don't have the hardware in question myself.
-
-
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > >   drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
-> > > index 3b48e717e89f7..4366320fb68d3 100644
-> > > --- a/drivers/vdpa/ifcvf/ifcvf_main.c
-> > > +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
-> > > @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
-> > >   	for (i = 0; i < vf->nr_vring; i++) {
-> > >   		vring = &vf->vring[i];
-> > >   		if (vring->cb.callback)
-> > > -			vf->vring->cb.callback(vring->cb.private);
-> > > +			vring->cb.callback(vring->cb.private);
-> > >   	}
-> > >   	return IRQ_HANDLED;
-> > > -- 
-> > > 2.26.3
-
+On 3/8/2022 11:25 PM, Bjorn Andersson wrote:
+Thanks for Your Time Bjorn!!!
+> On Tue 08 Mar 03:03 PST 2022, Srinivasa Rao Mandadapu wrote:
+>
+>> Update lpi group structure with core group_desc structure
+>> to avoid redundant struct params.
+>>
+> This fails to express why you're doing that, please see below.
+>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   drivers/pinctrl/qcom/Kconfig             |  1 +
+>>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 44 +++++++++++++++-----------------
+>>   2 files changed, 22 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+>> index ca6f68a..31c4aa6 100644
+>> --- a/drivers/pinctrl/qcom/Kconfig
+>> +++ b/drivers/pinctrl/qcom/Kconfig
+>> @@ -351,6 +351,7 @@ config PINCTRL_LPASS_LPI
+>>   	select PINMUX
+>>   	select PINCONF
+>>   	select GENERIC_PINCONF
+>> +	select GENERIC_PINCTRL_GROUPS
+> This allow you to use struct group_desc, but what does that give you?
+>
+> I don't see a change where you're moving to use the common group_desc
+> helpers that the framework supplies. Without that this just replace 3
+> entries in struct lpi_pingroup with 4 entries in struct group_desc.
+>
+>
+> Change looks good, iff it's followed by a transition to replace the
+> driver's custom functions with pinctrl_generic_get_group_*().
+>
+> Regards,
+> Bjorn
+Okay. Will change and re send the patch set.
+>
+>>   	depends on GPIOLIB
+>>   	help
+>>   	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+>> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+>> index 3c15f80..54750ba 100644
+>> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+>> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+>> @@ -51,11 +51,11 @@
+>>   
+>>   #define LPI_PINGROUP(id, soff, f1, f2, f3, f4)		\
+>>   	{						\
+>> -		.name = "gpio" #id,			\
+>> -		.pins = gpio##id##_pins,		\
+>> +		.group.name = "gpio" #id,			\
+>> +		.group.pins = gpio##id##_pins,		\
+>>   		.pin = id,				\
+>>   		.slew_offset = soff,			\
+>> -		.npins = ARRAY_SIZE(gpio##id##_pins),	\
+>> +		.group.num_pins = ARRAY_SIZE(gpio##id##_pins),	\
+>>   		.funcs = (int[]){			\
+>>   			LPI_MUX_gpio,			\
+>>   			LPI_MUX_##f1,			\
+>> @@ -67,9 +67,7 @@
+>>   	}
+>>   
+>>   struct lpi_pingroup {
+>> -	const char *name;
+>> -	const unsigned int *pins;
+>> -	unsigned int npins;
+>> +	struct group_desc group;
+>>   	unsigned int pin;
+>>   	/* Bit offset in slew register for SoundWire pins only */
+>>   	int slew_offset;
+>> @@ -150,20 +148,20 @@ enum sm8250_lpi_functions {
+>>   	LPI_MUX__,
+>>   };
+>>   
+>> -static const unsigned int gpio0_pins[] = { 0 };
+>> -static const unsigned int gpio1_pins[] = { 1 };
+>> -static const unsigned int gpio2_pins[] = { 2 };
+>> -static const unsigned int gpio3_pins[] = { 3 };
+>> -static const unsigned int gpio4_pins[] = { 4 };
+>> -static const unsigned int gpio5_pins[] = { 5 };
+>> -static const unsigned int gpio6_pins[] = { 6 };
+>> -static const unsigned int gpio7_pins[] = { 7 };
+>> -static const unsigned int gpio8_pins[] = { 8 };
+>> -static const unsigned int gpio9_pins[] = { 9 };
+>> -static const unsigned int gpio10_pins[] = { 10 };
+>> -static const unsigned int gpio11_pins[] = { 11 };
+>> -static const unsigned int gpio12_pins[] = { 12 };
+>> -static const unsigned int gpio13_pins[] = { 13 };
+>> +static int gpio0_pins[] = { 0 };
+>> +static int gpio1_pins[] = { 1 };
+>> +static int gpio2_pins[] = { 2 };
+>> +static int gpio3_pins[] = { 3 };
+>> +static int gpio4_pins[] = { 4 };
+>> +static int gpio5_pins[] = { 5 };
+>> +static int gpio6_pins[] = { 6 };
+>> +static int gpio7_pins[] = { 7 };
+>> +static int gpio8_pins[] = { 8 };
+>> +static int gpio9_pins[] = { 9 };
+>> +static int gpio10_pins[] = { 10 };
+>> +static int gpio11_pins[] = { 11 };
+>> +static int gpio12_pins[] = { 12 };
+>> +static int gpio13_pins[] = { 13 };
+>>   static const char * const swr_tx_clk_groups[] = { "gpio0" };
+>>   static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio5" };
+>>   static const char * const swr_rx_clk_groups[] = { "gpio3" };
+>> @@ -262,7 +260,7 @@ static const char *lpi_gpio_get_group_name(struct pinctrl_dev *pctldev,
+>>   {
+>>   	struct lpi_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+>>   
+>> -	return pctrl->data->groups[group].name;
+>> +	return pctrl->data->groups[group].group.name;
+>>   }
+>>   
+>>   static int lpi_gpio_get_group_pins(struct pinctrl_dev *pctldev,
+>> @@ -272,8 +270,8 @@ static int lpi_gpio_get_group_pins(struct pinctrl_dev *pctldev,
+>>   {
+>>   	struct lpi_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+>>   
+>> -	*pins = pctrl->data->groups[group].pins;
+>> -	*num_pins = pctrl->data->groups[group].npins;
+>> +	*pins = pctrl->data->groups[group].group.pins;
+>> +	*num_pins = pctrl->data->groups[group].group.num_pins;
+>>   
+>>   	return 0;
+>>   }
+>> -- 
+>> 2.7.4
+>>

@@ -2,50 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7524D96BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3328E4D96C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346222AbiCOIwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S1346153AbiCOIyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346214AbiCOIwK (ORCPT
+        with ESMTP id S242340AbiCOIyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:52:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587714D623;
-        Tue, 15 Mar 2022 01:50:58 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id E767D1F43189
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647334257;
-        bh=lopgVZP2WwtNXTEKFbRsbX8u2BD4qu5zhX66pLhAQoc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PkE4HH0M9WpZsbl2G9hpbgem8WqAwHX0e0j+R/9QnERZEsrZkJ0CHIeCJ1c+I3USY
-         /sB8O96aVWWAQhD63I5eXuy400SV8hU6zKzH+izf/dFTJJ+4Bb+3dw5KKkKXuBzvEP
-         oKzmCohsjowrSVW+n14iKWHoHU/J1LjGxQBIYbd/+xottpyFQP6H9sglUKA5q576lT
-         XqyElvHZ5Uot4r0YMauk749De6p6jFK8ozuPydlAdkpBo9XL/1DNwlTqEdbaiP7nLx
-         QtHak9M2c/zh2gft0HSDHPV6AJHZg+kV+0PnSDgdRhkyaF96p0R0QU4BESHqSflD7N
-         CmpP8afJlQhgw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        usama.anjum@collabora.com, kernel@collabora.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Date:   Tue, 15 Mar 2022 13:50:12 +0500
-Message-Id: <20220315085014.1047291-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220315085014.1047291-1-usama.anjum@collabora.com>
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
+        Tue, 15 Mar 2022 04:54:16 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA8B2701;
+        Tue, 15 Mar 2022 01:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647334385; x=1678870385;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hFmat0lmKJuvGjhTkHmi7yYiJqs/NBeQLcu+ammmDLU=;
+  b=BjxTrttxNs3AFyOvsbjkLiOvzY3Ao3VdH53pSiA4QDh2MmPaRzms2YyS
+   GO0Db6H5Yo65WzReBVi21wE0EN09bdCfWYzqBVLTqKGz7DlyXJ/Y4Uub4
+   Z+oAWhHjWUH3//W1T/Zyqpw2hs+A551u1Zw9c1HcPPyyLq4/oyFL3sSaO
+   k=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Mar 2022 01:53:05 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 01:53:04 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 15 Mar 2022 01:53:04 -0700
+Received: from [10.253.9.165] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 15 Mar
+ 2022 01:53:01 -0700
+Message-ID: <0ef5aa68-fc1c-6f0b-a1cb-46c5548952db@quicinc.com>
+Date:   Tue, 15 Mar 2022 16:52:58 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3] coresight: core: Fix coresight device probe failure
+ issue
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Tingwei Zhang" <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20220309142206.15632-1-quic_jinlmao@quicinc.com>
+ <a1790ad9-b5e0-9a00-debc-fc8ef2c757cb@arm.com>
+ <9cbb2e86-640f-4b5d-22ff-00c63a1b9743@quicinc.com>
+ <99845680-c2a5-2538-a57c-6fbf395faa8b@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <99845680-c2a5-2538-a57c-6fbf395faa8b@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,270 +79,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Krisman Bertazi <krisman@collabora.com>
 
-This introduces three tests:
-1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
-check if the SD bit is flipped.
-2) Check VMA reuse: validate the VM_SOFTDIRTY usage
-3) Check soft-dirty on huge pages
+On 3/15/2022 4:42 PM, Suzuki K Poulose wrote:
+> On 15/03/2022 08:36, Jinlong Mao wrote:
+>> On 3/10/2022 5:10 PM, Suzuki K Poulose wrote:
+>>> Hi Jinlong
+>>>
+>>>
+>>> On 09/03/2022 14:22, Mao Jinlong wrote:
+>>>> It is possibe that probe failure issue happens when the device
+>>>> and its child_device's probe happens at the same time.
+>>>> In coresight_make_links, has_conns_grp is true for parent, but
+>>>> has_conns_grp is false for child device as has_conns_grp is set
+>>>> to true in coresight_create_conns_sysfs_group. The probe of parent
+>>>> device will fail at this condition. Add has_conns_grp check for
+>>>> child device before make the links and make the process from
+>>>> device_register to connection_create be atomic to avoid this
+>>>> probe failure issue.
+>>>>
+>>>> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+>>>> Suggested-by: Mike Leach <mike.leach@linaro.org>
+>>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>>>
+>>> Thanks for the rework. The patch looks good to me.
+>>>
+>>> Suzuki
+>> Thanks Suzuki.
+>>
+>> Hi Mathieu & Mike,
+>>
+>> Could you please help to review and provide your comments for the 
+>> PATCH V3 ?
+>
+> Thats what I just said above. The patch looks good to me, I can queue
+> this in the next cycle.
 
-This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
-Invalidate TLB after clearing soft-dirty page state"). I was tracking the
-same issue that he fixed, and this test would have caught it.
+Thanks Suzuki.
 
-CC: Will Deacon <will@kernel.org>
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-V3 of this patch is in Andrew's tree. Please drop that.
-
-Changes in V4:
-Cosmetic changes
-Removed global variables
-Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
-once
-Some other minor changes
-Correct the authorship of the patch
-
-Tests of soft dirty bit in this patch and in madv_populate.c are
-non-overlapping. madv_populate.c has only one soft-dirty bit test in the
-context of different advise (MADV_POPULATE_READ and
-MADV_POPULATE_WRITE). This new test adds more tests.
-
-Tab width of 8 has been used to align the macros. This alignment may look
-odd in shell or email. But it looks alright in editors.
-
-Test output:
-TAP version 13
-1..5
-ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 Test test_hugepage huge page allocation
-ok 5 Test test_hugepage huge page dirty bit
- # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Or
-
-TAP version 13
-1..5
-ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 # SKIP Test test_hugepage huge page allocation
-ok 5 # SKIP Test test_hugepage huge page dirty bit
- # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
-
-Changes in V3:
-Move test to selftests/vm
-Use kselftest macros
-Minor updates to make code more maintainable
-Add configurations in config file
-
-V2 of this patch:
-https://lore.kernel.org/lkml/20210603151518.2437813-1-krisman@collabora.com/
----
- tools/testing/selftests/vm/.gitignore   |   1 +
- tools/testing/selftests/vm/Makefile     |   2 +
- tools/testing/selftests/vm/config       |   2 +
- tools/testing/selftests/vm/soft-dirty.c | 146 ++++++++++++++++++++++++
- 4 files changed, 151 insertions(+)
- create mode 100644 tools/testing/selftests/vm/soft-dirty.c
-
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index d7507f3c7c76a..3cb4fa771ec2a 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -29,5 +29,6 @@ write_to_hugetlbfs
- hmm-tests
- memfd_secret
- local_config.*
-+soft-dirty
- split_huge_page_test
- ksm_tests
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 4e68edb26d6b6..f25eb30b5f0cb 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -47,6 +47,7 @@ TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
-+TEST_GEN_PROGS += soft-dirty
- TEST_GEN_PROGS += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
- 
-@@ -92,6 +93,7 @@ KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- $(OUTPUT)/madv_populate: vm_util.c
-+$(OUTPUT)/soft-dirty: vm_util.c
- $(OUTPUT)/split_huge_page_test: vm_util.c
- 
- ifeq ($(MACHINE),x86_64)
-diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
-index 60e82da0de850..be087c4bc3961 100644
---- a/tools/testing/selftests/vm/config
-+++ b/tools/testing/selftests/vm/config
-@@ -4,3 +4,5 @@ CONFIG_TEST_VMALLOC=m
- CONFIG_DEVICE_PRIVATE=y
- CONFIG_TEST_HMM=m
- CONFIG_GUP_TEST=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_MEM_SOFT_DIRTY=y
-diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
-new file mode 100644
-index 0000000000000..2d50ed3472206
---- /dev/null
-+++ b/tools/testing/selftests/vm/soft-dirty.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdbool.h>
-+#include <fcntl.h>
-+#include <stdint.h>
-+#include <malloc.h>
-+#include <sys/mman.h>
-+#include "../kselftest.h"
-+#include "vm_util.h"
-+
-+#define PAGEMAP			"/proc/self/pagemap"
-+#define CLEAR_REFS		"/proc/self/clear_refs"
-+#define MAX_LINE_LENGTH		512
-+#define TEST_ITERATIONS		10000
-+
-+static void test_simple(int pagemap_fd, int pagesize)
-+{
-+	int i;
-+	char *map;
-+
-+	map = aligned_alloc(pagesize, pagesize);
-+	if (!map)
-+		ksft_exit_fail_msg("mmap failed\n");
-+
-+	clear_softdirty();
-+
-+	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-+		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-+			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		clear_softdirty();
-+		map[0]++;
-+
-+		if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-+			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		clear_softdirty();
-+	}
-+	free(map);
-+
-+	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-+}
-+
-+static void test_vma_reuse(int pagemap_fd, int pagesize)
-+{
-+	char *map, *map2;
-+
-+	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed");
-+
-+	clear_softdirty();
-+
-+	/* Write to the page before unmapping and map the same size region again to check
-+	 * if same memory region is gotten next time and if dirty bit is preserved across
-+	 * this type of allocations.
-+	 */
-+	map[0]++;
-+
-+	munmap(map, pagesize);
-+
-+	map2 = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-+	if (map2 == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed");
-+
-+	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
-+
-+	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) != 0,
-+			 "Test %s dirty bit of previous page\n", __func__);
-+
-+	munmap(map2, pagesize);
-+}
-+
-+static void test_hugepage(int pagemap_fd, int pagesize)
-+{
-+	char *map;
-+	int i, ret;
-+	size_t hpage_len = read_pmd_pagesize();
-+
-+	map = memalign(hpage_len, hpage_len);
-+	if (!map)
-+		ksft_exit_fail_msg("memalign failed\n");
-+
-+	ret = madvise(map, hpage_len, MADV_HUGEPAGE);
-+	if (ret)
-+		ksft_exit_fail_msg("madvise failed %d\n", ret);
-+
-+	for (i = 0; i < hpage_len; i++)
-+		map[i] = (char)i;
-+
-+	if (check_huge(map)) {
-+		ksft_test_result_pass("Test %s huge page allocation\n", __func__);
-+
-+		clear_softdirty();
-+		for (i = 0 ; i < TEST_ITERATIONS ; i++) {
-+			if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-+				ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-+				break;
-+			}
-+
-+			clear_softdirty();
-+			map[0]++;
-+
-+			if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-+				ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-+				break;
-+			}
-+			clear_softdirty();
-+		}
-+
-+		ksft_test_result(i == TEST_ITERATIONS, "Test %s huge page dirty bit\n", __func__);
-+	} else {
-+		// hugepage allocation failed. skip these tests
-+		ksft_test_result_skip("Test %s huge page allocation\n", __func__);
-+		ksft_test_result_skip("Test %s huge page dirty bit\n", __func__);
-+	}
-+	free(map);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int pagemap_fd;
-+	int pagesize;
-+
-+	ksft_print_header();
-+	ksft_set_plan(5);
-+
-+	pagemap_fd = open(PAGEMAP, O_RDONLY);
-+	if (pagemap_fd < 0)
-+		ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP);
-+
-+	pagesize = getpagesize();
-+
-+	test_simple(pagemap_fd, pagesize);
-+	test_vma_reuse(pagemap_fd, pagesize);
-+	test_hugepage(pagemap_fd, pagesize);
-+
-+	close(pagemap_fd);
-+
-+	return ksft_exit_pass();
-+}
--- 
-2.30.2
-
+Best Regards
+Jinlong Mao
+>
+> Kind regards
+> Suzuki
+>
+>>
+>> Thanks
+>> Jinlong Mao
+>

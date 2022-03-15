@@ -2,114 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033D44D9B22
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE2A4D9B2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348243AbiCOM1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S1348211AbiCOM3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348238AbiCOM1H (ORCPT
+        with ESMTP id S1348271AbiCOM3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:27:07 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F05532E0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:25:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V7I11eB_1647347151;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V7I11eB_1647347151)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 15 Mar 2022 20:25:53 +0800
-Date:   Tue, 15 Mar 2022 20:25:51 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Huang Jianan <jnhuang95@gmail.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        linux-erofs@lists.ozlabs.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] fs: erofs: remember if kobject_init_and_add was done
-Message-ID: <YjCFz1dxVJZnF3M/@B-P7TQMD6M-0146.local>
-References: <20220315075152.63789-1-dzm91@hust.edu.cn>
- <bca8f865-bc3e-44d7-7298-c2c7e8973580@gmail.com>
- <YjBwtqsEOZ5JbqvS@B-P7TQMD6M-0146.local>
- <8d832e7a-c8da-d2fa-571a-ea150b8deb1b@gmail.com>
- <CAD-N9QX2cajf0LXKcOji_Em26-0bw9wfhx7KDV_TLDWhgQ90hQ@mail.gmail.com>
+        Tue, 15 Mar 2022 08:29:01 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEABFEA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:27:48 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id s29so11291341lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AsA+Yh6Q1RmMXptMpCMPYPdPP7vKeigdTvuyokvMeVc=;
+        b=Em9Qk7CXYoY7kJ/x5MIbAzFv/MQ57GerniOmbIZANfrMlNCKWIregHTG8SP4ZgX7IG
+         uJZ99qnwkg0DMqtfbn0Sj/l54mHyq7so0cllYsVxIXuo/SrV4EMEsPqMM+kI1TnbGrv8
+         Si8P04B8WhgV8lHflb39DGw9dML5avysP83Ooata737y5di7fB5rz7l6mL3RKTDMxp3I
+         kpqtPotVV3spCSm2WtP9oOsp3adhFKSfWApKc9oYLuo09cKLXkUt1tAZ1SpSxN6Csjo/
+         CC4vpWL6pUQ/Pt0rAsZgEnBXb4oiwRNcJRj9tHjZ9XNmOxx5slEokIG32v45dIRcNJnu
+         PIww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AsA+Yh6Q1RmMXptMpCMPYPdPP7vKeigdTvuyokvMeVc=;
+        b=W1HM58naz5RpeoaxV6VEbLuVMPTrT8L65SR+3n4Wr3rmqDFd5hQ1zDJLSO/PeE7oo/
+         HHJticOMgDj32Vn0lqNnwyyAvFRYszbO4i0rSS69wX7jQNOPLyIDotzXcBywZmHc1TNC
+         Olt/ltr6juLVRYM2iHr9j+aqNcNBdWmX7ARd6BO5gq4pik9Fsltmm96WmZ7O/NMsrJqc
+         hwdBOWwvJtprqd7v120uhx6PHUSmIDy3fe1HHBtgdyJ0cznQ3gocGPPVVvOiY6924k9V
+         p7TWRUZrx82jrFzpjwKcmGhU7t2XgCKQ3OqLfTWOHz7gtJDUG0aTA4lNCL6QwrE5YbLT
+         HlJA==
+X-Gm-Message-State: AOAM532DPIH6Ysuvccq5C4Mn1CzHp8VI9aRFhdb1F7AjsOYmyvqE1hsF
+        1lc5LSPbR3/wBsblLFoof/nEmzlhGs2wJmj5/mUdJQ==
+X-Google-Smtp-Source: ABdhPJwxVWuJkU2Vdp6g6fEM88LdXyiqS980jZq2aSertEju4rKA5wTfDZX/Ssb/jhYjtQ2num4y7Pzb1S633PkhjTk=
+X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
+ z14-20020a056512308e00b0044838266d68mr15642859lfd.184.1647347266932; Tue, 15
+ Mar 2022 05:27:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD-N9QX2cajf0LXKcOji_Em26-0bw9wfhx7KDV_TLDWhgQ90hQ@mail.gmail.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220310125636.1.I484f4ee35609f78b932bd50feed639c29e64997e@changeid>
+ <50d4b87c-003f-818a-c8ba-a3bac9c0f171@intel.com> <CA+ASDXO8-wmEDPxUrO6j9wBvCMzTZMpTyH7adSga8dYLNq5ehg@mail.gmail.com>
+In-Reply-To: <CA+ASDXO8-wmEDPxUrO6j9wBvCMzTZMpTyH7adSga8dYLNq5ehg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 15 Mar 2022 13:27:10 +0100
+Message-ID: <CAPDyKFoQfr3W45vWY4SnTeBG7=z3J749=WBGNtEgujvXAqAn0Q@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: Set HS clock speed before sending HS CMD13
+To:     Brian Norris <briannorris@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dongliang,
++ Heiner
 
-On Tue, Mar 15, 2022 at 07:59:26PM +0800, Dongliang Mu wrote:
-> On Tue, Mar 15, 2022 at 7:05 PM Huang Jianan <jnhuang95@gmail.com> wrote:
+On Tue, 15 Mar 2022 at 00:11, Brian Norris <briannorris@chromium.org> wrote:
+>
+> On Mon, Mar 14, 2022 at 6:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 > >
-> > 在 2022/3/15 18:55, Gao Xiang 写道:
-> > > On Tue, Mar 15, 2022 at 06:43:01PM +0800, Huang Jianan wrote:
-> > >> 在 2022/3/15 15:51, Dongliang Mu 写道:
-> > >>> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> > >>>
-> > >>> Syzkaller hit 'WARNING: kobject bug in erofs_unregister_sysfs'. This bug
-> > >>> is triggered by injecting fault in kobject_init_and_add of
-> > >>> erofs_unregister_sysfs.
-> > >>>
-> > >>> Fix this by remembering if kobject_init_and_add is successful.
-> > >>>
-> > >>> Note that I've tested the patch and the crash does not occur any more.
-> > >>>
-> > >>> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> > >>> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > >>> ---
-> > >>>    fs/erofs/internal.h | 1 +
-> > >>>    fs/erofs/sysfs.c    | 9 ++++++---
-> > >>>    2 files changed, 7 insertions(+), 3 deletions(-)
-> > >>>
-> > >>> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> > >>> index 5aa2cf2c2f80..9e20665e3f68 100644
-> > >>> --- a/fs/erofs/internal.h
-> > >>> +++ b/fs/erofs/internal.h
-> > >>> @@ -144,6 +144,7 @@ struct erofs_sb_info {
-> > >>>     u32 feature_incompat;
-> > >>>     /* sysfs support */
-> > >>> +   bool s_sysfs_inited;
-> > >> Hi Dongliang,
-> > >>
-> > >> How about using sbi->s_kobj.state_in_sysfs to avoid adding a extra member in
-> > >> sbi ?
-> > > Ok, I have no tendency of these (I'm fine with either ways).
-> > > I've seen some usage like:
+> > On 10.3.2022 22.56, Brian Norris wrote:
+> > > Way back in commit 4f25580fb84d ("mmc: core: changes frequency to
+> > > hs_max_dtr when selecting hs400es"), Rockchip engineers noticed that
+> > > some eMMC don't respond to SEND_STATUS commands very reliably if they're
+> > > still running at a low initial frequency. As mentioned in that commit,
+> > > JESD84-B51 P49 suggests a sequence in which the host:
+> > > 1. sets HS_TIMING
+> > > 2. bumps the clock ("<= 52 MHz")
+> > > 3. sends further commands
 > > >
-> > > static inline int device_is_registered(struct device *dev)
-> > > {
-> > >          return dev->kobj.state_in_sysfs;
-> > > }
+> > > It doesn't exactly require that we don't use a lower-than-52MHz
+> > > frequency, but in practice, these eMMC don't like it.
 > > >
-> > > But I'm still not sure if we need to rely on such internal
-> > > interface.. More thoughts?
+> > > Anyway, the aforementioned commit got that right for HS400ES, but the
+> > > refactoring in 53e60650f74e ("mmc: core: Allow CMD13 polling when
+> > > switching to HS mode for mmc") messed that back up again, by reordering
+> > > step 2 after step 3.
 > >
-> > Yeah... It seems that it is better to use some of the interfaces
-> > provided by kobject,
-> > otherwise we should still maintain this state in sbi.
+> > That description might not be accurate.
+>
+> I've been struggling to track where things were working, where things
+> were broken, and what/why Shawn's original fix was, precisely. So you
+> may be correct in many ways :) Thanks for looking.
+>
+> > It looks like 4f25580fb84d did not have the intended effect because
+> > CMD13 was already being sent by mmc_select_hs(), still before increasing
+> > the frequency.  53e60650f74e just kept that behaviour.
+>
+> You may be partially right, or fully right. But anyway, I think I have
+> some additional explanation, now that you've pointed that out: that
+> behavior changed a bit in this commit:
+>
+> 08573eaf1a70 mmc: mmc: do not use CMD13 to get status after speed mode switch
+>
+> While that patch was merged in July 2016 and Shawn submitted his v1
+> fix in September, there's a very good chance that a lot of his work
+> was actually done via backports, and even if not, he may not have been
+> testing precisely the latest -next kernel when submitting. So his fix
+> may have worked out for _some_ near-upstream kernel he was testing in
+> 2016, you may be correct that it didn't really work in the state it
+> was committed to git history.
+>
+> This may also further explain why my attempts at bisection were rather
+> fruitless (notwithstanding the difficulties in getting RK3399 running
+> on that old of a kernel).
+>
+> Anyway, I'll see if I can improve the messaging if/when a v2 comes around.
+>
+> > > --- a/drivers/mmc/core/mmc.c
+> > > +++ b/drivers/mmc/core/mmc.c
+> ...
+> > > @@ -1487,6 +1492,12 @@ static int mmc_select_hs200(struct mmc_card *card)
+> > >               old_timing = host->ios.timing;
+> > >               mmc_set_timing(host, MMC_TIMING_MMC_HS200);
+> > >
+> > > +             /*
+> > > +              * Bump to HS frequency. Some cards don't handle SEND_STATUS
+> > > +              * reliably at the initial frequency.
+> > > +              */
+> > > +             mmc_set_clock(host, card->ext_csd.hs_max_dtr);
 > >
-> 
-> I am fine with either way. Let me know if you reach to an agreement.
+> > Is card->ext_csd.hs_max_dtr better than card->ext_csd.hs200_max_dtr here?
+>
+> I believe either worked in practice. I ended up choosing hs_max_dtr
+> because it's lower and presumably safer. But frankly, I don't know
+> what the Right thing to do is here, since the spec just talks about
+> "<=", and yet f_init (which is also "<=") does not work. I think it
+> might be like Ulf was guessing way back in the first place [1], and
+> the key is that there is *some* increase (i.e., not using f_init).
+>
+> So assuming either works, would you prefer hs200_max_dtr here, since
+> that does seem like the appropriate final rate?
 
-If you have time, would you mind sending another patch by using
-state_in_sysfs? I'd like to know Chao's perference later, and
-apply one of them...
+I think that makes most sense, as we are switching to that rate anyway
+just a few cycles later in mmc_select_timing(), when it calls
+mmc_set_bus_speed().
 
-Thanks,
-Gao Xiang
+That said, I have recently queued a patch that improves the
+speed-mode-selection-fallback, when switching to HS200 mode fails [2].
+We need to make sure this part still works as expected. I have looped
+in Heiner who has been in the loop around this change, hopefully he
+can help with further testing or so. Maybe $subject patch (or a new
+version of it) can even make HS200 to work on Heiner's platform!?
 
+>
+> Brian
+>
+> [1] https://lore.kernel.org/all/CAPDyKFrNp=Y3BhVE_kxtggv7Qc6m=2kef2U8Dn2Bb3ANHPYV-Q@mail.gmail.com/
+> Re: [PATCH 3/5] mmc: core: changes frequency to hs_max_dtr when
+> selecting hs400es
+
+Kind regards
+Uffe
+
+[2]
+https://patchwork.kernel.org/project/linux-mmc/patch/20220303164522.129583-1-ulf.hansson@linaro.org/

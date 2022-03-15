@@ -2,89 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA434D9E60
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A495D4D9E62
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 16:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245416AbiCOPM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 11:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
+        id S1348288AbiCOPNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 11:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234857AbiCOPM0 (ORCPT
+        with ESMTP id S234857AbiCOPNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 11:12:26 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE0D13F10;
-        Tue, 15 Mar 2022 08:11:14 -0700 (PDT)
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KHxdZ2s5nz67ww1;
-        Tue, 15 Mar 2022 23:09:22 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 15 Mar 2022 16:11:11 +0100
-Received: from [10.47.84.96] (10.47.84.96) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 15 Mar
- 2022 15:11:10 +0000
-Message-ID: <88ec9cac-f2ad-4728-6ce0-eb4358846463@huawei.com>
-Date:   Tue, 15 Mar 2022 15:11:09 +0000
+        Tue, 15 Mar 2022 11:13:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFC113F10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 08:11:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D86DB81731
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5003C340E8;
+        Tue, 15 Mar 2022 15:11:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647357112;
+        bh=tmAYCIaKsF0LUd/bmZ182eQrbvS+ccIG9Pcjgkbdn9s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=RvIKUhyU5dVPz0CZVC34DyE5eEP6wJS7GQ2CftzkIgKqU94K8hfp8HUO62kJTfG0s
+         qvAyAjjefh9gyqz1EUITEidFBUsSynD7icsMGHaE5GehLv5dOFC6LZyfXfS0bkk+Fc
+         rFB+v0oNM4hKDHs4r6zC7B+hS2dhzJma434yiW1h4FIapkQtMVsxUEMg0XbrSO7gxw
+         MGlfDYCrCQzZfmrQ5zM3eQDn7sPd3E5LLUkuCLfBwVlrWAO/sW+NwQx7+fJ6sUgAQ0
+         5GNNzCSP4lY3dzct2thsWaFA38Ho6WBV9gnyYJST972ggUPtnRLvaf4N4+i+LCvo9N
+         P5g2t0AdszODg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 795E95C417C; Tue, 15 Mar 2022 08:11:52 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 08:11:52 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Marco Elver <elver@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 2/3] preempt/dynamic: Introduce preempt mode accessors
+Message-ID: <20220315151152.GC4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220314133738.269522-1-frederic@kernel.org>
+ <20220314133738.269522-3-frederic@kernel.org>
+ <CANpmjNPqY65ZYLFukgp779pHbiRH05yns+G7Z36QdWwrQp1WOQ@mail.gmail.com>
+ <20220315104817.GE8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/2] scsi: core: Fix sbitmap depth in
- scsi_realloc_sdev_budget_map()
-To:     Bart Van Assche <bvanassche@acm.org>,
-        <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <ming.lei@redhat.com>, <hch@lst.de>,
-        <hare@suse.de>
-CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <martin.wilck@suse.com>
-References: <1647340746-17600-1-git-send-email-john.garry@huawei.com>
- <1647340746-17600-2-git-send-email-john.garry@huawei.com>
- <51c2d9da-a0c5-8ae5-5c22-ceb56c7f5a27@acm.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <51c2d9da-a0c5-8ae5-5c22-ceb56c7f5a27@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.84.96]
-X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315104817.GE8939@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2022 14:33, Bart Van Assche wrote:
->> sbitmap sb_backup;
->> +    depth = min_t(unsigned int, depth, 
->> scsi_device_max_queue_depth(sdev));
->> +
->>       /*
->>        * realloc if new shift is calculated, which is caused by setting
->>        * up one new default queue depth after calling ->slave_configure
->> @@ -245,6 +247,9 @@ static int scsi_realloc_sdev_budget_map(struct 
->> scsi_device *sdev,
->>                   scsi_device_max_queue_depth(sdev),
->>                   new_shift, GFP_KERNEL,
->>                   sdev->request_queue->node, false, true);
->> +    if (!ret)
->> +        sbitmap_resize(&sdev->budget_map, depth);
+On Tue, Mar 15, 2022 at 11:48:17AM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 14, 2022 at 03:44:39PM +0100, Marco Elver wrote:
+> > https://lore.kernel.org/lkml/20211112185203.280040-3-valentin.schneider@arm.com/
+> > 
+> > Is it also possible to take all the rest of that series (all 4
+> > patches) from Valentin?
 > 
-> Hmm ... why to call both sbitmap_init_node() and sbitmap_resize() 
-> instead of combining both calls into a single call with the proper depth?
+> I'll go stick the remaining 3 patches from Valentin in sched/core, they
+> seem to still apply without issue.
 
-Hi Bart,
+If testing goes well, are you planning to push into the upcoming
+merge window?  (I won't be pushing until the v5.19 merge window at
+the earliest.)
 
-Is the user wants to change the queue depth later via sysfs we do not 
-reallocate the sbitmap then. So we need to ensure that the size we 
-reallocate here will satisfy the scsi device max depth. I'm referencing 
-scsi_change_queue_depth() for this.
+Either way, just please let me know!
 
-Thanks,
-John
+							Thanx, Paul

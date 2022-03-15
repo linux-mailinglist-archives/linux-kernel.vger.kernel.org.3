@@ -2,141 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384274DA648
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E39C4DA64A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 00:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352588AbiCOX31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 19:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        id S1352600AbiCOXb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 19:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352580AbiCOX3Z (ORCPT
+        with ESMTP id S236864AbiCOXbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 19:29:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F74EB1;
-        Tue, 15 Mar 2022 16:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDB58B81907;
-        Tue, 15 Mar 2022 23:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3330AC340E8;
-        Tue, 15 Mar 2022 23:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647386889;
-        bh=w4qPeeKhNFfdJV7sHtmG6UT0h4O4RKuIt/5uhl+ouyE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nn5tTFcotsvFb1w5oolIwiVRkLvh79sDlGTnDfrGmVmnvz0y4zU1fbQ+ObyAIV6iW
-         jQI3LXys3cr3+XlTBHdW7Ep2JuyFLgTyoPW8dpZK/BBhvU7ZFa65A44uAK75M9meA6
-         sGWPCyo/sLqANnpB7o1PtKuRlQzrLXQ6HSnxw0OZ2Chb8dxDcTuJvHw68Z4vtUdzVg
-         SUUPBSVGN8554JRoslz6I9jk6zQTJwU8KXVU+BFPwiqaYuotKaGIlUNS5p0KLf8VNv
-         cOLCogEGtqz4X6Ak0W9xbI96i92N/3tEmgztAWWdh6stsFcAdxLwqsLaNTROEBLJyu
-         Q85NbEaBxjI3g==
-Received: by pali.im (Postfix)
-        id 4BCA7824; Wed, 16 Mar 2022 00:28:06 +0100 (CET)
-Date:   Wed, 16 Mar 2022 00:28:06 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq2415x: Fix spelling mistake "vender" ->
- "vendor"
-Message-ID: <20220315232806.m4mwsdawyiafpc3d@pali>
-References: <20220315223700.2961660-1-colin.i.king@gmail.com>
- <20220315224645.ytcf7y7awc3q2y6j@pali>
- <5ea0e154-e06e-32b4-be86-f38ce07b8bec@gmail.com>
- <20220315230753.6xymu77uirjbnn3u@pali>
- <9e2ac011-72e8-977c-00c9-5fa862a4e5f6@gmail.com>
+        Tue, 15 Mar 2022 19:31:55 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782765DA56
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 16:30:42 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bu29so1137082lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 16:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=NyNPoKbL808w7OY7R26NhmVWgd4nJ+fEBE5S54TvM4Y=;
+        b=ClQlVsiqHu9L/Ayp4tl1EoPkxMAILRksImAfnZhFb3C/UfNi1t+Lgs4u0kzumA+VAO
+         xQ7g9CR/oFB1BeDNpg2mv5WdmhruMNsJ4V1qxZzlOySPl9mILwqRVkoXLByH+aZb8cPl
+         80/V3j5N3OhRDGYzJUqc/z1lUCn0J/uIo3mvf0pbm3SQjcMYqbQGYU5dyuFINidOGZvt
+         fcyL0/oXA54vp1qo61GWECXyFFXNqbyTAPKoumMU2Q/tEQOrZl0g2I42DvYKfs28iwuQ
+         6DeUaCtZvW7nZ8R6jzInhvBRdw40uU2rJH++zEp/GfX3I3N3OAiuvJEyxfdOpNWoSOKK
+         p+Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=NyNPoKbL808w7OY7R26NhmVWgd4nJ+fEBE5S54TvM4Y=;
+        b=P0oJ/tWDu8goYkgsGHpZwbeGQGHAAsFkYS+zTQKny59xs0aNIvyh+0xrtQd6oNElFO
+         PDdsxf+9/mMFzEZDDM6SIhVg64a086efz705/eDb/9rbHvGLsoZT4goUo5DX95N/r6+J
+         vT5MXKroibhKQoXmamyPizJwpW5blqwr/ca200Uhsk4AKVxb08FLPi1yjfRFjgBYqJmj
+         67GOoZ2W5hCwzK7TF4J+Yqqf3da9p75meVfeiqCOizH9fandDA5FS8763pKyzAx4eEHW
+         oz5VAlOfFdudHElftG3ouaKp0zXk6sye2ZF7icZ/dgSxZ3tFiDTVjDRztA9Om/tBHt5y
+         Za1Q==
+X-Gm-Message-State: AOAM533f3lg3Oer13wGDElx9k/e9di6ldrzDZ24fqb0wALMl1dD24ylb
+        1PC2SbBlBTLBWnrQIZeo1D2phw==
+X-Google-Smtp-Source: ABdhPJyc+AwfeDN6S+N36JN+QR1+D+RvkhYlnaRVzApgQ8yTVkgbC1T5pBA4MC4ppM2MzsE8BRJNpA==
+X-Received: by 2002:a05:6512:3741:b0:443:d5c1:404b with SMTP id a1-20020a056512374100b00443d5c1404bmr17561653lfs.565.1647387040798;
+        Tue, 15 Mar 2022 16:30:40 -0700 (PDT)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id 10-20020a2e080a000000b00247f82bbc6fsm35312lji.54.2022.03.15.16.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 16:30:40 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net-next] net: dsa: Never offload FDB entries on standalone ports
+Date:   Wed, 16 Mar 2022 00:30:33 +0100
+Message-Id: <20220315233033.1468071-1-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Organization: Westermo
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e2ac011-72e8-977c-00c9-5fa862a4e5f6@gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 15 March 2022 23:09:17 Colin King (gmail) wrote:
-> On 15/03/2022 23:07, Pali Rohár wrote:
-> > On Tuesday 15 March 2022 23:00:14 Colin King (gmail) wrote:
-> > > On 15/03/2022 22:46, Pali Rohár wrote:
-> > > > On Tuesday 15 March 2022 22:37:00 Colin Ian King wrote:
-> > > > > There are several spelling mistakes in comments, function names
-> > > > > and literal strings. Fix these.
-> > > > 
-> > > > I do not think that there are mistakes.
-> > > > 
-> > > > Please look at page 29 of the official bq24150 datasheet:
-> > > > https://www.ti.com/lit/ds/symlink/bq24150.pdf
-> > > 
-> > > Looks like TI are redefining the spelling in the language :-)
-> > 
-> > Well, that could be truth, or maybe it just means something different.
-> > It is about 10 years ago and I do not remember more details about it.
-> > Anyway, in any case register name is vender and kernel code should match
-> > official register naming for which driver was written...
-> 
-> I'm fine with that. Apologies for the noise.
+If a port joins a bridge that it can't offload, it will fallback to
+standalone mode and software bridging. In this case, we never want to
+offload any FDB entries to hardware either.
 
-I looked into dictionaries and word vender exists in Cambridge Dictionary:
-https://dictionary.cambridge.org/dictionary/english/vender
+Previously, for host addresses, we would eventually end up in
+dsa_port_bridge_host_fdb_add, which would unconditionally dereference
+dp->bridge and cause a segfault.
 
-Also some details about this word are available in Wiktionary:
-https://en.wiktionary.org/wiki/vender#English
+Fixes: c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+---
+ net/dsa/slave.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-And looking at more internet resources and discussions, it looks like
-that word vender is just older spelling in American English.
+diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+index f9cecda791d5..d24b6bf845c1 100644
+--- a/net/dsa/slave.c
++++ b/net/dsa/slave.c
+@@ -2847,6 +2847,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+ 	if (ctx && ctx != dp)
+ 		return 0;
+ 
++	if (!dp->bridge)
++		return 0;
++
+ 	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
+ 		if (dsa_port_offloads_bridge_port(dp, orig_dev))
+ 			return 0;
+-- 
+2.25.1
 
-But I really do not know, I'm not native speaker.
-
-> > 
-> > > > 
-> > > > > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> > > > > ---
-> > > > >    drivers/power/supply/bq2415x_charger.c | 10 +++++-----
-> > > > >    1 file changed, 5 insertions(+), 5 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
-> > > > > index 5724001e66b9..b35700071966 100644
-> > > > > --- a/drivers/power/supply/bq2415x_charger.c
-> > > > > +++ b/drivers/power/supply/bq2415x_charger.c
-> > > > > @@ -71,7 +71,7 @@
-> > > > >    #define BQ2415X_BIT_OTG_PL		1
-> > > > >    #define BQ2415X_BIT_OTG_EN		0
-> > > > > -/* vender register */
-> > > > > +/* vendor register */
-> > > > >    #define BQ2415X_MASK_VENDER		(BIT(5)|BIT(6)|BIT(7))
-> > > > >    #define BQ2415X_SHIFT_VENDER		5
-> > > > >    #define BQ2415X_MASK_PN			(BIT(3)|BIT(4))
-> > > > > @@ -491,8 +491,8 @@ static int bq2415x_detect_revision(struct bq2415x_device *bq)
-> > > > >    	return -1;
-> > > > >    }
-> > > > > -/* return chip vender code */
-> > > > > -static int bq2415x_get_vender_code(struct bq2415x_device *bq)
-> > > > > +/* return chip vendor code */
-> > > > > +static int bq2415x_get_vendor_code(struct bq2415x_device *bq)
-> > > > >    {
-> > > > >    	int ret;
-> > > > > @@ -1501,9 +1501,9 @@ static int bq2415x_power_supply_init(struct bq2415x_device *bq)
-> > > > >    		sprintf(revstr, "1.%d", ret);
-> > > > >    	bq->model = kasprintf(GFP_KERNEL,
-> > > > > -				"chip %s, revision %s, vender code %.3d",
-> > > > > +				"chip %s, revision %s, vendor code %.3d",
-> > > > >    				bq2415x_chip_name[chip], revstr,
-> > > > > -				bq2415x_get_vender_code(bq));
-> > > > > +				bq2415x_get_vendor_code(bq));
-> > > > >    	if (!bq->model) {
-> > > > >    		dev_err(bq->dev, "failed to allocate model name\n");
-> > > > >    		return -ENOMEM;
-> > > > > -- 
-> > > > > 2.35.1
-> > > > > 
-> > > 
-> 

@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151BF4DA364
+	by mail.lfdr.de (Postfix) with ESMTP id CFD194DA366
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351415AbiCOTkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S1351432AbiCOTk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351387AbiCOTkT (ORCPT
+        with ESMTP id S1351407AbiCOTkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:40:19 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE72D27B03;
-        Tue, 15 Mar 2022 12:39:06 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id eq14so321945qvb.3;
-        Tue, 15 Mar 2022 12:39:06 -0700 (PDT)
+        Tue, 15 Mar 2022 15:40:20 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEC727FF6;
+        Tue, 15 Mar 2022 12:39:07 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 13so299447qvq.8;
+        Tue, 15 Mar 2022 12:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KBxpEzoITwpU6kRtLWtpxV0a9ktQzPhWaCO/U0K4p2c=;
-        b=XdzVQlWtFuwhv2KKVJvudG1KFS1VEslxYAFcjhLcAc061BST9gME1NKzu4mGfSvDuW
-         8n1l1sWbJhRlhZRZ8A/QebvedXpumD81wGEc+gSr5yL4Qw1QGJYeuVaCsaEBNQyD+mtq
-         iGAbsZ5gGGosDXD+76Y5tIl45WE8faqRL1R8lOEIFyi5OWociN4w4ejp54ph1Ir6YS2L
-         oeGNRbGhv9TgkEOOc++cSuh5y0vffeszOwnkMTAIrIZou59eOhAqaWK9gbHwlLBnKaA6
-         1aU89b8tYDIrEFQUfitkeCVkr+xlQqv7nMkzG4g+3vHps7O6db44L1go5LfJVSzPKWGg
-         ClZQ==
+        bh=6n/GEXN5lDYLZ4JxfAxl/V57o/OOb9d29VzaUpcLpQA=;
+        b=AechcBsRHkC9FhFZuNbA/sO4Tuy863lBtYizhPTaLsA7vMEys8NaWH7RHaAH3i3YnX
+         z3YhRd53z1vErumO0rFGcBwk78KLYV7YtNI6nMwaVnmYrFcrtswMV0nYhLIPNqOPChDi
+         6Xv2tf2Xav5AECI4FcXDALrtvTN9/Npk6HtPTHJcuXvzQ9/6bN2Gjs2rBOCBIq4KjPl0
+         YxgZ7JjtvcM+yAz/Bbb1O4LzrIicf5iaXsx7pA6h4ibw/5LmXcrYPEy1WHVU90xFI0Nt
+         vxnkIaX8vDe+JW7zE5bKqTvWYHAhjWFFx6HgY8mIUTGGxmScIWjVW4YbvOCUQDjvGPTx
+         lzpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KBxpEzoITwpU6kRtLWtpxV0a9ktQzPhWaCO/U0K4p2c=;
-        b=xTPNrssimuo0T+qxkIS9bRhK1q5QEZhMzefSplJ+dS3Sdd2mhv+F/g6eN2fY1wCO6j
-         RtOC1QT50HV7187kkw6O9+f1wbAUTLJdWTWPjtJxwl9b/q6cypCVBpd8eGqqu/e8bo4T
-         Y6suaC7VMyt5gfSYSMSLed3r1NwWnRPOe6QOYNPs+fRssYcTfIjSX0X8+8ZpisxuGE1A
-         7xVJWVna2k6naXJ5UkqV0lr+j+kmYu2OZKOIMiQ9OGL1rfNqeTm3EZc1m3Vho45qM8v8
-         U7Cbc1il1uxc50R9uEyZ8hYFvwkM8hSgr6laADN+SCYS63rIYbdCfaVskM62H7KPW0oD
-         hP9w==
-X-Gm-Message-State: AOAM533heXpahWJdYrDtTbXmDxBmV/mD3i6+HjgaMXt1wAvH/pqtmjet
-        2QiP7P+p6VEccFpuEMPzoY4=
-X-Google-Smtp-Source: ABdhPJz8vcAdgiHLoJc84Zb8vEocnkd+b3eDP5CmaX3KcjgI26RtA+QjPQhFt+uMPD3IzwC1FqbDhQ==
-X-Received: by 2002:a0c:be89:0:b0:42c:4194:6adb with SMTP id n9-20020a0cbe89000000b0042c41946adbmr22624611qvi.6.1647373145823;
-        Tue, 15 Mar 2022 12:39:05 -0700 (PDT)
+        bh=6n/GEXN5lDYLZ4JxfAxl/V57o/OOb9d29VzaUpcLpQA=;
+        b=KGi/sVyk/C9jiJhIN7guqfk7Dgv21Z3Nh50gu+/MrCsNdXTdU8RXVmmNVnemxe51j/
+         1v/7FMk5qKapeVzQVGaATA9e3P8fF7bPh6vGN8/f51FjCzoh6cag0HA4YrNYhXVAvyNs
+         e8lVe66IiW9sZy/488x78y1HR1DN5Un/wpZtM86udWBXj/SN4gMA1b/9UFkb+Mn+XncX
+         QBVngN9xrt1ehsaip4Pr/wjBqz9+rZV1LQKsyquUuvuQvcfhf7Jn3OMqUHoR8fRHdwqP
+         4gxTso+5O6LfkYxVK3RmeiJ8De8NL4xi3wG8dBnbQhshzGS1px6vaCV8MAz25QAEsQYg
+         47gg==
+X-Gm-Message-State: AOAM532//Pfn5SR0ZYh9iEaVgCnLWcist+c9/Q5GxNDLCGYrq3KSWfsR
+        dizdBF9ZyhU5JCEsYDGQucQ=
+X-Google-Smtp-Source: ABdhPJw7whkPdA/y1cLsh5cBY3dhhlYpNL/ZKq60sS4Ygc2RxvxnjPZp9tBKybKPBT9qXoeIjIHCtA==
+X-Received: by 2002:ad4:594c:0:b0:435:6a5e:ebeb with SMTP id eo12-20020ad4594c000000b004356a5eebebmr22645843qvb.96.1647373146965;
+        Tue, 15 Mar 2022 12:39:06 -0700 (PDT)
 Received: from ishi.. (072-189-064-222.res.spectrum.com. [72.189.64.222])
-        by smtp.gmail.com with ESMTPSA id o4-20020a05620a22c400b0067e02a697e0sm1440798qki.33.2022.03.15.12.39.04
+        by smtp.gmail.com with ESMTPSA id o4-20020a05620a22c400b0067e02a697e0sm1440798qki.33.2022.03.15.12.39.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:39:05 -0700 (PDT)
+        Tue, 15 Mar 2022 12:39:06 -0700 (PDT)
 From:   William Breathitt Gray <vilhelm.gray@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         William Breathitt Gray <vilhelm.gray@gmail.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Syed Nayyar Waris <syednwaris@gmail.com>
-Subject: [RESEND PATCH 1/6] counter: 104-quad-8: Add COMPILE_TEST depends
-Date:   Tue, 15 Mar 2022 15:38:52 -0400
-Message-Id: <3917721e792d362ee108b2f12cd2223675449d05.1647373009.git.vilhelm.gray@gmail.com>
+        <u.kleine-koenig@pengutronix.de>
+Subject: [RESEND PATCH 2/6] counter: Set counter device name
+Date:   Tue, 15 Mar 2022 15:38:53 -0400
+Message-Id: <87cc8eb4c84f49f89290577dc9231b2e4d7d3e8c.1647373009.git.vilhelm.gray@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1647373009.git.vilhelm.gray@gmail.com>
 References: <cover.1647373009.git.vilhelm.gray@gmail.com>
@@ -74,32 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-104_QUAD_8 depends on X86, but compiles fine on ARCH=arm. This patch
-adds support for COMPILE_TEST which is useful for compile testing code
-changes to the driver and Counter subsystem.
+Naming the counter device provides a convenient way to identify it in
+devres_log events and similar situations. This patch names the counter
+device by combining the prefix "counter" with the counter device's
+unique ID.
 
-Suggested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Cc: Syed Nayyar Waris <syednwaris@gmail.com>
 Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20220105094137.259111-1-vilhelm.gray@gmail.com
+Link: https://lore.kernel.org/r/20220204084551.16397-1-vilhelm.gray@gmail.com
 Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 ---
- drivers/counter/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/counter/counter-core.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
-index 3dcdb681c4e4..5edd155f1911 100644
---- a/drivers/counter/Kconfig
-+++ b/drivers/counter/Kconfig
-@@ -14,7 +14,7 @@ if COUNTER
+diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
+index 869894b74741..938651f9e9e0 100644
+--- a/drivers/counter/counter-core.c
++++ b/drivers/counter/counter-core.c
+@@ -22,6 +22,8 @@
+ #include "counter-chrdev.h"
+ #include "counter-sysfs.h"
  
- config 104_QUAD_8
- 	tristate "ACCES 104-QUAD-8 driver"
--	depends on PC104 && X86
-+	depends on (PC104 && X86) || COMPILE_TEST
- 	select ISA_BUS_API
- 	help
- 	  Say yes here to build support for the ACCES 104-QUAD-8 quadrature
++#define COUNTER_NAME	"counter"
++
+ /* Provides a unique ID for each counter device */
+ static DEFINE_IDA(counter_ida);
+ 
+@@ -113,8 +115,15 @@ struct counter_device *counter_alloc(size_t sizeof_priv)
+ 
+ 	device_initialize(dev);
+ 
++	err = dev_set_name(dev, COUNTER_NAME "%d", dev->id);
++	if (err)
++		goto err_dev_set_name;
++
+ 	return counter;
+ 
++err_dev_set_name:
++
++	counter_chrdev_remove(counter);
+ err_chrdev_add:
+ 
+ 	ida_free(&counter_ida, dev->id);
+@@ -247,7 +256,8 @@ static int __init counter_init(void)
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = alloc_chrdev_region(&counter_devt, 0, COUNTER_DEV_MAX, "counter");
++	err = alloc_chrdev_region(&counter_devt, 0, COUNTER_DEV_MAX,
++				  COUNTER_NAME);
+ 	if (err < 0)
+ 		goto err_unregister_bus;
+ 
 -- 
 2.35.1
 

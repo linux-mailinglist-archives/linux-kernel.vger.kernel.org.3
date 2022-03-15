@@ -2,101 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB4D4D91BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE174D91C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245751AbiCOAul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S1343941AbiCOAvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 20:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbiCOAui (ORCPT
+        with ESMTP id S1343600AbiCOAvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:50:38 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FDB42486
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:49:27 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id A5EE65D186
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:49:26 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id TvNOnQkiZdx86TvNOnNlz8; Mon, 14 Mar 2022 19:49:26 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3a9lfZp86vtLknE/eSHMX4MMCOPJye7CBuZw/TfwS+s=; b=oHaw1Ijfq0sFeO8YziyziTTf6M
-        EiU2un/bB/S1IpAn6MlouiaCh5skW1e6WggQJDHJD2gIrHhXMRBUt8IAXC5QPlWpSU2ogso2jd71y
-        jMvJRH043xabTEobM7KjqSfMaSdSaJHnEfJWlYcgEQ53woyUVSIQPEgivkRFtN221PSa+BvVaww06
-        KZNchbPi86PmxNJAoTIhYPqENzT1qIigR+6/mrFl86rD7Ub+ahU+/GWOTF8FEAlDwogeXgd9oTZuz
-        heZGssJ0N+o0XZjrnaxgi0/taIBogRUzScIG2q6tnZyOkmXf90TeKULS5z0sKACgPBpLgIB6BHBLD
-        biCn0Zew==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57466 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nTvNN-003ohA-Q4; Tue, 15 Mar 2022 00:49:25 +0000
-Date:   Mon, 14 Mar 2022 17:49:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.14 00/22] 4.14.272-rc2 review
-Message-ID: <20220315004924.GB1943350@roeck-us.net>
-References: <20220314145907.257355309@linuxfoundation.org>
+        Mon, 14 Mar 2022 20:51:31 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C15427F3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:50:19 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id q5so24363555ljb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iu1dDKMiO58IJTgn0Y5YT/ep6c6PH/A2I1xn5i2OO4M=;
+        b=A/QKF0mF9Rm2tSG6t2Q7FLiZsPmEh4wgSlnqrxSBzJTT18Tx/25nw5YitC+o5T1NIl
+         dHsn3dewSXLFAeqA/+ODgjyTVd/Tx+QWjF8zqtLmD0tIAydAS7721bsNCRqIJbtKOJmx
+         0AOy5rNA4qcgql5krqMhed3+t3qfYgcMOOsOjE3tnNwFKmr/qDH771GV9A5uGgXx8oaE
+         Vj+L8eHW1IIPVnDdUjCH5rbstiX6McbtDPBKBdIhI8BKsO6vPZplxqdd24rIn7fSlSIs
+         voa9xljon/WNiPC2LT2+MCpCtOQTHWC9qylrpk6wockoK/XRJO4YexgeGVa3vcONg4mj
+         368Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iu1dDKMiO58IJTgn0Y5YT/ep6c6PH/A2I1xn5i2OO4M=;
+        b=SiRAs21EZ776C/IRyISaTNXlhocsZgIutcDGeiXRk3IHisMAS9Zt5O46hes8deifHV
+         Y/9d1NDNmWDZ/jmtkLLhMRvpqq1/RstA5JFWSrPPpHL1N7SCcQv5sCvjx184jW6FxvZ0
+         IG2ApH8teAYQlw8plvZNexGxLySYtMiv0VqkcKFaULQv7Dyur9s0hp0YHlG96lL1s+VY
+         beRQSz87/hHEKnzzXglE/eGl+nJaQF690tTHnJ0Q2ozUYzyOluUrif0o/OK20JyGBvuK
+         iIBGp+8wlANumh4IvBzxR84NCVgRF6h5a0LNJx4yKwdz17FOyi4WizaPXjnoWaSyqi8z
+         oTsA==
+X-Gm-Message-State: AOAM532fA5t0QlaLj+Kx5Kw8tZvILRl0megsRm6ZNsyj/RX7ivTsbbg5
+        o38FX6z8h/2jJoVS4sUPE29nhJ3hyrDwt97LOZLcIA==
+X-Google-Smtp-Source: ABdhPJwHgu6MX7NhAwd4EkLiDaUQTvRgHtgs0ltqyCQLgN417gcAMf2BCutJE3sfOkxZqjDgfOwUxWCmaE1PNMqduXs=
+X-Received: by 2002:a2e:7c16:0:b0:244:be33:9718 with SMTP id
+ x22-20020a2e7c16000000b00244be339718mr15092896ljc.467.1647305417826; Mon, 14
+ Mar 2022 17:50:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314145907.257355309@linuxfoundation.org>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nTvNN-003ohA-Q4
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57466
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 25
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220309165222.2843651-1-tjmercier@google.com> <20220309165222.2843651-7-tjmercier@google.com>
+In-Reply-To: <20220309165222.2843651-7-tjmercier@google.com>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Mon, 14 Mar 2022 17:50:05 -0700
+Message-ID: <CAHRSSEwY=1ns9LZSZi-yiYgx1UDE2_+L-+VFYPdWVqRuTSkYhw@mail.gmail.com>
+Subject: Re: [RFC v3 6/8] binder: Add a buffer flag to relinquish ownership of fds
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
+        Kenny.Ho@amd.com, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 04:00:06PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.272 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 16 Mar 2022 14:58:59 +0000.
-> Anything received after that time might be too late.
-> 
+On Wed, Mar 9, 2022 at 8:52 AM T.J. Mercier <tjmercier@google.com> wrote:
+>
+> From: Hridya Valsaraju <hridya@google.com>
+>
+> This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
+> that a process sending an fd array to another process over binder IPC
+> can set to relinquish ownership of the fds being sent for memory
+> accounting purposes. If the flag is found to be set during the fd array
+> translation and the fd is for a DMA-BUF, the buffer is uncharged from
+> the sender's cgroup and charged to the receiving process's cgroup
+> instead.
+>
+> It is up to the sending process to ensure that it closes the fds
+> regardless of whether the transfer failed or succeeded.
+>
+> Most graphics shared memory allocations in Android are done by the
+> graphics allocator HAL process. On requests from clients, the HAL process
+> allocates memory and sends the fds to the clients over binder IPC.
+> The graphics allocator HAL will not retain any references to the
+> buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for fd
+> arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
+> correctly charge the buffers to the client processes instead of the
+> graphics allocator HAL.
+>
+> Since this is a new feature exposed to userspace, the kernel and userspac=
+e
+> must be compatible for the accounting to work for transfers. In all cases
+> the allocation and transport of DMA buffers via binder will succeed, but
+> only when both the kernel supports, and userspace depends on this feature
+> will the transfer accounting work. The possible scenarios are detailed
+> below:
+>
+> 1. new kernel + old userspace
+> The kernel supports the feature but userspace does not use it. The old
+> userspace won't mount the new cgroup controller, accounting is not
+> performed, charge is not transferred.
+>
+> 2. old kernel + new userspace
+> The new cgroup controller is not supported by the kernel, accounting is
+> not performed, charge is not transferred.
+>
+> 3. old kernel + old userspace
+> Same as #2
+>
+> 4. new kernel + new userspace
+> Cgroup is mounted, feature is supported and used.
+>
+> Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
-Build results:
-	total: 168 pass: 168 fail: 0
-Qemu test results:
-	total: 424 pass: 424 fail: 0
+Acked-by: Todd Kjos <tkjos@google.com>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+>
+> ---
+> v3 changes
+> Remove android from title per Todd Kjos.
+>
+> Use more common dual author commit message format per John Stultz.
+>
+> Include details on behavior for all combinations of kernel/userspace
+> versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
+>
+> v2 changes
+> Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+> heap to a single dma-buf function for all heaps per Daniel Vetter and
+> Christian K=C3=B6nig.
+> ---
+>  drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
+>  include/uapi/linux/android/binder.h |  1 +
+>  2 files changed, 27 insertions(+)
+>
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 8351c5638880..f50d88ded188 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -42,6 +42,7 @@
+>
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>
+> +#include <linux/dma-buf.h>
+>  #include <linux/fdtable.h>
+>  #include <linux/file.h>
+>  #include <linux/freezer.h>
+> @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct list_h=
+ead *pf_head,
+>  {
+>         binder_size_t fdi, fd_buf_size;
+>         binder_size_t fda_offset;
+> +       bool transfer_gpu_charge =3D false;
+>         const void __user *sender_ufda_base;
+>         struct binder_proc *proc =3D thread->proc;
+> +       struct binder_proc *target_proc =3D t->to_proc;
+>         int ret;
+>
+>         fd_buf_size =3D sizeof(u32) * fda->num_fds;
+> @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct list_h=
+ead *pf_head,
+>         if (ret)
+>                 return ret;
+>
+> +       if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
+> +               parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
+> +               transfer_gpu_charge =3D true;
+> +
+>         for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
+>                 u32 fd;
+> +               struct dma_buf *dmabuf;
+> +               struct gpucg *gpucg;
+> +
+>                 binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
+>                 binder_size_t sender_uoffset =3D fdi * sizeof(fd);
+>
+> @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct list_h=
+ead *pf_head,
+>                                                   in_reply_to);
+>                 if (ret)
+>                         return ret > 0 ? -EINVAL : ret;
+> +
+> +               if (!transfer_gpu_charge)
+> +                       continue;
+> +
+> +               dmabuf =3D dma_buf_get(fd);
+> +               if (IS_ERR(dmabuf))
+> +                       continue;
+> +
+> +               gpucg =3D gpucg_get(target_proc->tsk);
+> +               ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
+> +               if (ret) {
+> +                       pr_warn("%d:%d Unable to transfer DMA-BUF fd char=
+ge to %d",
+> +                               proc->pid, thread->pid, target_proc->pid)=
+;
+> +                       gpucg_put(gpucg);
+> +               }
+> +               dma_buf_put(dmabuf);
+>         }
+>         return 0;
+>  }
+> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/and=
+roid/binder.h
+> index 3246f2c74696..169fd5069a1a 100644
+> --- a/include/uapi/linux/android/binder.h
+> +++ b/include/uapi/linux/android/binder.h
+> @@ -137,6 +137,7 @@ struct binder_buffer_object {
+>
+>  enum {
+>         BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
+> +       BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
+>  };
+>
+>  /* struct binder_fd_array_object - object describing an array of fds in =
+a buffer
+> --
+> 2.35.1.616.g0bdcbb4464-goog
+>

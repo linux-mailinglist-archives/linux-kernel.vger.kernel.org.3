@@ -2,256 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BEB4D9B99
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA4D4D9B93
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348486AbiCOMvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S1348488AbiCOMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348389AbiCOMvI (ORCPT
+        with ESMTP id S1348389AbiCOMuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:51:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52635004B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647348591; x=1678884591;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SfW00ZwuA7gEkmiM+FXaiu2fQPLJNs0OT34MPTvSSQs=;
-  b=XnTHuINrC/cW7bnNpgJfbHzuBPheA8zYaiK1/3TzqEgCaPmyn62V6L+u
-   CoNyv05ibkw74AYvi0sJjjlIiIedkm10LIsYc6xsTHLTejEHgsU3AK9Jy
-   fwEUWz/OzyjWKUpTtHLW3OJB3FHZ7Tya7kg2SQukVEaT7v7cO4M5v9oqP
-   DvIuU9acW14RP/gaPanjhd2DiJb5GiJ98vHMpkhwNTKyjQc9MuEae7nqx
-   l04NpXgfCsYKUfa8a7/q4MqOSbd3NeuW4aA4cckmennbxsTTDfQB6X6W+
-   LpBlIVlDG1qR1a4Kp6W2nkHiLSd6rxFjI5S9MEMgpM2p4matb+c1uxJcK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256479668"
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="256479668"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 05:49:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
-   d="scan'208";a="580499979"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 15 Mar 2022 05:49:49 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nU6cX-000AyP-62; Tue, 15 Mar 2022 12:49:49 +0000
-Date:   Tue, 15 Mar 2022 20:48:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:irq/core] BUILD SUCCESS
- 411472ae5bb4ffe1404dc5f1505f07e0f04770a8
-Message-ID: <62308b33.8UkgkMRjr/LI873X%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 15 Mar 2022 08:50:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F28031205
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647348577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A8YB/zouyCs2m8bIpB0HNPrzD15OIyDhGFrmSggKmO0=;
+        b=f27hGqUVLcOihoYodU66FUI2mBxNzxrOvKNTYY0ysVVA63Pf6EmcYhDZK4xGWQJpXG85Ys
+        7RHIyb4jhjS/HTgDLxI0gXvTaP///1x5QYpOBZUz55EFJM4dY6CBSktfBWil9u7AAtZQ/5
+        8Jj1BqEKJga6U7ZURMEfZ1qGEh+fD0U=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-2IqbUVpZPrGgkp17VXO5dQ-1; Tue, 15 Mar 2022 08:49:36 -0400
+X-MC-Unique: 2IqbUVpZPrGgkp17VXO5dQ-1
+Received: by mail-qk1-f197.google.com with SMTP id bj2-20020a05620a190200b005084968bb24so14166975qkb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:49:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=A8YB/zouyCs2m8bIpB0HNPrzD15OIyDhGFrmSggKmO0=;
+        b=Jqam4C/uXfoUABKBiWbpJrEBzVObnzZIcrEBidpyZDpsJ+iXegHCpvYtEQuPxNi5RU
+         jyRJJFCA4OkvbMOAjF6DLKkka4jmeTQeU3T/t4/aVJ06C6BwSuY6ejAiyU6bYqToud8G
+         dgumGJn4CyqNs/w8mIpiPZGwnvqC9Vq8CW5LXymzjv/9oTq0jcqg7+RLXM1tDkG58GAZ
+         HHPTGKvA7Hsbn085IRrI1AeRLu1e8ZSFv9NdUr6dj0tQI1vW4HOsn7lKA1LR575XKiim
+         1SRNfQuqXnzj4ipi0iR5YwJR4HSj/+YuTccnhgDxN9IHo50ELGG+v0vRupsZES3mLgFn
+         sgCQ==
+X-Gm-Message-State: AOAM531XsyXcPXoGMQzXFPu6RaNimg/9TKumG+OXZ+vjzSM+ZuRrUt3F
+        mjpPrQj/qltFn+WHCZ+k6RjXvTiTEvlj7IwDCH2CjJ/vml2h0O23JdkLThBeqIBirQlP2tIR08Y
+        n9f+t/4C0EK2wyFexfrn4Bpb2
+X-Received: by 2002:a05:622a:43:b0:2e1:4e:a784 with SMTP id y3-20020a05622a004300b002e1004ea784mr22472649qtw.240.1647348575276;
+        Tue, 15 Mar 2022 05:49:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJySZNgzLvqshSrfyIaulX9BUiVIIovtIEdrD1Ud0s8XPceC7N4NZNZ0FQQO4xA+4EEcVHK/8g==
+X-Received: by 2002:a05:622a:43:b0:2e1:4e:a784 with SMTP id y3-20020a05622a004300b002e1004ea784mr22472621qtw.240.1647348575015;
+        Tue, 15 Mar 2022 05:49:35 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-232-135.dyn.eolo.it. [146.241.232.135])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac85fc1000000b002e1c6420790sm7984298qta.40.2022.03.15.05.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 05:49:34 -0700 (PDT)
+Message-ID: <5ebf8873334a3a38855e378748cb6d8948fbd0c7.camel@redhat.com>
+Subject: Re: [PATCH net-next 2/3] net: icmp: add skb drop reasons to
+ ping_queue_rcv_skb()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     menglong8.dong@gmail.com, dsahern@kernel.org, kuba@kernel.org
+Cc:     davem@davemloft.net, rostedt@goodmis.org, mingo@redhat.com,
+        yoshfuji@linux-ipv6.org, imagedong@tencent.com,
+        edumazet@google.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, alobakin@pm.me, dongli.zhang@oracle.com,
+        maze@google.com, aahringo@redhat.com, weiwan@google.com,
+        yangbo.lu@nxp.com, fw@strlen.de, tglx@linutronix.de,
+        rpalethorpe@suse.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Tue, 15 Mar 2022 13:49:29 +0100
+In-Reply-To: <20220314113225.151959-3-imagedong@tencent.com>
+References: <20220314113225.151959-1-imagedong@tencent.com>
+         <20220314113225.151959-3-imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
-branch HEAD: 411472ae5bb4ffe1404dc5f1505f07e0f04770a8  Merge tag 'v5.17-rc8' into irq/core, to fix conflicts
+Hello,
 
-elapsed time: 725m
+On Mon, 2022-03-14 at 19:32 +0800, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> In order to get the reasons of skb drops, replace sock_queue_rcv_skb()
+> used in ping_queue_rcv_skb() with sock_queue_rcv_skb_reason().
+> Meanwhile, use kfree_skb_reason() instead of kfree_skb().
+> 
+> As we can see in ping_rcv(), 'skb' will be freed if '-1' is returned
+> by ping_queue_rcv_skb(). In order to get the drop reason of 'skb',
+> make ping_queue_rcv_skb() return the drop reason.
+> 
+> As ping_queue_rcv_skb() is used as 'ping_prot.backlog_rcv()', we can't
+> change its return type. (Seems ping_prot.backlog_rcv() is not used?)
+> Therefore, make it return 'drop_reason * -1' to keep the origin logic.
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  net/ipv4/ping.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/ipv4/ping.c b/net/ipv4/ping.c
+> index 3ee947557b88..cd4eb211431a 100644
+> --- a/net/ipv4/ping.c
+> +++ b/net/ipv4/ping.c
+> @@ -936,12 +936,13 @@ EXPORT_SYMBOL_GPL(ping_recvmsg);
+>  
+>  int ping_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
+>  {
+> +	enum skb_drop_reason reason;
 
-configs tested: 170
-configs skipped: 3
+Please insert an empty line between variable declaration and code.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>  	pr_debug("ping_queue_rcv_skb(sk=%p,sk->num=%d,skb=%p)\n",
+>  		 inet_sk(sk), inet_sk(sk)->inet_num, skb);
+> -	if (sock_queue_rcv_skb(sk, skb) < 0) {
+> -		kfree_skb(skb);
+> +	if (sock_queue_rcv_skb_reason(sk, skb, &reason) < 0) {
+> +		kfree_skb_reason(skb, reason);
+>  		pr_debug("ping_queue_rcv_skb -> failed\n");
+> -		return -1;
+> +		return -reason;
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-i386                 randconfig-c001-20220314
-mips                 randconfig-c004-20220314
-powerpc              randconfig-c003-20220313
-powerpc                      pasemi_defconfig
-arm                       imx_v6_v7_defconfig
-xtensa                              defconfig
-arm                         nhk8815_defconfig
-x86_64                              defconfig
-sh                        edosk7760_defconfig
-powerpc                     taishan_defconfig
-sh                          lboxre2_defconfig
-um                           x86_64_defconfig
-arm                         lpc18xx_defconfig
-arm                       aspeed_g5_defconfig
-m68k                        stmark2_defconfig
-arc                          axs101_defconfig
-openrisc                  or1klitex_defconfig
-arm                            xcep_defconfig
-riscv             nommu_k210_sdcard_defconfig
-sh                            migor_defconfig
-sh                             sh03_defconfig
-m68k                           sun3_defconfig
-m68k                        m5272c3_defconfig
-powerpc                        cell_defconfig
-sh                           se7705_defconfig
-powerpc                      bamboo_defconfig
-csky                             alldefconfig
-parisc                generic-32bit_defconfig
-powerpc                 mpc837x_mds_defconfig
-powerpc                  storcenter_defconfig
-arm                         vf610m4_defconfig
-mips                           jazz_defconfig
-sh                   secureedge5410_defconfig
-h8300                     edosk2674_defconfig
-m68k                         apollo_defconfig
-powerpc                      arches_defconfig
-m68k                                defconfig
-arm                           h5000_defconfig
-sh                          rsk7201_defconfig
-arc                          axs103_defconfig
-parisc                generic-64bit_defconfig
-powerpc                 mpc834x_mds_defconfig
-sh                         microdev_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                     pq2fads_defconfig
-sh                          kfr2r09_defconfig
-parisc                              defconfig
-openrisc                 simple_smp_defconfig
-m68k                       m5208evb_defconfig
-mips                        bcm47xx_defconfig
-arm                         axm55xx_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                  decstation_64_defconfig
-arm                  randconfig-c002-20220313
-arm                  randconfig-c002-20220314
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64               randconfig-a004-20220314
-x86_64               randconfig-a005-20220314
-x86_64               randconfig-a003-20220314
-x86_64               randconfig-a002-20220314
-x86_64               randconfig-a006-20220314
-x86_64               randconfig-a001-20220314
-i386                 randconfig-a003-20220314
-i386                 randconfig-a004-20220314
-i386                 randconfig-a001-20220314
-i386                 randconfig-a006-20220314
-i386                 randconfig-a002-20220314
-i386                 randconfig-a005-20220314
-arc                  randconfig-r043-20220313
-riscv                randconfig-r042-20220313
-s390                 randconfig-r044-20220313
-arc                  randconfig-r043-20220314
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+This changes the return value for the release callback.  Such callback
+has a long and non trivial call chain via sk_backlog_rcv. 
 
-clang tested configs:
-arm                  randconfig-c002-20220313
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220313
-riscv                randconfig-c006-20220313
-mips                 randconfig-c004-20220313
-i386                          randconfig-c001
-mips                   sb1250_swarm_defconfig
-arm                     davinci_all_defconfig
-powerpc                       ebony_defconfig
-mips                      bmips_stb_defconfig
-arm                       cns3420vb_defconfig
-arm                      pxa255-idp_defconfig
-arm                        magician_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                          imote2_defconfig
-mips                           mtx1_defconfig
-powerpc                      pmac32_defconfig
-powerpc                          allyesconfig
-powerpc               mpc834x_itxgp_defconfig
-mips                     cu1000-neo_defconfig
-arm                           omap1_defconfig
-mips                          ath25_defconfig
-i386                             allyesconfig
-mips                malta_qemu_32r6_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a014-20220314
-x86_64               randconfig-a015-20220314
-x86_64               randconfig-a016-20220314
-x86_64               randconfig-a012-20220314
-x86_64               randconfig-a013-20220314
-x86_64               randconfig-a011-20220314
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                 randconfig-a013-20220314
-i386                 randconfig-a015-20220314
-i386                 randconfig-a014-20220314
-i386                 randconfig-a011-20220314
-i386                 randconfig-a016-20220314
-i386                 randconfig-a012-20220314
-hexagon              randconfig-r045-20220314
-hexagon              randconfig-r045-20220313
-riscv                randconfig-r042-20220314
-hexagon              randconfig-r041-20220313
-hexagon              randconfig-r041-20220314
-s390                 randconfig-r044-20220314
+It *should* be safe, but have you considered factoring out an
+__ping_queue_rcv_skb() variant returning the full drop reason, use it
+in the next patch and build ping_queue_rcv_skb() on top of such helper
+to that backlog_rcv() return code will not change?
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+The above should additionally avoid the IMHO not so nice:
+
+	reason = ping_queue_rcv_skb(sk, skb2) * -1;
+
+in the next patch - it will become:
+
+	reason = __ping_queue_rcv_skb(sk, skb2);
+
+Thanks!
+
+Paolo
+

@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95424D989E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781434D98A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239877AbiCOKXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
+        id S1346912AbiCOKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346885AbiCOKWy (ORCPT
+        with ESMTP id S243390AbiCOKXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:22:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E795506CA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:21:42 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nU4J7-0000Us-KI; Tue, 15 Mar 2022 11:21:37 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-97f1-7654-c271-bcb4.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:97f1:7654:c271:bcb4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 65C964BA0A;
-        Tue, 15 Mar 2022 10:21:35 +0000 (UTC)
-Date:   Tue, 15 Mar 2022 11:21:35 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220315102135.evgt4es7yb23sabb@pengutronix.de>
-References: <20220307214303.1822590-1-max@enpas.org>
- <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
- <20220309135414.34f77251.max@enpas.org>
- <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
- <20220312222142.21591629.max@enpas.org>
+        Tue, 15 Mar 2022 06:23:46 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C52506CC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:22:34 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2e5969bdf31so710217b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 03:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9O1QfHi1I0g1rKMxOGzWpZRk1RXFbwE7xufKq2/FhEs=;
+        b=ShFdeB8w8gvB1NNpEKZoaVhE/7zTtC75kc9Ay4V7ehH5nnrABGbkhXgtK/Gv4xXgXL
+         XFxrf+5exDfnh4z7iGQbvkkRpRZSeGk2FpItDxq0TEG2xEmXZflPkHdCJjYpQZBTWuQt
+         tkcQwG3rpjv2qWMQWwuwpNGzlz/4ztMQI8cGF8r1cyWqBqH4n35F8i0SXSYhCMvXYVT/
+         bmqj0rvTstc5JHG7YszcLCLL5IHrdDnTm9F64PfMMhdi3JPlzPE21QUwUOu40bNIG8IK
+         5INy0k+ENNPyFySvNpAzB7uFeu6sRq60Qf51l+N4Fcc9GI027ilWt42SzarIE4/tzT1T
+         W2zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9O1QfHi1I0g1rKMxOGzWpZRk1RXFbwE7xufKq2/FhEs=;
+        b=DRYbvbvo0kHsd9IkSYvgHEzI7mclHuOhElvif/NGZoTFCtBHyhdYSeXOqgt6a3OhuW
+         uaSSQ+uC6+ivL4qPqStdj7oLEgmf5RaZ2w2ntuASSWJjXNAcst/Pur9Kz1yS0rpTBq5G
+         nfpC2gsEBokZdqwRfUju0n+lCezdvrkbWJBho4r/w92u8EuVnp64z9ZxM+5sHuISI+y3
+         wDfWGKIOCtdlBYw6KbYzVQPZZfNAt+BL61O6hhOu4oHDEJWhWDjXTegLwtMiLqdiZpkc
+         lxPnpTC405e2x72vWzpL5zpRblByzSsy7CluCqPbyL3bEJlBba9kxfA9Fa9NJEueWOvV
+         elDA==
+X-Gm-Message-State: AOAM531r/1i4pxP5IMJM9QHucoWPluwFl+oPjxCXnv5aB73NE6MLn7EK
+        Nhwm1cJDlviseKj1Toaj2fWBkBmseNjygkvkCyzQyA==
+X-Google-Smtp-Source: ABdhPJzJrqXtYFwq1O2AGJSKQaGeunuur6ljYmtRJs+3qUKIYokBmodVRHbXm/ToYTmHU5gLQuY5LU/AhYqZON1s7kQ=
+X-Received: by 2002:a0d:f347:0:b0:2d6:916b:eb3f with SMTP id
+ c68-20020a0df347000000b002d6916beb3fmr23287723ywf.141.1647339753523; Tue, 15
+ Mar 2022 03:22:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ljfp3hdtlvkt5bva"
-Content-Disposition: inline
-In-Reply-To: <20220312222142.21591629.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220314145907.257355309@linuxfoundation.org>
+In-Reply-To: <20220314145907.257355309@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Mar 2022 15:52:22 +0530
+Message-ID: <CA+G9fYuWRag7wAPOpyE5nhb6GCWVjm=z8=e87AgYNmcs38BnuA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/22] 4.14.272-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,90 +71,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 14 Mar 2022 at 20:30, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.272 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Mar 2022 14:58:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.272-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---ljfp3hdtlvkt5bva
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-On 12.03.2022 22:21:42, Max Staudt wrote:
-> @Vincent - two more things have remained, and I hope it's okay once I
-> explain them:
->=20
-> 1. _memstrcmp() - memcmp() vs. str(n)cmp()
->=20
-> The _memstrcmp() function does not compare strings, it compares raw
-> buffers. I am just using C strings for the fixed buffers to compare
-> against, as that allows for shorter and easier to read code. The NUL
-> byte at the end of those strings goes unused.
->=20
-> Also, I have not looked at the assembly produced, since the semantics
-> are different: str(n)cmp() needs to look for NUL bytes in the buffer(s),
-> which is unnecessary here. As a bonus, NUL will never even occur
-> because my code filters those bytes out upon reception from the UART
-> (it's a documented quirk of the ELM327).
->=20
-> Finally, even if I were to use strcmp(), the code would still look just
-> as ugly. Except the machine would also look for NUL bytes, and the next
-> human to read the code would wonder why I'm comparing strings and not
-> buffers.
->=20
-> Hence memcmp(), to help the code self-document and the compiler
-> optimise - I hope that's okay.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Looking at the code:
+## Build
+* kernel: 4.14.272-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.14.y
+* git commit: e991f498ccbf4fc46e0525c0ca02e4134f253706
+* git describe: v4.14.271-23-ge991f498ccbf
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.271-23-ge991f498ccbf
 
-> +/* Compare a buffer to a fixed string */
-> +static inline int _memstrcmp(const u8 *mem, const char *str)
-> +{
-> +     return memcmp(mem, str, strlen(str));
+## Test Regressions (compared to v4.14.271)
+No test regressions found.
 
-The _memstrcmp is sometimes directly used. Where's the check that mem is
-valid for strlen(len)? Better only use _len_memstrcmp().
+## Metric Regressions (compared to v4.14.271)
+No metric regressions found.
 
-> +}
-> +
-> +/* Compare buffer to string length, then compare buffer to fixed string.
-> + * This ensures two things:
-> + *  - It flags cases where the fixed string is only the start of the
-> + *    buffer, rather than exactly all of it.
-> + *  - It avoids byte comparisons in case the length doesn't match.
-> + */
-> +static inline int _len_memstrcmp(const u8 *mem, size_t mem_len, const ch=
-ar *str)
+## Test Fixes (compared to v4.14.271)
+No test fixes found.
 
-make it a bool.
+## Metric Fixes (compared to v4.14.271)
+No metric fixes found.
 
-> +{
-> + 	size_t str_len =3D strlen(str);
-> +
-> +	return (mem_len !=3D str_len) || memcmp(mem, str, str_len);
-> +}
+## Test result summary
+total: 77914, pass: 65222, fail: 257, skip: 11064, xfail: 1371
 
-Can you rename _len_memstrcmp into something like elm327_match() or so?
+## Build Summary
+* arm: 280 total, 270 passed, 10 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 60 total, 12 passed, 48 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
 
-regards,
-Marc
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-bpf
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ljfp3hdtlvkt5bva
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIwaKwACgkQrX5LkNig
-011f3QgAtpKD3azoXiCk8tqsByeX0+JujrYl+eg2jXCOuE3dpOEYGnnewW+Elq7H
-aoXZ/mTc5iLcoF7FSTz5OH8joUS4bTk65wxRHVAKXmAA9kyDHQzeg/intLsyKX5f
-mgKJszUXl3JGcZtmUDDTK40/IbFCpAeuFHhTFKLinPdg29wuk0iGyUCQVWb/m6L5
-ts5AKaNqfGk2dxPZ+cKWDsJXhRBr7B4BjmS9kr03ddGPtPUDSFM5cHEP8ZjaspYc
-jFQb4lf4H/SNYpuq9VEVXubQkcqNkio+zp3iyWuZ1NOxqLWRv1rBBvE/QAaLtxVQ
-8HGNMMnJyWtJKZE91Byr9o6ZLX0Sng==
-=llkR
------END PGP SIGNATURE-----
-
---ljfp3hdtlvkt5bva--
+--
+Linaro LKFT
+https://lkft.linaro.org

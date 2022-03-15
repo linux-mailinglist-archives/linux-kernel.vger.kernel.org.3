@@ -2,98 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8CC4D95E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113CB4D95F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345694AbiCOIIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S1345778AbiCOIQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237121AbiCOIIA (ORCPT
+        with ESMTP id S1345767AbiCOIQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:08:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCED4BFCC;
-        Tue, 15 Mar 2022 01:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647331609; x=1678867609;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=GjBivfhHIJhsgzEOzZeFiFsGAkpj8zbSUCNkNd1Dkro=;
-  b=P3PZ20BxdzBycbBffqRVLoKaSteYlgsUr1X6TFynoJRjnzLB5GM+rQ3J
-   HPbdi1mE+7OiJTWgEkCUj3yIat4cPvGOJdPYn94/+LF7nu1Hy6uebLRRP
-   +APHboU64ZzwbNv9bDMKgZTTepoXtCKiZ+o4RdZf/19CZqoHHN1LeZzKg
-   GpTQedTIQrTWye1T/imyJiT6Pfe8mIQw0qb87BXrtkMzwupVyEdgdjSNQ
-   qcwJoIAyC/PXxuUtFEpDNxpt9OcUUPpe3CN7J7DvROVg+Z1WqPc6CBZP9
-   WtAAw/MY6zrfWlXB/HFARsYVOQWV+VzyK0sLLB0C7x0nUE85eJTWdC4fb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255071587"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="255071587"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 01:06:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="646132539"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2022 01:06:46 -0700
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Message-ID: <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
-Date:   Tue, 15 Mar 2022 10:08:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Tue, 15 Mar 2022 04:16:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B68D4AE15
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647332130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tCvl2VW1cmsTMiDGSIxoASCMFsGS7CwQX41mH9mi7og=;
+        b=DLCOt/nnQszNEAlLGn/a1+bkvc2x8+GC7wTd6+5M3R/a33zQ2urEIKpBYSlZrfCy7htH94
+        7AiAG5PsPnprnHUX/hgMa8IMiIddGCEeAlLyHcyBa61a4tiTGABqmna3ArZhVKox36VgPG
+        L/KQJlHcYdvv8jBsqg5VTnrxdUNKw1M=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-328-uBzbiPxDPB66M4q86R-Peg-1; Tue, 15 Mar 2022 04:15:27 -0400
+X-MC-Unique: uBzbiPxDPB66M4q86R-Peg-1
+Received: by mail-qk1-f198.google.com with SMTP id 68-20020a370847000000b0067e0cd1c855so328249qki.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 01:15:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tCvl2VW1cmsTMiDGSIxoASCMFsGS7CwQX41mH9mi7og=;
+        b=Iw8BVrSz3Sz8CZe+0CCy0NjMSMqHvUWcVED+OEyN0xh9K1B6wH0gwfQOvemlpTHwrQ
+         ODJ6Bht0g7YjjZjGPqgJ6B95mehX6In9aY+3QG/vVVQvgIi6URLG6WpmdJa3QTd7JBpt
+         6VT5/5rmAnoKoipel7Xo29ch+ny4FerCzmlrvFFqoTQm3capJeWFDmI+3BShbS0EyUzS
+         DqWDDvD1R/Fl1GZeKqCpv0NDPTkYEBAaes9oh+AJ4o9Nx0oEMGIaRjcEVQHqgKdB2sAF
+         3eTHxoR1YJ7pNl2HLatdu9JjNbzAwkZb5Cq+kM6CuWfvvKg+u2p56BMoV5HMwQOZm/K+
+         hkIg==
+X-Gm-Message-State: AOAM533xrkD4vpyVpElRXBt2ur71jrmcej7fc6LDiiJVre/ygUmTogkv
+        wDD0ZtiTsoEimsVahYNpA+TPcDkGLGT+qlspJOh4k+3LkFwhJdaCarsYm1BfQ3Zf9MhzGwnWQPm
+        KvSefpSk9HPKT2ovJuxqsSyFy
+X-Received: by 2002:a05:620a:424e:b0:67d:3607:6b50 with SMTP id w14-20020a05620a424e00b0067d36076b50mr17091974qko.194.1647332127179;
+        Tue, 15 Mar 2022 01:15:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjgYb2HPocNtGnS6faY8OIC23ZTZlsPZ5W/DCuKMZo/aQnXkwFKl2eu1filb04x820ASXlIQ==
+X-Received: by 2002:a05:620a:424e:b0:67d:3607:6b50 with SMTP id w14-20020a05620a424e00b0067d36076b50mr17091955qko.194.1647332126634;
+        Tue, 15 Mar 2022 01:15:26 -0700 (PDT)
+Received: from sgarzare-redhat (host-212-171-187-184.pool212171.interbusiness.it. [212.171.187.184])
+        by smtp.gmail.com with ESMTPSA id b126-20020a376784000000b0067d21404704sm8982966qkc.131.2022.03.15.01.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 01:15:26 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 09:15:17 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
+Cc:     Krasnov Arseniy <oxffffaa@gmail.com>,
+        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 2/3] af_vsock: SOCK_SEQPACKET receive timeout test
+Message-ID: <20220315081517.m7rvlpintqipdu6i@sgarzare-redhat>
+References: <1bb5ce91-da53-7de9-49ba-f49f76f45512@sberdevices.ru>
+ <6981b132-4121-62d8-7172-dca28ad1e498@sberdevices.ru>
 MIME-Version: 1.0
-In-Reply-To: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <6981b132-4121-62d8-7172-dca28ad1e498@sberdevices.ru>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.3.2022 9.25, WeitaoWang-oc@zhaoxin.com wrote:
-> On some situations, software handles TRB events slower than adding TRBs,
-> xhci_irq will not exit until all events are handled. If xhci_irq just
-> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records in xhci irq is equal to driver current dequeue pointer. It will cause driver not update ERDP and software dequeue pointer lost sync with ERDP. On the next xhci_irq, the event ring is full but driver will not update ERDP as software dequeue pointer is equal to ERDP.
-> 
-> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
-> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
-> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
-> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
-> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
-> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
-> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
-> 
-> Fixed this issue by update software record temp variable when handles 128 TRB events.> 
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+On Fri, Mar 11, 2022 at 10:55:42AM +0000, Krasnov Arseniy Vladimirovich wrote:
+>Test for receive timeout check: connection is established,
+>receiver sets timeout, but sender does nothing. Receiver's
+>'read()' call must return EAGAIN.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> tools/testing/vsock/vsock_test.c | 49 ++++++++++++++++++++++++++++++++
+> 1 file changed, 49 insertions(+)
+>
+>diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+>index 2a3638c0a008..aa2de27d0f77 100644
+>--- a/tools/testing/vsock/vsock_test.c
+>+++ b/tools/testing/vsock/vsock_test.c
+>@@ -391,6 +391,50 @@ static void test_seqpacket_msg_trunc_server(const struct test_opts *opts)
+> 	close(fd);
+> }
+>
+>+static void test_seqpacket_timeout_client(const struct test_opts *opts)
+>+{
+>+	int fd;
+>+	struct timeval tv;
+>+	char dummy;
+>+
+>+	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
+>+	if (fd < 0) {
+>+		perror("connect");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	tv.tv_sec = 1;
+>+	tv.tv_usec = 0;
+>+
+>+	if (setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (void *)&tv, sizeof(tv)) == -1) {
+>+		perror("setsockopt 'SO_RCVTIMEO'");
+>+		exit(EXIT_FAILURE);
+>+	}
+>+
+>+	if ((read(fd, &dummy, sizeof(dummy)) != -1) ||
+>+	    (errno != EAGAIN)) {
+>+		perror("EAGAIN expected");
+>+		exit(EXIT_FAILURE);
+>+	}
 
-Thanks
+The patch LGTM, maybe the only thing I would add here is a check on the 
+time spent in the read(), to see that it is approximately the timeout we 
+have set.
 
-Solution itself looks good but patch has some minor format issue:
+Thanks,
+Stefano
 
-
-It would also be interesting to know if the full event ring was triggered in a real
-life usecase?
-If that is the case I might need to look more into it.
-
-Bigger event ring, more rings, faster handler, avoid irqoff time...
-
-Thanks
-Mathias 

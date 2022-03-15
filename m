@@ -2,216 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EA54D9DC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0884D9DCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243688AbiCOOin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S243902AbiCOOj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349370AbiCOOiW (ORCPT
+        with ESMTP id S243674AbiCOOj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:38:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661395548F;
-        Tue, 15 Mar 2022 07:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=mKZgpBJtPUvTEog2OOpGUjyTeQRlLu1FawE9R01V1Rw=; b=npixrOoFSPGLx2a30o3licOIVW
-        IbMwjV9ypqPGYBGJIKX5lMt0P3oRQXHnJEAMLngw4qLCvaHtUGsqriKegQ+l2hD2H/xW2IDzNzM7K
-        jx1739qZDQ8DYLp1ybETBc3SJc7ZmwQF4MYbPzeNRl8cS/hzNfl0V68DwcEIE9LJR5hxPy5jy6O1r
-        vStGCwzHxvBlCQZE8e1C34QmmPOGtArKf37kO4UYBW5ZE9MxK0MBBRgQN3usjEdU7jQ9Z3q4H+cWY
-        Fqn3GrW4FFGxLlqhDZi6K7aoHQC3odPgMG8QlYdTksNjsEMbHPb/XDlIhJ7mg9E3XZ6JhwZduZBtc
-        G/tmAzEQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nU8I1-0057A4-Me; Tue, 15 Mar 2022 14:36:45 +0000
-Message-ID: <2254badd-9eea-9af5-2aef-c39719070215@infradead.org>
-Date:   Tue, 15 Mar 2022 07:36:40 -0700
+        Tue, 15 Mar 2022 10:39:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBC53BBCB;
+        Tue, 15 Mar 2022 07:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647355125; x=1678891125;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jZc6rbA3KtDzxwr5RamwrlspVzRzBAtnbcHlUkft5pI=;
+  b=At633+HOj8gsX44hej/nVPUHMd5SdsKVv31qZxJQH1TdHpwgJt25P7qr
+   VPjxBCi8ADOfMPizqsVisHdQbpkIRwxUrbZOTFUTcJoV2uu56h4ylJYsE
+   jYk18VGGXRP23fpx0ep+54Yoru/LDJY5d19fMY5zPG6zgRL4GRLPin6KE
+   MQEWf4mEbk9YoE+0r9o67gsIFiBL6WXcHRf520M5L3c/3azjhvqKvobtF
+   LNpMJN9+71yky3jBYPCA8F2jI67indvDKXmVybFtqP2E3nynknBI4QC43
+   rxf1O8xEZfK38TC5dlMW+1eM1pb/8VpPqeWTNPKwy8lzXilRzIxtc83q/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256045939"
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="256045939"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 07:38:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,183,1643702400"; 
+   d="scan'208";a="646249692"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2022 07:37:58 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nU8JB-000B6B-Iq; Tue, 15 Mar 2022 14:37:57 +0000
+Date:   Tue, 15 Mar 2022 22:37:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, j.vosburgh@gmail.com,
+        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        oliver@neukum.org
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn,
+        sunshouxin@chinatelecom.cn
+Subject: Re: [PATCH v2 3/4] net:bonding:Add support for IPV6 RLB to
+ balance-alb mode
+Message-ID: <202203152231.edfJfrCg-lkp@intel.com>
+References: <20220315073008.17441-4-sunshouxin@chinatelecom.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] docs/scheduler: Introduce the doc of load average
-Content-Language: en-US
-To:     Jui-Tse Huang <juitse.huang@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Beata Michalska <beata.michalska@arm.com>,
-        Chun-Hung Tseng <henrybear327@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        Brendan Gregg <bgregg@netflix.com>,
-        Yiwei Lin <s921975628@gmail.com>
-References: <20220315140857.41697-1-juitse.huang@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220315140857.41697-1-juitse.huang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315073008.17441-4-sunshouxin@chinatelecom.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Hi Sun,
 
-On 3/15/22 07:08, Jui-Tse Huang wrote:
-> The load average is one of a common as well as easy observed statistic
-> provied by Linux, but still not well documented, which makes the numbers
-> that users observes from the output of top, htop or other system
-> monitoring application are only numbers. This patch gives a discussion
-> on how Linux calculates the load average as well as what metrics are
-> concerned while calculating the load average.
-> 
-> The discussion flow is divided into several parts:
-> 1. The expression used to get the load average.
-> 2. Why Linux choose such average method from the other.
-> 2. The meaning of each term in the expression.
-> 3. The metrics, that is, the type of tasks that will be covered in the
->    calculation.
-> 4. A brief explanation over the fixed-point nubmer since the weights
->    defined in the Linux kernel are based on it.
-> 
-> Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
-> Signed-off-by: Yiwei Lin <s921975628@gmail.com>
-> Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
-> Co-Developed-by: Yiwei Lin <s921975628@gmail.com>
-> 
-> ---
-> 
-> v3:
->   - Fix typo (Randy Dunlap)
->   - Add further reading that links to Brendan Gregg's blog
-> 
-> v2:
->   - Fix typo (Chun-Hung Tseng) 
-> 
->  Documentation/scheduler/index.rst        |  1 +
->  Documentation/scheduler/load-average.rst | 82 ++++++++++++++++++++++++
->  2 files changed, 83 insertions(+)
->  create mode 100644 Documentation/scheduler/load-average.rst
-> 
-> diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-> index 88900aabdbf7..bdc779b4190f 100644
-> --- a/Documentation/scheduler/index.rst
-> +++ b/Documentation/scheduler/index.rst
-> @@ -17,6 +17,7 @@ Linux Scheduler
->      sched-nice-design
->      sched-rt-group
->      sched-stats
-> +    load-average
->  
->      text_files
->  
-> diff --git a/Documentation/scheduler/load-average.rst b/Documentation/scheduler/load-average.rst
-> new file mode 100644
-> index 000000000000..27ce6cbae5f4
-> --- /dev/null
-> +++ b/Documentation/scheduler/load-average.rst
-> @@ -0,0 +1,82 @@
-> +============
-> +Load Average
-> +============
-> +
-> +The load average, provided by common operating systems, indicates the average
-> +number of system load over a period of time.  In Linux, it shows the average
-> +number of tasks running and waiting for CPU time. The following expression is
-> +used in Linux to update the load average::
-> +
-> +                / 0                                      , if t = 0
-> +    load_{t} = |
-> +                \ load_{t - 1} * exp + active * (1 - exp), otherwise
-> +
-> +The expression represents the exponential moving average of the historical
-> +loading of the system. There are several reasons that Linux kernel chooses
-> +exponential moving average from other similar average equations such as simple
-> +moving average or cumulative moving average:
-> +
-> +#. The exponential moving average consumes fixed memory space, while the simple
-> +   moving average has O(n) space complexity where n is the number of timeslices
-> +   within a given interval.
-> +#. The exponential moving average not only applies a higher weight to the most
-> +   recent record but also declines the weight exponentially, which makes the
-> +   resulting load average reflect the situation of the current system. Neither
-> +   the simple moving average nor cumulative moving average has this feature.
-> +
-> +In the expression, the load_{t} indicates the calculated load average at the
-> +given time t.
-> +The active is the most recent recorded system load. In Linux, the system load
-> +means the number of tasks in the state of TASK_RUNNING or TASK_UNINTERRUPTIBLE
-> +of the entire system. Tasks with TASK_UNINTERRUPTIBLE state are usually waiting
-> +for disk I/O or holding an uninterruptible lock, which is considered as a part
-> +of system resource, thus, Linux kernel covers them while calculating the load
-> +average.
-> +The exp means the weight applied to the previous report of load average, while
-> +(1 - exp) is the weight applied to the most recently recorded system load.
-> +There are three different weights defined in the Linux kernel, in
-> +include/linux/sched/loadavg.h, to perform statistics in various timescales::
-> +
-> +    // include/linux/sched/loadavg.h
-> +    ...
-> +    #define EXP_1    1884    /* 1/exp(5sec/1min) as fixed-point */
-> +    #define EXP_5    2014    /* 1/exp(5sec/5min) */
-> +    #define EXP_15   2037    /* 1/exp(5sec/15min) */
-> +    ...
-> +
-> +According to the expression shown on the top of this page, the weight (exp)
-> +controls how much of the last load load_{t - 1} will take place in the
-> +calculation of current load, while (1 - exp) is the weight applied to the most
-> +recent record of system load active.
-> +
-> +Due to the security issue, the weights are defined as fixed-point numbers based
-> +on the unsigned integer rather than floating-pointing numbers. The introduction
-> +of the fixed-point number keeps the FPU away from the calculation process. Since
-> +the precision of the fixed-point used in the Linux kernel is 11 bits, a
-> +fixed-point can be converted to a floating-point by dividing it by 2048, as in
-> +the expressions shown bellow::
+Thank you for the patch! Yet something to improve:
 
-                         below::
+[auto build test ERROR on bdd6a89de44b9e07d0b106076260d2367fe0e49a]
 
-> +
-> +    EXP_1  = 1884 / 2048 = 0.919922
-> +    EXP_5  = 2014 / 2048 = 0.983398
-> +    EXP_15 = 2037 / 2048 = 0.994629
-> +
-> +Which indicates the weights applied to active are::
-> +
-> +    (1 - EXP_1)  = (1 - 0.919922) = 0.080078
-> +    (1 - EXP_5)  = (1 - 0.983398) = 0.016602
-> +    (1 - EXP_15) = (1 - 0.994629) = 0.005371
-> +
-> +The load average will be updated every 5 seconds. Each time the scheduler_tick()
-> +be called, the function calc_global_load_tick() will also be invoked, which
+url:    https://github.com/0day-ci/linux/commits/Sun-Shouxin/net-bonding-Add-support-for-IPV6-RLB-to-balance-alb-mode/20220315-153427
+base:   bdd6a89de44b9e07d0b106076260d2367fe0e49a
+config: nios2-randconfig-r016-20220314 (https://download.01.org/0day-ci/archive/20220315/202203152231.edfJfrCg-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e28b865b25b88aec1ae5991aaa525549fb5d1fca
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sun-Shouxin/net-bonding-Add-support-for-IPV6-RLB-to-balance-alb-mode/20220315-153427
+        git checkout e28b865b25b88aec1ae5991aaa525549fb5d1fca
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-   is called,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +makes the active of each CPU core be calculated and be merged globally. Finally,
-> +the load average will be updated with that global active.
-> +
-> +As a user, the load average can be observed via top, htop, or other system
-> +monitor application, or more directly, by the following command::
-> +
-> +    $ cat /proc/loadavg
-> +
-> +Further Reading
-> +---------------
-> +The explanation and analysis done by Brendan Gregg on `his blog
-> +<https://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html>`_.
+All errors (new ones prefixed by >>):
 
+   nios2-linux-ld: drivers/net/bonding/bond_alb.o: in function `rlb6_update_client':
+>> bond_alb.c:(.text+0x874): undefined reference to `ndisc_send_na'
+   bond_alb.c:(.text+0x874): relocation truncated to fit: R_NIOS2_CALL26 against `ndisc_send_na'
+>> nios2-linux-ld: bond_alb.c:(.text+0x89c): undefined reference to `ndisc_send_na'
+   bond_alb.c:(.text+0x89c): relocation truncated to fit: R_NIOS2_CALL26 against `ndisc_send_na'
+   nios2-linux-ld: drivers/net/bonding/bond_alb.o: in function `rlb_nd_recv':
+>> bond_alb.c:(.text+0x2410): undefined reference to `ipv6_get_ifaddr'
+   bond_alb.c:(.text+0x2410): relocation truncated to fit: R_NIOS2_CALL26 against `ipv6_get_ifaddr'
+>> nios2-linux-ld: bond_alb.c:(.text+0x2458): undefined reference to `inet6_ifa_finish_destroy'
+   bond_alb.c:(.text+0x2458): relocation truncated to fit: R_NIOS2_CALL26 against `inet6_ifa_finish_destroy'
 
-After those corrections, you can add:
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-thanks.
--- 
-~Randy
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

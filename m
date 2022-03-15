@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B734D9986
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E3E4D9963
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347986AbiCOKsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S1347553AbiCOKrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347381AbiCOKpm (ORCPT
+        with ESMTP id S1347299AbiCOKpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 06:45:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C2550B31;
-        Tue, 15 Mar 2022 03:44:09 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 10:44:07 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A2F50B3E;
+        Tue, 15 Mar 2022 03:44:10 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 10:44:08 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647341048;
+        s=2020; t=1647341049;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tEqKl8Xj2eBJiDqtuaIr+NyfY08vFf9Oy2NqKL/Hsgw=;
-        b=DS/8qzFXMOCjBY7Qs9Gf3Yh+DG5HFMktcYZ712116tm5AVx1ciMUFAvQEJFVC25UFJ2lWv
-        +L7GdPWtvwXOic5575d4YHBhgfu+vXBf+Hb103/3Gp+J1QjWEy4PyAMfblgheqM3kRb/C6
-        oVwFnRpXoqbICLMPZUknuqVQuDVBlTF2AiW8H/izW2XHjweABYC1dIbFu+qwoUp3j/RYvA
-        6arP2CzBCRGqXFBHCuCTePcN/3IxKAgZAF/egoa6wmGzYarzkVDDz4QaZ1j9J3ERB2iUhV
-        LmUJSTdCOPDZiMnEUo4Q7QeOV3fqgp8k/EFEzJet4NPezQbJCDcFxa6OOkfp+Q==
+        bh=swCwTecdJGT/ErUWecWBJRxuFrh4IhAg4ne1JoRBZ1g=;
+        b=0ruPAJ9sbeAidylDi9c0+bv02ILybBgOgGfoGf1fhHFYjrpFfvojkak25F2+mP9D8cDKXn
+        QqpZw2vDz+Dv7VkuHVFJqnovx/eUS2govxWTvRsCcQw4KDicVcWRMYSQQXqv54ymIYgwR3
+        70+A74d2YTcESh4v7M5BfNg5n2MU3rsrXP6v564FstMgSE4OZaAPUpqD5X/911pSs68E/y
+        GWDzkREg+daabr1CvYaVsHm/91qpgF7pT6eWnteAviPtwH6j3l3DD93uaQfgzDUDXM0+jg
+        +IU2bc0dH2VmOrkSeaGCmlvPMhGmLr1SFC9ebEh5/00P2cnhx3OAV5qFxEnmBg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647341048;
+        s=2020e; t=1647341049;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tEqKl8Xj2eBJiDqtuaIr+NyfY08vFf9Oy2NqKL/Hsgw=;
-        b=NgIDgQr0U3ejzniUG6kFsvaqXPkTFIxHrJBJ4eySEeI/qS5ucXrDbmuWwOymDAU984UlsO
-        NDlNpQwPpAcJIWDw==
+        bh=swCwTecdJGT/ErUWecWBJRxuFrh4IhAg4ne1JoRBZ1g=;
+        b=QwMhDB+mjndoxNZ8YuFWvgFdU+Bk4rwwMInomqM1ER6bvJCQZ1ArY+ds2BKb14UVTwh9Ei
+        awyjb1bwoZA8daCg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/ibt,entry: Sprinkle ENDBR dust
+Subject: [tip: x86/core] x86/ibt,xen: Sprinkle the ENDBR
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220308154317.933157479@infradead.org>
-References: <20220308154317.933157479@infradead.org>
+In-Reply-To: <20220308154317.873919996@infradead.org>
+References: <20220308154317.873919996@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164734104734.16921.6139951335620081807.tip-bot2@tip-bot2>
+Message-ID: <164734104815.16921.5125419048077994442.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,265 +67,170 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     8f93402b92d443573d310250efa0b7f352fec992
-Gitweb:        https://git.kernel.org/tip/8f93402b92d443573d310250efa0b7f352fec992
+Commit-ID:     5b2fc51576eff811a614e33cbbd0c3cb05022892
+Gitweb:        https://git.kernel.org/tip/5b2fc51576eff811a614e33cbbd0c3cb05022892
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 08 Mar 2022 16:30:24 +01:00
+AuthorDate:    Tue, 08 Mar 2022 16:30:23 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 15 Mar 2022 10:32:35 +01:00
 
-x86/ibt,entry: Sprinkle ENDBR dust
+x86/ibt,xen: Sprinkle the ENDBR
 
-Kernel entry points should be having ENDBR on for IBT configs.
+Even though Xen currently doesn't advertise IBT, prepare for when it
+will eventually do so and sprinkle the ENDBR dust accordingly.
 
-The SYSCALL entry points are found through taking their respective
-address in order to program them in the MSRs, while the exception
-entry points are found through UNWIND_HINT_IRET_REGS.
-
-The rule is that any UNWIND_HINT_IRET_REGS at sym+0 should have an
-ENDBR, see the later objtool ibt validation patch.
+Even though most of the entry points are IRET like, the CPL0
+Hypervisor can set WAIT-FOR-ENDBR and demand ENDBR at these sites.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220308154317.933157479@infradead.org
+Link: https://lore.kernel.org/r/20220308154317.873919996@infradead.org
 ---
- arch/x86/entry/entry_64.S        |  7 +++++++
- arch/x86/entry/entry_64_compat.S |  3 +++
- arch/x86/include/asm/idtentry.h  | 20 +++++++++++---------
- arch/x86/include/asm/segment.h   |  3 ++-
- arch/x86/kernel/head_64.S        |  4 +++-
- arch/x86/kernel/idt.c            |  5 +++--
- 6 files changed, 29 insertions(+), 13 deletions(-)
+ arch/x86/entry/entry_64.S      |  1 +
+ arch/x86/include/asm/segment.h |  2 +-
+ arch/x86/kernel/head_64.S      |  1 +
+ arch/x86/xen/enlighten_pv.c    |  3 +++
+ arch/x86/xen/xen-asm.S         |  9 +++++++++
+ arch/x86/xen/xen-head.S        |  9 +++++++--
+ 6 files changed, 22 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 3fd3828..50b6118 100644
+index f731393..3fd3828 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -86,6 +86,7 @@
- 
- SYM_CODE_START(entry_SYSCALL_64)
+@@ -809,6 +809,7 @@ SYM_CODE_END(exc_xen_hypervisor_callback)
+  */
+ SYM_CODE_START(xen_failsafe_callback)
  	UNWIND_HINT_EMPTY
 +	ENDBR
- 
- 	swapgs
- 	/* tss.sp2 is scratch space. */
-@@ -350,6 +351,7 @@ SYM_CODE_END(ret_from_fork)
- .macro idtentry vector asmsym cfunc has_error_code:req
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
-+	ENDBR
- 	ASM_CLAC
- 
- 	.if \has_error_code == 0
-@@ -417,6 +419,7 @@ SYM_CODE_END(\asmsym)
- .macro idtentry_mce_db vector asmsym cfunc
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS
-+	ENDBR
- 	ASM_CLAC
- 
- 	pushq	$-1			/* ORIG_RAX: no syscall to restart */
-@@ -472,6 +475,7 @@ SYM_CODE_END(\asmsym)
- .macro idtentry_vc vector asmsym cfunc
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS
-+	ENDBR
- 	ASM_CLAC
- 
- 	/*
-@@ -533,6 +537,7 @@ SYM_CODE_END(\asmsym)
- .macro idtentry_df vector asmsym cfunc
- SYM_CODE_START(\asmsym)
- 	UNWIND_HINT_IRET_REGS offset=8
-+	ENDBR
- 	ASM_CLAC
- 
- 	/* paranoid_entry returns GS information for paranoid_exit in EBX. */
-@@ -1069,6 +1074,7 @@ SYM_CODE_END(error_return)
-  */
- SYM_CODE_START(asm_exc_nmi)
- 	UNWIND_HINT_IRET_REGS
-+	ENDBR
- 
- 	/*
- 	 * We allow breakpoints in NMIs. If a breakpoint occurs, then
-@@ -1427,6 +1433,7 @@ SYM_CODE_END(asm_exc_nmi)
-  */
- SYM_CODE_START(ignore_sysret)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	mov	$-ENOSYS, %eax
- 	sysretl
- SYM_CODE_END(ignore_sysret)
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index 0051cf5..35a0e69 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -48,6 +48,7 @@
-  */
- SYM_CODE_START(entry_SYSENTER_compat)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	/* Interrupts are off on entry. */
- 	SWAPGS
- 
-@@ -198,6 +199,7 @@ SYM_CODE_END(entry_SYSENTER_compat)
-  */
- SYM_CODE_START(entry_SYSCALL_compat)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	/* Interrupts are off on entry. */
- 	swapgs
- 
-@@ -340,6 +342,7 @@ SYM_CODE_END(entry_SYSCALL_compat)
-  */
- SYM_CODE_START(entry_INT80_compat)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	/*
- 	 * Interrupts are off on entry.
- 	 */
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 1345088..f84280a 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -5,6 +5,8 @@
- /* Interrupts/Exceptions */
- #include <asm/trapnr.h>
- 
-+#define IDT_ALIGN	(8 * (1 + HAS_KERNEL_IBT))
-+
- #ifndef __ASSEMBLY__
- #include <linux/entry-common.h>
- #include <linux/hardirq.h>
-@@ -480,7 +482,7 @@ __visible noinstr void func(struct pt_regs *regs,			\
- 
- /*
-  * ASM code to emit the common vector entry stubs where each stub is
-- * packed into 8 bytes.
-+ * packed into IDT_ALIGN bytes.
-  *
-  * Note, that the 'pushq imm8' is emitted via '.byte 0x6a, vector' because
-  * GCC treats the local vector variable as unsigned int and would expand
-@@ -492,33 +494,33 @@ __visible noinstr void func(struct pt_regs *regs,			\
-  * point is to mask off the bits above bit 7 because the push is sign
-  * extending.
-  */
--	.align 8
-+	.align IDT_ALIGN
- SYM_CODE_START(irq_entries_start)
-     vector=FIRST_EXTERNAL_VECTOR
-     .rept NR_EXTERNAL_VECTORS
- 	UNWIND_HINT_IRET_REGS
- 0 :
-+	ENDBR
- 	.byte	0x6a, vector
- 	jmp	asm_common_interrupt
--	nop
--	/* Ensure that the above is 8 bytes max */
--	. = 0b + 8
-+	/* Ensure that the above is IDT_ALIGN bytes max */
-+	.fill 0b + IDT_ALIGN - ., 1, 0xcc
- 	vector = vector+1
-     .endr
- SYM_CODE_END(irq_entries_start)
- 
- #ifdef CONFIG_X86_LOCAL_APIC
--	.align 8
-+	.align IDT_ALIGN
- SYM_CODE_START(spurious_entries_start)
-     vector=FIRST_SYSTEM_VECTOR
-     .rept NR_SYSTEM_VECTORS
- 	UNWIND_HINT_IRET_REGS
- 0 :
-+	ENDBR
- 	.byte	0x6a, vector
- 	jmp	asm_spurious_interrupt
--	nop
--	/* Ensure that the above is 8 bytes max */
--	. = 0b + 8
-+	/* Ensure that the above is IDT_ALIGN bytes max */
-+	.fill 0b + IDT_ALIGN - ., 1, 0xcc
- 	vector = vector+1
-     .endr
- SYM_CODE_END(spurious_entries_start)
+ 	movl	%ds, %ecx
+ 	cmpw	%cx, 0x10(%rsp)
+ 	jne	1f
 diff --git a/arch/x86/include/asm/segment.h b/arch/x86/include/asm/segment.h
-index 3a31d4e..656ed65 100644
+index b228c9d..3a31d4e 100644
 --- a/arch/x86/include/asm/segment.h
 +++ b/arch/x86/include/asm/segment.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/const.h>
- #include <asm/alternative.h>
-+#include <asm/ibt.h>
- 
- /*
-  * Constructor for a conventional segment GDT (or LDT) entry.
-@@ -275,7 +276,7 @@ static inline void vdso_read_cpunode(unsigned *cpu, unsigned *node)
-  * vector has no error code (two bytes), a 'push $vector_number' (two
-  * bytes), and a jump to the common entry code (up to five bytes).
+@@ -283,7 +283,7 @@ static inline void vdso_read_cpunode(unsigned *cpu, unsigned *node)
+  * pop %rcx; pop %r11; jmp early_idt_handler_array[i]; summing up to
+  * max 8 bytes.
   */
--#define EARLY_IDT_HANDLER_SIZE 9
-+#define EARLY_IDT_HANDLER_SIZE (9 + ENDBR_INSN_SIZE)
+-#define XEN_EARLY_IDT_HANDLER_SIZE 8
++#define XEN_EARLY_IDT_HANDLER_SIZE (8 + ENDBR_INSN_SIZE)
  
- /*
-  * xen_early_idt_handler_array is for Xen pv guests: for each entry in
+ #ifndef __ASSEMBLY__
+ 
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 990960a..9b6fa76 100644
+index 023761c..990960a 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -371,9 +371,11 @@ SYM_CODE_START(early_idt_handler_array)
- 	.rept NUM_EXCEPTION_VECTORS
- 	.if ((EXCEPTION_ERRCODE_MASK >> i) & 1) == 0
- 		UNWIND_HINT_IRET_REGS
-+		ENDBR
- 		pushq $0	# Dummy error code, to make stack frame uniform
- 	.else
- 		UNWIND_HINT_IRET_REGS offset=8
-+		ENDBR
- 	.endif
- 	pushq $i		# 72(%rsp) Vector number
- 	jmp early_idt_handler_common
-@@ -381,11 +383,11 @@ SYM_CODE_START(early_idt_handler_array)
- 	i = i + 1
- 	.fill early_idt_handler_array + i*EARLY_IDT_HANDLER_SIZE - ., 1, 0xcc
+@@ -383,6 +383,7 @@ SYM_CODE_START(early_idt_handler_array)
  	.endr
--	UNWIND_HINT_IRET_REGS offset=16
+ 	UNWIND_HINT_IRET_REGS offset=16
  SYM_CODE_END(early_idt_handler_array)
- 	ANNOTATE_NOENDBR // early_idt_handler_array[NUM_EXCEPTION_VECTORS]
++	ANNOTATE_NOENDBR // early_idt_handler_array[NUM_EXCEPTION_VECTORS]
  
  SYM_CODE_START_LOCAL(early_idt_handler_common)
-+	UNWIND_HINT_IRET_REGS offset=16
  	/*
- 	 * The stack is the hardware frame, an error code or zero, and the
- 	 * vector number.
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index df0fa69..7676e34 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -10,6 +10,7 @@
- #include <asm/proto.h>
- #include <asm/desc.h>
- #include <asm/hw_irq.h>
-+#include <asm/idtentry.h>
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 3c7a55c..5038edb 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -624,6 +624,9 @@ static struct trap_array_entry trap_array[] = {
+ 	TRAP_ENTRY(exc_coprocessor_error,		false ),
+ 	TRAP_ENTRY(exc_alignment_check,			false ),
+ 	TRAP_ENTRY(exc_simd_coprocessor_error,		false ),
++#ifdef CONFIG_X86_KERNEL_IBT
++	TRAP_ENTRY(exc_control_protection,		false ),
++#endif
+ };
  
- #define DPL0		0x0
- #define DPL3		0x3
-@@ -272,7 +273,7 @@ void __init idt_setup_apic_and_irq_gates(void)
- 	idt_setup_from_table(idt_table, apic_idts, ARRAY_SIZE(apic_idts), true);
+ static bool __ref get_trap_addr(void **addr, unsigned int ist)
+diff --git a/arch/x86/xen/xen-asm.S b/arch/x86/xen/xen-asm.S
+index ee17b94..caa9bc2 100644
+--- a/arch/x86/xen/xen-asm.S
++++ b/arch/x86/xen/xen-asm.S
+@@ -122,6 +122,7 @@ SYM_FUNC_END(xen_read_cr2_direct);
+ .macro xen_pv_trap name
+ SYM_CODE_START(xen_\name)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	pop %rcx
+ 	pop %r11
+ 	jmp  \name
+@@ -147,6 +148,9 @@ xen_pv_trap asm_exc_page_fault
+ xen_pv_trap asm_exc_spurious_interrupt_bug
+ xen_pv_trap asm_exc_coprocessor_error
+ xen_pv_trap asm_exc_alignment_check
++#ifdef CONFIG_X86_KERNEL_IBT
++xen_pv_trap asm_exc_control_protection
++#endif
+ #ifdef CONFIG_X86_MCE
+ xen_pv_trap asm_xenpv_exc_machine_check
+ #endif /* CONFIG_X86_MCE */
+@@ -162,6 +166,7 @@ SYM_CODE_START(xen_early_idt_handler_array)
+ 	i = 0
+ 	.rept NUM_EXCEPTION_VECTORS
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	pop %rcx
+ 	pop %r11
+ 	jmp early_idt_handler_array + i*EARLY_IDT_HANDLER_SIZE
+@@ -231,6 +236,7 @@ SYM_CODE_END(xenpv_restore_regs_and_return_to_usermode)
+ /* Normal 64-bit system call target */
+ SYM_CODE_START(xen_syscall_target)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	popq %rcx
+ 	popq %r11
  
- 	for_each_clear_bit_from(i, system_vectors, FIRST_SYSTEM_VECTOR) {
--		entry = irq_entries_start + 8 * (i - FIRST_EXTERNAL_VECTOR);
-+		entry = irq_entries_start + IDT_ALIGN * (i - FIRST_EXTERNAL_VECTOR);
- 		set_intr_gate(i, entry);
- 	}
+@@ -250,6 +256,7 @@ SYM_CODE_END(xen_syscall_target)
+ /* 32-bit compat syscall target */
+ SYM_CODE_START(xen_syscall32_target)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	popq %rcx
+ 	popq %r11
  
-@@ -283,7 +284,7 @@ void __init idt_setup_apic_and_irq_gates(void)
- 		 * system_vectors bitmap. Otherwise they show up in
- 		 * /proc/interrupts.
- 		 */
--		entry = spurious_entries_start + 8 * (i - FIRST_SYSTEM_VECTOR);
-+		entry = spurious_entries_start + IDT_ALIGN * (i - FIRST_SYSTEM_VECTOR);
- 		set_intr_gate(i, entry);
- 	}
- #endif
+@@ -267,6 +274,7 @@ SYM_CODE_END(xen_syscall32_target)
+ /* 32-bit compat sysenter target */
+ SYM_CODE_START(xen_sysenter_target)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	/*
+ 	 * NB: Xen is polite and clears TF from EFLAGS for us.  This means
+ 	 * that we don't need to guard against single step exceptions here.
+@@ -290,6 +298,7 @@ SYM_CODE_END(xen_sysenter_target)
+ SYM_CODE_START(xen_syscall32_target)
+ SYM_CODE_START(xen_sysenter_target)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	lea 16(%rsp), %rsp	/* strip %rcx, %r11 */
+ 	mov $-ENOSYS, %rax
+ 	pushq $0
+diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+index 11d2865..ac17196 100644
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -25,8 +25,12 @@
+ SYM_CODE_START(hypercall_page)
+ 	.rept (PAGE_SIZE / 32)
+ 		UNWIND_HINT_FUNC
+-		.skip 31, 0x90
+-		RET
++		ANNOTATE_NOENDBR
++		ret
++		/*
++		 * Xen will write the hypercall page, and sort out ENDBR.
++		 */
++		.skip 31, 0xcc
+ 	.endr
+ 
+ #define HYPERCALL(n) \
+@@ -74,6 +78,7 @@ SYM_CODE_END(startup_xen)
+ .pushsection .text
+ SYM_CODE_START(asm_cpu_bringup_and_idle)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 
+ 	call cpu_bringup_and_idle
+ SYM_CODE_END(asm_cpu_bringup_and_idle)

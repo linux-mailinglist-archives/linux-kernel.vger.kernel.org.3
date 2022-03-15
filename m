@@ -2,248 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093B54D9139
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BC74D913C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 01:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245641AbiCOAYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 20:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S1343510AbiCOAZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 20:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237769AbiCOAYv (ORCPT
+        with ESMTP id S237769AbiCOAZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 20:24:51 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23BF3BBFA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:23:40 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id e186so34161374ybc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:23:40 -0700 (PDT)
+        Mon, 14 Mar 2022 20:25:27 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AE03CFC1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:24:16 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id z85so19050955vsz.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EGfNWx74UGuUub5piWt3tsVOuTbPS9Nq0NSKYIwZfOc=;
-        b=PYRfwuzfXlVuwTmkFVHsCaGsito8gFKFX2Q5Ixo4mOCFQegWQ3Ua2OPPOyN3A0VimE
-         Q3DNZDn0azVbow/4cs7W963T2YreqnPHkXWXX60007eVdm/TIwcbMxgLqqH5+XzO4yHM
-         GUiu2DUkVT79FkM54HgFWJb2rPzZN2SE77olXoMm5rnY4A+F/HizB7IDBdvQ5dQ8Yf6l
-         Psc/LChDPo9yVp7pL2PdGYEA6xTADKKX+PVtMqWag0gBVoGxx7n6y9xmQq7DerQ/2CVW
-         2go7i1Gdudvc7dveN2yVpzs4YRCoHosYoelNlPhGpvwZ14oklaed28LZ9BgCFhrR67UN
-         FMVQ==
+        bh=9+FOSvDg+ZUh5vunVEqGtFAxwPurKxeLhtmDXEkBmug=;
+        b=OkbxfUcCvuK0TIeWEhVllcozSpDI+atGFo1gj7JDGcq7W/bia8MXWEnCfQbkKBF6NL
+         nTPUUorDchFrNA5oATz4P5IbFvCHKqp6D61Hfor5tDNi/RjsQf3FPVrfqERdCy6+2DHE
+         Zwyi+cOw/B7l0+TvugAGX8IRU7395eDn22VUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EGfNWx74UGuUub5piWt3tsVOuTbPS9Nq0NSKYIwZfOc=;
-        b=1WWFuUdU2yGEj0/F7C/cQzpasJmJmArSBZ80E5t05n8A+H/Dx+w0ZBYtfC/YO0SCMw
-         +6G+eQjmJ3mTuwe/1+K3c5JEyx1gowhRjHPT5XmKWT7UxLgUAucORc4KIGo8/bU9P6ek
-         U91BG8KLIbMbXo1ToqaIAw/AiWYDu8ezGqNWg3XRFWAIt1nZhil9nfk1RpJmYs3G+o5X
-         fWMPNJtGJJDKSGdY0fGaGLEkf3zzTISy8HkAfAn1EHcrnfEPxtvgWtp0A7QXnD9uGDwm
-         nicreK+YwMJnpoIwubNX+NhMpVDAAKKouFGSxJpZbqykVVrDpl1E+t2bPyRkhOVOjE/b
-         vMAg==
-X-Gm-Message-State: AOAM530cDsFwEOxUn4aOI5psbpAn3WELnfMeZVJxUw+egwnNkWFPu4Oe
-        t01T4LIlNWdG+GFlylTELiZcIchqDBampTAzWQp/lg==
-X-Google-Smtp-Source: ABdhPJwfwj8uxFtCbOhp08GGf72OizUn5mMAatGc9XWM0wr+mGQO9ZtqIutLsRpwHCI+V+8WZgRGYPvDEQOa43mJIy8=
-X-Received: by 2002:a25:d512:0:b0:61d:aded:1743 with SMTP id
- r18-20020a25d512000000b0061daded1743mr19336522ybe.526.1647303819857; Mon, 14
- Mar 2022 17:23:39 -0700 (PDT)
+        bh=9+FOSvDg+ZUh5vunVEqGtFAxwPurKxeLhtmDXEkBmug=;
+        b=FA++RfcMmLSabXSpFaN+7UeM4jyJjkaSYzSu3JLQzEpxvIuOUeRGMgTp8h162s41df
+         TSZmqCIyZSBvHZVo/YiT/Gbq6A5i00nQ5xDTqiL8NBUlKDujFR+4mJGwAMxTUx3ivwbt
+         APVZnjSaum17d4bwkgcBFmzd2ZFRlZQq62edscoCgoJ9RSMx5rC9XPhNEDUpy3XSZNT3
+         idcwR8ggC1myzNkqF2mRNxUe2zZwYNQW0LmUgyg32xHMAQzl6x+RZe/LRG6GYFZAQ2dZ
+         fldgokuA3zfmChEOeacluuCvcHvkFJEylyDEJRSgi5f9FxmkH7gkeWfY79upzP7MKYCZ
+         opXQ==
+X-Gm-Message-State: AOAM533cHbGVFbiplKtJPP2R9OUP4vQc4+t/ZGEzFlxKp8wRL7auIXBM
+        6ho7U7cLw5GtoqDyfTCMvR8LI31pQiLAoQ==
+X-Google-Smtp-Source: ABdhPJzOjJ9NsVQ06bx/6Dt1Ca55iXu9ibiL2ZMw0GjWlZPQ6/yd03eovze0ijTrTuDZT2X+g42D9Q==
+X-Received: by 2002:a67:e911:0:b0:322:f217:4c2f with SMTP id c17-20020a67e911000000b00322f2174c2fmr2759258vso.87.1647303855884;
+        Mon, 14 Mar 2022 17:24:15 -0700 (PDT)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id h14-20020a1f9e0e000000b00331eed549basm2449288vke.8.2022.03.14.17.24.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 17:24:14 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id b37so7321859uad.12
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 17:24:14 -0700 (PDT)
+X-Received: by 2002:ab0:67d7:0:b0:345:6bac:4f15 with SMTP id
+ w23-20020ab067d7000000b003456bac4f15mr9498820uar.43.1647303854018; Mon, 14
+ Mar 2022 17:24:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220224172559.4170192-1-rananta@google.com> <20220224172559.4170192-7-rananta@google.com>
- <Yi+bVM742+9W4TYj@google.com>
-In-Reply-To: <Yi+bVM742+9W4TYj@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 14 Mar 2022 17:23:27 -0700
-Message-ID: <CAJHc60yJQ4VOq9OoyGncL07bfvQuz0mPYXCVf2WhL-8QzM5-nA@mail.gmail.com>
-Subject: Re: [PATCH v4 06/13] KVM: arm64: Add standard hypervisor firmware register
-To:     Oliver Upton <oupton@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220314232214.4183078-1-swboyd@chromium.org> <20220314232214.4183078-2-swboyd@chromium.org>
+In-Reply-To: <20220314232214.4183078-2-swboyd@chromium.org>
+From:   Alexandru M Stan <amstan@chromium.org>
+Date:   Mon, 14 Mar 2022 17:23:38 -0700
+X-Gmail-Original-Message-ID: <CAHNYxRwFYBbgxUqz79jYXbDxSd-r+NdHWQPucEyuNK83U577xw@mail.gmail.com>
+Message-ID: <CAHNYxRwFYBbgxUqz79jYXbDxSd-r+NdHWQPucEyuNK83U577xw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: Add ChromeOS fingerprint binding
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 12:45 PM Oliver Upton <oupton@google.com> wrote:
+On Mon, Mar 14, 2022 at 4:22 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> On Thu, Feb 24, 2022 at 05:25:52PM +0000, Raghavendra Rao Ananta wrote:
-> > Introduce the firmware register to hold the standard hypervisor
-> > service calls (owner value 5) as a bitmap. The bitmap represents
-> > the features that'll be enabled for the guest, as configured by
-> > the user-space. Currently, this includes support only for
-> > Paravirtualized time, represented by bit-0.
-> >
-> > The register is also added to the kvm_arm_vm_scope_fw_regs[] list
-> > as it maintains its state per-VM.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_host.h |  2 ++
-> >  arch/arm64/include/uapi/asm/kvm.h |  4 ++++
-> >  arch/arm64/kvm/guest.c            |  1 +
-> >  arch/arm64/kvm/hypercalls.c       | 20 +++++++++++++++++++-
-> >  include/kvm/arm_hypercalls.h      |  3 +++
-> >  5 files changed, 29 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> > index 1909ced3208f..318148b69279 100644
-> > --- a/arch/arm64/include/asm/kvm_host.h
-> > +++ b/arch/arm64/include/asm/kvm_host.h
-> > @@ -105,9 +105,11 @@ struct kvm_arch_memory_slot {
-> >   * struct kvm_hvc_desc: KVM ARM64 hypercall descriptor
-> >   *
-> >   * @hvc_std_bmap: Bitmap of standard secure service calls
-> > + * @hvc_std_hyp_bmap: Bitmap of standard hypervisor service calls
-> >   */
-> >  struct kvm_hvc_desc {
-> >       u64 hvc_std_bmap;
-> > +     u64 hvc_std_hyp_bmap;
-> >  };
-> >
-> >  struct kvm_arch {
-> > diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> > index 2decc30d6b84..9a2caead7359 100644
-> > --- a/arch/arm64/include/uapi/asm/kvm.h
-> > +++ b/arch/arm64/include/uapi/asm/kvm.h
-> > @@ -295,6 +295,10 @@ struct kvm_arm_copy_mte_tags {
-> >  #define KVM_REG_ARM_STD_BIT_TRNG_V1_0                BIT(0)
-> >  #define KVM_REG_ARM_STD_BMAP_BIT_MAX         0       /* Last valid bit */
-> >
-> > +#define KVM_REG_ARM_STD_HYP_BMAP             KVM_REG_ARM_FW_BMAP_REG(1)
-> > +#define KVM_REG_ARM_STD_HYP_BIT_PV_TIME              BIT(0)
-> > +#define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX     0       /* Last valid bit */
-> > +
-> >  /* SVE registers */
-> >  #define KVM_REG_ARM64_SVE            (0x15 << KVM_REG_ARM_COPROC_SHIFT)
-> >
-> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> > index d66e6c742bbe..c42426d6137e 100644
-> > --- a/arch/arm64/kvm/guest.c
-> > +++ b/arch/arm64/kvm/guest.c
-> > @@ -66,6 +66,7 @@ static const u64 kvm_arm_vm_scope_fw_regs[] = {
-> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1,
-> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
-> >       KVM_REG_ARM_STD_BMAP,
-> > +     KVM_REG_ARM_STD_HYP_BMAP,
-> >  };
-> >
-> >  /**
-> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> > index 48c126c3da72..ebc0cc26cf2e 100644
-> > --- a/arch/arm64/kvm/hypercalls.c
-> > +++ b/arch/arm64/kvm/hypercalls.c
-> > @@ -75,6 +75,10 @@ static bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
-> >       case ARM_SMCCC_TRNG_RND64:
-> >               return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_bmap,
-> >                                               KVM_REG_ARM_STD_BIT_TRNG_V1_0);
-> > +     case ARM_SMCCC_HV_PV_TIME_FEATURES:
-> > +     case ARM_SMCCC_HV_PV_TIME_ST:
-> > +             return kvm_arm_fw_reg_feat_enabled(hvc_desc->hvc_std_hyp_bmap,
-> > +                                     KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
-> >       default:
-> >               /* By default, allow the services that aren't listed here */
-> >               return true;
-> > @@ -83,6 +87,7 @@ static bool kvm_hvc_call_supported(struct kvm_vcpu *vcpu, u32 func_id)
-> >
-> >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
-> >  {
-> > +     struct kvm_hvc_desc *hvc_desc = &vcpu->kvm->arch.hvc_desc;
-> >       u32 func_id = smccc_get_function(vcpu);
-> >       u64 val[4] = {SMCCC_RET_NOT_SUPPORTED};
-> >       u32 feature;
-> > @@ -134,7 +139,10 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
-> >                       }
-> >                       break;
-> >               case ARM_SMCCC_HV_PV_TIME_FEATURES:
-> > -                     val[0] = SMCCC_RET_SUCCESS;
-> > +                     if (kvm_arm_fw_reg_feat_enabled(
-> > +                                     hvc_desc->hvc_std_hyp_bmap,
+> Add a binding to describe the fingerprint processor found on Chromeboks
+> with a fingerprint sensor.
 >
-> It is probably OK to keep this parameter on the line above (just stay
-> under 100 characters a line).
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: <devicetree@vger.kernel.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Craig Hesling <hesling@chromium.org>
+> Cc: Tom Hughes <tomhughes@chromium.org>
+> Cc: Alexandru M Stan <amstan@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  .../bindings/mfd/google,cros-ec-fp.yaml       | 89 +++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml
 >
-Will rearrange this in the next series. Thanks.
+> diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml
+> new file mode 100644
+> index 000000000000..05d2b2b9b713
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec-fp.yaml
+> @@ -0,0 +1,89 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/google,cros-ec-fp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ChromeOS Embedded Fingerprint Controller
+> +
+> +description:
+> +  Google's ChromeOS embedded fingerprint controller is a device which
+> +  implements fingerprint functionality such as unlocking a Chromebook
+> +  without typing a password.
+> +
+> +maintainers:
+> +  - Tom Hughes <tomhughes@chromium.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: google,cros-ec-fp
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 3000000
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description: reset signal (active low).
+> +
+> +  boot0-gpios:
+> +    maxItems: 1
+> +    description: boot signal (low for normal boot; high for bootloader).
+Maybe add "active high, same polarity as the fpmcu sees physically".
 
-Regards,
-Raghavendra
-> > +                                     KVM_REG_ARM_STD_HYP_BIT_PV_TIME))
-> > +                             val[0] = SMCCC_RET_SUCCESS;
-> >                       break;
-> >               }
-> >               break;
-> > @@ -179,6 +187,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
-> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1,
-> >       KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
-> >       KVM_REG_ARM_STD_BMAP,
-> > +     KVM_REG_ARM_STD_HYP_BMAP,
-> >  };
-> >
-> >  void kvm_arm_init_hypercalls(struct kvm *kvm)
-> > @@ -186,6 +195,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
-> >       struct kvm_hvc_desc *hvc_desc = &kvm->arch.hvc_desc;
-> >
-> >       hvc_desc->hvc_std_bmap = ARM_SMCCC_STD_FEATURES;
-> > +     hvc_desc->hvc_std_hyp_bmap = ARM_SMCCC_STD_HYP_FEATURES;
-> >  }
-> >
-> >  int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
-> > @@ -272,6 +282,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
-> >       case KVM_REG_ARM_STD_BMAP:
-> >               val = READ_ONCE(hvc_desc->hvc_std_bmap);
-> >               break;
-> > +     case KVM_REG_ARM_STD_HYP_BMAP:
-> > +             val = READ_ONCE(hvc_desc->hvc_std_hyp_bmap);
-> > +             break;
-> >       default:
-> >               return -ENOENT;
-> >       }
-> > @@ -294,6 +307,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
-> >               fw_reg_bmap = &hvc_desc->hvc_std_bmap;
-> >               fw_reg_features = ARM_SMCCC_STD_FEATURES;
-> >               break;
-> > +     case KVM_REG_ARM_STD_HYP_BMAP:
-> > +             fw_reg_bmap = &hvc_desc->hvc_std_hyp_bmap;
-> > +             fw_reg_features = ARM_SMCCC_STD_HYP_FEATURES;
-> > +             break;
-> >       default:
-> >               return -ENOENT;
-> >       }
-> > @@ -398,6 +415,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
-> >
-> >               return 0;
-> >       case KVM_REG_ARM_STD_BMAP:
-> > +     case KVM_REG_ARM_STD_HYP_BMAP:
-> >               return kvm_arm_set_fw_reg_bmap(vcpu, reg_id, val);
-> >       default:
-> >               return -ENOENT;
-> > diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
-> > index 64d30b452809..a1cb6e839c74 100644
-> > --- a/include/kvm/arm_hypercalls.h
-> > +++ b/include/kvm/arm_hypercalls.h
-> > @@ -9,6 +9,9 @@
-> >  #define ARM_SMCCC_STD_FEATURES \
-> >       GENMASK_ULL(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
-> >
-> > +#define ARM_SMCCC_STD_HYP_FEATURES \
-> > +     GENMASK_ULL(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
-> > +
-> >  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
-> >
-> >  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
-> > --
-> > 2.35.1.473.g83b2b277ed-goog
-> >
+> +  vdd-supply:
+> +    description: Power supply for the fingerprint controller.
+> +
+> +  google,cros-ec-spi-pre-delay:
+> +    description:
+> +      This property specifies the delay in usecs between the
+> +      assertion of the CS and the first clock pulse.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> +      - default: 0
+> +      - minimum: 0
+> +
+> +  google,cros-ec-spi-msg-delay:
+> +    description:
+> +      This property specifies the delay in usecs between messages.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> +      - default: 0
+> +      - minimum: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - reset-gpios
+> +  - boot0-gpios
+> +  - vdd-supply
+> +  - spi-max-frequency
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    spi {
+> +      #address-cells = <0x1>;
+> +      #size-cells = <0x0>;
+> +      ec@0 {
+> +        compatible = "google,cros-ec-fp";
+> +        reg = <0>;
+> +        interrupt-parent = <&gpio_controller>;
+> +        interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
+> +        spi-max-frequency = <3000000>;
+> +        google,cros-ec-spi-msg-delay = <37>;
+> +        google,cros-ec-spi-pre-delay = <5>;
+> +        reset-gpios = <&gpio_controller 5 GPIO_ACTIVE_LOW>;
+> +        boot0-gpios = <&gpio_controller 10 GPIO_ACTIVE_LOW>;
+This should say GPIO_ACTIVE_HIGH, since there's no inverting going on
+either with a real inverter, or the convention (of 'N' being in the
+pin name).
+
+It might be easier to reason about if there's no invesion going for this signal.
+
+Consider it like an enum instead of a verb (unlike active_low
+reset-gpios which can be considered: in reset if it's set):
+
+enum boot0 {
+        normal = 0,
+        bootloader = 1,
+};
+
+> +        vdd-supply = <&pp3300_fp_mcu>;
+> +      };
+> +    };
+> +...
+> --
+> https://chromeos.dev
+>
+--
+Alexandru Stan (amstan)

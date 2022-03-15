@@ -2,168 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CF14D938B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB07E4D9395
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 06:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344828AbiCOFKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 01:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S1344836AbiCOFLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 01:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344813AbiCOFKI (ORCPT
+        with ESMTP id S242877AbiCOFLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 01:10:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F9645ACE;
-        Mon, 14 Mar 2022 22:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647320937; x=1678856937;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oJuv0Z8dvZxqgVY1+X5D78/R17rRg7H8XXZJ/5nQQ3A=;
-  b=XYo7iZfLk/t91ZJu5cLak395/UVXlaDrecuqsBD32+9SNeu92zSgY+P2
-   WLkKgXLxmovLTZ7zH9tfxhx3U8xDr5HQnEJ4pCvGqc2Ce3OVFbjeiSNng
-   jI61tYzweN4W9+yTsOybrBeXK2AJqirPxxl80SfAhhbx99xdvXSWFENc7
-   IEeRSX5G6yNiVt78bULuWimxYwkdvlSmquLkiGU+naT/6Dp3RRatPAwHG
-   xLgZis33RASBC9yGAH0guLp4yCyYbtUfkhN60F6jL/6Ahj4lyjZO5YzXW
-   9nI379GHGV1LYcVEO4bao/yKXeyDpEC/j5Wv6xg4gIJBfHRhqgN7Ywo4A
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253774485"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="253774485"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 22:08:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="580384681"
-Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 22:08:55 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver OHalloran <oohall@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [PATCH v2] PCI/AER: Handle Multi UnCorrectable/Correctable errors properly
-Date:   Tue, 15 Mar 2022 05:08:42 +0000
-Message-Id: <20220315050842.120063-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Mar 2022 01:11:46 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723C048E7E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:10:35 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2e5827a76f4so17463507b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 22:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lL7cd8qE9IaU3wuuUAMrbO8uNuGot6UwjtaA+bbuf0U=;
+        b=pNMj2k1CAnM+L/QbehYMm2BTsrp4h9cPWa3gtwCx9JLSaDKGyoDBVFguwTVI0i9nVE
+         Fqjco8yr2eT3BMQ8KzheXqZBewMBwCGlsjXGB9KKFRLRgLT1O/ZosRA5zylZpi++uYg3
+         qhUTexDEUqUuqTmhiKs8FX4TpUAkhPpdwQ/561OZVNZIqhgMdyhNMQw1xJBDsWv93PH8
+         h6lSbNeCCzuM1mkCZ73eHBzjjm7iO4x4o8ZFFxAOMF3wx6oYibwqvwR9fC36Xb8/WGOE
+         rZ9bIglR0yJULpypBVzmDuqsF9Jpe4X4OH6MVMzZumnNU2m4w2yppnXpcufGSskJJlON
+         4gng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lL7cd8qE9IaU3wuuUAMrbO8uNuGot6UwjtaA+bbuf0U=;
+        b=Yi7tj37L/WSQvFMJUdCo3OX+0Zf/4skFZ+PQ4D3mzEufmTnAbYPPunI6FilxQoDLB1
+         Bz/LmKWuxfEoP6E3UOSEmQvPD2JdRU0j+ItRIbQvJ203JlrUqQL0YWLZMDPwEoDHaz0J
+         y8gk7Srw1ZK6yyPPeANk1/pJGwc1M8y0ikVTbZzQbj20zED9603weiwuo1ig4Wz2BmeU
+         vKO0bQ3KCLAYRlNz51feEJT/MHROeEvsk6Zr9lcpCbDnEbCXPXdr9TuFsMNFWmRtM1jB
+         rVovrdR1n+hOrisyYeiLYtSVjTj2LtuhOPLRfLOTVjymwFZ029QFnF85WI2hnKxpsWEC
+         1oPw==
+X-Gm-Message-State: AOAM533SQWlwDItl4BLrwmP8FmdJiImZB9b45HbNZTNmuvXQb2oQ8vcP
+        XLKOMT0Mio5bXUGVHniSCVh5bYsTiDiVXcwUGE3rNg==
+X-Google-Smtp-Source: ABdhPJwyFRz05LI1PLzsussDvbrnvw2EN9RDlMRMRYp1Nm+7L4L3VlDugtTdGEucyoIJczyMpuwuugDdm1xrGWxLDqw=
+X-Received: by 2002:a81:678a:0:b0:2e5:8748:5c23 with SMTP id
+ b132-20020a81678a000000b002e587485c23mr1718051ywc.199.1647321034468; Mon, 14
+ Mar 2022 22:10:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220314112744.120491875@linuxfoundation.org>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Mar 2022 10:40:23 +0530
+Message-ID: <CA+G9fYt16S2P4r8qbF_7ZcDVN0ScFhyXofB7uuR82xoNP+xctQ@mail.gmail.com>
+Subject: Re: [PATCH 5.16 000/121] 5.16.15-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the aer_irq() handler returns IRQ_NONE for cases without bits
-PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
-assumption is incorrect.
+On Mon, 14 Mar 2022 at 17:43, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.15 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.16.15-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Consider a scenario where aer_irq() is triggered for a correctable
-error, and while we process the error and before we clear the error
-status in "Root Error Status" register, if the same kind of error
-is triggered again, since aer_irq() only clears events it saw, the
-multi-bit error is left in tact. This will cause the interrupt to fire
-again, resulting in entering aer_irq() with just the multi-bit error
-logged in the "Root Error Status" register.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Repeated AER recovery test has revealed this condition does happen
-and this prevents any new interrupt from being triggered. Allow to
-process interrupt even if only multi-correctable (BIT 1) or
-multi-uncorrectable bit (BIT 3) is set.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-This error can be reproduced by making following changes to the
-aer_irq() function and by executing the given test commands.
+## Build
+* kernel: 5.16.15-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.16.y
+* git commit: b2a408c85a229c023493aced7ac25f71e2f61107
+* git describe: v5.16.14-122-gb2a408c85a22
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
+.14-122-gb2a408c85a22
 
- static irqreturn_t aer_irq(int irq, void *context)
-         struct aer_err_source e_src = {};
+## Test Regressions (compared to v5.16.14)
+No test regressions found.
 
-         pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS,
-				&e_src.status);
- +       pci_dbg(pdev->port, "Root Error Status: %04x\n",
- +		e_src.status);
-         if (!(e_src.status & AER_ERR_STATUS_MASK))
-                 return IRQ_NONE;
+## Metric Regressions (compared to v5.16.14)
+No metric regressions found.
 
- +       mdelay(5000);
+## Test Fixes (compared to v5.16.14)
+No test fixes found.
 
- # Prep injection data for a correctable error.
- $ cd /sys/kernel/debug/apei/einj
- $ echo 0x00000040 > error_type
- $ echo 0x4 > flags
- $ echo 0x891000 > param4
+## Metric Fixes (compared to v5.16.14)
+No metric fixes found.
 
- # Root Error Status is initially clear
- $ setpci -s <Dev ID> ECAP0001+0x30.w
- 0000
+## Test result summary
+total: 115372, pass: 96926, fail: 1741, skip: 15433, xfail: 1272
 
- # Inject one error
- $ echo 1 > error_inject
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* dragonboard-410c: 2 total, 2 passed, 0 failed
+* hi6220-hikey: 2 total, 2 passed, 0 failed
+* i386: 46 total, 42 passed, 4 failed
+* juno-r2: 2 total, 2 passed, 0 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 50 passed, 15 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 2 total, 2 passed, 0 failed
+* x86: 2 total, 2 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
 
- # Interrupt received
- pcieport <Dev ID>: AER: Root Error Status 0001
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* prep-inline
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
- # Inject another error (within 5 seconds)
- $ echo 1 > error_inject
-
- # No interrupt received, but "multiple ERR_COR" is now set
- $ setpci -s <Dev ID> ECAP0001+0x30.w
- 0003
-
- # Wait for a while, then clear ERR_COR. A new interrupt immediately
-   fires.
- $ setpci -s <Dev ID> ECAP0001+0x30.w=0x1
- pcieport <Dev ID>: AER: Root Error Status 0002
-
-Currently, the above issue has been only reproduced in the ICL server
-platform.
-
-[Eric: proposed reproducing steps]
-Fixes: 4696b828ca37 ("PCI/AER: Hoist aerdrv.c, aer_inject.c up to drivers/pci/pcie/")
-Reported-by: Eric Badger <ebadger@purestorage.com>
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
-
-Changes since v1:
- * Added Fixes tag.
- * Included reproducing steps proposed by Eric.
-
- drivers/pci/pcie/aer.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 9fa1f97e5b27..7952e5efd6cf 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -101,6 +101,11 @@ struct aer_stats {
- #define ERR_COR_ID(d)			(d & 0xffff)
- #define ERR_UNCOR_ID(d)			(d >> 16)
- 
-+#define AER_ERR_STATUS_MASK		(PCI_ERR_ROOT_UNCOR_RCV |	\
-+					PCI_ERR_ROOT_COR_RCV |		\
-+					PCI_ERR_ROOT_MULTI_COR_RCV |	\
-+					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
-+
- static int pcie_aer_disable;
- static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
- 
-@@ -1196,7 +1201,7 @@ static irqreturn_t aer_irq(int irq, void *context)
- 	struct aer_err_source e_src = {};
- 
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
--	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
-+	if (!(e_src.status & AER_ERR_STATUS_MASK))
- 		return IRQ_NONE;
- 
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_ERR_SRC, &e_src.id);
--- 
-2.25.1
-
+--
+Linaro LKFT
+https://lkft.linaro.org

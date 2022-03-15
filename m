@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083104D9B2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3D84D9B2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348252AbiCOM2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S1348280AbiCOM3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239134AbiCOM2s (ORCPT
+        with ESMTP id S1348275AbiCOM3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:28:48 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86D9532E4;
-        Tue, 15 Mar 2022 05:27:36 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id g7so75213wrb.4;
-        Tue, 15 Mar 2022 05:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vsPzKwTS+IeFWwMuAO6niSRyxPXe0xb+6y4I6aL7QW0=;
-        b=NL+6mVXVc1ULntZn6zGAnso0FAmQ76WRKZ3Jvq9anuufLIQW4RBIIiMcAPEm4jCuDK
-         ykfi02g0nCetjIZaq5XYPak7KEGHV0Ad6AXxKhvlnFKzhFx6o/EwwV499I3AQh0hgaS3
-         h7UQAbtGfuQ/V2n4944je+hTfTSIBRRPO7CKnDvjsFGWZqviwTzPkndcYnfsNyCkH9cu
-         UswbkIffl6AtqT74VVSlcS0rSP1/c5uN4reY/b6n3JRGBFmzko/7MzeQZZ3EMK/yQ7pE
-         /BK1OjThtOw472gixxuHu8oGbPSO+0VuluSIHvK+IDe+gOdO92LFnLdmGGsM65nW3ieQ
-         B06Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vsPzKwTS+IeFWwMuAO6niSRyxPXe0xb+6y4I6aL7QW0=;
-        b=NuXIwvrKI36Xp+KlqDa41kSncuz98xG8C5BCKwsQGm7xSAC7wdw7G0h3nimCigva8A
-         McPRoqKXjYUpxLw2n4b9WE0iOZV72RHMK1oSP1r8HDW1Vs708gt265vx4xaApKJnoagB
-         rAR0htYIRCpXdSVitTPl9LPBinNg4DrrsSFBN3+U+uVWkk3W3lQiWpxdJh5RtwXp4y9+
-         R6PiLVSZRAbqzFIWGlgv88kIDTrV34olbQ5dcUKw6c+WQPqLMkkRvBzSn/NfqdAU81K3
-         t0Ci/YhK0YMgJb+g+m44HGB+mhr6t0mfxThQmYQZSmJiKiPm0FnZzmuN0qpsXIPJBqae
-         zoBw==
-X-Gm-Message-State: AOAM5323K2U+cpR/RRpWGUVftla8LdsuDx2d29rneT5MdemyZI/aC4gj
-        sy9Orb5COe55R6EMu8bSlb9ZVo/U3oE=
-X-Google-Smtp-Source: ABdhPJw9ZyXSSVehYTlyuH3WFHXnRE2RC1Xiin6VmXbIKq+x3kPvEhih+fOd4MhV9lnNokBxAfg6/A==
-X-Received: by 2002:a05:6000:144d:b0:203:7add:fa71 with SMTP id v13-20020a056000144d00b002037addfa71mr19819711wrx.526.1647347255342;
-        Tue, 15 Mar 2022 05:27:35 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id g12-20020a5d698c000000b001f1d8bb4618sm24282118wru.36.2022.03.15.05.27.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 05:27:34 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 12:27:32 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/29] 4.19.235-rc2 review
-Message-ID: <YjCGNH2AWqpbIICA@debian>
-References: <20220314145920.247358804@linuxfoundation.org>
+        Tue, 15 Mar 2022 08:29:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC13010E6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647347268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QZj/j3mujpkHpYXJfMpqznpHbCKC+8ZpMC/lUI9cO/E=;
+        b=bK8XuwiK3rNPg3w6WwiIY9aznEiBJdWh4eV5b7HCe3dlufHp9LnIcBWnW3kQ23TrEjN8Ko
+        AGoaakXg/usQZ2K+9iBM0u4E+dZRLwSPWArOX2WAzNfWldGS3uUOk7y1qup0Ij258mNFVY
+        GwXFxQ2fkfrG+e/UIQCuqpbmcfjjPxk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-Mjj8FLqdMHqKdxErlIq-vQ-1; Tue, 15 Mar 2022 08:27:45 -0400
+X-MC-Unique: Mjj8FLqdMHqKdxErlIq-vQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22A723C02B6B;
+        Tue, 15 Mar 2022 12:27:45 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 35579401E36;
+        Tue, 15 Mar 2022 12:27:42 +0000 (UTC)
+Message-ID: <74fdb7e9d29af948d6ddaa7755b3c8bf7577f9c7.camel@redhat.com>
+Subject: Re: [PATCH 3/4] KVM: x86: SVM: use vmcb01 in avic_init_vmcb
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org
+Date:   Tue, 15 Mar 2022 14:27:41 +0200
+In-Reply-To: <7b1999d1-4fd7-1b59-76f7-4287ad2c2a99@redhat.com>
+References: <20220301135526.136554-1-mlevitsk@redhat.com>
+         <20220301135526.136554-4-mlevitsk@redhat.com> <Yh5H8qRhbefuD9YF@google.com>
+         <603d78c516d10119c833ff54367b63b7a66f32b3.camel@redhat.com>
+         <7b1999d1-4fd7-1b59-76f7-4287ad2c2a99@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220314145920.247358804@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Mar 14, 2022 at 04:00:14PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.235 release.
-> There are 29 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, 2022-03-09 at 16:48 +0100, Paolo Bonzini wrote:
+> On 3/1/22 18:25, Maxim Levitsky wrote:
+> > > I don't like this change.  It's not bad code, but it'll be confusing because it
+> > > implies that it's legal for svm->vmcb to be something other than svm->vmcb01.ptr
+> > > when this is called.
+> > Honestly I don't see how you had reached this conclusion.
+> >   
+> > I just think that code that always works on vmcb01
+> > should use it, even if it happens that vmcb == vmcb01.
+> >   
+> > If you insist I can drop this patch or add WARN_ON instead,
+> > I just think that this way is cleaner.
+> >   
 > 
-> Responses should be made by Wed, 16 Mar 2022 14:59:12 +0000.
-> Anything received after that time might be too late.
+> I do like the patch, but you should do the same in init_vmcb() and 
+> svm_hv_init_vmcb() as well.
 
-Build test:
-mips (gcc version 11.2.1 20220301): 63 configs -> no  failure
-arm (gcc version 11.2.1 20220301): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220301): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
+I will do this.
+Thanks!
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+Best regards,
+	Maxim Levitsky
+> 
+> Paolo
+> 
 
-[1]. https://openqa.qa.codethink.co.uk/tests/880
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
 

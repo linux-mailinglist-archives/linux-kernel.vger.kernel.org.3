@@ -2,305 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CF74D9CF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0944D9CF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 15:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348990AbiCOOEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 10:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S1347312AbiCOOFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 10:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349017AbiCOODz (ORCPT
+        with ESMTP id S239793AbiCOOE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 10:03:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531BE5469B;
-        Tue, 15 Mar 2022 07:02:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E36E861685;
-        Tue, 15 Mar 2022 14:02:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A864C340E8;
-        Tue, 15 Mar 2022 14:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647352962;
-        bh=gYl4Kdz77UQE5JD3kUI4FvgjNtnkg0CruIjvyq/cUEQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gIykNzyR/1l/mQrXCe7Qiz1hbCWb986Y5AWpAQYS4EpFO+wHWBDx4TGtlKnkPTKmv
-         DaVMA7zO4LCirp2Qu+Lz7ml2vVsdxlEy7uvocsRzALwfySfAfEINpec9jt9eva7Z+W
-         XZ3bJxXiVE7RibfK0UYuSYoCso6wFPI4t1PUtHIeWnMPbfqmIlpvie4H9hTrd8Gk9b
-         5c5gJKDpP0Mc66Nn1AlzfX6tExsvdtWuFi4ZYJC1Pr0G0pWt/Iu6t8rgOnqfMrbBZ4
-         XXwsI55sOSs7S9IejouR5zNjcSdJQiUJJ+QINpTYSCd9uksJZkVT4vCR4ZBTkm2Bfe
-         kyFm2dyAyCLlQ==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v12 bpf-next 12/12] fprobe: Add a selftest for fprobe
-Date:   Tue, 15 Mar 2022 23:02:35 +0900
-Message-Id: <164735295554.1084943.18347620679928750960.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164735281449.1084943.12438881786173547153.stgit@devnote2>
-References: <164735281449.1084943.12438881786173547153.stgit@devnote2>
-User-Agent: StGit/0.19
+        Tue, 15 Mar 2022 10:04:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E1263F4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:03:47 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2e58e59d101so17297107b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 07:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=soL1dE6+M5+b/reXeAn06RN5n+N6IBE0EIn9JWJ1OPE=;
+        b=TvNO4OfC0OOtvKBHgObwZ7ibBT8Bby0q/hA7wCvrj21D55iiKSwy09ZAoMs5+7X3eJ
+         xMU21RFT2m5KfcYOgeL19haHaa5JTCKurAUwt8a0yaUr41dFgzCdJtBAVOk6pOha1wsF
+         PU7WBDtqna7capPabyjaqc9xjVTVOUwNAYBtxxUQEKTp1J75F+dNqD79Ot0fTkJl0BhC
+         iD3kEezN2Of17DOd3tCwWhGHVsUGSKXINV2EZdkU1KPsopII+JxK3mZUZFu6frsMuZu+
+         8i94ICxjhnVsU3mvPCACbBh/upNdwf8Xd0tPcbDLuilTSSmrVZnexL/fORrut0nlBXqL
+         MA8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=soL1dE6+M5+b/reXeAn06RN5n+N6IBE0EIn9JWJ1OPE=;
+        b=aZpLBrv+Z44ln5I4tslefIyKG5Q/btmhVn4eCkFw7SaOXeWMUee40DwLwSym5Wb+FP
+         THiOOPH+5SQhTDevSbAozhc9CPI/ROmPxaCi+sMerBBdQwW1dq6APZDp/F/33ZO/RFBq
+         G/gPlfIh7bZ4zzDMiHrd8+KQfekbqcnM/3zT+NWA6yWvW0C8MxQNPq0vnLSpAZJRwbmp
+         HXzvf4llX/l3hiow42VNrelQVoplK/Fut2ZHmLtLdl4e+VROQCPqDmhSFwQqsPe8olXB
+         SvRHGOMA5Xfg1mqTTcUGiftImXHDVmuel43FbC1N9nWw3uoAqCq/Y7fVdAinIGLifxaB
+         hSoA==
+X-Gm-Message-State: AOAM530WIGqYGRSj+x+ldxFPlMI1SgcrT2ftmTcFYnux/vdJxAs4QY33
+        SzT6h6keaf3LF2CwSb5cIW6usPyxRSTs6pmU3v0=
+X-Google-Smtp-Source: ABdhPJwwQMd0TithFxtUcDfA+cH1fPjMVtwZy9CQKU5MBDaqaf8Yt3X2rmQoUe0y99eyJn7ZFFKSHXHYGPyOzd726J8=
+X-Received: by 2002:a0d:da02:0:b0:2e5:7825:9741 with SMTP id
+ c2-20020a0dda02000000b002e578259741mr6272635ywe.20.1647353026366; Tue, 15 Mar
+ 2022 07:03:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: mrsabibatuhafiza1@gmail.com
+Received: by 2002:a05:7108:408a:0:0:0:0 with HTTP; Tue, 15 Mar 2022 07:03:45
+ -0700 (PDT)
+From:   Mimi Hassan <mimihassan971@gmail.com>
+Date:   Tue, 15 Mar 2022 07:03:45 -0700
+X-Google-Sender-Auth: 0O0blRhH5t-tRAq53qAVL98-Ijo
+Message-ID: <CABzhNW3DdqJhXZmYcUffM5B5iW=wmqJ_7NFv+mQBTravLVFF7w@mail.gmail.com>
+Subject: MY GOOD FRIEND, ARE YOU READY TO DO IT?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_3,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a KUnit based selftest for fprobe interface.
-
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v11:
-  - Build selftest only if KUNIT=y.
- Changes in v9:
-  - Rename fprobe_target* to fprobe_selftest_target*.
-  - Find the correct expected ip by ftrace_location_range().
-  - Since the ftrace_location_range() is not exposed to module, make
-    this test only for embedded.
-  - Add entry only test.
-  - Reset the fprobe structure before reuse it.
----
- lib/Kconfig.debug |   12 ++++
- lib/Makefile      |    2 +
- lib/test_fprobe.c |  174 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 188 insertions(+)
- create mode 100644 lib/test_fprobe.c
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 72ca4684beda..b0bf0d224b2c 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2118,6 +2118,18 @@ config KPROBES_SANITY_TEST
- 
- 	  Say N if you are unsure.
- 
-+config FPROBE_SANITY_TEST
-+	bool "Self test for fprobe"
-+	depends on DEBUG_KERNEL
-+	depends on FPROBE
-+	depends on KUNIT=y
-+	help
-+	  This option will enable testing the fprobe when the system boot.
-+	  A series of tests are made to verify that the fprobe is functioning
-+	  properly.
-+
-+	  Say N if you are unsure.
-+
- config BACKTRACE_SELF_TEST
- 	tristate "Self test for the backtrace code"
- 	depends on DEBUG_KERNEL
-diff --git a/lib/Makefile b/lib/Makefile
-index 300f569c626b..154008764b16 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -103,6 +103,8 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
- obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
-+CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
-+obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
- #
- # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
- # off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
-diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
-new file mode 100644
-index 000000000000..ed70637a2ffa
---- /dev/null
-+++ b/lib/test_fprobe.c
-@@ -0,0 +1,174 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * test_fprobe.c - simple sanity test for fprobe
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/fprobe.h>
-+#include <linux/random.h>
-+#include <kunit/test.h>
-+
-+#define div_factor 3
-+
-+static struct kunit *current_test;
-+
-+static u32 rand1, entry_val, exit_val;
-+
-+/* Use indirect calls to avoid inlining the target functions */
-+static u32 (*target)(u32 value);
-+static u32 (*target2)(u32 value);
-+static unsigned long target_ip;
-+static unsigned long target2_ip;
-+
-+static noinline u32 fprobe_selftest_target(u32 value)
-+{
-+	return (value / div_factor);
-+}
-+
-+static noinline u32 fprobe_selftest_target2(u32 value)
-+{
-+	return (value / div_factor) + 1;
-+}
-+
-+static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+{
-+	KUNIT_EXPECT_FALSE(current_test, preemptible());
-+	/* This can be called on the fprobe_selftest_target and the fprobe_selftest_target2 */
-+	if (ip != target_ip)
-+		KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
-+	entry_val = (rand1 / div_factor);
-+}
-+
-+static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+{
-+	unsigned long ret = regs_return_value(regs);
-+
-+	KUNIT_EXPECT_FALSE(current_test, preemptible());
-+	if (ip != target_ip) {
-+		KUNIT_EXPECT_EQ(current_test, ip, target2_ip);
-+		KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor) + 1);
-+	} else
-+		KUNIT_EXPECT_EQ(current_test, ret, (rand1 / div_factor));
-+	KUNIT_EXPECT_EQ(current_test, entry_val, (rand1 / div_factor));
-+	exit_val = entry_val + div_factor;
-+}
-+
-+/* Test entry only (no rethook) */
-+static void test_fprobe_entry(struct kunit *test)
-+{
-+	struct fprobe fp_entry = {
-+		.entry_handler = fp_entry_handler,
-+	};
-+
-+	current_test = test;
-+
-+	/* Before register, unregister should be failed. */
-+	KUNIT_EXPECT_NE(test, 0, unregister_fprobe(&fp_entry));
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp_entry, "fprobe_selftest_target*", NULL));
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, 0, exit_val);
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target2(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, 0, exit_val);
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp_entry));
-+}
-+
-+static void test_fprobe(struct kunit *test)
-+{
-+	struct fprobe fp = {
-+		.entry_handler = fp_entry_handler,
-+		.exit_handler = fp_exit_handler,
-+	};
-+
-+	current_test = test;
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe(&fp, "fprobe_selftest_target*", NULL));
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target2(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
-+}
-+
-+static void test_fprobe_syms(struct kunit *test)
-+{
-+	static const char *syms[] = {"fprobe_selftest_target", "fprobe_selftest_target2"};
-+	struct fprobe fp = {
-+		.entry_handler = fp_entry_handler,
-+		.exit_handler = fp_exit_handler,
-+	};
-+
-+	current_test = test;
-+	KUNIT_EXPECT_EQ(test, 0, register_fprobe_syms(&fp, syms, 2));
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	entry_val = 0;
-+	exit_val = 0;
-+	target2(rand1);
-+	KUNIT_EXPECT_NE(test, 0, entry_val);
-+	KUNIT_EXPECT_EQ(test, entry_val + div_factor, exit_val);
-+
-+	KUNIT_EXPECT_EQ(test, 0, unregister_fprobe(&fp));
-+}
-+
-+static unsigned long get_ftrace_location(void *func)
-+{
-+	unsigned long size, addr = (unsigned long)func;
-+
-+	if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
-+		return 0;
-+
-+	return ftrace_location_range(addr, addr + size - 1);
-+}
-+
-+static int fprobe_test_init(struct kunit *test)
-+{
-+	do {
-+		rand1 = prandom_u32();
-+	} while (rand1 <= div_factor);
-+
-+	target = fprobe_selftest_target;
-+	target2 = fprobe_selftest_target2;
-+	target_ip = get_ftrace_location(target);
-+	target2_ip = get_ftrace_location(target2);
-+
-+	return 0;
-+}
-+
-+static struct kunit_case fprobe_testcases[] = {
-+	KUNIT_CASE(test_fprobe_entry),
-+	KUNIT_CASE(test_fprobe),
-+	KUNIT_CASE(test_fprobe_syms),
-+	{}
-+};
-+
-+static struct kunit_suite fprobe_test_suite = {
-+	.name = "fprobe_test",
-+	.init = fprobe_test_init,
-+	.test_cases = fprobe_testcases,
-+};
-+
-+kunit_test_suites(&fprobe_test_suite);
-+
-+MODULE_LICENSE("GPL");
-
+i am Mrs Mimi Hassan and i was diagnosed with cancer about 2 years
+ago,before i go for a surgery  i  have to do this,so  If you are
+interested to use the sum of US17.3Million)to help Poor,
+Less-privileged and  ORPHANAGES and invest  in your country, get back
+to me for more information on how you can  contact the company for
+where the fund is
+Warm Regards,
+MRS.MIMI HASSAN

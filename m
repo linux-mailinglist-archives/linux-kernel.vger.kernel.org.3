@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3C44DA0A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045B64DA0A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350355AbiCOQ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S1350364AbiCORAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 13:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350357AbiCOQ6n (ORCPT
+        with ESMTP id S1350321AbiCORAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:58:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27E6580D3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647363451; x=1678899451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m7ZKrh8loAyVEg0SDdOAuMAn1KCDmPCSOZk5E8Ai0S4=;
-  b=VDVgIRrC70Qsw2P2I+pPIvkTCQW4AaiT/Qj629MUEZDKLrQErkQfK62D
-   vmZ9ovp2jP6QFApNp7TtFKbgkVePJNoW7hX6FZoQdcYXFhOAKUHXGYcvj
-   oJYII4k9rYABOiKmKCRLu/INlxhsfqO+DJ5C/SAk650iwRm0JfUUM7kfO
-   vE56yBoMdeaMvblnBHy3USB5O4q05PiRrKcg5VWf5n3ynwLcOmb1IHS/j
-   NPI9vsE5+E3e8nyN+TNXbdQfXqTbLpwQDYZdU/U4RVGMpIUMkLg0JGFKB
-   nw8rwAwB6+IAwjVyidXdKnKK6jl11fcurkcmSLWo6rJFZfHD1WyzWlvZw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="253918414"
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="253918414"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:57:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="498091678"
-Received: from jpgabald-mobl.amr.corp.intel.com (HELO localhost) ([10.212.75.31])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:57:30 -0700
-Date:   Tue, 15 Mar 2022 09:57:30 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] x86/pkeys: Standardize on u8 for pkey type
-Message-ID: <YjDFesTdo8Zl8iYm@iweiny-desk3>
-References: <20220311005742.1060992-1-ira.weiny@intel.com>
- <20220311005742.1060992-6-ira.weiny@intel.com>
- <42e0aa73-04c8-a4c2-2d64-80812634b627@intel.com>
- <YjC2jcn7kJKdHrf3@iweiny-desk3>
- <5b5ae505-84c7-1a46-832a-68bdfd8fd61c@intel.com>
+        Tue, 15 Mar 2022 13:00:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9691D57B25
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647363527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LGUrQuXOtgHlUwtoNupql+5VRYbS7vNf+UN5ulYsPQo=;
+        b=Sy7CfHn0xlufviv5ErFCTH9mbdgH4mYkAsE1udi4s0Ftmc34xkVX7vUILT1hos0qBiKUUH
+        GShyX/PkgR+JCVeFSCWPTRBDVd/LfQIgfJ9DHn21QuK8NklO9Jd24viaioR2jugEO9AhhM
+        OCizdOhw8eVOhYoSYJp7k3yrwMCeH+Y=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-3xd_qDZgM0W526WNADTtaA-1; Tue, 15 Mar 2022 12:58:46 -0400
+X-MC-Unique: 3xd_qDZgM0W526WNADTtaA-1
+Received: by mail-wr1-f72.google.com with SMTP id 8-20020adf8108000000b00203d97ba415so530010wrm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:58:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=LGUrQuXOtgHlUwtoNupql+5VRYbS7vNf+UN5ulYsPQo=;
+        b=Jlu3bb8awm5vxEzcvMr33FK6tkR8NKjvTnRP+BR8iZCTD5Dfcy6oBJA65VABpxz+Jz
+         YI/kjkAfoaJ5pcBNQcANCHUyykWOTuU3MdXkIxzEhRM7MeLLWw5dCgGpgTRhaszr2cTW
+         IAVDXaignDAERyQPoU5UpRvQOyAQGgu3w7lbol+w2mL8lVFECXMv11LqzfmSgjfxFOwP
+         yWaA19rsyWwpQmP4S9tn8f94Ei3mQE5RIYB+9khXmNN2gObJj2pG99+5q3nW8vKOvoVP
+         dKXt1UUKBwTG7Pnc/joPAm4HhxvXtjeXAyceoWj5A7Ob6q9jiOhXzRqWYC0JmaiPh+6Z
+         Trhw==
+X-Gm-Message-State: AOAM532VYNp9pN7IS7YkIazORLrZIdC8gMrafJxKdwzQpHe/abrBc8VW
+        CPCEW6x7fq/AMAUhoSBlcSdTcsWNWS2M39mbp++eIpJyodHbi3P5MsIA+XD54PAXX9alaSmJ7fz
+        JQ1LAPAdULEkOHSzhMQhdZbus
+X-Received: by 2002:a7b:c5d6:0:b0:381:4127:84d3 with SMTP id n22-20020a7bc5d6000000b00381412784d3mr4077957wmk.24.1647363525117;
+        Tue, 15 Mar 2022 09:58:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwlZot5PU2X0oLNLaK3DaCcFcYOa0tVNe87pG0OWN67pZZ94UjPsh6UkkIWtNctJtwqc7+3yg==
+X-Received: by 2002:a7b:c5d6:0:b0:381:4127:84d3 with SMTP id n22-20020a7bc5d6000000b00381412784d3mr4077947wmk.24.1647363524808;
+        Tue, 15 Mar 2022 09:58:44 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:1800:42bd:3cac:d22a:3c62? (p200300cbc708180042bd3cacd22a3c62.dip0.t-ipconnect.de. [2003:cb:c708:1800:42bd:3cac:d22a:3c62])
+        by smtp.gmail.com with ESMTPSA id e18-20020adfdbd2000000b001e4bbbe5b92sm17551203wrj.76.2022.03.15.09.58.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 09:58:44 -0700 (PDT)
+Message-ID: <8b13b6c0-78d4-48e3-06f0-ec0680d013a9@redhat.com>
+Date:   Tue, 15 Mar 2022 17:58:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b5ae505-84c7-1a46-832a-68bdfd8fd61c@intel.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v1 5/7] s390/pgtable: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+References: <20220315141837.137118-1-david@redhat.com>
+ <20220315141837.137118-6-david@redhat.com> <20220315172102.771bd2cf@thinkpad>
+ <c8229082-e8f1-e605-25c2-0ec9d23efd9e@redhat.com>
+Organization: Red Hat
+In-Reply-To: <c8229082-e8f1-e605-25c2-0ec9d23efd9e@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 09:03:26AM -0700, Dave Hansen wrote:
-> On 3/15/22 08:53, Ira Weiny wrote:
-> > On Mon, Mar 14, 2022 at 04:49:12PM -0700, Dave Hansen wrote:
-> >> On 3/10/22 16:57, ira.weiny@intel.com wrote:
-> >>> From: Ira Weiny <ira.weiny@intel.com>
-> >>>
-> >>> The number of pkeys supported on x86 and powerpc are much smaller than a
-> >>> u16 value can hold.  It is desirable to standardize on the type for
-> >>> pkeys.  powerpc currently supports the most pkeys at 32.  u8 is plenty
-> >>> large for that.
-> >>>
-> >>> Standardize on the pkey types by changing u16 to u8.
-> >>
-> >> How widely was this intended to "standardize" things?  Looks like it may
-> >> have missed a few spots.
-> > 
-> > Sorry I think the commit message is misleading you.  The justification of u8 as
-> > the proper type is that no arch has a need for more than 255 pkeys.
-> > 
-> > This specific patch was intended to only change x86.  Per that goal I don't see
-> > any other places in x86 which uses u16 after this patch.
-> > 
-> > $ git grep u16 arch/x86 | grep key
-> > arch/x86/events/intel/uncore_discovery.c:	const u16 *type_id = key;
-> > arch/x86/include/asm/intel_pconfig.h:	u16 keyid;
-> > arch/x86/include/asm/mmu.h:	u16 pkey_allocation_map;
-> > arch/x86/include/asm/pkeys.h:	u16 all_pkeys_mask = ((1U << arch_max_pkey()) - 1);
+
+>> This would mean that it is not OK to have bit 52 not zero for swap PTEs.
+>> But if I read the POP correctly, all bits except for the DAT-protection
+>> would be ignored for invalid PTEs, so maybe this comment needs some update
+>> (for both bits 52 and also 55).
+>>
+>> Heiko might also have some more insight.
 > 
-> I was also looking at the generic mm code.
+> Indeed, I wonder why we should get a specification exception when the
+> PTE is invalid. I'll dig a bit into the PoP.
 
-Ah yea that needs to be sorted out too I think.
+SA22-7832-12 6-46 ("Translation-Specification Exception") is clearer
 
-> 
-> >> Also if we're worried about the type needing to changY or with the wrong
-> >> type being used, I guess we could just to a pkey_t typedef.
-> > 
-> > I'm not 'worried' about it.  But I do think it makes the code cleaner and more
-> > self documenting.
-> 
-> Yeah, consistency is good.  Do you mind taking a look at how a pkey_t
-> would look, and also seeing how much core mm code should use it?
+"The page-table entry used for the translation is
+valid, and bit position 52 does not contain zero."
 
-I don't mind at all.
+"The page-table entry used for the translation is
+valid, EDAT-1 does not apply, the instruction-exe-
+cution-protection facility is not installed, and bit
+position 55 does not contain zero. It is model
+dependent whether this condition is recognized."
 
-Ira
+-- 
+Thanks,
+
+David / dhildenb
+

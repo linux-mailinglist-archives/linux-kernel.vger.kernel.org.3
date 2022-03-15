@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0D24D9653
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AE24D964E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 09:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346008AbiCOIca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 04:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S1345992AbiCOIct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 04:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345956AbiCOIcL (ORCPT
+        with ESMTP id S1345966AbiCOIcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 04:32:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9FA4C428;
-        Tue, 15 Mar 2022 01:30:59 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 08:30:57 -0000
+        Tue, 15 Mar 2022 04:32:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F464C781;
+        Tue, 15 Mar 2022 01:31:01 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 08:30:58 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647333058;
+        s=2020; t=1647333060;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=kupy0Bc0ObB7ZHAcB3Ho+yjyamO78el+3D4x6h3kiFs=;
-        b=2AQW/uIj4Do0OpB4N1+q7dKBWXkukaiYA+siuY1uKFe1b+hNIcNloAuoMh1xyX4sKVmOnA
-        pS1+TM6J9Zd0m6UEwDWBHb1MpC5M1Ydm2VTlzYzdaHVzJSN8B/4RReA5atiC4V/BUSLyGL
-        qqFSaliIMvJR2R1uXGRV79W03hHwaF772lFFLHYyZtAxGNmOBPDJP4B1RNLuzBEE/x/2c3
-        Dx2Au1fXV/t7aiW6h2v4IstdDheN3pRX4JtqibEDcPo5D0xafTJ2GwwqMNQQUKF+l9MSgK
-        +vSYABx2WCq6PJZgeUl4vIVhn0yit0ApL9/ZNJxSr02qE++OFNDmTQeJSJE8xw==
+        bh=4SQfnyKRH2aoTVNEuheWRpZBUbdeJu9QhE6mbfGbRsc=;
+        b=f84HL8MnV5HJD1DznK5i8P/AOSUvV9cflbDGeRqp5gJLMOshE4VRgry7LheEuZCr39TxfR
+        BX89rboaZjiBaXWr5sx7X8DMcKiwFFXci5EDAvEtNFAmn0oRw7eHA8hyTYJIX+LuicdgTo
+        pI8fqfzioJ56qStPqd8QFLCmssGy6sbiLKq0VGDzcxGPyGLpF9aU1ZK2744H7syDU4EaMi
+        58bkj+w4D+9VG6Ew6pRU2gzc1K3093xGTJb7U09ZFnGzuJElJ4iVwLV3xVaxUCFvMnR/f6
+        z5wdjVq+yJm9a63ceFPE/I34ZG96W3f+aAoqZbMaWe3Nr53ufHHXmIy1SA8Fiw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647333058;
+        s=2020e; t=1647333060;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=kupy0Bc0ObB7ZHAcB3Ho+yjyamO78el+3D4x6h3kiFs=;
-        b=ERIowSrMFszmWjptSzu1qzsU1DJaVTAnqUHZ7eWgK9Eybw21hDQE4dPdQsiQW7rDUGYnQU
-        mpB6sVOU1pWDkCDQ==
+        bh=4SQfnyKRH2aoTVNEuheWRpZBUbdeJu9QhE6mbfGbRsc=;
+        b=Qhd9GtmR4T7zJCl7wp0YRmTPYBD1rW4hprfSOHfsh4635AWsTOyrB8ag8ZN90UGp1z84yb
+        701e4gXoxMCyvRDA==
 From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/headers: Standardize kernel/sched/sched.h
- header dependencies
+Subject: [tip: sched/core] sched/headers: Introduce
+ kernel/sched/build_policy.c and build multiple .c files there
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <164733305721.16921.17375336826369599412.tip-bot2@tip-bot2>
+Message-ID: <164733305807.16921.4885277987837934842.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,163 +62,210 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     b9e9c6ca6e54b5d58a57663f76c5cb33c12ea98f
-Gitweb:        https://git.kernel.org/tip/b9e9c6ca6e54b5d58a57663f76c5cb33c12ea98f
+Commit-ID:     f96eca432015ddc1b621632488ebc345bca06791
+Gitweb:        https://git.kernel.org/tip/f96eca432015ddc1b621632488ebc345bca06791
 Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Sun, 13 Feb 2022 08:19:43 +01:00
+AuthorDate:    Tue, 22 Feb 2022 13:46:03 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Wed, 23 Feb 2022 10:58:33 +01:00
 
-sched/headers: Standardize kernel/sched/sched.h header dependencies
+sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
 
-kernel/sched/sched.h is a weird mix of ad-hoc headers included
-in the middle of the header.
+Similarly to kernel/sched/build_utility.c, collect all 'scheduling policy' related
+source code files into kernel/sched/build_policy.c:
 
-Two of them rely on being included in the middle of kernel/sched/sched.h,
-due to definitions they require:
+    kernel/sched/idle.c
 
- - "stat.h" needs the rq definitions.
- - "autogroup.h" needs the task_group definition.
+    kernel/sched/rt.c
 
-Move the inclusion of these two files out of kernel/sched/sched.h, and
-include them in all files that require them.
+    kernel/sched/cpudeadline.c
+    kernel/sched/pelt.c
 
-Move of the rest of the header dependencies to the top of the
-kernel/sched/sched.h file.
+    kernel/sched/cputime.c
+    kernel/sched/deadline.c
+
+With the exception of fair.c, which we continue to build as a separate file
+for build efficiency and parallelism reasons.
 
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Reviewed-by: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/build_policy.c  |  3 +++
- kernel/sched/build_utility.c |  2 ++
- kernel/sched/core.c          |  2 ++
- kernel/sched/fair.c          |  2 ++
- kernel/sched/sched.h         | 20 +++++++++++---------
- kernel/sched/stats.h         |  4 ++--
- 6 files changed, 22 insertions(+), 11 deletions(-)
+ kernel/sched/Makefile       |  2 +-
+ kernel/sched/build_policy.c | 29 +++++++++++++++++++++++++++++
+ kernel/sched/cpudeadline.c  |  1 -
+ kernel/sched/cputime.c      |  1 -
+ kernel/sched/deadline.c     |  2 --
+ kernel/sched/idle.c         |  3 ---
+ kernel/sched/pelt.c         |  4 ----
+ kernel/sched/rt.c           |  3 ---
+ kernel/sched/sched.h        |  8 ++++++++
+ 9 files changed, 38 insertions(+), 15 deletions(-)
+ create mode 100644 kernel/sched/build_policy.c
 
+diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
+index 4a4785c..976092b 100644
+--- a/kernel/sched/Makefile
++++ b/kernel/sched/Makefile
+@@ -30,5 +30,5 @@ endif
+ #
+ obj-y += core.o
+ obj-y += fair.o
++obj-y += build_policy.o
+ obj-y += build_utility.o
+-obj-y += idle.o rt.o deadline.o cputime.o cpudeadline.o pelt.o
 diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-index 6bb384d..9a169b2 100644
---- a/kernel/sched/build_policy.c
+new file mode 100644
+index 0000000..6bb384d
+--- /dev/null
 +++ b/kernel/sched/build_policy.c
-@@ -13,6 +13,9 @@
-  */
- 
- #include "sched.h"
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * These are the scheduling policy related scheduler files, built
++ * in a single compilation unit for build efficiency reasons.
++ *
++ * ( Incidentally, the size of the compilation unit is roughly
++ *   comparable to core.c and fair.c, the other two big
++ *   compilation units. This helps balance build time, while
++ *   coalescing source files to amortize header inclusion
++ *   cost. )
++ *
++ * core.c and fair.c are built separately.
++ */
 +
-+#include "autogroup.h"
-+#include "stats.h"
- #include "pelt.h"
- 
- #include "idle.c"
-diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
-index 31216ce..8b2b199 100644
---- a/kernel/sched/build_utility.c
-+++ b/kernel/sched/build_utility.c
-@@ -12,6 +12,8 @@
- 
- #include "sched.h"
- #include "sched-pelt.h"
-+#include "stats.h"
-+#include "autogroup.h"
- 
- #include <linux/sched_clock.h>
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ef94612..22de537 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11,6 +11,8 @@
- #undef CREATE_TRACE_POINTS
- 
- #include "sched.h"
-+#include "stats.h"
-+#include "autogroup.h"
- 
- #include <linux/nospec.h>
- #include <linux/blkdev.h>
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 16874e1..7391c92 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -21,6 +21,8 @@
-  *  Copyright (C) 2007 Red Hat, Inc., Peter Zijlstra
++#include "sched.h"
++#include "pelt.h"
++
++#include "idle.c"
++
++#include "rt.c"
++
++#ifdef CONFIG_SMP
++# include "cpudeadline.c"
++# include "pelt.c"
++#endif
++
++#include "cputime.c"
++#include "deadline.c"
++
+diff --git a/kernel/sched/cpudeadline.c b/kernel/sched/cpudeadline.c
+index 0e196f0..02d970a 100644
+--- a/kernel/sched/cpudeadline.c
++++ b/kernel/sched/cpudeadline.c
+@@ -6,7 +6,6 @@
+  *
+  *  Author: Juri Lelli <j.lelli@sssup.it>
   */
- #include "sched.h"
-+#include "stats.h"
-+#include "autogroup.h"
+-#include "sched.h"
  
+ static inline int parent(int i)
+ {
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index b7ec427..78a233d 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -2,7 +2,6 @@
  /*
-  * Targeted preemption latency for CPU-bound tasks:
+  * Simple CPU accounting cgroup controller
+  */
+-#include "sched.h"
+ 
+ #ifdef CONFIG_IRQ_TIME_ACCOUNTING
+ 
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index d2c072b..fca2d7d 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -15,8 +15,6 @@
+  *                    Michael Trimarchi <michael@amarulasolutions.com>,
+  *                    Fabio Checconi <fchecconi@gmail.com>
+  */
+-#include "sched.h"
+-#include "pelt.h"
+ 
+ struct dl_bandwidth def_dl_bandwidth;
+ 
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index d17b0a5..8f8b502 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -6,9 +6,6 @@
+  * (NOTE: these are not related to SCHED_IDLE batch scheduled
+  *        tasks which are handled in sched/fair.c )
+  */
+-#include "sched.h"
+-
+-#include <trace/events/power.h>
+ 
+ /* Linker adds these: start and end of __cpuidle functions */
+ extern char __cpuidle_text_start[], __cpuidle_text_end[];
+diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
+index a554e3b..0f31076 100644
+--- a/kernel/sched/pelt.c
++++ b/kernel/sched/pelt.c
+@@ -24,10 +24,6 @@
+  *  Author: Vincent Guittot <vincent.guittot@linaro.org>
+  */
+ 
+-#include <linux/sched.h>
+-#include "sched.h"
+-#include "pelt.h"
+-
+ /*
+  * Approximate:
+  *   val * y^n,    where y^32 ~= 0.5 (~1 scheduling period)
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 7b4f4fb..ff4c044 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -3,9 +3,6 @@
+  * Real-Time Scheduling Class (mapped to the SCHED_FIFO and SCHED_RR
+  * policies)
+  */
+-#include "sched.h"
+-
+-#include "pelt.h"
+ 
+ int sched_rr_timeslice = RR_TIMESLICE;
+ int sysctl_sched_rr_timeslice = (MSEC_PER_SEC / HZ) * RR_TIMESLICE;
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f7d10b9..f255ec2 100644
+index 79c7a8a..f7d10b9 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -96,11 +96,20 @@
- # include <asm/paravirt.h>
- #endif
- 
-+#include <trace/events/sched.h>
-+
-+#ifdef CONFIG_CGROUP_SCHED
-+#include <linux/cgroup.h>
-+#include <linux/psi.h>
-+#endif
-+
-+#ifdef CONFIG_SCHED_DEBUG
-+# include <linux/static_key.h>
-+#endif
-+
- #include "cpupri.h"
- #include "cpudeadline.h"
- 
--#include <trace/events/sched.h>
--
- #ifdef CONFIG_SCHED_DEBUG
- # define SCHED_WARN_ON(x)	WARN_ONCE(x, #x)
- #else
-@@ -417,9 +426,6 @@ extern bool dl_cpu_busy(unsigned int cpu);
- 
- #ifdef CONFIG_CGROUP_SCHED
- 
--#include <linux/cgroup.h>
--#include <linux/psi.h>
--
- struct cfs_rq;
- struct rt_rq;
- 
-@@ -1919,9 +1925,6 @@ extern void flush_smp_call_function_from_idle(void);
- static inline void flush_smp_call_function_from_idle(void) { }
- #endif
- 
--#include "stats.h"
--#include "autogroup.h"
--
- #if defined(CONFIG_SCHED_CORE) && defined(CONFIG_SCHEDSTATS)
- 
- extern void __sched_core_account_forceidle(struct rq *rq);
-@@ -2016,7 +2019,6 @@ static inline void __set_task_cpu(struct task_struct *p, unsigned int cpu)
-  * Tunables that become constants when CONFIG_SCHED_DEBUG is off:
-  */
- #ifdef CONFIG_SCHED_DEBUG
--# include <linux/static_key.h>
- # define const_debug __read_mostly
- #else
- # define const_debug const
-diff --git a/kernel/sched/stats.h b/kernel/sched/stats.h
-index edc0d13..a0df79e 100644
---- a/kernel/sched/stats.h
-+++ b/kernel/sched/stats.h
-@@ -2,10 +2,10 @@
- #ifndef _KERNEL_STATS_H
- #define _KERNEL_STATS_H
- 
--#ifdef CONFIG_SCHEDSTATS
--
- #include "sched.h"
- 
-+#ifdef CONFIG_SCHEDSTATS
-+
- extern struct static_key_false sched_schedstats;
- 
- /*
+@@ -13,6 +13,7 @@
+ #include <linux/prctl.h>
+ #include <linux/ptrace_api.h>
+ #include <linux/gfp_api.h>
++#include <linux/posix-timers.h>
+ #include <linux/sched/clock.h>
+ #include <linux/workqueue_api.h>
+ #include <linux/tick.h>
+@@ -113,8 +114,11 @@
+ #include <linux/cpumask_api.h>
+ #include <linux/ctype.h>
+ #include <linux/file.h>
++#include <linux/hrtimer_api.h>
++#include <linux/interrupt.h>
+ #include <linux/jiffies.h>
+ #include <linux/kref_api.h>
++#include <linux/ktime_api.h>
+ #include <linux/lockdep_api.h>
+ #include <linux/module.h>
+ #include <linux/mutex_api.h>
+@@ -126,12 +130,16 @@
+ #include <linux/sched/loadavg.h>
+ #include <linux/sched/mm.h>
+ #include <linux/sched/rseq_api.h>
++#include <linux/sched/signal.h>
+ #include <linux/seq_file.h>
+ #include <linux/seqlock.h>
++#include <linux/softirq.h>
++#include <linux/spinlock_api.h>
+ #include <linux/syscalls_api.h>
+ #include <linux/syscalls.h>
+ #include <linux/topology.h>
+ #include <linux/types.h>
++#include <linux/u64_stats_sync_api.h>
+ #include <linux/uaccess.h>
+ #include <linux/wait_api.h>
+ #include <linux/workqueue_api.h>

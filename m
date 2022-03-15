@@ -2,84 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D924D99D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2994D99D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347742AbiCOLBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 07:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        id S1347751AbiCOLCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 07:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347734AbiCOLBd (ORCPT
+        with ESMTP id S244698AbiCOLB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 07:01:33 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566953CFC5;
-        Tue, 15 Mar 2022 04:00:22 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id D99753201F82;
-        Tue, 15 Mar 2022 07:00:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 15 Mar 2022 07:00:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=NExbxl+i2kuO3Pvzdgbe/Iig/umuCg0Aqp3WMWOTS
-        DA=; b=bASI2gJC467wslZAh/G66t63jB1zY0shNB3Wuma/AJ/qKyNks5ywiEv9L
-        TjeFFh+XXl3Xba8pswlacUlwKsgv6XjO4tuUavk/8KW8tuiClxHPA2BzZajqfTYu
-        I/uZjMvH74mB/42xUXfqjI554e/RudCwZgpyiDh8kDwbjypE18L2y6YKTQmqJzjL
-        7mTcc53No0wnYWnN+33WTsR38tuTr69ke7QiYaGaF7iFoR6rqY7RJTwLnaMFAzEU
-        wbls6j+7Dt8oirYqY1Dbh6XhryFblkYZRiWcbtVCbeyEXYZsCO5bDI/c5Hr0/QTQ
-        zcvbWWTTfSjlrGpd4XCbuUKtKKfRg==
-X-ME-Sender: <xms:wHEwYhgcubcKtlyOpo7K_B0uun3VxRqKxmlunBgvA68gC2moawlKPA>
-    <xme:wHEwYmCiJIf315nEu7BpADDUVukfgf_NxMFYJRaqsvYGZT5EGvJkD-puNcBQY19W0
-    h0lFb_6ICuEujc>
-X-ME-Received: <xmr:wHEwYhG7W1ysFc7OfnA3ifivYxnV0YXZaUQMzYoqYvFWRtgU72_pi8NKZHK3p-KHPQaLThhl3M1-tCNJYVScMOWXhDs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeftddgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepvdffveekfeeiieeuieetudefkeevkeeuhfeuieduudetkeegleefvdegheej
-    hefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:wHEwYmRYrzN_v3mGacJ4vuIAqMZVJ9Ssevhx1O329QV0o1bOlTijUQ>
-    <xmx:wHEwYuw-hvty131IEgbXViDinbwbv6yqrqT6ZCBYi20V2w4V7oFboA>
-    <xmx:wHEwYs5uJ987OkhhWOdCaxr-GgSNX_HwXgSsI1sjBCprMFf2yRMhXQ>
-    <xmx:wnEwYigrT9dPwh32_Vq4kNc4l-3wK6s2gVqtjVJsaGGjywalncunYw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 15 Mar 2022 07:00:15 -0400 (EDT)
-Date:   Tue, 15 Mar 2022 13:00:12 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Tue, 15 Mar 2022 07:01:57 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065B73CFC5;
+        Tue, 15 Mar 2022 04:00:44 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nU4ue-0002hT-9o; Tue, 15 Mar 2022 12:00:24 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Frank Wunderlich <linux@fw-web.de>, devicetree@vger.kernel.org
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
         Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 1/3] net: bridge: add fdb flag to extent locked
- port feature
-Message-ID: <YjBxvM+rYSMP8UNy@shredder>
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
- <20220310142320.611738-2-schultz.hans+netdev@gmail.com>
- <Yi9fqkQ9wH3Duqhg@shredder>
- <86h77zha8b.fsf@gmail.com>
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        linux-ide@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Peter Geis <pgwipeout@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-rockchip@lists.infradead.org,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        soc@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v6 0/6] Add sata nodes to rk356x
+Date:   Tue, 15 Mar 2022 12:00:21 +0100
+Message-Id: <164734201499.2137788.90858927315746768.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220311210357.222830-1-linux@fw-web.de>
+References: <20220311210357.222830-1-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <86h77zha8b.fsf@gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,24 +57,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 09:48:52AM +0100, Hans Schultz wrote:
-> On mån, mar 14, 2022 at 17:30, Ido Schimmel <idosch@idosch.org> wrote:
-> > On Thu, Mar 10, 2022 at 03:23:18PM +0100, Hans Schultz wrote:
-> >> @@ -94,8 +95,16 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
-> >>  			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
-> >>  
-> >>  		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
-> >> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
-> >> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags)) {
-> >> +			if (!fdb_src) {
-> >> +				set_bit(BR_FDB_ENTRY_LOCKED, &flags);
-> >
-> > This flag is read-only for user space, right? That is, the kernel needs
-> > to reject it during netlink policy validation.
-> >
-> 
-> Yes, the flag is only readable from user space, unless there is a wish
-> to change that.
+On Fri, 11 Mar 2022 22:03:51 +0100, Frank Wunderlich wrote:
+> This Series converts the binding for ahci-platform to yaml and adds
+> sata nodes to rockchip rk356x device trees.
 
-OK, so please spell it out in the commit message so that it is clear the
-flag can only be set by the kernel.
+Applied, thanks!
+
+[6/6] arm64: dts: rockchip: Add sata nodes to rk356x
+      commit: b2e5612f6ea23c87397e50f8d976cd8c95e3ed17
+
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>

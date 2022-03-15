@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C3D4DA373
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B63B4DA375
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 20:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351473AbiCOTsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 15:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S1351472AbiCOTtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 15:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351466AbiCOTrv (ORCPT
+        with ESMTP id S245391AbiCOTtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 15:47:51 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8670355236;
-        Tue, 15 Mar 2022 12:46:38 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b15so187392edn.4;
-        Tue, 15 Mar 2022 12:46:38 -0700 (PDT)
+        Tue, 15 Mar 2022 15:49:18 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F97DEA0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:48:06 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id c4so159753qtx.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 12:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uMKzKZw1W1nvQbMWjZMoxygwki6kU5a3M6LAZ2CWVok=;
-        b=B1UoLY0vVogWD4fb4W22HeuOs7R/KQw5omeg1KwRNogjLPZA2mN5XqYorwGqS7RDNM
-         hMnWTxp9he2F7yNEARsfJ0YbCx8LnQT9KDz88TVMLp0KJz/cWvlJMf2KivKdO5+nLRZG
-         T3tY6drmkFiJA/50D2FY4rJV4nD3Yr9zWy8IXJmTJ4jXnHLk5mdh8Ov2ZU0o+zsnhJOY
-         i1XVS2/l98A0Axk8yWoSoZpx8ilFyxJu30TS4CzOvF/pO1sKZXIcdaSU61n0Wj49atGd
-         loxsNT3GOWIaUM0TU8eJGIM/w/D4wFJbLzl5iwNR3llbe0+I157UEuWgw2P8goZYgcCG
-         /JqA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jzTzwH5r+B8zHWp2dL9bIRp+jnDQp4u6qStPolr36JI=;
+        b=SVFOtodruKnk3NeRKIG5/VG4myOANEFzk02YEJ0NuwwHWsE4VW6a5bvyR4IHJYh6tI
+         qLGRCkAWEu1W3EUTBUpHvk3+xcmTBepwVGz8/ujzD59oWiwx8m1A3KGiIeIyn7PJbr3n
+         cjI5Tq52DG0wgeJnFutkLs0F3maHVsyVr/X5u9lk521S/opk+v81JmdUxwNgLKf2tpAl
+         OPY6ngods97/J3fjOT8eK1o8F2/Rgkgh5P5e94VScnMUVWoPV8/FsuijXoBvUUqKJnYc
+         MTyeXlAe8IEPYmqhRiBfvUoce+l+/IIOq2B35ZPzKtYGeXOCBAjAL1+suZcEXA+xd7+P
+         bq2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uMKzKZw1W1nvQbMWjZMoxygwki6kU5a3M6LAZ2CWVok=;
-        b=ULaZXWfN9iHagumI3U38L014y68gL7/BKpbcYdg9B+QheRrKrogUFKw6HBkqJNVPgV
-         L/pHNmBUaxwtyRaAam54K5iTUkwV2xTeNGodtu+sTY1wMpLrs/xCEmgW18CUeq5uvZIK
-         +x3RcW1YcL1uzch1Er82Qahu5ijsXIVWPDx3++zw29QHfr7k3FR3exwOR+8hdWpz9f3M
-         7lIj/zRDsTifRTpRHgI41t4fYLmGvSahZre9OdXAl5AampjnnzbxmP9vM9Tz3R7I4WhQ
-         3n3AuC57hJ7jx4MW8RchZu8ExPF9KcHSRnfA5panO1MSEJb0MzT+JA3vjM5QZ+aiGvgb
-         GpmQ==
-X-Gm-Message-State: AOAM532psk4Jg4manwFzdQz8GJ+/MzVA1cEFqXBqfSlcQzgxC7H0z6TS
-        2fEAVLi3XBrRxvY5tn7ZFv7dyIIOMFEpBA==
-X-Google-Smtp-Source: ABdhPJw3GTNmdkdldnehvdpFpXejlkPv3KZUnLL9VN/I7qYqwiMUqmXgZ5Q5III7WEkwnkswbyeUqg==
-X-Received: by 2002:a05:6402:1e88:b0:416:9c06:9818 with SMTP id f8-20020a0564021e8800b004169c069818mr27167059edf.290.1647373597045;
-        Tue, 15 Mar 2022 12:46:37 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170906165300b006a625c583b9sm8601286ejd.155.2022.03.15.12.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 12:46:36 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 07/46] media: sun6i-csi: Use runtime pm for clocks and reset
-Date:   Tue, 15 Mar 2022 20:46:35 +0100
-Message-ID: <14579642.tv2OnDr8pf@kista>
-In-Reply-To: <20220311143532.265091-8-paul.kocialkowski@bootlin.com>
-References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com> <20220311143532.265091-8-paul.kocialkowski@bootlin.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jzTzwH5r+B8zHWp2dL9bIRp+jnDQp4u6qStPolr36JI=;
+        b=yuVq9tCokSH2hr71zynMrnB+ZlTeYwfh2tu2QiSgrJBZbFokHKlgJluo2Y0naq82bs
+         mriVv1coyFYRH4Vi5Y9i6WIfbDaSvC6LL92p1e8i035PB1Fn1Xzg7Hnk4IEJ3PjEbRBN
+         +zFhRzCtkwM2pORjK9KnE/W/lDo3sUnHNfWAzoec64dLHS4SC3Teq8ItYuHTz0I/L2kv
+         uLvwjDSes+iUZ9jOZAqgpDwWhAXOyGrU0y9qLV9Yj5OayxF1Qx9YsciawR1VfFJpO5N3
+         UccsA2D8hvKwhNrQra0qQGH3KQKokZ5SBKDL1EJEy33UEK6rqxeE97JK6dUsgpf+oxEl
+         w1nA==
+X-Gm-Message-State: AOAM531qqLDv19OQQX3HlrebGqa+Itzd6jW3D20V6AgOl8QoO9Vp6bg3
+        5lwOMcAlG4DFinPHgR5oySvcNKHBgzzOBFevB3T7Vg==
+X-Google-Smtp-Source: ABdhPJyXelC5s4w2x3SOsGNEaEWzPS5GKbL0dBxyHDUfFy3ZT9Bs9ZtipguBQMOUHwLyYFwcDvQ5ZAKqn0tSEJj2osQ=
+X-Received: by 2002:a05:622a:170a:b0:2e1:cdae:28df with SMTP id
+ h10-20020a05622a170a00b002e1cdae28dfmr10979314qtk.299.1647373685297; Tue, 15
+ Mar 2022 12:48:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220225234339.2386398-1-haoluo@google.com> <20220225234339.2386398-2-haoluo@google.com>
+ <YiwXnSGf9Nb79wnm@zeniv-ca.linux.org.uk> <CA+khW7g+T2sAkP1aycmts_82JKWgYk5Y0ZJp+EvjFUyNY8W_5w@mail.gmail.com>
+ <Yi/LaZ5id4ZjqFmL@zeniv-ca.linux.org.uk> <CA+khW7jhD0+s9kivrd6PsNEaxmDCewhk_egrsxwdHPZNkubJYA@mail.gmail.com>
+ <YjDiQbam/P+KkgKE@zeniv-ca.linux.org.uk>
+In-Reply-To: <YjDiQbam/P+KkgKE@zeniv-ca.linux.org.uk>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 15 Mar 2022 12:47:54 -0700
+Message-ID: <CA+khW7h=Ykav0c=vZQTMeVumxgNwq-pRgko1VTk4wjzCVnxHFA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls
+ for prog_bpf_syscall
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Tejun Heo <tj@kernel.org>, joshdon@google.com, sdf@google.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,201 +79,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 11. marec 2022 ob 15:34:53 CET je Paul Kocialkowski napisal(a):
-> Wrap the clock and reset preparation into runtime pm functions
-> for better organization of the code. Also fix the clock and
-> reset enable order to first deassert reset, as recommended in
-> Allwinner litterature.
-> 
-> Make the driver depend on PM while at it since runtime pm is
-> mandatory for the driver to work.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../media/platform/sunxi/sun6i-csi/Kconfig    |  2 +-
->  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 94 ++++++++++++++-----
->  2 files changed, 70 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/Kconfig b/drivers/media/
-platform/sunxi/sun6i-csi/Kconfig
-> index 586e3fb3a80d..fd03e48f0c8a 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/Kconfig
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config VIDEO_SUN6I_CSI
->  	tristate "Allwinner V3s Camera Sensor Interface driver"
-> -	depends on VIDEO_V4L2 && COMMON_CLK  && HAS_DMA
-> +	depends on PM && VIDEO_V4L2 && COMMON_CLK  && HAS_DMA
->  	depends on ARCH_SUNXI || COMPILE_TEST
->  	select MEDIA_CONTROLLER
->  	select VIDEO_V4L2_SUBDEV_API
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/
-media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> index 4a0d08e0ac25..7f045a9551a7 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> @@ -152,40 +152,18 @@ int sun6i_csi_set_power(struct sun6i_csi_device 
-*csi_dev, bool enable)
->  
->  	if (!enable) {
->  		regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 
-0);
-> +		pm_runtime_put(dev);
->  
-> -		clk_disable_unprepare(csi_dev->clk_ram);
-> -		clk_disable_unprepare(csi_dev->clk_mod);
-> -		reset_control_assert(csi_dev->reset);
->  		return 0;
->  	}
->  
-> -	ret = clk_prepare_enable(csi_dev->clk_mod);
-> -	if (ret) {
-> -		dev_err(csi_dev->dev, "Enable csi clk err %d\n", ret);
-> +	ret = pm_runtime_resume_and_get(dev);
-> +	if (ret < 0)
->  		return ret;
-> -	}
-> -
-> -	ret = clk_prepare_enable(csi_dev->clk_ram);
-> -	if (ret) {
-> -		dev_err(csi_dev->dev, "Enable clk_dram_csi clk err 
-%d\n", ret);
-> -		goto clk_mod_disable;
-> -	}
-> -
-> -	ret = reset_control_deassert(csi_dev->reset);
-> -	if (ret) {
-> -		dev_err(csi_dev->dev, "reset err %d\n", ret);
-> -		goto clk_ram_disable;
-> -	}
->  
->  	regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 
-CSI_EN_CSI_EN);
->  
->  	return 0;
-> -
-> -clk_ram_disable:
-> -	clk_disable_unprepare(csi_dev->clk_ram);
-> -clk_mod_disable:
-> -	clk_disable_unprepare(csi_dev->clk_mod);
-> -	return ret;
->  }
->  
->  static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device 
-*csi_dev,
-> @@ -800,6 +778,65 @@ static irqreturn_t sun6i_csi_isr(int irq, void 
-*private)
->  	return IRQ_HANDLED;
->  }
->  
-> +static int sun6i_csi_suspend(struct device *dev)
-> +{
-> +	struct sun6i_csi_device *csi_dev = dev_get_drvdata(dev);
-> +
-> +	reset_control_assert(csi_dev->reset);
-> +	clk_disable_unprepare(csi_dev->clk_ram);
-> +	clk_disable_unprepare(csi_dev->clk_mod);
-> +	clk_disable_unprepare(csi_dev->clk_bus);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sun6i_csi_resume(struct device *dev)
-> +{
-> +	struct sun6i_csi_device *csi_dev = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = reset_control_deassert(csi_dev->reset);
-> +	if (ret) {
-> +		dev_err(dev, "failed to deassert reset\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = clk_prepare_enable(csi_dev->clk_bus);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable bus clock\n");
-> +		goto error_reset;
-> +	}
-> +
-> +	ret = clk_prepare_enable(csi_dev->clk_mod);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable module clock\n");
-> +		goto error_clk_bus;
-> +	}
-> +
-> +	ret = clk_prepare_enable(csi_dev->clk_ram);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable ram clock\n");
-> +		goto error_clk_mod;
-> +	}
-> +
-> +	return 0;
-> +
-> +error_clk_mod:
-> +	clk_disable_unprepare(csi_dev->clk_mod);
-> +
-> +error_clk_bus:
-> +	clk_disable_unprepare(csi_dev->clk_bus);
-> +
-> +error_reset:
-> +	reset_control_assert(csi_dev->reset);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct dev_pm_ops sun6i_csi_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(sun6i_csi_suspend, sun6i_csi_resume, NULL)
+On Tue, Mar 15, 2022 at 12:02 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Tue, Mar 15, 2022 at 10:27:39AM -0700, Hao Luo wrote:
+>
+> > Option 1: We can put restrictions on the pathname passed into this
+> > helper. We can explicitly require the parameter dirfd to be in bpffs
+> > (we can verify). In addition, we check pathname to be not containing
+> > any dot or dotdot, so the resolved path will end up inside bpffs,
+> > therefore won't take ->i_rwsem that is in the callchain of
+> > cgroup_mkdir().
+>
+> Won't be enough - mount --bind the parent under itself and there you go...
+> Sure, you could prohibit mountpoint crossing, etc., but at that point
+> I'd question the usefulness of pathname resolution in the first place.
 
-Since driver depends on PM, using SET_RUNTIME_PM_OPS macro doesn't make sense.
+[Apologies for resend, my response did not get delivered to mail list]
 
-> +};
-> +
->  static const struct regmap_config sun6i_csi_regmap_config = {
->  	.reg_bits       = 32,
->  	.reg_stride     = 4,
-> @@ -886,6 +923,11 @@ static int sun6i_csi_resources_setup(struct 
-sun6i_csi_device *csi_dev,
->  		goto error_clk_rate_exclusive;
->  	}
->  
-> +	/* Runtime PM */
-> +
-> +	pm_runtime_enable(dev);
-> +	pm_runtime_set_suspended(dev);
+I don't see a use case where we need to bind mount the directories in
+bpffs, right now. So in option 1, we can also prohibit mountpoint
+crossing.
 
-pm_runtime_set_suspended() description says: "It is not valid to call this 
-function for devices with runtime PM enabled."
+Pathname resolution is still useful in this case. Imagine we want to
+put all the created dirs under a base dir, we can open the base dir
+and reuse its fd for multiple mkdirs, for example:
 
-Best regards,
-Jernej
+Userspace:
+  fd = openat(..., "/sys/fs/bpf", ...);
+  pass fd to the bpf prog
 
-> +
->  	return 0;
->  
->  error_clk_rate_exclusive:
-> @@ -896,6 +938,7 @@ static int sun6i_csi_resources_setup(struct 
-sun6i_csi_device *csi_dev,
->  
->  static void sun6i_csi_resources_cleanup(struct sun6i_csi_device *csi_dev)
->  {
-> +	pm_runtime_disable(csi_dev->dev);
->  	clk_rate_exclusive_put(csi_dev->clk_mod);
->  }
->  
-> @@ -978,6 +1021,7 @@ static struct platform_driver sun6i_csi_platform_driver 
-= {
->  	.driver	= {
->  		.name		= SUN6I_CSI_NAME,
->  		.of_match_table	= 
-of_match_ptr(sun6i_csi_of_match),
-> +		.pm		= &sun6i_csi_pm_ops,
->  	},
->  };
->  
-> -- 
-> 2.35.1
-> 
-> 
+bpf prog:
+  bpf_mkdirat(fd, "common1", ...);
+  bpf_mkdirat(fd, "common1/a", ...);
+  bpf_mkdirat(fd, "common1/b", ...);
+  bpf_mkdirat(fd, "common2", ...);
+  ...
 
+It would be very inconvenient if we can't resolve multi-level paths.
 
+As Alexei said, another option is to delegate syscall to a worker
+thread. IMHO, we could do that in future if we find there is a need
+for the full feature of pathname resolution.
+
+Al, does that sound good?

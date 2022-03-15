@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13EF4D92AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BD34D92B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 03:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344498AbiCOCis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Mar 2022 22:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S1344511AbiCOCnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Mar 2022 22:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiCOCir (ORCPT
+        with ESMTP id S1344505AbiCOCnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Mar 2022 22:38:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF14755F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Mar 2022 19:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647311856; x=1678847856;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4zB0EluaBLUlbrJtFNQECe8zx0RpNQBtFyPNsRfg9xI=;
-  b=EJyASLzGsHuKHWg4+3KUkTWuwiu5KQ7X7DkfVsAIv/gV3lyGlJY7CvhG
-   VwfZ1Wn/KOCi2lgt3XUgLxsJJZY6n5zHvF6EIByEoV7CUIpCkcj97rYz2
-   Z7tlTLUhEOAuw8VO+hsIJokJXkxAsLTLU0+9ehdCJl1rfy8+/nMY9zeVu
-   Yl7JfPWj25gGK7fQH+MnDyMMIAYUtR3CoILCJLT103TWU1jExqkLvYmWW
-   toCC98738JZJNVobBBq0sqjCCumF1hZIykZElMDk5sJHNelCn+LJGD6us
-   9L+keYGyo42AAwX5pgzR7HwSzbor1vMmF1QrjWPko8RZoe3r8uMHuf7Nj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255923655"
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="255923655"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 19:37:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,182,1643702400"; 
-   d="scan'208";a="497852010"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Mar 2022 19:37:34 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nTx41-000ATL-8a; Tue, 15 Mar 2022 02:37:33 +0000
-Date:   Tue, 15 Mar 2022 10:36:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:netdev/net-next/master 111/126]
- drivers/net/ethernet/mscc/ocelot.c:2920:14: error: use of undeclared
- identifier 'IEEE_8021QAZ_MAX_TCS'
-Message-ID: <202203151054.NrsDHU0t-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Mar 2022 22:43:35 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EA648307;
+        Mon, 14 Mar 2022 19:42:24 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id f8so17311214pfj.5;
+        Mon, 14 Mar 2022 19:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=SacbrvjKw7fY+dlnnH94qEz643omGhuaUbTvS7BkFpo=;
+        b=hbGFk7hNn+JA8tW1p1Q19tn1+HN6SRCnsQx29IQ7L6IdW4wgJthKdqOgCpI4fT8lF2
+         MpH6G7I+d/cIyBTzho3hO6Wjwj90GdvxjDv20kGhdGMSjrE5piTETTnHGCX6Bz9gQoG5
+         sMM/iezxZVkVtL1eY+zhp0zc3g32h2YdIQlaB/FwEt/JD2dHo1m/v/c7Nqr9bjU1rgzk
+         M/1h/VyF5doejhrtu/yxkWhNkBp4jWpgJCOg3S0uNV0nDnChHtUpkZfMcRjpOAysLgNH
+         Tals0z290WqhEW8J7/H9vL9wlUsPu0T75eyEVN0Mwp7zAd87QXXIcgTkno2frgxc+NW3
+         +Owg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=SacbrvjKw7fY+dlnnH94qEz643omGhuaUbTvS7BkFpo=;
+        b=TSSbQnlj2+3hvMvA9Cr19VRCou2xhu+tfvDi+1seWFzwbrLXUT9bzFCikmQC4e7KOt
+         jgNLv9Es/GHt8gbX3ZAZFc7Nczt8EzxnOnXMtdwMuLAZGACQdOAb9IYIjxBe9OLsmY4L
+         cg2jN0ecJeflQTCXQL1S/WP3m5T8KSavfbNIB/SbRvWP1tZ1C1FVqftLCpIdBLI8W7u8
+         7LV1ULKDZV3uQsTiaGAs9KBz1gE5vdEgx4VFmbsmp/JBHCn6Slyk4xJyzoQkYTxL6xfi
+         pEHxX+jv23WX/SMcSZC7UojzrBvJ0UG7CdVTZTXqa9QWPR47Rz4UAlPH2v3u0Uqg4Hpx
+         pRuQ==
+X-Gm-Message-State: AOAM533fUoRlMY37NLtT8mjun5v1+PwRPZPuvD6YWARmSUe+TvGSUXTQ
+        WOczNFq/sV1bbeJasdHFqzvhx+6kNuD8W5kQ41g/QQ==
+X-Google-Smtp-Source: ABdhPJy4t6CSSEPvrqfm9rYp9gsqSvnAUObPXgQ9HpMz6DrIwx8y7gwo9ug/OR8NMzOUXb41Q7bGrQ==
+X-Received: by 2002:a62:4e48:0:b0:4f6:cc16:8116 with SMTP id c69-20020a624e48000000b004f6cc168116mr26488743pfb.54.1647312143678;
+        Mon, 14 Mar 2022 19:42:23 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id w17-20020a056a0014d100b004f79bb37b54sm12144891pfu.195.2022.03.14.19.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 19:42:23 -0700 (PDT)
+Message-ID: <622ffd0f.1c69fb81.c97cd.ed76@mx.google.com>
+Date:   Mon, 14 Mar 2022 19:42:23 -0700 (PDT)
+X-Google-Original-Date: Tue, 15 Mar 2022 02:42:21 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220314112744.120491875@linuxfoundation.org>
+Subject: RE: [PATCH 5.16 000/121] 5.16.15-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block netdev/net-next/master
-head:   5e7350e8a618ebfea0713b30986976fcbb90b8bb
-commit: 978777d0fb06663523281aa50a5040c3aa31fbe7 [111/126] net: dsa: felix: configure default-prio and dscp priorities
-config: hexagon-randconfig-r032-20220313 (https://download.01.org/0day-ci/archive/20220315/202203151054.NrsDHU0t-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3e4950d7fa78ac83f33bbf1658e2f49a73719236)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/978777d0fb06663523281aa50a5040c3aa31fbe7
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block netdev/net-next/master
-        git checkout 978777d0fb06663523281aa50a5040c3aa31fbe7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mscc/
+On Mon, 14 Mar 2022 12:53:03 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.16.15 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 16 Mar 2022 11:27:22 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.15-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+5.16.15-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/mscc/ocelot.c:2920:14: error: use of undeclared identifier 'IEEE_8021QAZ_MAX_TCS'
-           if (prio >= IEEE_8021QAZ_MAX_TCS)
-                       ^
-   drivers/net/ethernet/mscc/ocelot.c:2962:14: error: use of undeclared identifier 'IEEE_8021QAZ_MAX_TCS'
-           if (prio >= IEEE_8021QAZ_MAX_TCS)
-                       ^
-   2 errors generated.
-
-
-vim +/IEEE_8021QAZ_MAX_TCS +2920 drivers/net/ethernet/mscc/ocelot.c
-
-  2917	
-  2918	int ocelot_port_set_default_prio(struct ocelot *ocelot, int port, u8 prio)
-  2919	{
-> 2920		if (prio >= IEEE_8021QAZ_MAX_TCS)
-  2921			return -ERANGE;
-  2922	
-  2923		ocelot_rmw_gix(ocelot,
-  2924			       ANA_PORT_QOS_CFG_QOS_DEFAULT_VAL(prio),
-  2925			       ANA_PORT_QOS_CFG_QOS_DEFAULT_VAL_M,
-  2926			       ANA_PORT_QOS_CFG,
-  2927			       port);
-  2928	
-  2929		return 0;
-  2930	}
-  2931	EXPORT_SYMBOL_GPL(ocelot_port_set_default_prio);
-  2932	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

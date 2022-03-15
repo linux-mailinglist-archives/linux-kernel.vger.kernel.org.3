@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79454D9AC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 12:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E524D9AC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 13:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348114AbiCOMA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 08:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S1348124AbiCOMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 08:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348110AbiCOMA4 (ORCPT
+        with ESMTP id S1348123AbiCOMBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 08:00:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C98B52B31
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:59:45 -0700 (PDT)
+        Tue, 15 Mar 2022 08:01:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC5ED52E10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 05:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647345584;
+        s=mimecast20190719; t=1647345601;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kt3DJA4isK0c4GS/JPeqMKduS9oS6ZcarVp783V2EyA=;
-        b=DfXGuEzvGqR/gczbhA/4PdEF+sPPxZ1KkG8RKhtLt1WdhFR9E5lICqQRFzvBdwXBTx0Ndv
-        pBCtK63HQqt9ViXuQNosvkyGAMzEXuBHdZAlEjVRqIrr3KZBvmnEqdr03G0AIE45jYU5gy
-        ZUIvZsd9AFZ5hhBXqXy1iOoTkMD8sfQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=EfHwLZ6WtwFkxJceJihq9t4icqNtwFmMvMop7qIav68=;
+        b=bXv6wqA4rVgQgqFNdGVTdjaIc0mh7ZJWPaH5C/AqXuTMszh3TnITsn6iAKZh/qqntBcbE0
+        tP+RebvngWIz7/Te1LwT00ZP93Q9EJUd+hkL36UhE+TvPvel8S7B/eOoHPgu8CnuFtnmfr
+        TD7dI8J1yhYvTczs4HDdLzdC+OCt7Mc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-184-ytsku21pNCybtc2XlFXeOg-1; Tue, 15 Mar 2022 07:59:39 -0400
-X-MC-Unique: ytsku21pNCybtc2XlFXeOg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F15B899EC2;
-        Tue, 15 Mar 2022 11:59:38 +0000 (UTC)
-Received: from localhost (ovpn-12-225.pek2.redhat.com [10.72.12.225])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1BF8340D1B9A;
-        Tue, 15 Mar 2022 11:59:37 +0000 (UTC)
-Date:   Tue, 15 Mar 2022 19:59:33 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v21 5/5] docs: kdump: Update the crashkernel description
- for arm64
-Message-ID: <YjB/pTWF8wKcATaq@MiWiFi-R3L-srv>
-References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
- <20220227030717.1464-6-thunder.leizhen@huawei.com>
+ us-mta-587-x4uekkyNNX-NgR5n81u8Eg-1; Tue, 15 Mar 2022 07:59:59 -0400
+X-MC-Unique: x4uekkyNNX-NgR5n81u8Eg-1
+Received: by mail-wm1-f72.google.com with SMTP id l1-20020a1c2501000000b00389c7b9254cso829965wml.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 04:59:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EfHwLZ6WtwFkxJceJihq9t4icqNtwFmMvMop7qIav68=;
+        b=e8w+w61HmVsm9LewuV6pywxyHISM4iitlhne4utKDYb05z+QGclf0tmFsPETCPUs8U
+         Q/clxV7krersb76P4kPFdDhVJqNMFzgcNDB1RGlWcpaX0sl2U5ZGzGmzdh7rnuu9FeIm
+         xknNNvu1rZIZmXzmRoo0SCiFRDXR+05y76cHfoSvIgw9ozgYoCee3xgqC/DjKL1UiFbF
+         JHXLuW9niAoXMHInR8KIUxPT9xs4S5A8wgNLQWJjvAYdiDak8oauJpYOlhROmVo/otdv
+         rr8BhJL4mDLHMbw7UItlqsnHW2UNibU/LaqtqYCgvZld6CGR1ZyW1C3rl9XaST4DKyfD
+         IJiQ==
+X-Gm-Message-State: AOAM531u5+ry/RKlQaE1WEzkxVjQvGRqWON+vmzFhhMk0N87EX3WbHeZ
+        mCd006iUpsQwMk3HN/oD1jh1ECrUvT81lAnPfer79otIMTzrYyzYfCSZOSR3K9yTKZPB7NyDbqP
+        qOE8ZHIWmxDNQ5uWZnT8Ltoic
+X-Received: by 2002:adf:f18f:0:b0:1f0:761:491d with SMTP id h15-20020adff18f000000b001f00761491dmr19493106wro.505.1647345597811;
+        Tue, 15 Mar 2022 04:59:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz3q7Jx4Hf6PlL7mAci9EOXtUzatt6VVmdN2f4A2ddwH+xm8/PGXivwu6Wk/5IPV5J/w+aB6Q==
+X-Received: by 2002:adf:f18f:0:b0:1f0:761:491d with SMTP id h15-20020adff18f000000b001f00761491dmr19493097wro.505.1647345597567;
+        Tue, 15 Mar 2022 04:59:57 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i8-20020a1c5408000000b00389bf11ba0csm2079941wmb.38.2022.03.15.04.59.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 04:59:57 -0700 (PDT)
+Message-ID: <8d672df4-0078-2777-bde7-89f65b1e60c0@redhat.com>
+Date:   Tue, 15 Mar 2022 12:59:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220227030717.1464-6-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/5] drm/format-helper: Rename
+ drm_fb_xrgb8888_to_mono_reversed()
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220315110707.628166-1-geert@linux-m68k.org>
+ <20220315110707.628166-2-geert@linux-m68k.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220315110707.628166-2-geert@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,59 +90,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/27/22 at 11:07am, Zhen Lei wrote:
-> Now arm64 has added support for "crashkernel=X,high" and
-> "crashkernel=Y,low", and implements "crashkernel=X[@offset]" in the
-> same way as x86. So update the Documentation.
+Hello Geert,
+
+Thanks for your patch.
+
+On 3/15/22 12:07, Geert Uytterhoeven wrote:
+> There is no "reversed" handling in drm_fb_xrgb8888_to_mono_reversed():
+> the function just converts from color to grayscale, and reduces the
+> number of grayscale levels from 256 to 2 (i.e. brightness 0-127 is
+> mapped to 0, 128-255 to 1).  All "reversed" handling is done in the
+> repaper driver, where this function originated.
 > 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-
-Looks good to me, thx.
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
+> Hence make this clear by renaming drm_fb_xrgb8888_to_mono_reversed() to
+> drm_fb_xrgb8888_to_mono(), and documenting the black/white pixel
+> mapping.
+> 
+> Fixes: bcf8b616deb87941 ("drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 > ---
->  Documentation/admin-guide/kernel-parameters.txt | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f5a27f067db9ed9..63098786c93828c 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -789,7 +789,7 @@
->  			memory region [offset, offset + size] for that kernel
->  			image. If '@offset' is omitted, then a suitable offset
->  			is selected automatically.
-> -			[KNL, X86-64] Select a region under 4G first, and
-> +			[KNL, X86-64, ARM64] Select a region under 4G first, and
->  			fall back to reserve region above 4G when '@offset'
->  			hasn't been specified.
->  			See Documentation/admin-guide/kdump/kdump.rst for further details.
-> @@ -802,20 +802,20 @@
->  			Documentation/admin-guide/kdump/kdump.rst for an example.
->  
->  	crashkernel=size[KMG],high
-> -			[KNL, X86-64] range could be above 4G. Allow kernel
-> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
->  			to allocate physical memory region from top, so could
->  			be above 4G if system have more than 4G ram installed.
->  			Otherwise memory region will be allocated below 4G, if
->  			available.
->  			It will be ignored if crashkernel=X is specified.
->  	crashkernel=size[KMG],low
-> -			[KNL, X86-64] range under 4G. When crashkernel=X,high
-> +			[KNL, X86-64, ARM64] range under 4G. When crashkernel=X,high
->  			is passed, kernel could allocate physical memory region
->  			above 4G, that cause second kernel crash on system
->  			that require some amount of low memory, e.g. swiotlb
->  			requires at least 64M+32K low memory, also enough extra
->  			low memory is needed to make sure DMA buffers for 32-bit
-> -			devices won't run out. Kernel would try to allocate at
-> +			devices won't run out. Kernel would try to allocate
->  			at least 256M below 4G automatically.
->  			This one let user to specify own low range under 4G
->  			for second kernel instead.
-> -- 
-> 2.25.1
-> 
+As you mentioned the function originally came from the repaper driver
+(that uses white-on-black) and I wrongly assumed that the destination
+buffer for the OLED panels were also monochrome reversed.
+
+Acked-by: Javier Martinez Canillas <javierm@redhat.com>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

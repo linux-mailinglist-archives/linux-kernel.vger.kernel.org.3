@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0724DA1FF
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2394DA1FE
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350930AbiCOSGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S1350903AbiCOSGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350905AbiCOSGY (ORCPT
+        with ESMTP id S1350904AbiCOSGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Mar 2022 14:06:24 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056FD3668D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3CE4163A
         for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:05:11 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: bbeckett)
-        with ESMTPSA id AFB961F430BF
+        with ESMTPSA id 529E31F43052
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647367509;
-        bh=sv/7BhTnXU6OwO9t2oOn1ya2zRweojAD5yK19Y9oJaU=;
+        s=mail; t=1647367510;
+        bh=ToS8lMBol1VOlB+6o7QPgccbMJbV2qQuGt1LNM0xKzU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KWQuk6MPHbAKO5FzGNeyNlRjlMXMJx9ygW1wM4ODTJQnqvFAtUVmAA77md3vmPiAZ
-         4Jz9gf2jApf32RWcb+GXbHeDnWrWc40dQOoh95XPSJYoollakbeM/cZ68+iboqTOWA
-         Jq95cjGryzWLuSO7ry1sP+CIDurxFOIQ4V4HA7xqdgN3eCL3992dgdQ2a+hIJaW5/X
-         GEFfzReBsMP4DwwgJYTVtBTfdkDSGVuuWKTMkCUE8lOl+s7tDCjbM604pjE3GvfauU
-         JKwc+O/shZgc0xZJSdu644hZgIk1KJBR/wWkOv01KLptaAkFPysfHyPBuMWqpEEOgI
-         979RtP1a6pU1Q==
+        b=Mgkg5vPTu4489UhKxp8356PXehcPFvkKbjF4txpVFKtgjZcdn/BNH7T2RjOfcjs1x
+         xAIph6X0fJLkVMe66iZV8BqufuSMIsd+7jeNY4dqCHVQFHqSvB/RvQ2l8Iz2Lu0Ra+
+         JM1CxniNI6V+X3CHmiOTM9J18gmykw6nbqT3MEkhSyp7d/GyuWVdAQUFFpJJeZdY50
+         IadRUhuf7ASVgfyWCLSOvg8cwvgw0VXhKdMXfqSTDTKkUq+GvxbO4/rSZXc2W46s1D
+         M7QvkaLWvHwRBT4XU3ma1Rhf17am85K2T6T1kJPcezv5iauWB44jUt6nd5D18K1VK0
+         klN+6aJcrNrtw==
 From:   Robert Beckett <bob.beckett@collabora.com>
 To:     intel-gfx@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     Robert Beckett <bob.beckett@collabora.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 5/7] drm/ttm: add range busy check for range manager
-Date:   Tue, 15 Mar 2022 18:04:42 +0000
-Message-Id: <20220315180444.3327283-6-bob.beckett@collabora.com>
+Subject: [RFC PATCH 6/7] drm/i915: add range busy check for ttm region
+Date:   Tue, 15 Mar 2022 18:04:43 +0000
+Message-Id: <20220315180444.3327283-7-bob.beckett@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220315180444.3327283-1-bob.beckett@collabora.com>
 References: <20220315180444.3327283-1-bob.beckett@collabora.com>
@@ -53,59 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RFC: do we want this to become a generic interface in
-ttm_resource_manager_func?
+RFC: should this become a generic interface in intel_memory_region_ops?
 
-RFC: would we prefer a different interface? e.g.
-for_each_resource_in_range or for_each_bo_in_range
+RFC: would we prefer an different interface? e.g. for_each_obj_in_range
 
 Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
- drivers/gpu/drm/ttm/ttm_range_manager.c | 21 +++++++++++++++++++++
- include/drm/ttm/ttm_range_manager.h     |  3 +++
- 2 files changed, 24 insertions(+)
+ drivers/gpu/drm/i915/intel_region_ttm.c | 19 +++++++++++++++++++
+ drivers/gpu/drm/i915/intel_region_ttm.h |  3 +++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/drivers/gpu/drm/ttm/ttm_range_manager.c b/drivers/gpu/drm/ttm/ttm_range_manager.c
-index 8cd4f3fb9f79..5662627bb933 100644
---- a/drivers/gpu/drm/ttm/ttm_range_manager.c
-+++ b/drivers/gpu/drm/ttm/ttm_range_manager.c
-@@ -206,3 +206,24 @@ int ttm_range_man_fini_nocheck(struct ttm_device *bdev,
- 	return 0;
+diff --git a/drivers/gpu/drm/i915/intel_region_ttm.c b/drivers/gpu/drm/i915/intel_region_ttm.c
+index bb564b830c96..2ccefa76348f 100644
+--- a/drivers/gpu/drm/i915/intel_region_ttm.c
++++ b/drivers/gpu/drm/i915/intel_region_ttm.c
+@@ -256,3 +256,22 @@ void intel_region_ttm_resource_free(struct intel_memory_region *mem,
+ 
+ 	man->func->free(man, res);
  }
- EXPORT_SYMBOL(ttm_range_man_fini_nocheck);
 +
 +/**
-+ * ttm_range_man_range_busy - Check whether anything is allocated with a range
++ * intel_region_ttm_range_busy - check whether range has any allocations
++ * @mem: The region to check
++ * @start: the start of the range to check
++ * @end: the end of the range to check
 + *
-+ * @man: memory manager to check
-+ * @fpfn: first page number to check
-+ * @lpfn: last page number to check
-+ *
-+ * Return: true if anything allocated within the range, false otherwise.
++ * Return: true if something is alloceted within the region, false otherwise.
 + */
-+bool ttm_range_man_range_busy(struct ttm_resource_manager *man,
-+			      unsigned fpfn, unsigned lpfn)
++bool intel_region_ttm_range_busy(struct intel_memory_region *mem,
++				 u64 start, u64 end)
 +{
-+	struct ttm_range_manager *rman = to_range_manager(man);
-+	struct drm_mm *mm = &rman->mm;
++	struct ttm_resource_manager *man = mem->region_private;
 +
-+	if (__drm_mm_interval_first(mm, PFN_PHYS(fpfn), PFN_PHYS(lpfn + 1) - 1))
-+		return true;
-+	return false;
++	/* currently only supported for range allocator */
++	GEM_BUG_ON(!mem->is_range_manager);
++
++	return ttm_range_man_range_busy(man, PFN_DOWN(start), PFN_UP(end));
 +}
-+EXPORT_SYMBOL(ttm_range_man_range_busy);
-diff --git a/include/drm/ttm/ttm_range_manager.h b/include/drm/ttm/ttm_range_manager.h
-index 7963b957e9ef..86794a3f9101 100644
---- a/include/drm/ttm/ttm_range_manager.h
-+++ b/include/drm/ttm/ttm_range_manager.h
-@@ -53,4 +53,7 @@ static __always_inline int ttm_range_man_fini(struct ttm_device *bdev,
- 	BUILD_BUG_ON(__builtin_constant_p(type) && type >= TTM_NUM_MEM_TYPES);
- 	return ttm_range_man_fini_nocheck(bdev, type);
- }
+diff --git a/drivers/gpu/drm/i915/intel_region_ttm.h b/drivers/gpu/drm/i915/intel_region_ttm.h
+index fdee5e7bd46c..670ba9b618f7 100644
+--- a/drivers/gpu/drm/i915/intel_region_ttm.h
++++ b/drivers/gpu/drm/i915/intel_region_ttm.h
+@@ -29,6 +29,9 @@ intel_region_ttm_resource_to_rsgt(struct intel_memory_region *mem,
+ void intel_region_ttm_resource_free(struct intel_memory_region *mem,
+ 				    struct ttm_resource *res);
+ 
++bool intel_region_ttm_range_busy(struct intel_memory_region *mem,
++				 u64 start, u64 end);
 +
-+bool ttm_range_man_range_busy(struct ttm_resource_manager *man,
-+			      unsigned fpfn, unsigned lpfn);
- #endif
+ int intel_region_to_ttm_type(const struct intel_memory_region *mem);
+ 
+ struct ttm_device_funcs *i915_ttm_driver(void);
 -- 
 2.25.1
 

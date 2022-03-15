@@ -2,199 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6E94DA4FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CDB4DA505
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352087AbiCOWFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S1352131AbiCOWHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbiCOWFl (ORCPT
+        with ESMTP id S1352113AbiCOWHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:05:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D3B236334;
-        Tue, 15 Mar 2022 15:04:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DAAB51474;
-        Tue, 15 Mar 2022 15:04:27 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F51D3F66F;
-        Tue, 15 Mar 2022 15:04:26 -0700 (PDT)
-Message-ID: <ffc67380-afc7-559e-c0f0-a5d446725f75@arm.com>
-Date:   Tue, 15 Mar 2022 22:04:20 +0000
+        Tue, 15 Mar 2022 18:07:08 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808AB5C363
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:05:54 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9C6642C066E;
+        Tue, 15 Mar 2022 22:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647381952;
+        bh=6qW0bIvSocuUGPAKqMqS/TneO9lAt3g2leeaoQdWrxE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WK12/Uushi22+XWuZlXZH+dgMjzpo8ym5bC+34Le7apERadkSrybyWZLUeooNpRKW
+         C9mTDvAHJ8+89Ulvx7f5AlCSHku4KJipPz0gM2Y97yWfq1AsboM540SV2T/Po8jC7n
+         Smp/ruiDgk2KhSGtHuzAKq0mXIGAhAWWShWslQVVR26vXTnQ+WOs0yLflxsbk9OYsl
+         FEsCcS/ZdbL/sbr7gBoAY50fX/pL2EN4LsftHmA38Y2se+8N2nZKkG4r63M4kiTf2c
+         NGTrtHyiOiWeB9qwrwmJiag3DRztmDpWPsO+drP2vSKtIomAP+RYnfPlSo88Oi/1Lr
+         lE+P15P3EuUAg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B62310dc00000>; Wed, 16 Mar 2022 11:05:52 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 5870F13EDD7;
+        Wed, 16 Mar 2022 11:05:52 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 3F9DE2A2678; Wed, 16 Mar 2022 11:05:51 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     huziji@marvell.com, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        adrian.hunter@intel.com
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v3 0/2] mmc: xenon: Armada 98DX2530 SoC
+Date:   Wed, 16 Mar 2022 11:05:47 +1300
+Message-Id: <20220315220549.2749328-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 2/2] thunderbolt: Use pre-boot DMA protection on AMD
- systems
-Content-Language: en-GB
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Christoph Hellwig <hch@infradead.org>, christian@kellner.me,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Will Deacon <will@kernel.org>
-References: <20220315162455.5190-1-mario.limonciello@amd.com>
- <20220315162455.5190-2-mario.limonciello@amd.com>
- <YjDDUUeZ/dvUZoDN@infradead.org>
- <BL1PR12MB5157D7B7734122684D47923AE2109@BL1PR12MB5157.namprd12.prod.outlook.com>
- <21d33a75-8c0e-7734-b3d1-dbe33cfe0ab0@arm.com>
- <7d588dfa-aa57-7be1-9cbb-61897f81bf99@amd.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <7d588dfa-aa57-7be1-9cbb-61897f81bf99@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=e-_wUu_MSEDw5Nq8D2YA:9 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-15 18:36, Limonciello, Mario wrote:
-> + Christian Kellner (Bolt userspace maintainer)
-> 
-> On 3/15/2022 13:07, Robin Murphy wrote:
->> On 2022-03-15 16:54, Limonciello, Mario via iommu wrote:
->>> [Public]
->>>
->>>
->>>> On Tue, Mar 15, 2022 at 11:24:55AM -0500, Mario Limonciello wrote:
->>>>> -     * handled natively using IOMMU. It is enabled when IOMMU is
->>>>> -     * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
->>>>> +     * handled natively using IOMMU. It is enabled when the IOMMU is
->>>>> +     * enabled and either:
->>>>> +     * ACPI DMAR table has DMAR_PLATFORM_OPT_IN set
->>>>> +     * or
->>>>> +     * ACPI IVRS table has DMA_REMAP bitset
->>>>>        */
->>>>>       return sprintf(buf, "%d\n",
->>>>> -               iommu_present(&pci_bus_type) &&
->>>> dmar_platform_optin());
->>>>> +               iommu_present(&pci_bus_type) &&
->>>>> +               (dmar_platform_optin() || amd_ivrs_remap_support()));
->>>>
->>>> Yikes.  No, the thunderbot code does not have any business poking into
->>>> either dmar_platform_optin or amd_ivrs_remap_support.  This needs
->>>> a proper abstration from the IOMMU code.
->>>
->>> To make sure I follow your ask - it's to make a new generic iommu 
->>> function
->>> That would check dmar/ivrs, and switch out thunderbolt domain.c to 
->>> use the
->>> symbol?
->>>
->>> I'm happy to rework that if that is what you want.
->>> Do you have a preferred proposed function name for that?
->>
->> But why? Either IOMMU translation is enabled or it isn't, and if it 
->> is, what's to gain from guessing at *why* it might have been? And even 
->> if the IOMMU's firmware table did tell the IOMMU driver to enable the 
->> IOMMU, why should that be Thunderbolt's business?
-> A lot of this comes from baggage from early Thunderbolt 3 implementation 
-> on systems with ICM (Intel's FW CM). On those systems there was a 
-> concept of "Security Levels".  This meant that downstream PCIe devices 
-> were not automatically authorized when a TBT3 device was plugged in.  In 
-> those cases there was no guarantee that the IOMMU was in use and so the 
-> security was passed on to the user to make a decision.
-> 
-> In Linux this was accomplished using the 'authorized' attribute in 
-> /sys/bus/thunderbolt/devices/$NUM/authorized.  When this was set to 1 
-> then the TBT3 device and PCIe topology behind it would be enumerated.
-> 
-> Further documentation explaining how this works is available here:
-> https://www.kernel.org/doc/html/latest/admin-guide/thunderbolt.html#security-levels-and-how-to-use-them 
-> 
-> 
-> (Intel based) Platforms from 2018+ w/ TBT3 started to use the IOMMU 
-> consistently at runtime but had this existing implementation of security 
-> levels to worry about.  Furthermore tunnels could be created pre-boot, 
-> and so the thunderbolt driver may or may not re-create them based on 
-> policy.
-> 
-> So a new attribute was created "iommu_dma_protection" that userspace 
-> could use as part of a policy decision to automatically authorize 
-> devices.  Exporting this attribute is very similar to what Microsoft 
-> does to let the user see the security of the system.
-> 
-> https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection 
-> 
-> 
-> In Linux today some userspace software "bolt" has a policy included by
-> default that will automatically authorize TBT3 and USB4 (w/ PCIe) 
-> devices when iommu_dma_protection is set to 1.
-> 
->>
->> Furthermore, looking at patch #1 I can only conclude that this is 
->> entirely meaningless anyway. AFAICS it's literally reporting whether 
->> the firmware flag was set or not. Not whether it's actually been 
->> honoured and the IOMMU is enforcing any kind of DMA protection at all. 
->> Even on Intel where the flag does at least have some effect on the 
->> IOMMU driver, that can still be overridden.
-> 
-> Take a look at the Microsoft link I shared above.  They also make policy
-> decisions based on the information in these tables.
-> 
->>
->> I already have a patch refactoring this to get rid of iommu_present(), 
->> but at the time I wasn't looking to closely at what it's trying to 
->> *do* with the information. If it's supposed to accurately reflect 
->> whether the Thunderbolt device is subject to IOMMU translation and not 
->> bypassed, I can fix that too (and unexport dmar_platform_optin() in 
->> the process...)
->>
->> Robin.
-> 
-> This patch series stems from that history.  To give the best experience 
-> to end users you want hotplugged devices to be automatically authorized 
-> when software says it's safe to do so.
-> 
-> To summarize the flow:
-> * User plugs in device
-> * USB4 CM will query supported tunnels
-> * USB4 CM will create devices in /sys/bus/thunderbolt/devices for new 
-> plugged in TBT3/USB4 device
-> * "authorized" attribute will default to "0" and PCIe tunnels are not 
-> created
-> * Userspace gets a uevent that the device was added
-> * Userspace (bolt) reacts by reading 
-> /sys/bus/thunderbolt/devices/domainX/iommu_dma_protection
-> * If that is set to "1", bolt will write "1" to "authorized"  and USB4 
-> CM will create PCIe tunnels
-> * If that is set to "0", bolt will send an event to GUI to show a popup 
-> asking to authorize the device
-> * After user acks the authorization then it will write "1" to 
-> "authorized" and USB4 CM will create PCIe tunnels
-> 
-> 
-> Mika,
-> 
-> I wonder if maybe what we really want is to only use that flow for the 
-> authorized attribute when using TBT3 + ICM (or IOMMU disabled at 
-> runtime).  If we're using a USB4 host, check IOMMU translation layer 
-> active like Robin suggested and then automatically authorize from the CM.
+This is split off from [1] to let it go in independently rather than wait=
+ing
+for the rest of the series to land.
 
-Thanks for the explanation. I don't think there's anything wrong with 
-that flow per se - fundamentally, whether it's relayed through userspace 
-or done automagically inside the kernel doesn't change the end result - 
-but it does seem to confirm my suspicion that even now it's not actually 
-working as intended and may end up letting devices be authorised in 
-circumstances that they probably shouldn't be.
+[1] - https://lore.kernel.org/lkml/20220314213143.2404162-1-chris.packham=
+@alliedtelesis.co.nz/\n
 
-It's absolutely fine for Thunderbolt to care about whether a device 
-currently has IOMMU translation enabled (and to expose that to userspace 
-in its own way if it wants to), but that's generic IOMMU API stuff, no 
-firmware-poking required :)
+Chris Packham (2):
+  dt-bindings: mmc: xenon: add AC5 compatible string
+  mmc: xenon: add AC5 compatible string
 
-Tomorrow I'll rework the patch out of my iommu_present() cleanup stack 
-to do the right thing, and share it.
+ .../bindings/mmc/marvell,xenon-sdhci.txt      | 52 +++++++++++++++++++
+ drivers/mmc/host/sdhci-xenon.c                |  1 +
+ drivers/mmc/host/sdhci-xenon.h                |  3 +-
+ 3 files changed, 55 insertions(+), 1 deletion(-)
 
-Cheers,
-Robin.
+--=20
+2.35.1
+

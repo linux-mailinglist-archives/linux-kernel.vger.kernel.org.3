@@ -2,177 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86904D9F93
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A66304D9F9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349782AbiCOQFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S1349882AbiCOQGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238915AbiCOQFp (ORCPT
+        with ESMTP id S1349837AbiCOQGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:05:45 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0331FA79
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:04:32 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so2690256pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gvkC3jGwM0BSWnuGpgckFHOiTk6SWYeHrSDlcpLuLck=;
-        b=3gqdwDRiCpRYgnbCiljAUJPe+a2nTGkGs2zkB5QHuuedEezypdquacGD/eUaQO1L48
-         W8q+bQNYgZzYuWRLozKeXY/T6eFQRQeF0zEZJj2Uj51n8r+WEVn59ZGNDqZ3WRH9Ixbr
-         vjfaZmO3t+A/a04EBXTmKgmCaYz6pFUFvcPblzGN9GWeI0uTrZv+8qlpHoRUapzOJIA0
-         0LAxv4xPNTNd8ErCac5s+GPIxnEWbZF6vtS5bIIgEOOeBIDJ+DEp1UkRkXlpE8LPq4pU
-         4LskO51J4VqSAb83p4KhKkgt/VPsn4Al4Dr/pozZ5fSQdu/gp2Ukcgmrc5f3QRI8t8tu
-         7VRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gvkC3jGwM0BSWnuGpgckFHOiTk6SWYeHrSDlcpLuLck=;
-        b=Uf98LMQI1I3pEVV9quIZCQydJF2pk4eUvvNGsseKSGrDrZdjtKM14DFEdoe2CPwAjH
-         N7y4H9TXppJ/C7nEuBV3eP3pcpk3cp1GrUmCIu28c3q51Y8a6aHl3ejCpaabj5kYkWcF
-         bzzpWNN4mY5ePYqXYJ80zJ3ZSGBMtgYz6dD/5Hlv7rQf+Ej3UB0jtLoXoTNsTwb/fol3
-         Km1PSZbjkvp40BZ6J42lxtV4kVh0jCUafHq/qYPWfhOqGSuMhEQY7voQGkAvUhA0Kemo
-         OboNoAhPiU8jpSNJce6Z224RL4RkQHosvyhB2hL/xjotnByg6NFKU07kT6/S6Hek4BdZ
-         rfWg==
-X-Gm-Message-State: AOAM5322eljO1EXYSsnetMnIoc+qsrjYMejs14IkUHC2obfvRZu+UUUR
-        rz0o57qhUeVsf2sKY4yzz0MS/XHNWU8OUktzJ24hhw==
-X-Google-Smtp-Source: ABdhPJx4iexvZ9E7ec4YTysWAlz/seulvJb3IeWy/vdbRcyyJyL0GKEJRsaIdVfIyVQD8KsXXN09cpfz7Pj3dHUw5t0=
-X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id
- q13-20020a17090a430d00b001bcf3408096mr5395590pjg.93.1647360271908; Tue, 15
- Mar 2022 09:04:31 -0700 (PDT)
+        Tue, 15 Mar 2022 12:06:11 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526A72AE2E;
+        Tue, 15 Mar 2022 09:04:59 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FEoi77012311;
+        Tue, 15 Mar 2022 16:04:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=tdEYLDx1G8bzKxisHf7Abo3qouFpdoa7ZzkGJTm29gw=;
+ b=tUTvlYrCkbrSz9VorIEtZFp+W7P4gTPyEdEHyZUGQz293eSXrybnSZsptki9aa8/OPew
+ w6CyKpL2s0GC2jipsBUUJBViBBa8wzKPtQyjElbQUGayNvjR0puS5Q9pjhLABsWCIFqz
+ SwF7b8wN8LW0eIXQjEEjEXXyhwmqDtAq6P2f8l/9k8wHZjgGLhJyDc9Fmre76BCe/mek
+ K/iA3fnV13LuOFT9P27E4qCpykHtMnmqVXxdbpEisv6iAdWtKD2Zctg/YHJeGn5vYmOW
+ mRDDt/hiI1igFRsGGzCWTVrKzxb9yEoLp1/IJn7HtG+cEqFiVF6Nzu0ifCYNx8rJS92F Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3etvx09vsx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 16:04:52 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22FFoSrE031868;
+        Tue, 15 Mar 2022 16:04:51 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3etvx09vry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 16:04:51 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22FFxtjY005384;
+        Tue, 15 Mar 2022 16:04:50 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma02dal.us.ibm.com with ESMTP id 3etaj6r9ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Mar 2022 16:04:50 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22FG4mXB33948066
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Mar 2022 16:04:48 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A8426AC05E;
+        Tue, 15 Mar 2022 16:04:48 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34488AC05F;
+        Tue, 15 Mar 2022 16:04:37 +0000 (GMT)
+Received: from [9.211.32.184] (unknown [9.211.32.184])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Mar 2022 16:04:36 +0000 (GMT)
+Message-ID: <dbe8488f-2539-f81a-b730-26e58b78856a@linux.ibm.com>
+Date:   Tue, 15 Mar 2022 12:04:35 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4 15/32] vfio: introduce KVM-owned IOMMU type
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>, borntraeger@linux.ibm.com
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        linux-s390@vger.kernel.org, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        pbonzini@redhat.com, corbet@lwn.net, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-doc@vger.kernel.org
+References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
+ <20220314194451.58266-16-mjrosato@linux.ibm.com>
+ <20220314165033.6d2291a5.alex.williamson@redhat.com>
+ <20220314231801.GN11336@nvidia.com>
+ <9618afae-2a91-6e4e-e8c3-cb83e2f5c3d9@linux.ibm.com>
+ <20220315145520.GZ11336@nvidia.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20220315145520.GZ11336@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -w36gmF1H8rJjnaDs5OGV7pUR03jgs89
+X-Proofpoint-ORIG-GUID: OH7K6C4R5v45F-_abHJQ5ckSN6hzhDCe
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220301195457.21152-1-jithu.joseph@intel.com>
- <Yh59rOIH24X+6GyI@kroah.com> <Yh5+om/Nr06V0+Qj@kroah.com> <Yi/Lb5laEki0JHft@agluck-desk3.sc.intel.com>
- <YjBBmEjbIaqTbVt+@kroah.com> <c4af81bd788e43dda915a1052af0be55@intel.com> <YjCwI4N00reBuIqA@kroah.com>
-In-Reply-To: <YjCwI4N00reBuIqA@kroah.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 15 Mar 2022 09:04:20 -0700
-Message-ID: <CAPcyv4iU5mXAjkUe-c_-Ba4Ejse90gqd=db+00jybnkV1-K6=g@mail.gmail.com>
-Subject: Re: [RFC 00/10] Introduce In Field Scan driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-15_03,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ bulkscore=0 spamscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203150102
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 8:27 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Mar 15, 2022 at 02:59:03PM +0000, Luck, Tony wrote:
-> > >> This seems a novel use of uevent ... is it OK, or is is abuse?
-> > >
-> > > Don't create "novel" uses of uevents.  They are there to express a
-> > > change in state of a device so that userspace can then go and do
-> > > something with that information.  If that pattern fits here, wonderful.
-> >
-> > Maybe Dan will chime in here to better explain his idea. I think for
-> > the case where the core test fails, there is a good match with uevent.
-> > The device (one CPU core) has changed state from "working" to
-> > "untrustworthy". Userspace can do things like: take the logical CPUs
-> > on that core offline, initiate a service call, or in a VMM cluster environment
-> > migrate work to a different node.
->
-> Again, I have no idea what you are doing at all with this driver, nor
-> what you want to do with it.
->
-> Start over please.
->
-> What is the hardware you have to support?
->
-> What is the expectation from userspace with regards to using the
-> hardware?
+On 3/15/22 10:55 AM, Jason Gunthorpe wrote:
+> On Tue, Mar 15, 2022 at 09:36:08AM -0400, Matthew Rosato wrote:
+>>> If we do try to stick this into VFIO it should probably use the
+>>> VFIO_TYPE1_NESTING_IOMMU instead - however, we would like to delete
+>>> that flag entirely as it was never fully implemented, was never used,
+>>> and isn't part of what we are proposing for IOMMU nesting on ARM
+>>> anyhow. (So far I've found nobody to explain what the plan here was..)
+>>>
+>>
+>> I'm open to suggestions on how better to tie this into vfio.  The scenario
+>> basically plays out that:
+> 
+> Ideally I would like it to follow the same 'user space page table'
+> design that Eric and Kevin are working on for HW iommu.
 
-Here is what I have learned about this driver since engaging on this
-patch set. Cores go bad at run time. Datacenters can detect them at
-scale. When I worked at Facebook there was an epic story of debugging
-random user login failures that resulted in the discovery of a
-marginal lot-number of CPUs in a certain cluster. In that case the
-crypto instructions on a few cores of those CPUs gave wrong answers.
-Whether that was an electromigration effect, or just a marginal bin of
-CPUs, the only detection method was A-B testing different clusters of
-CPUs to isolate the differences.
+'[RFC v16 0/9] SMMUv3 Nested Stage Setup (IOMMU part)' ??
 
-This driver takes advantage of a CPU feature to inject a diagnostic
-test similar to what can be done via JTAG to validate the
-functionality of a given core on a CPU at a low level. The diagnostic
-is run periodically since some failures may be sensitive to thermals
-while other failures may be be related to the lifetime of the CPU. The
-result of the diagnostic is "here are 1 or more cores that may
-miscalculate, stop using them and replace the CPU".
+https://lore.kernel.org/linux-iommu/20211027104428.1059740-1-eric.auger@redhat.com/
 
-At a base level the ABI need only be something that conveys "core X
-failed its last diagnostic". All the other details are just extra, and
-in my opinion can be dropped save for maybe "core X was unable to run
-the diagnostic".
+> 
+> You have an 1st iommu_domain that maps and pins the entire guest physical
+> address space.
 
-The thought process that got me from the proposal on the table "extend
-/sys/devices/system/cpu with per-cpu result state and other details"
-to "emit uevents on each test completion" were the following:
--The complexity and maintenance burden of dynamically extending
-/sys/devices/system/cpu: Given that you identified a reference
-counting issue, I wondered why this was trying to use
-/sys/devices/system/cpu in the first instance.
+Ahh, I see.
 
-- The result of the test is an event that kicks off remediation
-actions: When this fails a tech is paged to replace the CPU and in the
-meantime the system can either be taken offline, or if some of the
-cores are still good the workloads can be moved off of the bad cores
-to keep some capacity online until the replacement can be made.
+@Christian would it be OK to pursue a model that pins all of guest 
+memory upfront?
 
-- KOBJ_CHANGE uevents are already deployed in NVME for AEN
-(Asynchronous Event Notifications): If the results of the test were
-conveyed only in sysfs then there would be a program that would scrape
-sysfs and turn around and fire an event for the downstream remediation
-actions. Uevent cuts to the chase and lets udev rule policy log,
-notify, and/or take pre-emptive CPU offline action. The CPU state has
-changed after a test run. It has either changed to a failed CPU, or it
-has changed to one that has recently asserted its health.
+> 
+> You have an nested iommu_domain that represents the user page table
+> (the ioat in your language I think)
 
-> > > I doubt you can report "test results" via a uevent in a way that the
-> > > current uevent states and messages would properly convey, but hey, maybe
-> > > I'm wrong.
-> >
-> > But here things get a bit sketchy. Reporting "pass", or "didn't complete the test"
-> > isn't a state change.  But it seems like a poor interface if there is no feedback
-> > that the test was run. Using different methods to report pass/fail/incomplete
-> > also seems user hostile.
->
-> We have an in-kernel "test" framework.  Yes, it's for kernel code, but
-> why not extend that to also include hardware tests?
+Yes
 
-This is where my head was at when starting out with this, but this is
-more of an asynchronous error reporting mechanism like machine check,
-or PCIe AER, than a test. The only difference being that the error in
-this case is only reported by first requesting an error check. So it
-is more similar to something like a background patrol scrub that seeks
-out latent ECC errors in memory.
+> 
+> When the guest says it wants to set a user page table then you create
+> the nested iommu_domain representing that user page table and pass in
+> the anchor (guest address of the root IOPTE) to the kernel to do the
+> work. >
+> The rule for all other HW's is that the user space page table is
+> translated by the top level kernel page table. So when you traverse it
+> you fetch the CPU page storing the guest's IOPTE by doing an IOVA
+> translation through the first level page table - not through KVM.
+> 
+> Since the first level page table an the KVM GPA should be 1:1 this is
+> an equivalent operation.
+> 
+>> 1) the iommu will be domain_alloc'd once VFIO_SET_IOMMU is issued -- so at
+>> that time (or earlier) we have to make the decision on whether to use the
+>> standard IOMMU or this alternate KVM/nested IOMMU.
+> 
+> So in terms of iommufd I would see it this would be an iommufd 'create
+> a device specific iomm_domain' IOCTL and you can pass in a S390
+> specific data blob to make it into this special mode.
+> 
+>>> This is why I said the second level should be an explicit iommu_domain
+>>> all on its own that is explicitly coupled to the KVM to read the page
+>>> tables, if necessary.
+>>
+>> Maybe I misunderstood this.  Are you proposing 2 layers of IOMMU that
+>> interact with each other within host kernel space?
+>>
+>> A second level runs the guest tables, pins the appropriate pieces from the
+>> guest to get the resulting phys_addr(s) which are then passed via iommu to a
+>> first level via map (or unmap)?
+> 
+> 
+> The first level iommu_domain has the 'type1' map and unmap and pins
+> the pages. This is the 1:1 map with the GPA and ends up pinning all
+> guest memory because the point is you don't want to take a memory pin
+> on your performance path
+> 
+> The second level iommu_domain points to a single IO page table in GPA
+> and is created/destroyed whenever the guest traps to the hypervisor to
+> manipulate the anchor (ie the GPA of the guest IO page table).
+> 
+
+That makes sense, thanks for clarifying.
+
+>>> But I'm not sure that reading the userspace io page tables with KVM is
+>>> even the best thing to do - the iommu driver already has the pinned
+>>> memory, it would be faster and more modular to traverse the io page
+>>> tables through the pfns in the root iommu_domain than by having KVM do
+>>> the translations. Lets see what Matthew says..
+>>
+>> OK, you lost me a bit here.  And this may be associated with the above.
+>>
+>> So, what the current implementation is doing is reading the guest DMA tables
+>> (which we must pin the first time we access them) and then map the PTEs of
+>> the associated guest DMA entries into the associated host DMA table (so,
+>> again pin and place the address, or unpin and invalidate).  Basically we are
+>> shadowing the first level DMA table as a copy of the second level DMA table
+>> with the host address(es) of the pinned guest page(s).
+> 
+> You can't pin/unpin in this path, there is no real way to handle error
+> and ulimit stuff here, plus it is really slow. I didn't notice any of
+> this in your patches, so what do you mean by 'pin' above?
+
+patch 18 does some symbol_get for gfn_to_page (which will drive 
+hva_to_pfn under the covers) and kvm_release_pfn_dirty and uses those 
+symbols for pin/unpin.
+
+pin/unpin errors in this series are reliant on the fact that RPCIT is 
+architected to include a panic response to the guest of 'mappings failed 
+for the specified range, go refresh your tables and make room', thus 
+allowing this to work for pageable guests.
+
+Agreed this would be unnecessary if we've already mapped all of guest 
+memory via a 1st iommu domain.
+
+> 
+> To be like other IOMMU nesting drivers the pages should already be
+> pinned and stored in the 1st iommu_domain, lets say in an xarray. This
+> xarray is populated by type1 map/unmap sytem calls like any
+> iommu_domain.
+> 
+> A nested iommu_domain should create the real HW IO page table and
+> associate it with the real HW IOMMU and record the parent 1st level iommu_domain.
+> 
+> When you do the shadowing you use the xarray of the 1st level
+> iommu_domain to translate from GPA to host physical and there is no
+> pinning/etc involved. After walking the guest table and learning the
+> final vIOVA it is translated through the xarray to a CPU physical and
+> then programmed into the real HW IO page table.
+> 
+> There is no reason to use KVM to do any of this, and is actively wrong
+> to place CPU pages from KVM into an IOPTE that did not come through
+> the type1 map/unmap calls that do all the proper validation and
+> accounting.
+> 
+> Jason
+

@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF444DA217
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC764DA21A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 19:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350970AbiCOSKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 14:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S1350990AbiCOSLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 14:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346008AbiCOSKE (ORCPT
+        with ESMTP id S1350963AbiCOSLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 14:10:04 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9CB59A4D;
-        Tue, 15 Mar 2022 11:08:51 -0700 (PDT)
-X-UUID: 372c819213d64504b3eac5393916279e-20220316
-X-UUID: 372c819213d64504b3eac5393916279e-20220316
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1023954275; Wed, 16 Mar 2022 02:08:47 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 16 Mar 2022 02:08:45 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Mar
- 2022 02:08:45 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 02:08:45 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>
-CC:     <johan.hedberg@gmail.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <abhishekpandit@google.com>,
-        <michaelfsun@google.com>, <mcchou@chromium.org>,
-        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/5] Bluetooth: btmtksdio: Fix kernel oops in btmtksdio_interrupt
-Date:   Wed, 16 Mar 2022 02:08:44 +0800
-Message-ID: <1647367724-5486-1-git-send-email-sean.wang@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647366404.git.objelf@gmail.com--annotate>
-References: <7b4627d5017be2c26ded9daf7fd297bed6614852.1647366404.git.objelf@gmail.com--annotate>
+        Tue, 15 Mar 2022 14:11:05 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE25C59A79
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:09:52 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d18so1761510plr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 11:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LnfhahHm3PDL9lPgihcYM1ixyCrpxkRE4I19AMm+GpI=;
+        b=JVFkFjRzXHvl4p6lzecOm3qCuwJkQk5Aq/4Fikfk7weWrbtXCItQc1wAZya5H6IJDG
+         QNI3GLzgvk3q2YYFCgId9Id3a/AMxyHSRXjdwlpHsKqaZesf5hk2QTOeNe8E421h+niV
+         56QoMW3xTldNTC6XDzfuHu9lXtWAK74IHih4w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LnfhahHm3PDL9lPgihcYM1ixyCrpxkRE4I19AMm+GpI=;
+        b=iEGKTbDhvpLwd5G/6R5NToS+f5cXd1avqQv+qfQhO0S08X5QNUFsDSOu41M9UA2mcr
+         JCiGzA3L5vg1PvIugfzu9r5AOfzbEEJMVi9dqS8lNfCzV0jqRSGx2OwqtVhHqKG08YZa
+         w0OoAeG5VZ4aIArqEtEy/bABb4BdxJRjDsXCiTe/TLVPOhO9fAc6MJnryCZBNHRdIxdz
+         8tOZtCnMfMSWhAHlNPTrRflsO70Ie7gHvolz4KF0lI0QbZKVZqhuBzJhS+5cGmVYLuB2
+         tWXXMgg/wbKjCJOVOUWnHrWnfPNdN6SfqxZYzvVskxQj/eXfTecTrodQ0auJSomnylRK
+         RCKg==
+X-Gm-Message-State: AOAM531ONv7ywmO0pty0CeaiVHGJ8QSLuiKB6vGrTaSveaLj8pZxqcdV
+        8oqJFgHniEZSISSr+BbcrM2wuQ==
+X-Google-Smtp-Source: ABdhPJxrv8JWlmC583Lem9EnnxkdYf2cpc2Vr67JCGAwKnCX6HsrocM0D0dZOBLboyTP/eYhDYcA9Q==
+X-Received: by 2002:a17:90a:17ab:b0:1bf:9519:fe86 with SMTP id q40-20020a17090a17ab00b001bf9519fe86mr6027447pja.25.1647367792246;
+        Tue, 15 Mar 2022 11:09:52 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 16-20020a17090a19d000b001c1c6b25cb2sm3736609pjj.26.2022.03.15.11.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 11:09:51 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 11:09:51 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Yanteng Si <siyanteng01@gmail.com>, linux-mips@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Only use current_stack_pointer on GCC
+Message-ID: <202203151109.F59911C4CB@keescook>
+References: <20220309220939.392227-1-keescook@chromium.org>
+ <20220314145215.GD13438@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220314145215.GD13438@alpha.franken.de>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,67 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On Mon, Mar 14, 2022 at 03:52:15PM +0100, Thomas Bogendoerfer wrote:
+> On Wed, Mar 09, 2022 at 02:09:39PM -0800, Kees Cook wrote:
+> > Unfortunately, Clang did not have support for "sp" as a global register
+> > definition, and was crashing after the addition of current_stack_pointer.
+> > This has been fixed in Clang 15, but earlier Clang versions need to
+> > avoid this code, so add a versioned test and revert back to the
+> > open-coded asm instances. Fixes Clang build error:
+> > 
+> > fatal error: error in backend: Invalid register name global variable
+> > 
+> > Fixes: 200ed341b864 ("mips: Implement "current_stack_pointer"")
+> > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > Link: https://lore.kernel.org/lkml/YikTQRql+il3HbrK@dev-arch.thelio-3990X
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Yanteng Si <siyanteng01@gmail.com>
+> > Cc: linux-mips@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v1: https://lore.kernel.org/lkml/20220309204537.390428-1-keescook@chromium.org
+> > v2: - adjust Clang version (Nathan)
+> > ---
+> >  arch/mips/Kconfig                   | 2 +-
+> >  arch/mips/include/asm/thread_info.h | 2 ++
+> >  arch/mips/kernel/irq.c              | 3 ++-
+> >  arch/mips/lib/uncached.c            | 4 +++-
+> >  4 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> applied to mips-next with the Clang version in the decscription fixed.
 
-Hi Marcel,
+Excellent; thanks very much!
 
-Please ignore the series because I put a wrong version as the prefix
+-Kees
 
-I will send the series later.
-
-        Sean
-
->
->From: Yake Yang <yake.yang@mediatek.com>
->
->Fix the following kernel oops in btmtksdio_interrrupt
->
->[   14.339134]  btmtksdio_interrupt+0x28/0x54
->[   14.339139]  process_sdio_pending_irqs+0x68/0x1a0
->[   14.339144]  sdio_irq_work+0x40/0x70
->[   14.339154]  process_one_work+0x184/0x39c
->[   14.339160]  worker_thread+0x228/0x3e8
->[   14.339168]  kthread+0x148/0x3ac
->[   14.339176]  ret_from_fork+0x10/0x30
->
->That happened because hdev->power_on is already called before sdio_set_drvdata which btmtksdio_interrupt handler relies on is not properly set up.
->
->The details are shown as the below: hci_register_dev would run queue_work(hdev->req_workqueue, &hdev->power_on) as WQ_HIGHPRI workqueue_struct to complete the power-on sequeunce and thus hci_power_on may run before sdio_set_drvdata is done in btmtksdio_probe.
->
->The hci_dev_do_open in hci_power_on would initialize the device and enable the interrupt and thus it is possible that btmtksdio_interrupt is being called right before sdio_set_drvdata is filled out.
->
->When btmtksdio_interrupt is being called and sdio_set_drvdata is not filled , the kernel oops is going to happen because btmtksdio_interrupt access an uninitialized pointer.
->
->Fixes: 9aebfd4a2200 ("Bluetooth: mediatek: add support for MediaTek MT7663S and MT7668S SDIO devices")
->Reviewed-by: Mark Chen <markyawenchen@gmail.com>
->Co-developed-by: Sean Wang <sean.wang@mediatek.com>
->Signed-off-by: Sean Wang <sean.wang@mediatek.com>
->Signed-off-by: Yake Yang <yake.yang@mediatek.com>
->---
-> drivers/bluetooth/btmtksdio.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
->diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c index df3f9d090529..9644069cecbb 100644
->--- a/drivers/bluetooth/btmtksdio.c
->+++ b/drivers/bluetooth/btmtksdio.c
->@@ -1281,6 +1281,8 @@ static int btmtksdio_probe(struct sdio_func *func,
->	hdev->manufacturer = 70;
->	set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
->
->+	sdio_set_drvdata(func, bdev);
->+
->	err = hci_register_dev(hdev);
->	if (err < 0) {
->		dev_err(&func->dev, "Can't register HCI device\n"); @@ -1288,8 +1290,6 @@ static int btmtksdio_probe(struct sdio_func *func,
->		return err;
->	}
->
->-	sdio_set_drvdata(func, bdev);
->-
->	/* pm_runtime_enable would be done after the firmware is being
->	 * downloaded because the core layer probably already enables
->	 * runtime PM for this func such as the case host->caps &
->--
->2.25.1
->
->
+-- 
+Kees Cook

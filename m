@@ -2,214 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939E34DA5BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA60C4DA5C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 23:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352450AbiCOWvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 18:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S1344538AbiCOW5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 18:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352393AbiCOWvb (ORCPT
+        with ESMTP id S1344423AbiCOW5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 18:51:31 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5A05D1A2;
-        Tue, 15 Mar 2022 15:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647384618; x=1678920618;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AoL+AQKyb3WLrBNANBB4c8DGr0XOP5pxqBpjs6Zn37k=;
-  b=OoBFAhblftbHGfQ88LcYHUWNVM0yrOoFFMpHa3+abHvgnuiYr2WNOYxe
-   CkM7Az3p1R6oX3Hxs2nsEeZcfGrWQ5ocSM8njQWAyYi3IPsTKi1v/xSEl
-   p5Z/2hxPUzS8l2y6Q1EbmB221eCXXpABfZiqt2H3l/RUOl2CPN4t7pjmB
-   bY8yFIdBazHfvBRdWXs9nSrfM68ZPVa2ky1TWa5Xco0aBIigj6pcPOLJY
-   HnHLM4EidL0CBIx7UF3rpyPWV65aQVlyu4u0wFxm1vXhAhz5NvlXEHP/B
-   XKA1iM9iM4aSsp8bnYg1jMNzR1RKUOZ8Y3dLldo5C44rO29+/mBgSkD/E
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256390620"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="256390620"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 15:50:13 -0700
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="690368472"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 15:50:13 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: [PATCH 6/6] KVM: TDX: Make TDX VM type supported
-Date:   Tue, 15 Mar 2022 15:50:10 -0700
-Message-Id: <c4c6bffb4502df9059f1033e07a702b6de37160d.1647384148.git.isaku.yamahata@intel.com>
+        Tue, 15 Mar 2022 18:57:08 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305E95D5E1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:55:55 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id u7so854454ljk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 15:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=353ErsK+RGDyNPxQky3skb4+jiks6X7CPsq9uRQTVb4=;
+        b=L6/T4rpw8WvPr3573NYwtD1rNDtLBVQhNsCYrmwLv+NkgCN7Yw4pp3lP8uplbUZojD
+         pyOf8RRVzciVkb8rIBMWXnSu/Xr5Qx8oSbLjdj5lhNu4rQL+2SSQ+R9TeYG0Omq1TgFL
+         Sii7aIxy9lb0SUxbnzNauaFAEQNgf0B/Atzv6snv1iKF231IHrSfU3ln8FgGC+lJ7Y5o
+         yI1bUvJcYJjuDulZmw4h2tCHsEsLUqGOzXNrsKFVLaFfns29ns6pRL3CbFlLFbt7Wm+J
+         Ynt80jfSlsdVM54NIs/Ozbb8dzMfmcAzmImF4BO39/GRakEEr9yQRdnIvqTspZKxvClS
+         IdLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=353ErsK+RGDyNPxQky3skb4+jiks6X7CPsq9uRQTVb4=;
+        b=2ZNVoaCA5m9VUjOWMu9Ia9hBtvaSEjfWXu9SO96ugfiWt8+w3Pw/KKoLEc/4wWcLhy
+         YnrwqmxqHPWgea7qrnpDIo4xDhD5qdmuCQCWRVHExeGW8bKh9b/PCv1jXVEFXh4I8WBu
+         DvVjv8urefZlRGD8gPjy7fP8ZswickVax7XjikmsCNKaO2suuy5CtjWp9j4pMCEnRMoX
+         vuhu0x1D5IaGVNzdImhTubNgDwdqcK2O6syRsO2wDa5iHGX5NJ7CcYi66HXMYWk3jbqI
+         XycxUmyFJ/3PPY3TECXt83wMmHSrjKXMw6iHnERiFb9TYF7Ka0pNPZxHpMzz9b0awFyP
+         xV1w==
+X-Gm-Message-State: AOAM530B2CCXvYR/QEASgWUUkXKeOJFuK2MmDA6tC7bCh93w4EDNV2Ny
+        ZXMISM1PXqW98NJz9qZIvMp7Ag==
+X-Google-Smtp-Source: ABdhPJzYA7g7r6z6hBDKdXhfFziYg1jj95qbG394ogx9KGZh1RJJ+T13V3Dd1E6WLqyyb5F/FAlF/w==
+X-Received: by 2002:a2e:b0f5:0:b0:249:2986:4fa8 with SMTP id h21-20020a2eb0f5000000b0024929864fa8mr10504755ljl.128.1647384953430;
+        Tue, 15 Mar 2022 15:55:53 -0700 (PDT)
+Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id 5-20020a2e1445000000b002491768821asm29445lju.49.2022.03.15.15.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 15:55:52 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: dsa: Never offload FDB entries on standalone ports
+Date:   Tue, 15 Mar 2022 23:50:18 +0100
+Message-Id: <20220315225018.1399269-1-tobias@waldekranz.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1647384147.git.isaku.yamahata@intel.com>
-References: <cover.1647384147.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
+Organization: Westermo
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+If a port joins a bridge that it can't offload, it will fallback to
+standalone mode and software bridging. In this case, we never want to
+offload any FDB entries to hardware either.
 
-As first step TDX VM support, return that TDX VM type supported to device
-model, e.g. qemu.  The callback to create guest TD is vm_init callback for
-KVM_CREATE_VM.  Add a place holder function and call a function to
-initialize TDX module on demand because in that callback VMX is enabled by
-hardware_enable callback (vmx_hardware_enable).
-
-Although guest TD isn't functional at this point, it's possible for
-KVM developer to exercise (partially implemented) TDX KVM code.  Introduce
-X86_TDX_KVM_EXPERIMENTAL to allow TDX KVM code to be exercised.  Once TDX
-KVM is functional, the config will be removed.
-
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Fixes: c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 ---
- arch/x86/kvm/Kconfig       | 14 ++++++++++++++
- arch/x86/kvm/Makefile      |  1 +
- arch/x86/kvm/vmx/main.c    |  7 ++++++-
- arch/x86/kvm/vmx/tdx.c     | 17 +++++++++++++++++
- arch/x86/kvm/vmx/vmx.c     |  5 -----
- arch/x86/kvm/vmx/x86_ops.h |  7 ++++++-
- 6 files changed, 44 insertions(+), 7 deletions(-)
- create mode 100644 arch/x86/kvm/vmx/tdx.c
+ net/dsa/slave.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-index 2b1548da00eb..a3287440aa9e 100644
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -98,6 +98,20 @@ config X86_SGX_KVM
+diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+index f9cecda791d5..d24b6bf845c1 100644
+--- a/net/dsa/slave.c
++++ b/net/dsa/slave.c
+@@ -2847,6 +2847,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+ 	if (ctx && ctx != dp)
+ 		return 0;
  
- 	  If unsure, say N.
- 
-+config X86_TDX_KVM_EXPERIMENTAL
-+	bool "EXPERIMENTAL Trust Domian Extensions (TDX) KVM support"
-+	default n
-+	depends on INTEL_TDX_HOST
-+	depends on KVM_INTEL
-+	help
-+	  Enable experimental TDX KVM support.  TDX KVM needs many patches and
-+	  the patches will be merged step by step, not at once. Even if TDX KVM
-+	  support is incomplete, enable TDX KVM support so that developper can
-+	  exercise TDX KVM code.  TODO: Remove this configuration once the
-+	  (first step of) TDX KVM support is complete.
++	if (!dp->bridge)
++		return 0;
 +
-+	  If unsure, say N.
-+
- config KVM_AMD
- 	tristate "KVM for AMD processors support"
- 	depends on KVM
-diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-index ee4d0999f20f..e2c05195cb95 100644
---- a/arch/x86/kvm/Makefile
-+++ b/arch/x86/kvm/Makefile
-@@ -24,6 +24,7 @@ kvm-$(CONFIG_KVM_XEN)	+= xen.o
- kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
- 			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o vmx/main.o
- kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
-+kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o
- 
- kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
- 
-diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-index 459087fcf7b7..086b5106c15a 100644
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -7,6 +7,11 @@
- #include "pmu.h"
- #include "tdx.h"
- 
-+static bool vt_is_vm_type_supported(unsigned long type)
-+{
-+	return type == KVM_X86_DEFAULT_VM || tdx_is_vm_type_supported(type);
-+}
-+
- struct kvm_x86_ops vt_x86_ops __initdata = {
- 	.name = "kvm_intel",
- 
-@@ -17,7 +22,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
- 	.cpu_has_accelerated_tpr = report_flexpriority,
- 	.has_emulated_msr = vmx_has_emulated_msr,
- 
--	.is_vm_type_supported = vmx_is_vm_type_supported,
-+	.is_vm_type_supported = vt_is_vm_type_supported,
- 	.vm_size = sizeof(struct kvm_vmx),
- 	.vm_init = vmx_vm_init,
- 
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-new file mode 100644
-index 000000000000..02271a3e2733
---- /dev/null
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "x86_ops.h"
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt) "tdx: " fmt
-+
-+static bool __read_mostly enable_tdx = true;
-+module_param_named(tdx, enable_tdx, bool, 0644);
-+bool tdx_is_vm_type_supported(unsigned long type)
-+{
-+#ifdef CONFIG_X86_TDX_KVM_EXPERIMENTAL
-+	return type == KVM_X86_TDX_VM && READ_ONCE(enable_tdx);
-+#else
-+	return false;
-+#endif
-+}
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 191e653355dd..538b91380c06 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7085,11 +7085,6 @@ int vmx_vcpu_create(struct kvm_vcpu *vcpu)
- 	return err;
- }
- 
--bool vmx_is_vm_type_supported(unsigned long type)
--{
--	return type == KVM_X86_DEFAULT_VM;
--}
--
- #define L1TF_MSG_SMT "L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.\n"
- #define L1TF_MSG_L1D "L1TF CPU bug present and virtualization mitigation disabled, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.\n"
- 
-diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-index e0a4c6438c88..2fb5df625bb1 100644
---- a/arch/x86/kvm/vmx/x86_ops.h
-+++ b/arch/x86/kvm/vmx/x86_ops.h
-@@ -25,7 +25,6 @@ void vmx_hardware_unsetup(void);
- int vmx_hardware_enable(void);
- void vmx_hardware_disable(void);
- bool report_flexpriority(void);
--bool vmx_is_vm_type_supported(unsigned long type);
- int vmx_vm_init(struct kvm *kvm);
- int vmx_vcpu_create(struct kvm_vcpu *vcpu);
- int vmx_vcpu_pre_run(struct kvm_vcpu *vcpu);
-@@ -127,4 +126,10 @@ void vmx_cancel_hv_timer(struct kvm_vcpu *vcpu);
- #endif
- void vmx_setup_mce(struct kvm_vcpu *vcpu);
- 
-+#ifdef CONFIG_INTEL_TDX_HOST
-+bool tdx_is_vm_type_supported(unsigned long type);
-+#else
-+static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
-+#endif
-+
- #endif /* __KVM_X86_VMX_X86_OPS_H */
+ 	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
+ 		if (dsa_port_offloads_bridge_port(dp, orig_dev))
+ 			return 0;
 -- 
 2.25.1
 

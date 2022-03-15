@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C747E4DA079
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1475B4DA07F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 17:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349693AbiCOQxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 12:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
+        id S1350275AbiCOQx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 12:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350301AbiCOQw4 (ORCPT
+        with ESMTP id S1349732AbiCOQxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:52:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC260574BA;
-        Tue, 15 Mar 2022 09:51:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C5BD6140F;
-        Tue, 15 Mar 2022 16:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91BADC340EE;
-        Tue, 15 Mar 2022 16:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647363103;
-        bh=0OCWPWNP51yJ7yrh0jSupXw6ERwIlBLi3oJqb8npluQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=td/qq3j3gUe+aRGgXEAGi10/wEBrsIMUARKl43nGKBoLmtlGGy6eUSLeZ9Vyvxupo
-         iS5B57ImG0q6S4wCQ53bzLn3Vb+7x5KlUwwF7WL/88sucdks51ktHdWS5ReADTPJSn
-         z/sDHPS9e+mlGEGsCFPV7cAI8KUqu68E+Bk9dVwA9H9ZgxZQj82LkqUflQ04poCOoV
-         2H7OGu9ZLmiQD3GaIERcn4eZCDSFlMOWDw34NmJe95eeESWYjsbXj+yaavE4/tsabV
-         8FelYsanBjIdHbfbABx/7ju3rfl53zFfjV5uO2Sp2yz7EQBCHkZ/xIC6SqKYyA8NaH
-         Y4osaLRhIaxkA==
-Date:   Tue, 15 Mar 2022 09:51:43 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     fstests <fstests@vger.kernel.org>, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 1/4] generic/468: Add another falloc test entry
-Message-ID: <20220315165143.GB8200@magnolia>
-References: <cover.1647342932.git.riteshh@linux.ibm.com>
- <08bd90fa8c291a4ccba2e5d6182a8595b7e6d7ab.1647342932.git.riteshh@linux.ibm.com>
+        Tue, 15 Mar 2022 12:53:54 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CCA57B20
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:52:41 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id qt6so42757677ejb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 09:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b0aM6sl3949MchX9Yv6VE189C4y3nLxjnRhOtDMW61Y=;
+        b=03TlvfMezDfHN5wS4PTTVt1TAQJJy0/fVvcordTJ/PWCn6rsNVFK0xY9FQGuv2tHJv
+         LlCVl/YNcODDUFDhxu/5SOZowpjHuwwGIW5wlfHPiHnwB175XSpXCuuc74jUQOe03SsS
+         v6K6ZILJ6BvV8MogrNCxeTGsBYKvvcMhwDxEoImAwIAMgellDune48LdpHMtfdL1kEyl
+         u7OSMo2R0J5b3dp3FZidMK1jRrOqMqVJxuK0lEHHB3mHUVdJPyOUHF8YLR8YYjqJCqrz
+         fnSbdMtVvFZlYh1v7N3XnyhZKdiwZlzlzyqiDOMMG00tfAg7scS57+usDhOi2wpv6rEI
+         q2jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b0aM6sl3949MchX9Yv6VE189C4y3nLxjnRhOtDMW61Y=;
+        b=OsO/sI8KAOjvG6fX+zbHVNqJHeyOpj0qw6uKARYph9OJ5uk1CqYOUt8azvmQYdix9E
+         4jBIKZ3+gcCK9CeW38+PlYq3Pvl4ghtLoSGo2HUxgVrEAZIf7k18SR6V1rZQ1i/kBOVQ
+         sCYN3Jw/EgdwE2f6tfOJlnnsJhJRt63SebcqsoNMm/ayjtw7k/1/NpjPmiBlRVlKwcK3
+         XiGFtiw3olGejk/5yKQRawJDREvyGh8yJItubX1sCBtBM2q2VqBx9QM3kWTPFyeHTz6N
+         fMCFH9AHiSyO3VylxZrww+p0I4No5OLiNjM964uIUGsiaIqj4uSY7Q2RJ2FytUOLR1MF
+         o4lQ==
+X-Gm-Message-State: AOAM5315IbWSA4xWb3WEhUb3qo7Vxg2fINt2dLVZFutgvplEACxaoY3o
+        qlJO1p4zqRpuaBlznC8vlW45qg==
+X-Google-Smtp-Source: ABdhPJyBERVWp7y/+2aM+hyL9hcsGBfVWaKAFWiAGotauhnQNVMjsEwt46YXwMjYS3+QabYtJQDu2A==
+X-Received: by 2002:a17:906:f41:b0:6d5:c6bc:fbc7 with SMTP id h1-20020a1709060f4100b006d5c6bcfbc7mr22738941ejj.541.1647363159864;
+        Tue, 15 Mar 2022 09:52:39 -0700 (PDT)
+Received: from localhost.localdomain (46.205.192.191.nat.umts.dynamic.t-mobile.pl. [46.205.192.191])
+        by smtp.gmail.com with ESMTPSA id qa44-20020a17090786ac00b006dbcd7c9656sm3795955ejc.172.2022.03.15.09.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 09:52:39 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH] Revert "gpio: Revert regression in sysfs-gpio (gpiolib.c)"
+Date:   Tue, 15 Mar 2022 17:52:05 +0100
+Message-Id: <20220315165205.1502325-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08bd90fa8c291a4ccba2e5d6182a8595b7e6d7ab.1647342932.git.riteshh@linux.ibm.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 07:58:56PM +0530, Ritesh Harjani wrote:
-> Add another falloc test entry which could hit a kernel bug
-> with ext4 fast_commit feature w/o below kernel commit [1].
-> 
-> <log>
-> [  410.888496][ T2743] BUG: KASAN: use-after-free in ext4_mb_mark_bb+0x26a/0x6c0
-> [  410.890432][ T2743] Read of size 8 at addr ffff888171886000 by task mount/2743
-> 
-> This happens when falloc -k size is huge which spans across more than
-> 1 flex block group in ext4. This causes a bug in fast_commit replay
-> code which is fixed by kernel commit at [1].
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git/commit/?h=dev&id=bfdc502a4a4c058bf4cbb1df0c297761d528f54d
-> 
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> ---
->  tests/generic/468     | 4 ++++
->  tests/generic/468.out | 2 ++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/tests/generic/468 b/tests/generic/468
-> index 95752d3b..cbef9746 100755
-> --- a/tests/generic/468
-> +++ b/tests/generic/468
-> @@ -34,6 +34,9 @@ _scratch_mkfs >/dev/null 2>&1
->  _require_metadata_journaling $SCRATCH_DEV
->  _scratch_mount
-> 
-> +blocksize=4096
+This reverts commit fc328a7d1fcce263db0b046917a66f3aa6e68719.
 
-What happens if the file blocksize isn't 4k?  Does fastcommit only
-support one block size?  I didn't think it has any such restriction?
+This commit - while attempting to fix a regression - has caused a number
+of other problems. As the fallout from it is more significant than the
+initial problem itself, revert it for now before we find a correct
+solution.
 
-> +fact=18
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ drivers/gpio/gpiolib.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-This needs a bit more explanation -- why 18?  I think the reason is that
-you need the fallocate to cross into another flexbg, and flexbgs (by
-default) are 16bg long, right?
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index defb7c464b87..6630d92e30ad 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1701,6 +1701,11 @@ static inline void gpiochip_irqchip_free_valid_mask(struct gpio_chip *gc)
+  */
+ int gpiochip_generic_request(struct gpio_chip *gc, unsigned int offset)
+ {
++#ifdef CONFIG_PINCTRL
++	if (list_empty(&gc->gpiodev->pin_ranges))
++		return 0;
++#endif
++
+ 	return pinctrl_gpio_request(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+@@ -1712,6 +1717,11 @@ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+  */
+ void gpiochip_generic_free(struct gpio_chip *gc, unsigned int offset)
+ {
++#ifdef CONFIG_PINCTRL
++	if (list_empty(&gc->gpiodev->pin_ranges))
++		return;
++#endif
++
+ 	pinctrl_gpio_free(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_free);
+-- 
+2.30.1
 
-If that's the case, then don't you need to detect the flexbg size so
-that this is still an effective test if someone runs fstests with
-MKFS_OPTIONS='-G 32' or something?
-
---D
-
-> +
->  testfile=$SCRATCH_MNT/testfile
-> 
->  # check inode metadata after shutdown
-> @@ -85,6 +88,7 @@ for i in fsync fdatasync; do
->  	test_falloc $i "-k " 1024
->  	test_falloc $i "-k " 4096
->  	test_falloc $i "-k " 104857600
-> +	test_falloc $i "-k " $((32768*$blocksize*$fact))
->  done
-> 
->  status=0
-> diff --git a/tests/generic/468.out b/tests/generic/468.out
-> index b3a28d5e..a09cedb8 100644
-> --- a/tests/generic/468.out
-> +++ b/tests/generic/468.out
-> @@ -5,9 +5,11 @@ QA output created by 468
->  ==== falloc -k 1024 test with fsync ====
->  ==== falloc -k 4096 test with fsync ====
->  ==== falloc -k 104857600 test with fsync ====
-> +==== falloc -k 2415919104 test with fsync ====
->  ==== falloc 1024 test with fdatasync ====
->  ==== falloc 4096 test with fdatasync ====
->  ==== falloc 104857600 test with fdatasync ====
->  ==== falloc -k 1024 test with fdatasync ====
->  ==== falloc -k 4096 test with fdatasync ====
->  ==== falloc -k 104857600 test with fdatasync ====
-> +==== falloc -k 2415919104 test with fdatasync ====
-> --
-> 2.31.1
-> 

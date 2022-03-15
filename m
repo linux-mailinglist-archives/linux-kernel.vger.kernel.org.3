@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEDE4DA4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE224DA4AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 22:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351901AbiCOVbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 17:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S1349902AbiCOVfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 17:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350379AbiCOVbq (ORCPT
+        with ESMTP id S237319AbiCOVfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 17:31:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14C15BE4B;
-        Tue, 15 Mar 2022 14:30:33 -0700 (PDT)
+        Tue, 15 Mar 2022 17:35:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3F7BF57;
+        Tue, 15 Mar 2022 14:34:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19EA3B81892;
-        Tue, 15 Mar 2022 21:30:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E47C340F4;
-        Tue, 15 Mar 2022 21:30:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29681B810EE;
+        Tue, 15 Mar 2022 21:34:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6C4C340EE;
+        Tue, 15 Mar 2022 21:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647379830;
-        bh=Z+w7qmmwtApw9A0X4lTrxH73AXRGI1t4uG6akIL9azM=;
+        s=k20201202; t=1647380071;
+        bh=8pwmfFxXgu9Kha0KZaWYb5XC+8kVZfHH2ATkleQcQTY=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=M4PwMSDorSTfdtY0s/1gMPAGwA76o8BVklHp8cUpOsLR/WrS9AYZ0xQbOt88TuQaH
-         EMQbSpPCoHfLXrEwj2M+QFhUoVpxT++T84P/S7tTMMZOvurhsiRzOWIGXE3vASsh+e
-         36FI6P9cehMnn4n2+l4rzhjFAqEy35TiQWb3azA3bsUcQzWn2u1GgsQhcX2nilHAfS
-         eF4egGjPLjkS4eVKhpZ2+lctYADUqew2oGAyw1mE8bswn940YdxDiTyWOZ3pAMwYVG
-         +7xrwSWWJ8yHK8a6zeB47BABudr8r8ppqzsH7d+muharC6MX2YyZZNiwVPyxJ/RmZN
-         4tKFqn7Jr7fVA==
+        b=kGRJ98G7G3eTMa4RvJFbz/Ug9KZqoX9+/HnNFIQBHCGzm17ueens+ta8XGUWLgqKk
+         n87XvbPMixk5WsO/cUOkjFr806yb2MWm+J2LyoJ0qpwKOyzXhZI1M8ItzScWaUCh8i
+         TF3S3fcfRAS0uMkbnAq+VHXATqzCnrfMaoVpy5Xci3L+TMZ1MxUNN5ERE2Cy7brXBl
+         bLtkmE3IFaz9QA/Pyuu19RHKeDzOx6k4yDJ6oYfXaiY3SFPmC+RIpPkVyqoszLwv4u
+         JR0YIMIkoBXdoqQPIc+jfvn5ZmJKVGqwImSKINTJW4vYN9fLJY2LQElRsWl2mxCcG8
+         hdDJtvJtHL2Bw==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YjDV3n1Xq/EGWU1E@Ansuel-xps.localdomain>
-References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-2-ansuelsmth@gmail.com> <20220315175520.32E1AC340EE@smtp.kernel.org> <YjDV3n1Xq/EGWU1E@Ansuel-xps.localdomain>
-Subject: Re: [PATCH 01/16] clk: permit to define a custom parent for clk_hw_get_parent_index
+In-Reply-To: <Yi84aNrJ7p+3jy2A@Ansuel-xps.localdomain>
+References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-13-ansuelsmth@gmail.com> <169795c1-607e-ee60-7ac7-538ed888bedf@linaro.org> <Yi84aNrJ7p+3jy2A@Ansuel-xps.localdomain>
+Subject: Re: [PATCH 12/16] clk: qcom: clk-krait: add 8064 errata workaround
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
         Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-tegra@vger.kernel.org
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Date:   Tue, 15 Mar 2022 14:30:28 -0700
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 15 Mar 2022 14:34:30 -0700
 User-Agent: alot/0.10
-Message-Id: <20220315213030.C8E47C340F4@smtp.kernel.org>
+Message-Id: <20220315213431.DB6C4C340EE@smtp.kernel.org>
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,26 +65,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-03-15 11:07:26)
-> On Tue, Mar 15, 2022 at 10:55:18AM -0700, Stephen Boyd wrote:
-> > Quoting Ansuel Smith (2022-03-13 12:04:04)
-> > >   */
-> > > -int clk_hw_get_parent_index(struct clk_hw *hw)
-> > > +int clk_hw_get_parent_index(struct clk_hw *hw, struct clk_hw *parent)
+Quoting Ansuel Smith (2022-03-14 05:43:20)
+> On Mon, Mar 14, 2022 at 11:20:21AM +0300, Dmitry Baryshkov wrote:
+> > On 13/03/2022 22:04, Ansuel Smith wrote:
+> > > Add 8064 errata workaround where the sec_src clock gating needs to be
 > >=20
-> > Please introduce another API vs. tacking on an "output" argument to this
-> > API. That makes the patch less invasive. And it can also return a
-> > pointer instead of an integer in that case.
+> > Could you please be more specific whether the errata applies only to the
+> > ipq8064 or to the apq8064 too? 8064 is not specific enough.
 > >
 >=20
-> Any suggestion about the name? clk_hw_fetch_parent_index? That would be
-> a direct access of the internal clk_fetch_parent_index.
+> That's a good question... Problem is that we really don't know the
+> answer. This errata comes from qsdk on an old sourcecode. I assume this
+> is specific to ipq8064 and apq8064 have different mux configuration.
 >=20
-> The name is already not that intuitive as is. The alternative is to make
-> it extra long, don't know if that's a problem...
-> Something like clk_hw_get_parent_index_by_parent? (that is even more
-> confusing)
 
-Haha that's a mouthful. clk_hw_get_index_of_parent()? I realize now that
-I misread the API because parent wasn't a const pointer. Please make
-parent argument const as well and return an int as before.
+I think it was some glitch that happened when the automatic clk gating
+was enabled during a switch. The automatic clk gating didn't know that
+software was running and switching the input so it killed the CPU and
+stopped the clk. That lead to hangs and super badness. I assume it was
+applicable to apq8064 as well because ipq8064 is basically apq8064 with
+the multimedia subsystem replaced by the networking subsystem. Also I
+wouldn't remember all these details because I worked on apq8064 but not
+so much on ipq8064 :)

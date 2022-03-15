@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE6B4D999F
+	by mail.lfdr.de (Postfix) with ESMTP id 303274D999E
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Mar 2022 11:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347631AbiCOKwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 06:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S1347581AbiCOKwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 06:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347643AbiCOKvz (ORCPT
+        with ESMTP id S1347154AbiCOKwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 06:51:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEDDC3BA4A;
-        Tue, 15 Mar 2022 03:49:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 945BE1474;
-        Tue, 15 Mar 2022 03:49:11 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B3C03F66F;
-        Tue, 15 Mar 2022 03:49:06 -0700 (PDT)
-Message-ID: <a9637631-c23b-4158-d2cb-597a36b09a6b@arm.com>
-Date:   Tue, 15 Mar 2022 10:49:02 +0000
+        Tue, 15 Mar 2022 06:52:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D839F52E11;
+        Tue, 15 Mar 2022 03:49:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KHqsd40Q1z4xw2;
+        Tue, 15 Mar 2022 21:49:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647341369;
+        bh=iYE9dJHDTT8H7bqrMBV1EnYaqbnrrezKk7EQTKogbcI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qIihu0phsKEqMkqI3Hlvk0QfYokGGny6ddBoiWTwWhEaLdbQRO+CVYntOUzyteSYq
+         woZ9yB4UTeELpVDc+DZHZoiOvLbuyBX97S8qriBFjLhTAgZ5oq+UUR4/t8RU/ectWs
+         ltWTKO270IFcZnCFUxdaAzvcVfHaIupIrDapYiEvUFewLDt1ugSMDnWqibe9Qtc2c9
+         OrBzsKuRcxnVEI0kBIeMUhY8IrqopMGX0/G1f65TuaCPfJbUszQFUnfXK5TdyRp/ae
+         zGW7Gq8nrGqR2Wklhgk4iZ9hfzb9OH0o6qtUHpqeqJNuARCmDI0SDdmaZrprnBYXZK
+         Qd/L+FToHkS4w==
+Date:   Tue, 15 Mar 2022 21:49:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the kspp tree with Linus' tree
+Message-ID: <20220315214924.27f5e360@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4 14/32] iommu: introduce iommu_domain_alloc_type and the
- KVM type
-Content-Language: en-GB
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     kvm@vger.kernel.org, david@redhat.com, thuth@redhat.com,
-        linux-kernel@vger.kernel.org, vneethv@linux.ibm.com,
-        agordeev@linux.ibm.com, imbrenda@linux.ibm.com, will@kernel.org,
-        frankja@linux.ibm.com, corbet@lwn.net, linux-doc@vger.kernel.org,
-        pasic@linux.ibm.com, jgg@nvidia.com, gerald.schaefer@linux.ibm.com,
-        borntraeger@linux.ibm.com, farman@linux.ibm.com, gor@linux.ibm.com,
-        schnelle@linux.ibm.com, hca@linux.ibm.com,
-        alex.williamson@redhat.com, freude@linux.ibm.com,
-        pmorel@linux.ibm.com, cohuck@redhat.com, oberpar@linux.ibm.com,
-        iommu@lists.linux-foundation.org, svens@linux.ibm.com,
-        pbonzini@redhat.com,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
- <20220314194451.58266-15-mjrosato@linux.ibm.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220314194451.58266-15-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/oj0r1jFpsjdfgToetMx4HKq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,96 +52,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-14 19:44, Matthew Rosato wrote:
-> s390x will introduce an additional domain type that is used for
-> managing IOMMU owned by KVM.  Define the type here and add an
-> interface for allocating a specified type vs the default type.
+--Sig_/oj0r1jFpsjdfgToetMx4HKq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm also not a huge fan of adding a new domain_alloc interface like 
-this, however if it is justifiable, then please make it take struct 
-device rather than struct bus_type as an argument.
+Hi all,
 
-It also sounds like there may be a degree of conceptual overlap here 
-with what Jean-Philippe is working on for sharing pagetables between KVM 
-and SMMU for Android pKVM, so it's probably worth some thought over 
-whether there's any scope for common interfaces in terms of actual 
-implementation.
+Today's linux-next merge of the kspp tree got a conflict in:
 
-Thanks,
-Robin.
+  arch/arm64/Kconfig
 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   drivers/iommu/iommu.c |  7 +++++++
->   include/linux/iommu.h | 12 ++++++++++++
->   2 files changed, 19 insertions(+)
-> 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index f2c45b85b9fc..8bb57e0e3945 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -1976,6 +1976,13 @@ void iommu_domain_free(struct iommu_domain *domain)
->   }
->   EXPORT_SYMBOL_GPL(iommu_domain_free);
->   
-> +struct iommu_domain *iommu_domain_alloc_type(struct bus_type *bus,
-> +					     unsigned int t)
-> +{
-> +	return __iommu_domain_alloc(bus, t);
-> +}
-> +EXPORT_SYMBOL_GPL(iommu_domain_alloc_type);
-> +
->   static int __iommu_attach_device(struct iommu_domain *domain,
->   				 struct device *dev)
->   {
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 9208eca4b0d1..b427bbb9f387 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -63,6 +63,7 @@ struct iommu_domain_geometry {
->   					      implementation              */
->   #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
->   #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
-> +#define __IOMMU_DOMAIN_KVM	(1U << 4)  /* Domain is controlled by KVM */
->   
->   /*
->    * This are the possible domain-types
-> @@ -77,6 +78,7 @@ struct iommu_domain_geometry {
->    *				  certain optimizations for these domains
->    *	IOMMU_DOMAIN_DMA_FQ	- As above, but definitely using batched TLB
->    *				  invalidation.
-> + *	IOMMU_DOMAIN_KVM	- DMA mappings managed by KVM, used for VMs
->    */
->   #define IOMMU_DOMAIN_BLOCKED	(0U)
->   #define IOMMU_DOMAIN_IDENTITY	(__IOMMU_DOMAIN_PT)
-> @@ -86,6 +88,8 @@ struct iommu_domain_geometry {
->   #define IOMMU_DOMAIN_DMA_FQ	(__IOMMU_DOMAIN_PAGING |	\
->   				 __IOMMU_DOMAIN_DMA_API |	\
->   				 __IOMMU_DOMAIN_DMA_FQ)
-> +#define IOMMU_DOMAIN_KVM	(__IOMMU_DOMAIN_PAGING |	\
-> +				 __IOMMU_DOMAIN_KVM)
->   
->   struct iommu_domain {
->   	unsigned type;
-> @@ -421,6 +425,8 @@ extern bool iommu_capable(struct bus_type *bus, enum iommu_cap cap);
->   extern struct iommu_domain *iommu_domain_alloc(struct bus_type *bus);
->   extern struct iommu_group *iommu_group_get_by_id(int id);
->   extern void iommu_domain_free(struct iommu_domain *domain);
-> +extern struct iommu_domain *iommu_domain_alloc_type(struct bus_type *bus,
-> +						    unsigned int t);
->   extern int iommu_attach_device(struct iommu_domain *domain,
->   			       struct device *dev);
->   extern void iommu_detach_device(struct iommu_domain *domain,
-> @@ -708,6 +714,12 @@ static inline void iommu_domain_free(struct iommu_domain *domain)
->   {
->   }
->   
-> +static inline struct iommu_domain *iommu_domain_alloc_type(struct bus_type *bus,
-> +							   unsigned int t)
-> +{
-> +	return NULL;
-> +}
-> +
->   static inline int iommu_attach_device(struct iommu_domain *domain,
->   				      struct device *dev)
->   {
+between commit:
+
+  6e2edd6371a4 ("arm64: Ensure execute-only permissions are not allowed wit=
+hout EPAN")
+
+from Linus' tree and commit:
+
+  afcf5441b9ff ("arm64: Add gcc Shadow Call Stack support")
+
+from the kspp tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/Kconfig
+index 181679ffedac,de01e77f4db7..000000000000
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@@ -1259,7 -1252,10 +1260,7 @@@ config HW_PERF_EVENT
+  	def_bool y
+  	depends on ARM_PMU
+ =20
+- # Supported by clang >=3D 7.0
+ -config ARCH_HAS_FILTER_PGPROT
+ -	def_bool y
+ -
++ # Supported by clang >=3D 7.0 or GCC >=3D 12.0.0
+  config CC_HAVE_SHADOW_CALL_STACK
+  	def_bool $(cc-option, -fsanitize=3Dshadow-call-stack -ffixed-x18)
+ =20
+
+--Sig_/oj0r1jFpsjdfgToetMx4HKq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIwbzQACgkQAVBC80lX
+0Gzi6Af9HC+4RwrGbaXdZ1Xs3TcJrnFoDKWz5zoAxmXsD1NSLN3qdSUR3jxOvnkf
+U6tpofOQW1TWBmrAAScXEEYgoqUxnz/1QkwnPwja81JGmGVjLXUL0phLo9EQF7b3
+onn9qhY3vEXwO715/m2c6umTb0sarBekMZuPUCxYI6f9AyLdgxiOGzZXFaYY03wn
+T7zQq+FPRAfUwVuj6t2AKmLEAOGf4cGNUYJS68lJpqXMVOGhB9t23FkEhgEJMJrv
+C7hwZDu5EDmeoe2E+2UM8ChHzsx13YSiwydq2Mudi5ab8zI/Lvlj5nmufEDE5UbV
+Gg/+QXmRJs6NuVEAUgj2h7dyvSxklg==
+=G5DD
+-----END PGP SIGNATURE-----
+
+--Sig_/oj0r1jFpsjdfgToetMx4HKq--

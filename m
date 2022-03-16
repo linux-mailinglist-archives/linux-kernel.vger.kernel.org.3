@@ -2,175 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FD44DA72E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB414DA732
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347400AbiCPBFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 21:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S1349556AbiCPBIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 21:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236125AbiCPBFB (ORCPT
+        with ESMTP id S236125AbiCPBIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 21:05:01 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA60B87E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:03:47 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q5so1146296ljb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nhmwtf/VjoQV7F5h0NhBM6NJo4NB3/oDyqq5QgKUcBo=;
-        b=XK6ukyJcvRudCRFreqwkI/ZibKG5OxRAZAZKt0vdZYPRwhihL8jVgAQutWBInC/+U8
-         oN5bKJWIL9Czm3Hd68rOx+kHlXfrmAWFcSl8HeEkMtvg4YfWoz39R/zC2bhsip5jCXYb
-         CauKoudJ/QFlP5RZAGpoVbY8Td6WINL6xtG5d6DKEI/nEeoCG7guBuT2VFRPFGT0DsKp
-         MIJeksid/Uj8o84X19iL0UQQuhCnbMErWbUZP9TSWCNz0v3ob76iQku5az/2z2dtziZ6
-         2d1gAahHloqs/pUJYO4C08f8gPodGcAhc8ZLxWqJ77MRVGwl0n9WMz+HQotsY9FEp7VG
-         JHpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nhmwtf/VjoQV7F5h0NhBM6NJo4NB3/oDyqq5QgKUcBo=;
-        b=zJKnrt14Gha5n+/aQ2sAxs4meXhXiQo3S0a7SA/eQAk2XPuwXDpBupTQRlNc/Wom5M
-         N7ya2J3pIcF5TdifwINlSPiDOcgL5/Gs9dyb/CJJ9NmUS7wVecsVtxME5dz3Wn5n34s7
-         jWM1t47e/KkhrksVsA04j6REWgTaVOXFeP9IAIqp/yk+CSaPVZ1d7EZD+kuWTSMemISg
-         kyIqGI+q9b2XYPG7hfCHhfHT0RpZ8I33bAVuUHdl0Ri3XBM1idYzQdY30OZ091qaUGDM
-         IoSERR1gHrdTgCcAsSbvyncotrxDPCcXfqal9t9WYjoUYfwQWR6yRkuI1oWwiUd7vnrh
-         H4ow==
-X-Gm-Message-State: AOAM531QAJ0c1QVAFVr+6nFBuhsClWys88A33Q5BiaDm19o8AF9frQgd
-        +hsKycitPqhTU0n1rJIkgEG7pdZdDXZIC9+6wfC7cg==
-X-Google-Smtp-Source: ABdhPJyCf73Ia/8zLvpmsufs/bjwOHOazg++Gw0hXDw/QV8/e2mFDrs+TGn7YwFIBM7OUFLVjACS3f2wdOxePnW6NlU=
-X-Received: by 2002:a05:651c:a06:b0:246:71a3:556a with SMTP id
- k6-20020a05651c0a0600b0024671a3556amr18781599ljq.5.1647392625976; Tue, 15 Mar
- 2022 18:03:45 -0700 (PDT)
+        Tue, 15 Mar 2022 21:08:09 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6CCB87E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:06:54 -0700 (PDT)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id D75BC5655
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:06:53 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id UI7pn8JyQRnrrUI7pneMnf; Tue, 15 Mar 2022 20:06:53 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tzbhUUimCWSsPCgJq5XHIFalUmk/Izfwmy6o2IriLOE=; b=Fjkm3HwiPtEKUCXj1EGETc5lZ4
+        ioMioZgV2bpmk2DjYyM9oMyA48mS+h8aJ0grLU2ooOclSBJ2KMPs/S+FhCjrkBBKdlqARjEQkRy/e
+        Delp0sVYX2QkW/NezBLJePQH/g2pk5uiQfWeHsQJon0ZZWaKlY2TpEJflbQMlcmt3rUt1sYabhixk
+        xYZz6xNIdMmt/goW58RRRJ1s+I3ZFCdDUIhHFx4eCzdXjEi7S81pw+ElNTXfk46njW+QqC0Nz/an/
+        HnNPVyw+6PkDVhCoJmB6EtccdZy3eCZARxtEPmaEPGizA8nj6AlmFAZ5MMCgjULcf2BDlgbtOT8Yd
+        LR0Yh9Ow==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57496 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nUI7p-003UwW-AL; Wed, 16 Mar 2022 01:06:53 +0000
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Rob Barnes <robbarnes@google.com>,
+        Rajat Jain <rajatja@google.com>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] platform/chrome: Re-introduce cros_ec_cmd_xfer and use it for ioctls
+Date:   Tue, 15 Mar 2022 18:06:51 -0700
+Message-Id: <20220316010651.4166983-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20201211141656.24915-1-mw@semihalf.com> <CAPDyKFqsSO+f9iG8vccwXZXDDNHgLEg7bfUe-KfHn2C-ZnOU4A@mail.gmail.com>
- <20220314154033.4x74zscayee32rrj@pali> <CAPv3WKc4MFeLgnJMWx=YNT5Ta5yi6fVhb4f-Rf211FTEmkvyog@mail.gmail.com>
- <20220315230333.eyznbu5tuxneizbs@pali>
-In-Reply-To: <20220315230333.eyznbu5tuxneizbs@pali>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Wed, 16 Mar 2022 02:03:35 +0100
-Message-ID: <CAPv3WKc96vDsW_duXYMYbr3X05=-p28N5_cf2PHo-tiwDLjaWg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-xenon: fix 1.8v regulator stabilization
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Ziji Hu <huziji@marvell.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Kostya Porotchkin <kostap@marvell.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        "# 4.0+" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nUI7p-003UwW-AL
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57496
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 5
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+Commit 413dda8f2c6f ("platform/chrome: cros_ec_chardev: Use
+cros_ec_cmd_xfer_status helper") inadvertendly changed the userspace ABI.
+Previously, cros_ec ioctls would only report errors if the EC communication
+failed, and otherwise return success and the result of the EC
+communication. An EC command execution failure was reported in the EC
+response field. The above mentioned commit changed this behavior, and the
+ioctl itself would fail. This breaks userspace commands trying to analyze
+the EC command execution error since the actual EC command response is no
+longer reported to userspace.
 
-=C5=9Br., 16 mar 2022 o 00:03 Pali Roh=C3=A1r <pali@kernel.org> napisa=C5=
-=82(a):
->
-> Hello!
->
-> On Monday 14 March 2022 16:51:25 Marcin Wojtas wrote:
-> > Hi Pali,
-> >
-> >
-> > pon., 14 mar 2022 o 16:40 Pali Roh=C3=A1r <pali@kernel.org> napisa=C5=
-=82(a):
-> > >
-> > > On Monday 11 January 2021 19:06:24 Ulf Hansson wrote:
-> > > > On Fri, 11 Dec 2020 at 15:17, Marcin Wojtas <mw@semihalf.com> wrote=
-:
-> > > > >
-> > > > > From: Alex Leibovich <alexl@marvell.com>
-> > > > >
-> > > > > Automatic Clock Gating is a feature used for the power
-> > > > > consumption optimisation. It turned out that
-> > > > > during early init phase it may prevent the stable voltage
-> > > > > switch to 1.8V - due to that on some platfroms an endless
-> > > > > printout in dmesg can be observed:
-> > > > > "mmc1: 1.8V regulator output did not became stable"
-> > > > > Fix the problem by disabling the ACG at very beginning
-> > > > > of the sdhci_init and let that be enabled later.
-> > > > >
-> > > > > Fixes: 3a3748dba881 ("mmc: sdhci-xenon: Add Marvell Xenon SDHC co=
-re functionality")
-> > > > > Signed-off-by: Alex Leibovich <alexl@marvell.com>
-> > > > > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> > > > > Cc: stable@vger.kernel.org
-> > > >
-> > > > Applied for fixes (by fixing the typos), thanks!
-> > >
-> > > Hello!
-> > >
-> > > Is not this patch address same issue which was fixed by patch which w=
-as
-> > > merged earlier?
-> > >
-> > > bb32e1987bc5 ("mmc: sdhci-xenon: fix annoying 1.8V regulator warning"=
-)
-> > > https://lore.kernel.org/linux-mmc/CAPDyKFqAsvgAjfL-c9ukFNWeGJmufQosR2=
-Eg9SKjXMVpNitdkA@mail.gmail.com/
-> > >
-> >
-> > This indeed look similar. This fix was originally developed for CN913x
-> > platform without the mentioned patch (I'm wondering if it would also
-> > suffice to fix A3k board's problem). Anyway, I don't think we have an
-> > issue here, as everything seems to work fine on top of mainline Linux
-> > with both changes.
->
-> Yea, there should be no issue. Just question is if we need _both_ fixes.
->
-> I could probably try to revert bb32e1987bc5 and check what happens on
-> A3k board.
->
+Fix the problem by re-introducing the cros_ec_cmd_xfer() helper, and use it
+to handle ioctl messages.
 
-Yes, that would be interesting. Please let me know whenever you find
-time to check.
+Fixes: 413dda8f2c6f ("platform/chrome: cros_ec_chardev: Use cros_ec_cmd_xfer_status helper")
+Cc: Daisuke Nojiri <dnojiri@chromium.org>
+Cc: Rob Barnes <robbarnes@google.com>
+Cc: Rajat Jain <rajatja@google.com>
+Cc: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/platform/chrome/cros_ec_chardev.c   |  2 +-
+ drivers/platform/chrome/cros_ec_proto.c     | 47 +++++++++++++++++----
+ include/linux/platform_data/cros_ec_proto.h |  3 ++
+ 3 files changed, 42 insertions(+), 10 deletions(-)
 
-Best regards,
-Marcin
+diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
+index e0bce869c49a..fd33de546aee 100644
+--- a/drivers/platform/chrome/cros_ec_chardev.c
++++ b/drivers/platform/chrome/cros_ec_chardev.c
+@@ -301,7 +301,7 @@ static long cros_ec_chardev_ioctl_xcmd(struct cros_ec_dev *ec, void __user *arg)
+ 	}
+ 
+ 	s_cmd->command += ec->cmd_offset;
+-	ret = cros_ec_cmd_xfer_status(ec->ec_dev, s_cmd);
++	ret = cros_ec_cmd_xfer(ec->ec_dev, s_cmd);
+ 	/* Only copy data to userland if data was received. */
+ 	if (ret < 0)
+ 		goto exit;
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index c4caf2e2de82..adf57062991f 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -560,22 +560,25 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ EXPORT_SYMBOL(cros_ec_query_all);
+ 
+ /**
+- * cros_ec_cmd_xfer_status() - Send a command to the ChromeOS EC.
++ * cros_ec_cmd_xfer() - Send a command to the ChromeOS EC.
+  * @ec_dev: EC device.
+  * @msg: Message to write.
+  *
+- * Call this to send a command to the ChromeOS EC. This should be used instead of calling the EC's
+- * cmd_xfer() callback directly. It returns success status only if both the command was transmitted
+- * successfully and the EC replied with success status.
++ * Call this to send a command to the ChromeOS EC. This should be used instead
++ * of calling the EC's cmd_xfer() callback directly. This function does not
++ * convert EC error codes to Linux error codes. Most in-kernel users will want
++ * to use cros_ec_cmd_xfer_status() instead since that function implements
++ * the conversion.
+  *
+  * Return:
+- * >=0 - The number of bytes transferred
+- * <0 - Linux error code
++ * >0 - The number of bytes returned from EC (excluding the header).
++ * =0 - Successful communication but EC reported a command execution error.
++ *      The EC error code will be reported in msg->result.
++ * <0 - Linux error code (EC communication error).
+  */
+-int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
+-			    struct cros_ec_command *msg)
++int cros_ec_cmd_xfer(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
+ {
+-	int ret, mapped;
++	int ret;
+ 
+ 	mutex_lock(&ec_dev->lock);
+ 	if (ec_dev->proto_version == EC_PROTO_VERSION_UNKNOWN) {
+@@ -616,6 +619,32 @@ int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
+ 	ret = send_command(ec_dev, msg);
+ 	mutex_unlock(&ec_dev->lock);
+ 
++	return ret;
++}
++EXPORT_SYMBOL(cros_ec_cmd_xfer);
++
++/**
++ * cros_ec_cmd_xfer_status() - Send a command to the ChromeOS EC.
++ * @ec_dev: EC device.
++ * @msg: Message to write.
++ *
++ * Call this to send a command to the ChromeOS EC. This should be used instead of calling the EC's
++ * cmd_xfer() callback directly. It returns success status only if both the command was transmitted
++ * successfully and the EC replied with success status.
++ *
++ * Return:
++ * >=0 - The number of bytes transferred.
++ * <0 - Linux error code
++ */
++int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
++			    struct cros_ec_command *msg)
++{
++	int ret, mapped;
++
++	ret = cros_ec_cmd_xfer(ec_dev, msg);
++	if (ret < 0)
++		return ret;
++
+ 	mapped = cros_ec_map_error(msg->result);
+ 	if (mapped) {
+ 		dev_dbg(ec_dev->dev, "Command result (err: %d [%d])\n",
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index df3c78c92ca2..16931569adce 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -216,6 +216,9 @@ int cros_ec_prepare_tx(struct cros_ec_device *ec_dev,
+ int cros_ec_check_result(struct cros_ec_device *ec_dev,
+ 			 struct cros_ec_command *msg);
+ 
++int cros_ec_cmd_xfer(struct cros_ec_device *ec_dev,
++		     struct cros_ec_command *msg);
++
+ int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
+ 			    struct cros_ec_command *msg);
+ 
+-- 
+2.35.1
 
-> > > >
-> > > >
-> > > > > ---
-> > > > >  drivers/mmc/host/sdhci-xenon.c | 7 ++++++-
-> > > > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sd=
-hci-xenon.c
-> > > > > index c67611fdaa8a..4b05f6fdefb4 100644
-> > > > > --- a/drivers/mmc/host/sdhci-xenon.c
-> > > > > +++ b/drivers/mmc/host/sdhci-xenon.c
-> > > > > @@ -168,7 +168,12 @@ static void xenon_reset_exit(struct sdhci_ho=
-st *host,
-> > > > >         /* Disable tuning request and auto-retuning again */
-> > > > >         xenon_retune_setup(host);
-> > > > >
-> > > > > -       xenon_set_acg(host, true);
-> > > > > +       /*
-> > > > > +        * The ACG should be turned off at the early init time, i=
-n order
-> > > > > +        * to solve a possile issues with the 1.8V regulator stab=
-ilization.
-> > > > > +        * The feature is enabled in later stage.
-> > > > > +        */
-> > > > > +       xenon_set_acg(host, false);
-> > > > >
-> > > > >         xenon_set_sdclk_off_idle(host, sdhc_id, false);
-> > > > >
-> > > > > --
-> > > > > 2.29.0
-> > > > >

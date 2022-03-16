@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F40F4DB93B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2071F4DB93E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347769AbiCPURC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S1346326AbiCPUSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiCPURA (ORCPT
+        with ESMTP id S1354584AbiCPUR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:17:00 -0400
-Received: from audible.transient.net (audible.transient.net [24.143.126.66])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 76E366D87F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:15:45 -0700 (PDT)
-Received: (qmail 9556 invoked from network); 16 Mar 2022 20:15:44 -0000
-Received: from cucamonga.audible.transient.net (192.168.2.5)
-  by canarsie.audible.transient.net with QMQP; 16 Mar 2022 20:15:44 -0000
-Received: (nullmailer pid 2639 invoked by uid 1000);
-        Wed, 16 Mar 2022 20:15:43 -0000
-Date:   Wed, 16 Mar 2022 20:15:43 +0000
-From:   Jamie Heilman <jamie@audible.transient.net>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: system locks up with CONFIG_SLS=Y; 5.17.0-rc
-Message-ID: <YjJFb02Fc0jeoIW4@audible.transient.net>
-Mail-Followup-To: Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
- <YjHYh3XRbHwrlLbR@zn.tnic>
- <YjIwRR5UsTd3W4Bj@audible.transient.net>
- <YjI69aUseN/IuzTj@zn.tnic>
+        Wed, 16 Mar 2022 16:17:58 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB96D94A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:16:43 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id q20so2005489wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AsIQz2Pkn6O8UOCJWUPHs3KUK5w6eLsc7Z0MCX/OzYY=;
+        b=CoxlTDpPnw67QhX6lNxht0V1XLTaD3guuATfSlTW+4qA09bH1Vhjgptc/B73fbvCAK
+         1j/jrxkdg9FI2eIig8EdNnLdTwUstauj94LjaAtQoaSmcN9c1Jipy0UoK1qHEMQEsW3G
+         oQ7xzxg0NFonQAyzY++SEsZtGjCq7n/6JO2uYwgbmuWPI0m7x6WYFKy9r0ZiyRy2EKzy
+         PvNXNRDDJcYA0GTx+xa3YRJH2LlC2LfvKqZI5Tv8/wNlGwIwZn5I4o4ZwUeFUy0x8ZDp
+         WGa02qzA2ti8cod+zck9Bym/ucARRGPmyG+dnrwkgAvkRCFLFkZCwAX0KKIpnpFH6bka
+         J5lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AsIQz2Pkn6O8UOCJWUPHs3KUK5w6eLsc7Z0MCX/OzYY=;
+        b=zEUPlNeZ0/AUWVnFzHsgDjd+UWic1s3Yt2T7P/D9xKDQcHoZ8/E3R0VtpkadWEPGzT
+         xWHu+FPyrt4ATIXMpJv6w1lI3u7dwA0D6F828BeHPlDaXzTSQnHSmY23/nknA1PnVBzQ
+         qo4e0E1cgvAJ8GVBVtkgSpZo2Ac76MQ6HvyX6qI3Eexux6lBQ9IAXQMJzl9yVk80mjOO
+         uZRwJZ7fZdY9Tf538NRRL7UArznRhIkYlNxqbTI3Com0lJ8/50HOhhAbGSv+Tjm+vCjW
+         LJJb0wXpVIcwonlrWmvbq2EU46gN2tOFEbl0VNreJFs612fTX8TXAE0bnjKVeqmKPuVz
+         bWjA==
+X-Gm-Message-State: AOAM5303U2DqpE4NUQxYkzYqDytUr+Nk35UyqZv+ynEOVyzR6ke4MpLo
+        0DjX7GLlO97FCNx0n9fEUjC1u+Eopo4/ihX7xC627eOOehY=
+X-Google-Smtp-Source: ABdhPJzo5AgwZWU9D2SGLWVhoQ8j72mgNFYPe66/P7razkfABS6wbEWoecxkthxv8v9oAHsZJ0MNISSmC/DYOVsoevU=
+X-Received: by 2002:a1c:c907:0:b0:37b:f983:5d4e with SMTP id
+ f7-20020a1cc907000000b0037bf9835d4emr1141678wmb.174.1647461802210; Wed, 16
+ Mar 2022 13:16:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjI69aUseN/IuzTj@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220316071049.2368250-1-irogers@google.com> <YjHvB4q7VZyKsIUU@krava>
+In-Reply-To: <YjHvB4q7VZyKsIUU@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 16 Mar 2022 13:16:30 -0700
+Message-ID: <CAP-5=fUkgp0G+Hj8fnO0RdMdbcKMesEHHE5SgS5OPpj_iW_D9w@mail.gmail.com>
+Subject: Re: [PATCH] perf evlist: Avoid iteration for empty evlist.
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Borislav Petkov wrote:
-> On Wed, Mar 16, 2022 at 06:45:25PM +0000, Jamie Heilman wrote:
-> > Yep that worked, here's output, you can see the network get set up and
-> > then boom:
-> 
-> Thx, that was very useful. Does this below fix it, per chance:
+On Wed, Mar 16, 2022 at 7:08 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Wed, Mar 16, 2022 at 12:10:49AM -0700, Ian Rogers wrote:
+> > As seen with 'perf stat --null ..' and reported in:
+> > https://lore.kernel.org/lkml/YjCLcpcX2peeQVCH@kernel.org/
+> >
+> > Fixes: 472832d2c000 ("perf evlist: Refactor evlist__for_each_cpu()")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/evlist.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> > index 8134d45e2164..a2dba9e00765 100644
+> > --- a/tools/perf/util/evlist.c
+> > +++ b/tools/perf/util/evlist.c
+> > @@ -354,7 +354,10 @@ struct evlist_cpu_iterator evlist__cpu_begin(struct evlist *evlist, struct affin
+> >               .affinity = affinity,
+> >       };
+> >
+> > -     if (itr.affinity) {
+> > +     if (evlist__empty(evlist)) {
+> > +             /* Ensure the empty list doesn't iterate. */
+> > +             itr.evlist_cpu_map_idx = itr.evlist_cpu_map_nr;
+>
+> I can't see the crash anymore, but I'm bit confused with the code
+>
+> if evlist is empty then itr.evsel is bogus.. and the loop code
+> __run_perf_stat is just lucky, right?
 
-It does indeed!
+The itr.evsel is the list head, so bogus.
 
-> ---
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index f667bd8df533..e88ce4171c4a 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -430,8 +430,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
->  	FOP_END
->  
->  /* Special case for SETcc - 1 instruction per cc */
-> +
-> +#define SETCC_ALIGN 8
-> +
->  #define FOP_SETCC(op) \
-> -	".align 4 \n\t" \
-> +	".align " __stringify(SETCC_ALIGN) " \n\t" \
->  	".type " #op ", @function \n\t" \
->  	#op ": \n\t" \
->  	ASM_ENDBR \
-> @@ -1049,7 +1052,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
->  static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
->  {
->  	u8 rc;
-> -	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
-> +	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
->  
->  	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
->  	asm("push %[flags]; popf; " CALL_NOSPEC
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> I think we need to set itr.evsel to NULL and skip the loop in
+> case evlist is empty
 
--- 
-Jamie Heilman                     http://audible.transient.net/~jamie/
+So that's the effect of this change except that the evsel is the list
+head. I'm not sure it is worth adding the condition to setting the
+evsel to capture that given that with the end condition having been
+met it would be invalid to read it. There's a similar problem for the
+other fields of the iterator.
+
+Thanks,
+Ian
+
+> thanks,
+> jirka
+>
+> > +     } else if (itr.affinity) {
+> >               itr.cpu = perf_cpu_map__cpu(evlist->core.all_cpus, 0);
+> >               affinity__set(itr.affinity, itr.cpu.cpu);
+> >               itr.cpu_map_idx = perf_cpu_map__idx(itr.evsel->core.cpus, itr.cpu);
+> > --
+> > 2.35.1.723.g4982287a31-goog
+> >

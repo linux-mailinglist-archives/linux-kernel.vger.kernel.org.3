@@ -2,100 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6954DB31A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C31E64DB32E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiCPOZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 10:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S1356490AbiCPO0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358065AbiCPOZM (ORCPT
+        with ESMTP id S235985AbiCPO0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 10:25:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95229CA2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 07:23:56 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 7C6C51F446BC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647440634;
-        bh=/+1jMsTuGfyM9tAc0LJ0oAzRyZbFMVXpcUs37THZdNA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ay2xIE3SmlC7qBGaqVOyicXDU1zXPcsq9e/mJbym99HPurDWneWzgRyrOxaIQ4ok9
-         GvbA+fV8OGVKgoGCwstBkv/ZAvMlFAaHJnS7PAM+lJlu+CfoncbuBXEVeRyKodsYkX
-         xzONZVZdPiqR1UD25SzPMcIg8AqAixEGqy5Ch9jflZ7jTlfUIKwLEK2H9AXE3a6bLt
-         mneuww9fK/bMgnFo7uiVUBCtgoQGYiKvK74TunbAe/qh3HtV4HnZOF/cNrw7gggyz8
-         md/I9pY7vnLLqTHrz1CkaWRVNFjSvzyox7WQNuvUl9ORpYWVu6X72eiZAxq61z4qOR
-         CsxomGU7C4xoQ==
-Message-ID: <16a43784-27d4-6362-5e4d-465ddc5e5380@collabora.com>
-Date:   Wed, 16 Mar 2022 17:23:49 +0300
+        Wed, 16 Mar 2022 10:26:31 -0400
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7423A1BD;
+        Wed, 16 Mar 2022 07:25:16 -0700 (PDT)
+Received: from [77.244.183.192] (port=63008 helo=[192.168.178.75])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nUUaQ-000DFG-2U; Wed, 16 Mar 2022 15:25:14 +0100
+Message-ID: <02af807d-c35e-afc6-7a41-22eafd3c46f9@lucaceresoli.net>
+Date:   Wed, 16 Mar 2022 15:25:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 7/8] drm/virtio: Support memory shrinking
+ Thunderbird/91.5.0
+Subject: Re: [RFCv3 2/6] i2c: add I2C Address Translator (ATR) support
 Content-Language: en-US
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
- <20220314224253.236359-8-dmitry.osipenko@collabora.com>
- <CACvgo52-pd-g=ZnR=m0T7W2yQ4i7_Q6gWy22=vm-fX+eA-YwQg@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CACvgo52-pd-g=ZnR=m0T7W2yQ4i7_Q6gWy22=vm-fX+eA-YwQg@mail.gmail.com>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Peter Rosin <peda@axentia.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+References: <20220206115939.3091265-1-luca@lucaceresoli.net>
+ <20220206115939.3091265-3-luca@lucaceresoli.net>
+ <a8796cde-e97b-7157-33ac-1b6020053c5d@fi.rohmeurope.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+In-Reply-To: <a8796cde-e97b-7157-33ac-1b6020053c5d@fi.rohmeurope.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 15:43, Emil Velikov wrote:
-> Greetings everyone,
-> 
-> Food for thought: Would it make sense to have the madvise ioctl as
-> generic DRM one?
-> Looking around - i915, msm & panfrost already have one and the virtio
-> implementation [below] seems as generic as it gets.
-> 
-> On Mon, 14 Mar 2022 at 22:44, Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
-> 
->> +#define VIRTGPU_MADV_WILLNEED 0
->> +#define VIRTGPU_MADV_DONTNEED 1
->> +struct drm_virtgpu_madvise {
->> +       __u32 bo_handle;
->> +       __u32 retained; /* out, non-zero if BO can be used */
->> +       __u32 madv;
->> +       __u32 pad;
-> 
-> This seems to be based on panfrost/msm yet names (bo_handle vs
-> handle), layout and documentation varies.
-> Why is that - copy/paste is cheap :-P
+Hi Matti,
 
-Indeed, there is copy/pasting among drivers. But I'm doubtful about
-making madvise a generic ioctl because some drivers already have own
-ioctl for that and h/w capabilities vary, so some drivers may want to
-have extra features later on and then this doesn't feel like a common
-thing anymore.
+On 16/03/22 15:11, Vaittinen, Matti wrote:
+> Hi dee Ho peeps!
+> 
+> On 2/6/22 13:59, Luca Ceresoli wrote:
+>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>> slave "upstream" port and N master "downstream" ports, and forwards
+>> transactions from upstream to the appropriate downstream port. But is
+>> is different in that the forwarded transaction has a different slave
+>> address. The address used on the upstream bus is called the "alias"
+>> and is (potentially) different from the physical slave address of the
+>> downstream chip.
+>>
+>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>> implementing ATR features in a device driver. The helper takes care or
+>> adapter creation/destruction and translates addresses at each transaction.
+>>
+> 
+> snip
+> 
+>> diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
+>> index 438905e2a1d0..c6d1a345ea6d 100644
+>> --- a/drivers/i2c/Kconfig
+>> +++ b/drivers/i2c/Kconfig
+>> @@ -71,6 +71,15 @@ config I2C_MUX
+>>   
+>>   source "drivers/i2c/muxes/Kconfig"
+>>   
+>> +config I2C_ATR
+>> +	tristate "I2C Address Translator (ATR) support"
+>> +	help
+>> +	  Enable support for I2C Address Translator (ATR) chips.
+>> +
+>> +	  An ATR allows accessing multiple I2C busses from a single
+>> +	  physical bus via address translation instead of bus selection as
+>> +	  i2c-muxes do.
+>> +
+> 
+> I continued playing with the ROHM (de-)serializer and ended up having 
+> .config where the I2C_ATR was ='m', while my ATR driver was ='y' even 
+> though it selects the I2C_ATR.
+> 
+> Yep, most probably my error somewhere.
+> 
+> Anyways, this made me think that most of the I2C_ATR users are likely to 
+> just silently select the I2C_ATR, right? The I2C_ATR has no much reason 
+> to be compiled in w/o users, right? So perhaps the menu entry for 
+> selecting the I2C_ATR could be dropped(?) Do we really need this entry 
+> in already long list of configs to be manually picked?
+
+Maybe we could make it a blind option, sure. The only reason it could be
+useful that it's visible is that one might implement a user driver could
+be written out of tree. I don't care very much about that, but it is
+possible. Maybe it's the reason for I2C_MUX to be a visible option too.
+Peter?
+
+>> +struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
+>> +			    const struct i2c_atr_ops *ops, int max_adapters)
+>> +{
+>> +	struct i2c_atr *atr;
+>> +
+>> +	if (!ops || !ops->attach_client || !ops->detach_client)
+>> +		return ERR_PTR(-EINVAL);
+>> +
+> 
+> I believe that most of the attach_client implementations will have 
+> similar approach of allocating and populating an address-pool and 
+> searching for first unused address. As a 'further dev' it'd be great to 
+> see a common helper implementation for attach/detach - perhaps so that 
+> the atr drivers would only need to specify the slave-address 
+> configuration register(s) / mask and the use a 'generic' attach/detach 
+> helpers. Well, just thinking how to reduce the code from actual IC 
+> drivers but this is really not something that is required during this 
+> initial series :)
+> 
+> Also, devm-variants would be great - although that falls to the same 
+> category of things that do not need to be done immediately - but would 
+> perhaps be worth considering in the future.
+
+Both of your proposals make sense, however I did deliberately not
+generalize too much because I knew only one chipset. I don't like trying
+to generalize for an unpredictable future use case, it generally leads
+(me) to generalizing in the wrong direction. That means you'd be very
+welcome to propose helpers and/or devm variants, possibly in the same
+patchset as the first Rohm serdes driver. ;)
+
+> Reviewed-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+
+Thanks for your review!
+
+-- 
+Luca

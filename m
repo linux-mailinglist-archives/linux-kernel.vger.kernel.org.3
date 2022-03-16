@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959DF4DAF4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 12:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B739A4DAF4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355528AbiCPL71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 07:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S1355541AbiCPMBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 08:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345168AbiCPL7Z (ORCPT
+        with ESMTP id S1355524AbiCPMBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 07:59:25 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E16167FA;
-        Wed, 16 Mar 2022 04:58:10 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id s25so3317439lfs.10;
-        Wed, 16 Mar 2022 04:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X5KML0hnqyksN62QQjE8XBIPa5cXwZ293F5MGevyM2U=;
-        b=hVvNVkdvqeMRw6MG9cFqU9kZtzJuZGq7VFcM2ZSuH6z7LmbfOFrjbSJ596Ij4N2bTJ
-         lP0VJp8wMsGBQrZ1KW7zM7lrhQI7uXi/umxZsXDYvCWayoAfWrjwjh+RJiWi4vlyU2zd
-         PRqytTrJvgIsBbT8Y22hkKs3UVlkEZlVvQk0eMfX9lOpL4R5d3ooh2h1iDB9SkgdGgHJ
-         t+cT2GkdnqMjdwABPLaN3gPFe7WLblqgOEmo36UcZOKYbazOBdr4ly4JdoMlXUWLCZ1z
-         Z6ME6GNWCxJbMSEh3GTvmDJ0/6ZOM2ii8cI37rzDP24m1bmM1mHzTD3KEndKNxWYX8he
-         VY7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X5KML0hnqyksN62QQjE8XBIPa5cXwZ293F5MGevyM2U=;
-        b=SqU5DUxdqMSt9ATjpmKEQFwGKepAo7JH2dQXw07BjaKZNDEepljJaCIZ26oCuSqpwC
-         4fGgEW7HOTEUcg77cPwsupvGmF8rYWMqHvQeJ5zmR+yAY3otdIsUdYv2lG7JjX+lMX5Y
-         jH7CDF+QRNXeMQNuRRHp1DWpuIi6/l4BrIGC4alHwfAqihrAdKns2IG6YbpJDbrPR3TJ
-         QpYrWap0y80Cq2fbb2zg6i7SPL8WR/wypj6AgtylQ5Yul6jnE/hybFssh8ts0yZuNcgA
-         N6yaVnoEArAfNwgmGZ89JhSGBzydzyoeP4LkybLdGj1nspJR5dclhC4CPZNYhhp+Xw4w
-         cG9w==
-X-Gm-Message-State: AOAM532xEry7IPy0B79SfIpd9VG6n7dWBjUK8Ux8Yzi7ZQuW6RcuMZwD
-        vPinY9aVruua2DPV5SviC3VNMuIeYMa59MSw0Rg1wwVb
-X-Google-Smtp-Source: ABdhPJw2L+OZSIYZv1DhyLkq071py4zAmh+vwGVJQBxC0XXbct9zGflXcugCXhiN8H7Q4QhXEZH8M5YpRhl9iDRdcvA=
-X-Received: by 2002:a05:6512:410:b0:448:b553:8a00 with SMTP id
- u16-20020a056512041000b00448b5538a00mr2401057lfk.354.1647431889046; Wed, 16
- Mar 2022 04:58:09 -0700 (PDT)
+        Wed, 16 Mar 2022 08:01:39 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9AF6581E;
+        Wed, 16 Mar 2022 05:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647432019;
+        bh=+9JC4UpgP/dnb0RksxqNoNEQdUUz7+Ntu6Z5TSUnjq8=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Z5FQqbm3W7aNOXVLiDIAuaHab5gvl0yxrSwTtRn4pF0lBvIiH1jDqILJBOxR7h6QA
+         vUCVP0vT9fdL7wQbXit60MahsjkKg7oyhA7zXd1YgqDHvhsshFMxZfEy94JzS+14t5
+         aiOlOEWuzbM3f1TVHAKA6Ikl5jB3YyU4e3gixaME=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfYLa-1o1JAR3EAC-00g2zk; Wed, 16
+ Mar 2022 13:00:19 +0100
+Date:   Wed, 16 Mar 2022 13:00:17 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree  (in
+ pinctrl-npcm7xx)
+Message-ID: <YjHRUdXqHHdr/XXL@latitude>
+References: <20220316183227.725bfd37@canb.auug.org.au>
 MIME-Version: 1.0
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com> <Yi7xJy70XZCA8RyN@kroah.com>
-In-Reply-To: <Yi7xJy70XZCA8RyN@kroah.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Wed, 16 Mar 2022 19:57:54 +0800
-Message-ID: <CAL411-o_2PSndEVXfa+ciLukSr5u5w8G9T63d2MpSm2Fpn5QTQ@mail.gmail.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        mathias.nyman@intel.com, Alan Stern <stern@rowland.harvard.edu>,
-        USB list <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lY7qAAELnZeQE9Dl"
+Content-Disposition: inline
+In-Reply-To: <20220316183227.725bfd37@canb.auug.org.au>
+X-Provags-ID: V03:K1:btAUbzbso2Qx5nou2Aru6cfXDsfQeMZ9k4e5b+zmdy5IvY1xMLU
+ xFQK300fatYGVnHDST1cssuNqCesvtR2K89ryZpwf0+US+mACxkDLK8zSrgZziHE+aYO9pK
+ eJWxuW/xxyW7UHWw9jCOrAz16SogB4lPmNq5ommouIpHHAAqSan4YCMeIYYovoZkhz6+9Dd
+ O/EKMNofUbdnMCGllpUew==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CfFtgFwNEo0=:BnmlwAhv81bBBl7mL+bREh
+ V4oPtl+znm580rgMqnoVlPIx4sSUWaz6Pdh+SVsOTT/agYuFcgoT2sTUAfpUKGrscx5f7C5Yi
+ KFKgUjg2RLb5MOD7C5wbZbEeGE8gPTvEybJPBbMJRxX965FNQmq9GvAwzE9XRGSMWUYLzmllf
+ SE4MGRgABJ04TGqOXdxMEbQzQ3G9d1km5zZbQbAd6A7mn5Is0Zq2OZGFnxgcJ9t1NSgJ3oCVY
+ KvpYiDWEmfHShr7wA5iOCrv6zvEkN3y+ex56Rqn0OdBNgmxQF/6HNZcooRCym9LQof0Cjt7bS
+ h0mp3/5M5Yv/911oJjfNCrt1QJ9MP9h7lYOg4kSivcDSut2QicMfgC1A5WfZwgxAMc8PBP4nP
+ J9mSBX8jdLu5un1b0oIiyu3in1ku8gwmoZBMekBJfx/DtBHnCPy26JuJNV2s6bTIXv3WOP9BO
+ hsG7t9dRqXq51vHOu0wyQMhmtkahvR/f68UVRKqi9ihoItsLeJ9NnAuOjE0k0vaouuQZayiYB
+ f9VofsZIyC44ej+cUmCUixSX1ME/nQvHjozTCMJ4qOmbFjp0MAGi2GsRdeSqkdY/6T+QTLuwq
+ kkJxtJtx8NZQxreHLZjGxspcTKvH/lsy0yFPfdfCUez6soV0tN+h0QyyiUEFzjbBB8a0hpr0b
+ MXEIsha2atLjBVNJOdQLNukyrmIRPh7a8uYX+lD6PzPR+jnnnOrhRhx1SioP1chJjCT8xFgvg
+ CZIqvJQ3hkvpAfhxO7OT4jY2NfRhHmgiwbbH4gWormbqoi8omsKy1okVJcP+jMOtKQF8aqEg5
+ waZXknfBMzKSK/syOKUczsIQBtDepkKeqv3+O2e9+kMEkcK6RzJEH0Zy9CcVsYHijSJFhTR9a
+ aojYJOEVlfNCAY18CLoPwVjrfDm2XSIRGTSnj4py6uC1FkZZzpdBeuBkWRFuvN7rdRHCjxvpQ
+ xaD+SIy4uCRnOW28MKfEEgg2sJa4nq8qIKJjbLqjar1g9RzHlUplmVWKG0Z/e+ObuRd2RZSq1
+ benj9qXxfhWaphoCTLateCAWAPsM5I1SpV+NR1WijX9X+B0PIdx2eNyOsEUbF165eqqNVDSZ6
+ hQ01xJ9JqCrElI=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,90 +75,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:34 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Mar 14, 2022 at 03:25:23PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> > On some situations, software handles TRB events slower than adding TRBs,
-> > xhci_irq will not exit until all events are handled. If xhci_irq just
-> > handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records
-> > in xhci irq is equal to driver current dequeue pointer. It will cause driver
-> > not update ERDP and software dequeue pointer lost sync with ERDP. On the
-> > next xhci_irq, the event ring is full but driver will not update ERDP as
-> > software dequeue pointer is equal to ERDP.
 
-At the current driver, the ERDP is updated at most 128 TRBs, how is
-the above condition
-triggered?
+--lY7qAAELnZeQE9Dl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Peter
+Hello Stephen, Tomer, and others,
 
 
+On Wed, Mar 16, 2022 at 06:32:27PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the kspp tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+[...]
+> drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c: In function 'npcmgpio_irq_hand=
+ler':
+> include/linux/find.h:40:23: error: array subscript 'long unsigned int[0]'=
+ is partly outside array bounds of 'u32[1]' {aka 'unsigned int[1]'} [-Werro=
+r=3Darray-bounds]
+>    40 |                 val =3D *addr & GENMASK(size - 1, offset);
+>       |                       ^~~~~
+> drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c:219:13: note: while referencing=
+ 'sts'
+>   219 |         u32 sts, en, bit;
+>       |             ^~~
 
-> >
-> > [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-> > [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
-> > inflight: CMD OUT
-> > [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00
-> > 00 08 00
-> > [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not
-> > responding to stop endpoint command.
-> > [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-> > [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding,
-> > assume dead
-> > [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
-> > inflight: CMD
-> > [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00
-> > 00 08 00
-> > [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
-> > inflight: CMD
-> >
-> > Fixed this issue by update software record temp variable when handles 128
-> > TRB events.
-> >
-> > Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> > ---
-> >  drivers/usb/host/xhci-ring.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> > index d0b6806..f970799 100644
-> > --- a/drivers/usb/host/xhci-ring.c
-> > +++ b/drivers/usb/host/xhci-ring.c
-> > @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
-> >                 if (event_loop++ < TRBS_PER_SEGMENT / 2)
-> >                         continue;
-> >                 xhci_update_erst_dequeue(xhci, event_ring_deq);
-> > +               event_ring_deq = xhci->event_ring->dequeue;
-> >
-> >                 /* ring is half-full, force isoc trbs to interrupt more
-> > often */
-> >                 if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-> > --
-> > 2.7.4
->
-> Hi,
->
-> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-> a patch that has triggered this response.  He used to manually respond
-> to these common problems, but in order to save his sanity (he kept
-> writing the same thing over and over, yet to different people), I was
-> created.  Hopefully you will not take offence and will fix the problem
-> in your patch and resubmit it so that it can be accepted into the Linux
-> kernel tree.
->
-> You are receiving this message because of the following common error(s)
-> as indicated below:
->
-> - Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
->   and can not be applied.  Please read the file,
->   Documentation/email-clients.txt in order to fix this.
->
->
-> If you wish to discuss this problem further, or you have questions about
-> how to resolve this issue, please feel free to respond to this email and
-> Greg will reply once he has dug out from the pending patches received
-> from other developers.
->
-> thanks,
->
-> greg k-h's patch email bot
+
+Quoting the code in pinctrl-npcm7xx:
+
+	for_each_set_bit(bit, (const void *)&sts, NPCM7XX_GPIO_PER_BANK)
+		generic_handle_domain_irq(gc->irq.domain, bit);
+
+The cast is indeed already a bit suspicious, because such casts can hide
+type mismatch bugs.
+
+The pinctrl-npcm7xx driver probably won't actually *run* on a 64-bit
+platform (I guess there will be a separate pinctrl-npcm8xx driver for
+the upcoming 64-bit platform from Nuvoton) but it's better not to have
+unnecessary 32bit-isms.
+
+>=20
+> Caused by commit
+>=20
+>   3b588e43ee5c ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver")
+>=20
+> probably exposed by commit
+>=20
+>   a1d1e0e3d80a ("pinctrl: nuvoton: Add driver for WPCM450")
+>=20
+> from the pinctrl tree and enabling -Werror=3Darray-bounds.
+>=20
+> I have applied the following hack patch for today.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 16 Mar 2022 18:12:14 +1100
+> Subject: [PATCH] fixup for "pinctrl: nuvoton: add NPCM7xx pinctrl and GPI=
+O driver"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/=
+nuvoton/pinctrl-npcm7xx.c
+> index 41136f63014a..fddcb7d6bdf4 100644
+> --- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+> +++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+> @@ -216,7 +216,8 @@ static void npcmgpio_irq_handler(struct irq_desc *des=
+c)
+>  	struct gpio_chip *gc;
+>  	struct irq_chip *chip;
+>  	struct npcm7xx_gpio *bank;
+> -	u32 sts, en, bit;
+> +	unsigned long sts, bit;
+> +	u32 en;
+> =20
+>  	gc =3D irq_desc_get_handler_data(desc);
+>  	bank =3D gpiochip_get_data(gc);
+> @@ -225,7 +226,7 @@ static void npcmgpio_irq_handler(struct irq_desc *des=
+c)
+>  	chained_irq_enter(chip, desc);
+>  	sts =3D ioread32(bank->base + NPCM7XX_GP_N_EVST);
+>  	en  =3D ioread32(bank->base + NPCM7XX_GP_N_EVEN);
+> -	dev_dbg(bank->gc.parent, "=3D=3D> got irq sts %.8x %.8x\n", sts,
+> +	dev_dbg(bank->gc.parent, "=3D=3D> got irq sts %.8lx %.8x\n", sts,
+>  		en);
+
+This fix looks reasonable to me.
+
+
+
+Thanks,
+Jonathan
+
+--lY7qAAELnZeQE9Dl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIx0S0ACgkQCDBEmo7z
+X9ut6A//XKv4DPD0MPpnCCcq/PV79GMjhPsdEh+4Dv/Mkxj2Nv5d9fUi5KIAPv8L
+ZrSYYLB4np+Usw1lgF7Z5wq0pkM7ltwtMzYHx1BG/XKURRdrncSxJkUqlKUrjzeB
+vszZlhGi7SJ/K8SwSwL1nwSNoVAfv2ukOWW53KJ30FHAZqfjB3/4j3/0UzYixbUw
+2vmJpSgqKL3eiG5eX1guVo1nn5HAAmwtX6KeTAsKPCyk0LrZjQOT6Ofl0VrDrDgY
+rYdvp/o+KvjDA7KtadTNhAkV9+ljjms+3R8dzPJXQwvD80yQrV1XM1xSfnT3SmnL
+YT95MeYfQXPDsCIXL9TOYf9Bz/gBO1scqjitLfAcSiB1QgZQtCUGsxkIWTR3JLxX
+EjDNMsh81cqHTP/P6kFiIgtMpfqcfE2Pp0Zh4rDociadq/VMHJ7xcfWLN0kxRhNo
+N+C9v96sueeZUPZvqYqCqnNotL1I0Z/DddGSVGEZGrOVoGbyx/9tqauxI0hvEXzY
+TxiS0k6unGQJrWm0drxefAobIAClGBA+hJzPjA14XGyWK4hR3vF3dKh3KeYzrJCQ
+N9KLg+J+sbx7qyLGThchbpxA3nVH4z5oBH7klEJgD7GcDjoE+oDCiiRJS/EOwwZV
+WcbWaAsXfAHNddMTkxKoPzxsO3eWagph9OcCVX6pYVNCxHG3oKg=
+=Hj/o
+-----END PGP SIGNATURE-----
+
+--lY7qAAELnZeQE9Dl--

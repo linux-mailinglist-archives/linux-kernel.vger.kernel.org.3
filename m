@@ -2,144 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893C14DB57E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 138FD4DB582
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357352AbiCPP7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S1357414AbiCPQBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346168AbiCPP7j (ORCPT
+        with ESMTP id S234320AbiCPQBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:59:39 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AFD1BE8E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:58:23 -0700 (PDT)
-X-UUID: dc6c407514a841a982a93a5dd0c11e44-20220316
-X-UUID: dc6c407514a841a982a93a5dd0c11e44-20220316
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 496109302; Wed, 16 Mar 2022 23:58:18 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 23:58:17 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Mar
- 2022 23:58:16 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 23:58:16 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <mark-pk.tsai@mediatek.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mingo@redhat.com>, <rostedt@goodmis.org>, <yj.chiang@mediatek.com>
-Subject: Re: [PATCH] tracing: make tracer_init_tracefs initcall asynchronous
-Date:   Wed, 16 Mar 2022 23:58:16 +0800
-Message-ID: <20220316155816.1094-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220314114749.28646-1-mark-pk.tsai@mediatek.com>
-References: <20220314114749.28646-1-mark-pk.tsai@mediatek.com>
+        Wed, 16 Mar 2022 12:01:15 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0373DDFD;
+        Wed, 16 Mar 2022 09:00:00 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id p15so5161893ejc.7;
+        Wed, 16 Mar 2022 09:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CxBlO0C502y1jpeWHAj0rnF5IMS/Z4EuROWhss7SnWs=;
+        b=JGMB0dsPB1GrxAi6JpNXgtS72jVkFOHljY4TZdBg6Vn985GUp5yWutHNgiB/ymSvVz
+         Ns4YRhE+2mtfwFWgMAyS/l1Wv204oLxxxtjNiDBISwvIdmYli7Zxg30TxJf2PSpo5qD7
+         KVfluv9AKpsQtstRO6ImY9Nr9cU8pKn2N/kRRgB8eLUCRZIrBIV0PbtUr9LeS64c/qtO
+         HrnYfue7by4ulT6m/17L1358uDPQKiQovIzEpGgnQnQvJG0r3hSGEMZWhZEEirlEVsG9
+         Y4cN05Y5px1OY1rXeHVqkf5WjSUfemS6aKqRBK4VBmdC3AkobI4kJakUHp7qgQSVthjH
+         CuAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CxBlO0C502y1jpeWHAj0rnF5IMS/Z4EuROWhss7SnWs=;
+        b=7LvJhdGbiP5QjC9moz3umAiCOJgtRo8ehk+QrZzj6G+GbFkfqlTnDBDnr8s9+3b/bc
+         2d3YmxDTh2mGArf88PYUb8xhJ1CdTaplPj3cc4TGa4gEUdRzRmtuiOWcUK8eKox+j92P
+         d6iuMHgU/c3Md5FMOsxdtc5yvK5EkT/uM+zS2+5eIs2wVhdgrC7GjmVEw4eMc8ynvJWS
+         Je5fb/EBLMUvYf8WnPZ840GM6/fbCxFl+crbouQSD6QTMkuuytJGml88+g/ERThxa/kU
+         D/j7LTyedPe7lRBAN9f3QckWCsrCy9SWr68Tmmw1hVD2M+0H5bgZ0oUcMHBkPH5/oZ1x
+         GpWA==
+X-Gm-Message-State: AOAM530oEy7erSrAHLqd/i7KO2tPb9IDO3xcZ384FvUI41i7dBbsUnrX
+        Vg50VtRmxeTZxjKOCXlBox8=
+X-Google-Smtp-Source: ABdhPJwcOThT7DlE2zS9uYNLym4QBIYFoyqVObijFN6e4+Cjci/GkcPa4xgC79NQo5C1dAplVRFVlA==
+X-Received: by 2002:a17:906:2699:b0:6d0:9f3b:a6a7 with SMTP id t25-20020a170906269900b006d09f3ba6a7mr510974ejc.397.1647446398797;
+        Wed, 16 Mar 2022 08:59:58 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id w19-20020a05640234d300b00416baf4cdcasm1218527edc.48.2022.03.16.08.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 08:59:58 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 17:59:56 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v5 net-next 10/15] net: dsa: Validate hardware support
+ for MST
+Message-ID: <20220316155956.swin6lhz5r4fn5ef@skbuf>
+References: <20220316150857.2442916-1-tobias@waldekranz.com>
+ <20220316150857.2442916-11-tobias@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316150857.2442916-11-tobias@waldekranz.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > On Fri, 11 Mar 2022 19:26:56 +0800
-> > Mark-PK Tsai <mark-pk.tsai@mediatek.com> wrote:
-> > 
-> > > tracer_init_tracefs() is slow especially when there are
-> > > lots of trace events.
-> > > Create a kthread to do tracer_init_tracefs() asynchronously
-> > 
-> > When making comments like this, please provide the benchmarks you used,
-> > with the numbers before and after.
+On Wed, Mar 16, 2022 at 04:08:52PM +0100, Tobias Waldekranz wrote:
+> When joining a bridge where MST is enabled, we validate that the
+> proper offloading support is in place, otherwise we fallback to
+> software bridging.
 > 
-> I've retest it with kernel 5.17-rc7 on my arm64 board, and I found that
-> the critical path is trace_eval_sync which spend about 430 ms.
-> It's almost half of the time the do_initcalls spends.
-> Below is the test result.
+> When then mode is changed on a bridge in which we are members, we
+> refuse the change if offloading is not supported.
 > 
-> 			before		after
-> tracer_init_tracefs	29872 us	66 us
-> trace_eval_sync		429695 us	459370 us
-> do_initcalls		797818 us	799890 us
+> At the moment we only check for configurable learning, but this will
+> be further restricted as we support more MST related switchdev events.
 > 
-> I locally skip trace_eval_sync and got below result.
-> 
-> 			before		after		diff
-> do_initcalls		359252 us	341725 us	-17527 us
-> 
-> So beside this patch, could we add a kernel parameter or a
-> option to skip it when it doesn't used right after kernel boot?
-> 
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
 
-Please ignore this.
-I do more tests and found that ftrace_eval_maps is in INIT_DATA.
-So the eval_wq may crash if it doesn't finish before init mem
-is freed.
-And ftrace_eval_maps is big when there are lots of trace event
-(About 6KB with arch/arm64/defconfig).
-So it seems not a good idea to remove all the needed funcs from init.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-So please review v2 [1] I've just push which queue the tracer_init_tracefs()
-to eval_map_wq.
-
-[1]: https://lore.kernel.org/lkml/20220316151639.9216-1-mark-pk.tsai@mediatek.com/
-
-> > 
-> > > to speed up the initialization of kernel and move the
-> > > related functions and variables out of init section.
-> > 
-> > Thus we sacrifice memory for boot time. I'd like to also see how much
-> > memory is freed from init before and after this patch.
-> > 
+>  net/dsa/dsa_priv.h |  2 ++
+>  net/dsa/port.c     | 22 ++++++++++++++++++++++
+>  net/dsa/slave.c    |  6 ++++++
+>  3 files changed, 30 insertions(+)
 > 
-> Below is the INIT_TEXT and INIT_DATA diff:
+> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+> index f20bdd8ea0a8..2aba420696ef 100644
+> --- a/net/dsa/dsa_priv.h
+> +++ b/net/dsa/dsa_priv.h
+> @@ -234,6 +234,8 @@ int dsa_port_vlan_filtering(struct dsa_port *dp, bool vlan_filtering,
+>  			    struct netlink_ext_ack *extack);
+>  bool dsa_port_skip_vlan_configuration(struct dsa_port *dp);
+>  int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock);
+> +int dsa_port_mst_enable(struct dsa_port *dp, bool on,
+> +			struct netlink_ext_ack *extack);
+>  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu,
+>  			bool targeted_match);
+>  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+> diff --git a/net/dsa/port.c b/net/dsa/port.c
+> index 58291df14cdb..02214033cec0 100644
+> --- a/net/dsa/port.c
+> +++ b/net/dsa/port.c
+> @@ -321,6 +321,11 @@ static void dsa_port_bridge_destroy(struct dsa_port *dp,
+>  	kfree(bridge);
+>  }
+>  
+> +static bool dsa_port_supports_mst(struct dsa_port *dp)
+> +{
+> +	return dsa_port_can_configure_learning(dp);
+> +}
+> +
+>  int dsa_port_bridge_join(struct dsa_port *dp, struct net_device *br,
+>  			 struct netlink_ext_ack *extack)
+>  {
+> @@ -334,6 +339,9 @@ int dsa_port_bridge_join(struct dsa_port *dp, struct net_device *br,
+>  	struct net_device *brport_dev;
+>  	int err;
+>  
+> +	if (br_mst_enabled(br) && !dsa_port_supports_mst(dp))
+> +		return -EOPNOTSUPP;
+> +
+>  	/* Here the interface is already bridged. Reflect the current
+>  	 * configuration so that drivers can program their chips accordingly.
+>  	 */
+> @@ -735,6 +743,20 @@ int dsa_port_ageing_time(struct dsa_port *dp, clock_t ageing_clock)
+>  	return 0;
+>  }
+>  
+> +int dsa_port_mst_enable(struct dsa_port *dp, bool on,
+> +			struct netlink_ext_ack *extack)
+> +{
+> +	if (!on)
+> +		return 0;
+> +
+> +	if (!dsa_port_supports_mst(dp)) {
+> +		NL_SET_ERR_MSG_MOD(extack, "Hardware does not support MST");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  int dsa_port_pre_bridge_flags(const struct dsa_port *dp,
+>  			      struct switchdev_brport_flags flags,
+>  			      struct netlink_ext_ack *extack)
+> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> index f9cecda791d5..2e8f62476ce9 100644
+> --- a/net/dsa/slave.c
+> +++ b/net/dsa/slave.c
+> @@ -464,6 +464,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
+>  
+>  		ret = dsa_port_ageing_time(dp, attr->u.ageing_time);
+>  		break;
+> +	case SWITCHDEV_ATTR_ID_BRIDGE_MST:
+> +		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
+> +			return -EOPNOTSUPP;
+> +
+> +		ret = dsa_port_mst_enable(dp, attr->u.mst, extack);
+> +		break;
+>  	case SWITCHDEV_ATTR_ID_PORT_PRE_BRIDGE_FLAGS:
+>  		if (!dsa_port_offloads_bridge_port(dp, attr->orig_dev))
+>  			return -EOPNOTSUPP;
+> -- 
+> 2.25.1
 > 
-> 		before	after	diff
-> INIT_TEXT	7F290	7EDAC	-0x4e4	bytes
-> INIT_DATA	116FE8	116FE8	0	bytes
-> 
-> And the init section is 64K aligned on arm64 so that when I test
-> on my platform, the actual memory freed by initmem_free() have no
-> diffrence after apply this patch.
-> 
-> #define SEGMENT_ALIGN SZ_64K
-> 
-> > >  
-> > >  static int trace_panic_handler(struct notifier_block *this,
-> > > diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-> > > index 3147614c1812..fe055bef1e8f 100644
-> > > --- a/kernel/trace/trace_events.c
-> > > +++ b/kernel/trace/trace_events.c
-> > > @@ -3687,7 +3687,7 @@ static __init int event_trace_init_fields(void)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > -__init int event_trace_init(void)
-> > > +int event_trace_init(void)
-> > >  {
-> > >  	struct trace_array *tr;
-> > >  	struct dentry *entry;
-> > 
-> > Hmm, this calls early_event_tracer() which is also in __init. Looks like
-> > there's going to be a ripple effect due to this change.
-> > 
-> > If we want to go this route, then first a change must be made to remove the
-> > needed functions from init, and then see if we can consolidate it. As there
-> > are some init functions that are duplicated for init purposes.
-> 
-> Got it!
-> 
-
 

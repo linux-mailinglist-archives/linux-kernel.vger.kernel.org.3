@@ -2,164 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248814DB874
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D0F4DB87E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348804AbiCPTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S1357838AbiCPTVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbiCPTTS (ORCPT
+        with ESMTP id S235986AbiCPTVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:19:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E535C1D0DB;
-        Wed, 16 Mar 2022 12:18:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9BB11476;
-        Wed, 16 Mar 2022 12:18:03 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46CE03F7F5;
-        Wed, 16 Mar 2022 12:18:02 -0700 (PDT)
-Message-ID: <0709e994-1c8b-56fe-7743-8fdbf3ba748b@arm.com>
-Date:   Wed, 16 Mar 2022 19:17:57 +0000
+        Wed, 16 Mar 2022 15:21:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706B6532CF;
+        Wed, 16 Mar 2022 12:20:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=X2j8KWKH7mPGrGuSOCsj6/Zr05knYdm/d0qKjoRqe/A=; b=bdC3zFz0aD/kHDcjfAyZbfQHBp
+        7D/NlBM1amLmkH4B4sqKV2ufqUvJD88hTlKpyZ6VqDgekjK4FNGYILRpxkEqmQPADEL6WPYAAzU3c
+        Sgrf+0emCMPKxF4geOisKrAEZIi126v6w7X5ziKEvg+Vo5Kfv7gQeEp68Rya/2NrsCbuCdD1F1eRO
+        BniaXaZDMgIYFHq/3z0YvLS2w5qVtTdqdrrvR04+Nr2xp3obBSzkGzIwryyT9w7ppsZfrvdhEgpU1
+        CvVbeb1+V8VRryF0rtfXsRiz/tX5kbeNaIbViAt6lEitADJHoianGTvyLAizZrpPdjB0SFmWrUO/U
+        gzvEtNsQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUZBu-00EArp-Lx; Wed, 16 Mar 2022 19:20:14 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: [PATCH 0/9] treewide: eliminate anonymous module_init & module_exit
+Date:   Wed, 16 Mar 2022 12:20:01 -0700
+Message-Id: <20220316192010.19001-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
-Content-Language: en-GB
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "hch@lst.de" <hch@lst.de>
-References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
- <YjHb1xCx4UAmUjrR@lahna> <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
- <YjIb+XOGZbWKpQDa@lahna>
- <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjIgQfmcw6fydkXd@lahna> <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
- <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
- <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-16 18:34, Limonciello, Mario wrote:
-> [Public]
-> 
->>> Can the USB4 CM make the device links in the DVSEC case perhaps too?  I
->> would
->>> think we want that anyway to control device suspend ordering.
->>>
->>> If I had something discrete to try I'd dust off the DVSEC patch I wrote
->> before to
->>> try it, but alas all I have is integrated stuff on my hand.
->>>
->>>>>> Mika, you might not have seen it yet, but I sent a follow up diff in this
->>>> thread
->>>>>> to Robin's patch.  If that looks good Robin can submit a v2 (or I'm happy
->> to
->>>> do
->>>>>> so as well as I confirmed it helps my original intent too).
->>>>>
->>>>> I saw it now and I'm thinking are we making this unnecessary complex? I
->>>>> mean Microsoft solely depends on the DMAR platform opt-in flag:
->>>>>
->>>>>
->>>>
->>>
->>> I think Microsoft doesn't allow you to turn off the IOMMU though or put it
->> in
->>> passthrough through on the kernel command line.
->>>
->>>>> We also do turn on full IOMMU mappings in that case for devices that
->> are
->>>>> marked as external facing by the same firmware that provided the
->> DMAR
->>>>> bit. If the user decides to disable IOMMU from command line for
->> instance
->>>>> then we expect she knows what she is doing.
->>>>
->>>> Yeah, if external_facing is set correctly then we can safely expect the
->>>> the IOMMU layer to do the right thing, so in that case it probably is OK
->>>> to infer that if an IOMMU is present for the NHI then it'll be managing
->>>> that whole bus hierarchy. What I'm really thinking about here is whether
->>>> we can defend against a case when external_facing *isn't* set, so we
->>>> treat the tunnelled ports as normal PCI buses, assume it's OK since
->>>> we've got an IOMMU and everything else is getting translation domains
->> by
->>>> default, but then a Thunderbolt device shows up masquerading the
->> VID:DID
->>>> of something that gets a passthrough quirk, and thus tricks its way
->>>> through the perceived protection.
->>>>
->>>> Robin.
->>>
->>> Unless it happened after 5.17-rc8 looking at the code I think that's Intel
->>> specific behavior though at the moment (has_external_pci).  I don't see it
->>> in a generic layer.
->>
->> Ah, it's not necessarily the most obvious thing -
->> pci_dev->external_facing gets propagated through to pci_dev->untrusted
->> by set_pcie_untrusted(), and it's that that's then checked by
->> iommu_get_def_domain_type() to enforce a translation domain regardless
->> of default passthrough or quirks. It's then further checked by
->> iommu-dma's dev_is_untrusted() to enforce bounce-buffering to avoid data
->> leakage in sub-page mappings too.
->>
-> 
-> Ah thanks for explaining it, that was immediately obvious to me.
-> 
->>> In addition to the point Robin said about firmware not setting external
->> facing
->>> if the IOMMU was disabled on command line then iommu_dma_protection
->>> would be showing the wrong values meaning userspace may choose to
->>> authorize the device automatically in a potentially unsafe scenario.
->>>
->>> Even if the user "knew what they were doing", I would expect that we still
->>> do our best to protect them from themselves and not advertise something
->>> that will cause automatic authorization.
->>
->> Might it be reasonable for the Thunderbolt core to check early on if any
->> tunnelled ports are not marked as external facing, and if so just tell
->> the user that iommu_dma_protection is off the table and anything they
->> authorise is at their own risk?
->>
->> Robin.
-> 
-> How about in iommu_dma_protection_show to just check that all the device
-> links to the NHI are marked as untrusted?
-> 
-> Then if there are device links missing we solve that separately (discrete USB4
-> DVSEC case we just need to make those device links).
+There are a number of drivers that use "module_init(init)" and
+"module_exit(exit)", which are anonymous names and can lead to
+confusion or ambiguity when reading System.map, crashes/oops/bugs,
+or an initcall_debug log.
 
-The feeling I'm getting from all this is that if we've got as far as 
-iommu_dma_protection_show() then it's really too late to meaningfully 
-mitigate bad firmware. We should be able to detect missing 
-untrusted/external-facing properties as early as nhi_probe(), and if we 
-could go into "continue at your own risk" mode right then *before* 
-anything else happens, it all becomes a lot easier to reason about. If 
-there's a strong enough impetus from Microsoft for system vendors to get 
-their firmware right, hopefully we can get away with not trying too hard 
-to cope with systems that haven't.
+Give each of these init and exit functions unique driver-specific
+names to eliminate the anonymous names.
 
-I'm inclined to send v2 of this patch effectively going back to my 
-original (even simpler) cleanup, just now with much more reasoning about 
-why it isn't doing more :)
+Example 1: (System.map)
+ ffffffff832fc78c t init
+ ffffffff832fc79e t init
+ ffffffff832fc8f8 t init
+ ffffffff832fca05 t init
+ ffffffff832fcbd2 t init
+ ffffffff83328f0e t init
+ ffffffff8332c5b1 t init
+ ffffffff8332d9eb t init
+ ffffffff8332f0aa t init
+ ffffffff83330e25 t init
+ ffffffff833317a5 t init
+ ffffffff8333dd6b t init
 
-Cheers,
-Robin.
+Example 2: (initcall_debug log)
+ calling  init+0x0/0x12 @ 1
+ initcall init+0x0/0x12 returned 0 after 15 usecs
+ calling  init+0x0/0x60 @ 1
+ initcall init+0x0/0x60 returned 0 after 2 usecs
+ calling  init+0x0/0x9a @ 1
+ initcall init+0x0/0x9a returned 0 after 74 usecs
+ calling  init+0x0/0x73 @ 1
+ initcall init+0x0/0x73 returned 0 after 6 usecs
+ calling  init+0x0/0x73 @ 1
+ initcall init+0x0/0x73 returned 0 after 4 usecs
+ calling  init+0x0/0xf5 @ 1
+ initcall init+0x0/0xf5 returned 0 after 27 usecs
+ calling  init+0x0/0x7d @ 1
+ initcall init+0x0/0x7d returned 0 after 11 usecs
+ calling  init+0x0/0xc9 @ 1
+ initcall init+0x0/0xc9 returned 0 after 19 usecs
+ calling  init+0x0/0x9d @ 1
+ initcall init+0x0/0x9d returned 0 after 37 usecs
+ calling  init+0x0/0x63f @ 1
+ initcall init+0x0/0x63f returned 0 after 411 usecs
+ calling  init+0x0/0x171 @ 1
+ initcall init+0x0/0x171 returned 0 after 61 usecs
+ calling  init+0x0/0xef @ 1
+ initcall init+0x0/0xef returned 0 after 3 usecs
+
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Stefan Hajnoczi <stefanha@redhat.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Amit Shah <amit@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Eli Cohen <eli@mellanox.com>
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Krzysztof Opasiak <k.opasiak@samsung.com>
+Cc: Igor Kotrasinski <i.kotrasinsk@samsung.com>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Jussi Kivilinna <jussi.kivilinna@mbnet.fi>
+Cc: Joachim Fritschi <jfritschi@freenet.de>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Karol Herbst <karolherbst@gmail.com>
+Cc: Pekka Paalanen <ppaalanen@gmail.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: netfilter-devel@vger.kernel.org
+Cc: coreteam@netfilter.org
+Cc: netdev@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: nouveau@lists.freedesktop.org
+Cc: virtualization@lists.linux-foundation.org
+Cc: x86@kernel.org
+
+patches:
+ [PATCH 1/9] virtio_blk: eliminate anonymous module_init & module_exit
+ [PATCH 2/9] virtio_console: eliminate anonymous module_init & module_exit
+ [PATCH 3/9] net: mlx5: eliminate anonymous module_init & module_exit
+ [PATCH 4/9] netfilter: h323: eliminate anonymous module_init & module_exit
+ [PATCH 5/9] virtio-scsi: eliminate anonymous module_init & module_exit
+ [PATCH 6/9] usb: gadget: eliminate anonymous module_init & module_exit
+ [PATCH 7/9] usb: usbip: eliminate anonymous module_init & module_exit
+ [PATCH 8/9] x86/crypto: eliminate anonymous module_init & module_exit
+ [PATCH 9/9] testmmiotrace: eliminate anonymous module_init & module_exit
+
+diffstat:
+ arch/x86/crypto/blowfish_glue.c                |    8 ++++----
+ arch/x86/crypto/camellia_glue.c                |    8 ++++----
+ arch/x86/crypto/serpent_avx2_glue.c            |    8 ++++----
+ arch/x86/crypto/twofish_glue.c                 |    8 ++++----
+ arch/x86/crypto/twofish_glue_3way.c            |    8 ++++----
+ arch/x86/mm/testmmiotrace.c                    |    8 ++++----
+ drivers/block/virtio_blk.c                     |    8 ++++----
+ drivers/char/virtio_console.c                  |    8 ++++----
+ drivers/net/ethernet/mellanox/mlx5/core/main.c |    8 ++++----
+ drivers/scsi/virtio_scsi.c                     |    8 ++++----
+ drivers/usb/gadget/legacy/inode.c              |    8 ++++----
+ drivers/usb/gadget/legacy/serial.c             |   10 +++++-----
+ drivers/usb/gadget/udc/dummy_hcd.c             |    8 ++++----
+ drivers/usb/usbip/vudc_main.c                  |    8 ++++----
+ net/ipv4/netfilter/nf_nat_h323.c               |    8 ++++----
+ 15 files changed, 61 insertions(+), 61 deletions(-)

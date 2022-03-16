@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2E54DB15A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEB54DB166
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356196AbiCPNZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S1348690AbiCPN2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348712AbiCPNZN (ORCPT
+        with ESMTP id S1356390AbiCPN15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:25:13 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A135874;
-        Wed, 16 Mar 2022 06:23:59 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 447013201FCE;
-        Wed, 16 Mar 2022 09:23:58 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 16 Mar 2022 09:23:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kkourt.io; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=mesmtp; bh=dYa12N5Sg9tXSwbjxJtKclSjJTp
-        ajHZmkUfVIRdsj38=; b=kSE4RlqsmHUlUktT1PSYJiifZBMJXmA7efnOjx/hwwJ
-        Uy8o5Q4sl/yz4DY2KwKd95VBJ/06Xc8+LhBbSRy9gZ+SnagsUTtJWPnRRIOEi+Kp
-        h/oMn5RpJzN1bDrgujfX7bNetJSExCS8D8vULTy+bhYq8a9Igu9vNp31f0cGSn2Y
-        =
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=dYa12N
-        5Sg9tXSwbjxJtKclSjJTpajHZmkUfVIRdsj38=; b=Q8MW9/qbn9j5vhUiHHiBPY
-        wZj3ebXeZKapMmVBeEceGP7kmMgbcz8vrqw5DR80o+qyZ0zeYnIDZTcdMZLi+Ztm
-        9wDaR6wXMfyLUGEn4BqdUSn+4rJ0lOW6arGUpbkirMg69AG5MZoJKPOvRY/6ESd1
-        XQJ38vyebIWYGHoxPO27w/GTZLaITGe55O/8vpa0Tds9DbAfztWcV9nO2EFsdAQg
-        O3Zhi+6oBTZNjrOh1Bijf3KaA6Uc6OInoHsBBkpnK3EZJ1lpc7FsdM+mlkHJbYct
-        q0y+JFYls1OdLmGkapjQ2a1VAEUO4/UFv2RJCppdda1DrBX3kLm1JsB67VzgKZBA
-        ==
-X-ME-Sender: <xms:7eQxYlHYgfJvfcBe73lbkVpMZ7ZFuCE3S92FFZFODzzFi8pfxl3pRw>
-    <xme:7eQxYqX8Q9o6P3S45zPmIc5VIvLF-HrYLHmh6Hx1Sga-1ZtytKn4sZ8laMrgBbHxx
-    eu5hV9MZJ8vkW-H1g>
-X-ME-Received: <xmr:7eQxYnIoa_kIqP216-nIivS94p2req-tiDgxdJmQCBwi2Nigbv6zOjAcs8Uwl_Iu71QKBluqZhmsz7hIDQkQCVn9xB6g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefvddggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpehkkhhouhhr
-    theskhhkohhurhhtrdhiohenucggtffrrghtthgvrhhnpedtfeeileevgfetgfehjedthe
-    fgvdetheetgeeuffejgeekjeefteetgfegffevfeenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpehkkhhouhhrtheskhhkohhurhhtrdhioh
-X-ME-Proxy: <xmx:7eQxYrEQ8uITEuEiOQeiIz7vJb4LgC_5JyYIUV8HDIreWR1qpyEmbQ>
-    <xmx:7eQxYrXlfzngyCuzxNbXdZ9CpeBbLxbiivClGD2i2wUCGIa1vnyE7A>
-    <xmx:7eQxYmMImJ2N7r1uKz8Prx7h7q3umZEMVzxAUQnyj5XlZYtDaKeZ3w>
-    <xmx:7eQxYmT3xVa_rPdk2JWklO0ewz9efk2KU3aFUINhZLCMvK49BAd-fA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Mar 2022 09:23:57 -0400 (EDT)
-Received: by kkourt.io (Postfix, from userid 1000)
-        id 4C1682541B5C; Wed, 16 Mar 2022 14:23:56 +0100 (CET)
-From:   kkourt@kkourt.io
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kornilios Kourtis <kornilios@isovalent.com>
-Subject: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
-Date:   Wed, 16 Mar 2022 14:23:54 +0100
-Message-Id: <20220316132354.3226908-1-kkourt@kkourt.io>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <YjHjLkYBk/XfXSK0@tinh>
-References: <YjHjLkYBk/XfXSK0@tinh>
+        Wed, 16 Mar 2022 09:27:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078345FF2E;
+        Wed, 16 Mar 2022 06:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647437203; x=1678973203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vnRswGehRJLFAaBCzvBCJdjOnc3qj7r4WnbNFLMazzs=;
+  b=bLsjJb77BDQAz8l4zvmsDoGWXO2wyOzRjtM+EjqJDhMcW/wZ80J5iO1G
+   rpO6ca7jQfR4ztX+PJHiBOwmuTq2KzuSMpNsz4cF/qZNiGHjl84H7K3z/
+   XuxvpUrshvf43G7Kt1ZBmNfPiLKB51pUYs84rb5587bJv28QXnqwFIxg2
+   nWvhElsTCk+O/fDJJGcX3vkDsuhIeHubgcWdOHUeVfXvlX3tdlRxRtNvD
+   4boyTXbJ5Mdn/aSYIo3IOu1Weu9YXpmC9IIbVe4Gp+aPFPiexo1dy7UX2
+   P5NaGN69CidL7a3bl+Ea7LrGWBcq0r1YIe4Jg552XhapjAyQf3DyAa/Ty
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256311559"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="256311559"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:26:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="634975950"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:26:36 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id A50C620090;
+        Wed, 16 Mar 2022 15:26:34 +0200 (EET)
+Date:   Wed, 16 Mar 2022 15:26:34 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 7/9] dt-bindings: media: Add Allwinner A83T MIPI CSI-2
+ bindings documentation
+Message-ID: <YjHlisNfdobeAta7@paasikivi.fi.intel.com>
+References: <20220302220739.144303-1-paul.kocialkowski@bootlin.com>
+ <20220302220739.144303-8-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302220739.144303-8-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,46 +77,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kornilios Kourtis <kornilios@isovalent.com>
+Hi Paul,
 
-This patch improves the error seen by the user by setting errno in
-cus__load_files(). Otherwise, we get a "No such file or directory" error
-which might be confusing.
+Thanks for the patch.
 
-Before the patch, using a bogus file:
-$ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
-pahole: ./vmlinux-5.3.18-24.102-default.debug: No such file or directory
-$ ls ./vmlinux-5.3.18-24.102-default.debug
-/home/kkourt/src/hubble-fgs/vmlinux-5.3.18-24.102-default.debug
+On Wed, Mar 02, 2022 at 11:07:37PM +0100, Paul Kocialkowski wrote:
+> This introduces YAML bindings documentation for the Allwinner A83T
+> MIPI CSI-2 controller.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 138 ++++++++++++++++++
+>  1 file changed, 138 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+> new file mode 100644
+> index 000000000000..75121b402435
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+> @@ -0,0 +1,138 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/allwinner,sun8i-a83t-mipi-csi2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner A83T MIPI CSI-2 Device Tree Bindings
+> +
+> +maintainers:
+> +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: allwinner,sun8i-a83t-mipi-csi2
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Bus Clock
+> +      - description: Module Clock
+> +      - description: MIPI-specific Clock
+> +      - description: Misc CSI Clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +      - const: mod
+> +      - const: mipi
+> +      - const: misc
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: Input port, connect to a MIPI CSI-2 sensor
+> +
+> +        properties:
+> +          reg:
+> +            const: 0
+> +
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              clock-lanes:
+> +                maxItems: 1
 
-After the patch:
-$ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
-pahole: ./vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+Does the hardware support lane reordering? If not, the property should be
+omitted here.
 
-Which is not very helpful, but less confusing.
+I can also remove the three lines here while applying the patches.
 
-Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
----
- dwarves.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +            required:
+> +              - data-lanes
+> +
+> +        additionalProperties: false
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: Output port, connect to a CSI controller
+> +
+> +        properties:
+> +          reg:
+> +            const: 1
+> +
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +        additionalProperties: false
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
+> +    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
+> +
+> +    mipi_csi2: csi@1cb1000 {
+> +        compatible = "allwinner,sun8i-a83t-mipi-csi2";
+> +        reg = <0x01cb1000 0x1000>;
+> +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&ccu CLK_BUS_CSI>,
+> +                 <&ccu CLK_CSI_SCLK>,
+> +                 <&ccu CLK_MIPI_CSI>,
+> +                 <&ccu CLK_CSI_MISC>;
+> +        clock-names = "bus", "mod", "mipi", "misc";
+> +        resets = <&ccu RST_BUS_CSI>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            mipi_csi2_in: port@0 {
+> +                reg = <0>;
+> +
+> +                mipi_csi2_in_ov8865: endpoint {
+> +                    data-lanes = <1 2 3 4>;
+> +
+> +                    remote-endpoint = <&ov8865_out_mipi_csi2>;
+> +                };
+> +            };
+> +
+> +            mipi_csi2_out: port@1 {
+> +                reg = <1>;
+> +
+> +                mipi_csi2_out_csi: endpoint {
+> +                    remote-endpoint = <&csi_in_mipi_csi2>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
 
-diff --git a/dwarves.c b/dwarves.c
-index 89b58ef..5d0b420 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -2399,8 +2399,11 @@ int cus__load_files(struct cus *cus, struct conf_load *conf,
- 	int i = 0;
- 
- 	while (filenames[i] != NULL) {
--		if (cus__load_file(cus, conf, filenames[i]))
-+		int err = cus__load_file(cus, conf, filenames[i]);
-+		if (err) {
-+			errno = err;
- 			return -++i;
-+		}
- 		++i;
- 	}
- 
 -- 
-2.25.1
+Kind regards,
 
+Sakari Ailus

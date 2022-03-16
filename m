@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BC24DB97C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110D34DB98B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237699AbiCPUhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
+        id S1357975AbiCPUj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358051AbiCPUh3 (ORCPT
+        with ESMTP id S1358106AbiCPUhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:37:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB3769CC8;
-        Wed, 16 Mar 2022 13:36:14 -0700 (PDT)
+        Wed, 16 Mar 2022 16:37:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02B96E4CE;
+        Wed, 16 Mar 2022 13:36:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC440B81D42;
-        Wed, 16 Mar 2022 20:36:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DC2C340E9;
-        Wed, 16 Mar 2022 20:36:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3037FB81D4B;
+        Wed, 16 Mar 2022 20:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8120C340EE;
+        Wed, 16 Mar 2022 20:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647462971;
-        bh=hPywN4Hc+VWnx8HZ9pRvRyevbb+miQ7224hVJAhUwEY=;
+        s=k20201202; t=1647462979;
+        bh=JU8bh3oAnltrOOy06ldYgVZ5Y6Ez415dRPGhjhNXI+8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=q8KJtzSLaYTDnj4b6Z96x655UGVx8qCbRjp8AveB2+kJ3G++9OjVeMuJvYRWVLet2
-         ve9k1OfO2ICO8m70pSilaF1yFsTBK0/Al7LC61drC1NgC4yxd9rhvWirl4pndSbRrZ
-         y53pDJkz+qp7oLwxNtbrzk//sJ3rVdUWdr9/iVcoVwuHMu0W/Zb7q30dYfR9bAkchG
-         AiM4Og29jwnUDsrVTxBMp5LcVdAYm/OGTnGcBvgNXKRxmq4zONkTG6NCK+dim5cDcZ
-         pSZU0MyAWqAJxbEQRdRYYVKXH5GdIIoV7EWkiy/uzWamaa09QL5tMygwIk69mojpX/
-         NwBGaCUHZBtUQ==
+        b=dkigp/ew2LlyYiIX/WtQlQxT9L0mCFauK3ZYoa+ytfxD3roeluVrS+NCOM1mGKwfw
+         C8MMTGadaO2euJJ5gMh9QlpNP8Yafn/yEDvk/moK2h8D4POeD5z7wZmsiZKjmDW48G
+         xbqGpUjVPnB5UirO1+ED3kkBRAq/vQJT55XFubusUeNjiFrhdCwXUk0hH1SAdlqjRJ
+         qglioYLXBH7HIVFvUFjwgbSx5W3QnyhUcsTI3tBbhm79uo3QF6Xe2JGjHAmxFefZLm
+         f1UNGPakEPDnTfYAvrPML7P9aIvju6uPwfpQpOLkwDDhTB55FwOknkM+pMnrUeGUip
+         QYfaSz1hybr7A==
 From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org, tiwai@suse.com, judyhsiao@chromium.org,
-        perex@perex.cz, alsa-devel@alsa-project.org, agross@kernel.org,
-        swboyd@chromium.org, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, lgirdwood@gmail.com,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bgoswami@codeaurora.org,
-        linux-kernel@vger.kernel.org, quic_plai@quicinc.com,
-        rohitkr@codeaurora.org, bjorn.andersson@linaro.org
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-In-Reply-To: <1647355531-4150-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1647355531-4150-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH] ASoC: codecs: Fix misplaced lpass_macro_pds_exit call
-Message-Id: <164746296665.1220201.1306280283439888806.b4-ty@kernel.org>
-Date:   Wed, 16 Mar 2022 20:36:06 +0000
+To:     cgel.zte@gmail.com
+Cc:     linux-kernel@vger.kernel.org, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, thierry.reding@gmail.com,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        linux-tegra@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        ldewangan@nvidia.com
+In-Reply-To: <20220315023138.2118293-1-chi.minghao@zte.com.cn>
+References: <20220315023138.2118293-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] spi: tegra20: Use of_device_get_match_data()
+Message-Id: <164746297766.1220434.5469365380012677264.b4-ty@kernel.org>
+Date:   Wed, 16 Mar 2022 20:36:17 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,21 +57,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 20:15:31 +0530, Srinivasa Rao Mandadapu wrote:
-> Update power domains exit function calling from runtime resume
-> to remove function which was wrongly placed and causing crash in
-> device suspend and resume.
+On Tue, 15 Mar 2022 02:31:38 +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Use of_device_get_match_data() to simplify the code.
 > 
 > 
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: codecs: Fix misplaced lpass_macro_pds_exit call
-      commit: 1c19601ddceda1517511e4bad3d24619e765c78c
+[1/1] spi: tegra20: Use of_device_get_match_data()
+      commit: c9839acfcbe20ce43d363c2a9d0772472d9921c0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

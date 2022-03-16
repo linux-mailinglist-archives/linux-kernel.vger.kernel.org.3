@@ -2,141 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D364DBAFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C36F4DBAF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344550AbiCPX0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        id S244985AbiCPXZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344132AbiCPX0T (ORCPT
+        with ESMTP id S239181AbiCPXZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:26:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311E8DFB4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647473104; x=1679009104;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=olKeikmnasQX1H3yq4HT9Z5DQKu0tbikuNURRGppd/s=;
-  b=C3Yn6ME3rPEUePuqvPTA9cDMMI6/zI+xcteAPCG2EMH0Uy805N3EQHNk
-   BC9k9QGBCpNARZiDvwiV8ZkYqo3Wk9CX3FlL40+ry9yVB094vLVZBc2x4
-   Y/agfffTgDQF4CSFH24WIlLnU2HQ+TpgGZvy4VY3/ii+czEtqQcXvtfPc
-   0PBAE0HIWdNVVWlOTIppfpCJvQlHZ8BDhw4MaCZNeaSSL/iv9/nBe62LW
-   4Kt9F/IFgROeDQGUBloq3MI55rDD5f+YrFlg3/7QxaOChiQ2JaMv3mtTV
-   Ozhv20B6MLhGAk06ezflIwoxIRCnkrszCOgaeZhR7Ah7dDFkYEcs4y/J0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="255565671"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="255565671"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 16:25:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="516539020"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 16:25:02 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUd0n-000D4d-Ie; Wed, 16 Mar 2022 23:25:01 +0000
-Date:   Thu, 17 Mar 2022 07:24:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Subject: [gfs2:for-next 11/11] fs/gfs2/file.c:796:10: warning: comparison of
- distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof
- (nr_dirtied * (1UL << 16)) *' (aka 'unsigned long *'))
-Message-ID: <202203170735.Ndb8Ua7n-lkp@intel.com>
+        Wed, 16 Mar 2022 19:25:49 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F36A63AD;
+        Wed, 16 Mar 2022 16:24:35 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d18so3045563plr.6;
+        Wed, 16 Mar 2022 16:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=G+B8PYofFQmB5bQg2/zmTVhP0vn5BLMq4NTw0OI7YZ4=;
+        b=gNWxk6ELs485vb6iIjGlrEQUnqNt8dKzPs07QEUsL9LqGK5jU3xRo9hyoNQFgyji8E
+         r/1dHlWf5bu1t2mfl5eemQjOpRsuxhZ0Wvok/xP9J7dq3LDg0Tv+L8xnY+QSpHPsjJUf
+         XDw59AziiyL0ixjIq7cZNlXxBWTb1/SIkJ38PC0dJ8iPjQOxhfiBV3eM6V65hwA+Scr1
+         GnUdhCt3uQSKUwwcjCdSevizpfCyKLrJ8kAiNL5UymtOb8mEJVh/iScqBTJarVwkvwLL
+         kAHEkMxHYLRPsKJwbRXgftraEmGuS1YUjI1MvS4pPA3Kb+C2lF78cd1CoRVZb7QZ1qQi
+         5IzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=G+B8PYofFQmB5bQg2/zmTVhP0vn5BLMq4NTw0OI7YZ4=;
+        b=amj6/TDSvzX9+oJLW9TUdtcGgKxu1rxey4XT7JeZld/I0FF4wdTOw2Af7Sx/mW/wlH
+         oKbgts6BenVF76OImWDueQl/hgEazw4gBLodfglStzJEn9uyzeqBlSZ2b+z/TEwq7Jgt
+         NkIBPTRWQCbPBPfmcVq42DwJqpBZRzwjoMIPDOtkvgb/rnvkVwlJVSxCuIcuaIAt8TRy
+         F1LY8j7kZbbhTZh5ArHm+o4xjrct5enIx1nOBcJ/zg981dRTrHWvZ3vRgWKWQp+QLK8U
+         0nnvFGpeQKDNJqcFxjKM9KTtlzREifvpLIAGLKsMS2gzGpfBGw3ZtHAu5rQ/+f0Qw1p3
+         wS6w==
+X-Gm-Message-State: AOAM533KliiAHvrECmOX9fkmjp0FK9bTWvQG7D+pWoS8GifvgaVuRd0m
+        Lw0tGCYMO/NViLVl4GhJpl5zV+TdWjY=
+X-Google-Smtp-Source: ABdhPJzrWTgL6poswUS7VkyKDbqCzmVKQnT3yHXN8WdQInlLsPcUiqBIQX3LmjNfGb+1A6eba8/pFg==
+X-Received: by 2002:a17:90a:4214:b0:1bf:6ae9:f62a with SMTP id o20-20020a17090a421400b001bf6ae9f62amr12641462pjg.64.1647473074117;
+        Wed, 16 Mar 2022 16:24:34 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ij17-20020a17090af81100b001c67c964d93sm639714pjb.2.2022.03.16.16.24.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 16:24:33 -0700 (PDT)
+Subject: Re: [PATCH v2 net-next] net: dsa: Never offload FDB entries on
+ standalone ports
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220315233033.1468071-1-tobias@waldekranz.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <3799afd4-438c-5a63-c2d2-c95aafd0326c@gmail.com>
+Date:   Wed, 16 Mar 2022 16:24:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220315233033.1468071-1-tobias@waldekranz.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
-head:   a20050c14edf19add5a9588cb196bb00aa410650
-commit: a20050c14edf19add5a9588cb196bb00aa410650 [11/11] gfs2: Add read/write page 'fault_stats'
-config: hexagon-randconfig-r041-20220313 (https://download.01.org/0day-ci/archive/20220317/202203170735.Ndb8Ua7n-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=a20050c14edf19add5a9588cb196bb00aa410650
-        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git
-        git fetch --no-tags gfs2 for-next
-        git checkout a20050c14edf19add5a9588cb196bb00aa410650
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
+On 3/15/22 4:30 PM, Tobias Waldekranz wrote:
+> If a port joins a bridge that it can't offload, it will fallback to
+> standalone mode and software bridging. In this case, we never want to
+> offload any FDB entries to hardware either.
+> 
+> Previously, for host addresses, we would eventually end up in
+> dsa_port_bridge_host_fdb_add, which would unconditionally dereference
+> dp->bridge and cause a segfault.
+> 
+> Fixes: c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/gfs2/file.c:796:10: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (nr_dirtied * (1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                   size = min(size, nr_dirtied * PAGE_SIZE);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +796 fs/gfs2/file.c
-
-   772	
-   773	static inline bool should_fault_in_pages(ssize_t ret, struct iov_iter *i,
-   774						 size_t *prev_count,
-   775						 size_t *window_size)
-   776	{
-   777		size_t count = iov_iter_count(i);
-   778		size_t size, offs;
-   779	
-   780		if (likely(!count))
-   781			return false;
-   782		if (ret <= 0 && ret != -EFAULT)
-   783			return false;
-   784		if (!iter_is_iovec(i))
-   785			return false;
-   786	
-   787		size = PAGE_SIZE;
-   788		offs = offset_in_page(i->iov[0].iov_base + i->iov_offset);
-   789		if (*prev_count != count || !*window_size) {
-   790			int nr_dirtied;
-   791	
-   792			size = ALIGN(offs + count, PAGE_SIZE);
-   793			size = min_t(size_t, size, SZ_1M);
-   794			nr_dirtied = max(current->nr_dirtied_pause -
-   795					 current->nr_dirtied, 8);
- > 796			size = min(size, nr_dirtied * PAGE_SIZE);
-   797		}
-   798	
-   799		*prev_count = count;
-   800		*window_size = size - offs;
-   801		return true;
-   802	}
-   803	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

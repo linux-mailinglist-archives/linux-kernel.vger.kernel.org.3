@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8504DA8CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86994DA8CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353239AbiCPDRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S1353388AbiCPDRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbiCPDRN (ORCPT
+        with ESMTP id S234584AbiCPDRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:17:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BECB5E15C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647400560; x=1678936560;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aflBzv2aSbEXMnmeQqtRJe2jg/7+cFg5nd+jV5vAdKc=;
-  b=Q7LtS/IUVfNhgokICBRfCmtvpmsDRcOcilJtNEvgs60E056FQPDkNpct
-   jNhXLE90ymIfm7laD7Iz9CYbqxxuQLSstFI6xvzO9Sb2Tlydicp6BfJzj
-   amtStVjp/foEWofBJOy0JLKVho4muJekvPB0YBFZo7CYi/zU2x3e0aub5
-   g0+aJnz/V2fh2g2tPkAUB5JUtYdhYmsX/6W2FrDR84rYBTIwMWNriHenN
-   XuaIFlwLoT3M/XshNdvS2KWtu0tnampQzjncU+ALOLAgrLZfzKObC0og3
-   2zFf4VFpHpfAaVRReq3dJ8zOYHxqmzyoN7SrmCPklw3+bGxZLdL6j2ueY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256203549"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="256203549"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 20:15:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="516145365"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Mar 2022 20:15:43 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUK8U-000BrK-L6; Wed, 16 Mar 2022 03:15:42 +0000
-Date:   Wed, 16 Mar 2022 11:14:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 105/2308]
- ./usr/include/asm-generic/shmbuf.h:7:10: fatal error:
- uapi/asm-generic/ipcbuf.h: No such file or directory
-Message-ID: <202203161151.VtI7Uoa7-lkp@intel.com>
+        Tue, 15 Mar 2022 23:17:49 -0400
+Received: from spam.unicloud.com (mx.unispc.com [220.194.70.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CED55E15C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:16:35 -0700 (PDT)
+Received: from eage.unicloud.com ([220.194.70.35])
+        by spam.unicloud.com with ESMTP id 22G3GIB8054293;
+        Wed, 16 Mar 2022 11:16:19 +0800 (GMT-8)
+        (envelope-from luofei@unicloud.com)
+Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
+ (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Wed, 16
+ Mar 2022 11:16:18 +0800
+From:   luofei <luofei@unicloud.com>
+To:     <mike.kravetz@oracle.com>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        luofei <luofei@unicloud.com>
+Subject: [PATCH v2] hugetlb: Fix comments about avoiding atomic allocation of vmemmap pages
+Date:   Tue, 15 Mar 2022 23:16:02 -0400
+Message-ID: <20220316031602.377452-1-luofei@unicloud.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.10.1.7]
+X-ClientProxiedBy: zgys-ex-mb11.Unicloud.com (10.10.0.28) To
+ zgys-ex-mb09.Unicloud.com (10.10.0.24)
+X-DNSRBL: 
+X-MAIL: spam.unicloud.com 22G3GIB8054293
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   ef90a8d1de7ff54bfd0fcfe6371c20f544b14d6d
-commit: 74e007195c2ad2051418f06d922524829a22d1b8 [105/2308] headers/deps: Remove <linux/sem.h> from <linux/sched.h>
-config: i386-randconfig-a006-20220314 (https://download.01.org/0day-ci/archive/20220316/202203161151.VtI7Uoa7-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=74e007195c2ad2051418f06d922524829a22d1b8
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 74e007195c2ad2051418f06d922524829a22d1b8
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Since there is no longer an atomic allocation of vmemmap pages,
+but a fixed flag(GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE) is
+used. The description of atomicity here is some what inappropriate.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+And the atomic parameter naming of update_and_free_page() may
+be misleading, add a comment here.
 
-All errors (new ones prefixed by >>):
-
-   In file included from ./usr/include/asm/shmbuf.h:6,
-                    from ./usr/include/linux/shm.h:26,
-                    from <command-line>:32:
->> ./usr/include/asm-generic/shmbuf.h:7:10: fatal error: uapi/asm-generic/ipcbuf.h: No such file or directory
-       7 | #include <uapi/asm-generic/ipcbuf.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
+Signed-off-by: luofei <luofei@unicloud.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ mm/hugetlb.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index f8ca7cca3c1a..fbf598bbc4e3 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1569,10 +1569,12 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
+ }
+ 
+ /*
+- * As update_and_free_page() can be called under any context, so we cannot
+- * use GFP_KERNEL to allocate vmemmap pages. However, we can defer the
+- * actual freeing in a workqueue to prevent from using GFP_ATOMIC to allocate
+- * the vmemmap pages.
++ * Freeing hugetlb pages in done in update_and_free_page(). When freeing
++ * a hugetlb page, vmemmap pages may need to be allocated. The routine
++ * alloc_huge_page_vmemmap() can possibly sleep as it uses GFP_KERNEL.
++ * However, update_and_free_page() can be called under any context. To
++ * avoid the possibility of sleeping in a context where sleeping is not
++ * allowed, defer the actual freeing in a workqueue where sleeping is allowed.
+  *
+  * free_hpage_workfn() locklessly retrieves the linked list of pages to be
+  * freed and frees them one-by-one. As the page->mapping pointer is going
+@@ -1616,6 +1618,10 @@ static inline void flush_free_hpage_work(struct hstate *h)
+ 		flush_work(&free_hpage_work);
+ }
+ 
++/*
++ * atomic == true indicates called from a context where sleeping is
++ * not allowed.
++ */
+ static void update_and_free_page(struct hstate *h, struct page *page,
+ 				 bool atomic)
+ {
+@@ -1625,7 +1631,8 @@ static void update_and_free_page(struct hstate *h, struct page *page,
+ 	}
+ 
+ 	/*
+-	 * Defer freeing to avoid using GFP_ATOMIC to allocate vmemmap pages.
++	 * Defer freeing to avoid possible sleeping when allocating
++	 * vmemmap pages.
+ 	 *
+ 	 * Only call schedule_work() if hpage_freelist is previously
+ 	 * empty. Otherwise, schedule_work() had been called but the workfn
+-- 
+2.27.0
+

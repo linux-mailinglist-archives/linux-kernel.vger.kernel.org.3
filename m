@@ -2,132 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7416B4DAE8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 11:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68A74DAE8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 11:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355210AbiCPK7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 06:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S1344523AbiCPK6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 06:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347406AbiCPK7W (ORCPT
+        with ESMTP id S232037AbiCPK6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 06:59:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6BEDE81;
-        Wed, 16 Mar 2022 03:58:09 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22GAkNhe029949;
-        Wed, 16 Mar 2022 10:57:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=pqEtRRluTdcqyicuZ3uViocrXZh7WOAHX11wx61Vhzs=;
- b=qyq/3FcT7lW08wy86AfF5YcyJ4M2Xfa8xUImtiANcjURw+I5Kli3Vy30gDfzTvslBbnY
- xRG9tc6FV2PFw9acgFVZqCXmWejAgM0pN33TYrJhxDf7H5hJS6v9+qkMJB9dlUCJg1na
- CaxdnWteUBEUWmCFeObXJQV/KgLRbH+NQ5Ysu2w3tEadW75kJt+7AbFi98npqwi2VqIg
- Di68f/hoJ62wecZiNlKTatqsuW90kjmz2OhBCrBS5b3e6bq/CAOP4mOYVvALDIWUFmTJ
- RQtgwdTPl+Cng7e3BzSmbUg20zE/eBhNNUYJwATKzu+/S4YYEnYcthpc9azC75ErC3FB ZA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eueef8656-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Mar 2022 10:57:04 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22GAqaOw021546;
-        Wed, 16 Mar 2022 10:57:04 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eueef864b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Mar 2022 10:57:03 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22GAqwHQ004747;
-        Wed, 16 Mar 2022 10:57:01 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3et95wv4d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Mar 2022 10:57:01 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22GAuwnT23789856
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Mar 2022 10:56:58 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 071CDA404D;
-        Wed, 16 Mar 2022 10:56:58 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C6D9A4053;
-        Wed, 16 Mar 2022 10:56:56 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.18.20])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed, 16 Mar 2022 10:56:56 +0000 (GMT)
-Date:   Wed, 16 Mar 2022 11:56:54 +0100
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v1 5/7] s390/pgtable: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <20220316115654.12823b78@thinkpad>
-In-Reply-To: <55b6b582-51ca-b869-2055-674fe4c563e6@redhat.com>
-References: <20220315141837.137118-1-david@redhat.com>
-        <20220315141837.137118-6-david@redhat.com>
-        <20220315172102.771bd2cf@thinkpad>
-        <c8229082-e8f1-e605-25c2-0ec9d23efd9e@redhat.com>
-        <8b13b6c0-78d4-48e3-06f0-ec0680d013a9@redhat.com>
-        <55b6b582-51ca-b869-2055-674fe4c563e6@redhat.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Wed, 16 Mar 2022 06:58:54 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4044615D;
+        Wed, 16 Mar 2022 03:57:40 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B85311F4454D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647428259;
+        bh=+B786kmjh9bVhF2dKutVQcJCHSHyfhNNrMNo6Cs2QQo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Htic6mUCNGozdobaaT2ZH9DnFUpA3VUjw9aytlaQcKQMsh4mDtjvQ4L8arnYmHveS
+         k/QlQjTJS2giW6WpcAi7/mYPOlnQl+BuSG+HnUJVisxaGeicYRfoUmgiMX4yOZ1M1Z
+         f1Rag2nzFgD4tLZAjkIY3y0g8VlBZoXLMiX7t2LGQakwVVhZCO4ZHUpqVpKJlnwriN
+         rX+trRcxFmD/Q3n3ZQEzHKl/R0xNCbfEKKuYQr5MGGBKH20ULZ4nT5TD353J503tS9
+         Iguqwt8793ig+QEiV9BPHBt42E7Q3gscBku2eokd3b9o/61M/IpQbVDT0mYmW+uM9k
+         3TfRWAKlbtb4A==
+Message-ID: <a06003ae-2dcc-f5a4-3b5c-62db99d18950@collabora.com>
+Date:   Wed, 16 Mar 2022 11:57:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 0/5] MediaTek pinctrl drivers cleanups
+Content-Language: en-US
+To:     sean.wang@kernel.org
+Cc:     linus.walleij@linaro.org, matthias.bgg@gmail.com,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@collabora.com, wenst@chromium.org
+References: <20220222111144.20796-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220222111144.20796-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LNrEZRUbiCjvuMs3vypCO_bwoZe7D75W
-X-Proofpoint-ORIG-GUID: L41oykoEMXECEBvnbt61pfruSn_s2QSZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-16_03,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0 spamscore=0
- mlxscore=0 impostorscore=0 priorityscore=1501 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203160064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,81 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 18:12:16 +0100
-David Hildenbrand <david@redhat.com> wrote:
-
-> On 15.03.22 17:58, David Hildenbrand wrote:
-> > 
-> >>> This would mean that it is not OK to have bit 52 not zero for swap PTEs.
-> >>> But if I read the POP correctly, all bits except for the DAT-protection
-> >>> would be ignored for invalid PTEs, so maybe this comment needs some update
-> >>> (for both bits 52 and also 55).
-> >>>
-> >>> Heiko might also have some more insight.
-> >>
-> >> Indeed, I wonder why we should get a specification exception when the
-> >> PTE is invalid. I'll dig a bit into the PoP.
-> > 
-> > SA22-7832-12 6-46 ("Translation-Specification Exception") is clearer
-> > 
-> > "The page-table entry used for the translation is
-> > valid, and bit position 52 does not contain zero."
-> > 
-> > "The page-table entry used for the translation is
-> > valid, EDAT-1 does not apply, the instruction-exe-
-> > cution-protection facility is not installed, and bit
-> > position 55 does not contain zero. It is model
-> > dependent whether this condition is recognized."
-> > 
+Il 22/02/22 12:11, AngeloGioacchino Del Regno ha scritto:
+> Hello!
+> This series performs some cleanups to the MediaTek pinctrl drivers
+> by commonizing some functions (reducing code duplication) hence also
+> simplifying the probe mechanism by removing unnecessary per-driver
+> probe functions.
 > 
-> I wonder if the following matches reality:
+> This code was tested against multiple platforms.
 > 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 008a6c856fa4..6a227a8c3712 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -1669,18 +1669,16 @@ static inline int has_transparent_hugepage(void)
->  /*
->   * 64 bit swap entry format:
->   * A page-table entry has some bits we have to treat in a special way.
-> - * Bits 52 and bit 55 have to be zero, otherwise a specification
-> - * exception will occur instead of a page translation exception. The
-> - * specification exception has the bad habit not to store necessary
-> - * information in the lowcore.
->   * Bits 54 and 63 are used to indicate the page type.
->   * A swap pte is indicated by bit pattern (pte & 0x201) == 0x200
-> - * This leaves the bits 0-51 and bits 56-62 to store type and offset.
-> - * We use the 5 bits from 57-61 for the type and the 52 bits from 0-51
-> - * for the offset.
-> - * |                     offset                        |01100|type |00|
-> + * |                     offset                        |XX1XX|type |S0|
->   * |0000000000111111111122222222223333333333444444444455|55555|55566|66|
->   * |0123456789012345678901234567890123456789012345678901|23456|78901|23|
-> + *
-> + * Bits 0-51 store the offset.
-> + * Bits 57-62 store the type.
-> + * Bit 62 (S) is used for softdirty tracking.
-> + * Bits 52, 53, 55 and 56 (X) are unused.
->   */
->  
->  #define __SWP_OFFSET_MASK      ((1UL << 52) - 1)
+> Changes in v2:
+> - Patch 2/5: Changed -ENOENT to -ENODEV as per Chen-Yu's suggestion
+> - Patch 4/5: Removed unnoticed wrong comment change (Chen-Yu)
 > 
+> AngeloGioacchino Del Regno (5):
+>    pinctrl: mediatek: paris: Unify probe function by using OF match data
+>    pinctrl: mediatek: common-v1: Add common probe function
+>    pinctrl: mediatek: common-v1: Use common probe function
+>    pinctrl: mediatek: common-v1: Commonize spec_pupd callback
+>    pinctrl: mediatek: common-v1: Commonize spec_ies_smt_set callback
 > 
-> I'm not sure why bit 53 was indicated as "1" and bit 55 was indicated as
-> "0". At least for 52 and 55 there was a clear description.
+>   drivers/pinctrl/mediatek/pinctrl-mt2701.c     | 40 ++++--------
+>   drivers/pinctrl/mediatek/pinctrl-mt2712.c     | 44 +++----------
+>   drivers/pinctrl/mediatek/pinctrl-mt6765.c     |  9 +--
+>   drivers/pinctrl/mediatek/pinctrl-mt6779.c     |  9 +--
+>   drivers/pinctrl/mediatek/pinctrl-mt6797.c     |  9 +--
+>   drivers/pinctrl/mediatek/pinctrl-mt8127.c     | 39 +++---------
+>   drivers/pinctrl/mediatek/pinctrl-mt8135.c     | 17 ++----
+>   drivers/pinctrl/mediatek/pinctrl-mt8167.c     | 40 +++---------
+>   drivers/pinctrl/mediatek/pinctrl-mt8173.c     | 29 +++------
+>   drivers/pinctrl/mediatek/pinctrl-mt8183.c     |  9 +--
+>   drivers/pinctrl/mediatek/pinctrl-mt8192.c     |  9 +--
+>   drivers/pinctrl/mediatek/pinctrl-mt8195.c     |  9 +--
+>   drivers/pinctrl/mediatek/pinctrl-mt8365.c     | 40 +++---------
+>   drivers/pinctrl/mediatek/pinctrl-mt8516.c     | 40 +++---------
+>   drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 61 ++++++++++++++-----
+>   drivers/pinctrl/mediatek/pinctrl-mtk-common.h | 33 +++++++---
+>   drivers/pinctrl/mediatek/pinctrl-paris.c      |  9 ++-
+>   drivers/pinctrl/mediatek/pinctrl-paris.h      |  3 +-
+>   18 files changed, 164 insertions(+), 285 deletions(-)
+> 
 
-Bit 53 is the invalid bit, and that is always 1 for swap ptes, in addition
-to protection bit 54. Bit 55, along with bit 52, has to be zero according
-to the (potentially deprecated) comment.
 
-It is interesting that bit 56 seems to be unused, at least according
-to the comment, but that would also mention bit 62 as unused, so that
-clearly needs some update.
+Hello maintainers,
 
-If bit 56 could be used for _PAGE_SWP_EXCLUSIVE, that would be better
-than stealing a bit from the offset, or using potentially dangerous
-bit 52. It is defined as _PAGE_UNUSED and only used for kvm, not sure
-if this is also relevant for swap ptes, similar to bit 62.
+friendly ping for this series that already got a Reviewed-by tag on all patches :)
 
-Adding Christian on cc, maybe he has some insight on _PAGE_UNUSED
-bit 56 and swap ptes.
+Cheers,
+Angelo

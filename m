@@ -2,125 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B1C4DB61F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA744DB622
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353413AbiCPQ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        id S1357430AbiCPQ3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236791AbiCPQ2W (ORCPT
+        with ESMTP id S236791AbiCPQ3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:28:22 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDC26C1C2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:27:07 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so2891145pjp.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:27:07 -0700 (PDT)
+        Wed, 16 Mar 2022 12:29:04 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F9255B8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:27:48 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d19so4414893pfv.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LOz30deJcjhjIyXrEXiDnvgZ+SlnXxBb7kUkmufCFCs=;
-        b=euiuCzfqGkYwgdoQmNRDghuuPrAiXcUV401r/vjPV6N4ydFbIk4O/ZZos55iCYihiJ
-         1B2Rdtk2zITgdDZnW4fAcsQkznCDbtClCUyNsp3+wGQqZhtsZcavfxaZO4uc39FbFK5c
-         DPNGY6oCGwYL2dtnywRcf3II37L/WfRmydceUYcMRp7yEXaaDpJwqw0cdTtA7oUmf99K
-         L3r2N2Ro8VNPJE16xuaG4MaBJbyvbNiaNwRSY0Eyjwppc6RxiTgg9+8s5wDbscVHjrjn
-         S/F6K4GdPfbGbLMp3h+Y+rNlIC4IvgqTUFpV8l+loRNejQDA4QjoTkD9Bx4o+eQmBScb
-         t/ow==
+        d=purestorage.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YdfDwLcCxjBdFThwwHos9x013CjhNXUSI2ePOCAUr0A=;
+        b=iIS9XuZtPG0W5Be9kuSTERIiint31DBY4mh3ylmZoH9Dg3HorEwyYM9h/pjdpx5yX3
+         fgMnEdo7U7Wyr2osuRjdEQBgoEgAuiqHSPJ9lIxbUaP+h+2tiylVp7bvWSvcnIuTd/6F
+         I27AW6cl8/e0TlxzfCTZtE9O4Y+oX4c/otCS4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LOz30deJcjhjIyXrEXiDnvgZ+SlnXxBb7kUkmufCFCs=;
-        b=XQcR3UXmGXQdWOlkx/UWyLBRUbWkxUqmtOy7F50WJ4wjwQ5U5hEuH0W7rk2ho5WkqK
-         hGG2fTXZH6TNhzQ9vznqWuL+7N6A+Dx1dnV0JIMxQDPeXR+cWrZgdiXHD9fa9Nch4Jok
-         6pbx+l/BKPeUhUZaqNO27pHRocxluJ+SwPkX7l0IMJNrNdHnpN5ui/pEFQtOmGpWGjev
-         OXQIf31wk+JZA/C/R0w+ULFnqSmIdXhzHqSIJkyla5dwpnUHO4JaDgvUB1wSjYyfkHya
-         ekStRTCS07Z25CJCBT2aJOQJmVwX7PDJP6WvGqzYcWbqxiopWwM9KFcu4kIj7qyPMmNN
-         UXog==
-X-Gm-Message-State: AOAM531yJimsEO+0/a+tb/1ysm5hfEimdwn/krLBn0iDTQ98ZgaBWZLt
-        fSRLdvdha5AHovMuhO/sJ/8Xk+FuebJnRQtza2Uk9g==
-X-Google-Smtp-Source: ABdhPJytOF5H+Jf3tnI4511+heBxknFBPUzXrfadFH/aaaKAfnciI9nJzGVZMoY9Fe2031uuscVswxuuo1OcklRO2DE=
-X-Received: by 2002:a17:902:e745:b0:151:5474:d3ed with SMTP id
- p5-20020a170902e74500b001515474d3edmr319937plf.106.1647448026684; Wed, 16 Mar
- 2022 09:27:06 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YdfDwLcCxjBdFThwwHos9x013CjhNXUSI2ePOCAUr0A=;
+        b=bseztXOMedTRsGDmctmli/RzlRZAPs84OQ7E0vXoJHmkAh9TLNwvoUlR846vq2KIBZ
+         kqiV1kJvza9AktY1InmfiNz34jnUe8GiH64pHz/Na1FPRajcyytZjZRNrxO0SIIH7rnV
+         ZWgyelrwyEySfv7P+nr3O74WenlGVSOvyf3dp5DCsAQOv01wJcUIt+Rw1Yr4KVoD8ecz
+         H/WNBLliZ54ic2Ft9Fbp1YlkiLJDnRN7NHpkzdeKQcESGFm6glLwjlLfLSAVeP2VixB4
+         kygHHoLiYwxm0r34h3hEeirGhCHZrlqGt8t1pA+M0hR1aQipRzVW/lVP81RMeXJzTHEa
+         Un4A==
+X-Gm-Message-State: AOAM530okOVW+8PGX3GeXEiA6EeOKqm20nWKc5EqyLxMFiu7g0aJWP7i
+        nW7mCQIPaW7q9W7UIym5t81GzQ==
+X-Google-Smtp-Source: ABdhPJxva7xZsTK7pkGECCA5lVC+ON1Nrx1iA73AnmCG359irVs9MLBTBJMXbSo6A+5jYzRqoELU/A==
+X-Received: by 2002:aa7:9ad8:0:b0:4f7:78d4:de8c with SMTP id x24-20020aa79ad8000000b004f778d4de8cmr121241pfp.38.1647448068048;
+        Wed, 16 Mar 2022 09:27:48 -0700 (PDT)
+Received: from ebps (vpn.purestorage.com. [192.30.189.1])
+        by smtp.gmail.com with ESMTPSA id n14-20020a17090a394e00b001c670d67b8esm847798pjf.32.2022.03.16.09.27.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 09:27:47 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 09:27:44 -0700
+From:   Eric Badger <ebadger@purestorage.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver OHalloran <oohall@gmail.com>, linux-pci@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        ebadger@purestorage.com
+Subject: Re: [PATCH v2] PCI/AER: Handle Multi UnCorrectable/Correctable
+ errors properly
+Message-ID: <20220316162744.GA1585319@ebps>
+References: <20220315050842.120063-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220315171425.GA1521135@ebps>
+ <2d4e8811-dce6-c891-e92d-e3746434685e@linux.intel.com>
+ <20220315195255.GA1523195@ebps>
+ <f794a3fb-4d3a-7e3d-1600-27ee831526fd@linux.intel.com>
 MIME-Version: 1.0
-References: <20220304184040.1304781-1-shakeelb@google.com> <20220311160051.GA24796@blackbody.suse.cz>
- <20220312190715.cx4aznnzf6zdp7wv@google.com> <20220314125709.GA12347@blackbody.suse.cz>
-In-Reply-To: <20220314125709.GA12347@blackbody.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 16 Mar 2022 09:26:55 -0700
-Message-ID: <CALvZod4Mfcqt4DvYzSxSX=C9sVWfrMpva9rrMc91_DQ_jReXbA@mail.gmail.com>
-Subject: Re: [PATCH] memcg: sync flush only if periodic flush is delayed
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Frank Hofmann <fhofmann@cloudflare.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Dao <dqminh@cloudflare.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f794a3fb-4d3a-7e3d-1600-27ee831526fd@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 5:57 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
->
-> Hi 2.
->
-> On Sat, Mar 12, 2022 at 07:07:15PM +0000, Shakeel Butt <shakeelb@google.c=
-om> wrote:
-> > It is (b) that I am aiming for in this patch. At least (a) was not
-> > happening in the cloudflare experiments. Are you suggesting having a
-> > dedicated high priority wq would solve both (a) and (b)?
-> > [...]
-> > > We can't argue what's the effect of periodic only flushing so this
-> > > newly introduced factor would inherit that too. I find it superfluous=
-.
-> >
-> >
-> > Sorry I didn't get your point. What is superfluous?
->
-> Let me retell my understanding.
-> The current implementation flushes based on cumulated error and time.
-> Your patch proposes conditioning the former with another time-based
-> flushing, whose duration can be up to 2 times longer than the existing
-> periodic flush.
->
-> Assuming the periodic flush is working, the reader won't see data older
-> than 2 seconds, so the additional sync-flush after (possible) 4 seconds
-> seems superfluous.
->
-> (In the case of periodic flush being stuck, I thought the factor 2=3D4s/2=
-s
-> was superfluous, another magic parameter.)
->
-> I'm comparing here your proposal vs no synchronous flushing in
-> workingset_refault().
->
-> > Do you have any strong concerns with the currect patch?
->
-> Does that clarify?
->
-> (I agree with your initial thesis this can be iterated before it evolves
-> to everyone's satisfaction.)
->
+On Tue, Mar 15, 2022 at 02:29:23PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 3/15/22 12:52 PM, Eric Badger wrote:
+> > On Tue, Mar 15, 2022 at 10:26:46AM -0700, Sathyanarayanan Kuppuswamy wrote:
+> > > On 3/15/22 10:14 AM, Eric Badger wrote:
+> > > > >    # Prep injection data for a correctable error.
+> > > > >    $ cd /sys/kernel/debug/apei/einj
+> > > > >    $ echo 0x00000040 > error_type
+> > > > >    $ echo 0x4 > flags
+> > > > >    $ echo 0x891000 > param4
+> > > > > 
+> > > > >    # Root Error Status is initially clear
+> > > > >    $ setpci -s <Dev ID> ECAP0001+0x30.w
+> > > > >    0000
+> > > > > 
+> > > > >    # Inject one error
+> > > > >    $ echo 1 > error_inject
+> > > > > 
+> > > > >    # Interrupt received
+> > > > >    pcieport <Dev ID>: AER: Root Error Status 0001
+> > > > > 
+> > > > >    # Inject another error (within 5 seconds)
+> > > > >    $ echo 1 > error_inject
+> > > > > 
+> > > > >    # No interrupt received, but "multiple ERR_COR" is now set
+> > > > >    $ setpci -s <Dev ID> ECAP0001+0x30.w
+> > > > >    0003
+> > > > > 
+> > > > >    # Wait for a while, then clear ERR_COR. A new interrupt immediately
+> > > > >      fires.
+> > > > >    $ setpci -s <Dev ID> ECAP0001+0x30.w=0x1
+> > > > >    pcieport <Dev ID>: AER: Root Error Status 0002
+> > > > > 
+> > > > > Currently, the above issue has been only reproduced in the ICL server
+> > > > > platform.
+> > > > > 
+> > > > > [Eric: proposed reproducing steps]
+> > > > Hmm, this differs from the procedure I described on v1, and I don't
+> > > > think will work as described here.
+> > > 
+> > > I have attempted to modify the steps to reproduce it without returning
+> > > IRQ_NONE for all cases (which will break the functionality). But I
+> > > think I did not correct the last few steps.
+> > 
+> > Well, the thinking in always returning IRQ_NONE was so that only setpci
+> > modified the register and we could clearly see how writes to the
+> > register affect interrupt generation.
+> 
+> Got it. Makes sense.
+> 
+> > 
+> > > How about replacing the last 3 steps with following?
+> > > 
+> > >   # Inject another error (within 5 seconds)
+> > >   $ echo 1 > error_inject
+> > > 
+> > >   # You will get a new IRQ with only multiple ERR_COR bit set
+> > >   pcieport <Dev ID>: AER: Root Error Status 0002
+> > 
+> > This seems accurate. Though it does muddy a detail that I think was
+> > clearer in the original procedure: was the second interrupt triggered by
+> > the second error, or by the write of 0x1 to Root Error Status?
+> 
+> I think you are talking about the following command, right?
+> 
+> setpci -s <Dev ID> ECAP0001+0x30.w=0x1
+> 
+> If yes, my previously modified instructions already removed it. So
+> no confusion.
 
-Thanks Michal for the explanation. For the long term, I think all
-these batching can be made part of core rstat infrastructure and as
-generic as you have described. Also there is interest in using rstat
-from BPF, so generic batching would be needed there as well.
+The confusion I mention is: "what actually triggers the second
+interrupt?" Since I can't find a description of the observed behavior in
+the PCIe spec, I find it interesting to know what's actually happening.
+Since the procedure we've discussed in this thread stalls in aer_irq(),
+you can't distinguish clearly which event causes the second interrupt.
+
+> 
+> To summarize,
+> 
+> In your case, you have controlled both register read/write of Root
+> error status register to simulate the interrupt with only multi
+> ERR_COR bit set.
+> 
+> In my case, I have attempted to simulate it without changing the
+> default behavior of aer_irq() in the kernel.
+> 
+> Both seem ok to me. Although my personal preference is to trigger
+> the error without changing the code behavior, if both you and Bjorn
+> prefer to revert to old instructions, I will fix this in the next version.
+
+I think the amended procedure from this thread is fine to demonstrate
+how to play with the patch. The other procedure is available on the list
+if anyone has a need for it.
+
+Cheers,
+Eric

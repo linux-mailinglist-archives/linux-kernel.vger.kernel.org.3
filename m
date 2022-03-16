@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263BD4DAFC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D664DAFCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348972AbiCPMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 08:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S1355616AbiCPMc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 08:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237563AbiCPMao (ORCPT
+        with ESMTP id S230190AbiCPMc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 08:30:44 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC5F443DA;
-        Wed, 16 Mar 2022 05:29:29 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 94082274703aed3f; Wed, 16 Mar 2022 13:29:26 +0100
-Received: from kreacher.localnet (unknown [213.134.162.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 16 Mar 2022 08:32:27 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C05242EFB
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:31:13 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3C7D266B8A7;
-        Wed, 16 Mar 2022 13:29:26 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 2/2] cpuidle: intel_idle: Drop redundant backslash at line end
-Date:   Wed, 16 Mar 2022 13:29:25 +0100
-Message-ID: <2633372.mvXUDI8C0e@kreacher>
-In-Reply-To: <67576f38c4bb5975568a863069c334d102552901.camel@linux.intel.com>
-References: <2630560.mvXUDI8C0e@kreacher> <4731792.31r3eYUQgx@kreacher> <67576f38c4bb5975568a863069c334d102552901.camel@linux.intel.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DF1951EC03C9;
+        Wed, 16 Mar 2022 13:31:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647433867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=qMIjVS8BeT+tVF68txhAOz+wyR0Q9rCb1N6DeL44fX0=;
+        b=hL0xJN5AWUiB2PAVXFw1YkEWFmhukb/TpUgO2lR32MjopasaopsK8BWvfEiqAnpqHlpNlT
+        KVpOSumQqvKMydhvt4nWfk49njmZk0JCFOCdpV1AmuwUM416Kb+vsYPEfilGn/bOc6Gxwu
+        miHQY35kWjsX1AjAwhPrdVAMgVPwnpE=
+Date:   Wed, 16 Mar 2022 13:31:03 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jamie Heilman <jamie@audible.transient.net>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: system locks up with CONFIG_SLS=Y; 5.17.0-rc
+Message-ID: <YjHYh3XRbHwrlLbR@zn.tnic>
+References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.1
-X-CLIENT-HOSTNAME: 213.134.162.1
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudefvddgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudeivddrudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedvrddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheprghrthgvmhdrsghithihuhhtshhkihihsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, March 16, 2022 9:56:42 AM CET Artem Bityutskiy wrote:
-> On Tue, 2022-03-15 at 20:36 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > Drop a redundant backslash character at the end of a line in the
-> > spr_cstates[] definition.
-> > 
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Rafael, thanks for cleaning this up. Sorry for this.
+On Wed, Mar 16, 2022 at 09:51:35AM +0000, Jamie Heilman wrote:
+> I've been (somewhat unsuccessfully) trying to bisect a hard lock-up
+> of my workstation that occurs when I'm running 5.17 rc kernels a few
+> seconds after I start a kvm guest instance.  There is no output to
+> any log, everything locks up completely, sysrq doesn't even work
+> anymore.
 
-No big deal.  I'm taking this as an ACK. :-)
+Any chance you can connect that box with a serial cable, get serial
+console working and see if you can catch dmesg with it this way?
 
+https://www.kernel.org/doc/html/latest/admin-guide/serial-console.html
 
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

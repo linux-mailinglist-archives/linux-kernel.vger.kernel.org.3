@@ -2,211 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794AA4DB8DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84F84DB8E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348099AbiCPT2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S1349674AbiCPTaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241391AbiCPT2m (ORCPT
+        with ESMTP id S243997AbiCPTaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:28:42 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2139.outbound.protection.outlook.com [40.107.20.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FBB532CF;
-        Wed, 16 Mar 2022 12:27:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O0HuKPouBODK0cowAL9mtE3MxbZq4Yp9L+EI+warVcR/4/8hwZzuTXOkW6YcY6+8pLyA0Lbk0h440IVHOiPWLN2QzOhXqY0wrLsAVi+2VtDM3MwTiNyrzCvgoUHAbiYWXTXWKinSG+8sA6WhiyTl+/uqc7Vghg5Zg/4SmnClA0Jw7R+CwwS7LoHxZ5cEp/vlJLfQ4RatKMHsdsv31Gf0+bK2EXz1NvprDiVq2NnpHFZxRvpkmoQGKvv2EhR5rzxEszbdaN4N2Wfj+rVVg5C1RYtiI32oWo5Mo6xAM92LOo1FO1wgXIWWZFr225WkMb0v654hWQUZZKuxfpgYuzbMiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EADwajGJsULJdDoLFAxdbsPsbszPc0YvOcEalN1wOUc=;
- b=TJ+qONhO5N4jzB/N/Ic5bdI/qxc//9q4oxU9yayPc+mjR3VMMdiMQW4/q5TWi8fjKOS7hcf+q54Ab6lSCFkV4mkt9ZkcXRdMRKjHoP07nshULBZPC6Zk92hfd+Ps7RwfCr7TfFGvxVhxNwkSPRaMUwvzo5wTH8R1lzaBjduSDz0FJIrFZrFRN3iFMODAxA4+NQghtiWIM13WA5ByUiDVGqGjD+W45rv4yx0m+CGIYwnFRrvU15nwfKHOU6hKSQ1LMfHMHDCFgVwIGNnR9ebOcD1igSy9mr9YJqVnyaCZWukLe5R4TNZpBTLyN2MKWJA4cyaflVYYs50VFvqegjcFYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silicom-usa.com; dmarc=pass action=none
- header.from=silicom-usa.com; dkim=pass header.d=silicom-usa.com; arc=none
+        Wed, 16 Mar 2022 15:30:23 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDC23A735
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:29:08 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id s29so5398897lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:29:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EADwajGJsULJdDoLFAxdbsPsbszPc0YvOcEalN1wOUc=;
- b=Sb52SvM38buC37lftMXVuop/aXS5PpqBHiBLUc7N9Fivfehkz/VE4+aY7EQWG99xSlZDap/Kn9i4wnl5XCqITdyx+3FcaB4g3KZW/ZiF0FRYNGIfXjtnWFc8lYtVrqfDpWIjzuhH1HEaY93bQlKMf/pUrpBRyVkOdtSKOg8KSgU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=silicom-usa.com;
-Received: from VI1PR0402MB3517.eurprd04.prod.outlook.com (2603:10a6:803:b::16)
- by DBBPR04MB7787.eurprd04.prod.outlook.com (2603:10a6:10:1e3::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.28; Wed, 16 Mar
- 2022 19:27:25 +0000
-Received: from VI1PR0402MB3517.eurprd04.prod.outlook.com
- ([fe80::3c4b:12e1:8c6b:dbb5]) by VI1PR0402MB3517.eurprd04.prod.outlook.com
- ([fe80::3c4b:12e1:8c6b:dbb5%6]) with mapi id 15.20.5081.015; Wed, 16 Mar 2022
- 19:27:25 +0000
-From:   Jeff Daly <jeffd@silicom-usa.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ixgbe: Manual AN-37 for troublesome link partners for X550 SFI
-Date:   Wed, 16 Mar 2022 15:27:10 -0400
-Message-Id: <20220316192710.9947-1-jeffd@silicom-usa.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0130.namprd03.prod.outlook.com
- (2603:10b6:208:32e::15) To VI1PR0402MB3517.eurprd04.prod.outlook.com
- (2603:10a6:803:b::16)
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kXm3aPGa6kumOLc0BpQgk8B33A75Ce44sP5rN5yEc48=;
+        b=UM0MNayjkbqgfu1XWtyQYDhdQX7mfqFrOqJ5oTFXnVWReMsB2OW0NJS9z0mNjhhG7T
+         N2kjjSIYqHXhSCpdeX1kH9/ZaHtGOMLhLlpsRan74z8rXHQzlg/+zNFykJGOa5jH7x5Y
+         O3ezJcxIGCKF6PpACvz1gCAsDUwBPb8o3fyzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kXm3aPGa6kumOLc0BpQgk8B33A75Ce44sP5rN5yEc48=;
+        b=Of80Eb9H8hZBwnxLEdv5i/4b1KdQuuJLEqsy3y94SQqpMln4plkiPOfVkfLeTPnAKH
+         o6m4wb+uy9YuyOvQxqOu1TcsrU7ncegq2Bej4Ck6NPX6oKqDi0lh9h5OM/bKvGXuPHSo
+         93qQbAc1GPR8ngTQMAtpD5fQZI23hLECzJzx8e+oGVUNzLob/Qfue9MS9Gu5mSEq1i1X
+         GrG3QVoXRuE439V45ujfdNaLECNIz8CF01Ge5rcnXK7iyfA/ztR2XQ5nr/vlajBxTqAG
+         Vt6SE2EszLMe3kPL8NObE8pieEVXWQtQ8i2GOQjMJm4TGwPfrX3ji2FiuNOjQsZYgvQh
+         XFew==
+X-Gm-Message-State: AOAM5302t9KGk3GjihAAvIfxS3LCmE+LzFoZZL0j0W4xP5xRyTJ2pZXj
+        KGofxs73IP+sUvzTEf8Fe4iR0SO3c3eNgbyAIX8=
+X-Google-Smtp-Source: ABdhPJybosOT0C55mB5ZrnQw+GrMHTi1EzDlMZ0J/e2O/kAIsY3RAKD8sKsgkP2r78lWDq6+S0n6FA==
+X-Received: by 2002:a19:8c54:0:b0:448:2271:57d3 with SMTP id i20-20020a198c54000000b00448227157d3mr719693lfj.482.1647458946134;
+        Wed, 16 Mar 2022 12:29:06 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id t10-20020ac24c0a000000b004435eefa4efsm248655lfq.269.2022.03.16.12.29.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 12:29:03 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id u7so4422071ljk.13
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:29:03 -0700 (PDT)
+X-Received: by 2002:a2e:6f17:0:b0:248:124:9c08 with SMTP id
+ k23-20020a2e6f17000000b0024801249c08mr671918ljc.506.1647458942587; Wed, 16
+ Mar 2022 12:29:02 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7a7bf175-ef67-43f0-1c0a-08da0782ffee
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7787:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR04MB7787C68CDACEAB3004010D22EA119@DBBPR04MB7787.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0SFhJyghotaUJFjNRWxB+2AU+NvATQ7SCa0gVihM6ExWeqOO7mMFgXWLL6elnkYIZbCsWUL0XbyGUL4N3twkc/EPmP7rvWS8VmIoTwTojNnQtj3Bwy9BfTg85Yu+q8ERKu6n6N94vYFaNvfzeyWq5Ac21qYuwAsYe/HHzDNZxpm6QguQY4l0mC80aBduqTqAntcGy1TburbySUqG0phQ5s3DzNFOKbovcGDyOfI5midAIQTn/BUt0Hk7TeKS2IqA21j8lIMjIjY1r87NE2kAl50Z5kEQWAhNLZ07KHoSHfU41zE7uEKDHslHsJ54/Shzo5hg1VqxYnKzg71x72TkeGIuKZksSB1s3Sl05tSoUaw7QduWCret1vNBrUytD8zRmy+KbfgC0Ogh8KpyCIAXofpbDfSAsGuxvFkIHMKQaBW9kDLbp76tbMQFNm/3i9xYxitkOVzt0J5cO4KNN2YaLcGV1cAM+UYWCCWFHl778mx1WW06mQ5LlSAc+/8A035miBK6yOmBgjTAqeQVpXjeI8wZPpFp6ImATR1x2Lzd2cSCcxr/vAMx44SifB/sazeisvcay15shTi4RPKf4IDG1svi3G7QzpTUwhwfCtcpr92yjeTs9INktwk/rBc6941lpxMPQDBfEXIXg5Cx6ugnGoQdIGsActovulq0J0joUpoPtT89+zVYEHb86jlY9yUDLCbufJedmuuqSyNebUaD1w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3517.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(316002)(66946007)(4326008)(54906003)(8676002)(66476007)(66556008)(38100700002)(8936002)(5660300002)(6916009)(86362001)(6506007)(6486002)(36756003)(26005)(52116002)(2616005)(186003)(1076003)(6666004)(6512007)(38350700002)(508600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BPNHJynC66/jIAKg1npmustlVHD8H1HLzKrnnPd6oksaHa8jQg0T4x+8g8i3?=
- =?us-ascii?Q?I6Zbmz52YtN42dN9cCoOdKdjaWHTNtUyPHhsfzw2itqS7Bxnchrp0yx+Pqw6?=
- =?us-ascii?Q?b3zz2a48pP00NubC4QH7k/ShsYTA+UzEBxmSfe2+NlgEvy3KweXFI2GzQaU3?=
- =?us-ascii?Q?23bcZKQc85anYAx/UT7pm9z35gilHkK+QuwRxPxw32C1fHL2Px0+NWZqr4XP?=
- =?us-ascii?Q?+spiDlZ62167E0Bdbho/3qhLmqTtKV1EJ8NOmLew5u1s7QKIdpFz/C7ZL24X?=
- =?us-ascii?Q?VmWku0xT1TMF1ZaWgja7nhnS1oj0wj5lNrp4/YU90E13srJVL0vPDNaLt0Z2?=
- =?us-ascii?Q?9ljgRjXxTJ0zDknCOtliJn0lpBCSnEeC6lkMIWsCVSVIEX+9ZsbdxCzvmBn5?=
- =?us-ascii?Q?7a+cZv1S/MBxLYsfaEHata5T+J9W/Lyt6DZ068GwSHBLFTuTGCC6GsSvwX4I?=
- =?us-ascii?Q?pW5+2JqwyrnmkzkqWTow3eeVa9WOZg41J7T1/AM2jqv3LInyCrNVXjR1QJUu?=
- =?us-ascii?Q?yDqjscplrAuJ3omb7oBLRIMdC/BmpSn5ZAAN7OtcpCSuVf8YwDXX2Rp8fYwg?=
- =?us-ascii?Q?YTWm3+rsI8IkPcSJB6NBm6wV/CoXFqkqbgdf8/o99QniyZjCvBS+adBzvKQF?=
- =?us-ascii?Q?v0S6uc2it3YTlIZOmbZhPr00Tq4xL+bKIX8/eBj4A+p4vyNAs6KHlgThGlip?=
- =?us-ascii?Q?V2So1t3eOK4n9pJ7oFEuuoLvWj/dYngCXeHjaQ914UuwhcGoP0fwvX8h63l1?=
- =?us-ascii?Q?bMFu0n2OtP3xf0yEwxQBz/OJYaOjuE3fgxcYu2OUWKZ1arZLVY80xTM0wC5z?=
- =?us-ascii?Q?7ODE3ahNRZs4NQVKIZYM7RwTfoyGviug6ojlpvcOgLgslE9zng56GpHl2gPy?=
- =?us-ascii?Q?oQpAgrJQSSJfA4oJwpJB/rtg+dYjFcJAXQIuE0r7JiMdqjAAc3atMnRR/SqR?=
- =?us-ascii?Q?zmvC5Q4isvYz0MLPpQ7UjIyF2k15E9Sldd2BdQbj+m3uK9ykIxLNdKVJXL7y?=
- =?us-ascii?Q?/XYHuSmSt3/sC5roW26A7I6ec6JfeJGW/RzvhjaM4Z/+Shc7U7sPcE3KvIhm?=
- =?us-ascii?Q?dxTjgktUYTfXQ0rExfEHfx1LzbIhQs0a9YK2cebyVD87vTCrTDod6KP3Rbxn?=
- =?us-ascii?Q?kV4j3gbVF7RCDrNZH/6Kp72Wq49Gmxk/9Ty0+Gui41SBHDDqcJjc2AcpjWXe?=
- =?us-ascii?Q?1pkh8ANhhOd2e7XZ5yh7djKbxLL7TNVffDpY7BeXJdBNDqBmMowl+NuV46JA?=
- =?us-ascii?Q?4b3q1Rl2aCmjZIXPyQmny31SAXrlK1FJQ4eEnlFe5+sKRK+cbkdv1bPz6zdU?=
- =?us-ascii?Q?5rtGfppo/P8hWRxckFyaIwjklrsnZjuQl5df3WkNae6xZFw9Dlqb7uMup3IV?=
- =?us-ascii?Q?t6HxajLXwldB8u4cyLbaCtNGy3cwiHkDryuJBTksJmSIQAONIkKUUk0lvJiY?=
- =?us-ascii?Q?tC4z0f47Oree6S8IHSsZ6fb7jeYWhOsy?=
-X-OriginatorOrg: silicom-usa.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a7bf175-ef67-43f0-1c0a-08da0782ffee
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3517.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 19:27:24.9315
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V7LjiOHeaykKXKs/pb2AqTFSEYo9/otJosMHf/iLvowUrMCUqk4GsRB83FOKnAQCkrAdHBwLEYF95mZtZhLT3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7787
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000085b1b305da5a66f3@google.com>
+In-Reply-To: <00000000000085b1b305da5a66f3@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 16 Mar 2022 12:28:46 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjLNbf7viXP74K59jK=sRkg6mUbj0i3qpQvy9_2S4Lbtg@mail.gmail.com>
+Message-ID: <CAHk-=wjLNbf7viXP74K59jK=sRkg6mUbj0i3qpQvy9_2S4Lbtg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: kmalloc bug in snd_pcm_plugin_alloc (2)
+To:     syzbot <syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some (Juniper MX5) SFP link partners exhibit a disinclination to
-autonegotiate with X550 configured in SFI mode.  This patch enables
-a manual AN-37 restart to work around the problem.
+On Wed, Mar 16, 2022 at 11:51 AM syzbot
+<syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com> wrote:
+>
+> WARNING: CPU: 1 PID: 3761 at mm/util.c:591 kvmalloc_node+0x121/0x130 mm/util.c:591
+>  snd_pcm_plugin_alloc+0x570/0x770 sound/core/oss/pcm_plugin.c:71
+>  snd_pcm_plug_alloc+0x20d/0x310 sound/core/oss/pcm_plugin.c:118
+>  snd_pcm_oss_change_params_locked+0x19db/0x3bf0 sound/core/oss/pcm_oss.c:1041
+>  snd_pcm_oss_change_params sound/core/oss/pcm_oss.c:1104 [inline]
+>  snd_pcm_oss_get_active_substream+0x164/0x1c0 sound/core/oss/pcm_oss.c:1121
+>  snd_pcm_oss_get_rate sound/core/oss/pcm_oss.c:1778 [inline]
+>  snd_pcm_oss_set_rate sound/core/oss/pcm_oss.c:1770 [inline]
+>  snd_pcm_oss_ioctl+0x144f/0x3430 sound/core/oss/pcm_oss.c:2632
 
-Signed-off-by: Jeff Daly <jeffd@silicom-usa.com>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_type.h |  3 ++
- drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c | 50 +++++++++++++++++++
- 2 files changed, 53 insertions(+)
+Well, that looks like a real bug in the sound subsystem, and the
+warning is appropriate.
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h b/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
-index 2647937f7f4d..dc8a259fda5f 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_type.h
-@@ -3705,7 +3705,9 @@ struct ixgbe_info {
- #define IXGBE_KRM_LINK_S1(P)		((P) ? 0x8200 : 0x4200)
- #define IXGBE_KRM_LINK_CTRL_1(P)	((P) ? 0x820C : 0x420C)
- #define IXGBE_KRM_AN_CNTL_1(P)		((P) ? 0x822C : 0x422C)
-+#define IXGBE_KRM_AN_CNTL_4(P)		((P) ? 0x8238 : 0x4238)
- #define IXGBE_KRM_AN_CNTL_8(P)		((P) ? 0x8248 : 0x4248)
-+#define IXGBE_KRM_PCS_KX_AN(P)		((P) ? 0x9918 : 0x5918)
- #define IXGBE_KRM_SGMII_CTRL(P)		((P) ? 0x82A0 : 0x42A0)
- #define IXGBE_KRM_LP_BASE_PAGE_HIGH(P)	((P) ? 0x836C : 0x436C)
- #define IXGBE_KRM_DSP_TXFFE_STATE_4(P)	((P) ? 0x8634 : 0x4634)
-@@ -3715,6 +3717,7 @@ struct ixgbe_info {
- #define IXGBE_KRM_PMD_FLX_MASK_ST20(P)	((P) ? 0x9054 : 0x5054)
- #define IXGBE_KRM_TX_COEFF_CTRL_1(P)	((P) ? 0x9520 : 0x5520)
- #define IXGBE_KRM_RX_ANA_CTL(P)		((P) ? 0x9A00 : 0x5A00)
-+#define IXGBE_KRM_FLX_TMRS_CTRL_ST31(P)	((P) ? 0x9180 : 0x5180)
- 
- #define IXGBE_KRM_PMD_FLX_MASK_ST20_SFI_10G_DA		~(0x3 << 20)
- #define IXGBE_KRM_PMD_FLX_MASK_ST20_SFI_10G_SR		BIT(20)
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
-index e4b50c7781ff..f48a422ae83f 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c
-@@ -1725,6 +1725,56 @@ static s32 ixgbe_setup_sfi_x550a(struct ixgbe_hw *hw, ixgbe_link_speed *speed)
- 				IXGBE_KRM_PMD_FLX_MASK_ST20(hw->bus.lan_id),
- 				IXGBE_SB_IOSF_TARGET_KR_PHY, reg_val);
- 
-+	/* change mode enforcement rules to hybrid */
-+	status = mac->ops.read_iosf_sb_reg(hw,
-+				IXGBE_KRM_FLX_TMRS_CTRL_ST31(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, &reg_val);
-+	reg_val |= 0x0400;
-+
-+	status = mac->ops.write_iosf_sb_reg(hw,
-+				IXGBE_KRM_FLX_TMRS_CTRL_ST31(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, reg_val);
-+
-+	/* manually control the config */
-+	status = mac->ops.read_iosf_sb_reg(hw,
-+				IXGBE_KRM_LINK_CTRL_1(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, &reg_val);
-+	reg_val |= 0x20002240;
-+
-+	status = mac->ops.write_iosf_sb_reg(hw,
-+				IXGBE_KRM_LINK_CTRL_1(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, reg_val);
-+
-+	/* move the AN base page values */
-+	status = mac->ops.read_iosf_sb_reg(hw,
-+				IXGBE_KRM_PCS_KX_AN(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, &reg_val);
-+	reg_val |= 0x1;
-+
-+	status = mac->ops.write_iosf_sb_reg(hw,
-+				IXGBE_KRM_PCS_KX_AN(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, reg_val);
-+
-+	/* set the AN37 over CB mode */
-+	status = mac->ops.read_iosf_sb_reg(hw,
-+				IXGBE_KRM_AN_CNTL_4(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, &reg_val);
-+	reg_val |= 0x20000000;
-+
-+	status = mac->ops.write_iosf_sb_reg(hw,
-+				IXGBE_KRM_AN_CNTL_4(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, reg_val);
-+
-+	/* restart AN manually */
-+	status = mac->ops.read_iosf_sb_reg(hw,
-+				IXGBE_KRM_LINK_CTRL_1(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, &reg_val);
-+	reg_val |= IXGBE_KRM_LINK_CTRL_1_TETH_AN_RESTART;
-+
-+	status = mac->ops.write_iosf_sb_reg(hw,
-+				IXGBE_KRM_LINK_CTRL_1(hw->bus.lan_id),
-+				IXGBE_SB_IOSF_TARGET_KR_PHY, reg_val);
-+
- 	/* Toggle port SW reset by AN reset. */
- 	status = ixgbe_restart_an_internal_phy_x550em(hw);
- 
--- 
-2.25.1
+It looks like
 
+        size = frames * format->channels * width;
+
+can overflow 32 bits, and this is presumably user-triggerable with
+snd_pcm_oss_ioctl().
+
+Maybe there's some range check at an upper layer that is supposed to
+catch this, but I'm not seeing it.
+
+I think the simple fix is to do
+
+        size = array3_size(frames, format->channels, width);
+
+instead, which clamps the values at the maximum size_t.
+
+Then you can trivially check for that overflow value (SIZE_MAX), but
+you can - and probably should - just check for some sane value.
+INT_MAX comes to mind, since that's what the allocation routine will
+warn about.
+
+But you can also say "Ok, I have now used the 'array_size()' function
+to make sure any overflow will clamp to a very high value, so I know
+I'll get an allocation failure, and I'd rather just make the allocator
+do the size checking, so I'll add __GFP_NOWARN at allocation time and
+just return -ENOMEM when that fails".
+
+But that __GFP_NOWARN is *ONLY* acceptable if you have actually made
+sure that "yes, all my size calculations have checked for overflow
+and/or done that SIZE_MAX clamping".
+
+Alternatively, you can just do each multiplication carefully, and use
+"check_mul_overflow()" by hand, but it's a lot more inconvenient and
+the end result tends to look horrible. There's a reason we have those
+"array_size()" and "array3_size()" helpers.
+
+There is also some very odd and suspicious-looking code in
+snd_pcm_oss_change_params_locked():
+
+        oss_period_size *= oss_frame_size;
+
+        oss_buffer_size = oss_period_size * runtime->oss.periods;
+        if (oss_buffer_size < 0) {
+                err = -EINVAL;
+                goto failure;
+        }
+
+which seems to think that checking the end result for being negative
+is how you check for overflow. But that's actually after the
+snd_pcm_plug_alloc() call.
+
+It looks like all of this should use "check_mul_overflow()", but it
+presumably also wants fixing (and also would like to use the
+'array_size()' helpers, but note that those take a 'size_t', so you do
+want to check for negative values *before* if you allow zeroes
+anywhere else)
+
+If you don't mind "multiplying by zero will hide a negative
+intermediate value", you can pass in 'ssize_t' arguments, do the
+multiplication as unsigned, put the result in a 'ssize_t' value, and
+just check for a negative result.
+
+That would seem to be acceptable here, and that
+snd_pcm_oss_change_params_locked() code could also just be
+
+        oss_period_size = array_size(oss_period_size, oss_frame_size);
+        oss_buffer_size = array_size(oss_period_size, runtime->oss.periods);
+        if (oss_buffer_size < 0) {
+                ...
+
+but I would suggest checking for a zero result too, because that can
+hide the sub-parts having been some invalid crazy values that can also
+cause problems later.
+
+Takashi?
+
+                 Linus

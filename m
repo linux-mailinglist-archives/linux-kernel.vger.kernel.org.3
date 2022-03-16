@@ -2,96 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DFD4DA7E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B55524DA7D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349457AbiCPCWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
+        id S1343993AbiCPCQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237405AbiCPCWx (ORCPT
+        with ESMTP id S241389AbiCPCQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:22:53 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B52427CE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:21:40 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id g19so1872358pfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=mpIGdb55Nd4sn/CpKfkQzU0+Ne3ozaz+3vbBHRA2I6U=;
-        b=STJJhjhySdxRolMQ6fId8pdd/hZAOz3EpMWlonsXd8vSgXzLo6gP73O9ekBBfrS9wI
-         3nsfbhCR+Q6YqWsymo5rs4GMKS51FLBlOZyYmGsucAWFRX3KFmT13t/rbwHSi+jaud3G
-         Dyh/+cXbCgtjWD1Ev5Xfg2olYx8TPAISk4lYVUuuJKiCDADcZoH9IaNu1gAjkdJSMGdP
-         P3NO2s8eFzTsWHg6sqKQJpC1GpDBYsclPozt9ZmRfQkQbv9Fn43YOgMZfCLaPsudrEuq
-         s9BDfBxnJ5sniUbt/+u49qELuen3qi2Ood2hji/DlR1rPP01jFM5F8dY7/52j0gqcTYZ
-         +TIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=mpIGdb55Nd4sn/CpKfkQzU0+Ne3ozaz+3vbBHRA2I6U=;
-        b=JYKQHzRwYeJaJmXp1M50JOXDcQdy1lSv8qyql2mMx0ReodxXj/+VmQ3y+Cvc+kQI8n
-         KAV3fQs4939gmS5ym2EKUEB4LTFWBAh8iYZqezBKsJZu+j5seZPnuAY5Q3tPRb41jNp9
-         O3KVviSxOG0UOOh8rCOQjwYSC8QVgWQLccllKXy6qssZcqesWbs+TLWwAVex7Fr+70UU
-         ZYXp0ulWSLohPxAwilmL3Edil/FKxriwDxDSk3Dm6D/WaKklwH4Htk/OEDx5UvBSIxBO
-         UBgQo58KgBf6frxGMSgwcM0+HroDWSpwobbXQuzKlqmpwXFAMcMHLKU6zWc7khQQAYe/
-         pgeQ==
-X-Gm-Message-State: AOAM533M9n0CLDsisEtZArGb6Fyz1p+HnE0B9tetC0jwqfoE9I4l5lPK
-        LzN92AuTn7pdI2GwBrKQ1UQ=
-X-Google-Smtp-Source: ABdhPJw2oM4iw4X9LdjPldazp7yPJi6PzmHFFz+lxJaiE9molHGTsa7R9nL6wpCNalHa8LzYxaDVBA==
-X-Received: by 2002:a63:4e52:0:b0:380:7c35:fc9a with SMTP id o18-20020a634e52000000b003807c35fc9amr26129775pgl.376.1647397299989;
-        Tue, 15 Mar 2022 19:21:39 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id q10-20020a056a00084a00b004f7ebae5be6sm469764pfk.155.2022.03.15.19.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 19:21:39 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Igor Grinberg <grinberg@compulab.co.il>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ARM: pxa: Change clk_disable to clk_disable_unprepare
-Date:   Wed, 16 Mar 2022 02:21:22 +0000
-Message-Id: <20220316022122.7426-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 22:16:33 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E126BCD7;
+        Tue, 15 Mar 2022 19:15:18 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:49050.1605950715
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.43 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 1994D1002AD;
+        Wed, 16 Mar 2022 10:15:12 +0800 (CST)
+Received: from  ([123.150.8.43])
+        by gateway-153622-dep-749df8664c-mvcg4 with ESMTP id 8f25d97f08c443a3a48ae68ce49704ae for johan@kernel.org;
+        Wed, 16 Mar 2022 10:15:18 CST
+X-Transaction-ID: 8f25d97f08c443a3a48ae68ce49704ae
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.43
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, elder@ieee.org
+Cc:     Song Chen <chensong_2000@189.cn>
+Subject: [PATCH v5] staging: greybus: introduce pwm_ops::apply
+Date:   Wed, 16 Mar 2022 10:21:25 +0800
+Message-Id: <1647397285-30061-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The corresponding API for clk_prepare_enable is clk_disable_unprepare,
-other than clk_disable_unprepare.
+Introduce newer .apply function in pwm_ops to replace legacy operations,
+like enable, disable, config and set_polarity.
 
-Fix this by changing clk_disable to clk_disable_unprepare.
+This guarantees atomic changes of the pwm controller configuration.
 
-Fixes: 7a5d9a913f91 ("ARM: pxa: ulpi: fix ulpi timeout and slowpath warn")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Song Chen <chensong_2000@189.cn>
+
 ---
- arch/arm/mach-pxa/cm-x300.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+1, define duty_cycle and period as u64 in gb_pwm_config_operation.
+2, define duty and period as u64 in gb_pwm_config_request.
+3, disable before configuring duty and period if the eventual goal
+   is a disabled state.
 
-diff --git a/arch/arm/mach-pxa/cm-x300.c b/arch/arm/mach-pxa/cm-x300.c
-index 2e35354b61f5..fcf5b8fa5b9f 100644
---- a/arch/arm/mach-pxa/cm-x300.c
-+++ b/arch/arm/mach-pxa/cm-x300.c
-@@ -538,7 +538,7 @@ static int cm_x300_u2d_init(struct device *dev)
+v3:
+Regarding duty_cycle and period, I read more discussion in this thread,
+min, warn or -EINVAL, seems no perfect way acceptable for everyone.
+How about we limit their value to INT_MAX and throw a warning at the
+same time when they are wrong?
+
+v4:
+1, explain why legacy operations are replaced.
+2, cap the value of period and duty to U32_MAX.
+
+v5:
+1, revise commit message.
+---
+ drivers/staging/greybus/pwm.c | 59 +++++++++++++++++++++--------------
+ 1 file changed, 35 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+index 891a6a672378..3add3032678b 100644
+--- a/drivers/staging/greybus/pwm.c
++++ b/drivers/staging/greybus/pwm.c
+@@ -204,43 +204,54 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
+ 	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+ }
  
- 		err = cm_x300_ulpi_phy_reset();
- 		if (err) {
--			clk_disable(pout_clk);
-+			clk_disable_unprepare(pout_clk);
- 			clk_put(pout_clk);
- 		}
- 	}
+-static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+-			 int duty_ns, int period_ns)
++static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
++			const struct pwm_state *state)
+ {
++	int err;
++	bool enabled = pwm->state.enabled;
++	u64 period = state->period;
++	u64 duty_cycle = state->duty_cycle;
+ 	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+ 
+-	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
+-};
++	/* set polarity */
++	if (state->polarity != pwm->state.polarity) {
++		if (enabled) {
++			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
++			enabled = false;
++		}
++		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
++		if (err)
++			return err;
++	}
+ 
+-static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
+-			       enum pwm_polarity polarity)
+-{
+-	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
++	if (!state->enabled) {
++		if (enabled)
++			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
++		return 0;
++	}
+ 
+-	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+-};
++	/* set period and duty cycle*/
++	if (period > U32_MAX)
++		period = U32_MAX;
+ 
+-static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+-{
+-	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
++	if (duty_cycle > period)
++		duty_cycle = period;
+ 
+-	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+-};
++	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
++	if (err)
++		return err;
+ 
+-static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
+-{
+-	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
++	/* enable/disable */
++	if (!enabled)
++		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+ 
+-	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+-};
++	return 0;
++}
+ 
+ static const struct pwm_ops gb_pwm_ops = {
+ 	.request = gb_pwm_request,
+ 	.free = gb_pwm_free,
+-	.config = gb_pwm_config,
+-	.set_polarity = gb_pwm_set_polarity,
+-	.enable = gb_pwm_enable,
+-	.disable = gb_pwm_disable,
++	.apply = gb_pwm_apply,
+ 	.owner = THIS_MODULE,
+ };
+ 
 -- 
-2.17.1
+2.25.1
 

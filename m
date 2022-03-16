@@ -2,65 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADED74DAA0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0344DAA14
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353676AbiCPFtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 01:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S1353686AbiCPF4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiCPFtC (ORCPT
+        with ESMTP id S238982AbiCPF4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 01:49:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D44720E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:47:46 -0700 (PDT)
+        Wed, 16 Mar 2022 01:56:36 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5A62667;
+        Tue, 15 Mar 2022 22:55:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647409666; x=1678945666;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tOB59a+wtlGrYXv96rvzF3ToAPe+XHNOqF1O3L7x/Bw=;
-  b=YIoUqBozrUfBcnHp09lmk8vM15hwi682gC7kBhCtpbs+xBpsHlBeiYR7
-   2ZQHxJFN+3pwT8zgAMeC0Se+0CsUrehepUIwuvOesuyrWUthbAZ+Pdfo4
-   gTvL52CwgKXIaHjHMJI2H7sPKvuwyeDJ4Fng0z9QsxVYwf6eb1aeCwzaL
-   oAxO6gpNmcXDyKdND1pxwYn2TtHnArndFioy0qx0iFtwNSD6bDCnWLd2m
-   Npt6ZBB4XKZll/glaReXE8MQX3pGwSSe80P0DfX7ld6XdoDYasKyQWDt1
-   nw/oYWPpFqKBId11OnIukn/zvNcRITrwcCNlkYxPuyim8mvh07QwHkc53
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="237106844"
+  t=1647410122; x=1678946122;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=hXbcQT9FRmDvFtocUaLFO+s9TeLyNb12ETvlhaJ5DxU=;
+  b=M3UqvqePqja31swBvgDmw4V26JkOSJ5ip3TzQkH8xYxg/CC5P7JOn3Yi
+   Gz/AngdtJdOpCfWF6fL4fyjmZcJJX1X3eJoEwC9opN04alhx1nuP9lAFv
+   7YYZxvJu953VO6BnI9QndzVt6hW9N8btTYs6/XA20+FhueMg5m/uEISI9
+   Yu4vdkSgGwdvG97p6RLJcLaqc5/cJdfXJRu34n2Z5p8W9xYC62VCLEzzb
+   usZIMzm5x8YrwFxnMA1eJUfrDkW552C0njecFDiwT5SqsGlL56PefpGKK
+   nUMmU2FI2/XrrC9wiN1s0skgcwEVqa+jfut3YHopYC5KY79OZvSiE7qaB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256689119"
 X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="237106844"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 22:47:45 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="256689119"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 22:55:22 -0700
 X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="714463620"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2022 22:47:42 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUMVZ-000C2g-OB; Wed, 16 Mar 2022 05:47:41 +0000
-Date:   Wed, 16 Mar 2022 13:47:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Swathi Sridhar <swatsrid@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Sudarshan Rajagopalan <sudaraja@codeaurora.org>,
-        Prakash Gupta <guptap@codeaurora.org>,
-        Vinayak Menon <vinmenon@codeaurora.org>,
-        Mark Salyzyn <salyzyn@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 464/9999] drivers/iommu/io-pgtable-arm.c:241:48: error: expected ')' before
- 'table_pte'
-Message-ID: <202203161322.YnbEPtC7-lkp@intel.com>
+   d="scan'208";a="540769039"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 22:55:14 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?utf-8?Q?Hol?= =?utf-8?Q?ger_Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v9 06/14] mm: multi-gen LRU: minimal implementation
+References: <20220309021230.721028-1-yuzhao@google.com>
+        <20220309021230.721028-7-yuzhao@google.com>
+Date:   Wed, 16 Mar 2022 13:55:12 +0800
+In-Reply-To: <20220309021230.721028-7-yuzhao@google.com> (Yu Zhao's message of
+        "Tue, 8 Mar 2022 19:12:23 -0700")
+Message-ID: <87wnguwif3.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,482 +93,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   5b194414a86d3b098004ed42b64152b41940baf7
-commit: 27de1978c331d4e7571a5d0187ef1802d65dbf65 [464/9999] ANDROID: GKI: iommu/io-pgtable-arm: LPAE related updates by vendor
-config: sparc-buildonly-randconfig-r001-20220314 (https://download.01.org/0day-ci/archive/20220316/202203161322.YnbEPtC7-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/27de1978c331d4e7571a5d0187ef1802d65dbf65
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 27de1978c331d4e7571a5d0187ef1802d65dbf65
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/iommu/
+Hi, Yu,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yu Zhao <yuzhao@google.com> writes:
 
-All errors (new ones prefixed by >>):
+[snip]
 
-   include/linux/dma-mapping.h:628:17: note: in expansion of macro 'WARN_ONCE'
-     628 |                 WARN_ONCE(1, "Remap function not implemented for %pS\n",
-         |                 ^~~~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:134:9: note: in expansion of macro 'if'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/asm-generic/bug.h:166:17: note: in expansion of macro 'WARN'
-     166 |                 WARN(1, format);                                \
-         |                 ^~~~
-   include/linux/dma-mapping.h:628:17: note: in expansion of macro 'WARN_ONCE'
-     628 |                 WARN_ONCE(1, "Remap function not implemented for %pS\n",
-         |                 ^~~~~~~~~
-   include/linux/dma-mapping.h: In function 'dma_unremap':
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   include/asm-generic/bug.h:164:9: note: in expansion of macro 'if'
-     164 |         if (unlikely(__ret_warn_once && !__warned)) {           \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:164:13: note: in expansion of macro 'unlikely'
-     164 |         if (unlikely(__ret_warn_once && !__warned)) {           \
-         |             ^~~~~~~~
-   include/linux/dma-mapping.h:643:17: note: in expansion of macro 'WARN_ONCE'
-     643 |                 WARN_ONCE(1, "unremap function not implemented for %pS\n",
-         |                 ^~~~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:164:9: note: in expansion of macro 'if'
-     164 |         if (unlikely(__ret_warn_once && !__warned)) {           \
-         |         ^~
-   include/linux/dma-mapping.h:643:17: note: in expansion of macro 'WARN_ONCE'
-     643 |                 WARN_ONCE(1, "unremap function not implemented for %pS\n",
-         |                 ^~~~~~~~~
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   include/asm-generic/bug.h:134:9: note: in expansion of macro 'if'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:134:13: note: in expansion of macro 'unlikely'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   include/asm-generic/bug.h:166:17: note: in expansion of macro 'WARN'
-     166 |                 WARN(1, format);                                \
-         |                 ^~~~
-   include/linux/dma-mapping.h:643:17: note: in expansion of macro 'WARN_ONCE'
-     643 |                 WARN_ONCE(1, "unremap function not implemented for %pS\n",
-         |                 ^~~~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:134:9: note: in expansion of macro 'if'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/asm-generic/bug.h:166:17: note: in expansion of macro 'WARN'
-     166 |                 WARN(1, format);                                \
-         |                 ^~~~
-   include/linux/dma-mapping.h:643:17: note: in expansion of macro 'WARN_ONCE'
-     643 |                 WARN_ONCE(1, "unremap function not implemented for %pS\n",
-         |                 ^~~~~~~~~
-   In file included from arch/sparc/include/asm/page.h:8,
-                    from arch/sparc/include/asm/thread_info_64.h:27,
-                    from arch/sparc/include/asm/thread_info.h:5,
-                    from include/linux/thread_info.h:38,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/sparc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:81,
-                    from include/linux/spinlock.h:51,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:10,
-                    from include/linux/scatterlist.h:8,
-                    from include/linux/iommu.h:22,
-                    from drivers/iommu/io-pgtable-arm.c:25:
-   drivers/iommu/io-pgtable-arm.c: At top level:
->> drivers/iommu/io-pgtable-arm.c:241:48: error: expected ')' before 'table_pte'
-     241 | static arm_lpae_iopte iopte_val(arm_lpae_iopte table_pte)
-         |                                                ^~~~~~~~~
-   arch/sparc/include/asm/page_64.h:77:27: note: in definition of macro 'iopte_val'
-      77 | #define iopte_val(x)    ((x).iopte)
-         |                           ^
->> arch/sparc/include/asm/page_64.h:77:29: error: expected ')' before '.' token
-      77 | #define iopte_val(x)    ((x).iopte)
-         |                             ^
-   drivers/iommu/io-pgtable-arm.c:241:23: note: in expansion of macro 'iopte_val'
-     241 | static arm_lpae_iopte iopte_val(arm_lpae_iopte table_pte)
-         |                       ^~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function 'iopte_tblcnt_set':
->> arch/sparc/include/asm/page_64.h:77:29: error: request for member 'iopte' in something not a structure or union
-      77 | #define iopte_val(x)    ((x).iopte)
-         |                             ^
-   drivers/iommu/io-pgtable-arm.c:266:30: note: in expansion of macro 'iopte_val'
-     266 |         arm_lpae_iopte pte = iopte_val(*table_pte);
-         |                              ^~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function '__arm_lpae_alloc_pages':
-   drivers/iommu/io-pgtable-arm.c:312:23: error: implicit declaration of function 'io_pgtable_alloc_pages_exact' [-Werror=implicit-function-declaration]
-     312 |         void *pages = io_pgtable_alloc_pages_exact(cfg, cookie, size,
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:312:23: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   drivers/iommu/io-pgtable-arm.c:337:9: error: implicit declaration of function 'io_pgtable_free_pages_exact' [-Werror=implicit-function-declaration]
-     337 |         io_pgtable_free_pages_exact(cfg, cookie, pages, size);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/asm-generic/barrier.h:20,
-                    from arch/sparc/include/asm/barrier_64.h:59,
-                    from arch/sparc/include/asm/barrier.h:5,
-                    from arch/sparc/include/asm/atomic_64.h:13,
-                    from arch/sparc/include/asm/atomic.h:5,
-                    from include/linux/atomic.h:7,
-                    from drivers/iommu/io-pgtable-arm.c:23:
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_init_pte':
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   include/asm-generic/bug.h:134:9: note: in expansion of macro 'if'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:134:13: note: in expansion of macro 'unlikely'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   include/linux/ratelimit.h:107:19: note: in expansion of macro 'WARN'
-     107 |         int rtn = WARN(condition, format, ##__VA_ARGS__);       \
-         |                   ^~~~
-   drivers/iommu/io-pgtable-arm.c:405:17: note: in expansion of macro 'WARN_RATELIMIT'
-     405 |                 WARN_RATELIMIT(1, "map without unmap\n");
-         |                 ^~~~~~~~~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:134:9: note: in expansion of macro 'if'
-     134 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/ratelimit.h:107:19: note: in expansion of macro 'WARN'
-     107 |         int rtn = WARN(condition, format, ##__VA_ARGS__);       \
-         |                   ^~~~
-   drivers/iommu/io-pgtable-arm.c:405:17: note: in expansion of macro 'WARN_RATELIMIT'
-     405 |                 WARN_RATELIMIT(1, "map without unmap\n");
-         |                 ^~~~~~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function '__arm_lpae_map':
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:37: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                     ^~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:125:13: note: in expansion of macro 'unlikely'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:515:13: note: in expansion of macro 'WARN_ON'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |             ^~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:58:37: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                     ^~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   drivers/iommu/io-pgtable-arm.c:515:13: note: in expansion of macro 'WARN_ON'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |             ^~~~~~~
---
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:125:13: note: in expansion of macro 'unlikely'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:515:13: note: in expansion of macro 'WARN_ON'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |             ^~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:125:13: note: in expansion of macro 'unlikely'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:515:13: note: in expansion of macro 'WARN_ON'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |             ^~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   drivers/iommu/io-pgtable-arm.c:515:13: note: in expansion of macro 'WARN_ON'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |             ^~~~~~~
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:127:9: note: in expansion of macro 'unlikely'
-     127 |         unlikely(__ret_warn_on);                                        \
-         |         ^~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:515:13: note: in expansion of macro 'WARN_ON'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |             ^~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:515:9: note: in expansion of macro 'if'
-     515 |         if (WARN_ON(lvl >= ARM_LPAE_MAX_LEVELS - 1))
-         |         ^~
-   In file included from arch/sparc/include/asm/page.h:8,
-                    from arch/sparc/include/asm/thread_info_64.h:27,
-                    from arch/sparc/include/asm/thread_info.h:5,
-                    from include/linux/thread_info.h:38,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/sparc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:81,
-                    from include/linux/spinlock.h:51,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:10,
-                    from include/linux/scatterlist.h:8,
-                    from include/linux/iommu.h:22,
-                    from drivers/iommu/io-pgtable-arm.c:25:
->> arch/sparc/include/asm/page_64.h:77:29: error: request for member 'iopte' in something not a structure or union
-      77 | #define iopte_val(x)    ((x).iopte)
-         |                             ^
-   arch/sparc/include/asm/page_64.h:148:60: note: in definition of macro '__va'
-     148 | #define __va(x)                 ((void *)((unsigned long) (x) + PAGE_OFFSET))
-         |                                                            ^
-   drivers/iommu/io-pgtable-arm.c:186:15: note: in expansion of macro 'iopte_val'
-     186 |         (__va(iopte_val(pte) & ((1ULL << ARM_LPAE_MAX_ADDR_BITS) - 1)   \
-         |               ^~~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:535:25: note: in expansion of macro 'iopte_deref'
-     535 |                 cptep = iopte_deref(pte, data);
-         |                         ^~~~~~~~~~~
-   In file included from include/asm-generic/barrier.h:20,
-                    from arch/sparc/include/asm/barrier_64.h:59,
-                    from arch/sparc/include/asm/barrier.h:5,
-                    from arch/sparc/include/asm/atomic_64.h:13,
-                    from arch/sparc/include/asm/atomic.h:5,
-                    from include/linux/atomic.h:7,
-                    from drivers/iommu/io-pgtable-arm.c:23:
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:69:30: note: in definition of macro '__trace_if'
-      69 |                 ______r = !!(cond);                                     \
-         |                              ^~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:125:13: note: in expansion of macro 'unlikely'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:538:17: note: in expansion of macro 'WARN_ON'
-     538 |                 WARN_ON(!selftest_running);
-         |                 ^~~~~~~
-   include/linux/compiler.h:64:25: note: previous declaration here
-      64 |                         ______f = {                                     \
-         |                         ^~~~~~~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   drivers/iommu/io-pgtable-arm.c:538:17: note: in expansion of macro 'WARN_ON'
-     538 |                 WARN_ON(!selftest_running);
-         |                 ^~~~~~~
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_prot_to_pte':
-   drivers/iommu/io-pgtable-arm.c:572:33: error: 'IOMMU_USE_UPSTREAM_HINT' undeclared (first use in this function)
-     572 |                 else if (prot & IOMMU_USE_UPSTREAM_HINT)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:37: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                     ^~~~
-   drivers/iommu/io-pgtable-arm.c:572:22: note: in expansion of macro 'if'
-     572 |                 else if (prot & IOMMU_USE_UPSTREAM_HINT)
-         |                      ^~
-   drivers/iommu/io-pgtable-arm.c:572:33: note: each undeclared identifier is reported only once for each function it appears in
-     572 |                 else if (prot & IOMMU_USE_UPSTREAM_HINT)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:37: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                     ^~~~
-   drivers/iommu/io-pgtable-arm.c:572:22: note: in expansion of macro 'if'
-     572 |                 else if (prot & IOMMU_USE_UPSTREAM_HINT)
-         |                      ^~
-   drivers/iommu/io-pgtable-arm.c:575:33: error: 'IOMMU_USE_LLC_NWA' undeclared (first use in this function)
-     575 |                 else if (prot & IOMMU_USE_LLC_NWA)
-         |                                 ^~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:37: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                     ^~~~
-   drivers/iommu/io-pgtable-arm.c:575:22: note: in expansion of macro 'if'
-     575 |                 else if (prot & IOMMU_USE_LLC_NWA)
-         |                      ^~
-   drivers/iommu/io-pgtable-arm.c: In function 'arm_lpae_map':
-   include/linux/compiler.h:25:39: warning: ignoring attribute 'section ("_ftrace_annotated_branch")' because it conflicts with previous 'section ("_ftrace_branch")' [-Wattributes]
-      25 |                         static struct ftrace_likely_data                \
-         |                                       ^~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:37: note: in definition of macro '__trace_if'
-      58 |         if (__builtin_constant_p(!!(cond)) ? !!(cond) :                 \
-         |                                     ^~~~
-   drivers/iommu/io-pgtable-arm.c:610:9: note: in expansion of macro 'if'
-     610 |         if (WARN_ON(iova >= (1ULL << data->iop.cfg.ias) ||
-         |         ^~
-   include/linux/compiler.h:56:23: note: in expansion of macro '__trace_if'
-      56 | #define if(cond, ...) __trace_if( (cond , ## __VA_ARGS__) )
-         |                       ^~~~~~~~~~
-   include/asm-generic/bug.h:125:9: note: in expansion of macro 'if'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |         ^~
-   include/linux/compiler.h:48:26: note: in expansion of macro '__branch_check__'
-      48 | #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-         |                          ^~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:125:13: note: in expansion of macro 'unlikely'
-     125 |         if (unlikely(__ret_warn_on))                                    \
-         |             ^~~~~~~~
-   drivers/iommu/io-pgtable-arm.c:610:13: note: in expansion of macro 'WARN_ON'
-     610 |         if (WARN_ON(iova >= (1ULL << data->iop.cfg.ias) ||
-..
+>  
+> +static int get_swappiness(struct lruvec *lruvec, struct scan_control *sc)
+> +{
+> +	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+> +	struct pglist_data *pgdat = lruvec_pgdat(lruvec);
+> +
+> +	if (!can_demote(pgdat->node_id, sc) &&
+> +	    mem_cgroup_get_nr_swap_pages(memcg) < MIN_LRU_BATCH)
+> +		return 0;
+> +
+> +	return mem_cgroup_swappiness(memcg);
+> +}
+> +
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS || MCOUNT
-   Selected by
-   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM_UNWIND && !S390 && !MICROBLAZE && !ARC && !X86
+We have tested v9 for memory tiering system, the demotion works now even
+without swap devices configured.  Thanks!
+
+And we found that the demotion (page reclaiming on DRAM nodes) speed is
+lower than the original implementation.  The workload itself is just a
+memory accessing micro-benchmark with Gauss distribution.  It is run on
+a system with DRAM and PMEM.  Initially, quite some hot pages are placed
+in PMEM and quite some cold pages are placed in DRAM.  Then the page
+placement optimizing mechanism based on NUMA balancing will try to
+promote some hot pages from PMEM node to DRAM node.  If the DRAM node
+near full (reach high watermark), kswapd of the DRAM node will be woke
+up to demote (reclaim) some cold DRAM pages to PMEM.  Because quite some
+pages on DRAM is very cold (not accessed for at least several seconds),
+the benchmark performance will be better if demotion speed is faster.
+
+Some data comes from /proc/vmstat and perf-profile is as follows.
+
+From /proc/vmstat, it seems that the page scanned and page demoted is
+much less with MGLRU enabled.  The pgdemote_kswapd / pgscan_kswapd is
+5.22 times higher with MGLRU enabled than that with MGLRU disabled.  I
+think this shows the value of direct page table scanning.
+
+From perf-profile, the CPU cycles for kswapd is same.  But less pages
+are demoted (reclaimed) with MGLRU.  And it appears that the total page
+table scanning time of MGLRU is longer if we compare walk_page_range
+(1.97%, MGLRU enabled) and page_referenced (0.54%, MGLRU disabled)?
+Because we only demote (reclaim) from DRAM nodes, but not demote
+(reclaim) from PMEM nodes and bloom filter doesn't work well enough?
+One thing that may be not friendly for bloom filter is that some virtual
+pages may change their resident nodes because of demotion/promotion.
+
+Can you teach me to how interpret these data for MGLRU?  Or can you
+point me to the other/better data for MGLRU?
+
+MGLRU disabled via: echo -n 0 > /sys/kernel/mm/lru_gen/enabled
+--------------------------------------------------------------
+
+/proc/vmstat:
+
+pgactivate 1767172340
+pgdeactivate 1740111896
+pglazyfree 0
+pgfault 583875828
+pgmajfault 0
+pglazyfreed 0
+pgrefill 1740111896
+pgreuse 22626572
+pgsteal_kswapd 153796237
+pgsteal_direct 1999
+pgdemote_kswapd 153796237
+pgdemote_direct 1999
+pgscan_kswapd 2055504891
+pgscan_direct 1999
+pgscan_direct_throttle 0
+pgscan_anon 2055356614
+pgscan_file 150276
+pgsteal_anon 153798203
+pgsteal_file 33
+zone_reclaim_failed 0
+pginodesteal 0
+slabs_scanned 82761
+kswapd_inodesteal 0
+kswapd_low_wmark_hit_quickly 2960
+kswapd_high_wmark_hit_quickly 17732
+pageoutrun 21583
+pgrotated 0
+drop_pagecache 0
+drop_slab 0
+oom_kill 0
+numa_pte_updates 515994024
+numa_huge_pte_updates 154
+numa_hint_faults 498301236
+numa_hint_faults_local 121109067
+numa_pages_migrated 152650705
+pgmigrate_success 307213704
+pgmigrate_fail 39
+thp_migration_success 93
+thp_migration_fail 0
+thp_migration_split 0
+
+perf-profile:
+
+kswapd.kthread.ret_from_fork: 2.86
+balance_pgdat.kswapd.kthread.ret_from_fork: 2.86
+shrink_node.balance_pgdat.kswapd.kthread.ret_from_fork: 2.85
+shrink_lruvec.shrink_node.balance_pgdat.kswapd.kthread: 2.76
+shrink_inactive_list.shrink_lruvec.shrink_node.balance_pgdat.kswapd: 1.9
+shrink_page_list.shrink_inactive_list.shrink_lruvec.shrink_node.balance_pgdat: 1.52
+shrink_active_list.shrink_lruvec.shrink_node.balance_pgdat.kswapd: 0.85
+migrate_pages.shrink_page_list.shrink_inactive_list.shrink_lruvec.shrink_node: 0.79
+page_referenced.shrink_page_list.shrink_inactive_list.shrink_lruvec.shrink_node: 0.54
 
 
-vim +241 drivers/iommu/io-pgtable-arm.c
+MGLRU enabled via: echo -n 7 > /sys/kernel/mm/lru_gen/enabled
+-------------------------------------------------------------
 
-   219	
-   220	/*
-   221	 * We'll use some ignored bits in table entries to keep track of the number
-   222	 * of page mappings beneath the table.  The maximum number of entries
-   223	 * beneath any table mapping in armv8 is 8192 (which is possible at the
-   224	 * 2nd- and 3rd-level when using a 64K granule size).  The bits at our
-   225	 * disposal are:
-   226	 *
-   227	 *     4k granule: [54..52], [11..2]
-   228	 *    64k granule: [54..52], [15..2]
-   229	 *
-   230	 * [54..52], [11..2] is enough bits for tracking table mappings at any
-   231	 * level for any granule, so we'll use those.
-   232	 */
-   233	#define BOTTOM_IGNORED_MASK 0x3ff
-   234	#define BOTTOM_IGNORED_SHIFT 2
-   235	#define BOTTOM_IGNORED_NUM_BITS 10
-   236	#define TOP_IGNORED_MASK 0x7ULL
-   237	#define TOP_IGNORED_SHIFT 52
-   238	#define IOPTE_RESERVED_MASK ((BOTTOM_IGNORED_MASK << BOTTOM_IGNORED_SHIFT) | \
-   239				     (TOP_IGNORED_MASK << TOP_IGNORED_SHIFT))
-   240	
- > 241	static arm_lpae_iopte iopte_val(arm_lpae_iopte table_pte)
-   242	{
-   243		return table_pte & ~IOPTE_RESERVED_MASK;
-   244	}
-   245	
+/proc/vmstat:
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+pgactivate 47212585
+pgdeactivate 0
+pglazyfree 0
+pgfault 580056521
+pgmajfault 0
+pglazyfreed 0
+pgrefill 6911868880
+pgreuse 25108929
+pgsteal_kswapd 32701609
+pgsteal_direct 0
+pgdemote_kswapd 32701609
+pgdemote_direct 0
+pgscan_kswapd 83582770
+pgscan_direct 0
+pgscan_direct_throttle 0
+pgscan_anon 83549777
+pgscan_file 32993
+pgsteal_anon 32701576
+pgsteal_file 33
+zone_reclaim_failed 0
+pginodesteal 0
+slabs_scanned 84829
+kswapd_inodesteal 0
+kswapd_low_wmark_hit_quickly 313
+kswapd_high_wmark_hit_quickly 5262
+pageoutrun 5895
+pgrotated 0
+drop_pagecache 0
+drop_slab 0
+oom_kill 0
+numa_pte_updates 512084786
+numa_huge_pte_updates 198
+numa_hint_faults 494583387
+numa_hint_faults_local 129411334
+numa_pages_migrated 34165992
+pgmigrate_success 67833977
+pgmigrate_fail 7
+thp_migration_success 135
+thp_migration_fail 0
+thp_migration_split 0
+
+perf-profile:
+
+kswapd.kthread.ret_from_fork: 2.86
+balance_pgdat.kswapd.kthread.ret_from_fork: 2.86
+lru_gen_age_node.balance_pgdat.kswapd.kthread.ret_from_fork: 1.97
+walk_page_range.try_to_inc_max_seq.lru_gen_age_node.balance_pgdat.kswapd: 1.97
+shrink_node.balance_pgdat.kswapd.kthread.ret_from_fork: 0.89
+evict_folios.lru_gen_shrink_lruvec.shrink_lruvec.shrink_node.balance_pgdat: 0.89
+scan_folios.evict_folios.lru_gen_shrink_lruvec.shrink_lruvec.shrink_node: 0.66
+
+Best Regards,
+Huang, Ying
+
+[snip]

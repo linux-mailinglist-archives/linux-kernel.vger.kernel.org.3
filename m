@@ -2,106 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65A44DB99A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859134DB99E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356490AbiCPUmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S1344217AbiCPUnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbiCPUmH (ORCPT
+        with ESMTP id S229958AbiCPUnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:42:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B1FDE8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647463252; x=1678999252;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=r19zuMYqIMDnuCyWOijWhVUayxbhysyUD/iRsXuP/6c=;
-  b=VhEJTna/N+pghJJF8CbFvJ00Jq0ztYTK+4svFLj0jhsmBX08bJCZF7tG
-   hM/QRij7HGAmY0Kri6k2XmbYOOr5oEEFdZqJRKK4abR4Ewy7cmvpFnqNq
-   LbmW8r0fVWUKXnVALA5wjZeP55fSBPaPmvPHHAIfes96nYk5vcpTRPwmZ
-   KKdMcftkpw++DItNLVNRXo8jLwjHrA5iZhLOZFXfw4/BrZkgza6o003jL
-   NnlHhLMXaLXJ0rlUx+lmRtjAeAmMO3L5W4GVQUBVj8ocwQ32VjiPjLgDP
-   esZzkKgNzwCmcGnEfCMshGCea4MsqXTGeM2/CdgGtW3TJFVpHCMXTenWM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="255538002"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="255538002"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:40:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="516489395"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 13:40:29 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUaRY-000CtU-Ud; Wed, 16 Mar 2022 20:40:28 +0000
-Date:   Thu, 17 Mar 2022 04:39:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 413/2335] kernel/bpf/core.c:62:6: warning: no
- previous prototype for 'bpf_jit_dump'
-Message-ID: <202203170410.uapuR37c-lkp@intel.com>
+        Wed, 16 Mar 2022 16:43:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341A864BC9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=6Ex2pLdz5gD/Bu9SEokKuJDOiJb5N2ZhO58Lzad4N40=; b=XXAdcciDiJ2TmVJF/7I13wIpg6
+        GVKvutTdqFEBWZbu4DumIWPla52Gz1mK+/5hRfxjl9GMsGGOJR+Jz+rWecAXhF8nfPxAbgGs4Fdpy
+        oA3uPFToAKCoU3PMO0CVaiXs+ZRNOALRGt5x4G70+MxC564/so6di5ohQFa+fwv8a3tYPvhKi1jsn
+        J3qFDlgPuYzqFaCueYpq9tfJfUJla2ctRTQaNmicix8cEKp0ZiMZrY5qeZQoPVdZYZmczLyHDe7mT
+        Fqa5wZwR4G0McGkYlTOrLoxRqPdRqYyAyJXA4XQk0+n53uVJ6IgT+37Q1oxRQTHiE4Fb+Dv81XjxB
+        NObHhdlg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUaSp-00EHHf-BG; Wed, 16 Mar 2022 20:41:47 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, patches@armlinux.org.uk
+Subject: [PATCH -next] sched/headers: ARM needs asm/paravirt_api_clock.h
+Date:   Wed, 16 Mar 2022 13:41:46 -0700
+Message-Id: <20220316204146.14000-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: 13afaa4b6ebba9ee9365fa7688a8d7f3fff97749 [413/2335] headers/uninline: Uninline multi-use function: bpf_jit_dump()
-config: i386-randconfig-a001-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170410.uapuR37c-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=13afaa4b6ebba9ee9365fa7688a8d7f3fff97749
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 13afaa4b6ebba9ee9365fa7688a8d7f3fff97749
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/entry/vdso/ arch/x86/pci/ kernel/bpf/ kernel/trace/ lib/
+Add <asm/paravirt_api_clock.h> for arch/arm/.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes this build error:
 
-All warnings (new ones prefixed by >>):
+In file included from ../kernel/sched/core.c:81:
+../kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+   87 | # include <asm/paravirt_api_clock.h>
 
->> kernel/bpf/core.c:62:6: warning: no previous prototype for 'bpf_jit_dump' [-Wmissing-prototypes]
-      62 | void bpf_jit_dump(unsigned int flen, unsigned int proglen, u32 pass, void *image)
-         |      ^~~~~~~~~~~~
-   kernel/bpf/core.c:1378:12: warning: no previous prototype for 'bpf_probe_read_kernel' [-Wmissing-prototypes]
-    1378 | u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-         |            ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/bpf_jit_dump +62 kernel/bpf/core.c
-
-    61	
-  > 62	void bpf_jit_dump(unsigned int flen, unsigned int proglen, u32 pass, void *image)
-    63	{
-    64		pr_err("flen=%u proglen=%u pass=%u image=%pK from=%s pid=%d\n", flen,
-    65		       proglen, pass, image, current->comm, task_pid_nr(current));
-    66	
-    67		if (image)
-    68			print_hex_dump(KERN_ERR, "JIT code: ", DUMP_PREFIX_OFFSET,
-    69				       16, 1, image, proglen, false);
-    70	}
-    71	
-
+Fixes: 4ff8f2ca6ccd ("sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: patches@armlinux.org.uk
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+KernelVersion: linux-next-20220316
+
+ arch/arm/include/asm/paravirt_api_clock.h |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- /dev/null
++++ linux-next-20220316/arch/arm/include/asm/paravirt_api_clock.h
+@@ -0,0 +1 @@
++#include <asm/paravirt.h>

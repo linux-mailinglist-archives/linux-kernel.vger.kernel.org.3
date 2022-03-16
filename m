@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE5E4DB1F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCBE4DB1F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356133AbiCPN5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S239700AbiCPN6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353279AbiCPN5J (ORCPT
+        with ESMTP id S232045AbiCPN6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:57:09 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A074A4705C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:55:52 -0700 (PDT)
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MNbtF-1nk6NJ3xMp-00P7UW for <linux-kernel@vger.kernel.org>; Wed, 16 Mar
- 2022 14:55:50 +0100
-Received: by mail-wr1-f47.google.com with SMTP id u16so2088791wru.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:55:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532tiKqdcu4wtlpfC6zOkSFYnKDqGuy1G19xVTP3Yxx59DCQ0mAU
-        lYYNYKBp9wRQx/GEYqoMccKiwU5ix1hBKjF/ymA=
-X-Google-Smtp-Source: ABdhPJy+lwx53EZnd7w8d/ihKdeWtRvy8fq/hg43IWx4M+zNwmv/HP81T+84POeldU40HhcONYSQPVqVO7LeEIbIOV0=
-X-Received: by 2002:adf:edc3:0:b0:1ec:5f11:5415 with SMTP id
- v3-20020adfedc3000000b001ec5f115415mr48812wro.317.1647438950657; Wed, 16 Mar
- 2022 06:55:50 -0700 (PDT)
+        Wed, 16 Mar 2022 09:58:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F126441FBE;
+        Wed, 16 Mar 2022 06:57:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD56C1F38A;
+        Wed, 16 Mar 2022 13:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647439050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fVnaIKXQpvG9mLruAk0reUuRGL+ESYJUl+C6vlyz8wA=;
+        b=e1qeW3YdkGqC/ADJdxeQv5Fq0zN9IF2QuYSXv+ruO1800/d98Q8OZegZfa1Kf7tCubCTS8
+        pRBvCE4iNbN7jCeHk0Y7OwIh3+XlvKR+D1whwrtAs51vEfO4xwWdDUlTH5z6EYV51RlYoz
+        VIMnnkBo1NZok3Ou/xv4e88GDN7XEWQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647439050;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fVnaIKXQpvG9mLruAk0reUuRGL+ESYJUl+C6vlyz8wA=;
+        b=Ve+5n8MV0gYO7o3lp4IEkoRpxVgisrCbYnu7S7+uRYFziE04yx+HtD3bzJ2PMi/TTnOUki
+        gwSFmulo3VuiY+Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 729D0139B5;
+        Wed, 16 Mar 2022 13:57:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LPsyGsrsMWKwewAAMHmgww
+        (envelope-from <ddiss@suse.de>); Wed, 16 Mar 2022 13:57:30 +0000
+Date:   Wed, 16 Mar 2022 14:57:28 +0100
+From:   David Disseldorp <ddiss@suse.de>
+To:     Vasant Karasulli <vkarasulli@suse.de>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>,
+        Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp
+Subject: Re: [PATCH v3 1/2] exfat: add keep_last_dots mount option
+Message-ID: <20220316145728.709d85e0@suse.de>
+In-Reply-To: <YjGr3IpZ4p55YuAB@vasant-suse>
+References: <20220311114746.7643-1-vkarasulli@suse.de>
+        <20220311114746.7643-2-vkarasulli@suse.de>
+        <CAKYAXd9kdYi4rXmyfAO3ZbmKLu3i35QzsL_oOorROYieQnWGRg@mail.gmail.com>
+        <YjGr3IpZ4p55YuAB@vasant-suse>
 MIME-Version: 1.0
-References: <202203162123.Ksr0CtpZ-lkp@intel.com>
-In-Reply-To: <202203162123.Ksr0CtpZ-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 16 Mar 2022 14:55:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1atu-azCPCC_1c-MKTungkHVn0Wd1awhZ4=hf1i9MWfA@mail.gmail.com>
-Message-ID: <CAK8P3a1atu-azCPCC_1c-MKTungkHVn0Wd1awhZ4=hf1i9MWfA@mail.gmail.com>
-Subject: Re: [csky-linux:riscv_compat_v8 20/20] arch/riscv/kernel/compat_signal.c:199:5:
- warning: no previous prototype for function 'compat_setup_rt_frame'
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:XwbXopYYy6njKVpvYhEygwjAaYy64S9/+yDmDpSg4DVFBIRv+wp
- /pcbhAqZcP1Fnaji1qodT6rhpyxADU4muND4OCrqxgd+dIPVwoCpV8nQxF+OlHNeagad/Ev
- wr6zOMDAHgjw9siX1Z+Kk6DBVm+2JkpXndD1Z3tuyxTTgGrswxiSbsFjg3TQCsKMvGQOzra
- EA4Vs/SH/+JmQek4myM/g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0eb4o75aLlw=:wibIAZxUy5EIp43Bn50sq/
- X0tYq5EAWfHkwOSJZKXBP7OT0v4gOMVLhl5ncB7SgaEYd2Np7qASvT4RL5nTUy5XJ5d3Ij4qX
- PUVqFwjVavP8syZECEfuPW+507KlVJVYLujfyabitHhDEpsqwaP9XGq9jzr2nlJ3QZj8q0QSb
- U6tmuaoDQU/B0+nco4MEEtUPvtHzH1cZYVffxpBo19G0L7IHK5V/2TboAD/zJsrk1r5G/30pz
- LNwbiHABNHY/zoEEKe40/99KIgSKA0UclwEboL+KkbLuYqt38RsuqF1dNjvwKAITrn2eEFBO0
- i3lMDVypuk2o5SHMR9If5MxdERHIlzpVN4jSp3r7Dir2xfQgsx7da66KFJITMTXod6QqSAez1
- wWyiimExqjH6sgUdnECKYh8bsRPxG7W7nESw4jWVJ1X4+tqhLW1uwy7GmCzcRWgA7lPf/I4ku
- 34kx+2Nawxg9KGK9nPjRTFhemOx1d1KE9qx5ozMhlA221ZxQhGbVPKyNEN2tiMNDVQOPrg/PM
- YR8hNeTGLS081Vbz7/6ykyC9FT6dQCcNlsX/+zx27lujJMHkKzOP6db4ytPYX0LdbIZqKSjwq
- ggEnflIVOgCcntDhmWQmbJMBrmxW6Ab4IvJawsmSn6LJ/XqhWZfs4+WK6TecKdEZnw/+yPd2u
- 0TotDl/xdPulzZorQCvE1ItXMs/3yUsneAqWooF5sFXePIKdfnlEBXOkSJZCqIBlxiwrenXUv
- bXexulPG4l/CwUnn/j1zO0D8qQf0syX6RGleksrXna0jo6fr2tsifgpXdiq91V4J/IE3kjci7
- WBBjUyoee6Mary0uh5CC7A5kK01ujOrqsRwp3LuPA/QHoNdy6s=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 2:42 PM kernel test robot <lkp@intel.com> wrote:
->
-> All warnings (new ones prefixed by >>):
->
-> >> arch/riscv/kernel/compat_signal.c:199:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
->    int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
->        ^
->    arch/riscv/kernel/compat_signal.c:199:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
->    ^
->    static
->    1 warning generated.
+On Wed, 16 Mar 2022 10:20:28 +0100, Vasant Karasulli wrote:
 
-The problem here is that the compat_setup_rt_frame() declaration got added to
-arch/riscv/kernel/signal.c instead of a header file that is included by both
-signal.c and compat_signal.c.
+> On So 13-03-22 09:01:32, Namjae Jeon wrote:
+> > 2022-03-11 20:47 GMT+09:00, Vasant Karasulli <vkarasulli@suse.de>:  
+> > > The "keep_last_dots" mount option will, in a
+> > > subsequent commit, control whether or not trailing periods '.' are stripped
+> > > from path components during file lookup or file creation.  
+> > I don't know why the 1/2 patch should be split from the 2/2 patch.
+> > Wouldn't it be better to combine them? Otherwise it looks good to me.  
+> 
+> I just followed the same patch structure as was in the initial version
+> of the patch.
 
-Alternatively, the definition could be made static and moved into signal.c.
+I'm fine with having both patches squashed together. @Namjae: should we
+resubmit as a single patch or can you do the squash on your side before
+submitting to Linus?
 
-       Arnd
+Cheers, David

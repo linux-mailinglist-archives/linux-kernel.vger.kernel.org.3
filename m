@@ -2,197 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFE34DA7E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CD84DA80F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349466AbiCPC0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S1353175AbiCPC2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbiCPC0r (ORCPT
+        with ESMTP id S1352551AbiCPC21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:26:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E4A4B408
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647397534; x=1678933534;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2VA94Eh1qS411dAUoSCxbhcrRfvG6zQ7XscUmqUXoRY=;
-  b=SPLTKn6kf+pUR36OW/W+mo8d+EBvpt+E3FNwyQh0JbGP91v1Fwsg9bdS
-   rviTEM5R5aJ75edDWfGpi17/EArvhHgRauKjEG4UNNJBWGL1cIhAPdjhE
-   WalV9jxr6Qr8IOXyHDuFUrluS3TI4lRuqhAfQIv8wlkimLVi5XYIkIU4O
-   gPDLzCNJ19aAKnXI/KL/Jm4JI528WP15YtIx7AEWb0LejA434pHCbcQH1
-   57fO4WEuJmD8Zc2BihCWL20rY0Bp/RA8ctjfFKvJWu7Zxn+/5aBKlh+zo
-   K6myq+HuDnnmR+/UvVbULwP90iwl4Gw0H9x0hN1uAfludx/W4YfxMIicZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319690484"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="319690484"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:34 -0700
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="557221241"
-Received: from lingshan-mobl.ccr.corp.intel.com (HELO [10.255.31.20]) ([10.255.31.20])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:31 -0700
-Message-ID: <eb3b0964-662e-2c5f-02c6-6141c4c5bf92@intel.com>
-Date:   Wed, 16 Mar 2022 10:25:28 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.1
-Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>, Tom Rix <trix@redhat.com>
-Cc:     jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
-        sgarzare@redhat.com, xieyongji@bytedance.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20220315124130.1710030-1-trix@redhat.com>
- <20220315092656-mutt-send-email-mst@kernel.org>
- <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
- <20220315111456-mutt-send-email-mst@kernel.org>
-From:   "Zhu, Lingshan" <lingshan.zhu@intel.com>
-In-Reply-To: <20220315111456-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 22:28:27 -0400
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D4775DA7F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:27:10 -0700 (PDT)
+Received: from unknown (HELO lgemrelse7q.lge.com) (156.147.1.151)
+        by 156.147.23.52 with ESMTP; 16 Mar 2022 11:27:09 +0900
+X-Original-SENDERIP: 156.147.1.151
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
+        by 156.147.1.151 with ESMTP; 16 Mar 2022 11:27:09 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     torvalds@linux-foundation.org
+Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: [PATCH RFC v5 00/21] DEPT(Dependency Tracker)
+Date:   Wed, 16 Mar 2022 11:26:12 +0900
+Message-Id: <1647397593-16747-1-git-send-email-byungchul.park@lge.com>
+X-Mailer: git-send-email 1.9.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm gonna re-add RFC for a while at Ted's request. But hard testing is
+needed to find false alarms for now that there's no false alarm with my
+system. I'm gonna look for other systems that might produce false
+alarms. And it'd be appreciated if you share it when you see any alarms
+with yours.
 
+---
 
-On 3/15/2022 11:15 PM, Michael S. Tsirkin wrote:
-> On Tue, Mar 15, 2022 at 08:03:26AM -0700, Tom Rix wrote:
->> On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
->>> On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
->>>> From: Tom Rix <trix@redhat.com>
->>>>
->>>> Clang static analysis reports this issue
->>>> ifcvf_main.c:49:4: warning: Called function
->>>>     pointer is null (null dereference)
->>>>     vf->vring->cb.callback(vring->cb.private);
->>>>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>
->>>> The check
->>>>     vring = &vf->vring[i];
->>>>     if (vring->cb.callback)
->>>>
->>>> Does not match the use.  Change dereference so they match.
->>>>
->>>> Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
->>> Thanks a lot! I squashed this into the offending patch - no point in
->>> breaking bisect. Pushed to linux. However I'm now
->>> having second thoughts about applying that patchset - I'd like
->>> soma analysis explaining how this got through testing.
->> static analysis is something i do treewide.
->>
->> There are currently ~2500 issues in linux-next, do not panic! many are false
->> positives.
->>
->> It is pretty easy to setup and once you have a baseline you can filter only
->> your files.
->>
->> Tom
-> Thanks for that info! I was actually directing this question to the
-> contributor since the code does not look like it could have ever
-> worked. I don't have the hardware in question myself.
-Oh, that's my bad introducing this bug by typo, thanks Tom for fixing that!
-In my previous testing, I tolerated the lower performance(only one queue 
-working as you pointed out)
-due to the shared irq, and did not check mq status, sorry for that.
+Hi Linus and folks,
 
-After fixing this issue, test again:
+I've been developing a tool for detecting deadlock possibilities by
+tracking wait/event rather than lock(?) acquisition order to try to
+cover all synchonization machanisms. It's done on v5.17-rc7 tag.
 
-(1)set nvectors = 2 after allocate MSI vectors, force the queues share 
-one vector. from /proc/interrupts, we can see:
-[lszhu@localhost linux]$ cat /proc/interrupts | grep ifcvf
-  241:          0          0          0          0 0          0          
-0          0          0          0 0          0          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0    2724424          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-534528-edge      ifcvf[0000:01:00.5]-vqs-reused-irq
-  242:          0          0          0          0 0          0          
-0          0          0          0 0          0          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0          0          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-534529-edge      ifcvf[0000:01:00.5]-config
-  251:          0          0          0          0 0          0          
-0          0          0          0 0    2693318          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0          0          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-536576-edge      ifcvf[0000:01:00.6]-vqs-reused-irq
-  252:          0          0          0          0 0          0          
-0          0          0          0 0          0          0          
-0          0          0 0          0          0          0          
-0          0 0          0          0          0          0          0 
-0          0          0          0          0          0 0          
-0          0          0          0          0 IR-PCI-MSI 
-536577-edge      ifcvf[0000:01:00.6]-config
+https://github.com/lgebyungchulpark/linux-dept/commits/dept1.18_on_v5.17-rc7
 
-(2) after several rounds of scp from a VF to another, at the source 
-side, ethtool -S shows(cut off, only tx):
-localhost:/home/lszhu # ethtool -S eth1
-NIC statistics:
-      tx_queue_0_packets: 437256
-      tx_queue_0_bytes: 629246017
-      tx_queue_0_xdp_tx: 0
-      tx_queue_0_xdp_tx_drops: 0
-      tx_queue_0_kicks: 34089
-      tx_queue_1_packets: 73
-      tx_queue_1_bytes: 96721
-      tx_queue_1_xdp_tx: 0
-      tx_queue_1_xdp_tx_drops: 0
-      tx_queue_1_kicks: 12
-      tx_queue_2_packets: 294647
-      tx_queue_2_bytes: 433949815
-      tx_queue_2_xdp_tx: 0
-      tx_queue_2_xdp_tx_drops: 0
-      tx_queue_2_kicks: 14948
-      tx_queue_3_packets: 20226451
-      tx_queue_3_bytes: 29735633548
-      tx_queue_3_xdp_tx: 0
-      tx_queue_3_xdp_tx_drops: 0
-      tx_queue_3_kicks: 1123675
+Benifit:
 
-so every queue carries traffic now, all enabled
+	0. Works with all lock primitives.
+	1. Works with wait_for_completion()/complete().
+	2. Works with 'wait' on PG_locked.
+	3. Works with 'wait' on PG_writeback.
+	4. Works with swait/wakeup.
+	5. Works with waitqueue.
+	6. Multiple reports are allowed.
+	7. Deduplication control on multiple reports.
+	8. Withstand false positives thanks to 6.
+	9. Easy to tag any wait/event.
+
+Future work:
+
+	0. To make it more stable.
+	1. To separates Dept from Lockdep.
+	2. To improves performance in terms of time and space.
+	3. To use Dept as a dependency engine for Lockdep.
+	4. To add any missing tags of wait/event in the kernel.
+	5. To deduplicate stack trace.
+
+How to interpret reports:
+
+	1. E(event) in each context cannot be triggered because of the
+	   W(wait) that cannot be woken.
+	2. The stack trace helping find the problematic code is located
+	   in each conext's detail.
 
 Thanks,
-Zhu Lingshan
+Byungchul
 
+---
 
->
->
->>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>> ---
->>>>    drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
->>>> index 3b48e717e89f7..4366320fb68d3 100644
->>>> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
->>>> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
->>>> @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
->>>>    	for (i = 0; i < vf->nr_vring; i++) {
->>>>    		vring = &vf->vring[i];
->>>>    		if (vring->cb.callback)
->>>> -			vf->vring->cb.callback(vring->cb.private);
->>>> +			vring->cb.callback(vring->cb.private);
->>>>    	}
->>>>    	return IRQ_HANDLED;
->>>> -- 
->>>> 2.26.3
+Changes from v4:
+
+	1. Fix some bugs that produce false alarms.
+	2. Distinguish each syscall context from another *for arm64*.
+	3. Make it not warn it but just print it in case Dept ring
+	   buffer gets exhausted. (feedback from Hyeonggon)
+	4. Explicitely describe "EXPERIMENTAL" and "Dept might produce
+	   false positive reports" in Kconfig. (feedback from Ted)
+
+Changes from v3:
+
+	1. Dept shouldn't create dependencies between different depths
+	   of a class that were indicated by *_lock_nested(). Dept
+	   normally doesn't but it does once another lock class comes
+	   in. So fixed it. (feedback from Hyeonggon)
+	2. Dept considered a wait as a real wait once getting to
+	   __schedule() even if it has been set to TASK_RUNNING by wake
+	   up sources in advance. Fixed it so that Dept doesn't consider
+	   the case as a real wait. (feedback from Jan Kara)
+	3. Stop tracking dependencies with a map once the event
+	   associated with the map has been handled. Dept will start to
+	   work with the map again, on the next sleep.
+
+Changes from v2:
+
+	1. Disable Dept on bit_wait_table[] in sched/wait_bit.c
+	   reporting a lot of false positives, which is my fault.
+	   Wait/event for bit_wait_table[] should've been tagged in a
+	   higher layer for better work, which is a future work.
+	   (feedback from Jan Kara)
+	2. Disable Dept on crypto_larval's completion to prevent a false
+	   positive.
+
+Changes from v1:
+
+	1. Fix coding style and typo. (feedback from Steven)
+	2. Distinguish each work context from another in workqueue.
+	3. Skip checking lock acquisition with nest_lock, which is about
+	   correct lock usage that should be checked by Lockdep.
+
+Changes from RFC:
+
+	1. Prevent adding a wait tag at prepare_to_wait() but __schedule().
+	   (feedback from Linus and Matthew)
+	2. Use try version at lockdep_acquire_cpus_lock() annotation.
+	3. Distinguish each syscall context from another.
+
+Byungchul Park (21):
+  llist: Move llist_{head,node} definition to types.h
+  dept: Implement Dept(Dependency Tracker)
+  dept: Embed Dept data in Lockdep
+  dept: Apply Dept to spinlock
+  dept: Apply Dept to mutex families
+  dept: Apply Dept to rwlock
+  dept: Apply Dept to wait_for_completion()/complete()
+  dept: Apply Dept to seqlock
+  dept: Apply Dept to rwsem
+  dept: Add proc knobs to show stats and dependency graph
+  dept: Introduce split map concept and new APIs for them
+  dept: Apply Dept to wait/event of PG_{locked,writeback}
+  dept: Apply SDT to swait
+  dept: Apply SDT to wait(waitqueue)
+  locking/lockdep, cpu/hotplus: Use a weaker annotation in AP thread
+  dept: Distinguish each syscall context from another
+  dept: Distinguish each work from another
+  dept: Disable Dept within the wait_bit layer by default
+  dept: Add nocheck version of init_completion()
+  dept: Disable Dept on struct crypto_larval's completion for now
+  dept: Don't create dependencies between different depths in any case
+
+ arch/arm64/kernel/syscall.c        |    2 +
+ arch/x86/entry/common.c            |    4 +
+ crypto/api.c                       |    7 +-
+ include/linux/completion.h         |   50 +-
+ include/linux/dept.h               |  544 +++++++
+ include/linux/dept_page.h          |   78 +
+ include/linux/dept_sdt.h           |   62 +
+ include/linux/hardirq.h            |    3 +
+ include/linux/irqflags.h           |   33 +-
+ include/linux/llist.h              |    8 -
+ include/linux/lockdep.h            |  157 ++-
+ include/linux/lockdep_types.h      |    3 +
+ include/linux/mutex.h              |   32 +
+ include/linux/page-flags.h         |   45 +-
+ include/linux/pagemap.h            |    7 +-
+ include/linux/percpu-rwsem.h       |   10 +-
+ include/linux/rtmutex.h            |    7 +
+ include/linux/rwlock.h             |   50 +
+ include/linux/rwlock_api_smp.h     |    8 +-
+ include/linux/rwlock_types.h       |    7 +
+ include/linux/rwsem.h              |   32 +
+ include/linux/sched.h              |    7 +
+ include/linux/seqlock.h            |   68 +-
+ include/linux/spinlock.h           |   25 +
+ include/linux/spinlock_types_raw.h |   13 +
+ include/linux/swait.h              |    4 +
+ include/linux/types.h              |    8 +
+ include/linux/wait.h               |    6 +-
+ init/init_task.c                   |    2 +
+ init/main.c                        |    4 +
+ kernel/Makefile                    |    1 +
+ kernel/cpu.c                       |    2 +-
+ kernel/dependency/Makefile         |    4 +
+ kernel/dependency/dept.c           | 2743 ++++++++++++++++++++++++++++++++++++
+ kernel/dependency/dept_hash.h      |   10 +
+ kernel/dependency/dept_internal.h  |   26 +
+ kernel/dependency/dept_object.h    |   13 +
+ kernel/dependency/dept_proc.c      |   92 ++
+ kernel/exit.c                      |    1 +
+ kernel/fork.c                      |    2 +
+ kernel/locking/lockdep.c           |   12 +-
+ kernel/module.c                    |    2 +
+ kernel/sched/completion.c          |   12 +-
+ kernel/sched/core.c                |    8 +
+ kernel/sched/swait.c               |   10 +
+ kernel/sched/wait.c                |   16 +
+ kernel/sched/wait_bit.c            |    5 +-
+ kernel/softirq.c                   |    6 +-
+ kernel/trace/trace_preemptirq.c    |   19 +-
+ kernel/workqueue.c                 |    3 +
+ lib/Kconfig.debug                  |   27 +
+ mm/filemap.c                       |   68 +
+ mm/page_ext.c                      |    5 +
+ 53 files changed, 4313 insertions(+), 60 deletions(-)
+ create mode 100644 include/linux/dept.h
+ create mode 100644 include/linux/dept_page.h
+ create mode 100644 include/linux/dept_sdt.h
+ create mode 100644 kernel/dependency/Makefile
+ create mode 100644 kernel/dependency/dept.c
+ create mode 100644 kernel/dependency/dept_hash.h
+ create mode 100644 kernel/dependency/dept_internal.h
+ create mode 100644 kernel/dependency/dept_object.h
+ create mode 100644 kernel/dependency/dept_proc.c
+
+-- 
+1.9.1
 

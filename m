@@ -2,93 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9102C4DADFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 648624DADE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355046AbiCPKAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 06:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
+        id S1355019AbiCPJzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350398AbiCPKAL (ORCPT
+        with ESMTP id S1355006AbiCPJzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 06:00:11 -0400
-X-Greylist: delayed 441 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 02:58:57 PDT
-Received: from audible.transient.net (audible.transient.net [24.143.126.66])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CE38764BE7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:58:57 -0700 (PDT)
-Received: (qmail 5861 invoked from network); 16 Mar 2022 09:51:35 -0000
-Received: from cucamonga.audible.transient.net (192.168.2.5)
-  by canarsie.audible.transient.net with QMQP; 16 Mar 2022 09:51:35 -0000
-Received: (nullmailer pid 4066 invoked by uid 1000);
-        Wed, 16 Mar 2022 09:51:35 -0000
-Date:   Wed, 16 Mar 2022 09:51:35 +0000
-From:   Jamie Heilman <jamie@audible.transient.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: system locks up with CONFIG_SLS=Y; 5.17.0-rc
-Message-ID: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
-Mail-Followup-To: linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
+        Wed, 16 Mar 2022 05:55:49 -0400
+Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC5B33880;
+        Wed, 16 Mar 2022 02:54:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436528|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0161911-0.00387286-0.979936;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.N5pKMoy_1647424463;
+Received: from 172.30.10.142(mailfrom:michael@allwinnertech.com fp:SMTPD_---.N5pKMoy_1647424463)
+          by smtp.aliyun-inc.com(33.13.195.200);
+          Wed, 16 Mar 2022 17:54:31 +0800
+Message-ID: <32b29790-eb5c-dac0-1f91-aede38220914@allwinnertech.com>
+Date:   Wed, 16 Mar 2022 17:54:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] mmc: block: enable cache-flushing when mmc cache is on
+Content-Language: en-GB
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "porzio@gmail.com" <porzio@gmail.com>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        allwinner-opensource-support 
+        <allwinner-opensource-support@allwinnertech.com>
+References: <20220312044315.7994-1-michael@allwinnertech.com>
+ <83edf9a1-1712-5388-a3fa-d685f1f581df@intel.com>
+ <88e53cb9-791f-ee58-9be8-76ae9986e0e2@allwinnertech.com>
+ <DM6PR04MB6575C3B87DFA920EDCD994CCFC0F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <DM6PR04MB6575C3B87DFA920EDCD994CCFC0F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've been (somewhat unsuccessfully) trying to bisect a hard lock-up
-of my workstation that occurs when I'm running 5.17 rc kernels a few
-seconds after I start a kvm guest instance.  There is no output to
-any log, everything locks up completely, sysrq doesn't even work
-anymore.  As bisection progressed closer and closer to the branch
-where straight-line-speculation mitigation was enabled, and as bisect
-landing me between 9cdbeec40968 ("x86/entry_32: Fix segment exceptions")
-and 3411506550b1 ("x86/csum: Rewrite/optimize csum_partial()") wasn't
-resulting in clear results (my system definately starts Oopsing and
-gets so hosed up that I'm forced to reboot, but it isn't quite as dire
-as sysrq continues to function) I decided to just try a build with
-CONFIG_SLS disabled, and it turns out that works just fine.  Sooo...
+On 14/03/2022 17:37, Avri Altman wrote:
+>> On 14/03/2022 14:54, Adrian Hunter wrote:
+>>> On 12/03/2022 06:43, Michael Wu wrote:
+>>>> The mmc core enable cache on default. But it only enables
+>>>> cache-flushing when host supports cmd23 and eMMC supports reliable
+>> write.
+>>>> For hosts which do not support cmd23 or eMMCs which do not support
+>>>> reliable write, the cache can not be flushed by `sync` command.
+>>>> This may leads to cache data lost.
+>>>> This patch enables cache-flushing as long as cache is enabled, no
+>>>> matter host supports cmd23 and/or eMMC supports reliable write or not.
+>>>>
+>>>
+>>> Fixes tag?
+>>>
+>>
+>> Hi Adrian,
+>> My patch intend to fix the cache problem brought by the following two
+>> patches:
+>>
+>> Fixes: d0c97cfb81ebc ("mmc: core: Use CMD23 for multiblock transfers when
+>> we can.")
+>> Fixes: e9d5c746246c8 ("mmc/block: switch to using blk_queue_write_cache()")
+>>
+>> I'm not sure if this is what you referred to ("Fixes tag"). Please correct me if I
+>> misunderstood.
+>>
+>>>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+>>>> ---
+>>>>    drivers/mmc/core/block.c | 20 ++++++++++++++------
+>>>>    1 file changed, 14 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+>>>> index 689eb9afeeed..1e508c079c1e 100644
+>>>> --- a/drivers/mmc/core/block.c
+>>>> +++ b/drivers/mmc/core/block.c
+>>>> @@ -2279,6 +2279,8 @@ static struct mmc_blk_data
+>> *mmc_blk_alloc_req(struct mmc_card *card,
+>>>>       struct mmc_blk_data *md;
+>>>>       int devidx, ret;
+>>>>       char cap_str[10];
+>>>> +    bool enable_cache = false;
+>>>> +    bool enable_fua = false;
+>>>>
+>>>>       devidx = ida_simple_get(&mmc_blk_ida, 0, max_devices, GFP_KERNEL);
+>>>>       if (devidx < 0) {
+>>>> @@ -2375,12 +2377,18 @@ static struct mmc_blk_data
+>> *mmc_blk_alloc_req(struct mmc_card *card,
+>>>>                       md->flags |= MMC_BLK_CMD23;
+>>>>       }
+>>>>
+>>>> -    if (mmc_card_mmc(card) &&
+>>>> -        md->flags & MMC_BLK_CMD23 &&
+>>>> -        ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
+>>>> -         card->ext_csd.rel_sectors)) {
+>>>> -            md->flags |= MMC_BLK_REL_WR;
+>>>> -            blk_queue_write_cache(md->queue.queue, true, true);
+>>>> +    if (mmc_card_mmc(card)) {
+>>>> +            if (md->flags & MMC_BLK_CMD23 &&
+>>>> +                    ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN)
+>> ||
+>>>> +                    card->ext_csd.rel_sectors)) {
+>>>> +                    md->flags |= MMC_BLK_REL_WR;
+>>>> +                    enable_fua = true;
+>>>> +            }
+>>>> +
+>>>> +            if (mmc_cache_enabled(card->host))
+>>>> +                    enable_cache = true;
+>>>> +
+>>>> +            blk_queue_write_cache(md->queue.queue, enable_cache,
+>>>> + enable_fua);
+>>>>       }
+>>>
+>>> Seems like we should inform block layer about SD card cache also
+>>>
+>>
+>> I saw another mail by Avri Altman, which says few days will be needed to ask
+>> internally. Shall I wait or make another change here on 'inform block layer
+>> about SD card cache'?
+> Please don't wait.
+> 
+> Thanks,
+> Avri
+> 
+>>
+>>>>
+>>>>       string_get_size((u64)size, 512, STRING_UNITS_2,
+>>
+>> --
+>> Best Regards,
+>> Michael Wu
+Hi Avril & Adrian,
+Thanks for your efforts. Could we have an agreement now --
 
-This system uses a Intel Core2 Duo E8400 processor.
-working config (CONFIG_SLS=N) and dmesg at:
-http://audible.transient.net/~jamie/k/sls.config-5.17.0-rc8
-http://audible.transient.net/~jamie/k/sls.dmesg
+1. enabling-cache and cmd23/reliable-write should be independent;
 
-(I don't think the dmesg of CONFIG_SLS=Y is really any different.)
+ > On 14/03/2022 18:32, Adrian Hunter wrote:
+ >> On 14/03/2022 09:26, Avri Altman wrote:
+ >>> Hi,
+ >>>> The mmc core enable cache on default. But it only enables 
+cache-flushing
+ >>>> when host supports cmd23 and eMMC supports reliable write.
+ >>>> For hosts which do not support cmd23 or eMMCs which do not support
+ >>>> reliable write, the cache can not be flushed by `sync` command.
+ >>>> This may leads to cache data lost.
+ >>>> This patch enables cache-flushing as long as cache is enabled, no
+ >>>> matter host supports cmd23 and/or eMMC supports reliable write or
+ >>>> not.
+ >>> I looked in the spec and indeed couldn't find why enabling cache is
+ >>> dependent of cmd23/reliable write.
+ >>> Nor I was able to find the original commit log.
+ >>
+ >> Reliable write was added first, so it might have been an oversight:
+ >>
+ >> commit 881d1c25f765938a95def5afe39486ce39f9fc96
+ >> Author: Seungwon Jeon <tgih.jun@samsung.com>
+ >> Date:   Fri Oct 14 14:03:21 2011 +0900
+ >>
+ >>      mmc: core: Add cache control for eMMC4.5 device
+ >>
+ >>      This patch adds cache feature of eMMC4.5 Spec.
+ >>      If device supports cache capability, host can utilize some
+ >>      specific operations.
+ >>
+ >>      Signed-off-by: Seungwon Jeon <tgih.jun@samsung.com>
+ >>      Signed-off-by: Jaehoon Chung <jh80.chung@samsung.com>
+ >>      Signed-off-by: Chris Ball <cjb@laptop.org>
 
-As far as I know the guest kernel I hand to qemu doesn't really
-matter, but the gist of my qemu command line is:
+Here's what I found in the spec JESD84-B51:
+ > 6.6.31 Cache
+ > Caching of data shall apply only for the single block
+ > read/write(CMD17/24), pre-defined multiple block
+ > read/write(CMD23+CMD18/25) and open ended multiple block
+ > read/write(CMD18/25+CMD12) commands and excludes any other access
+ > e.g., to the register space(e.g., CMD6).
+Which means with CMD18/25+CMD12 (without using CMD23), the cache can 
+also be enabled. Maybe this could be an evidence of the independence 
+between enabling-cache and cmd23/reliable-write?
 
-qemu-system-x86_64 -m 2048 -name "$NAME" -machine pc,accel=kvm \
-    -nographic -no-user-config -nodefaults -boot strict=on \
-    -rtc base=utc -smp 1,sockets=1,cores=1,threads=1 \
-    -chardev pipe,id=char0,path="$DIR/monitor" \
-    -chardev pty,id=char1 \
-    -device isa-serial,chardev=char1 \
-    -device virtio-blk-pci,drive=blk0,bootindex=1 \
-    -device virtio-net-pci,netdev=net0,"mac=$IF_MAC" \
-    -device virtio-rng-pci,rng=rng0,max-bytes=1024,period=3000 \
-    -drive "id=blk0,file=/dev/S/$NAME,if=none,format=raw,cache=none" \
-    -mon chardev=char0,id=monitor,mode=control \
-    -netdev "tap,id=net0,ifname=$NAME,script=no,downscript=no" \
-    -object rng-random,id=rng0,filename=/dev/random
+2. We don't consider supporting SD in this change.
 
+ > On 14/03/2022 19:10, Avri Altman wrote:
+ >> Here is what our SD system guys wrote:
+ >> " In SD we don’t support reliable write and this eMMC driver may not 
+ >>    be utilizing the cache feature we added in SD5.0.
+ >>   The method of cache flush is different between SD and eMMC."
+ >>
+ >> So adding SD seems to be out of scope of this change.
 
-No clue what additional debugging would help to enable here, if
-anything.  As you can see from the dmesg, I'm using gcc 11.2.0 from
-Debian unstable, 4:11.2.0-2 to be exact.  Let me know what other
-information would be useful.
+Is there anything else I can do about this patch? Thanks again.
 
 -- 
-Jamie Heilman                     http://audible.transient.net/~jamie/
+Best Regards,
+Michael Wu

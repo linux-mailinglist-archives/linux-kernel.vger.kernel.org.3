@@ -2,106 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86994DA8CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDC44DA8D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353388AbiCPDRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S1353450AbiCPDS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbiCPDRt (ORCPT
+        with ESMTP id S234584AbiCPDSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:17:49 -0400
-Received: from spam.unicloud.com (mx.unispc.com [220.194.70.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CED55E15C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:16:35 -0700 (PDT)
-Received: from eage.unicloud.com ([220.194.70.35])
-        by spam.unicloud.com with ESMTP id 22G3GIB8054293;
-        Wed, 16 Mar 2022 11:16:19 +0800 (GMT-8)
-        (envelope-from luofei@unicloud.com)
-Received: from localhost.localdomain (10.10.1.7) by zgys-ex-mb09.Unicloud.com
- (10.10.0.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2375.17; Wed, 16
- Mar 2022 11:16:18 +0800
-From:   luofei <luofei@unicloud.com>
-To:     <mike.kravetz@oracle.com>, <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        luofei <luofei@unicloud.com>
-Subject: [PATCH v2] hugetlb: Fix comments about avoiding atomic allocation of vmemmap pages
-Date:   Tue, 15 Mar 2022 23:16:02 -0400
-Message-ID: <20220316031602.377452-1-luofei@unicloud.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 15 Mar 2022 23:18:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB84E5E15C;
+        Tue, 15 Mar 2022 20:17:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A336FB8181C;
+        Wed, 16 Mar 2022 03:17:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6187C340E8;
+        Wed, 16 Mar 2022 03:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647400628;
+        bh=PlSgv56mxNRopY1yc16lOuudQ7ENlgRXJivgph2Ss9M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UGPsFoLJYgTGlZ8MU0IVJ+3MuoMplzorQGMbSsXLoCyfFEKaiRK3+TYtaOfynic2m
+         hZWSpYmyL6rCTW/6D3M0L26M1HviLCZjpIuKbvq1gYizHSCjiKPZ/KmvvQMuNwUcyt
+         xOBuGqSHSC4W3sDacQczboPIPIksiFQ4notEKneTAEIB+ATiZl8qmGlAIUVOMV3Ms1
+         Nw1azlYZNZi58uJTV56EoeGZRK5SIuAo1+1kzgbGHjpbFKi7j7FOG2EWccTsNeK7qb
+         BgMB2kTc+O8VBHFLVtIfz+wDbeNAcIVv8u7BivUe2mwN6v2v7ml2bVCclcmNydvjLl
+         JRa/hfmpuIvDQ==
+Date:   Tue, 15 Mar 2022 20:17:06 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     menglong8.dong@gmail.com
+Cc:     dsahern@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        xeb@mail.ru, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
+        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
+        flyingpeng@tencent.com, mengensun@tencent.com,
+        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Biao Jiang <benbjiang@tencent.com>
+Subject: Re: [PATCH net-next 3/3] net: ipgre: add skb drop reasons to
+ gre_rcv()
+Message-ID: <20220315201706.464d5ecd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220314133312.336653-4-imagedong@tencent.com>
+References: <20220314133312.336653-1-imagedong@tencent.com>
+        <20220314133312.336653-4-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.10.1.7]
-X-ClientProxiedBy: zgys-ex-mb11.Unicloud.com (10.10.0.28) To
- zgys-ex-mb09.Unicloud.com (10.10.0.24)
-X-DNSRBL: 
-X-MAIL: spam.unicloud.com 22G3GIB8054293
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since there is no longer an atomic allocation of vmemmap pages,
-but a fixed flag(GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE) is
-used. The description of atomicity here is some what inappropriate.
+On Mon, 14 Mar 2022 21:33:12 +0800 menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> Replace kfree_skb() used in gre_rcv() with kfree_skb_reason(). With
+> previous patch, we can tell that no tunnel device is found when
+> PACKET_NEXT is returned by erspan_rcv() or ipgre_rcv().
+> 
+> In this commit, following new drop reasons are added:
+> 
+> SKB_DROP_REASON_GRE_CSUM
+> SKB_DROP_REASON_GRE_NOTUNNEL
+> 
+> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+> Reviewed-by: Biao Jiang <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  include/linux/skbuff.h     |  2 ++
+>  include/trace/events/skb.h |  2 ++
+>  net/ipv4/ip_gre.c          | 28 ++++++++++++++++++----------
+>  3 files changed, 22 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 5edb704af5bb..4f5e58e717ee 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -448,6 +448,8 @@ enum skb_drop_reason {
+>  	SKB_DROP_REASON_GRE_NOHANDLER,	/* no handler found (version not
+>  					 * supported?)
+>  					 */
+> +	SKB_DROP_REASON_GRE_CSUM,	/* GRE csum error */
+> +	SKB_DROP_REASON_GRE_NOTUNNEL,	/* no tunnel device found */
+>  	SKB_DROP_REASON_MAX,
+>  };
+>  
+> diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
+> index f2bcffdc4bae..e8f95c96cf9d 100644
+> --- a/include/trace/events/skb.h
+> +++ b/include/trace/events/skb.h
+> @@ -63,6 +63,8 @@
+>  	EM(SKB_DROP_REASON_TAP_TXFILTER, TAP_TXFILTER)		\
+>  	EM(SKB_DROP_REASON_GRE_VERSION, GRE_VERSION)		\
+>  	EM(SKB_DROP_REASON_GRE_NOHANDLER, GRE_NOHANDLER)	\
+> +	EM(SKB_DROP_REASON_GRE_CSUM, GRE_CSUM)			\
+> +	EM(SKB_DROP_REASON_GRE_NOTUNNEL, GRE_NOTUNNEL)		\
+>  	EMe(SKB_DROP_REASON_MAX, MAX)
+>  
+>  #undef EM
+> diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+> index b1579d8374fd..b989239e4abc 100644
+> --- a/net/ipv4/ip_gre.c
+> +++ b/net/ipv4/ip_gre.c
+> @@ -421,9 +421,10 @@ static int ipgre_rcv(struct sk_buff *skb, const struct tnl_ptk_info *tpi,
+>  
+>  static int gre_rcv(struct sk_buff *skb)
+>  {
+> +	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
+>  	struct tnl_ptk_info tpi;
+>  	bool csum_err = false;
+> -	int hdr_len;
+> +	int hdr_len, ret;
+>  
+>  #ifdef CONFIG_NET_IPGRE_BROADCAST
+>  	if (ipv4_is_multicast(ip_hdr(skb)->daddr)) {
+> @@ -438,19 +439,26 @@ static int gre_rcv(struct sk_buff *skb)
 
-And the atomic parameter naming of update_and_free_page() may
-be misleading, add a comment here.
+I feel like gre_parse_header() is a good candidate for converting
+to return a reason instead of errno.
 
-Signed-off-by: luofei <luofei@unicloud.com>
----
- mm/hugetlb.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index f8ca7cca3c1a..fbf598bbc4e3 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1569,10 +1569,12 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
- }
- 
- /*
-- * As update_and_free_page() can be called under any context, so we cannot
-- * use GFP_KERNEL to allocate vmemmap pages. However, we can defer the
-- * actual freeing in a workqueue to prevent from using GFP_ATOMIC to allocate
-- * the vmemmap pages.
-+ * Freeing hugetlb pages in done in update_and_free_page(). When freeing
-+ * a hugetlb page, vmemmap pages may need to be allocated. The routine
-+ * alloc_huge_page_vmemmap() can possibly sleep as it uses GFP_KERNEL.
-+ * However, update_and_free_page() can be called under any context. To
-+ * avoid the possibility of sleeping in a context where sleeping is not
-+ * allowed, defer the actual freeing in a workqueue where sleeping is allowed.
-  *
-  * free_hpage_workfn() locklessly retrieves the linked list of pages to be
-  * freed and frees them one-by-one. As the page->mapping pointer is going
-@@ -1616,6 +1618,10 @@ static inline void flush_free_hpage_work(struct hstate *h)
- 		flush_work(&free_hpage_work);
- }
- 
-+/*
-+ * atomic == true indicates called from a context where sleeping is
-+ * not allowed.
-+ */
- static void update_and_free_page(struct hstate *h, struct page *page,
- 				 bool atomic)
- {
-@@ -1625,7 +1631,8 @@ static void update_and_free_page(struct hstate *h, struct page *page,
- 	}
- 
- 	/*
--	 * Defer freeing to avoid using GFP_ATOMIC to allocate vmemmap pages.
-+	 * Defer freeing to avoid possible sleeping when allocating
-+	 * vmemmap pages.
- 	 *
- 	 * Only call schedule_work() if hpage_freelist is previously
- 	 * empty. Otherwise, schedule_work() had been called but the workfn
--- 
-2.27.0
+>  		goto drop;
+>  
+>  	if (unlikely(tpi.proto == htons(ETH_P_ERSPAN) ||
+> -		     tpi.proto == htons(ETH_P_ERSPAN2))) {
+> -		if (erspan_rcv(skb, &tpi, hdr_len) == PACKET_RCVD)
+> -			return 0;
+> -		goto out;
+> -	}
+> +		     tpi.proto == htons(ETH_P_ERSPAN2)))
+> +		ret = erspan_rcv(skb, &tpi, hdr_len);
+> +	else
+> +		ret = ipgre_rcv(skb, &tpi, hdr_len);
+
+ipgre_rcv() OTOH may be better off taking the reason as an output
+argument. Assuming PACKET_REJECT means NOMEM is a little fragile.
+
+>  
+> -	if (ipgre_rcv(skb, &tpi, hdr_len) == PACKET_RCVD)
+> +	switch (ret) {
+> +	case PACKET_NEXT:
+> +		reason = SKB_DROP_REASON_GRE_NOTUNNEL;
+> +		break;
+> +	case PACKET_RCVD:
+>  		return 0;
+> -
+> -out:
+> +	case PACKET_REJECT:
+> +		reason = SKB_DROP_REASON_NOMEM;
+> +		break;
+> +	}
+>  	icmp_send(skb, ICMP_DEST_UNREACH, ICMP_PORT_UNREACH, 0);
+>  drop:
+> -	kfree_skb(skb);
+> +	if (csum_err)
+> +		reason = SKB_DROP_REASON_GRE_CSUM;
+> +	kfree_skb_reason(skb, reason);
+>  	return 0;
+>  }
+>  
 

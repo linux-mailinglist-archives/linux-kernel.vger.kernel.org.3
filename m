@@ -2,107 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA48F4DB787
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5694DB796
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356574AbiCPRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 13:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S1357707AbiCPRvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355558AbiCPRok (ORCPT
+        with ESMTP id S1349080AbiCPRvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:44:40 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252D717046
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 10:43:25 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 1CD1648F; Wed, 16 Mar 2022 13:43:24 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 1CD1648F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1647452604;
-        bh=Wl8eLmn2EyVMIbzbpeaNnxsMHJboV9nFjzpk/4KzOkE=;
-        h=Date:To:Cc:Subject:From:From;
-        b=zBBxlsA1m1y04DG77zWHK91zWwZexpegElKCeRRQsAAOGVz6jkaRT4Y43z0tHKno0
-         ZbEWWlpkHiM5RaWK4xfrJMEwtApTqrkUtJ91AFw/+uLgUfHBkRoDUS6MR6k2rG1mMv
-         u9zB9cXONokvgYmVbxprMe628XN95oMI3ESiscUE=
-Date:   Wed, 16 Mar 2022 13:43:24 -0400
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: failure to boot after dc6e0818bc9a "sched/cpuacct: Optimize away RCU
- read lock"
-Message-ID: <20220316174324.GA16511@fieldses.org>
+        Wed, 16 Mar 2022 13:51:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8124B6B09F;
+        Wed, 16 Mar 2022 10:49:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43C2A1476;
+        Wed, 16 Mar 2022 10:49:52 -0700 (PDT)
+Received: from [10.57.6.128] (unknown [10.57.6.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8815B3F66F;
+        Wed, 16 Mar 2022 10:49:50 -0700 (PDT)
+Subject: Re: [PATCH v2 1/1] perf test arm64: Test unwinding using fame-pointer
+ (fp) mode
+To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     mark.rutland@arm.com, namhyung@kernel.org, leo.yan@linaro.org,
+        Alexandre.Truong@arm.com, Jiri Olsa <jolsa@kernel.org>
+References: <20220316172015.98000-1-german.gomez@arm.com>
+ <592a32d6-b618-951c-9db9-711d022ff85e@arm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <b2ff473a-f252-89c9-78b3-bacff2876869@arm.com>
+Date:   Wed, 16 Mar 2022 17:48:50 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <592a32d6-b618-951c-9db9-711d022ff85e@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of my test VMs has been failing to boot linux-next recently.  I
-finally got around to a bisect this morning, and it landed on the below.
 
-What other information would be useful to debug this?
+On 16/03/2022 17:30, James Clark wrote:
+>
+> On 16/03/2022 17:20, German Gomez wrote:
+>> Add a shell script to check that the call-graphs generated using frame
+>> pointers (--call-graph fp) are complete and not missing leaf functions:
+>>
+>>   | $ perf test 88 -v
+>>   |  88: Check Arm64 callgraphs are complete in fp mode                  :
+>>   | --- start ---
+>>   | test child forked, pid 8734
+>>   |  + Compiling test program (/tmp/test_program.Cz3yL)...
+>>   |  + Recording (PID=8749)...
+>>   |  + Stopping perf-record...
+>>   | test_program.Cz
+>>   |                  728 leaf
+>>   |                  753 parent
+>>   |                  76c main
+>>   | test child finished with 0
+>>   | ---- end ----
+>>   | Check Arm SPE callgraphs are complete in fp mode: Ok
+>>
+> Ran it on N1SDP and it passes, and it fails if b9f6fbb3b2c2 isn't applied.
 
---b.
+I forgot to mention in the notes that it's supposed to work with both unwinders:
 
-commit dc6e0818bc9a
-Author: Chengming Zhou <zhouchengming@bytedance.com>
-Date:   Sun Feb 20 13:14:25 2022 +0800
+$ make                # for libunwind (default)
+$ make NO_LIBUNWIND=1 # for libdw
 
-    sched/cpuacct: Optimize away RCU read lock
-    
-    Since cpuacct_charge() is called from the scheduler update_curr(),
-    we must already have rq lock held, then the RCU read lock can
-    be optimized away.
-    
-    And do the same thing in it's wrapper cgroup_account_cputime(),
-    but we can't use lockdep_assert_rq_held() there, which defined
-    in kernel/sched/sched.h.
-    
-    Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-    Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-    Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-    Link: https://lore.kernel.org/r/20220220051426.5274-2-zhouchengming@bytedance.com
-
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 75c151413fda..9a109c6ac0e0 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -791,11 +791,9 @@ static inline void cgroup_account_cputime(struct task_struct *task,
- 
- 	cpuacct_charge(task, delta_exec);
- 
--	rcu_read_lock();
- 	cgrp = task_dfl_cgroup(task);
- 	if (cgroup_parent(cgrp))
- 		__cgroup_account_cputime(cgrp, delta_exec);
--	rcu_read_unlock();
- }
- 
- static inline void cgroup_account_cputime_field(struct task_struct *task,
-diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
-index 307800586ac8..f79f88456d72 100644
---- a/kernel/sched/cpuacct.c
-+++ b/kernel/sched/cpuacct.c
-@@ -337,12 +337,10 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
- 	unsigned int cpu = task_cpu(tsk);
- 	struct cpuacct *ca;
- 
--	rcu_read_lock();
-+	lockdep_assert_rq_held(cpu_rq(cpu));
- 
- 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
- 		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
--
--	rcu_read_unlock();
- }
- 
- /*
+>
+> Reviewed-by: James Clark <james.clark@arm.com>
+>
+>> Fixes: b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
+>> Suggested-by: Jiri Olsa <jolsa@kernel.org>
+>> Signed-off-by: German Gomez <german.gomez@arm.com>
+>> ---
+>> Changes since v1: https://lore.kernel.org/all/a6ba0ea8-f070-9f79-f018-f638ff677c7c@arm.com/
+>>  - Add explicit '-g' flag to GCC command
+>> ---
+>>  .../perf/tests/shell/test_arm_callgraph_fp.sh | 68 +++++++++++++++++++
+>>  1 file changed, 68 insertions(+)
+>>  create mode 100755 tools/perf/tests/shell/test_arm_callgraph_fp.sh
+>>
+>> diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+>> new file mode 100755
+>> index 000000000..ea1b4e6bb
+>> --- /dev/null
+>> +++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+>> @@ -0,0 +1,68 @@
+>> +#!/bin/sh
+>> +# Check Arm64 callgraphs are complete in fp mode
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +lscpu | grep -q "aarch64" || exit 2
+>> +
+>> +if ! [ -x "$(command -v cc)" ]; then
+>> +	echo "failed: no compiler, install gcc"
+>> +	exit 2
+>> +fi
+>> +
+>> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+>> +TEST_PROGRAM_SOURCE=$(mktemp /tmp/test_program.XXXXX.c)
+>> +TEST_PROGRAM=$(mktemp /tmp/test_program.XXXXX)
+>> +
+>> +cleanup_files()
+>> +{
+>> +	rm -f $PERF_DATA
+>> +	rm -f $TEST_PROGRAM_SOURCE
+>> +	rm -f $TEST_PROGRAM
+>> +}
+>> +
+>> +trap cleanup_files exit term int
+>> +
+>> +cat << EOF > $TEST_PROGRAM_SOURCE
+>> +int a = 0;
+>> +void leaf(void) {
+>> +  for (;;)
+>> +    a += a;
+>> +}
+>> +void parent(void) {
+>> +  leaf();
+>> +}
+>> +int main(void) {
+>> +  parent();
+>> +  return 0;
+>> +}
+>> +EOF
+>> +
+>> +echo " + Compiling test program ($TEST_PROGRAM)..."
+>> +
+>> +CFLAGS="-g -O0 -fno-inline -fno-omit-frame-pointer"
+>> +cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
+>> +
+>> +# Add a 1 second delay to skip samples that are not in the leaf() function
+>> +perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 -- $TEST_PROGRAM 2> /dev/null &
+>> +PID=$!
+>> +
+>> +echo " + Recording (PID=$PID)..."
+>> +sleep 2
+>> +echo " + Stopping perf-record..."
+>> +
+>> +kill $PID
+>> +wait $PID
+>> +
+>> +# expected perf-script output:
+>> +#
+>> +# program 
+>> +# 	728 leaf
+>> +# 	753 parent
+>> +# 	76c main
+>> +# ...
+>> +
+>> +perf script -i $PERF_DATA -F comm,ip,sym | head -n4
+>> +perf script -i $PERF_DATA -F comm,ip,sym | head -n4 | \
+>> +	awk '{ if ($2 != "") sym[i++] = $2 } END { if (sym[0] != "leaf" ||
+>> +						       sym[1] != "parent" ||
+>> +						       sym[2] != "main") exit 1 }'

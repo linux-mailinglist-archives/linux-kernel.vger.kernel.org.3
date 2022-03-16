@@ -2,67 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502834DAC69
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3527C4DAC67
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354531AbiCPI1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S1354523AbiCPI04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346342AbiCPI1F (ORCPT
+        with ESMTP id S1346342AbiCPI0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:27:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EB463BCB;
-        Wed, 16 Mar 2022 01:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=gGe/Q0wOH7lGIxRZWER5mI2apc8gnY7qZBwZGULV7Yc=; b=prVGffOvR1csAnss6IzmG07sJw
-        SawdYeP/IhPi123rRKEDUxEUaULOh74V2dpIgdJNtoZd/WwXniGNrw4MJlUrCSMAKnsb1X3CfzHHF
-        DzjHoht+5W4EkMahRa3u4P+X3sintVKzvMj0K1y0vX35EKJbsuJx2KimIikOjCovl2piB1p+mHQZc
-        cGeu0b+oQ185+I0zm2Uqtl3LGu719oid+PtGbGDXSfZ/gdTwTb+EC7TxzHA+VMZzg4gcCsIbw/uEo
-        BuZrA6fvWtY36Xjif7TUbnfKkh7JfQJ2vm5Ch0uL9zkGUiW98vVplHynPl/1IKz6YJpnbm94iu4Dw
-        OD6vJXOw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUOyF-00C6pX-4R; Wed, 16 Mar 2022 08:25:27 +0000
-Date:   Wed, 16 Mar 2022 01:25:27 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     Maninder Singh <maninder1.s@samsung.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "v.narang@samsung.com" <v.narang@samsung.com>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "avimalin@gmail.com" <avimalin@gmail.com>,
-        "atomlin@redhat.com" <atomlin@redhat.com>
-Subject: Re: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
- disabled
-Message-ID: <YjGe961XL8GW7Qeh@bombadil.infradead.org>
-References: <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcas5p2.samsung.com>
- <20220315155100.516107-1-maninder1.s@samsung.com>
- <YjDScHjMUbqYV4s4@bombadil.infradead.org>
- <62c74547-deb0-539a-c1cc-64b2ac334c94@csgroup.eu>
+        Wed, 16 Mar 2022 04:26:54 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D74E5F251
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:25:40 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 80D583F601
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647419139;
+        bh=FTwSx/3HEgnMDE/GY4NSGet5opQ0xemL0ZN3Wo9yDNs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=U1S8Zk+SpsDkBDBqG5kogTNRGhU8mqboWGqyMEUkZ6IhOl5i6AqPhvRtv5KSNSgwv
+         g7mYvdGFGcajV1LSEtulr4PueRMnbm6iPZ8qkS5le3gRtrXAXbTtnCDLi/g1K3mJgQ
+         FFs2Dj+kZNytVdsWNeR+opY//6zTVIXtJ1uIwZQkvuKTIjwsje3mq9FIjrT287NrfU
+         K8pUDtdz74rozEtVucgDTJ1YhKnP6NvLee0X7dbXq6cxEwLsdVDmqhLIXQx2jqykCE
+         +v1ZiufVTIvquaICZtxPmMjfgZ6WNao0VXas1jcSe9H6/ETupd15lvhupfxRUrv4x1
+         oQQw+fv7sebtA==
+Received: by mail-ej1-f69.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso739737ejk.17
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:25:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FTwSx/3HEgnMDE/GY4NSGet5opQ0xemL0ZN3Wo9yDNs=;
+        b=EqpirLqrH4f77fWlwhKtX91R3qbES52npuQCNVSIpxjpSwifSfwtbu0kiq929mNzbA
+         KoBYSvdUwTwYgqUGbH+vKj0sq474BnsZ4aLMAco/arQkV7hZKxzJ9S8L23RZcLrpEFjf
+         bl+8AHWn2oyna7HuFYBhZhJii/kOfPAqlrTLPeJyqK3CRhpt7uI7FUX/tJkaRIt+TJbZ
+         A/eR7fCeGdFC8gevT2nieE9v8PyZ2sXPHb3A7QhZqgWeTWyzhEbna2YSmAErNPcrzuRn
+         aXUYoffYwb2xRUu73zDmH0eF47rWFCSk8qgWRVAhLpVOpZw6ljA0O404G3lSE9KffUgG
+         bCvQ==
+X-Gm-Message-State: AOAM530W1+evwcqtG6S+WoSATzvr1uoo/mMoxz/UJsr1DuBoKQgbFFfP
+        yPQ2kJLBPuHp0X72e+oMSXj5JGpXQHthdy1cobbq0hbqtQWv4pyrdXg0/CDnD+3qoTwbu5GQP5L
+        5VFJhdpFCp+jGJT+BXA/Yu8FbGnp8XJt6i9BcCjfCgQ==
+X-Received: by 2002:a05:6402:50ce:b0:416:798c:b167 with SMTP id h14-20020a05640250ce00b00416798cb167mr28339631edb.136.1647419138652;
+        Wed, 16 Mar 2022 01:25:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy2ikOjr+WheFDi+pUjy+MT9UyQ3T3j2eKC6+Xohw9h/2uGCDp47REhaIhuhWr5jd6ti+bnuQ==
+X-Received: by 2002:a05:6402:50ce:b0:416:798c:b167 with SMTP id h14-20020a05640250ce00b00416798cb167mr28339619edb.136.1647419138445;
+        Wed, 16 Mar 2022 01:25:38 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id fq6-20020a1709069d8600b006db088ca6d0sm566636ejc.126.2022.03.16.01.25.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 01:25:37 -0700 (PDT)
+Message-ID: <18cf03b5-631a-e97f-dbb8-0fa93c8784cf@canonical.com>
+Date:   Wed, 16 Mar 2022 09:25:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62c74547-deb0-539a-c1cc-64b2ac334c94@csgroup.eu>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: timer: Convert rda,8810pl-timer to YAML
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-unisoc@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220225173734.GA7573@standask-GA-A55M-S2HP>
+ <20220315140140.GA2558@standask-GA-A55M-S2HP>
+ <09e8fdab-978b-fa9d-9e45-f8625ebc9c52@canonical.com>
+ <04887e91-3116-c7fa-ac48-5d0ca8e42994@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <04887e91-3116-c7fa-ac48-5d0ca8e42994@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,70 +90,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 06:40:02AM +0000, Christophe Leroy wrote:
-> Hi Luis
+On 15/03/2022 20:02, Daniel Lezcano wrote:
+> On 15/03/2022 19:26, Krzysztof Kozlowski wrote:
+>> On 15/03/2022 15:01, Stanislav Jakubek wrote:
+>>> Hi all,
+>>>
+>>> anything holding this back? It's been sitting on the mailing lists
+>>> with 2 R-B's for ~2 weeks.
+>>
+>> Maybe it's too late in the cycle for Daniel to take this?
+>>
+>> Daniel,
+>>
+>> If you are waiting for Rob's ack, mine should be sufficient.
 > 
-> 
-> Le 15/03/2022 à 18:52, Luis Chamberlain a écrit :
-> > On Tue, Mar 15, 2022 at 09:21:00PM +0530, Maninder Singh wrote:
-> >>   include/linux/kallsyms.h |  2 +
-> >>   include/linux/module.h   | 20 ++++++++++
-> >>   kernel/kallsyms.c        | 27 +++++++------
-> >>   kernel/module.c          |  4 +-
-> >>   lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
-> > 
-> > Hey Maninder, thanks for your patch!
-> > 
-> > Since this touches kernel/module.c and include/linux/module.h I'd prefer
-> > this go through modules-next [0], and as you will see that's a different
-> > world right now. I also have a set of at least 2 other patch sets to
-> > merge there before yours.
-> > 
-> > Also, what is on modules-next is not intended to go to Linus for the
-> > next merge window as the changes there got merged only late, and I want
-> > at least 2 months of testing on linux-newt before any pull requiest is
-> > sent to Linus.
-> > 
-> > Can you rebase to modules-next? I can evaluate the patches then for
-> > integration there once the other stuff gets merged into that tree too.
-> > 
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
-> > 
-> 
-> I can't see Aaron's series on modules-next yet, do you plan to merge it 
-> anytime soon ?
-> 
-> As you say, it will be a different world by then.
-> 
-> I have my series rebases on top of latest Aaron's series, but I was 
-> waiting that it lands in modules-next. How do you plan to proceed ?
+> Right usually, I'm waiting for Rob's ack before picking these changes.
 
-Yes sorry about that, modules-testing is what had Aaron's code. And
-Aaron noted that from his series 13/14 and 14/14 from his series
-had their Message-Id modified accidently via git-send-email. Given
-*current events* and since I use b4 am to verify KSIM signatures
-I asked Aaron to wait and post a v12 to aggregate further reviews
-and acked-by's. The reason being that if his v11 series has issues
-I rather start from a very clean patchset.
+Which is fine :) but for the record (since information spreads slowly):
+https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=d029175f1420931e8d855868d264c4685687f3fd
 
-Yes I am paranoid :)
 
-Anyway so Aaron, let's give it a few more days, and please then post a
-v12 collecing all new tags, then I'll apply your changes and then try to
-apply Christophe's.
-
-There was some work by Michal Suchánek which would go after, but
-its unclear if that's yet vetted by their other respective maintainers.
-Michal?
-
-Anyway, your stuff is at the end of the train after Michal's if that
-stuff is really ready. So please don't be surprised if you later have
-to rebase once again, or two or 3 times more. Thanks for your patience.
-
-I know this has been quite a bit of churn, but given Aaron's series I
-really hope we're goint to be in a better place for maintenance for
-modules long term.
-
-I guess I gotta go automate tests to these things somehow too.
-
-  Luis
+Best regards,
+Krzysztof

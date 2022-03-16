@@ -2,157 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960AA4DB8EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C864DB8F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343506AbiCPTiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S1351077AbiCPTjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238244AbiCPTit (ORCPT
+        with ESMTP id S1344825AbiCPTjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:38:49 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC166211D;
-        Wed, 16 Mar 2022 12:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647459454; x=1678995454;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VoK7NCHknJwS9CczrBoyoyzwwOqpTK80AgOJjhOYGzQ=;
-  b=TI011b3GxCKjXdsI65+orEqr0HKZoJxyaTALmWQ7Nj49PWhXLO4KcYEj
-   DkAqT2yhTRVKXJ3kNr00l0+UzF3nTkRlNpOgCGhnNuqU5uxmEKJDhNuv4
-   A2HXplAiF9PqPqeq34Ji9JIQvNEUTU4rp1LngkdXUESUzrPZfxW2XD/Z4
-   inRN7S/8fi1lmxBk6dhAYQYmTW/QpLTg5buU553DurZeFr2gMXmjSmTSx
-   CWIkgkos3GofpJVL8vtmWGYUzPfBQEyAfpEKkEgAuTwVCCaN2yGAil8ZC
-   uWbWDxYcS2yEDVVA32wRP+rlmCIQQS/SbhIHmn3a+hpU+rPFkHiLFAfOp
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317416690"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="317416690"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 12:37:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="513158149"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2022 12:37:28 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUZSa-000CoG-0a; Wed, 16 Mar 2022 19:37:28 +0000
-Date:   Thu, 17 Mar 2022 03:37:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
-        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org
-Cc:     kbuild-all@lists.01.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
-Subject: Re: [PATCH v5 04/22] cachefiles: notify user daemon with anon_fd
- when looking up cookie
-Message-ID: <202203170323.idYrKxCZ-lkp@intel.com>
-References: <20220316131723.111553-5-jefflexu@linux.alibaba.com>
+        Wed, 16 Mar 2022 15:39:35 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2EE28E16
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:38:19 -0700 (PDT)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 20CD83F1E8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647459493;
+        bh=6+h9BeibtnFt0Fy4V0bEz+bagkoBJTSRfdm71NC24xs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=qsZipiORv/nFk23zk3TB6ijV+rP1RnwVvsblAxN7JTa7UKNvcIIpSQZeStEwJRTNf
+         EtYuJqzoGq8sLvWf5DDEd3THm1iEA/ryQaqR1AmmRcpvqyHHNfZLkkvkL41ExUXecG
+         Wtz1tcFBdnOxadFd2DCXVuH2TFC7/m7d+vlVCGNpY8PUcycZloZw3U7dSe40gsOuBp
+         OWbvjWSYqF99PqGONGin62JK0xf/LyFYf8F3stWMw6/EUSwf7jZcRxKN2Jjj0S/PZx
+         lskY7xlovtPVUo3Jkzu++rCS2OfQ25H2UCHTw5cYcyqpLD6GRhvyLGxj8zidm0EA3K
+         UDk2pXdpdxunA==
+Received: by mail-wr1-f69.google.com with SMTP id f9-20020a5d58e9000000b001f0247e5e96so881391wrd.15
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:38:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6+h9BeibtnFt0Fy4V0bEz+bagkoBJTSRfdm71NC24xs=;
+        b=sx/9b0H+rhxqvtNCZdQc7YujdIYnz0YOVc9WOCktWgJZlCP/BYupOcHTsV5nsZy8cC
+         9+iSQ3s5jb954S3NAgqRowwSOuu+Vi91K5fp90yGjwYIsgLnB/23pfBNjma6byDG4Rvo
+         162sTSY/b/hhNyMFHecAKpn/ABF3Yw3qRgZr3oLIyYgADolxpw/9iXCoulBywHSWlwZE
+         Co6RUdLC5hCzmYCcjtw+qubVZLjMAbs99kb3SZCO6X/GwVxaICwY3pC0AStZucTnaysf
+         wdbgqVsrhjHa67oyj2vG0N6WVk4EaxldqLk41506OoPQmbQmMRuhJ4NwFtqYZDSy+AAw
+         Qv0w==
+X-Gm-Message-State: AOAM531vd67S5SpYUUeYVf0WoDmPYq28YZi89gxyQV3MT6YmmjqIWX5+
+        fNk6gsahbGkuKMMLYhi1I0cbVV2rn5plgOcG2HjcP06lJHARvAWaGmTgM3Vh3K7pua0E7d34gpX
+        xXX55law1H30S6cp8Z2rP/ZnTeHmw874X1z0e9c6r/Q==
+X-Received: by 2002:a05:600c:4796:b0:386:45aa:667b with SMTP id k22-20020a05600c479600b0038645aa667bmr1045812wmo.104.1647459492725;
+        Wed, 16 Mar 2022 12:38:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwz2q+ZfMVNL/xv6DCH0VHKA2cCReGbKqid/bgaItjng219g1bFLER3WRAwMzoyrwOoAn1bTw==
+X-Received: by 2002:a05:600c:4796:b0:386:45aa:667b with SMTP id k22-20020a05600c479600b0038645aa667bmr1045789wmo.104.1647459492463;
+        Wed, 16 Mar 2022 12:38:12 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id c7-20020a5d4f07000000b00203db8f13c6sm2300253wru.75.2022.03.16.12.38.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 12:38:11 -0700 (PDT)
+Message-ID: <0cc4e90d-c5e5-e6a3-6cc6-23d3058b9731@canonical.com>
+Date:   Wed, 16 Mar 2022 20:38:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316131723.111553-5-jefflexu@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 11/11] rpmsg: Fix kfree() of static memory on setting
+ driver_override
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        stable@vger.kernel.org
+References: <20220316150533.421349-1-krzysztof.kozlowski@canonical.com>
+ <20220316150803.421897-5-krzysztof.kozlowski@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220316150803.421897-5-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeffle,
+On 16/03/2022 16:08, Krzysztof Kozlowski wrote:
+> The driver_override field from platform driver should not be initialized
+> from static memory (string literal) because the core later kfree() it,
+> for example when driver_override is set via sysfs.
+> 
+> Use dedicated helper to set driver_override properly.
+> 
+> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
+> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/rpmsg/rpmsg_core.c     |  3 ++-
+>  drivers/rpmsg/rpmsg_internal.h | 11 +++++++++--
+>  drivers/rpmsg/rpmsg_ns.c       | 14 ++++++++++++--
+>  include/linux/rpmsg.h          |  6 ++++--
+>  4 files changed, 27 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 79368a957d89..95fc283f6af7 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -400,7 +400,8 @@ field##_store(struct device *dev, struct device_attribute *attr,	\
+>  	      const char *buf, size_t sz)				\
+>  {									\
+>  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);		\
+> -	char *new, *old;						\
+> +	const char *old;						\
+> +	char *new;							\
+>  									\
+>  	new = kstrndup(buf, sz, GFP_KERNEL);				\
+>  	if (!new)							\
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index d4b23fd019a8..dd1f4ed616b6 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -95,9 +95,16 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
+>  static inline int rpmsg_ctrldev_register_device(struct rpmsg_device *rpdev)
+>  {
+>  	strcpy(rpdev->id.name, "rpmsg_ctrl");
+> -	rpdev->driver_override = "rpmsg_ctrl";
+> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
+> +				  "rpmsg_ctrl", strlen("rpmsg_ctrl"));
 
-Thank you for the patch! Yet something to improve:
+I made here a mistake while rebasing. This will need a v6.
 
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on rostedt-trace/for-next linus/master v5.17-rc8]
-[cannot apply to xiang-erofs/dev-test dhowells-fs/fscache-next next-20220316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220316-214711
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-config: ia64-randconfig-r033-20220317 (https://download.01.org/0day-ci/archive/20220317/202203170323.idYrKxCZ-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/ef29cbdc09ec1e6ab918eaf5a16fa7ba8d23fb54
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220316-214711
-        git checkout ef29cbdc09ec1e6ab918eaf5a16fa7ba8d23fb54
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash fs/cachefiles/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/ia64/include/asm/pgtable.h:153,
-                    from include/linux/pgtable.h:6,
-                    from arch/ia64/include/asm/uaccess.h:40,
-                    from include/linux/uaccess.h:11,
-                    from include/linux/sched/task.h:11,
-                    from include/linux/sched/signal.h:9,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from fs/cachefiles/daemon.c:13:
-   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
-   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
-     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
-         |                                                ^~~~~~~
-   fs/cachefiles/daemon.c: In function 'cachefiles_ondemand_fd_write_iter':
->> fs/cachefiles/daemon.c:160:26: error: invalid use of undefined type 'struct iov_iter'
-     160 |         size_t len = iter->count;
-         |                          ^~
-
-
-vim +160 fs/cachefiles/daemon.c
-
-   153	
-   154	static ssize_t cachefiles_ondemand_fd_write_iter(struct kiocb *kiocb,
-   155							 struct iov_iter *iter)
-   156	{
-   157		struct cachefiles_object *object = kiocb->ki_filp->private_data;
-   158		struct cachefiles_cache *cache = object->volume->cache;
-   159		struct file *file = object->file;
- > 160		size_t len = iter->count;
-   161		loff_t pos = kiocb->ki_pos;
-   162		const struct cred *saved_cred;
-   163		int ret;
-   164	
-   165		if (!file)
-   166			return -ENOBUFS;
-   167	
-   168		cachefiles_begin_secure(cache, &saved_cred);
-   169		ret = __cachefiles_prepare_write(object, file, &pos, &len, true);
-   170		cachefiles_end_secure(cache, saved_cred);
-   171		if (ret < 0)
-   172			return ret;
-   173	
-   174		ret = __cachefiles_write(object, file, pos, iter, NULL, NULL);
-   175		if (!ret)
-   176			ret = len;
-   177	
-   178		return ret;
-   179	}
-   180	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best regards,
+Krzysztof

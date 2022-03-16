@@ -2,70 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF444DB864
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960C94DB869
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357831AbiCPTJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
+        id S244275AbiCPTOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiCPTJF (ORCPT
+        with ESMTP id S232884AbiCPTN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:09:05 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3DC6E4DD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:07:48 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22GJ7aGd092762;
-        Wed, 16 Mar 2022 14:07:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1647457656;
-        bh=N5ylJZ1K6pH9Ewh0ti3NqYFgD8V839oLAeuagKadsz0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=tOLYc0HrapKS2LqxUYFvFPZxuhZMSXLeiTl4X04fbvFvU+PYH0+yuhlFcZH+bImF6
-         yU1IjkFy4/rqTLmdohg8lxxk2k4P0LFqfDWr21mGoFH9d3p/WbTEKBK+pRiH1dtyB7
-         urPpUSLuldowfha+2A3EUeJqzJeOdZ97ggWCniOE=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22GJ7ak6050129
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Mar 2022 14:07:36 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 16
- Mar 2022 14:07:36 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 16 Mar 2022 14:07:36 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22GJ7Y5o027198;
-        Wed, 16 Mar 2022 14:07:35 -0500
-Date:   Thu, 17 Mar 2022 00:37:34 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <heiko.thiery@gmail.com>
-Subject: Re: [PATCH v1] mtd: spi-nor: unset quad_enable if SFDP doesn't
- specify it
-Message-ID: <20220316190734.ft2fnesptnyk2cdg@ti.com>
-References: <20220304185137.3376011-1-michael@walle.cc>
- <7f339d0c-5ca9-261c-a545-d4ebf3bda140@microchip.com>
- <92cde38c-d398-44f4-26f8-ef4919f5944e@microchip.com>
- <7f947928e7189f98eb950828990b3920@walle.cc>
- <91393780-1521-09b7-8dea-14c65e18b37e@microchip.com>
- <0cf8dbbf4ad005abd3db825fb257dedd@walle.cc>
- <33464af7-b445-6229-a02d-703a5ce6b5ef@microchip.com>
- <77c2c64f362b08cbbdab517bbaa49101@walle.cc>
- <683b7df7-cd34-c87b-9918-fd63d09df2f3@microchip.com>
+        Wed, 16 Mar 2022 15:13:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEF73F8BC
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:12:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CD3841F38A;
+        Wed, 16 Mar 2022 19:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647457962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s89diZDc/0UO/kAXwcmcq+96gKNNdCSstGV5toyPOdY=;
+        b=yCHge+ZnmEbqkHRHCyGMZDvHp0VUPHCQZfl3vFitAuCPETCd9VeWxzdTtE/FkAsYskEhYg
+        9dDU3iUv5zQak//oXr7pL96+pqv7/bE1NXoyiQO79ma/wI/RxMgsL+k4ovZgyxHiDIFj9a
+        SS4TrV4zlq1pSKPHUDHg7XwHtP7yUqU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647457962;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s89diZDc/0UO/kAXwcmcq+96gKNNdCSstGV5toyPOdY=;
+        b=F04IHBvMB5vnf/sUEadpTozRyrwlAT6U4V83nIIF3HMKGArmpmboY89cILakft2mlgWZXM
+        vaCAvzNnWA+CuhCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F13B13B5E;
+        Wed, 16 Mar 2022 19:12:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OCAvFqo2MmKjfwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 16 Mar 2022 19:12:42 +0000
+Message-ID: <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
+Date:   Wed, 16 Mar 2022 20:12:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <683b7df7-cd34-c87b-9918-fd63d09df2f3@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org
+References: <20220316183708.1505846-1-arnd@kernel.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220316183708.1505846-1-arnd@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------L2Kg8oL8rrM047Px9SyFRYB7"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,168 +90,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/22 07:47AM, Tudor.Ambarus@microchip.com wrote:
-> On 3/15/22 09:24, Michael Walle wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Am 2022-03-15 06:55, schrieb Tudor.Ambarus@microchip.com:
-> >> On 3/14/22 22:42, Michael Walle wrote:
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know
-> >>> the content is safe
-> >>>
-> >>> Am 2022-03-09 05:49, schrieb Tudor.Ambarus@microchip.com:
-> >>>> On 3/7/22 20:56, Michael Walle wrote:
-> >>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
-> >>>>> know
-> >>>>> the content is safe
-> >>>>>
-> >>>>> Am 2022-03-07 10:23, schrieb Tudor.Ambarus@microchip.com:
-> >>>>>> On 3/7/22 09:12, Tudor.Ambarus@microchip.com wrote:
-> >>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
-> >>>>>>> know
-> >>>>>>> the content is safe
-> >>>>>>>
-> >>>>>>> On 3/4/22 20:51, Michael Walle wrote:
-> >>>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
-> >>>>>>>> know the content is safe
-> >>>>>>>>
-> >>>>>>>> While the first version of JESD216 specify the opcode for 4 bit
-> >>>>>>>> I/O
-> >>>>>>>> accesses, it lacks information on how to actually enable this
-> >>>>>>>> mode.
-> >>>>>>>>
-> >>>>>>>> For now, the one set in spi_nor_init_default_params() will be
-> >>>>>>>> used.
-> >>>>>>>> But this one is likely wrong for some flashes, in particular the
-> >>>>>>>> Macronix MX25L12835F. Thus we need to clear the enable method
-> >>>>>>>> when
-> >>>>>>>> parsing the SFDP. Flashes with such an SFDP revision will have to
-> >>>>>>>> use
-> >>>>>>>> a
-> >>>>>>>> flash (and SFDP revision) specific fixup.
-> >>>>>>>>
-> >>>>>>>> This might break quad I/O for some flashes which relied on the
-> >>>>>>>> spi_nor_sr2_bit1_quad_enable() that was formerly set. If your
-> >>>>>>>> bisect
-> >>>>>>>> turns up this commit, you'll probably have to set the proper
-> >>>>>>>> quad_enable method in a post_bfpt() fixup for your flash.
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Right, I meant adding a paragraph such as the one from above.
-> >>>>>>>
-> >>>>>>>> Signed-off-by: Michael Walle <michael@walle.cc>
-> >>>>>>>> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-> >>>>>>>> ---
-> >>>>>>>> changes since RFC:
-> >>>>>>>>  - reworded commit message
-> >>>>>>>>  - added comment about post_bfpt hook
-> >>>>>>>>
-> >>>>>>>> Tudor, I'm not sure what you meant with
-> >>>>>>>>   Maybe you can update the commit message and explain why would
-> >>>>>>>> some
-> >>>>>>>>   flashes fail to enable quad mode, similar to what I did.
-> >>>>>>>>
-> >>>>>>>> It doesn't work because the wrong method is chosen? ;)
-> >>>>>>>>
-> >>>>>>>>  drivers/mtd/spi-nor/sfdp.c | 11 ++++++++++-
-> >>>>>>>>  1 file changed, 10 insertions(+), 1 deletion(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/drivers/mtd/spi-nor/sfdp.c
-> >>>>>>>> b/drivers/mtd/spi-nor/sfdp.c
-> >>>>>>>> index a5211543d30d..6bba9b601846 100644
-> >>>>>>>> --- a/drivers/mtd/spi-nor/sfdp.c
-> >>>>>>>> +++ b/drivers/mtd/spi-nor/sfdp.c
-> >>>>>>>> @@ -549,6 +549,16 @@ static int spi_nor_parse_bfpt(struct spi_nor
-> >>>>>>>> *nor,
-> >>>>>>>>         map->uniform_erase_type = map->uniform_region.offset &
-> >>>>>>>>                                   SNOR_ERASE_TYPE_MASK;
-> >>>>>>>>
-> >>>>>>>> +       /*
-> >>>>>>>> +        * The first JESD216 revision doesn't specify a method to
-> >>>>>>>> enable
-> >>>>>>>> +        * quad mode. spi_nor_init_default_params() will set a
-> >>>>>>>> legacy
-> >>>>>>>> +        * default method to enable quad mode. We have to disable
-> >>>>>>>> it
-> >>>>>>>> +        * again.
-> >>>>>>>> +        * Flashes with this JESD216 revision need to set the
-> >>>>>>>> quad_enable
-> >>>>>>>> +        * method in their post_bfpt() fixup if they want to use
-> >>>>>>>> quad
-> >>>>>>>> I/O.
-> >>>>>>>> +        */
-> >>>>>>>
-> >>>>>>> Great. Looks good to me. I'll change the subject to "mtd: spi-nor:
-> >>>>>>> sfdp:"
-> >>>>>>> when applying.
-> >>>>>>
-> >>>>>> As we talked on the meeting, we can instead move the default quad
-> >>>>>> mode
-> >>>>>> init
-> >>>>>> to the deprecated way of initializing the params, or/and to where
-> >>>>>> SKIP_SFDP
-> >>>>>> is used. This way you'll no longer need to clear it here.
-> >>>>>
-> >>>>> Mh, I just had a look and I'm not sure it will work there,
-> >>>>> because in the deprecated way, the SFDP is still parsed and
-> >>>>> thus we might still have the wrong enable method for flashes
-> >>>>> which don't have PARSE_SFDP set.
-> >>>>
-> >>>> Moving the default quad_enable method to
-> >>>> spi_nor_no_sfdp_init_params(),
-> >>>> thus also for spi_nor_init_params_deprecated() because it calls
-> >>>> spi_nor_no_sfdp_init_params(), will not change the behavior for the
-> >>>> deprecated way of initializing the params, isn't it?
-> >>>
-> >>> What do you mean? The behavior is not changed and the bug is not
-> >>> fixed for the flashes which use the deprecated way. It will get
-> >>> overwritten by the spi_nor_parse_sfdp call in
-> >>> spi_nor_sfdp_init_params_deprecated().
-> >>
-> >> right, it will not change the logic for the deprecated way of
-> >> initializing
-> >> the params.
-> >>
-> >>>
-> >>>> A more reason
-> >>>> to use PARSE_SFDP/SKIP_SFDP, we'll get rid of the deprecated params
-> >>>> init at some point.
-> >>>>
-> >>>> No new fixes for spi_nor_init_params_deprecated().
-> >>>
-> >>> Hm, so we deliberately won't fix known bugs there? I'm not sure
-> >>> I'd agree here. Esp. because it is hard to debug and might even
-> >>> depend on non-volatile state of the flash.
-> >>>
-> >>
-> >> even more a reason to switch to the recommended way of initializing
-> >> the flash. We'll get rid of the deprecated code anyway, no?
-> > 
-> > I get your point. But I disagree with you on that point :) Features?
-> > sure we can say this shouldn't go to any deprectated code flow and
-> > might poke users to post a patch. But bug fixes? I don't think
-> > we should hold these back.
-> 
-> Why to fix something that never worked in a deprecated code path? It's
-> equivalent to adding new support, no?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------L2Kg8oL8rrM047Px9SyFRYB7
+Content-Type: multipart/mixed; boundary="------------JRt57Q5cB0oCPiXsrDdvQSji";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Thierry Reding <thierry.reding@gmail.com>
+Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+ Jani Nikula <jani.nikula@intel.com>, Dillon Min <dillon.minfei@gmail.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ dri-devel@lists.freedesktop.org, Douglas Anderson <dianders@chromium.org>,
+ Deepak Rawat <drawat.floss@gmail.com>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
+ <noralf@tronnes.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>, Sam Ravnborg <sam@ravnborg.org>,
+ linux-kernel@vger.kernel.org
+Message-ID: <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
+Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
+References: <20220316183708.1505846-1-arnd@kernel.org>
+In-Reply-To: <20220316183708.1505846-1-arnd@kernel.org>
 
-I have not followed this discussion very closely but this argument makes 
-sense to me. If something never worked in the deprecated path then we 
-have don't have to fix it.
+--------------JRt57Q5cB0oCPiXsrDdvQSji
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> 
-> > Correct me if I'm wrong, but we can get rid of the deprecated way
-> > only if all the flashes are converted to PARSE_SFDP or SKIP_SFDP,
-> > right? And I don't see this happening anytime soon.
-> 
-> Right. I vote to don't queue any new patches for deprecated code paths,
-> new support or fixes. But I'm not completely against it, I don't see
-> the point, that's all. Let's sync with Pratyush and Vignesh too.
+SGkNCg0KQW0gMTYuMDMuMjIgdW0gMTk6MzYgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBG
+cm9tOiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiANCj4gVGhlIGRyaXZlciBm
+YWlscyB0byBidWlsZCB3aGVuIHRoZSBLTVMgaGVscGVycyBhcmUgZGlzYWJsZWQ6DQo+IA0K
+PiBsZC5sbGQ6IGVycm9yOiB1bmRlZmluZWQgc3ltYm9sOiBkcm1fZ2VtX2ZiX2dldF9vYmoN
+Cj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+PiAgICAgICAgICAgICAg
+ICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2RiaV9idWZfY29weSkgaW4gYXJjaGl2
+ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmku
+Yw0KPj4+PiAgICAgICAgICAgICAgICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
+aV9mYl9kaXJ0eSkgaW4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IGxkLmxs
+ZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9nZW1fZmJfYmVnaW5fY3B1X2FjY2Vz
+cw0KPj4+PiByZWZlcmVuY2VkIGJ5IGRybV9taXBpX2RiaS5jDQo+Pj4+ICAgICAgICAgICAg
+ICAgIGdwdS9kcm0vZHJtX21pcGlfZGJpLm86KG1pcGlfZGJpX2J1Zl9jb3B5KSBpbiBhcmNo
+aXZlIGRyaXZlcnMvYnVpbHQtaW4uYQ0KPiANCj4gbGQubGxkOiBlcnJvcjogdW5kZWZpbmVk
+IHN5bWJvbDogZHJtX2ZiX3N3YWINCj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmku
+Yw0KPj4+PiAgICAgICAgICAgICAgICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
+aV9idWZfY29weSkgaW4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IGxkLmxs
+ZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9mYl94cmdiODg4OF90b19yZ2I1NjUN
+Cj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+PiAgICAgICAgICAgICAg
+ICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2RiaV9idWZfY29weSkgaW4gYXJjaGl2
+ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IGxkLmxsZDogZXJyb3I6IHVuZGVmaW5lZCBz
+eW1ib2w6IGRybV9mYl9tZW1jcHkNCj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmku
+Yw0KPj4+PiAgICAgICAgICAgICAgICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
+aV9idWZfY29weSkgaW4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IFRoaXMg
+aXMgZmFpcmx5IGhhcmQgdG8gaGl0IGluIHJhbmRjb25maWcgZHJpdmVycywgYnV0IGl0IGV2
+ZW50dWFsbHkNCj4gZGlkIHRyaWdnZXIgZm9yIG1lIGluIGEgY29uZmlndXJhdGlvbiB3aGVy
+ZSBhbGwgb3RoZXIgRFJNIGRyaXZlcnMNCj4gYXJlIGxvYWRhYmxlIG1vZHVsZXMsIGJ1dCBE
+Uk1fUEFORUxfV0lERUNISVBTX1dTMjQwMSB3YXMgYnVpbHQtaW4uDQo+IA0KPiBBZGRpbmcg
+YSBkZXBlbmRlbmN5IGluIGFsbCBkcml2ZXJzIHRoYXQgc2VsZWN0IERSTV9NSVBJX0RCSSBh
+dm9pZHMNCj4gdGhlIHByb2JsZW0gZm9yIG5vdywgYWRkaW5nIHRoZSBkZXBlbmRlbmN5IGlu
+IERSTV9NSVBJX0RCSSBhcyB3ZWxsDQo+IHNob3VsZCBoZWxwIG1ha2UgaXQgZWFzaWVyIHRv
+IGZpZ3VyZSBvdXQgd2h5IGl0IGJyZWFrcyBpZiBzb21lb25lDQo+IGZvcmdldHMgdGhlIGRl
+cGVuZGVuY3kgdGhlIG5leHQgdGltZS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFybmQgQmVy
+Z21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9LY29u
+ZmlnICAgICAgIHwgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnIHwg
+NCArKysrDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEgZGVsZXRp
+b24oLSkNCj4gDQo+IEkgc2VlIHRoaXMgd2FybmluZyBvbiA1LjE3LXJjOCwgYnV0IGRpZCBu
+b3QgdGVzdCBpdCBvbiBsaW51eC1uZXh0LA0KPiB3aGljaCBtYXkgYWxyZWFkeSBoYXZlIGEg
+Zml4Lg0KPiANCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZyBi
+L2RyaXZlcnMvZ3B1L2RybS9LY29uZmlnDQo+IGluZGV4IGIxZjIyZTQ1N2ZkMC4uZDVlYzBi
+NzdjMDEwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZw0KPiArKysg
+Yi9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZw0KPiBAQCAtMzAsNyArMzAsNyBAQCBtZW51Y29u
+ZmlnIERSTQ0KPiAgIA0KPiAgIGNvbmZpZyBEUk1fTUlQSV9EQkkNCj4gICAJdHJpc3RhdGUN
+Cj4gLQlkZXBlbmRzIG9uIERSTQ0KPiArCWRlcGVuZHMgb24gRFJNX0tNU19IRUxQRVINCg0K
+VGhpcyBzeW1ib2wgY2Fubm90IGJlIHNlbGVjdGVkIGJ5IHVzZXJzLCBzbyBpdCdzIG1heWJl
+IG5vdCBhIGdvb2QgaWRlYSANCnRvIGRlcGVuZCBvbiBpdC4gSW4gZmFjdCwgSSd2ZSBoYWQg
+dG8gcmVtb3ZlIHN1Y2ggYSBzdGF0ZW1lbnQgYmVjYXVzZSBpdCANCmNyZWF0ZWQgYSBjeWNs
+aWMgZGVwZW5kZW5jeS4gWzFdDQoNCk1ha2luZyB0aGUgZHJpdmVycyBkZXBlbmQgb24gS01T
+IGhlbHBlcnMgaXMgdGhlIHJpZ2h0IHRoaW5nIHRob3VnaC4gSWYgDQp0aGVyZSdzIGEgYmV0
+dGVyIHNvbHV0aW9uLCBwbGVhc2UgbGV0IG1lIGtub3cuDQoNCkJlc3QgcmVnYXJkcw0KVGhv
+bWFzDQoNCj4gICANCj4gICBjb25maWcgRFJNX01JUElfRFNJDQo+ICAgCWJvb2wNCj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnIGIvZHJpdmVycy9ncHUv
+ZHJtL3BhbmVsL0tjb25maWcNCj4gaW5kZXggMGFlYzVhMTBiMDY0Li45Njg4N2QwZWZiOWYg
+MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnDQo+ICsrKyBi
+L2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnDQo+IEBAIC00MjUsNiArNDI1LDcgQEAg
+Y29uZmlnIERSTV9QQU5FTF9TQU1TVU5HX0RCNzQzMA0KPiAgIAl0cmlzdGF0ZSAiU2Ftc3Vu
+ZyBEQjc0MzAtYmFzZWQgRFBJIHBhbmVscyINCj4gICAJZGVwZW5kcyBvbiBPRiAmJiBTUEkg
+JiYgR1BJT0xJQg0KPiAgIAlkZXBlbmRzIG9uIEJBQ0tMSUdIVF9DTEFTU19ERVZJQ0UNCj4g
+KwlkZXBlbmRzIG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fTUlQSV9EQkkN
+Cj4gICAJaGVscA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gZW5hYmxlIHN1
+cHBvcnQgZm9yIHRoZSBTYW1zdW5nDQo+IEBAIC00NDAsNiArNDQxLDcgQEAgY29uZmlnIERS
+TV9QQU5FTF9TQU1TVU5HX1M2RDE2RDANCj4gICBjb25maWcgRFJNX1BBTkVMX1NBTVNVTkdf
+UzZEMjdBMQ0KPiAgIAl0cmlzdGF0ZSAiU2Ftc3VuZyBTNkQyN0ExIERQSSBwYW5lbCBkcml2
+ZXIiDQo+ICAgCWRlcGVuZHMgb24gT0YgJiYgU1BJICYmIEdQSU9MSUINCj4gKwlkZXBlbmRz
+IG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fTUlQSV9EQkkNCj4gICAJaGVs
+cA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gZW5hYmxlIHN1cHBvcnQgZm9y
+IHRoZSBTYW1zdW5nDQo+IEBAIC00NzYsNiArNDc4LDcgQEAgY29uZmlnIERSTV9QQU5FTF9T
+QU1TVU5HX1M2RTYzTTBfU1BJDQo+ICAgCWRlcGVuZHMgb24gU1BJDQo+ICAgCWRlcGVuZHMg
+b24gRFJNX1BBTkVMX1NBTVNVTkdfUzZFNjNNMA0KPiAgIAlkZWZhdWx0IERSTV9QQU5FTF9T
+QU1TVU5HX1M2RTYzTTANCj4gKwlkZXBlbmRzIG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNl
+bGVjdCBEUk1fTUlQSV9EQkkNCj4gICAJaGVscA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91
+IHdhbnQgdG8gYmUgYWJsZSB0byBhY2Nlc3MgdGhlIFNhbXN1bmcNCj4gQEAgLTY3Nyw2ICs2
+ODAsNyBAQCBjb25maWcgRFJNX1BBTkVMX1dJREVDSElQU19XUzI0MDENCj4gICAJdHJpc3Rh
+dGUgIldpZGVjaGlwcyBXUzI0MDEgRFBJIHBhbmVsIGRyaXZlciINCj4gICAJZGVwZW5kcyBv
+biBTUEkgJiYgR1BJT0xJQg0KPiAgIAlkZXBlbmRzIG9uIEJBQ0tMSUdIVF9DTEFTU19ERVZJ
+Q0UNCj4gKwlkZXBlbmRzIG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fTUlQ
+SV9EQkkNCj4gICAJaGVscA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gZW5h
+YmxlIHN1cHBvcnQgZm9yIHRoZSBXaWRlY2hpcHMgV1MyNDAxIERQSQ0KDQotLSANClRob21h
+cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
+IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
+ZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhy
+ZXI6IEl2byBUb3Rldg0K
 
-I agree with no new features for deprecated path. But I think we should 
-still take in bug fixes.
+--------------JRt57Q5cB0oCPiXsrDdvQSji--
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+--------------L2Kg8oL8rrM047Px9SyFRYB7
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIyNqkFAwAAAAAACgkQlh/E3EQov+A8
+gg/+JoJ6qkB9Auzd/Q7PKwRgAnGg1w2o04JPnwmvoONiYgWSgw/WH3EJKOXrh9ozWpzfXQ6cdUko
+aMFuah7R7wsr1R6nobyxKW8HlwCOPxUNt8A73GebWs7hxWJB8/0UPmRFtc+jr9iKeJmGyC2SEZBo
+s7v3a63iqsmrSSR6lE9ge5JvSmGE/RXvjuHuyq76GHZLYABWfz5OmQroypnFFf7G89wA6uUV5qDN
+D3hl1v2FGIP+Hl9LfljUo4/vfp4vybKPiPNf2kZQ10Nq4n8lHO+KAQDfMgCwpUp7sLk/A+ndHcbi
+yKzsuyxhyKSpPXAUev2DJ6OMt5vP1g6BeTtJD82D/erc16o0UGhiKtTQVVRaA3hZkIhYtF+6eVSv
+BIXTGcgiY+mN1lVjqpItEhiIX0dv7czm5p7wbnhVG+8ORia1TbnvCUKww4X5OdzUlYBcK2T3Xno+
+ZIYZLubD0JuoTvFwhoHan93NOjK1nWIK1nA8DQ1lGhvwEKSyCQCljX0/V4K+pe8Z1dPXeHansR2w
+hXDvt26Rj8Ou+i2yiIcOQJ3WZ80RZfwBTKPmyiOZuiD6ei5kDBunhB55ngj7mdpg17dKqFnYY9U5
+Jsc5QCup5jAfCDQxE8t8aoR0B3A81h7X7e/CDZZ2P8Mmga3qi3WtT1bxtzFo5Ob02MP+aTyd9owX
+Reg=
+=xKEK
+-----END PGP SIGNATURE-----
+
+--------------L2Kg8oL8rrM047Px9SyFRYB7--

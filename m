@@ -2,172 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA744DB622
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD4F4DB625
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357430AbiCPQ3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S1355606AbiCPQaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236791AbiCPQ3E (ORCPT
+        with ESMTP id S230383AbiCPQaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:29:04 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F9255B8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:27:48 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d19so4414893pfv.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YdfDwLcCxjBdFThwwHos9x013CjhNXUSI2ePOCAUr0A=;
-        b=iIS9XuZtPG0W5Be9kuSTERIiint31DBY4mh3ylmZoH9Dg3HorEwyYM9h/pjdpx5yX3
-         fgMnEdo7U7Wyr2osuRjdEQBgoEgAuiqHSPJ9lIxbUaP+h+2tiylVp7bvWSvcnIuTd/6F
-         I27AW6cl8/e0TlxzfCTZtE9O4Y+oX4c/otCS4=
+        Wed, 16 Mar 2022 12:30:07 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E7E53B58
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:28:53 -0700 (PDT)
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 691503F338
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:28:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647448132;
+        bh=O9azuf7ICO8h5uyN+uYKd3/hmAqYJNPc/YeUIk6IvOY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Q0qgCv8g85usPyzQsDtGgDFalJ7TfoRPzDbFubrVduaO+EnSR+Jwmho7GLJBT0her
+         m2eVXmy2o6L443/C8vl81t9iWwgM8obJMbAfXS76tirzzcbUlK5DXTiZrQO1Ar5oPt
+         74qqjrdoPuO9b4cjO9PjBSiOMv+cuayW1niULMz2Ypw5LEgo95ozpwDRFUvmHkjEUH
+         P1IDwxi+JJcabZhL/vI1NBq6fy4TXvZ4v5l89off3mcM4d2xRD27ezXXid8LKFHjwG
+         g+gczEkKmWsctrK7Bm0tEJYxwggi9AGbIglwWvErO+7hig46FduXvlgo7hWlMcDn3A
+         DHcDtwHL5L+iw==
+Received: by mail-wr1-f72.google.com with SMTP id p9-20020adf9589000000b001e333885ac1so725811wrp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:28:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YdfDwLcCxjBdFThwwHos9x013CjhNXUSI2ePOCAUr0A=;
-        b=bseztXOMedTRsGDmctmli/RzlRZAPs84OQ7E0vXoJHmkAh9TLNwvoUlR846vq2KIBZ
-         kqiV1kJvza9AktY1InmfiNz34jnUe8GiH64pHz/Na1FPRajcyytZjZRNrxO0SIIH7rnV
-         ZWgyelrwyEySfv7P+nr3O74WenlGVSOvyf3dp5DCsAQOv01wJcUIt+Rw1Yr4KVoD8ecz
-         H/WNBLliZ54ic2Ft9Fbp1YlkiLJDnRN7NHpkzdeKQcESGFm6glLwjlLfLSAVeP2VixB4
-         kygHHoLiYwxm0r34h3hEeirGhCHZrlqGt8t1pA+M0hR1aQipRzVW/lVP81RMeXJzTHEa
-         Un4A==
-X-Gm-Message-State: AOAM530okOVW+8PGX3GeXEiA6EeOKqm20nWKc5EqyLxMFiu7g0aJWP7i
-        nW7mCQIPaW7q9W7UIym5t81GzQ==
-X-Google-Smtp-Source: ABdhPJxva7xZsTK7pkGECCA5lVC+ON1Nrx1iA73AnmCG359irVs9MLBTBJMXbSo6A+5jYzRqoELU/A==
-X-Received: by 2002:aa7:9ad8:0:b0:4f7:78d4:de8c with SMTP id x24-20020aa79ad8000000b004f778d4de8cmr121241pfp.38.1647448068048;
-        Wed, 16 Mar 2022 09:27:48 -0700 (PDT)
-Received: from ebps (vpn.purestorage.com. [192.30.189.1])
-        by smtp.gmail.com with ESMTPSA id n14-20020a17090a394e00b001c670d67b8esm847798pjf.32.2022.03.16.09.27.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 09:27:47 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 09:27:44 -0700
-From:   Eric Badger <ebadger@purestorage.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver OHalloran <oohall@gmail.com>, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        ebadger@purestorage.com
-Subject: Re: [PATCH v2] PCI/AER: Handle Multi UnCorrectable/Correctable
- errors properly
-Message-ID: <20220316162744.GA1585319@ebps>
-References: <20220315050842.120063-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220315171425.GA1521135@ebps>
- <2d4e8811-dce6-c891-e92d-e3746434685e@linux.intel.com>
- <20220315195255.GA1523195@ebps>
- <f794a3fb-4d3a-7e3d-1600-27ee831526fd@linux.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O9azuf7ICO8h5uyN+uYKd3/hmAqYJNPc/YeUIk6IvOY=;
+        b=Xn48X8f28XaOITFI68PmT9lPmkIUmCvlZfCTC7iMZuEoAt/N/+sZE606shfZ7Aj92x
+         eeK12ONFYIdzkyDzQzrGlVmOlZyQSAsmeUSH8dgTXau1XroJa/9fDyGGpGc2pguLVQD3
+         UzM1lIich9UAcX1oKcuAq5oVUgFvmCgGpOslA/e3AS0ILD9D/4M/pgy76mZE0c9Yizow
+         3eEp54tgMVQnaCtjHqA+K5nJB+dEm4PDRdFumqrsEVZehtxT6SG0hbozFGGDfdKHzBub
+         g7oX8DgTfrPZPBiENeb9sszHifupv7JqnHc1iovWF5SWHJICeelnnzpHhVCC9Z/sITuy
+         8CiA==
+X-Gm-Message-State: AOAM532ptMlqlEmN2SLonE30tKDsTigoZG9RaZQVj7laqTx0GVm8un4r
+        Nn0vrtrCrfTj2+X6BYfGO2tvWQ6JIZA48MqOpW0P/NzdIrA/5gbBJoOHn/gYDGF7sAio1vQP5+t
+        NNVgmF7ihQD5J33Hf1WIFRTSGzW1YgBuV+pd06d2Vzw==
+X-Received: by 2002:a05:600c:22c4:b0:38c:70f5:25a9 with SMTP id 4-20020a05600c22c400b0038c70f525a9mr399235wmg.119.1647448132149;
+        Wed, 16 Mar 2022 09:28:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyKAKAWokuZKgPZXqwJlDzsHHWTVsJ9pCwRX+QtYBaOkXVUSCX+5SlHY5BD4mQkdYO5g15k/Q==
+X-Received: by 2002:a05:600c:22c4:b0:38c:70f5:25a9 with SMTP id 4-20020a05600c22c400b0038c70f525a9mr399217wmg.119.1647448131987;
+        Wed, 16 Mar 2022 09:28:51 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id l18-20020adfe592000000b001f064ae9830sm2007779wrm.37.2022.03.16.09.28.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 09:28:51 -0700 (PDT)
+Message-ID: <662981fe-7cf4-b0e6-2d43-3f33a53a6abd@canonical.com>
+Date:   Wed, 16 Mar 2022 17:28:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f794a3fb-4d3a-7e3d-1600-27ee831526fd@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] dt-bindings: timer: Document arm,cortex-a7-timer for
+ arch timer
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
+ <20220316095433.20225-3-singh.kuldeep87k@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220316095433.20225-3-singh.kuldeep87k@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 02:29:23PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 3/15/22 12:52 PM, Eric Badger wrote:
-> > On Tue, Mar 15, 2022 at 10:26:46AM -0700, Sathyanarayanan Kuppuswamy wrote:
-> > > On 3/15/22 10:14 AM, Eric Badger wrote:
-> > > > >    # Prep injection data for a correctable error.
-> > > > >    $ cd /sys/kernel/debug/apei/einj
-> > > > >    $ echo 0x00000040 > error_type
-> > > > >    $ echo 0x4 > flags
-> > > > >    $ echo 0x891000 > param4
-> > > > > 
-> > > > >    # Root Error Status is initially clear
-> > > > >    $ setpci -s <Dev ID> ECAP0001+0x30.w
-> > > > >    0000
-> > > > > 
-> > > > >    # Inject one error
-> > > > >    $ echo 1 > error_inject
-> > > > > 
-> > > > >    # Interrupt received
-> > > > >    pcieport <Dev ID>: AER: Root Error Status 0001
-> > > > > 
-> > > > >    # Inject another error (within 5 seconds)
-> > > > >    $ echo 1 > error_inject
-> > > > > 
-> > > > >    # No interrupt received, but "multiple ERR_COR" is now set
-> > > > >    $ setpci -s <Dev ID> ECAP0001+0x30.w
-> > > > >    0003
-> > > > > 
-> > > > >    # Wait for a while, then clear ERR_COR. A new interrupt immediately
-> > > > >      fires.
-> > > > >    $ setpci -s <Dev ID> ECAP0001+0x30.w=0x1
-> > > > >    pcieport <Dev ID>: AER: Root Error Status 0002
-> > > > > 
-> > > > > Currently, the above issue has been only reproduced in the ICL server
-> > > > > platform.
-> > > > > 
-> > > > > [Eric: proposed reproducing steps]
-> > > > Hmm, this differs from the procedure I described on v1, and I don't
-> > > > think will work as described here.
-> > > 
-> > > I have attempted to modify the steps to reproduce it without returning
-> > > IRQ_NONE for all cases (which will break the functionality). But I
-> > > think I did not correct the last few steps.
-> > 
-> > Well, the thinking in always returning IRQ_NONE was so that only setpci
-> > modified the register and we could clearly see how writes to the
-> > register affect interrupt generation.
+On 16/03/2022 10:54, Kuldeep Singh wrote:
+> Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
+> conjugation with "arm,armv7-timer". Since, initial entry is not
+> documented, it start raising dtbs_check warnings.
 > 
-> Got it. Makes sense.
+> ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
+> 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
+> 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
 > 
-> > 
-> > > How about replacing the last 3 steps with following?
-> > > 
-> > >   # Inject another error (within 5 seconds)
-> > >   $ echo 1 > error_inject
-> > > 
-> > >   # You will get a new IRQ with only multiple ERR_COR bit set
-> > >   pcieport <Dev ID>: AER: Root Error Status 0002
-> > 
-> > This seems accurate. Though it does muddy a detail that I think was
-> > clearer in the original procedure: was the second interrupt triggered by
-> > the second error, or by the write of 0x1 to Root Error Status?
-> 
-> I think you are talking about the following command, right?
-> 
-> setpci -s <Dev ID> ECAP0001+0x30.w=0x1
-> 
-> If yes, my previously modified instructions already removed it. So
-> no confusion.
+> In general, removing an existing entry is mostly devastating considering
+> backward compatibility. Therefore, document it.
 
-The confusion I mention is: "what actually triggers the second
-interrupt?" Since I can't find a description of the observed behavior in
-the PCIe spec, I find it interesting to know what's actually happening.
-Since the procedure we've discussed in this thread stalls in aer_irq(),
-you can't distinguish clearly which event causes the second interrupt.
+How removing undocumented and unused compatible is devastating for
+backwards compatibility? I don't see it.
 
-> 
-> To summarize,
-> 
-> In your case, you have controlled both register read/write of Root
-> error status register to simulate the interrupt with only multi
-> ERR_COR bit set.
-> 
-> In my case, I have attempted to simulate it without changing the
-> default behavior of aer_irq() in the kernel.
-> 
-> Both seem ok to me. Although my personal preference is to trigger
-> the error without changing the code behavior, if both you and Bjorn
-> prefer to revert to old instructions, I will fix this in the next version.
+DTS is rather wrong, not bindings. Otherwise please explain it more, why
+DTS is correct.
 
-I think the amended procedure from this thread is fine to demonstrate
-how to play with the patch. The other procedure is available on the list
-if anyone has a need for it.
 
-Cheers,
-Eric
+
+Best regards,
+Krzysztof

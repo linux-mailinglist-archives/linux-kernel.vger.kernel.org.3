@@ -2,141 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2272F4DB7C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6184DB7D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357718AbiCPSK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S1350920AbiCPSRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239661AbiCPSKz (ORCPT
+        with ESMTP id S237715AbiCPSRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:10:55 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 307D3527E0;
-        Wed, 16 Mar 2022 11:09:40 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 382DE92009C; Wed, 16 Mar 2022 19:09:38 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 30B8992009B;
-        Wed, 16 Mar 2022 18:09:38 +0000 (GMT)
-Date:   Wed, 16 Mar 2022 18:09:38 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-cc:     Nikolai Zhubr <zhubr.2@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@kernel.org>,
-        Michal Necasek <mnecasek@yahoo.com>, x86@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] x86/PCI: Add $IRT PIRQ routing table support
-In-Reply-To: <a2791312-2957-27e6-43af-c805bbb90266@collabora.com>
-Message-ID: <alpine.DEB.2.21.2203161740350.24248@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201021821480.56863@angie.orcam.me.uk> <alpine.DEB.2.21.2201022058050.56863@angie.orcam.me.uk> <a2791312-2957-27e6-43af-c805bbb90266@collabora.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 16 Mar 2022 14:17:30 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A684D622;
+        Wed, 16 Mar 2022 11:16:15 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2e59939b862so32783857b3.10;
+        Wed, 16 Mar 2022 11:16:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h3RBLpBbAryPqG6TuJAla1nVu9jViIKaNxDEE5urMbw=;
+        b=CwVuvpDYGj3oW3UKb8V5GcaTMh2BTFiwTWxfWbGYfY8RkcsxUhd1HavDOb1r2MsyYO
+         qZtoH2+umYYi/vIkyVT0G6WNcB/RkPm78M2aBVh7RC75UvhcOH5RUpLTBpxRM/ziugry
+         q0zML6pKTLmmlXUHK3BDwm2mxvJtjG1Y+B4C0+fEumDCsYjcTmFIwRsvLOPV+BkWsQvP
+         IBFNMEhAruNJKs4TlvUNcUKpayTKrWv6s3WsPliBafoWgMq2vhNdPxDQ4nDrh9wfEwJu
+         M/L4B1thRAXtxVhpvusmUPW35ZsyZI3EkLu1ne3yfm9XFr5JLwmgCWue1iBwfD/UPI36
+         vYcA==
+X-Gm-Message-State: AOAM530lVJa1JbuJXHEvDVVOYz5IXJQw5+T6lq3LeBRbWXFS7mF6/7JU
+        FSJTSY4naUbQ/Du11wyaci5QlXfcaq9maYzr9bg=
+X-Google-Smtp-Source: ABdhPJzguP0ZdMTGW0S66n7AWLvsSCvC3k3Mm4FkLi+eluMHkzuCF4DOkF+CM0A9/LVaoIA1P6c6b2aI/X8+LVTemRY=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr1500029ywb.326.1647454575078; Wed, 16
+ Mar 2022 11:16:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220310224223.684007-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220310224223.684007-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Mar 2022 19:16:04 +0100
+Message-ID: <CAJZ5v0i8PKdaF5mt4tHsqWy5wO2+c6sRxmW+UiR7_HOn=w4Y6A@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Use firmware default EPP
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022, Dmitry Osipenko wrote:
+On Thu, Mar 10, 2022 at 11:42 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> For some specific platforms (E.g. AlderLake) the balance performance
+> EPP is updated from the hard coded value in the driver. This acts as
+> the default and balance_performance EPP. The purpose of this EPP
+> update is to reach maximum 1 core turbo frequency (when possible) out
+> of the box.
+>
+> Although we can achieve the objective by using hard coded value in the
+> driver, there can be other EPP which can be better in terms of power.
+> But that will be very subjective based on platform and use cases.
+> This is not practical to have a per platform specific default hard coded
+> in the driver.
+>
+> If a platform wants to specify default EPP, it can be set in the firmware.
+> If this EPP is not the chipset default of 0x80 (balance_perf_epp unless
+> driver changed it) and more performance oriented but not 0, the driver
+> can use this as the default and balanced_perf EPP. In this case no driver
+> update is required every time there is some new platform and default EPP.
+>
+> If the firmware didn't update the EPP from the chipset default then
+> the hard coded value is used as per existing implementation.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
+>  1 file changed, 32 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index bc7f7e6759bd..846bb3a78788 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1692,6 +1692,37 @@ static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
+>         }
+>  }
+>
+> +static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
+> +{
+> +       cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
+> +
+> +       /*
+> +        * If this CPU gen doesn't call for change in balance_perf
+> +        * EPP return.
+> +        */
+> +       if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
+> +               return;
+> +
+> +       /*
+> +        * If powerup EPP is something other than chipset default 0x80 and
+> +        * - is more performance oriented than 0x80 (default balance_perf EPP)
+> +        * - But less performance oriented than performance EPP
+> +        *   then use this as new balance_perf EPP.
+> +        */
+> +       if (cpudata->epp_default < HWP_EPP_BALANCE_PERFORMANCE &&
+> +           cpudata->epp_default > HWP_EPP_PERFORMANCE) {
+> +               epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = cpudata->epp_default;
+> +               return;
+> +       }
+> +
+> +       /*
+> +        * Use hard coded value per gen to update the balance_perf
+> +        * and default EPP.
+> +        */
+> +       cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
+> +       intel_pstate_set_epp(cpudata, cpudata->epp_default);
+> +}
+> +
+>  static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+>  {
+>         /* First disable HWP notification interrupt till we activate again */
+> @@ -1705,12 +1736,7 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+>         if (cpudata->epp_default >= 0)
+>                 return;
+>
+> -       if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE) {
+> -               cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
+> -       } else {
+> -               cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
+> -               intel_pstate_set_epp(cpudata, cpudata->epp_default);
+> -       }
+> +       intel_pstate_update_epp_defaults(cpudata);
+>  }
+>
+>  static int atom_get_min_pstate(void)
+> --
 
-> > Handle the $IRT PCI IRQ Routing Table format used by AMI for its BCP 
-> > (BIOS Configuration Program) external tool meant for tweaking BIOS 
-> > structures without the need to rebuild it from sources[1].
-> > 
-> > The $IRT format has been invented by AMI before Microsoft has come up 
-> > with its $PIR format and a $IRT table is therefore there in some systems 
-> > that lack a $PIR table, such as the DataExpert EXP8449 mainboard based 
-> > on the ALi FinALi 486 chipset (M1489/M1487), which predates DMI 2.0 and 
-> > cannot therefore be easily identified at run time.
-> > 
-> > Unlike with the $PIR format there is no alignment guarantee as to the 
-> > placement of the $IRT table, so scan the whole BIOS area bytewise.
-[...]
-> This patch broke crosvm using recent linux-next. The "ir = (struct
-> irt_routing_table *)addr;" contains invalid pointer. Any ideas why?
-
- This specific pointer refers to the BIOS area being iterated over:
-
-	for (addr = (u8 *)__va(0xf0000);
-	     addr < (u8 *)__va(0x100000);
-	     addr++) {
-
-and it is conceptually not new code in that a similar piece as below:
-
-	for (addr = (u8 *)__va(0xf0000);
-	     addr < (u8 *)__va(0x100000);
-	     addr += 16) {
-
-used to be there before my change and even now it is executed earlier on 
-in `pirq_find_routing_table'.
-
-> PCI: Probing PCI hardware
-> BUG: unable to handle page fault for address: ffffed1000020000
-> #PF: supervisor read access in kernel mode
-> #PF: error_code(0x0000) - not-present page
-> PGD 12fff4067 P4D 12fff4067 PUD 12fff3067 PMD 12fff2067 PTE 0
-> Oops: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7-next-20220310+ #226
-> Hardware name: ChromiumOS crosvm, BIOS 0
-> RIP: 0010:kasan_check_range+0xe6/0x1a0
-> Code: 00 74 ee 48 89 c2 b8 01 00 00 00 48 85 d2 75 5d 5b 41 5c 41 5d 5d
-> c3 48 85 d2 74 63 4c 01 e2 eb 09 48 83 c0 01 48 39 d0 74 55 <80> 38 00
-> 74 f2 eb d2 41 bd 08 00 00 00 45 29 dd 4b 8d 54 25 00 eb
-
- Thank you for your report and apologies for the trouble.
-
- I don't know what a "ChromiumOS crosvm" is, but the mention of "Chromium" 
-indicates to me it is something reasonably recent that should be using 
-ACPI rather than legacy PCI IRQ routing, and even then it should be using 
-the standardised $PIR format rather than AMI's proprietary $IRT one.  I am 
-more than surprised this code is active for x86-64 even, as this is solely 
-i386 legacy.
-
- In any case we need to debug this and possibly work around somehow as 
-this BIOS is likely giving us rubbish information.  Unfortunately without 
-access to your Linux build tree along with debug information I can do very 
-little.  The faulting piece of code is as follows:
-
-  21:	48 83 c0 01          	add    $0x1,%rax
-  25:	48 39 d0             	cmp    %rdx,%rax
-  28:	74 55                	je     7f <foo+0x7f>
-  2a:	80 38 00             	cmpb   $0x0,(%rax)
-  2d:	74 f2                	je     21 <foo+0x21>
-
--- with the CMPB at 2a being the offender and further information required 
-as to what RAX holds at the moment.
-
- So as the first approximation I would like to see what your BIOS actually 
-tells Linux.  Would you therefore please try the following debug patch, 
-boot with the `debug' kernel parameter and send me the resulting bootstrap 
-log?
-
-  Maciej
-
----
- arch/x86/include/asm/pci_x86.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-linux-x86-pci-debug.diff
-Index: linux-macro/arch/x86/include/asm/pci_x86.h
-===================================================================
---- linux-macro.orig/arch/x86/include/asm/pci_x86.h
-+++ linux-macro/arch/x86/include/asm/pci_x86.h
-@@ -7,7 +7,7 @@
- 
- #include <linux/ioport.h>
- 
--#undef DEBUG
-+#define DEBUG 1
- 
- #ifdef DEBUG
- #define DBG(fmt, ...) printk(fmt, ##__VA_ARGS__)
+Applied as 5.18 material, thanks!

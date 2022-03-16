@@ -2,99 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF094DB6E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FD94DB6E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352867AbiCPRG1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Mar 2022 13:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S1357609AbiCPRGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiCPRG0 (ORCPT
+        with ESMTP id S241750AbiCPRGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:06:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5505446B25
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 10:05:11 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-40-kHM77aNRMluU0HPtzKF3Hw-1; Wed, 16 Mar 2022 17:05:08 +0000
-X-MC-Unique: kHM77aNRMluU0HPtzKF3Hw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 16 Mar 2022 17:05:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 16 Mar 2022 17:05:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kees Cook' <keescook@chromium.org>,
-        James Jones <linux@theinnocuous.com>
-CC:     "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] x86: Remove a.out support
-Thread-Topic: [PATCH] x86: Remove a.out support
-Thread-Index: AQHYOVBkiI2rWSVwnUW0pCDz/QTpF6zCOwVw
-Date:   Wed, 16 Mar 2022 17:05:07 +0000
-Message-ID: <8e9db4d6ff614006869eaa412a536fa0@AcuMS.aculab.com>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
- <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
- <202203151150.1CDB1D8DA@keescook>
- <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
- <202203160909.B1A022B@keescook>
-In-Reply-To: <202203160909.B1A022B@keescook>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 16 Mar 2022 13:06:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158AE46B3E;
+        Wed, 16 Mar 2022 10:05:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ECCC617D6;
+        Wed, 16 Mar 2022 17:05:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C11BC340E9;
+        Wed, 16 Mar 2022 17:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647450315;
+        bh=VAILIcNcuve6zwpUMsnMu0YRMMRvlJ0yTNICt6G+urY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sGjbGSsKOjHVfjg1RR8nfoszypmTCfGdpKLHPee9b+vpktXhKcY08NcuM7VSJdw/W
+         H1TKpfpI6sJQJeM7khd9G9np+PTzUUGtGITTDWAnga5DSuINGkRQPIX6BmuDMzCpH+
+         AS157Qbhb4Zc5QBo46Y/v5ZEvqHzIGHKzkddsyi+vUFRqjxfEVR+HnSw5vavXW1O9V
+         lZPWgVe017c8UqzlaQVxtO/8pUD8Ut2gwoHzPMIvtUxWm1JCdRzuo7ifXuxnEe5vz2
+         OE8/sTFKzujkz89zwZVg4gYp7/Ov+cMoElPEveLaZgpVeuCO02q6nGpeCkG6ZHaEpP
+         DYC5vDC0r6Vzw==
+Date:   Wed, 16 Mar 2022 17:05:09 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [broonie-misc:arm64-sysreg-gen 6/9]
+ arch/arm64/include/asm/sysreg.h:125:10: fatal error:
+ 'generated/asm/sysreg.h' file not found
+Message-ID: <YjIYxWkVzT0/XYf+@sirena.org.uk>
+References: <202203160508.k7vz4ZxC-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="47OylaR+d6CbicYl"
+Content-Disposition: inline
+In-Reply-To: <202203160508.k7vz4ZxC-lkp@intel.com>
+X-Cookie: Androphobia:
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook
-> Sent: 16 March 2022 16:11
-> 
-> On Wed, Mar 16, 2022 at 05:06:10AM +0000, James Jones wrote:
-> > I dug the scripts up in the state they were in when I gave up (September
-> > 2020 according to mtime), and put them on github in case anyone wants to
-> > have a go at it:
-> >
-> > https://github.com/cubanismo/aout-to-elf/
-> >
-> > It was an interesting problem in its own right, and I'd be curious to
-> > know what I missed.
-> 
-> Yeah, this is a good start. I think the main problem is with how program
-> entry works, specifically that %esp is pointing to argc (with all the
-> args in memory above there), which isn't the way ELF sets %esp.
-> 
-> It might be possible to make a userspace loader, though. Hmm.
 
-Could it be fixed up by a small bit of code that the elf interpreter
-runs just before jumping the a.out entry point?
+--47OylaR+d6CbicYl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Depending on the elf layout it might be enough to just reset %esp.
-But if the strings are the wrong side of argv[] and enpv[] the
-vectors themselves might need copying further down the stack.
+On Wed, Mar 16, 2022 at 05:56:39AM +0800, kernel test robot wrote:
 
-Should be possible to do it as PIC code.
+Not deleting context for the benefit of the kbuild people I just CCed...
 
-	David
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git =
+arm64-sysreg-gen
+> head:   72b2ee21681c0c515c6a8bb62bd289766ce324a1
+> commit: caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff [6/9] arm64/sysreg: Enab=
+le automatic generation of system register definitions
+> config: arm64-randconfig-r006-20220313 (https://download.01.org/0day-ci/a=
+rchive/20220316/202203160508.k7vz4ZxC-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6b2=
+f50fb47da3baeee10b1906da6e30ac5d26ec)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.gi=
+t/commit/?id=3Dcaf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
+>         git remote add broonie-misc https://git.kernel.org/pub/scm/linux/=
+kernel/git/broonie/misc.git
+>         git fetch --no-tags broonie-misc arm64-sysreg-gen
+>         git checkout caf0e02eaa9ed9bfa50642f0bc2ee008b1c138ff
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Darm64 prepare
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    In file included from kernel/bounds.c:10:
+>    In file included from include/linux/page-flags.h:10:
+>    In file included from include/linux/bug.h:5:
+>    In file included from arch/arm64/include/asm/bug.h:26:
+>    In file included from include/asm-generic/bug.h:22:
+>    In file included from include/linux/printk.h:9:
+>    In file included from include/linux/cache.h:6:
+>    In file included from arch/arm64/include/asm/cache.h:8:
+>    In file included from arch/arm64/include/asm/cputype.h:173:
+> >> arch/arm64/include/asm/sysreg.h:125:10: fatal error: 'generated/asm/sy=
+sreg.h' file not found
+>    #include "generated/asm/sysreg.h"
+>             ^~~~~~~~~~~~~~~~~~~~~~~~
+>    1 error generated.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+This looks like a kbuild thing which as far as I can see only exists for
+O=3D builds and possibly only with bounds.s - if I look at the full log I
+see that we correctly generated asm/sysreg.h:
 
+  GEN     arch/arm64/include/generated/asm/sysreg.h
+
+but that's only passed to CC (at least for bounds.s) via an
+-I./arch/arm64/include/generated so won't be found with the generated/
+prefix.  While this can be avoided by renaming the header and not
+referencing it with the prefix I do see a bunch of other headers
+throughout the tree being included with an explicit generated/ prefix so
+I'm not sure this is what's supposed to be happening, it does seem like
+a landmine somehow.
+
+>    make[2]: *** [scripts/Makefile.build:121: kernel/bounds.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [Makefile:1191: prepare0] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:219: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
+>=20
+>=20
+> vim +125 arch/arm64/include/asm/sysreg.h
+>=20
+>    118=09
+>    119	/*
+>    120	 * Automatically generated definitions for system registers, the
+>    121	 * manual encodings below are in the process of being converted to
+>    122	 * come from here. The header relies on the definition of sys_reg()
+>    123	 * earlier in this file.
+>    124	 */
+>  > 125	#include "generated/asm/sysreg.h"
+>    126=09
+>=20
+> ---
+> 0-DAY CI Kernel Test Service
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+--47OylaR+d6CbicYl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIyGMUACgkQJNaLcl1U
+h9BGYAf/a5rGPjpj7U3tRYQ0COopaqhrMs7opcgx61qiaTZcuQ5SXro1NBErX1wG
+CvLTBLPSvdgiwuGPMgENDQp+rucshqYV5L6hY1E2FT0zKlViYN11HPEpGK+NBWUK
+FxkLP8AHVmPu13JPyj2cCNDHG9GVsOTjvsC+NWUOkMVA0/sPm1MDHUptOx83B9Hn
+t1JCAFZsdxQRc/9Imjl1yK26sy9OfN21H9OHDbcM239xCKbh4dWjLSCyYlhAtLJI
+7XthTpsa0fm8Xu/mYHb6Gigi+C+w8N6ZMd7bMkWaE246rrrUmnZG9pT0l86B3NMx
+E2ABvY6aKb1jnFPf9wtrPpMmYu5BMg==
+=NUi8
+-----END PGP SIGNATURE-----
+
+--47OylaR+d6CbicYl--

@@ -2,129 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3F04DB9C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23C54DB9AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239166AbiCPUwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S1358040AbiCPUsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236608AbiCPUv7 (ORCPT
+        with ESMTP id S1358107AbiCPUsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:51:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D462B5A5B5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:50:44 -0700 (PDT)
+        Wed, 16 Mar 2022 16:48:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7F5A598
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647463844; x=1678999844;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5rTx0VkfmyTgcyY0GLxRZZKS14Mwj2aNsggT7IlBymQ=;
-  b=GbDU4oneY2qjmD1WbUP41r8TGzT0cS0Jfvu012luZ6Cd0iSE3rvgdyEG
-   F4h2XM+lu5n1gmxdqfdSAiqTUxtpDYX7Jc28pDxTkzb4RVZmbT1kK08He
-   tSuic4B/4otnhg1kC7TRZ54SzbWYy+ZjaKA40/yHtpv6tbHei5rLW/Syn
-   ie0vFng7ORjtl5jHP0SZxxSvQRBbQK61a3nGHwSfnOjlGJTpazuuEc1SV
-   aZRpXlwjY23uL7pdsOGcfRimER+DXkGXP8ev6ePCXbajqEtlod1TytZvx
-   DTnituTfVE55swc0QQnPT/pRVwmIF0WQ9yy63f4AB853QjSmYDq2bO0ki
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="319921612"
+  t=1647463609; x=1678999609;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=amVRG1zmPs9HJDAJXGSv/XhAzDgNn5MXqtThTcMFz2o=;
+  b=Yfce87SXPIuEZQ570NZmQ9G6yN7D9rXMKjjo/MVuaBvQkV1QiV0N9Sm8
+   qZojUtiAf4FLqlnG98JSH2cYxyhzQyaxtCZi95O3AnPJ43jf01fbL6oQj
+   apgeoXpFlNvUOrAeIJYcq/9OpuKqLWcbybbOhbHBKG3cW/vSZV2KdLI4W
+   y9dxxOqV1t0RIYRIDdQTVKQLZ0Vb9woS/JQykYzFvUxIPqwH1RqpUoiWY
+   4Wn2mBfifwSrt2wjeaXYcKL74wrpyUbIhdNBYvnWcMsVPh6IllTsqBBsW
+   uT0nn8NtWQ7xA2fvcJD6UL31JjXpNXQPgRNXwo/08tYaiL65hO9vXzjMr
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="237315565"
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="319921612"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:50:42 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="237315565"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:46:49 -0700
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="516491900"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 13:50:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUabQ-000CuQ-IE; Wed, 16 Mar 2022 20:50:40 +0000
-Date:   Thu, 17 Mar 2022 04:49:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 32/38] include/linux/stddef.h:8:14:
- warning: initialization of 'unsigned int' from 'void *' makes integer from
- pointer without a cast
-Message-ID: <202203170426.cQSnwc5c-lkp@intel.com>
+   d="scan'208";a="513175592"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:46:48 -0700
+Date:   Wed, 16 Mar 2022 13:50:04 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 3/8] iommu/vt-d: Implement device_pasid domain attach
+ ops
+Message-ID: <20220316135004.61ae1611@jacob-builder>
+In-Reply-To: <20220315230457.GO11336@nvidia.com>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+        <20220315050713.2000518-4-jacob.jun.pan@linux.intel.com>
+        <20220315143322.GW11336@nvidia.com>
+        <20220315153620.710a30fa@jacob-builder>
+        <20220315230457.GO11336@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   1f93371b93e3d215381b1ebcecacb9f2e54b270f
-commit: ef83a194815d993203e117d8a83e591f0a0c288e [32/38] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220317/202203170426.cQSnwc5c-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/ef83a194815d993203e117d8a83e591f0a0c288e
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout ef83a194815d993203e117d8a83e591f0a0c288e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+Hi Jason,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, 15 Mar 2022 20:04:57 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-All warnings (new ones prefixed by >>):
+> On Tue, Mar 15, 2022 at 03:36:20PM -0700, Jacob Pan wrote:
+> > Hi Jason,
+> > 
+> > On Tue, 15 Mar 2022 11:33:22 -0300, Jason Gunthorpe <jgg@nvidia.com>
+> > wrote: 
+> > > On Mon, Mar 14, 2022 at 10:07:07PM -0700, Jacob Pan wrote:  
+> > > > +	/*
+> > > > +	 * Each domain could have multiple devices attached with
+> > > > shared or per
+> > > > +	 * device PASIDs. At the domain level, we keep track of
+> > > > unique PASIDs and
+> > > > +	 * device user count.
+> > > > +	 * E.g. If a domain has two devices attached, device A has
+> > > > PASID 0, 1;
+> > > > +	 * device B has PASID 0, 2. Then the domain would have
+> > > > PASID 0, 1, 2.
+> > > > +	 */    
+> > > 
+> > > A 2d array of xarray's seems like a poor data structure for this task.
+> > > 
+> > > AFACIT this wants to store a list of (device, pasid) tuples, so a
+> > > simple linked list, 1d xarray vector or a red black tree seems more
+> > > appropriate..
+> > >   
+> > Agreed.
+> > It might need some surgery for dmar_domain and device_domain_info, which
+> > already has a simple device list. I am trying to leverage the existing
+> > data struct, let me take a closer look.  
+> 
+> Maybe the core code should provide this data structure in the
+> iommu_domain.
+> 
+> Figuring out what stuff is attached is something every driver has to
+> do right?
+yeah, seems we already have some duplicated device list in vendor domain
+struct, e.g. VT-d's dmar_domain, AMD's protection_domain. Similarly for 
+device_domain_info equivalent.
 
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from arch/arm64/include/asm/rwonce.h:71,
-                    from include/linux/compiler.h:255,
-                    from include/asm-generic/bug.h:5,
-                    from arch/arm64/include/asm/bug.h:26,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:9,
-                    from include/linux/mman.h:5,
-                    from arch/arm64/kvm/mmu.c:7:
-   arch/arm64/kvm/mmu.c: In function 'kvm_phys_addr_ioremap':
->> include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-       8 | #define NULL ((void *)0)
-         |              ^
-   arch/arm64/kvm/mmu.c:768:62: note: in expansion of macro 'NULL'
-     768 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-         |                                                              ^~~~
-   include/linux/stddef.h:8:14: note: (near initialization for 'cache.gfp_atomic')
-       8 | #define NULL ((void *)0)
-         |              ^
-   arch/arm64/kvm/mmu.c:768:62: note: in expansion of macro 'NULL'
-     768 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-         |                                                              ^~~~
+If core code provides domain-device-pasid tracking, we could do device-pasid
+tracking in ioasid.c, when we support per device PASID allocation, each
+phy device could be an IOASID set, thus its own namespace.
 
+Perhaps, we could do the following: add a device list to struct
+iommu_domain, this will replace vender's domain lists. The data would be
+something like:
+struct iommu_dev_pasid_data {
+	struct list_head list;	  /* For iommu_domain->dev_list */
+	struct ioasid_set *pasids;  /* For the PASIDs used by the device */
+	struct device *dev;
+};
 
-vim +8 include/linux/stddef.h
+I guess a list of (device, pasid) tuples as you suggested could work but it
+will have duplicated device entries since each device could have multiple
+PASIDs. right?
 
-^1da177e4c3f41 Linus Torvalds   2005-04-16  6  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  7  #undef NULL
-^1da177e4c3f41 Linus Torvalds   2005-04-16 @8  #define NULL ((void *)0)
-6e218287432472 Richard Knutsson 2006-09-30  9  
+Have to code this up to see.
 
-:::::: The code at line 8 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+Thanks for the pointers,
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Jacob

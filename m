@@ -2,102 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF4E4DB5EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344DB4DB5F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbiCPQUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S1344253AbiCPQUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237584AbiCPQUF (ORCPT
+        with ESMTP id S244432AbiCPQUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:20:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756D46D4C2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:18:43 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 17:18:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647447521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lLiWlJxNu5tEJIowHXDFed8QcF9G6PLDtmgVlnwcn/E=;
-        b=3rs5MbOPYqXmpiWUZMOxVUHEGxu57IWf2Wys0ZRtOUZH4wgYqKy3Cb0oierRNFnASCw+Fa
-        0/w7y79FllqHisKPLhuCwvMl4WsyOM6Oas/+TksMpIGrHNWa2JYCbgTi8IOmNrIho3iAGM
-        pKQliSoLdF6neXXUcF6Re7hvwesMUMLnm2+AeQJF5rhMFUQ19OnpSVC/cQEbNlzeatBtvf
-        WY7sBaNK/WseU0j0oq86gzHcExHAto9yL5ezHxj9/juF0r9VXto1155hzf1fULMVH/PKKf
-        4hXj4q93Bq01lUu8bxRTFqEKU5Hqauo2tzBFgHVSxwUOerZpebfXA3hwNaVBbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647447521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lLiWlJxNu5tEJIowHXDFed8QcF9G6PLDtmgVlnwcn/E=;
-        b=P5zd6s5J7rtECeYbyxCPWHuhQ0RhkQC8EL372SzNFmMAjrPVK3zIpnZxWhw+Y6H9HeXDtO
-        EWTqqClQa6nVEeCQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: sched_core_balance() releasing interrupts with pi_lock held
-Message-ID: <YjIN4C8EFIOOR+o4@linutronix.de>
-References: <20220308161455.036e9933@gandalf.local.home>
- <20220315174606.02959816@gandalf.local.home>
- <YjIKQBIbJR/kRR+N@linutronix.de>
+        Wed, 16 Mar 2022 12:20:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C286D4D9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:19:16 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id d10so5242288eje.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9R+r1ohG1xCnpzC1qrsRmiSwShPkfg0ZOVxajhsdBXQ=;
+        b=qi9FqeLpLieqgQ59FaHOoa+yZmTX88lHcN3nvMY9vttgnNQqJJFXReFu54ETu5sZhG
+         ol+10DgD84IYFTcb6bqne0P4eM47tjCOXAFSakQRAMKrLnZ0JcLIVD9d6JTKAUlOqQxC
+         i4H4ax9AxxtyaSAgVGLgmqLDVbV0d2ZgeFqYeYX4BsqoQtbbE7wZtXvcKEZO1gJletKa
+         BUEsCy8Y10vn5Y21uOm4eV2GcQCMoMGAuT84ujf6vEq5pWjBlUobUwBaROrHHwWt/iIt
+         GlDlteycpbqQSDQL31WqLIHl5cqYeZnoVPDjwp3ZXGvwFrFEs9kEQ9sWL3jxykiYAPsx
+         7wnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9R+r1ohG1xCnpzC1qrsRmiSwShPkfg0ZOVxajhsdBXQ=;
+        b=e05jicfz5w6pjmbQ/Q62EAMgv6us73BT/DtJERD0bOLGKQ/IwAn4tsmEicFzuJOWtm
+         1n0lRI4tAUR0u8u04UFjHzJxNSVejAExAxeFDInL+GV82P/a/kbFJpUaKVk9CO4byt3g
+         BT9Dx6B+FjHTzjJSYk+9F7tc7SmXnW93SuVh+DetVe2+BAN9UjMgnrH1x7KzBu7xpcSK
+         PIqNBpuwOr2sZS0isRL/1PKyVN95QJgXuZOxTvbj9VgayApRC/LorRXOwR2j57tBcJ8U
+         zyDND8dySHpCGWFRX8Ch3xqFKDPU5LG2ErN0r4odmievDSKPXerUsiUIyijIfjzUvHM6
+         SlkA==
+X-Gm-Message-State: AOAM533ksoGq3RzxmUlQUtXjd09370weBNjFE+N5obDJHHI6SiNRMcDj
+        x3wtEHQ7t+0Q3G2AsgcurVo+Cp6fRk/CoCLtWjl4MUFI+S7oBw==
+X-Google-Smtp-Source: ABdhPJzkyHYoHaQHM8GNWqhExHqyYScznfMyfLqJcNZrFrej94rfPlOBntdNphvEe68f7Vztb+3Wp8jOrmKfnkef6sU=
+X-Received: by 2002:a17:907:1609:b0:6db:b385:d13b with SMTP id
+ hb9-20020a170907160900b006dbb385d13bmr608694ejc.542.1647447554142; Wed, 16
+ Mar 2022 09:19:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YjIKQBIbJR/kRR+N@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220316024432.1454366-1-dlatypov@google.com> <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
+In-Reply-To: <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 16 Mar 2022 11:19:02 -0500
+Message-ID: <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-16 17:03:14 [+0100], To Steven Rostedt wrote:
-=E2=80=A6
-> which looked right but RT still fall apart:
-=E2=80=A6
-> | =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> | WARNING: bad unlock balance detected!
-> | 5.17.0-rc8-rt14+ #10 Not tainted
-> | -------------------------------------
-=E2=80=A6
-=E2=80=A6
-> It is always the local-lock that is breaks apart. Based on "locks held"
-> and the lock it tries to release it looks like the lock was acquired on
-> CPU-A and released on CPU-B.
+On Wed, Mar 16, 2022 at 12:41 AM David Gow <davidgow@google.com> wrote:
+>
+> On Wed, Mar 16, 2022 at 10:44 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > Background:
+> > Currently, a reader looking at kunit/test.h will find the file is quite
+> > long, and the first meaty comment is a doc comment about struct
+> > kunit_resource.
+> >
+> > Most users will not ever use the KUnit resource API directly.
+> > They'll use kunit_kmalloc() and friends, or decide it's simpler to do
+> > cleanups via labels (it often can be) instead of figuring out how to use
+> > the API.
+> >
+>
+> A depressing (but probably not untrue) thought. I think that, even if
 
-with
+I'm not sure it's that depressing.
+Without some compiler support (e.g. GCC's `cleanup`), I can see there
+being a number of one-off things that don't warrant formalizing into a
+resource.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 33ce5cd113d8..f4675bd8f878 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5968,6 +5967,9 @@ static bool try_steal_cookie(int this, int that)
- 		if (p =3D=3D src->core_pick || p =3D=3D src->curr)
- 			goto next;
-=20
-+		if (p->migration_disabled)
-+			goto next;
-+
- 		if (!cpumask_test_cpu(this, &p->cpus_mask))
- 			goto next;
-=20
-on top my problems are gone. Let me do some testing and then I would
-patch unless PeterZ does the yelling :)
+More detail:
+It works OK when there's one pointer parameter, e.g. [1], but I feel
+like you'd normally need to capture at least one more local variable.
+So then you need to define a new struct to hold all the values, which
+is where I'd draw the line personally.
 
-> > Thanks,
-> >=20
-> > -- Steve
->=20
-Sebastian
+[1] https://elixir.bootlin.com/linux/v5.17-rc8/source/lib/kunit/executor_test.c#L182
+
+> most people were to use the resource API, having it in test.h makes it
+> harder, as having the resource functions separate makes it easier to
+> understand as well.
+>
+> > It's also logically separate from everything else in test.h.
+> > Removing it from the file doesn't cause any compilation errors (since
+> > struct kunit has `struct list_head resources` to store them).
+> >
+> > This commit:
+> > Let's move it into a kunit/resource.h file and give it a separate page
+> > in the docs, kunit/api/resource.rst.
+>
+> Yay! This makes a lot of sense to me, as I've wasted a lot of time
+> scrolling through test.h.
+>
+> >
+> > We include resource.h at the bottom of test.h since
+> > * don't want to force existing users to add a new include if they use the API
+> > * it accesses `lock` inside `struct kunit` in a inline func
+> >   * so we can't just forward declare, and the alternatives require
+> >     uninlining the func, adding hepers to lock/unlock, or other more
+> >     invasive changes.
+>
+> I don't like this, but still think it's an improvement on what we have
+> now. Ultimately, I think adding helpers to lock/unlock or similar and
+
+Yes, I can see us maybe needing this in the future.
+Right now, outside of test.c, there's only one callsite for each (in
+resource.h).
+
+> making users include this separately is probably the right thing to
+> do, as nesting the headers like this is a bit ugly, but I won't lose
+> sleep over leaving it till later.
+
+Ack, I can add a TODO to indicate we want to clean this up?
+It's a bit annoying right now, but it'll only get more annoying in the future.
+
+>
+> >
+> > Now the first big comment in test.h is about kunit_case, which is a lot
+> > more relevant to what a new user wants to know.
+> >
+> > A side effect of this is git blame won't properly track history by
+> > default, users need to run
+> > $ git blame -L ,1 -C17 include/kunit/resource.h
+>
+> This is a pain, but is probably worth it. Thanks for including the
+> command in the commit message, which should mitigate it slightly.
+>
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> This was starting to annoy me, too, as it was a pain to read through
+> everything in test.h. It'll be a bit of short-term pain,
+> merge-conflict wise if we have other changes to the resource system
+> (which I fear is likely), but is worth it.
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> -- David
+>
+> >
+> > NOTE: this file doesn't split out code from test.c to a new resource.c
+> > file.
+> > I'm primarily concerned with users trying to read the headers, so I
+> > didn't think messing up git blame (w/ default settings) was worth it.
+> > But I can make that change if it feels appropriate (it might also be
+> > messier).
+>
+> Personally, I think it's probably worth splitting this out as well.
+> And the sooner we do it, the less history we'll obscure. :-)
+
+Yeah, that was my thought.
+But if you think this would help users, then I think we have a case to
+make this change.
+
+Should I send a v2 with resource.c split out?
+Brendan (and any others who have an opinion), what's your preference?
+>
+> But I agree, it's less of an issue as it only directly affects people
+> working on KUnit itself. Though making it easier for users to find and
+> read the implementation of these functions could help them understand
+> API "gotchas", so I think it's worthwhile.
+>
+> >
+> > ---
+> >  Documentation/dev-tools/kunit/api/index.rst   |   5 +
+> >  .../dev-tools/kunit/api/resource.rst          |  13 +
+> >  include/kunit/resource.h                      | 319 ++++++++++++++++++
+> >  include/kunit/test.h                          | 301 +----------------
+> >  4 files changed, 339 insertions(+), 299 deletions(-)
+> >  create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
+> >  create mode 100644 include/kunit/resource.h
+> >
+> <...snip...>

@@ -2,167 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0F84DB862
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF444DB864
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354346AbiCPTIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S1357831AbiCPTJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiCPTIK (ORCPT
+        with ESMTP id S233238AbiCPTJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:08:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485466E4D6;
-        Wed, 16 Mar 2022 12:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647457615; x=1678993615;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=uIgMVEu3MyfngKFGEj3PYBmw4qvWn5Z5YDHjGaoOc0U=;
-  b=kIEgyp7eQFuf7yY0KLBo8ihUl3a3PYPSzCwNEjRYjnNkNYI/XX0KNJsF
-   /s+R577cxVfideFhczaMIUlA2nuilIFcUN9lxHKJ/d9IqaGQIhXuOg521
-   HYdbJJaLeCsPsnKO9ZH86Y9gVK/geU7gRmUgVOqX0EC4wjmaOiL1r3xGT
-   PgHHBtdpf1ulUHl/q/dHUGnARQpiB+ib6fxjKDXdhj1tvFiCCGYpM4FhS
-   PWFFJVkuFfjUA/RD4Dz54ZtLfb2RZTorQ1pV4Xgqcte2d/M56jvFZjJ1G
-   IBJHJngMQdYI5YAdud9Q7XNqkn9i/RLZ7WUcyGMKmYAWF243578EgOdsI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="236637060"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="236637060"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 12:06:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="598833573"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Mar 2022 12:06:54 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Mar 2022 12:06:54 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Wed, 16 Mar 2022 12:06:54 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Wed, 16 Mar 2022 12:06:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PokeztLPbJxhqoKr/V2sKrHxi/YRLvvV73ln87AubgLZ4ac1TXDVQFo8VYRhi/4eJLLdVzTrlkORo+jbv9NY9IRa9p3eISDRCDq2U2yNNqZBotO+mpjFK6hsfjdCmCBeWUVqT/ie7hiL5IoWBcbtrLnHuEwHa3g6XEJ9sOh6F1/RK3UK38pec8qLe+NisHJwqWUxf0gjVMtAywvnXQstCw8grdgqrNTFwXFLhb6pgn03xFIkZkBrbCOjcfqOXMCI//kaJC2F7vlVzTlCaYZQaQiu/rHo2JlZdC+WmBOgdks1PS6Pu804KMo2Gy0QaWWm6LBx/Yr2fWIb4tJAeirj7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uIgMVEu3MyfngKFGEj3PYBmw4qvWn5Z5YDHjGaoOc0U=;
- b=gwwlHTRKHZ/hYDCs5ZThCAe6wTw02q9VO5LLOelOCB0Pa8+H2oyotZ/7Do08FKG7EPwQ+qZNgNgx8pZvYmy4chjK84xgFGorDtK88nmZRDyG2EWBxKp5310XHNt7pkk6Y7YzOCCXsb9KLB9pqUn62Q9+/nKxQgJfjy8JpdgiAqvkFwL2q3c0ogC9xk0PV1o4vagKHpIX3htatPWgH/uxdhjQefuzLMV4mtm+Lv1mxorWw1hR/1mSF9QcZwgnqzxomlfmk5XgJ7+NiTyKxfiUfV6jOdiy1Bk7X1JZmqxbDrujXdllJ+tEgk76VAZ0bLHROZ7O7hx91oycOBFgHzpexA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by SN6PR11MB3470.namprd11.prod.outlook.com (2603:10b6:805:b7::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Wed, 16 Mar
- 2022 19:06:49 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::c1ac:4117:326:eff2]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::c1ac:4117:326:eff2%3]) with mapi id 15.20.5081.015; Wed, 16 Mar 2022
- 19:06:48 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "keescook@chromium.org" <keescook@chromium.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Brown, Len" <len.brown@intel.com>
-Subject: Re: [PATCH 1/3] x86: Separate out x86_regset for 32 and 64 bit
-Thread-Topic: [PATCH 1/3] x86: Separate out x86_regset for 32 and 64 bit
-Thread-Index: AQHYOKnIB2wsd8uW6EiQs+9kCgApRqzA6N8AgAAT7wCAAFKbAIABETqA
-Date:   Wed, 16 Mar 2022 19:06:48 +0000
-Message-ID: <b5f9ce3c70d202834e0a76ed30966e2c81eb28dc.camel@intel.com>
-References: <20220315201706.7576-1-rick.p.edgecombe@intel.com>
-         <20220315201706.7576-2-rick.p.edgecombe@intel.com>
-         <202203151340.7447F75BDC@keescook>
-         <fe7ce2ae1011b240e3a6ee8b0425ff3e2c675b6d.camel@intel.com>
-         <202203151948.E5076F4BB@keescook>
-In-Reply-To: <202203151948.E5076F4BB@keescook>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 40fbf73f-d602-4ca9-70a6-08da07801f5b
-x-ms-traffictypediagnostic: SN6PR11MB3470:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-microsoft-antispam-prvs: <SN6PR11MB34705EEA09EADEFFC3568EB5C9119@SN6PR11MB3470.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RmUoEeNBjUEizAVrs6lsQHbgIkuPj7FgUgLftFJvsi++aw6u8g2qmlXWDmbqWSIPQc56pT3tsEoOTrvZ2mcrIiL8QRAA07lHqdkQM8TaBDriv1KFFS9EidJ4Og1C0teBAtpKYIDDrRy5/cuNdba6PCpmzRJ3HUW4NzNZE96emvqDOtpCsVC8Z1jj6/KFFHyapivkGC9FrJLL4N7nCjucKqzwWQ6KCzu3r+x6TQPQXNlRN9LITG+oFAfyQKtMmlyTUY5pznd6FmCnzJhBhNH1uJU6G6XOzZqOiyKV3yeggQguIn//NSK2sI2UlToySHOx2LyFJEf2vlOCovVMw0z0hhFn/eY1nEG+YyIhkIBY/du6G/tG7lmNWyd/1hBwLtdlGmjh6jGugipmJrbZ9wO146/StdtkIGJNxKAYUqDubjgchqbB1rExZgW67urBTsjm+I2guxFnRbWN2YdmW981c6MopFVq3U8xUTzVLmSRTVCfirrTY0j/wGF667s+FwT7ZSIzr4v5of+e/WwDxcaHjni/Z3lKrAfPLo75mics8b9YQJJEJTyA7AQjdjwK+oqvlq8+6w23FOuPhKDiVpkkntHKK8qgEs/3HAKtUFmoZ1BB/ubAl3ZmFVcgv2iLVME2q+H0bfWdwZQeEgwBg31JI062q4g3x2gL2ttm0sc5b10cEe2AOwE4slIEXYkR801ab0kUR397I3rGbtSNvE7weaY3SHCA7PHU5tGnsglThKs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6916009)(38070700005)(86362001)(54906003)(122000001)(82960400001)(316002)(83380400001)(36756003)(26005)(186003)(66476007)(66446008)(8936002)(64756008)(66556008)(76116006)(4326008)(66946007)(8676002)(6486002)(71200400001)(508600001)(6512007)(6506007)(2616005)(38100700002)(5660300002)(2906002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SVVtQU9Kd1U0TTFjYUk3WjF2MDcxeGVydXBKYWZleEUrTjVXbFF6RlVrT3l1?=
- =?utf-8?B?YmExaHh3VlVrajBBbmVrdjFhVkE4WDVzMGhtMlhZSEhLYzdwYksxTjFsaFFO?=
- =?utf-8?B?aktYL2xDOTBsNzNLSGo4eXFucVMvNnpEN0VXcjFSa0YrWDZjRndFZ1NaN0lE?=
- =?utf-8?B?YnJyMDI3aExBaWtKV0FWcHBQWnB0NTF4ai9pajBFM0FqMHBoVDZhMng0THQ0?=
- =?utf-8?B?RDdCajhlRzduUTV1OEtHSFdEbzVzZWU4TTJrMWUzaFJIT3VMbWMxN04rS3lZ?=
- =?utf-8?B?bWlNYmxJb0xFNVhlMVR1M0RvSzR3U2lwMDFoVmdOcElPajR0Vzc1L213dEx1?=
- =?utf-8?B?OE1JSnJMQWIzSGp5YTlUTTRocHFwa1F5UEpzaEFYcDYwNlJ2cHZaWDBMUmZY?=
- =?utf-8?B?bVlQMXlKSFZIRGd4UE15aDNxUnlwUGY5V2NZcm14aGYyMUJWaE14R2RsblFK?=
- =?utf-8?B?b1FDRFpaek5BSWRkMUpSZjNuOXN6SlRybzBXUDlQaXY4M0xwOTBUMUJ0Wkgr?=
- =?utf-8?B?UjlVNFlubDR0WUV4Zzl6RlJxT2dqYkVXRkJ1WEpScWRFOGhzMEluQ2ZEODdM?=
- =?utf-8?B?NDBuTVcxNXV4QmxvUHZIWVN6d29NaG9mdk55MC82SndvSDhiRnRwSjgzVlpr?=
- =?utf-8?B?eEdaQmp4RFAxV0NCUGo4aTBrVmNuWlU3SzVOZjc4TS8yK0t4MmhhZElPMWds?=
- =?utf-8?B?aS9iNGpUeXEzK3QyVENEdGNWZnVEUDNhY3lNb1N6dGRDU3FUWUlWNzFZZjg2?=
- =?utf-8?B?S3hJQ0llWldhV0xBSW5mdC8yZzJ6aXoxYmJsdGFPQkFPRjNqVDZkNEk0Rmox?=
- =?utf-8?B?SjZnWTMzcDJEZGNJQXF0RExGWTk2Vm5Id2ZuSmFEQWZHRi9qSktGMnArOWJC?=
- =?utf-8?B?cXBTaW5wN0pyaU9aeCs0ZHJjRDA0Wm9TVGVsNEQyQjl3d2lDMFFmM2ppU0dN?=
- =?utf-8?B?QlFKeG1Kb0ZETmN6THN4Z1JCemRjaTlPL2cyQWlCSllGc2tDNGhqUk14U1g1?=
- =?utf-8?B?eXV1ZncxSGFNdE5TM3pLZThMQU1sWnFJUERrWlNXUElPWHd3SjJYSE5LS3hP?=
- =?utf-8?B?L3VaOWRiREg2U1A2TXZFYUdRQnBwRC9MOW9WTXlTWkkrblN0MjA4V1l4Yy9E?=
- =?utf-8?B?TTVvNW9qMmhoMWFIUklsZ3RRUzFlOXlaL25yVDhmSkZYQkZYa3dudHhyWjFU?=
- =?utf-8?B?RnBlZ21zdStOSlJEWE9GNHF4WjlESnNRYTJhUWViS0lYOG5lR3JXb3RyYmVP?=
- =?utf-8?B?c2E3QzZwM253NUlYa2VkZ2ovZVFSOUdmWk1YSUJRamtyRHArOE1GQ3pDYUJF?=
- =?utf-8?B?MUV6aFN2U3hVRzNTaEZvUmVncXAzM0ExMG55NERxa2hsaE8xMUNvRDIzMjF3?=
- =?utf-8?B?R1BYU0JlcXpiSmoyZS81Nk1mV3IyVExxRVROM3ZLZGNXWjNxQm1Ec2hwTFVo?=
- =?utf-8?B?T2dNRWlzTnF1cC9lNk4yWlJoa3dmNzh5SkhJSllxRDRwTDNxblU2VFVFcURO?=
- =?utf-8?B?cmdwL0hYajY2N28waHFzbEQ3YjlMeUhBU2k0Sm9EQzEyMTdoR3I0czZmdVdL?=
- =?utf-8?B?dnNYZzRBUGhVUVU0ZFU4VURaMXZNR2hSa2M1NlhqUmp4UGx6MVJuVGNieEUx?=
- =?utf-8?B?SCs1SVU2cGx0dURSbDNMVE5OOGxzZDB0Z1gvQUt5ME5FSlZtQW0vdEdnS3RU?=
- =?utf-8?B?NFFHbG5SMjdLQThuUXRVTXZ2RE1wczUyUVFmdzY4SG9yRnJMT0VzOVlXbldI?=
- =?utf-8?B?QkNWL2NpeGRINnRIQldKdXhUdG85cTluSENSWDg4QitNUXZSc1ZMU0lDYmVt?=
- =?utf-8?B?U2x3Q3E5UUFHUGNrcEU3KzdTOVczTnpTWnVWNjdlUnR2cW1id1dmWnE2ZkEx?=
- =?utf-8?B?VzI5WnpPb3VWRlpDNEpDV0ZJZFFvVzJFSE1LZUl4TzE1b0ljVEluNXpTLzJj?=
- =?utf-8?B?d2NIZUdBTGptVGpNYnY1T1d0WCtUYXdNQ3dQUElGMGpEeC85bEpxRHdXblhC?=
- =?utf-8?Q?bcDyL06raoEtpJTZuRBMKZG5wxNXiQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <014E5A9359BF6F4CA9D8E68CE1B34412@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 16 Mar 2022 15:09:05 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3DC6E4DD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:07:48 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22GJ7aGd092762;
+        Wed, 16 Mar 2022 14:07:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1647457656;
+        bh=N5ylJZ1K6pH9Ewh0ti3NqYFgD8V839oLAeuagKadsz0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=tOLYc0HrapKS2LqxUYFvFPZxuhZMSXLeiTl4X04fbvFvU+PYH0+yuhlFcZH+bImF6
+         yU1IjkFy4/rqTLmdohg8lxxk2k4P0LFqfDWr21mGoFH9d3p/WbTEKBK+pRiH1dtyB7
+         urPpUSLuldowfha+2A3EUeJqzJeOdZ97ggWCniOE=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22GJ7ak6050129
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Mar 2022 14:07:36 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 16
+ Mar 2022 14:07:36 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 16 Mar 2022 14:07:36 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22GJ7Y5o027198;
+        Wed, 16 Mar 2022 14:07:35 -0500
+Date:   Thu, 17 Mar 2022 00:37:34 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <heiko.thiery@gmail.com>
+Subject: Re: [PATCH v1] mtd: spi-nor: unset quad_enable if SFDP doesn't
+ specify it
+Message-ID: <20220316190734.ft2fnesptnyk2cdg@ti.com>
+References: <20220304185137.3376011-1-michael@walle.cc>
+ <7f339d0c-5ca9-261c-a545-d4ebf3bda140@microchip.com>
+ <92cde38c-d398-44f4-26f8-ef4919f5944e@microchip.com>
+ <7f947928e7189f98eb950828990b3920@walle.cc>
+ <91393780-1521-09b7-8dea-14c65e18b37e@microchip.com>
+ <0cf8dbbf4ad005abd3db825fb257dedd@walle.cc>
+ <33464af7-b445-6229-a02d-703a5ce6b5ef@microchip.com>
+ <77c2c64f362b08cbbdab517bbaa49101@walle.cc>
+ <683b7df7-cd34-c87b-9918-fd63d09df2f3@microchip.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40fbf73f-d602-4ca9-70a6-08da07801f5b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 19:06:48.8078
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xAK1n2HQ7vUW7ZE9+IA1gjWuOTXEWhffokI2iWjOhXoP9E5+pXBd5LKhvvbXqGB7lnx/h/N6yjhlvR4FqBIVAl0CMYyeyzAIp5cMNn1AzPc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3470
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <683b7df7-cd34-c87b-9918-fd63d09df2f3@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -170,37 +74,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTAzLTE1IGF0IDE5OjQ4IC0wNzAwLCBLZWVzIENvb2sgd3JvdGU6DQo+IE9u
-IFR1ZSwgTWFyIDE1LCAyMDIyIGF0IDA5OjUzOjEzUE0gKzAwMDAsIEVkZ2Vjb21iZSwgUmljayBQ
-IHdyb3RlOg0KPiA+IE9uIFR1ZSwgMjAyMi0wMy0xNSBhdCAxMzo0MSAtMDcwMCwgS2VlcyBDb29r
-IHdyb3RlOg0KPiA+ID4gSGF2ZSB5b3UgdmVyaWZpZWQgdGhlcmUncyBubyBiaW5hcnkgZGlmZmVy
-ZW5jZSBpbiBtYWNoaW5lIGNvZGUNCj4gPiA+IG91dHB1dD8NCj4gPiANCj4gPiBUaGVyZSBhY3R1
-YWxseSB3YXMgYSBkaWZmZXJlbnQgaW4gdGhlIGJpbmFyaWVzLiBJIGludmVzdGlnYXRlZCBhDQo+
-ID4gYml0LA0KPiA+IGFuZCBpdCBzZWVtZWQgYXQgbGVhc3QgcGFydCBvZiBpdCB3YXMgZHVlIHRv
-IHRoZSBsaW5lIG51bWJlcnMNCj4gPiBjaGFuZ2luZw0KPiA+IHRoZSBXQVJOX09OKClzLiBCdXQg
-b3RoZXJ3aXNlLCBJIGFzc3VtZWQgc29tZSBjb21waWxlciBvcHRpbWl6YXRpb24NCj4gPiBtdXN0
-IGhhdmUgYmVlbiBidW1wZWQuDQo+IA0KPiBSaWdodCwgeW91IGNhbiBpZ25vcmUgYWxsIHRoZSBk
-ZWJ1Z2dpbmcgbGluZSBudW1iZXIgY2hhbmdlcy4NCj4gImRpZmZvc2NvcGUiIHNob3VsZCBoZWxw
-IHNlZSB0aGUgZGlmZmVyZW5jZSBieSBzZWN0aW9uLiBBcyBsb25nIGFzDQo+IHRoZQ0KPiBhY3R1
-YWwgb2JqZWN0IGNvZGUgaXNuJ3QgY2hhbmdpbmcsIHlvdSBzaG91bGQgYmUgZ29vZC4NCg0KV2hh
-dCBJIGRpZCBvcmlnaW5hbGx5IHdhcyBvYmpkdW1wIC1EIHB0cmFjZS5vIGFuZCBkaWZmIHRoYXQu
-IFRoZW4gSQ0Kc2xvd2x5IHJlZHVjZWQgY2hhbmdlcyB0byBzZWUgd2hhdCB3YXMgZ2VuZXJhdGlu
-ZyB0aGUgZGlmZmVyZW5jZS4gV2hlbg0KSSBtYWludGFpbmVkIHRoZSBsaW5lIG51bWJlcnMgZnJv
-bSB0aGUgb3JpZ2luYWwgdmVyc2lvbiwgYW5kIHNpbXBseQ0KY29udmVydGVkIHRoZSBlbnVtIHRv
-IGRlZmluZXMsIGl0IHN0aWxsIGdlbmVyYXRlZCBzbGlnaHRseSBkaWZmZXJlbnQNCmNvZGUgaW4g
-cGxhY2VzIHRoYXQgZGlkbid0IHNlZW0gdG8gY29ubmVjdGVkIHRvIHRoZSBjaGFuZ2VzLiBTbyBJ
-DQpmaWd1cmVkIHRoZSBjb21waWxlciB3YXMgZG9pbmcgc29tZXRoaW5nLCBhbmQgcmVsaWVkIG9u
-IGNoZWNraW5nIHRoYXQNCnRoZSBhY3R1YWwgY29uc3RhbnRzIGRpZG4ndCBjaGFuZ2UgaW4gdmFs
-dWUuDQoNClRoaXMgbW9ybmluZyBJIHRyaWVkIGFnYWluIHRvIGZpZ3VyZSBvdXQgd2hhdCB3YXMg
-Y2F1c2luZyB0aGUNCmRpZmZlcmVuY2UuIElmIEkgc3RyaXAgZGVidWcgc3ltYm9scywgcmVtb3Zl
-IHRoZSBCVUlMRF9CVUdfT04oKXMgYW5kDQpyZWZvcm1hdCB0aGUgZW51bXMgc3VjaCB0aGF0IHRo
-ZSBsaW5lIG51bWJlcnMgYXJlIHRoZSBzYW1lIGJlbG93IHRoZQ0KZW51bXMgdGhlbiB0aGUgb2Jq
-ZHVtcCBvdXRwdXQgaXMgaWRlbnRpY2FsLg0KDQpJIHRoaW5rIHdoYXQgaXMgaGFwcGVuaW5nIGlu
-IHRoaXMgZGVidWcgc3RyaXBwZWQgdGVzdCwgaXMgdGhhdCBpbiB0aGUNCmNhbGwncyB0byBwdXRf
-dXNlcigpLCBpdCBjYWxscyBtaWdodF9mYXVsdCgpLCB3aGljaCBoYXMgYSBfX0xJTkVfXy4NCg0K
-QnV0IGV2ZW4gYWRkaW5nIGEgY29tbWVudCB0byB0aGUgYmFzZSBmaWxlIGhhcyBzdXJwcmlzaW5n
-bHkgd2lkZQ0KZWZmZWN0cy4gSXQgY2F1c2VkIHRoZSBfX2J1Z190YWJsZSBzZWN0aW9uIHRhYmxl
-IHRvIGdldCBjb2RlIGdlbmVyYXRlZA0Kd2l0aCBkaWZmZXJlbnQgaW5zdHJ1Y3Rpb25zLCBub3Qg
-anVzdCBsaW5lIG51bWJlcnMgY29uc3RhbnRzIGNoYW5naW5nLg0KDQpTbyBJIHRoaW5rIHRoZXJl
-IHNob3VsZCBiZSBubyBmdW5jdGlvbmFsIGNoYW5nZSwgYnV0IHRoZSBiaW5hcmllcyBhcmUNCm5v
-dCBpZGVudGljYWwuDQo=
+On 15/03/22 07:47AM, Tudor.Ambarus@microchip.com wrote:
+> On 3/15/22 09:24, Michael Walle wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Am 2022-03-15 06:55, schrieb Tudor.Ambarus@microchip.com:
+> >> On 3/14/22 22:42, Michael Walle wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> >>> the content is safe
+> >>>
+> >>> Am 2022-03-09 05:49, schrieb Tudor.Ambarus@microchip.com:
+> >>>> On 3/7/22 20:56, Michael Walle wrote:
+> >>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+> >>>>> know
+> >>>>> the content is safe
+> >>>>>
+> >>>>> Am 2022-03-07 10:23, schrieb Tudor.Ambarus@microchip.com:
+> >>>>>> On 3/7/22 09:12, Tudor.Ambarus@microchip.com wrote:
+> >>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+> >>>>>>> know
+> >>>>>>> the content is safe
+> >>>>>>>
+> >>>>>>> On 3/4/22 20:51, Michael Walle wrote:
+> >>>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+> >>>>>>>> know the content is safe
+> >>>>>>>>
+> >>>>>>>> While the first version of JESD216 specify the opcode for 4 bit
+> >>>>>>>> I/O
+> >>>>>>>> accesses, it lacks information on how to actually enable this
+> >>>>>>>> mode.
+> >>>>>>>>
+> >>>>>>>> For now, the one set in spi_nor_init_default_params() will be
+> >>>>>>>> used.
+> >>>>>>>> But this one is likely wrong for some flashes, in particular the
+> >>>>>>>> Macronix MX25L12835F. Thus we need to clear the enable method
+> >>>>>>>> when
+> >>>>>>>> parsing the SFDP. Flashes with such an SFDP revision will have to
+> >>>>>>>> use
+> >>>>>>>> a
+> >>>>>>>> flash (and SFDP revision) specific fixup.
+> >>>>>>>>
+> >>>>>>>> This might break quad I/O for some flashes which relied on the
+> >>>>>>>> spi_nor_sr2_bit1_quad_enable() that was formerly set. If your
+> >>>>>>>> bisect
+> >>>>>>>> turns up this commit, you'll probably have to set the proper
+> >>>>>>>> quad_enable method in a post_bfpt() fixup for your flash.
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> Right, I meant adding a paragraph such as the one from above.
+> >>>>>>>
+> >>>>>>>> Signed-off-by: Michael Walle <michael@walle.cc>
+> >>>>>>>> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+> >>>>>>>> ---
+> >>>>>>>> changes since RFC:
+> >>>>>>>>  - reworded commit message
+> >>>>>>>>  - added comment about post_bfpt hook
+> >>>>>>>>
+> >>>>>>>> Tudor, I'm not sure what you meant with
+> >>>>>>>>   Maybe you can update the commit message and explain why would
+> >>>>>>>> some
+> >>>>>>>>   flashes fail to enable quad mode, similar to what I did.
+> >>>>>>>>
+> >>>>>>>> It doesn't work because the wrong method is chosen? ;)
+> >>>>>>>>
+> >>>>>>>>  drivers/mtd/spi-nor/sfdp.c | 11 ++++++++++-
+> >>>>>>>>  1 file changed, 10 insertions(+), 1 deletion(-)
+> >>>>>>>>
+> >>>>>>>> diff --git a/drivers/mtd/spi-nor/sfdp.c
+> >>>>>>>> b/drivers/mtd/spi-nor/sfdp.c
+> >>>>>>>> index a5211543d30d..6bba9b601846 100644
+> >>>>>>>> --- a/drivers/mtd/spi-nor/sfdp.c
+> >>>>>>>> +++ b/drivers/mtd/spi-nor/sfdp.c
+> >>>>>>>> @@ -549,6 +549,16 @@ static int spi_nor_parse_bfpt(struct spi_nor
+> >>>>>>>> *nor,
+> >>>>>>>>         map->uniform_erase_type = map->uniform_region.offset &
+> >>>>>>>>                                   SNOR_ERASE_TYPE_MASK;
+> >>>>>>>>
+> >>>>>>>> +       /*
+> >>>>>>>> +        * The first JESD216 revision doesn't specify a method to
+> >>>>>>>> enable
+> >>>>>>>> +        * quad mode. spi_nor_init_default_params() will set a
+> >>>>>>>> legacy
+> >>>>>>>> +        * default method to enable quad mode. We have to disable
+> >>>>>>>> it
+> >>>>>>>> +        * again.
+> >>>>>>>> +        * Flashes with this JESD216 revision need to set the
+> >>>>>>>> quad_enable
+> >>>>>>>> +        * method in their post_bfpt() fixup if they want to use
+> >>>>>>>> quad
+> >>>>>>>> I/O.
+> >>>>>>>> +        */
+> >>>>>>>
+> >>>>>>> Great. Looks good to me. I'll change the subject to "mtd: spi-nor:
+> >>>>>>> sfdp:"
+> >>>>>>> when applying.
+> >>>>>>
+> >>>>>> As we talked on the meeting, we can instead move the default quad
+> >>>>>> mode
+> >>>>>> init
+> >>>>>> to the deprecated way of initializing the params, or/and to where
+> >>>>>> SKIP_SFDP
+> >>>>>> is used. This way you'll no longer need to clear it here.
+> >>>>>
+> >>>>> Mh, I just had a look and I'm not sure it will work there,
+> >>>>> because in the deprecated way, the SFDP is still parsed and
+> >>>>> thus we might still have the wrong enable method for flashes
+> >>>>> which don't have PARSE_SFDP set.
+> >>>>
+> >>>> Moving the default quad_enable method to
+> >>>> spi_nor_no_sfdp_init_params(),
+> >>>> thus also for spi_nor_init_params_deprecated() because it calls
+> >>>> spi_nor_no_sfdp_init_params(), will not change the behavior for the
+> >>>> deprecated way of initializing the params, isn't it?
+> >>>
+> >>> What do you mean? The behavior is not changed and the bug is not
+> >>> fixed for the flashes which use the deprecated way. It will get
+> >>> overwritten by the spi_nor_parse_sfdp call in
+> >>> spi_nor_sfdp_init_params_deprecated().
+> >>
+> >> right, it will not change the logic for the deprecated way of
+> >> initializing
+> >> the params.
+> >>
+> >>>
+> >>>> A more reason
+> >>>> to use PARSE_SFDP/SKIP_SFDP, we'll get rid of the deprecated params
+> >>>> init at some point.
+> >>>>
+> >>>> No new fixes for spi_nor_init_params_deprecated().
+> >>>
+> >>> Hm, so we deliberately won't fix known bugs there? I'm not sure
+> >>> I'd agree here. Esp. because it is hard to debug and might even
+> >>> depend on non-volatile state of the flash.
+> >>>
+> >>
+> >> even more a reason to switch to the recommended way of initializing
+> >> the flash. We'll get rid of the deprecated code anyway, no?
+> > 
+> > I get your point. But I disagree with you on that point :) Features?
+> > sure we can say this shouldn't go to any deprectated code flow and
+> > might poke users to post a patch. But bug fixes? I don't think
+> > we should hold these back.
+> 
+> Why to fix something that never worked in a deprecated code path? It's
+> equivalent to adding new support, no?
+
+I have not followed this discussion very closely but this argument makes 
+sense to me. If something never worked in the deprecated path then we 
+have don't have to fix it.
+
+> 
+> > Correct me if I'm wrong, but we can get rid of the deprecated way
+> > only if all the flashes are converted to PARSE_SFDP or SKIP_SFDP,
+> > right? And I don't see this happening anytime soon.
+> 
+> Right. I vote to don't queue any new patches for deprecated code paths,
+> new support or fixes. But I'm not completely against it, I don't see
+> the point, that's all. Let's sync with Pratyush and Vignesh too.
+
+I agree with no new features for deprecated path. But I think we should 
+still take in bug fixes.
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

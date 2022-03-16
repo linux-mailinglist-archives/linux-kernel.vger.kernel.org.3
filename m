@@ -2,275 +2,920 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BD54DB6A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E658D4DB69B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239125AbiCPQry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
+        id S1351178AbiCPQsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348446AbiCPQru (ORCPT
+        with ESMTP id S238933AbiCPQsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:47:50 -0400
-Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50AF28E37;
-        Wed, 16 Mar 2022 09:46:35 -0700 (PDT)
-Received: from pps.filterd (m0174679.ppops.net [127.0.0.1])
-        by mx0a-0039f301.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22GFnniQ024885;
-        Wed, 16 Mar 2022 16:46:26 GMT
-Received: from eur04-vi1-obe.outbound.protection.outlook.com (mail-vi1eur04lp2057.outbound.protection.outlook.com [104.47.14.57])
-        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3eujvp87t5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Mar 2022 16:46:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iUsJMyQ/NNs+uXG8IzZOkjJpTUvi4Orby13uzoyX+tcSFIbiTHv9CDhkDE7NUqSsq14hVti99lv10jhz2MmPjLoZNQfEepQbf6QDukK9ci/r8O/RPbNSkuhXyZtgrGw+RRK0Fggjicw+pRoDvvuEJ6QYegaA33fo23DsrBOtxeErCRt3pZY+aGoJiutWW1D9x6dMfaJ0DC6l9Gg6S7diEEtEPDaNlrM84TcoAaE1wpHvVbm2+cikj2cCEC2oZ8uA4AOG1CyVICdlkeJWxaONWO7yM+VYkuRV/mrBxz4/2dJQa8vska3+TvHg17INI4hMIqiVOz+pRdB6bUlGXWKEBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K+KEGKCPCSphI6iWgnTsxLJnqwEHq2k1wFvqeXx3Rg0=;
- b=hM5sb7X6GxPiYB/fTx59e8LYfSA/2/Pah6I61DsqkGnbaWqqyXIByRPjCOuzAqQxxOVtgNxCXUUQNPQvbQh2OCaLPCaGZkmEMiotz9JSkDXKmHUg6rZPAQcTH5UdA5rhxJxUQAXh6SA3EWATEd1SJu75Un9vBRWEIY4CMKGLVvtd++SLUzZLQ00C5ZIBWf5xkf3OBoGbidqj2IkjcWlVxSmophZUVr6pPFpNVjcUcbVFS82x7iQRexS3gIPp0fXC8iMFF4rtwxRL2MmMrWio+NTJohU2K+4fKWGgfCBFoi/tQneuj+OouI8c5AXXM1xEJ8NCF9gc3ldrVx3QViIzAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K+KEGKCPCSphI6iWgnTsxLJnqwEHq2k1wFvqeXx3Rg0=;
- b=mwinp5QvltB5u53wxLJaB8NhgtAPSfytp7rXjoIpe8RDGlZ2/f4ikz5ibF316NL2nUjl2UcPqdWKibDsSSjp2kocm6Ngl5HVDyXFUqT+ArpjKfQHLrCukMJD6Gib1QCQF9X0eCldHHF/kgdrj1JuipC+oGmLVw5O6u3mlRfxjSNi5YaknzcGOnbXI40G04ORkoneq7miFK2KvPy9qgqUNYYKyveL4kT69Cvsf1e4TEvUdQXO4S2nHQhKFlGv7H0hArBKQ0K1Abuxe6cAYNWE1RnZ5UCsi6Pt31O8PBRrB09JR1ZnId6M9dhXZrDEWMFP4R5PsggZ0duHArPlA/38yA==
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
- by VE1PR03MB5326.eurprd03.prod.outlook.com (2603:10a6:802:b0::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Wed, 16 Mar
- 2022 16:46:20 +0000
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::b12a:5b52:7c19:fbc]) by PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::b12a:5b52:7c19:fbc%6]) with mapi id 15.20.5081.015; Wed, 16 Mar 2022
- 16:46:20 +0000
-From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] dt-bindings: xen: Add xen,scmi-devid property
- description for SCMI
-Thread-Topic: [PATCH v2 2/2] dt-bindings: xen: Add xen,scmi-devid property
- description for SCMI
-Thread-Index: AQHYMfvS+PrMFPR+OUmb9ZzOrE/y56y17gCAgAxYwIA=
-Date:   Wed, 16 Mar 2022 16:46:20 +0000
-Message-ID: <20220316164619.GA3489934@EPUAKYIW015D>
-References: <cover.1646639462.git.oleksii_moisieiev@epam.com>
- <5859bb58c8caf87985deb84d7f6bfc8182bd6a59.1646639462.git.oleksii_moisieiev@epam.com>
- <Yie47a4lqXjVzgxI@robh.at.kernel.org>
-In-Reply-To: <Yie47a4lqXjVzgxI@robh.at.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4fa3db5c-277f-4e50-2736-08da076c7fa1
-x-ms-traffictypediagnostic: VE1PR03MB5326:EE_
-x-microsoft-antispam-prvs: <VE1PR03MB532698102EB1A7BEBB26545EE3119@VE1PR03MB5326.eurprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ASQRMij0OFz8dTnStWujax1f+lFojug4qLtme+9Smwt8DWd1yjza8bn0IJkRijjxsdClJef83/BsREVvxcnTMgdE8Kx+YdW9n4oHIS1bemB7uKVYiVSfOcabi8ZQvDAmjUTfv3aqX1n9h16s+xyZsS0xOrA9tuBLk9RR3iD0iqii7NYiUgmWIcmmAol8oPlHyEsCzfB6MRw7tPksHNVz0+oeQq1e61oz2K+Ao+2OsSgonAohpH+PcHV1/s7t2Bka6P18LyhYyMhz6BTibuOh5T9jq9tmX7czoJVdW5RzCBWjU7rPrvQFHvswIvSe0VSdKmMEmn2+bOjpG18IXuGTpGgzmYA9aYqJlcombDrT6RkdLx2R3DhWt9tSbfYABUwQUgEKGraWpK22qw0THnNMRFXdTbD5hrrxz7hn8LZcq26C1grIDrFkDMZKaJqwL9b99zD95rDFgFajanDxnBm2iKV25A2uhlk8mddD3VaX2II0i6M5bzpjgPe9JQZdM4CCThTtVLwYl9g7Cx9XfT0xmG9CTvU19xviK/QzVe52fC++aUb/aw06boISWtV2Q/8zx7aB/rLTIlLoGX284v6h3f9PJBGmwEv/5DP2iViuOxL+BtSPwGGmwUegPmrDGoLyj6SAT8Wpi2JTlM80/YnZVaXCXQxaAyWgb0ysBWuljrC5dN5pQawZrb0Qdl4Vo02MNQk2iCivGT2Q76GDY0/zQGaXiiqupowx/Ql4dWH5+imQxBwOgKYgATmeZDn9kmdYLt2S0nvy+QOXKqcY7ZwziMraiD3krxxCDLJRy5SSnIg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(122000001)(508600001)(6486002)(966005)(8936002)(71200400001)(6916009)(5660300002)(2906002)(33716001)(6512007)(91956017)(6506007)(9686003)(316002)(55236004)(54906003)(4326008)(66946007)(38070700005)(76116006)(66556008)(66476007)(66446008)(64756008)(33656002)(83380400001)(38100700002)(86362001)(186003)(1076003)(26005)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0vgs1N5W1bb5k09ah5mSoRn1K1yfH9mb61zGjv7aqk64F0w9ewlZ9FVtu5EU?=
- =?us-ascii?Q?aNlGk04sDnv66rlT7/lP8NmcOPQrEBGmWEb00UCPh+WWH9Lvnv9Gs5d/JZVU?=
- =?us-ascii?Q?ZavnFy9Mu0oqNJL+FN+0AFQNRXPJo9v2xmSrm1jFU6dv9xhXJEaK/MnVnYR7?=
- =?us-ascii?Q?AWtVDseHI56YgMc4tekk18tjQB7Hd1tcs4fAmmHg9cXZCd2iC+gt3womBd0c?=
- =?us-ascii?Q?QZudWF6TslPvPoqsFTYvTXukSJ/4wi6cZADd/wpSkKXvIfObQ16PhQr+h1kT?=
- =?us-ascii?Q?f+wD61OaOEtUXzBvefPU7dT1wKkiMOCD+2yZ6YueYG7dwkVH6GN0TAGetitr?=
- =?us-ascii?Q?chWFwE46bvL4y0aMaJJ5E73+ScPqYjJBLoxPz54rO3nAvW6o8dr7HVnKb8IC?=
- =?us-ascii?Q?HYDBSSbzzVNY5JPCUMJ8ApR2PaV9C0Hi7G2aBPsoSl8MNRHLc00DW/9Copr2?=
- =?us-ascii?Q?Fb+rK1i46eeEC8POpB7rvRnId17m7F8lIvbM+y91qCO988t9JDGLmQu3ADAy?=
- =?us-ascii?Q?F2sdLt18i15x6xcg0GzA24u4092crJ/IlTAyxbloD+10K+ByZt4Nxv6GfrY0?=
- =?us-ascii?Q?AaTR3UKksjYNcPAK7yoroxg2Szlr4ztkeY3cLD0IuCE6zTE4tS84KoAGH5lZ?=
- =?us-ascii?Q?jp+JG5rU6+27vmlkVF5U56hP1q0k4RJzcyTKB7ojuZw9FEmraKcFNCBldq42?=
- =?us-ascii?Q?Dx21T0/n0SDDVPBM+AAt5i2zn52D9ghumFFknaXo1drDlJGF1h1tY5Je4CnK?=
- =?us-ascii?Q?JpFxsSyVwwi/J2xkeli9HemR+tbnxfp0WpN5g1hYj5LbCNwdyZ3vgA+VpBoI?=
- =?us-ascii?Q?JwWsDX3CUS4ZJtLhCwmGLweGCaN4ZBLjpvMNfIXA2g2UHRrAB/I+p2HxIODI?=
- =?us-ascii?Q?eSEv75jfRRGZb6TR1TlbqDi4W93/oe3idJV/rRU6jIZKfJ7S5+8AbcJ3jAjF?=
- =?us-ascii?Q?XoYDSL8uGpCoseCbeNryTpveczZK1V1OXKUbOF5VqbBtiQ+ZegxdRArDo+7+?=
- =?us-ascii?Q?CHoD9VeRqIyMvMy40jX1kwtHVHC39kq1GNsjVDkmI2g5dDmy6O7EkbX/Gaph?=
- =?us-ascii?Q?yZy2P41g2SoCR2MoCv8vGolu6sM1Z8z8Ga3kz5e9e937+tWYBn7Qa9HVKYWK?=
- =?us-ascii?Q?GJ3ZlUh69cZVMT6Vswq6gUOOTqRIKw2ifC1bS2xLjBpIJuG8JNTKBHljR6Qm?=
- =?us-ascii?Q?xPnY20MQX8oUSCv81dkmIfWu19hmtYUOAEVmx4Lr5pcxZtYGiGUahUvnnL5O?=
- =?us-ascii?Q?MnSsGL82O+435cJwi6FCzVX+/AvJjK1L/zeihzAb9D8EczS4JtL0SYTA3kV4?=
- =?us-ascii?Q?sORTyniIUSAkJ5RhUFpDS+S6cuG6NRz76MqUskZCMtW33++zUzCtNTJRt9Xi?=
- =?us-ascii?Q?Ss/5J7qcfwgmPhHzLmz1WsBUVGRxXH9q/Oo1wc6L3CeDu5RgPbV2CA1rSpA0?=
- =?us-ascii?Q?Vjg6Af664iBXwY6ORI6YQtzxzTzTaQIBvEIYuB0pY3bVESIXa7FC5Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <0841B79E5C037B43B720E2A707FDA885@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 16 Mar 2022 12:48:30 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255E12BB36
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:47:12 -0700 (PDT)
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A67CA3F499
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647449227;
+        bh=Xh8vQV7R7xKmmjdIGua5FYVm9xtXTcNl740RvmZXS50=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=HQe/k7sevnDI5Uju3xFai/MmLcMUMzlTMOaIt0Y8nqIwMs1/LOGXDRwZ/1Nt3gAL3
+         mBvvJwO7/jas+xEdD0QMkw+6IK5lRg9h3jQkIc9M5QHO4WTu2RAkd4Ut13KUDVBxd7
+         cgrBsmbZzExDST9bQmUWNBCGoYMiNZXDFkNQAZpOtU7HvMtaAzrXopU/zM1RP5TdrS
+         tK2ZWsj2ve+GoPI2BK3U4QxzgkPo6uxOON9mmo1KioYjd3fzTO4gcpJHSI6PYsgVla
+         dDuM5PG1zod+mqnU4/Hb9iCyHBDUcqCXwI7vimQ1f298Mwtq2+4OEee+Xqk5ZZBHzg
+         1kQVK1jFb3vvQ==
+Received: by mail-io1-f72.google.com with SMTP id k10-20020a5d91ca000000b006414a00b160so1602934ior.18
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:47:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xh8vQV7R7xKmmjdIGua5FYVm9xtXTcNl740RvmZXS50=;
+        b=rHBNQSA8rE6TTbkkLjcwUIOfTjmLF/URHgYV0QvRaTJIdaNXlbTYyHfJuJ5lC6Wpo4
+         0Wn6/AArt4YJbyYWxvZhqurN/D+nFkGIh+V8Hlnk0hfibWq0vC/fHncUVnMLzQAv53vz
+         1fthgq1cKfe/7GoeJruW30JTeWgWgqSd5wyd0HhEEAjSuHFXvuNDRuk2Na5NSg+PMjYy
+         u0cBMuCT1pHNaF2LfpbriTnn7Es9qNeitZPM33tG7/zVGK/+Zt0GSPkZytaLhYsw186i
+         ZscgNv59CdgrpWCWR6IyBSpoE+XoLkJmmsVxB71WgZyURdYi21Bm+u1YUklf5gxjgChB
+         ltTw==
+X-Gm-Message-State: AOAM532ctl4YLxURL3hiOy5K9Qt2GFZUBpjqi3ecqlbjwNDbRPD7rlLG
+        eLZnZE/EUn8ldVwZLa44UY92SIiKaKv96x/fFMldJRcV3QTV5tR17bzs9BNnkk+fRPbC89iWs+j
+        Gl6XI8E3D9f0gMwW8qUknO6V7ye65K/67hPZpB8nGfg==
+X-Received: by 2002:a05:6e02:1b8e:b0:2c7:9886:ffe4 with SMTP id h14-20020a056e021b8e00b002c79886ffe4mr227706ili.248.1647449221270;
+        Wed, 16 Mar 2022 09:47:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzAw6YhcXp9t/quDODImWKQq4YlE6kTivokenFW3kDuuZWA7W6uY53kLCQ6ozQg9RKHzTw50A==
+X-Received: by 2002:a05:6e02:1b8e:b0:2c7:9886:ffe4 with SMTP id h14-20020a056e021b8e00b002c79886ffe4mr227680ili.248.1647449220208;
+        Wed, 16 Mar 2022 09:47:00 -0700 (PDT)
+Received: from xps13.dannf (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
+        by smtp.gmail.com with ESMTPSA id n14-20020a056602340e00b00648c287cc02sm1207822ioz.27.2022.03.16.09.46.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 09:46:59 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 10:46:57 -0600
+From:   dann frazier <dann.frazier@canonical.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Sergei Trofimovich <slyfox@gentoo.org>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4.19 0/3] sched/topology: Fix missing scheduling domain
+ levels
+Message-ID: <YjIUgXl6j/+0axvz@xps13.dannf>
+References: <20220307195941.459076-1-dann.frazier@canonical.com>
+ <Yi8jAuqqHRa19rSE@kroah.com>
+ <YjGfQq8zPXpqg5ki@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: epam.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fa3db5c-277f-4e50-2736-08da076c7fa1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 16:46:20.4695
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fLh6kROkjoZrqLJkNU3GfNbEJAhwZoYQVCyVXyd71410395L3GRPQRzsjey1+6A+Av3b+nZ7fqmw5UCithleYC2mUkUUYNFIXVcZ3rC6yjI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR03MB5326
-X-Proofpoint-ORIG-GUID: 7AY5MMDmcK46-Utj1GHfSioHuqQCCEE1
-X-Proofpoint-GUID: 7AY5MMDmcK46-Utj1GHfSioHuqQCCEE1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-16_06,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- phishscore=0 spamscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- mlxlogscore=999 mlxscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203160100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjGfQq8zPXpqg5ki@kroah.com>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 16, 2022 at 09:26:42AM +0100, Greg KH wrote:
+> On Mon, Mar 14, 2022 at 12:12:02PM +0100, Greg KH wrote:
+> > On Mon, Mar 07, 2022 at 12:59:38PM -0700, dann frazier wrote:
+> > > This is a 4.19.y version of a patch series I submitted earlier for
+> > > 5.4.y/5.10.y.
+> > > 
+> > > The LTP cpuset_sched_domains test, authored by Miao Xie, fails on a Kunpeng920
+> > > server that has 4 NUMA nodes:
+> > >   https://launchpad.net/bugs/1951289
+> > > 
+> > > This does appear to be a real bug. /proc/schedstat displays 4 domain levels for
+> > > CPUs on 2 of the nodes, but only 3 levels for the others 2 (see below).
+> > > I assume this means the scheduler is making suboptimal decisions about
+> > > where to place/move processes. I'm not sure how to demonstrate that - but
+> > > open to suggestions if that evidence is important justification for stable.
+> > > 
+> > > This is not a problem in current upstream kernels, so I bisected and found
+> > > that the first patch here fixes it. I can't tell from the commit message
+> > > if fixing this case was Valentin's intent, or just a happy side-effect of the
+> > > set conversion. The other two patches fix regressions introduced by the first.
+> > > The first 2 patches cleanly cherry-pick to 4.19.y, the 3rd one for ia64
+> > > required very minor porting. This platform easily reproduces the problem
+> > > Dietmar's fix addresses. I don't have hardware to test the ia64 fix.
+> > > 
+> > > Here's a comparison of /proc/schedstat before & after applying these
+> > > fixes:
+> > > 
+> > > --- proc_schedstat.4.19.y	2022-03-07 12:50:56.654079337 -0700
+> > > +++ proc_schedstat.4.19.y+fix	2022-03-07 12:50:56.838080561 -0700
+> > > @@ -1,578 +1,642 @@
+> > >  version 15
+> > > -timestamp 4294908434
+> > > -cpu0 0 0 0 0 0 0 11361612670 10290559520 6836
+> > > +timestamp 4341100534
+> > > +cpu0 0 0 0 0 0 0 21341653900 11481279300 96517
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu1 0 0 0 0 0 0 1843515520 625631630 2548
+> > > +cpu1 0 0 0 0 0 0 4471195470 882281120 71449
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu2 0 0 0 0 0 0 2289354570 713438390 3079
+> > > +cpu2 0 0 0 0 0 0 2943530980 1004328880 62562
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu3 0 0 0 0 0 0 2432256280 666979990 1725
+> > > +cpu3 0 0 0 0 0 0 4139792990 1703292020 55607
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu4 0 0 0 0 0 0 1992074450 629454630 1369
+> > > +cpu4 0 0 0 0 0 0 2381857590 919686940 60677
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu5 0 0 0 0 0 0 2064947910 609531780 1521
+> > > +cpu5 0 0 0 0 0 0 2759676770 917386060 56978
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu6 0 0 0 0 0 0 1855812000 663883500 1362
+> > > +cpu6 0 0 0 0 0 0 3351237280 1297382170 74715
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu7 0 0 0 0 0 0 2703746430 783916840 1274
+> > > +cpu7 0 0 0 0 0 0 3179976450 1058536630 77655
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu8 0 0 0 0 0 0 2090836290 638674520 1821
+> > > +cpu8 0 0 0 0 0 0 4639801690 1188713110 72354
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu9 0 0 0 0 0 0 1436484120 612530430 1541
+> > > +cpu9 0 0 0 0 0 0 2705771710 1062818450 65414
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu10 0 0 0 0 0 0 1480678890 556545060 1337
+> > > +cpu10 0 0 0 0 0 0 2455687130 1058647510 68369
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu11 0 0 0 0 0 0 1423172570 653457570 981
+> > > +cpu11 0 0 0 0 0 0 2948426610 1224244600 74876
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu12 0 0 0 0 0 0 1545614210 522001880 1372
+> > > +cpu12 0 0 0 0 0 0 4943016060 1651668820 115111
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu13 0 0 0 0 0 0 1465587250 674454370 1207
+> > > +cpu13 0 0 0 0 0 0 2167573930 908101200 61156
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu14 0 0 0 0 0 0 1390290580 650169110 1025
+> > > +cpu14 0 0 0 0 0 0 4103688790 1301146100 81751
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu15 0 0 0 0 0 0 1743631330 646091580 1119
+> > > +cpu15 0 0 0 0 0 0 3684955290 1065119580 87891
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu16 0 0 0 0 0 0 1739710440 555727290 1235
+> > > +cpu16 0 0 0 0 0 0 2839787900 1158098400 77911
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu17 0 0 0 0 0 0 1514802100 707472360 1168
+> > > +cpu17 0 0 0 0 0 0 3476012050 1332258530 88387
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu18 0 0 0 0 0 0 1391130070 668239020 1773
+> > > +cpu18 0 0 0 0 0 0 5175597860 2383481010 135990
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu19 0 0 0 0 0 0 1451889490 456963730 1344
+> > > +cpu19 0 0 0 0 0 0 2512887500 1180193640 68144
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu20 0 0 0 0 0 0 1908084510 715553220 1246
+> > > +cpu20 0 0 0 0 0 0 2788627280 1011387500 74053
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu21 0 0 0 0 0 0 2066768230 775260700 1118
+> > > +cpu21 0 0 0 0 0 0 2425076590 1075471460 75281
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu22 0 0 0 0 0 0 1615037850 712311120 952
+> > > +cpu22 0 0 0 0 0 0 2307101730 962019510 58461
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu23 0 0 0 0 0 0 1456302120 572598420 1357
+> > > +cpu23 0 0 0 0 0 0 2757474030 962260370 76356
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu24 0 0 0 0 0 0 1709072910 552893710 1169
+> > > +cpu24 0 0 0 0 0 0 3652933450 1101994170 73649
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu25 0 0 0 0 0 0 1805119330 657079790 1087
+> > > +cpu25 0 0 0 0 0 0 6529340180 1624287290 109297
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu26 0 0 0 0 0 0 1577795880 527864810 3029
+> > > +cpu26 0 0 0 0 0 0 3324754670 1068483950 72891
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu27 0 0 0 0 0 0 1413590050 554362040 1049
+> > > +cpu27 0 0 0 0 0 0 2974224880 1106486680 63463
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu28 0 0 0 0 0 0 1413432190 755115350 985
+> > > +cpu28 0 0 0 0 0 0 2815118430 941855370 62111
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu29 0 0 0 0 0 0 1419853070 709649360 965
+> > > +cpu29 0 0 0 0 0 0 2621430500 818510960 62538
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu30 0 0 0 0 0 0 2224691830 533562480 650
+> > > +cpu30 0 0 0 0 0 0 2589371240 892337590 59789
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu31 0 0 0 0 0 0 1802365230 670372730 1050
+> > > +cpu31 0 0 0 0 0 0 486062192680 4705704580 339187
+> > >  domain0 00000000,00000000,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu32 0 0 0 0 0 0 9573362270 609270210 10022
+> > > +cpu32 0 0 0 0 0 0 5971265040 2139404800 121742
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu33 0 0 0 0 0 0 1843131380 599904670 1914
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu33 0 0 0 0 0 0 2677524760 991281220 64712
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu34 0 0 0 0 0 0 1460011550 532140570 1688
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu34 0 0 0 0 0 0 21475764990 10677348350 481844
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu35 0 0 0 0 0 0 1400239060 493604250 1512
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu35 0 0 0 0 0 0 2962357680 895515780 54085
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu36 0 0 0 0 0 0 1428620060 533587890 1425
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu36 0 0 0 0 0 0 4310924220 971362320 65732
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu37 0 0 0 0 0 0 1524935740 488283110 6510
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu37 0 0 0 0 0 0 3132714360 869595750 59698
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu38 0 0 0 0 0 0 1999281270 537669780 6115
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu38 0 0 0 0 0 0 2448968530 687460690 51252
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu39 0 0 0 0 0 0 1428167600 505249420 1096
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu39 0 0 0 0 0 0 4552292990 739739650 74183
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu40 0 0 0 0 0 0 1515985780 501267310 3840
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu40 0 0 0 0 0 0 1831337510 674888630 49370
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu41 0 0 0 0 0 0 1420438250 557522320 1184
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu41 0 0 0 0 0 0 1973746130 707267520 50880
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu42 0 0 0 0 0 0 1455844290 612244690 1039
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu42 0 0 0 0 0 0 1993767880 628424850 50460
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu43 0 0 0 0 0 0 1456445970 637932950 1171
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu43 0 0 0 0 0 0 1840687640 601267720 52153
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu44 0 0 0 0 0 0 1405907130 620353930 1023
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu44 0 0 0 0 0 0 2690531750 535200870 52597
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu45 0 0 0 0 0 0 1784062190 512787800 922
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu45 0 0 0 0 0 0 5069432230 1599031180 105413
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu46 0 0 0 0 0 0 1379527430 528818940 937
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu46 0 0 0 0 0 0 2678516560 697964660 51825
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu47 0 0 0 0 0 0 1344541010 592395430 743
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu47 0 0 0 0 0 0 57574127850 6647390480 995065
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu48 0 0 0 0 0 0 1328420630 584498310 981
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu48 0 0 0 0 0 0 11632859900 6308091200 590818
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu49 0 0 0 0 0 0 1467974770 515278960 1701
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu49 0 0 0 0 0 0 10079777610 4339643760 346371
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu50 0 0 0 0 0 0 1665255180 626549770 1448
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu50 0 0 0 0 0 0 5166677770 1780059980 102801
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu51 0 0 0 0 0 0 1376758540 522451430 1510
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu51 0 0 0 0 0 0 5303796540 1264948860 82590
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu52 0 0 0 0 0 0 1342335080 590540210 924
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu52 0 0 0 0 0 0 6106970160 1830189880 85615
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu53 0 0 0 0 0 0 1351876520 468872080 902
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu53 0 0 0 0 0 0 17366546430 1471292050 110608
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu54 0 0 0 0 0 0 1694712800 603617800 2043
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu54 0 0 0 0 0 0 9956432680 1334653040 74379
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu55 0 0 0 0 0 0 2027759720 600070800 1340
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu55 0 0 0 0 0 0 5967816930 1575673890 114789
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu56 0 0 0 0 0 0 1708325190 555252620 934
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu56 0 0 0 0 0 0 3109219800 816277290 51495
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu57 0 0 0 0 0 0 2093621470 496899220 1514
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu57 0 0 0 0 0 0 5282416490 2120760880 237134
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu58 0 0 0 0 0 0 1668541860 521570220 963
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu58 0 0 0 0 0 0 4306123980 886686630 56916
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu59 0 0 0 0 0 0 1791297470 378380750 1596
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu59 0 0 0 0 0 0 10280589500 3130725070 169341
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu60 0 0 0 0 0 0 1419231630 527375220 1044
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu60 0 0 0 0 0 0 3332621430 918959960 64661
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu61 0 0 0 0 0 0 1393583630 578772930 1009
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu61 0 0 0 0 0 0 2085048610 606157210 56813
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu62 0 0 0 0 0 0 1448983520 550022900 1469
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu62 0 0 0 0 0 0 1822324780 681457240 49305
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu63 0 0 0 0 0 0 1461598320 483305850 980
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu63 0 0 0 0 0 0 3778241440 856580220 73528
+> > >  domain0 00000000,00000000,ffffffff,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 00000000,00000000,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 00000000,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu64 0 0 0 0 0 0 3507643190 661152900 4244
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu64 0 0 0 0 0 0 22216587140 1428127370 125508
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu65 0 0 0 0 0 0 1492831550 600370650 975
+> > > +cpu65 0 0 0 0 0 0 14127940200 1098171010 90254
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu66 0 0 0 0 0 0 1838833710 416135460 1086
+> > > +cpu66 0 0 0 0 0 0 14849141250 1236594070 109524
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu67 0 0 0 0 0 0 1466172980 495304860 1389
+> > > +cpu67 0 0 0 0 0 0 14476836460 1114782300 95657
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu68 0 0 0 0 0 0 1267081320 553239000 1778
+> > > +cpu68 0 0 0 0 0 0 14301777660 1324547280 95881
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu69 0 0 0 0 0 0 1526589610 584764950 4584
+> > > +cpu69 0 0 0 0 0 0 13216203220 1204294380 92657
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu70 0 0 0 0 0 0 1983939560 397079630 2049
+> > > +cpu70 0 0 0 0 0 0 13127525830 1160748780 94376
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu71 0 0 0 0 0 0 1798306900 566172630 5770
+> > > +cpu71 0 0 0 0 0 0 13604682800 1235081350 103097
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu72 0 0 0 0 0 0 2726720520 603334060 7516
+> > > +cpu72 0 0 0 0 0 0 13417280970 975966630 89350
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu73 0 0 0 0 0 0 1447697760 488697730 1239
+> > > +cpu73 0 0 0 0 0 0 12927320870 970385370 87649
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu74 0 0 0 0 0 0 1426290760 373811830 1882
+> > > +cpu74 0 0 0 0 0 0 13138291420 1064998540 89727
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu75 0 0 0 0 0 0 2151996530 431681780 1468
+> > > +cpu75 0 0 0 0 0 0 13574235300 1037221570 89262
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu76 0 0 0 0 0 0 1790512110 624574630 2231
+> > > +cpu76 0 0 0 0 0 0 13262665270 1035332240 88955
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu77 0 0 0 0 0 0 1628597380 515857090 3999
+> > > +cpu77 0 0 0 0 0 0 13210280290 1034503870 94551
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu78 0 0 0 0 0 0 1569364270 506924980 973
+> > > +cpu78 0 0 0 0 0 0 14722980960 1014148230 90250
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu79 0 0 0 0 0 0 1545516180 539271750 3617
+> > > +cpu79 0 0 0 0 0 0 14424507360 952523200 106198
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu80 0 0 0 0 0 0 1314881380 446373500 2104
+> > > +cpu80 0 0 0 0 0 0 16949650100 1312289710 106558
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu81 0 0 0 0 0 0 1235357220 563105350 1291
+> > > +cpu81 0 0 0 0 0 0 59661125520 4712796960 888710
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu82 0 0 0 0 0 0 1308268630 599984950 1500
+> > > +cpu82 0 0 0 0 0 0 52812760750 6442971310 656162
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu83 0 0 0 0 0 0 1381022960 476011810 1784
+> > > +cpu83 0 0 0 0 0 0 19405879230 2279630800 145772
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu84 0 0 0 0 0 0 2814122640 464110210 2874
+> > > +cpu84 0 0 0 0 0 0 20741575350 1237812270 101456
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu85 0 0 0 0 0 0 1321336450 435735720 1332
+> > > +cpu85 0 0 0 0 0 0 13913195240 1118206300 97305
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu86 0 0 0 0 0 0 1437564030 636517790 1304
+> > > +cpu86 0 0 0 0 0 0 14035935000 1116957170 91485
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu87 0 0 0 0 0 0 1254395470 532577150 3209
+> > > +cpu87 0 0 0 0 0 0 15901295860 1314048440 111234
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu88 0 0 0 0 0 0 1295552590 690733260 1582
+> > > +cpu88 0 0 0 0 0 0 16911709520 1179562020 92679
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu89 0 0 0 0 0 0 1246907590 507766850 1902
+> > > +cpu89 0 0 0 0 0 0 13525990150 1203966710 93613
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu90 0 0 0 0 0 0 1268379780 548312550 1093
+> > > +cpu90 0 0 0 0 0 0 13806727720 1101458110 91998
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu91 0 0 0 0 0 0 1247742830 579149750 1227
+> > > +cpu91 0 0 0 0 0 0 13625841200 988922760 91560
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu92 0 0 0 0 0 0 1272481900 461421670 997
+> > > +cpu92 0 0 0 0 0 0 13766158180 1065663440 89003
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu93 0 0 0 0 0 0 1228611240 461038970 886
+> > > +cpu93 0 0 0 0 0 0 12817342700 1043976800 92779
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu94 0 0 0 0 0 0 1447578690 459346070 877
+> > > +cpu94 0 0 0 0 0 0 13308837020 1043742980 87526
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu95 0 0 0 0 0 0 1393144520 552480040 899
+> > > +cpu95 0 0 0 0 0 0 13606107120 940495330 103860
+> > >  domain0 00000000,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu96 0 0 0 0 0 0 1370067340 465828610 793
+> > > +cpu96 0 0 0 0 0 0 2987063120 753888540 60057
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu97 0 0 0 0 0 0 1171899600 453644780 567
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu97 0 0 0 0 0 0 1968001730 534342310 53949
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu98 0 0 0 0 0 0 1205647750 370030300 796
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu98 0 0 0 0 0 0 2220499060 706667480 53075
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu99 0 0 0 0 0 0 1188578600 445334260 629
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu99 0 0 0 0 0 0 2430403760 819037460 61433
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu100 0 0 0 0 0 0 1196553180 597428140 642
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu100 0 0 0 0 0 0 2460772780 577817540 53251
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu101 0 0 0 0 0 0 1167371530 432873560 502
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu101 0 0 0 0 0 0 1693618400 705122600 52664
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu102 0 0 0 0 0 0 1181187970 580350690 493
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu102 0 0 0 0 0 0 2301201340 632424530 49900
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu103 0 0 0 0 0 0 1186311210 574456360 542
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu103 0 0 0 0 0 0 1805617940 611485890 52184
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu104 0 0 0 0 0 0 1760990070 514012570 774
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu104 0 0 0 0 0 0 1664873190 527303670 52658
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu105 0 0 0 0 0 0 1485231310 624973390 575
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu105 0 0 0 0 0 0 2521611660 675404910 60313
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu106 0 0 0 0 0 0 1157646860 434236480 507
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu106 0 0 0 0 0 0 2110366970 609177130 53290
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu107 0 0 0 0 0 0 1228977750 444628380 559
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu107 0 0 0 0 0 0 1776083360 611230870 53791
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu108 0 0 0 0 0 0 1193380610 581360820 549
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu108 0 0 0 0 0 0 2421201140 491993970 57622
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu109 0 0 0 0 0 0 1649801280 393865790 629
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu109 0 0 0 0 0 0 1889445480 500033420 51916
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu110 0 0 0 0 0 0 1200941210 472638690 631
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu110 0 0 0 0 0 0 1931517310 622934790 50689
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu111 0 0 0 0 0 0 1172568170 575732120 656
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu111 0 0 0 0 0 0 1447219670 530624180 52184
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu112 0 0 0 0 0 0 1207990460 590195860 551
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu112 0 0 0 0 0 0 1745764040 532716480 49891
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu113 0 0 0 0 0 0 1144115950 619054780 545
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu113 0 0 0 0 0 0 1706237410 613992870 54371
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu114 0 0 0 0 0 0 1223053110 390862070 609
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu114 0 0 0 0 0 0 2269369350 678733390 52976
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu115 0 0 0 0 0 0 1487193840 471509880 554
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu115 0 0 0 0 0 0 1459128660 729702440 49229
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu116 0 0 0 0 0 0 1467892130 425307870 516
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu116 0 0 0 0 0 0 2099516420 565294690 50630
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu117 0 0 0 0 0 0 1785265600 360272740 729
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu117 0 0 0 0 0 0 2685067970 710842870 52588
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu118 0 0 0 0 0 0 1527783850 325185450 548
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu118 0 0 0 0 0 0 2598777260 611374290 51294
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu119 0 0 0 0 0 0 1532430330 499915720 553
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu119 0 0 0 0 0 0 2670722810 573329650 54912
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu120 0 0 0 0 0 0 1215283710 584904310 588
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu120 0 0 0 0 0 0 2230876930 680415800 48605
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu121 0 0 0 0 0 0 1195612890 514566410 661
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu121 0 0 0 0 0 0 1834523090 667740790 51029
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu122 0 0 0 0 0 0 1145575730 389723540 503
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu122 0 0 0 0 0 0 1968694910 505060190 48295
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu123 0 0 0 0 0 0 1173138720 412947810 535
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu123 0 0 0 0 0 0 1845035810 566308100 49047
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu124 0 0 0 0 0 0 1148413430 506449480 433
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu124 0 0 0 0 0 0 2007055190 607257140 52469
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu125 0 0 0 0 0 0 1535279740 473271970 525
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu125 0 0 0 0 0 0 2553202630 732732710 60094
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu126 0 0 0 0 0 0 1619874930 348350000 816
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu126 0 0 0 0 0 0 2288418430 658005670 49345
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > -cpu127 0 0 0 0 0 0 1431905380 457191450 615
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +cpu127 0 0 0 0 0 0 2474274800 650070960 56289
+> > >  domain0 ffffffff,00000000,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain1 ffffffff,ffffffff,00000000,00000000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > >  domain2 ffffffff,ffffffff,00000000,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > +domain3 ffffffff,ffffffff,ffffffff,ffffffff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> > > 
+> > > 
+> > > Dietmar Eggemann (1):
+> > >   sched/topology: Fix sched_domain_topology_level alloc in
+> > >     sched_init_numa()
+> > > 
+> > > Valentin Schneider (2):
+> > >   sched/topology: Make sched_init_numa() use a set for the deduplicating
+> > >     sort
+> > >   ia64: ensure proper NUMA distance and possible map initialization
+> > > 
+> > >  arch/ia64/kernel/acpi.c  |  7 ++-
+> > >  include/linux/topology.h |  1 +
+> > >  kernel/sched/topology.c  | 99 +++++++++++++++++++---------------------
+> > >  3 files changed, 54 insertions(+), 53 deletions(-)
+> > > 
+> > 
+> > Now queued up, thanks.
+> 
+> Nope, this series breaks the build in ia64.  So I'm dropping it now.
+> Please fix up and resend if you want it applied.
 
+Apologies; I've now fixed and build-tested w/ an ia64 cross compiler.
+v2 coming momentarily.
 
-On Tue, Mar 08, 2022 at 02:13:33PM -0600, Rob Herring wrote:
-> On Mon, Mar 07, 2022 at 08:17:44AM +0000, Oleksii Moisieiev wrote:
-> > Document xen,scmi-devid property for the devices, using SCMI protocol
-> > to work with clocks/resets/power-domains etc. This property is intended
-> > to set the device_id, which should be used to manage device permissions
-> > in the Firmware. Device permissions management described in DEN 0056,
-> > Section 4.2.2.10 [0].
->=20
-> If device_id is a SCMI thing, how is it set for other platforms and=20
-> bindings? With clocks or power-domains, the device_id is the cell value,=
-=20
-> right?
-> =20
-> Since we don't yet have a device assignment, security, or partitioning=20
-> binding, you've come up with some Xen specific solution. Given I know=20
-> multiple people want some sort of binding for this, I'm not going to=20
-> accept anything short of a common binding addressing the various needs.
->=20
-
-Hi Sudeep,
-
-On your email from 3/4/2022 you wrote:
-
-> The fact that we don't need this to be part of SCMI OSPM user bindings,
-> it is not addressed and can be considered as a gap.
-
-> + The reason I want to keep it xen specific at the moment as we had some
-> plan to extended the device-id usage in the spec which hasn't progressed
-> a bit(I must admit that before you ask), and this addition should not be
-> obstruct that future development. If we align with what we define xen
-> specific as part of $subject work, we can always define generic binding
-> in the future and slowly make the other obsolete over the time.
-
-IIUC you have some plans to provide device_id support to the device-tree
-bindings from your side. Maybe we can discuss some of your plans here
-and we can come up with the generic device-id binding?
-So I will have something to base on in Xen.
-
-Best regards,
-Oleksii.
-
->=20
-> > This property is used by Xen hypervisor, which works as trusted Agent, =
-to
-> > set permissions for the devices, passed-through to the Guest Domains,
-> > which are non-trusted Agents. Trusted and non-trusted Agent terms descr=
-ibed
-> > in Section 4.1.1 [0].
-> >=20
-> > [0] https://urldefense.com/v3/__https://developer.arm.com/documentation=
-/den0056/latest__;!!GF_29dbcQIUBPA!kOUan6_nwTf375KaLzZxwHSYqYp1ptLUolUEoK-t=
-3Wb4gsN3ajUC0qQBh6TdAMXQYrn8$ [developer[.]arm[.]com]
-> >=20
-> > Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> > ---
-> >  .../bindings/firmware/xen,scmi-devid.yaml     | 42 +++++++++++++++++++
-> >  1 file changed, 42 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/firmware/xen,scmi=
--devid.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/firmware/xen,scmi-devid.=
-yaml b/Documentation/devicetree/bindings/firmware/xen,scmi-devid.yaml
-> > new file mode 100644
-> > index 000000000000..49dc9951b54d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/firmware/xen,scmi-devid.yaml
-> > @@ -0,0 +1,42 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright 2022 EPAM Systems.
-> > +%YAML 1.2
-> > +---
-> > +$id: https://urldefense.com/v3/__http://devicetree.org/schemas/firmwar=
-e/xen,scmi-devid.yaml*__;Iw!!GF_29dbcQIUBPA!kOUan6_nwTf375KaLzZxwHSYqYp1ptL=
-UolUEoK-t3Wb4gsN3ajUC0qQBh6TdAPJC8yo3$ [devicetree[.]org]
-> > +$schema: https://urldefense.com/v3/__http://devicetree.org/meta-schema=
-s/core.yaml*__;Iw!!GF_29dbcQIUBPA!kOUan6_nwTf375KaLzZxwHSYqYp1ptLUolUEoK-t3=
-Wb4gsN3ajUC0qQBh6TdADgb5MTo$ [devicetree[.]org]
-> > +
-> > +title: Xen SCMI (System Control and Management Interface) Device ID bi=
-nding
-> > +
-> > +maintainers:
-> > +  - Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> > +
-> > +select: true
-> > +
-> > +description: |
-> > +  SCMI device_id property is intended to set the device id, needed to =
-manage
-> > +  the device permissions via SCMI protocol in the firmware. The device=
-_id
-> > +  should match device ids, defined in the firmware so the device permi=
-ssions
-> > +  can be requested by sending BASE_SET_DEVICE_PERMISSIONS (see 4.2.2.1=
-0 of [0]).
-> > +
-> > +  This property is used by Xen hypervisor to set the device permission=
-s for
-> > +  the Guest Domains. Where Xen is trusted Agent and Guest Domains are
-> > +  non-trusted Agents.
-> > +
-> > +  [0] https://urldefense.com/v3/__https://developer.arm.com/documentat=
-ion/den0056/latest__;!!GF_29dbcQIUBPA!kOUan6_nwTf375KaLzZxwHSYqYp1ptLUolUEo=
-K-t3Wb4gsN3ajUC0qQBh6TdAMXQYrn8$ [developer[.]arm[.]com]
-> > +
-> > +properties:
-> > +  xen,scmi-devid:
-> > +    description: Identifier of the device, matching device id, defined=
- in
-> > +      the firmware.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +additionalProperties: true
-> > +
-> > +examples:
-> > +  - |
-> > +    ohci1: usb@ee0a0000 {
-> > +        /* ... */
-> > +        reg =3D <0xee0a0000 0x100>;
-> > +        xen,scmi-devid =3D <11>;
->=20
-> This will cause validation errors unless xen,scmi-devid is listed or=20
-> this schema is referenced in every possible device schema. That=20
-> doesn't scale, but we don't really have a solution to that. For some=20
-> common properties, the tools will add certain properties. If we=20
-> come up with something common, we'll need to add it. Or we may=20
-> need to come up with something more data driven where certain schemas=20
-> are automatically added.
->=20
-> Rob
->=20
-> > +        clocks =3D <&scmi_clock 4>;
-> > +    };
-> > --=20
-> > 2.27.0
-> > =
+  -dann

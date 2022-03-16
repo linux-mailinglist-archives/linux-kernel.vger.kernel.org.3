@@ -2,68 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601D04DB36A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9FD4DB371
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356687AbiCPOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 10:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S1350119AbiCPOkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350119AbiCPOjK (ORCPT
+        with ESMTP id S240487AbiCPOkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 10:39:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10A8D614F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 07:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647441473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FdaRFj6Txp5dVh+5ToS7luAujkKT+3c923Qns25TpZk=;
-        b=GjWrayXvHTOPiXT5oLEmbk3pJ47Lk5ACFAY5ZhcYnQHoNt72J60Ehs8xpUSuZBk4MTjMuF
-        cUtBagfNoREKE3GtvMz4j3xVAQZSGzUGdvD5CrwsrB8agOn4mScunSqKQ7jKeMnwdEMB3F
-        EdAW8LYjO0/6v/6MAky5Qk4IIs3nAxA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-PX3TcyXXMn21kXKpX9Klgg-1; Wed, 16 Mar 2022 10:37:52 -0400
-X-MC-Unique: PX3TcyXXMn21kXKpX9Klgg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 16 Mar 2022 10:40:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8EE26EC;
+        Wed, 16 Mar 2022 07:39:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 453D91801388;
-        Wed, 16 Mar 2022 14:37:51 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.19.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 132C1400F73E;
-        Wed, 16 Mar 2022 14:37:47 +0000 (UTC)
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        linux-serial@vger.kernel.org (open list:SERIAL DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     rostedt@goodmis.org, senozhatsky@chromium.org,
-        andre.goddard@gmail.com, sudipm.mukherjee@gmail.com,
-        andy.shevchenko@gmail.com, David.Laight@aculab.com,
-        jonathanh@nvidia.com, phil@raspberrypi.com
-Subject: [PATCH v4 5/5] serial/8250: Only use fifo after the port is initialized in console_write
-Date:   Wed, 16 Mar 2022 11:36:44 -0300
-Message-Id: <20220316143646.13301-6-wander@redhat.com>
-In-Reply-To: <20220316143646.13301-1-wander@redhat.com>
-References: <20220316143646.13301-1-wander@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id CAC00CE1FE0;
+        Wed, 16 Mar 2022 14:38:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B930C340EC;
+        Wed, 16 Mar 2022 14:38:55 +0000 (UTC)
+Date:   Wed, 16 Mar 2022 14:38:51 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     guoren@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, Guo Ren <guoren@linux.alibaba.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH V2] arch: patch_text: Fixup last cpu should be master
+Message-ID: <YjH2e4bfTl+0/+yc@arm.com>
+References: <20220313012221.1755483-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220313012221.1755483-1-guoren@kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,36 +49,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The serial driver set the value of uart_8250_port.fcr in the function
-serial8250_config_port, but only writes the value to the controller
-register later in the initalization code.
+On Sun, Mar 13, 2022 at 09:22:21AM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> These patch_text implementations are using stop_machine_cpuslocked
+> infrastructure with atomic cpu_count. The original idea: When the
+> master CPU patch_text, the others should wait for it.
 
-That opens a small window in which is not safe to use the fifo for
-console write.
+I couldn't find the original intent in the commit logs (at least not in
+the arm64 logs). Maybe the intention was for the CPUs to wait for the
+text patching to complete rather than the master CPU to wait for the
+others to enter the cpu_relax() loop before patching.
 
-Make sure the port is initialized correctly before reading the FCR
-cached value.
+I think your patch makes sense anyway, the master CPU would wait for all
+the others to enter the cpu_relax() loop before patching and releasing
+them with another increment. You probably wouldn't see any issues in
+practice unless you insert probes in the multi_stop_cpu() function (or
+we could mark this function as __kprobes and get rid of the extra loops
+entirely).
 
-Unfortunately, I lost track of who originally reported the issue. If
-s/he is reading this, please speak up so I can give you the due credit.
+> --- a/arch/arm64/kernel/patching.c
+> +++ b/arch/arm64/kernel/patching.c
+> @@ -117,8 +117,8 @@ static int __kprobes aarch64_insn_patch_text_cb(void *arg)
+>  	int i, ret = 0;
+>  	struct aarch64_insn_patch *pp = arg;
+>  
+> -	/* The first CPU becomes master */
+> -	if (atomic_inc_return(&pp->cpu_count) == 1) {
+> +	/* The last CPU becomes master */
+> +	if (atomic_inc_return(&pp->cpu_count) == num_online_cpus()) {
+>  		for (i = 0; ret == 0 && i < pp->insn_cnt; i++)
+>  			ret = aarch64_insn_patch_text_nosync(pp->text_addrs[i],
+>  							     pp->new_insns[i]);
 
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
----
- drivers/tty/serial/8250/8250_port.c | 1 +
- 1 file changed, 1 insertion(+)
+For arm64:
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 4acf620be241..7e2227161555 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -3416,6 +3416,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
- 		!(up->capabilities & UART_CAP_MINI) &&
- 		up->tx_loadsz > 1 &&
- 		(up->fcr & UART_FCR_ENABLE_FIFO) &&
-+		test_bit(TTY_PORT_INITIALIZED, &port->state->port.iflags) &&
- 		/*
- 		 * After we put a data in the fifo, the controller will send
- 		 * it regardless of the CTS state. Therefore, only use fifo
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+
 -- 
-2.35.1
-
+Catalin

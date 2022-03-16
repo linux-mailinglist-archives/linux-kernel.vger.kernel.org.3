@@ -2,39 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585BE4DA9F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B334DA9DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbiCPFjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 01:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
+        id S1353638AbiCPFaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237378AbiCPFji (ORCPT
+        with ESMTP id S1348079AbiCPFaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 01:39:38 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB065FF3D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:38:24 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7B3E02004A6;
-        Wed, 16 Mar 2022 06:38:23 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 16A202003D3;
-        Wed, 16 Mar 2022 06:38:23 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 9338E183AD0B;
-        Wed, 16 Mar 2022 13:38:21 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: fsl_spdif: Add new registers included on i.MX8ULP
-Date:   Wed, 16 Mar 2022 13:28:58 +0800
-Message-Id: <1647408538-2982-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Wed, 16 Mar 2022 01:30:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E707935DEE;
+        Tue, 15 Mar 2022 22:29:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BC8B11F38C;
+        Wed, 16 Mar 2022 05:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647408541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/PIDCzlHujec2z5GgI/Fxhz1Ptiq+5sj17W7kV26IFg=;
+        b=k/sKfbSrYYRa9c1IRzKH1EV1lIJNiMZHAjh0QjBh2f8r2/LjPWIs3T9GHvoWKqtUG43T1A
+        SuAP3MeGhbVbhlexyS1BFn6MhAS01BLuoGiqA7y9VVJEr1um9I4VZoJDtsiFHpPTrXcRT4
+        4FXFARFp8tWrZKdcpXmTcIDgY1YbVy4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 82B1113B93;
+        Wed, 16 Mar 2022 05:29:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l8SgHZ11MWJIKwAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 16 Mar 2022 05:29:01 +0000
+Message-ID: <78b16b06-9cfe-5bfd-5d23-b7e8010024fd@suse.com>
+Date:   Wed, 16 Mar 2022 06:29:00 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] xen/usb: harden xen_hcd against malicious backends
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220311103509.12908-1-jgross@suse.com>
+ <YjDPtRhdrtY6tpvc@kroah.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <YjDPtRhdrtY6tpvc@kroah.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------eod0dLzbzdUZdsKtS040X2Cp"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -43,173 +66,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some new registers added on i.MX8ULP, they are
-the SPDIF transmit Professional C channel registers,
-192bit SPDIF receive C channel registers, and 192bit SPDIF
-transmit C channel registers.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------eod0dLzbzdUZdsKtS040X2Cp
+Content-Type: multipart/mixed; boundary="------------dIo5mqVJwQtgAvakBeavLCM7";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <78b16b06-9cfe-5bfd-5d23-b7e8010024fd@suse.com>
+Subject: Re: [PATCH] xen/usb: harden xen_hcd against malicious backends
+References: <20220311103509.12908-1-jgross@suse.com>
+ <YjDPtRhdrtY6tpvc@kroah.com>
+In-Reply-To: <YjDPtRhdrtY6tpvc@kroah.com>
 
-There are two output lines, SPDIF_OUT1 and SPDIF_OUT2, the
-original REG_SPDIF_STCSCH and REG_SPDIF_STCSCL are used for
-SPDIF_OUT1, the new REG_SPDIF_STCSPH and REG_SPDIF_STCSPL
-are used for SPDIF_OUT2, the 192bit SPDIF C channel registers
-are used for both.
+--------------dIo5mqVJwQtgAvakBeavLCM7
+Content-Type: multipart/mixed; boundary="------------RThCbjbaim80DRYqQ5E0TjUm"
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- sound/soc/fsl/fsl_spdif.c | 52 ++++++++++++++++++++++++++++++++++++++-
- sound/soc/fsl/fsl_spdif.h | 14 +++++++++++
- 2 files changed, 65 insertions(+), 1 deletion(-)
+--------------RThCbjbaim80DRYqQ5E0TjUm
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/sound/soc/fsl/fsl_spdif.c b/sound/soc/fsl/fsl_spdif.c
-index b502e7c3c04d..42d11aca38a1 100644
---- a/sound/soc/fsl/fsl_spdif.c
-+++ b/sound/soc/fsl/fsl_spdif.c
-@@ -50,6 +50,7 @@ static u8 srpc_dpll_locked[] = { 0x0, 0x1, 0x2, 0x3, 0x4, 0xa, 0xb };
-  * @shared_root_clock: flag of sharing a clock source with others;
-  *                     so the driver shouldn't set root clock rate
-  * @raw_capture_mode: if raw capture mode support
-+ * @cchannel_192b: if there are registers for 192bits C channel data
-  * @interrupts: interrupt number
-  * @tx_burst: tx maxburst size
-  * @rx_burst: rx maxburst size
-@@ -59,6 +60,7 @@ struct fsl_spdif_soc_data {
- 	bool imx;
- 	bool shared_root_clock;
- 	bool raw_capture_mode;
-+	bool cchannel_192b;
- 	u32 interrupts;
- 	u32 tx_burst;
- 	u32 rx_burst;
-@@ -196,6 +198,7 @@ static struct fsl_spdif_soc_data fsl_spdif_imx8ulp = {
- 	.tx_burst = 2,		/* Applied for EDMA */
- 	.rx_burst = 2,		/* Applied for EDMA */
- 	.tx_formats = SNDRV_PCM_FMTBIT_S24_LE,	/* Applied for EDMA */
-+	.cchannel_192b = true,
- };
- 
- /* Check if clk is a root clock that does not share clock source with others */
-@@ -441,6 +444,23 @@ static void spdif_write_channel_status(struct fsl_spdif_priv *spdif_priv)
- 	regmap_write(regmap, REG_SPDIF_STCSCL, ch_status);
- 
- 	dev_dbg(&pdev->dev, "STCSCL: 0x%06x\n", ch_status);
-+
-+	if (spdif_priv->soc->cchannel_192b) {
-+		ch_status = (bitrev8(ctrl->ch_status[0]) << 24) |
-+			    (bitrev8(ctrl->ch_status[1]) << 16) |
-+			    (bitrev8(ctrl->ch_status[2]) << 8) |
-+			    bitrev8(ctrl->ch_status[3]);
-+
-+		regmap_update_bits(regmap, REG_SPDIF_SCR, 0x1000000, 0x1000000);
-+
-+		/*
-+		 * The first 32bit should be in REG_SPDIF_STCCA_31_0 register,
-+		 * but here we need to set REG_SPDIF_STCCA_191_160 on 8ULP
-+		 * then can get correct result with HDMI analyzer capture.
-+		 * There is a hardware bug here.
-+		 */
-+		regmap_write(regmap, REG_SPDIF_STCCA_191_160, ch_status);
-+	}
- }
- 
- /* Set SPDIF PhaseConfig register for rx clock */
-@@ -1229,6 +1249,8 @@ static const struct reg_default fsl_spdif_reg_defaults[] = {
- 	{REG_SPDIF_STR,	   0x00000000},
- 	{REG_SPDIF_STCSCH, 0x00000000},
- 	{REG_SPDIF_STCSCL, 0x00000000},
-+	{REG_SPDIF_STCSPH, 0x00000000},
-+	{REG_SPDIF_STCSPL, 0x00000000},
- 	{REG_SPDIF_STC,	   0x00020f00},
- };
- 
-@@ -1248,8 +1270,22 @@ static bool fsl_spdif_readable_reg(struct device *dev, unsigned int reg)
- 	case REG_SPDIF_SRQ:
- 	case REG_SPDIF_STCSCH:
- 	case REG_SPDIF_STCSCL:
-+	case REG_SPDIF_STCSPH:
-+	case REG_SPDIF_STCSPL:
- 	case REG_SPDIF_SRFM:
- 	case REG_SPDIF_STC:
-+	case REG_SPDIF_SRCCA_31_0:
-+	case REG_SPDIF_SRCCA_63_32:
-+	case REG_SPDIF_SRCCA_95_64:
-+	case REG_SPDIF_SRCCA_127_96:
-+	case REG_SPDIF_SRCCA_159_128:
-+	case REG_SPDIF_SRCCA_191_160:
-+	case REG_SPDIF_STCCA_31_0:
-+	case REG_SPDIF_STCCA_63_32:
-+	case REG_SPDIF_STCCA_95_64:
-+	case REG_SPDIF_STCCA_127_96:
-+	case REG_SPDIF_STCCA_159_128:
-+	case REG_SPDIF_STCCA_191_160:
- 		return true;
- 	default:
- 		return false;
-@@ -1268,6 +1304,12 @@ static bool fsl_spdif_volatile_reg(struct device *dev, unsigned int reg)
- 	case REG_SPDIF_SRU:
- 	case REG_SPDIF_SRQ:
- 	case REG_SPDIF_SRFM:
-+	case REG_SPDIF_SRCCA_31_0:
-+	case REG_SPDIF_SRCCA_63_32:
-+	case REG_SPDIF_SRCCA_95_64:
-+	case REG_SPDIF_SRCCA_127_96:
-+	case REG_SPDIF_SRCCA_159_128:
-+	case REG_SPDIF_SRCCA_191_160:
- 		return true;
- 	default:
- 		return false;
-@@ -1286,7 +1328,15 @@ static bool fsl_spdif_writeable_reg(struct device *dev, unsigned int reg)
- 	case REG_SPDIF_STR:
- 	case REG_SPDIF_STCSCH:
- 	case REG_SPDIF_STCSCL:
-+	case REG_SPDIF_STCSPH:
-+	case REG_SPDIF_STCSPL:
- 	case REG_SPDIF_STC:
-+	case REG_SPDIF_STCCA_31_0:
-+	case REG_SPDIF_STCCA_63_32:
-+	case REG_SPDIF_STCCA_95_64:
-+	case REG_SPDIF_STCCA_127_96:
-+	case REG_SPDIF_STCCA_159_128:
-+	case REG_SPDIF_STCCA_191_160:
- 		return true;
- 	default:
- 		return false;
-@@ -1298,7 +1348,7 @@ static const struct regmap_config fsl_spdif_regmap_config = {
- 	.reg_stride = 4,
- 	.val_bits = 32,
- 
--	.max_register = REG_SPDIF_STC,
-+	.max_register = REG_SPDIF_STCCA_191_160,
- 	.reg_defaults = fsl_spdif_reg_defaults,
- 	.num_reg_defaults = ARRAY_SIZE(fsl_spdif_reg_defaults),
- 	.readable_reg = fsl_spdif_readable_reg,
-diff --git a/sound/soc/fsl/fsl_spdif.h b/sound/soc/fsl/fsl_spdif.h
-index bff8290e71f2..75b42a692c90 100644
---- a/sound/soc/fsl/fsl_spdif.h
-+++ b/sound/soc/fsl/fsl_spdif.h
-@@ -31,9 +31,23 @@
- #define REG_SPDIF_STR			0x30	/* SPDIFTxRight Register */
- #define REG_SPDIF_STCSCH		0x34	/* SPDIFTxCChannelCons_h Register */
- #define REG_SPDIF_STCSCL		0x38	/* SPDIFTxCChannelCons_l Register */
-+#define REG_SPDIF_STCSPH		0x3C	/* SPDIFTxCChannel_Prof_h Register */
-+#define REG_SPDIF_STCSPL		0x40	/* SPDIFTxCChannel_Prof_l Register */
- #define REG_SPDIF_SRFM			0x44	/* FreqMeas Register */
- #define REG_SPDIF_STC			0x50	/* SPDIFTxClk Register */
- 
-+#define REG_SPDIF_SRCCA_31_0		0x60	/* SPDIF receive C channel register, bits 31-0 */
-+#define REG_SPDIF_SRCCA_63_32		0x64	/* SPDIF receive C channel register, bits 63-32 */
-+#define REG_SPDIF_SRCCA_95_64		0x68	/* SPDIF receive C channel register, bits 95-64 */
-+#define REG_SPDIF_SRCCA_127_96		0x6C	/* SPDIF receive C channel register, bits 127-96 */
-+#define REG_SPDIF_SRCCA_159_128		0x70	/* SPDIF receive C channel register, bits 159-128 */
-+#define REG_SPDIF_SRCCA_191_160		0x74	/* SPDIF receive C channel register, bits 191-160 */
-+#define REG_SPDIF_STCCA_31_0		0x78	/* SPDIF transmit C channel register, bits 31-0 */
-+#define REG_SPDIF_STCCA_63_32		0x7C	/* SPDIF transmit C channel register, bits 63-32 */
-+#define REG_SPDIF_STCCA_95_64		0x80	/* SPDIF transmit C channel register, bits 95-64 */
-+#define REG_SPDIF_STCCA_127_96		0x84	/* SPDIF transmit C channel register, bits 127-96 */
-+#define REG_SPDIF_STCCA_159_128		0x88	/* SPDIF transmit C channel register, bits 159-128 */
-+#define REG_SPDIF_STCCA_191_160		0x8C	/* SPDIF transmit C channel register, bits 191-160 */
- 
- /* SPDIF Configuration register */
- #define SCR_RXFIFO_CTL_OFFSET		23
--- 
-2.17.1
+T24gMTUuMDMuMjIgMTg6NDEsIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gT24gRnJp
+LCBNYXIgMTEsIDIwMjIgYXQgMTE6MzU6MDlBTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90
+ZToNCj4+IE1ha2Ugc3VyZSBhIG1hbGljaW91cyBiYWNrZW5kIGNhbid0IGNhdXNlIGFueSBo
+YXJtIG90aGVyIHRoYW4gd3JvbmcNCj4+IEkvTyBkYXRhLg0KPj4NCj4+IE1pc3NpbmcgYXJl
+IHZlcmlmaWNhdGlvbiBvZiB0aGUgcmVxdWVzdCBpZCBpbiBhIHJlc3BvbnNlLCBzYW5pdGl6
+aW5nDQo+PiB0aGUgcmVwb3J0ZWQgYWN0dWFsIEkvTyBsZW5ndGgsIGFuZCBwcm90ZWN0aW9u
+IGFnYWluc3QgaW50ZXJydXB0IHN0b3Jtcw0KPj4gZnJvbSB0aGUgYmFja2VuZC4NCj4+DQo+
+PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+PiAt
+LS0NCj4+ICAgZHJpdmVycy91c2IvaG9zdC94ZW4taGNkLmMgfCA1NyArKysrKysrKysrKysr
+KysrKysrKysrKysrKysrLS0tLS0tLS0tLQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNDMgaW5z
+ZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25zKC0pDQo+IA0KPiBGYWlscyB0byBhcHBseSB0byBt
+eSB0cmVlOg0KPiANCj4gY2hlY2tpbmcgZmlsZSBkcml2ZXJzL3VzYi9ob3N0L3hlbi1oY2Qu
+Yw0KPiBIdW5rICMyIHN1Y2NlZWRlZCBhdCA3MjAgKG9mZnNldCAtMSBsaW5lcykuDQo+IEh1
+bmsgIzMgc3VjY2VlZGVkIGF0IDgwNyAob2Zmc2V0IC0zIGxpbmVzKS4NCj4gSHVuayAjNCBz
+dWNjZWVkZWQgYXQgOTM0IChvZmZzZXQgLTUgbGluZXMpLg0KPiBIdW5rICM1IEZBSUxFRCBh
+dCA5ODYuDQo+IEh1bmsgIzYgc3VjY2VlZGVkIGF0IDEwMDMgd2l0aCBmdXp6IDEgKG9mZnNl
+dCAtMTAgbGluZXMpLg0KPiBIdW5rICM3IHN1Y2NlZWRlZCBhdCAxMDQ4IChvZmZzZXQgLTEw
+IGxpbmVzKS4NCj4gSHVuayAjOCBzdWNjZWVkZWQgYXQgMTA3MiAob2Zmc2V0IC0xMCBsaW5l
+cykuDQo+IEh1bmsgIzkgc3VjY2VlZGVkIGF0IDExNjEgKG9mZnNldCAtMTAgbGluZXMpLg0K
+PiBIdW5rICMxMCBzdWNjZWVkZWQgYXQgMTUxNiAob2Zmc2V0IC0xMCBsaW5lcykuDQo+IDEg
+b3V0IG9mIDEwIGh1bmtzIEZBSUxFRA0KPiANCj4gQW55IGhpbnRzPw0KDQpSZWJhc2UgeW91
+ciB0cmVlIHRvIHY1LjE3LXJjOD8gSXQgaXMgbWlzc2luZyB0aGUgcmVjZW50IHNlY3VyaXR5
+DQpwYXRjaGVzIHdoaWNoIG1vZGlmaWVkIGRyaXZlcnMvdXNiL2hvc3QveGVuLWhjZC5jLg0K
+DQoNCkp1ZXJnZW4NCg==
+--------------RThCbjbaim80DRYqQ5E0TjUm
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------RThCbjbaim80DRYqQ5E0TjUm--
+
+--------------dIo5mqVJwQtgAvakBeavLCM7--
+
+--------------eod0dLzbzdUZdsKtS040X2Cp
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmIxdZwFAwAAAAAACgkQsN6d1ii/Ey9F
+Hwf+LkGaWrpNt9vcE1twmTNgjxj3MDenPvnyDaABq2+G1W36GWL407B+xfrskqVqc/xkM9vw7Vlh
+wXEwTWHkGUF+RIXf1KGD1yjqakF5apcrfxZPzUhzWDYAc1nLEJ6a8Ajjs5xz8A0t+Mzw9/WB0IEM
+f6+mog8mAn88xCXKmWzM1+Kp06uimKRc776aSvlVj7rwSn5+zrYc+1hdGVUNfP/BtRJcuwTWm06B
+cGGd3Dnf7VvB48ehxM6poumJ9wZKZVtweduzCV/6fF/iachj6ERDpVdg4qYqKbXs4s6AHr5yQ7/J
+Fq6xOa/M0HxTzTsaosLBpQSIPHMY7bgycGmrCUR6rQ==
+=aDhE
+-----END PGP SIGNATURE-----
+
+--------------eod0dLzbzdUZdsKtS040X2Cp--

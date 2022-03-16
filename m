@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21ED4DADCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7844DADD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355007AbiCPJxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S1355037AbiCPJxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354996AbiCPJxL (ORCPT
+        with ESMTP id S1355000AbiCPJxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:53:11 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4998C65490
+        Wed, 16 Mar 2022 05:53:12 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008B765497
         for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:51:57 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KJQR5363Qz1GCS1;
-        Wed, 16 Mar 2022 17:46:57 +0800 (CST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KJQSR2svjz9skp;
+        Wed, 16 Mar 2022 17:48:07 +0800 (CST)
 Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.21; Wed, 16 Mar 2022 17:51:55 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
  (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Wed, 16 Mar
- 2022 17:51:54 +0800
+ 2022 17:51:55 +0800
 From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
 CC:     <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
         <xiexiuqi@huawei.com>, <liwei391@huawei.com>,
@@ -33,9 +33,9 @@ CC:     <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
         <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
         <will@kernel.org>, <rostedt@goodmis.org>, <mark.rutland@arm.com>,
         <bobo.shaobowang@huawei.com>, <zengshun.wu@outlook.com>
-Subject: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically allocated trampolines
-Date:   Wed, 16 Mar 2022 18:01:31 +0800
-Message-ID: <20220316100132.244849-4-bobo.shaobowang@huawei.com>
+Subject: [RFC PATCH -next v2 4/4] arm64/ftrace: implement long jump for dynamic trampolines
+Date:   Wed, 16 Mar 2022 18:01:32 +0800
+Message-ID: <20220316100132.244849-5-bobo.shaobowang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
 References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
@@ -58,440 +58,428 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cheng Jian <cj.chengjian@huawei.com>
 
-When tracing multiple functions customly, a list function is called
-in ftrace_(regs)_caller, which makes all the other traced functions
-recheck the hash of the ftrace_ops when tracing happend, apparently
-it is inefficient.
+When kaslr is enabled, long jump should be implemented for jumping
+to according trampoline and to callback from this trampoline.
 
-We notified X86_64 has delivered a dynamically allocated trampoline
-which calls the callback directly to solve this problem. This patch
-introduces similar trampolines for ARM64, but we also should also
-handle long jump different.
+Firstly, we use -fpatchable-function-entry=5,3 to reserve 3 NOPs at
+the end of each function, and also 2 NOPs at the head as 3b23e4991fb6
+("arm64: implement ftrace with regs") does, so rec->ip should be
+rec->ip + 4 after change in case there is no extra instrument
+(such as bti ) be put the head.
 
-Similar to X86_64, save the local ftrace_ops at the end.
-the ftrace trampoline layout:
+But should note this will increase the size of the text section:
+ //Using defconfig with -fpatchable-function-entry=5,3://
+   text        data      bss     dec        hex     filename
+  27095761  14578580   533268  42207609  2840979    vmlinux
 
-         ftrace_(regs_)caller_tramp            low
-                   `--> +---------------------+ ^
-                        | ftrace_regs_entry:  | |
-                        | ...                 | |
-                        +---------------------+ |
-                        | ftrace_common:      | |
-                        | ...                 | |
-                        | ldr x2, <ftrace_ops>| |
-       ftrace callsite  | ...                 | |
-                   `--> +---------------------+ |
-                        | nop                  >> bl <callback>
- ftrace graph callsite  | PLT entrys (TODO)   | |
-                   `--> +---------------------+ |
-                        | nop                  >> bl <graph callback>
-                        | PLT entrys (TODO)   | |
-                        +---------------------+ |
-                        | ftrace_regs_restore:| |
-                        | ...                 | |
-                        +---------------------+ |
-                        | ftrace_ops          | |
-                        +---------------------+ |
-                                               high
+ //Using defconfig with -fpatchable-function-entry=2://
+   text        data      bss     dec        hex     filename
+  26394597  14575988   533268  41503853  2794c6d    vmlinux
 
-Adopting the new dynamical trampoline is benificial when only one
-callback is registered to a function, when tracing happened, ftrace_ops
-can get its own callback directly from this trampoline allocated.
+When registering new ftrace function, we put this ftrace_ops registered
+into our trampoline allocated dynamically but not the ftrace_ops_list,
 
-To compare the efficiency of calling schedule() when using traditional
-dynamic ftrace(using ftrace_ops_list) and ftrace using dynamic trampoline,
-We wrote a module to register multiple ftrace_ops, but only one(in our
-testcase is 'schedule') is used to measure the performance on the call
-path used by Unixbench.
+   .text section:
+     funcA:         |    funcA():       funcB():    |
+      `->  +-----+  |    |   ...         mov x9 x30 |
+           | ... |  |    |   adrp   <-   bl  <>     |
+           | nop |  |    |   add
+           | nop |  |    |   br   x16 ---+
+     funcB | nop |  |                    | ftrace_(regs_)caller_tramp:
+      `->  +-----+  |                    `--> +---------------------+
+           | nop |  |                         | ...                 |
+           | nop |  |       ftrace callsite   +---------------------+
+           | ... |  |                `----->  | PLT entry:          |
+           | nop |  |                         |      adrp           |
+           | nop |  |                         |      add            |
+    funcC: | nop |  | ftrace graph callsite   |      br   x16       |
+      `->  +-----+  |                `----->  +---------------------+
+           | nop |  |                         | ...                 |
+           | nop |  |                         +---------------------+
 
-This is the partial code:
-```
-     static struct ftrace_ops *ops_array[100];
-     static struct ftrace_ops ops = {
-             .func                    = my_callback_func,
-             .flags                   = FTRACE_OPS_FL_PID,
-     };
-     static int register_ftrace_test_init(void)
-     {
-             int i, ret;
+There are three steps to concreate this conection when registering
+a ftrace_ops for a function to be traced (Take funcB as example):
 
-             if (cnt > 100 || cnt < 0)
-                     return -1;
+Step 1: use make_init_nop() to generate 'mov x9 x30' for LR reservation.
+          funcB:
+          | mov x9 x30
+          | nop        //rec->ip
+          | ...
 
-             for (i = 0; i < cnt; i++) {
-                     ops_array[i] = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
-                     if (!ops_array[i])
-                             return -1;
+Step 2: create trampoline and use ftrace_make_call() to update plt entry:
+          funcA:
+          | ...
+          | adrp
+          | add
+	  | br   x16   //pointer to trampoline allocated
 
-                     *ops_array[i] = ops;
+Step 3: fill plt entry to where ftrace_ops(addr stored in x2) contained:
+          trampoline:
+          | ...
+          | adrp
+          | add
+          | br   x16   //pointer to callback handler
 
-                     ret = ftrace_set_filter(ops_array[i], "cpuset_write_u64",
-                                 strlen("cpuset_write_u64"), 1);
-                     if (ret)
-                             return ret;
+At the end automically replacing nop to bl in funB to enable profiling.
+          funcB:
+          | mov x9 x30
+          | bl <>      //to first adrp in funA
+          | ...
 
-                     ret = register_ftrace_function(ops_array[i]);
-                     if (ret)
-                             return ret;
-             }
-
-             ret = ftrace_set_filter(&ops, "schedule", strlen("schedule"), 1);
-             if (ret)
-                     return ret;
-             return register_ftrace_function(&ops);
-     }
-```
-
-So in our test, ftrace_ops_list can be illustrated:
-
-HEAD(ftrace_ops_list)
-`-> +--------+    +--------+    +--------+     +------------+    +--------+
-    +  ops0  + -> +  ops1  + -> +  ops2  + ... +  ops(cnt-1)+ -> +   ops  +
-    +--------+    +--------+    +--------+     +------------+    +--------+ \_END
-        `-------------cpuset_write_u64----------------`           `schedule`
-
-This is the result testing on kunpeng920 with CONFIG_RANDOMIZE_BASE=n
-(we also add first NA row for comparison with not tracing any function):
-
-    command: taskset -c 1 ./Run -c 1 context1
-    +------------------UnixBench context1--------------------+
-    +---------+--------------+-----------------+-------------+
-    +         +            Score               + improvement +
-    +         +--------------+-----------------+-------------+
-    +         +  traditional +  dynamic tramp  +     +/-     +
-    +---------+--------------+-----------------+-------------+
-    +   NA    +    554.6     +     553.6       +      -      +
-    +---------+--------------+-----------------+-------------+
-    +  cnt=0  +    542.4     +     549.7       +    +1.2%    +
-    +---------+--------------+-----------------+-------------+
-    +  cnt=3  +    528.7     +     549.7       +    +3.9%    +
-    +---------+--------------+-----------------+-------------+
-    +  cnt=6  +    523.9     +     549.8       +    +4.9%    +
-    +---------+--------------+-----------------+-------------+
-    +  cnt=15 +    504.2     +     549.0       +    +8.9%    +
-    +---------+--------------+-----------------+-------------+
-    +  cnt=20 +    492.6     +     551.1       +    +11.9%   +
-    +---------+--------------+-----------------+-------------+
-
-References:
-- https://lore.kernel.org/linux-arm-kernel/20200109142736.1122-1-cj.chengjian@huawei.com/
+If funcB was bound to another ftrace_ops, Step2 and Step3 will be repeated,
+If funcB was bound to multiple ftrace_ops, this trampoline will not be used
+but jump to ftrace_(regs)_caller.
 
 Signed-off-by: Cheng Jian <cj.chengjian@huawei.com>
 Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
 ---
- arch/arm64/kernel/ftrace.c | 286 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 286 insertions(+)
+ arch/arm64/Makefile              |   2 +-
+ arch/arm64/include/asm/ftrace.h  |   2 +-
+ arch/arm64/include/asm/module.h  |   9 +++
+ arch/arm64/kernel/entry-ftrace.S |   8 ++
+ arch/arm64/kernel/ftrace.c       | 127 +++++++++++++++++--------------
+ arch/arm64/kernel/module-plts.c  |  50 ++++++++++++
+ 6 files changed, 140 insertions(+), 58 deletions(-)
 
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 4506c4a90ac1..d35a042baf75 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -10,12 +10,14 @@
- #include <linux/module.h>
- #include <linux/swab.h>
- #include <linux/uaccess.h>
-+#include <linux/vmalloc.h>
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 2f1de88651e6..3139d6d9ee52 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -130,7 +130,7 @@ CHECKFLAGS	+= -D__aarch64__
  
- #include <asm/cacheflush.h>
- #include <asm/debug-monitors.h>
- #include <asm/ftrace.h>
- #include <asm/insn.h>
- #include <asm/patching.h>
-+#include <asm/set_memory.h>
+ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_REGS),y)
+   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+-  CC_FLAGS_FTRACE := -fpatchable-function-entry=2
++  CC_FLAGS_FTRACE := -fpatchable-function-entry=5,3
+ endif
  
- #ifdef CONFIG_DYNAMIC_FTRACE
- /*
-@@ -48,6 +50,290 @@ static int ftrace_modify_code(unsigned long pc, u32 old, u32 new,
- 	return 0;
+ # Default value
+diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+index 1494cfa8639b..d0562c13b1dc 100644
+--- a/arch/arm64/include/asm/ftrace.h
++++ b/arch/arm64/include/asm/ftrace.h
+@@ -70,7 +70,7 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+ 	 * See ftrace_init_nop() for the callsite sequence.
+ 	 */
+ 	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
+-		return addr + AARCH64_INSN_SIZE;
++		return addr + AARCH64_INSN_SIZE + sizeof(struct plt_entry);
+ 	/*
+ 	 * addr is the address of the mcount call instruction.
+ 	 * recordmcount does the necessary offset calculation.
+diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
+index 4e7fa2623896..30f5b1cd5c9c 100644
+--- a/arch/arm64/include/asm/module.h
++++ b/arch/arm64/include/asm/module.h
+@@ -36,6 +36,14 @@ extern u64 module_alloc_base;
+ #define module_alloc_base	((u64)_etext - MODULES_VSIZE)
+ #endif
+ 
++enum {
++	PLT_MAKE_NOP,
++	PLT_MAKE_CALL,
++	PLT_MAKE_CALL_LINK,
++	PLT_MAKE_LCALL,
++	PLT_MAKE_LCALL_LINK
++};
++
+ struct plt_entry {
+ 	/*
+ 	 * A program that conforms to the AArch64 Procedure Call Standard
+@@ -58,6 +66,7 @@ static inline bool is_forbidden_offset_for_adrp(void *place)
  }
  
-+/* ftrace dynamic trampolines */
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#ifdef CONFIG_MODULES
-+#include <linux/moduleloader.h>
-+
-+static inline void *alloc_tramp(unsigned long size)
+ struct plt_entry get_plt_entry(u64 dst, void *pc);
++struct plt_entry update_plt_entry(u64 pc, u64 dst, int record);
+ bool plt_entries_equal(const struct plt_entry *a, const struct plt_entry *b);
+ 
+ static inline bool plt_entry_is_initialized(const struct plt_entry *e)
+diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+index 88462d925446..71290f0e0740 100644
+--- a/arch/arm64/kernel/entry-ftrace.S
++++ b/arch/arm64/kernel/entry-ftrace.S
+@@ -154,8 +154,12 @@ SYM_INNER_LABEL(ftrace_regs_caller_tramp_ops, SYM_L_GLOBAL)
+ 	mov	x3, sp				// regs
+ SYM_INNER_LABEL(ftrace_regs_caller_tramp_call, SYM_L_GLOBAL)
+ 	nop
++	nop
++	nop
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ SYM_INNER_LABEL(ftrace_regs_caller_tramp_graph_call, SYM_L_GLOBAL)
++	nop
++	nop
+ 	nop					// ftrace_graph_caller()
+ #endif
+ 	ftrace_regs_restore
+@@ -175,8 +179,12 @@ SYM_INNER_LABEL(ftrace_caller_tramp_ops, SYM_L_GLOBAL)
+ 	mov	x3, sp				// regs
+ SYM_INNER_LABEL(ftrace_caller_tramp_call, SYM_L_GLOBAL)
+ 	nop
++	nop
++	nop
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ SYM_INNER_LABEL(ftrace_caller_tramp_graph_call, SYM_L_GLOBAL)
++	nop
++	nop
+ 	nop					// ftrace_graph_caller()
+ #endif
+ 	ftrace_regs_restore
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index d35a042baf75..4011aceefe8c 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -234,27 +234,55 @@ ftrace_trampoline_get_func(struct ftrace_ops *ops, bool is_graph)
+ 	return func;
+ }
+ 
++static struct plt_entry *
++update_ftrace_tramp_plt(unsigned long pc, unsigned long addr, bool enable, bool link)
 +{
-+	return module_alloc(size);
-+}
++	int i;
++	struct plt_entry entry;
++	u32 *pentry;
++	long offset;
++	struct plt_entry *plt = (struct plt_entry *)pc;
 +
-+static inline void tramp_free(void *tramp)
-+{
-+	module_memfree(tramp);
-+}
-+#else
-+static inline void *alloc_tramp(unsigned long size)
-+{
-+	return NULL;
-+}
++	offset = (long)pc - (long)addr;
 +
-+static inline void tramp_free(void *tramp) {}
-+#endif
-+
-+/* ftrace_caller trampoline template */
-+extern void ftrace_caller_tramp(void);
-+extern void ftrace_caller_tramp_end(void);
-+extern void ftrace_caller_tramp_call(void);
-+extern void ftrace_caller_tramp_graph_call(void);
-+extern void ftrace_caller_tramp_ops(void);
-+
-+/* ftrace_regs_caller trampoline template */
-+extern void ftrace_regs_caller_tramp(void);
-+extern void ftrace_regs_caller_tramp_end(void);
-+extern void ftrace_regs_caller_tramp_call(void);
-+extern void ftrace_regs_caller_tramp_graph_call(void);
-+extern void ftrace_regs_caller_tramp_ops(void);
-+
-+
-+/*
-+ * The ARM64 ftrace trampoline layout :
-+ *
-+ *
-+ *         ftrace_(regs_)caller_tramp            low
-+ *                   `--> +---------------------+ ^
-+ *                        | ftrace_regs_entry:  | |
-+ *                        | ...                 | |
-+ *                        +---------------------+ |
-+ *                        | ftrace_common:      | |
-+ *                        | ...                 | |
-+ *                        | ldr x2, <ftrace_ops>| |
-+ *       ftrace callsite  | ...                 | |
-+ *                   `--> +---------------------+ |
-+ *                        | nop                  >> bl <callback>
-+ * ftrace graph callsite  | PLT entrys (TODO)   | |
-+ *                   `--> +---------------------+ |
-+ *                        | nop                  >> bl <graph callback>
-+ *                        | PLT entrys (TODO)   | |
-+ *                        +---------------------+ |
-+ *                        | ftrace_regs_restore:| |
-+ *                        | ...                 | |
-+ *                        +---------------------+ |
-+ *                        | ftrace_ops          | |
-+ *                        +---------------------+ |
-+ *                                               high
-+ */
-+
-+static unsigned long
-+create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
-+{
-+	unsigned long start_offset, end_offset, ops_offset;
-+	unsigned long caller_size, size, offset;
-+	unsigned long pc, npages;
-+	unsigned long *ptr;
-+	void *trampoline;
-+	u32 load;
-+	int ret;
-+
-+	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
-+		start_offset = (unsigned long)ftrace_regs_caller_tramp;
-+		end_offset = (unsigned long)ftrace_regs_caller_tramp_end;
-+		ops_offset = (unsigned long)ftrace_regs_caller_tramp_ops;
++	if (!enable)
++		entry = update_plt_entry(pc, addr, PLT_MAKE_NOP);
++	else if (offset < -SZ_128M || offset >= SZ_128M) {
++		if (link)
++			entry = update_plt_entry(pc, addr, PLT_MAKE_LCALL_LINK);
++		else
++			entry = update_plt_entry(pc, addr, PLT_MAKE_LCALL);
 +	} else {
-+		start_offset = (unsigned long)ftrace_caller_tramp;
-+		end_offset = (unsigned long)ftrace_caller_tramp_end;
-+		ops_offset = (unsigned long)ftrace_caller_tramp_ops;
++		if (link)
++			entry = update_plt_entry(pc, addr, PLT_MAKE_CALL_LINK);
++		else
++			entry = update_plt_entry(pc, addr, PLT_MAKE_CALL);
 +	}
 +
-+	caller_size = end_offset - start_offset + AARCH64_INSN_SIZE;
-+	size = caller_size + sizeof(void *);
++	pentry = (u32 *)&entry;
++	for (i = 0; i < sizeof(struct plt_entry) / AARCH64_INSN_SIZE; i++)
++		aarch64_insn_patch_text_nosync((void *)((u32*)pc + i), *(pentry + i));
 +
-+	trampoline = alloc_tramp(size);
-+	if (!trampoline)
++	return plt;
++}
++
+ static int
+ ftrace_trampoline_modify_call(struct ftrace_ops *ops, bool is_graph, bool active)
+ {
+ 	unsigned long offset;
+ 	unsigned long pc;
+ 	ftrace_func_t func;
+-	u32 nop, branch;
+ 
+ 	offset = calc_trampoline_call_offset(ops->flags &
+ 				FTRACE_OPS_FL_SAVE_REGS, is_graph);
+ 	pc = ops->trampoline + offset;
+ 
+ 	func = ftrace_trampoline_get_func(ops, is_graph);
+-	nop = aarch64_insn_gen_nop();
+-	branch = aarch64_insn_gen_branch_imm(pc, (unsigned long)func,
+-				AARCH64_INSN_BRANCH_LINK);
+ 
+-	if (active)
+-		return ftrace_modify_code(pc, 0, branch, false);
+-	else
+-		return ftrace_modify_code(pc, 0, nop, false);
++	if (update_ftrace_tramp_plt(pc, (unsigned long)func, active, true))
 +		return 0;
 +
-+	*tramp_size = size;
-+	npages = DIV_ROUND_UP(*tramp_size, PAGE_SIZE);
++	return -EINVAL;
+ }
+ 
+ extern int ftrace_graph_active;
+@@ -262,13 +290,6 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
+ {
+ 	unsigned int size;
+ 
+-	/*
+-	 * If kaslr is enabled, the address of tramp and ftrace call
+-	 * may be far away, Therefore, long jump support is required.
+-	 */
+-	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE))
+-		return;
+-
+ 	if (!ops->trampoline) {
+ 		ops->trampoline = create_trampoline(ops, &size);
+ 		if (!ops->trampoline)
+@@ -349,17 +370,34 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 	return ftrace_modify_code(pc, 0, new, false);
+ }
+ 
+-static struct plt_entry *get_ftrace_plt(struct module *mod, unsigned long addr)
++extern void ftrace_kernel_plt(void);
++static struct plt_entry *
++get_ftrace_plt(struct module *mod, unsigned long pc, unsigned long addr)
+ {
+-#ifdef CONFIG_ARM64_MODULE_PLTS
+-	struct plt_entry *plt = mod->arch.ftrace_trampolines;
++	struct plt_entry *plt;
+ 
+-	if (addr == FTRACE_ADDR)
+-		return &plt[FTRACE_PLT_IDX];
+-	if (addr == FTRACE_REGS_ADDR &&
+-	    IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
+-		return &plt[FTRACE_REGS_PLT_IDX];
++	if (mod) {
++#ifdef CONFIG_ARM64_MODULE_PLTS
++		plt = mod->arch.ftrace_trampolines;
 +
-+	/*
-+	 * copy ftrace_caller/ftrace_regs_caller trampoline template
-+	 * onto the trampoline memory
-+	 */
-+	ret = copy_from_kernel_nofault(trampoline, (void *)start_offset, caller_size);
-+	if (WARN_ON(ret < 0))
-+		goto free;
-+
-+	/*
-+	 * Stored ftrace_ops at the end of the trampoline.
-+	 * This will be used to load the third parameter for the callback.
-+	 * Basically, that location at the end of the trampoline takes the
-+	 * place of the global function_trace_op variable.
-+	 */
-+	ptr = (unsigned long *)(trampoline + caller_size);
-+	*ptr = (unsigned long)ops;
-+
-+	/*
-+	 * Update the trampoline ops REF
-+	 *	ldr x2, <ftrace_ops>
-+	 */
-+	ops_offset -= start_offset;
-+	pc = (unsigned long)trampoline + ops_offset;
-+	offset = (unsigned long)ptr - pc;
-+	if (WARN_ON(offset % AARCH64_INSN_SIZE != 0))
-+		goto free;
-+
-+	load = aarch64_insn_gen_load_literal(AARCH64_INSN_REG_2,
-+		AARCH64_INSN_VARIANT_64BIT, offset);
-+	if (ftrace_modify_code(pc, 0, load, false))
-+		goto free;
-+
-+	ops->flags |= FTRACE_OPS_FL_ALLOC_TRAMP;
-+
-+	set_vm_flush_reset_perms(trampoline);
-+
-+	/*
-+	 * Module allocation needs to be completed by making the page
-+	 * executable. The page is still writable, which is a security hazard,
-+	 * but anyhow ftrace breaks W^X completely.
-+	 */
-+	set_memory_ro((unsigned long)trampoline, npages);
-+	set_memory_x((unsigned long)trampoline, npages);
-+
-+	return (unsigned long)trampoline;
-+
-+free:
-+	tramp_free(trampoline);
-+	return 0;
-+}
-+
-+static unsigned long calc_trampoline_call_offset(bool save_regs, bool is_graph)
-+{
-+	unsigned start_offset, call_offset;
-+
-+	if (save_regs) {
-+		start_offset = (unsigned long)ftrace_regs_caller_tramp;
-+		if (is_graph)
-+			call_offset = (unsigned long)ftrace_regs_caller_tramp_graph_call;
-+		else
-+			call_offset = (unsigned long)ftrace_regs_caller_tramp_call;
++		if (addr == FTRACE_ADDR)
++			return &plt[FTRACE_PLT_IDX];
++		else if (addr == FTRACE_REGS_ADDR &&
++			IS_ENABLED(CONFIG_FTRACE_WITH_REGS))
++			return &plt[FTRACE_REGS_PLT_IDX];
++		else {
+ #endif
++			pc = pc - sizeof(struct plt_entry) - AARCH64_INSN_SIZE;
++			return update_ftrace_tramp_plt(pc, addr, true, false);
++#ifdef CONFIG_ARM64_MODULE_PLTS
++		}
++#endif
 +	} else {
-+		start_offset = (unsigned long)ftrace_caller_tramp;
-+		if (is_graph)
-+			call_offset = (unsigned long)ftrace_caller_tramp_graph_call;
-+		else
-+			call_offset = (unsigned long)ftrace_caller_tramp_call;
++		WARN_ON(addr == FTRACE_ADDR || addr == FTRACE_REGS_ADDR);
++		pc = pc - sizeof(struct plt_entry) - AARCH64_INSN_SIZE;
++		return update_ftrace_tramp_plt(pc, addr, true, false);
 +	}
 +
-+	return call_offset - start_offset;
-+}
-+
-+static inline ftrace_func_t
-+ftrace_trampoline_get_func(struct ftrace_ops *ops, bool is_graph)
+ 	return NULL;
+ }
+ 
+@@ -376,9 +414,6 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 		struct module *mod;
+ 		struct plt_entry *plt;
+ 
+-		if (!IS_ENABLED(CONFIG_ARM64_MODULE_PLTS))
+-			return -EINVAL;
+-
+ 		/*
+ 		 * On kernels that support module PLTs, the offset between the
+ 		 * branch instruction and its target may legally exceed the
+@@ -393,12 +428,10 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 		mod = __module_text_address(pc);
+ 		preempt_enable();
+ 
+-		if (WARN_ON(!mod))
+-			return -EINVAL;
+-
+-		plt = get_ftrace_plt(mod, addr);
++		plt = get_ftrace_plt(mod, pc, addr);
+ 		if (!plt) {
+-			pr_err("ftrace: no module PLT for %ps\n", (void *)addr);
++			pr_err("ftrace: no %s PLT for %ps\n",
++					mod ? "module" : "kernel", (void *)addr);
+ 			return -EINVAL;
+ 		}
+ 
+@@ -474,36 +507,18 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+ 	if (offset < -SZ_128M || offset >= SZ_128M) {
+ 		u32 replaced;
+ 
+-		if (!IS_ENABLED(CONFIG_ARM64_MODULE_PLTS))
+-			return -EINVAL;
+-
+-		/*
+-		 * 'mod' is only set at module load time, but if we end up
+-		 * dealing with an out-of-range condition, we can assume it
+-		 * is due to a module being loaded far away from the kernel.
+-		 */
+-		if (!mod) {
+-			preempt_disable();
+-			mod = __module_text_address(pc);
+-			preempt_enable();
+-
+-			if (WARN_ON(!mod))
+-				return -EINVAL;
+-		}
+-
+ 		/*
+-		 * The instruction we are about to patch may be a branch and
+-		 * link instruction that was redirected via a PLT entry. In
+-		 * this case, the normal validation will fail, but we can at
+-		 * least check that we are dealing with a branch and link
+-		 * instruction that points into the right module.
++		 * The instruction we are about to patch may be a branch
++		 * and link instruction that was redirected via a PLT entry
++		 * supported by a dynamic trampoline or module, in this case,
++		 * the normal validation will fail, but we can at least check
++		 * that we are dealing with a branch and link instruction
++		 * that points into the right place.
+ 		 */
+ 		if (aarch64_insn_read((void *)pc, &replaced))
+ 			return -EFAULT;
+ 
+-		if (!aarch64_insn_is_bl(replaced) ||
+-		    !within_module(pc + aarch64_get_branch_offset(replaced),
+-				   mod))
++		if (!aarch64_insn_is_bl(replaced))
+ 			return -EINVAL;
+ 
+ 		validate = false;
+diff --git a/arch/arm64/kernel/module-plts.c b/arch/arm64/kernel/module-plts.c
+index e53493d8b208..b7a832dfaa69 100644
+--- a/arch/arm64/kernel/module-plts.c
++++ b/arch/arm64/kernel/module-plts.c
+@@ -37,6 +37,56 @@ struct plt_entry get_plt_entry(u64 dst, void *pc)
+ 	return plt;
+ }
+ 
++struct plt_entry update_plt_entry(u64 pc, u64 dst, int record)
 +{
-+	ftrace_func_t func;
++	u32 adrp, add, br;
 +
-+	if (!is_graph)
-+		func = ftrace_ops_get_func(ops);
-+#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-+	else
-+		func = (ftrace_func_t)ftrace_graph_caller;
-+#endif
++	switch (record) {
++	case PLT_MAKE_NOP:
++		adrp = aarch64_insn_gen_nop();
++		add = aarch64_insn_gen_nop();
++		br = aarch64_insn_gen_nop();
++		break;
 +
-+	return func;
-+}
++	case PLT_MAKE_CALL_LINK:
++		adrp = aarch64_insn_gen_nop();
++		add = aarch64_insn_gen_nop();
++		br = aarch64_insn_gen_branch_imm(pc + 8, dst,
++						 AARCH64_INSN_BRANCH_LINK);
++		break;
 +
-+static int
-+ftrace_trampoline_modify_call(struct ftrace_ops *ops, bool is_graph, bool active)
-+{
-+	unsigned long offset;
-+	unsigned long pc;
-+	ftrace_func_t func;
-+	u32 nop, branch;
++	case PLT_MAKE_LCALL_LINK:
++		adrp = aarch64_insn_gen_adr(pc, dst, AARCH64_INSN_REG_16,
++					    AARCH64_INSN_ADR_TYPE_ADRP);
++		add = aarch64_insn_gen_add_sub_imm(AARCH64_INSN_REG_16,
++						   AARCH64_INSN_REG_16, dst % SZ_4K,
++						   AARCH64_INSN_VARIANT_64BIT,
++						   AARCH64_INSN_ADSB_ADD);
++		br = aarch64_insn_gen_branch_reg(AARCH64_INSN_REG_16,
++						 AARCH64_INSN_BRANCH_LINK);
++		break;
 +
-+	offset = calc_trampoline_call_offset(ops->flags &
-+				FTRACE_OPS_FL_SAVE_REGS, is_graph);
-+	pc = ops->trampoline + offset;
-+
-+	func = ftrace_trampoline_get_func(ops, is_graph);
-+	nop = aarch64_insn_gen_nop();
-+	branch = aarch64_insn_gen_branch_imm(pc, (unsigned long)func,
-+				AARCH64_INSN_BRANCH_LINK);
-+
-+	if (active)
-+		return ftrace_modify_code(pc, 0, branch, false);
-+	else
-+		return ftrace_modify_code(pc, 0, nop, false);
-+}
-+
-+extern int ftrace_graph_active;
-+void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
-+{
-+	unsigned int size;
-+
-+	/*
-+	 * If kaslr is enabled, the address of tramp and ftrace call
-+	 * may be far away, Therefore, long jump support is required.
-+	 */
-+	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE))
-+		return;
-+
-+	if (!ops->trampoline) {
-+		ops->trampoline = create_trampoline(ops, &size);
-+		if (!ops->trampoline)
-+			return;
-+		ops->trampoline_size = size;
++	case PLT_MAKE_LCALL:
++		adrp = aarch64_insn_gen_adr(pc, dst, AARCH64_INSN_REG_16,
++					    AARCH64_INSN_ADR_TYPE_ADRP);
++		add = aarch64_insn_gen_add_sub_imm(AARCH64_INSN_REG_16,
++						   AARCH64_INSN_REG_16,
++						   dst % SZ_4K,
++						   AARCH64_INSN_VARIANT_64BIT,
++						   AARCH64_INSN_ADSB_ADD);
++		br = aarch64_insn_gen_branch_reg(AARCH64_INSN_REG_16,
++						 AARCH64_INSN_BRANCH_NOLINK);
++		break;
++	default:
++		pr_err("[%s %d] error flag %d\n", __func__, __LINE__, record);
++		BUG();
++		break;
 +	}
 +
-+	/* These is no static trampoline on ARM64 */
-+	WARN_ON(!(ops->flags & FTRACE_OPS_FL_ALLOC_TRAMP));
-+
-+	/* atomic modify trampoline: <call func> */
-+	WARN_ON(ftrace_trampoline_modify_call(ops, false, true));
-+#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-+	/* atomic modify trampoline: <call graph func> */
-+	WARN_ON(ftrace_trampoline_modify_call(ops, true, ftrace_graph_active));
-+#endif
++	return (struct plt_entry){ cpu_to_le32(adrp), cpu_to_le32(add),
++				cpu_to_le32(br) };
 +}
 +
-+static void *addr_from_call(void *ptr)
-+{
-+	u32 insn;
-+	unsigned long offset;
-+
-+	if (aarch64_insn_read(ptr, &insn))
-+		return NULL;
-+
-+	/* Make sure this is a call */
-+	if (!aarch64_insn_is_bl(insn)) {
-+		pr_warn("Expected bl instruction, but not\n");
-+		return NULL;
-+	}
-+
-+	offset = aarch64_get_branch_offset(insn);
-+
-+	return (void *)ptr + AARCH64_INSN_SIZE + offset;
-+}
-+
-+void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
-+			   unsigned long frame_pointer);
-+
-+void *arch_ftrace_trampoline_func(struct ftrace_ops *ops, struct dyn_ftrace *rec)
-+{
-+	unsigned long offset;
-+
-+	/* If we didn't allocate this trampoline, consider it static */
-+	if (!ops || !(ops->flags & FTRACE_OPS_FL_ALLOC_TRAMP))
-+		return NULL;
-+
-+	offset = calc_trampoline_call_offset(ops->flags & FTRACE_OPS_FL_SAVE_REGS,
-+					ftrace_graph_active);
-+
-+	return addr_from_call((void *)ops->trampoline + offset);
-+}
-+
-+void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
-+{
-+	if (!ops || !(ops->flags & FTRACE_OPS_FL_ALLOC_TRAMP))
-+		return;
-+
-+	tramp_free((void *)ops->trampoline);
-+	ops->trampoline = 0;
-+	ops->trampoline_size = 0;
-+}
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+
- /*
-  * Replace tracer function in ftrace_caller()
-  */
+ bool plt_entries_equal(const struct plt_entry *a, const struct plt_entry *b)
+ {
+ 	u64 p, q;
 -- 
 2.25.1
 

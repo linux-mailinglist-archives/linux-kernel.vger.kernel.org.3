@@ -2,144 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B142A4DB1E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECE64DB1EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353441AbiCPNxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S1353250AbiCPNzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbiCPNxc (ORCPT
+        with ESMTP id S233718AbiCPNzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:53:32 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC6364BE1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:52:18 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id C1E881F44628
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647438737;
-        bh=FqvajMGnxRjtpeh5DO1PC1ggOMUMBHDf7570Spd3GV0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=V+rSKskSoX2RTbQWfBTESQ8eTq8joYpfqPvvw3zETS2u/Mm6WrV6YTF6b1wer64p7
-         VY1qY7+ww2l6tgnJWoGPN9umMFhRMjfXvxPeXLcLXqfPiFWqWO+PU5oMSCsf6zyYeH
-         pX/Ti8PiKa6pv5HD5iuvJ4HmxOIy05LikmRqJjtdwxxGJpOgPZ+57jxZhmB9jYBJ8I
-         fHLRakOJkqWtFx/SAD59BDDhdVDR9ww3eGjByonf8eQjyOR36ti1Ijuj+QKAgef8JQ
-         LU5ulPaoeapDLy/MTrJz+k2hny+szY/aw0VEYLjVdrqSUsbXrjL8FbQNfzn1EuWiBE
-         h+Nhfsa6BP9Ug==
-Message-ID: <13f77cd8-ed57-3593-ab21-dafce91ee85e@collabora.com>
-Date:   Wed, 16 Mar 2022 16:52:12 +0300
+        Wed, 16 Mar 2022 09:55:39 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B49B4E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:54:25 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:46178)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nUU6Z-006iY5-MH; Wed, 16 Mar 2022 07:54:23 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37928 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nUU6Y-00HDTA-AC; Wed, 16 Mar 2022 07:54:23 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220316165612.4f50faad@canb.auug.org.au>
+Date:   Wed, 16 Mar 2022 08:54:15 -0500
+In-Reply-To: <20220316165612.4f50faad@canb.auug.org.au> (Stephen Rothwell's
+        message of "Wed, 16 Mar 2022 16:56:12 +1100")
+Message-ID: <871qz257g8.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 4/8] drm/virtio: Improve DMA API usage for shmem BOs
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
-References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
- <20220314224253.236359-5-dmitry.osipenko@collabora.com>
- <f2fed903-c61b-8040-ddfd-25a7bf0a625a@arm.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <f2fed903-c61b-8040-ddfd-25a7bf0a625a@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nUU6Y-00HDTA-AC;;;mid=<871qz257g8.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19wBYZXI6ToWV3riBhbTAJX534/W8fHVSg=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Stephen Rothwell <sfr@canb.auug.org.au>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 655 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 4.0 (0.6%), b_tie_ro: 2.8 (0.4%), parse: 0.67
+        (0.1%), extract_message_metadata: 8 (1.3%), get_uri_detail_list: 1.31
+        (0.2%), tests_pri_-1000: 3.7 (0.6%), tests_pri_-950: 1.17 (0.2%),
+        tests_pri_-900: 0.90 (0.1%), tests_pri_-90: 111 (16.9%), check_bayes:
+        109 (16.6%), b_tokenize: 6 (0.9%), b_tok_get_all: 6 (1.0%),
+        b_comp_prob: 1.69 (0.3%), b_tok_touch_all: 92 (14.0%), b_finish: 0.77
+        (0.1%), tests_pri_0: 254 (38.8%), check_dkim_signature: 0.39 (0.1%),
+        check_dkim_adsp: 1.71 (0.3%), poll_dns_idle: 252 (38.5%),
+        tests_pri_10: 1.80 (0.3%), tests_pri_500: 267 (40.8%), rewrite_mail:
+        0.00 (0.0%)
+Subject: Re: linux-next: build failure after merge of the userns tree
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-On 3/16/22 15:41, Robin Murphy wrote:
-> On 2022-03-14 22:42, Dmitry Osipenko wrote:
->> DRM API requires the DRM's driver to be backed with the device that can
->> be used for generic DMA operations. The VirtIO-GPU device can't perform
->> DMA operations if it uses PCI transport because PCI device driver creates
->> a virtual VirtIO-GPU device that isn't associated with the PCI. Use PCI's
->> GPU device for the DRM's device instead of the VirtIO-GPU device and drop
->> DMA-related hacks from the VirtIO-GPU driver.
->>
->> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> ---
->>   drivers/gpu/drm/virtio/virtgpu_drv.c    | 22 +++++++---
->>   drivers/gpu/drm/virtio/virtgpu_drv.h    |  5 +--
->>   drivers/gpu/drm/virtio/virtgpu_kms.c    |  7 ++--
->>   drivers/gpu/drm/virtio/virtgpu_object.c | 56 +++++--------------------
->>   drivers/gpu/drm/virtio/virtgpu_vq.c     | 13 +++---
->>   5 files changed, 37 insertions(+), 66 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c
->> b/drivers/gpu/drm/virtio/virtgpu_drv.c
->> index 5f25a8d15464..8449dad3e65c 100644
->> --- a/drivers/gpu/drm/virtio/virtgpu_drv.c
->> +++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
->> @@ -46,9 +46,9 @@ static int virtio_gpu_modeset = -1;
->>   MODULE_PARM_DESC(modeset, "Disable/Enable modesetting");
->>   module_param_named(modeset, virtio_gpu_modeset, int, 0400);
->>   -static int virtio_gpu_pci_quirk(struct drm_device *dev, struct
->> virtio_device *vdev)
->> +static int virtio_gpu_pci_quirk(struct drm_device *dev)
->>   {
->> -    struct pci_dev *pdev = to_pci_dev(vdev->dev.parent);
->> +    struct pci_dev *pdev = to_pci_dev(dev->dev);
->>       const char *pname = dev_name(&pdev->dev);
->>       bool vga = (pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA;
->>       char unique[20];
->> @@ -101,6 +101,7 @@ static int virtio_gpu_pci_quirk(struct drm_device
->> *dev, struct virtio_device *vd
->>   static int virtio_gpu_probe(struct virtio_device *vdev)
->>   {
->>       struct drm_device *dev;
->> +    struct device *dma_dev;
->>       int ret;
->>         if (drm_firmware_drivers_only() && virtio_gpu_modeset == -1)
->> @@ -109,18 +110,29 @@ static int virtio_gpu_probe(struct virtio_device
->> *vdev)
->>       if (virtio_gpu_modeset == 0)
->>           return -EINVAL;
->>   -    dev = drm_dev_alloc(&driver, &vdev->dev);
->> +    /*
->> +     * If GPU's parent is a PCI device, then we will use this PCI device
->> +     * for the DRM's driver device because GPU won't have PCI's IOMMU
->> DMA
->> +     * ops in this case since GPU device is sitting on a separate
->> (from PCI)
->> +     * virtio-bus.
->> +     */
->> +    if (!strcmp(vdev->dev.parent->bus->name, "pci"))
-> 
-> Nit: dev_is_pci() ?
+> Hi all,
+>
+> After merging the userns tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>
+> kernel/sched/fair.c: In function 'init_numa_balancing':
+> kernel/sched/fair.c:2884:9: error: implicit declaration of function 'init_task_work'; did you mean 'init_irq_work'? [-Werror=implicit-function-declaration]
+>  2884 |         init_task_work(&p->numa_work, task_numa_work);
+>       |         ^~~~~~~~~~~~~~
+>       |         init_irq_work
+> kernel/sched/fair.c: In function 'task_tick_numa':
+> kernel/sched/fair.c:2935:25: error: implicit declaration of function 'task_work_add' [-Werror=implicit-function-declaration]
+>  2935 |                         task_work_add(curr, work, TWA_RESUME);
+>       |                         ^~~~~~~~~~~~~
+> kernel/sched/fair.c:2935:51: error: 'TWA_RESUME' undeclared (first use in this function)
+>  2935 |                         task_work_add(curr, work, TWA_RESUME);
+>       |                                                   ^~~~~~~~~~
+>
+> Maybe caused by commit
+>
+>   03248addadf1 ("resume_user_mode: Move to resume_user_mode.h")
+> or
+>   8ca07e17c9dd ("task_work: Remove unnecessary include from posix_timers.h")
 
-Yes, thank you.
+Yes.  That has the potential to have hidden a bug like this.
 
-> However, what about other VirtIO transports? Wouldn't virtio-mmio with
-> F_ACCESS_PLATFORM be in a similar situation?
+> interacting with (maybe) commit
+>
+>   c4ad6fcb67c4 ("sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies")
+>
+> from the tip tree.
+>
 
-I couldn't find anyone using virtio-mmio for the GPU, both Qemu and
-crosvm support only PCI transport for GPU.
+It is commit 4ff8f2ca6ccd ("sched/headers: Reorganize, clean up and
+optimize kernel/sched/sched.h dependencies") that ultimately removes the
+include of task_work.h from "sched.h".
 
-But I'm now looking at virtio_mmio_probe() and see that virtio-mmio
-devices actually should be in the exactly same position as PCI devices.
-So you should be right and we need to use vdev->dev.parent for the DRM
-device universally. I'll improve it in the v3, thank you again.
+But yes ideally commit c4ad6fcb67c4 ("sched/headers: Reorganize, clean
+up and optimize kernel/sched/fair.c dependencies") would have added an
+include of task_work.h into kernel/sched/fair.c
+
+Ingo any chance you can fix this in your tree?  kernel/sched/fair.c
+needs to include <linux/task_work.h> regardless. So I don't think this
+is a bad thing.
+
+Eric
+
+
+> I have applied this merge fix patch.
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 16 Mar 2022 16:41:42 +1100
+> Subject: [PATCH] fixup for moving of linux/task_work.h
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  kernel/sched/fair.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 89d21fda106c..7a6678fdffb0 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/lockdep_api.h>
+>  #include <linux/softirq.h>
+>  #include <linux/refcount_api.h>
+> +#include <linux/task_work.h>
+>  #include <linux/topology.h>
+>  #include <linux/sched/clock.h>
+>  #include <linux/sched/cond_resched.h>
+> -- 
+>
+> 2.34.1

@@ -2,723 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4428C4DB795
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593D74DB7A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349264AbiCPRus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 13:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S1349264AbiCPRzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357632AbiCPRup (ORCPT
+        with ESMTP id S240365AbiCPRy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:50:45 -0400
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5656AA64
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 10:49:29 -0700 (PDT)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 846074B53; Wed, 16 Mar 2022 13:49:28 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 846074B53
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1647452968;
-        bh=sFHpqIOSkD8FjP4sq3ErDK4hq8AV7bjjU23FVf7YXbg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UFy0wU1R+6Rnzg6N9NHNqjLeeErgrJL4ONkgri657KRAGUnHmrR+JkR03CFFmIvlS
-         ESdwAn0jUW2UyV1V6rtDunAriqPKLegFy+KSJWoOs3HZfzggVa4NAH6mDdDRMSc6bp
-         NzVXKU7V05WpsgdSxQYK4j+493z8gLWmJINSawJI=
-Date:   Wed, 16 Mar 2022 13:49:28 -0400
-From:   "J. Bruce Fields" <bfields@fieldses.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: failure to boot after dc6e0818bc9a "sched/cpuacct: Optimize away
- RCU read lock"
-Message-ID: <20220316174928.GB16511@fieldses.org>
-References: <20220316174324.GA16511@fieldses.org>
+        Wed, 16 Mar 2022 13:54:59 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9ED29C9D;
+        Wed, 16 Mar 2022 10:53:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gxmlhsPJEq3Hmq7ev58EMo8lm0Xj4tdJRlfAcretAnWdFP704srmGmq5Op2d8quPGM6aG2sGCiO4dPDuiusiaAKe+YxGRfZV13owRsCRQN/cF1LJ7KZdRAISf5BFiiWrIjjXy8c9Bjc1mdzQUz7Gaz4AiaKiLrxDkQmxErhRHjZKBK2sgDo9S3YVs/bjO2O77rqhTJM4OqGS4P5ZYqDvvmfD7I+BGlvScHIMRt1dKRMKo9aDjwo+4lF64kZjQwlJLCRf4TXWz/J/C6dxzvPLZl8dgePHQVBh79ugrpW0JdsG2330MRYq4O5x/6LhnVPY3Gv0q73v1UCx7IvklZ7UWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=54k10UHs89HwQ9lyDnhHdOdzNhcCfQP6O8Lm5bzgL7o=;
+ b=aFw1FF9xEI3A+PKZa/3ikhQZWLEr6RTh9d70HAXSZmRNge3Kz8w2IaDdxU6SlPanQ20KZ6Zv/gYGLf7+52h4Qic1pj/6vJJAmubdEXDml8/uHE/RcUJ1BNzvwxrC+O9Oo6X1AYC70xUZVUN7q80Ob3WjxYXkHEhmbjw3UKwZ+f/x50+PWJ7BfAzv0KWz4IAl7fZjGL9jX0yg8EsMMtqRDSdT4OFyeujWcJwmWpiOdLQ7KIDOGzNrcOvnJSzKY28qBkRyuHMMmLt4FRW5UaIAx2Wi+9AyeR71z3sTOVFhZsdsAB6RQjdUVMWk+KsoybynAlINvEQxltIEoerMR4Ubyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=54k10UHs89HwQ9lyDnhHdOdzNhcCfQP6O8Lm5bzgL7o=;
+ b=EC9eqzMG4II2Yd+vXQ2zVdc3yJN1Fg4Bdi9E+StjPHAwa6daZuPJqYiy3zRiHNAfwpjIteKlLqYCxmwpjJeea7/hZhzafHP3+f++/XIIZjzKobZtM1Fpl3LnSCT5U8kAXKSeS+KrJqx1hQI48b4IQIkjKZutF8IuSxFRG32hYUs=
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by DM6PR12MB4942.namprd12.prod.outlook.com (2603:10b6:5:1be::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Wed, 16 Mar
+ 2022 17:53:42 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08%5]) with mapi id 15.20.5081.014; Wed, 16 Mar 2022
+ 17:53:42 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "hch@lst.de" <hch@lst.de>
+Subject: RE: [PATCH] thunderbolt: Stop using iommu_present()
+Thread-Topic: [PATCH] thunderbolt: Stop using iommu_present()
+Thread-Index: AQHYOSidJZwMFUwbGEibeELZIyT74azB9QiAgAAiooCAACnRgIAAAPcAgAAEJICAAANtgIAAAECw
+Date:   Wed, 16 Mar 2022 17:53:42 +0000
+Message-ID: <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
+ <YjHb1xCx4UAmUjrR@lahna> <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
+ <YjIb+XOGZbWKpQDa@lahna>
+ <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjIgQfmcw6fydkXd@lahna> <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
+In-Reply-To: <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-03-16T17:53:39Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=a32c2a09-b0c2-4794-916a-a4afd648a123;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-03-16T17:53:40Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 82aebe48-d2e8-4d27-9474-70f6cad9933f
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7c19e976-74e4-4f31-2f36-08da0775e8c8
+x-ms-traffictypediagnostic: DM6PR12MB4942:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB49422DA337BB3BEE9A0E0D3BE2119@DM6PR12MB4942.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nSmVNX1lM4CgrQQxy3yiF8e5s9ONe1vhHMKj1rRzPa0EojHXMMETiTUNq4kR7GOmF6m2GbSjt8fFScYdsQWCNqv33E6a5GUGOFsBRsCpQd0vN+AF9JQrl8FFkitW2XVgHyp7YzVJ+pYgPLj83WUoNEIzxzZVkd5NVQhKcZWk8PN0ZpMbfE/uQwDQVqqUiLHHqtMnkJtKhNpFHSiAipavxNPupY3CBW6Iy1/OUJWw3okrvjTxW6+J28ckCMoYhRFjwwk6rCjGDO48hfWuLnjxnkexoarYy5PtOztFoG5eX38B271uw7c+FenOCRkXAXgdaOdnaHCdH1fqDfSqMbgQTcRgYdRl+d/M5nTwEAfogLHsk3M3sqAR7Oxe7Ix24PhepDmN4bZXIjfsxw0Sb+TI/al1dmf7CiHButUCNrxGvbTH0m27c0EkyA2DtyomE+GWVS2GUObacZYRo4xdwQRgjgMqCYrdkgQ/l7chvCMUX9mGHGoRtPDd6N9pCtunW1LBEzOkFVC0IonO2tFUN5iUTO6B87Y8F0YY0wzOZnEoeV487EopxXw8wX5iD8rh6Oo62OFXvrOOQSGrFHR/NWiXR0DTbE97WvcTnqQi6YugOZhc328HroULZvRous2rmE1GQAWuU2aiB2U4GTq3C/tnA1Jk8zXvxfdBDUVBksIZaQNj7jLcprkCPoV9qmhxQ03GOhV4yQJFiG98LjmHxC/kIty7FAYHBZD7B0dbCybBlD3YoEGdZNlDuBpDnNGrX1JZDh/cl/OhoZP5GQK15rmZVE9MiPU4Lb02dYi4e20D/ag=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(76116006)(66446008)(66556008)(66946007)(66476007)(508600001)(8676002)(5660300002)(86362001)(4326008)(38070700005)(71200400001)(7696005)(45080400002)(54906003)(966005)(110136005)(6506007)(316002)(9686003)(52536014)(8936002)(83380400001)(186003)(2906002)(38100700002)(122000001)(33656002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XBdNkfy2Zep+5tuFqp/Jy6PDfGoLPI7AwsLjXPWAgWdjP4nAOXYTfVexJb2E?=
+ =?us-ascii?Q?zFBNJTK56aP8uxCF/VJsyImjpgO+V6coDrmRAjrzJx+YjHZu+qByGu0qrvWg?=
+ =?us-ascii?Q?TvBJjQ9e+wXl1ba+92Z313Z/JQE8m3/xmycaXU1lF/tB/6iLpkdoY9RgkHng?=
+ =?us-ascii?Q?MC61q01WDFPNrpkOY5OgCVBAHkYKXIjjipXVveEQUr48VLmStmhh1H4a5lEB?=
+ =?us-ascii?Q?YQF/xqnMtTJmXTxCIqlJgAgnqmc6uLC+7NWx5K5/SJrnXzTpdWk23+2N/NeV?=
+ =?us-ascii?Q?+U0db1gGCEpHYAEWbe0sHD1VgAPTg1obwL8Bl4aWPk0mimMDGGzF/v3yja9Z?=
+ =?us-ascii?Q?jbTPMXXYNSyEe+KWT+qkCgsWzFcw3KQVV6ZsijsW26Ts7IyNevztu95c71xk?=
+ =?us-ascii?Q?ju5yuH6NRxdzaM8RhpoILCoI2Vj5ENlCB4HeWtonkj6QleNLMNDLsIRfK5xN?=
+ =?us-ascii?Q?LJI2oth2XJEnX1ggQoLtjPnidq4cEK3TQH2jHeE4c/bwACKCRLElnS6Vi6Uy?=
+ =?us-ascii?Q?GIC5//ztXe8jfKMaCHU3CsWmAXkOrCasSy3DSqGajrRJrL69CqatU+Rj6KPt?=
+ =?us-ascii?Q?74hf0C6+ZCyx/u9JaVQEJeDUUl/P0Tn9cnbDsvya7REudpkFvCuWosgG9cuY?=
+ =?us-ascii?Q?P4npc2J11IIa8mXHwjIkDJGk7xycpFdDsbUBOBmUSP0WAUF4qDlrpdec+5N+?=
+ =?us-ascii?Q?xoBJzxHRqHWWsl5WMwTd2JvD1UD9KA5j3vW42xbLVO78c1nVF85E3KRxLXfq?=
+ =?us-ascii?Q?YF0fIg/y1tAwV5TwOR/OaWL+9/dfgv5RIkcEu9fUmS9qbivDjfZQY8MtjoNh?=
+ =?us-ascii?Q?ByjLGICBmEmYYzdW8EfZYgWBA71xfFzwB9Kqatqv3gRo/88/eyo1XRORhA2i?=
+ =?us-ascii?Q?Cl9jTJVLyGuZYh0KwpLquFCHK5H4LiuEAuSGBaC2Y9s5jzmmIPqUSykGhQ6F?=
+ =?us-ascii?Q?x9GCB/KmtJNJGknJbGHcvpjISMUZRmmsaZp+VhziYVNEMjxixbvvD4/cnDHS?=
+ =?us-ascii?Q?1eEPwUAjNtbQ7wW8DZ25CfdMdrLAK1bvTIEgPG9HLpMnQOTXNSaP/j68uhjs?=
+ =?us-ascii?Q?Y7o4Rd+g9bfLp5Mb/rKrheGlKv+PimqGVMNCSZ08eEBpIcttRXfl0kziXxsu?=
+ =?us-ascii?Q?B7sg348xOza5339VutqNYSWsMLtx0zqtcozaL8S3GabJ8ZsKnR+93cW8Us5l?=
+ =?us-ascii?Q?+JfEU6nmCnI/tCF3dDZk7QASh6fYUq920AsMVAWdP/Lz9qtofH1sLxw7Wovl?=
+ =?us-ascii?Q?aFyzzQfvXPfs1IVFmt7zAz/VSoTM2r+yQyR+q0NIGGVCJ9LrVQZqt6EsY/sy?=
+ =?us-ascii?Q?eVj1YMUkT6yy8OynISQJqzispK1Hl5Bd9C8E2bP35utJ1+zmDOwgWdftAHPg?=
+ =?us-ascii?Q?N0yIM05y3Pa214xb4+M35tWfo9A9vpchCCaSiwhflGq6MX86Zzj9qlA/MibI?=
+ =?us-ascii?Q?kGmuk1VwZ4ZUfGNUmDitYpPb1iyRTEFMO0XRoT825IF2FGHkcLat3/D987mb?=
+ =?us-ascii?Q?8g/J98iSlRM/G0foccixN2qc/dhcuTn9dixF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316174324.GA16511@fieldses.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c19e976-74e4-4f31-2f36-08da0775e8c8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 17:53:42.3254
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: keKHj1uALfB/TYYbj7/smWp9Wsxezvb+Zs1ACMuep4SWL9xXli6KN4/0sJTtDSXsZjP1xKxpQwwb1/ULT5brfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4942
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 01:43:24PM -0400, bfields wrote:
-> One of my test VMs has been failing to boot linux-next recently.  I
-> finally got around to a bisect this morning, and it landed on the below.
-> 
-> What other information would be useful to debug this?
+[Public]
 
-Oh, also, I should have noticed the RCU warnings on the console:
+> >>>
+> >>> There is a way to figure out the "tunneled" PCIe ports by looking at
+> >>> certain properties and we do that already actually. The BIOS has the
+> >>> following under these ports:
+> >>>
+> >>>
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fdocs
+> >>> .microsoft.com%2Fen-us%2Fwindows-
+> hardware%2Fdrivers%2Fpci%2Fdsd-
+> >>> for-pcie-root-ports%23identifying-externally-exposed-pcie-root-
+> >>>
+> ports&amp;data=3D04%7C01%7Cmario.limonciello%40amd.com%7C0465d319a
+> >>>
+> 6684335d9c208da07710e7c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7
+> >>>
+> C0%7C637830479402895833%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
+> >>>
+> LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am
+> >>>
+> p;sdata=3Dz6hpYGpj%2B%2BVvz9d6MXiO4N66PUm4zwhOdI%2Br6l3PjhQ%3D
+> >>> &amp;reserved=3D0
+> >>>
+> >>> and the ports will have dev->external_facing set to 1. Perhaps lookin=
+g
+> >>> at that field helps here?
+> >>
+> >> External facing isn't a guarantee from the firmware though.  It's
+> something we
+> >> all expect in practice, but I think it's better to look at the ones th=
+at are
+> from
+> >> the _DSD usb4-host-interface to be safer.
+> >
+> > Right but then we have the discrete ones with the DVSEC that exposes th=
+e
+> > tunneled ports :(
+> >
 
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc5-00050-gdc6e0818bc9a #2134 Not tainted
------------------------------
-include/linux/cgroup.h:494 suspicious rcu_dereference_check() usage!
+Can the USB4 CM make the device links in the DVSEC case perhaps too?  I wou=
+ld
+think we want that anyway to control device suspend ordering.
 
-other info that might help us debug this:
+If I had something discrete to try I'd dust off the DVSEC patch I wrote bef=
+ore to
+try it, but alas all I have is integrated stuff on my hand.
 
+> >> Mika, you might not have seen it yet, but I sent a follow up diff in t=
+his
+> thread
+> >> to Robin's patch.  If that looks good Robin can submit a v2 (or I'm ha=
+ppy to
+> do
+> >> so as well as I confirmed it helps my original intent too).
+> >
+> > I saw it now and I'm thinking are we making this unnecessary complex? I
+> > mean Microsoft solely depends on the DMAR platform opt-in flag:
+> >
+> >
+>=20
 
-rcu_scheduler_active = 1, debug_locks = 1
-2 locks held by swapper/0/1:
- #0: ffffffff850bed60 (console_lock){+.+.}-{0:0}, at: _printk+0x96/0xb2
- #1: ffff88806d4377d8 (&rq->__lock){-...}-{2:2}, at: scheduler_tick+0xa0/0x790
+I think Microsoft doesn't allow you to turn off the IOMMU though or put it =
+in
+passthrough through on the kernel command line.
 
-stack backtrace:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc5-00050-gdc6e0818bc9a #2134
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0x45/0x59
- cpuacct_charge+0x248/0x300
- update_curr+0x338/0x870
- ? lock_is_held_type+0xd7/0x130
- task_tick_fair+0x77/0x810
- ? lock_is_held_type+0xd7/0x130
- scheduler_tick+0x210/0x790
- ? irq_work_single+0x16a/0x230
- update_process_times+0x119/0x170
- tick_periodic+0x56/0x1e0
- tick_handle_periodic+0x3b/0xa0
- __sysvec_apic_timer_interrupt+0x188/0x5a0
- sysvec_apic_timer_interrupt+0x89/0xc0
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:console_unlock+0x681/0x850
-Code: 08 e9 aa fc ff ff 48 c7 c6 0d a3 2c 81 48 c7 c7 60 e9 d3 84 e8 90 cb fe ff e8 9b 26 00 00 48 83 7c 24 10 00 0f 85 64 01 00 00 <8b> 54 24 30 85 d2 0f 84 d2 fa ff ff 31 d2 be a0 0a 00 00 48 c7 c7
-RSP: 0000:ffff88800775fc88 EFLAGS: 00000202
-RAX: 0000000000000119 RBX: ffff88800775fce0 RCX: 1ffffffff0d0d232
-RDX: 0000000000000000 RSI: ffffffff8426aa20 RDI: ffffffff844e4c60
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff86868ba7
-R10: fffffbfff0d0d174 R11: 0000000000000001 R12: 0000000000000000
-R13: ffffffff854cb968 R14: 0000000000000000 R15: dffffc0000000000
- ? console_unlock+0x7ea/0x850
- ? devkmsg_read+0x640/0x640
- ? lock_acquire+0x1b6/0x4b0
- ? _printk+0x96/0xb2
- vprintk_emit+0xf0/0x2c0
- _printk+0x96/0xb2
- ? pm_suspend.cold+0x4dd/0x4dd
- ? cblist_init_generic+0x3af/0x530
- rcu_init_tasks_generic+0x71/0x15e
- kernel_init_freeable+0x17c/0x3e0
- ? rest_init+0x2d0/0x2d0
- kernel_init+0x19/0x140
- ret_from_fork+0x22/0x30
- </TASK>
+> > We also do turn on full IOMMU mappings in that case for devices that ar=
+e
+> > marked as external facing by the same firmware that provided the DMAR
+> > bit. If the user decides to disable IOMMU from command line for instanc=
+e
+> > then we expect she knows what she is doing.
+>=20
+> Yeah, if external_facing is set correctly then we can safely expect the
+> the IOMMU layer to do the right thing, so in that case it probably is OK
+> to infer that if an IOMMU is present for the NHI then it'll be managing
+> that whole bus hierarchy. What I'm really thinking about here is whether
+> we can defend against a case when external_facing *isn't* set, so we
+> treat the tunnelled ports as normal PCI buses, assume it's OK since
+> we've got an IOMMU and everything else is getting translation domains by
+> default, but then a Thunderbolt device shows up masquerading the VID:DID
+> of something that gets a passthrough quirk, and thus tricks its way
+> through the perceived protection.
+>=20
+> Robin.
 
-Full console output follows.
+Unless it happened after 5.17-rc8 looking at the code I think that's Intel
+specific behavior though at the moment (has_external_pci).  I don't see it
+in a generic layer.
 
---b.
+In addition to the point Robin said about firmware not setting external fac=
+ing
+if the IOMMU was disabled on command line then iommu_dma_protection
+would be showing the wrong values meaning userspace may choose to
+authorize the device automatically in a potentially unsafe scenario.
 
-Linux version 5.17.0-rc5-00050-gdc6e0818bc9a (bfields@patate.fieldses.org) (gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9), GNU ld version 2.37-10.fc35) #2134 SMP PREEMPT Wed Mar 16 12:55:40 EDT 2022
-Command line: BOOT_IMAGE=(hd0,msdos1)/vmlinuz-5.17.0-rc5-00050-gdc6e0818bc9a root=/dev/mapper/fedora-root ro resume=/dev/mapper/fedora-swap rd.lvm.lv=fedora/root rd.lvm.lv=fedora/swap console=ttyS0,38400n8 consoleblank=0
-x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
-x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
-x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
-x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
-x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'standard' format.
-signal: max sigframe size: 1776
-BIOS-provided physical RAM map:
-BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
-BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
-BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
-BIOS-e820: [mem 0x0000000000100000-0x000000007ffd7fff] usable
-BIOS-e820: [mem 0x000000007ffd8000-0x000000007fffffff] reserved
-BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff] reserved
-BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
-NX (Execute Disable) protection: active
-SMBIOS 2.8 present.
-DMI: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-tsc: Fast TSC calibration using PIT
-tsc: Detected 3591.671 MHz processor
-last_pfn = 0x7ffd8 max_arch_pfn = 0x400000000
-x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
-found SMP MP-table at [mem 0x000f5a80-0x000f5a8f]
-RAMDISK: [mem 0x346ce000-0x3635efff]
-ACPI: Early table checksum verification disabled
-ACPI: RSDP 0x00000000000F57F0 000014 (v00 BOCHS )
-ACPI: RSDT 0x000000007FFE1902 000030 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
-ACPI: FACP 0x000000007FFE17D6 000074 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
-ACPI: DSDT 0x000000007FFE0040 001796 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
-ACPI: FACS 0x000000007FFE0000 000040
-ACPI: APIC 0x000000007FFE184A 000090 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
-ACPI: WAET 0x000000007FFE18DA 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
-ACPI: Reserving FACP table memory at [mem 0x7ffe17d6-0x7ffe1849]
-ACPI: Reserving DSDT table memory at [mem 0x7ffe0040-0x7ffe17d5]
-ACPI: Reserving FACS table memory at [mem 0x7ffe0000-0x7ffe003f]
-ACPI: Reserving APIC table memory at [mem 0x7ffe184a-0x7ffe18d9]
-ACPI: Reserving WAET table memory at [mem 0x7ffe18da-0x7ffe1901]
-Zone ranges:
-  DMA      [mem 0x0000000000001000-0x0000000000ffffff]
-  DMA32    [mem 0x0000000001000000-0x000000007ffd7fff]
-  Normal   empty
-Movable zone start for each node
-Early memory node ranges
-  node   0: [mem 0x0000000000001000-0x000000000009efff]
-  node   0: [mem 0x0000000000100000-0x000000007ffd7fff]
-Initmem setup node 0 [mem 0x0000000000001000-0x000000007ffd7fff]
-On node 0, zone DMA: 1 pages in unavailable ranges
-On node 0, zone DMA: 97 pages in unavailable ranges
-On node 0, zone DMA32: 40 pages in unavailable ranges
-kasan: KernelAddressSanitizer initialized
-ACPI: PM-Timer IO Port: 0x608
-ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
-IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
-ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
-ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
-ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
-ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
-ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
-ACPI: Using ACPI (MADT) for SMP configuration information
-TSC deadline timer available
-smpboot: Allowing 4 CPUs, 0 hotplug CPUs
-[mem 0x80000000-0xfeffbfff] available for PCI devices
-clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
-setup_percpu: NR_CPUS:8 nr_cpumask_bits:8 nr_cpu_ids:4 nr_node_ids:1
-percpu: Embedded 66 pages/cpu s232272 r8192 d29872 u524288
-Built 1 zonelists, mobility grouping on.  Total pages: 516824
-Kernel command line: BOOT_IMAGE=(hd0,msdos1)/vmlinuz-5.17.0-rc5-00050-gdc6e0818bc9a root=/dev/mapper/fedora-root ro resume=/dev/mapper/fedora-swap rd.lvm.lv=fedora/root rd.lvm.lv=fedora/swap console=ttyS0,38400n8 consoleblank=0
-Unknown kernel command line parameters "BOOT_IMAGE=(hd0,msdos1)/vmlinuz-5.17.0-rc5-00050-gdc6e0818bc9a resume=/dev/mapper/fedora-swap", will be passed to user space.
-Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
-Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
-mem auto-init: stack:off, heap alloc:off, heap free:off
-Stack Depot allocating hash table with memblock_alloc
-Memory: 1652304K/2096600K available (49169K kernel code, 11732K rwdata, 9356K rodata, 2088K init, 15176K bss, 444040K reserved, 0K cma-reserved)
-Kernel/User page tables isolation: enabled
-ftrace: allocating 48495 entries in 190 pages
-ftrace: allocated 190 pages with 6 groups
-Dynamic Preempt: full
-Running RCU self tests
-rcu: Preemptible hierarchical RCU implementation.
-rcu: 	RCU lockdep checking is enabled.
-rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
-	Trampoline variant of Tasks RCU enabled.
-	Rude variant of Tasks RCU enabled.
-	Tracing variant of Tasks RCU enabled.
-rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
-NR_IRQS: 4352, nr_irqs: 72, preallocated irqs: 16
-random: get_random_bytes called from start_kernel+0x1ef/0x384 with crng_init=0
-Console: colour VGA+ 80x25
-printk: console [ttyS0] enabled
-Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-... MAX_LOCKDEP_SUBCLASSES:  8
-... MAX_LOCK_DEPTH:          48
-... MAX_LOCKDEP_KEYS:        8192
-... CLASSHASH_SIZE:          4096
-... MAX_LOCKDEP_ENTRIES:     32768
-... MAX_LOCKDEP_CHAINS:      65536
-... CHAINHASH_SIZE:          32768
- memory used by lock dependency info: 6365 kB
- memory used for stack traces: 4224 kB
- per task-struct memory footprint: 1920 bytes
-ACPI: Core revision 20211217
-APIC: Switch to symmetric I/O mode setup
-clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x33c5978b159, max_idle_ns: 440795383616 ns
-Calibrating delay loop (skipped), value calculated using timer frequency.. 7183.34 BogoMIPS (lpj=14366684)
-pid_max: default: 32768 minimum: 301
-LSM: Security Framework initializing
-SELinux:  Initializing.
-Mount-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
-Mountpoint-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
-Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
-Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
-Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
-Spectre V2 : Mitigation: Full generic retpoline
-Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
-Spectre V2 : Enabling Restricted Speculation for firmware calls
-Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
-Speculative Store Bypass: Vulnerable
-SRBDS: Unknown: Dependent on hypervisor status
-MDS: Vulnerable: Clear CPU buffers attempted, no microcode
-Freeing SMP alternatives memory: 44K
-smpboot: CPU0: Intel Core Processor (Haswell, no TSX, IBRS) (family: 0x6, model: 0x3c, stepping: 0x1)
-cblist_init_generic: Setting adjustable number of callback queues.
-cblist_init_generic: Setting shift to 2 and lim to 1.
-cblist_init_generic: Setting shift to 2 and lim to 1.
-
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc5-00050-gdc6e0818bc9a #2134 Not tainted
------------------------------
-include/linux/cgroup.h:494 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 1, debug_locks = 1
-2 locks held by swapper/0/1:
- #0: ffffffff850bed60 (console_lock){+.+.}-{0:0}, at: _printk+0x96/0xb2
- #1: ffff88806d4377d8 (&rq->__lock){-...}-{2:2}, at: scheduler_tick+0xa0/0x790
-
-stack backtrace:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc5-00050-gdc6e0818bc9a #2134
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0x45/0x59
- cpuacct_charge+0x248/0x300
- update_curr+0x338/0x870
- ? lock_is_held_type+0xd7/0x130
- task_tick_fair+0x77/0x810
- ? lock_is_held_type+0xd7/0x130
- scheduler_tick+0x210/0x790
- ? irq_work_single+0x16a/0x230
- update_process_times+0x119/0x170
- tick_periodic+0x56/0x1e0
- tick_handle_periodic+0x3b/0xa0
- __sysvec_apic_timer_interrupt+0x188/0x5a0
- sysvec_apic_timer_interrupt+0x89/0xc0
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:console_unlock+0x681/0x850
-Code: 08 e9 aa fc ff ff 48 c7 c6 0d a3 2c 81 48 c7 c7 60 e9 d3 84 e8 90 cb fe ff e8 9b 26 00 00 48 83 7c 24 10 00 0f 85 64 01 00 00 <8b> 54 24 30 85 d2 0f 84 d2 fa ff ff 31 d2 be a0 0a 00 00 48 c7 c7
-RSP: 0000:ffff88800775fc88 EFLAGS: 00000202
-RAX: 0000000000000119 RBX: ffff88800775fce0 RCX: 1ffffffff0d0d232
-RDX: 0000000000000000 RSI: ffffffff8426aa20 RDI: ffffffff844e4c60
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff86868ba7
-R10: fffffbfff0d0d174 R11: 0000000000000001 R12: 0000000000000000
-R13: ffffffff854cb968 R14: 0000000000000000 R15: dffffc0000000000
- ? console_unlock+0x7ea/0x850
- ? devkmsg_read+0x640/0x640
- ? lock_acquire+0x1b6/0x4b0
- ? _printk+0x96/0xb2
- vprintk_emit+0xf0/0x2c0
- _printk+0x96/0xb2
- ? pm_suspend.cold+0x4dd/0x4dd
- ? cblist_init_generic+0x3af/0x530
- rcu_init_tasks_generic+0x71/0x15e
- kernel_init_freeable+0x17c/0x3e0
- ? rest_init+0x2d0/0x2d0
- kernel_init+0x19/0x140
- ret_from_fork+0x22/0x30
- </TASK>
-
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc5-00050-gdc6e0818bc9a #2134 Not tainted
------------------------------
-include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 1, debug_locks = 1
-2 locks held by swapper/0/1:
- #0: ffffffff850bed60 (console_lock){+.+.}-{0:0}, at: _printk+0x96/0xb2
- #1: ffff88806d4377d8 (&rq->__lock){-...}-{2:2}, at: scheduler_tick+0xa0/0x790
-
-stack backtrace:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc5-00050-gdc6e0818bc9a #2134
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0x45/0x59
- update_curr+0x634/0x870
- ? lock_is_held_type+0xd7/0x130
- task_tick_fair+0x77/0x810
- ? lock_is_held_type+0xd7/0x130
- scheduler_tick+0x210/0x790
- ? irq_work_single+0x16a/0x230
- update_process_times+0x119/0x170
- tick_periodic+0x56/0x1e0
- tick_handle_periodic+0x3b/0xa0
- __sysvec_apic_timer_interrupt+0x188/0x5a0
- sysvec_apic_timer_interrupt+0x89/0xc0
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:console_unlock+0x681/0x850
-Code: 08 e9 aa fc ff ff 48 c7 c6 0d a3 2c 81 48 c7 c7 60 e9 d3 84 e8 90 cb fe ff e8 9b 26 00 00 48 83 7c 24 10 00 0f 85 64 01 00 00 <8b> 54 24 30 85 d2 0f 84 d2 fa ff ff 31 d2 be a0 0a 00 00 48 c7 c7
-RSP: 0000:ffff88800775fc88 EFLAGS: 00000202
-RAX: 0000000000000119 RBX: ffff88800775fce0 RCX: 1ffffffff0d0d232
-RDX: 0000000000000000 RSI: ffffffff8426aa20 RDI: ffffffff844e4c60
-RBP: 0000000000000000 R08: 0000000000000001 R09: ffffffff86868ba7
-R10: fffffbfff0d0d174 R11: 0000000000000001 R12: 0000000000000000
-R13: ffffffff854cb968 R14: 0000000000000000 R15: dffffc0000000000
- ? console_unlock+0x7ea/0x850
- ? devkmsg_read+0x640/0x640
- ? lock_acquire+0x1b6/0x4b0
- ? _printk+0x96/0xb2
- vprintk_emit+0xf0/0x2c0
- _printk+0x96/0xb2
- ? pm_suspend.cold+0x4dd/0x4dd
- ? cblist_init_generic+0x3af/0x530
- rcu_init_tasks_generic+0x71/0x15e
- kernel_init_freeable+0x17c/0x3e0
- ? rest_init+0x2d0/0x2d0
- kernel_init+0x19/0x140
- ret_from_fork+0x22/0x30
- </TASK>
-cblist_init_generic: Setting shift to 2 and lim to 1.
-Running RCU-tasks wait API self tests
-Performance Events: unsupported p6 CPU model 60 no PMU driver, software events only.
-rcu: Hierarchical SRCU implementation.
-
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc5-00050-gdc6e0818bc9a #2134 Not tainted
------------------------------
-include/linux/cgroup.h:481 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 1, debug_locks = 1
-1 lock held by migration/0/15:
- #0: ffff88806d4377d8 (&rq->__lock){-.-.}-{2:2}, at: __schedule+0x1d4/0x2280
-
-stack backtrace:
-CPU: 0 PID: 15 Comm: migration/0 Not tainted 5.17.0-rc5-00050-gdc6e0818bc9a #2134
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-Stopper: 0x0 <- 0x0
-Call Trace:
- <TASK>
- dump_stack_lvl+0x45/0x59
- put_prev_task_stop+0x48e/0x640
- ? balance_rt+0x2b3/0x3e0
- __schedule+0x1146/0x2280
- ? io_schedule_timeout+0x190/0x190
- ? lockdep_hardirqs_on_prepare+0x17b/0x400
- ? _raw_spin_unlock_irqrestore+0x2d/0x50
- ? smpboot_thread_fn+0x6b/0x8c0
- schedule+0xe0/0x270
- ? ikconfig_read_current+0x30/0x30
- smpboot_thread_fn+0x253/0x8c0
- ? smpboot_register_percpu_thread+0x320/0x320
- kthread+0x29f/0x340
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x22/0x30
- </TASK>
-NMI watchdog: Perf NMI watchdog permanently disabled
-smp: Bringing up secondary CPUs ...
-x86: Booting SMP configuration:
-.... node  #0, CPUs:      #1
-smpboot: CPU 1 Converting physical 0 to logical die 1
- #2
-smpboot: CPU 2 Converting physical 0 to logical die 2
-Callback from call_rcu_tasks_trace() invoked.
-Callback from call_rcu_tasks_rude() invoked.
- #3
-smpboot: CPU 3 Converting physical 0 to logical die 3
-smp: Brought up 1 node, 4 CPUs
-smpboot: Max logical packages: 4
-smpboot: Total of 4 processors activated (28894.81 BogoMIPS)
-devtmpfs: initialized
-clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-futex hash table entries: 1024 (order: 5, 131072 bytes, linear)
-NET: Registered PF_NETLINK/PF_ROUTE protocol family
-audit: initializing netlink subsys (disabled)
-Callback from call_rcu_tasks() invoked.
-audit: type=2000 audit(1647449881.440:1): state=initialized audit_enabled=0 res=1
-thermal_sys: Registered thermal governor 'step_wise'
-thermal_sys: Registered thermal governor 'user_space'
-cpuidle: using governor ladder
-PCI: Using configuration type 1 for base access
-kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
-HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
-cryptd: max_cpu_qlen set to 1000
-raid6: avx2x4   gen() 34895 MB/s
-raid6: avx2x2   gen() 33100 MB/s
-raid6: avx2x1   gen() 25416 MB/s
-raid6: using algorithm avx2x4 gen() 34895 MB/s
-raid6: .... xor() 13503 MB/s, rmw enabled
-raid6: using avx2x2 recovery algorithm
-ACPI: Added _OSI(Module Device)
-ACPI: Added _OSI(Processor Device)
-ACPI: Added _OSI(3.0 _SCP Extensions)
-ACPI: Added _OSI(Processor Aggregator Device)
-ACPI: Added _OSI(Linux-Dell-Video)
-ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
-ACPI: Added _OSI(Linux-HPI-Hybrid-Graphics)
-ACPI: 1 ACPI AML tables successfully acquired and loaded
-ACPI: Interpreter enabled
-ACPI: PM: (supports S0 S5)
-ACPI: Using IOAPIC for interrupt routing
-PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
-ACPI: Enabled 2 GPEs in block 00 to 0F
-ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
-acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments HPX-Type3]
-acpi PNP0A03:00: PCIe port services disabled; not requesting _OSC control
-acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended PCI configuration space under this bridge.
-PCI host bridge to bus 0000:00
-pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
-pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
-pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
-pci_bus 0000:00: root bus resource [mem 0x80000000-0xfebfffff window]
-pci_bus 0000:00: root bus resource [mem 0x100000000-0x17fffffff window]
-pci_bus 0000:00: root bus resource [bus 00-ff]
-pci 0000:00:00.0: [8086:1237] type 00 class 0x060000
-pci 0000:00:01.0: [8086:7000] type 00 class 0x060100
-pci 0000:00:01.1: [8086:7010] type 00 class 0x010180
-pci 0000:00:01.1: reg 0x20: [io  0xc2e0-0xc2ef]
-pci 0000:00:01.1: legacy IDE quirk: reg 0x10: [io  0x01f0-0x01f7]
-pci 0000:00:01.1: legacy IDE quirk: reg 0x14: [io  0x03f6]
-pci 0000:00:01.1: legacy IDE quirk: reg 0x18: [io  0x0170-0x0177]
-pci 0000:00:01.1: legacy IDE quirk: reg 0x1c: [io  0x0376]
-pci 0000:00:01.3: [8086:7113] type 00 class 0x068000
-pci 0000:00:01.3: quirk: [io  0x0600-0x063f] claimed by PIIX4 ACPI
-pci 0000:00:01.3: quirk: [io  0x0700-0x070f] claimed by PIIX4 SMB
-pci 0000:00:02.0: [1b36:0100] type 00 class 0x030000
-pci 0000:00:02.0: reg 0x10: [mem 0xf4000000-0xf7ffffff]
-pci 0000:00:02.0: reg 0x14: [mem 0xf8000000-0xfbffffff]
-pci 0000:00:02.0: reg 0x18: [mem 0xfc054000-0xfc055fff]
-pci 0000:00:02.0: reg 0x1c: [io  0xc200-0xc21f]
-pci 0000:00:02.0: reg 0x30: [mem 0xfc040000-0xfc04ffff pref]
-pci 0000:00:02.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
-pci 0000:00:03.0: [1af4:1000] type 00 class 0x020000
-pci 0000:00:03.0: reg 0x10: [io  0xc220-0xc23f]
-pci 0000:00:03.0: reg 0x14: [mem 0xfc056000-0xfc056fff]
-pci 0000:00:03.0: reg 0x20: [mem 0xfebd4000-0xfebd7fff 64bit pref]
-pci 0000:00:03.0: reg 0x30: [mem 0xfc000000-0xfc03ffff pref]
-pci 0000:00:04.0: [8086:2668] type 00 class 0x040300
-pci 0000:00:04.0: reg 0x10: [mem 0xfc050000-0xfc053fff]
-pci 0000:00:05.0: [8086:2934] type 00 class 0x0c0300
-pci 0000:00:05.0: reg 0x20: [io  0xc240-0xc25f]
-pci 0000:00:05.1: [8086:2935] type 00 class 0x0c0300
-pci 0000:00:05.1: reg 0x20: [io  0xc260-0xc27f]
-pci 0000:00:05.2: [8086:2936] type 00 class 0x0c0300
-pci 0000:00:05.2: reg 0x20: [io  0xc280-0xc29f]
-pci 0000:00:05.7: [8086:293a] type 00 class 0x0c0320
-pci 0000:00:05.7: reg 0x10: [mem 0xfc057000-0xfc057fff]
-pci 0000:00:06.0: [1af4:1003] type 00 class 0x078000
-pci 0000:00:06.0: reg 0x10: [io  0xc000-0xc03f]
-pci 0000:00:06.0: reg 0x14: [mem 0xfc058000-0xfc058fff]
-pci 0000:00:06.0: reg 0x20: [mem 0xfebd8000-0xfebdbfff 64bit pref]
-pci 0000:00:07.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:07.0: reg 0x10: [io  0xc040-0xc07f]
-pci 0000:00:07.0: reg 0x14: [mem 0xfc059000-0xfc059fff]
-pci 0000:00:07.0: reg 0x20: [mem 0xfebdc000-0xfebdffff 64bit pref]
-pci 0000:00:08.0: [1af4:1002] type 00 class 0x00ff00
-pci 0000:00:08.0: reg 0x10: [io  0xc2a0-0xc2bf]
-pci 0000:00:08.0: reg 0x20: [mem 0xfebe0000-0xfebe3fff 64bit pref]
-pci 0000:00:09.0: [1af4:1005] type 00 class 0x00ff00
-pci 0000:00:09.0: reg 0x10: [io  0xc2c0-0xc2df]
-pci 0000:00:09.0: reg 0x20: [mem 0xfebe4000-0xfebe7fff 64bit pref]
-pci 0000:00:0a.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:0a.0: reg 0x10: [io  0xc080-0xc0bf]
-pci 0000:00:0a.0: reg 0x14: [mem 0xfc05a000-0xfc05afff]
-pci 0000:00:0a.0: reg 0x20: [mem 0xfebe8000-0xfebebfff 64bit pref]
-pci 0000:00:0b.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:0b.0: reg 0x10: [io  0xc0c0-0xc0ff]
-pci 0000:00:0b.0: reg 0x14: [mem 0xfc05b000-0xfc05bfff]
-pci 0000:00:0b.0: reg 0x20: [mem 0xfebec000-0xfebeffff 64bit pref]
-pci 0000:00:0c.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:0c.0: reg 0x10: [io  0xc100-0xc13f]
-pci 0000:00:0c.0: reg 0x14: [mem 0xfc05c000-0xfc05cfff]
-pci 0000:00:0c.0: reg 0x20: [mem 0xfebf0000-0xfebf3fff 64bit pref]
-pci 0000:00:0d.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:0d.0: reg 0x10: [io  0xc140-0xc17f]
-pci 0000:00:0d.0: reg 0x14: [mem 0xfc05d000-0xfc05dfff]
-pci 0000:00:0d.0: reg 0x20: [mem 0xfebf4000-0xfebf7fff 64bit pref]
-pci 0000:00:0e.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:0e.0: reg 0x10: [io  0xc180-0xc1bf]
-pci 0000:00:0e.0: reg 0x14: [mem 0xfc05e000-0xfc05efff]
-pci 0000:00:0e.0: reg 0x20: [mem 0xfebf8000-0xfebfbfff 64bit pref]
-pci 0000:00:0f.0: [1af4:1001] type 00 class 0x010000
-pci 0000:00:0f.0: reg 0x10: [io  0xc1c0-0xc1ff]
-pci 0000:00:0f.0: reg 0x14: [mem 0xfc05f000-0xfc05ffff]
-pci 0000:00:0f.0: reg 0x20: [mem 0xfebfc000-0xfebfffff 64bit pref]
-ACPI: PCI: Interrupt link LNKA configured for IRQ 10
-ACPI: PCI: Interrupt link LNKB configured for IRQ 10
-ACPI: PCI: Interrupt link LNKC configured for IRQ 11
-ACPI: PCI: Interrupt link LNKD configured for IRQ 11
-ACPI: PCI: Interrupt link LNKS configured for IRQ 9
-pci 0000:00:02.0: vgaarb: setting as boot VGA device
-pci 0000:00:02.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
-pci 0000:00:02.0: vgaarb: bridge control possible
-vgaarb: loaded
-SCSI subsystem initialized
-ACPI: bus type USB registered
-usbcore: registered new interface driver usbfs
-usbcore: registered new interface driver hub
-usbcore: registered new device driver usb
-pps_core: LinuxPPS API ver. 1 registered
-pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
-PTP clock support registered
-EDAC MC: Ver: 3.0.0
-Advanced Linux Sound Architecture Driver Initialized.
-PCI: Using ACPI for IRQ routing
-clocksource: Switched to clocksource tsc-early
-VFS: Disk quotas dquot_6.6.0
-VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
-FS-Cache: Loaded
-CacheFiles: Loaded
-pnp: PnP ACPI init
-pnp: PnP ACPI: found 5 devices
-clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
-NET: Registered PF_INET protocol family
-IP idents hash table entries: 32768 (order: 6, 262144 bytes, linear)
-tcp_listen_portaddr_hash hash table entries: 1024 (order: 4, 81920 bytes, linear)
-TCP established hash table entries: 16384 (order: 5, 131072 bytes, linear)
-TCP bind hash table entries: 16384 (order: 8, 1179648 bytes, linear)
-TCP: Hash tables configured (established 16384 bind 16384)
-UDP hash table entries: 1024 (order: 5, 163840 bytes, linear)
-UDP-Lite hash table entries: 1024 (order: 5, 163840 bytes, linear)
-NET: Registered PF_UNIX/PF_LOCAL protocol family
-pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
-pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
-pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
-pci_bus 0000:00: resource 7 [mem 0x80000000-0xfebfffff window]
-pci_bus 0000:00: resource 8 [mem 0x100000000-0x17fffffff window]
-pci 0000:00:01.0: PIIX3: Enabling Passive Release
-pci 0000:00:00.0: Limiting direct PCI/PCI transfers
-pci 0000:00:01.0: Activating ISA DMA hang workarounds
-ACPI: \_SB_.LNKA: Enabled at IRQ 10
-pci 0000:00:05.0: quirk_usb_early_handoff+0x0/0xa70 took 1972834 usecs
-ACPI: \_SB_.LNKB: Enabled at IRQ 11
-pci 0000:00:05.1: quirk_usb_early_handoff+0x0/0xa70 took 1981210 usecs
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-pci 0000:00:05.2: quirk_usb_early_handoff+0x0/0xa70 took 1999352 usecs
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-pci 0000:00:05.7: quirk_usb_early_handoff+0x0/0xa70 took 1996418 usecs
-PCI: CLS 0 bytes, default 64
-Trying to unpack rootfs image as initramfs...
-Initialise system trusted keyrings
-workingset: timestamp_bits=62 max_order=19 bucket_order=0
-DLM installed
-Key type cifs.idmap registered
-fuse: init (API version 7.36)
-SGI XFS with ACLs, security attributes, no debug enabled
-ocfs2: Registered cluster interface o2cb
-ocfs2: Registered cluster interface user
-OCFS2 User DLM kernel interface loaded
-gfs2: GFS2 installed
-xor: automatically using best checksumming function   avx       
-Key type asymmetric registered
-Asymmetric key parser 'x509' registered
-Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
-io scheduler mq-deadline registered
-io scheduler kyber registered
-test_string_helpers: Running tests...
-cryptomgr_test (95) used greatest stack depth: 30160 bytes left
-shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
-input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
-ACPI: button: Power Button [PWRF]
-Freeing initrd memory: 29252K
-kworker/u8:3 (119) used greatest stack depth: 28520 bytes left
-kworker/u8:2 (114) used greatest stack depth: 28272 bytes left
-tsc: Refined TSC clocksource calibration: 3591.584 MHz
-clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x33c545180c2, max_idle_ns: 440795274720 ns
-clocksource: Switched to clocksource tsc
-kworker/u8:2 (278) used greatest stack depth: 28048 bytes left
-kworker/u8:2 (303) used greatest stack depth: 27216 bytes left
-Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
-00:00: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-brd: module loaded
-loop: module loaded
-virtio_blk virtio2: [vda] 16777216 512-byte logical blocks (8.59 GB/8.00 GiB)
- vda: vda1 vda2
-virtio_blk virtio5: [vdb] 10485760 512-byte logical blocks (5.37 GB/5.00 GiB)
-virtio_blk virtio6: [vdc] 10485760 512-byte logical blocks (5.37 GB/5.00 GiB)
-virtio_blk virtio7: [vdd] 10485760 512-byte logical blocks (5.37 GB/5.00 GiB)
-virtio_blk virtio8: [vde] 10485760 512-byte logical blocks (5.37 GB/5.00 GiB)
-virtio_blk virtio9: [vdf] 41943040 512-byte logical blocks (21.5 GB/20.0 GiB)
-virtio_blk virtio10: [vdg] 20971520 512-byte logical blocks (10.7 GB/10.0 GiB)
- vdg:
-zram: Added device: zram0
-scsi host0: ata_piix
-scsi host1: ata_piix
-ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xc2e0 irq 14
-ata2: PATA max MWDMA2 cmd 0x170 ctl 0x376 bmdma 0xc2e8 irq 15
-tun: Universal TUN/TAP device driver, 1.6
-e1000: Intel(R) PRO/1000 Network Driver
-e1000: Copyright (c) 1999-2006 Intel Corporation.
-e1000e: Intel(R) PRO/1000 Network Driver
-e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-PPP generic driver version 2.4.2
-aoe: AoE v85 initialised.
-ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-ehci-pci: EHCI PCI platform driver
-ata1: found unknown device (class 0)
-ata1.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
-scsi 0:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
-sr 0:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
-cdrom: Uniform CD-ROM driver Revision: 3.20
-sr 0:0:0:0: Attached scsi generic sg0 type 5
-ehci-pci 0000:00:05.7: EHCI Host Controller
-ehci-pci 0000:00:05.7: new USB bus registered, assigned bus number 1
-ehci-pci 0000:00:05.7: irq 10, io mem 0xfc057000
-ehci-pci 0000:00:05.7: USB 2.0 started, EHCI 1.00
-hub 1-0:1.0: USB hub found
-hub 1-0:1.0: 6 ports detected
-ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
-ohci-pci: OHCI PCI platform driver
-uhci_hcd: USB Universal Host Controller Interface driver
-usb 1-1: new high-speed USB device number 2 using ehci-pci
-uhci_hcd 0000:00:05.0: UHCI Host Controller
-uhci_hcd 0000:00:05.0: new USB bus registered, assigned bus number 2
-uhci_hcd 0000:00:05.0: irq 10, io port 0x0000c240
-hub 2-0:1.0: USB hub found
-hub 2-0:1.0: 2 ports detected
-uhci_hcd 0000:00:05.1: UHCI Host Controller
-uhci_hcd 0000:00:05.1: new USB bus registered, assigned bus number 3
-uhci_hcd 0000:00:05.1: irq 11, io port 0x0000c260
-hub 3-0:1.0: USB hub found
-hub 3-0:1.0: 2 ports detected
-uhci_hcd 0000:00:05.2: UHCI Host Controller
-uhci_hcd 0000:00:05.2: new USB bus registered, assigned bus number 4
-uhci_hcd 0000:00:05.2: irq 11, io port 0x0000c280
-hub 4-0:1.0: USB hub found
-hub 4-0:1.0: 2 ports detected
-usbcore: registered new interface driver usblp
-usbcore: registered new interface driver usb-storage
-i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
-serio: i8042 KBD port at 0x60,0x64 irq 1
-serio: i8042 AUX port at 0x60,0x64 irq 12
-mousedev: PS/2 mouse device common for all mice
-input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
-input: PC Speaker as /devices/platform/pcspkr/input/input4
-device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
-device-mapper: uevent: version 1.0.3
-device-mapper: ioctl: 4.45.0-ioctl (2021-03-22) initialised: dm-devel@redhat.com
-device-mapper: multipath round-robin: version 1.2.0 loaded
-intel_pstate: CPU model not supported
-input: QEMU QEMU USB Tablet as /devices/pci0000:00/0000:00:05.7/usb1/1-1/1-1:1.0/0003:0627:0001.0001/input/input5
-hid-generic 0003:0627:0001.0001: input: USB HID v0.01 Mouse [QEMU QEMU USB Tablet] on usb-0000:00:05.7-1/input0
-usbcore: registered new interface driver usbhid
-usbhid: USB HID core driver
-netem: version 1.3
-NET: Registered PF_INET6 protocol family
-Segment Routing with IPv6
-In-situ OAM (IOAM) with IPv6
-sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
-NET: Registered PF_PACKET protocol family
-NET: Registered PF_KEY protocol family
-sctp: Hash tables configured (bind 32/56)
-Key type dns_resolver registered
-IPI shorthand broadcast: enabled
-AVX2 version of gcm_enc/dec engaged.
-AES CTR mode by8 optimization enabled
-sched_clock: Marking stable (28096270726, 82668394)->(28303532526, -124593406)
-Loading compiled-in X.509 certificates
-debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-Btrfs loaded, crc32c=crc32c-intel, zoned=no, fsverity=no
-ima: No TPM chip found, activating TPM-bypass!
-ima: Allocated hash algorithm: sha1
-ima: No architecture policies found
-ALSA device list:
-  #0: Virtual MIDI Card 1
-Freeing unused kernel image (initmem) memory: 2088K
-Write protecting the kernel read-only data: 61440k
-Freeing unused kernel image (text/rodata gap) memory: 2028K
-Freeing unused kernel image (rodata/data gap) memory: 884K
-Run /init as init process
-systemd[1]: systemd v246.13-1.fc33 running in system mode. (+PAM +AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD +IDN2 -IDN +PCRE2 default-hierarchy=unified)
-systemd[1]: Detected virtualization kvm.
-systemd[1]: Detected architecture x86-64.
-systemd[1]: Running in initial RAM disk.
-
-Welcome to 
+Even if the user "knew what they were doing", I would expect that we still
+do our best to protect them from themselves and not advertise something
+that will cause automatic authorization.

@@ -2,111 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745134DAE35
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 11:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF274DAE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 11:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355124AbiCPK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 06:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S1355130AbiCPK3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 06:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237516AbiCPK1n (ORCPT
+        with ESMTP id S243190AbiCPK3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 06:27:43 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2025748D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 03:26:27 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 17so2501788lji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 03:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JZ8EHIBzmOyeWvKgy0ZYkrJEoe2rL78XJxOVNyg56hs=;
-        b=AGdot4lN7nfcJfBeLT6Ld2ZE71bnWdLlZxePtqX8WUBQeFH1CSKRlloc26tuKdVPef
-         TM/NFS9rfikGYs6YiK0Zw/RXAnISjmnt2XpIddVhWGUcABPKaML5kgCkj0Xsav0Vf0Ch
-         csre2Iy+NNgIdvwSVHs5E7fajEWxEVk++GIx4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JZ8EHIBzmOyeWvKgy0ZYkrJEoe2rL78XJxOVNyg56hs=;
-        b=1JyVQnJ2O3jEUuwGLsagCvPstWZ/PgIQVdruT1DmOVvDsz82rsjQfmFyRkh6jFe3wU
-         dz6fxyCxgox3QCtyxx7q05vWiZFvVvbNlsEnghUn3w3OFSHFjiH4BIlO2eJrHQAnwFPx
-         pW7EI9Z8eqQPN3hFlvzbxa3x0M8pgiI58HwsBxC/5uWPhFprTQyBU4nkREpfS1cuzOCb
-         32suCJtJJgN/bdAYTLkKbsYmfwWX/h60acAQPlyCtphWFYrOvBD4V4epH58LP6xrS2fs
-         jS1Eh7TW8VgW6zY+EYrswGf3qqyIAPJc4cYawk69xTqK+ZqCPBD3vUZnNP28kPbyKGG7
-         MXBQ==
-X-Gm-Message-State: AOAM531ziCf+z4p52tCcZMNVUWca7RG0O8WhgztxnLyumPUMlv166Vqd
-        VCrFfXI6SXFS3yQ9yv7BeL6W6Q==
-X-Google-Smtp-Source: ABdhPJxReci0Y1M/kl0TZiMK9Ql/NpCDfs/OiPp95bf5pXykHDmtkjaEYhrO7I4VJS5ptGi52k93Ug==
-X-Received: by 2002:a2e:9b8b:0:b0:234:38f3:e85c with SMTP id z11-20020a2e9b8b000000b0023438f3e85cmr19785045lji.452.1647426385725;
-        Wed, 16 Mar 2022 03:26:25 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004433b80c1d3sm145062lfi.182.2022.03.16.03.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 03:26:25 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Kyle McMartin <kmcmarti@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kernel/panic.c: remove CONFIG_PANIC_ON_OOPS_VALUE indirection
-Date:   Wed, 16 Mar 2022 11:26:22 +0100
-Message-Id: <20220316102622.562572-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.31.1
+        Wed, 16 Mar 2022 06:29:53 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F3B5D1A7;
+        Wed, 16 Mar 2022 03:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647426519; x=1678962519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i+d3XgmpM+8MZ9Ozi+tajsF8Go04+890r3RqulbTxZM=;
+  b=MKzHD+Rd4+Msv+zf9Kk69PbZDW91YJRp4h5o/4toyYXFMbGtjCaCTLia
+   +KpXorj5IQknbcQpE4bXFH9s2JAoMs4TBBJVRofEtUX0m8OodpfpoYogG
+   L2t4Zub0VHBQLTExjZbla90MQsfTbLr+gMeyigiZRiFKDLK8AW8Hp0qJx
+   6CG6X12+w60e9yM5YRh1vuimygj0Y0MZfzdapHR+bBdfTuV1ZJB4LKomD
+   jpBvWyG3JjLq6hlpSRLylziKhDqGq7OtA0++sdz2CsR6gK/QjrfHQRg43
+   aFlN/N7P4+Nid2ZQac4LTmXB2ecIN4wshOwCMVC0vc/09yhXg9KA1+/vg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319761103"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="319761103"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 03:28:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="516272651"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 03:28:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nUQsn-000pAk-Be;
+        Wed, 16 Mar 2022 12:27:57 +0200
+Date:   Wed, 16 Mar 2022 12:27:57 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, micklorain@protonmail.com
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+Message-ID: <YjG7rZ11PP3vWz89@smile.fi.intel.com>
+References: <YjBlxOi0ljZVUb/D@smile.fi.intel.com>
+ <20220315202231.GA629970@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315202231.GA629970@bhelgaas>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have the helper IS_ENABLED(). Use that instead of having an
-unnecessary hidden config option.
+On Tue, Mar 15, 2022 at 03:22:31PM -0500, Bjorn Helgaas wrote:
+> On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
+> > On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
+> > > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> > > > ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
+> > > > Enable the respective quirk as it's done for other ATI devices on this chipset,
+> > > > 
+> > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+> > > 
+> > > This is interesting because there must be a TON of these AMD/ATI SB600
+> > > USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
+> > > appeared in v5.9.
+> > > 
+> > > So why would we only get a report now, in February 2022?  Is there
+> > > some change more recent than 306c54d0edb6 that exposed this problem?
+> > 
+> > I think it's a rhetorical question. To me it's as simple as the latency
+> > between getting the change into the kernel.
+> > 
+> > However, I'm a bit worried that in case of ATI there are not so many
+> > platforms that are kept up-to-dated.
+> 
+> This would be a rhetorical question if I were not interested in the
+> answer but asking only to make a point.  That's not the case at all.
+> 
+> If these SB600 USB devices stopped working in v5.9 (October 2020),
+> that would affect lots of keyboards and mice, and I would be surprised
+> if we didn't hear about it until February, 2022.
+> 
+> I looked through https://github.com/linuxhw/Dmesg, and there are at
+> least 40 dmesg logs from v5.9 or later with SB600 USB, so I'm
+> still a little skeptical that 306c54d0edb6 by itself is enough to
+> explain this.
+> 
+> Anyway, I applied this to pci/msi for v5.18 with the following commit
+> log:
+> 
+>     PCI: Disable broken MSI on ATI SB600 USB adapters
+> 
+>     Some ATI SB600 USB adapters advertise MSI, but MSI doesn't work if INTx is
+>     disabled.  Disable MSI on these adapters.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- kernel/panic.c    | 2 +-
- lib/Kconfig.debug | 6 ------
- 2 files changed, 1 insertion(+), 7 deletions(-)
+But IIUC MSI is _not_ disabled. That's why I have issued this version of the
+patch with different commit message. Did I misunderstand something?
 
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 55b50e052ec3..304957f5b3c4 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -46,7 +46,7 @@
- unsigned int __read_mostly sysctl_oops_all_cpu_backtrace;
- #endif /* CONFIG_SMP */
- 
--int panic_on_oops = CONFIG_PANIC_ON_OOPS_VALUE;
-+int panic_on_oops = IS_ENABLED(CONFIG_PANIC_ON_OOPS);
- static unsigned long tainted_mask =
- 	IS_ENABLED(CONFIG_GCC_PLUGIN_RANDSTRUCT) ? (1 << TAINT_RANDSTRUCT) : 0;
- static int pause_on_oops;
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 14b89aa37c5c..40211c343a14 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -995,12 +995,6 @@ config PANIC_ON_OOPS
- 
- 	  Say N if unsure.
- 
--config PANIC_ON_OOPS_VALUE
--	int
--	range 0 1
--	default 0 if !PANIC_ON_OOPS
--	default 1 if PANIC_ON_OOPS
--
- config PANIC_TIMEOUT
- 	int "panic timeout"
- 	default 0
 -- 
-2.31.1
+With Best Regards,
+Andy Shevchenko
+
 

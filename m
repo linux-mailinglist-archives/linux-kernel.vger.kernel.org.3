@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACE84DABF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE3D4DABFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354276AbiCPHoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 03:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
+        id S1354295AbiCPHqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 03:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354269AbiCPHoy (ORCPT
+        with ESMTP id S1354280AbiCPHqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 03:44:54 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7DE329AA
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:43:38 -0700 (PDT)
-X-UUID: b8b9268005924c798f11d488ea397757-20220316
-X-UUID: b8b9268005924c798f11d488ea397757-20220316
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1666183484; Wed, 16 Mar 2022 15:43:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 16 Mar 2022 15:43:29 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 15:43:29 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <mark-pk.tsai@mediatek.com>,
-        <yj.chiang@mediatek.com>
-Subject: [PATCH] driver core: Prevent overriding async driver of a device before it probe
-Date:   Wed, 16 Mar 2022 15:43:28 +0800
-Message-ID: <20220316074328.1801-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 16 Mar 2022 03:46:54 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD2360CC1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:45:40 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id u30-20020a4a6c5e000000b00320d8dc2438so1713315oof.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T87zTH0DkphGLesbWlrfLY37BYRGj5Dcsh6fZ7Tb2Io=;
+        b=r1XEXiASBQDYZ5V4TV73TqXbRPkoxgosJdV49eyGOPLU/Y8tV87HdLL086XkKTPyfH
+         MQFEjm1sPu217Jk6SkldXFKawlY+jNY7UCsWGUqkyeWmlP/qecm+wo74TK5aFSoha033
+         nICfZT38j16WTKmtm7Bn7uryf7ZzPLxV0ECLZyJOs3fP6oB6mH6Zf5AdGdrTGttuoMUP
+         2AY6haAAiY4SQTKEonDAlVrpH4NlpowXYIv/6DJYg9h13ril1KbWhfL+0NqaQD0xAlTE
+         Tl65DdltW7v38+WjqbO+OnC0giEL1gO7f1YFUmLZCD8Pjp68bGn6s7naqY0Fmwmg9zrx
+         NtCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T87zTH0DkphGLesbWlrfLY37BYRGj5Dcsh6fZ7Tb2Io=;
+        b=ZOqvRPcETw+r++9WYldsaAF8/fHDLjjYQluy90xAYhtdi0NFewtp5U/X9Q427qvJET
+         uXMu3aZIyqSH0MQSNGFlT4hLMm+/b6/6oZkkAD+dGTXi4fz/ycjjudWA4PVbV3VTA+dw
+         7BpLQBNwuuGEHNNS0CRk3O01/MYUh0Ob2ph5YDdU39WSGT2eNond6cmo1V9wnOm8VRxA
+         CMBlqaA3DtR1wL+ln3sW12MXKtf8n0jy0jALlfR6uRKmYPEeNBzpkqd16eaawXVEfmjX
+         izhPGboQFX/2zQyjQDe2wxMSM2pwoknjhAn/d/FvBjPaSVCsGgpBjdMCP+Drgdn9pou0
+         FR4A==
+X-Gm-Message-State: AOAM532OKJHFDs2Uc1mQ+SoLSEN2wPUiSuhG1m0vWX2mJd/Rn2rFivT5
+        LMd8/Yys6d1/DU1CwBQr6vNJ+9A0NAvPw3EtcUhIwQ==
+X-Google-Smtp-Source: ABdhPJwzCR0t8OhcbK4m9h7T96CulLhfg0yY9yNAWIVbNLOCUnRCPgn7zHvpS8UjmFaaH1ztlBIszs4pNFw+zeng5vg=
+X-Received: by 2002:a05:6870:9619:b0:d9:a25e:ed55 with SMTP id
+ d25-20020a056870961900b000d9a25eed55mr2840688oaq.163.1647416739279; Wed, 16
+ Mar 2022 00:45:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0000000000009e7a1905b8295829@google.com> <00000000000003887a05da3e872c@google.com>
+ <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
+In-Reply-To: <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 16 Mar 2022 08:45:28 +0100
+Message-ID: <CACT4Y+atgbwmYmiYqhFQT9_oHw5cD5oyp5bNyCJNz34wSaMgmg@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        ath9k-devel@qca.qualcomm.com, chouhan.shreyansh630@gmail.com,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
+        <linux-usb@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Zekun Shen <bruceshenzk@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When there are 2 matched drivers for a device using
-async probe mechanism, the dev->p->async_driver might
-be overridden by the last attached driver.
-So just skip the later one if the previous matched driver
-was not handled by async thread yet.
+On Tue, 15 Mar 2022 at 18:08, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Mar 15, 2022 at 2:36 AM syzbot
+> <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com> wrote:
+> >
+> > syzbot suspects this issue was fixed by commit
+> > 09688c0166e7 ("Linux 5.17-rc8")
+>
+> No, I'm afraid that means that the bisection is broken:
+>
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=140283ad700000
+>
+> and yeah, looking at that log it looks like every single run has
+>
+>   testing commit [...]
+>   run #0: crashed: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb
+>   ...
+>   # git bisect good [...]
+>
+> and you never saw a "bad" commit that didn't have the issue, so the
+> top-of-tree gets marked "good" (and I suspect you intentionally mark
+> the broken case "good" in order to find where it got fixed, so you're
+> using "git bisect" in a reverse way).
+>
+> I didn't look closer, but it does seem to not reproduce very reliably,
+> maybe that is what confused the bot originally.
 
-Below is my use case which having this problem.
+Hi Linus,
 
-Make both driver mmcblk and mmc_test allow async probe,
-the dev->p->async_driver will be overridden by the later driver
-mmc_test and bind to the device then claim it for testing.
-When it happen, mmcblk will never do probe again.
+Thanks for taking a look. Yes, it's a "reverse" bisection that tries
+to find the fix.
+And your conclusion re flakiness looks right, there were few runs with
+only 1/20 crashes.
+But the bug looks to be fixed by something anyway. git log on the file
+pretty clearly points to:
 
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
----
- drivers/base/dd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index f47cab21430f..f0bd779a4696 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -1085,6 +1085,7 @@ static void __driver_attach_async_helper(void *_dev, async_cookie_t cookie)
- 
- 	__device_driver_lock(dev, dev->parent);
- 	drv = dev->p->async_driver;
-+	dev->p->async_driver = NULL;
- 	ret = driver_probe_device(drv, dev);
- 	__device_driver_unlock(dev, dev->parent);
- 
-@@ -1131,7 +1132,7 @@ static int __driver_attach(struct device *dev, void *data)
- 		 */
- 		dev_dbg(dev, "probing driver %s asynchronously\n", drv->name);
- 		device_lock(dev);
--		if (!dev->driver) {
-+		if (!dev->driver && !dev->p->async_driver) {
- 			get_device(dev);
- 			dev->p->async_driver = drv;
- 			async_schedule_dev(__driver_attach_async_helper, dev);
--- 
-2.18.0
-
+#syz fix: ath9k: Fix out-of-bound memcpy in ath9k_hif_usb_rx_stream

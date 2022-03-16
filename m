@@ -2,145 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314F54DBA6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798BB4DBA6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357043AbiCPV6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 17:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S1344261AbiCPV6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 17:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233967AbiCPV6g (ORCPT
+        with ESMTP id S233967AbiCPV6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 17:58:36 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2071.outbound.protection.outlook.com [40.107.100.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9053DE94;
-        Wed, 16 Mar 2022 14:57:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TctkMs3iQU091V//03DjC9PV4b6wjXl3knpzQM5i16GX+AFTvvef14iRMVw9uNwAx2JErDTS26CisG7P3WFmqlmyjOGj0J5n9s21tbGq3JK48LtXG8mXHHIvQF4Rc39/Fr6q/TGHgm1Jbv6wb1WmfZqZAH+5JugHE0lUG1jqp89y9f756vBcl92Jyri886u5JCntsECISN0rayzpxVH6ZxvmX1w3gT6fKjC1XoJ7Y8LECrg6WE3lXo8RGPfOsifqBfcoWj/k74HPIKDUss/hcFRBLz3CSd6o6YiCncn6EwO/q8t60elrZwkgzCWnRpiJMZZNyKji1F8XiHuVO9NgSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ml5tMxBHG+g8Prcq+35jmqDJZefpolxnYAt78FIKCFk=;
- b=imL6t/aQ8OTz+m6AMeBmf2eVjhIdmfVEOx+xnjcsw7lANsYL4UegRUOGAwjMBefKQ+oJkENyeJrBr32uU2agyIzIg88/oL5Fsiyd0p5o4eXZ4JF0qtd7T//98spcwP37tot6K5zaFJe7i2IkkQwX9t433e1RvEyLIf+8ZoeqmAxn+x1n5gnegvck4wBr3o2hlfw2NyiY8LjcdExVf+8V2myGp76xHcCHKCJU2zESrQ6O39v0t474dncoekGnJ2BtMAh3hm0kicM/b+fuuBtJ4o4WQsU8LeV3vn3QnLoJeW6PvIlSZULKTN8PYkiY8D/lPyV5WjzhROtdwZEnK6jL2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ml5tMxBHG+g8Prcq+35jmqDJZefpolxnYAt78FIKCFk=;
- b=Q3RHus2Ffad04PD9SQ2dRjC72XEO6LeScZ3o/ZDZm5eJKdgpXrY7KNOtYBz1H0YO7oNO0aKpfTJL3HleerQN3HqJx1u1d44CepiXr+8lrGWsxvHQ3rAyVM+j6t1VSJCpkzDQrIRFDtq/Ep05FeUcq2RDlyP0IOrksTKJDkGBdsE=
-Received: from DM6PR18CA0007.namprd18.prod.outlook.com (2603:10b6:5:15b::20)
- by CY4PR12MB1206.namprd12.prod.outlook.com (2603:10b6:903:3b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.25; Wed, 16 Mar
- 2022 21:57:19 +0000
-Received: from DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:15b:cafe::d2) by DM6PR18CA0007.outlook.office365.com
- (2603:10b6:5:15b::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.28 via Frontend
- Transport; Wed, 16 Mar 2022 21:57:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT066.mail.protection.outlook.com (10.13.173.179) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5081.14 via Frontend Transport; Wed, 16 Mar 2022 21:57:18 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 16 Mar
- 2022 16:57:15 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     <Ray.Huang@amd.com>
-Subject: [PATCH] cpufreq: powernow-k8: Re-order the init checks
-Date:   Wed, 16 Mar 2022 16:55:48 -0500
-Message-ID: <20220316215548.6013-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 16 Mar 2022 17:58:20 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98805F32;
+        Wed, 16 Mar 2022 14:57:04 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b15so4394903edn.4;
+        Wed, 16 Mar 2022 14:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=1OAQbtmaZdNIyjRxgjPGasOAl8hVZ0IRLH/v9tSHVWA=;
+        b=NUOCcaJUn/I/fN7B3Cuk8U/+RsgLiMmTSQh4E8lmG3S4cfIv1nC47OLhzNMfhSzuWf
+         A9snOz42mn84Pug9lpUih1X0Ljza3SyshxJYNn0wyufNMnLKKmS5/JAIK7EX26kcsaaz
+         8Ykcxb1DokTjeJASANAxb2OJfjPDuzf+dPybtmnIJfKd4Yyt/NkqPNuZTweM3OEe/9dE
+         B8ZVg51qwOyY3pi6TxjzoqMc/q2PfuuA5u1TrjZJFVjaRQ+mFWu0yKVHwdzYrU4fX/Ud
+         E/10f+eHxipmBxvHTncyZbZWgxXHHcTvfOsZuyO9565wCKK+O6CpGRLw6YmyRolgtOc5
+         pdQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=1OAQbtmaZdNIyjRxgjPGasOAl8hVZ0IRLH/v9tSHVWA=;
+        b=lXm6Z+PwSoXXecwWt50c6fDUH5KgHG27sC+Ojfi6BkeTkzyzDrVr6rRrZSFOP4xXk0
+         NzGw8t4+wSGCORYMDdqMsBIyxPYOAMKEmF3jn1WW/2UcHAqmd45Nx5xu4eyu/8KPkVxQ
+         ceBXHueLnJxP/IBCDV18cF+Jq+jeQWhnHDsloiXJtuSHZAENPA+QO6Id7aGtEGOEZAmg
+         cctoQDoYe0clX//RKYkfnMH6CvilkrfniyN/gpy76dgptQ1yzU1/QSsgUbfe+7Eskmmn
+         Rvy5fLspMyfoyEen5/ds8CRxy3iCN5gDkwcZR/qDK2V9oM2hQcI0Hwf/IjT2Qn8H0cTO
+         x6qg==
+X-Gm-Message-State: AOAM530CdP50/9PraScavBB7RNf8bXA2M/9iOT/G4LeZuFqeogR72yd9
+        zek0U9SeQyJmnPKKc4HCpk4=
+X-Google-Smtp-Source: ABdhPJyoD5xW6O6c12V8Kofr8zxRUHnvPt0lzmQxJ3tGvooctXFnz0ef7+TSCn0vsqH48779LnBuPw==
+X-Received: by 2002:aa7:d645:0:b0:418:ebf1:a1bb with SMTP id v5-20020aa7d645000000b00418ebf1a1bbmr1375060edr.361.1647467823133;
+        Wed, 16 Mar 2022 14:57:03 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:b866:cc00:e490:2de6:a89f:9b66? (dynamic-2a01-0c23-b866-cc00-e490-2de6-a89f-9b66.c23.pool.telefonica.de. [2a01:c23:b866:cc00:e490:2de6:a89f:9b66])
+        by smtp.googlemail.com with ESMTPSA id s7-20020a170906778700b006df7e0e140bsm1240570ejm.140.2022.03.16.14.57.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 14:57:02 -0700 (PDT)
+Message-ID: <3ef33014-be77-3a97-d49e-84b62d09ba00@gmail.com>
+Date:   Wed, 16 Mar 2022 22:56:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3f09d0f6-5788-44ce-aa5e-08da0797f073
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1206:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1206869AE98070E772029C7EE2119@CY4PR12MB1206.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tJlDkoDV5oCAU20yX+YRoX0tXt1zIQ1s5hT1RwUwL3etg/UkIovZ/7Jg63aJbPLxAyRTHGmQhdqhAP+CBI9trdYAIE/juDhEq8D3h7JgfHclJOebpw9SDmVzZ79gsI4+IpZHpa+lgjIxHmHFWi3g+X67YFua426M73RqFaPUlOVZWSUscMRDYgUfftXo4+RNBMNfOP/R6GvPMjt6K6JJB0GW6+nx4+Lmbl5zn2pO817bcGypUcmtxpYpv07aMZ/AqePpbiBqRKF5YfAIw6rYKJOufeOlAgPUheCwGBwWcR62UT1ywI1jG0JIiMl/teCsMvm8h2TXbn4tR5NVmIsd8zYFylMQgq3qxz6OG01tG9YCxyYKEsqDd1WMCVZYMIn7Z7liQvTK8LNJ02v7p3viEqFdpZAESqxP3zhfCgHVaEgi91q19vu4SPig2fsfUNv/ccunJOcdsoqInWkslegtJtaQcmrLqb7mXru6zKEKPWW8OLK9Bx7BY8Dy2ZuXQ7y4M85fWCkbqtpOPuV9QSn1ApKWOTQDON+ccSYi32uoIqTZLxCLfBzktkCXXq1XecrnuvBkscU95RAutvZhQcrZpsEBKDBZnBOU1cJhgc8LELqYNJv4HBSqIC7h0FQe2WXVYaKRHnOczMqQnD6uTOxOk2TajWtznkereTpoHqIZsj9NTSVLSl6ZrurTh9/CyVjYQELB2JnAFpBhg7mCqIqW0AicseKgxinvpc5kkL+7VdPVGEcqOxPMesoY+UtUiSaF
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(70586007)(5660300002)(336012)(426003)(2906002)(8936002)(508600001)(70206006)(36756003)(7696005)(47076005)(2616005)(8676002)(36860700001)(316002)(26005)(186003)(83380400001)(40460700003)(86362001)(44832011)(6666004)(356005)(4326008)(16526019)(81166007)(82310400004)(1076003)(110136005)(169823001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 21:57:18.0821
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f09d0f6-5788-44ce-aa5e-08da0797f073
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1206
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org
+References: <20220310125636.1.I484f4ee35609f78b932bd50feed639c29e64997e@changeid>
+ <50d4b87c-003f-818a-c8ba-a3bac9c0f171@intel.com>
+ <CA+ASDXO8-wmEDPxUrO6j9wBvCMzTZMpTyH7adSga8dYLNq5ehg@mail.gmail.com>
+ <CAPDyKFoQfr3W45vWY4SnTeBG7=z3J749=WBGNtEgujvXAqAn0Q@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH] mmc: core: Set HS clock speed before sending HS CMD13
+In-Reply-To: <CAPDyKFoQfr3W45vWY4SnTeBG7=z3J749=WBGNtEgujvXAqAn0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The powernow-k8 driver will do checks at startup that the current
-active driver is acpi-cpufreq and show a warning when they're not
-expected.
+On 15.03.2022 13:27, Ulf Hansson wrote:
+> + Heiner
+> 
+> On Tue, 15 Mar 2022 at 00:11, Brian Norris <briannorris@chromium.org> wrote:
+>>
+>> On Mon, Mar 14, 2022 at 6:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 10.3.2022 22.56, Brian Norris wrote:
+>>>> Way back in commit 4f25580fb84d ("mmc: core: changes frequency to
+>>>> hs_max_dtr when selecting hs400es"), Rockchip engineers noticed that
+>>>> some eMMC don't respond to SEND_STATUS commands very reliably if they're
+>>>> still running at a low initial frequency. As mentioned in that commit,
+>>>> JESD84-B51 P49 suggests a sequence in which the host:
+>>>> 1. sets HS_TIMING
+>>>> 2. bumps the clock ("<= 52 MHz")
+>>>> 3. sends further commands
+>>>>
+>>>> It doesn't exactly require that we don't use a lower-than-52MHz
+>>>> frequency, but in practice, these eMMC don't like it.
+>>>>
+>>>> Anyway, the aforementioned commit got that right for HS400ES, but the
+>>>> refactoring in 53e60650f74e ("mmc: core: Allow CMD13 polling when
+>>>> switching to HS mode for mmc") messed that back up again, by reordering
+>>>> step 2 after step 3.
+>>>
+>>> That description might not be accurate.
+>>
+>> I've been struggling to track where things were working, where things
+>> were broken, and what/why Shawn's original fix was, precisely. So you
+>> may be correct in many ways :) Thanks for looking.
+>>
+>>> It looks like 4f25580fb84d did not have the intended effect because
+>>> CMD13 was already being sent by mmc_select_hs(), still before increasing
+>>> the frequency.  53e60650f74e just kept that behaviour.
+>>
+>> You may be partially right, or fully right. But anyway, I think I have
+>> some additional explanation, now that you've pointed that out: that
+>> behavior changed a bit in this commit:
+>>
+>> 08573eaf1a70 mmc: mmc: do not use CMD13 to get status after speed mode switch
+>>
+>> While that patch was merged in July 2016 and Shawn submitted his v1
+>> fix in September, there's a very good chance that a lot of his work
+>> was actually done via backports, and even if not, he may not have been
+>> testing precisely the latest -next kernel when submitting. So his fix
+>> may have worked out for _some_ near-upstream kernel he was testing in
+>> 2016, you may be correct that it didn't really work in the state it
+>> was committed to git history.
+>>
+>> This may also further explain why my attempts at bisection were rather
+>> fruitless (notwithstanding the difficulties in getting RK3399 running
+>> on that old of a kernel).
+>>
+>> Anyway, I'll see if I can improve the messaging if/when a v2 comes around.
+>>
+>>>> --- a/drivers/mmc/core/mmc.c
+>>>> +++ b/drivers/mmc/core/mmc.c
+>> ...
+>>>> @@ -1487,6 +1492,12 @@ static int mmc_select_hs200(struct mmc_card *card)
+>>>>               old_timing = host->ios.timing;
+>>>>               mmc_set_timing(host, MMC_TIMING_MMC_HS200);
+>>>>
+>>>> +             /*
+>>>> +              * Bump to HS frequency. Some cards don't handle SEND_STATUS
+>>>> +              * reliably at the initial frequency.
+>>>> +              */
+>>>> +             mmc_set_clock(host, card->ext_csd.hs_max_dtr);
+>>>
+>>> Is card->ext_csd.hs_max_dtr better than card->ext_csd.hs200_max_dtr here?
+>>
+>> I believe either worked in practice. I ended up choosing hs_max_dtr
+>> because it's lower and presumably safer. But frankly, I don't know
+>> what the Right thing to do is here, since the spec just talks about
+>> "<=", and yet f_init (which is also "<=") does not work. I think it
+>> might be like Ulf was guessing way back in the first place [1], and
+>> the key is that there is *some* increase (i.e., not using f_init).
+>>
+>> So assuming either works, would you prefer hs200_max_dtr here, since
+>> that does seem like the appropriate final rate?
+> 
+> I think that makes most sense, as we are switching to that rate anyway
+> just a few cycles later in mmc_select_timing(), when it calls
+> mmc_set_bus_speed().
+> 
+> That said, I have recently queued a patch that improves the
+> speed-mode-selection-fallback, when switching to HS200 mode fails [2].
+> We need to make sure this part still works as expected. I have looped
+> in Heiner who has been in the loop around this change, hopefully he
+> can help with further testing or so. Maybe $subject patch (or a new
+> version of it) can even make HS200 to work on Heiner's platform!?
+> 
+>>
+>> Brian
+>>
+>> [1] https://lore.kernel.org/all/CAPDyKFrNp=Y3BhVE_kxtggv7Qc6m=2kef2U8Dn2Bb3ANHPYV-Q@mail.gmail.com/
+>> Re: [PATCH 3/5] mmc: core: changes frequency to hs_max_dtr when
+>> selecting hs400es
+> 
+> Kind regards
+> Uffe
+> 
+> [2]
+> https://patchwork.kernel.org/project/linux-mmc/patch/20220303164522.129583-1-ulf.hansson@linaro.org/
 
-Because of this the following warning comes up on systems that
-support amd-pstate and compiled in both drivers:
-`WTF driver: amd-pstate`
-
-The systems that support powernow-k8 will not support amd-pstate,
-so re-order the checks to validate the CPU model number first to
-avoid this warning being displayed on modern SOCs.
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/cpufreq/powernow-k8.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/cpufreq/powernow-k8.c b/drivers/cpufreq/powernow-k8.c
-index 12ab4014af71..d289036beff2 100644
---- a/drivers/cpufreq/powernow-k8.c
-+++ b/drivers/cpufreq/powernow-k8.c
-@@ -1172,14 +1172,14 @@ static int powernowk8_init(void)
- 	unsigned int i, supported_cpus = 0;
- 	int ret;
- 
-+	if (!x86_match_cpu(powernow_k8_ids))
-+		return -ENODEV;
-+
- 	if (boot_cpu_has(X86_FEATURE_HW_PSTATE)) {
- 		__request_acpi_cpufreq();
- 		return -ENODEV;
- 	}
- 
--	if (!x86_match_cpu(powernow_k8_ids))
--		return -ENODEV;
--
- 	cpus_read_lock();
- 	for_each_online_cpu(i) {
- 		smp_call_function_single(i, check_supported_cpu, &ret, 1);
--- 
-2.34.1
-
+In my specific case this patch makes no difference. My test system is a
+dirt-cheap Amlogic SoC based Android TV box. My best guess is that maybe due
+to chip shortage the vendor omitted some regulator, making the eMMC card
+refuse the switch to HS200.
+Therefore my test result doesn't speak against the proposed patch.

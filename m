@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1656D4DB786
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA48F4DB787
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244998AbiCPRo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 13:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S1356574AbiCPRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236541AbiCPRo1 (ORCPT
+        with ESMTP id S1355558AbiCPRok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:44:27 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8813F2D;
-        Wed, 16 Mar 2022 10:43:13 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id w4so2369787ply.13;
-        Wed, 16 Mar 2022 10:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ffIAIQFc2cAlKifnXo9kBri/p18XrYzz9Wn/ebkpe2Y=;
-        b=oRaai7D6WoTdn09DUthJ/tCt3ZRRRmTzMA9X8s8oBmeJAg4xuhj7WSnLzfEEhEgo2q
-         DPQt68VNB+OVBXGlLhiEMHEqhRgGOQ6FznYvsQO3pSP3mKq2fQbVYApDCLtvu+m6TXub
-         OQ3gOjdeLx4Ju83hgwuQrZ1VX6sKiMYMOix6Gt9suK2mEtycc+nIg765JAyisOEJLIl9
-         cFPvtIgB5mIdKc8h9FYLeJ9OXBGUuLxmMkRZX6oz/Os2hvWArKKuLNgOXg9KDXlOm1Hv
-         j5WeXFkxP3L83WDfWIsCvjRR3+oZ/byvxYBspjIXAtF0fidfuwVcLlwf32PaEEogdmtY
-         hHDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ffIAIQFc2cAlKifnXo9kBri/p18XrYzz9Wn/ebkpe2Y=;
-        b=bUTlq2qWgter4K7m7YKPb++WjFUnlIELAn8BN79zxOzWXj3X1HJOUT6HwlAJrKGYE3
-         vKtoHu3Fg8hma91GCn199qwUSngrrvk502JahajWDjsNXELY+VHzySrupmRDW4sNEFun
-         sqb6WaJLmukLQvdSHEiD643iOUN61ehptgWiBfAh6B+gyQ+jSc5WGBFOP2iIjYACmrSC
-         ANyScmCHxeLzrZoLf1705+1RkpqYjvbymMHIoKx7RLFjg9qXRt7CoQpk57E2H+AfNXtB
-         VVYdTOInMtB3EPeDUto5OTmfV79ZeXg92cRs4hAJ+ld6rerNTHICzaxmiMJsJo4zr1IB
-         XIyw==
-X-Gm-Message-State: AOAM532M3lKDXlCZDyDFFJT6o2BCsLqFeBbERg9pcWgfK3JcaKPbb06u
-        5VSMt08iCXtt8UC0ObhhNAU=
-X-Google-Smtp-Source: ABdhPJyQXcnhJGX4GLSkway+M5F+Uzq+ULmdDX4acrkkN+dZx1VsMPBvO0zpceH6za8lhtXP6hIjJA==
-X-Received: by 2002:a17:902:a40d:b0:153:7213:1584 with SMTP id p13-20020a170902a40d00b0015372131584mr778008plq.56.1647452592648;
-        Wed, 16 Mar 2022 10:43:12 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id n18-20020a628f12000000b004f743724c75sm3777905pfd.53.2022.03.16.10.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 10:43:12 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 23:13:06 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: timer: Document arm,cortex-a7-timer for
- arch timer
-Message-ID: <20220316174306.GC21737@9a2d8922b8f1>
-References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
- <20220316095433.20225-3-singh.kuldeep87k@gmail.com>
- <662981fe-7cf4-b0e6-2d43-3f33a53a6abd@canonical.com>
+        Wed, 16 Mar 2022 13:44:40 -0400
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252D717046
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 10:43:25 -0700 (PDT)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 1CD1648F; Wed, 16 Mar 2022 13:43:24 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 1CD1648F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1647452604;
+        bh=Wl8eLmn2EyVMIbzbpeaNnxsMHJboV9nFjzpk/4KzOkE=;
+        h=Date:To:Cc:Subject:From:From;
+        b=zBBxlsA1m1y04DG77zWHK91zWwZexpegElKCeRRQsAAOGVz6jkaRT4Y43z0tHKno0
+         ZbEWWlpkHiM5RaWK4xfrJMEwtApTqrkUtJ91AFw/+uLgUfHBkRoDUS6MR6k2rG1mMv
+         u9zB9cXONokvgYmVbxprMe628XN95oMI3ESiscUE=
+Date:   Wed, 16 Mar 2022 13:43:24 -0400
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: failure to boot after dc6e0818bc9a "sched/cpuacct: Optimize away RCU
+ read lock"
+Message-ID: <20220316174324.GA16511@fieldses.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <662981fe-7cf4-b0e6-2d43-3f33a53a6abd@canonical.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+From:   bfields@fieldses.org (J. Bruce Fields)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 05:28:49PM +0100, Krzysztof Kozlowski wrote:
-> On 16/03/2022 10:54, Kuldeep Singh wrote:
-> > Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
-> > conjugation with "arm,armv7-timer". Since, initial entry is not
-> > documented, it start raising dtbs_check warnings.
-> > 
-> > ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
-> > 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
-> > 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
-> > 
-> > In general, removing an existing entry is mostly devastating considering
-> > backward compatibility. Therefore, document it.
-> 
-> How removing undocumented and unused compatible is devastating for
-> backwards compatibility? I don't see it.
-> 
-> DTS is rather wrong, not bindings. Otherwise please explain it more, why
-> DTS is correct.
+One of my test VMs has been failing to boot linux-next recently.  I
+finally got around to a bisect this morning, and it landed on the below.
 
-Please see my comment on 3/3 patch.
+What other information would be useful to debug this?
 
-- Kuldeep
+--b.
+
+commit dc6e0818bc9a
+Author: Chengming Zhou <zhouchengming@bytedance.com>
+Date:   Sun Feb 20 13:14:25 2022 +0800
+
+    sched/cpuacct: Optimize away RCU read lock
+    
+    Since cpuacct_charge() is called from the scheduler update_curr(),
+    we must already have rq lock held, then the RCU read lock can
+    be optimized away.
+    
+    And do the same thing in it's wrapper cgroup_account_cputime(),
+    but we can't use lockdep_assert_rq_held() there, which defined
+    in kernel/sched/sched.h.
+    
+    Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+    Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+    Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+    Link: https://lore.kernel.org/r/20220220051426.5274-2-zhouchengming@bytedance.com
+
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 75c151413fda..9a109c6ac0e0 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -791,11 +791,9 @@ static inline void cgroup_account_cputime(struct task_struct *task,
+ 
+ 	cpuacct_charge(task, delta_exec);
+ 
+-	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(task);
+ 	if (cgroup_parent(cgrp))
+ 		__cgroup_account_cputime(cgrp, delta_exec);
+-	rcu_read_unlock();
+ }
+ 
+ static inline void cgroup_account_cputime_field(struct task_struct *task,
+diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
+index 307800586ac8..f79f88456d72 100644
+--- a/kernel/sched/cpuacct.c
++++ b/kernel/sched/cpuacct.c
+@@ -337,12 +337,10 @@ void cpuacct_charge(struct task_struct *tsk, u64 cputime)
+ 	unsigned int cpu = task_cpu(tsk);
+ 	struct cpuacct *ca;
+ 
+-	rcu_read_lock();
++	lockdep_assert_rq_held(cpu_rq(cpu));
+ 
+ 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
+ 		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
+-
+-	rcu_read_unlock();
+ }
+ 
+ /*

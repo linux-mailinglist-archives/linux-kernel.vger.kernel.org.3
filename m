@@ -2,225 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960C94DB869
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099F64DB86E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244275AbiCPTOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S1346447AbiCPTSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiCPTN6 (ORCPT
+        with ESMTP id S239247AbiCPTSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:13:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEF73F8BC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:12:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CD3841F38A;
-        Wed, 16 Mar 2022 19:12:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647457962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s89diZDc/0UO/kAXwcmcq+96gKNNdCSstGV5toyPOdY=;
-        b=yCHge+ZnmEbqkHRHCyGMZDvHp0VUPHCQZfl3vFitAuCPETCd9VeWxzdTtE/FkAsYskEhYg
-        9dDU3iUv5zQak//oXr7pL96+pqv7/bE1NXoyiQO79ma/wI/RxMgsL+k4ovZgyxHiDIFj9a
-        SS4TrV4zlq1pSKPHUDHg7XwHtP7yUqU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647457962;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s89diZDc/0UO/kAXwcmcq+96gKNNdCSstGV5toyPOdY=;
-        b=F04IHBvMB5vnf/sUEadpTozRyrwlAT6U4V83nIIF3HMKGArmpmboY89cILakft2mlgWZXM
-        vaCAvzNnWA+CuhCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F13B13B5E;
-        Wed, 16 Mar 2022 19:12:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OCAvFqo2MmKjfwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 16 Mar 2022 19:12:42 +0000
-Message-ID: <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
-Date:   Wed, 16 Mar 2022 20:12:41 +0100
+        Wed, 16 Mar 2022 15:18:07 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2182C11E;
+        Wed, 16 Mar 2022 12:16:52 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id yy13so6277988ejb.2;
+        Wed, 16 Mar 2022 12:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RkfrJNG8t17LURuEyWQI2LF3gagrZVlUtyrEQH/7zIc=;
+        b=oY35iQPJNL8kb2Q+kXv0zYjdB2FLgugzyrhKyq6Z0HiKYk4A6TUvfzg7+Uy+XB+1kg
+         wtgN1mbFlxcGBIp7xWv+3ZnGgUVVV82SyPHd/zKnXOAHlJlilK56P+fFkDVIAbNPiLAh
+         lG86yiJCgvcTLar05R7k4DlqAv3K0K25Y2vX4YXB1dxUnkPCt0Cqn69ombA9tzDLoFm0
+         ahGbO7ukP6BBY/qx42jcKf0bK0oBn+Ls93lcdtJIOo1IRFMK6mnW052mH/eOT7Rz/W3S
+         7pvaryusP1ONWmJVXh22xslPpHnPJkZ0QHXWraJvX4QlREyPh5XamR0IuNNSDVHHr2F7
+         j5Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RkfrJNG8t17LURuEyWQI2LF3gagrZVlUtyrEQH/7zIc=;
+        b=oDjVNUNIrJST+N8WO9ntDxSFOsgkjUrxq8XZsTHp7y0Jp7WZRH8ZAcVZNBML+EvsvN
+         EV/xlyzpQpO3QMCU2mRZl3ocrjRqVseeaLIFcA/7aC88Pdb+nWNFI2zqDnPi1v79e9Jr
+         Eu/waCMlsR1rJkg3zaYCltUhQ/JZdzNfYusyHDlpj0BW2QqrKX3hkrZQFS9cgrSxVP8r
+         lwNcLqsgre2ulKO0ZGS/oflrVakJ+RIwtM6980I0VNzcsFIRzgA8S2sVbqgVwK/qLhVc
+         YXKAcMg1ue/4ICjKG6zJUC2Da5YES6TlEm+H8LXCYIoreTYqyPNKpTKd98frVh/S6DjW
+         heaQ==
+X-Gm-Message-State: AOAM533YioskGADZjVG7hiEtbN9xBQM8IiFO0yVbTVYi5sgyysqNymx/
+        +yfQ8f107KVci+zX5zhdWJs=
+X-Google-Smtp-Source: ABdhPJyVDm6rP5DLjJJe3mX6QOo7rXtAop98+oEhFDNT550DP7C3nwbz1eBmMt6lpGyLPHCpqjEFwg==
+X-Received: by 2002:a17:906:c18c:b0:6d5:8518:e567 with SMTP id g12-20020a170906c18c00b006d58518e567mr1181411ejz.37.1647458210814;
+        Wed, 16 Mar 2022 12:16:50 -0700 (PDT)
+Received: from pswork ([62.96.250.75])
+        by smtp.gmail.com with ESMTPSA id rh13-20020a17090720ed00b006da69254082sm1248954ejb.135.2022.03.16.12.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 12:16:49 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 20:16:49 +0100
+From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
+ in kernel
+Message-ID: <20220316191649.GA11547@pswork>
+References: <164724890153.731226.1478494969800777757.stgit@devnote2>
+ <164724892075.731226.14103557516176115189.stgit@devnote2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org
-References: <20220316183708.1505846-1-arnd@kernel.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220316183708.1505846-1-arnd@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------L2Kg8oL8rrM047Px9SyFRYB7"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164724892075.731226.14103557516176115189.stgit@devnote2>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------L2Kg8oL8rrM047Px9SyFRYB7
-Content-Type: multipart/mixed; boundary="------------JRt57Q5cB0oCPiXsrDdvQSji";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Thierry Reding <thierry.reding@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
- Jani Nikula <jani.nikula@intel.com>, Dillon Min <dillon.minfei@gmail.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, Douglas Anderson <dianders@chromium.org>,
- Deepak Rawat <drawat.floss@gmail.com>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
- <noralf@tronnes.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
- Alex Deucher <alexander.deucher@amd.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Sam Ravnborg <sam@ravnborg.org>,
- linux-kernel@vger.kernel.org
-Message-ID: <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
-Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
-References: <20220316183708.1505846-1-arnd@kernel.org>
-In-Reply-To: <20220316183708.1505846-1-arnd@kernel.org>
+Hello Masami Hiramatsu,
 
---------------JRt57Q5cB0oCPiXsrDdvQSji
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Mon, Mar 14, 2022 at 06:08:41PM +0900, Masami Hiramatsu wrote:
+> This allows kernel developer to embed a default bootconfig file in
+> the kernel instead of embedding it in the initrd. This will be good
+> for who are using the kernel without initrd, or who needs a default
+> bootconfigs.
+> This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
+> the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+> 
+> Note that you still need 'bootconfig' command line option to load the
+> embedded bootconfig. Also if you boot using an initrd with a different
+> bootconfig, the kernel will use the bootconfig in the initrd, instead
+> of the default bootconfig.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  include/linux/bootconfig.h |   10 ++++++++++
+>  init/Kconfig               |   21 +++++++++++++++++++++
+>  init/main.c                |   13 ++++++++-----
+>  lib/.gitignore             |    1 +
+>  lib/Makefile               |   12 ++++++++++++
+>  lib/bootconfig.c           |   23 +++++++++++++++++++++++
+>  6 files changed, 75 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
+> index a4665c7ab07c..5dbda5e3e9bb 100644
+> --- a/include/linux/bootconfig.h
+> +++ b/include/linux/bootconfig.h
+> @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
+>  /* XBC cleanup data structures */
+>  void __init xbc_exit(void);
+>  
+> +/* XBC embedded bootconfig data in kernel */
+> +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> +char * __init xbc_get_embedded_bootconfig(size_t *size);
+> +#else
+> +static inline char *xbc_get_embedded_bootconfig(size_t *size)
+> +{
+> +	return NULL;
+> +}
+> +#endif
+> +
+>  #endif
+> diff --git a/init/Kconfig b/init/Kconfig
+> index e9119bf54b1f..70440804874d 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
+>  
+>  	  If unsure, say Y.
+>  
+> +config EMBED_BOOT_CONFIG
+> +	bool "Embed bootconfig file in the kernel"
+> +	depends on BOOT_CONFIG
+> +	default n
+> +	help
+> +	  Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
+> +	  kernel. Usually, the bootconfig file is loaded with the initrd
+> +	  image. But if the system doesn't support initrd, this option will
+> +	  help you by embedding a bootconfig file while building the kernel.
+> +
+> +	  If unsure, say N.
+> +
+> +config EMBED_BOOT_CONFIG_FILE
+> +	string "Embedded bootconfig file path"
+> +	default ""
+> +	depends on EMBED_BOOT_CONFIG
+> +	help
+> +	  Specify a bootconfig file which will be embedded to the kernel.
+> +	  This bootconfig will be used if there is no initrd or no other
+> +	  bootconfig in the initrd.
+> +
+>  choice
+>  	prompt "Compiler optimization level"
+>  	default CC_OPTIMIZE_FOR_PERFORMANCE
+> diff --git a/init/main.c b/init/main.c
+> index 421050be5039..3803bf2e22ea 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
+>  early_param("loglevel", loglevel);
+>  
+>  #ifdef CONFIG_BLK_DEV_INITRD
+> -static void * __init get_boot_config_from_initrd(u32 *_size)
+> +static void * __init get_boot_config_from_initrd(size_t *_size)
+>  {
+>  	u32 size, csum;
+>  	char *data;
+> @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
+>  	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
+>  	const char *msg;
+>  	int pos;
+> -	u32 size;
+> +	size_t size;
+>  	char *data, *err;
+>  	int ret;
+>  
+>  	/* Cut out the bootconfig data even if we have no bootconfig option */
+>  	data = get_boot_config_from_initrd(&size);
+> +	/* If there is no bootconfig in initrd, try embedded one. */
+> +	if (!data)
+> +		data = xbc_get_embedded_bootconfig(&size);
+>  
+>  	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+>  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
+> @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
+>  	}
+>  
+>  	if (size >= XBC_DATA_MAX) {
+> -		pr_err("bootconfig size %d greater than max size %d\n",
+> -			size, XBC_DATA_MAX);
+> +		pr_err("bootconfig size %ld greater than max size %d\n",
+> +			(long)size, XBC_DATA_MAX);
+>  		return;
+>  	}
+>  
+> @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
+>  				msg, pos);
+>  	} else {
+>  		xbc_get_info(&ret, NULL);
+> -		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
+> +		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
+>  		/* keys starting with "kernel." are passed via cmdline */
+>  		extra_command_line = xbc_make_cmdline("kernel");
+>  		/* Also, "init." keys are init arguments */
+> diff --git a/lib/.gitignore b/lib/.gitignore
+> index e5e217b8307b..30a2a5db7033 100644
+> --- a/lib/.gitignore
+> +++ b/lib/.gitignore
+> @@ -6,3 +6,4 @@
+>  /oid_registry_data.c
+>  /test_fortify.log
+>  /test_fortify/*.log
+> +/default.bconf
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 300f569c626b..8183785ee99d 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -279,6 +279,18 @@ $(foreach file, $(libfdt_files), \
+>  	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+>  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
+>  
+> +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
+> +# Since the specified bootconfig file can be switched, we forcibly update the
+> +# default.bconf file always.
+> +$(obj)/default.bconf: FORCE
+> +	$(call cmd,defbconf)
+> +
+> +quiet_cmd_defbconf = GEN     $@
+> +      cmd_defbconf = cat < /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE) > $@
+> +clean-files	+= default.bconf
+> +$(obj)/bootconfig.o: $(obj)/default.bconf
+> +endif
+> +
+>  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+>  
+>  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+> diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+> index 74f3201ab8e5..3a3bf3a208e3 100644
+> --- a/lib/bootconfig.c
+> +++ b/lib/bootconfig.c
+> @@ -12,6 +12,29 @@
+>  #include <linux/kernel.h>
+>  #include <linux/memblock.h>
+>  #include <linux/string.h>
+> +
+> +#ifdef CONFIG_EMBED_BOOT_CONFIG
+> +asm (
+> +"	.pushsection .init.data, \"aw\"			\n"
+> +"	.global embedded_bootconfig_data		\n"
+> +"embedded_bootconfig_data:				\n"
+> +"	.incbin \"lib/default.bconf\"			\n"
+> +"	.global embedded_bootconfig_data_end		\n"
+> +"embedded_bootconfig_data_end:				\n"
+> +"	.popsection					\n"
+> +);
+> +
+> +extern __visible char embedded_bootconfig_data[];
+> +extern __visible char embedded_bootconfig_data_end[];
+> +
+> +char * __init xbc_get_embedded_bootconfig(size_t *size)
+> +{
+> +	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
+> +	return (*size) ? embedded_bootconfig_data : NULL;
+> +}
+> +
+> +#endif
+> +
+>  #else /* !__KERNEL__ */
+>  /*
+>   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
+>
 
-SGkNCg0KQW0gMTYuMDMuMjIgdW0gMTk6MzYgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBG
-cm9tOiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiANCj4gVGhlIGRyaXZlciBm
-YWlscyB0byBidWlsZCB3aGVuIHRoZSBLTVMgaGVscGVycyBhcmUgZGlzYWJsZWQ6DQo+IA0K
-PiBsZC5sbGQ6IGVycm9yOiB1bmRlZmluZWQgc3ltYm9sOiBkcm1fZ2VtX2ZiX2dldF9vYmoN
-Cj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+PiAgICAgICAgICAgICAg
-ICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2RiaV9idWZfY29weSkgaW4gYXJjaGl2
-ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmku
-Yw0KPj4+PiAgICAgICAgICAgICAgICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
-aV9mYl9kaXJ0eSkgaW4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IGxkLmxs
-ZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9nZW1fZmJfYmVnaW5fY3B1X2FjY2Vz
-cw0KPj4+PiByZWZlcmVuY2VkIGJ5IGRybV9taXBpX2RiaS5jDQo+Pj4+ICAgICAgICAgICAg
-ICAgIGdwdS9kcm0vZHJtX21pcGlfZGJpLm86KG1pcGlfZGJpX2J1Zl9jb3B5KSBpbiBhcmNo
-aXZlIGRyaXZlcnMvYnVpbHQtaW4uYQ0KPiANCj4gbGQubGxkOiBlcnJvcjogdW5kZWZpbmVk
-IHN5bWJvbDogZHJtX2ZiX3N3YWINCj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmku
-Yw0KPj4+PiAgICAgICAgICAgICAgICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
-aV9idWZfY29weSkgaW4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IGxkLmxs
-ZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9mYl94cmdiODg4OF90b19yZ2I1NjUN
-Cj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+PiAgICAgICAgICAgICAg
-ICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2RiaV9idWZfY29weSkgaW4gYXJjaGl2
-ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IGxkLmxsZDogZXJyb3I6IHVuZGVmaW5lZCBz
-eW1ib2w6IGRybV9mYl9tZW1jcHkNCj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmku
-Yw0KPj4+PiAgICAgICAgICAgICAgICBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
-aV9idWZfY29weSkgaW4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4gDQo+IFRoaXMg
-aXMgZmFpcmx5IGhhcmQgdG8gaGl0IGluIHJhbmRjb25maWcgZHJpdmVycywgYnV0IGl0IGV2
-ZW50dWFsbHkNCj4gZGlkIHRyaWdnZXIgZm9yIG1lIGluIGEgY29uZmlndXJhdGlvbiB3aGVy
-ZSBhbGwgb3RoZXIgRFJNIGRyaXZlcnMNCj4gYXJlIGxvYWRhYmxlIG1vZHVsZXMsIGJ1dCBE
-Uk1fUEFORUxfV0lERUNISVBTX1dTMjQwMSB3YXMgYnVpbHQtaW4uDQo+IA0KPiBBZGRpbmcg
-YSBkZXBlbmRlbmN5IGluIGFsbCBkcml2ZXJzIHRoYXQgc2VsZWN0IERSTV9NSVBJX0RCSSBh
-dm9pZHMNCj4gdGhlIHByb2JsZW0gZm9yIG5vdywgYWRkaW5nIHRoZSBkZXBlbmRlbmN5IGlu
-IERSTV9NSVBJX0RCSSBhcyB3ZWxsDQo+IHNob3VsZCBoZWxwIG1ha2UgaXQgZWFzaWVyIHRv
-IGZpZ3VyZSBvdXQgd2h5IGl0IGJyZWFrcyBpZiBzb21lb25lDQo+IGZvcmdldHMgdGhlIGRl
-cGVuZGVuY3kgdGhlIG5leHQgdGltZS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFybmQgQmVy
-Z21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9LY29u
-ZmlnICAgICAgIHwgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnIHwg
-NCArKysrDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEgZGVsZXRp
-b24oLSkNCj4gDQo+IEkgc2VlIHRoaXMgd2FybmluZyBvbiA1LjE3LXJjOCwgYnV0IGRpZCBu
-b3QgdGVzdCBpdCBvbiBsaW51eC1uZXh0LA0KPiB3aGljaCBtYXkgYWxyZWFkeSBoYXZlIGEg
-Zml4Lg0KPiANCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZyBi
-L2RyaXZlcnMvZ3B1L2RybS9LY29uZmlnDQo+IGluZGV4IGIxZjIyZTQ1N2ZkMC4uZDVlYzBi
-NzdjMDEwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZw0KPiArKysg
-Yi9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZw0KPiBAQCAtMzAsNyArMzAsNyBAQCBtZW51Y29u
-ZmlnIERSTQ0KPiAgIA0KPiAgIGNvbmZpZyBEUk1fTUlQSV9EQkkNCj4gICAJdHJpc3RhdGUN
-Cj4gLQlkZXBlbmRzIG9uIERSTQ0KPiArCWRlcGVuZHMgb24gRFJNX0tNU19IRUxQRVINCg0K
-VGhpcyBzeW1ib2wgY2Fubm90IGJlIHNlbGVjdGVkIGJ5IHVzZXJzLCBzbyBpdCdzIG1heWJl
-IG5vdCBhIGdvb2QgaWRlYSANCnRvIGRlcGVuZCBvbiBpdC4gSW4gZmFjdCwgSSd2ZSBoYWQg
-dG8gcmVtb3ZlIHN1Y2ggYSBzdGF0ZW1lbnQgYmVjYXVzZSBpdCANCmNyZWF0ZWQgYSBjeWNs
-aWMgZGVwZW5kZW5jeS4gWzFdDQoNCk1ha2luZyB0aGUgZHJpdmVycyBkZXBlbmQgb24gS01T
-IGhlbHBlcnMgaXMgdGhlIHJpZ2h0IHRoaW5nIHRob3VnaC4gSWYgDQp0aGVyZSdzIGEgYmV0
-dGVyIHNvbHV0aW9uLCBwbGVhc2UgbGV0IG1lIGtub3cuDQoNCkJlc3QgcmVnYXJkcw0KVGhv
-bWFzDQoNCj4gICANCj4gICBjb25maWcgRFJNX01JUElfRFNJDQo+ICAgCWJvb2wNCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnIGIvZHJpdmVycy9ncHUv
-ZHJtL3BhbmVsL0tjb25maWcNCj4gaW5kZXggMGFlYzVhMTBiMDY0Li45Njg4N2QwZWZiOWYg
-MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnDQo+ICsrKyBi
-L2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnDQo+IEBAIC00MjUsNiArNDI1LDcgQEAg
-Y29uZmlnIERSTV9QQU5FTF9TQU1TVU5HX0RCNzQzMA0KPiAgIAl0cmlzdGF0ZSAiU2Ftc3Vu
-ZyBEQjc0MzAtYmFzZWQgRFBJIHBhbmVscyINCj4gICAJZGVwZW5kcyBvbiBPRiAmJiBTUEkg
-JiYgR1BJT0xJQg0KPiAgIAlkZXBlbmRzIG9uIEJBQ0tMSUdIVF9DTEFTU19ERVZJQ0UNCj4g
-KwlkZXBlbmRzIG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fTUlQSV9EQkkN
-Cj4gICAJaGVscA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gZW5hYmxlIHN1
-cHBvcnQgZm9yIHRoZSBTYW1zdW5nDQo+IEBAIC00NDAsNiArNDQxLDcgQEAgY29uZmlnIERS
-TV9QQU5FTF9TQU1TVU5HX1M2RDE2RDANCj4gICBjb25maWcgRFJNX1BBTkVMX1NBTVNVTkdf
-UzZEMjdBMQ0KPiAgIAl0cmlzdGF0ZSAiU2Ftc3VuZyBTNkQyN0ExIERQSSBwYW5lbCBkcml2
-ZXIiDQo+ICAgCWRlcGVuZHMgb24gT0YgJiYgU1BJICYmIEdQSU9MSUINCj4gKwlkZXBlbmRz
-IG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fTUlQSV9EQkkNCj4gICAJaGVs
-cA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gZW5hYmxlIHN1cHBvcnQgZm9y
-IHRoZSBTYW1zdW5nDQo+IEBAIC00NzYsNiArNDc4LDcgQEAgY29uZmlnIERSTV9QQU5FTF9T
-QU1TVU5HX1M2RTYzTTBfU1BJDQo+ICAgCWRlcGVuZHMgb24gU1BJDQo+ICAgCWRlcGVuZHMg
-b24gRFJNX1BBTkVMX1NBTVNVTkdfUzZFNjNNMA0KPiAgIAlkZWZhdWx0IERSTV9QQU5FTF9T
-QU1TVU5HX1M2RTYzTTANCj4gKwlkZXBlbmRzIG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNl
-bGVjdCBEUk1fTUlQSV9EQkkNCj4gICAJaGVscA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91
-IHdhbnQgdG8gYmUgYWJsZSB0byBhY2Nlc3MgdGhlIFNhbXN1bmcNCj4gQEAgLTY3Nyw2ICs2
-ODAsNyBAQCBjb25maWcgRFJNX1BBTkVMX1dJREVDSElQU19XUzI0MDENCj4gICAJdHJpc3Rh
-dGUgIldpZGVjaGlwcyBXUzI0MDEgRFBJIHBhbmVsIGRyaXZlciINCj4gICAJZGVwZW5kcyBv
-biBTUEkgJiYgR1BJT0xJQg0KPiAgIAlkZXBlbmRzIG9uIEJBQ0tMSUdIVF9DTEFTU19ERVZJ
-Q0UNCj4gKwlkZXBlbmRzIG9uIERSTV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fTUlQ
-SV9EQkkNCj4gICAJaGVscA0KPiAgIAkgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gZW5h
-YmxlIHN1cHBvcnQgZm9yIHRoZSBXaWRlY2hpcHMgV1MyNDAxIERQSQ0KDQotLSANClRob21h
-cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
-IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVy
-ZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhy
-ZXI6IEl2byBUb3Rldg0K
+Thanks tested the implemation, it works as expected.
 
---------------JRt57Q5cB0oCPiXsrDdvQSji--
+Also noted that a change in default.bconf requries a clean build, is it
+expected behaviour?
 
---------------L2Kg8oL8rrM047Px9SyFRYB7
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIyNqkFAwAAAAAACgkQlh/E3EQov+A8
-gg/+JoJ6qkB9Auzd/Q7PKwRgAnGg1w2o04JPnwmvoONiYgWSgw/WH3EJKOXrh9ozWpzfXQ6cdUko
-aMFuah7R7wsr1R6nobyxKW8HlwCOPxUNt8A73GebWs7hxWJB8/0UPmRFtc+jr9iKeJmGyC2SEZBo
-s7v3a63iqsmrSSR6lE9ge5JvSmGE/RXvjuHuyq76GHZLYABWfz5OmQroypnFFf7G89wA6uUV5qDN
-D3hl1v2FGIP+Hl9LfljUo4/vfp4vybKPiPNf2kZQ10Nq4n8lHO+KAQDfMgCwpUp7sLk/A+ndHcbi
-yKzsuyxhyKSpPXAUev2DJ6OMt5vP1g6BeTtJD82D/erc16o0UGhiKtTQVVRaA3hZkIhYtF+6eVSv
-BIXTGcgiY+mN1lVjqpItEhiIX0dv7czm5p7wbnhVG+8ORia1TbnvCUKww4X5OdzUlYBcK2T3Xno+
-ZIYZLubD0JuoTvFwhoHan93NOjK1nWIK1nA8DQ1lGhvwEKSyCQCljX0/V4K+pe8Z1dPXeHansR2w
-hXDvt26Rj8Ou+i2yiIcOQJ3WZ80RZfwBTKPmyiOZuiD6ei5kDBunhB55ngj7mdpg17dKqFnYY9U5
-Jsc5QCup5jAfCDQxE8t8aoR0B3A81h7X7e/CDZZ2P8Mmga3qi3WtT1bxtzFo5Ob02MP+aTyd9owX
-Reg=
-=xKEK
------END PGP SIGNATURE-----
-
---------------L2Kg8oL8rrM047Px9SyFRYB7--
+Thanks and Regards,
+Padmanabha.S

@@ -2,45 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D967D4DAEE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 12:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7204DAEE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 12:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355328AbiCPL32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 07:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S1355334AbiCPL3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 07:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345749AbiCPL3Z (ORCPT
+        with ESMTP id S1345749AbiCPL3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 07:29:25 -0400
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA96C1A809;
-        Wed, 16 Mar 2022 04:28:09 -0700 (PDT)
-Received: from [192.168.1.3] (ns.gsystem.sk [62.176.172.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id AD25D7A025B;
-        Wed, 16 Mar 2022 12:28:08 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH] pata_parport: add driver (PARIDE replacement)
-Date:   Wed, 16 Mar 2022 12:28:05 +0100
-User-Agent: KMail/1.9.10
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220312144415.20010-1-linux@zary.sk> <202203132219.59100.linux@zary.sk> <68e572f6-e1b6-8d04-900d-8621f607f3bc@omp.ru>
-In-Reply-To: <68e572f6-e1b6-8d04-900d-8621f607f3bc@omp.ru>
-X-KMail-QuotePrefix: > 
+        Wed, 16 Mar 2022 07:29:30 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B141A82E;
+        Wed, 16 Mar 2022 04:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647430096; x=1678966096;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4jogdazBJV35LcyWiOHLVD3Ee6rHelFVxCPdz8kIHnk=;
+  b=G42YMc0ts/GjkO7owmhptiEQEDYJmj7wkD+wQoIRl5U371SXIackCN0r
+   C+tRMJdMyXdeBFDNhBYgu3GRa20cc/GBVUS37kvXJGQ3khJ5cPe4I/pm9
+   77Ea66fktW3KktaRT7fBylEqE1BouL5teaDLaXt2puIUvBryxBf2adJ1N
+   hNVtHXBrCjlmvGBbh9Y1uQWPcQtmZi5nB213FGie/QzUKynCpp2rtw9co
+   VGOGxDcjXzMmSo3qYMztlDhRryVK7euthufUGZ+2GHk80lJs3HDdSCQDX
+   GU3rRjtgQciMbyRkdE8CqjLe6iMuHO1oDGN9b2s2wiD2+4vu2wfX6KOHa
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="238720659"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="238720659"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 04:28:15 -0700
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="557395100"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.28])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 04:28:13 -0700
+Message-ID: <312d724c-e43f-d766-49fb-9c5b10fe8b07@intel.com>
+Date:   Wed, 16 Mar 2022 13:28:07 +0200
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202203161228.05700.linux@zary.sk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] mmc: block: enable cache-flushing when mmc cache is on
+Content-Language: en-US
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Michael Wu <michael@allwinnertech.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "porzio@gmail.com" <porzio@gmail.com>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        allwinner-opensource-support 
+        <allwinner-opensource-support@allwinnertech.com>
+References: <20220312044315.7994-1-michael@allwinnertech.com>
+ <83edf9a1-1712-5388-a3fa-d685f1f581df@intel.com>
+ <88e53cb9-791f-ee58-9be8-76ae9986e0e2@allwinnertech.com>
+ <DM6PR04MB6575C3B87DFA920EDCD994CCFC0F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <32b29790-eb5c-dac0-1f91-aede38220914@allwinnertech.com>
+ <DM6PR04MB6575A4A2A687A876EA5C04B7FC119@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <DM6PR04MB6575A4A2A687A876EA5C04B7FC119@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,141 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 16 March 2022, Sergey Shtylyov wrote:
-> Hello!
+On 16.3.2022 13.09, Avri Altman wrote:
+>> Hi Avril & Adrian,
+>> Thanks for your efforts. Could we have an agreement now --
+>>
+>> 1. enabling-cache and cmd23/reliable-write should be independent;
+>>
+>> Here's what I found in the spec JESD84-B51:
+>>  > 6.6.31 Cache
+>>  > Caching of data shall apply only for the single block
+>>  > read/write(CMD17/24), pre-defined multiple block
+>>  > read/write(CMD23+CMD18/25) and open ended multiple block
+>>  > read/write(CMD18/25+CMD12) commands and excludes any other access
+>>  > e.g., to the register space(e.g., CMD6).
+>> Which means with CMD18/25+CMD12 (without using CMD23), the cache can
+>> also be enabled. Maybe this could be an evidence of the independence
+>> between enabling-cache and cmd23/reliable-write?
+> Acked-by: Avri Altman <avri.altman@wdc.com>
 > 
-> On 3/14/22 12:19 AM, Ondrej Zary wrote:
+> Thanks,
+> Avri
 > 
-> [...]
-> >>> The pata_parport is a libata-based replacement of the old PARIDE
-> >>> subsystem - driver for parallel port IDE devices.
-> >>> It uses the original paride low-level protocol drivers but does not
-> >>> need the high-level drivers (pd, pcd, pf, pt, pg). The IDE devices
-> >>> behind parallel port adapters are handled by the ATA layer.
-> >>>
-> >>> This will allow paride and its high-level drivers to be removed.
-> >>>
-> >>> paride and pata_parport are mutually exclusive because the compiled
-> >>> protocol drivers are incompatible.
-> >>>
-> >>> Tested with Imation SuperDisk LS-120 and HP C4381A (both use EPAT
-> >>> chip).
-> >>>
-> >>> Note: EPP-32 mode is buggy in EPAT - and also in all other protocol
-> >>> drivers - they don't handle non-multiple-of-4 block transfers
-> >>> correctly. This causes problems with LS-120 drive.
-> >>> There is also another bug in EPAT: EPP modes don't work unless a 4-bit
-> >>> or 8-bit mode is used first (probably some initialization missing?).
-> >>> Once the device is initialized, EPP works until power cycle.
-> >>>
-> >>> So after device power on, you have to:
-> >>> echo "parport0 epat 0" >/sys/bus/pata_parport/new_device
-> >>> echo pata_parport.0 >/sys/bus/pata_parport/delete_device
-> >>> echo "parport0 epat 4" >/sys/bus/pata_parport/new_device
-> >>> (autoprobe will initialize correctly as it tries the slowest modes
-> >>> first but you'll get the broken EPP-32 mode)
-> >>>
-> >>> Signed-off-by: Ondrej Zary <linux@zary.sk>
-> >> [...]
-> >>> diff --git a/Documentation/admin-guide/blockdev/paride.rst b/Documentation/admin-guide/blockdev/paride.rst
-> >>> index e1ce90af602a..e431a1ef41eb 100644
-> >>> --- a/Documentation/admin-guide/blockdev/paride.rst
-> >>> +++ b/Documentation/admin-guide/blockdev/paride.rst
-> >> [...]
-> >>> diff --git a/drivers/ata/pata_parport.c b/drivers/ata/pata_parport.c
-> >>> new file mode 100644
-> >>> index 000000000000..783764626a27
-> >>> --- /dev/null
-> >>> +++ b/drivers/ata/pata_parport.c
-> >>> @@ -0,0 +1,819 @@
-> >> [...]
-> >>> +static void pata_parport_lost_interrupt(struct ata_port *ap)
-> >>> +{
-> >>> +	u8 status;
-> >>> +	struct ata_queued_cmd *qc;
-> >>> +
-> >>> +	/* Only one outstanding command per SFF channel */
-> >>> +	qc = ata_qc_from_tag(ap, ap->link.active_tag);
-> >>> +	/* We cannot lose an interrupt on a non-existent or polled command */
-> >>> +	if (!qc || qc->tf.flags & ATA_TFLAG_POLLING)
-> >>> +		return;
-> >>> +	/*
-> >>> +	 * See if the controller thinks it is still busy - if so the command
-> >>> +	 * isn't a lost IRQ but is still in progress
-> >>> +	 */
-> >>> +	status = pata_parport_check_altstatus(ap);
-> >>> +	if (status & ATA_BUSY)
-> >>> +		return;
-> >>> +
-> >>> +	/*
-> >>> +	 * There was a command running, we are no longer busy and we have
-> >>> +	 * no interrupt.
-> >>> +	 */
-> >>> +	ata_port_warn(ap, "lost interrupt (Status 0x%x)\n", status);
-> >>> +	/* Run the host interrupt logic as if the interrupt had not been lost */
-> >>> +	ata_sff_port_intr(ap, qc);
-> >>> +}
-> >>
-> >>    As I said, ata_sff_lost_interrupt() could be used instead...
-> > 
-> > It couldn't be used because it calls ata_sff_altstatus().
-> 
->    And? That one used to call the sff_check_altstatus() method (which you define)
-> even before my patch:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git/commit/?h=for-next&id=03c0e84f9c1e166d57d06b04497e11205f48e9a8
+>>
+>> 2. We don't consider supporting SD in this change.
+>>
+>>  > On 14/03/2022 19:10, Avri Altman wrote:
+>>  >> Here is what our SD system guys wrote:
+>>  >> " In SD we don’t support reliable write and this eMMC driver may not
+>>  >>    be utilizing the cache feature we added in SD5.0.
+>>  >>   The method of cache flush is different between SD and eMMC."
+>>  >>
+>>  >> So adding SD seems to be out of scope of this change.
+>>
+>> Is there anything else I can do about this patch? Thanks again.
 
-OK, I was probably confused by ata_sff_check_status which uses ioread directly.
-
-> [...]
-> >>> diff --git a/include/linux/pata_parport.h b/include/linux/pata_parport.h
-> >>> new file mode 100644
-> >>> index 000000000000..f1ba57bb319c
-> >>> --- /dev/null
-> >>> +++ b/include/linux/pata_parport.h
-> >>> @@ -0,0 +1,108 @@
-> [...]
-> >>> +static inline u16 pi_swab16(char *b, int k)
-> >>> +{
-> >>> +	union { u16 u; char t[2]; } r;
-> >>> +
-> >>> +	r.t[0] = b[2 * k + 1]; r.t[1] = b[2 * k];
-> >>> +	return r.u;
-> >>> +}
-> >>> +
-> >>> +static inline u32 pi_swab32(char *b, int k)
-> >>> +{
-> >>> +	union { u32 u; char f[4]; } r;
-> >>> +
-> >>> +	r.f[0] = b[4 * k + 1]; r.f[1] = b[4 * k];
-> >>> +	r.f[2] = b[4 * k + 3]; r.f[3] = b[4 * k + 2];
-> >>> +	return r.u;
-> >>
-> >>    Hey, I was serious about swab{16|32}p()! Please don't use home grown byte
-> >> swapping...
-> > 
-> > This crap comes from old paride.h and we can't get rid of it without touching the protocol drivers
-> 
->    I don't argue about the *inline*s themselves, just about the ineffective code inside them.
-> 
-> > (comm.c and kbic.c). Maybe use something like:
-> > 
-> > #define pi_swab16(char *b, int k) 	swab16p((u16 *)&b[2 * k])
-> 
-> > but I'm not sure it's equivalent on a big-endian machine.
-> 
->    These functions are endian-agnostic -- they swap always.
->    If you only need to swab the bytes on big-endian machines, you should use cpu_to_le*() and/or
-> le*_to_cpu()...
-
-swab16 swaps always but pi_swab16 does not on big-endian. It's probably a bug but doing the correct thing by accident. Other protocol drivers completely ignore endianness, probably because PARIDE was meant for x86 only.
-
-> [...]
-> 
-> MBR, Sergey
-> 
-
-
-
--- 
-Ondrej Zary
+So we are not going to let the block layer know about SD cache?
+Or is it a separate change?

@@ -2,280 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598AB4DADC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9102C4DADFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354991AbiCPJwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S1355046AbiCPKAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 06:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353462AbiCPJwf (ORCPT
+        with ESMTP id S1350398AbiCPKAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:52:35 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775663BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:51:21 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id g24so1142003lja.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=aQmdouwyZt64K3CHs4I/+fPCcZUQHf00pgfAtsBjS/8=;
-        b=k2GCmScofpSG6NncS2vSq7Gz2rQSQuSlz4FW/k8lM75O5pptJSmJraWXBqj7Rf4ZN2
-         px/hrXkJqbbTUhxF4mJ2UUzdQMxDJPdAx6ZdU0lwERbSPW6IAAQz3Nx7vely8pKPQANW
-         YtFVs/azDd+BtrsKIydPHpuk5YpycnKWV4diYrTTd/bcbJckPrFdtFPAQWAuPnzyN2GY
-         H/d3dXfvnaFk9yc7iKTBqwte6yPS4dQ7jyxhtFuQK1UvLO9VGp8mzrLCB++QFd+Mzqk+
-         /GQ196IVjhEVEPxWJFiNlvceJdUYFr1CV4A0DJ27rJlvhbQm5jcdj9i965TUIHigDQ6l
-         8FNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=aQmdouwyZt64K3CHs4I/+fPCcZUQHf00pgfAtsBjS/8=;
-        b=HnOMuDq5ddh0VqTo0gyNr1SGrwJewv6PmdTka2RhCKeB7yce2HNEKmbZcP41ir/DBk
-         br7P/KVCQMFL4VNGv2LUorBLFWLF365dluXACYbWSW4fs46DqKH6r47Fzp46Ciisu9l1
-         ATo/tjSzzZjGuvOjiyLj4Jsml1MBVMAQiobPyBfOh/tHXMlG5UR6G9hah571fT3Uxs6P
-         /OiAO+jreva2ppoHfy1uDn6Wz+ke0OrP3uOUOa4WuIqm3HQqIUob0lNtqXlvixzvq8TO
-         BTS/nsayP3wOtFtBPeNzIiV2wI9cMXW4GeV4p+nw261CjW3SYk4l0ngxJKGhLFK6TP7O
-         fEWg==
-X-Gm-Message-State: AOAM533rDPJOTwGc6zKb4DCvCc/I300Uc76ZN3qWTTbjz4xbN2ZtkIc4
-        QtGrr0BYlDmR5Y4cMO9WBMWGbTcdxh3mRUyG5lA=
-X-Google-Smtp-Source: ABdhPJw68bIiy9XYVz386CSHTor0T8RWyy2YgN4fqBlK1vE4L6wdUvGOnNdVXMEJZFsqHpW1UYzuvg==
-X-Received: by 2002:a05:651c:4d4:b0:249:1768:81eb with SMTP id e20-20020a05651c04d400b00249176881ebmr17374006lji.329.1647424279292;
-        Wed, 16 Mar 2022 02:51:19 -0700 (PDT)
-Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
-        by smtp.gmail.com with ESMTPSA id m5-20020a2eb6c5000000b002480545ebfesm135372ljo.138.2022.03.16.02.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 02:51:18 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v4 net-next 12/15] net: dsa: Handle MST state changes
-In-Reply-To: <87zglqjkmk.fsf@waldekranz.com>
-References: <20220315002543.190587-1-tobias@waldekranz.com>
- <20220315002543.190587-13-tobias@waldekranz.com>
- <20220315164249.sjgi6wbdpgehc6m6@skbuf> <87zglqjkmk.fsf@waldekranz.com>
-Date:   Wed, 16 Mar 2022 10:51:17 +0100
-Message-ID: <87wngujkdm.fsf@waldekranz.com>
+        Wed, 16 Mar 2022 06:00:11 -0400
+X-Greylist: delayed 441 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 02:58:57 PDT
+Received: from audible.transient.net (audible.transient.net [24.143.126.66])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CE38764BE7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:58:57 -0700 (PDT)
+Received: (qmail 5861 invoked from network); 16 Mar 2022 09:51:35 -0000
+Received: from cucamonga.audible.transient.net (192.168.2.5)
+  by canarsie.audible.transient.net with QMQP; 16 Mar 2022 09:51:35 -0000
+Received: (nullmailer pid 4066 invoked by uid 1000);
+        Wed, 16 Mar 2022 09:51:35 -0000
+Date:   Wed, 16 Mar 2022 09:51:35 +0000
+From:   Jamie Heilman <jamie@audible.transient.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: system locks up with CONFIG_SLS=Y; 5.17.0-rc
+Message-ID: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
+Mail-Followup-To: linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 10:45, Tobias Waldekranz <tobias@waldekranz.com> wrote:
-> On Tue, Mar 15, 2022 at 18:42, Vladimir Oltean <olteanv@gmail.com> wrote:
->> On Tue, Mar 15, 2022 at 01:25:40AM +0100, Tobias Waldekranz wrote:
->>> Add the usual trampoline functionality from the generic DSA layer down
->>> to the drivers for MST state changes.
->>> 
->>> When a state changes to disabled/blocking/listening, make sure to fast
->>> age any dynamic entries in the affected VLANs (those controlled by the
->>> MSTI in question).
->>> 
->>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
->>> ---
->>>  include/net/dsa.h  |  3 ++
->>>  net/dsa/dsa_priv.h |  2 ++
->>>  net/dsa/port.c     | 70 +++++++++++++++++++++++++++++++++++++++++++---
->>>  net/dsa/slave.c    |  6 ++++
->>>  4 files changed, 77 insertions(+), 4 deletions(-)
->>> 
->>> diff --git a/include/net/dsa.h b/include/net/dsa.h
->>> index 1ddaa2cc5842..0f369f2e9a97 100644
->>> --- a/include/net/dsa.h
->>> +++ b/include/net/dsa.h
->>> @@ -945,7 +945,10 @@ struct dsa_switch_ops {
->>>  				     struct dsa_bridge bridge);
->>>  	void	(*port_stp_state_set)(struct dsa_switch *ds, int port,
->>>  				      u8 state);
->>> +	int	(*port_mst_state_set)(struct dsa_switch *ds, int port,
->>> +				      const struct switchdev_mst_state *state);
->>>  	void	(*port_fast_age)(struct dsa_switch *ds, int port);
->>> +	int	(*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 vid);
->>>  	int	(*port_pre_bridge_flags)(struct dsa_switch *ds, int port,
->>>  					 struct switchdev_brport_flags flags,
->>>  					 struct netlink_ext_ack *extack);
->>> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
->>> index d90b4cf0c9d2..2ae8996cf7c8 100644
->>> --- a/net/dsa/dsa_priv.h
->>> +++ b/net/dsa/dsa_priv.h
->>> @@ -215,6 +215,8 @@ static inline struct net_device *dsa_master_find_slave(struct net_device *dev,
->>>  void dsa_port_set_tag_protocol(struct dsa_port *cpu_dp,
->>>  			       const struct dsa_device_ops *tag_ops);
->>>  int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age);
->>> +int dsa_port_set_mst_state(struct dsa_port *dp,
->>> +			   const struct switchdev_mst_state *state);
->>>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy);
->>>  int dsa_port_enable(struct dsa_port *dp, struct phy_device *phy);
->>>  void dsa_port_disable_rt(struct dsa_port *dp);
->>> diff --git a/net/dsa/port.c b/net/dsa/port.c
->>> index 3ac114f6fc22..a2a817bb77b1 100644
->>> --- a/net/dsa/port.c
->>> +++ b/net/dsa/port.c
->>> @@ -30,12 +30,11 @@ static int dsa_port_notify(const struct dsa_port *dp, unsigned long e, void *v)
->>>  	return dsa_tree_notify(dp->ds->dst, e, v);
->>>  }
->>>  
->>> -static void dsa_port_notify_bridge_fdb_flush(const struct dsa_port *dp)
->>> +static void dsa_port_notify_bridge_fdb_flush(const struct dsa_port *dp, u16 vid)
->>>  {
->>>  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
->>>  	struct switchdev_notifier_fdb_info info = {
->>> -		/* flush all VLANs */
->>> -		.vid = 0,
->>> +		.vid = vid,
->>>  	};
->>>  
->>>  	/* When the port becomes standalone it has already left the bridge.
->>> @@ -57,7 +56,42 @@ static void dsa_port_fast_age(const struct dsa_port *dp)
->>>  
->>>  	ds->ops->port_fast_age(ds, dp->index);
->>>  
->>> -	dsa_port_notify_bridge_fdb_flush(dp);
->>> +	/* flush all VLANs */
->>> +	dsa_port_notify_bridge_fdb_flush(dp, 0);
->>> +}
->>> +
->>> +static int dsa_port_vlan_fast_age(const struct dsa_port *dp, u16 vid)
->>> +{
->>> +	struct dsa_switch *ds = dp->ds;
->>> +	int err;
->>> +
->>> +	if (!ds->ops->port_vlan_fast_age)
->>> +		return -EOPNOTSUPP;
->>> +
->>> +	err = ds->ops->port_vlan_fast_age(ds, dp->index, vid);
->>> +
->>> +	if (!err)
->>> +		dsa_port_notify_bridge_fdb_flush(dp, vid);
->>> +
->>> +	return err;
->>> +}
->>> +
->>> +static int dsa_port_msti_fast_age(const struct dsa_port *dp, u16 msti)
->>> +{
->>> +	DECLARE_BITMAP(vids, VLAN_N_VID) = { 0 };
->>> +	int err, vid;
->>> +
->>> +	err = br_mst_get_info(dsa_port_bridge_dev_get(dp), msti, vids);
->>> +	if (err)
->>> +		return err;
->>> +
->>> +	for_each_set_bit(vid, vids, VLAN_N_VID) {
->>> +		err = dsa_port_vlan_fast_age(dp, vid);
->>> +		if (err)
->>> +			return err;
->>> +	}
->>> +
->>> +	return 0;
->>>  }
->>>  
->>>  static bool dsa_port_can_configure_learning(struct dsa_port *dp)
->>> @@ -118,6 +152,32 @@ static void dsa_port_set_state_now(struct dsa_port *dp, u8 state,
->>>  		pr_err("DSA: failed to set STP state %u (%d)\n", state, err);
->>>  }
->>>  
->>> +int dsa_port_set_mst_state(struct dsa_port *dp,
->>> +			   const struct switchdev_mst_state *state)
->>> +{
->>> +	struct dsa_switch *ds = dp->ds;
->>> +	int err;
->>> +
->>> +	if (!ds->ops->port_mst_state_set)
->>> +		return -EOPNOTSUPP;
->>> +
->>> +	err = ds->ops->port_mst_state_set(ds, dp->index, state);
->>> +	if (err)
->>> +		return err;
->>> +
->>> +	if (dp->learning) {
->>> +		switch (state->state) {
->>> +		case BR_STATE_DISABLED:
->>> +		case BR_STATE_BLOCKING:
->>> +		case BR_STATE_LISTENING:
->>
->> Is there a requirement in br_mst_set_state() to put the switchdev
->> notifier at the end instead of at the beginning?
->
-> Not that I can think of. Moving it.
->
->> I'm tempted to ask you to introduce br_mst_get_state(), then assign
->> old_state = br_mst_get_state(dsa_port_bridge_dev_get(dp), state->msti),
->> then perform the VLAN fast age only on the appropriate state transitions,
->> just like the regular fast age.
->
-> No time like the present!
->
-> Question though:
->
->>> +			err = dsa_port_msti_fast_age(dp, state->msti);
->
-> If _msti_fast_age returns an error here, do we want that to bubble up to
-> the bridge? It seems more important to keep the bridge in sync with the
-> hardware. I.e. the hardware state has already been successfully synced,
-> we just weren't able to flush all VLANs for some reason. We could revert
-> the state I guess, but what if that fails?
->
-> Should we settle for a log message?
+I've been (somewhat unsuccessfully) trying to bisect a hard lock-up
+of my workstation that occurs when I'm running 5.17 rc kernels a few
+seconds after I start a kvm guest instance.  There is no output to
+any log, everything locks up completely, sysrq doesn't even work
+anymore.  As bisection progressed closer and closer to the branch
+where straight-line-speculation mitigation was enabled, and as bisect
+landing me between 9cdbeec40968 ("x86/entry_32: Fix segment exceptions")
+and 3411506550b1 ("x86/csum: Rewrite/optimize csum_partial()") wasn't
+resulting in clear results (my system definately starts Oopsing and
+gets so hosed up that I'm forced to reboot, but it isn't quite as dire
+as sysrq continues to function) I decided to just try a build with
+CONFIG_SLS disabled, and it turns out that works just fine.  Sooo...
 
-Or should we set the extack message? Similar to how we report software
-fallback of bridging/LAGs?
+This system uses a Intel Core2 Duo E8400 processor.
+working config (CONFIG_SLS=N) and dmesg at:
+http://audible.transient.net/~jamie/k/sls.config-5.17.0-rc8
+http://audible.transient.net/~jamie/k/sls.dmesg
 
->>> +			break;
->>> +		}
->>> +	}
->>> +
->>> +	return err;
->>> +}
->>> +
->>>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy)
->>>  {
->>>  	struct dsa_switch *ds = dp->ds;
->>> @@ -326,6 +386,8 @@ static bool dsa_port_supports_mst(struct dsa_port *dp)
->>>  	struct dsa_switch *ds = dp->ds;
->>>  
->>>  	return ds->ops->vlan_msti_set &&
->>> +		ds->ops->port_mst_state_set &&
->>> +		ds->ops->port_vlan_fast_age &&
->>>  		dsa_port_can_configure_learning(dp);
->>>  }
->>>  
->>> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
->>> index 5e986cdeaae5..4300fc76f3af 100644
->>> --- a/net/dsa/slave.c
->>> +++ b/net/dsa/slave.c
->>> @@ -450,6 +450,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
->>>  
->>>  		ret = dsa_port_set_state(dp, attr->u.stp_state, true);
->>>  		break;
->>> +	case SWITCHDEV_ATTR_ID_PORT_MST_STATE:
->>> +		if (!dsa_port_offloads_bridge_port(dp, attr->orig_dev))
->>> +			return -EOPNOTSUPP;
->>> +
->>> +		ret = dsa_port_set_mst_state(dp, &attr->u.mst_state);
->>> +		break;
->>>  	case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
->>>  		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
->>>  			return -EOPNOTSUPP;
->>> -- 
->>> 2.25.1
->>> 
+(I don't think the dmesg of CONFIG_SLS=Y is really any different.)
+
+As far as I know the guest kernel I hand to qemu doesn't really
+matter, but the gist of my qemu command line is:
+
+qemu-system-x86_64 -m 2048 -name "$NAME" -machine pc,accel=kvm \
+    -nographic -no-user-config -nodefaults -boot strict=on \
+    -rtc base=utc -smp 1,sockets=1,cores=1,threads=1 \
+    -chardev pipe,id=char0,path="$DIR/monitor" \
+    -chardev pty,id=char1 \
+    -device isa-serial,chardev=char1 \
+    -device virtio-blk-pci,drive=blk0,bootindex=1 \
+    -device virtio-net-pci,netdev=net0,"mac=$IF_MAC" \
+    -device virtio-rng-pci,rng=rng0,max-bytes=1024,period=3000 \
+    -drive "id=blk0,file=/dev/S/$NAME,if=none,format=raw,cache=none" \
+    -mon chardev=char0,id=monitor,mode=control \
+    -netdev "tap,id=net0,ifname=$NAME,script=no,downscript=no" \
+    -object rng-random,id=rng0,filename=/dev/random
+
+
+No clue what additional debugging would help to enable here, if
+anything.  As you can see from the dmesg, I'm using gcc 11.2.0 from
+Debian unstable, 4:11.2.0-2 to be exact.  Let me know what other
+information would be useful.
+
+-- 
+Jamie Heilman                     http://audible.transient.net/~jamie/

@@ -2,163 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6134DA7DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C0F4DA7E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344977AbiCPCUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S1347806AbiCPCVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236034AbiCPCUA (ORCPT
+        with ESMTP id S237405AbiCPCU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:20:00 -0400
-Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [203.148.12.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA7339B85;
-        Tue, 15 Mar 2022 19:18:45 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 16 Mar
- 2022 10:18:42 +0800
-Received: from [10.29.8.53] (10.29.8.53) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 16 Mar
- 2022 10:18:40 +0800
-Subject: Re: [PATCH] USB:Fix ehci infinite suspend-resume loop issue in
- zhaoxin
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <weitaowang@zhaoxin.com>
-References: <3d0ae3ca-9dad-bb8f-5c41-45bdcb07b9cd@zhaoxin.com>
- <Yi9QIk+6VIWW6V/W@rowland.harvard.edu>
- <320584eb-ef89-3759-509c-e7e9cb10f983@zhaoxin.com>
- <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Message-ID: <ac40c227-ea26-bccd-d254-5a2034103184@zhaoxin.com>
-Date:   Wed, 16 Mar 2022 10:18:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 15 Mar 2022 22:20:58 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25B4427CE;
+        Tue, 15 Mar 2022 19:19:45 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2e59ea0f3d8so8313297b3.7;
+        Tue, 15 Mar 2022 19:19:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2wDOJfE8Udv/yPkkP//z7M6l01Skx49rMSVyt4RFfkk=;
+        b=joGnnPIeYb+VlXp+ly8j/0oB5qBB3qaNJh0k/cLpE61oXjRpfr2OVYTdHqwm4hyLSg
+         1Bc0W3jnYw0d0kBXJ6PSvyDIzrUrQO4DGn0awBVEED2EpOgB14ixgrHd7dn+YTxkJ0ZL
+         ldT0E3UDLviwkPNemhjQLp7MJJXHNdM5342Y4PlJB0HQjFDgT+x/UvAypwVQUXDc6Jf5
+         sYqz35ghl125FMfkGglJNm+AUimgLhX+9kEup89hvsqXouTeQLYePAFOnjhdnToy1J6j
+         CllkkMQUYaUxGjLY58UYQGWcMMO2NQtkM/5cVWk0f+Ah8ztdGRQdvDl+ryhg5nKbi2rW
+         NWLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2wDOJfE8Udv/yPkkP//z7M6l01Skx49rMSVyt4RFfkk=;
+        b=yTEW7mEid4wt0t5yxuLYumyShRWcsR8mE1IBsvBv9rbcD90wSSR6pY91tMsND+JA+Y
+         USCWyeqLjv7IXrNNNzyYwrr0F0FQng4Fy2HIBF2PS3vKibBTnZfXdYk1Auywk5vgqak9
+         ASoOVoudZtii+vCAxmgpRntP9NW5M4C6Icp4trVnEa1gYgmsos2jkwXdEgoigDAyEFy6
+         t3O2N4B/IVACHOjxmBtGO5lDPkaIRA0ANHt7AdrriuMT0EVlXDa3TlRxf7NHI/bXNiBQ
+         YjL3QDEwkt5k3Wo+axX4b86iw5KRm/roL5d91l2T5hUFp67QqfYRB6inLATFEG8Trzje
+         XSxg==
+X-Gm-Message-State: AOAM532Z5u73mDNDRg8l66WaTm5aEsaz+Dq4/hpalEPL7EK3tkfi4+nM
+        ZajQBfy1GEcAwz3LfwPkj1H6sKsXb3CPbSAuC18=
+X-Google-Smtp-Source: ABdhPJw4huEMVFKmb4DDLz4qwY4nPYpek7DI+L85d5wjn5LwIdVaRy+YtAtrq+un+GInFq6nbuqV+PAXA+b1GQ4gGjI=
+X-Received: by 2002:a0d:eb02:0:b0:2e5:9d37:58ba with SMTP id
+ u2-20020a0deb02000000b002e59d3758bamr2837723ywe.231.1647397184923; Tue, 15
+ Mar 2022 19:19:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YjCuOXRFZ8CjK9SD@rowland.harvard.edu>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.53]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
+In-Reply-To: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 16 Mar 2022 10:19:33 +0800
+Message-ID: <CAJhGHyCDTxabp_5BizzFofXRNp2ggNFNT-NHCGBO9AgavJyAYw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Don't rebuild page when the page is synced
+ and no tlb flushing is required
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/15 11:18, Alan Stern wrote:
-> On Tue, Mar 15, 2022 at 08:39:09PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->> On 2022/3/14 10:24, Alan Stern wrote:
->>>> +       t1 = ehci_readl(ehci, &ehci->regs->status);
->>>> +       ehci_writel(ehci, t1 & STS_PCD, &ehci->regs->status);
->>>> +       ehci_readl(ehci, &ehci->regs->status);
->>>
->>> You should not clear the STS_PCD bit.  What if some other port had a
->>> status change at the same time?  Then because you cleared the
->>> port-change-detect bit, the system would not realize that the other port
->>> needed to be handled.
->>
->> I really didn't think about this case.
->>
->>> Leaving the STS_PCD bit turned on will cause the driver to do a little
->>> extra work, but it shouldn't cause any harm.
->>>
->> I have encountered the following situation if EHCI runtime suspend is
->> enabled by default.
->>
->>
->>
->> 1.Wake from system to disk and boot OS.
-> 
-> You're talking about resuming after hibernation, right?
+On Tue, Mar 15, 2022 at 6:45 PM Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+>
+> Before Commit c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page()
+> to return true when remote flush is needed"), the return value
+> of kvm_sync_page() indicates whether the page is synced, and
+> kvm_mmu_get_page() would rebuild page when the sync fails.
+> But now, kvm_sync_page() returns false when the page is
+> synced and no tlb flushing is required, which leads to
+> rebuild page in kvm_mmu_get_page(). So return the return
+> value of mmu->sync_page() directly and check it in
+> kvm_mmu_get_page(). If the sync fails, the page will be
+> zapped and the invalid_list is not empty, so set flush as
+> true is accepted in mmu_sync_children().
+>
 
-You're right.
->> 2.EHCI will entry runtime suspend after enumerated by driver during boot
->> phase of suspend to disk
-> 
-> I'm not sure what you mean by "boot phase of suspend to disk".  This is
-> while the restore kernel is starting up at the beginning of resume from
-> hibernation, right?
-> 
-You understood exactly what I was saying.
+Good catch.
 
+Acked-by: Lai Jiangshan <jiangshanlai@gmail.com>
 
->> 3.EHCI will be placed to freeze state and ehci_resume is called after image
->> is loaded.
-> 
-> ehci_resume is called to leave runtime suspend.  Going into the freeze
-> state doesn't require any changes.
-> 
->> 4.If PCD flag is set(caused by patch), then HCD_FLAG_RH_RUNNING will be set.
->>
->> 5.Pci_pm_freeze_noirq is called to check ehci root hub state and return
->> value is -EBUSY. which will cause
->>   quiesce phase of suspend to disk fail.
-> 
-> You're talking about check_root_hub_suspended() in hcd-pci.c, right?
-> 
-It's right.
-> You know, I'm not at all certain that the callbacks for freeze and
-> freeze_noirq should ever return anything other than 0.  It's okay for
-> them to call check_root_hub_suspended(), but they should ignore its
-> return value.
-> 
-> Can you check if the patch below helps?
-> 
-> Alan Stern
-> 
-> 
-> Index: usb-devel/drivers/usb/core/hcd-pci.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/hcd-pci.c
-> +++ usb-devel/drivers/usb/core/hcd-pci.c
-> @@ -575,6 +575,12 @@ static int hcd_pci_resume(struct device
->   	return resume_common(dev, PM_EVENT_RESUME);
->   }
->   
-> +static int hcd_pci_freeze_check(struct device *dev)
-> +{
-> +	(void) check_root_hub_suspended(dev);
-> +	return 0;
-> +}
-> +
->   static int hcd_pci_restore(struct device *dev)
->   {
->   	return resume_common(dev, PM_EVENT_RESTORE);
-> @@ -586,6 +592,7 @@ static int hcd_pci_restore(struct device
->   #define hcd_pci_suspend_noirq	NULL
->   #define hcd_pci_resume_noirq	NULL
->   #define hcd_pci_resume		NULL
-> +#define hcd_pci_freeze_check	NULL
->   #define hcd_pci_restore		NULL
->   
->   #endif	/* CONFIG_PM_SLEEP */
-> @@ -616,8 +623,8 @@ const struct dev_pm_ops usb_hcd_pci_pm_o
->   	.suspend_noirq	= hcd_pci_suspend_noirq,
->   	.resume_noirq	= hcd_pci_resume_noirq,
->   	.resume		= hcd_pci_resume,
-> -	.freeze		= check_root_hub_suspended,
-> -	.freeze_noirq	= check_root_hub_suspended,
-> +	.freeze		= hcd_pci_freeze_check,
-> +	.freeze_noirq	= hcd_pci_freeze_check,
+> Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 3b8da8b0745e..8efd165ee27c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1866,17 +1866,14 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
+>           &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])     \
+>                 if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
+>
+> -static bool kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+> +static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>                          struct list_head *invalid_list)
 
-This patch can fix pci driver's fail check in freeze_noirq phase.
-
-Restoring system state from a hibernation image can continue and success.
-
-Weitao Wang
->   	.thaw_noirq	= NULL,
->   	.thaw		= NULL,
->   	.poweroff	= hcd_pci_suspend,
-> .
-> 
+The comments for FNAME(sync_page) can be copied here.

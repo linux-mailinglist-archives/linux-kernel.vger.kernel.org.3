@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1AA4DB51B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7D14DB517
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357295AbiCPPor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S1357279AbiCPPnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350516AbiCPPoo (ORCPT
+        with ESMTP id S242407AbiCPPnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:44:44 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0422333E14;
-        Wed, 16 Mar 2022 08:43:30 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id a17so2190726edm.9;
-        Wed, 16 Mar 2022 08:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EL8SPq0tFGKKMPZ6eWOoFq+B8Y0BC0Wp+VatKXyZsfg=;
-        b=ilg6KEssa9OxmAVaCZokfR8oveD05mfB2MjaDdtdZDOfsQ8sQhGe7i4Kx/aNPa6aPN
-         gZaH2xA2LCFpFjnLburwk2rSVaaHfJWl7tneHlobMqwkLCp1J8K436Em9pJ1qtJZ2Ke9
-         EyfTt9OU2rZeJkRMM3WOn+N2v/uuTYHumXN6/gT1/dJsAVb0E9YOyWXBgqZ1N5VZWicf
-         M0iRhMGMw00HQRdkqTL7JCNDHDGH8lI5SAvVSF/rCkosc61ZFPo4MZl5yjZ/7mBocWif
-         qT32n/kYN+lHVmHwMc/PXDLArbUcnVL3RGRh+PNMXdbQQTwzwQveo3K+keBGR+d4F9dE
-         lXBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EL8SPq0tFGKKMPZ6eWOoFq+B8Y0BC0Wp+VatKXyZsfg=;
-        b=wn5Jb/B035EuqEclqzv1VahJJpZ5/PZVIo5TBux/z6DX215rLE3Cq0DDHGS1pBu5j1
-         QuKdE8ozbjw7UYYmDTVsvAxGMyjJq3YimBUo8kfAgSY4sTtEtujwQxeS4zeUWuOpJ4CM
-         42MObuamw6YTsSK/9uSLt3w6XFgwqSjrdYqHbEg3u/WwFCRcCZA5gfn5vgkMiqIWLgyg
-         Yt5ujiQlLcog1lZOTbA5ag422qm2FDU7WujfYYIBgs7BjgtRzpl52rJpACIr8wb9s7Xn
-         spSO3MEHfJsoINgKbNjW/QLc8uOGQF/6B0HP4GmMnpQEl3sNbe0qFXwK8nDQcatQuExV
-         p9ZQ==
-X-Gm-Message-State: AOAM533Ir0TbiMrCw9B0uf3XCzu0s/5nb4ou2mzUIVk5qL9INDMUHz1S
-        MPCLt5RiDMUt6ETGhUCPOKv6OYVT2N32nWygVhQ=
-X-Google-Smtp-Source: ABdhPJybEl1wu5fLBjs9JJKe9wXxnEFgIV4wrI5bCRrEaFk7ObVhQKonoGWk2+0ayUXt+GkwD9+hDw5opq0w5monWKQ=
-X-Received: by 2002:aa7:da93:0:b0:416:4aca:bef7 with SMTP id
- q19-20020aa7da93000000b004164acabef7mr111360eds.296.1647445408611; Wed, 16
- Mar 2022 08:43:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220316064716.16587-1-linmq006@gmail.com> <CAHp75Veae=8Ev-xU3zbVYh=AxbAPFayZD3MeRSrAGNNZ8LMBPg@mail.gmail.com>
- <20220316071841.GA43@VICKYMQLIN-NB1.localdomain>
-In-Reply-To: <20220316071841.GA43@VICKYMQLIN-NB1.localdomain>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 16 Mar 2022 17:42:15 +0200
-Message-ID: <CAHp75Ve+tkrzzz3ZjhexW4eRXXCjejh=w=uTbb4Vuo6XL6jP3Q@mail.gmail.com>
-Subject: Re: [PATCH] i2c: busses: Fix error handling in synquacer_i2c_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 11:43:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609736D193
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:42:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F200561693
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:42:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6507EC340E9;
+        Wed, 16 Mar 2022 15:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647445345;
+        bh=J5ZkX6POaKKLpqerhVssLGbX3hMhlpc03GUaoFBIzeM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O2u99JQ57zOZ/Oj6y6WPMSRwsrz/IJRGNFMu2x0K6jmCvwLF7F174psFCE+K5jW7/
+         DanqYtvgPs3af0exFI4e1T/HzDz+S+iuTPW9IjP0mrtWEEnRfLe/wbKzbiyVO0R+24
+         joo0UEwYLOcEa7xbwB1ZtdYW0spFzEANqB6jtZtoYPimNQfVc486SeH87FAvEjrqHp
+         SgzVAUC/G5TaUU5uAPCSOKQKjyDIHIh2Tc94ravTjecbBgqifE8avN5btR7cMOrw83
+         B65iCOE8kMVhRmWe4d5Pgnn4a+5ezEL8p1Vz2E4tDACVip3w8nbQZrIwp9xhtKDd1N
+         tnFnGqZxx+nUA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUVn3-00Exff-Fs; Wed, 16 Mar 2022 15:42:23 +0000
+Date:   Wed, 16 Mar 2022 15:42:21 +0000
+Message-ID: <871qz1zyxu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH 3/3] irqchip/gic-v3: Relax polling of GIC{R,D}_CTLR.RWP
+In-Reply-To: <20220316145403.51475e25@slackpad.lan>
+References: <20220315165034.794482-1-maz@kernel.org>
+        <20220315165034.794482-4-maz@kernel.org>
+        <20220316145403.51475e25@slackpad.lan>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: andre.przywara@arm.com, linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com, tglx@linutronix.de, eric.auger@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 9:18 AM Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> Hi, Andy Shevchenko
->
-> On Wed, Mar 16, 2022 at 09:04:06AM +0200, Andy Shevchenko wrote:
+On Wed, 16 Mar 2022 14:54:03 +0000,
+Andre Przywara <andre.przywara@arm.com> wrote:
+> 
+> On Tue, 15 Mar 2022 16:50:34 +0000
+> Marc Zyngier <maz@kernel.org> wrote:
+> 
+> Hi,
+> 
+> > Recent work on the KVM GIC emulation has revealed that the GICv3
+> > driver is a bit RWP-happy, as it polls this bit for each and
+> > every write MMIO access involving a single interrupt.
 > >
-> > > In the error handling path, the clk_prepare_enable() function
-> > > call should be balanced by a corresponding 'clk_disable_unprepare()'
-> > > call, as already done in the remove function.
+> > As it turns out, polling RWP is only required when:
+> > - Disabling an SGI, PPI or SPI
+> > - Disabling LPIs at the redistributor level
+> > - Disabling groups
+> > - Enabling ARE
+> > - Dealing with DPG*
 > >
-> >
-> > It=E2=80=99s not good to mix devm approach with non-devm.
-> >
-> Thanks for your review. I'm sorry, I don't quite understand. Could you pl=
-ease explain more? What functions are your referring to? Thanks.
+> > Simplify the driver by removing all the other instances of RWP
+> > polling, and add the one that was missing when enabling the distributor
+> > (as that's where we set ARE).
+> 
+> Don't we need an explicit call to wait_for_rwp() now for:
+> gic_irq_set_irqchip_state(IRQCHIP_STATE_MASKED, true) ?
 
-Your entire patch is broken. The error handling in ->probe() and
-complete ->remove() now have asymmetrical ordering.
+Ah, yes, I missed that one. Thanks.
 
-On top of that the CCF is NULL aware (and error pointer IIRC), so no
-need to have additional checks.
+> IMPORTANT NOTICE: The contents of this email [...]
 
---=20
-With Best Regards,
-Andy Shevchenko
+The ARM IT crap is firing again. Wrong SMTP server?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

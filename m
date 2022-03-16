@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEBD4DB4CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30604DB4CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244994AbiCPP2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
+        id S1347903AbiCPP2r convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Mar 2022 11:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiCPP2c (ORCPT
+        with ESMTP id S229528AbiCPP2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:28:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCEE66FB6;
-        Wed, 16 Mar 2022 08:27:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 073BB616D5;
-        Wed, 16 Mar 2022 15:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C689C340E9;
-        Wed, 16 Mar 2022 15:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647444437;
-        bh=cKHMfEEuQWjkMg9IVsapbzoI/deGhDOqoxo8h1Pfj4w=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=Jx6/gUnfFvTWYhsjPB8Sysp75pa4maiTq5EZEpP1jpTbvScVH46gWD7CixZgiAqUz
-         Ce4Tq6stpudFBkZOMW2bdIBV8KMgDBbMFfL5DINGDsPvCS1YFx6jcD2sOXoTOvpsnG
-         Ho1WoaXb4/turf+duna7fPplueauyniqmw+3i1dZhxISxZhStzPyTAwPY0dRfV9MRG
-         J5KARGct264zx+zSdUummt1PWu7Pu6q48H+ln3aNUadbjdZDmTguY6bZH5/0ZoT0pw
-         KGxGvwEjLpkfg1zSx5edFC/lhYm9KvKa7cadP2/Ziu9i9EUjcXmaNEOK7h2eVc3TJ+
-         v2Trt6YxkFJZA==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Mar 2022 11:28:45 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D45A4673D5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:27:30 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-38-f6wgHKZ6OgqCN6WP2rtJ0g-1; Wed, 16 Mar 2022 15:27:27 +0000
+X-MC-Unique: f6wgHKZ6OgqCN6WP2rtJ0g-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 16 Mar 2022 15:27:26 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 16 Mar 2022 15:27:26 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Wander Lairson Costa' <wander@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?iso-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "andre.goddard@gmail.com" <andre.goddard@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "phil@raspberrypi.com" <phil@raspberrypi.com>
+Subject: RE: [PATCH v4 1/5] serial/8250: Use fifo in 8250 console driver
+Thread-Topic: [PATCH v4 1/5] serial/8250: Use fifo in 8250 console driver
+Thread-Index: AQHYOUNg+UxO79+xmUuDTD6Kl8POG6zCIVEg
+Date:   Wed, 16 Mar 2022 15:27:26 +0000
+Message-ID: <bb5f03ec092f462c9656f224895bb224@AcuMS.aculab.com>
+References: <20220316143646.13301-1-wander@redhat.com>
+ <20220316143646.13301-2-wander@redhat.com>
+In-Reply-To: <20220316143646.13301-2-wander@redhat.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] brcmfmac: check the return value of devm_kzalloc() in
- brcmf_of_probe()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220311021751.29958-1-baijiaju1990@gmail.com>
-References: <20220311021751.29958-1-baijiaju1990@gmail.com>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     aspriel@gmail.com, franky.lin@broadcom.com,
-        hante.meuleman@broadcom.com, chi-hsien.lin@infineon.com,
-        wright.feng@infineon.com, chung-hsien.hsu@infineon.com,
-        davem@davemloft.net, kuba@kernel.org, len.baker@gmx.com,
-        gustavoars@kernel.org, shawn.guo@linaro.org,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164744442985.16413.13793620395472132632.kvalo@kernel.org>
-Date:   Wed, 16 Mar 2022 15:27:13 +0000 (UTC)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jia-Ju Bai <baijiaju1990@gmail.com> wrote:
-
-> The function devm_kzalloc() in brcmf_of_probe() can fail, so its return
-> value should be checked.
+From: Wander Lairson Costa
+> Sent: 16 March 2022 14:37
 > 
-> Fixes: 29e354ebeeec ("brcmfmac: Transform compatible string for FW loading")
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+> Note: I am using a small test app + driver located at [0] for the
+> problem description. serco is a driver whose write function dispatches
+> to the serial controller. sertest is a user-mode app that writes n bytes
+> to the serial console using the serco driver.
+> 
+> While investigating a bug in the RHEL kernel, I noticed that the serial
+> console throughput is way below the configured speed of 115200 bps in
+> a HP Proliant DL380 Gen9. I was expecting something above 10KB/s, but
+> I got 2.5KB/s.
+> 
+> $ time ./sertest -n 2500 /tmp/serco
+> 
+> real    0m0.997s
+> user    0m0.000s
+> sys     0m0.997s
+> 
+> With the help of the function tracer, I then noticed the serial
+> controller was taking around 410us seconds to dispatch one single byte:
 
-Fails to apply to wireless-next:
+Did you verify the baud rate?
 
-Recorded preimage for 'drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c'
-error: Failed to merge in the changes.
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-Applying: brcmfmac: check the return value of devm_kzalloc() in brcmf_of_probe()
-Using index info to reconstruct a base tree...
-M	drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-Falling back to patching base and 3-way merge...
-Auto-merging drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-CONFLICT (content): Merge conflict in drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-Patch failed at 0001 brcmfmac: check the return value of devm_kzalloc() in brcmf_of_probe()
+Or is there some horrid serial redirection going on.
+It is even possible there is a bios smm interrupt
+chugging through on another cpu core.
 
-Patch set to Changes Requested.
+	David
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220311021751.29958-1-baijiaju1990@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

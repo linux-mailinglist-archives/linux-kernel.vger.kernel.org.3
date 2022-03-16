@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650B94DB4FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1A34DB506
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344070AbiCPPfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S1346884AbiCPPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240167AbiCPPf1 (ORCPT
+        with ESMTP id S242953AbiCPPil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:35:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAA028E3C
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647444853; x=1678980853;
-  h=message-id:date:mime-version:to:references:from:subject:
-   in-reply-to:content-transfer-encoding;
-  bh=boYCnh6qWuwCAj1Sjfgi0rW0Z9re8P6EPX8iN50WXOw=;
-  b=ihESAcpMJIFO5STBtHDfzvXBuOo1mwgMSmJv6/BbUJzTpVi7YsRR5duV
-   HpAuACApYDYRc31sLYDRP9fgGUrh4XUwcAM7b/n7a+ie8Kg/OY/bDibFa
-   q/H7wo0/a0mfidXqGLUyMI7ss9kQyw3BjwRx5PYCKP/zybv5wdLkHnqXs
-   pbv4Y9rXOvNUmDHtBGzdv448PfsOTNF9RebtivVXEZF6CDycmoZnhFwrV
-   OIILpSczrAJzvPiUYCKlC8mGRyUeZlZbR5BHjFpBzqZocWA9TlvyCaAmF
-   KTKy+6heFcvnWfDi2KZI96sCWJdFcVYj0lttA0ziRk4wNBznwpTrAU4wE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256822706"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="256822706"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 08:34:13 -0700
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="557502057"
-Received: from jdwaldem-mobl.amr.corp.intel.com (HELO [10.255.228.230]) ([10.255.228.230])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 08:34:12 -0700
-Message-ID: <aa3ffe77-8066-adab-80f0-27568ad8f2f6@intel.com>
-Date:   Wed, 16 Mar 2022 08:34:04 -0700
+        Wed, 16 Mar 2022 11:38:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 502C76D1B4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:37:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16BB51476;
+        Wed, 16 Mar 2022 08:37:26 -0700 (PDT)
+Received: from e122027.arm.com (unknown [10.57.43.235])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 560793F7D7;
+        Wed, 16 Mar 2022 08:37:24 -0700 (PDT)
+From:   Steven Price <steven.price@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Steven Price <steven.price@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: [PATCH v2] cpu/hotplug: Set st->cpu earlier
+Date:   Wed, 16 Mar 2022 15:36:37 +0000
+Message-Id: <20220316153637.288199-1-steven.price@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: system locks up with CONFIG_SLS=Y; 5.17.0-rc
-In-Reply-To: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 02:51, Jamie Heilman wrote:
-> I've been (somewhat unsuccessfully) trying to bisect a hard lock-up
-> of my workstation that occurs when I'm running 5.17 rc kernels a few
-> seconds after I start a kvm guest instance.  There is no output to
-> any log, everything locks up completely, sysrq doesn't even work
-> anymore.  As bisection progressed closer and closer to the branch
-> where straight-line-speculation mitigation was enabled, and as bisect
-> landing me between 9cdbeec40968 ("x86/entry_32: Fix segment exceptions")
-> and 3411506550b1 ("x86/csum: Rewrite/optimize csum_partial()") wasn't
-> resulting in clear results (my system definately starts Oopsing and
-> gets so hosed up that I'm forced to reboot, but it isn't quite as dire
-> as sysrq continues to function) I decided to just try a build with
-> CONFIG_SLS disabled, and it turns out that works just fine.  Sooo...
-> 
-> This system uses a Intel Core2 Duo E8400 processor.
-> working config (CONFIG_SLS=N) and dmesg at:
-> http://audible.transient.net/~jamie/k/sls.config-5.17.0-rc8
-> http://audible.transient.net/~jamie/k/sls.dmesg
-> 
-> (I don't think the dmesg of CONFIG_SLS=Y is really any different.)
+Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
+too late as other callbacks can be made before that point. In particular
+if one of the earlier callbacks fails and triggers a rollback that
+rollback will be done with st->cpu==0 causing CPU0 to be erroneously set
+to be dying, causing the scheduler to get mightily confused and throw
+its toys out of the pram.
 
-If you get really ambitious, you could try to see if any of the
-individual things that change based on the CONFIG_SLS #ifdef trigger
-this.  Basically, turn off the config option and then go manually
-enabling each of the sites.
+Move the assignment earlier before any callbacks have a chance to run.
 
-The odd thing is that it isn't touching anything really KVM-specific.
-It probably influences some KVM-specific assembly, but it's hard to see
-how that might break anything.
+Fixes: 2ea46c6fc945 ("cpumask/hotplug: Fix cpu_dying() state tracking")
+Signed-off-by: Steven Price <steven.price@arm.com>
+CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
+---
+Changes since v1[1]:
 
-The worrying part is:
+ * Added a Fixes: tag.
+ * Moved the assignment to just before cpuhp_set_state() which is the
+   first place it is needed.
 
-ifdef CONFIG_SLS
-  KBUILD_CFLAGS += -mharden-sls=all
-endif
+[1]: https://lore.kernel.org/r/20220225134918.105796-1-steven.price%40arm.com
 
-That's presumably a shiny, new compiler option, also known as a
-relatively lightly tested compiler option.
+ kernel/cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 407a2568f35e..c1324c8677cf 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -720,7 +720,6 @@ static void cpuhp_create(unsigned int cpu)
+ 
+ 	init_completion(&st->done_up);
+ 	init_completion(&st->done_down);
+-	st->cpu = cpu;
+ }
+ 
+ static int cpuhp_should_run(unsigned int cpu)
+@@ -1351,6 +1350,7 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
+ 
+ 	cpuhp_tasks_frozen = tasks_frozen;
+ 
++	st->cpu = cpu;
+ 	cpuhp_set_state(st, target);
+ 	/*
+ 	 * If the current CPU state is in the range of the AP hotplug thread,
+-- 
+2.25.1
+

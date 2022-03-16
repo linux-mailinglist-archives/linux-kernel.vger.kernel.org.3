@@ -2,49 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FD24DB7FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D034DB7FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357722AbiCPShm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S1352025AbiCPSij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239413AbiCPShi (ORCPT
+        with ESMTP id S241347AbiCPSii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:37:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA125F4CB;
-        Wed, 16 Mar 2022 11:36:24 -0700 (PDT)
+        Wed, 16 Mar 2022 14:38:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C956F6D971
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 11:37:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC8BD618D3;
-        Wed, 16 Mar 2022 18:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA04BC340EC;
-        Wed, 16 Mar 2022 18:36:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 723CFB81CA4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB06C340E9;
+        Wed, 16 Mar 2022 18:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647455783;
-        bh=5kfVOxiNs9Lfjb/f3WQydUgKBkkYnRcyc4hj7F3zqys=;
+        s=k20201202; t=1647455837;
+        bh=AeOKmCyzq1uIA6ULnTh98t5emlpFl5gxplN7rmXD6BI=;
         h=From:To:Cc:Subject:Date:From;
-        b=RUJz0qKmBWGiMdYQNI3NyveSUlZnvQbnK9DfdZE1KuSKzA0cuE8OOCJNiiysq8G5F
-         Ph71rzGyePcrhyHuHT77TMAk6oaRa/yyskiEXsvfK2cumn9zpTfJVVgE4xqJVGh8gk
-         iBNnVYYxl5elULDvrXuLkXQ8Z4FEonsPFjb9hrsZv7LccPrmqBw2srG1NQK7PiLW4I
-         TKkvxGGjwZWzF1c6oV0AXmLACydvQ/P7nL8X4phF0KdhrGAyljxLFa/ss8JcTQHO6V
-         xzOW7CjDcmIM1hlWVlBM4byVVHJo4mgG5QnM+kL+NAxFrPYwicuXU8oBoffGmdzsKJ
-         /HMU5JA5ZbzmA==
+        b=Qockax2Wfb9NicmpzRdcZsGmXxQ288gBYZ1jXZDnmCyNI5T0nA+duNoHrBT9avwLO
+         cHBehu4dH8vAvxB1d87pIy4Ov4pfvc/FeQD3LLfMhNZl99EPVsAljonngYLtCErt97
+         s7ctPZUnA2QYbgyE3OIQdB7AN1JngCj2OqJAXvFwXImb9nW5PA9va3OsazHqNgjWXv
+         uTktlMJ7CTXLAyQllkKGDxrajDY0i55gUpl223flIJQXH+Unat1Lm0L1EQdkCHAp2+
+         oAdoNjEusV0T7DUZFYsP+ojVz8hI3adWn3OWMrn55rr9XE/liQQSRJOUNKWiXIavGf
+         jER51JVbhKioQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ayala Beker <ayala.beker@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iwlwifi: mei: fix building iwlmei
-Date:   Wed, 16 Mar 2022 19:36:03 +0100
-Message-Id: <20220316183617.1470631-1-arnd@kernel.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
+Date:   Wed, 16 Mar 2022 19:36:46 +0100
+Message-Id: <20220316183708.1505846-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,36 +72,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Building iwlmei without CONFIG_CFG80211 causes a link-time warning:
+The driver fails to build when the KMS helpers are disabled:
 
-ld.lld: error: undefined symbol: ieee80211_hdrlen
->>> referenced by net.c
->>>               net/wireless/intel/iwlwifi/mei/net.o:(iwl_mei_tx_copy_to_csme) in archive drivers/built-in.a
+ld.lld: error: undefined symbol: drm_gem_fb_get_obj
+>>> referenced by drm_mipi_dbi.c
+>>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+>>> referenced by drm_mipi_dbi.c
+>>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
 
-Add an explicit dependency to avoid this. In theory it should not
-be needed here, but it also seems pointless to allow IWLMEI
-for configurations without CFG80211.
+ld.lld: error: undefined symbol: drm_gem_fb_begin_cpu_access
+>>> referenced by drm_mipi_dbi.c
+>>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+
+ld.lld: error: undefined symbol: drm_fb_swab
+>>> referenced by drm_mipi_dbi.c
+>>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+
+ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
+>>> referenced by drm_mipi_dbi.c
+>>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+
+ld.lld: error: undefined symbol: drm_fb_memcpy
+>>> referenced by drm_mipi_dbi.c
+>>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+
+This is fairly hard to hit in randconfig drivers, but it eventually
+did trigger for me in a configuration where all other DRM drivers
+are loadable modules, but DRM_PANEL_WIDECHIPS_WS2401 was built-in.
+
+Adding a dependency in all drivers that select DRM_MIPI_DBI avoids
+the problem for now, adding the dependency in DRM_MIPI_DBI as well
+should help make it easier to figure out why it breaks if someone
+forgets the dependency the next time.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/wireless/intel/iwlwifi/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/Kconfig       | 2 +-
+ drivers/gpu/drm/panel/Kconfig | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 I see this warning on 5.17-rc8, but did not test it on linux-next,
 which may already have a fix.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/Kconfig b/drivers/net/wireless/intel/iwlwifi/Kconfig
-index 85e704283755..a647a406b87b 100644
---- a/drivers/net/wireless/intel/iwlwifi/Kconfig
-+++ b/drivers/net/wireless/intel/iwlwifi/Kconfig
-@@ -139,6 +139,7 @@ config IWLMEI
- 	tristate "Intel Management Engine communication over WLAN"
- 	depends on INTEL_MEI
- 	depends on PM
-+	depends on CFG80211
- 	help
- 	  Enables the iwlmei kernel module.
+
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index b1f22e457fd0..d5ec0b77c010 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -30,7 +30,7 @@ menuconfig DRM
  
+ config DRM_MIPI_DBI
+ 	tristate
+-	depends on DRM
++	depends on DRM_KMS_HELPER
+ 
+ config DRM_MIPI_DSI
+ 	bool
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index 0aec5a10b064..96887d0efb9f 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -425,6 +425,7 @@ config DRM_PANEL_SAMSUNG_DB7430
+ 	tristate "Samsung DB7430-based DPI panels"
+ 	depends on OF && SPI && GPIOLIB
+ 	depends on BACKLIGHT_CLASS_DEVICE
++	depends on DRM_KMS_HELPER
+ 	select DRM_MIPI_DBI
+ 	help
+ 	  Say Y here if you want to enable support for the Samsung
+@@ -440,6 +441,7 @@ config DRM_PANEL_SAMSUNG_S6D16D0
+ config DRM_PANEL_SAMSUNG_S6D27A1
+ 	tristate "Samsung S6D27A1 DPI panel driver"
+ 	depends on OF && SPI && GPIOLIB
++	depends on DRM_KMS_HELPER
+ 	select DRM_MIPI_DBI
+ 	help
+ 	  Say Y here if you want to enable support for the Samsung
+@@ -476,6 +478,7 @@ config DRM_PANEL_SAMSUNG_S6E63M0_SPI
+ 	depends on SPI
+ 	depends on DRM_PANEL_SAMSUNG_S6E63M0
+ 	default DRM_PANEL_SAMSUNG_S6E63M0
++	depends on DRM_KMS_HELPER
+ 	select DRM_MIPI_DBI
+ 	help
+ 	  Say Y here if you want to be able to access the Samsung
+@@ -677,6 +680,7 @@ config DRM_PANEL_WIDECHIPS_WS2401
+ 	tristate "Widechips WS2401 DPI panel driver"
+ 	depends on SPI && GPIOLIB
+ 	depends on BACKLIGHT_CLASS_DEVICE
++	depends on DRM_KMS_HELPER
+ 	select DRM_MIPI_DBI
+ 	help
+ 	  Say Y here if you want to enable support for the Widechips WS2401 DPI
 -- 
 2.29.2
 

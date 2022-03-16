@@ -2,205 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B088E4DADC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598AB4DADC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354984AbiCPJvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S1354991AbiCPJwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354989AbiCPJvq (ORCPT
+        with ESMTP id S1353462AbiCPJwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:51:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9420063BFE;
-        Wed, 16 Mar 2022 02:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647424231; x=1678960231;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ag6lF0N6GjJ11ncqT04s+Zirja0zTp5u1TVDMYmoUzc=;
-  b=WhqwqhuEzVfpPpBtQgobDcLhayVwcBukEEgkvZK3iAfd0XX0ylaEBO3S
-   d5c7OVAn2qeXKT5iZBzb5DKah4tMAjQX6QMg3pQVkZSCFzNtHsFq3aWv4
-   Vsox/JQiH/3nWGwm2PpBMFzVqaA69VU1Rr/aLRxkWELsY9ncHu7aGHvPm
-   DqWAoqgnrAUlWus67LJmoAdXZQGFcPvpknEF9e3guBBi0dJvOgmkkZata
-   wKucj4IatsdXbce305No17RdzE1c/9bKzvF1o574R7fs66SKM1LD/XXq4
-   yNzWd51wI1qqPix/4OV/6+vtZfS8MjiLhcAkeApBJ2KR+3OnXkSmdMs+Q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="254096818"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="254096818"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 02:50:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="598645629"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 02:50:27 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 16 Mar 2022 11:50:25 +0200
-Date:   Wed, 16 Mar 2022 11:50:25 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@infradead.org>, christian@kellner.me,
-        Michael Jamet <michael.jamet@intel.com>,
-        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 2/2] thunderbolt: Use pre-boot DMA protection on AMD
- systems
-Message-ID: <YjGy4ZOnLnTyCh8p@lahna>
-References: <20220315162455.5190-1-mario.limonciello@amd.com>
- <20220315162455.5190-2-mario.limonciello@amd.com>
- <YjDDUUeZ/dvUZoDN@infradead.org>
- <BL1PR12MB5157D7B7734122684D47923AE2109@BL1PR12MB5157.namprd12.prod.outlook.com>
- <21d33a75-8c0e-7734-b3d1-dbe33cfe0ab0@arm.com>
- <7d588dfa-aa57-7be1-9cbb-61897f81bf99@amd.com>
+        Wed, 16 Mar 2022 05:52:35 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775663BE5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:51:21 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id g24so1142003lja.7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=aQmdouwyZt64K3CHs4I/+fPCcZUQHf00pgfAtsBjS/8=;
+        b=k2GCmScofpSG6NncS2vSq7Gz2rQSQuSlz4FW/k8lM75O5pptJSmJraWXBqj7Rf4ZN2
+         px/hrXkJqbbTUhxF4mJ2UUzdQMxDJPdAx6ZdU0lwERbSPW6IAAQz3Nx7vely8pKPQANW
+         YtFVs/azDd+BtrsKIydPHpuk5YpycnKWV4diYrTTd/bcbJckPrFdtFPAQWAuPnzyN2GY
+         H/d3dXfvnaFk9yc7iKTBqwte6yPS4dQ7jyxhtFuQK1UvLO9VGp8mzrLCB++QFd+Mzqk+
+         /GQ196IVjhEVEPxWJFiNlvceJdUYFr1CV4A0DJ27rJlvhbQm5jcdj9i965TUIHigDQ6l
+         8FNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=aQmdouwyZt64K3CHs4I/+fPCcZUQHf00pgfAtsBjS/8=;
+        b=HnOMuDq5ddh0VqTo0gyNr1SGrwJewv6PmdTka2RhCKeB7yce2HNEKmbZcP41ir/DBk
+         br7P/KVCQMFL4VNGv2LUorBLFWLF365dluXACYbWSW4fs46DqKH6r47Fzp46Ciisu9l1
+         ATo/tjSzzZjGuvOjiyLj4Jsml1MBVMAQiobPyBfOh/tHXMlG5UR6G9hah571fT3Uxs6P
+         /OiAO+jreva2ppoHfy1uDn6Wz+ke0OrP3uOUOa4WuIqm3HQqIUob0lNtqXlvixzvq8TO
+         BTS/nsayP3wOtFtBPeNzIiV2wI9cMXW4GeV4p+nw261CjW3SYk4l0ngxJKGhLFK6TP7O
+         fEWg==
+X-Gm-Message-State: AOAM533rDPJOTwGc6zKb4DCvCc/I300Uc76ZN3qWTTbjz4xbN2ZtkIc4
+        QtGrr0BYlDmR5Y4cMO9WBMWGbTcdxh3mRUyG5lA=
+X-Google-Smtp-Source: ABdhPJw68bIiy9XYVz386CSHTor0T8RWyy2YgN4fqBlK1vE4L6wdUvGOnNdVXMEJZFsqHpW1UYzuvg==
+X-Received: by 2002:a05:651c:4d4:b0:249:1768:81eb with SMTP id e20-20020a05651c04d400b00249176881ebmr17374006lji.329.1647424279292;
+        Wed, 16 Mar 2022 02:51:19 -0700 (PDT)
+Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
+        by smtp.gmail.com with ESMTPSA id m5-20020a2eb6c5000000b002480545ebfesm135372ljo.138.2022.03.16.02.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 02:51:18 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v4 net-next 12/15] net: dsa: Handle MST state changes
+In-Reply-To: <87zglqjkmk.fsf@waldekranz.com>
+References: <20220315002543.190587-1-tobias@waldekranz.com>
+ <20220315002543.190587-13-tobias@waldekranz.com>
+ <20220315164249.sjgi6wbdpgehc6m6@skbuf> <87zglqjkmk.fsf@waldekranz.com>
+Date:   Wed, 16 Mar 2022 10:51:17 +0100
+Message-ID: <87wngujkdm.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7d588dfa-aa57-7be1-9cbb-61897f81bf99@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Mar 16, 2022 at 10:45, Tobias Waldekranz <tobias@waldekranz.com> wrote:
+> On Tue, Mar 15, 2022 at 18:42, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> On Tue, Mar 15, 2022 at 01:25:40AM +0100, Tobias Waldekranz wrote:
+>>> Add the usual trampoline functionality from the generic DSA layer down
+>>> to the drivers for MST state changes.
+>>> 
+>>> When a state changes to disabled/blocking/listening, make sure to fast
+>>> age any dynamic entries in the affected VLANs (those controlled by the
+>>> MSTI in question).
+>>> 
+>>> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+>>> ---
+>>>  include/net/dsa.h  |  3 ++
+>>>  net/dsa/dsa_priv.h |  2 ++
+>>>  net/dsa/port.c     | 70 +++++++++++++++++++++++++++++++++++++++++++---
+>>>  net/dsa/slave.c    |  6 ++++
+>>>  4 files changed, 77 insertions(+), 4 deletions(-)
+>>> 
+>>> diff --git a/include/net/dsa.h b/include/net/dsa.h
+>>> index 1ddaa2cc5842..0f369f2e9a97 100644
+>>> --- a/include/net/dsa.h
+>>> +++ b/include/net/dsa.h
+>>> @@ -945,7 +945,10 @@ struct dsa_switch_ops {
+>>>  				     struct dsa_bridge bridge);
+>>>  	void	(*port_stp_state_set)(struct dsa_switch *ds, int port,
+>>>  				      u8 state);
+>>> +	int	(*port_mst_state_set)(struct dsa_switch *ds, int port,
+>>> +				      const struct switchdev_mst_state *state);
+>>>  	void	(*port_fast_age)(struct dsa_switch *ds, int port);
+>>> +	int	(*port_vlan_fast_age)(struct dsa_switch *ds, int port, u16 vid);
+>>>  	int	(*port_pre_bridge_flags)(struct dsa_switch *ds, int port,
+>>>  					 struct switchdev_brport_flags flags,
+>>>  					 struct netlink_ext_ack *extack);
+>>> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+>>> index d90b4cf0c9d2..2ae8996cf7c8 100644
+>>> --- a/net/dsa/dsa_priv.h
+>>> +++ b/net/dsa/dsa_priv.h
+>>> @@ -215,6 +215,8 @@ static inline struct net_device *dsa_master_find_slave(struct net_device *dev,
+>>>  void dsa_port_set_tag_protocol(struct dsa_port *cpu_dp,
+>>>  			       const struct dsa_device_ops *tag_ops);
+>>>  int dsa_port_set_state(struct dsa_port *dp, u8 state, bool do_fast_age);
+>>> +int dsa_port_set_mst_state(struct dsa_port *dp,
+>>> +			   const struct switchdev_mst_state *state);
+>>>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy);
+>>>  int dsa_port_enable(struct dsa_port *dp, struct phy_device *phy);
+>>>  void dsa_port_disable_rt(struct dsa_port *dp);
+>>> diff --git a/net/dsa/port.c b/net/dsa/port.c
+>>> index 3ac114f6fc22..a2a817bb77b1 100644
+>>> --- a/net/dsa/port.c
+>>> +++ b/net/dsa/port.c
+>>> @@ -30,12 +30,11 @@ static int dsa_port_notify(const struct dsa_port *dp, unsigned long e, void *v)
+>>>  	return dsa_tree_notify(dp->ds->dst, e, v);
+>>>  }
+>>>  
+>>> -static void dsa_port_notify_bridge_fdb_flush(const struct dsa_port *dp)
+>>> +static void dsa_port_notify_bridge_fdb_flush(const struct dsa_port *dp, u16 vid)
+>>>  {
+>>>  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
+>>>  	struct switchdev_notifier_fdb_info info = {
+>>> -		/* flush all VLANs */
+>>> -		.vid = 0,
+>>> +		.vid = vid,
+>>>  	};
+>>>  
+>>>  	/* When the port becomes standalone it has already left the bridge.
+>>> @@ -57,7 +56,42 @@ static void dsa_port_fast_age(const struct dsa_port *dp)
+>>>  
+>>>  	ds->ops->port_fast_age(ds, dp->index);
+>>>  
+>>> -	dsa_port_notify_bridge_fdb_flush(dp);
+>>> +	/* flush all VLANs */
+>>> +	dsa_port_notify_bridge_fdb_flush(dp, 0);
+>>> +}
+>>> +
+>>> +static int dsa_port_vlan_fast_age(const struct dsa_port *dp, u16 vid)
+>>> +{
+>>> +	struct dsa_switch *ds = dp->ds;
+>>> +	int err;
+>>> +
+>>> +	if (!ds->ops->port_vlan_fast_age)
+>>> +		return -EOPNOTSUPP;
+>>> +
+>>> +	err = ds->ops->port_vlan_fast_age(ds, dp->index, vid);
+>>> +
+>>> +	if (!err)
+>>> +		dsa_port_notify_bridge_fdb_flush(dp, vid);
+>>> +
+>>> +	return err;
+>>> +}
+>>> +
+>>> +static int dsa_port_msti_fast_age(const struct dsa_port *dp, u16 msti)
+>>> +{
+>>> +	DECLARE_BITMAP(vids, VLAN_N_VID) = { 0 };
+>>> +	int err, vid;
+>>> +
+>>> +	err = br_mst_get_info(dsa_port_bridge_dev_get(dp), msti, vids);
+>>> +	if (err)
+>>> +		return err;
+>>> +
+>>> +	for_each_set_bit(vid, vids, VLAN_N_VID) {
+>>> +		err = dsa_port_vlan_fast_age(dp, vid);
+>>> +		if (err)
+>>> +			return err;
+>>> +	}
+>>> +
+>>> +	return 0;
+>>>  }
+>>>  
+>>>  static bool dsa_port_can_configure_learning(struct dsa_port *dp)
+>>> @@ -118,6 +152,32 @@ static void dsa_port_set_state_now(struct dsa_port *dp, u8 state,
+>>>  		pr_err("DSA: failed to set STP state %u (%d)\n", state, err);
+>>>  }
+>>>  
+>>> +int dsa_port_set_mst_state(struct dsa_port *dp,
+>>> +			   const struct switchdev_mst_state *state)
+>>> +{
+>>> +	struct dsa_switch *ds = dp->ds;
+>>> +	int err;
+>>> +
+>>> +	if (!ds->ops->port_mst_state_set)
+>>> +		return -EOPNOTSUPP;
+>>> +
+>>> +	err = ds->ops->port_mst_state_set(ds, dp->index, state);
+>>> +	if (err)
+>>> +		return err;
+>>> +
+>>> +	if (dp->learning) {
+>>> +		switch (state->state) {
+>>> +		case BR_STATE_DISABLED:
+>>> +		case BR_STATE_BLOCKING:
+>>> +		case BR_STATE_LISTENING:
+>>
+>> Is there a requirement in br_mst_set_state() to put the switchdev
+>> notifier at the end instead of at the beginning?
+>
+> Not that I can think of. Moving it.
+>
+>> I'm tempted to ask you to introduce br_mst_get_state(), then assign
+>> old_state = br_mst_get_state(dsa_port_bridge_dev_get(dp), state->msti),
+>> then perform the VLAN fast age only on the appropriate state transitions,
+>> just like the regular fast age.
+>
+> No time like the present!
+>
+> Question though:
+>
+>>> +			err = dsa_port_msti_fast_age(dp, state->msti);
+>
+> If _msti_fast_age returns an error here, do we want that to bubble up to
+> the bridge? It seems more important to keep the bridge in sync with the
+> hardware. I.e. the hardware state has already been successfully synced,
+> we just weren't able to flush all VLANs for some reason. We could revert
+> the state I guess, but what if that fails?
+>
+> Should we settle for a log message?
 
-On Tue, Mar 15, 2022 at 01:36:11PM -0500, Limonciello, Mario wrote:
-> + Christian Kellner (Bolt userspace maintainer)
-> 
-> On 3/15/2022 13:07, Robin Murphy wrote:
-> > On 2022-03-15 16:54, Limonciello, Mario via iommu wrote:
-> > > [Public]
-> > > 
-> > > 
-> > > > On Tue, Mar 15, 2022 at 11:24:55AM -0500, Mario Limonciello wrote:
-> > > > > -     * handled natively using IOMMU. It is enabled when IOMMU is
-> > > > > -     * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
-> > > > > +     * handled natively using IOMMU. It is enabled when the IOMMU is
-> > > > > +     * enabled and either:
-> > > > > +     * ACPI DMAR table has DMAR_PLATFORM_OPT_IN set
-> > > > > +     * or
-> > > > > +     * ACPI IVRS table has DMA_REMAP bitset
-> > > > >        */
-> > > > >       return sprintf(buf, "%d\n",
-> > > > > -               iommu_present(&pci_bus_type) &&
-> > > > dmar_platform_optin());
-> > > > > +               iommu_present(&pci_bus_type) &&
-> > > > > +               (dmar_platform_optin() || amd_ivrs_remap_support()));
-> > > > 
-> > > > Yikes.  No, the thunderbot code does not have any business poking into
-> > > > either dmar_platform_optin or amd_ivrs_remap_support.  This needs
-> > > > a proper abstration from the IOMMU code.
+Or should we set the extack message? Similar to how we report software
+fallback of bridging/LAGs?
 
-I agree. When it was originally added it was only the DMAR (Intel) based
-platforms that provided this hint so adding an abstraction for that did
-not make much sense. Now, since we are seeing more and more USB4 host
-controllers and many of them support PCIe tunneling (and IOMMU) adding
-an API makes more sense.
-
-> > > 
-> > > To make sure I follow your ask - it's to make a new generic iommu
-> > > function
-> > > That would check dmar/ivrs, and switch out thunderbolt domain.c to
-> > > use the
-> > > symbol?
-> > > 
-> > > I'm happy to rework that if that is what you want.
-> > > Do you have a preferred proposed function name for that?
-> > 
-> > But why? Either IOMMU translation is enabled or it isn't, and if it is,
-> > what's to gain from guessing at *why* it might have been? And even if
-> > the IOMMU's firmware table did tell the IOMMU driver to enable the
-> > IOMMU, why should that be Thunderbolt's business?
-> A lot of this comes from baggage from early Thunderbolt 3 implementation on
-> systems with ICM (Intel's FW CM). On those systems there was a concept of
-> "Security Levels".  This meant that downstream PCIe devices were not
-> automatically authorized when a TBT3 device was plugged in.  In those cases
-> there was no guarantee that the IOMMU was in use and so the security was
-> passed on to the user to make a decision.
-> 
-> In Linux this was accomplished using the 'authorized' attribute in
-> /sys/bus/thunderbolt/devices/$NUM/authorized.  When this was set to 1 then
-> the TBT3 device and PCIe topology behind it would be enumerated.
-> 
-> Further documentation explaining how this works is available here:
-> https://www.kernel.org/doc/html/latest/admin-guide/thunderbolt.html#security-levels-and-how-to-use-them
-> 
-> (Intel based) Platforms from 2018+ w/ TBT3 started to use the IOMMU
-> consistently at runtime but had this existing implementation of security
-> levels to worry about.  Furthermore tunnels could be created pre-boot, and
-> so the thunderbolt driver may or may not re-create them based on policy.
-> 
-> So a new attribute was created "iommu_dma_protection" that userspace could
-> use as part of a policy decision to automatically authorize devices.
-> Exporting this attribute is very similar to what Microsoft does to let the
-> user see the security of the system.
-> 
-> https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection
-> 
-> In Linux today some userspace software "bolt" has a policy included by
-> default that will automatically authorize TBT3 and USB4 (w/ PCIe) devices
-> when iommu_dma_protection is set to 1.
-> 
-> > 
-> > Furthermore, looking at patch #1 I can only conclude that this is
-> > entirely meaningless anyway. AFAICS it's literally reporting whether the
-> > firmware flag was set or not. Not whether it's actually been honoured
-> > and the IOMMU is enforcing any kind of DMA protection at all. Even on
-> > Intel where the flag does at least have some effect on the IOMMU driver,
-> > that can still be overridden.
-> 
-> Take a look at the Microsoft link I shared above.  They also make policy
-> decisions based on the information in these tables.
-> 
-> > 
-> > I already have a patch refactoring this to get rid of iommu_present(),
-> > but at the time I wasn't looking to closely at what it's trying to *do*
-> > with the information. If it's supposed to accurately reflect whether the
-> > Thunderbolt device is subject to IOMMU translation and not bypassed, I
-> > can fix that too (and unexport dmar_platform_optin() in the process...)
-> > 
-> > Robin.
-> 
-> This patch series stems from that history.  To give the best experience to
-> end users you want hotplugged devices to be automatically authorized when
-> software says it's safe to do so.
-> 
-> To summarize the flow:
-> * User plugs in device
-> * USB4 CM will query supported tunnels
-> * USB4 CM will create devices in /sys/bus/thunderbolt/devices for new
-> plugged in TBT3/USB4 device
-> * "authorized" attribute will default to "0" and PCIe tunnels are not
-> created
-> * Userspace gets a uevent that the device was added
-> * Userspace (bolt) reacts by reading
-> /sys/bus/thunderbolt/devices/domainX/iommu_dma_protection
-> * If that is set to "1", bolt will write "1" to "authorized"  and USB4 CM
-> will create PCIe tunnels
-> * If that is set to "0", bolt will send an event to GUI to show a popup
-> asking to authorize the device
-> * After user acks the authorization then it will write "1" to "authorized"
-> and USB4 CM will create PCIe tunnels
-> 
-> 
-> Mika,
-> 
-> I wonder if maybe what we really want is to only use that flow for the
-> authorized attribute when using TBT3 + ICM (or IOMMU disabled at runtime).
-> If we're using a USB4 host, check IOMMU translation layer active like Robin
-> suggested and then automatically authorize from the CM.
-
-I would still leave that policy to userspace to decide.
+>>> +			break;
+>>> +		}
+>>> +	}
+>>> +
+>>> +	return err;
+>>> +}
+>>> +
+>>>  int dsa_port_enable_rt(struct dsa_port *dp, struct phy_device *phy)
+>>>  {
+>>>  	struct dsa_switch *ds = dp->ds;
+>>> @@ -326,6 +386,8 @@ static bool dsa_port_supports_mst(struct dsa_port *dp)
+>>>  	struct dsa_switch *ds = dp->ds;
+>>>  
+>>>  	return ds->ops->vlan_msti_set &&
+>>> +		ds->ops->port_mst_state_set &&
+>>> +		ds->ops->port_vlan_fast_age &&
+>>>  		dsa_port_can_configure_learning(dp);
+>>>  }
+>>>  
+>>> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+>>> index 5e986cdeaae5..4300fc76f3af 100644
+>>> --- a/net/dsa/slave.c
+>>> +++ b/net/dsa/slave.c
+>>> @@ -450,6 +450,12 @@ static int dsa_slave_port_attr_set(struct net_device *dev, const void *ctx,
+>>>  
+>>>  		ret = dsa_port_set_state(dp, attr->u.stp_state, true);
+>>>  		break;
+>>> +	case SWITCHDEV_ATTR_ID_PORT_MST_STATE:
+>>> +		if (!dsa_port_offloads_bridge_port(dp, attr->orig_dev))
+>>> +			return -EOPNOTSUPP;
+>>> +
+>>> +		ret = dsa_port_set_mst_state(dp, &attr->u.mst_state);
+>>> +		break;
+>>>  	case SWITCHDEV_ATTR_ID_BRIDGE_VLAN_FILTERING:
+>>>  		if (!dsa_port_offloads_bridge_dev(dp, attr->orig_dev))
+>>>  			return -EOPNOTSUPP;
+>>> -- 
+>>> 2.25.1
+>>> 

@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0C74DAFFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A58B4DB009
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355860AbiCPMpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 08:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S1355899AbiCPMrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 08:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346786AbiCPMo7 (ORCPT
+        with ESMTP id S1355866AbiCPMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 08:44:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEE32D1CA;
-        Wed, 16 Mar 2022 05:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647434625; x=1678970625;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=jhBBYw4CP4Lcvzt3g4Q7+TNz8lbElcc2WGmCX6PEuRY=;
-  b=MAGNOD2Eo8I88gUe/k1QPTTVciWPIijxPUT6+XgHRmNFGv5KSGaP5+7X
-   vrorsK14CZFaDNQBoUmzHGCB2c9FuVdEGO4xg1l0ejTZnYx0I0JuOwsj4
-   1t9n03USWHw+p1lmhWAMHh+M8VG/ZSXu7MfFiQCEoeJxTmEIUHvNcWclm
-   VK04pSYTub1F6tL8nZuGy8qQDA0gxjLfE2mBL02tsOdqizoX2kajCCjvY
-   lcQ84mIyxMmrqfQWCJnOIBLOy9QKqLNtKSQQFt7fR6RRysIeoAiusMSid
-   /XG6Q1G1o7ddIYhwLpqQm6d44Avf9vq24xFHTUuH1IQQKV3TTaGBNTvQQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256298221"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="256298221"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 05:43:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="646631800"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 05:43:41 -0700
-To:     Peter Chen <hzpeterchen@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        mathias.nyman@intel.com, Alan Stern <stern@rowland.harvard.edu>,
-        USB list <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
- <Yi7xJy70XZCA8RyN@kroah.com>
- <CAL411-o_2PSndEVXfa+ciLukSr5u5w8G9T63d2MpSm2Fpn5QTQ@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Message-ID: <d95ca5f6-221b-1a22-abbe-10621e2fb219@linux.intel.com>
-Date:   Wed, 16 Mar 2022 14:45:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Wed, 16 Mar 2022 08:47:34 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67456548D;
+        Wed, 16 Mar 2022 05:46:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22GAA4Yv013540;
+        Wed, 16 Mar 2022 13:46:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=xQ0LY62N9ucJsRtmmS7ed7yZVgwJC7hBULDEdrXmsp4=;
+ b=G4WdUUHjUULb5wZFHpgXbt+9XrzcIJGjvHqHnwzTy2OYZm4wBWHgOPosiBoGiR/A4EwU
+ i2PITWsjEAiXSXozHLkKLunwDQ78rhPamMfdh/eU6hgUHUhQVYmkjhrLEa7AZ9YHWyJF
+ G/TKfojRwbwnrPLZp6kOggJlY4/9dryVtg0dd7wYghiwi8ncRdTneh+x6jCq9OLsQzRK
+ TxVVco+Aj6SOu8Qb7kv7EIUmgSbB6Tjd8SJWi3XWyHOMuvZVRs4Lo0yg2QjFnWN/Dfbe
+ GS3J6w4IWazcy+PU68kjXw2NGvg+aMNvtzlqWEPo0gs4258x7W+YWtso03H8Wm/9MBPo kw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et63hdhen-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 13:46:02 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CA00310002A;
+        Wed, 16 Mar 2022 13:45:57 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B3729226FB3;
+        Wed, 16 Mar 2022 13:45:57 +0100 (CET)
+Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 16 Mar 2022 13:45:57
+ +0100
+From:   <gabriel.fernandez@foss.st.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 00/13] Introduction of STM32MP13 RCC driver (Reset Clock Controller)
+Date:   Wed, 16 Mar 2022 13:45:40 +0100
+Message-ID: <20220316124553.6818-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAL411-o_2PSndEVXfa+ciLukSr5u5w8G9T63d2MpSm2Fpn5QTQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-16_04,2022-03-15_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +75,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.3.2022 13.57, Peter Chen wrote:
-> On Mon, Mar 14, 2022 at 10:34 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>
->> On Mon, Mar 14, 2022 at 03:25:23PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
->>> On some situations, software handles TRB events slower than adding TRBs,
->>> xhci_irq will not exit until all events are handled. If xhci_irq just
->>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records
->>> in xhci irq is equal to driver current dequeue pointer. It will cause driver
->>> not update ERDP and software dequeue pointer lost sync with ERDP. On the
->>> next xhci_irq, the event ring is full but driver will not update ERDP as
->>> software dequeue pointer is equal to ERDP.
-> 
-> At the current driver, the ERDP is updated at most 128 TRBs, how is
-> the above condition
-> triggered?
-> 
-> Peter
-> 
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Before, and during _one_ interrupt handling xHC hardware writes exactly 256 events
-to event ring. ring buffer size is 256 so buffer position 0 and 256 point
-to the same place.
+v3:
+  - cosmetic change from Stephen Boyd
+  - rename some functions in clk-stm32-core
+  - add missing static for variables or functions
 
-Interrupt handler stores software dequeue in a local variable "event_ring_deq".
-Handler start handling events, it updates software dequeue, but not local variable.
-After 128 events handler updates hardware ERDP.
+v2:
+  - Resend because patch 9,10,12,13 has not been sent
+  - add Reviewed by Krzysztof Kozlowski for patch 1
 
-So at event 128 we got:
-Hardware ERDP = 128
-software dequeue = 128
-event_ring_deq = 0
+Gabriel Fernandez (13):
+  dt-bindings: rcc: stm32: add new compatible for STM32MP13 SoC
+  clk: stm32: Introduce STM32MP13 RCC drivers (Reset Clock Controller)
+  clk: stm32mp13: add stm32_mux clock management
+  clk: stm32mp13: add stm32_gate management
+  clk: stm32mp13: add stm32 divider clock
+  clk: stm32mp13: add composite clock
+  clk: stm32mp13: manage secured clocks
+  clk: stm32mp13: add all STM32MP13 peripheral clocks
+  clk: stm32mp13: add all STM32MP13 kernel clocks
+  clk: stm32mp13: add multi mux function
+  clk: stm32mp13: add safe mux management
+  ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP13
+  ARM: dts: stm32: add RCC on STM32MP13x SoC family
 
-Handler continue handling events, at event 256 try to update HW ERDP again, but fail due
-to this condition in update_erst_dequeue():
-      if (event_ring_deq != xhci->event_ring->dequeue)
+ .../bindings/clock/st,stm32mp1-rcc.yaml       |    2 +
+ arch/arm/boot/dts/stm32mp131.dtsi             |  128 +-
+ arch/arm/boot/dts/stm32mp133.dtsi             |    4 +-
+ arch/arm/boot/dts/stm32mp13xf.dtsi            |    3 +-
+ drivers/clk/Kconfig                           |    5 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/stm32/Makefile                    |    1 +
+ drivers/clk/stm32/clk-stm32-core.c            |  695 +++++++
+ drivers/clk/stm32/clk-stm32-core.h            |  188 ++
+ drivers/clk/stm32/clk-stm32mp13.c             | 1620 +++++++++++++++
+ drivers/clk/stm32/reset-stm32.c               |  122 ++
+ drivers/clk/stm32/reset-stm32.h               |    8 +
+ drivers/clk/stm32/stm32mp13_rcc.h             | 1748 +++++++++++++++++
+ include/dt-bindings/clock/stm32mp13-clks.h    |  229 +++
+ include/dt-bindings/reset/stm32mp13-resets.h  |  100 +
+ 15 files changed, 4794 insertions(+), 60 deletions(-)
+ create mode 100644 drivers/clk/stm32/Makefile
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.c
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.h
+ create mode 100644 drivers/clk/stm32/clk-stm32mp13.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.h
+ create mode 100644 drivers/clk/stm32/stm32mp13_rcc.h
+ create mode 100644 include/dt-bindings/clock/stm32mp13-clks.h
+ create mode 100644 include/dt-bindings/reset/stm32mp13-resets.h
 
-This fails because event_ring_deq is still 0, and software deq is 256,
-pointing to the same place in the event ring.
+-- 
+2.25.1
 
-So at the end of the interrupt handler we have:
-HW ERDP = 128
-software dequeue = 256 (same as 0)
-
-So in this specific case we fail to update ERDP correctly
-
--Mathias

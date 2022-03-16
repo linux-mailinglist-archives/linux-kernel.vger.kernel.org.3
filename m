@@ -2,267 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F69F4DACF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A2E4DACF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348849AbiCPIzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S1354663AbiCPI5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346087AbiCPIzH (ORCPT
+        with ESMTP id S1345549AbiCPI5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:55:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9661E381B9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:53:53 -0700 (PDT)
+        Wed, 16 Mar 2022 04:57:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FC3247049
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647420832;
+        s=mimecast20190719; t=1647420958;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BGSquJZfEU0XpxQDlJiQ9Nf/2e2vYgQ8cePX8MYx0lw=;
-        b=NaKceCeMzi+8eQlwKGa3FS+Iztj9I5oSF9mwUzNFWradIwQ//MNrP6fSyC6Nh89MJ6e7yF
-        AN2ChVQHV+hfjkk6Xo1ETvaS8JgFu16VG6LL2f3QTVWSw/uNNgMW7P124QI2S6V5Y5JzKw
-        kIZKb0YCmp+SR++5wz9a0TEtqMcmWjI=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=mOXL/dlYJ9Y7q9KmoEp9L9wBQeuY/rwi8nHu81o4BOc=;
+        b=Zjv+GKkD8TLQ5L/+ylqi/uX42nbdw2sUnxFBTaSL8L/We9CAzqttDt8SRvP4qXMI9JjZJh
+        LfbPgLEsh8R6ceM4RmTisfY8/9B7winDw5/FBKuq4LCaq2R5cO4tLQQGQQTbgByxxZMXx/
+        97YPcjhcwsbWuDSacO0fxDWkgOJH4NI=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-151-Pv7d2SSCMZqUAl5L1ikAHQ-1; Wed, 16 Mar 2022 04:53:51 -0400
-X-MC-Unique: Pv7d2SSCMZqUAl5L1ikAHQ-1
-Received: by mail-qt1-f199.google.com with SMTP id q24-20020ac87358000000b002e063c3d15aso1082440qtp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:53:51 -0700 (PDT)
+ us-mta-102-Z0TrKOyqMje-WVHsFJ9hzw-1; Wed, 16 Mar 2022 04:55:56 -0400
+X-MC-Unique: Z0TrKOyqMje-WVHsFJ9hzw-1
+Received: by mail-wr1-f70.google.com with SMTP id z1-20020adfec81000000b001f1f7e7ec99so315631wrn.17
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:55:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BGSquJZfEU0XpxQDlJiQ9Nf/2e2vYgQ8cePX8MYx0lw=;
-        b=trWpwUeNS9NT1/esoAuyXYNejnqFQCFp3B3qMJjdw/pm/efPNKcfLQ7oDQI8JQuKRm
-         UWGzvJ01pibM91dF32pCVQ9NslrIDIPh15YxD6K/VHJK5YwoIL8oaQkHrlTHZCDpGa7w
-         EKC/pjoeS3aCFX+HuKSr0zFGYYiznunhd73gloHPgOWainY/vyVkAMiEFVI9GfuP+nGH
-         aEjxBsvRWRz9f6Ly+f/Lsi6pNP5hpDhljqjVIVRllva0lXStyCl4w4erVHtM5qBsXe/r
-         6j1+8qz4XDeEEm53rIsSvWRRINslLXiFGckM41KRyTfiRrKcyeOnLsKX/OO1kSA4xnEB
-         NPKw==
-X-Gm-Message-State: AOAM530nM2tIzlzFpJBjYkaUvGKY2vn0Y3nNP8e2cZzlTXDExsrBBZ1/
-        xnn94YXHcV/92CHAUGtt+s2gcuyi/F9wnOqKLnHyJCKzHEwX4N8G4rojVEgwvyedwuDVEvJcU77
-        M0B4LW8n9Hhf+1DwUV6m6QcTM
-X-Received: by 2002:a05:620a:4085:b0:67b:315b:a09f with SMTP id f5-20020a05620a408500b0067b315ba09fmr20513445qko.334.1647420830984;
-        Wed, 16 Mar 2022 01:53:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwb/nFj3dDrpxdws1scoeFcog8y/RQk9LTO0D1ZDQQyiweerrLDje3qSyAQR/5kQ8Sr9cHm0Q==
-X-Received: by 2002:a05:620a:4085:b0:67b:315b:a09f with SMTP id f5-20020a05620a408500b0067b315ba09fmr20513439qko.334.1647420830768;
-        Wed, 16 Mar 2022 01:53:50 -0700 (PDT)
-Received: from sgarzare-redhat (host-212-171-187-184.retail.telecomitalia.it. [212.171.187.184])
-        by smtp.gmail.com with ESMTPSA id t66-20020ae9df45000000b0064915aff85fsm638399qkf.45.2022.03.16.01.53.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 01:53:50 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 09:53:45 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-Cc:     Krasnov Arseniy <oxffffaa@gmail.com>,
-        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 2/2] af_vsock: SOCK_SEQPACKET broken buffer test
-Message-ID: <20220316085345.ajfmnzg3vx3o3vgs@sgarzare-redhat>
-References: <1474b149-7d4c-27b2-7e5c-ef00a718db76@sberdevices.ru>
- <415368cd-81b3-e2fd-fbed-65cacfc43850@sberdevices.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=mOXL/dlYJ9Y7q9KmoEp9L9wBQeuY/rwi8nHu81o4BOc=;
+        b=l0Nqs0vvylnimwDzs9YFJeTqPbIZugOaLh8STkB+cM2fCZXeHU2KzOdD4KUI+q9jow
+         H7/5FIuF9MoXDDUvWu07MwykT4ybtqfFqnlzg/OAs6GzWSMW3TgL2zlHypoGwbh84Ko8
+         GfPFFmJXBFQJpsNFN+V+/rXjM84FbRaYWQwnRoGCN9Hq7cCqPvco9xSF34gUYFpnj+ml
+         mIKPlWE1sSDHSO5BJ5xQgRBP1DNCflonx9SfsVOwG0DfBlisKb7p6+FTcHFDJ3PdTh7w
+         d1s9Vx69/xxcQ8kazpI9Am8V2546BW+xs4e0e/2AhHv7lV5VxmFmmeHiVHMY1NzxdzuG
+         JV5g==
+X-Gm-Message-State: AOAM5327u2T3ahPB+62S2jrJ6QqwFubs95IbbCqtaBPhfbNnz/6A/x3F
+        Qgp0T84QJTo/OF4hjL2OEKpabmU1Y7U5zdgwwkjh7iECLYUl6iufSGyut0OQfaouOfdOfle3Tqa
+        SLW5d3Wciql/eocebwdytKx8O
+X-Received: by 2002:a05:6000:2c9:b0:1f0:49aa:d347 with SMTP id o9-20020a05600002c900b001f049aad347mr23452348wry.453.1647420955620;
+        Wed, 16 Mar 2022 01:55:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxyd7sa+0eL137AIqkXqTEIJzbfdMHDmQgaMRZl52+qq2qpQhfpnTOOt6EPW7m4NTjXbmHuow==
+X-Received: by 2002:a05:6000:2c9:b0:1f0:49aa:d347 with SMTP id o9-20020a05600002c900b001f049aad347mr23452321wry.453.1647420955257;
+        Wed, 16 Mar 2022 01:55:55 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:f900:aa79:cd25:e0:32d1? (p200300cbc706f900aa79cd2500e032d1.dip0.t-ipconnect.de. [2003:cb:c706:f900:aa79:cd25:e0:32d1])
+        by smtp.gmail.com with ESMTPSA id g26-20020a05600c4c9a00b00389a48b68bdsm1078382wmp.10.2022.03.16.01.55.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 01:55:54 -0700 (PDT)
+Message-ID: <b47a93fe-da50-d0d4-be8f-87071bf181f9@redhat.com>
+Date:   Wed, 16 Mar 2022 09:55:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <415368cd-81b3-e2fd-fbed-65cacfc43850@sberdevices.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20220315085014.1047291-1-usama.anjum@collabora.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH V4 1/2] selftests: vm: bring common functions to a new
+ file
+In-Reply-To: <20220315085014.1047291-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 07:29:28AM +0000, Krasnov Arseniy Vladimirovich wrote:
->Add test where sender sends two message, each with own
->data pattern. Reader tries to read first to broken buffer:
->it has three pages size, but middle page is unmapped. Then,
->reader tries to read second message to valid buffer. Test
->checks, that uncopied part of first message was dropped
->and thus not copied as part of second message.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> v1 -> v2:
-> 1) Use 'fprintf()' instead of 'perror()' where 'errno' variable
->    is not affected.
-> 2) Replace word "invalid" -> "unexpected".
->
-> tools/testing/vsock/vsock_test.c | 132 +++++++++++++++++++++++++++++++
-> 1 file changed, 132 insertions(+)
->
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index 6d7648cce5aa..1132bcd8ddb7 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -17,6 +17,7 @@
-> #include <sys/types.h>
-> #include <sys/socket.h>
-> #include <time.h>
->+#include <sys/mman.h>
->
-> #include "timeout.h"
-> #include "control.h"
->@@ -465,6 +466,132 @@ static void test_seqpacket_timeout_server(const struct test_opts *opts)
-> 	close(fd);
-> }
->
->+#define BUF_PATTERN_1 'a'
->+#define BUF_PATTERN_2 'b'
->+
->+static void test_seqpacket_invalid_rec_buffer_client(const struct test_opts *opts)
->+{
->+	int fd;
->+	unsigned char *buf1;
->+	unsigned char *buf2;
->+	int buf_size = getpagesize() * 3;
->+
->+	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
->+	if (fd < 0) {
->+		perror("connect");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	buf1 = malloc(buf_size);
->+	if (buf1 == NULL) {
->+		perror("'malloc()' for 'buf1'");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	buf2 = malloc(buf_size);
->+	if (buf2 == NULL) {
->+		perror("'malloc()' for 'buf2'");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	memset(buf1, BUF_PATTERN_1, buf_size);
->+	memset(buf2, BUF_PATTERN_2, buf_size);
->+
->+	if (send(fd, buf1, buf_size, 0) != buf_size) {
->+		perror("send failed");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (send(fd, buf2, buf_size, 0) != buf_size) {
->+		perror("send failed");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	close(fd);
->+}
->+
->+static void test_seqpacket_invalid_rec_buffer_server(const struct test_opts *opts)
->+{
->+	int fd;
->+	unsigned char *broken_buf;
->+	unsigned char *valid_buf;
->+	int page_size = getpagesize();
->+	int buf_size = page_size * 3;
->+	ssize_t res;
->+	int prot = PROT_READ | PROT_WRITE;
->+	int flags = MAP_PRIVATE | MAP_ANONYMOUS;
->+	int i;
->+
->+	fd = vsock_seqpacket_accept(VMADDR_CID_ANY, 1234, NULL);
->+	if (fd < 0) {
->+		perror("accept");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Setup first buffer. */
->+	broken_buf = mmap(NULL, buf_size, prot, flags, -1, 0);
->+	if (broken_buf == MAP_FAILED) {
->+		perror("mmap for 'broken_buf'");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Unmap "hole" in buffer. */
->+	if (munmap(broken_buf + page_size, page_size)) {
->+		perror("'broken_buf' setup");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	valid_buf = mmap(NULL, buf_size, prot, flags, -1, 0);
->+	if (valid_buf == MAP_FAILED) {
->+		perror("mmap for 'valid_buf'");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Try to fill buffer with unmapped middle. */
->+	res = read(fd, broken_buf, buf_size);
->+	if (res != -1) {
->+		fprintf(stderr,
->+			"expected 'broken_buf' read(2) failure, got %zi\n",
->+			res);
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (errno != ENOMEM) {
->+		perror("unexpected errno of 'broken_buf'");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Try to fill valid buffer. */
->+	res = read(fd, valid_buf, buf_size);
->+	if (res < 0) {
->+		perror("unexpected 'valid_buf' read(2) failure");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (res != buf_size) {
->+		fprintf(stderr,
->+			"invalid 'valid_buf' read(2), got %zi, expected %i\n",
->+			res, buf_size);
+On 15.03.22 09:50, Muhammad Usama Anjum wrote:
+> Bring common functions to a new file. These functions can be used in the
+> new tests. This helps in code duplication.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/vm/Makefile           |   7 +-
+>  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
+>  .../selftests/vm/split_huge_page_test.c       |  77 +------------
+>  tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
+>  tools/testing/selftests/vm/vm_util.h          |  15 +++
+>  5 files changed, 125 insertions(+), 111 deletions(-)
+>  create mode 100644 tools/testing/selftests/vm/vm_util.c
+>  create mode 100644 tools/testing/selftests/vm/vm_util.h
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 5e43f072f5b76..4e68edb26d6b6 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
+>  TEST_GEN_FILES += hugepage-shm
+>  TEST_GEN_FILES += hugepage-vmemmap
+>  TEST_GEN_FILES += khugepaged
+> -TEST_GEN_FILES += madv_populate
+> +TEST_GEN_PROGS = madv_populate
+>  TEST_GEN_FILES += map_fixed_noreplace
+>  TEST_GEN_FILES += map_hugetlb
+>  TEST_GEN_FILES += map_populate
+> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+>  TEST_GEN_FILES += thuge-gen
+>  TEST_GEN_FILES += transhuge-stress
+>  TEST_GEN_FILES += userfaultfd
+> -TEST_GEN_FILES += split_huge_page_test
+> +TEST_GEN_PROGS += split_huge_page_test
+>  TEST_GEN_FILES += ksm_tests
+>  
+>  ifeq ($(MACHINE),x86_64)
+> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
+>  KSFT_KHDR_INSTALL := 1
+>  include ../lib.mk
+>  
+> +$(OUTPUT)/madv_populate: vm_util.c
+> +$(OUTPUT)/split_huge_page_test: vm_util.c
+> +
 
-I would suggest to use always the same pattern in the error messages:
-"expected X, got Y".
 
-The rest LGTM.
+[...]
 
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	for (i = 0; i < buf_size; i++) {
->+		if (valid_buf[i] != BUF_PATTERN_2) {
->+			fprintf(stderr,
->+				"invalid pattern for 'valid_buf' at %i, expected %hhX, got %hhX\n",
->+				i, BUF_PATTERN_2, valid_buf[i]);
->+			exit(EXIT_FAILURE);
->+		}
->+	}
->+
->+
->+	/* Unmap buffers. */
->+	munmap(broken_buf, page_size);
->+	munmap(broken_buf + page_size * 2, page_size);
->+	munmap(valid_buf, buf_size);
->+	close(fd);
->+}
->+
-> static struct test_case test_cases[] = {
-> 	{
-> 		.name = "SOCK_STREAM connection reset",
->@@ -510,6 +637,11 @@ static struct test_case test_cases[] = {
-> 		.run_client = test_seqpacket_timeout_client,
-> 		.run_server = test_seqpacket_timeout_server,
-> 	},
->+	{
->+		.name = "SOCK_SEQPACKET invalid receive buffer",
->+		.run_client = test_seqpacket_invalid_rec_buffer_client,
->+		.run_server = test_seqpacket_invalid_rec_buffer_server,
->+	},
-> 	{},
-> };
->
->-- 
->2.25.1
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <stdbool.h>
+> +#include <string.h>
+> +#include "vm_util.h"
+> +
+> +uint64_t pagemap_get_entry(int fd, char *start)
+> +{
+> +	const unsigned long pfn = (unsigned long)start / getpagesize();
+> +	uint64_t entry;
+> +	int ret;
+> +
+> +	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
+> +	if (ret != sizeof(entry))
+> +		ksft_exit_fail_msg("reading pagemap failed\n");
+> +	return entry;
+> +}
+> +
+> +bool pagemap_is_softdirty(int fd, char *start)
+> +{
+> +	uint64_t entry = pagemap_get_entry(fd, start);
+> +
+> +	return ((entry >> DIRTY_BIT_LOCATION) & 1);
+> +}
+
+Please leave code you're moving around as untouched as possible to avoid
+unrelated bugs that happen by mistake and are hard to review.
+
+> +
+> +void clear_softdirty(void)
+> +{
+> +	int ret;
+> +	const char *ctrl = "4";
+> +	int fd = open("/proc/self/clear_refs", O_WRONLY);
+> +
+> +	if (fd < 0)
+> +		ksft_exit_fail_msg("opening clear_refs failed\n");
+> +	ret = write(fd, ctrl, strlen(ctrl));
+> +	close(fd);
+> +	if (ret != strlen(ctrl))
+> +		ksft_exit_fail_msg("writing clear_refs failed\n");
+> +}
+> +
+> +
+> +static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
+> +{
+> +	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
+> +		if (!strncmp(buf, pattern, strlen(pattern)))
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+> +uint64_t read_pmd_pagesize(void)
+> +{
+> +	int fd;
+> +	char buf[20];
+> +	ssize_t num_read;
+> +
+> +	fd = open(PMD_SIZE, O_RDONLY);
+> +	if (fd == -1)
+> +		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
+> +
+> +	num_read = read(fd, buf, 19);
+> +	if (num_read < 1) {
+> +		close(fd);
+> +		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
+> +	}
+> +	buf[num_read] = '\0';
+> +	close(fd);
+> +
+> +	return strtoul(buf, NULL, 10);
+> +}
+> +
+> +uint64_t check_huge(void *addr)
+> +{
+> +	uint64_t thp = 0;
+> +	int ret;
+> +	FILE *fp;
+> +	char buffer[MAX_LINE_LENGTH];
+> +	char addr_pattern[MAX_LINE_LENGTH];
+> +
+> +	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
+> +		       (unsigned long) addr);
+> +	if (ret >= MAX_LINE_LENGTH)
+> +		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
+> +
+> +	fp = fopen(SMAP, "r");
+> +	if (!fp)
+> +		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
+> +
+> +	if (!check_for_pattern(fp, addr_pattern, buffer))
+> +		goto err_out;
+> +
+> +	/*
+> +	 * Fetch the AnonHugePages: in the same block and check the number of
+> +	 * hugepages.
+> +	 */
+> +	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
+> +		goto err_out;
+> +
+> +	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
+> +		ksft_exit_fail_msg("Reading smap error\n");
+> +
+> +err_out:
+> +	fclose(fp);
+> +	return thp;
+> +}
+> diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
+> new file mode 100644
+> index 0000000000000..7522dbb859f0f
+> --- /dev/null
+> +++ b/tools/testing/selftests/vm/vm_util.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#include <stdint.h>
+> +#include <fcntl.h>
+> +#include "../kselftest.h"
+> +
+> +#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
+
+Ehm no. PMD_SIZE_PATH at best -- just as it used to.
+
+> +#define	SMAP			"/proc/self/smaps"
+
+SMAPS_PATH
+
+> +#define	DIRTY_BIT_LOCATION	55
+
+Please inline that just as it used to. There is no value in a magic
+define without any proper namespace.
+
+> +#define	MAX_LINE_LENGTH		512
+
+This used to be 500. Why the change?
+
+
+Also: weird indentation and these all look like the should go into
+vm_util.c. They are not used outside that file.
+
+
+
+-- 
+Thanks,
+
+David / dhildenb
 

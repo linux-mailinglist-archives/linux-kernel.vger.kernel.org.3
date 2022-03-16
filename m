@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561DE4DAC5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C445B4DAC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354497AbiCPIYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S1354506AbiCPIYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiCPIYk (ORCPT
+        with ESMTP id S238004AbiCPIYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:24:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16097DF43
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:23:24 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 09:23:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647419001;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KufJwsnfI5CF+IvC8AFaW/fYYl7ZQPnkJ0/TGFXMWf4=;
-        b=u3498QkUVfjcu0P9/or7uHAM2kFHX8yrHC3/Ad7Hr8PtWbpM1SeXJ9qcYuDk8TGlxds1l9
-        J0njii7Fuqd3+3worrsQXicjU/B8GCTEv3Rl8MY783bkTAXdA0b4FRf3gaoCp16F/6rWPt
-        qfAO+zksAHwHZPCFHEJkxg8/d35qRF5uC5nLS0JsCyAjtIGh8326wqP/cY2vlkTTXI/TbK
-        kdlX8+NCPfpd4WNWcSVRtVfvhreS6Me5ApE28NHTKDSX8Byhl0CWk+2609xHKvSOMX2zaK
-        YyxTzXuFlh/yvxswsTeFINOAl+cSDRVFRNnChMAltf6aY/IV0GRjP4V0zJp0UA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647419001;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KufJwsnfI5CF+IvC8AFaW/fYYl7ZQPnkJ0/TGFXMWf4=;
-        b=rr70YkguRBrIGAO97ABRjUp0zDrOik+5WMNNmvkQECrFBjtcckXVVO6KvEFR2eLRbqY8Om
-        qO9kX3x6nFof4nBQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] ptrace: fix ptrace vs tasklist_lock race on PREEMPT_RT.
-Message-ID: <YjGed4pvP1RM9liz@linutronix.de>
-References: <Yh/b19JikC+Vnm8i@linutronix.de>
- <20220314185429.GA30364@redhat.com>
- <YjBO8yzxdmjTGNiy@linutronix.de>
- <20220315142944.GA22670@redhat.com>
+        Wed, 16 Mar 2022 04:24:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A22DF49;
+        Wed, 16 Mar 2022 01:23:40 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KJNYB2MP5z67MkT;
+        Wed, 16 Mar 2022 16:22:06 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 16 Mar 2022 09:23:38 +0100
+Received: from [10.47.84.96] (10.47.84.96) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 16 Mar
+ 2022 08:23:37 +0000
+Message-ID: <650c667f-ca55-821d-4e0f-29fce69a68fc@huawei.com>
+Date:   Wed, 16 Mar 2022 08:23:34 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220315142944.GA22670@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH RFC 2/2] libata: Use scsi cmnd budget token for qc tag for
+ SAS host
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <bvanassche@acm.org>, <ming.lei@redhat.com>, <hch@lst.de>,
+        <hare@suse.de>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <martin.wilck@suse.com>
+References: <1647340746-17600-1-git-send-email-john.garry@huawei.com>
+ <1647340746-17600-3-git-send-email-john.garry@huawei.com>
+ <99541f2d-2aea-6bd7-e3b6-21dbc355875d@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <99541f2d-2aea-6bd7-e3b6-21dbc355875d@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.84.96]
+X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,42 +60,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-15 15:29:46 [+0100], Oleg Nesterov wrote:
-> > > > --- a/kernel/sched/core.c
-> > > > +++ b/kernel/sched/core.c
-> > > > @@ -3239,7 +3239,8 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
-> > > >  		 * is actually now running somewhere else!
-> > > >  		 */
-> > > >  		while (task_running(rq, p)) {
-> > > > -			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
-> > > > +			if (match_state &&
-> > > > +			    unlikely(!task_state_match_eq(p, match_state)))
-> > > >  				return 0;
-> > >
-> > > So wait_task_inactive() can return 0 but the task can run after that, right?
-> > > This is not what we want...
-> >
-> > Without checking both states you may never observe the requested state
-> > because it is set to TASK_RTLOCK_WAIT while waiting for a lock. Other
-> > than that, it may run briefly because it tries to acquire a lock or just
-> > acquired and this shouldn't be different from a task spinning on a lock.
-> 
-> I don't understand. wait_task_inactive() is used to ensure that this task
-> doesn't and can't run again, until debugger resumes these tracee.
-> 
-> Now. Unless I missed something, the tracee can leave CPU with saved_state
-> = TRACED (so task_state_match_eq() returns T) and wait_task_inactive() will
-> return. Then later the tracee will park in schedule again, yes.
-> 
-> But, for example, what if debugger clears TIF_BLOCKSTEP in between, while
-> the tracee is running? Can't this race with __switch_to_xtra() ?
+Hi Damien,
 
-If you describe like that, then it appears better to only look at
-->state. Otherwise, yes, you would see the expected state in
-->saved_state and the task might still be on the CPU. Even if it is not
-actually running/ on the runqueue, it could be the case if the lock has
-been made available shortly after.
+>> -	}
+>> -	return -1;
+>> +	return scmd->budget_token;
+>>   }
+> Since this is now not actually allocating a tag, I would rename this
+> something like ata_sas_get_tag(). Or even better, simply open code this
+> in ata_qc_new_init() since that is the only caller.
 
-> Oleg.
+ok, I think it might be better to open code in ata_qc_new_init(), as 
+suggested. That should avoid the need for the return -1 call.
 
-Sebastian
+> 
+>>   
+>>   void ata_sas_free_tag(unsigned int tag, struct ata_port *ap)
+>>   {
+>> -	clear_bit(tag, &ap->sas_tag_allocated);
+>>   }
+> This is called only in ata_qc_free(). With this change, the function is
+> empty, so let's completely remove it.
+> 
+
+ok
+
+>>   
+>>   /**
+>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+>> index ed8be585a98f..45d63a2ba3ee 100644
+>> --- a/drivers/ata/libata-scsi.c
+>> +++ b/drivers/ata/libata-scsi.c
+>> @@ -640,7 +640,7 @@ static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
+>>   {
+
+Thanks,
+John

@@ -2,108 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5A34DB59F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F764DB590
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355026AbiCPQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S244990AbiCPQEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344655AbiCPQI6 (ORCPT
+        with ESMTP id S234859AbiCPQEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:08:58 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014705FF07
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:07:43 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id qt6so5161971ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sfyn51iMEtZOW1VvGz9/zKro/mJL/U+AGtoyS/q05lk=;
-        b=IxJzMGVBQ3dqOjwnT0kNvGBM1q4ToNrQ8MnPmSDiP9yfNiOStXUVcBRVnxaULD6+qQ
-         iDehTRiYAMHSCxlwKAHGVWuwY43EtSG7VmF2E+DrfhETaC+kwkg1Zw7nn0Mt77iaYVPS
-         eI5jjYFFkS7OLX94NFKpBzVwOSR3Cj742b3BY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sfyn51iMEtZOW1VvGz9/zKro/mJL/U+AGtoyS/q05lk=;
-        b=AHBxPXIRZFN93kFMtw0wtL37Ujzguv8aTe3otnxx0L5dboWxE7g5M4r8k6XnRcckWW
-         GWFkcIeQXPEhiH1MeGPrvCYOzx6m5DDOyLT7yZY5pa38Nk/6NOpDgAks5XBCkB0/rzh7
-         oxiEUV6VI1rl8ENfsSPW5Z3CNhaJ0EtTuPe1nCqhZI0+hOv9cL/er6+oNeY7gA9A3jlX
-         +blBBu23PqspU+PtnkkQ4hZRl10jL6g1bHNziYV0xV2lA9g3cox61sKGk7zCdqucsiWA
-         3aEYzqgwBNFaaNEGHL1Yrjdf+s9uWpzeTKdGp4WxFZAfln6k5Qdafv+E5Pc4KvhSJuX0
-         sTng==
-X-Gm-Message-State: AOAM533CZ0/Nn4fxQovh9EfBiDUtJup7YaF9cwyA4Mbf+fsxZhoq9i/O
-        x3Qh7WgtL+LPDj6TuZDJ44j3dr5WegMJsxOLIYw=
-X-Google-Smtp-Source: ABdhPJx8UhA0vDw6KSYRlO1VUJ+Qn3FuTeeNGV0wc/atfNqjoqnF7OHic9hdJAj6ZMfvEawmLH679g==
-X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id l8-20020a170906794800b006da64ed178emr562072ejo.523.1647446858301;
-        Wed, 16 Mar 2022 09:07:38 -0700 (PDT)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709060cc200b006d3d91e88c7sm1053754ejh.214.2022.03.16.09.07.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 09:07:36 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id qa43so5145185ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:07:35 -0700 (PDT)
-X-Received: by 2002:ac2:4f92:0:b0:448:7eab:c004 with SMTP id
- z18-20020ac24f92000000b004487eabc004mr184326lfs.27.1647446495212; Wed, 16 Mar
- 2022 09:01:35 -0700 (PDT)
+        Wed, 16 Mar 2022 12:04:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FBE4EA2D
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:03:16 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 17:03:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647446594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hQRxvCGWz5JjZ5mxKrBGw2/uRU2quWW8b9gTuwsLi08=;
+        b=zUJ/PTUFN88JQUjr3/q4NVB3+mFVpG94J5I6ycNIA6tKPg9nBZU/6cmeURuXEBErmMWUn9
+        7HI1j6HhpRySNlEWGVqTnnr4eOR/Ongjo7fp1As/aFz4BkNcskVNP3ZHzWnYPrkGZbkbpR
+        83Rfywiflvfns7lZAwmuc1AYzG8MQ/s41W912TH5nniE7f7rTsXnYGCJ3xhqcGr0UCb4Qk
+        6MD7SgedyJQ+0Qeq1LElF5SRTmfrEH2aI+EPEMrrGpIuDNVa0AU7PP7lwAPrFr9w8Z2js6
+        jMq1jSsZLcoPy26nEG8r3nAym+4u6lF1VknXxn9SBxltjv63ZotBAMQN8qFD/A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647446594;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hQRxvCGWz5JjZ5mxKrBGw2/uRU2quWW8b9gTuwsLi08=;
+        b=NWoxNFiv9Oc5+egiMdKxzZhIjMZZhmDoCwajc6mvhC2fgIuvYmJEL3BjPaudKIF1tLO9m4
+        mhTED40dYRHizDBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: sched_core_balance() releasing interrupts with pi_lock held
+Message-ID: <YjIKQBIbJR/kRR+N@linutronix.de>
+References: <20220308161455.036e9933@gandalf.local.home>
+ <20220315174606.02959816@gandalf.local.home>
 MIME-Version: 1.0
-References: <0000000000009e7a1905b8295829@google.com> <00000000000003887a05da3e872c@google.com>
- <CAHk-=wj4HBk7o8_dbpk=YiTOFxvE9LTiH8Gk=1kgVxOq1jaH7g@mail.gmail.com> <CACT4Y+atgbwmYmiYqhFQT9_oHw5cD5oyp5bNyCJNz34wSaMgmg@mail.gmail.com>
-In-Reply-To: <CACT4Y+atgbwmYmiYqhFQT9_oHw5cD5oyp5bNyCJNz34wSaMgmg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 16 Mar 2022 09:01:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj270g1sHyvvMz99d5x5A_2BXJExzKGNhF1Ch8Y2Mi0pA@mail.gmail.com>
-Message-ID: <CAHk-=wj270g1sHyvvMz99d5x5A_2BXJExzKGNhF1Ch8Y2Mi0pA@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        ath9k-devel@qca.qualcomm.com, chouhan.shreyansh630@gmail.com,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:USB GADGET/PERIPHERAL SUBSYSTEM" 
-        <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Zekun Shen <bruceshenzk@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220315174606.02959816@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 12:45 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> But the bug looks to be fixed by something anyway. git log on the file
-> pretty clearly points to:
->
-> #syz fix: ath9k: Fix out-of-bound memcpy in ath9k_hif_usb_rx_stream
+On 2022-03-15 17:46:06 [-0400], Steven Rostedt wrote:
+> On Tue, 8 Mar 2022 16:14:55 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > Hi Peter,
+> 
+> Have you had time to look into this?
 
-Yeah, that commit 6ce708f54cc8 looks a lot more likely to have any
-effect on this than my version bump that the syzbot bisection pointed
-to.
+yes, I can confirm that it is a problem ;) So I did this:
 
-But kernels containing that commit still have that
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 33ce5cd113d8..56c286aaa01f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5950,7 +5950,6 @@ static bool try_steal_cookie(int this, int that)
+ 	unsigned long cookie;
+ 	bool success = false;
+ 
+-	local_irq_disable();
+ 	double_rq_lock(dst, src);
+ 
+ 	cookie = dst->core->core_cookie;
+@@ -5989,7 +5988,6 @@ static bool try_steal_cookie(int this, int that)
+ 
+ unlock:
+ 	double_rq_unlock(dst, src);
+-	local_irq_enable();
+ 
+ 	return success;
+ }
+@@ -6019,7 +6017,7 @@ static void sched_core_balance(struct rq *rq)
+ 
+ 	preempt_disable();
+ 	rcu_read_lock();
+-	raw_spin_rq_unlock_irq(rq);
++	raw_spin_rq_unlock(rq);
+ 	for_each_domain(cpu, sd) {
+ 		if (need_resched())
+ 			break;
+@@ -6027,7 +6025,7 @@ static void sched_core_balance(struct rq *rq)
+ 		if (steal_cookie_task(cpu, sd))
+ 			break;
+ 	}
+-	raw_spin_rq_lock_irq(rq);
++	raw_spin_rq_lock(rq);
+ 	rcu_read_unlock();
+ 	preempt_enable();
+ }
 
-  run #0: crashed: KASAN: use-after-free Read in ath9k_hif_usb_rx_cb
 
-so apparently it isn't actually fully fixed. ;(
+which looked right but RT still fall apart:
 
-                 Linus
+| =====================================
+| WARNING: bad unlock balance detected!
+| 5.17.0-rc8-rt14+ #10 Not tainted
+| -------------------------------------
+| gcc/2608 is trying to release lock ((lock)) at:
+| [<ffffffff8135a150>] folio_add_lru+0x60/0x90
+| but there are no more locks to release!
+| 
+| other info that might help us debug this:
+| 4 locks held by gcc/2608:
+|  #0: ffff88826ea6efe0 (&sb->s_type->i_mutex_key#12){++++}-{3:3}, at: xfs_ilock+0x90/0xd0
+|  #1: ffff88826ea6f1a0 (mapping.invalidate_lock#2){++++}-{3:3}, at: page_cache_ra_unbounded+0x8e/0x1f0
+|  #2: ffff88852aba8d18 ((lock)#3){+.+.}-{2:2}, at: folio_add_lru+0x2a/0x90
+|  #3: ffffffff829a5140 (rcu_read_lock){....}-{1:2}, at: rt_spin_lock+0x5/0xe0
+| 
+| stack backtrace:
+| CPU: 18 PID: 2608 Comm: gcc Not tainted 5.17.0-rc8-rt14+ #10
+| Hardware name: Intel Corporation S2600CP/S2600CP, BIOS SE5C600.86B.02.03.0003.041920141333 04/19/2014
+| Call Trace:
+|  <TASK>
+|  dump_stack_lvl+0x4a/0x62
+|  lock_release.cold+0x32/0x37
+|  rt_spin_unlock+0x17/0x80
+|  folio_add_lru+0x60/0x90
+|  filemap_add_folio+0x53/0xa0
+|  page_cache_ra_unbounded+0x1c3/0x1f0
+|  filemap_get_pages+0xe3/0x5b0
+|  filemap_read+0xc5/0x2f0
+|  xfs_file_buffered_read+0x6b/0x1a0
+|  xfs_file_read_iter+0x6a/0xd0
+|  new_sync_read+0x11b/0x1a0
+|  vfs_read+0x134/0x1d0
+|  ksys_read+0x68/0xf0
+|  do_syscall_64+0x59/0x80
+|  entry_SYSCALL_64_after_hwframe+0x44/0xae
+| RIP: 0033:0x7f3feab7310e
+
+It is always the local-lock that is breaks apart. Based on "locks held"
+and the lock it tries to release it looks like the lock was acquired on
+CPU-A and released on CPU-B.
+
+> Thanks,
+> 
+> -- Steve
+
+Sebastian

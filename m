@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A1D4DBB42
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C374DBB46
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350039AbiCPXn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S1348481AbiCPXoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352178AbiCPXnZ (ORCPT
+        with ESMTP id S238833AbiCPXoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:43:25 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7EF1B7B7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:42:06 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id f38so7318718ybi.3
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:42:06 -0700 (PDT)
+        Wed, 16 Mar 2022 19:44:01 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9F11AD86;
+        Wed, 16 Mar 2022 16:42:45 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j17so5185075wrc.0;
+        Wed, 16 Mar 2022 16:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IE2Ea1Cz8v1eLhlB/b4Le+DL8OUHmAt2PXNs7TNdYyo=;
-        b=ER72S7HFC008I9si0CLcY2Yjgn92FTTnxYAWgV/xZsbR8TntqsInYe5JWzjOPXFo8S
-         m1FjJ/EF+HY952bZaCaPh6p/vag21pmK9zMwEM+jBa2CTu6G52PYVMMj+od2uod0M+R/
-         YhABNZVBsE/YqUzLiwiEGMl7x0R/msYx+IuMQAK2a7JVXcH0cVN/5jt4WdOATvY/YFme
-         /6Cx+6b5tQtNjvt4453yzJ4MNSqqs2iUY/x5gOyWApD4VJWZRBKMmIt+c8T4IqMriJMB
-         R5awjV8maBUntFQxzaA/QoQ3vdaT4wX8TFpaLk2oGE6PZo2KBxFwVArNra11iAajEAvp
-         jylw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9GllwDD1lbwf5TdbQUghkmXuyp60McuGtPv3Aj+W5Go=;
+        b=mDD+sPjAuJQoC7C5Am/WO2Wsonxpx/hUAZwYXHzAT+YKEM1o7bO8aHOT+QrRd8RXrn
+         xEscKX2S0JBAQcGrmW2ytZ9rJVP4VdoZtFOTHAcovTBpvQQswajvJ82OjCzgQpi6Hrmm
+         7WblHE81ndtm6zkv/2xcteUc6rBDb1MUy4OLgKn9BPx//0/Iz9iNVnyCtlnpBIkoZ8+Z
+         KprSeQA/4qYN4/6aOd5PTsN6YAcfoYUdEUaTx15tVhmc983SMhdpc29cuaOZ6fIVcrUx
+         JWJvLMHmP++asFHbwV6cPpjpRqmCxufxxA8A9wR+0vVCsNAJDpiXvNRn1l395a3HQw7u
+         ZxVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IE2Ea1Cz8v1eLhlB/b4Le+DL8OUHmAt2PXNs7TNdYyo=;
-        b=ovS4T6+/ZO0qogBj8Mrnj7OJaI0H3vzkALH8fWsrS8wKGDdDQ0TdwzV5F+SlXqEp3a
-         Krv6m+T0YIi1HTDjsULq0UiK7uUk0luynxurtS5ba6UkPwNCenE2MUwfaCEapMwquLqo
-         Mb9WHrj8qQOGvV69AyIR3P0tn8dDzsxfWh41iz2Fy+66OsgHbGGizZJqCKH6OTtNGY69
-         lP0AIka3ds1PZ5bCSCa6CyKaR+zGyAfunnZAg0xa9lCz/pKuz3z/YAxSFomJWpiBe9K7
-         0dFQK5stMVFqbo2C5y/g8Xlb5wLbLSFvDCc2LHB/zEGdL/1QYuk3uqwiqN3JFlbxkDtD
-         QemA==
-X-Gm-Message-State: AOAM532BAmuXAk86ySXUX1wl2Mj4fMNzsVMqZiaXqFfnuLMV34fiAJNj
-        rrYGkyBvgjVMCiBv5zLvNeWUVQHKFNQi+OrLVWRql/x5unkGRA==
-X-Google-Smtp-Source: ABdhPJzqz46JGmqxBDLRnCpVdoH9nYY9SgLKyI8nxa65ZhXp3xjQz+PNbeXq6UT9EcgDZkdJ6rRORP/8KhCR/rDTue8=
-X-Received: by 2002:a25:2308:0:b0:628:9a66:7327 with SMTP id
- j8-20020a252308000000b006289a667327mr2490701ybj.626.1647474125953; Wed, 16
- Mar 2022 16:42:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9GllwDD1lbwf5TdbQUghkmXuyp60McuGtPv3Aj+W5Go=;
+        b=1CAcdhVyJTYoMkQHTSXtCRng8qVY07elJwM4kixUNg0xVy29wE6THkRahWa0xTFO4Q
+         z4uiE/7fnF1kn5WYyaH+7X9ghcDlWuhJO2cz5agWncp5vG+7FwrCMhh8mBwnz3gqJOls
+         mTowpa9cZJ62yGRH+KN8GMWU0QM5Rg4wfY4gQDuAnvAlRttoUhEnXQdIHqrHG6sRBJ7m
+         EOQzaOEuwcc+0f6FUBCgs6t9iyEGoIxP0IUJSrzpnvgCp+vjvFclLRM8eulpARc5Kwr5
+         HTEY9C8lm75C0k1RzfjDkQhfZ/f4gx/eQa+oA0rVd0bgsYnIG3kwMBaao+TU7nemGmYf
+         /IOQ==
+X-Gm-Message-State: AOAM53300YoICbvrtsn/HLDQWHCGMuomONu65MMm4RSIWi5CmT4+4j0P
+        kNgZz25rGhD8KUfZRF8Ei2F0QilBamKfIw==
+X-Google-Smtp-Source: ABdhPJx+ifk/0d/5lefPj0dTm/N0bmsw3Ym25Aw1wpy8wOkWUPMJBtSc4nAyoD2h3byfIx2uXXl4sQ==
+X-Received: by 2002:a5d:64c5:0:b0:1f1:e6b8:bd3c with SMTP id f5-20020a5d64c5000000b001f1e6b8bd3cmr1711097wri.686.1647474164008;
+        Wed, 16 Mar 2022 16:42:44 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a14-20020a05600c348e00b00389ab74c033sm2779518wmq.4.2022.03.16.16.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 16:42:43 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rtw89: Fix spelling mistake "Mis-Match" -> "Mismatch"
+Date:   Wed, 16 Mar 2022 23:42:42 +0000
+Message-Id: <20220316234242.55515-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220316141636.248324-1-sashal@kernel.org> <20220316141636.248324-10-sashal@kernel.org>
- <CACRpkdZU_wv74MeRiO_bMV03Gwp=8LamsPOGMEpY8Rm-X2Aq8w@mail.gmail.com> <YjIS9KENmMgXQejZ@sashalap>
-In-Reply-To: <YjIS9KENmMgXQejZ@sashalap>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 17 Mar 2022 00:41:54 +0100
-Message-ID: <CACRpkdbQtP8G975s46t9-94BsvtLO3Vys99ap2=9ZR1ykLyhKw@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.10 10/12] gpio: Revert regression in sysfs-gpio (gpiolib.c)
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 5:40 PM Sasha Levin <sashal@kernel.org> wrote:
-> On Wed, Mar 16, 2022 at 05:06:47PM +0100, Linus Walleij wrote:
-> >On Wed, Mar 16, 2022 at 3:17 PM Sasha Levin <sashal@kernel.org> wrote:
-> >
-> >> From: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
-> >>
-> >> [ Upstream commit fc328a7d1fcce263db0b046917a66f3aa6e68719 ]
-> >>
-> >> Some GPIO lines have stopped working after the patch
-> >> commit 2ab73c6d8323f ("gpio: Support GPIO controllers without pin-ranges")
-> >>
-> >> And this has supposedly been fixed in the following patches
-> >> commit 89ad556b7f96a ("gpio: Avoid using pin ranges with !PINCTRL")
-> >> commit 6dbbf84603961 ("gpiolib: Don't free if pin ranges are not defined")
-> >>
-> >> But an erratic behavior where some GPIO lines work while others do not work
-> >> has been introduced.
-> >>
-> >> This patch reverts those changes so that the sysfs-gpio interface works
-> >> properly again.
-> >>
-> >> Signed-off-by: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
-> >> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> >> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> >
-> >
-> >I think you should not apply this for stable, because we will revert the revert.
->
-> Okay, I'll give it a week to soak and if the revert is in by then I can
-> just pick it too for the sake of completeness.
+There are some spelling mistakes in some literal strings. Fix them.
 
-The revert of the revert is already in Linus' tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=56e337f2cf1326323844927a04e9dbce9a244835
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/wireless/realtek/rtw89/coex.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
+index 07f26718b66f..99abd0fe7f15 100644
+--- a/drivers/net/wireless/realtek/rtw89/coex.c
++++ b/drivers/net/wireless/realtek/rtw89/coex.c
+@@ -4623,12 +4623,12 @@ static void _show_cx_info(struct rtw89_dev *rtwdev, struct seq_file *m)
+ 	ver_hotfix = FIELD_GET(GENMASK(15, 8), chip->wlcx_desired);
+ 	seq_printf(m, "(%s, desired:%d.%d.%d), ",
+ 		   (wl->ver_info.fw_coex >= chip->wlcx_desired ?
+-		   "Match" : "Mis-Match"), ver_main, ver_sub, ver_hotfix);
++		   "Match" : "Mismatch"), ver_main, ver_sub, ver_hotfix);
+ 
+ 	seq_printf(m, "BT_FW_coex:%d(%s, desired:%d)\n",
+ 		   bt->ver_info.fw_coex,
+ 		   (bt->ver_info.fw_coex >= chip->btcx_desired ?
+-		   "Match" : "Mis-Match"), chip->btcx_desired);
++		   "Match" : "Mismatch"), chip->btcx_desired);
+ 
+ 	if (bt->enable.now && bt->ver_info.fw == 0)
+ 		rtw89_btc_fw_en_rpt(rtwdev, RPT_EN_BT_VER_INFO, true);
+@@ -5075,7 +5075,7 @@ static void _show_dm_info(struct rtw89_dev *rtwdev, struct seq_file *m)
+ 	seq_printf(m, "leak_ap:%d, fw_offload:%s%s\n", dm->leak_ap,
+ 		   (BTC_CX_FW_OFFLOAD ? "Y" : "N"),
+ 		   (dm->wl_fw_cx_offload == BTC_CX_FW_OFFLOAD ?
+-		    "" : "(Mis-Match!!)"));
++		    "" : "(Mismatch!!)"));
+ 
+ 	if (dm->rf_trx_para.wl_tx_power == 0xff)
+ 		seq_printf(m,
+-- 
+2.35.1
+

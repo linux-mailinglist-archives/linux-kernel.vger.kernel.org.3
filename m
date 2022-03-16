@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3E34DA89C
+	by mail.lfdr.de (Postfix) with ESMTP id 12D8B4DA89B
 	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353257AbiCPCuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S1353342AbiCPCuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiCPCuE (ORCPT
+        with ESMTP id S1353332AbiCPCuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:50:04 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB36BF65
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:48:50 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so3855166pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:48:50 -0700 (PDT)
+        Tue, 15 Mar 2022 22:50:08 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C2E12ADF
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:48:53 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id h2so1974954pfh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=F+9Lk/ZaOrFy64xMvd6xSLhdg3ceUuM8DcyhbPt/GUM=;
-        b=t32YKnrPGUxZ5shZ99fWStzfMUkFlC1Lj9TCief1G7+4rubHcPZCBW99KdgQrIoNB6
-         atAh1RryHo5uqi5Gx3OY5qF014LUWmMiEIwgWtAwocyP0sU/Mg8x0GVnZypuPgsNkqpp
-         Zz6eOomO9XKNL88zcrqmCS1AeIENLF3YgGcEzNgqGs9mzR9VmjtCtvPzo7t4/vFZm5HD
-         Tm8VI3wqWOatHyzn4bhprFp4M7kFjkUbav8yO8TOREOEP7MLAsCte5twThcAn3HBNQ5Y
-         pbqYBjWbVRb+js8vPRpr3JxHDbRWvosFQbQuDpaE5s3sc2oOkWtC12PwgWQi0RnKFH8O
-         Yl6w==
+        bh=c0M/K+1eFLxLow4mbMiKmCtwBH2b7Lm5/YgoYLc2Jig=;
+        b=ccnR7riMJqNwgZKJTM2DdghxvC0pBG+VaqFAgWWSVY3XbJo1wzpiYHpMGXq6otq1N5
+         iV8gtOwV9NKjqsLy/hqESzwgOkqPUwSvvHuU1SEZFxe1rNeyGRIg+UIJQLfaOLdcICtO
+         tv3bmG2kU2UvPdFt56vzYO6xr5RC+UdbajNEk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=F+9Lk/ZaOrFy64xMvd6xSLhdg3ceUuM8DcyhbPt/GUM=;
-        b=cAo42W3cvm6aFqRAQ7pmJTFhbhDvNqy9VjjH3YCliuFlU2mIkhQdVoDQcRm1ZCDkFr
-         ZTBUdcVfAZMqSOHfkw9+ZXSs+oiNWf9uBXnCLL5EXDKguIgivjhHuZ1Hhxijn7ERnseG
-         AgVEl49CUQT8dU5t9VDmJoTrT73b7bPmyPHKD6fGdJLVPk45gHicEpWWUIWA8mt0e5Om
-         TMDVpZKxAmvbEWS3sPW8s4oupLu2T6VlvZeZPuqM/Vkbcj7ootzhcbs48Ic02aSjpmZa
-         XZg3HSaJ/D8TJJKTY8Mri/SmqsjAfBovhjNVO0J3QFN1HHmf8qy8axGH65t+svXWa58v
-         BUlQ==
-X-Gm-Message-State: AOAM531O5u1LMOdG7GwOZZNn6vZwyI1LtsKXHtqvoOnAN/wacRRdTvz7
-        pYRtHjLnszMx8+FRdRoOh/uNeA==
-X-Google-Smtp-Source: ABdhPJxJpa5gzfSyzonLKOeAhPe6n4QlorqfcbOtWa28voaFWTFtbrkhQvbHibqjpCMnoGlB62iB/w==
-X-Received: by 2002:a17:90b:4f92:b0:1bf:25e2:f6af with SMTP id qe18-20020a17090b4f9200b001bf25e2f6afmr7931464pjb.98.1647398929987;
-        Tue, 15 Mar 2022 19:48:49 -0700 (PDT)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id j17-20020a634a51000000b00378f9c90e66sm616942pgl.39.2022.03.15.19.48.48
+        bh=c0M/K+1eFLxLow4mbMiKmCtwBH2b7Lm5/YgoYLc2Jig=;
+        b=q2YRBwoYp62iq1BZTr7rdR4MBJl6SReGLuBmugfDx+NFMiVUKSQBKwG6izH5C0qzlP
+         C9AJQLfXbRoc479NuoUgKpgmy9t4nOmARAP7goOyD8b7q7Jox1d2rrSzJru1d8OcCqsp
+         YWckYULDc/3/XGC9iHpWqvP+sWarii1IPOnNFmcIqHZngVY1i4kwRg+zwmRCykTva9jM
+         8fnOqfxfbFypXCY78R0RhNxTK59OyYNaH0wAgbY3rZhlA6bSw/kIc0Gq0BZS2As6RZMM
+         8rxFAz5j4bAKf+PJ4ZRU+1BeC+dxE6Fcl6kg6AWjN3r0/a24I4u1m+s2czxSqXqVdqHb
+         LuIw==
+X-Gm-Message-State: AOAM530IbGz1LVxM4wEL4VfycpKKa6OZ8AoozBfz+cpgwbGBUTofxKlq
+        cS4CAszxkaKi5JovOyoH6c0W+A==
+X-Google-Smtp-Source: ABdhPJzVMfVBFpio8c9aEyIZlnXkq8spdnH7j/vo6Y0rcslj0Xy3iCQRbPgKW1yb2pCz+OY5DqegAg==
+X-Received: by 2002:a05:6a00:1350:b0:4f7:8c4f:cfca with SMTP id k16-20020a056a00135000b004f78c4fcfcamr24609313pfu.45.1647398933483;
+        Tue, 15 Mar 2022 19:48:53 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k3-20020a056a00168300b004f7e60da26csm503648pfc.182.2022.03.15.19.48.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 19:48:49 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 10:48:44 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, maz@kernel.org
-Subject: Re: [PATCH -next] irqchip/irq-qcom-mpm: fix return value check in
- qcom_mpm_init()
-Message-ID: <20220316024844.GA282154@dragon>
-References: <20220316025100.1758413-1-yangyingliang@huawei.com>
+        Tue, 15 Mar 2022 19:48:53 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 19:48:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Brown, Len" <len.brown@intel.com>
+Subject: Re: [PATCH 1/3] x86: Separate out x86_regset for 32 and 64 bit
+Message-ID: <202203151948.E5076F4BB@keescook>
+References: <20220315201706.7576-1-rick.p.edgecombe@intel.com>
+ <20220315201706.7576-2-rick.p.edgecombe@intel.com>
+ <202203151340.7447F75BDC@keescook>
+ <fe7ce2ae1011b240e3a6ee8b0425ff3e2c675b6d.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220316025100.1758413-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <fe7ce2ae1011b240e3a6ee8b0425ff3e2c675b6d.camel@intel.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,35 +78,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 10:51:00AM +0800, Yang Yingliang wrote:
-> If devm_platform_ioremap_resource() fails, it never returns
-> NULL, replace NULL check with IS_ERR().
+On Tue, Mar 15, 2022 at 09:53:13PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2022-03-15 at 13:41 -0700, Kees Cook wrote:
+> > Have you verified there's no binary difference in machine code
+> > output?
 > 
-> Fixes: a6199bb514d8 ("irqchip: Add Qualcomm MPM controller driver")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/irqchip/irq-qcom-mpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-qcom-mpm.c b/drivers/irqchip/irq-qcom-mpm.c
-> index eea5a753618c..d30614661eea 100644
-> --- a/drivers/irqchip/irq-qcom-mpm.c
-> +++ b/drivers/irqchip/irq-qcom-mpm.c
-> @@ -375,7 +375,7 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
->  	raw_spin_lock_init(&priv->lock);
->  
->  	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (!priv->base)
-> +	if (IS_ERR(priv->base))
+> There actually was a different in the binaries. I investigated a bit,
+> and it seemed at least part of it was due to the line numbers changing
+> the WARN_ON()s. But otherwise, I assumed some compiler optimization
+> must have been bumped.
 
-Oops!  Thanks for the fixing!
+Right, you can ignore all the debugging line number changes.
+"diffoscope" should help see the difference by section. As long as the
+actual object code isn't changing, you should be good.
 
-Acked-by: Shawn Guo <shawn.guo@linaro.org>
-
->  		return PTR_ERR(priv->base);
->  
->  	for (i = 0; i < priv->reg_stride; i++) {
-> -- 
-> 2.25.1
-> 
+-- 
+Kees Cook

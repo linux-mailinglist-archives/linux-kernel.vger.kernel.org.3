@@ -2,69 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAC64DADAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E544DADBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350495AbiCPJnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
+        id S1354976AbiCPJvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiCPJnq (ORCPT
+        with ESMTP id S241720AbiCPJve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:43:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAE0C65485
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:42:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47F1B1476;
-        Wed, 16 Mar 2022 02:42:32 -0700 (PDT)
-Received: from [10.163.34.65] (unknown [10.163.34.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B61933F73D;
-        Wed, 16 Mar 2022 02:42:30 -0700 (PDT)
-Message-ID: <dad20ecc-efcd-4d3b-9d60-b5ad0b2c2c4b@arm.com>
-Date:   Wed, 16 Mar 2022 15:12:35 +0530
+        Wed, 16 Mar 2022 05:51:34 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE701606D5;
+        Wed, 16 Mar 2022 02:50:19 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KJQT84XtZz67MtS;
+        Wed, 16 Mar 2022 17:48:44 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 16 Mar 2022 10:50:17 +0100
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Mar 2022 09:50:14 +0000
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <damien.lemoal@opensource.wdc.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <bvanassche@acm.org>,
+        <martin.wilck@suse.com>, <ming.lei@redhat.com>, <hch@lst.de>,
+        <hare@suse.de>, John Garry <john.garry@huawei.com>
+Subject: [PATCH v2] scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()
+Date:   Wed, 16 Mar 2022 17:44:30 +0800
+Message-ID: <1647423870-143867-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] mm: add access/dirty bit on numa page fault
-Content-Language: en-US
-To:     maobibo <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220316010836.1137084-1-maobibo@loongson.cn>
- <93302a47-9fda-25c7-4212-41b8dd027696@arm.com>
- <3756661c-d710-7bf6-76ab-39ac44f8e8b3@loongson.cn>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <3756661c-d710-7bf6-76ab-39ac44f8e8b3@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In commit edb854a3680b ("scsi: core: Reallocate device's budget map on
+queue depth change"), the sbitmap for the device budget map may be
+reallocated after the slave device depth is configured.
 
+When the sbitmap is reallocated we use the result from
+scsi_device_max_queue_depth() for the sbitmap size, but don't resize to
+match the actual device queue depth.
 
-On 3/16/22 12:33, maobibo wrote:
-> 
-> On 03/16/2022 02:43 PM, Anshuman Khandual wrote:
->>
->> On 3/16/22 06:38, Bibo Mao wrote:
->>> During numa page fault, dirty bit can be added for old pte if
->>> fail to migrate on write fault. And if it succeeds to migrate,
->>> access bit can be added for migrated new pte, also dirty bit
->>> can be added for write fault.
->> The current code does not set the access and dirty bits when ever
->> applicable i.e on FAULT_FLAG_WRITE, on the pte (old if migration
->> fails, new if migration succeeds) ? Did not this cause any problem
->> earlier ? I am wondering how this might have gone unnoticed.
+Fix by resizing the sbitmap after reallocating the budget sbitmap. We do
+this instead of init'ing the sbitmap to the device queue depth as the user
+may want to change the queue depth later via sysfs or other.
 
-> On arm/x86 platform hw will set access/dirty bits automatically,
-> however on MIPS platform access/dirty bits are set by software in next
-> page fault, it is relatively easier to watch on MIPS platform.
+Fixes: edb854a3680b ("scsi: core: Reallocate device's budget map on queue depth change")
+Signed-off-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+---
+Changes since v1 (apart from sending as a separate patch):
+- Add fixes and RB tag (thanks)
+- mention in commit message why we don't init sbitmap at queue depth
 
-Could you please update this in the commit message as well ?
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index f4e6c68ac99e..2ef78083f1ef 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -223,6 +223,8 @@ static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
+ 	int ret;
+ 	struct sbitmap sb_backup;
+ 
++	depth = min_t(unsigned int, depth, scsi_device_max_queue_depth(sdev));
++
+ 	/*
+ 	 * realloc if new shift is calculated, which is caused by setting
+ 	 * up one new default queue depth after calling ->slave_configure
+@@ -245,6 +247,9 @@ static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
+ 				scsi_device_max_queue_depth(sdev),
+ 				new_shift, GFP_KERNEL,
+ 				sdev->request_queue->node, false, true);
++	if (!ret)
++		sbitmap_resize(&sdev->budget_map, depth);
++
+ 	if (need_free) {
+ 		if (ret)
+ 			sdev->budget_map = sb_backup;
+-- 
+2.26.2
+

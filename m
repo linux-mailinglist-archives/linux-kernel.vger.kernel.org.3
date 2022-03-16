@@ -2,58 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDC44DA8D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F332B4DA8D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353450AbiCPDS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S1343716AbiCPDXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234584AbiCPDSY (ORCPT
+        with ESMTP id S238491AbiCPDWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:18:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB84E5E15C;
-        Tue, 15 Mar 2022 20:17:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A336FB8181C;
-        Wed, 16 Mar 2022 03:17:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6187C340E8;
-        Wed, 16 Mar 2022 03:17:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647400628;
-        bh=PlSgv56mxNRopY1yc16lOuudQ7ENlgRXJivgph2Ss9M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UGPsFoLJYgTGlZ8MU0IVJ+3MuoMplzorQGMbSsXLoCyfFEKaiRK3+TYtaOfynic2m
-         hZWSpYmyL6rCTW/6D3M0L26M1HviLCZjpIuKbvq1gYizHSCjiKPZ/KmvvQMuNwUcyt
-         xOBuGqSHSC4W3sDacQczboPIPIksiFQ4notEKneTAEIB+ATiZl8qmGlAIUVOMV3Ms1
-         Nw1azlYZNZi58uJTV56EoeGZRK5SIuAo1+1kzgbGHjpbFKi7j7FOG2EWccTsNeK7qb
-         BgMB2kTc+O8VBHFLVtIfz+wDbeNAcIVv8u7BivUe2mwN6v2v7ml2bVCclcmNydvjLl
-         JRa/hfmpuIvDQ==
-Date:   Tue, 15 Mar 2022 20:17:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     dsahern@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        xeb@mail.ru, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Biao Jiang <benbjiang@tencent.com>
-Subject: Re: [PATCH net-next 3/3] net: ipgre: add skb drop reasons to
- gre_rcv()
-Message-ID: <20220315201706.464d5ecd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220314133312.336653-4-imagedong@tencent.com>
-References: <20220314133312.336653-1-imagedong@tencent.com>
-        <20220314133312.336653-4-imagedong@tencent.com>
+        Tue, 15 Mar 2022 23:22:55 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891A45E762
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1647400902; x=1678936902;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0tMGg/mjHRA0kNh/9cBNcvbCDCHUiiq3kSLRADxKok0=;
+  b=NZHOJwxVJHNhuh95isxtfRfEOwCV+CjLl56x5vqJEoW2rMz1lbMwSaZj
+   MffTAVqCs6M4W0smn1tpmsnJrBraAvn5TQ44KGAf9NUe6rsCDlqc4Zx+n
+   46+ZjXKmhgvFxsGBYluc3AAYBZu7NcVj93dq5XQ5TKMMpAn+8IEuxiHf5
+   ErESlW3wp0AkO0phZ43FtVzxfdZ6TNIL/QjQ6lbULc3L46Vl/27Jh146n
+   jtlRtsY4DM15cLLmgIbGQGScAmi211U1HrIZb2vZ+7X4LuJ5kbmbXyXzs
+   zuQS6YMQL/knpmT13fAsjoVcYAoj2VxF7voWYZAJMjLQkxmUt/5/bRqVc
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,185,1643644800"; 
+   d="scan'208";a="195467712"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 16 Mar 2022 11:21:40 +0800
+IronPort-SDR: Qvypa5yiwgHCyzndws3UoHOnha3XmntvnNZnp503EV4usfEqxt99eldU9GJ7+G2jd0aE/ESUqH
+ hc2NAld06xVUV2XaSsPYkM85FybK3mQAc1dquNvWogJSnhkBWL579JUOchET4nC+cvcsJJE/9y
+ /t0LS1x5ev3jtYcdjrjSaf+mlFaje0MRx2QYOVGbGZJD333pqFGYpHPS1IpnWrvqj0KU5pO5zV
+ xc1cL9wrdg0DZrIpo3wupEUYL59XHe3dggGFgS+G80AaZOjx27t2hU9v7ECsg2kC83Vp2cJZ/x
+ 1UMgCFEdAz3SoXFHp3E+ie+A
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:52:47 -0700
+IronPort-SDR: Nb3a4kgw59ga1686jhC45htnS81v56CGfZWE8fbjk/IbG74SII+uovmqYpxJIN9AX93KQ1zs/8
+ w4TpON+Yhzc464loVKLGUhoBo6DsZmolIEihse2Ou+iIRHoPn/X1prIKfM5U2XWY2fk/vDkBwQ
+ xDU9SIVtwYUaFojxtqRCtaaKHJYs0B599+Pn/4z0/7+4akNo/CJOhhFNIk+TbugXnYeusPIjSn
+ cMhPCD8xSsnZPYo2BYLQJpEO5txdZirtuqJeYm5gCrre2I22Jgd470n5tvcnO+MMQtj/kKJ8tB
+ b+E=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 20:21:40 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KJFtX0QZDz1SVp4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:21:40 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1647400899; x=1649992900; bh=0tMGg/mjHRA0kNh/9cBNcvbCDCHUiiq3kSL
+        RADxKok0=; b=kcmRmBF///NauREsS7z15RCUw/ujRh+Uxq2qhXPSge3oP9gyMWv
+        ZeFIi5eva7hzNg/HnkouVgm8KbvEMbUONguydZ6tVeecpl5qTuHj7GatkT7bYmEK
+        p8aYKDOSz68qFrgaHlA577sdOG7iNcFBtR5L3TrZbCScO+nj6BWFLJBmimomTmlj
+        UNu2CHTn2nc/iIWV5S/0UAArZE4miI9gcLZWvg/psyCx2ddsvk5OjKorvpuQn3UF
+        grB86yScjJhiSyql2/GzVvGWkuvOzLQlH3ErX1DM10xWgdyDeN7P9xo0ozipfYCN
+        2gY3sf6CiPbZzFia/diJcm+Qa/De49851lQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QyNpS93T5k99 for <linux-kernel@vger.kernel.org>;
+        Tue, 15 Mar 2022 20:21:39 -0700 (PDT)
+Received: from [10.225.163.101] (unknown [10.225.163.101])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KJFtT0d3pz1Rvlx;
+        Tue, 15 Mar 2022 20:21:36 -0700 (PDT)
+Message-ID: <99541f2d-2aea-6bd7-e3b6-21dbc355875d@opensource.wdc.com>
+Date:   Wed, 16 Mar 2022 12:21:35 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH RFC 2/2] libata: Use scsi cmnd budget token for qc tag for
+ SAS host
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, bvanassche@acm.org,
+        ming.lei@redhat.com, hch@lst.de, hare@suse.de
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.wilck@suse.com
+References: <1647340746-17600-1-git-send-email-john.garry@huawei.com>
+ <1647340746-17600-3-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1647340746-17600-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,112 +102,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 21:33:12 +0800 menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+On 3/15/22 19:39, John Garry wrote:
+> For attaining a qc tag for a SAS host we need to allocate a bit in
+> ata_port.sas_tag_allocated bitmap.
 > 
-> Replace kfree_skb() used in gre_rcv() with kfree_skb_reason(). With
-> previous patch, we can tell that no tunnel device is found when
-> PACKET_NEXT is returned by erspan_rcv() or ipgre_rcv().
+> However we already have a unique tag per device in range
+> [0, ATA_MAX_QUEUE) in the scsi cmnd budget token, so just use that
+> instead.
 > 
-> In this commit, following new drop reasons are added:
-> 
-> SKB_DROP_REASON_GRE_CSUM
-> SKB_DROP_REASON_GRE_NOTUNNEL
-> 
-> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-> Reviewed-by: Biao Jiang <benbjiang@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> Signed-off-by: John Garry <john.garry@huawei.com>
 > ---
->  include/linux/skbuff.h     |  2 ++
->  include/trace/events/skb.h |  2 ++
->  net/ipv4/ip_gre.c          | 28 ++++++++++++++++++----------
->  3 files changed, 22 insertions(+), 10 deletions(-)
+>  drivers/ata/libata-core.c |  5 +++--
+>  drivers/ata/libata-sata.c | 21 ++++-----------------
+>  drivers/ata/libata-scsi.c |  2 +-
+>  drivers/ata/libata.h      |  4 ++--
+>  include/linux/libata.h    |  1 -
+>  5 files changed, 10 insertions(+), 23 deletions(-)
 > 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 5edb704af5bb..4f5e58e717ee 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -448,6 +448,8 @@ enum skb_drop_reason {
->  	SKB_DROP_REASON_GRE_NOHANDLER,	/* no handler found (version not
->  					 * supported?)
->  					 */
-> +	SKB_DROP_REASON_GRE_CSUM,	/* GRE csum error */
-> +	SKB_DROP_REASON_GRE_NOTUNNEL,	/* no tunnel device found */
->  	SKB_DROP_REASON_MAX,
->  };
+> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+> index 0c854aebfe0b..2c0a550d3ecd 100644
+> --- a/drivers/ata/libata-core.c
+> +++ b/drivers/ata/libata-core.c
+> @@ -4572,8 +4572,9 @@ void swap_buf_le16(u16 *buf, unsigned int buf_words)
+>   *	None.
+>   */
 >  
-> diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-> index f2bcffdc4bae..e8f95c96cf9d 100644
-> --- a/include/trace/events/skb.h
-> +++ b/include/trace/events/skb.h
-> @@ -63,6 +63,8 @@
->  	EM(SKB_DROP_REASON_TAP_TXFILTER, TAP_TXFILTER)		\
->  	EM(SKB_DROP_REASON_GRE_VERSION, GRE_VERSION)		\
->  	EM(SKB_DROP_REASON_GRE_NOHANDLER, GRE_NOHANDLER)	\
-> +	EM(SKB_DROP_REASON_GRE_CSUM, GRE_CSUM)			\
-> +	EM(SKB_DROP_REASON_GRE_NOTUNNEL, GRE_NOTUNNEL)		\
->  	EMe(SKB_DROP_REASON_MAX, MAX)
->  
->  #undef EM
-> diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-> index b1579d8374fd..b989239e4abc 100644
-> --- a/net/ipv4/ip_gre.c
-> +++ b/net/ipv4/ip_gre.c
-> @@ -421,9 +421,10 @@ static int ipgre_rcv(struct sk_buff *skb, const struct tnl_ptk_info *tpi,
->  
->  static int gre_rcv(struct sk_buff *skb)
+> -struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, int tag)
+> +struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd *scmd)
 >  {
-> +	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
->  	struct tnl_ptk_info tpi;
->  	bool csum_err = false;
-> -	int hdr_len;
-> +	int hdr_len, ret;
+> +	int tag = scsi_cmd_to_rq(scmd)->tag;
+>  	struct ata_port *ap = dev->link->ap;
+>  	struct ata_queued_cmd *qc;
 >  
->  #ifdef CONFIG_NET_IPGRE_BROADCAST
->  	if (ipv4_is_multicast(ip_hdr(skb)->daddr)) {
-> @@ -438,19 +439,26 @@ static int gre_rcv(struct sk_buff *skb)
-
-I feel like gre_parse_header() is a good candidate for converting
-to return a reason instead of errno.
-
-
->  		goto drop;
+> @@ -4583,7 +4584,7 @@ struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, int tag)
 >  
->  	if (unlikely(tpi.proto == htons(ETH_P_ERSPAN) ||
-> -		     tpi.proto == htons(ETH_P_ERSPAN2))) {
-> -		if (erspan_rcv(skb, &tpi, hdr_len) == PACKET_RCVD)
-> -			return 0;
-> -		goto out;
-> -	}
-> +		     tpi.proto == htons(ETH_P_ERSPAN2)))
-> +		ret = erspan_rcv(skb, &tpi, hdr_len);
-> +	else
-> +		ret = ipgre_rcv(skb, &tpi, hdr_len);
-
-ipgre_rcv() OTOH may be better off taking the reason as an output
-argument. Assuming PACKET_REJECT means NOMEM is a little fragile.
-
->  
-> -	if (ipgre_rcv(skb, &tpi, hdr_len) == PACKET_RCVD)
-> +	switch (ret) {
-> +	case PACKET_NEXT:
-> +		reason = SKB_DROP_REASON_GRE_NOTUNNEL;
-> +		break;
-> +	case PACKET_RCVD:
->  		return 0;
-> -
-> -out:
-> +	case PACKET_REJECT:
-> +		reason = SKB_DROP_REASON_NOMEM;
-> +		break;
-> +	}
->  	icmp_send(skb, ICMP_DEST_UNREACH, ICMP_PORT_UNREACH, 0);
->  drop:
-> -	kfree_skb(skb);
-> +	if (csum_err)
-> +		reason = SKB_DROP_REASON_GRE_CSUM;
-> +	kfree_skb_reason(skb, reason);
->  	return 0;
+>  	/* libsas case */
+>  	if (ap->flags & ATA_FLAG_SAS_HOST) {
+> -		tag = ata_sas_allocate_tag(ap);
+> +		tag = ata_sas_allocate_tag(ap, scmd);
+>  		if (tag < 0)
+>  			return NULL;
+>  	}
+> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+> index 071158c0c44c..a4374fdffc43 100644
+> --- a/drivers/ata/libata-sata.c
+> +++ b/drivers/ata/libata-sata.c
+> @@ -1268,29 +1268,16 @@ int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap)
 >  }
+>  EXPORT_SYMBOL_GPL(ata_sas_queuecmd);
 >  
+> -int ata_sas_allocate_tag(struct ata_port *ap)
+> +int ata_sas_allocate_tag(struct ata_port *ap, struct scsi_cmnd *scmd)
+>  {
+> -	unsigned int max_queue = ap->host->n_tags;
+> -	unsigned int i, tag;
+> +	if (scmd->budget_token >= ATA_MAX_QUEUE)
+> +		return -1;
+>  
+> -	for (i = 0, tag = ap->sas_last_tag + 1; i < max_queue; i++, tag++) {
+> -		tag = tag < max_queue ? tag : 0;
+> -
+> -		/* the last tag is reserved for internal command. */
+> -		if (ata_tag_internal(tag))
+> -			continue;
+> -
+> -		if (!test_and_set_bit(tag, &ap->sas_tag_allocated)) {
+> -			ap->sas_last_tag = tag;
+> -			return tag;
+> -		}
+> -	}
+> -	return -1;
+> +	return scmd->budget_token;
+>  }
 
+Since this is now not actually allocating a tag, I would rename this
+something like ata_sas_get_tag(). Or even better, simply open code this
+in ata_qc_new_init() since that is the only caller.
+
+>  
+>  void ata_sas_free_tag(unsigned int tag, struct ata_port *ap)
+>  {
+> -	clear_bit(tag, &ap->sas_tag_allocated);
+>  }
+
+This is called only in ata_qc_free(). With this change, the function is
+empty, so let's completely remove it.
+
+>  
+>  /**
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index ed8be585a98f..45d63a2ba3ee 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -640,7 +640,7 @@ static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
+>  {
+>  	struct ata_queued_cmd *qc;
+>  
+> -	qc = ata_qc_new_init(dev, scsi_cmd_to_rq(cmd)->tag);
+> +	qc = ata_qc_new_init(dev, cmd);
+>  	if (qc) {
+>  		qc->scsicmd = cmd;
+>  		qc->scsidone = scsi_done;
+> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+> index 51e01acdd241..65302d7829fe 100644
+> --- a/drivers/ata/libata.h
+> +++ b/drivers/ata/libata.h
+> @@ -44,7 +44,7 @@ static inline void ata_force_cbl(struct ata_port *ap) { }
+>  #endif
+>  extern u64 ata_tf_to_lba(const struct ata_taskfile *tf);
+>  extern u64 ata_tf_to_lba48(const struct ata_taskfile *tf);
+> -extern struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, int tag);
+> +extern struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd *scmd);
+>  extern int ata_build_rw_tf(struct ata_taskfile *tf, struct ata_device *dev,
+>  			   u64 block, u32 n_block, unsigned int tf_flags,
+>  			   unsigned int tag, int class);
+> @@ -93,7 +93,7 @@ extern unsigned int ata_read_log_page(struct ata_device *dev, u8 log,
+>  
+>  /* libata-sata.c */
+>  #ifdef CONFIG_SATA_HOST
+> -int ata_sas_allocate_tag(struct ata_port *ap);
+> +int ata_sas_allocate_tag(struct ata_port *ap, struct scsi_cmnd *scmd);
+>  void ata_sas_free_tag(unsigned int tag, struct ata_port *ap);
+>  #else
+>  static inline int ata_sas_allocate_tag(struct ata_port *ap)
+> diff --git a/include/linux/libata.h b/include/linux/libata.h
+> index 7f99b4d78822..3b9399f67b39 100644
+> --- a/include/linux/libata.h
+> +++ b/include/linux/libata.h
+> @@ -814,7 +814,6 @@ struct ata_port {
+>  	unsigned int		cbl;	/* cable type; ATA_CBL_xxx */
+>  
+>  	struct ata_queued_cmd	qcmd[ATA_MAX_QUEUE + 1];
+> -	unsigned long		sas_tag_allocated; /* for sas tag allocation only */
+>  	u64			qc_active;
+>  	int			nr_active_links; /* #links with active qcs */
+>  	unsigned int		sas_last_tag;	/* track next tag hw expects */
+
+
+-- 
+Damien Le Moal
+Western Digital Research

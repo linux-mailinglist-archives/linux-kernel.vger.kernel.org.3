@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344DB4DB5F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3B34DB608
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344253AbiCPQUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S1357477AbiCPQVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244432AbiCPQUl (ORCPT
+        with ESMTP id S1343489AbiCPQUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:20:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C286D4D9
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:19:16 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id d10so5242288eje.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9R+r1ohG1xCnpzC1qrsRmiSwShPkfg0ZOVxajhsdBXQ=;
-        b=qi9FqeLpLieqgQ59FaHOoa+yZmTX88lHcN3nvMY9vttgnNQqJJFXReFu54ETu5sZhG
-         ol+10DgD84IYFTcb6bqne0P4eM47tjCOXAFSakQRAMKrLnZ0JcLIVD9d6JTKAUlOqQxC
-         i4H4ax9AxxtyaSAgVGLgmqLDVbV0d2ZgeFqYeYX4BsqoQtbbE7wZtXvcKEZO1gJletKa
-         BUEsCy8Y10vn5Y21uOm4eV2GcQCMoMGAuT84ujf6vEq5pWjBlUobUwBaROrHHwWt/iIt
-         GlDlteycpbqQSDQL31WqLIHl5cqYeZnoVPDjwp3ZXGvwFrFEs9kEQ9sWL3jxykiYAPsx
-         7wnQ==
+        Wed, 16 Mar 2022 12:20:53 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5756D4C6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:19:37 -0700 (PDT)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2B6A43F4C0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:19:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647447576;
+        bh=ZRYQ7z9tZ99+GzXwYfi9q+aq0P3XgrXRoIknWvHPWiY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Da092m7MQiFrclop2JPRDe7V0I3y3BjCBJwYLXQmwQ1xopVwD+NifT1FsgPXiGN+o
+         lCcIO9aiDht0Zpd7MA8xco7M6yEZUAD4Lv97xsj+INZveiAaaG+4I5DKz9XIQdGQW8
+         T2dvvb6d87YJuvQYQLed2CnGbxNhAHG3LaMIMxbZouxU/sjio4oHxhAaifwZp54o3w
+         4eaC2eOhzRydZ8RO6p0+ILlCa5r3xtzYNdUbD1jOP30ynZ7SRhv2CG4AJEvven5/r9
+         teeO2RxL5/5v11B81pPlgJfNJupXtH01tm7fxgWnpePvwlOUW0Xs327iUxIJrC9MKe
+         M5MXd9hKW/1cw==
+Received: by mail-wm1-f70.google.com with SMTP id t185-20020a1c46c2000000b0038c7372b2e5so346000wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:19:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9R+r1ohG1xCnpzC1qrsRmiSwShPkfg0ZOVxajhsdBXQ=;
-        b=e05jicfz5w6pjmbQ/Q62EAMgv6us73BT/DtJERD0bOLGKQ/IwAn4tsmEicFzuJOWtm
-         1n0lRI4tAUR0u8u04UFjHzJxNSVejAExAxeFDInL+GV82P/a/kbFJpUaKVk9CO4byt3g
-         BT9Dx6B+FjHTzjJSYk+9F7tc7SmXnW93SuVh+DetVe2+BAN9UjMgnrH1x7KzBu7xpcSK
-         PIqNBpuwOr2sZS0isRL/1PKyVN95QJgXuZOxTvbj9VgayApRC/LorRXOwR2j57tBcJ8U
-         zyDND8dySHpCGWFRX8Ch3xqFKDPU5LG2ErN0r4odmievDSKPXerUsiUIyijIfjzUvHM6
-         SlkA==
-X-Gm-Message-State: AOAM533ksoGq3RzxmUlQUtXjd09370weBNjFE+N5obDJHHI6SiNRMcDj
-        x3wtEHQ7t+0Q3G2AsgcurVo+Cp6fRk/CoCLtWjl4MUFI+S7oBw==
-X-Google-Smtp-Source: ABdhPJzkyHYoHaQHM8GNWqhExHqyYScznfMyfLqJcNZrFrej94rfPlOBntdNphvEe68f7Vztb+3Wp8jOrmKfnkef6sU=
-X-Received: by 2002:a17:907:1609:b0:6db:b385:d13b with SMTP id
- hb9-20020a170907160900b006dbb385d13bmr608694ejc.542.1647447554142; Wed, 16
- Mar 2022 09:19:14 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZRYQ7z9tZ99+GzXwYfi9q+aq0P3XgrXRoIknWvHPWiY=;
+        b=Vtkzqso/IRsg/ickDhLIcn0ItZGl8D7ISeMeIQZRQ5HZh+407FKTDhPmO0WjHOcOju
+         ubXeR08a/P7GsrsIhA2kTD3PSQbC1u7ukQUoN0RwcnzIDgiqWSsJthyrMcnelCgH3pCD
+         XFxGlu0DiqwwdtJ3ng2E3JFpxLr+iN+10AdYR7rEDTzItz4HYI/nLvdP0sEa0SiHzttw
+         rvr708yG1+iJKRQpe4DDCX/3V4gQZDKqitUJ6kX6uHvhpiuah5/BGA0GgaeRSh7DZfXh
+         +0OQFc0QVJLlMDieOUJ2asF79n+osTWc+XmG9IkDsYky/AUUfBXTcnH4gYPC5gl3G14w
+         hNGQ==
+X-Gm-Message-State: AOAM532e5FLXYb/s1x+KB0CnX5fJPhLI3BnV3qqzGn5kx1yreUGAa2OE
+        e7UD6/7wYJISBgfw4HGCmNVd2BppiEmuI06plYPK32+DMEQNmHTrjl42ceJ0hxhkuAiqmazR9fn
+        /mUaqVOBM1kmjN4C1+m0n/xOfl37KOarnSoYDlwEndA==
+X-Received: by 2002:a5d:6da5:0:b0:1f1:f968:1a62 with SMTP id u5-20020a5d6da5000000b001f1f9681a62mr554990wrs.227.1647447575679;
+        Wed, 16 Mar 2022 09:19:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzgYANb6+IHUjd2tYv3t6zuG8C+19OKOirVe7PMEmdJAJNWdgt0WY7zKPbaRDMj+QIXT6tXnA==
+X-Received: by 2002:a5d:6da5:0:b0:1f1:f968:1a62 with SMTP id u5-20020a5d6da5000000b001f1f9681a62mr554978wrs.227.1647447575512;
+        Wed, 16 Mar 2022 09:19:35 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id i11-20020a05600c354b00b00389f440512esm5719821wmq.32.2022.03.16.09.19.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 09:19:35 -0700 (PDT)
+Message-ID: <fe67c7e7-957b-3abf-a929-5ee346657bcf@canonical.com>
+Date:   Wed, 16 Mar 2022 17:19:34 +0100
 MIME-Version: 1.0
-References: <20220316024432.1454366-1-dlatypov@google.com> <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
-In-Reply-To: <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 16 Mar 2022 11:19:02 -0500
-Message-ID: <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
+Content-Language: en-US
+To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com
+References: <cover.1647399369.git.lhjeff911@gmail.com>
+ <71c1b80e0083f38de71f36193e12b3cbff2ec852.1647399369.git.lhjeff911@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <71c1b80e0083f38de71f36193e12b3cbff2ec852.1647399369.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,129 +86,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 12:41 AM David Gow <davidgow@google.com> wrote:
->
-> On Wed, Mar 16, 2022 at 10:44 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Background:
-> > Currently, a reader looking at kunit/test.h will find the file is quite
-> > long, and the first meaty comment is a doc comment about struct
-> > kunit_resource.
-> >
-> > Most users will not ever use the KUnit resource API directly.
-> > They'll use kunit_kmalloc() and friends, or decide it's simpler to do
-> > cleanups via labels (it often can be) instead of figuring out how to use
-> > the API.
-> >
->
-> A depressing (but probably not untrue) thought. I think that, even if
+On 16/03/2022 04:01, Li-hao Kuo wrote:
+> Add bindings for Sunplus SP7021 thermal driver
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v5:
+>  - Modify yaml file remove reg name and change nvmem name
+>  - Addressed comments from Mr. Daniel Lezcano
+> 
+>  .../bindings/thermal/sunplus_thermal.yaml          | 47 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+> new file mode 100644
+> index 0000000..176bc07
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/sunplus_thermal.yaml#
 
-I'm not sure it's that depressing.
-Without some compiler support (e.g. GCC's `cleanup`), I can see there
-being a number of one-off things that don't warrant formalizing into a
-resource.
+File name with vendor prefix and comma, so one of:
+sunplus,thermal
+sunplus,sp7021-thermal
 
-More detail:
-It works OK when there's one pointer parameter, e.g. [1], but I feel
-like you'd normally need to capture at least one more local variable.
-So then you need to define a new struct to hold all the values, which
-is where I'd draw the line personally.
 
-[1] https://elixir.bootlin.com/linux/v5.17-rc8/source/lib/kunit/executor_test.c#L182
-
-> most people were to use the resource API, having it in test.h makes it
-> harder, as having the resource functions separate makes it easier to
-> understand as well.
->
-> > It's also logically separate from everything else in test.h.
-> > Removing it from the file doesn't cause any compilation errors (since
-> > struct kunit has `struct list_head resources` to store them).
-> >
-> > This commit:
-> > Let's move it into a kunit/resource.h file and give it a separate page
-> > in the docs, kunit/api/resource.rst.
->
-> Yay! This makes a lot of sense to me, as I've wasted a lot of time
-> scrolling through test.h.
->
-> >
-> > We include resource.h at the bottom of test.h since
-> > * don't want to force existing users to add a new include if they use the API
-> > * it accesses `lock` inside `struct kunit` in a inline func
-> >   * so we can't just forward declare, and the alternatives require
-> >     uninlining the func, adding hepers to lock/unlock, or other more
-> >     invasive changes.
->
-> I don't like this, but still think it's an improvement on what we have
-> now. Ultimately, I think adding helpers to lock/unlock or similar and
-
-Yes, I can see us maybe needing this in the future.
-Right now, outside of test.c, there's only one callsite for each (in
-resource.h).
-
-> making users include this separately is probably the right thing to
-> do, as nesting the headers like this is a bit ugly, but I won't lose
-> sleep over leaving it till later.
-
-Ack, I can add a TODO to indicate we want to clean this up?
-It's a bit annoying right now, but it'll only get more annoying in the future.
-
->
-> >
-> > Now the first big comment in test.h is about kunit_case, which is a lot
-> > more relevant to what a new user wants to know.
-> >
-> > A side effect of this is git blame won't properly track history by
-> > default, users need to run
-> > $ git blame -L ,1 -C17 include/kunit/resource.h
->
-> This is a pain, but is probably worth it. Thanks for including the
-> command in the commit message, which should mitigate it slightly.
->
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> This was starting to annoy me, too, as it was a pain to read through
-> everything in test.h. It'll be a bit of short-term pain,
-> merge-conflict wise if we have other changes to the resource system
-> (which I fear is likely), but is worth it.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> -- David
->
-> >
-> > NOTE: this file doesn't split out code from test.c to a new resource.c
-> > file.
-> > I'm primarily concerned with users trying to read the headers, so I
-> > didn't think messing up git blame (w/ default settings) was worth it.
-> > But I can make that change if it feels appropriate (it might also be
-> > messier).
->
-> Personally, I think it's probably worth splitting this out as well.
-> And the sooner we do it, the less history we'll obscure. :-)
-
-Yeah, that was my thought.
-But if you think this would help users, then I think we have a case to
-make this change.
-
-Should I send a v2 with resource.c split out?
-Brendan (and any others who have an opinion), what's your preference?
->
-> But I agree, it's less of an issue as it only directly affects people
-> working on KUnit itself. Though making it easier for users to find and
-> read the implementation of these functions could help them understand
-> API "gotchas", so I think it's worthwhile.
->
-> >
-> > ---
-> >  Documentation/dev-tools/kunit/api/index.rst   |   5 +
-> >  .../dev-tools/kunit/api/resource.rst          |  13 +
-> >  include/kunit/resource.h                      | 319 ++++++++++++++++++
-> >  include/kunit/test.h                          | 301 +----------------
-> >  4 files changed, 339 insertions(+), 299 deletions(-)
-> >  create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
-> >  create mode 100644 include/kunit/resource.h
-> >
-> <...snip...>
+Best regards,
+Krzysztof

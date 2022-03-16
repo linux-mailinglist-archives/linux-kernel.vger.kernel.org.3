@@ -2,191 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B334DA9DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79AA4DA9DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353638AbiCPFaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 01:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S1353643AbiCPFbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348079AbiCPFaR (ORCPT
+        with ESMTP id S232644AbiCPFb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 01:30:17 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E707935DEE;
-        Tue, 15 Mar 2022 22:29:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BC8B11F38C;
-        Wed, 16 Mar 2022 05:29:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647408541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/PIDCzlHujec2z5GgI/Fxhz1Ptiq+5sj17W7kV26IFg=;
-        b=k/sKfbSrYYRa9c1IRzKH1EV1lIJNiMZHAjh0QjBh2f8r2/LjPWIs3T9GHvoWKqtUG43T1A
-        SuAP3MeGhbVbhlexyS1BFn6MhAS01BLuoGiqA7y9VVJEr1um9I4VZoJDtsiFHpPTrXcRT4
-        4FXFARFp8tWrZKdcpXmTcIDgY1YbVy4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 82B1113B93;
-        Wed, 16 Mar 2022 05:29:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id l8SgHZ11MWJIKwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 16 Mar 2022 05:29:01 +0000
-Message-ID: <78b16b06-9cfe-5bfd-5d23-b7e8010024fd@suse.com>
-Date:   Wed, 16 Mar 2022 06:29:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] xen/usb: harden xen_hcd against malicious backends
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220311103509.12908-1-jgross@suse.com>
- <YjDPtRhdrtY6tpvc@kroah.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <YjDPtRhdrtY6tpvc@kroah.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------eod0dLzbzdUZdsKtS040X2Cp"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 01:31:28 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A0615DA6F;
+        Tue, 15 Mar 2022 22:30:13 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app3 (Coremail) with SMTP id cC_KCgC3jqTZdTFiHbsNAA--.45082S2;
+        Wed, 16 Mar 2022 13:30:05 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net, ralf@linux-mips.org,
+        jreuter@yaina.de, eric.dumazet@gmail.com,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net V5 2/2] ax25: Fix NULL pointer dereferences in ax25 timers
+Date:   Wed, 16 Mar 2022 13:30:00 +0800
+Message-Id: <20220316053000.130053-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgC3jqTZdTFiHbsNAA--.45082S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF4rZF48trW3Zw1UCw1Dtrb_yoWrJw4fpF
+        ZFgFWfJr4vqrW5Ar48Grs7JF1Uuw1qq3y5Ar18uF4Sk3Z7Jrn8JFyUtFyUXFWakFZ8AF9r
+        Aw18WasxZF18uaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgULAVZdtYslngADsA
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------eod0dLzbzdUZdsKtS040X2Cp
-Content-Type: multipart/mixed; boundary="------------dIo5mqVJwQtgAvakBeavLCM7";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <78b16b06-9cfe-5bfd-5d23-b7e8010024fd@suse.com>
-Subject: Re: [PATCH] xen/usb: harden xen_hcd against malicious backends
-References: <20220311103509.12908-1-jgross@suse.com>
- <YjDPtRhdrtY6tpvc@kroah.com>
-In-Reply-To: <YjDPtRhdrtY6tpvc@kroah.com>
+There are race conditions that may lead to null pointer dereferences in
+ax25_heartbeat_expiry(), ax25_t1timer_expiry(), ax25_t2timer_expiry(),
+ax25_t3timer_expiry() and ax25_idletimer_expiry(), when we use
+ax25_kill_by_device() to detach the ax25 device.
 
---------------dIo5mqVJwQtgAvakBeavLCM7
-Content-Type: multipart/mixed; boundary="------------RThCbjbaim80DRYqQ5E0TjUm"
+One of the race conditions that cause null pointer dereferences can be
+shown as below:
 
---------------RThCbjbaim80DRYqQ5E0TjUm
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+      (Thread 1)                    |      (Thread 2)
+ax25_connect()                      |
+ ax25_std_establish_data_link()     |
+  ax25_start_t1timer()              |
+   mod_timer(&ax25->t1timer,..)     |
+                                    | ax25_kill_by_device()
+   (wait a time)                    |  ...
+                                    |  s->ax25_dev = NULL; //(1)
+   ax25_t1timer_expiry()            |
+    ax25->ax25_dev->values[..] //(2)|  ...
+     ...                            |
 
-T24gMTUuMDMuMjIgMTg6NDEsIEdyZWcgS3JvYWgtSGFydG1hbiB3cm90ZToNCj4gT24gRnJp
-LCBNYXIgMTEsIDIwMjIgYXQgMTE6MzU6MDlBTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90
-ZToNCj4+IE1ha2Ugc3VyZSBhIG1hbGljaW91cyBiYWNrZW5kIGNhbid0IGNhdXNlIGFueSBo
-YXJtIG90aGVyIHRoYW4gd3JvbmcNCj4+IEkvTyBkYXRhLg0KPj4NCj4+IE1pc3NpbmcgYXJl
-IHZlcmlmaWNhdGlvbiBvZiB0aGUgcmVxdWVzdCBpZCBpbiBhIHJlc3BvbnNlLCBzYW5pdGl6
-aW5nDQo+PiB0aGUgcmVwb3J0ZWQgYWN0dWFsIEkvTyBsZW5ndGgsIGFuZCBwcm90ZWN0aW9u
-IGFnYWluc3QgaW50ZXJydXB0IHN0b3Jtcw0KPj4gZnJvbSB0aGUgYmFja2VuZC4NCj4+DQo+
-PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+PiAt
-LS0NCj4+ICAgZHJpdmVycy91c2IvaG9zdC94ZW4taGNkLmMgfCA1NyArKysrKysrKysrKysr
-KysrKysrKysrKysrKysrLS0tLS0tLS0tLQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNDMgaW5z
-ZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25zKC0pDQo+IA0KPiBGYWlscyB0byBhcHBseSB0byBt
-eSB0cmVlOg0KPiANCj4gY2hlY2tpbmcgZmlsZSBkcml2ZXJzL3VzYi9ob3N0L3hlbi1oY2Qu
-Yw0KPiBIdW5rICMyIHN1Y2NlZWRlZCBhdCA3MjAgKG9mZnNldCAtMSBsaW5lcykuDQo+IEh1
-bmsgIzMgc3VjY2VlZGVkIGF0IDgwNyAob2Zmc2V0IC0zIGxpbmVzKS4NCj4gSHVuayAjNCBz
-dWNjZWVkZWQgYXQgOTM0IChvZmZzZXQgLTUgbGluZXMpLg0KPiBIdW5rICM1IEZBSUxFRCBh
-dCA5ODYuDQo+IEh1bmsgIzYgc3VjY2VlZGVkIGF0IDEwMDMgd2l0aCBmdXp6IDEgKG9mZnNl
-dCAtMTAgbGluZXMpLg0KPiBIdW5rICM3IHN1Y2NlZWRlZCBhdCAxMDQ4IChvZmZzZXQgLTEw
-IGxpbmVzKS4NCj4gSHVuayAjOCBzdWNjZWVkZWQgYXQgMTA3MiAob2Zmc2V0IC0xMCBsaW5l
-cykuDQo+IEh1bmsgIzkgc3VjY2VlZGVkIGF0IDExNjEgKG9mZnNldCAtMTAgbGluZXMpLg0K
-PiBIdW5rICMxMCBzdWNjZWVkZWQgYXQgMTUxNiAob2Zmc2V0IC0xMCBsaW5lcykuDQo+IDEg
-b3V0IG9mIDEwIGh1bmtzIEZBSUxFRA0KPiANCj4gQW55IGhpbnRzPw0KDQpSZWJhc2UgeW91
-ciB0cmVlIHRvIHY1LjE3LXJjOD8gSXQgaXMgbWlzc2luZyB0aGUgcmVjZW50IHNlY3VyaXR5
-DQpwYXRjaGVzIHdoaWNoIG1vZGlmaWVkIGRyaXZlcnMvdXNiL2hvc3QveGVuLWhjZC5jLg0K
-DQoNCkp1ZXJnZW4NCg==
---------------RThCbjbaim80DRYqQ5E0TjUm
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+We set null to ax25_cb->ax25_dev in position (1) and dereference
+the null pointer in position (2).
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+The corresponding fail log is shown below:
+===============================================================
+BUG: kernel NULL pointer dereference, address: 0000000000000050
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc6-00794-g45690b7d0
+RIP: 0010:ax25_t1timer_expiry+0x12/0x40
+...
+Call Trace:
+ call_timer_fn+0x21/0x120
+ __run_timers.part.0+0x1ca/0x250
+ run_timer_softirq+0x2c/0x60
+ __do_softirq+0xef/0x2f3
+ irq_exit_rcu+0xb6/0x100
+ sysvec_apic_timer_interrupt+0xa2/0xd0
+...
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+If ax25_disconnect() is called by ax25_kill_by_device() or ax25->ax25_dev
+is NULL, the reason in ax25_disconnect() will be equal to ENETUNREACH.
+This patch adds check and uses del_timer_sync() to delete timers in
+ax25_disconnect(), it will wait all timers to stop before we set null
+to ax25_cb->ax25_dev in ax25_kill_by_device().
 
---------------RThCbjbaim80DRYqQ5E0TjUm--
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in V5:
+  - Add a check and use del_timer_sync() to delete timers in ax25_disconnect().
+  - Based on [PATCH net V5 1/2] ax25: Fix refcount leaks caused by ax25_cb_del().
 
---------------dIo5mqVJwQtgAvakBeavLCM7--
+ net/ax25/af_ax25.c   |  4 ++--
+ net/ax25/ax25_subr.c | 20 ++++++++++++++------
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
---------------eod0dLzbzdUZdsKtS040X2Cp
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index cf8847cfc66..992b6e5d85d 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -89,20 +89,20 @@ static void ax25_kill_by_device(struct net_device *dev)
+ 			sk = s->sk;
+ 			if (!sk) {
+ 				spin_unlock_bh(&ax25_list_lock);
+-				s->ax25_dev = NULL;
+ 				ax25_disconnect(s, ENETUNREACH);
++				s->ax25_dev = NULL;
+ 				spin_lock_bh(&ax25_list_lock);
+ 				goto again;
+ 			}
+ 			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
++			ax25_disconnect(s, ENETUNREACH);
+ 			s->ax25_dev = NULL;
+ 			if (sk->sk_socket) {
+ 				dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
+ 				ax25_dev_put(ax25_dev);
+ 			}
+-			ax25_disconnect(s, ENETUNREACH);
+ 			release_sock(sk);
+ 			spin_lock_bh(&ax25_list_lock);
+ 			sock_put(sk);
+diff --git a/net/ax25/ax25_subr.c b/net/ax25/ax25_subr.c
+index 15ab812c4fe..3a476e4f6cd 100644
+--- a/net/ax25/ax25_subr.c
++++ b/net/ax25/ax25_subr.c
+@@ -261,12 +261,20 @@ void ax25_disconnect(ax25_cb *ax25, int reason)
+ {
+ 	ax25_clear_queues(ax25);
+ 
+-	if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
+-		ax25_stop_heartbeat(ax25);
+-	ax25_stop_t1timer(ax25);
+-	ax25_stop_t2timer(ax25);
+-	ax25_stop_t3timer(ax25);
+-	ax25_stop_idletimer(ax25);
++	if (reason == ENETUNREACH) {
++		del_timer_sync(&ax25->timer);
++		del_timer_sync(&ax25->t1timer);
++		del_timer_sync(&ax25->t2timer);
++		del_timer_sync(&ax25->t3timer);
++		del_timer_sync(&ax25->idletimer);
++	} else {
++		if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
++			ax25_stop_heartbeat(ax25);
++		ax25_stop_t1timer(ax25);
++		ax25_stop_t2timer(ax25);
++		ax25_stop_t3timer(ax25);
++		ax25_stop_idletimer(ax25);
++	}
+ 
+ 	ax25->state = AX25_STATE_0;
+ 
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmIxdZwFAwAAAAAACgkQsN6d1ii/Ey9F
-Hwf+LkGaWrpNt9vcE1twmTNgjxj3MDenPvnyDaABq2+G1W36GWL407B+xfrskqVqc/xkM9vw7Vlh
-wXEwTWHkGUF+RIXf1KGD1yjqakF5apcrfxZPzUhzWDYAc1nLEJ6a8Ajjs5xz8A0t+Mzw9/WB0IEM
-f6+mog8mAn88xCXKmWzM1+Kp06uimKRc776aSvlVj7rwSn5+zrYc+1hdGVUNfP/BtRJcuwTWm06B
-cGGd3Dnf7VvB48ehxM6poumJ9wZKZVtweduzCV/6fF/iachj6ERDpVdg4qYqKbXs4s6AHr5yQ7/J
-Fq6xOa/M0HxTzTsaosLBpQSIPHMY7bgycGmrCUR6rQ==
-=aDhE
------END PGP SIGNATURE-----
-
---------------eod0dLzbzdUZdsKtS040X2Cp--

@@ -2,122 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DC04DB138
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05A94DB158
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356381AbiCPNVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S1348688AbiCPNZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356332AbiCPNVb (ORCPT
+        with ESMTP id S241443AbiCPNZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:21:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7855692B8;
-        Wed, 16 Mar 2022 06:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647436747; x=1678972747;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=3gydTSfJJ0kj7X+pEx3OA6sK9bKnh0Gb6dYO4OHWtjw=;
-  b=NPYLy9lK9jY8hOqyrqfYiffIpKlW9C57obYh/zuTqUXUJwiPllHUDbXQ
-   TOKzIDMdqNlag2JaN6SBEdUxBtke4iLeJ1mBhte4PrW+BwaVvatiMekzb
-   v0WTBum0j4QvDdjio25oiizpbmxk1BJIhQB2eut5h2m2Ff2uFKrtXy5DL
-   FBjqPxZvmps3cPmF3nB9HzHT0ssU4hQGvyOVBwGtWRmdZei5p8gM2GsfV
-   WXfMcn5n5orKEKAYWrzxg6ofSATCoyKBoDuDk1bQbKPSjCILAPjjk1LRT
-   pJ2z0j9g3YBs/avUaiw5jBq+JMqIMq3zgSo1AvowAkky5GfHkbf3K7S/c
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="343013016"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="343013016"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 06:19:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="646642824"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 06:18:58 -0700
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, tonywwang@zhaoxin.com,
-        weitaowang@zhaoxin.com
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
- <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
- <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Message-ID: <6c11dc4f-4984-e7aa-9fc5-7026100b38e1@linux.intel.com>
-Date:   Wed, 16 Mar 2022 15:20:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Wed, 16 Mar 2022 09:25:05 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B8D33E37;
+        Wed, 16 Mar 2022 06:23:52 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 49B613202010;
+        Wed, 16 Mar 2022 09:23:51 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 16 Mar 2022 09:23:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kkourt.io; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=mesmtp; bh=bENHhIi915KsPjgABUpRtuQfqeP
+        QoymgG+Vo887wrCc=; b=ThPMiqaRipdQRREPicRBAfL5RZN0Arp5CRNwQRMghW7
+        IWz9jCKtOtIPwN8ER78Y66h6G6DnWYO6Vgh6+uQQf2A4aCYckDwBJSg2Ypi58Ono
+        GAxxHyXJ5SmCAjmWMtaQufccAPWVZArFiePoH1oHzVNPKRtUR9oR8JTxko8GIS8Q
+        =
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=bENHhI
+        i915KsPjgABUpRtuQfqePQoymgG+Vo887wrCc=; b=GVZ8IFqGGnEylI1Gd/HqP1
+        BfIk46n62ljKMPRmki2auOerraMtzlXsbxc4dZa0QlbMEsi9b8nAR++hkFbEusys
+        iAS7QayhoYvUtlstxONb2pF87IfH46xrXAgivb8d18f3Fn+DEInCdwi53Q1we6bW
+        6YONofyrAvqBwD+by6PFo7guABjStb22r23a/fz2UgPuzN1i+JF6FAucjErcR/sH
+        E+P2Atu1XxOAe3yff8zkSn9Px6JQcKG2TBQvhjNMRiLKjpH64BsJZ+MvY69JZFil
+        JQVI7nykMKDhajiabYjZsDCd+iNLVSgnYaIVQNm3KWilkdQ98i5mLWTTBwvNbSrg
+        ==
+X-ME-Sender: <xms:5uQxYn0pDrlAMbNSDk19o4i1qtD3t7HHPn8_NAup1QG2Wdw_zEZmtQ>
+    <xme:5uQxYmEUgHHBa__jXd8X3RlbUQRhfB7PW-xj6VTi4ABhWy_fz7_dO4BBAk95fMEk9
+    f7uesZVvzdZ1veafQ>
+X-ME-Received: <xmr:5uQxYn4rpERdhR5jNEuXxiQSyh6A87jqkbY7rLuOLS4ts3QbUu4NMzSKjVZQq9qCnBgzbcoLDNwqNj_hGZ4KmxBa0ydt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefvddggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpehkkhhouhhr
+    theskhhkohhurhhtrdhiohenucggtffrrghtthgvrhhnpeekkeeuiedujeekvdefjefffe
+    eggfdugeettdeiieevgffghfelgeetffeijeegffenucffohhmrghinhepshhouhhrtggv
+    figrrhgvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepkhhkohhurhhtsehkkhhouhhrthdrihho
+X-ME-Proxy: <xmx:5uQxYs0kBVqKuW6gupNhMVxNHyW9QEmCNykD0J9JsknrQGSWdtJkNw>
+    <xmx:5uQxYqGdgOKLIN6XWKs1jzVIw7Je3EumIP4hsOuemNYLzjvow6Rb0w>
+    <xmx:5uQxYt9ftG2Z7JlzeUVBdWbrgPLBZQdtC67LtWhXQek2K1Kb1gXjAA>
+    <xmx:5uQxYmBCr21vwoVnVYoFGMfW0GDTyeGZOG4cw2A9tg-22XgTB9OAKA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Mar 2022 09:23:50 -0400 (EDT)
+Received: by kkourt.io (Postfix, from userid 1000)
+        id 21ADB2541B5C; Wed, 16 Mar 2022 14:23:48 +0100 (CET)
+From:   kkourt@kkourt.io
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kornilios Kourtis <kornilios@isovalent.com>
+Subject: [PATCH 1/2] pahole: avoid segfault when parsing bogus file
+Date:   Wed, 16 Mar 2022 14:23:38 +0100
+Message-Id: <20220316132338.3226871-1-kkourt@kkourt.io>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <YjHjLkYBk/XfXSK0@tinh>
+References: <YjHjLkYBk/XfXSK0@tinh>
 MIME-Version: 1.0
-In-Reply-To: <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.3.2022 14.44, WeitaoWang-oc@zhaoxin.com wrote:
-> On 2022/3/15 下午4:08, Mathias Nyman wrote:
->> On 14.3.2022 9.25, WeitaoWang-oc@zhaoxin.com wrote:
->>> On some situations, software handles TRB events slower than adding TRBs,
->>> xhci_irq will not exit until all events are handled. If xhci_irq just
->>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records in xhci irq is equal to driver current dequeue pointer. It will cause driver not update ERDP and software dequeue pointer lost sync with ERDP. On the next xhci_irq, the event ring is full but driver will not update ERDP as software dequeue pointer is equal to ERDP.
->>>
->>> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
->>> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
->>> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
->>> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
->>> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
->>> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
->>> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
->>> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
->>> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
->>>
->>> Fixed this issue by update software record temp variable when handles 128 TRB events.>
->>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->>
->> Thanks
->>
->> Solution itself looks good but patch has some minor format issue:
->>
->>
->> It would also be interesting to know if the full event ring was triggered in a real
->> life usecase?
->> If that is the case I might need to look more into it.
->>
->> Bigger event ring, more rings, faster handler, avoid irqoff time...
->>
->> Thanks
->> Mathias
->> .
-> Some performance test tools such as fio or iometer can be used to reproduce
->  this case, If tested with 4KB read or write. xHCI will generate a lost TRB
->  events fast than software consume on a certain period of time. Once the interrupt is entered, software may handle more than 128 TRBs at a time.
-> While the software is processing, xHCI is still generating events. This may
-> has problems caused by the ERDP update mechanism. If update software
->  record temp variable when handles 128 TRB events, event ring full will not
->  happen any more even though fio test with 4KB read or write.
-> 
-> Thanks
-> Weitao Wang
->>
+From: Kornilios Kourtis <kornilios@isovalent.com>
 
-Thanks for the clarification.
+When trying to use btf encoding for an apparently problematic kernel
+file, pahole segfaults. As can be seen below [1], the problem is that we
+are trying to dereference a NULL decoder.
 
-Could you resubmit this after fixing the minor patch format issue?
-Also make sure patch passes checkpatch test
+Fix this by checking the return value of dwfl_getmodules which [2] whill
+return -1 on errors or an offset if one of the modules did not return
+DWARF_CB_OK. (In this specific case, it was __cus__load_debug_types that
+returned DWARF_CB_ABORT.)
 
-Thanks
--Mathias
+[1]:
+$ gdb -q --args ./pahole -J vmlinux-5.3.18-24.102-default.debug
+Reading symbols from ./pahole...
+(gdb) r
+Starting program: /tmp/pahole/build/pahole -J vmlinux-5.3.18-24.102-default.debug
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00007ffff7f4000e in gobuffer__size (gb=0x18) at /tmp/pahole/gobuffer.h:39
+39              return gb->index;
+(gdb) bt
+(gdb) frame 1
+1042            if (gobuffer__size(&encoder->percpu_secinfo) != 0)
+(gdb) list
+1037
+1038    int btf_encoder__encode(struct btf_encoder *encoder)
+1039    {
+1040            int err;
+1041
+1042            if (gobuffer__size(&encoder->percpu_secinfo) != 0)
+1043                    btf_encoder__add_datasec(encoder, PERCPU_SECTION);
+1044
+1045            /* Empty file, nothing to do, so... done! */
+1046            if (btf__get_nr_types(encoder->btf) == 0)
+(gdb) print encoder
+$1 = (struct btf_encoder *) 0x0
+
+[2] https://sourceware.org/git/?p=elfutils.git;a=blob;f=libdwfl/libdwfl.h;h=f98f1d525d94bc7bcfc7c816890de5907ee4bd6d;hb=HEAD#l200
+
+Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+---
+ dwarf_loader.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 151bc83..c87378b 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -3268,7 +3268,10 @@ static int cus__process_file(struct cus *cus, struct conf_load *conf, int fd,
+ 	};
+ 
+ 	/* Process the one or more modules gleaned from this file. */
+-	dwfl_getmodules(dwfl, cus__process_dwflmod, &parms, 0);
++	int err = dwfl_getmodules(dwfl, cus__process_dwflmod, &parms, 0);
++	if (err) {
++		return -1;
++	}
+ 
+ 	// We can't call dwfl_end(dwfl) here, as we keep pointers to strings
+ 	// allocated by libdw that will be freed at dwfl_end(), so leave this for
+-- 
+2.25.1
+

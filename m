@@ -2,384 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8DB4DB91F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EF64DB921
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351201AbiCPUEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S1353208AbiCPUFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244611AbiCPUEJ (ORCPT
+        with ESMTP id S244611AbiCPUE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:04:09 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6669315
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:02:51 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id z3so2676814plg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:02:51 -0700 (PDT)
+        Wed, 16 Mar 2022 16:04:58 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08822CCA;
+        Wed, 16 Mar 2022 13:03:43 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t11so4517090wrm.5;
+        Wed, 16 Mar 2022 13:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uTb/eDpTR8x3dKYpTipbgrv/A4RYKtuyfr7w8c85gc4=;
-        b=B3rUJPhaMv97hfBK3NREN2d9gtQY1sVTrORdG30qBFS3wQv3QajOqawzrcPZCB5skC
-         X5phhjsxHIUThaOTtCK6hVd3ChNKjB+KvXYbKifwSsJADJNmRsljdHTbFuxW0e3lcUv0
-         Z1KtthUYU4WNKJYqXWHubpRNgyRjoZ9RXQ5P59qNI2K+9wgtz2T3HrO56oW7wW6FYKsR
-         VVJKBUcvH69utzRHlyMbN1oGlJ0Qsm8jQYr7/QqPwDfOVgUjIC3vB4mjg2J0JbGBsaN1
-         cPzQ2d7JsdKy9gP+eQ9+XFMvgixVeOIaHN7TIeT5q5nIhx9T68IwJympFXuoWxNCk5cb
-         b0DA==
+        bh=xRrmSaXTPuHNH4vczPmmM5RurjEif4JresYAJudYvWc=;
+        b=FqfD0qVQyY2JzhSPaxqS+ifkhnrgmFYU8pFZiQ5Ld/+ajw2zlH3GxSV49hEgPXm2wp
+         QH7feBbRLhu/He4VjdQ6QDME1HBxtBUCBB88Bu7xziemX5wIBBXic1xJWuOIuDiXgnBg
+         mfohjMUO82cePSELJ7ANo6/q/IZTc2BmK9hB2PcDLWjlo2JAKJEaILrqAO5KbX7lyw7W
+         WeFdd6YuuH3/puhFwFRu1RwRadoeZd7XLBoQdz46Tmj4vABMEA8A/1gtHoqWBposDlws
+         lfI8KvHTvsRdIS2VuX2fVZasA+oz7bMpHfRUTKcBDqFZhOj1QImcT1SIyQI++DGdjces
+         RhJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uTb/eDpTR8x3dKYpTipbgrv/A4RYKtuyfr7w8c85gc4=;
-        b=w+ERMKdwxOH8CaRXo70esPvRxu0WR3K4PVVaCMl6Gm9Vv4flnQl82SQZ2B0iiagBHi
-         4OM+BO4wu//yfYj8pxZluHshFRkjxlgTCb4DxM/rHK7siwKfBjdUF1nQpxwH98zIjmVX
-         BKEetPMRyAC3LT5dquzzt3zLgBEytenhzBwylBU7OYbJgLLFVHxtIosCVDs3R1LJb7Ls
-         RuuIvrtnR2l0ZnJmn5uO4t0Mk05p/LLxtHa8d/v0Ng1WNCXgYisk0NNbVP7N8KcQZ4ra
-         CPFQxEzA/kwmVE/UsEHecR005pOzp9HJeRIPeh4sSfhcxmcIZfttVSiKdAph4Fxk+wim
-         Dpnw==
-X-Gm-Message-State: AOAM5326wRU1PzEu1LoBet5uprryeznM8w1XgP+G1Z8l9aoqH7616Wmu
-        ovE/tOy2HryeDu8bwu1ttviGaQUgedVmP0U8jnU=
-X-Google-Smtp-Source: ABdhPJwyjFRLAYNLl6/8MLneSORPj/tBt1JesG1HQf0NsQYJ+5facnxgPLTdMH5LUnIL0traGw65SFB3qCaoDR/9i5w=
-X-Received: by 2002:a17:903:1c5:b0:151:cd10:5a5 with SMTP id
- e5-20020a17090301c500b00151cd1005a5mr1363986plh.26.1647460971276; Wed, 16 Mar
- 2022 13:02:51 -0700 (PDT)
+        bh=xRrmSaXTPuHNH4vczPmmM5RurjEif4JresYAJudYvWc=;
+        b=R3x/LkoDb/z0jRmBf+IMDIvPUNq974fgbkYRXMvX/gX0ll2vCsZxAZ6pPU+9m1H0Za
+         7KeEgQSfxbzlh9AjavSTtBhbFsSoFPpd2YZbMuuyIGAGUbCf5exbcr0mGjymntijepIf
+         E1ZmxNe7gVTKEqhukvxsyrDtdlsPumPAiyPosU83f7HEDSJzpOP0gONkB+nsm1jiNHbC
+         O0LPbPkJqqkx2YhiC9lGw8jGl1hP7MRWXmgp/TVCf/eAFvuigWD6NP/z6IILIcdt5xLq
+         4E5pbt4r/B+QWIIwS8J+mWDiEcRNTYOXBX3zxZ4CLXIX90x9xvKnz6O1txmmpI9puZWx
+         mN1A==
+X-Gm-Message-State: AOAM5324nWvSbW1WmHJcpvCtJ4gaE547Z0g2c7BhgGIQ7zk0O4TJz91j
+        QuWTzntWKa61yi2axmYwvvsMlvCYNXeqWNnxxU275QPqZPw=
+X-Google-Smtp-Source: ABdhPJwe/qOmXM9fRYbfR0TjwFrwz2y+p/GQCaKzJzgfLqeXm63idcDnub/1584eptHtzSB+GwGei7Si0y9PArMPYsY=
+X-Received: by 2002:a5d:47a7:0:b0:203:d1b4:8f6 with SMTP id
+ 7-20020a5d47a7000000b00203d1b408f6mr1298090wrb.36.1647461021390; Wed, 16 Mar
+ 2022 13:03:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220315104741.63071-1-david@redhat.com> <20220315104741.63071-5-david@redhat.com>
-In-Reply-To: <20220315104741.63071-5-david@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 16 Mar 2022 13:02:39 -0700
-Message-ID: <CAHbLzkqs04Y+2oNP1Tvhk7wOK4LQnD5vuCMVU9o6+-=UAUDwXA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/15] mm/rmap: split page_dup_rmap() into
- page_dup_file_rmap() and page_try_dup_anon_rmap()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220311181014.3448936-1-bjwyman@gmail.com> <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
+In-Reply-To: <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
+From:   Brandon Wyman <bjwyman@gmail.com>
+Date:   Wed, 16 Mar 2022 15:03:05 -0500
+Message-ID: <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 3:50 AM David Hildenbrand <david@redhat.com> wrote:
+On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> ... and move the special check for pinned pages into
-> page_try_dup_anon_rmap() to prepare for tracking exclusive anonymous
-> pages via a new pageflag, clearing it only after making sure that there
-> are no GUP pins on the anonymous page.
+> On 3/11/22 10:10, Brandon Wyman wrote:
+> > Add a clear_faults write-only debugfs entry for the ibm-cffps device
+> > driver.
+> >
+> > Certain IBM power supplies require clearing some latched faults in order
+> > to indicate that the fault has indeed been observed/noticed.
+> >
 >
-> We really only care about pins on anonymous pages, because they are
-> prone to getting replaced in the COW handler once mapped R/O. For !anon
-> pages in cow-mappings (!VM_SHARED && VM_MAYWRITE) we shouldn't really
-> care about that, at least not that I could come up with an example.
+> That is insufficient, sorry. Please provide the affected power supplies as
+> well as the affected faults, and confirm that the problem still exists
+> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
+> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
+> bits after read").
 >
-> Let's drop the is_cow_mapping() check from page_needs_cow_for_dma(), as we
-> know we're dealing with anonymous pages. Also, drop the handling of
-> pinned pages from copy_huge_pud() and add a comment if ever supporting
-> anonymous pages on the PUD level.
->
-> This is a preparation for tracking exclusivity of anonymous pages in
-> the rmap code, and disallowing marking a page shared (-> failing to
-> duplicate) if there are GUP pins on a page.
->
-> RFC notes: if I'm missing something important for !anon pages, we could
->            similarly handle it via page_try_dup_file_rmap().
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  include/linux/mm.h   |  5 +----
->  include/linux/rmap.h | 48 +++++++++++++++++++++++++++++++++++++++++++-
->  mm/huge_memory.c     | 27 ++++++++-----------------
->  mm/hugetlb.c         | 16 ++++++++-------
->  mm/memory.c          | 17 +++++++++++-----
->  mm/migrate.c         |  2 +-
->  6 files changed, 78 insertions(+), 37 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 391b950e919d..63ee06001189 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1322,16 +1322,13 @@ static inline bool is_cow_mapping(vm_flags_t flags)
->
->  /*
->   * This should most likely only be called during fork() to see whether we
-> - * should break the cow immediately for a page on the src mm.
-> + * should break the cow immediately for an anon page on the src mm.
->   *
->   * The caller has to hold the PT lock and the vma->vm_mm->->write_protect_seq.
->   */
->  static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
->                                           struct page *page)
->  {
-> -       if (!is_cow_mapping(vma->vm_flags))
-> -               return false;
-> -
->         VM_BUG_ON(!(raw_read_seqcount(&vma->vm_mm->write_protect_seq) & 1));
->
->         if (!test_bit(MMF_HAS_PINNED, &vma->vm_mm->flags))
-> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-> index e704b1a4c06c..92c3585b8c6a 100644
-> --- a/include/linux/rmap.h
-> +++ b/include/linux/rmap.h
-> @@ -180,11 +180,57 @@ void hugepage_add_anon_rmap(struct page *, struct vm_area_struct *,
->  void hugepage_add_new_anon_rmap(struct page *, struct vm_area_struct *,
->                                 unsigned long);
->
-> -static inline void page_dup_rmap(struct page *page, bool compound)
-> +static inline void __page_dup_rmap(struct page *page, bool compound)
->  {
->         atomic_inc(compound ? compound_mapcount_ptr(page) : &page->_mapcount);
->  }
->
-> +static inline void page_dup_file_rmap(struct page *page, bool compound)
-> +{
-> +       __page_dup_rmap(page, compound);
-> +}
-> +
-> +/**
-> + * page_try_dup_anon_rmap - try duplicating a mapping of an already mapped
-> + *                         anonymous page
-> + * @page: the page to duplicate the mapping for
-> + * @compound: the page is mapped as compound or as a small page
-> + * @vma: the source vma
-> + *
-> + * The caller needs to hold the PT lock and the vma->vma_mm->write_protect_seq.
-> + *
-> + * Duplicating the mapping can only fail if the page may be pinned; device
-> + * private pages cannot get pinned and consequently this function cannot fail.
-> + *
-> + * If duplicating the mapping succeeds, the page has to be mapped R/O into
-> + * the parent and the child. It must *not* get mapped writable after this call.
-> + *
-> + * Returns 0 if duplicating the mapping succeeded. Returns -EBUSY otherwise.
-> + */
-> +static inline int page_try_dup_anon_rmap(struct page *page, bool compound,
-> +                                        struct vm_area_struct *vma)
-> +{
-> +       VM_BUG_ON_PAGE(!PageAnon(page), page);
-> +
-> +       /*
-> +        * If this page may have been pinned by the parent process,
-> +        * don't allow to duplicate the mapping but instead require to e.g.,
-> +        * copy the page immediately for the child so that we'll always
-> +        * guarantee the pinned page won't be randomly replaced in the
-> +        * future on write faults.
-> +        */
-> +       if (likely(!is_device_private_page(page) &&
-> +           unlikely(page_needs_cow_for_dma(vma, page))))
-> +               return -EBUSY;
-> +
-> +       /*
-> +        * It's okay to share the anon page between both processes, mapping
-> +        * the page R/O into both processes.
-> +        */
-> +       __page_dup_rmap(page, compound);
-> +       return 0;
-> +}
-> +
->  /*
->   * Called from mm/vmscan.c to handle paging out
->   */
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index cda88d8ac1bd..c126d728b8de 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1097,23 +1097,16 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->         src_page = pmd_page(pmd);
->         VM_BUG_ON_PAGE(!PageHead(src_page), src_page);
->
-> -       /*
-> -        * If this page is a potentially pinned page, split and retry the fault
-> -        * with smaller page size.  Normally this should not happen because the
-> -        * userspace should use MADV_DONTFORK upon pinned regions.  This is a
-> -        * best effort that the pinned pages won't be replaced by another
-> -        * random page during the coming copy-on-write.
-> -        */
-> -       if (unlikely(page_needs_cow_for_dma(src_vma, src_page))) {
-> +       get_page(src_page);
-> +       if (unlikely(page_try_dup_anon_rmap(src_page, true, src_vma))) {
-> +               /* Page maybe pinned: split and retry the fault on PTEs. */
-> +               put_page(src_page);
+> Thanks,
+> Guenter
 
-Do we have to do the get_page()/put_page() sequence? It seems we don't
-have to get the page before calling page_try_dup_anon_rmap(), right?
-We just need to bump page refcount when dupping rmap successfully. So
-we could do:
+Sorry for the delay in responding. I did some testing with commit
+35f165f08950. I could not get that code to send the CLEAR_FAULTS
+command to the power supplies.
 
-if (unlikely(page_try_dup_anon_rmap(src_page, true, src_vma))) {
-    /* do something */
-}
+I can update the commit message to be more specific about which power
+supplies need this CLEAR_FAULTS sent, and which faults. It is observed
+with the 1600W power supplies (2B1E model). The faults that latch are
+the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
+STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
 
-get_page(src_page)
-
->                 pte_free(dst_mm, pgtable);
->                 spin_unlock(src_ptl);
->                 spin_unlock(dst_ptl);
->                 __split_huge_pmd(src_vma, src_pmd, addr, false, NULL);
->                 return -EAGAIN;
->         }
-> -
-> -       get_page(src_page);
-> -       page_dup_rmap(src_page, true);
->         add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR);
->  out_zero_page:
->         mm_inc_nr_ptes(dst_mm);
-> @@ -1217,14 +1210,10 @@ int copy_huge_pud(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->                 /* No huge zero pud yet */
->         }
 >
-> -       /* Please refer to comments in copy_huge_pmd() */
-> -       if (unlikely(page_needs_cow_for_dma(vma, pud_page(pud)))) {
-> -               spin_unlock(src_ptl);
-> -               spin_unlock(dst_ptl);
-> -               __split_huge_pud(vma, src_pud, addr);
-> -               return -EAGAIN;
-> -       }
-> -
-> +       /*
-> +        * TODO: once we support anonymous pages, use page_try_dup_anon_rmap()
-> +        * and split if duplicating fails.
-> +        */
->         pudp_set_wrprotect(src_mm, addr, src_pud);
->         pud = pud_mkold(pud_wrprotect(pud));
->         set_pud_at(dst_mm, addr, dst_pud, pud);
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index d3ce89697855..9fb990d95dab 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -4781,15 +4781,18 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                         get_page(ptepage);
->
->                         /*
-> -                        * This is a rare case where we see pinned hugetlb
-> -                        * pages while they're prone to COW.  We need to do the
-> -                        * COW earlier during fork.
-> +                        * Failing to duplicate the anon rmap is a rare case
-> +                        * where we see pinned hugetlb pages while they're
-> +                        * prone to COW. We need to do the COW earlier during
-> +                        * fork.
->                          *
->                          * When pre-allocating the page or copying data, we
->                          * need to be without the pgtable locks since we could
->                          * sleep during the process.
->                          */
-> -                       if (unlikely(page_needs_cow_for_dma(vma, ptepage))) {
-> +                       if (!PageAnon(ptepage)) {
-> +                               page_dup_file_rmap(ptepage, true);
-> +                       } else if (page_try_dup_anon_rmap(ptepage, true, vma)) {
->                                 pte_t src_pte_old = entry;
->                                 struct page *new;
->
-> @@ -4836,7 +4839,6 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->                                 entry = huge_pte_wrprotect(entry);
->                         }
->
-> -                       page_dup_rmap(ptepage, true);
->                         set_huge_pte_at(dst, addr, dst_pte, entry);
->                         hugetlb_count_add(npages, dst);
->                 }
-> @@ -5514,7 +5516,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
->                 ClearHPageRestoreReserve(page);
->                 hugepage_add_new_anon_rmap(page, vma, haddr);
->         } else
-> -               page_dup_rmap(page, true);
-> +               page_dup_file_rmap(page, true);
->         new_pte = make_huge_pte(vma, page, ((vma->vm_flags & VM_WRITE)
->                                 && (vma->vm_flags & VM_SHARED)));
->         set_huge_pte_at(mm, haddr, ptep, new_pte);
-> @@ -5874,7 +5876,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
->                 goto out_release_unlock;
->
->         if (vm_shared) {
-> -               page_dup_rmap(page, true);
-> +               page_dup_file_rmap(page, true);
->         } else {
->                 ClearHPageRestoreReserve(page);
->                 hugepage_add_new_anon_rmap(page, dst_vma, dst_addr);
-> diff --git a/mm/memory.c b/mm/memory.c
-> index accb72a3343d..b9602d41d907 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -828,7 +828,8 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->                  */
->                 get_page(page);
->                 rss[mm_counter(page)]++;
-> -               page_dup_rmap(page, false);
-> +               /* Cannot fail as these pages cannot get pinned. */
-> +               BUG_ON(page_try_dup_anon_rmap(page, false, src_vma));
->
->                 /*
->                  * We do not preserve soft-dirty information, because so
-> @@ -924,18 +925,24 @@ copy_present_pte(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
->         struct page *page;
->
->         page = vm_normal_page(src_vma, addr, pte);
-> -       if (page && unlikely(page_needs_cow_for_dma(src_vma, page))) {
-> +       if (page && PageAnon(page)) {
->                 /*
->                  * If this page may have been pinned by the parent process,
->                  * copy the page immediately for the child so that we'll always
->                  * guarantee the pinned page won't be randomly replaced in the
->                  * future.
->                  */
-> -               return copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
-> -                                        addr, rss, prealloc, page);
-> +               get_page(page);
-> +               if (unlikely(page_try_dup_anon_rmap(page, false, src_vma))) {
-> +                       /* Page maybe pinned, we have to copy. */
-> +                       put_page(page);
-> +                       return copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
-> +                                                addr, rss, prealloc, page);
-> +               }
-> +               rss[mm_counter(page)]++;
->         } else if (page) {
->                 get_page(page);
-> -               page_dup_rmap(page, false);
-> +               page_dup_file_rmap(page, false);
->                 rss[mm_counter(page)]++;
->         }
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index c7da064b4781..524c2648ab36 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -240,7 +240,7 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
->                         if (PageAnon(new))
->                                 hugepage_add_anon_rmap(new, vma, pvmw.address);
->                         else
-> -                               page_dup_rmap(new, true);
-> +                               page_dup_file_rmap(new, true);
->                         set_huge_pte_at(vma->vm_mm, pvmw.address, pvmw.pte, pte);
->                 } else
->  #endif
-> --
-> 2.35.1
+> > Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+> > ---
+> > V1 -> V2: Explain why this change is needed
+> >
+> >   drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
+> >   1 file changed, 11 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> > index e3294a1a54bb..3f02dde02a4b 100644
+> > --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> > +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> > @@ -67,6 +67,7 @@ enum {
+> >       CFFPS_DEBUGFS_CCIN,
+> >       CFFPS_DEBUGFS_FW,
+> >       CFFPS_DEBUGFS_ON_OFF_CONFIG,
+> > +     CFFPS_DEBUGFS_CLEAR_FAULTS,
+> >       CFFPS_DEBUGFS_NUM_ENTRIES
+> >   };
+> >
+> > @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
+> >               if (rc)
+> >                       return rc;
+> >
+> > +             rc = 1;
+> > +             break;
+> > +     case CFFPS_DEBUGFS_CLEAR_FAULTS:
+> > +             rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
+> > +             if (rc < 0)
+> > +                     return rc;
+> > +
+> >               rc = 1;
+> >               break;
+> >       default:
+> > @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
+> >       debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
+> >                           &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
+> >                           &ibm_cffps_fops);
+> > +     debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
+> > +                         &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
+> > +                         &ibm_cffps_fops);
+> >
+> >       return 0;
+> >   }
 >

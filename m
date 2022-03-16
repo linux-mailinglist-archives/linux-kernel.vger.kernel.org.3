@@ -2,112 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440964DBA28
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074754DBA2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354948AbiCPVdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 17:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S1358147AbiCPVdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 17:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346516AbiCPVcl (ORCPT
+        with ESMTP id S1358124AbiCPVdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 17:32:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A7F286F1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:31:18 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e8-20020a259248000000b0063391b39d14so1973087ybo.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to;
-        bh=Bl7MJwhFK3CmN1p0LqSa7+Zpx9isugSorKxGIE7TLbU=;
-        b=ah8JhERqzsKI4zoA2wM2uCY/y/mKtUqCZoLIwB3GCdvt+R176gYWd3Ld2kbRNtnnUr
-         8U9wbv3CAC9uy871ywNAiGgwkvf2m1U1vpk02cmN9umb/paDX/JSEhaidAUA1G4DjaLa
-         piJhYvpV0OAAwCx9uvkOkFCvddGwkYOxWm6eHR78imHUeT5mSVGe4/2GO8O38vVlQ/Pc
-         Y2YhL72G8o9DMCyMGfm2wrxfQAydVc4Qd7QhupIGdBqah1qSlM5P/thLWnxhmNyYwHmp
-         /i4KM0WUSg8C87uwFk6w5KNfuGFRZ3OJ2xUbHDCy2cu2f0IkbUhFfpaksKteCqj7/715
-         2zFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to;
-        bh=Bl7MJwhFK3CmN1p0LqSa7+Zpx9isugSorKxGIE7TLbU=;
-        b=toaTOD/z6/ksKCf9opBGWDpBM79O1FDChPI0ogWrQdt5bUPmdHNKheWy0fyQSqssN8
-         A5b1hcJCc/0rKkil7USX9b0VKgnqRlxh45i5h36ulGS8lBXTWEvp+9gugWFN+Gkop+HB
-         MQ+Mp0hRerWVbH1di2LNGzNIV9jPFN6UmjHBjrS9OYhf4qDwBu3aGqiJV4/XnVYgO3BU
-         D91wdVQy+hK+6ig/iFYeSEu/u6MRj5k4ljKYrgprkBx0tG7x4JftfSXtUK1PSkxv9fqk
-         V2R4mwNMJt2fIcih/5jR8d/PkmLWuOWX7QEFOPuAH564KYMwXPyyblxtqbT6bUh7g3KT
-         h1pw==
-X-Gm-Message-State: AOAM531N1STZxBf+yEQzduGwbajuNtZulJ2KKbOdJMygi3eEIZEF1dR6
-        73Ozat4HJJ2AH7A7Di4ljBiDKeCp
-X-Google-Smtp-Source: ABdhPJxcu9/nbwO++m/ad4AXWkdgZrz+qZB/yIay3eyHTM4D+IPKZRAvikVbXXZyPH347XhAgqrOD/zsyA==
-X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:7dae:6503:2272:5cd1])
- (user=morbo job=sendgmr) by 2002:a25:8b8a:0:b0:62c:25e2:cf2d with SMTP id
- j10-20020a258b8a000000b0062c25e2cf2dmr2115234ybl.186.1647466277390; Wed, 16
- Mar 2022 14:31:17 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 14:31:14 -0700
-Message-Id: <20220316213114.2352352-1-morbo@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH] net/fsl: xgmac_mdio: use correct format characters
-From:   Bill Wendling <morbo@google.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Marcin Wojtas <mw@semihalf.com>, Andrew Lunn <andrew@lunn.ch>,
-        Bill Wendling <morbo@google.com>,
-        Calvin Johnson <calvin.johnson@oss.nxp.com>,
-        Markus Koch <markus@notsyncing.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 17:33:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3192654F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647466314; x=1679002314;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bf4JKomAlruhcstNZW05X/lq3nwv0fgH8wbcIE/yYRA=;
+  b=QrQai2jdTejgd6eIgBPmhvcNtj78Buq051559BX0e+W8mU4IzBInwiYo
+   23mpXb3Dq+U+vnybO7z+BGx7WUkEKeDNPEqNNuwrWAuLKMTOjLVvUHwoR
+   qSJsl+pCbZvJJnflOe9YrctUDNNJ+6anG4fcifm+eiy+abqASx7OjD+f3
+   dBmo9ELPsonBAPkgiYLF+ZttA5UO7Q9r7jcTqSO/F3HfSKwIFy8hnw6+g
+   Bisdbz1MovO1m4js6RsiXGar1ciBn99g/UCSSFFIFImFAC4+KKrcevNv5
+   rU9KChONDv/sSj+XWfz93J4kT0/SzlYbkX0m1JrZtgicFPzageByBKbaj
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="244169998"
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="244169998"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 14:31:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="516503899"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 14:31:53 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUbFI-000Cxh-Ab; Wed, 16 Mar 2022 21:31:52 +0000
+Date:   Thu, 17 Mar 2022 05:31:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1486/2335] arch/powerpc/include/asm/mmu.h:350:16:
+ error: 'rodata_enabled' undeclared; did you mean 'radix_enabled'?
+Message-ID: <202203170542.lLTUY4Wv-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compiling with -Wformat, clang emits the following warning:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: c9cf83a54a72f523cc78474ba78110c9e89db2a6 [1486/2335] headers/deps: printk: Reduce <linux/printk.h> header dependencies
+config: powerpc64-randconfig-r023-20220313 (https://download.01.org/0day-ci/archive/20220317/202203170542.lLTUY4Wv-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=c9cf83a54a72f523cc78474ba78110c9e89db2a6
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout c9cf83a54a72f523cc78474ba78110c9e89db2a6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc prepare
 
-drivers/net/ethernet/freescale/xgmac_mdio.c:243:22: warning: format
-specifies type 'unsigned char' but the argument has type 'int'
-[-Wformat]
-                        phy_id, dev_addr, regnum);
-                                          ^~~~~~
-./include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                    ~~~     ^~~~~~~~~~~
-./include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                        ~~~    ^~~~~~~~~~~
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The types of these arguments are unconditionally defined, so this patch
-updates the format character to the correct ones for ints and unsigned
-ints.
+All errors (new ones prefixed by >>):
 
-Link: ClangBuiltLinux/linux#378
-Signed-off-by: Bill Wendling <morbo@google.com>
+   In file included from arch/powerpc/include/asm/lppaca.h:46,
+                    from arch/powerpc/include/asm/paca.h:17,
+                    from arch/powerpc/include/asm/current.h:13,
+                    from include/linux/preempt.h:10,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+   arch/powerpc/include/asm/mmu.h: In function 'strict_kernel_rwx_enabled':
+>> arch/powerpc/include/asm/mmu.h:350:16: error: 'rodata_enabled' undeclared (first use in this function); did you mean 'radix_enabled'?
+     350 |         return rodata_enabled;
+         |                ^~~~~~~~~~~~~~
+         |                radix_enabled
+   arch/powerpc/include/asm/mmu.h:350:16: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:299,
+                    from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+                    from arch/powerpc/include/asm/book3s/64/mmu.h:39,
+                    from arch/powerpc/include/asm/mmu.h:405,
+                    from arch/powerpc/include/asm/lppaca.h:46,
+                    from arch/powerpc/include/asm/paca.h:17,
+                    from arch/powerpc/include/asm/current.h:13,
+                    from include/linux/preempt.h:10,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+   arch/powerpc/include/asm/book3s/64/hash.h: At top level:
+>> arch/powerpc/include/asm/book3s/64/hash.h:244:22: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'hash__vmemmap_create_mapping'
+     244 | extern int __meminit hash__vmemmap_create_mapping(unsigned long start,
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:300,
+                    from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+                    from arch/powerpc/include/asm/book3s/64/mmu.h:39,
+                    from arch/powerpc/include/asm/mmu.h:405,
+                    from arch/powerpc/include/asm/lppaca.h:46,
+                    from arch/powerpc/include/asm/paca.h:17,
+                    from arch/powerpc/include/asm/current.h:13,
+                    from include/linux/preempt.h:10,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+>> arch/powerpc/include/asm/book3s/64/radix.h:289:22: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'radix__vmemmap_create_mapping'
+     289 | extern int __meminit radix__vmemmap_create_mapping(unsigned long start,
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+                    from arch/powerpc/include/asm/book3s/64/mmu.h:39,
+                    from arch/powerpc/include/asm/mmu.h:405,
+                    from arch/powerpc/include/asm/lppaca.h:46,
+                    from arch/powerpc/include/asm/paca.h:17,
+                    from arch/powerpc/include/asm/current.h:13,
+                    from include/linux/preempt.h:10,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+>> arch/powerpc/include/asm/book3s/64/pgtable.h:1087:29: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'vmemmap_create_mapping'
+    1087 | static inline int __meminit vmemmap_create_mapping(unsigned long start,
+         |                             ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/include/asm/mmu.h:405,
+                    from arch/powerpc/include/asm/lppaca.h:46,
+                    from arch/powerpc/include/asm/paca.h:17,
+                    from arch/powerpc/include/asm/current.h:13,
+                    from include/linux/preempt.h:10,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+>> arch/powerpc/include/asm/book3s/64/mmu.h:231:27: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'early_init_mmu'
+     231 | static inline void __init early_init_mmu(void)
+         |                           ^~~~~~~~~~~~~~
+>> arch/powerpc/include/asm/book3s/64/mmu.h:262:13: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'radix_init_pseries'
+     262 | void __init radix_init_pseries(void);
+         |             ^~~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/include/asm/paca.h:30,
+                    from arch/powerpc/include/asm/current.h:13,
+                    from include/linux/preempt.h:10,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+>> arch/powerpc/include/asm/cpuidle.h:88:12: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'validate_psscr_val_mask'
+      88 | int __init validate_psscr_val_mask(u64 *psscr_val, u64 *psscr_mask, u32 flags);
+         |            ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/sched.h:12,
+                    from include/linux/sched/thread_info_api.h:5,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:79,
+                    from arch/powerpc/kernel/asm-offsets.c:12:
+   include/linux/sched/per_task.h:48:11: fatal error: generated/asm-offsets.h: No such file or directory
+      48 | # include <generated/asm-offsets.h>
+         |           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+   make[2]: *** [scripts/Makefile.build:121: arch/powerpc/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +350 arch/powerpc/include/asm/mmu.h
+
+bab4c8de6289b46 Michael Ellerman 2016-07-27  346  
+28ea38b9cba68ee Christophe Leroy 2019-02-21  347  #ifdef CONFIG_STRICT_KERNEL_RWX
+28ea38b9cba68ee Christophe Leroy 2019-02-21  348  static inline bool strict_kernel_rwx_enabled(void)
+28ea38b9cba68ee Christophe Leroy 2019-02-21  349  {
+28ea38b9cba68ee Christophe Leroy 2019-02-21 @350  	return rodata_enabled;
+28ea38b9cba68ee Christophe Leroy 2019-02-21  351  }
+28ea38b9cba68ee Christophe Leroy 2019-02-21  352  #else
+28ea38b9cba68ee Christophe Leroy 2019-02-21  353  static inline bool strict_kernel_rwx_enabled(void)
+28ea38b9cba68ee Christophe Leroy 2019-02-21  354  {
+28ea38b9cba68ee Christophe Leroy 2019-02-21  355  	return false;
+28ea38b9cba68ee Christophe Leroy 2019-02-21  356  }
+28ea38b9cba68ee Christophe Leroy 2019-02-21  357  #endif
+4fcc636615b1a30 Jordan Niethe    2021-06-09  358  
+
+:::::: The code at line 350 was first introduced by commit
+:::::: 28ea38b9cba68eec55cf550acd6b36b6f507cd17 powerpc/mmu: add is_strict_kernel_rwx() helper
+
+:::::: TO: Christophe Leroy <christophe.leroy@c-s.fr>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
 ---
- drivers/net/ethernet/freescale/xgmac_mdio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/freescale/xgmac_mdio.c b/drivers/net/ethernet/freescale/xgmac_mdio.c
-index 266e562bd67a..1d5d09d2eb41 100644
---- a/drivers/net/ethernet/freescale/xgmac_mdio.c
-+++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
-@@ -239,7 +239,7 @@ static int xgmac_mdio_read(struct mii_bus *bus, int phy_id, int regnum)
- 	if ((xgmac_read32(&regs->mdio_stat, endian) & MDIO_STAT_RD_ER) &&
- 	    !priv->has_a011043) {
- 		dev_dbg(&bus->dev,
--			"Error while reading PHY%d reg at %d.%hhu\n",
-+			"Error while reading PHY%d reg at %d.%d\n",
- 			phy_id, dev_addr, regnum);
- 		ret = 0xffff;
- 	} else {
--- 
-2.35.1.723.g4982287a31-goog
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

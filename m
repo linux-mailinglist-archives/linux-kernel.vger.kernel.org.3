@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54ADC4DB3A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950E94DB39D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356685AbiCPOtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 10:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S1348350AbiCPOto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349582AbiCPOtx (ORCPT
+        with ESMTP id S231273AbiCPOtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 10:49:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332422BFD;
-        Wed, 16 Mar 2022 07:48:39 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bg10so4719049ejb.4;
-        Wed, 16 Mar 2022 07:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MU28qsctK5PVccJ1WrLZfX9pzKHKxkT7Hh1LuKa2sg8=;
-        b=oYGLiy/hunXG2D75J7dgg6ccgKAlxDTBHJWc2w9thvePgZOCpSFQ02J/Z1DDvze70U
-         M07qtMz9jgPckpvV4kCgxu1Pgr2Kr/pKLQX/dI9OxNjCHQmJjEEz8BId3TdNe9i1TtvJ
-         9vdt0fo77rejZd5la9VGlaGen7BKHyICYk7UbfRUtNySFXp6a+JHq6vpLVrt1wu4svIr
-         xVFwCuXCQrn/Kl2CRVAIPpZwa3MouPH1SnRl4Mzshrlk6BiHaGsjWnucQEy9Qixhtsm9
-         LDWrJjLvbZ6+OVIi+pU1xIvnO7zi+oAppY1jdkKBRx6Ytt06OM/1O0EF1534lZuc1Le2
-         XHuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MU28qsctK5PVccJ1WrLZfX9pzKHKxkT7Hh1LuKa2sg8=;
-        b=iA+7kS2ysN8+Z128SEVT8UP8sQO682AOIIHHGoC6xTvoRL7x6njIZwc6jOMWG6+zIZ
-         24Y8QUBIULuitgQ1wlvWIbhArCbarc+Q1mgl0grJy9lniZi/SyVMIkiWzVaGM+4uptN9
-         RkcZZvOUFseS33YTEg7HSQHpCP9yo0NstfXgeIVi0h1LY1kli0Ro6ng5gGNx+w2hhQkv
-         XkNixgm+Wmr0inG0J8CkfIbx1z7FqBC4SbkDP5zMlDYPvJ3vHLkyqVO8nMa4mdNstSY0
-         s269gE3BzF/SJKhOUB0zudoUALe7YUCDxskEowR8sEWFAI+t6IYcaUlUC2lhLslmxxRV
-         yoJQ==
-X-Gm-Message-State: AOAM5322pDj1aF/bWo4rMXNDHGxXWQ5iIQQAqUIf0J/16WSagoSE/VKP
-        UhBtkqMvl7UgqgpiqWwFy+mgYAt4RWfFkiXUFoc=
-X-Google-Smtp-Source: ABdhPJy/Ny8UY3V3+yIJkaQJt94C4ScuZfBq3+cneD49OBa3A7yawWEZCrCxtlo7/0BYgVPT/lQC8V9e77lniQQqEw4=
-X-Received: by 2002:a17:907:9703:b0:6da:6412:508a with SMTP id
- jg3-20020a170907970300b006da6412508amr275705ejc.77.1647442117741; Wed, 16 Mar
- 2022 07:48:37 -0700 (PDT)
+        Wed, 16 Mar 2022 10:49:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A425B1A800;
+        Wed, 16 Mar 2022 07:48:27 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 61F3C210E4;
+        Wed, 16 Mar 2022 14:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647442106; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sNgiXVZBv6F6wyCvndqNofHIp7IwWtdhnCB8N/Uhyx4=;
+        b=hothijYJO1hxPRBPTWSio0H1fgSSzQ8O7tk8VGs/WEuIfRvgvnwDzVWziL+njJmzW6wyFn
+        VATT3K4e72LwlXcRj3rW+0WbHF7s9L+fpVx64QmLSbyMLwtHUQdxspy7+5OnijG2U+hrJS
+        i9OUAEdd5u4u2QvpIpuWOodg7TL2S18=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647442106;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sNgiXVZBv6F6wyCvndqNofHIp7IwWtdhnCB8N/Uhyx4=;
+        b=PKQl+BpgTe2MRagJZ4oRxzm6SS30ZxbcbTnqEeM2XrTInCRsMggLFOJzqWHHMc41bUhnSs
+        yIjn9NvRSPch9PCA==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 31C92A3B87;
+        Wed, 16 Mar 2022 14:48:25 +0000 (UTC)
+Date:   Wed, 16 Mar 2022 15:48:25 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
+        joe.lawrence@redhat.com, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        qirui.001@bytedance.com
+Subject: Re: [PATCH v3] livepatch: Don't block removal of patches that are
+ safe to unload
+In-Reply-To: <20220312152220.88127-1-zhouchengming@bytedance.com>
+Message-ID: <alpine.LSU.2.21.2203161536330.6444@pobox.suse.cz>
+References: <20220312152220.88127-1-zhouchengming@bytedance.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20220315173922.153389-1-paul@crapouillou.net>
-In-Reply-To: <20220315173922.153389-1-paul@crapouillou.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 16 Mar 2022 16:47:24 +0200
-Message-ID: <CAHp75Vfas=H7Vb+mJor-LWckUpE8QUdD8Yauq4mdG4OY+7dfMg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: ingenic: Garbage-collect code paths for SoCs
- disabled by config
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, od@opendingux.net,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 4:11 AM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> By being a bit smarter about how the SoC version checks are performed,
-> it is possible to have all the code paths that correspond to SoCs
-> disabled in the kernel config automatically marked as dead code by the
-> compiler, and therefore garbage-collected.
->
-> With this patch, when compiling a kernel that only targets the JZ4760
-> for instance, the driver is now about 4.5 KiB smaller.
+On Sat, 12 Mar 2022, Chengming Zhou wrote:
 
-...
+> module_put() is not called for a patch with "forced" flag. It should
+> block the removal of the livepatch module when the code might still
+> be in use after forced transition.
+> 
+> klp_force_transition() currently sets "forced" flag for all patches on
+> the list.
+> 
+> In fact, any patch can be safely unloaded when it passed through
+> the consistency model in KLP_UNPATCHED transition.
+> 
+> By other words, the "forced" flag must be set only for livepatches
 
-> +static const u32 enabled_socs =
+s/By/In/
 
-If you make it unsigned long, it would be easier to switch to bitmap
-APIs if needed in the future.
+> that are being removed. In particular, set the "forced" flag:
+> 
+>   + only for klp_transition_patch when the transition to KLP_UNPATCHED
+>     state was forced.
+> 
+>   + all replaced patches when the transition to KLP_PATCHED state was
+>     forced and the patch was replacing the existing patches.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+> Changes in v3:
+>  - rewrite more clear commit message by Petr.
+> 
+> Changes in v2:
+>  - interact nicely with the atomic replace feature noted by Miroslav.
+> ---
+>  kernel/livepatch/transition.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> index 5683ac0d2566..7f25a5ae89f6 100644
+> --- a/kernel/livepatch/transition.c
+> +++ b/kernel/livepatch/transition.c
+> @@ -641,6 +641,18 @@ void klp_force_transition(void)
+>  	for_each_possible_cpu(cpu)
+>  		klp_update_patch_state(idle_task(cpu));
+>  
+> -	klp_for_each_patch(patch)
+> -		patch->forced = true;
+> +	/*
+> +	 * Only need to set forced flag for the transition patch
+> +	 * when force transition to KLP_UNPATCHED state, but
+> +	 * have to set forced flag for all replaced patches
+> +	 * when force atomic replace transition.
+> +	 */
 
-> +       IS_ENABLED(CONFIG_MACH_JZ4730) << ID_JZ4730 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4740) << ID_JZ4740 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4725B) << ID_JZ4725B |
-> +       IS_ENABLED(CONFIG_MACH_JZ4750) << ID_JZ4750 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4755) << ID_JZ4755 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4760) << ID_JZ4760 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4770) << ID_JZ4770 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4775) << ID_JZ4775 |
-> +       IS_ENABLED(CONFIG_MACH_JZ4780) << ID_JZ4780 |
-> +       IS_ENABLED(CONFIG_MACH_X1000) << ID_X1000 |
-> +       IS_ENABLED(CONFIG_MACH_X1500) << ID_X1500 |
-> +       IS_ENABLED(CONFIG_MACH_X1830) << ID_X1830 |
-> +       IS_ENABLED(CONFIG_MACH_X2000) << ID_X2000 |
-> +       IS_ENABLED(CONFIG_MACH_X2100) << ID_X2100;
+How about something like
 
-...
+/*
+ * Set forced flag for patches being removed, which is the transition
+ * patch in KLP_UNPATCHED state or all replaced patches when forcing
+ * the atomic replace transition.
+ */
 
-> +is_soc_or_above(const struct ingenic_pinctrl *jzpc, enum jz_version version)
-> +{
-> +       return (enabled_socs >> version) &&
-> +               (!(enabled_socs & GENMASK((unsigned int)version - 1, 0))
+?
 
-Why casting? Why not use BIT()?
+> +	if (klp_target_state == KLP_UNPATCHED)
+> +		klp_transition_patch->forced = true;
+> +	else if (klp_transition_patch->replace) {
+> +		klp_for_each_patch(patch) {
+> +			if (patch != klp_transition_patch)
+> +				patch->forced = true;
+> +		}
+> +	}
 
-But these two lines seem like a very interesting way to reinvent the test_bit().
+Looks good to me.
 
-If I'm mistaken, this all version code needs a good comment.
-
-> +                || jzpc->info->version >= version);
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
+Miroslav

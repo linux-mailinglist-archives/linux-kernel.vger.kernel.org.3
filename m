@@ -2,48 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61E54DAA16
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EC84DAA1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353693AbiCPF5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 01:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S1343876AbiCPF75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiCPF53 (ORCPT
+        with ESMTP id S236350AbiCPF7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 01:57:29 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE908433B8;
-        Tue, 15 Mar 2022 22:56:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KJKJt13c2z4xc5;
-        Wed, 16 Mar 2022 16:56:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647410174;
-        bh=02nk9lW8BCCctxls3pqsMzGJixoyf2zsAdcAg+KrNmw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IhQ6OJ4+GAYzBh/Kb7HDPjOMM2mxAGJqRV1EJX1WwzR/Pxijz3RnA6L/8EH4BV5N8
-         ERN8mTlgFtjvVixVpmOYavfcs7/+S2hhqwVaOHcChULSAAIS252i8QkpM0fEC3MZOK
-         hOopxkVX5x7CbDg9eBPBXW1xzdfAeeUN9TAFPvKEnM7F90Utp1Zodt/is91zplShWH
-         fEpgfB55EBQId1nQJ2DrhGWgttihQwgaiseBy/ox2yiDYsVpbrwBqZcrZ8qMtyof0d
-         gwPoYmkYCE5prmmBJ88isqw7ucSJf4yMeD5+VJS/SX/3UlmgC8IEPipNRxhRcccYxs
-         8SgJ6pKDdFMdQ==
-Date:   Wed, 16 Mar 2022 16:56:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the userns tree
-Message-ID: <20220316165612.4f50faad@canb.auug.org.au>
+        Wed, 16 Mar 2022 01:59:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1FD5F24B;
+        Tue, 15 Mar 2022 22:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647410319; x=1678946319;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zfZnlOFK8Z/4hc0pM9Fr+RCd2hrVL1WnE5hcxyw+apA=;
+  b=iLjQEmlEa6JpTG+bwripT+mpqswsg4S48Qq2xorN0czin1CdcBrgLvfk
+   R5NqAG9elqNfqDGFd8l+Of7+ixUXb2N4+FV/kdZ9g3NFr+8yFiO8TiUar
+   BtTlSSSpxR4NrGEXhusVMyQmpqm6NaYw934Cp8RKyYZPBR9U/5FXNNOB8
+   cJSZhFPHP9FWZvATt1wLXXQm5EmpoWBlMvQuWdiG56mrXE5XzZsoHgpjE
+   FrEFwAk7fIT3NTxw0Chc/rtY3RiO4oxJblZPX2MO4zzK0SakoJ17UMpcP
+   gCwhORDWtfMYebtd571iTO010bwrDfnUo3ziMBkzfl/mYaHkLZu7VrQO+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342930172"
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="342930172"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 22:58:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="516194047"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga006.jf.intel.com with ESMTP; 15 Mar 2022 22:58:04 -0700
+Message-ID: <d30b5ded-c777-4de1-c48f-e7ac1ac37a3b@intel.com>
+Date:   Wed, 16 Mar 2022 07:58:03 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5X9PVaMngZ9FYee3la2En_e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH V4 6/7] mmc: sdhci: Set error state for mmc driver
+Content-Language: en-US
+To:     "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>,
+        "Asutosh Das (asd)" <asutoshd@quicinc.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Veerabhadrarao Badiganti (QUIC)" <quic_vbadigan@quicinc.com>,
+        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
+        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
+        "Sarthak Garg (QUIC)" <quic_sartgarg@quicinc.com>,
+        "Nitin Rawat (QUIC)" <quic_nitirawa@quicinc.com>,
+        "Sayali Lokhande (QUIC)" <quic_sayalil@quicinc.com>,
+        Sayali Lokhande <sayalil@codeaurora.org>,
+        "Bao D . Nguyen" <nguyenb@codeaurora.org>
+References: <1646226227-32429-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ <1646226227-32429-7-git-send-email-quic_c_sbhanu@quicinc.com>
+ <01515ee6-b312-7f81-43f0-e72a0d290046@intel.com>
+ <SJ0PR02MB8449518ACEA501523DB8E558CD0D9@SJ0PR02MB8449.namprd02.prod.outlook.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <SJ0PR02MB8449518ACEA501523DB8E558CD0D9@SJ0PR02MB8449.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,89 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/5X9PVaMngZ9FYee3la2En_e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/03/2022 20:15, Sajida Bhanu (Temp) (QUIC) wrote:
+> Hi,
+> 
+> Thanks for the review.
+> 
+> Please find the inline comments.
+> 
+> Thanks,
+> Sajida
+>> -----Original Message-----
+>> From: Adrian Hunter <adrian.hunter@intel.com>
+>> Sent: Tuesday, March 8, 2022 3:36 PM
+>> To: Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@quicinc.com>; Asutosh
+>> Das (asd) <asutoshd@quicinc.com>; ulf.hansson@linaro.org;
+>> agross@kernel.org; bjorn.andersson@linaro.org; linux-
+>> mmc@vger.kernel.org; linux-arm-msm@vger.kernel.org; linux-
+>> kernel@vger.kernel.org
+>> Cc: Veerabhadrarao Badiganti (QUIC) <quic_vbadigan@quicinc.com>; Ram
+>> Prakash Gupta (QUIC) <quic_rampraka@quicinc.com>; Pradeep Pragallapati
+>> (QUIC) <quic_pragalla@quicinc.com>; Sarthak Garg (QUIC)
+>> <quic_sartgarg@quicinc.com>; Nitin Rawat (QUIC)
+>> <quic_nitirawa@quicinc.com>; Sayali Lokhande (QUIC)
+>> <quic_sayalil@quicinc.com>; Sayali Lokhande <sayalil@codeaurora.org>; Bao
+>> D . Nguyen <nguyenb@codeaurora.org>
+>> Subject: Re: [PATCH V4 6/7] mmc: sdhci: Set error state for mmc driver
+>>
+>> On 2.3.2022 15.03, Shaik Sajida Bhanu wrote:
+>>> Set error state if any errors observed in eMMC and SD card driver level.
+>>>
+>>> Signed-off-by: Liangliang Lu <luliang@codeaurora.org>
+>>> Signed-off-by: Sayali Lokhande <sayalil@codeaurora.org>
+>>> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
+>>> Signed-off-by: Ram Prakash Gupta <quic_rampraka@quicinc.com>
+>>> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+>>> ---
+>>>  drivers/mmc/host/sdhci.c | 22 ++++++++++++++++++++++
+>>>  1 file changed, 22 insertions(+)
+>>>
+>>> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c index
+>>> 741fb06..4ba3797 100644
+>>> --- a/drivers/mmc/host/sdhci.c
+>>> +++ b/drivers/mmc/host/sdhci.c
+>>> @@ -224,6 +224,8 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
+>>>  		if (timedout) {
+>>>  			pr_err("%s: Reset 0x%x never completed.\n",
+>>>  				mmc_hostname(host->mmc), (int)mask);
+>>> +			if (host->mmc && !host->mmc->err_state)
+>>> +				mmc_debugfs_err_stats_enable(host-
+>>> mmc);
+>>
+>> I really do not understand why this cannot be another err_stats entry such as
+>> MMC_ERR_DRIVER and then as below?
+>>
+>> 			sdhci_err_stats_inc(host, DRIVER);
+>>
+>>
+> Hi,
+> 
+> err_stats having all the error types.
+> err_state is not the error type, if err_state set means some errors occurred in driver and we will go and check err_stats to know exact error.
 
-Hi all,
 
-After merging the userns tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+In sdhci.c use only sdhci_err_stats_inc() adding err_stats entries as needed.
+Seems like there are controller timeouts (say MMC_ERR_CTRL_TIMEOUT) and
+unexpected interrupts (say MMC_ERR_UNEXPECTED_IRQ)
 
-kernel/sched/fair.c: In function 'init_numa_balancing':
-kernel/sched/fair.c:2884:9: error: implicit declaration of function 'init_t=
-ask_work'; did you mean 'init_irq_work'? [-Werror=3Dimplicit-function-decla=
-ration]
- 2884 |         init_task_work(&p->numa_work, task_numa_work);
-      |         ^~~~~~~~~~~~~~
-      |         init_irq_work
-kernel/sched/fair.c: In function 'task_tick_numa':
-kernel/sched/fair.c:2935:25: error: implicit declaration of function 'task_=
-work_add' [-Werror=3Dimplicit-function-declaration]
- 2935 |                         task_work_add(curr, work, TWA_RESUME);
-      |                         ^~~~~~~~~~~~~
-kernel/sched/fair.c:2935:51: error: 'TWA_RESUME' undeclared (first use in t=
-his function)
- 2935 |                         task_work_add(curr, work, TWA_RESUME);
-      |                                                   ^~~~~~~~~~
+In drivers/mmc/core/debugfs.c calculate err_state as needed e.g.
 
-Maybe caused by commit
+static int mmc_err_state_get(void *data, u64 *val)
+{
+	struct mmc_host *host = data;
 
-  03248addadf1 ("resume_user_mode: Move to resume_user_mode.h")
-or
-  8ca07e17c9dd ("task_work: Remove unnecessary include from posix_timers.h")
+	*val = host->err_stats[MMC_ERR_REQ_TIMEOUT] ||
+	       host->err_stats[MMC_ERR_CTRL_TIMEOUT] ||
+	       host->err_stats[MMC_ERR_UNEXPECTED_IRQ] ||
+	       <etc>
 
-interacting with (maybe) commit
-
-  c4ad6fcb67c4 ("sched/headers: Reorganize, clean up and optimize kernel/sc=
-hed/fair.c dependencies")
-
-from the tip tree.
-
-I have applied this merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 16 Mar 2022 16:41:42 +1100
-Subject: [PATCH] fixup for moving of linux/task_work.h
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- kernel/sched/fair.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 89d21fda106c..7a6678fdffb0 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -31,6 +31,7 @@
- #include <linux/lockdep_api.h>
- #include <linux/softirq.h>
- #include <linux/refcount_api.h>
-+#include <linux/task_work.h>
- #include <linux/topology.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/cond_resched.h>
---=20
-2.34.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/5X9PVaMngZ9FYee3la2En_e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIxe/wACgkQAVBC80lX
-0Gy8UAf8DUEireL9zIc1o+fiDIhFC1CN+Fc+k9f9Bd3igsa/td+ZD8V8W6HqQaD2
-wxHO08w+cqHILA0w4Vvb2C/BHLTwYT+hX5oTXqIYloWzqs4xhdFK2M9R3vH9Bb7T
-T4oC34D2u3MJKUtK2Ve6Ycudt7ilOUQUdx1MUyuGjd4JNX9RlC8GGv0gAXVOVhSX
-YlCqlwRPPA0e2AfZw7OnSywnUmN9/Vhih+/NYbudgojXA82lVY7BKTJX5wo76/P6
-QNBQlUAHZeWWjFQ67io1+cf2zhekno05phl/RpcZkmwlUH5LtSSDTVwoArw0hDsY
-/bfYLzi3pzLr265oEpj9V4JxjSMjig==
-=otb0
------END PGP SIGNATURE-----
-
---Sig_/5X9PVaMngZ9FYee3la2En_e--
+	return 0;
+}

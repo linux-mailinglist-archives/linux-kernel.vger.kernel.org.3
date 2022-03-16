@@ -2,161 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777024DB961
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14B24DB963
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357947AbiCPU2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S1357503AbiCPU3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357964AbiCPU17 (ORCPT
+        with ESMTP id S1348561AbiCPU3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:27:59 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC603F8AE;
-        Wed, 16 Mar 2022 13:26:43 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d15so1704635qty.8;
-        Wed, 16 Mar 2022 13:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Gns4/i7WVTMPvm4NCq+ncvvmRYDMWRv+EPtpCaahO6I=;
-        b=Y4SLtxmwKiGsSL/pt5pVjNOc8tI4eDK8Avvn7lQnt8NjQTgicY9820fpiXjU5jBXAv
-         fR6gCM19reTd6IHxEtYkZ7iXoZMjQi4S3S7cGEndRgEpU2439g9jVmmeuseWAg9KByeI
-         PmuxYYiomzKSbVsLeHA9tPuOggZfxsR+/aFuUXZGsYcg4jdcPw4IFR9MVG9s4R8upKhT
-         BeLDkiNxuMzCQq1vEtkM9Epb071ZocsII6eucqqe9a0hvwVhYPgmWes2tSSvm4GN0szb
-         WgnkQSu9JbMCzjKuK2ZAhGrDF3Inos8eNDllCIV/oRp5jV28vxsrOzN7bj5aaGdRQT9c
-         vdDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Gns4/i7WVTMPvm4NCq+ncvvmRYDMWRv+EPtpCaahO6I=;
-        b=sXwCKYK6aPh7dQjY0V++LB/qqlvg5E2au/MM7crn6a0Z99zEqagPmWyGZYXGLIbrcv
-         rw5C6dLu3EZ5CxsHp2ck83ail7EvgY/xM/Yfk4ZE+Rxbk0QShYxUUmOZhvIdno5gK+8Z
-         q60Ya12B++F71S24rOH4zaBys0ci0CgpC84h/j9P/5SBVGPzin8XKmfGwNZz6g0nY+YL
-         0oj1VzMUPdU55tVpfnl+IpCcdXkOxEb8IPBJg1ILccEjdJzzmu//DGEswhJkviFdSlyt
-         a0fnhwDFXwAr3vSDcb7oRxSJsQq5LHOaZdJKJW6UKq2LUycI0IhNXgp9JWcyZG3eU3+L
-         aStA==
-X-Gm-Message-State: AOAM531AOlUyFL2/QgX+Z+RsrChPCX3Hz2fUn8eed6deeX0SCfpBYUN4
-        RBlJ5DuaPFs+4fbaj4dVVBs=
-X-Google-Smtp-Source: ABdhPJwDDTLLFZ3EPcFp8sFnXz3GpraQjpfswl3LzydEvK2e93Q65Q22kyKStXJosR6i+yavMvSWpw==
-X-Received: by 2002:a05:622a:1808:b0:2e0:6d99:a782 with SMTP id t8-20020a05622a180800b002e06d99a782mr1360726qtc.406.1647462402852;
-        Wed, 16 Mar 2022 13:26:42 -0700 (PDT)
-Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:7488:f626:3f3b:5607])
-        by smtp.gmail.com with ESMTPSA id bp9-20020a05622a1b8900b002e0e86b8ac6sm1940074qtb.67.2022.03.16.13.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 13:26:42 -0700 (PDT)
-From:   frowand.list@gmail.com
-To:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] Documentation: dev-tools: use literal block instead of code-block
-Date:   Wed, 16 Mar 2022 15:26:22 -0500
-Message-Id: <20220316202622.324866-3-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316202622.324866-1-frowand.list@gmail.com>
-References: <20220316202622.324866-1-frowand.list@gmail.com>
+        Wed, 16 Mar 2022 16:29:18 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637211409C
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1i0WnN0sRNJ5r3i3sNS6CEcqbgD4q29gLj9qxaplvjA=; b=VI72k+OclnVWeyhFO/cglE+dhk
+        V/HD5fgh+c5PRUX87PX3mENgqUa4sMHFNiHMnDY9gQZRtsx9EkizxeO0xEqBlJXy1UDVwnYvq9w+S
+        hzYfyn56TujYLaeSY6z0YyUOQ6k1y0PNC582v6YrCKPPMvz5d0a+XA13slV3aEWvZHQR/IWwMX3Hy
+        QeJEKJX8bn6K7cvZ2ah6DyRSEvbNWEAGov91rxBqaEAmnK27R3qTSMwkG6cAzlAYd/WI4phegdZXC
+        VJbfaXt+FrnRyBjImmZXkDe/6tkbGTMjTYGfuCfQDa0AfulG8yVmpMqJE5hcyhqAQbZIiYKNCxW5R
+        h3Z/q3YQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUaF7-001eK2-AT; Wed, 16 Mar 2022 20:27:53 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EDA5E9882AA; Wed, 16 Mar 2022 21:27:34 +0100 (CET)
+Date:   Wed, 16 Mar 2022 21:27:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: sched_core_balance() releasing interrupts with pi_lock held
+Message-ID: <20220316202734.GJ8939@worktop.programming.kicks-ass.net>
+References: <20220308161455.036e9933@gandalf.local.home>
+ <20220315174606.02959816@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315174606.02959816@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+On Tue, Mar 15, 2022 at 05:46:06PM -0400, Steven Rostedt wrote:
+> On Tue, 8 Mar 2022 16:14:55 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > Hi Peter,
+> 
+> Have you had time to look into this?
 
-KTAP Specification: Change code-block directives to straightforward
-literal blocks since the blocks do not contain code.
+Not since I talk to you on IRC about it last week.
 
-Suggested-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
- Documentation/dev-tools/ktap.rst | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+Like I wrote, the balance_callback should be ran under whichever
+rq->lock instance it gets queued under. As per:
 
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index 37b5dc61bfb8..b9a57ceddd4f 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -115,34 +115,32 @@ The diagnostic data field is optional, and results which have neither a
- directive nor any diagnostic data do not need to include the "#" field
- separator.
- 
--Example result lines include:
--
--.. code-block:: none
-+Example result lines include::
- 
- 	ok 1 test_case_name
- 
- The test "test_case_name" passed.
- 
--.. code-block:: none
-+::
- 
- 	not ok 1 test_case_name
- 
- The test "test_case_name" failed.
- 
--.. code-block:: none
-+::
- 
- 	ok 1 test # SKIP necessary dependency unavailable
- 
- The test "test" was SKIPPED with the diagnostic message "necessary dependency
- unavailable".
- 
--.. code-block:: none
-+::
- 
- 	not ok 1 test # TIMEOUT 30 seconds
- 
- The test "test" timed out, with diagnostic data "30 seconds".
- 
--.. code-block:: none
-+::
- 
- 	ok 5 check return code # rcode=0
- 
-@@ -202,7 +200,7 @@ allowed to be either indented or not indented.
- 
- An example of a test with two nested subtests:
- 
--.. code-block:: none
-+::
- 
- 	KTAP version 1
- 	1..1
-@@ -215,7 +213,7 @@ An example of a test with two nested subtests:
- 
- An example format with multiple levels of nested testing:
- 
--.. code-block:: none
-+::
- 
- 	KTAP version 1
- 	1..2
-@@ -250,7 +248,7 @@ nested version line, uses a line of the form
- 
- Example KTAP output
- --------------------
--.. code-block:: none
-+::
- 
- 	KTAP version 1
- 	1..1
--- 
-Frank Rowand <frank.rowand@sony.com>
+  565790d28b1e ("sched: Fix balance_callback()")
 
+Now, we only do queue_core_balance() from set_next_task_idle(), which
+*should* only happen from pick_next_task(), and as such the callback
+should only ever get called from finish_lock_switch() or the 'prev ==
+next' case in __schedule().
+
+Neither of these two sites holds pi_lock.
+
+
+This is about as far as I got explaining things, and it being late, it's
+about as far as I got looking at things.
+
+Now that also makes conceptual sense, we only want to pull a core-cookie
+task when we're scheduling an idle task.
+
+Now, clearly this gets triggered from the PI path, but that's not making
+immediate sense to me, it would mean we're boosting the idle task, which
+is wrong too.
+
+So it would be useful for someone that can reproduce this to provide a
+trace of where queue_core_balance() gets called, because that *should*
+only be in __schedule().

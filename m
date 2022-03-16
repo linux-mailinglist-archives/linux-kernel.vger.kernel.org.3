@@ -2,120 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF844DA717
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CCE4DA71C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352861AbiCPAty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 20:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
+        id S1352866AbiCPAwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 20:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352854AbiCPAtw (ORCPT
+        with ESMTP id S241438AbiCPAwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 20:49:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51CCD275E9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647391718;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3wgRCg5rHLO663AukahnIUlWXYq2JT3ybopJbTiJj1k=;
-        b=jRMgiChy08O7GgGGRD2ZfdrVFW/SmPDp5r0z3WTpErAJ8wGdeEOLJkfGBNm0YFSHesf0oH
-        54yB+FOFkUgUS37niJt4pmhcfGrwRcqrh0YWCxseZBw+Krsj7qLgyz9BwJHH1umcQrSG3+
-        PXdyfc9ezhrZYqJytnAEoUcLyK59u4I=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-D62ycw0pPy6CDoWtg1gHrA-1; Tue, 15 Mar 2022 20:48:37 -0400
-X-MC-Unique: D62ycw0pPy6CDoWtg1gHrA-1
-Received: by mail-pl1-f198.google.com with SMTP id w24-20020a170902a71800b001538d7b076dso343003plq.16
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:48:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=3wgRCg5rHLO663AukahnIUlWXYq2JT3ybopJbTiJj1k=;
-        b=BehGaEcrDYrqVme95C+DzvEbkl7cMAb1ZLdT5iq5FdJBQruMVkHiDovTMf5ytf3ASn
-         RwdwU0JHWqvspeMrJnmGiP3z9hU/37/r7TLkfxMGgz5kx8MIW6xCwNk8DSBgECj8FEnh
-         b+0IO65XcF0zjq8HAwnddxqmL6TpAcaIWclXLSDTnYJlBsduwSZpunCUJATmtOamDnTT
-         +iHBYamNn3/0ALdpXIqVs2A0I04+woaUe1v57cI25x9DlBnIoNK9ge8Wf1HMG0qiXeb0
-         SWprUXD06a3s/CsoJAVO8lTv9cxZYPgjLtbcDTolVoheOkG+ZQn+BE8OsplVUDHU4jIp
-         he8Q==
-X-Gm-Message-State: AOAM531lUFhwFLZO5kcadBumc2J6V6hrAbjH70lwAxB5fei4AgFewQoj
-        IDobuiuKDxH/+1u3mQAf092Pu8hMU9mscmC5Psmi6E6qSR6HhdEy8BnoRM0ZCIFHU2apwXFdCdn
-        3CNUh/ogM9Y9qeAPTmT1eBlSN12PtTSSeTo5kFhmcTob5zuXTrizh423gjUCvjlKxQVOxurcu0A
-        ==
-X-Received: by 2002:a63:2d5:0:b0:380:b650:f948 with SMTP id 204-20020a6302d5000000b00380b650f948mr26319032pgc.37.1647391716086;
-        Tue, 15 Mar 2022 17:48:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy/EuxJR8F+CmeO2gnkczskKa4EqhaacvFTKGED45uanz3yM1nO0Aw2PqT11iclTxWX5+psYQ==
-X-Received: by 2002:a63:2d5:0:b0:380:b650:f948 with SMTP id 204-20020a6302d5000000b00380b650f948mr26319012pgc.37.1647391715786;
-        Tue, 15 Mar 2022 17:48:35 -0700 (PDT)
-Received: from [10.72.12.110] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id d19-20020a056a00199300b004f7b7bb0733sm327732pfl.60.2022.03.15.17.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 17:48:35 -0700 (PDT)
-Subject: Re: [RFC PATCH v2 3/3] ceph: update documentation regarding snapshot
- naming limitations
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220315161959.19453-1-lhenriques@suse.de>
- <20220315161959.19453-4-lhenriques@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <db0eb19c-7ad9-8cc1-b0da-59b59c308cc1@redhat.com>
-Date:   Wed, 16 Mar 2022 08:48:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 15 Mar 2022 20:52:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8603E5C868;
+        Tue, 15 Mar 2022 17:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647391891; x=1678927891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YXFKpERtBJQFxnnvLc21al+Vghk+4iLs8WPaY6XgGEQ=;
+  b=BX6RLkzGGEOoBdprexYXFclhxv9HjUEa7JHHy+XVdUHQyyhA5Y1m9Zew
+   1EsFROjUvCfk0mU/hWCYbp1FrqQu41XRPdfpP21ov/Mlp9BZlO4EkZtWn
+   37vSrGE+wka1tXuNkaEtjqYtELq4oWgMrJIjBWxO8tRA+Oaj+kbVo2n6p
+   Iuzj9bIVxsabuLLarwGjl7dEFkQI8ge0F0brA7T6WMrT58zhvr/hXej45
+   t9qajl2C31A1TC8yZocs4JthvTnf4QMjxBFTJFGgX4rROxO9gleBNtxR8
+   vgSzw0if3ArvFZ4s9b46/EiBpWMzRqWcV1ZR1zPlfY5q1zYcx51ODxNqn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256181133"
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="256181133"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:51:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="714391253"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2022 17:51:28 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUHst-000Bj2-F4; Wed, 16 Mar 2022 00:51:27 +0000
+Date:   Wed, 16 Mar 2022 08:51:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH 1/2] iommu/amd: Add support to indicate whether DMA remap
+ support is enabled
+Message-ID: <202203160844.lKviWR1Q-lkp@intel.com>
+References: <20220315162455.5190-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <20220315161959.19453-4-lhenriques@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315162455.5190-1-mario.limonciello@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mario,
 
-On 3/16/22 12:19 AM, Luís Henriques wrote:
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->   Documentation/filesystems/ceph.rst | 10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/Documentation/filesystems/ceph.rst b/Documentation/filesystems/ceph.rst
-> index 4942e018db85..d487cabe792d 100644
-> --- a/Documentation/filesystems/ceph.rst
-> +++ b/Documentation/filesystems/ceph.rst
-> @@ -57,6 +57,16 @@ a snapshot on any subdirectory (and its nested contents) in the
->   system.  Snapshot creation and deletion are as simple as 'mkdir
->   .snap/foo' and 'rmdir .snap/foo'.
->   
-> +Snapshot names have two limitations:
-> +
-> +* They can not start with an underscore ('_'), as these names are reserved
-> +  for internal usage by the MDS.
-> +* They can not exceed 240 characters in size.  This is because the MDS makes
-> +  use of long snapshot names internally, which follow the format:
-> +  `_<SNAPSHOT-NAME>_<INODE-NUMBER>`.  Since filenames in general can't have
-> +  more than 255 characters, and `<node-id>` takes 13 characters, the long
-> +  snapshot names can take as much as 255 - 1 - 1 - 13 = 240.
-> +
->   Ceph also provides some recursive accounting on directories for nested
->   files and bytes.  That is, a 'getfattr -d foo' on any directory in the
->   system will reveal the total number of nested regular files and
->
-LGTM.
+Thank you for the patch! Yet something to improve:
 
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
+[auto build test ERROR on joro-iommu/next]
+[also build test ERROR on arm-perf/for-next/perf linus/master v5.17-rc8 next-20220315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/0day-ci/linux/commits/Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220316/202203160844.lKviWR1Q-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/fa63035401902e438c5ef3213112901a1054c621
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220316-002821
+        git checkout fa63035401902e438c5ef3213112901a1054c621
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iommu/amd/init.c:3294:6: error: redefinition of 'amd_ivrs_remap_support'
+    3294 | bool amd_ivrs_remap_support(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/iommu/amd/init.c:20:
+   include/linux/amd-iommu.h:198:20: note: previous definition of 'amd_ivrs_remap_support' was here
+     198 | static inline bool amd_ivrs_remap_support(void)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/amd_ivrs_remap_support +3294 drivers/iommu/amd/init.c
+
+  3284	
+  3285	/*
+  3286	 * ivrs_remap_support - Is %IOMMU_IVINFO_DMA_REMAP set in IVRS table
+  3287	 *
+  3288	 * Returns true if the platform has %IOMMU_IVINFO_DMA_REMAP% set in the IOMMU
+  3289	 * IVRS IVInfo field.
+  3290	 * Presence of this flag indicates to the OS/HV that the IOMMU is used for
+  3291	 * Preboot DMA protection and device accessed memory should be remapped after
+  3292	 * the OS has loaded.
+  3293	 */
+> 3294	bool amd_ivrs_remap_support(void)
+  3295	{
+  3296		return amdr_ivrs_remap_support;
+  3297	}
+  3298	EXPORT_SYMBOL_GPL(amd_ivrs_remap_support);
+  3299	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

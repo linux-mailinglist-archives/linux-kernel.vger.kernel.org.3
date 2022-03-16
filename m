@@ -2,139 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550474DAAD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 07:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8574DAAD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 07:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351667AbiCPGsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 02:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S1353897AbiCPGtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 02:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbiCPGsf (ORCPT
+        with ESMTP id S236005AbiCPGtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 02:48:35 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C58461A2D;
-        Tue, 15 Mar 2022 23:47:22 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id h2so2695356pfh.6;
-        Tue, 15 Mar 2022 23:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=S0FWgyXHo+RiwHLAlAUSX2fIHtUAv+xZLkceIzty9Ik=;
-        b=pGXJv8iNe3Ts1r32TM0SWeThT7nY3rTIAVasalVKbishbAeQ+h/655CMOsd1XYdYWo
-         BsRCT+VUAArAclU+Kd3mCOb4jQQyK569ZYvLOL68aBGfWvbk1VufbI9PfX0FM18qHVmu
-         nbeI3JtD6qkQLLW86Q9oXohrzjQeBvPzMAtUnXRCc6SObKZri4G+ZfYp6OenGoXtOXI3
-         yelHZsvv+Ojvy6frAK8MV9A87ox6daOSb08TpU3dKFyvF6wRMxxNNBH8jFNykF7QPnOs
-         NdJd6L4U9TBtu7hhlYZyKlSgBrZA8eOSDU9ANHCwb6M7WTY7Tt88BCWIt0fSk896ljSe
-         mSGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=S0FWgyXHo+RiwHLAlAUSX2fIHtUAv+xZLkceIzty9Ik=;
-        b=EDHP6uxV0eLCc+4RxqG6/sw+y46aYqtlDVSebuMqFpefzeVACoWwzoaYwX6exzscyE
-         GlMGCxmDHvOc3/Eym8/8pJMr1nZFB49fzWm3o6KQV62AQm96Nwvw7DkhoJa67EkN3bMF
-         Lkwebdsj0mtskOcEsETFyQ5PLvPcJKbDBFNOUTUXRbnn9lAzPK2a9PEHUMVYyWWxLuK8
-         HPMoQXasKSv5YIK/8IFc1EGS7nGx3MpAZd6qqIYdBNqiZ1ENH8V3GnF7OiV0/RZroYMx
-         eb++28yJC3ENs4cBs6GEJtgCI1ZdyZRBkn6Rddh2jC4xeqrIcAcojsqFdpDe6CgxV4Jc
-         pnRw==
-X-Gm-Message-State: AOAM531SrXB9AiVpBP4utlGTYRxuWbhjykf2xlI8PZdoZdzTucghwAJ8
-        je51Zrw2Ytg8dwljqxmSt0Y=
-X-Google-Smtp-Source: ABdhPJyNfrvHPS9v5aFY47ezqFWUPYtX64d1cbJ8omEHt6OfsoXkor86QeerO9raIY7odqSgynFsxA==
-X-Received: by 2002:a63:2b05:0:b0:380:95c8:e0a with SMTP id r5-20020a632b05000000b0038095c80e0amr27681969pgr.257.1647413241816;
-        Tue, 15 Mar 2022 23:47:21 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id b16-20020a056a00115000b004f6ff260c9esm1534452pfm.207.2022.03.15.23.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 23:47:21 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] i2c: busses: Fix error handling in synquacer_i2c_probe
-Date:   Wed, 16 Mar 2022 06:47:16 +0000
-Message-Id: <20220316064716.16587-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 02:49:47 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1E1329B1;
+        Tue, 15 Mar 2022 23:48:32 -0700 (PDT)
+X-UUID: 775435b4fdf54be98e65a091eb42944a-20220316
+X-UUID: 775435b4fdf54be98e65a091eb42944a-20220316
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 606893099; Wed, 16 Mar 2022 14:48:25 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Mar 2022 14:48:24 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Mar 2022 14:48:24 +0800
+Message-ID: <75015615bbd69d68e42c1fff70872ebc4bd48be5.camel@mediatek.com>
+Subject: Re: [PATCH v8 17/19] drm/mediatek: add hpd debounce
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>,
+        <chunfeng.yun@mediatek.com>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <deller@gmx.de>, <ck.hu@mediatek.com>, <jitao.shi@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 16 Mar 2022 14:48:24 +0800
+In-Reply-To: <20220218145437.18563-18-granquet@baylibre.com>
+References: <20220218145437.18563-1-granquet@baylibre.com>
+         <20220218145437.18563-18-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the error handling path, the clk_prepare_enable() function
-call should be balanced by a corresponding 'clk_disable_unprepare()'
-call, as already done in the remove function.
+On Fri, 2022-02-18 at 15:54 +0100, Guillaume Ranquet wrote:
+> From: Jitao Shi <jitao.shi@mediatek.com>
+> 
+> Implement the DP HDP debounce described in DP 1.4a 3.3.
 
-Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/i2c/busses/i2c-synquacer.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+Hello Guillaume,
 
-diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
-index e4026c5416b1..cd955224d629 100644
---- a/drivers/i2c/busses/i2c-synquacer.c
-+++ b/drivers/i2c/busses/i2c-synquacer.c
-@@ -569,22 +569,27 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
- 	    i2c->pclkrate > SYNQUACER_I2C_MAX_CLK_RATE) {
- 		dev_err(&pdev->dev, "PCLK missing or out of range (%d)\n",
- 			i2c->pclkrate);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_disable_clk;
- 	}
- 
- 	i2c->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(i2c->base))
--		return PTR_ERR(i2c->base);
-+	if (IS_ERR(i2c->base)) {
-+		ret = PTR_ERR(i2c->base);
-+		goto err_disable_clk;
-+	}
- 
- 	i2c->irq = platform_get_irq(pdev, 0);
--	if (i2c->irq < 0)
--		return i2c->irq;
-+	if (i2c->irq < 0) {
-+		ret = i2c->irq;
-+		goto err_disable_clk;
-+	}
- 
- 	ret = devm_request_irq(&pdev->dev, i2c->irq, synquacer_i2c_isr,
- 			       0, dev_name(&pdev->dev), i2c);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "cannot claim IRQ %d\n", i2c->irq);
--		return ret;
-+		goto err_disable_clk;
- 	}
- 
- 	i2c->state = STATE_IDLE;
-@@ -607,7 +612,7 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
- 	ret = i2c_add_numbered_adapter(&i2c->adapter);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to add bus to i2c core\n");
--		return ret;
-+		goto err_disable_clk;
- 	}
- 
- 	platform_set_drvdata(pdev, i2c);
-@@ -616,6 +621,11 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
- 		 dev_name(&i2c->adapter.dev));
- 
- 	return 0;
-+
-+err_disable_clk:
-+	if (!IS_ERR(i2c->pclk))
-+		clk_disable_unprepare(i2c->pclk);
-+	return ret;
- }
- 
- static int synquacer_i2c_remove(struct platform_device *pdev)
--- 
-2.17.1
+Thanks for your patch, and here is some tests we do and I will explain
+the HPD deboucing. Maybe you can put these in commit message next time:
+
+From the DP spec 1.4a chapter 3.3, upstream devices should implement
+HPD signal de-bouncing on an external connection.
+A period of 100ms should be used for detecting an HPD connect event.
+To cover these cases, HPD de-bounce should be implemented only after
+HPD low has been detected for 100ms.
+
+Therefore,
+1. If HPD low (which means plugging out) is more than 100ms,
+   we need to do de-bouncing (which means we need to wait for 100ms).
+2. If HPD low is less than 100ms,
+   we don't need to care about the de-bouncing.
+
+In this patch, we can see the timer start to count 100ms and clear the
+need_debounce to false.
+
+There will be two situation when HPD high:
+1. If the timer is expired (which means it's more than 100ms):
+   - need_debounce will be set as true.
+   - When HPD high (plugging event comes), need_debounce will be true
+     and then we need to do de-bouncing (wait for 100ms).
+2. If the timer is not expired (which means it's less than 100ms):
+   - need_debounce keeps as false.
+   - When HPD high (plugging event comes), need_debounce will be false
+     and no need to do de-bouncing.
+
+HPD_______             __________________
+          |            |<-  100ms   ->
+          |____________|
+          <-  100ms   ->
+
+Original issue is that we do not implement the HPD de-bouncing and the
+device (Dell Adapter - USB-C to HDMI) will not be detected.
+After applying this patch, we can detect the device
+(Dell Adapter - USB-C to HDMI) successfully.
+
+We test the following devices and they can be detected successfully:
+- Dell Adapter - USB-C to HDMI
+- Acer 1in1 HDMI dongle
+- Ugreen 1in1 HDMI dongle
+- innowatt HDMI + USB3 hub
+- Acer 2in1 HDMI dongle
+- Apple 3in1 HDMI dongle (A2119)
+- J5Create 3in1 HDMI dongle (JAC379)
+
+Tested-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+
+BRs,
+Rex
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dp.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
+> b/drivers/gpu/drm/mediatek/mtk_dp.c
+> index 2a3d5f15b651b..fe91ab8b2fd89 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> @@ -178,6 +178,8 @@ struct mtk_dp {
+>  	struct device *codec_dev;
+>  	u8 connector_eld[MAX_ELD_BYTES];
+>  	struct drm_connector *conn;
+> +	bool need_debounce;
+> +	struct timer_list debounce_timer;
+>  };
+>  
+>  static struct regmap_config mtk_dp_regmap_config = {
+> @@ -1698,6 +1700,9 @@ static irqreturn_t mtk_dp_hpd_event_thread(int
+> hpd, void *dev)
+>  	if (event < 0)
+>  		return IRQ_HANDLED;
+>  
+> +	if (mtk_dp->need_debounce && mtk_dp-
+> >train_info.cable_plugged_in)
+> +		msleep(100);
+> +
+>  	if (mtk_dp->drm_dev) {
+>  		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
+>  		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+> @@ -1776,6 +1781,13 @@ static irqreturn_t
+> mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
+>  	}
+>  	train_info->cable_state_change = true;
+>  
+> +	if (train_info->cable_state_change) {
+> +		if (!train_info->cable_plugged_in) {
+> +			mod_timer(&mtk_dp->debounce_timer, jiffies +
+> msecs_to_jiffies(100) - 1);
+> +			mtk_dp->need_debounce = false;
+> +		}
+> +	}
+> +
+>  	return IRQ_WAKE_THREAD;
+>  }
+>  
+> @@ -2239,6 +2251,13 @@ static const struct drm_bridge_funcs
+> mtk_dp_bridge_funcs = {
+>  	.detect = mtk_dp_bdg_detect,
+>  };
+>  
+> +static void mtk_dp_debounce_timer(struct timer_list *t)
+> +{
+> +	struct mtk_dp *mtk_dp = from_timer(mtk_dp, t, debounce_timer);
+> +
+> +	mtk_dp->need_debounce = true;
+> +}
+> +
+>  static int mtk_dp_probe(struct platform_device *pdev)
+>  {
+>  	struct mtk_dp *mtk_dp;
+> @@ -2319,6 +2338,9 @@ static int mtk_dp_probe(struct platform_device
+> *pdev)
+>  	else
+>  		mtk_dp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+>  
+> +	mtk_dp->need_debounce = true;
+> +	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
+> +
+>  	pm_runtime_enable(dev);
+>  	pm_runtime_get_sync(dev);
+>  
+> @@ -2332,6 +2354,7 @@ static int mtk_dp_remove(struct platform_device
+> *pdev)
+>  	platform_device_unregister(mtk_dp->phy_dev);
+>  
+>  	mtk_dp_video_mute(mtk_dp, true);
+> +	del_timer_sync(&mtk_dp->debounce_timer);
+>  
+>  	pm_runtime_disable(&pdev->dev);
+>  
 

@@ -2,115 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88A34DAC38
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4294DAC58
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354401AbiCPIHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
+        id S1354492AbiCPIVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240102AbiCPIHH (ORCPT
+        with ESMTP id S1347658AbiCPIVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:07:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3D5E773;
-        Wed, 16 Mar 2022 01:05:54 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KJN8B3WltzfZ6l;
-        Wed, 16 Mar 2022 16:03:54 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Mar 2022 16:05:22 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Mar 2022 16:05:21 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <ming.qian@nxp.com>, <shijie.qin@nxp.com>, <eagle.zhou@nxp.com>,
-        <mchehab@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangxiongfeng2@huawei.com>
-Subject: [PATCH -next] media: amphion: Add missing of_node_put() in vpu_core_parse_dt()
-Date:   Wed, 16 Mar 2022 16:19:38 +0800
-Message-ID: <20220316081938.80819-1-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 16 Mar 2022 04:21:03 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90C163529
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:19:49 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id r6so1813131wrr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eB3Qa08xe5yQrsvIPU/lEi8D81kJpMa1SMOqC0T8EyI=;
+        b=KMgh5POQkPgJPtD8jFWJk5a5SH1QA1cwyg8ql04PZnvTkkU9yfAkqlCYaHSd54Y2XE
+         rti8sLyNq1VbL0MuuSYl/vkm89LJ5DtvjC+kxhbnWEXPXcD7g4JH6Bmic2LL5B7Y7agt
+         6RCrLY2AdJj8OYIKfqFw2Up9M4j/SsahasYIdoouI8wONF5uoB9W/uWNpqRLiLz17BnX
+         eo01QqcerJRs8lY2vWi2LlQ1h8aSDbXiiYvr1CMNRG4ruasA5hnjar+cU4qOc7n/4Rqe
+         KQ+ArjwSBaAkZsZmWgmngAg6TfN7KamEue76wnY4vzfUXnX0QdZ5eK0B2cpcGlLSQixQ
+         qoMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eB3Qa08xe5yQrsvIPU/lEi8D81kJpMa1SMOqC0T8EyI=;
+        b=n1j8XBerOs/w2YjRyhwyNVoRnr+3E6FRuDcQQiVXCQAOb0DnP0dGFhXec2DtFVeemc
+         wJrnJUki46fNHm45EyBM3OSKJr+1GsJyEcHT/We2r7Ph6cbTKkdx5Gur9BgBzaGjcHDs
+         BpvCxSZYdrcT8osjxqXsaDGgYnEx8AITA3jB5N/WsdiWczNJX25mMeYb6eZ04xvx0Trg
+         m965Iec7SltE2Q31jyLJFu3P4g3JOzmV9L9oecI/QXGhzVW7vBfmLkjBIt02lUKNKIvg
+         NjbJ+ty0rLSNro4Pa38oboVh1HcSeiPewznrWHrrll/oIqZp0cfYLLrEeJSFAQ0vIcWs
+         KOmw==
+X-Gm-Message-State: AOAM530pTnJCoHmnB5EMfnm3s8eY/hj2R4MlhoLCBfHKF1jPXDoXYFxw
+        us62WXykL8oHlV+kSfeaw0axww==
+X-Google-Smtp-Source: ABdhPJwrWBZdB7018LH8H2J5v0WSvKptIeZpUnF7AAPZMrxFp93OwZ6yln++zheKXJ8gFgNLU75vKw==
+X-Received: by 2002:a05:6000:1868:b0:203:732e:6a96 with SMTP id d8-20020a056000186800b00203732e6a96mr23454156wri.39.1647418788344;
+        Wed, 16 Mar 2022 01:19:48 -0700 (PDT)
+Received: from google.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
+        by smtp.gmail.com with ESMTPSA id i74-20020adf90d0000000b0020373ba7beesm1616426wri.0.2022.03.16.01.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 01:19:47 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 09:19:44 +0100
+From:   "Steinar H. Gunderson" <sesse@google.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+Message-ID: <YjGdoGy4Z2UUG9S9@google.com>
+References: <20220310093844.982656-1-sesse@google.com>
+ <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
+ <YiuKAk7SaXP7B7Ee@google.com>
+ <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
+ <YjBnet2813sEGjZY@google.com>
+ <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
+ <YjDUO6bbyfGw/u0C@google.com>
+ <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() will increment the refcount of the returned
-device_node. Calling of_node_put() to avoid the refcount leak.
+On Tue, Mar 15, 2022 at 10:11:54PM +0200, Adrian Hunter wrote:
+> Sorry, my first suggestion has issues, but the second is better.
 
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
----
- drivers/media/platform/amphion/vpu_core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I tried your second one, but can't see much difference. The original and
+your patched version still differ by a lot, and I still see various
+non-branch instructions getting very tiny fractions. (PSB packets
+_might_ be it, as there are ~1000 of them in the 165M-cycle trace.)
 
-diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
-index 016554387f3f..1da20335bc45 100644
---- a/drivers/media/platform/amphion/vpu_core.c
-+++ b/drivers/media/platform/amphion/vpu_core.c
-@@ -529,11 +529,14 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
- 	}
- 	if (of_address_to_resource(node, 0, &res)) {
- 		dev_err(core->dev, "boot-region of_address_to_resource error\n");
-+		of_node_put(node);
- 		return -EINVAL;
- 	}
- 	core->fw.phys = res.start;
- 	core->fw.length = resource_size(&res);
- 
-+	of_node_put(node);
-+
- 	node = of_parse_phandle(np, "memory-region", 1);
- 	if (!node) {
- 		dev_err(core->dev, "rpc-region of_parse_phandle error\n");
-@@ -541,6 +544,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
- 	}
- 	if (of_address_to_resource(node, 0, &res)) {
- 		dev_err(core->dev, "rpc-region of_address_to_resource error\n");
-+		of_node_put(node);
- 		return -EINVAL;
- 	}
- 	core->rpc.phys = res.start;
-@@ -549,6 +553,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
- 	if (core->rpc.length < core->res->rpc_size + core->res->fwlog_size) {
- 		dev_err(core->dev, "the rpc-region <%pad, 0x%x> is not enough\n",
- 			&core->rpc.phys, core->rpc.length);
-+		of_node_put(node);
- 		return -EINVAL;
- 	}
- 
-@@ -560,6 +565,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
- 	if (ret != VPU_CORE_MEMORY_UNCACHED) {
- 		dev_err(core->dev, "rpc region<%pad, 0x%x> isn't uncached\n",
- 			&core->rpc.phys, core->rpc.length);
-+		of_node_put(node);
- 		return -EINVAL;
- 	}
- 
-@@ -571,6 +577,8 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
- 	core->act.length = core->rpc.length - core->res->rpc_size - core->log.length;
- 	core->rpc.length = core->res->rpc_size;
- 
-+	of_node_put(node);
-+
- 	return 0;
- }
- 
--- 
-2.20.1
+I guess the good news is that the perf report coming out of your version
+looks more likely to me; I have some functions that are around 1% that
+shouldn't intuitively be that much (and, if I write some Perl to sum up
+the cycles from the IPC lines in perf script, are more around 0.1%).
+So perhaps we should stop chasing the difference? I don't know.
 
+/* Steinar */

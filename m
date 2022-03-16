@@ -2,70 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781D64DB203
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BA14DB207
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356196AbiCPOAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 10:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S1356291AbiCPOAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356134AbiCPN74 (ORCPT
+        with ESMTP id S1356209AbiCPOAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:59:56 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC41665805
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:58:39 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j17so3187819wrc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GwYcPqh2K6PO4WArWT/2r3/tXBX4mlEpbIQgfNHB70U=;
-        b=JnE1wGKizc21cbJxcu6AvY3wL4kgjqn6WDV8GoOnxB1GaM34XvPiZsmgzTmTlI40kt
-         NudPi6zbbCswrre6uCXKBQheG+beKPrw2jlfbIDrrmK4MOkV6m7nJgM6w7kU9nzR0HXk
-         qccFQKSforXfJ4+28s0j9n+Oa595r0SIpCKoVZpBOeuI6vXH+BjMu83f3MPI53HNL9qn
-         QTWGV+j54tvDAewf5mFu9vBkEc6CE1V2OxNzEzOJHerXYYSdyB3wp8pjSuV7njVsVvnZ
-         ENOw5oTYcr//CxkUtaujOidLkKTpuxZm+571zdtoWOMwklIqk4tMoIfj6orGhsNLXyYS
-         duHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GwYcPqh2K6PO4WArWT/2r3/tXBX4mlEpbIQgfNHB70U=;
-        b=k12mFWMDXxXWIjAWENlJFV0cQeu7rwJYnC9InSw7SriWEgY3P3sJmfh/MUmOqFFtMD
-         M5zshr2xH+mciu3iZ0ttSAaP3GQVy9pAXkXBTLkPLgm1N/0OqO8AP8pEYgHQ70f50YLU
-         wBJLA2oMO+QENGuSqA66kYKSuZg8GVyTWgsQxqzjnr+PvTNaC4b2hh+9EBag7rXnmydw
-         3dyPl59hrawnEiZFE93ThHlddnAfhMqxfsKB5Yv8OLnCuOAKocnZ7Vk0z9xsqZOrDi28
-         55MHQ48+6FrvsEWtNKALdqxJE7Ej89/VjXSCW/TKS65/MnDitkkN60D9LHNoFqPOJ9kn
-         umlg==
-X-Gm-Message-State: AOAM530/RHDJ2GCiZkdr8dsWPLnk+VwR23YsYFl/x/aKFkJ/3/fSnSgN
-        bHBI3PtbbbVwVCkGX8EVeNuQpg==
-X-Google-Smtp-Source: ABdhPJwnIHUVbqQ20Hqyt67cExg2HCrei/Y6awS4jEuGy4SABotZ5cs3ZSGNjccS+xMjS4babp8Svw==
-X-Received: by 2002:a5d:6712:0:b0:1f0:2486:2fff with SMTP id o18-20020a5d6712000000b001f024862fffmr115629wru.200.1647439118242;
-        Wed, 16 Mar 2022 06:58:38 -0700 (PDT)
-Received: from localhost.localdomain ([37.173.241.155])
-        by smtp.gmail.com with ESMTPSA id ay24-20020a05600c1e1800b00389a420e1ecsm1790563wmb.37.2022.03.16.06.58.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 06:58:37 -0700 (PDT)
-From:   Nicolas Belin <nbelin@baylibre.com>
-To:     narmstrong@baylibre.com, andrzej.hajda@intel.com,
-        robert.foss@linaro.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        Nicolas Belin <nbelin@baylibre.com>,
-        "Andy . Hsieh" <Andy.Hsieh@mediatek.com>
-Subject: [PATCH 3/3] drm: bridge: it66121: Add audio support
-Date:   Wed, 16 Mar 2022 14:57:33 +0100
-Message-Id: <20220316135733.173950-4-nbelin@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316135733.173950-1-nbelin@baylibre.com>
-References: <20220316135733.173950-1-nbelin@baylibre.com>
+        Wed, 16 Mar 2022 10:00:00 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B877F6543A;
+        Wed, 16 Mar 2022 06:58:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LqcvaeFwcvuCRpNc1cRiRk61DK1/eSKS0fzuG0lLLSg+KXVmO/de3IgUR67M71LI9zkEhyFYHp82+RH4z9EvG+iLffewIEvzPkZQlnQOE8FPyRlTrh0Rw678VHSOTL4TllVej95F1c7ThKdcsfvP9jvqHOLYjalVEQuw58EQ5VrSlzX6+IvGeRP0/kKOkOLY37VpOgfowRxPBfrHgri+jEgRLxTNgtfAYgCOzNVxogyAH8AG1vRYC30uE8Mw3dOCCVHLXUS6pCBGccxYUWtmmRDCc+H8doZoj8+SohKkbw167wnlK5aQ2Nbcow0PaQQQxf4WvwgFz7VrUy78qmj7xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dKtY4QpIi5R1l4CR9iSY25rzi84WqYjzvyStnU/1GMI=;
+ b=TCnZfQq4vznto2qzbWg2gbhevnNlcqtxxHT7tknVDOByK38CMIBX9IGdSXC1D8V1oqQY1pC1e7fc7fKjJoH9Ax4myNL0TBB2CKtHFpwZmiLqCWAlCeFCD6Ha1fqyiOZEqykMfhyLB5T2vsbHvVJMZIrrXksoDdsP1dSEXHafCAcefcd4RkFqXGU4i838kxPDAZLdrhSbGgEG38+uGREV88sxet/4SOPEi4Emt6dWcfM9VhDlD5Iw8b9ux+qrJY1WXkNud6FpaHqKHGb6quHa1JcnwXeWQJbgFc+lkchd+VBLo9lZiIov3ar1Zy4E+m8HQ+2YCbpz/JgDPWXyuY2Fzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dKtY4QpIi5R1l4CR9iSY25rzi84WqYjzvyStnU/1GMI=;
+ b=Vg2AZ4cz+bSrOoX36EKOSHEdbkLtlIXHCT15TpG06A938OkWIsHU5fJaV/14on6nGFCUJwhIiXsDqP1Me7EeXe7lvYZScwnjp3S4zfjJY/TixVrAJn+ljNui6ehRMCwrWj3I3ZPbUInkpWOK9Byxwx9ks4H7pti00do7eiWGlEOE/aYQAUcTVe0y47lBQS9nYsEQsbhxhGkJDJtOy0V2bjJzX8nMSwdQ9q/Rl5YMEsqGlF7LbIpx9gMy7LTZkQUaxtVvLil6jfVaNgGOnOTZgwzEvshqDtN31j1Kh6gbTbaUz99llpFB45t4XxKpPFzLvE2SUmMI2K8iaY6FVD70uw==
+Received: from MW4P221CA0015.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::20)
+ by MWHPR12MB1135.namprd12.prod.outlook.com (2603:10b6:300:e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Wed, 16 Mar
+ 2022 13:58:43 +0000
+Received: from CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8b:cafe::5a) by MW4P221CA0015.outlook.office365.com
+ (2603:10b6:303:8b::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.20 via Frontend
+ Transport; Wed, 16 Mar 2022 13:58:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ CO1NAM11FT059.mail.protection.outlook.com (10.13.174.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5081.14 via Frontend Transport; Wed, 16 Mar 2022 13:58:43 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 16 Mar
+ 2022 13:58:43 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 16 Mar
+ 2022 06:58:41 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Wed, 16 Mar 2022 06:58:37 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>
+Subject: [Patch v1 0/3] Tegra234 cpufreq driver support
+Date:   Wed, 16 Mar 2022 19:28:28 +0530
+Message-ID: <20220316135831.900-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ec75e8d5-3911-4abf-289d-08da07551550
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1135:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB113596E607B12FC584FCA646B9119@MWHPR12MB1135.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rHMue9I8QUYZh0eeHYNdhA+UKGr4Bxkuw+r0daIlg4TBQ0KAEvGQfMROMdbGCITNQ0WGamgjG6osucscPxDjDs8ipdrnVwnHb9zaWv7a2yRSOuWnzuYPbDnnaEjxb6O5tKU3j83aFIklEC6lWHo2gX4brLf7nCNG3qR0T3WmX/cT9V3uLlrXuFaYKIIo6qOUuAtV0+n9ztKOkixJsZSqYw11/ATYjil1vFO7ijdKMUOLrNrVQo3x+qLCfGrgK+haDB7zR/WyCOn1a20wvs345x5jUcsdsCuCyH0DBC+5wf58LyeFKWZ98OlisFKPpS9hIMfqoHQNoXTIMVLak0dwEUwgkVFqmqIHWoVmaJhpWZGMU6XfgbOg9ul/DNFCLto/wHLOHTgbzGM97Z8V1FHhR3RzU+GDqil4RUuISpLKonnUwXVnqtLqmg5ZSjNBHSLfL78P7QtRqICXuDWNmIpKAYrUCXgsChP7mey/4fPzIzgtkLpvDj0eOe2ZsO8FsxOeEcmZF7Tj6OWVlfrfJGKmlJEA7Dc3g5o12xhURGpnFVxyjVfb+gGeKCnjcuhO5LQ+Q4Ky3XB7OjJojfW83u8T6JauhwvaYkYpCYBzVWYZTAi9yPhB/MZTNVPYu39g4h+i3tMhCAgPPhM4scOGA9xrbcY3eeLghUxEfh7cZrGKeot0kMrtUXiuKbY2SJN7/PRSrLcUYHvhS+/hCX66IvIhZ7z4QTV9hnHqazEQUDTtT1g=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(54906003)(110136005)(36756003)(36860700001)(2906002)(47076005)(40460700003)(8676002)(7696005)(316002)(356005)(70206006)(70586007)(107886003)(8936002)(336012)(81166007)(2616005)(6666004)(921005)(426003)(1076003)(186003)(26005)(4326008)(82310400004)(4744005)(5660300002)(83380400001)(508600001)(86362001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 13:58:43.6598
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec75e8d5-3911-4abf-289d-08da07551550
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1135
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,687 +106,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding the audio support on the HDMI bridge for I2S only.
+This patchset adds driver support for Tegra234 cpufreq.
+Also, added soc data and ops to support multiple SoC's and variants
+which have similar logic to {get|set} cpu frequency as Tegra194 in
+the same driver.
+From cpufreq point, main difference between Tegra194 and Tegra234 are:
+ 1) Tegra234 uses MMIO for frequency requests and not sysreg like T194.
+ 2) MPIDR affinity info in Tegra234 is different from Tegra194.
+ 3) Register bits of pllp_clk_count and core_clk_count are swapped.
+So, added ops hooks for Tegra234.
 
-Signed-off-by: Nicolas Belin <nbelin@baylibre.com>
-Signed-off-by: Andy.Hsieh <Andy.Hsieh@mediatek.com>
----
- drivers/gpu/drm/bridge/ite-it66121.c | 627 +++++++++++++++++++++++++++
- 1 file changed, 627 insertions(+)
+Sumit Gupta (3):
+  cpufreq: tegra194: add soc data to support multiple soc
+  arm64: tegra: add node for tegra234 cpufreq
+  cpufreq: tegra194: Add support for Tegra234
 
-diff --git a/drivers/gpu/drm/bridge/ite-it66121.c b/drivers/gpu/drm/bridge/ite-it66121.c
-index 64912b770086..514989676d07 100644
---- a/drivers/gpu/drm/bridge/ite-it66121.c
-+++ b/drivers/gpu/drm/bridge/ite-it66121.c
-@@ -27,6 +27,8 @@
- #include <drm/drm_print.h>
- #include <drm/drm_probe_helper.h>
- 
-+#include <sound/hdmi-codec.h>
-+
- #define IT66121_VENDOR_ID0_REG			0x00
- #define IT66121_VENDOR_ID1_REG			0x01
- #define IT66121_DEVICE_ID0_REG			0x02
-@@ -155,6 +157,9 @@
- #define IT66121_AV_MUTE_ON			BIT(0)
- #define IT66121_AV_MUTE_BLUESCR			BIT(1)
- 
-+#define IT66121_PKT_CTS_CTRL_REG		0xC5
-+#define IT66121_PKT_CTS_CTRL_SEL		BIT(1)
-+
- #define IT66121_PKT_GEN_CTRL_REG		0xC6
- #define IT66121_PKT_GEN_CTRL_ON			BIT(0)
- #define IT66121_PKT_GEN_CTRL_RPT		BIT(1)
-@@ -202,6 +207,89 @@
- #define IT66121_EDID_SLEEP_US			20000
- #define IT66121_EDID_TIMEOUT_US			200000
- #define IT66121_EDID_FIFO_SIZE			32
-+
-+#define IT66121_CLK_CTRL0_REG			0x58
-+#define IT66121_CLK_CTRL0_AUTO_OVER_SAMPLING	BIT(4)
-+#define IT66121_CLK_CTRL0_EXT_MCLK_MASK		GENMASK(3, 2)
-+#define IT66121_CLK_CTRL0_EXT_MCLK_128FS	(0 << 2)
-+#define IT66121_CLK_CTRL0_EXT_MCLK_256FS	BIT(2)
-+#define IT66121_CLK_CTRL0_EXT_MCLK_512FS	(2 << 2)
-+#define IT66121_CLK_CTRL0_EXT_MCLK_1024FS	(3 << 2)
-+#define IT66121_CLK_CTRL0_AUTO_IPCLK		BIT(0)
-+#define IT66121_CLK_STATUS1_REG			0x5E
-+#define IT66121_CLK_STATUS2_REG			0x5F
-+
-+#define IT66121_AUD_CTRL0_REG			0xE0
-+#define IT66121_AUD_SWL				(3 << 6)
-+#define IT66121_AUD_16BIT			(0 << 6)
-+#define IT66121_AUD_18BIT			BIT(6)
-+#define IT66121_AUD_20BIT			(2 << 6)
-+#define IT66121_AUD_24BIT			(3 << 6)
-+#define IT66121_AUD_SPDIFTC			BIT(5)
-+#define IT66121_AUD_SPDIF			BIT(4)
-+#define IT66121_AUD_I2S				(0 << 4)
-+#define IT66121_AUD_EN_I2S3			BIT(3)
-+#define IT66121_AUD_EN_I2S2			BIT(2)
-+#define IT66121_AUD_EN_I2S1			BIT(1)
-+#define IT66121_AUD_EN_I2S0			BIT(0)
-+#define IT66121_AUD_CTRL0_AUD_SEL		BIT(4)
-+
-+#define IT66121_AUD_CTRL1_REG			0xE1
-+#define IT66121_AUD_FIFOMAP_REG			0xE2
-+#define IT66121_AUD_CTRL3_REG			0xE3
-+#define IT66121_AUD_SRCVALID_FLAT_REG		0xE4
-+#define IT66121_AUD_FLAT_SRC0			BIT(4)
-+#define IT66121_AUD_FLAT_SRC1			BIT(5)
-+#define IT66121_AUD_FLAT_SRC2			BIT(6)
-+#define IT66121_AUD_FLAT_SRC3			BIT(7)
-+#define IT66121_AUD_HDAUDIO_REG			0xE5
-+
-+#define IT66121_AUD_PKT_CTS0_REG		0x130
-+#define IT66121_AUD_PKT_CTS1_REG		0x131
-+#define IT66121_AUD_PKT_CTS2_REG		0x132
-+#define IT66121_AUD_PKT_N0_REG			0x133
-+#define IT66121_AUD_PKT_N1_REG			0x134
-+#define IT66121_AUD_PKT_N2_REG			0x135
-+
-+#define IT66121_AUD_CHST_MODE_REG		0x191
-+#define IT66121_AUD_CHST_CAT_REG		0x192
-+#define IT66121_AUD_CHST_SRCNUM_REG		0x193
-+#define IT66121_AUD_CHST_CHTNUM_REG		0x194
-+#define IT66121_AUD_CHST_CA_FS_REG		0x198
-+#define IT66121_AUD_CHST_OFS_WL_REG		0x199
-+
-+#define IT66121_AUD_PKT_CTS_CNT0_REG		0x1A0
-+#define IT66121_AUD_PKT_CTS_CNT1_REG		0x1A1
-+#define IT66121_AUD_PKT_CTS_CNT2_REG		0x1A2
-+
-+#define IT66121_AUD_FS_22P05K			0x4
-+#define IT66121_AUD_FS_44P1K			0x0
-+#define IT66121_AUD_FS_88P2K			0x8
-+#define IT66121_AUD_FS_176P4K			0xC
-+#define IT66121_AUD_FS_24K			0x6
-+#define IT66121_AUD_FS_48K			0x2
-+#define IT66121_AUD_FS_96K			0xA
-+#define IT66121_AUD_FS_192K			0xE
-+#define IT66121_AUD_FS_768K			0x9
-+#define IT66121_AUD_FS_32K			0x3
-+#define IT66121_AUD_FS_OTHER			0x1
-+
-+#define IT66121_AUD_SWL_21BIT			0xD
-+#define IT66121_AUD_SWL_24BIT			0xB
-+#define IT66121_AUD_SWL_23BIT			0x9
-+#define IT66121_AUD_SWL_22BIT			0x5
-+#define IT66121_AUD_SWL_20BIT			0x3
-+#define IT66121_AUD_SWL_17BIT			0xC
-+#define IT66121_AUD_SWL_19BIT			0x8
-+#define IT66121_AUD_SWL_18BIT			0x4
-+#define IT66121_AUD_SWL_16BIT			0x2
-+#define IT66121_AUD_SWL_NOT_INDICATED		0x0
-+
-+#define IT66121_VENDOR_ID0			0x54
-+#define IT66121_VENDOR_ID1			0x49
-+#define IT66121_DEVICE_ID0			0x12
-+#define IT66121_DEVICE_ID1			0x06
-+#define IT66121_DEVICE_MASK			0x0F
- #define IT66121_AFE_CLK_HIGH			80000 /* Khz */
- 
- struct it66121_ctx {
-@@ -216,6 +304,13 @@ struct it66121_ctx {
- 	u32 bus_width;
- 	struct mutex lock; /* Protects fields below and device registers */
- 	struct hdmi_avi_infoframe hdmi_avi_infoframe;
-+	struct {
-+		struct platform_device *pdev;
-+		u8 ch_enable;
-+		u8 fs;
-+		u8 swl;
-+		bool auto_cts;
-+	} audio;
- };
- 
- static const struct regmap_range_cfg it66121_regmap_banks[] = {
-@@ -886,6 +981,536 @@ static irqreturn_t it66121_irq_threaded_handler(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static int it661221_set_chstat(struct it66121_ctx *ctx, u8 iec60958_chstat[])
-+{
-+	int ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CHST_MODE_REG, iec60958_chstat[0] & 0x7C);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CHST_CAT_REG, iec60958_chstat[1]);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CHST_SRCNUM_REG, iec60958_chstat[2] & 0x0F);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CHST_CHTNUM_REG,
-+			   (iec60958_chstat[2] >> 4) & 0x0F);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CHST_CA_FS_REG, iec60958_chstat[3]);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(ctx->regmap, IT66121_AUD_CHST_OFS_WL_REG, iec60958_chstat[4]);
-+}
-+
-+static int it661221_set_lpcm_audio(struct it66121_ctx *ctx, u8 audio_src_num, u8 audio_swl)
-+{
-+	int ret;
-+	unsigned int audio_enable = 0;
-+	unsigned int audio_format = 0;
-+
-+	switch (audio_swl) {
-+	case 16:
-+		audio_enable |= IT66121_AUD_16BIT;
-+		break;
-+	case 18:
-+		audio_enable |= IT66121_AUD_18BIT;
-+		break;
-+	case 20:
-+		audio_enable |= IT66121_AUD_20BIT;
-+		break;
-+	case 24:
-+	default:
-+		audio_enable |= IT66121_AUD_24BIT;
-+		break;
-+	}
-+
-+	audio_format |= 0x40;
-+	switch (audio_src_num) {
-+	case 4:
-+		audio_enable |= IT66121_AUD_EN_I2S3 | IT66121_AUD_EN_I2S2 |
-+				IT66121_AUD_EN_I2S1 | IT66121_AUD_EN_I2S0;
-+		break;
-+	case 3:
-+		audio_enable |= IT66121_AUD_EN_I2S2 | IT66121_AUD_EN_I2S1 |
-+				IT66121_AUD_EN_I2S0;
-+		break;
-+	case 2:
-+		audio_enable |= IT66121_AUD_EN_I2S1 | IT66121_AUD_EN_I2S0;
-+		break;
-+	case 1:
-+	default:
-+		audio_format &= ~0x40;
-+		audio_enable |= IT66121_AUD_EN_I2S0;
-+		break;
-+	}
-+
-+	audio_format |= 0x01;
-+	ctx->audio.ch_enable = audio_enable;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CTRL0_REG, audio_enable & 0xF0);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CTRL1_REG, audio_format);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_FIFOMAP_REG, 0xE4);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_CTRL3_REG, 0x00);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_SRCVALID_FLAT_REG, 0x00);
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(ctx->regmap, IT66121_AUD_HDAUDIO_REG, 0x00);
-+}
-+
-+static int it661221_set_ncts(struct it66121_ctx *ctx, u8 fs)
-+{
-+	int ret;
-+	unsigned int n;
-+
-+	switch (fs) {
-+	case IT66121_AUD_FS_32K:
-+		n = 4096;
-+		break;
-+	case IT66121_AUD_FS_44P1K:
-+		n = 6272;
-+		break;
-+	case IT66121_AUD_FS_48K:
-+		n = 6144;
-+		break;
-+	case IT66121_AUD_FS_88P2K:
-+		n = 12544;
-+		break;
-+	case IT66121_AUD_FS_96K:
-+		n = 12288;
-+		break;
-+	case IT66121_AUD_FS_176P4K:
-+		n = 25088;
-+		break;
-+	case IT66121_AUD_FS_192K:
-+		n = 24576;
-+		break;
-+	case IT66121_AUD_FS_768K:
-+		n = 24576;
-+		break;
-+	default:
-+		n = 6144;
-+		break;
-+	}
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_PKT_N0_REG, (u8)((n) & 0xFF));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_PKT_N1_REG, (u8)((n >> 8) & 0xFF));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, IT66121_AUD_PKT_N2_REG, (u8)((n >> 16) & 0xF));
-+	if (ret)
-+		return ret;
-+
-+	if (ctx->audio.auto_cts) {
-+		u8 loop_cnt = 255;
-+		u8 cts_stable_cnt = 0;
-+		unsigned int sum_cts = 0;
-+		unsigned int cts = 0;
-+		unsigned int last_cts = 0;
-+		unsigned int diff;
-+		unsigned int val;
-+
-+		while (loop_cnt--) {
-+			msleep(30);
-+			regmap_read(ctx->regmap, IT66121_AUD_PKT_CTS_CNT2_REG, &val);
-+			cts = val << 12;
-+			regmap_read(ctx->regmap, IT66121_AUD_PKT_CTS_CNT1_REG, &val);
-+			cts |= val << 4;
-+			regmap_read(ctx->regmap, IT66121_AUD_PKT_CTS_CNT0_REG, &val);
-+			cts |= val >> 4;
-+			if (cts == 0) {
-+				continue;
-+			} else {
-+				if (last_cts > cts)
-+					diff = last_cts - cts;
-+				else
-+					diff = cts - last_cts;
-+				last_cts = cts;
-+				if (diff < 5) {
-+					cts_stable_cnt++;
-+					sum_cts += cts;
-+				} else {
-+					cts_stable_cnt = 0;
-+					sum_cts = 0;
-+					continue;
-+				}
-+
-+				if (cts_stable_cnt >= 32) {
-+					last_cts = (sum_cts >> 5);
-+					break;
-+				}
-+			}
-+		}
-+
-+		regmap_write(ctx->regmap, IT66121_AUD_PKT_CTS0_REG, (u8)((last_cts) & 0xFF));
-+		regmap_write(ctx->regmap, IT66121_AUD_PKT_CTS1_REG, (u8)((last_cts >> 8) & 0xFF));
-+		regmap_write(ctx->regmap, IT66121_AUD_PKT_CTS2_REG, (u8)((last_cts >> 16) & 0x0F));
-+	}
-+
-+	ret = regmap_write(ctx->regmap, 0xF8, 0xC3);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(ctx->regmap, 0xF8, 0xA5);
-+	if (ret)
-+		return ret;
-+
-+	if (ctx->audio.auto_cts) {
-+		ret = regmap_write_bits(ctx->regmap, IT66121_PKT_CTS_CTRL_REG,
-+					IT66121_PKT_CTS_CTRL_SEL,
-+					1);
-+	} else {
-+		ret = regmap_write_bits(ctx->regmap, IT66121_PKT_CTS_CTRL_REG,
-+					IT66121_PKT_CTS_CTRL_SEL,
-+					0);
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	return regmap_write(ctx->regmap, 0xF8, 0xFF);
-+}
-+
-+static int it661221_audio_output_enable(struct it66121_ctx *ctx, bool enable)
-+{
-+	int ret;
-+
-+	if (enable) {
-+		ret = regmap_write_bits(ctx->regmap, IT66121_SW_RST_REG,
-+					IT66121_SW_RST_AUD | IT66121_SW_RST_AREF,
-+					0);
-+		if (ret)
-+			return ret;
-+
-+		ret = regmap_write_bits(ctx->regmap, IT66121_AUD_CTRL0_REG,
-+					IT66121_AUD_EN_I2S3 | IT66121_AUD_EN_I2S2 |
-+					IT66121_AUD_EN_I2S1 | IT66121_AUD_EN_I2S0,
-+					ctx->audio.ch_enable);
-+	} else {
-+		ret = regmap_write_bits(ctx->regmap, IT66121_AUD_CTRL0_REG,
-+					IT66121_AUD_EN_I2S3 | IT66121_AUD_EN_I2S2 |
-+					IT66121_AUD_EN_I2S1 | IT66121_AUD_EN_I2S0,
-+					ctx->audio.ch_enable & 0xF0);
-+		if (ret)
-+			return ret;
-+
-+		ret = regmap_write_bits(ctx->regmap, IT66121_SW_RST_REG,
-+					IT66121_SW_RST_AUD | IT66121_SW_RST_AREF,
-+					IT66121_SW_RST_AUD | IT66121_SW_RST_AREF);
-+	}
-+
-+	return ret;
-+}
-+
-+static int it661221_audio_ch_enable(struct it66121_ctx *ctx, bool enable)
-+{
-+	int ret;
-+
-+	if (enable) {
-+		ret = regmap_write(ctx->regmap, IT66121_AUD_SRCVALID_FLAT_REG, 0);
-+		if (ret)
-+			return ret;
-+
-+		ret = regmap_write(ctx->regmap, IT66121_AUD_CTRL0_REG, ctx->audio.ch_enable);
-+	} else {
-+		ret = regmap_write(ctx->regmap, IT66121_AUD_CTRL0_REG, ctx->audio.ch_enable & 0xF0);
-+	}
-+
-+	return ret;
-+}
-+
-+static int it66121_audio_hw_params(struct device *dev, void *data,
-+				   struct hdmi_codec_daifmt *daifmt,
-+				   struct hdmi_codec_params *params)
-+{
-+	u8 fs;
-+	u8 swl;
-+	int ret;
-+	struct it66121_ctx *ctx = dev_get_drvdata(dev);
-+	static u8 iec60958_chstat[5];
-+	unsigned int channels = params->channels;
-+	unsigned int sample_rate = params->sample_rate;
-+	unsigned int sample_width = params->sample_width;
-+
-+	mutex_lock(&ctx->lock);
-+	dev_dbg(dev, "%s: %u, %u, %u, %u\n", __func__,
-+		daifmt->fmt, sample_rate, sample_width, channels);
-+
-+	switch (daifmt->fmt) {
-+	case HDMI_I2S:
-+		dev_dbg(dev, "Using HDMI I2S\n");
-+		break;
-+	default:
-+		dev_err(dev, "Invalid or unsupported DAI format %d\n", daifmt->fmt);
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	// Set audio clock recovery (N/CTS)
-+	ret = regmap_write(ctx->regmap, IT66121_CLK_CTRL0_REG,
-+			   IT66121_CLK_CTRL0_AUTO_OVER_SAMPLING |
-+			   IT66121_CLK_CTRL0_EXT_MCLK_256FS |
-+			   IT66121_CLK_CTRL0_AUTO_IPCLK);
-+	if (ret)
-+		goto out;
-+
-+	ret = regmap_write_bits(ctx->regmap, IT66121_AUD_CTRL0_REG,
-+				IT66121_AUD_CTRL0_AUD_SEL, 0); // remove spdif selection
-+	if (ret)
-+		goto out;
-+
-+	switch (sample_rate) {
-+	case 44100L:
-+		fs = IT66121_AUD_FS_44P1K;
-+		break;
-+	case 88200L:
-+		fs = IT66121_AUD_FS_88P2K;
-+		break;
-+	case 176400L:
-+		fs = IT66121_AUD_FS_176P4K;
-+		break;
-+	case 32000L:
-+		fs = IT66121_AUD_FS_32K;
-+		break;
-+	case 48000L:
-+		fs = IT66121_AUD_FS_48K;
-+		break;
-+	case 96000L:
-+		fs = IT66121_AUD_FS_96K;
-+		break;
-+	case 192000L:
-+		fs = IT66121_AUD_FS_192K;
-+		break;
-+	case 768000L:
-+		fs = IT66121_AUD_FS_768K;
-+		break;
-+	default:
-+		fs = IT66121_AUD_FS_48K;
-+		break;
-+	}
-+
-+	ctx->audio.fs = fs;
-+	ret = it661221_set_ncts(ctx, fs);
-+	if (ret) {
-+		dev_err(dev, "Failed to set N/CTS: %d\n", ret);
-+		goto out;
-+	}
-+
-+	// Set audio format register (except audio channel enable)
-+	ret = it661221_set_lpcm_audio(ctx, (channels + 1) / 2, sample_width);
-+	if (ret) {
-+		dev_err(dev, "Failed to set LPCM audio: %d\n", ret);
-+		goto out;
-+	}
-+
-+	// Set audio channel status
-+	iec60958_chstat[0] = 0;
-+	if ((channels + 1) / 2 == 1)
-+		iec60958_chstat[0] |= 0x1;
-+	iec60958_chstat[0] &= ~(1 << 1);
-+	iec60958_chstat[1] = 0;
-+	iec60958_chstat[2] = (channels + 1) / 2;
-+	iec60958_chstat[2] |= (channels << 4) & 0xF0;
-+	iec60958_chstat[3] = fs;
-+
-+	switch (sample_width) {
-+	case 21L:
-+		swl = IT66121_AUD_SWL_21BIT;
-+		break;
-+	case 24L:
-+		swl = IT66121_AUD_SWL_24BIT;
-+		break;
-+	case 23L:
-+		swl = IT66121_AUD_SWL_23BIT;
-+		break;
-+	case 22L:
-+		swl = IT66121_AUD_SWL_22BIT;
-+		break;
-+	case 20L:
-+		swl = IT66121_AUD_SWL_20BIT;
-+		break;
-+	case 17L:
-+		swl = IT66121_AUD_SWL_17BIT;
-+		break;
-+	case 19L:
-+		swl = IT66121_AUD_SWL_19BIT;
-+		break;
-+	case 18L:
-+		swl = IT66121_AUD_SWL_18BIT;
-+		break;
-+	case 16L:
-+		swl = IT66121_AUD_SWL_16BIT;
-+		break;
-+	default:
-+		swl = IT66121_AUD_SWL_NOT_INDICATED;
-+		break;
-+	}
-+
-+	iec60958_chstat[4] = (((~fs) << 4) & 0xF0) | swl;
-+	ret = it661221_set_chstat(ctx, iec60958_chstat);
-+	if (ret) {
-+		dev_err(dev, "Failed to set channel status: %d\n", ret);
-+		goto out;
-+	}
-+
-+	// Enable audio channel enable while input clock stable (if SPDIF).
-+	ret = it661221_audio_ch_enable(ctx, true);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable audio channel: %d\n", ret);
-+		goto out;
-+	}
-+
-+	ret = regmap_write_bits(ctx->regmap, IT66121_INT_MASK1_REG,
-+				IT66121_INT_MASK1_AUD_OVF,
-+				0);
-+	if (ret)
-+		goto out;
-+
-+	dev_dbg(dev, "HDMI audio enabled.\n");
-+out:
-+	mutex_unlock(&ctx->lock);
-+
-+	return ret;
-+}
-+
-+static int it66121_audio_startup(struct device *dev, void *data)
-+{
-+	int ret;
-+	struct it66121_ctx *ctx = dev_get_drvdata(dev);
-+
-+	dev_dbg(dev, "%s\n", __func__);
-+
-+	mutex_lock(&ctx->lock);
-+	ret = it661221_audio_output_enable(ctx, true);
-+	if (ret)
-+		dev_err(dev, "Failed to enable audio output: %d\n", ret);
-+
-+	mutex_unlock(&ctx->lock);
-+
-+	return ret;
-+}
-+
-+static void it66121_audio_shutdown(struct device *dev, void *data)
-+{
-+	int ret;
-+	struct it66121_ctx *ctx = dev_get_drvdata(dev);
-+
-+	dev_dbg(dev, "%s\n", __func__);
-+
-+	mutex_lock(&ctx->lock);
-+	ret = it661221_audio_output_enable(ctx, false);
-+	if (ret)
-+		dev_err(dev, "Failed to disable audio output: %d\n", ret);
-+
-+	mutex_unlock(&ctx->lock);
-+}
-+
-+static int it66121_audio_mute(struct device *dev, void *data,
-+			      bool enable, int direction)
-+{
-+	int ret;
-+	struct it66121_ctx *ctx = dev_get_drvdata(dev);
-+
-+	dev_dbg(dev, "%s: enable=%s, direction=%d\n",
-+		__func__, enable ? "true" : "false", direction);
-+
-+	mutex_lock(&ctx->lock);
-+
-+	if (enable) {
-+		ret = regmap_write_bits(ctx->regmap, IT66121_AUD_SRCVALID_FLAT_REG,
-+					IT66121_AUD_FLAT_SRC0 | IT66121_AUD_FLAT_SRC1 |
-+					IT66121_AUD_FLAT_SRC2 | IT66121_AUD_FLAT_SRC3,
-+					IT66121_AUD_FLAT_SRC0 | IT66121_AUD_FLAT_SRC1 |
-+					IT66121_AUD_FLAT_SRC2 | IT66121_AUD_FLAT_SRC3);
-+	} else {
-+		ret = regmap_write_bits(ctx->regmap, IT66121_AUD_SRCVALID_FLAT_REG,
-+					IT66121_AUD_FLAT_SRC0 | IT66121_AUD_FLAT_SRC1 |
-+					IT66121_AUD_FLAT_SRC2 | IT66121_AUD_FLAT_SRC3,
-+					0);
-+	}
-+
-+	mutex_unlock(&ctx->lock);
-+
-+	return ret;
-+}
-+
-+static int it66121_audio_get_eld(struct device *dev, void *data,
-+				 u8 *buf, size_t len)
-+{
-+	struct it66121_ctx *ctx = dev_get_drvdata(dev);
-+
-+	mutex_lock(&ctx->lock);
-+
-+	memcpy(buf, ctx->connector->eld,
-+	       min(sizeof(ctx->connector->eld), len));
-+
-+	mutex_unlock(&ctx->lock);
-+
-+	return 0;
-+}
-+
-+static const struct hdmi_codec_ops it66121_audio_codec_ops = {
-+	.hw_params = it66121_audio_hw_params,
-+	.audio_startup = it66121_audio_startup,
-+	.audio_shutdown = it66121_audio_shutdown,
-+	.mute_stream = it66121_audio_mute,
-+	.get_eld = it66121_audio_get_eld,
-+	.no_capture_mute = 1,
-+};
-+
-+static int it66121_audio_codec_init(struct it66121_ctx *ctx, struct device *dev)
-+{
-+	struct hdmi_codec_pdata codec_data = {
-+		.ops = &it66121_audio_codec_ops,
-+		.i2s = 1, /* Only i2s support for now */
-+		.spdif = 0,
-+		.max_i2s_channels = 8,
-+	};
-+
-+	dev_dbg(dev, "%s\n", __func__);
-+
-+	if (!of_property_read_bool(dev->of_node, "#sound-dai-cells")) {
-+		dev_info(dev, "No \"#sound-dai-cells\", no audio\n");
-+		return 0;
-+	}
-+
-+	ctx->audio.pdev = platform_device_register_data(dev,
-+							HDMI_CODEC_DRV_NAME,
-+							PLATFORM_DEVID_AUTO,
-+							&codec_data,
-+							sizeof(codec_data));
-+
-+	if (IS_ERR(ctx->audio.pdev)) {
-+		dev_err(dev, "Failed to initialize HDMI audio codec: %d\n",
-+			PTR_ERR_OR_ZERO(ctx->audio.pdev));
-+	}
-+
-+	return PTR_ERR_OR_ZERO(ctx->audio.pdev);
-+}
-+
- static int it66121_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -991,6 +1616,8 @@ static int it66121_probe(struct i2c_client *client,
- 		return ret;
- 	}
- 
-+	it66121_audio_codec_init(ctx, dev);
-+
- 	drm_bridge_add(&ctx->bridge);
- 
- 	dev_info(ctx->dev, "IT66121 revision %d probed\n", revision_id);
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi |   7 +
+ drivers/cpufreq/tegra194-cpufreq.c       | 246 +++++++++++++++++++----
+ 2 files changed, 216 insertions(+), 37 deletions(-)
+
 -- 
-2.25.1
+2.17.1
 

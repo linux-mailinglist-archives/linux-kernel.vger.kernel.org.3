@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CC64DB801
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043774DB806
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357740AbiCPSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S1355305AbiCPSj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241347AbiCPSin (ORCPT
+        with ESMTP id S240813AbiCPSjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:38:43 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D00F6E295;
-        Wed, 16 Mar 2022 11:37:28 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2e59939b862so33408787b3.10;
-        Wed, 16 Mar 2022 11:37:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S7CD9ymBGSUH9xoh9EuGWgSN+WocwcNmiO6ecrAxwYQ=;
-        b=0Pxt3atUoFC0+JWCJVRTtpPjrEB8rhRRsNl0bynn9FnjbGczrKaWan+96XpVey+KGV
-         dsxppYI99Mgro3f/lSS3SnaaP07Wmc+ZvBXWcxYj1wP7yJ2i+GP7vr2Hog5jg9Hf0A1C
-         ModXY2UCCtL3hrKF7StmQDLXYmjvzH8nE+Uc2T2hNZF1Fd2rOHYhw5PPJ3U4mqK3va9U
-         JC8j0DiBPGNibCYAqo2KUXO9lOjGS5MbcV9Tb1WxhEvECz6rgI6XuF477BAKGpgsnS10
-         YVFR4Kse/C9vOnrsb20NlO3XGIN89kjw9I3JJAuNFI/pOkKgDeJsEUNtaMCAlo8KzDAH
-         G0oA==
-X-Gm-Message-State: AOAM530GMA2fhuD1lQPW765H8INX3KD4jDIEEUx/s9vGO2EmJid0LwTg
-        z51O0rfyh9/ngczKOFCbNk9E7moAP/ulMNcORx1o+8yE
-X-Google-Smtp-Source: ABdhPJxhctPM1paCg3U/d9lI9xrFtrHRF4X2UhxMkcjRi9OXvU0gaJ8deNpRnMDeZicvOJIkfB4GLX9JHFukxmEiBy8=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr1600322ywb.326.1647455847918; Wed, 16
- Mar 2022 11:37:27 -0700 (PDT)
+        Wed, 16 Mar 2022 14:39:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91B11CB08
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 11:38:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 570AF618D2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:38:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DABDC340E9;
+        Wed, 16 Mar 2022 18:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647455888;
+        bh=B44gI3eqtidBdl9JbCiN+XY0RrXD4K8IvxUOi+CN0lA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U4+gfYSo5pOAJFR3Q5557xe3zQWxbZZMpGPHu9zPQrmq2GDKsofsw/2qFINdr43jC
+         NfI59lmeNhax1dqpTn4TohBpt+XM9XbfNN9yAScjAT1K8ijxisG7p++6PCL+JC97Oy
+         HjcF6TLq1trAmpP9/octZ2EVJ2jvBq6OvK4xcQsq7gnu+9U3sYTMCAdMxizyfSkedD
+         pa8XybsJNKKqAxnxr5I1R+5fLOmZ7oZRmE6LJYANLl2tkCZsDgWiC5C8SlZnslm/l5
+         eyLqp6Sar41lEBwr4oizuGcFfcYotxFHkLDcta4M5VhRidUBGL+Ub2FH99FoPUnoec
+         DAqewCIY/uPbA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        James Morse <james.morse@arm.com>,
+        Rich Wiley <rwiley@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: errata: avoid duplicate field initializer
+Date:   Wed, 16 Mar 2022 19:37:45 +0100
+Message-Id: <20220316183800.1546731-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20220314220855.939823-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220314220855.939823-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Mar 2022 19:37:17 +0100
-Message-ID: <CAJZ5v0hdRTHPeg9wVudHAwgBhRb0Enj34t_9+2HcpBs1yWXiyg@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: int340x: Increase bitmap size
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 11:09 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> The number of policies are 10, so can't be supported by the bitmap size
-> of u8. Even though there are no platfoms with these many policies, but
-> as correctness increase to u32.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Fixes: 16fc8eca1975 ("thermal/int340x_thermal: Add additional UUIDs")
-> Cc: stable@vger.kernel.org
-> ---
-> v2
-> - Changed u16 to u32 for better alignment as suggested by David
->
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 72acb1f61849..348b1f4ef801 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -53,7 +53,7 @@ struct int3400_thermal_priv {
->         struct art *arts;
->         int trt_count;
->         struct trt *trts;
-> -       u8 uuid_bitmap;
-> +       u32 uuid_bitmap;
->         int rel_misc_dev_res;
->         int current_uuid_index;
->         char *data_vault;
-> --
+From: Arnd Bergmann <arnd@arndb.de>
 
-Applied as 5.18 material, thanks!
+The '.type' field is initialized both in place and in the macro
+as reported by this W=1 warning:
+
+arch/arm64/include/asm/cpufeature.h:281:9: error: initialized field overwritten [-Werror=override-init]
+  281 |         (ARM64_CPUCAP_SCOPE_LOCAL_CPU | ARM64_CPUCAP_OPTIONAL_FOR_LATE_CPU)
+      |         ^
+arch/arm64/kernel/cpu_errata.c:136:17: note: in expansion of macro 'ARM64_CPUCAP_LOCAL_CPU_ERRATUM'
+  136 |         .type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,                         \
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/kernel/cpu_errata.c:145:9: note: in expansion of macro 'ERRATA_MIDR_RANGE'
+  145 |         ERRATA_MIDR_RANGE(m, var, r_min, var, r_max)
+      |         ^~~~~~~~~~~~~~~~~
+arch/arm64/kernel/cpu_errata.c:613:17: note: in expansion of macro 'ERRATA_MIDR_REV_RANGE'
+  613 |                 ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2),
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+arch/arm64/include/asm/cpufeature.h:281:9: note: (near initialization for 'arm64_errata[18].type')
+  281 |         (ARM64_CPUCAP_SCOPE_LOCAL_CPU | ARM64_CPUCAP_OPTIONAL_FOR_LATE_CPU)
+      |         ^
+
+Remove the extranous initializer.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm64/kernel/cpu_errata.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+I see this warning on 5.17-rc8, but did not test it on linux-next,
+which may already have a fix.
+
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index a337760f4423..ee7fbd13d030 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -609,7 +609,6 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+ 	{
+ 		.desc = "ARM erratum 2077057",
+ 		.capability = ARM64_WORKAROUND_2077057,
+-		.type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
+ 		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2),
+ 	},
+ #endif
+-- 
+2.29.2
+

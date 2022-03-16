@@ -2,199 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E334DB73C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF2A4DB757
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357611AbiCPRhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 13:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
+        id S1357672AbiCPRia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239152AbiCPRhi (ORCPT
+        with ESMTP id S1357657AbiCPRi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:37:38 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B00B674C1;
-        Wed, 16 Mar 2022 10:36:23 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 6F9591F430DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647452182;
-        bh=CcIxudwQJMgXuoIKm9oLlx5LdLPJZ9BlYBuhMcMRnmI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=IiPUZ/OADUJlHDKAwqADefd9ggOCIa5NXfKPYcqxdq3Yct/2qNnmWRZVMH7luFZqn
-         eDH5p2h4TqROCiRChNrgvdohvrtM8zi28Ey5fRWLI31Xuno4xG7PjzMhlhY+lwzb2+
-         1CSF1x4PjOzYtdRngZazwoqOJElurTS2yXIUQB0qvU/lEqG9aOFWjewZ1TQHRkuASS
-         k+/31ZXA/T3/a6/UO+fJjk2vbdg3TEpkU6hbdAdURZH7J8uEDcMVJ65lEDT2XALCJd
-         1zjhYbO1TDQ24HqSfc67QKoMRtMKk2PxB7T6YL1vMVw1zVgI6AgS7R8ZRmk/7cBh0s
-         layUMKAVVehpQ==
-Message-ID: <468db472-3298-0f3d-e000-29aed1abcd91@collabora.com>
-Date:   Wed, 16 Mar 2022 22:36:14 +0500
+        Wed, 16 Mar 2022 13:38:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B692068FB6;
+        Wed, 16 Mar 2022 10:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647452232; x=1678988232;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O35iNXQlRH+OS+APj1svNRdnOY4rt7s7kW6OPFwzhnA=;
+  b=Xzy1ll8ePcbMN4hVXc0iG+h8pU/7SNcX3nHhfFKgy1NMtjHUefLjonTS
+   UjgpcY5/hlN+NuD/TmDtZlhPlt0x/KAnyhOC4r9w1lLJVbikeaRVqpmUE
+   IMQJ1w0yYeSgDw3LTHDDQdc9HaIWSMlcuAf1btL5U/syIgHy8biRGO126
+   CLw5lLUKdJrXIdKbhV/iXC4i5aLnWoiSod3eAfU+69g/Ri2K7+Q9a8tpP
+   4qkynTlZyBdDXtdGW/WXEuA8ckz+28qw7pAFvsVjyBlxbZn9Yo13Esmr7
+   ZPHI6d+RzIP1ZXJgXyJe6gwonpO0z7Q+NqsctCS00wH4bTK7PG3sWdnsI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="236619157"
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="236619157"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 10:37:12 -0700
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="516437363"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 10:37:08 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 16 Mar 2022 19:37:05 +0200
+Date:   Wed, 16 Mar 2022 19:37:05 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "hch@lst.de" <hch@lst.de>
+Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
+Message-ID: <YjIgQfmcw6fydkXd@lahna>
+References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
+ <YjHb1xCx4UAmUjrR@lahna>
+ <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
+ <YjIb+XOGZbWKpQDa@lahna>
+ <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Cc:     usama.anjum@collabora.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V4 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Content-Language: en-US
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
- <20220315085014.1047291-2-usama.anjum@collabora.com>
- <871qz3ndji.fsf@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <871qz3ndji.fsf@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 1:53 AM, Gabriel Krisman Bertazi wrote:
-> Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
-> 
->> From: Gabriel Krisman Bertazi <krisman@collabora.com>
-> 
-> Hi Usama,
-> 
-> Please, cc me on the whole thread.  I didn't get the patch 1/2 or the
-> cover letter.
-> 
+Hi Mario,
 
-Sorry, I'll correct it.
-
->> This introduces three tests:
->> 1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
->> check if the SD bit is flipped.
->> 2) Check VMA reuse: validate the VM_SOFTDIRTY usage
->> 3) Check soft-dirty on huge pages
->>
->> This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
->> Invalidate TLB after clearing soft-dirty page state"). I was tracking the
->> same issue that he fixed, and this test would have caught it.
->>
->> CC: Will Deacon <will@kernel.org>
->> Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> V3 of this patch is in Andrew's tree. Please drop that.
+On Wed, Mar 16, 2022 at 05:24:38PM +0000, Limonciello, Mario wrote:
+> [Public]
 > 
-> v3 is still in linux-next and this note is quite hidden in the middle of
-> the commit message.
-
-I've tried to put this message at the top of the changelog. I can add
-"Note" in the start of it. What can be some other way to highlight this
-kind of important message?
-
->>
->> Changes in V4:
->> Cosmetic changes
->> Removed global variables
->> Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
->> once
->> Some other minor changes
->> Correct the authorship of the patch
->>
->> Tests of soft dirty bit in this patch and in madv_populate.c are
->> non-overlapping. madv_populate.c has only one soft-dirty bit test in the
->> context of different advise (MADV_POPULATE_READ and
->> MADV_POPULATE_WRITE). This new test adds more tests.
->>
->> Tab width of 8 has been used to align the macros. This alignment may look
->> odd in shell or email. But it looks alright in editors.
+> > On Wed, Mar 16, 2022 at 02:49:09PM +0000, Robin Murphy wrote:
+> > > > What we want is to make sure the Tunneled PCIe ports get the full
+> > IOMMU
+> > > > protection. In case of the discrete above it is also fine if all the
+> > > > devices behind the PCIe root port get the full IOMMU protection. Note in
+> > > > the integrated all the devices are "siblings".
+> > >
+> > > Ah, OK, I wasn't aware that the NHI isn't even the right thing in the first
+> > > place :(
+> > >
+> > > Is there an easy way to get from the struct tb to a PCI device representing
+> > > the end of its relevant tunnel, or do we have a circular dependency
+> > problem
+> > > where the latter won't appear until we've authorised it (and thus the
+> > IOMMU
+> > > layer won't know about it yet either)?
+> > 
+> > The PCIe root ports (and the PCIe downstream ports) are there already
+> > even without "authorization".
+> > 
+> > There is a way to figure out the "tunneled" PCIe ports by looking at
+> > certain properties and we do that already actually. The BIOS has the
+> > following under these ports:
+> > 
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs
+> > .microsoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-
+> > for-pcie-root-ports%23identifying-externally-exposed-pcie-root-
+> > ports&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7C0465d319a
+> > 6684335d9c208da07710e7c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7
+> > C0%7C637830479402895833%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
+> > LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am
+> > p;sdata=z6hpYGpj%2B%2BVvz9d6MXiO4N66PUm4zwhOdI%2Br6l3PjhQ%3D
+> > &amp;reserved=0
+> > 
+> > and the ports will have dev->external_facing set to 1. Perhaps looking
+> > at that field helps here?
 > 
-> I'm curious if you tested reverting 912efa17e512. Did the new versions
-> of this patch still catch the original issue?
+> External facing isn't a guarantee from the firmware though.  It's something we
+> all expect in practice, but I think it's better to look at the ones that are from
+> the _DSD usb4-host-interface to be safer.
 
-Yeah, it did after I reverted the patch and fixed build errors because
-of some function's signature change and one test failed and hence issue
-is caught:
+Right but then we have the discrete ones with the DVSEC that exposes the
+tunneled ports :(
 
-TAP version 13
-1..5
-# dirty bit was 0, but should be 1 (i=1)
-not ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 # SKIP Test test_hugepage huge page allocation
-ok 5 # SKIP Test test_hugepage huge page dirty bit
-# Totals: pass:2 fail:1 xfail:0 xpass:0 skip:2 error:0
+> Mika, you might not have seen it yet, but I sent a follow up diff in this thread
+> to Robin's patch.  If that looks good Robin can submit a v2 (or I'm happy to do
+> so as well as I confirmed it helps my original intent too).
 
+I saw it now and I'm thinking are we making this unnecessary complex? I
+mean Microsoft solely depends on the DMAR platform opt-in flag:
 
->> Test output:
->> TAP version 13
->> 1..5
->> ok 1 Test test_simple
->> ok 2 Test test_vma_reuse reused memory location
->> ok 3 Test test_vma_reuse dirty bit of previous page
->> ok 4 Test test_hugepage huge page allocation
->> ok 5 Test test_hugepage huge page dirty bit
->>  # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
->>
->> Or
->>
->> TAP version 13
->> 1..5
->> ok 1 Test test_simple
->> ok 2 Test test_vma_reuse reused memory location
->> ok 3 Test test_vma_reuse dirty bit of previous page
->> ok 4 # SKIP Test test_hugepage huge page allocation
->> ok 5 # SKIP Test test_hugepage huge page dirty bit
->>  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
-[..]
->> +
->> +#define PAGEMAP			"/proc/self/pagemap"
->> +#define CLEAR_REFS		"/proc/self/clear_refs"
->> +#define MAX_LINE_LENGTH		512
-> 
-> MAX_LINE_LENGTH is no longer used after check_for_pattern was dropped.
-> 
-> Can't the previous defines and file handling functions also go the
-> vm_util.h?
-> 
+  https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
 
-I don't want to make changes in other two tests. I just want to move
-some functions which we need for this test into vm_util.h while keeping
-changes less.
-
->> +#define TEST_ITERATIONS		10000
->> +
->> +static void test_simple(int pagemap_fd, int pagesize)
->> +{
->> +	int i;
->> +	char *map;
->> +
->> +	map = aligned_alloc(pagesize, pagesize);
->> +	if (!map)
->> +		ksft_exit_fail_msg("mmap failed\n");
->> +
->> +	clear_softdirty();
->> +
->> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
->> +		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
->> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
->> +			break;
->> +		}
->> +
->> +		clear_softdirty();
->> +		map[0]++;
-> 
-> 
-> This will overflow several times during TEST_ITERATIONS.  While it is
-> not broken, since we care about causing the page fault, it is not
-> obvious.  Can you add a comment or do something like this instead?
-> 
->   map[0] = !map[0];
-
-Yeah, it is less obvious. I'll add a comment
-
--- 
-Muhammad Usama Anjum
+We also do turn on full IOMMU mappings in that case for devices that are
+marked as external facing by the same firmware that provided the DMAR
+bit. If the user decides to disable IOMMU from command line for instance
+then we expect she knows what she is doing.

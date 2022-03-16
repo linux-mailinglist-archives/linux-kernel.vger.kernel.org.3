@@ -2,97 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBD84DA8C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCBA4DA8C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345865AbiCPDKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        id S1353438AbiCPDKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237407AbiCPDKE (ORCPT
+        with ESMTP id S244454AbiCPDKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:10:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF1C29801;
-        Tue, 15 Mar 2022 20:08:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 15 Mar 2022 23:10:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCD25B3E6;
+        Tue, 15 Mar 2022 20:09:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ECF76170A;
-        Wed, 16 Mar 2022 03:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A4EC340E8;
-        Wed, 16 Mar 2022 03:08:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647400129;
-        bh=YxVaQ81qWMMCHBR2Z78VIwf3VDaaQfI9AxYKFAfkqkE=;
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KJFcS6qJMz4xc2;
+        Wed, 16 Mar 2022 14:09:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647400169;
+        bh=0OkdD+ICwgkogaQXeYirjPsob8+9uM6oN1VDwU+zFAA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bXACU91+ilz2LBst6Tet4eds/MUmpWRgRJcdIW49ao2fj2EpXKUBBONd8Acy2qEd/
-         ajne8Pe0OmCJqXqIY3PUdVXINhOGTMNtEb3SOEjQUls30drkvzqAVPC9VwieVW3Y1n
-         Yuo4mVW1caLwVbHk8xYYV9CQFzE4zkPmyrxYCqOIz9oGTBC39bMho3o5E5kHb1wnVk
-         vf+I9G0BF74iOKFQ42d3PJXQy1iVt4K1P7CBWw3ZRL9kPJrLmbyjGVFh6tcHEI9W2/
-         gJHIeSrKYg2UdTkVkbCX0S9qeCib8K7LJYyt/+F4IBXLshfwCUSCMfy0cV8l0r2xvF
-         2dsstVmEwPVkg==
-Date:   Tue, 15 Mar 2022 20:08:47 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     dsahern@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        xeb@mail.ru, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Biao Jiang <benbjiang@tencent.com>
-Subject: Re: [PATCH net-next 1/3] net: gre_demux: add skb drop reasons to
- gre_rcv()
-Message-ID: <20220315200847.68c2efee@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220314133312.336653-2-imagedong@tencent.com>
-References: <20220314133312.336653-1-imagedong@tencent.com>
-        <20220314133312.336653-2-imagedong@tencent.com>
+        b=VMmuO8rfwYQxzdlXwBiP/6SQYhLmIEFwri2hvoPJUKYvry/sfyMM4TfWeYhriQ5uM
+         il2TPbbugIC2fSFOfSerTZDfMW75kltt+NXh5K4tHzyKzx8mnSx8/Kfz0t8A0mpkpc
+         LuD6jKRJ/ASEjHQBENcHpxWe+BYYEhPOiLAO8B2idPdWM6rBR4+0hWzhSVD+oQEujV
+         yJQPTNWRoWEWquHvdK8FHMN+t7Ke+lVX0RcvQ5dn2CQn25d8w4WQPpx+VD6cxbtAkl
+         vw8RSmFTlfsIx0Rd7vYUImMQHWAhQcVQjzvDVjE+bRgUPc+A87Gc9N5wfOSyjz1kRJ
+         WxHqat5IqFwIw==
+Date:   Wed, 16 Mar 2022 14:09:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the ftrace tree with the nfsd tree
+Message-ID: <20220316140924.0f4252b3@canb.auug.org.au>
+In-Reply-To: <20220315145828.413e9301@canb.auug.org.au>
+References: <20220315145828.413e9301@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/MpA68hHysxUSBjP=HaBfZF.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Mar 2022 21:33:10 +0800 menglong8.dong@gmail.com wrote:
-> +	reason = SKB_DROP_REASON_NOT_SPECIFIED;
->  	if (!pskb_may_pull(skb, 12))
->  		goto drop;
+--Sig_/MpA68hHysxUSBjP=HaBfZF.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-REASON_HDR_TRUNC ?
+Hi Stephen,
 
->  	ver = skb->data[1]&0x7f;
-> -	if (ver >= GREPROTO_MAX)
-> +	if (ver >= GREPROTO_MAX) {
-> +		reason = SKB_DROP_REASON_GRE_VERSION;
+On Tue, 15 Mar 2022 14:58:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> However, my x86_64 allmodconfig build then failed like this:
+>=20
+> In file included from include/trace/define_custom_trace.h:55,
+>                  from samples/trace_events/trace_custom_sched.h:95,
+>                  from samples/trace_events/trace_custom_sched.c:24:
+> samples/trace_events/./trace_custom_sched.h: In function 'ftrace_test_cus=
+tom_probe_sched_switch':
+> include/trace/trace_custom_events.h:178:42: error: passing argument 1 of =
+'check_trace_callback_type_sched_switch' from incompatible pointer type [-W=
+error=3Dincompatible-pointer-types]
+>   178 |         check_trace_callback_type_##call(trace_custom_event_raw_e=
+vent_##template); \
+>       |                                          ^~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~
+>       |                                          |
+>       |                                          void (*)(void *, bool,  =
+struct task_struct *, struct task_struct *) {aka void (*)(void *, _Bool,  s=
+truct task_struct *, struct task_struct *)}
+> include/trace/trace_custom_events.h:34:9: note: in expansion of macro 'DE=
+FINE_CUSTOM_EVENT'
+>    34 |         DEFINE_CUSTOM_EVENT(name, name, PARAMS(proto), PARAMS(arg=
+s));
+>       |         ^~~~~~~~~~~~~~~~~~~
+> samples/trace_events/./trace_custom_sched.h:21:1: note: in expansion of m=
+acro 'TRACE_CUSTOM_EVENT'
+>    21 | TRACE_CUSTOM_EVENT(sched_switch,
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/trace_events.h:11,
+>                  from samples/trace_events/trace_custom_sched.c:10:
+> include/linux/tracepoint.h:279:49: note: expected 'void (*)(void *, bool,=
+  unsigned int,  struct task_struct *, struct task_struct *)' {aka 'void (*=
+)(void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *=
+)'} but argument is of type 'void (*)(void *, bool,  struct task_struct *, =
+struct task_struct *)' {aka 'void (*)(void *, _Bool,  struct task_struct *,=
+ struct task_struct *)'}
+>   279 |         check_trace_callback_type_##name(void (*cb)(data_proto)) =
+       \
+>       |                                          ~~~~~~~^~~~~~~~~~~~~~~
+> include/linux/tracepoint.h:419:9: note: in expansion of macro '__DECLARE_=
+TRACE'
+>   419 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),       =
+       \
+>       |         ^~~~~~~~~~~~~~~
+> include/linux/tracepoint.h:553:9: note: in expansion of macro 'DECLARE_TR=
+ACE'
+>   553 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+>       |         ^~~~~~~~~~~~~
+> include/trace/events/sched.h:222:1: note: in expansion of macro 'TRACE_EV=
+ENT'
+>   222 | TRACE_EVENT(sched_switch,
+>       | ^~~~~~~~~~~
+>=20
+> So I gave up and uses the ftrace tree from next-20220310 for today.
+>=20
+> I am going to need some help with this mess, please.
 
-TBH I'm still not sure what level of granularity we should be shooting
-for with the reasons. I'd throw all unexpected header values into one 
-bucket, not go for a reason per field, per protocol. But as I'm said
-I'm not sure myself, so we can keep what you have..
+Thanks for the example merge.  The extra merge resolution patch ended
+up this:
 
->  		goto drop;
-> +	}
->  
->  	rcu_read_lock();
->  	proto = rcu_dereference(gre_proto[ver]);
-> -	if (!proto || !proto->handler)
-> +	if (!proto || !proto->handler) {
-> +		reason = SKB_DROP_REASON_GRE_NOHANDLER;
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 16 Mar 2022 14:01:59 +1100
+Subject: [PATCH] fixup for "sched/tracing: Don't re-read p->state when emit=
+ting sched_switch event"
 
-I think the ->handler check is defensive programming, there's no
-protocol upstream which would leave handler NULL.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ samples/trace_events/trace_custom_sched.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This is akin to SKB_DROP_REASON_PTYPE_ABSENT, we can reuse that or add
-a new reason, but I'd think the phrasing should be kept similar.
+diff --git a/samples/trace_events/trace_custom_sched.h b/samples/trace_even=
+ts/trace_custom_sched.h
+index a3d14de6a2e5..9fdd8e7c2a45 100644
+--- a/samples/trace_events/trace_custom_sched.h
++++ b/samples/trace_events/trace_custom_sched.h
+@@ -25,10 +25,11 @@ TRACE_CUSTOM_EVENT(sched_switch,
+ 	 * that the custom event is using.
+ 	 */
+ 	TP_PROTO(bool preempt,
++		 unsigned int prev_state,
+ 		 struct task_struct *prev,
+ 		 struct task_struct *next),
+=20
+-	TP_ARGS(preempt, prev, next),
++	TP_ARGS(preempt, prev_state, prev, next),
+=20
+ 	/*
+ 	 * The next fields are where the customization happens.
+--=20
+2.34.1
 
->  		goto drop_unlock;
-> +	}
->  	ret = proto->handler(skb);
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/MpA68hHysxUSBjP=HaBfZF.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIxVOUACgkQAVBC80lX
+0GynHgf/bXxlCbOdYk75HdowCWg+o9FwXrE+5Yo6GqPHBTuZMBxrnujJ95QF2uiN
+nLk/INgBJ3Ocdxu1xmdACcA6lRUVa2p68BGgoyC71CdKn7lSUhZRRHeTvGhmcNqH
+bXkQ7hGKnS9mUFuhxdDmlYI3Pf7FwP3zGRZiiJRYUPdPA2XszBzTf3EoLgR7k+6h
+8cqgx3lIOEWaJiHE6gOz2+LEfX0ZHdRl3IrzuTFl2k4DX++DpkQH9DKN8+3/EMx4
+3Ytv2AnqqK78NdTUU8LkAqh01dF5+N97H4GUq7RLu5oqk4Hn5C9pMz9HSDlU5abJ
+Nz48aC5Ut9aibmLzK6CJYkm5ji6pJQ==
+=IfZN
+-----END PGP SIGNATURE-----
+
+--Sig_/MpA68hHysxUSBjP=HaBfZF.--

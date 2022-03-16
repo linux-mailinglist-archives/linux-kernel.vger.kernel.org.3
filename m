@@ -2,174 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCBA4DA8C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF2A4DA8CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353438AbiCPDKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S1353447AbiCPDNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244454AbiCPDKs (ORCPT
+        with ESMTP id S237407AbiCPDNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:10:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCD25B3E6;
-        Tue, 15 Mar 2022 20:09:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KJFcS6qJMz4xc2;
-        Wed, 16 Mar 2022 14:09:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647400169;
-        bh=0OkdD+ICwgkogaQXeYirjPsob8+9uM6oN1VDwU+zFAA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VMmuO8rfwYQxzdlXwBiP/6SQYhLmIEFwri2hvoPJUKYvry/sfyMM4TfWeYhriQ5uM
-         il2TPbbugIC2fSFOfSerTZDfMW75kltt+NXh5K4tHzyKzx8mnSx8/Kfz0t8A0mpkpc
-         LuD6jKRJ/ASEjHQBENcHpxWe+BYYEhPOiLAO8B2idPdWM6rBR4+0hWzhSVD+oQEujV
-         yJQPTNWRoWEWquHvdK8FHMN+t7Ke+lVX0RcvQ5dn2CQn25d8w4WQPpx+VD6cxbtAkl
-         vw8RSmFTlfsIx0Rd7vYUImMQHWAhQcVQjzvDVjE+bRgUPc+A87Gc9N5wfOSyjz1kRJ
-         WxHqat5IqFwIw==
-Date:   Wed, 16 Mar 2022 14:09:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the ftrace tree with the nfsd tree
-Message-ID: <20220316140924.0f4252b3@canb.auug.org.au>
-In-Reply-To: <20220315145828.413e9301@canb.auug.org.au>
-References: <20220315145828.413e9301@canb.auug.org.au>
+        Tue, 15 Mar 2022 23:13:05 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168875C352;
+        Tue, 15 Mar 2022 20:11:50 -0700 (PDT)
+X-UUID: 059c8ae7a8bb4e5e835b1a30499283f2-20220316
+X-UUID: 059c8ae7a8bb4e5e835b1a30499283f2-20220316
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2061592986; Wed, 16 Mar 2022 11:11:21 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Mar 2022 11:11:20 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Mar 2022 11:11:20 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v4] remoteproc: mediatek: Fix side effect of mt8195 sram power on
+Date:   Wed, 16 Mar 2022 11:11:17 +0800
+Message-ID: <20220316031117.7311-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MpA68hHysxUSBjP=HaBfZF.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MpA68hHysxUSBjP=HaBfZF.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
 
-Hi Stephen,
+L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
 
-On Tue, 15 Mar 2022 14:58:28 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> However, my x86_64 allmodconfig build then failed like this:
->=20
-> In file included from include/trace/define_custom_trace.h:55,
->                  from samples/trace_events/trace_custom_sched.h:95,
->                  from samples/trace_events/trace_custom_sched.c:24:
-> samples/trace_events/./trace_custom_sched.h: In function 'ftrace_test_cus=
-tom_probe_sched_switch':
-> include/trace/trace_custom_events.h:178:42: error: passing argument 1 of =
-'check_trace_callback_type_sched_switch' from incompatible pointer type [-W=
-error=3Dincompatible-pointer-types]
->   178 |         check_trace_callback_type_##call(trace_custom_event_raw_e=
-vent_##template); \
->       |                                          ^~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~
->       |                                          |
->       |                                          void (*)(void *, bool,  =
-struct task_struct *, struct task_struct *) {aka void (*)(void *, _Bool,  s=
-truct task_struct *, struct task_struct *)}
-> include/trace/trace_custom_events.h:34:9: note: in expansion of macro 'DE=
-FINE_CUSTOM_EVENT'
->    34 |         DEFINE_CUSTOM_EVENT(name, name, PARAMS(proto), PARAMS(arg=
-s));
->       |         ^~~~~~~~~~~~~~~~~~~
-> samples/trace_events/./trace_custom_sched.h:21:1: note: in expansion of m=
-acro 'TRACE_CUSTOM_EVENT'
->    21 | TRACE_CUSTOM_EVENT(sched_switch,
->       | ^~~~~~~~~~~~~~~~~~
-> In file included from include/linux/trace_events.h:11,
->                  from samples/trace_events/trace_custom_sched.c:10:
-> include/linux/tracepoint.h:279:49: note: expected 'void (*)(void *, bool,=
-  unsigned int,  struct task_struct *, struct task_struct *)' {aka 'void (*=
-)(void *, _Bool,  unsigned int,  struct task_struct *, struct task_struct *=
-)'} but argument is of type 'void (*)(void *, bool,  struct task_struct *, =
-struct task_struct *)' {aka 'void (*)(void *, _Bool,  struct task_struct *,=
- struct task_struct *)'}
->   279 |         check_trace_callback_type_##name(void (*cb)(data_proto)) =
-       \
->       |                                          ~~~~~~~^~~~~~~~~~~~~~~
-> include/linux/tracepoint.h:419:9: note: in expansion of macro '__DECLARE_=
-TRACE'
->   419 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),       =
-       \
->       |         ^~~~~~~~~~~~~~~
-> include/linux/tracepoint.h:553:9: note: in expansion of macro 'DECLARE_TR=
-ACE'
->   553 |         DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
->       |         ^~~~~~~~~~~~~
-> include/trace/events/sched.h:222:1: note: in expansion of macro 'TRACE_EV=
-ENT'
->   222 | TRACE_EVENT(sched_switch,
->       | ^~~~~~~~~~~
->=20
-> So I gave up and uses the ftrace tree from next-20220310 for today.
->=20
-> I am going to need some help with this mess, please.
+L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
+These bits have to be powered on to allow EMI access for SCP.
 
-Thanks for the example merge.  The extra merge resolution patch ended
-up this:
+Bits[7:4] also affect audio DSP because audio DSP and SCP are
+placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
+blocked too.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 16 Mar 2022 14:01:59 +1100
-Subject: [PATCH] fixup for "sched/tracing: Don't re-read p->state when emit=
-ting sched_switch event"
+L1TCM_SRAM_PDN bits[31:8] are not used.
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+This fix removes modification of bits[7:4] when power on/off mt8195 SCP
+L1TCM. It's because the modification introduces a short period of time
+blocking audio DSP to access EMI. This was not a problem until we have
+to load both SCP module and audio DSP module. audio DSP needs to access
+EMI because it has source/data on DRAM. Audio DSP will have unexpected
+behavior when it accesses EMI and the SCP driver blocks the EMI path at
+the same time.
+
+Fixes: 79111df414fc ("remoteproc: mediatek: Support mt8195 scp")
+Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 ---
- samples/trace_events/trace_custom_sched.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v4: add Fixes and Reviewed-by tags
+v3: fix build error
+v2: apply comments about macro definition and function calls
+---
+ drivers/remoteproc/mtk_common.h |  2 ++
+ drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++++++++----------
+ 2 files changed, 53 insertions(+), 16 deletions(-)
 
-diff --git a/samples/trace_events/trace_custom_sched.h b/samples/trace_even=
-ts/trace_custom_sched.h
-index a3d14de6a2e5..9fdd8e7c2a45 100644
---- a/samples/trace_events/trace_custom_sched.h
-+++ b/samples/trace_events/trace_custom_sched.h
-@@ -25,10 +25,11 @@ TRACE_CUSTOM_EVENT(sched_switch,
- 	 * that the custom event is using.
- 	 */
- 	TP_PROTO(bool preempt,
-+		 unsigned int prev_state,
- 		 struct task_struct *prev,
- 		 struct task_struct *next),
-=20
--	TP_ARGS(preempt, prev, next),
-+	TP_ARGS(preempt, prev_state, prev, next),
-=20
- 	/*
- 	 * The next fields are where the customization happens.
---=20
-2.34.1
+diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
+index 5ff3867c72f3..ff954a06637c 100644
+--- a/drivers/remoteproc/mtk_common.h
++++ b/drivers/remoteproc/mtk_common.h
+@@ -51,6 +51,8 @@
+ #define MT8192_CORE0_WDT_IRQ		0x10030
+ #define MT8192_CORE0_WDT_CFG		0x10034
+ 
++#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
++
+ #define SCP_FW_VER_LEN			32
+ #define SCP_SHARE_BUFFER_SIZE		288
+ 
+diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+index 36e48cf58ed6..5f686fe09203 100644
+--- a/drivers/remoteproc/mtk_scp.c
++++ b/drivers/remoteproc/mtk_scp.c
+@@ -365,22 +365,22 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
+ 	return 0;
+ }
+ 
+-static void mt8192_power_on_sram(void __iomem *addr)
++static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
+ {
+ 	int i;
+ 
+ 	for (i = 31; i >= 0; i--)
+-		writel(GENMASK(i, 0), addr);
++		writel(GENMASK(i, 0) & ~reserved_mask, addr);
+ 	writel(0, addr);
+ }
+ 
+-static void mt8192_power_off_sram(void __iomem *addr)
++static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
+ {
+ 	int i;
+ 
+ 	writel(0, addr);
+ 	for (i = 0; i < 32; i++)
+-		writel(GENMASK(i, 0), addr);
++		writel(GENMASK(i, 0) & ~reserved_mask, addr);
+ }
+ 
+ static int mt8192_scp_before_load(struct mtk_scp *scp)
+@@ -391,11 +391,32 @@ static int mt8192_scp_before_load(struct mtk_scp *scp)
+ 	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
+ 
+ 	/* enable SRAM clock */
+-	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
+-	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
+-	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
+-	mt8192_power_on_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
+-	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
++	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
++
++	/* enable MPU for all memory regions */
++	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
++
++	return 0;
++}
++
++static int mt8195_scp_before_load(struct mtk_scp *scp)
++{
++	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
++	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
++
++	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
++
++	/* enable SRAM clock */
++	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
++	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
++			  MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
++	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+ 
+ 	/* enable MPU for all memory regions */
+ 	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
+@@ -551,11 +572,25 @@ static void mt8183_scp_stop(struct mtk_scp *scp)
+ static void mt8192_scp_stop(struct mtk_scp *scp)
+ {
+ 	/* Disable SRAM clock */
+-	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
+-	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
+-	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
+-	mt8192_power_off_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
+-	mt8192_power_off_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
++	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
++
++	/* Disable SCP watchdog */
++	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
++}
++
++static void mt8195_scp_stop(struct mtk_scp *scp)
++{
++	/* Disable SRAM clock */
++	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
++	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
++			   MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
++	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+ 
+ 	/* Disable SCP watchdog */
+ 	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
+@@ -901,11 +936,11 @@ static const struct mtk_scp_of_data mt8192_of_data = {
+ 
+ static const struct mtk_scp_of_data mt8195_of_data = {
+ 	.scp_clk_get = mt8195_scp_clk_get,
+-	.scp_before_load = mt8192_scp_before_load,
++	.scp_before_load = mt8195_scp_before_load,
+ 	.scp_irq_handler = mt8192_scp_irq_handler,
+ 	.scp_reset_assert = mt8192_scp_reset_assert,
+ 	.scp_reset_deassert = mt8192_scp_reset_deassert,
+-	.scp_stop = mt8192_scp_stop,
++	.scp_stop = mt8195_scp_stop,
+ 	.scp_da_to_va = mt8192_scp_da_to_va,
+ 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
+ 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
+-- 
+2.15.GIT
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MpA68hHysxUSBjP=HaBfZF.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIxVOUACgkQAVBC80lX
-0GynHgf/bXxlCbOdYk75HdowCWg+o9FwXrE+5Yo6GqPHBTuZMBxrnujJ95QF2uiN
-nLk/INgBJ3Ocdxu1xmdACcA6lRUVa2p68BGgoyC71CdKn7lSUhZRRHeTvGhmcNqH
-bXkQ7hGKnS9mUFuhxdDmlYI3Pf7FwP3zGRZiiJRYUPdPA2XszBzTf3EoLgR7k+6h
-8cqgx3lIOEWaJiHE6gOz2+LEfX0ZHdRl3IrzuTFl2k4DX++DpkQH9DKN8+3/EMx4
-3Ytv2AnqqK78NdTUU8LkAqh01dF5+N97H4GUq7RLu5oqk4Hn5C9pMz9HSDlU5abJ
-Nz48aC5Ut9aibmLzK6CJYkm5ji6pJQ==
-=IfZN
------END PGP SIGNATURE-----
-
---Sig_/MpA68hHysxUSBjP=HaBfZF.--

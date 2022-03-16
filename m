@@ -2,56 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1568C4DB3A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BAA4DB3A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356869AbiCPOuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 10:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S1356873AbiCPOud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245291AbiCPOuQ (ORCPT
+        with ESMTP id S1356875AbiCPOua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 10:50:16 -0400
+        Wed, 16 Mar 2022 10:50:30 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3537344E3;
-        Wed, 16 Mar 2022 07:49:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 175D43A73B;
+        Wed, 16 Mar 2022 07:49:15 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 708A71476;
-        Wed, 16 Mar 2022 07:49:01 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A55DF3F766;
-        Wed, 16 Mar 2022 07:48:58 -0700 (PDT)
-Message-ID: <eb33745a-9d63-89b1-1245-9d1e0e04a169@arm.com>
-Date:   Wed, 16 Mar 2022 15:48:50 +0100
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE0221476;
+        Wed, 16 Mar 2022 07:49:14 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 37FB73F766;
+        Wed, 16 Mar 2022 07:49:13 -0700 (PDT)
+Message-ID: <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
+Date:   Wed, 16 Mar 2022 14:49:09 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] topology: make core_mask include at least
- cluster_siblings
-Content-Language: en-US
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org, Barry Song <21cnbao@gmail.com>
-References: <f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com>
- <20220308103012.GA31267@willie-the-truck>
- <CAKfTPtDe+i0fwV10m2sX2xkJGBrO8B+RQogDDij8ioJAT5+wAw@mail.gmail.com>
- <e91bcc83-37c8-dcca-e088-8b3fcd737b2c@arm.com> <YieXQD7uG0+R5QBq@fedora>
- <7ac47c67-0b5e-5caa-20bb-a0100a0cb78f@arm.com> <YijxUAuufpBKLtwy@fedora>
- <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com> <Yi9zUuroS1vHWexY@fedora>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <Yi9zUuroS1vHWexY@fedora>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
+Content-Language: en-GB
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        mario.limonciello@amd.com, hch@lst.de
+References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
+ <YjHb1xCx4UAmUjrR@lahna>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YjHb1xCx4UAmUjrR@lahna>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -62,59 +48,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Barry Song <song.bao.hua@hisilicon.com> (always get undelivered mail
-  returned to sender)
-+ Barry Song <21cnbao@gmail.com>
-
-On 14/03/2022 17:54, Darren Hart wrote:
-> On Mon, Mar 14, 2022 at 05:35:05PM +0100, Dietmar Eggemann wrote:
->> On 09/03/2022 19:26, Darren Hart wrote:
->>> On Wed, Mar 09, 2022 at 01:50:07PM +0100, Dietmar Eggemann wrote:
->>>> On 08/03/2022 18:49, Darren Hart wrote:
->>>>> On Tue, Mar 08, 2022 at 05:03:07PM +0100, Dietmar Eggemann wrote:
->>>>>> On 08/03/2022 12:04, Vincent Guittot wrote:
->>>>>>> On Tue, 8 Mar 2022 at 11:30, Will Deacon <will@kernel.org> wrote:
-
-[...]
-
-> Ultimately, this delivers the same result. I do think it imposes more complexity
-> for everyone to address what as far as I'm aware only affect the one system.
+On 2022-03-16 12:45, Mika Westerberg wrote:
+> Hi Robin,
 > 
-> I don't think the term "Cluster" has a clear and universally understood
-> definition, so I don't think it's a given that "CLS should be sub-SD of MC". I
-
-I agree, the term 'cluster' is overloaded but default_topology[] clearly
-says (with direction up means smaller SD spans).
-
-  #ifdef CONFIG_SCHED_CLUSTER
-        { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-  #endif
-
-  #ifdef CONFIG_SCHED_MC
-        { cpu_coregroup_mask, cpu_core_flags, SD_INIT_NAME(MC) },
-  #endif
-
-In ACPI code we have `cluster_node = fetch_pptt_node(... ,
-cpu_node->parent) but then the cache information (via
-llc_id/llc_sibling) can change things which make this less easy to grasp.
-
-> think this has been assumed, and that assumption has mostly held up, but this is
-> an abstraction, and the abstraction should follow the physical topologies rather
-> than the other way around in my opinion. If that's the primary motivation for
-> this approach, I don't think it justifies the additional complexity.
+> On Wed, Mar 16, 2022 at 11:25:51AM +0000, Robin Murphy wrote:
+>> Even if an IOMMU might be present for some PCI segment in the system,
+>> that doesn't necessarily mean it provides translation for the device
+>> we care about. Furthermore, the presence or not of one firmware flag
+>> doesn't imply anything about the IOMMU driver's behaviour, which may
+>> still depend on other firmware properties and kernel options too. What
+>> actually matters is whether an IOMMU is enforcing protection for our
+>> device - regardless of whether that stemmed from firmware policy, kernel
+>> config, or user control - at the point we need to decide whether to
+>> authorise it. We can ascertain that generically by simply looking at
+>> whether we're currently attached to a translation domain or not.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>
+>> I don't have the means to test this, but I'm at least 80% confident
+>> in my unpicking of the structures to retrieve the correct device...
+>>
+>>   drivers/thunderbolt/domain.c | 7 ++++---
+>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+>> index 7018d959f775..5f5fc5f6a09b 100644
+>> --- a/drivers/thunderbolt/domain.c
+>> +++ b/drivers/thunderbolt/domain.c
+>> @@ -257,13 +257,14 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
+>>   					 struct device_attribute *attr,
+>>   					 char *buf)
+>>   {
+>> +	struct tb *tb = container_of(dev, struct tb, dev);
+>> +	struct iommu_domain *iod = iommu_get_domain_for_dev(&tb->nhi->pdev->dev);
 > 
-> All told, I prefer the 2 line change contained within cpu_coregroup_mask() which
-> handles the one known exception with minimal impact. It's easy enough to come
-> back to this to address more cases with a more complex solution if needed in the
-> future - but I prefer to introduce the least amount of complexity as possible to
-> address the known issues, especially if the end result is the same and the cost
-> is paid by the affected systems.
+> I wonder if this is the correct "domain"? I mean it's typically no the
+> Thunderbolt controller (here tb->nhi->pdev->dev) that needs the
+> protection (although in discrete controllers it does get it too) but
+> it's the tunneled PCIe topology that we need to check here.
 > 
-> Thanks,
+> For instance in Intel with intergrated Thunderbolt we have topology like
+> this:
+> 
+>    Host bridge
+>        |
+>        +--- Tunneled PCIe root port #1
+>        +--- Tunneled PCIe root port #2
+>        +--- Thunderbolt host controller (the NHI above)
+>        +--- xHCI
+> 
+> and In case of discrete controllers it looks like this:
+> 
+>    Host bridge
+>        |
+>        +--- PCIe root port #x
+>                  |
+>                  |
+>             PCIe switch upstream port
+>                  |
+> 	        +--- Tunneled PCIe switch downstream port #1
+> 	        +--- Tunneled PCIe switch downstream port #2
+>          	+--- Thunderbolt host controller (the NHI above)
+>          	+--- xHCI
+> 
+> What we want is to make sure the Tunneled PCIe ports get the full IOMMU
+> protection. In case of the discrete above it is also fine if all the
+> devices behind the PCIe root port get the full IOMMU protection. Note in
+> the integrated all the devices are "siblings".
 
-Yeah, I can see your point. It's the smaller hack. My solution just
-prevents us to manipulate the coregroup mask only to get the MC layer
-degenerated by the core topology code. But people might say that's a
-clever thing to do here. So I'm fine with your original solution as well.
+Ah, OK, I wasn't aware that the NHI isn't even the right thing in the 
+first place :(
 
-[...]
+Is there an easy way to get from the struct tb to a PCI device 
+representing the end of its relevant tunnel, or do we have a circular 
+dependency problem where the latter won't appear until we've authorised 
+it (and thus the IOMMU layer won't know about it yet either)?
+
+Thanks,
+Robin.

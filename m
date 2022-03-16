@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC034DB817
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2084DB81D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357762AbiCPSrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
+        id S1354237AbiCPStH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239276AbiCPSrB (ORCPT
+        with ESMTP id S232577AbiCPStG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:47:01 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 183073C4B1;
-        Wed, 16 Mar 2022 11:45:47 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id AFA5D92009C; Wed, 16 Mar 2022 19:45:45 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id AC40D92009B;
-        Wed, 16 Mar 2022 18:45:45 +0000 (GMT)
-Date:   Wed, 16 Mar 2022 18:45:45 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] parport_pc: Also enable driver for PCI systems
-In-Reply-To: <CADVatmP4sPwyqi6vKPm3QOFD=47w1LwXtsUynhecY4wMYGhXmw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2203161837130.24248@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk> <CADVatmP4sPwyqi6vKPm3QOFD=47w1LwXtsUynhecY4wMYGhXmw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
+        Wed, 16 Mar 2022 14:49:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21265B22;
+        Wed, 16 Mar 2022 11:47:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0531618C2;
+        Wed, 16 Mar 2022 18:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B89C340E9;
+        Wed, 16 Mar 2022 18:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647456470;
+        bh=UIXihu+RklUZQJ6pZ8YxpEeMjAIIgN/pkkuvXhq1O0A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HwbCKbGG/8+Jcj5hlh68OM9RO1B+UbkayqHLPTT3rHaP/QJG/YkB45gnDqAq1ba9N
+         tTMpm4q4kRe12sZLpBpk4tpWn/xVeU1m4XekMcZGM5L2CmzVZAF/5aeR+rQBO1f8Gm
+         hrgghJ0zskb7CDASU2B90QlVCH0d6CK9K9pBKqKzX9iGkKWNBRVRdBLMpSB1EF1HEB
+         6fDObYpCN5kb23x7RJihe+qqZNM9+wVGo30lG1yzEFmY1w3AXKDOhSnZp7wJ/IZOc+
+         Wm48+PlX1ftE/IYFZas5R4HSRN0C7zKkfXRic3U60jWmGGbz41HgYuWbN4Xf6yn7HY
+         u0AmDqGtL7Snw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUYgV-00Ezk3-Km; Wed, 16 Mar 2022 18:47:47 +0000
+Date:   Wed, 16 Mar 2022 18:47:47 +0000
+Message-ID: <87y219ybsc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/3] Fix dtbs warnings for arch timer
+In-Reply-To: <20220316172051.GA21737@9a2d8922b8f1>
+References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
+        <5521012e957efa3c4afe2de996a1b5ac@kernel.org>
+        <20220316172051.GA21737@9a2d8922b8f1>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: singh.kuldeep87k@gmail.com, mark.rutland@arm.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Mar 2022, Sudip Mukherjee wrote:
-
-> > Make the PARPORT_PC option selectable also for PCI systems then, except
-> > for the s390 arch, however limit the availability of PARPORT_PC_SUPERIO
-> > to platforms that enable ARCH_MIGHT_HAVE_PC_PARPORT.  Update platforms
-> > accordingly for the required <asm/parport.h> header.
-> >
-> > Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+On Wed, 16 Mar 2022 17:20:51 +0000,
+Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
 > 
-> Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> On Wed, Mar 16, 2022 at 11:27:10AM +0000, Marc Zyngier wrote:
+> > On 2022-03-16 09:54, Kuldeep Singh wrote:
+> > > This patchset is an attempt to resolve 'make dtbs_check' warning for
+> > > arch timer.
+> > > 
+> > > Patch 1 is done in preparation for following patches which defines
+> > > compatibles order in more clear way.
+> > > Patch 2 documents arm,cortex-a7-timer entry in bindings similar to an
+> > > existing entry arm,cortex-a15-timer.
+> > > Patch 3 adds above 2 properties in of_match list to bring them in
+> > > use.
+> > > 
+> > > Please note, this patchset is based on
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git, master
+> > > 
+> > > Kuldeep Singh (3):
+> > >   dt-bindings: timer: Rearrange compatible entries of arch timer
+> > >   dt-bindings: timer: Document arm,cortex-a7-timer for arch timer
+> > >   clocksource: arch_timer: Add arm,cortex-a7/15-timer in of_match list
+> > > 
+> > >  .../devicetree/bindings/timer/arm,arch_timer.yaml   | 13 +++++--------
+> > >  drivers/clocksource/arm_arch_timer.c                |  2 ++
+> > >  2 files changed, 7 insertions(+), 8 deletions(-)
+> > 
+> > Please use my @kernel.org address exclusively. My @arm.com
+> > address stopped working over two years ago, and the MAINTAINERS
+> > file shows the right addresses.
 > 
-> Usually parport patches goes via Greg's tree. Adding Greg.
+> Hi Marc,
+> 
+> I have tocmd and cccmd set in my gitconfig and it generated mail
+> addresses automatically so I assume it is correct.
+> tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol"
+> 
+> It seems your arm mail address got configured from binding file and not
+> from MAINTAINERS.
 
- Thank you.  I have since been able to move my parport card to my RISC-V 
-machine, and the result is as follows:
+It is a bug in get_maintainer.pl. You'll have to manually apply the
+.mailmap transformation.
 
-parport_pc 0000:07:00.0: enabling device (0000 -> 0001)
-PCI parallel port detected: 1415:c118, I/O at 0x8(0x4), IRQ 38
-parport0: PC-style at 0x8 (0x4), irq 38, using FIFO [PCSPP,TRISTATE,COMPAT,EPP,ECP]
-lp0: using parport0 (interrupt-driven).
+	M.
 
-with the patch from:
-
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>
-
-also applied so as to prevent I/O port 0 from being assigned by PCI code 
-that wouldn't actually work (so allocation for the two BARs is at 0x4 and 
-0x8 instead).
-
-  Maciej
+-- 
+Without deviation from the norm, progress is not possible.

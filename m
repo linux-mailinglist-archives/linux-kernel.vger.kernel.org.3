@@ -2,161 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681A44DBA10
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2265B4DBA13
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352735AbiCPVZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 17:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S1351403AbiCPVab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 17:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiCPVZB (ORCPT
+        with ESMTP id S1354479AbiCPVaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 17:25:01 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA3258;
-        Wed, 16 Mar 2022 14:23:46 -0700 (PDT)
-Received: from zn.tnic (p200300ea971561ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61ec:329c:23ff:fea6:a903])
+        Wed, 16 Mar 2022 17:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDF72654F;
+        Wed, 16 Mar 2022 14:29:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 992581EC0347;
-        Wed, 16 Mar 2022 22:23:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647465821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=z8e3s/F3Y4FoU689hPxEo1zuZ9LiswT9t/Nvm6Vv7PM=;
-        b=sLfzpJBzGswdwJ0HncS50/Wz2CwD6f3XfABOj+OaJs4jrUG1FeNj/E+Rh06WOVxbzf6Fs0
-        SsqecaHSvoE0dZrCBXzXOOHaghkSdH57h5WgsQ7CsowezVttFaEeCZ8A0yBTVSndja7ENb
-        Evp8WIjK6TpWtt3cqBNRhu+hn9JnJMg=
-Date:   Wed, 16 Mar 2022 22:23:37 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jamie Heilman <jamie@audible.transient.net>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-Subject: Re: system locks up with CONFIG_SLS=Y; 5.17.0-rc
-Message-ID: <YjJVWYzHQDbI6nZM@zn.tnic>
-References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
- <YjHYh3XRbHwrlLbR@zn.tnic>
- <YjIwRR5UsTd3W4Bj@audible.transient.net>
- <YjI69aUseN/IuzTj@zn.tnic>
- <YjJFb02Fc0jeoIW4@audible.transient.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YjJFb02Fc0jeoIW4@audible.transient.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CBAF61567;
+        Wed, 16 Mar 2022 21:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F422EC340F3;
+        Wed, 16 Mar 2022 21:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1647466147;
+        bh=dI8ATJ23yJ3aOXedIMHJSO6iU/obXw2eqnoCJdxikjo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wr5GCtT9e8hdgK53WPBSMowNZyqav5DZOjwCi+CegvpI8Ibc/s9bmJivRBw4pYcrJ
+         9AFhbhCy9kQGddYprYtD7YUYtlBLeQZnwaaapkymeHZ7MT2Vya1P9sC82KsjYBLaEY
+         61JkNVEMhl+Kr6DtHii92ToLM/hJPEy5CAkiXBSk=
+Date:   Wed, 16 Mar 2022 14:29:06 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     Minchan Kim <minchan@kernel.org>, <surenb@google.com>,
+        <vbabka@suse.cz>, <rientjes@google.com>, <sfr@canb.auug.org.au>,
+        <edgararriaga@google.com>, <nadav.amit@gmail.com>,
+        <mhocko@suse.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        "# 5 . 10+" <stable@vger.kernel.org>
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+Message-Id: <20220316142906.e41e39d2315e35ef43f4aad6@linux-foundation.org>
+In-Reply-To: <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+        <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+        <YjEaFBWterxc3Nzf@google.com>
+        <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
+        <YjFAzuLKWw5eadtf@google.com>
+        <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ kvm folks.
+On Wed, 16 Mar 2022 19:49:38 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
 
-On Wed, Mar 16, 2022 at 08:15:43PM +0000, Jamie Heilman wrote:
-> It does indeed!
+> > IMO, it's worth to note in man page.
+> > 
+> 
+> Or the current patch for just ENOMEM is sufficient here and we just have
+> to update the man page?
 
-Thanks, here's a proper patch. I've added your Reported-by and Tested-by
-tags - I hope that's ok.
+I think the "On success, process_madvise() returns the number of bytes
+advised" behaviour sounds useful.  But madvise() doesn't do that.
 
----
-From: Borislav Petkov <bp@suse.de>
-Date: Wed, 16 Mar 2022 22:05:52 +0100
-Subject: [PATCH] kvm/emulate: Fix SETcc emulation function offsets with SLS
+RETURN VALUE
+       On  success, madvise() returns zero.  On error, it returns -1 and errno
+       is set to indicate the error.
 
-The commit in Fixes started adding INT3 after RETs as a mitigation
-against straight-line speculation.
+So why is it desirable in the case of process_madvise()?
 
-The fastop SETcc implementation in kvm's insn emulator uses macro magic
-to generate all possible SETcc functions and to jump to them when
-emulating the respective instruction.
 
-However, it hardcodes the size and alignment of those functions to 4: a
-three-byte SETcc insn and a single-byte RET. BUT, with SLS, there's an
-INT3 that gets slapped after the RET, which brings the whole scheme out
-of alignment:
 
-  15:   0f 90 c0                seto   %al
-  18:   c3                      ret
-  19:   cc                      int3
-  1a:   0f 1f 00                nopl   (%rax)
-  1d:   0f 91 c0                setno  %al
-  20:   c3                      ret
-  21:   cc                      int3
-  22:   0f 1f 00                nopl   (%rax)
-  25:   0f 92 c0                setb   %al
-  28:   c3                      ret
-  29:   cc                      int3
-
-and this explodes like this:
-
-  int3: 0000 [#1] PREEMPT SMP PTI
-  CPU: 0 PID: 2435 Comm: qemu-system-x86 Not tainted 5.17.0-rc8-sls #1
-  Hardware name: Dell Inc. Precision WorkStation T3400  /0TP412, BIOS A14 04/30/2012
-  RIP: 0010:setc+0x5/0x8 [kvm]
-  Code: 00 00 0f 1f 00 0f b6 05 43 24 06 00 c3 cc 0f 1f 80 00 00 00 00 0f 90 c0 c3 cc 0f 1f 00 0f 91 c0 c3 cc 0f 1f 00 0f 92 c0 c3 cc <0f> 1f 00 0f 93 c0 c3 cc 0f 1f 00 0f 94 c0 c3 cc 0f 1f 00 0f 95 c0
-  Call Trace:
-   <TASK>
-   ? x86_emulate_insn [kvm]
-   ? x86_emulate_instruction [kvm]
-   ? vmx_handle_exit [kvm_intel]
-   ? kvm_arch_vcpu_ioctl_run [kvm]
-   ? kvm_vcpu_ioctl [kvm]
-   ? __x64_sys_ioctl
-   ? do_syscall_64+0x40/0xa0
-   ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
-
-Align everything to 8 and use a macro for that instead of hard-coding
-naked numbers.
-
-Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
-Reported-by: Jamie Heilman <jamie@audible.transient.net>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Tested-by: Jamie Heilman <jamie@audible.transient.net>
-Link: https://lore.kernel.org/r/YjGzJwjrvxg5YZ0Z@audible.transient.net
----
- arch/x86/kvm/emulate.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index f667bd8df533..e88ce4171c4a 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -430,8 +430,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
- 	FOP_END
- 
- /* Special case for SETcc - 1 instruction per cc */
-+
-+#define SETCC_ALIGN 8
-+
- #define FOP_SETCC(op) \
--	".align 4 \n\t" \
-+	".align " __stringify(SETCC_ALIGN) " \n\t" \
- 	".type " #op ", @function \n\t" \
- 	#op ": \n\t" \
- 	ASM_ENDBR \
-@@ -1049,7 +1052,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
- static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
- {
- 	u8 rc;
--	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
-+	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
- 
- 	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
- 	asm("push %[flags]; popf; " CALL_NOSPEC
--- 
-2.29.2
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+And why was process_madvise() designed this way?   Or was it
+always simply an error in the manpage?

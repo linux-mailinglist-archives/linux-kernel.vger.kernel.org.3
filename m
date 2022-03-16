@@ -2,249 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1B74DAA05
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C214DAA08
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353664AbiCPFmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 01:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S1353664AbiCPFqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353663AbiCPFmn (ORCPT
+        with ESMTP id S238982AbiCPFqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 01:42:43 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD376006B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:41:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r10so1396612wrp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:41:28 -0700 (PDT)
+        Wed, 16 Mar 2022 01:46:04 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815705EDCD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:44:50 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id g21so1137148vsp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mLRsUkTWGD/VPmFfWtQYmnjzNi7bklu2cPgeZosnFc0=;
-        b=QbEsKkTBeapYoX6zA1dpRclg99ut6z4Ewz/nO2UrdG4IyJhk64mXA8h03d7qsjMeQH
-         3sxKKInBI7L7o0buM2mq5Bttq89tlAW5zjjtMU7Wk0jkYteWNi4bsMDfJ58sNRFyaqD/
-         DloevQ4UO4fEu/TlG9a3lX6PRzFJ/FBz796ZwrXkVWL4BMQQ4k1WXNi7IFQuZGsu5K77
-         zq+/tA9y2/gmcwNVtGw7fRD0s1uMMc+Ox1uuo3srcxi+wiG+YetMc/Eqjo9gMXGXbQ9n
-         GCloqVbm0BI35FM+nc8AGhheMBEBDiX+Hc30McAAAXI7eCMhWP5z75Z0ragVmJ2dsTlj
-         nlnQ==
+        bh=FO8YAw7hPknWs6GesAsow8Rwfb0dK8UM8bv9x7kOV9o=;
+        b=IRL3aweVm+P+y/0KmQ/U0KzHAZW1JPIon9/dR3lw9DDTUn38lSsXQVLwV4cJ9XL/qW
+         DfcDzwgABdcarC/CvVq4NOGJvO+EAiNisglKg+r7H6EgRqYemErh4IWAOqvIaKBUjWKM
+         IrThNYSAPLlH+Tr5njDc2ITgAANdCvOr1s/2Xs0DsyZm8OkXtrN1EwP4jZ0z+oKaMFAt
+         IyN+liqtszKKk71gW5lvMmZgF5lTPGFcOwXfVLUFpSDMUbDPI9gU195GzQV3tlPDs6y3
+         KXo9u7Md8PTiVYHVhRzT9oIza4NZ+JJgZrlBroKDExFyD2/c/wjParBj78eg6/2r00rR
+         TQkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mLRsUkTWGD/VPmFfWtQYmnjzNi7bklu2cPgeZosnFc0=;
-        b=Ow0CX90sCFuV4kAV1oJ+2laMrgyfroc7wKa3glw2wmHCZjEh67Ht4B2wjpkSpMyhJo
-         5oa11dmSzl2xf888IFX++PswXE3XVh19PB7fkXKsm9VK9KbB8tt3HLp58IpvWr+SpjwM
-         f1XA9G0xQX04vPyEW7cRr2BdGeBUql4wzGxPNEzSz75ICt9NXnhkyWP1f9uiHBU3iaTr
-         egmqshE6QrBP0BzaQevpc5nfB7VnhB4EDBa07op7jvM17oAFl5KUaB8wTXQOu0Q3sDPT
-         PaLdl3BCWBCGmLWL6OCTu9IYsgxb07gJbtyBGVBjOBtJQL4KTTHsh9gv0nrPdHXBbwo/
-         Irpw==
-X-Gm-Message-State: AOAM53268zFftFqQaFV8RwpQ1OAFbdZGHek5nZ/wBtbZaZ+mvNzWVYZE
-        THCt7Vzf26ipNrfVtCW3aE7qo08lvE1n1smrqxxoyv7CTTg=
-X-Google-Smtp-Source: ABdhPJzP3wMa3CEaqjp2bA68Mrq2PljNjiNHG8G0hLA5n2ChsHaCqyNPl7XrjAehrMfB0lLK0oPNQXX9hCKNpKfED5o=
-X-Received: by 2002:adf:dd8e:0:b0:1f0:22f1:aed8 with SMTP id
- x14-20020adfdd8e000000b001f022f1aed8mr22868673wrl.269.1647409287159; Tue, 15
- Mar 2022 22:41:27 -0700 (PDT)
+        bh=FO8YAw7hPknWs6GesAsow8Rwfb0dK8UM8bv9x7kOV9o=;
+        b=d9PGqhrOv/a4pUpaoQN5ehXPJHeqDJ0mkSDx2mR2x9C0W99y5WYi54YxcIy6m023ak
+         zXabhQAm9YWr+iXZ4UJi34WgiI8lTPqNiZsBxCSHIljxwlScW4o4OBKzZyobnFwn/OVp
+         97dDq1IgO5Xve6YxuxkpNXopHRqr26oN8hMXjoyQ+dDx7r6JNa8d7c7L22C1HhwXj935
+         cW6w4tnOMZPGUiK6PWL7VfCOF6LWZ+A+52c5TqeIfs8Bp15EOtlU7niiCYzcbEIDj+4/
+         igS2pvehvKRYsMq3MVn+U0XKHd9lZushr4x4hY6begSKP3SbbO0BGeUwYzbly7QKVbiY
+         YUSw==
+X-Gm-Message-State: AOAM532Q8Vblk6tOOPD/fiZWP54F7FEf2EAUehZGYt1zlDlZLE0cirFh
+        sbhjmo+1D62KCaMhB9SgtzvkjWz/gOYWzS3/DuWgyA==
+X-Google-Smtp-Source: ABdhPJxzg4d7P5anSkOB2eEFL2ZXhLdQO2V5NKdtGZntNOB1a9hICiNvgOd8eNCg+XzFv12je3pgxITQJKRKT6RyDoU=
+X-Received: by 2002:a05:6102:5cc:b0:320:9bd2:3823 with SMTP id
+ v12-20020a05610205cc00b003209bd23823mr12681686vsf.81.1647409489430; Tue, 15
+ Mar 2022 22:44:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220316024432.1454366-1-dlatypov@google.com>
-In-Reply-To: <20220316024432.1454366-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 16 Mar 2022 13:41:15 +0800
-Message-ID: <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
-Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000062019805da4f5d4f"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+References: <CAOUHufbN_56UJBkgA2LjAfbTt9nzPOCHaSeS4P3GHcYst+Y+eg@mail.gmail.com>
+ <20220314233812.9011-1-21cnbao@gmail.com> <CAOUHufa9eY44QadfGTzsxa2=hEvqwahXd7Canck5Gt-N6c4UKA@mail.gmail.com>
+ <CAGsJ_4zvj5rmz7DkW-kJx+jmUT9G8muLJ9De--NZma9ey0Oavw@mail.gmail.com>
+ <CAGsJ_4zZc0oFSmBKAN77vm7VstQH=ieaQ0cfyvcMi3OQRrEpSg@mail.gmail.com>
+ <CAOUHufau34de-FmdBxNHpWWUUuN4DxT1fci9aX8Uc+RAfVXwXw@mail.gmail.com> <CAGsJ_4waTOj=zzC+gZAVMW5SQ_b9UWcXjKv3oj57s-YysTQmPw@mail.gmail.com>
+In-Reply-To: <CAGsJ_4waTOj=zzC+gZAVMW5SQ_b9UWcXjKv3oj57s-YysTQmPw@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 15 Mar 2022 23:44:38 -0600
+Message-ID: <CAOUHufZV-f6-7T+ZFBVHUJjGn6HfeKoVdPxiOCG2PmxxXbWVZA@mail.gmail.com>
+Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Brian Geffon <bgeffon@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Donald Carr <d@chaos-reins.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Mel Gorman <mgorman@suse.de>,
+        Michal Hocko <mhocko@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Huang Ying <ying.huang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000062019805da4f5d4f
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Mar 16, 2022 at 10:44 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Mar 15, 2022 at 10:37 PM Barry Song <21cnbao@gmail.com> wrote:
 >
-> Background:
-> Currently, a reader looking at kunit/test.h will find the file is quite
-> long, and the first meaty comment is a doc comment about struct
-> kunit_resource.
+> On Wed, Mar 16, 2022 at 3:47 PM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > On Tue, Mar 15, 2022 at 4:29 AM Barry Song <21cnbao@gmail.com> wrote:
+> >
+> > <snipped>
+> >
+> > > > I guess the main cause of the regression for the previous sequence
+> > > > with 16 entries is that the ebizzy has a new allocated copy in
+> > > > search_mem(), which is mapped and used only once in each loop.
+> > > > and the temp copy can push out those hot chunks.
+> > > >
+> > > > Anyway, I understand it is a trade-off between warmly embracing new
+> > > > pages and holding old pages tightly. Real user cases from phone, server,
+> > > > desktop will be judging this better.
+> >
+> > Thanks for all the details. I looked into them today and found no
+> > regressions when running with your original program.
+> >
+> > After I explain why, I hope you'd be convinced that using programs
+> > like this one is not a good way to measure things :)
+> >
 >
-> Most users will not ever use the KUnit resource API directly.
-> They'll use kunit_kmalloc() and friends, or decide it's simpler to do
-> cleanups via labels (it often can be) instead of figuring out how to use
-> the API.
+> Yep. I agree ebizzy might not be a good one to measure things.
+> I chose it only because Kim's patchset which moved anon pages
+> to inactive at the first detected access  was using it. Before kim's
+> patchset, anon pages were placed in the active list from the first
+> beginning:
+> https://patchwork.kernel.org/project/linux-mm/cover/1581401993-20041-1-git-send-email-iamjoonsoo.kim@lge.com/
 >
-
-A depressing (but probably not untrue) thought. I think that, even if
-most people were to use the resource API, having it in test.h makes it
-harder, as having the resource functions separate makes it easier to
-understand as well.
-
-> It's also logically separate from everything else in test.h.
-> Removing it from the file doesn't cause any compilation errors (since
-> struct kunit has `struct list_head resources` to store them).
+> in ebizzy, there is a used-once allocated memory in each
+> search_mem(). I guess that is why Kim's patchset chose
+> it.
 >
-> This commit:
-> Let's move it into a kunit/resource.h file and give it a separate page
-> in the docs, kunit/api/resource.rst.
-
-Yay! This makes a lot of sense to me, as I've wasted a lot of time
-scrolling through test.h.
-
+> > Problems:
+> > 1) Given the 2.5GB configuration and a sequence of cold/hot chunks, I
+> > assume your program tries to simulate a handful of apps running on a
+> > phone.  A short repeating sequence is closer to sequential access than
+> > to real user behaviors, as I suggested last time. You could check out
+> > how something similar is done here [1].
+> > 2) Under the same assumption (phone), C programs are very different
+> > from Android apps in terms of runtime memory behaviors, e.g., JVM GC
+> > [2].
+> > 3) Assuming you are interested in the runtime memory behavior of C/C++
+> > programs, your program is still not very representative. All C/C++
+> > programs I'm familiar with choose to link against TCmalloc, jemalloc
+> > or implement their own allocators. GNU libc, IMO, has a small market
+> > share nowadays.
+> > 4) TCmalloc/jemalloc are not only optimized for multithreading, they
+> > are also THP aware. THP is very important when benchmarking page
+> > reclaim, e.g., two similarly warm THPs can comprise 511+1 or 1+511 of
+> > warm+cold 4K pages. The LRU algorithm that chooses more of the former
+> > is at the disadvantage. Unless it's recommended by the applications
+> > you are trying to benchmark, THP should be disabled. (Android
+> > generally doesn't use THP.)
+> > 5) Swap devices are also important. Zram should NOT be used unless you
+> > know your benchmark doesn't generate incompressible data. The LRU
+> > algorithm that chooses more incompressible pages is at disadvantage.
+> >
 >
-> We include resource.h at the bottom of test.h since
-> * don't want to force existing users to add a new include if they use the API
-> * it accesses `lock` inside `struct kunit` in a inline func
->   * so we can't just forward declare, and the alternatives require
->     uninlining the func, adding hepers to lock/unlock, or other more
->     invasive changes.
-
-I don't like this, but still think it's an improvement on what we have
-now. Ultimately, I think adding helpers to lock/unlock or similar and
-making users include this separately is probably the right thing to
-do, as nesting the headers like this is a bit ugly, but I won't lose
-sleep over leaving it till later.
-
+> Thanks for all the information above. very useful.
 >
-> Now the first big comment in test.h is about kunit_case, which is a lot
-> more relevant to what a new user wants to know.
+> > Here is my result: on the same Snapdragon 7c + 2.5GB RAM + 1.5GB
+> > ramdisk swap, with your original program compiled against libc malloc
+> > and TCMalloc, to 32-bit and 64-bit binaries:
 >
-> A side effect of this is git blame won't properly track history by
-> default, users need to run
-> $ git blame -L ,1 -C17 include/kunit/resource.h
+> I noticed an important difference is that you are using ramdisk, so there
+> is no cost on "i/o". I assume compression/decompression is the i/o cost to
+> zRAM.
 
-This is a pain, but is probably worth it. Thanks for including the
-command in the commit message, which should mitigate it slightly.
+The cost is not the point; the fairness is:
 
+1) Ramdisk is fair to both LRU algorithms.
+2) Zram punishes the LRU algorithm that chooses incompressible pages.
+IOW, this algorithm needs to compress more pages in order to save the
+same amount of memory.
+
+> > # cat /sys/kernel/mm/lru_gen/enabled
+> > 0x0003
+> > # cat /sys/kernel/mm/transparent_hugepage/enabled
+> > always madvise [never]
+> >
+> > # modprobe brd rd_nr=1 rd_size=1572864
+> > # if=/dev/zero of=/dev/ram0 bs=1M
+> > # mkswap /dev/ram0
+> > # swapoff -a
+> > # swapon /dev/ram0
+> >
+> > # ldd test_absl_32
+> >         linux-vdso.so.1 (0xf6e7f000)
+> >         libabsl_malloc.so.2103.0.1 =>
+> > /usr/lib/libabsl_malloc.so.2103.0.1 (0xf6e23000)
+> >         libpthread.so.0 => /lib/libpthread.so.0 (0xf6dff000)
+> >         libc.so.6 => /lib/libc.so.6 (0xf6d07000)
+> >         /lib/ld-linux-armhf.so.3 (0x09df0000)
+> >         libabsl_base.so.2103.0.1 => /usr/lib/libabsl_base.so.2103.0.1
+> > (0xf6ce5000)
+> >         libabsl_raw_logging.so.2103.0.1 =>
+> > /usr/lib/libabsl_raw_logging.so.2103.0.1 (0xf6cc4000)
+> >         libabsl_spinlock_wait.so.2103.0.1 =>
+> > /usr/lib/libabsl_spinlock_wait.so.2103.0.1 (0xf6ca3000)
+> >         libc++.so.1 => /usr/lib/libc++.so.1 (0xf6c04000)
+> >         libc++abi.so.1 => /usr/lib/libc++abi.so.1 (0xf6bcd000)
+> > # file test_absl_64
+> > test_absl_64: ELF 64-bit LSB executable, ARM aarch64, version 1
+> > (SYSV), statically linked
+> > # ldd test_gnu_32
+> >         linux-vdso.so.1 (0xeabef000)
+> >         libpthread.so.0 => /lib/libpthread.so.0 (0xeab92000)
+> >         libc.so.6 => /lib/libc.so.6 (0xeaa9a000)
+> >         /lib/ld-linux-armhf.so.3 (0x05690000)
+> > # file test_gnu_64
+> > test_gnu_64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV),
+> > statically linked
+> >
+> > ### baseline 5.17-rc8
+> >
+> > # perf record ./test_gnu_64 -t 4 -s $((200*1024*1024)) -S 6000000
+> > 10 records/s
+> > real 59.00 s
+> > user 39.83 s
+> > sys  174.18 s
+> >
+> >     18.51%  [.] memcpy
+> >     15.98%  [k] __pi_clear_page
+> >      5.59%  [k] rmqueue_pcplist
+> >      5.19%  [k] do_raw_spin_lock
+> >      5.09%  [k] memmove
+> >      4.60%  [k] _raw_spin_unlock_irq
+> >      3.62%  [k] _raw_spin_unlock_irqrestore
+> >      3.61%  [k] free_unref_page_list
+> >      3.29%  [k] zap_pte_range
+> >      2.53%  [k] local_daif_restore
+> >      2.50%  [k] down_read_trylock
+> >      1.41%  [k] handle_mm_fault
+> >      1.32%  [k] do_anonymous_page
+> >      1.31%  [k] up_read
+> >      1.03%  [k] free_swap_cache
+> >
+> > ### MGLRU v9
+> >
+> > # perf record ./test_gnu_64 -t 4 -s $((200*1024*1024)) -S 6000000
+> > 11 records/s
+> > real 57.00 s
+> > user 39.39 s
+> >
+> >     19.36%  [.] memcpy
+> >     16.50%  [k] __pi_clear_page
+> >      6.21%  [k] memmove
+> >      5.57%  [k] rmqueue_pcplist
+> >      5.07%  [k] do_raw_spin_lock
+> >      4.96%  [k] _raw_spin_unlock_irqrestore
+> >      4.25%  [k] free_unref_page_list
+> >      3.80%  [k] zap_pte_range
+> >      3.69%  [k] _raw_spin_unlock_irq
+> >      2.71%  [k] local_daif_restore
+> >      2.10%  [k] down_read_trylock
+> >      1.50%  [k] handle_mm_fault
+> >      1.29%  [k] do_anonymous_page
+> >      1.17%  [k] free_swap_cache
+> >      1.08%  [k] up_read
+> >
 >
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+> I think your result is right. but if you take a look at the number of
+> major faults, will you find mglru have more page faults?
+> i ask this question because i can see mglru even wins with lower
+> hit ratio in the previous report I sent.
 
-This was starting to annoy me, too, as it was a pain to read through
-everything in test.h. It'll be a bit of short-term pain,
-merge-conflict wise if we have other changes to the resource system
-(which I fear is likely), but is worth it.
+Yes, I did see the elevated major faults:
 
-Reviewed-by: David Gow <davidgow@google.com>
+# baseline total 11503878
+majfault       4745116
+pgsteal_kswapd 3056793
+pgsteal_direct 3701969
 
--- David
-
->
-> NOTE: this file doesn't split out code from test.c to a new resource.c
-> file.
-> I'm primarily concerned with users trying to read the headers, so I
-> didn't think messing up git blame (w/ default settings) was worth it.
-> But I can make that change if it feels appropriate (it might also be
-> messier).
-
-Personally, I think it's probably worth splitting this out as well.
-And the sooner we do it, the less history we'll obscure. :-)
-
-But I agree, it's less of an issue as it only directly affects people
-working on KUnit itself. Though making it easier for users to find and
-read the implementation of these functions could help them understand
-API "gotchas", so I think it's worthwhile.
-
->
-> ---
->  Documentation/dev-tools/kunit/api/index.rst   |   5 +
->  .../dev-tools/kunit/api/resource.rst          |  13 +
->  include/kunit/resource.h                      | 319 ++++++++++++++++++
->  include/kunit/test.h                          | 301 +----------------
->  4 files changed, 339 insertions(+), 299 deletions(-)
->  create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
->  create mode 100644 include/kunit/resource.h
->
-<...snip...>
-
---00000000000062019805da4f5d4f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAFB5XJs46lHhs45dlgv
-lPcwDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjAyMDcy
-MDA0MDZaFw0yMjA4MDYyMDA0MDZaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC0RBy/38QAswohnM4+BbSvCjgfqx6l
-RZ05OpnPrwqbR8foYkoeQ8fvsoU+MkOAQlzaA5IaeOc6NZYDYl7PyNLLSdnRwaXUkHOJIn09IeqE
-9aKAoxWV8wiieIh3izFAHR+qm0hdG+Uet3mU85dzScP5UtFgctSEIH6Ay6pa5E2gdPEtO5frCOq2
-PpOgBNfXVa5nZZzgWOqtL44txbQw/IsOJ9VEC8Y+4+HtMIsnAtHem5wcQJ+MqKWZ0okg/wYl/PUj
-uaq2nM/5+Waq7BlBh+Wh4NoHIJbHHeGzAxeBcOU/2zPbSHpAcZ4WtpAKGvp67PlRYKSFXZvbORQz
-LdciYl8fAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKbSiBVQ
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC5
-dX+kXCwlQxJZbjfVMW9V+5NxFQMh+9cx8fGikPOZjjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTYwNTQxMjdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASgvUSU+sPMwhuht+bqvn
-ihitwFEQFnJBfxEd0JhrtQGigHcE08JH/rtUGfo4FMNFj0uxQyfTnA5lBnJRZxKNmcHPOXj2DqqE
-ySfoSkxgB4sJ6w+gv/Ye2bUZ+Tdf573OtxX+5sqlfvuRzvawdL/yjgzFtqPZvqMmfPMWbmNhPIzv
-aCEayw5UxjCovMAVZ8csZbRJcHbRgBNgg5FDVS09CHrGlFsy0fs+TSbRu20y7471U/CHR6ADcasb
-e7H3vOL6bgxfngTaRPF1b/MPLGvvK3DzXBxu+1tVsIDfx070ZYZuxtSoDilhYOk1ltHG4gAGfSlI
-4XqJDZyoDIn9dmzS/w==
---00000000000062019805da4f5d4f--
+# MGLRU total 11928659
+pgmajfault     5762213
+pgsteal_kswapd 2098253
+pgsteal_direct 4068193

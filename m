@@ -2,73 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E6E4DBB10
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9AD4DBB04
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346886AbiCPXaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S1345175AbiCPX2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347074AbiCPX3t (ORCPT
+        with ESMTP id S238816AbiCPX2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:29:49 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC0B167EC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:28:31 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id e3so3443987pjm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=llt+unTQxxB47mMK9cTVf/sVk7YwdP8ahVPZ8vUzo+E=;
-        b=P13QgI0zd+4RAOt3pbwZknViRr2CVhiVAFIRqM5bOGjAu9nzvjSnZusFhYRC5h9qSQ
-         9JCxra+cscVH+cq1tVm8CjiuMJlxW877K2j6AlCHNuh0DRBNi9EE4AcotfiNoC3XOOLK
-         dhnYjAvGq4qBYfG/ws5BM4JI/1zMJoKWHl+gPx8IkFDWC/CuJ+vSOxvmg3M8IpV/BOKi
-         Oz6nK2qVkXNZ02AyIkvsE3D3PHdimNMIXmdl8ruKlmv4JHoGQeGhFIjnxn/Mq7G4QX+y
-         2JDewQpoUe01b9wf6IjFRTdrHwJVTBH6ES8hoo446YGPwdfpUHyka6ajuquwNdtxfM3P
-         F7kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding:cc:from:to;
-        bh=llt+unTQxxB47mMK9cTVf/sVk7YwdP8ahVPZ8vUzo+E=;
-        b=6Bq+TyJWQqDevq4YeeVQngyKLFR1vym7WE8s78CkDSorK0Xetj4wC0MWuQanm8OD2z
-         E4W46WAOvTEqK5zZE/IMYcworSJp9Mfgztw7717COb+j/+Tgm1GV5Eizv8b1Hq0iNwPb
-         EJ3DrbhvZhKO2qlnD+UV5fpu2pXXvroy2AMBJjrETQtNK+k4sX4DN6v2zU5MYr1WdNHd
-         oYyDYNmbxJ2KD6i4Aht9kexDQnXxEuHdPeGdQH8oV571xAWNp8xlZa9cQCRXpgEZX759
-         5BnejUHErvGalY0TeFf9XAP7cYtbDufDvB9mA9OyfBaXIsmWT90AGZCfi3y8EZiCN4lR
-         T+1Q==
-X-Gm-Message-State: AOAM532IQZbJqoSqelUV9bXG55Oy9jZFxmgxbomVsWOPQhrD3wlmt0dI
-        zwdZHSf4pXT/qhALN02pVHa3Dg==
-X-Google-Smtp-Source: ABdhPJzyPV7prsqRJmPgkY9DrfVu2bdBaNJER6RIDfsjbbPdF+/QlL1mJF+2to5VA22BRA7tJfuvxA==
-X-Received: by 2002:a17:903:11c9:b0:151:9521:d5c7 with SMTP id q9-20020a17090311c900b001519521d5c7mr1923340plh.73.1647473310711;
-        Wed, 16 Mar 2022 16:28:30 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id o5-20020a056a0015c500b004f7988f16c3sm4696034pfu.30.2022.03.16.16.28.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 16:28:30 -0700 (PDT)
-Subject: [PATCH 5/5] RISC-V: Move to queued RW locks
-Date:   Wed, 16 Mar 2022 16:26:00 -0700
-Message-Id: <20220316232600.20419-6-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220316232600.20419-1-palmer@rivosinc.com>
-References: <20220316232600.20419-1-palmer@rivosinc.com>
+        Wed, 16 Mar 2022 19:28:20 -0400
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D064C9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:27:04 -0700 (PDT)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 178F148F; Wed, 16 Mar 2022 19:27:04 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 178F148F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1647473224;
+        bh=oRYsFvRyGnJC9jPCSEJDJXYHIXXhCY6to725MbmUgcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c/dnTlCDgHcQLb45RiI7tGWzeG/aLYl7l5F6vMHl9LneBnVLLw5B1R9pluHIyW7Kl
+         AYcTtNDv/fFDSyVu+OGXskiHqBGnzXo7gl83PbnzoSdvqP3Gmf+1Fjc6BI2a5EunGD
+         qYGFderD8x4GKOeOQnqq1Jjs+gawz3GxkuaXPKR8=
+Date:   Wed, 16 Mar 2022 19:27:04 -0400
+From:   "J. Bruce Fields" <bfields@fieldses.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: failure to boot after dc6e0818bc9a "sched/cpuacct: Optimize away
+ RCU read lock"
+Message-ID: <20220316232704.GE16511@fieldses.org>
+References: <20220316174324.GA16511@fieldses.org>
+ <20220316204806.GL8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
-        longman@redhat.com, boqun.feng@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:         linux-riscv@lists.infradead.org, peterz@infradead.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316204806.GL8939@worktop.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,151 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+On Wed, Mar 16, 2022 at 09:48:06PM +0100, Peter Zijlstra wrote:
+> On Wed, Mar 16, 2022 at 01:43:24PM -0400, J. Bruce Fields wrote:
+> > One of my test VMs has been failing to boot linux-next recently.  I
+> > finally got around to a bisect this morning, and it landed on the below.
+> > 
+> > What other information would be useful to debug this?
+> 
+> A more recent -next should have this commit in it:
 
-With the move to fair spinlocks, we might as well move to fair rwlocks.
+Ah, yep, it's booting again with today's -next.  Thanks.--b.
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/riscv/Kconfig                      |  1 +
- arch/riscv/include/asm/Kbuild           |  2 +
- arch/riscv/include/asm/spinlock.h       | 82 +------------------------
- arch/riscv/include/asm/spinlock_types.h |  7 +--
- 4 files changed, 5 insertions(+), 87 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..feb7030cfb6d 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -38,6 +38,7 @@ config RISCV
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
- 	select ARCH_USE_MEMTEST
-+	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 42b1961af1a6..e8714070cbb9 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -4,5 +4,7 @@ generic-y += flat.h
- generic-y += kvm_para.h
- generic-y += ticket-lock.h
- generic-y += ticket-lock-types.h
-+generic-y += qrwlock.h
-+generic-y += qrwlock_types.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-index 38089cbdea92..97dfb150d18c 100644
---- a/arch/riscv/include/asm/spinlock.h
-+++ b/arch/riscv/include/asm/spinlock.h
-@@ -11,86 +11,6 @@
- #include <asm/current.h>
- #include <asm/fence.h>
- #include <asm-generic/ticket-lock.h>
--
--static inline void arch_read_lock(arch_rwlock_t *lock)
--{
--	int tmp;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bltz	%1, 1b\n"
--		"	addi	%1, %1, 1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		: "+A" (lock->lock), "=&r" (tmp)
--		:: "memory");
--}
--
--static inline void arch_write_lock(arch_rwlock_t *lock)
--{
--	int tmp;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bnez	%1, 1b\n"
--		"	li	%1, -1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		: "+A" (lock->lock), "=&r" (tmp)
--		:: "memory");
--}
--
--static inline int arch_read_trylock(arch_rwlock_t *lock)
--{
--	int busy;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bltz	%1, 1f\n"
--		"	addi	%1, %1, 1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		"1:\n"
--		: "+A" (lock->lock), "=&r" (busy)
--		:: "memory");
--
--	return !busy;
--}
--
--static inline int arch_write_trylock(arch_rwlock_t *lock)
--{
--	int busy;
--
--	__asm__ __volatile__(
--		"1:	lr.w	%1, %0\n"
--		"	bnez	%1, 1f\n"
--		"	li	%1, -1\n"
--		"	sc.w	%1, %1, %0\n"
--		"	bnez	%1, 1b\n"
--		RISCV_ACQUIRE_BARRIER
--		"1:\n"
--		: "+A" (lock->lock), "=&r" (busy)
--		:: "memory");
--
--	return !busy;
--}
--
--static inline void arch_read_unlock(arch_rwlock_t *lock)
--{
--	__asm__ __volatile__(
--		RISCV_RELEASE_BARRIER
--		"	amoadd.w x0, %1, %0\n"
--		: "+A" (lock->lock)
--		: "r" (-1)
--		: "memory");
--}
--
--static inline void arch_write_unlock(arch_rwlock_t *lock)
--{
--	smp_store_release(&lock->lock, 0);
--}
-+#include <asm/qrwlock.h>
- 
- #endif /* _ASM_RISCV_SPINLOCK_H */
-diff --git a/arch/riscv/include/asm/spinlock_types.h b/arch/riscv/include/asm/spinlock_types.h
-index 431ee08e26c4..3779f13706fa 100644
---- a/arch/riscv/include/asm/spinlock_types.h
-+++ b/arch/riscv/include/asm/spinlock_types.h
-@@ -11,11 +11,6 @@
- #endif
- 
- #include <asm-generic/ticket-lock-types.h>
--
--typedef struct {
--	volatile unsigned int lock;
--} arch_rwlock_t;
--
--#define __ARCH_RW_LOCK_UNLOCKED		{ 0 }
-+#include <asm/qrwlock_types.h>
- 
- #endif /* _ASM_RISCV_SPINLOCK_TYPES_H */
--- 
-2.34.1
-
+> 
+> 
+> commit f2aa197e4794bf4c2c0c9570684f86e6fa103e8b
+> Author: Chengming Zhou <zhouchengming@bytedance.com>
+> Date:   Sat Mar 5 11:41:03 2022 +0800
+> 
+>     cgroup: Fix suspicious rcu_dereference_check() usage warning
+>     
+>     task_css_set_check() will use rcu_dereference_check() to check for
+>     rcu_read_lock_held() on the read-side, which is not true after commit
+>     dc6e0818bc9a ("sched/cpuacct: Optimize away RCU read lock"). This
+>     commit drop explicit rcu_read_lock(), change to RCU-sched read-side
+>     critical section. So fix the RCU warning by adding check for
+>     rcu_read_lock_sched_held().
+>     
+>     Fixes: dc6e0818bc9a ("sched/cpuacct: Optimize away RCU read lock")
+>     Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>     Reported-by: syzbot+16e3f2c77e7c5a0113f9@syzkaller.appspotmail.com
+>     Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+>     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>     Acked-by: Tejun Heo <tj@kernel.org>
+>     Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+>     Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>     Link: https://lore.kernel.org/r/20220305034103.57123-1-zhouchengming@bytedance.com
+> 
+> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+> index 1e356c222756..0d1ada8968d7 100644
+> --- a/include/linux/cgroup.h
+> +++ b/include/linux/cgroup.h
+> @@ -450,6 +450,7 @@ extern struct mutex cgroup_mutex;
+>  extern spinlock_t css_set_lock;
+>  #define task_css_set_check(task, __c)					\
+>  	rcu_dereference_check((task)->cgroups,				\
+> +		rcu_read_lock_sched_held() ||				\
+>  		lockdep_is_held(&cgroup_mutex) ||			\
+>  		lockdep_is_held(&css_set_lock) ||			\
+>  		((task)->flags & PF_EXITING) || (__c))

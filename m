@@ -2,64 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255C04DA94C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 05:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3970F4DA951
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 05:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351467AbiCPEeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 00:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S1353545AbiCPEen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 00:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351962AbiCPEeG (ORCPT
+        with ESMTP id S1353518AbiCPEee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 00:34:06 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 938CA216
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 21:32:50 -0700 (PDT)
-Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
-        by 156.147.23.51 with ESMTP; 16 Mar 2022 13:32:48 +0900
-X-Original-SENDERIP: 156.147.1.126
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
-        by 156.147.1.126 with ESMTP; 16 Mar 2022 13:32:48 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-Date:   Wed, 16 Mar 2022 13:32:13 +0900
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-        chris@chris-wilson.co.uk, duyuyang@gmail.com,
-        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
-        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
-        bfields@fieldses.org, gregkh@linuxfoundation.org,
-        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
-        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
-        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
-        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
-        linux-block@vger.kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jack@suse.com,
-        jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        djwong@kernel.org, dri-devel@lists.freedesktop.org,
-        airlied@linux.ie, rodrigosiqueiramelo@gmail.com,
-        melissa.srw@gmail.com, hamohammed.sa@gmail.com
-Subject: Re: [PATCH v4 00/24] DEPT(Dependency Tracker)
-Message-ID: <20220316043212.GA5715@X58A-UD3R>
-References: <1646377603-19730-1-git-send-email-byungchul.park@lge.com>
- <Yiv9Fn4kcRbXJLmu@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Wed, 16 Mar 2022 00:34:34 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E67D6D8A;
+        Tue, 15 Mar 2022 21:33:00 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Wed, 16 Mar 2022 12:32:49
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.65.173]
+Date:   Wed, 16 Mar 2022 12:32:49 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5ZGo5aSa5piO?= <duoming@zju.edu.cn>
+To:     "Eric Dumazet" <eric.dumazet@gmail.com>
+Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        ralf@linux-mips.org, jreuter@yaina.de
+Subject: Re: Re: [PATCH net V4 2/2] ax25: Fix NULL pointer dereferences in
+ ax25 timers
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <c6052f5c-c1c4-18a0-a04f-e48f366200e4@gmail.com>
+References: <20220315015654.79941-1-duoming@zju.edu.cn>
+ <c6052f5c-c1c4-18a0-a04f-e48f366200e4@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yiv9Fn4kcRbXJLmu@ip-172-31-19-208.ap-northeast-1.compute.internal>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Message-ID: <e552387.5e93.17f90fff974.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgC3CXZxaDFih3MNAA--.2763W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgULAVZdtYslngAAsD
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,223 +52,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 01:53:26AM +0000, Hyeonggon Yoo wrote:
-> On Fri, Mar 04, 2022 at 04:06:19PM +0900, Byungchul Park wrote:
-> > Hi Linus and folks,
-> > 
-> > I've been developing a tool for detecting deadlock possibilities by
-> > tracking wait/event rather than lock(?) acquisition order to try to
-> > cover all synchonization machanisms. It's done on v5.17-rc1 tag.
-> > 
-> > https://github.com/lgebyungchulpark/linux-dept/commits/dept1.14_on_v5.17-rc1
-> >
-> 
-> Small feedback unrelated to thread:
-> I'm not sure "Need to expand the ring buffer" is something to call
-> WARN(). Is this stack trace useful for something?
-> ========
-> 
-> Hello Byungchul. These are two warnings of DEPT on system.
-
-Hi Hyeonggon,
-
-Could you run scripts/decode_stacktrace.sh and share the result instead
-of the raw format below if the reports still appear with PATCH v5? It'd
-be appreciated (:
-
-https://lkml.org/lkml/2022/3/15/1277
-(or https://github.com/lgebyungchulpark/linux-dept/commits/dept1.18_on_v5.17-rc7)
-
-Thank you very much!
-
---
-Byungchul
-
-> Both cases look similar.
-> 
-> In what case DEPT says (unknown)?
-> I'm not sure we can properly debug this.
-> 
-> ===================================================
-> DEPT: Circular dependency has been detected.
-> 5.17.0-rc1+ #3 Tainted: G        W        
-> ---------------------------------------------------
-> summary
-> ---------------------------------------------------
-> *** AA DEADLOCK ***
-> 
-> context A
->     [S] (unknown)(&vfork:0)
->     [W] wait_for_completion_killable(&vfork:0)
->     [E] complete(&vfork:0)
-> 
-> [S]: start of the event context
-> [W]: the wait blocked
-> [E]: the event not reachable
-> ---------------------------------------------------
-> context A's detail
-> ---------------------------------------------------
-> context A
->     [S] (unknown)(&vfork:0)
->     [W] wait_for_completion_killable(&vfork:0)
->     [E] complete(&vfork:0)
-> 
-> [S] (unknown)(&vfork:0):
-> (N/A)
-> 
-> [W] wait_for_completion_killable(&vfork:0):
-> [<ffffffc00802204c>] kernel_clone+0x25c/0x2b8
-> stacktrace:
->       dept_wait+0x74/0x88
->       wait_for_completion_killable+0x60/0xa0
->       kernel_clone+0x25c/0x2b8
->       __do_sys_clone+0x5c/0x74
->       __arm64_sys_clone+0x18/0x20
->       invoke_syscall.constprop.0+0x78/0xc4
->       do_el0_svc+0x98/0xd0
->       el0_svc+0x44/0xe4
->       el0t_64_sync_handler+0xb0/0x12c
->       el0t_64_sync+0x158/0x15c
-> 
-> [E] complete(&vfork:0):
-> [<ffffffc00801f49c>] mm_release+0x7c/0x90
-> stacktrace:
->       dept_event+0xe0/0x100
->       complete+0x48/0x98
->       mm_release+0x7c/0x90
->       exit_mm_release+0xc/0x14
->       do_exit+0x1b4/0x81c
->       do_group_exit+0x30/0x9c
->       __wake_up_parent+0x0/0x24
->       invoke_syscall.constprop.0+0x78/0xc4
->       do_el0_svc+0x98/0xd0
->       el0_svc+0x44/0xe4
->       el0t_64_sync_handler+0xb0/0x12c
->       el0t_64_sync+0x158/0x15c
-> ---------------------------------------------------
-> information that might be helpful
-> ---------------------------------------------------
-> CPU: 6 PID: 229 Comm: start-stop-daem Tainted: G        W         5.17.0-rc1+ #3
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->  dump_backtrace.part.0+0x9c/0xc4
->  show_stack+0x14/0x28
->  dump_stack_lvl+0x9c/0xcc
->  dump_stack+0x14/0x2c
->  print_circle+0x2d4/0x438
->  cb_check_dl+0x44/0x70
->  bfs+0x60/0x168
->  add_dep+0x88/0x11c
->  do_event.constprop.0+0x19c/0x2c0
->  dept_event+0xe0/0x100
->  complete+0x48/0x98
->  mm_release+0x7c/0x90
->  exit_mm_release+0xc/0x14
->  do_exit+0x1b4/0x81c
->  do_group_exit+0x30/0x9c
->  __wake_up_parent+0x0/0x24
->  invoke_syscall.constprop.0+0x78/0xc4
->  do_el0_svc+0x98/0xd0
->  el0_svc+0x44/0xe4
->  el0t_64_sync_handler+0xb0/0x12c
->  el0t_64_sync+0x158/0x15c
-> 
-> 
-> 
-> 
-> ===================================================
-> DEPT: Circular dependency has been detected.
-> 5.17.0-rc1+ #3 Tainted: G        W        
-> ---------------------------------------------------
-> summary
-> ---------------------------------------------------
-> *** AA DEADLOCK ***
-> 
-> context A
->     [S] (unknown)(&try_completion:0)
->     [W] wait_for_completion_timeout(&try_completion:0)
->     [E] complete(&try_completion:0)
-> 
-> [S]: start of the event context
-> [W]: the wait blocked
-> [E]: the event not reachable
-> ---------------------------------------------------
-> context A's detail
-> ---------------------------------------------------
-> context A
->     [S] (unknown)(&try_completion:0)
->     [W] wait_for_completion_timeout(&try_completion:0)
->     [E] complete(&try_completion:0)
-> 
-> [S] (unknown)(&try_completion:0):
-> (N/A)
-> 
-> [W] wait_for_completion_timeout(&try_completion:0):
-> [<ffffffc008166bf4>] kunit_try_catch_run+0xb4/0x160
-> stacktrace:
->       dept_wait+0x74/0x88
->       wait_for_completion_timeout+0x64/0xa0
->       kunit_try_catch_run+0xb4/0x160
->       kunit_test_try_catch_successful_try_no_catch+0x3c/0x98
->       kunit_try_run_case+0x9c/0xa0
->       kunit_generic_run_threadfn_adapter+0x1c/0x28
->       kthread+0xd4/0xe4
->       ret_from_fork+0x10/0x20
-> 
-> [E] complete(&try_completion:0):
-> [<ffffffc00803dce4>] kthread_complete_and_exit+0x18/0x20
-> stacktrace:
->       dept_event+0xe0/0x100
->       complete+0x48/0x98
->       kthread_complete_and_exit+0x18/0x20
->       kunit_try_catch_throw+0x0/0x1c
->       kthread+0xd4/0xe4
->       ret_from_fork+0x10/0x20
-> 
-> ---------------------------------------------------
-> information that might be helpful
-> ---------------------------------------------------
-> CPU: 15 PID: 132 Comm: kunit_try_catch Tainted: G        W         5.17.0-rc1+ #3
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->  dump_backtrace.part.0+0x9c/0xc4
->  show_stack+0x14/0x28
->  dump_stack_lvl+0x9c/0xcc
->  dump_stack+0x14/0x2c
->  print_circle+0x2d4/0x438
->  cb_check_dl+0x44/0x70
->  bfs+0x60/0x168
->  add_dep+0x88/0x11c
->  do_event.constprop.0+0x19c/0x2c0
->  dept_event+0xe0/0x100
->  complete+0x48/0x98
->  kthread_complete_and_exit+0x18/0x20
->  kunit_try_catch_throw+0x0/0x1c
->  kthread+0xd4/0xe4
->  ret_from_fork+0x10/0x20
-> 
-> 
-> > Benifit:
-> > 
-> > 	0. Works with all lock primitives.
-> > 	1. Works with wait_for_completion()/complete().
-> > 	2. Works with 'wait' on PG_locked.
-> > 	3. Works with 'wait' on PG_writeback.
-> > 	4. Works with swait/wakeup.
-> > 	5. Works with waitqueue.
-> > 	6. Multiple reports are allowed.
-> > 	7. Deduplication control on multiple reports.
-> > 	8. Withstand false positives thanks to 6.
-> > 	9. Easy to tag any wait/event.
-> > 
-> > Future work:
-> 
-> [...]
-> 
-> > -- 
-> > 1.9.1
-> > 
-> 
-> -- 
-> Thank you, You are awesome!
-> Hyeonggon :-)
+SGVsbG8sCgpPbiBNb24sIDE0IE1hciAyMDIyIDIwOjAzOjAwIC0wNzAwLCBFcmljIER1bWF6ZXQg
+d3JvdGU6Cj4gPiBUaGVyZSBhcmUgcmFjZSBjb25kaXRpb25zIHRoYXQgbWF5IGxlYWQgdG8gbnVs
+bCBwb2ludGVyIGRlcmVmZXJlbmNlcyBpbgo+ID4gYXgyNV9oZWFydGJlYXRfZXhwaXJ5KCksIGF4
+MjVfdDF0aW1lcl9leHBpcnkoKSwgYXgyNV90MnRpbWVyX2V4cGlyeSgpLAo+ID4gYXgyNV90M3Rp
+bWVyX2V4cGlyeSgpIGFuZCBheDI1X2lkbGV0aW1lcl9leHBpcnkoKSwgd2hlbiB3ZSB1c2UKPiA+
+IGF4MjVfa2lsbF9ieV9kZXZpY2UoKSB0byBkZXRhY2ggdGhlIGF4MjUgZGV2aWNlLgo+ID4KPiA+
+IE9uZSBvZiB0aGUgcmFjZSBjb25kaXRpb25zIHRoYXQgY2F1c2UgbnVsbCBwb2ludGVyIGRlcmVm
+ZXJlbmNlcyBjYW4gYmUKPiA+IHNob3duIGFzIGJlbG93Ogo+ID4KPiA+ICAgICAgICAoVGhyZWFk
+IDEpICAgICAgICAgICAgICAgICAgICB8ICAgICAgKFRocmVhZCAyKQo+ID4gYXgyNV9jb25uZWN0
+KCkgICAgICAgICAgICAgICAgICAgICAgIHwKPiA+ICAgYXgyNV9zdGRfZXN0YWJsaXNoX2RhdGFf
+bGluaygpICAgICB8Cj4gPiAgICBheDI1X3N0YXJ0X3QxdGltZXIoKSAgICAgICAgICAgICAgfAo+
+ID4gICAgIG1vZF90aW1lcigmYXgyNS0+dDF0aW1lciwuLikgICAgIHwKPiA+ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8IGF4MjVfa2lsbF9ieV9kZXZpY2UoKQo+ID4gICAg
+ICh3YWl0IGEgdGltZSkgICAgICAgICAgICAgICAgICAgIHwgIC4uLgo+ID4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIHMtPmF4MjVfZGV2ID0gTlVMTDsgLy8oMSkKPiA+
+ICAgICBheDI1X3QxdGltZXJfZXhwaXJ5KCkgICAgICAgICAgICB8Cj4gPiAgICAgIGF4MjUtPmF4
+MjVfZGV2LT52YWx1ZXNbLi5dIC8vKDIpfCAgLi4uCj4gPiAgICAgICAuLi4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfAo+ID4KPiA+IFdlIHNldCBudWxsIHRvIGF4MjVfY2ItPmF4MjVfZGV2
+IGluIHBvc2l0aW9uICgxKSBhbmQgZGVyZWZlcmVuY2UKPiA+IHRoZSBudWxsIHBvaW50ZXIgaW4g
+cG9zaXRpb24gKDIpLgo+ID4KPiA+IFRoZSBjb3JyZXNwb25kaW5nIGZhaWwgbG9nIGlzIHNob3du
+IGJlbG93Ogo+ID4gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09Cj4gPiBCVUc6IGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVu
+Y2UsIGFkZHJlc3M6IDAwMDAwMDAwMDAwMDAwNTAKPiA+IENQVTogMSBQSUQ6IDAgQ29tbTogc3dh
+cHBlci8xIE5vdCB0YWludGVkIDUuMTcuMC1yYzYtMDA3OTQtZzQ1NjkwYjdkMAo+ID4gUklQOiAw
+MDEwOmF4MjVfdDF0aW1lcl9leHBpcnkrMHgxMi8weDQwCj4gPiAuLi4KPiA+IENhbGwgVHJhY2U6
+Cj4gPiAgIGNhbGxfdGltZXJfZm4rMHgyMS8weDEyMAo+ID4gICBfX3J1bl90aW1lcnMucGFydC4w
+KzB4MWNhLzB4MjUwCj4gPiAgIHJ1bl90aW1lcl9zb2Z0aXJxKzB4MmMvMHg2MAo+ID4gICBfX2Rv
+X3NvZnRpcnErMHhlZi8weDJmMwo+ID4gICBpcnFfZXhpdF9yY3UrMHhiNi8weDEwMAo+ID4gICBz
+eXN2ZWNfYXBpY190aW1lcl9pbnRlcnJ1cHQrMHhhMi8weGQwCj4gPiAuLi4KPiA+Cj4gPiBUaGlz
+IHBhdGNoIHVzZXMgYXgyNV9kaXNjb25uZWN0KCkgdG8gZGVsZXRlIHRpbWVycyBiZWZvcmUgd2Ug
+c2V0IG51bGwgdG8KPiA+IGF4MjVfY2ItPmF4MjVfZGV2IGluIGF4MjVfa2lsbF9ieV9kZXZpY2Uo
+KS5UaGUgZnVuY3Rpb24gYXgyNV9kaXNjb25uZWN0KCkKPiA+IHdpbGwgbm90IHJldHVybiB1bnRp
+bCBhbGwgdGltZXJzIGFyZSBzdG9wcGVkLCBiZWNhdXNlIHdlIGhhdmUgY2hhbmdlZAo+ID4gZGVs
+X3RpbWVyKCkgdG8gZGVsX3RpbWVyX3N5bmMoKS4gV2hhdGBzIG1vcmUsIHdlIGFkZCBjb25kaXRp
+b24gY2hlY2sgaW4KPiA+IGF4MjVfZGVzdHJveV9zb2NrZXQoKSwgYmVjYXVzZSBheDI1X3N0b3Bf
+aGVhcnRiZWF0KCkgd2lsbCBub3QgcmV0dXJuLAo+ID4gaWYgdGhlcmUgaXMgc3RpbGwgaGVhcnRi
+ZWF0Lgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1
+LmNuPgo+IAo+IE1pc3NpbmcgRkl4ZXM6IHRhZyA/Cj4gCj4gCj4gPiAtLS0KPiA+IENoYW5nZXMg
+aW4gVjQ6Cj4gPiAgICAtIEJhc2VkIG9uIFtQQVRDSCBuZXQgVjQgMS8yXSBheDI1OiBGaXggcmVm
+Y291bnQgbGVha3MgY2F1c2VkIGJ5IGF4MjVfY2JfZGVsKCkuCj4gPgo+ID4gICBuZXQvYXgyNS9h
+Zl9heDI1LmMgICAgfCAgNyArKysrLS0tCj4gPiAgIG5ldC9heDI1L2F4MjVfdGltZXIuYyB8IDEw
+ICsrKysrLS0tLS0KPiA+ICAgMiBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDggZGVs
+ZXRpb25zKC0pCj4gPgo+ID4gZGlmZiAtLWdpdCBhL25ldC9heDI1L2FmX2F4MjUuYyBiL25ldC9h
+eDI1L2FmX2F4MjUuYwo+ID4gaW5kZXggMDg4NjEwOTQyMWEuLmRjNjE2MWE3NWExIDEwMDY0NAo+
+ID4gLS0tIGEvbmV0L2F4MjUvYWZfYXgyNS5jCj4gPiArKysgYi9uZXQvYXgyNS9hZl9heDI1LmMK
+PiA+IEBAIC04OSwyMCArODksMjAgQEAgc3RhdGljIHZvaWQgYXgyNV9raWxsX2J5X2RldmljZShz
+dHJ1Y3QgbmV0X2RldmljZSAqZGV2KQo+ID4gICAJCQlzayA9IHMtPnNrOwo+ID4gICAJCQlpZiAo
+IXNrKSB7Cj4gPiAgIAkJCQlzcGluX3VubG9ja19iaCgmYXgyNV9saXN0X2xvY2spOwo+ID4gLQkJ
+CQlzLT5heDI1X2RldiA9IE5VTEw7Cj4gPiAgIAkJCQlheDI1X2Rpc2Nvbm5lY3QocywgRU5FVFVO
+UkVBQ0gpOwo+ID4gKwkJCQlzLT5heDI1X2RldiA9IE5VTEw7Cj4gPiAgIAkJCQlzcGluX2xvY2tf
+YmgoJmF4MjVfbGlzdF9sb2NrKTsKPiA+ICAgCQkJCWdvdG8gYWdhaW47Cj4gPiAgIAkJCX0KPiA+
+ICAgCQkJc29ja19ob2xkKHNrKTsKPiA+ICAgCQkJc3Bpbl91bmxvY2tfYmgoJmF4MjVfbGlzdF9s
+b2NrKTsKPiA+ICAgCQkJbG9ja19zb2NrKHNrKTsKPiA+ICsJCQlheDI1X2Rpc2Nvbm5lY3Qocywg
+RU5FVFVOUkVBQ0gpOwo+ID4gICAJCQlzLT5heDI1X2RldiA9IE5VTEw7Cj4gPiAgIAkJCWlmIChz
+ay0+c2tfd3EpIHsKPiA+ICAgCQkJCWRldl9wdXRfdHJhY2soYXgyNV9kZXYtPmRldiwgJmF4MjVf
+ZGV2LT5kZXZfdHJhY2tlcik7Cj4gPiAgIAkJCQlheDI1X2Rldl9wdXQoYXgyNV9kZXYpOwo+ID4g
+ICAJCQl9Cj4gPiAtCQkJYXgyNV9kaXNjb25uZWN0KHMsIEVORVRVTlJFQUNIKTsKPiA+ICAgCQkJ
+cmVsZWFzZV9zb2NrKHNrKTsKPiA+ICAgCQkJc3Bpbl9sb2NrX2JoKCZheDI1X2xpc3RfbG9jayk7
+Cj4gPiAgIAkJCXNvY2tfcHV0KHNrKTsKPiA+IEBAIC0zMDcsNyArMzA3LDggQEAgdm9pZCBheDI1
+X2Rlc3Ryb3lfc29ja2V0KGF4MjVfY2IgKmF4MjUpCj4gPiAgIAo+ID4gICAJYXgyNV9jYl9kZWwo
+YXgyNSk7Cj4gPiAgIAo+ID4gLQlheDI1X3N0b3BfaGVhcnRiZWF0KGF4MjUpOwo+ID4gKwlpZiAo
+IWF4MjUtPnNrIHx8ICFzb2NrX2ZsYWcoYXgyNS0+c2ssIFNPQ0tfREVTVFJPWSkpCj4gPiArCQlh
+eDI1X3N0b3BfaGVhcnRiZWF0KGF4MjUpOwo+ID4gICAJYXgyNV9zdG9wX3QxdGltZXIoYXgyNSk7
+Cj4gPiAgIAlheDI1X3N0b3BfdDJ0aW1lcihheDI1KTsKPiA+ICAgCWF4MjVfc3RvcF90M3RpbWVy
+KGF4MjUpOwo+ID4gZGlmZiAtLWdpdCBhL25ldC9heDI1L2F4MjVfdGltZXIuYyBiL25ldC9heDI1
+L2F4MjVfdGltZXIuYwo+ID4gaW5kZXggODU4NjVlYmZkZmEuLjk5YWYzZDFhZWVjIDEwMDY0NAo+
+ID4gLS0tIGEvbmV0L2F4MjUvYXgyNV90aW1lci5jCj4gPiArKysgYi9uZXQvYXgyNS9heDI1X3Rp
+bWVyLmMKPiA+IEBAIC03OCwyNyArNzgsMjcgQEAgdm9pZCBheDI1X3N0YXJ0X2lkbGV0aW1lcihh
+eDI1X2NiICpheDI1KQo+ID4gICAKPiA+ICAgdm9pZCBheDI1X3N0b3BfaGVhcnRiZWF0KGF4MjVf
+Y2IgKmF4MjUpCj4gPiAgIHsKPiA+IC0JZGVsX3RpbWVyKCZheDI1LT50aW1lcik7Cj4gPiArCWRl
+bF90aW1lcl9zeW5jKCZheDI1LT50aW1lcik7Cj4gPiAgIH0KPiA+ICAgCj4gPiAgIHZvaWQgYXgy
+NV9zdG9wX3QxdGltZXIoYXgyNV9jYiAqYXgyNSkKPiA+ICAgewo+ID4gLQlkZWxfdGltZXIoJmF4
+MjUtPnQxdGltZXIpOwo+ID4gKwlkZWxfdGltZXJfc3luYygmYXgyNS0+dDF0aW1lcik7Cj4gPiAg
+IH0KPiA+ICAgCj4gPiAgIHZvaWQgYXgyNV9zdG9wX3QydGltZXIoYXgyNV9jYiAqYXgyNSkKPiA+
+ICAgewo+ID4gLQlkZWxfdGltZXIoJmF4MjUtPnQydGltZXIpOwo+ID4gKwlkZWxfdGltZXJfc3lu
+YygmYXgyNS0+dDJ0aW1lcik7Cj4gPiAgIH0KPiA+ICAgCj4gPiAgIHZvaWQgYXgyNV9zdG9wX3Qz
+dGltZXIoYXgyNV9jYiAqYXgyNSkKPiA+ICAgewo+ID4gLQlkZWxfdGltZXIoJmF4MjUtPnQzdGlt
+ZXIpOwo+ID4gKwlkZWxfdGltZXJfc3luYygmYXgyNS0+dDN0aW1lcik7Cj4gPiAgIH0KPiA+ICAg
+Cj4gPiAgIHZvaWQgYXgyNV9zdG9wX2lkbGV0aW1lcihheDI1X2NiICpheDI1KQo+ID4gICB7Cj4g
+PiAtCWRlbF90aW1lcigmYXgyNS0+aWRsZXRpbWVyKTsKPiA+ICsJZGVsX3RpbWVyX3N5bmMoJmF4
+MjUtPmlkbGV0aW1lcik7Cj4gPiAgIH0KPiA+ICAgCj4gPiAgIGludCBheDI1X3QxdGltZXJfcnVu
+bmluZyhheDI1X2NiICpheDI1KQo+IAo+IAo+IAo+IEFyZSB5b3Ugc3VyZSBjYWxsaW5nIGRlbF90
+aW1lX3N5bmMoKSB3b250IGRlYWRsb2NrID8KPiAKPiAKPiBJZiB0aGUgdGltZXIgaGFuZGxlcnMg
+bmVlZCBhIGxvY2sgb3duZWQgYnkgdGhlIHRocmVhZCBjYWxsaW5nIAo+IGRlbF90aW1lcl9zeW5j
+KCksCj4gCj4gdGhlbiB0aGlzIHdpbGwgYmxvY2sgZm9yZXZlci4KCkluIG90aGVyIHRvIGxvd2Vy
+IHRoZSBpbXBhY3QgdG8gb3RoZXIgZnVuY3Rpb25zLCBJIGNvbWUgdXAgd2l0aCB0aGUgZm9sbG93
+aW5nCnBhdGNoLgoKSWYgYXgyNV9kaXNjb25uZWN0KCkgaXMgY2FsbGVkIGJ5IGF4MjVfa2lsbF9i
+eV9kZXZpY2UoKSBvciBheDI1LT5heDI1X2RldgppcyBOVUxMLCB0aGUgcmVhc29uIGluIGF4MjVf
+ZGlzY29ubmVjdCgpIHdpbGwgYmUgZXF1YWwgdG8gRU5FVFVOUkVBQ0guClRoaXMgcGF0Y2ggYWRk
+cyBjaGVjayBhbmQgdXNlcyBkZWxfdGltZXJfc3luYygpIHRvIGRlbGV0ZSB0aW1lcnMgaW4KYXgy
+NV9kaXNjb25uZWN0KCksIGl0IHdpbGwgd2FpdCBhbGwgdGltZXJzIHRvIHN0b3AgYmVmb3JlIHdl
+IHNldCBudWxsCnRvIGF4MjVfY2ItPmF4MjVfZGV2IGluIGF4MjVfa2lsbF9ieV9kZXZpY2UoKS4K
+CmRpZmYgLS1naXQgYS9uZXQvYXgyNS9hZl9heDI1LmMgYi9uZXQvYXgyNS9hZl9heDI1LmMKaW5k
+ZXggY2Y4ODQ3Y2ZjNjYuLjk5MmI2ZTVkODVkIDEwMDY0NAotLS0gYS9uZXQvYXgyNS9hZl9heDI1
+LmMKKysrIGIvbmV0L2F4MjUvYWZfYXgyNS5jCkBAIC04OSwyMCArODksMjAgQEAgc3RhdGljIHZv
+aWQgYXgyNV9raWxsX2J5X2RldmljZShzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQogCQkJc2sgPSBz
+LT5zazsKIAkJCWlmICghc2spIHsKIAkJCQlzcGluX3VubG9ja19iaCgmYXgyNV9saXN0X2xvY2sp
+OwotCQkJCXMtPmF4MjVfZGV2ID0gTlVMTDsKIAkJCQlheDI1X2Rpc2Nvbm5lY3QocywgRU5FVFVO
+UkVBQ0gpOworCQkJCXMtPmF4MjVfZGV2ID0gTlVMTDsKIAkJCQlzcGluX2xvY2tfYmgoJmF4MjVf
+bGlzdF9sb2NrKTsKIAkJCQlnb3RvIGFnYWluOwogCQkJfQogCQkJc29ja19ob2xkKHNrKTsKIAkJ
+CXNwaW5fdW5sb2NrX2JoKCZheDI1X2xpc3RfbG9jayk7CiAJCQlsb2NrX3NvY2soc2spOworCQkJ
+YXgyNV9kaXNjb25uZWN0KHMsIEVORVRVTlJFQUNIKTsKIAkJCXMtPmF4MjVfZGV2ID0gTlVMTDsK
+IAkJCWlmIChzay0+c2tfc29ja2V0KSB7CiAJCQkJZGV2X3B1dF90cmFjayhheDI1X2Rldi0+ZGV2
+LCAmYXgyNV9kZXYtPmRldl90cmFja2VyKTsKIAkJCQlheDI1X2Rldl9wdXQoYXgyNV9kZXYpOwog
+CQkJfQotCQkJYXgyNV9kaXNjb25uZWN0KHMsIEVORVRVTlJFQUNIKTsKIAkJCXJlbGVhc2Vfc29j
+ayhzayk7CiAJCQlzcGluX2xvY2tfYmgoJmF4MjVfbGlzdF9sb2NrKTsKIAkJCXNvY2tfcHV0KHNr
+KTsKZGlmZiAtLWdpdCBhL25ldC9heDI1L2F4MjVfc3Vici5jIGIvbmV0L2F4MjUvYXgyNV9zdWJy
+LmMKaW5kZXggMTVhYjgxMmM0ZmUuLjNhNDc2ZTRmNmNkIDEwMDY0NAotLS0gYS9uZXQvYXgyNS9h
+eDI1X3N1YnIuYworKysgYi9uZXQvYXgyNS9heDI1X3N1YnIuYwpAQCAtMjYxLDEyICsyNjEsMjAg
+QEAgdm9pZCBheDI1X2Rpc2Nvbm5lY3QoYXgyNV9jYiAqYXgyNSwgaW50IHJlYXNvbikKIHsKIAlh
+eDI1X2NsZWFyX3F1ZXVlcyhheDI1KTsKIAotCWlmICghYXgyNS0+c2sgfHwgIXNvY2tfZmxhZyhh
+eDI1LT5zaywgU09DS19ERVNUUk9ZKSkKLQkJYXgyNV9zdG9wX2hlYXJ0YmVhdChheDI1KTsKLQlh
+eDI1X3N0b3BfdDF0aW1lcihheDI1KTsKLQlheDI1X3N0b3BfdDJ0aW1lcihheDI1KTsKLQlheDI1
+X3N0b3BfdDN0aW1lcihheDI1KTsKLQlheDI1X3N0b3BfaWRsZXRpbWVyKGF4MjUpOworCWlmIChy
+ZWFzb24gPT0gRU5FVFVOUkVBQ0gpIHsKKwkJZGVsX3RpbWVyX3N5bmMoJmF4MjUtPnRpbWVyKTsK
+KwkJZGVsX3RpbWVyX3N5bmMoJmF4MjUtPnQxdGltZXIpOworCQlkZWxfdGltZXJfc3luYygmYXgy
+NS0+dDJ0aW1lcik7CisJCWRlbF90aW1lcl9zeW5jKCZheDI1LT50M3RpbWVyKTsKKwkJZGVsX3Rp
+bWVyX3N5bmMoJmF4MjUtPmlkbGV0aW1lcik7CisJfSBlbHNlIHsKKwkJaWYgKCFheDI1LT5zayB8
+fCAhc29ja19mbGFnKGF4MjUtPnNrLCBTT0NLX0RFU1RST1kpKQorCQkJYXgyNV9zdG9wX2hlYXJ0
+YmVhdChheDI1KTsKKwkJYXgyNV9zdG9wX3QxdGltZXIoYXgyNSk7CisJCWF4MjVfc3RvcF90MnRp
+bWVyKGF4MjUpOworCQlheDI1X3N0b3BfdDN0aW1lcihheDI1KTsKKwkJYXgyNV9zdG9wX2lkbGV0
+aW1lcihheDI1KTsKKwl9CiAKIAlheDI1LT5zdGF0ZSA9IEFYMjVfU1RBVEVfMDsKIAotLSAKMi4x
+Ny4xCgpEbyB5b3UgdGhpbmsgdGhpcyBwYXRjaCBpcyBvaz8KCkJlc3Qgd2lzaGVzLApEdW9taW5n
+IFpob3U=

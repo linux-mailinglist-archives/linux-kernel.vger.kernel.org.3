@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292794DB7E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8014DB7E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237492AbiCPS1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S1354276AbiCPS2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbiCPS1r (ORCPT
+        with ESMTP id S242928AbiCPS2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:27:47 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CA86D960
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 11:26:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id v130so5915381ybe.13
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 11:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+VVGHpNw2aToH4nlv/qP4fsUY4xFNKKSta7CoxCOLqU=;
-        b=Im3UELGk/iBvvXDdwloE1LayQw78/8xAF5xIkzHUcYNoTmJQWTbW5FnZyqyYEgkf/2
-         u6yjX7f4cTiiB6Xl/VU6E5cj6YVeOpmIafJOgwchCrZVrCmBGaGiUTzK8ypCnXwxX13n
-         /DVouNRz5uqNvN42UYjat3gLTPyDsihe7EGdA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+VVGHpNw2aToH4nlv/qP4fsUY4xFNKKSta7CoxCOLqU=;
-        b=OZ10SiopvRowMmCSfgr75t04L7E626rOda1ynwFkQO/3Iy7MnYxNCwx3ei3+ER6LQ9
-         83sTCoqOHuMQxJ+6ohThBi0uNTQjzulqzxhK0SWQdWAQPJ8+kl3ab8JBtstTvSEx5ofD
-         xBeBsL5PSr3MoFBoLvfgyUJwDEpOCo4a3SY5tBo72Z1pwF0TJknGFQJH83uKGihBGjwt
-         iB7mHkiaUOQvu70E71S7XO3+k71T2dTFtv7aUurFNjx7UucoDIi6Jfo3WMmpks0sFMRe
-         peabummB2pYxrb1Bi2ADse8A0232o4+80nOsPBcPfBjnXajOYcWpL33gMTPk363Vulf/
-         MnKA==
-X-Gm-Message-State: AOAM53026gewOaFp/frHuFLW1FceI0oHfuOdripin7NUylq6ylTHGvLe
-        Wm95N8UiElFj5Y1NbTodWY3cBtycIuYpvM2fsKEmKQ==
-X-Google-Smtp-Source: ABdhPJxgt41Y/UgMqCYCVzLLEzyZ00uN4v/bBuIogqY9sdSDfrECHl2+T+gNWPVLRmPOUuKWlmIHWV6lhzeCmDlncpY=
-X-Received: by 2002:a25:918f:0:b0:633:6f7d:6d78 with SMTP id
- w15-20020a25918f000000b006336f7d6d78mr1343447ybl.134.1647455191504; Wed, 16
- Mar 2022 11:26:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABWYdi2a=Tc3dRfQ+037PG0GHKvZd5SEXJxBBbNspsrHK1zNpQ@mail.gmail.com>
- <CABWYdi1PeNbgnM4qE001+_BzHJxQcaaY9sLOK=Y7gjqfXZO0=g@mail.gmail.com>
- <YjA439FwajtHsahr@google.com> <YjEOiZCLBMgbw8oc@google.com>
-In-Reply-To: <YjEOiZCLBMgbw8oc@google.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Wed, 16 Mar 2022 11:26:20 -0700
-Message-ID: <CABWYdi0jd_pG_qqAnnGK6otNNXeNoiAWtmC14Jv+tiSadJPw0w@mail.gmail.com>
-Subject: Re: zram corruption due to uninitialized do_swap_page fault
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+        Wed, 16 Mar 2022 14:28:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF0A5A59A;
+        Wed, 16 Mar 2022 11:27:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B30E2618B8;
+        Wed, 16 Mar 2022 18:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1B8C340EC;
+        Wed, 16 Mar 2022 18:27:05 +0000 (UTC)
+Date:   Wed, 16 Mar 2022 18:27:01 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v1 4/7] arm64/pgtable: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+Message-ID: <YjIr9f9qaz4xITVd@arm.com>
+References: <20220315141837.137118-1-david@redhat.com>
+ <20220315141837.137118-5-david@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315141837.137118-5-david@redhat.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 3:09 PM Minchan Kim <minchan@kernel.org> wrote:
-> I think the problem with CLONE_VM is following race
->
-> CPU A                        CPU B
->
-> do_swap_page                do_swap_page
-> SWP_SYNCHRONOUS_IO path     SWP_SYNCHRONOUS_IO path
-> swap_readpage original data
->   swap_slot_free_notify
->     delete zram entry
->                             swap_readpage zero data
->                             pte_lock
->                             map the *zero data* to userspace
->                             pte_unlock
-> pte_lock
-> if (!pte_same)
->   goto out_nomap;
-> pte_unlock
-> return and next refault will
-> read zero data
->
-> So, CPU A and B see zero data. With patchset below, it changes
->
->
-> CPU A                        CPU B
->
-> do_swap_page                do_swap_page
-> SWP_SYNCHRONOUS_IO path     SWP_SYNCHRONOUS_IO path
->                             swap_readpage original data
->                             pte_lock
->                             map the original data
->                             swap_free
->                               swap_range_free
->                                 bd_disk->fops->swap_slot_free_notify
-> swap_readpage read zero data
->                             pte_unlock
-> pte_lock
-> if (!pte_same)
->   goto out_nomap;
-> pte_unlock
-> return and next refault will
-> read correct data again
->
-> Here, CPU A could read zero data from zram but that's not a bug
-> (IOW, warning injected doesn't mean bug).
->
-> The concern of the patch would increase memory size since it could
-> increase wasted memory with compressed form in zram and uncompressed
-> form in address space.  However, most of cases of zram uses no
-> readahead and then, do_swap_page is followed by swap_free so it will
-> free the compressed from in zram quickly.
->
-> Ivan, with this patch, you can see the warning you added in the zram
-> but it shouldn't trigger the userspace corruption as mentioned above
-> if I understand correctly.
->
-> Could you test whether the patch prevent userspace broken?
+On Tue, Mar 15, 2022 at 03:18:34PM +0100, David Hildenbrand wrote:
+> diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
+> index b1e1b74d993c..62e0ebeed720 100644
+> --- a/arch/arm64/include/asm/pgtable-prot.h
+> +++ b/arch/arm64/include/asm/pgtable-prot.h
+> @@ -14,6 +14,7 @@
+>   * Software defined PTE bits definition.
+>   */
+>  #define PTE_WRITE		(PTE_DBM)		 /* same as DBM (51) */
+> +#define PTE_SWP_EXCLUSIVE	(_AT(pteval_t, 1) << 2)	 /* only for swp ptes */
 
-I'm making an internal build and will push it to some location to see
-how it behaves, but it might take a few days to get any sort of
-confidence in the results (unless it breaks immediately).
+I think we can use bit 1 here.
 
-I've also pushed my patch that disables SWP_SYNCHRONOUS_IO to a few
-locations yesterday to see how it fares.
+> @@ -909,12 +925,13 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>  /*
+>   * Encode and decode a swap entry:
+>   *	bits 0-1:	present (must be zero)
+> - *	bits 2-7:	swap type
+> + *	bits 2:		remember PG_anon_exclusive
+> + *	bits 3-7:	swap type
+>   *	bits 8-57:	swap offset
+>   *	bit  58:	PTE_PROT_NONE (must be zero)
+
+I don't remember exactly why we reserved bits 0 and 1 when, from the
+hardware perspective, it's sufficient for bit 0 to be 0 and the whole
+pte becomes invalid. We use bit 1 as the 'table' bit (when 0 at pmd
+level, it's a huge page) but we shouldn't check for this on a swap
+entry.
+
+-- 
+Catalin

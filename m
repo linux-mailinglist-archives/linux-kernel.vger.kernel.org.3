@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110D34DB98B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEE24DB982
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357975AbiCPUj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S1357963AbiCPUiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358106AbiCPUhl (ORCPT
+        with ESMTP id S1358310AbiCPUiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:37:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02B96E4CE;
-        Wed, 16 Mar 2022 13:36:22 -0700 (PDT)
+        Wed, 16 Mar 2022 16:38:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBBF65817
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:37:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3037FB81D4B;
-        Wed, 16 Mar 2022 20:36:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8120C340EE;
-        Wed, 16 Mar 2022 20:36:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABC956141B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 20:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B61C340E9;
+        Wed, 16 Mar 2022 20:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647462979;
-        bh=JU8bh3oAnltrOOy06ldYgVZ5Y6Ez415dRPGhjhNXI+8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dkigp/ew2LlyYiIX/WtQlQxT9L0mCFauK3ZYoa+ytfxD3roeluVrS+NCOM1mGKwfw
-         C8MMTGadaO2euJJ5gMh9QlpNP8Yafn/yEDvk/moK2h8D4POeD5z7wZmsiZKjmDW48G
-         xbqGpUjVPnB5UirO1+ED3kkBRAq/vQJT55XFubusUeNjiFrhdCwXUk0hH1SAdlqjRJ
-         qglioYLXBH7HIVFvUFjwgbSx5W3QnyhUcsTI3tBbhm79uo3QF6Xe2JGjHAmxFefZLm
-         f1UNGPakEPDnTfYAvrPML7P9aIvju6uPwfpQpOLkwDDhTB55FwOknkM+pMnrUeGUip
-         QYfaSz1hybr7A==
-From:   Mark Brown <broonie@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     linux-kernel@vger.kernel.org, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, thierry.reding@gmail.com,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        linux-tegra@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        ldewangan@nvidia.com
-In-Reply-To: <20220315023138.2118293-1-chi.minghao@zte.com.cn>
-References: <20220315023138.2118293-1-chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] spi: tegra20: Use of_device_get_match_data()
-Message-Id: <164746297766.1220434.5469365380012677264.b4-ty@kernel.org>
-Date:   Wed, 16 Mar 2022 20:36:17 +0000
+        s=k20201202; t=1647463021;
+        bh=TT5aj2bS0CfHdcNhyjXK54D7ZtehWAt5yO7XurUnSfs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hY5Lo9rqrd03oiydupg7X2xccQyXWiDOE/UGjqL6xvdziwaFpfViFUWpsltAO3kHy
+         DwDE+T/8FnyodlGo7a2H33X5mtGnxtCEprkTbnYn71W5WSDf0ity58lAU9MuN6hJNW
+         0851jotxe9ODCxZo7CXlqjqBXptnjfrySAyDmHkfbtFZvebPXYH2KXkuRrbjD9wwR0
+         Zx5tiOwk9KOQw09HcXPXjD4nuYMKY08dViUERENMXn54NrzGWqTLakpDzvYurJhR5f
+         GMCdgYD7n3whSX0/PpNCCtyk3RIInVBixM+oi1JmV3IwsZG1GYCxQtbkIhuwIHLOU8
+         wzQkYa57YTEHg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 730F940407; Wed, 16 Mar 2022 17:36:57 -0300 (-03)
+Date:   Wed, 16 Mar 2022 17:36:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     cclaudio@linux.ibm.com, Jiri Olsa <jolsa@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH] perf trace: Fix SIGSEGV when processing augmented args
+Message-ID: <YjJKaSanKI7LQdEk@kernel.org>
+References: <20220310104741.209834-1-naveen.n.rao@linux.vnet.ibm.com>
+ <Yi+9G1nK1shEIXVN@kernel.org>
+ <1647364864.3xrhklc7kl.naveen@linux.ibm.com>
+ <YjDSRb1wwswKpJNJ@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjDSRb1wwswKpJNJ@kernel.org>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,37 +61,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 02:31:38 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+Em Tue, Mar 15, 2022 at 02:52:05PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Mar 15, 2022 at 10:57:57PM +0530, Naveen N. Rao escreveu:
+> > Yes, it looks like the current check in 'perf' isn't working. The below
+> > patch also resolves the crash we are seeing:
+>  
+> > diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> > index 2f1d20553a0aa3..86b459f4ebdd61 100644
+> > --- a/tools/perf/builtin-trace.c
+> > +++ b/tools/perf/builtin-trace.c
+> > @@ -2326,7 +2326,7 @@ static int trace__sys_enter(struct trace *trace, struct evsel *evsel,
+> >         * thinking that the extra 2 u64 args are the augmented filename, so just check
+> >         * here and avoid using augmented syscalls when the evsel is the raw_syscalls one.
+> >         */
+> > -       if (evsel != trace->syscalls.events.sys_enter)
+> > +       if (strcmp(evsel__name(evsel), "raw_syscalls:sys_enter"))
+> >                augmented_args = syscall__augmented_args(sc, sample, &augmented_args_size, trace->raw_augmented_syscalls_args_size);
+> >        ttrace->entry_time = sample->time;
+> >        msg = ttrace->entry_str;
 > 
-> Use of_device_get_match_data() to simplify the code.
+> Interesting, that should be equivalent :-\ humm, not really, understood,
+> when processing perf.data files we don't setup
+> trace->syscalls.events.sys_enter...
 > 
-> 
+> switching from strcmp() to something cheaper but equivalent should be
+> the fix for now.
 
-Applied to
+I'll add a trace->use_augmented_args boolean that will do this test
+once, and then use it in this case and will audit to check if this
+should be used in other places.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: tegra20: Use of_device_get_match_data()
-      commit: c9839acfcbe20ce43d363c2a9d0772472d9921c0
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+- Arnaldo

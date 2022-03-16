@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6794DAC4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2A04DAC45
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354464AbiCPIRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S1354442AbiCPIRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354452AbiCPIRg (ORCPT
+        with ESMTP id S245093AbiCPIQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:17:36 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F205E63502
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:16:22 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KJNJp6RCRzcb3q;
-        Wed, 16 Mar 2022 16:11:22 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 16 Mar 2022 04:16:59 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A9263502;
+        Wed, 16 Mar 2022 01:15:45 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KJNMg5S0wz67Zgf;
+        Wed, 16 Mar 2022 16:13:51 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 16 Mar 2022 09:15:43 +0100
+Received: from [10.47.84.96] (10.47.84.96) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 16 Mar
- 2022 16:16:20 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <sj@kernel.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] mm/damon: minor cleanup for damon_pa_young
-Date:   Wed, 16 Mar 2022 16:15:28 +0800
-Message-ID: <20220316081528.6034-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+ 2022 08:15:42 +0000
+Message-ID: <1bde0883-bfbb-ea54-82f0-4e53b884b24b@huawei.com>
+Date:   Wed, 16 Mar 2022 08:15:41 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/2] scsi/libata: A potential tagging fix and improvement
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <bvanassche@acm.org>, <ming.lei@redhat.com>, <hch@lst.de>,
+        <hare@suse.de>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <martin.wilck@suse.com>
+References: <1647340746-17600-1-git-send-email-john.garry@huawei.com>
+ <b77e681d-d180-7434-1675-1fcb10ef4abf@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <b77e681d-d180-7434-1675-1fcb10ef4abf@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.84.96]
+X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-if need_lock is true but folio_trylock fails, we should return false
-instead of NULL to match the return value type exactly. No functional
-change intended.
+On 16/03/2022 03:25, Damien Le Moal wrote:s
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- mm/damon/paddr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Damien,
 
-diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-index a01495cebdad..21474ae63bc7 100644
---- a/mm/damon/paddr.c
-+++ b/mm/damon/paddr.c
-@@ -152,7 +152,7 @@ static bool damon_pa_young(unsigned long paddr, unsigned long *page_sz)
- 	need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
- 	if (need_lock && !folio_trylock(folio)) {
- 		folio_put(folio);
--		return NULL;
-+		return false;
- 	}
- 
- 	rmap_walk(folio, &rwc);
--- 
-2.23.0
+> I tested this and it is working fine for me. This actually solves the QD
+> not changing problem I had detected with the pm80xx driver.
+> Now, doing this:
+> 
+> # cat /sys/block/sde/device/queue_depth
+> 32
+> # echo 16 > /sys/block/sde/device/queue_depth
+> # cat /sys/block/sde/device/queue_depth
+> 16
+> 
+
+Having this working is down to the first patch. So I will resend that 
+patch today separately so that we may look to have it included in 5.18, 
+even though we're so late in the cycle...
+
+> is working as expected.
+> 
+> See my comments on patch 2 for getting final ack and tested tags:)
+
+OK, Thanks,
+John
 

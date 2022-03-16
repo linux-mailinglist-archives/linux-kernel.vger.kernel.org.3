@@ -2,363 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3733C4DB7F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF764DB7F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355863AbiCPSfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        id S1357639AbiCPSgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343956AbiCPSfX (ORCPT
+        with ESMTP id S236948AbiCPSgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:35:23 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C36642D;
-        Wed, 16 Mar 2022 11:34:07 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id j2so6123680ybu.0;
-        Wed, 16 Mar 2022 11:34:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3dM8foIYimRBAabR5hTDbsSnD+w/pDoTg5WTDUXv8WY=;
-        b=2Poxjry9Dh0Ne5pcKKPQ21t0aDu4Qe/WM2ULl7+DUh7j68UdN+dfaOe3m1uZDZ1NHv
-         lCgsqqKY7efw+ohfh5xV56Gv7UOu/oji91m7TF1p1l+e8WZ3RWb/fH8H3uyPC1ljY/zm
-         e+m30tcZ0LJwX0i+/imr89s8RO87Ea+6YsSi/O9dNcIacQiwSquP/0ZPOfvLbAc756Al
-         1x4lX/S9n6F5oxDNmnoPW5w4RsB7p/ek2JYIqoQxAXCJWHGxj48FFeU1C0bySWXj42OD
-         Il+s7dJfmtVu0N3W8aFZ8haPQ9WZFBhCJGxYyNSiyxHhbDsbYKq7WNNzNTvoEi1Zr4Xv
-         iW0g==
-X-Gm-Message-State: AOAM531mAGE2SSep8Zv8Ytx05ZU0JgYW1IqMABacOkDx+8Wts9Sh9m5k
-        nVBvx4WizlMXNLofCKXR1Ds18vuoDJOKGAkba9I=
-X-Google-Smtp-Source: ABdhPJyjOMNlbX3nH93iSMa/Ys58iozydn/tyO8zOvD6uzzg9tGO2DVV2Ddgvx6YCiePGkb36dDh2/ofikgz3UiQbe4=
-X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr1247788ybe.365.1647455646424; Wed, 16
- Mar 2022 11:34:06 -0700 (PDT)
+        Wed, 16 Mar 2022 14:36:08 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2065.outbound.protection.outlook.com [40.107.244.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F9D6459;
+        Wed, 16 Mar 2022 11:34:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NjnWi79L6zinRPgINI0lbIWS9OFRLPefgzR5UU0bb67VePakkhrrBOUjNuaNBLwkJd40F7kU8RCFzwRWhnJjv/p4SZdm5Yi5oSyreLwFPeDLbzn8otyUTXdgyNXapQ87LgRPcrV03gkdf6E/HxFzodzdf23MZAe9rSuLZIQX+oqqIeTggd35dqs/OH6PRVgwvxzbVkqsRnfaUsePtlnJx/TGlfifnUR+2768zMvrOHyRipohNT6mp36B7KBV9yOddKxTy5GuTKbLwGYN83YHtMGfgnOT6SddMuNYembBgEepIU9fRdl2+VR1XJNZc1VA6Qa0f/3aTbyX4BDqq1oAzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YAAZE68DYplUVuJSFt45ONa2GpXRxNrem62vI3Ik/b4=;
+ b=C9Yk0xK/NHzszK9nJypqMvdt2uMBvm+TsFr3wjUQC3mEM0aruy8J32r/FVltMEnWjsIH8vCOraku3Rak4PayD+G11EFJ5aiExbOzX04DjcMa8Rim7fOOYe58b4H7AQlkDkivv9Fv2bg5yr3XLJFG56PTGJJvLWCTJeQl87Q96nd+ItGlXPTtxV0PGuFr49HXDRq1IX5xbPawwOrWZZkgyW1K/VowcdrBdef/1VtDr9esbcdysImbuPFJCHmo2f/Bgb0uHaukPl/tqHsVMtU0FC/N8nplTxEYGVAZSN7ECfT5kdWpBOorMzIyUjxDHjW6hbD+uSB1qeQPajykkQVwsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YAAZE68DYplUVuJSFt45ONa2GpXRxNrem62vI3Ik/b4=;
+ b=wJvL7B2NL3VSF3rwuDW17CpJTYJAK8yGROwGTk0ORacNmExmE2bFKRuU+m4G/QNYDreU1MEa324aydyY/s1Eipg8G04iZIeX76QXb8v0M3Vy4WkCb3J1mlRYdlPGXAAM/h68tWtJh7vYtyMNZCdhLxGduui8OO8/HStXZGuCWgQ=
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by DM5PR12MB1499.namprd12.prod.outlook.com (2603:10b6:4:8::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5061.26; Wed, 16 Mar 2022 18:34:51 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::692d:9532:906b:2b08%5]) with mapi id 15.20.5081.014; Wed, 16 Mar 2022
+ 18:34:51 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "hch@lst.de" <hch@lst.de>
+Subject: RE: [PATCH] thunderbolt: Stop using iommu_present()
+Thread-Topic: [PATCH] thunderbolt: Stop using iommu_present()
+Thread-Index: AQHYOSidJZwMFUwbGEibeELZIyT74azB9QiAgAAiooCAACnRgIAAAPcAgAAEJICAAANtgIAAAECwgAAI+YCAAALbUA==
+Date:   Wed, 16 Mar 2022 18:34:51 +0000
+Message-ID: <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
+ <YjHb1xCx4UAmUjrR@lahna> <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
+ <YjIb+XOGZbWKpQDa@lahna>
+ <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjIgQfmcw6fydkXd@lahna> <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
+ <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
+In-Reply-To: <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-03-16T18:32:55Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=de44ae11-ae46-4d48-9404-a55278285b98;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-03-16T18:34:49Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 73256343-769f-4a4f-a1a8-ffd6b6bc58cb
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3ea0f199-b7c2-4df9-3a7a-08da077ba8a7
+x-ms-traffictypediagnostic: DM5PR12MB1499:EE_
+x-microsoft-antispam-prvs: <DM5PR12MB1499E9E6A4A8602028C68F2CE2119@DM5PR12MB1499.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vH8qwzZXVFZb7IFNcHZMsFSwafjK/ZDrg9PblPArRfIrJfpcg9qGJoJDjikNuUx2K/5ApR7FRCmsM4jAL+35dQRol7IChLbg51dx6pVJUUZBx5e72wyR2+zHZnkesdKI4bhgio/lO/JAE11tyTWQ/cFJ1On7Qgf/0jZE8ByCdlIcZ9ly4Cs3juICZbECm6S8j8DXHgIGaJ0l3IGoO00VfcWxlGkDwMuGchGFL34cLQUWPcNk3mWUesDeNuloPFIytpJdPNZ6pYgEFxfrjnnBqNpVvYPomWTk64sNSGH15onzODcJb30D1s7elq1zLY9Bty9RAqTGbnmSSK3cnExe8W2DC5H+gccRdrYfDRqFf1ZhSadX/ohjEAYbhCqy7Z+5V+ULGyX8v60/1fT6vvlMbti0C8BslyghPM0XfFgrtkNoPC5eKFofpy43iNPLypRDlXLKyExbB/zuVq1df9ujzBESULsqvN0yAbNY4PYvOC+gnueI7MCZFZpwQkb2p6xVTWRa7mmmdO1lbNOzAmC0LgnBXLukCGk4JvGm7yRSvOxrua1UDtXWgMQCjjaIF8wqTM2TJZPQAA9U8SCMuiKOVRA4efQlbG8c1xc6kJIUaZmbSsaeQiIUM+33D/JI/kK66SqpEPYQsep6UV1tTmuiqXczHpmrGvQLgyLJvcu7FYvADsP7FFLsP5tQo+mcJAp33H6K3d6EvdWcqcFFfHzLtg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(45080400002)(71200400001)(76116006)(66556008)(66446008)(66476007)(52536014)(64756008)(7696005)(508600001)(38100700002)(6506007)(5660300002)(33656002)(66946007)(186003)(9686003)(122000001)(110136005)(54906003)(316002)(83380400001)(8676002)(4326008)(38070700005)(86362001)(55016003)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SwEZ9ZExyW5D5g3j+WpZicXuU4QhBVuu5CZdAGN0h8ZOioTaJx+dXTGNFt1b?=
+ =?us-ascii?Q?cGHWpI0w21zlpBHrD55bk+Ws8DdfZFDMbz4KUfrkOLeNAD/qmjNLuVTK62I1?=
+ =?us-ascii?Q?VYytzIv5H5C01tk8e8ZsxO4XabubonZ59+gg1CgT5b1TGPrVU1uYWM/z88Hm?=
+ =?us-ascii?Q?ZJnpTwr1loIgjeUiZmTi+sAEU/fjVXjYD07Qn4dkXsitAP/T89Rkej+zwCld?=
+ =?us-ascii?Q?fvHPMdrKsuSJnK5jMe0t4NFlc2Wnf3waUmlyxAsZEMVsZp5XuBs2BMQrFJwI?=
+ =?us-ascii?Q?ADAgmQ6MtmkWX32qErmu49ab89+0Is1Br92qSC9c4+x8Dof/b9NPwXlo+3Y6?=
+ =?us-ascii?Q?FE6cTNhHGVQx0t9xtTBbE/Bemq6MCMCsB2hY6O5LfsVbI39iTppxvKBevprz?=
+ =?us-ascii?Q?fH5dzGFnh/gODaGYZ7PnuQNeDaaM1z5N77vSN3ltjYNzfU7gee4iMRrO/Mde?=
+ =?us-ascii?Q?t+mr/FhQ409kxALeNyGrUbqwe0b+H/HggXd010jchhuUVPKjx07uLh/OHIC8?=
+ =?us-ascii?Q?wT3bAPZ378nWyg78zUyDJVZARJhVn1JdbhuNqsQJdremeHsjpDLeR11zA1QR?=
+ =?us-ascii?Q?8vfUBABpE5EURQVSBd0sCSdKdPpUQ57coc5KXJO2X3nmB0xKutkZ6xUElPj7?=
+ =?us-ascii?Q?kAvUqHex9vc0O7otH2MsuKn856SdU0aQ0KomlP1XTi0XNCmquqsVnR79XYQm?=
+ =?us-ascii?Q?rii4OBZIu13sZzr447zw1MSC9xd2072EmZyPEz1rdXalONOOuWzFqzYfYQW1?=
+ =?us-ascii?Q?qAZQhx2kOfY3ToXM+b3GIwN3my5tVaMql+t5VPDjNtl1s4/y6Sxc0DD49643?=
+ =?us-ascii?Q?vb9d+OB4xevHiec/guvcjstE0Ffe4CMVi0f0peE/0T39EHeRvGPon2UCoF01?=
+ =?us-ascii?Q?ru5yMXxn/r5oXPgEjbaQkhtD76Sbbo+DTEtoBsaxYXouTI8GTLPiZOBwCkx0?=
+ =?us-ascii?Q?OgiEtvLy+f/aN5Dp7HgrsiIRprT8/ClyINDawG+qn1bgDPbH71NczZMjJLfr?=
+ =?us-ascii?Q?LxuATVHa0QIURFDHkLp0E/n+H2K5M4sVK8yOnhrIjwYrGlL0TKbd7fDa06Lf?=
+ =?us-ascii?Q?AQ4PowLG3onuNl5n5UAhO8hsHVNz4yTfsskweNkJ512R/Xu3Mj+UpdidvEMN?=
+ =?us-ascii?Q?Ck6CrPHU28lDZOB6jw+6mCaOkH/J6XQa+FaeA7UHAIsARmPpTJFSrMwT9sgs?=
+ =?us-ascii?Q?BFXr8b4T7kGhSBzHSJQZRfCBsYBDxj1URvd4D5B0suhskXCJL6ruUQ4PPo+r?=
+ =?us-ascii?Q?9V7Qi+RwjtB0tlEftWNUGanp8aEJnyjbdOOF5+SlFrzoTOU7ldAUGt2wP9x2?=
+ =?us-ascii?Q?dHG9mfCvEQF+yMl5m41j9rZsD4mdGnfgOfrTqiX4tClieuI2UGoqP+nSuFl7?=
+ =?us-ascii?Q?dnXNrGTXsclJGs/gMnyvdllUW28hJiGdNUHjbF9FMU0R9ZNgxKmtSL3z4ffP?=
+ =?us-ascii?Q?M76wZlrjarGP6emeRZsBdcszkP//QD4yuhqsaQaF271/ARzQrSKkBkogqN6u?=
+ =?us-ascii?Q?6sv+A941aq4gl1lrrZWnn1Lkb/YKn0G7Ic51?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220311221413.714859-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220311221413.714859-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Mar 2022 19:33:55 +0100
-Message-ID: <CAJZ5v0ghGDys3WuBLtW_BSu_P5aRJQJT4VFoRyuEQWvcUPp9mg@mail.gmail.com>
-Subject: Re: [PATCH] documentation: thermal: DPTF Documentation
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ea0f199-b7c2-4df9-3a7a-08da077ba8a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 18:34:51.7000
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 04ZNGwBjtFA1kIf1F3jqFbKMi6tYk1aCRXNYiXNHZBV6C8D/EW0kUB7GF1jpjcXaWl/AH2CBUAByAxduYdlVzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1499
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 11:14 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Document Intel Dynamic Platform and Thermal Framework (DPTF)
-> ABI.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  Documentation/driver-api/thermal/index.rst    |   1 +
->  .../driver-api/thermal/intel_dptf.rst         | 272 ++++++++++++++++++
->  2 files changed, 273 insertions(+)
->  create mode 100644 Documentation/driver-api/thermal/intel_dptf.rst
->
-> diff --git a/Documentation/driver-api/thermal/index.rst b/Documentation/driver-api/thermal/index.rst
-> index 4cb0b9b6bfb8..030306ffa408 100644
-> --- a/Documentation/driver-api/thermal/index.rst
-> +++ b/Documentation/driver-api/thermal/index.rst
-> @@ -17,3 +17,4 @@ Thermal
->     intel_powerclamp
->     nouveau_thermal
->     x86_pkg_temperature_thermal
-> +   intel_dptf
-> diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-> new file mode 100644
-> index 000000000000..96668dca753a
-> --- /dev/null
-> +++ b/Documentation/driver-api/thermal/intel_dptf.rst
-> @@ -0,0 +1,272 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===============================================================
-> +Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
-> +===============================================================
-> +
-> +:Copyright: |copy| 2022 Intel Corporation
-> +
-> +:Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> +
-> +Introduction
-> +------------
-> +
-> +Intel(R) Dynamic Platform and Thermal Framework (DPTF) is a platform
-> +level hardware/software solution for power and thermal management.
-> +
-> +As a container for multiple power/thermal technologies, DPTF provides
-> +a coordinated approach for different policies to effect the hardware
-> +state of a system.
-> +
-> +Since it is a platform level framework, this has several components.
-> +Some parts of the technology is implemented in the firmware and uses
-> +ACPI and PCI devices to expose various features for monitoring and
-> +control. Linux has a set of kernel drivers exposing hardware interface
-> +to user space. This allows user space thermal solutions like
-> +"Linux Thermal Daemon" to read platform specific thermal and power
-> +tables to deliver adequate performance while keeping the system under
-> +thermal limits.
-> +
-> +DPTF ACPI Drivers interface
-> +----------------------------
-> +
-> +:file:`/sys/bus/platform/devices/<N>/uuids`, where <N>
-> +=INT3400|INTC1040|INTC1041|INTC10A0
-> +
-> +``available_uuids`` (RO)
-> +       A set of UUIDs strings presenting available policies
-> +       which should be notified to the firmware when the
-> +       user space can support those policies.
-> +
-> +       UUID strings:
-> +
-> +       "42A441D6-AE6A-462b-A84B-4A8CE79027D3" : Passive 1
-> +
-> +       "3A95C389-E4B8-4629-A526-C52C88626BAE" : Active
-> +
-> +       "97C68AE7-15FA-499c-B8C9-5DA81D606E0A" : Critical
-> +
-> +       "63BE270F-1C11-48FD-A6F7-3AF253FF3E2D" : Adaptive performance
-> +
-> +       "5349962F-71E6-431D-9AE8-0A635B710AEE" : Emergency call
-> +
-> +       "9E04115A-AE87-4D1C-9500-0F3E340BFE75" : Passive 2
-> +
-> +       "F5A35014-C209-46A4-993A-EB56DE7530A1" : Power Boss
-> +
-> +       "6ED722A7-9240-48A5-B479-31EEF723D7CF" : Virtual Sensor
-> +
-> +       "16CAF1B7-DD38-40ED-B1C1-1B8A1913D531" : Cooling mode
-> +
-> +       "BE84BABF-C4D4-403D-B495-3128FD44dAC1" : HDC
-> +
-> +``current_uuid`` (RW)
-> +       User space can write strings from available UUIDs, one at a
-> +       time.
-> +
-> +:file:`/sys/bus/platform/devices/<N>/`, where <N>
-> +=INT3400|INTC1040|INTC1041|INTC10A0
-> +
-> +``imok`` (WO)
-> +       User space daemon write 1 to respond to firmware event
-> +       for sending keep alive notification. User space receives
-> +       THERMAL_EVENT_KEEP_ALIVE kobject uevent notification when
-> +       firmware calls for user space to respond with imok ACPI
-> +       method.
-> +
-> +``odvp*`` (RO)
-> +       Firmware thermal status variable values. Thermal tables
-> +       calls for different processing based on these variable
-> +       values.
-> +
-> +``data_vault`` (RO)
-> +       Binary thermal table. Refer to
-> +       https:/github.com/intel/thermal_daemon for decoding
-> +       thermal table.
-> +
-> +
-> +ACPI Thermal Relationship table interface
-> +------------------------------------------
-> +
-> +:file:`/dev/acpi_thermal_rel`
-> +
-> +       This device provides IOCTL interface to read standard ACPI
-> +       thermal relationship tables via ACPI methods _TRT and _ART.
-> +       These IOCTLs are defined in
-> +       drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.h
-> +
-> +       IOCTLs:
-> +
-> +       ACPI_THERMAL_GET_TRT_LEN: Get length of TRT table
-> +
-> +       ACPI_THERMAL_GET_ART_LEN: Get length of ART table
-> +
-> +       ACPI_THERMAL_GET_TRT_COUNT: Number of records in TRT table
-> +
-> +       ACPI_THERMAL_GET_ART_COUNT: Number of records in ART table
-> +
-> +       ACPI_THERMAL_GET_TRT: Read binary TRT table, length to read is
-> +       provided via argument to ioctl().
-> +
-> +       ACPI_THERMAL_GET_ART: Read binary ART table, length to read is
-> +       provided via argument to ioctl().
-> +
-> +DPTF ACPI Sensor drivers
-> +-------------------------
-> +
-> +DPTF Sensor drivers are presented as standard thermal sysfs thermal_zone.
-> +
-> +
-> +DPTF ACPI Cooling drivers
-> +--------------------------
-> +
-> +DPTF cooling drivers are presented as standard thermal sysfs cooling_device.
-> +
-> +
-> +DPTF Processor thermal PCI Driver interface
-> +--------------------------------------------
-> +
-> +:file:`/sys/bus/pci/devices/0000\:00\:04.0/power_limits/`
-> +
-> +Refer to Documentation/power/powercap/powercap.rst for powercap
-> +ABI.
-> +
-> +``power_limit_0_max_uw`` (RO)
-> +       Maximum powercap sysfs constraint_0_power_limit_uw for Intel RAPL
-> +
-> +``power_limit_0_step_uw`` (RO)
-> +       Power limit increment/decrements for Intel RAPL constraint 0 power limit
-> +
-> +``power_limit_0_min_uw`` (RO)
-> +       Minimum powercap sysfs constraint_0_power_limit_uw for Intel RAPL
-> +
-> +``power_limit_0_tmin_us`` (RO)
-> +       Minimum powercap sysfs constraint_0_time_window_us for Intel RAPL
-> +
-> +``power_limit_0_tmax_us`` (RO)
-> +       Maximum powercap sysfs constraint_0_time_window_us for Intel RAPL
-> +
-> +``power_limit_1_max_uw`` (RO)
-> +       Maximum powercap sysfs constraint_1_power_limit_uw for Intel RAPL
-> +
-> +``power_limit_1_step_uw`` (RO)
-> +       Power limit increment/decrements for Intel RAPL constraint 1 power limit
-> +
-> +``power_limit_1_min_uw`` (RO)
-> +       Minimum powercap sysfs constraint_1_power_limit_uw for Intel RAPL
-> +
-> +``power_limit_1_tmin_us`` (RO)
-> +       Minimum powercap sysfs constraint_1_time_window_us for Intel RAPL
-> +
-> +``power_limit_1_tmax_us`` (RO)
-> +       Maximum powercap sysfs constraint_1_time_window_us for Intel RAPL
-> +
-> +:file:`/sys/bus/pci/devices/0000\:00\:04.0/`
-> +
-> +``tcc_offset_degree_celsius`` (RW)
-> +       TCC offset from the critical temperature where hardware will throttle
-> +       CPU.
-> +
-> +:file:`/sys/bus/pci/devices/0000\:00\:04.0/workload_request`
-> +
-> +``workload_available_types`` (RO)
-> +       Available workload types. User space can specify one of the workload type
-> +       it is currently executing via workload_type. For example: idle, bursty,
-> +       sustained etc.
-> +
-> +``workload_type`` (RW)
-> +       User space can specify any one of the available workload type using
-> +       this interface.
-> +
-> +DPTF Processor thermal RFIM interface
-> +--------------------------------------------
-> +
-> +RFIM interface allows adjustment of FIVR (Fully Integrated Voltage Regulator)
-> +and DDR (Double Data Rate)frequencies to avoid RF interference with WiFi and 5G.
-> +
-> +Switching voltage regulators (VR) generate radiated EMI or RFI at the
-> +fundamental frequency and its harmonics. Some harmonics may interfere
-> +with very sensitive wireless receivers such as Wi-Fi and cellular that
-> +are integrated into host systems like notebook PCs.  One of mitigation
-> +methods is requesting SOC integrated VR (IVR) switching frequency to a
-> +small % and shift away the switching noise harmonic interference from
-> +radio channels.  OEM or ODMs can use the driver to control SOC IVR
-> +operation within the range where it does not impact IVR performance.
-> +
-> +DRAM devices of DDR IO interface and their power plane can generate EMI
-> +at the data rates. Similar to IVR control mechanism, Intel offers a
-> +mechanism by which DDR data rates can be changed if several conditions
-> +are met: there is strong RFI interference because of DDR; CPU power
-> +management has no other restriction in changing DDR data rates;
-> +PC ODMs enable this feature (real time DDR RFI Mitigation referred to as
-> +DDR-RFIM) for Wi-Fi from BIOS.
-> +
-> +
-> +FIVR attributes
-> +
-> +:file:`/sys/bus/pci/devices/0000\:00\:04.0/fivr/`
-> +
-> +``vco_ref_code_lo`` (RW)
-> +       The VCO reference code is an 11-bit field and controls the FIVR
-> +       switching frequency. This is the 3-bit LSB field.
-> +
-> +``vco_ref_code_hi`` (RW)
-> +       The VCO reference code is an 11-bit field and controls the FIVR
-> +       switching frequency. This is the 8-bit MSB field.
-> +
-> +``spread_spectrum_pct`` (RW)
-> +       Set the FIVR spread spectrum clocking percentage
-> +
-> +``spread_spectrum_clk_enable`` (RW)
-> +       Enable/disable of the FIVR spread spectrum clocking feature
-> +
-> +``rfi_vco_ref_code`` (RW)
-> +       This field is a read only status register which reflects the
-> +       current FIVR switching frequency
-> +
-> +``fivr_fffc_rev`` (RW)
-> +       This field indicated the revision of the FIVR HW.
-> +
-> +
-> +DVFS attributes
-> +
-> +:file:`/sys/bus/pci/devices/0000\:00\:04.0/dvfs/`
-> +
-> +``rfi_restriction_run_busy`` (RW)
-> +       Request the restriction of specific DDR data rate and set this
-> +       value 1. Self reset to 0 after operation.
-> +
-> +``rfi_restriction_err_code`` (RW)
-> +       0 :Request is accepted, 1:Feature disabled,
-> +       2: the request restricts more points than it is allowed
-> +
-> +``rfi_restriction_data_rate_Delta`` (RW)
-> +       Restricted DDR data rate for RFI protection: Lower Limit
-> +
-> +``rfi_restriction_data_rate_Base`` (RW)
-> +       Restricted DDR data rate for RFI protection: Upper Limit
-> +
-> +``ddr_data_rate_point_0`` (RO)
-> +       DDR data rate selection 1st point
-> +
-> +``ddr_data_rate_point_1`` (RO)
-> +       DDR data rate selection 2nd point
-> +
-> +``ddr_data_rate_point_2`` (RO)
-> +       DDR data rate selection 3rd point
-> +
-> +``ddr_data_rate_point_3`` (RO)
-> +       DDR data rate selection 4th point
-> +
-> +``rfi_disable (RW)``
-> +       Disable DDR rate change feature
-> +
-> +DPTF Power supply and Battery Interface
-> +----------------------------------------
-> +
-> +Refer to Documentation/ABI/testing/sysfs-platform-dptf
-> +
-> +DPTF Fan Control
-> +----------------------------------------
-> +
-> +Refer to Documentation/admin-guide/acpi/fan_performance_states.rst
-> --
+[Public]
 
-Applied as 5.18 material, thanks!
+> > Can the USB4 CM make the device links in the DVSEC case perhaps too?  I
+> would
+> > think we want that anyway to control device suspend ordering.
+> >
+> > If I had something discrete to try I'd dust off the DVSEC patch I wrote
+> before to
+> > try it, but alas all I have is integrated stuff on my hand.
+> >
+> >>>> Mika, you might not have seen it yet, but I sent a follow up diff in=
+ this
+> >> thread
+> >>>> to Robin's patch.  If that looks good Robin can submit a v2 (or I'm =
+happy
+> to
+> >> do
+> >>>> so as well as I confirmed it helps my original intent too).
+> >>>
+> >>> I saw it now and I'm thinking are we making this unnecessary complex?=
+ I
+> >>> mean Microsoft solely depends on the DMAR platform opt-in flag:
+> >>>
+> >>>
+> >>
+> >
+> > I think Microsoft doesn't allow you to turn off the IOMMU though or put=
+ it
+> in
+> > passthrough through on the kernel command line.
+> >
+> >>> We also do turn on full IOMMU mappings in that case for devices that
+> are
+> >>> marked as external facing by the same firmware that provided the
+> DMAR
+> >>> bit. If the user decides to disable IOMMU from command line for
+> instance
+> >>> then we expect she knows what she is doing.
+> >>
+> >> Yeah, if external_facing is set correctly then we can safely expect th=
+e
+> >> the IOMMU layer to do the right thing, so in that case it probably is =
+OK
+> >> to infer that if an IOMMU is present for the NHI then it'll be managin=
+g
+> >> that whole bus hierarchy. What I'm really thinking about here is wheth=
+er
+> >> we can defend against a case when external_facing *isn't* set, so we
+> >> treat the tunnelled ports as normal PCI buses, assume it's OK since
+> >> we've got an IOMMU and everything else is getting translation domains
+> by
+> >> default, but then a Thunderbolt device shows up masquerading the
+> VID:DID
+> >> of something that gets a passthrough quirk, and thus tricks its way
+> >> through the perceived protection.
+> >>
+> >> Robin.
+> >
+> > Unless it happened after 5.17-rc8 looking at the code I think that's In=
+tel
+> > specific behavior though at the moment (has_external_pci).  I don't see=
+ it
+> > in a generic layer.
+>=20
+> Ah, it's not necessarily the most obvious thing -
+> pci_dev->external_facing gets propagated through to pci_dev->untrusted
+> by set_pcie_untrusted(), and it's that that's then checked by
+> iommu_get_def_domain_type() to enforce a translation domain regardless
+> of default passthrough or quirks. It's then further checked by
+> iommu-dma's dev_is_untrusted() to enforce bounce-buffering to avoid data
+> leakage in sub-page mappings too.
+>=20
+
+Ah thanks for explaining it, that was immediately obvious to me.
+
+> > In addition to the point Robin said about firmware not setting external
+> facing
+> > if the IOMMU was disabled on command line then iommu_dma_protection
+> > would be showing the wrong values meaning userspace may choose to
+> > authorize the device automatically in a potentially unsafe scenario.
+> >
+> > Even if the user "knew what they were doing", I would expect that we st=
+ill
+> > do our best to protect them from themselves and not advertise something
+> > that will cause automatic authorization.
+>=20
+> Might it be reasonable for the Thunderbolt core to check early on if any
+> tunnelled ports are not marked as external facing, and if so just tell
+> the user that iommu_dma_protection is off the table and anything they
+> authorise is at their own risk?
+>=20
+> Robin.
+
+How about in iommu_dma_protection_show to just check that all the device
+links to the NHI are marked as untrusted?
+
+Then if there are device links missing we solve that separately (discrete U=
+SB4
+DVSEC case we just need to make those device links).

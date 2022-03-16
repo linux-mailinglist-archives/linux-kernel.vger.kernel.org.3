@@ -2,173 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2894DA709
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70424DA713
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351210AbiCPApW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 20:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
+        id S1352850AbiCPAtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 20:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiCPApT (ORCPT
+        with ESMTP id S245035AbiCPAtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 20:45:19 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217833A18F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:44:06 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id w16so1641051ybi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=82AfxM9iWnmVbmHsCRPs5CDEdlL0ZgkL1CBgzMeozWA=;
-        b=HjI4FtQJjPwIQM6KCfd/DEBcIiXtO+1ZVNN+7Q1olj8MlOm0y9YfuZNo+uF7xqnLSg
-         eAG1N47VmWf3OsLK4bNAgem70pW6Sokraw+2xztuQMv0As9tkyKxHOwuuURFz160Yxxv
-         P/OmNm2/o5y/Sdly2KmigBaKeA5hs2w4WCzTgNATocIHFiVYi2+ENnnyNAE3QGrRt4mo
-         0thJPKAkX+dZxzXDKQT7Alr5nTzt1w+rBx6l1MH3V5wTVURtKmWfMyiJoh0Nl2jpIGoP
-         j9EXT2uSd/aFSIsx10vtpdXtOgPKVaDwgynhpMwv0vi9mU0h7ivfTJAe0x2mgAhbm9pt
-         WuaQ==
+        Tue, 15 Mar 2022 20:49:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2376D65DA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647391672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=re2Tam7gtcX+vvhHqkMR415En/YB7irGYee1U4ejwNA=;
+        b=elymFTn/ErjLDxxZMZYydGKToBF9IBYLy8B/RG4niGzDDzGCyYXA0Lis4u+Xd5fmVJFGZC
+        cY92qoRzAMdbFnxrUM5a4gvaJHMbA2gL7FhqvQWb/ah1Vf4vgqQEXfTCQj82w2pqOeyIza
+        AMoFn9Bo5JtxSq1Q7YVaFWAw1l2vtu0=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-294-47ITKQV1M9OC4PGZAVfUGQ-1; Tue, 15 Mar 2022 20:47:51 -0400
+X-MC-Unique: 47ITKQV1M9OC4PGZAVfUGQ-1
+Received: by mail-pj1-f72.google.com with SMTP id t10-20020a17090a5d8a00b001bed9556134so3129289pji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:47:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=82AfxM9iWnmVbmHsCRPs5CDEdlL0ZgkL1CBgzMeozWA=;
-        b=HSFJLTC9OkisM5rxCzI2RH85/d2NvPxinY3WePSrLOFtpJHtKtxapl/VslIiN2h1D7
-         CBBDZ9RQiX5wVVEu17e8RopnGOJDIK2z/asjqzeD/5t2gTfAuCmYS9SHFykGWrz/spbZ
-         WRv0wW6L3pAh7D1bma7GHMSCH9pBrXPa1FdW9BlKF4OcUL3wZSNsCB2kBsUxNowo+Fyn
-         PT1o01NidQwV98m9iSEvUtt/330B48WkbsPBRk588hCLFS96QA0uuBMcafD9Nh6nz3+3
-         O8dANj8+oXz+oGvRMTft5d+8N4GsrQhCdvGY4/ZLRAkxaVDIkfoPztbEfESWmhkHc/7P
-         2nwQ==
-X-Gm-Message-State: AOAM530L3lGuWraVlxm22YLmMCQE9lIF+5TTeC9+fXSzjiIXGmdmLXju
-        UsFnGtZXdrwvveTE/7iUM4XSn9iF6JtfI2fMlVbdLg==
-X-Google-Smtp-Source: ABdhPJwAQvb3ghxoP3pI5m1Z3v3jw3I83xYnaaMv5u9LKgogJDBAjewC7noL1WOiyI1NsyN7W0n+XT8qU92gaoiinQU=
-X-Received: by 2002:a25:943:0:b0:633:883b:3e21 with SMTP id
- u3-20020a250943000000b00633883b3e21mr2284628ybm.132.1647391445249; Tue, 15
- Mar 2022 17:44:05 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=re2Tam7gtcX+vvhHqkMR415En/YB7irGYee1U4ejwNA=;
+        b=cZfaAO/jAL5k+CeVl1RTwfbgpKNQVCmnmj0oOmwgCwBtQJsBH4AfR45uhoGKy3kpGv
+         ilOwVC21lFC9SitgrRRTIiLYXLzJpM/Q+5tj4YzBRQMt9LJY/0zvKt+el1G6KhRsf9rV
+         WTgsnuIXvAggGBi4NbqFyJ8PrIQqPpBiLj3rR5x5ScBCUiosxK9smVLQpQX1mI51RsZ8
+         39KDQdBZdXuoSobXfP6qXIKNbuLseWo6UnHaCyf4XnaUhsdan0ZK1pRkRs8sk5OEJBU9
+         PXBR0hYM/D3JTwVTTqJRGEhWKbUTQq7feKaB7lGpgrpnGi+bpj919dy9/qVa7/kGa76D
+         VzBg==
+X-Gm-Message-State: AOAM5309L1BFnjocJYlFU+4TuVRmnc9r5E7xaQ3f2Dt1y5dut2blN2qx
+        Ou9pwne+vS4t+E2b9nCkMGlgbvH/ydqpf4KV47XkjfBMhihV766WRuU+APR5Z1LHUILqDeLlLOU
+        927mQGGxnDZq/X5ZbcDg3rEO8EUioCjlAQANsh0iTtXKHyih2myvev67iQyf1fLSD36Tbm2ggqQ
+        ==
+X-Received: by 2002:aa7:8385:0:b0:4f6:ef47:e943 with SMTP id u5-20020aa78385000000b004f6ef47e943mr31877901pfm.38.1647391669657;
+        Tue, 15 Mar 2022 17:47:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzt+STF+Jr2foxSo0t7cfUMP5etUeSHxZ4B5S4Lb1iNYGvu0hKG28/BSxJ1czpZ5RaBwHLrfw==
+X-Received: by 2002:aa7:8385:0:b0:4f6:ef47:e943 with SMTP id u5-20020aa78385000000b004f6ef47e943mr31877871pfm.38.1647391669165;
+        Tue, 15 Mar 2022 17:47:49 -0700 (PDT)
+Received: from [10.72.12.110] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm418092pgr.37.2022.03.15.17.47.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 17:47:48 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 2/3] ceph: add support for handling encrypted
+ snapshot names
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220315161959.19453-1-lhenriques@suse.de>
+ <20220315161959.19453-3-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <972eafc3-93a3-b523-4ad2-e234b3664635@redhat.com>
+Date:   Wed, 16 Mar 2022 08:47:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220315042355.362810-1-luofei@unicloud.com> <CAMZfGtWjnhZLVmRD0BSpMbAWr_vD5BCj5s0ARfNHpHeAAGWYjA@mail.gmail.com>
- <a56e0ea8-3b11-8239-d39c-ed33e479427e@oracle.com>
-In-Reply-To: <a56e0ea8-3b11-8239-d39c-ed33e479427e@oracle.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 16 Mar 2022 08:42:14 +0800
-Message-ID: <CAMZfGtUP-Uczx+fiP+28HnPjsGNSvCF5SR87war=MGzbmzBn4Q@mail.gmail.com>
-Subject: Re: [PATCH] hugetlbfs: fix description about atomic allocation of
- vmemmap pages when free huge page
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     luofei <luofei@unicloud.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220315161959.19453-3-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 5:16 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+
+On 3/16/22 12:19 AM, Luís Henriques wrote:
+> When creating a snapshot, the .snap directories for every subdirectory will
+> show the snapshot name in the "long format":
 >
-> On 3/15/22 06:29, Muchun Song wrote:
-> > On Tue, Mar 15, 2022 at 12:24 PM luofei <luofei@unicloud.com> wrote:
-> >>
-> >> No matter what context update_and_free_page() is called in,
-> >> the flag for allocating the vmemmap page is fixed
-> >> (GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE), and no atomic
-> >> allocation is involved, so the description of atomicity here
-> >> is somewhat inappropriate.
-> >>
-> >> and the atomic parameter naming of update_and_free_page() is
-> >> somewhat misleading.
-> >>
-> >> Signed-off-by: luofei <luofei@unicloud.com>
-> >> ---
-> >>  mm/hugetlb.c | 10 ++++------
-> >>  1 file changed, 4 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> >> index f8ca7cca3c1a..239ef82b7897 100644
-> >> --- a/mm/hugetlb.c
-> >> +++ b/mm/hugetlb.c
-> >> @@ -1570,8 +1570,8 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
-> >>
-> >>  /*
-> >>   * As update_and_free_page() can be called under any context, so we cannot
-> >> - * use GFP_KERNEL to allocate vmemmap pages. However, we can defer the
-> >> - * actual freeing in a workqueue to prevent from using GFP_ATOMIC to allocate
-> >> + * use GFP_ATOMIC to allocate vmemmap pages. However, we can defer the
-> >> + * actual freeing in a workqueue to prevent waits caused by allocating
-> >>   * the vmemmap pages.
-> >>   *
-> >>   * free_hpage_workfn() locklessly retrieves the linked list of pages to be
-> >> @@ -1617,16 +1617,14 @@ static inline void flush_free_hpage_work(struct hstate *h)
-> >>  }
-> >>
-> >>  static void update_and_free_page(struct hstate *h, struct page *page,
-> >> -                                bool atomic)
-> >> +                                bool delay)
-> >
-> > Hi luofei,
-> >
-> > At least, I don't agree with this change.  The "atomic" means if the
-> > caller is under atomic context instead of whether using atomic
-> > GFP_MASK.  The "delay" seems to tell the caller that it can undelay
-> > the allocation even if it is under atomic context (actually, it has no
-> > choice).  But "atomic" can indicate the user is being asked to tell us
-> > if it is under atomic context.
+>    # mkdir .snap/my-snap
+>    # ls my-dir/.snap/
+>    _my-snap_1099511627782
 >
-> There may be some confusion since GFP_ATOMIC is mentioned in the comments
-> and GFP_ATOMIC is not used in the allocation of vmemmap pages.  IIRC,
-> the use of GFP_ATOMIC was discussed at one time but dismissed because of
-> undesired side effects such as dipping into "atomic reserves".
+> Encrypted snapshots will need to be able to handle these snapshot names by
+> encrypting/decrypting only the snapshot part of the string ('my-snap').
 >
-> How about an update to the comments as follows (sorry mailer may mess up
-> formatting)?
+> Also, since the MDS prevents snapshot names to be bigger than 240 characters
+> it is necessary to adapt CEPH_NOHASH_NAME_MAX to accommodate this extra
+> limitation.
 >
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index f8ca7cca3c1a..6a4d27e24b21 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1569,10 +1569,12 @@ static void __update_and_free_page(struct hstate *h, struct page *page)
->  }
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/crypto.c | 158 +++++++++++++++++++++++++++++++++++++++++------
+>   fs/ceph/crypto.h |  11 ++--
+>   2 files changed, 145 insertions(+), 24 deletions(-)
 >
->  /*
-> - * As update_and_free_page() can be called under any context, so we cannot
-> - * use GFP_KERNEL to allocate vmemmap pages. However, we can defer the
-> - * actual freeing in a workqueue to prevent from using GFP_ATOMIC to allocate
-> - * the vmemmap pages.
-> + * Freeing hugetlb pages in done in update_and_free_page().  When freeing a
-> + * hugetlb page, vmemmap pages may need to be allocated.  The routine
-> + * alloc_huge_page_vmemmap() can possibly sleep as it uses GFP_KERNEL.
-> + * However, update_and_free_page() can be called under any context.  To
-> + * avoid the possibility of sleeping in a context where sleeping is not
-> + * allowed, defer the actual freeing in a workqueue where sleeping is allowed.
->   *
->   * free_hpage_workfn() locklessly retrieves the linked list of pages to be
->   * freed and frees them one-by-one. As the page->mapping pointer is going
-> @@ -1616,6 +1618,10 @@ static inline void flush_free_hpage_work(struct hstate *h)
->                 flush_work(&free_hpage_work);
->  }
->
+> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+> index c125a79019b3..06a4b918201c 100644
+> --- a/fs/ceph/crypto.c
+> +++ b/fs/ceph/crypto.c
+> @@ -128,18 +128,95 @@ void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_se
+>   	swap(req->r_fscrypt_auth, as->fscrypt_auth);
+>   }
+>   
+> -int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name, char *buf)
 > +/*
-> + * atomic == true indicates called from a context where sleeping is
-> + * not allowed.
+> + * User-created snapshots can't start with '_'.  Snapshots that start with this
+> + * character are special (hint: there aren't real snapshots) and use the
+> + * following format:
+> + *
+> + *   _<SNAPSHOT-NAME>_<INODE-NUMBER>
+> + *
+> + * where:
+> + *  - <SNAPSHOT-NAME> - the real snapshot name that may need to be decrypted,
+> + *  - <INODE-NUMBER> - the inode number for the actual snapshot
+> + *
+> + * This function parses these snapshot names and returns the inode
+> + * <INODE-NUMBER>.  'name_len' will also bet set with the <SNAPSHOT-NAME>
+> + * length.
 > + */
->  static void update_and_free_page(struct hstate *h, struct page *page,
->                                  bool atomic)
->  {
-> @@ -1625,7 +1631,8 @@ static void update_and_free_page(struct hstate *h, struct page *page,
->         }
->
->         /*
-> -        * Defer freeing to avoid using GFP_ATOMIC to allocate vmemmap pages.
-> +        * Defer freeing to avoid possible sleeping when allocating
-> +        * vmemmap pages.
->          *
->          * Only call schedule_work() if hpage_freelist is previously
->          * empty. Otherwise, schedule_work() had been called but the workfn
+> +static struct inode *parse_longname(const struct inode *parent, const char *name,
+> +				    int *name_len)
+>   {
+> +	struct inode *dir = NULL;
+> +	struct ceph_vino vino = { .snap = CEPH_NOSNAP };
+> +	char *inode_number;
+> +	char *name_end;
+> +	int orig_len = *name_len;
+> +	int ret = -EIO;
+> +
+> +	/* Skip initial '_' */
+> +	name++;
+> +	name_end = strrchr(name, '_');
+> +	if (!name_end) {
+> +		dout("Failed to parse long snapshot name: %s\n", name);
+> +		return ERR_PTR(-EIO);
+> +	}
+> +	*name_len = (name_end - name);
+> +	if (*name_len <= 0) {
+> +		pr_err("Failed to parse long snapshot name\n");
+> +		return ERR_PTR(-EIO);
+> +	}
+> +
+> +	/* Get the inode number */
+> +	inode_number = kmemdup_nul(name_end + 1,
+> +				   orig_len - *name_len - 2,
+> +				   GFP_KERNEL);
+> +	if (!inode_number)
+> +		return ERR_PTR(-ENOMEM);
+> +	ret = kstrtou64(inode_number, 0, &vino.ino);
+> +	if (ret) {
+> +		dout("Failed to parse inode number: %s\n", name);
+> +		dir = ERR_PTR(ret);
+> +		goto out;
+> +	}
+> +
+> +	/* And finally the inode */
+> +	dir = ceph_get_inode(parent->i_sb, vino, NULL);
+
+Maybe you should use ceph_find_inode() here ? We shouldn't insert a new 
+one here. And IMO the parent dir inode must be in the cache...
+
+
+> +	if (IS_ERR(dir))
+> +		dout("Can't find inode %s (%s)\n", inode_number, name);
+> +
+> +out:
+> +	kfree(inode_number);
+> +	return dir;
+> +}
+
+Here I think you have missed one case, not all the long snap names are 
+needed to be dencrypted if they are from the parent snap realms, who are 
+not encrypted, for example:
+
+mkdir dir1
+
+fscrypt encrypt dir1
+
+mkdir dir1/dir2
+
+mkdir .snap/root_snap
+
+mkdir dir1/.snap/dir1_snap
+
+ls dir1/dir2/.snap/
+
+_root_snap_1  _dir1_snap_1099511628283
+
+You shouldn't encrypt the "_root_snap_1" long name.
+
+
+> +
+> +int ceph_encode_encrypted_dname(struct inode *parent, struct qstr *d_name, char *buf)
+> +{
+> +	struct inode *dir = parent;
+> +	struct qstr iname;
+>   	u32 len;
+> +	int name_len;
+>   	int elen;
+>   	int ret;
+> -	u8 *cryptbuf;
+> +	u8 *cryptbuf = NULL;
+>   
+>   	if (!fscrypt_has_encryption_key(parent)) {
+>   		memcpy(buf, d_name->name, d_name->len);
+>   		return d_name->len;
+>   	}
+>   
+> +	iname.name = d_name->name;
+> +	name_len = d_name->len;
+> +
+> +	/* Handle the special case of snapshot names that start with '_' */
+> +	if ((ceph_snap(dir) == CEPH_SNAPDIR) && (name_len > 0) &&
+> +	    (iname.name[0] == '_')) {
+> +		dir = parse_longname(parent, iname.name, &name_len);
+> +		if (IS_ERR(dir))
+> +			return PTR_ERR(dir);
+> +		iname.name++; /* skip initial '_' */
+> +	}
+> +	iname.len = name_len;
+> +
+
+Maybe you can do this just before checking the 
+fscrypt_has_encryption_key() to fix the issue mentioned above ?
+
+
+>   	/*
+>   	 * convert cleartext d_name to ciphertext
+>   	 * if result is longer than CEPH_NOKEY_NAME_MAX,
+> @@ -147,18 +224,22 @@ int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name,
+>   	 *
+>   	 * See: fscrypt_setup_filename
+>   	 */
+> -	if (!fscrypt_fname_encrypted_size(parent, d_name->len, NAME_MAX, &len))
+> -		return -ENAMETOOLONG;
+> +	if (!fscrypt_fname_encrypted_size(dir, iname.len, NAME_MAX, &len)) {
+> +		elen = -ENAMETOOLONG;
+> +		goto out;
+> +	}
+>   
+>   	/* Allocate a buffer appropriate to hold the result */
+>   	cryptbuf = kmalloc(len > CEPH_NOHASH_NAME_MAX ? NAME_MAX : len, GFP_KERNEL);
+> -	if (!cryptbuf)
+> -		return -ENOMEM;
+> +	if (!cryptbuf) {
+> +		elen = -ENOMEM;
+> +		goto out;
+> +	}
+>   
+> -	ret = fscrypt_fname_encrypt(parent, d_name, cryptbuf, len);
+> +	ret = fscrypt_fname_encrypt(dir, &iname, cryptbuf, len);
+>   	if (ret) {
+> -		kfree(cryptbuf);
+> -		return ret;
+> +		elen = ret;
+> +		goto out;
+>   	}
+>   
+>   	/* hash the end if the name is long enough */
+> @@ -174,12 +255,24 @@ int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name,
+>   
+>   	/* base64 encode the encrypted name */
+>   	elen = fscrypt_base64url_encode(cryptbuf, len, buf);
+> -	kfree(cryptbuf);
+>   	dout("base64-encoded ciphertext name = %.*s\n", elen, buf);
+> +
+> +	if ((elen > 0) && (dir != parent)) {
+> +		char tmp_buf[FSCRYPT_BASE64URL_CHARS(NAME_MAX)];
+> +
+
+Do we really need FSCRYPT_BASE64URL_CHARS(NAME_MAX) ? Since you have fix 
+the 189->180 code, then the encrypted long snap name shouldn't exceed 255.
+
+I think the NAME_MAX is enough.
+
+And also you should check the elen here it shouldn't exceed 240 after 
+encrypted, or should we fail it here directly with a warning log ?
+
+
+> +		elen = snprintf(tmp_buf, sizeof(tmp_buf), "_%.*s_%ld",
+> +				elen, buf, dir->i_ino);
+> +		memcpy(buf, tmp_buf, elen);
+> +	}
+> +
+> +out:
+> +	kfree(cryptbuf);
+> +	if (dir != parent)
+> +		iput(dir);
+>   	return elen;
+>   }
+>   
+> -int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentry, char *buf)
+> +int ceph_encode_encrypted_fname(struct inode *parent, struct dentry *dentry, char *buf)
+>   {
+>   	WARN_ON_ONCE(!fscrypt_has_encryption_key(parent));
+>   
+> @@ -204,11 +297,14 @@ int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentr
+>   int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>   		      struct fscrypt_str *oname, bool *is_nokey)
+>   {
+> -	int ret;
+> +	struct inode *dir = fname->dir;
+>   	struct fscrypt_str _tname = FSTR_INIT(NULL, 0);
+>   	struct fscrypt_str iname;
+> +	char *name = fname->name;
+> +	int name_len = fname->name_len;
+> +	int ret;
+>   
+> -	if (!IS_ENCRYPTED(fname->dir)) {
+> +	if (!IS_ENCRYPTED(dir)) {
+>   		oname->name = fname->name;
+>   		oname->len = fname->name_len;
+>   		return 0;
+> @@ -218,15 +314,24 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>   	if (fname->name_len > NAME_MAX || fname->ctext_len > NAME_MAX)
+>   		return -EIO;
+>   
+> -	ret = __fscrypt_prepare_readdir(fname->dir);
+> +	/* Handle the special case of snapshot names that start with '_' */
+> +	if ((ceph_snap(dir) == CEPH_SNAPDIR) && (name_len > 0) &&
+> +	    (name[0] == '_')) {
+> +		dir = parse_longname(dir, name, &name_len);
+> +		if (IS_ERR(dir))
+> +			return PTR_ERR(dir);
+> +		name++; /* skip initial '_' */
+> +	}
+> +
+> +	ret = __fscrypt_prepare_readdir(dir);
+>   	if (ret)
+> -		return ret;
+> +		goto out_inode;
+>   
+>   	/*
+>   	 * Use the raw dentry name as sent by the MDS instead of
+>   	 * generating a nokey name via fscrypt.
+>   	 */
+> -	if (!fscrypt_has_encryption_key(fname->dir)) {
+> +	if (!fscrypt_has_encryption_key(dir)) {
+>   		if (fname->no_copy)
+>   			oname->name = fname->name;
+>   		else
+> @@ -234,7 +339,8 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>   		oname->len = fname->name_len;
+>   		if (is_nokey)
+>   			*is_nokey = true;
+> -		return 0;
+> +		ret = 0;
+> +		goto out_inode;
+>   	}
+>   
+>   	if (fname->ctext_len == 0) {
+> @@ -243,11 +349,11 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>   		if (!tname) {
+>   			ret = fscrypt_fname_alloc_buffer(NAME_MAX, &_tname);
+>   			if (ret)
+> -				return ret;
+> +				goto out_inode;
+>   			tname = &_tname;
+>   		}
+>   
+> -		declen = fscrypt_base64url_decode(fname->name, fname->name_len, tname->name);
+> +		declen = fscrypt_base64url_decode(name, name_len, tname->name);
+>   		if (declen <= 0) {
+>   			ret = -EIO;
+>   			goto out;
+> @@ -259,9 +365,21 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>   		iname.len = fname->ctext_len;
+>   	}
+>   
+> -	ret = fscrypt_fname_disk_to_usr(fname->dir, 0, 0, &iname, oname);
+> +	ret = fscrypt_fname_disk_to_usr(dir, 0, 0, &iname, oname);
+> +	if (!ret && (dir != fname->dir)) {
+> +		char tmp_buf[FSCRYPT_BASE64URL_CHARS(NAME_MAX)];
+> +
+> +		name_len = snprintf(tmp_buf, sizeof(tmp_buf), "_%.*s_%ld",
+> +				    oname->len, oname->name, dir->i_ino);
+> +		memcpy(oname->name, tmp_buf, name_len);
+> +		oname->len = name_len;
+> +	}
+> +
+>   out:
+>   	fscrypt_fname_free_buffer(&_tname);
+> +out_inode:
+> +	if ((dir != fname->dir) && !IS_ERR(dir))
+> +		iput(dir);
+>   	return ret;
+>   }
+>   
+> diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
+> index 185fb4799a6d..e38a842e02a6 100644
+> --- a/fs/ceph/crypto.h
+> +++ b/fs/ceph/crypto.h
+> @@ -76,13 +76,16 @@ static inline u32 ceph_fscrypt_auth_len(struct ceph_fscrypt_auth *fa)
+>    * smaller size. If the ciphertext name is longer than the value below, then
+>    * sha256 hash the remaining bytes.
+>    *
+> - * 189 bytes => 252 bytes base64-encoded, which is <= NAME_MAX (255)
+> + * 180 bytes => 240 bytes base64-encoded, which is <= NAME_MAX (255)
+> + *
+> + * (Note: 240 bytes is the maximum size allowed for snapshot names to take into
+> + *  account the format: '_<SNAPSHOT-NAME>_<INODE-NUMBER>')
+>    *
+>    * Note that for long names that end up having their tail portion hashed, we
+>    * must also store the full encrypted name (in the dentry's alternate_name
+>    * field).
+>    */
+> -#define CEPH_NOHASH_NAME_MAX (189 - SHA256_DIGEST_SIZE)
+> +#define CEPH_NOHASH_NAME_MAX (180 - SHA256_DIGEST_SIZE)
+>   
+>   void ceph_fscrypt_set_ops(struct super_block *sb);
+>   
+> @@ -91,8 +94,8 @@ void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc);
+>   int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
+>   				 struct ceph_acl_sec_ctx *as);
+>   void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_sec_ctx *as);
+> -int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name, char *buf);
+> -int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentry, char *buf);
+> +int ceph_encode_encrypted_dname(struct inode *parent, struct qstr *d_name, char *buf);
+> +int ceph_encode_encrypted_fname(struct inode *parent, struct dentry *dentry, char *buf);
+>   
+>   static inline int ceph_fname_alloc_buffer(struct inode *parent, struct fscrypt_str *fname)
+>   {
 >
 
-LGTM. Thanks Mike.

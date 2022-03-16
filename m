@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C374DBB46
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C1A4DBB49
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348481AbiCPXoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S1350541AbiCPXon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiCPXoB (ORCPT
+        with ESMTP id S1350051AbiCPXol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:44:01 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9F11AD86;
-        Wed, 16 Mar 2022 16:42:45 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j17so5185075wrc.0;
-        Wed, 16 Mar 2022 16:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9GllwDD1lbwf5TdbQUghkmXuyp60McuGtPv3Aj+W5Go=;
-        b=mDD+sPjAuJQoC7C5Am/WO2Wsonxpx/hUAZwYXHzAT+YKEM1o7bO8aHOT+QrRd8RXrn
-         xEscKX2S0JBAQcGrmW2ytZ9rJVP4VdoZtFOTHAcovTBpvQQswajvJ82OjCzgQpi6Hrmm
-         7WblHE81ndtm6zkv/2xcteUc6rBDb1MUy4OLgKn9BPx//0/Iz9iNVnyCtlnpBIkoZ8+Z
-         KprSeQA/4qYN4/6aOd5PTsN6YAcfoYUdEUaTx15tVhmc983SMhdpc29cuaOZ6fIVcrUx
-         JWJvLMHmP++asFHbwV6cPpjpRqmCxufxxA8A9wR+0vVCsNAJDpiXvNRn1l395a3HQw7u
-         ZxVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9GllwDD1lbwf5TdbQUghkmXuyp60McuGtPv3Aj+W5Go=;
-        b=1CAcdhVyJTYoMkQHTSXtCRng8qVY07elJwM4kixUNg0xVy29wE6THkRahWa0xTFO4Q
-         z4uiE/7fnF1kn5WYyaH+7X9ghcDlWuhJO2cz5agWncp5vG+7FwrCMhh8mBwnz3gqJOls
-         mTowpa9cZJ62yGRH+KN8GMWU0QM5Rg4wfY4gQDuAnvAlRttoUhEnXQdIHqrHG6sRBJ7m
-         EOQzaOEuwcc+0f6FUBCgs6t9iyEGoIxP0IUJSrzpnvgCp+vjvFclLRM8eulpARc5Kwr5
-         HTEY9C8lm75C0k1RzfjDkQhfZ/f4gx/eQa+oA0rVd0bgsYnIG3kwMBaao+TU7nemGmYf
-         /IOQ==
-X-Gm-Message-State: AOAM53300YoICbvrtsn/HLDQWHCGMuomONu65MMm4RSIWi5CmT4+4j0P
-        kNgZz25rGhD8KUfZRF8Ei2F0QilBamKfIw==
-X-Google-Smtp-Source: ABdhPJx+ifk/0d/5lefPj0dTm/N0bmsw3Ym25Aw1wpy8wOkWUPMJBtSc4nAyoD2h3byfIx2uXXl4sQ==
-X-Received: by 2002:a5d:64c5:0:b0:1f1:e6b8:bd3c with SMTP id f5-20020a5d64c5000000b001f1e6b8bd3cmr1711097wri.686.1647474164008;
-        Wed, 16 Mar 2022 16:42:44 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a14-20020a05600c348e00b00389ab74c033sm2779518wmq.4.2022.03.16.16.42.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 16:42:43 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rtw89: Fix spelling mistake "Mis-Match" -> "Mismatch"
-Date:   Wed, 16 Mar 2022 23:42:42 +0000
-Message-Id: <20220316234242.55515-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 16 Mar 2022 19:44:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1CE6324
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:43:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647474204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iZw0o0A4wRb2qEwrMVhNIrLoqsDfPePK9xt/pyVjrAQ=;
+        b=AU7pkwzrq7DJ8i89Uj8mtUuyF30EHQeHavZNNrdjXtGWh/R1Lh4T55fSsk3mQYz1e8SogC
+        9UonoXlsiSYi/14nq2JJkib8PJsHFqZmBqyv5eN84AxLfpRCqcp1yIGBFv4cpwYbxpDneq
+        Y4m3FRukny05JE8YNDtK2+SN8FEqM8/nGr0MMyYGyK68bHXgzTa0L8HWMd7unhpFtMeCyF
+        bwBR8u8MOZofWAEJnCELU8Iuh6SFiUsVHwwEtWrY0oy261UVwjeUBt5/hivcmIBJkX+BHK
+        mhGTPW/L7GU2BLgq6XuNgUdbWCahtEYUmMkxAfyYeXq3M82KAWh+B1mpSlmS5g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647474204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iZw0o0A4wRb2qEwrMVhNIrLoqsDfPePK9xt/pyVjrAQ=;
+        b=kRwJIYwOEPlIMYqkWbloe/H5BYBwA/LOhKfuF3SKqOjaWQmyF8PspBBna2uW1N6QFMfgEd
+        RHoxUaHjESk1f4CQ==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 03/30] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+In-Reply-To: <20220316020856.24435-4-kirill.shutemov@linux.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-4-kirill.shutemov@linux.intel.com>
+Date:   Thu, 17 Mar 2022 00:43:23 +0100
+Message-ID: <87ilsd31lw.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some spelling mistakes in some literal strings. Fix them.
+On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
+> +/*
+> + * Wrapper for standard use of __tdx_hypercall with no output aside from
+> + * return code.
+> + */
+> +static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
+> +{
+> +	struct tdx_hypercall_args args = {
+> +		.r10 = TDX_HYPERCALL_STANDARD,
+> +		.r11 = fn,
+> +		.r12 = r12,
+> +		.r13 = r13,
+> +		.r14 = r14,
+> +		.r15 = r15,
+> +	};
+> +
+> +	return __tdx_hypercall(&args, 0);
+> +}
+> +
+> +/* Called from __tdx_hypercall() for unrecoverable failure */
+> +void __tdx_hypercall_failed(void)
+> +{
+> +	panic("TDVMCALL failed. TDX module bug?");
+> +}
+>  void __init tdx_early_init(void)
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/wireless/realtek/rtw89/coex.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Lacks a new line before tdx_early_init().
 
-diff --git a/drivers/net/wireless/realtek/rtw89/coex.c b/drivers/net/wireless/realtek/rtw89/coex.c
-index 07f26718b66f..99abd0fe7f15 100644
---- a/drivers/net/wireless/realtek/rtw89/coex.c
-+++ b/drivers/net/wireless/realtek/rtw89/coex.c
-@@ -4623,12 +4623,12 @@ static void _show_cx_info(struct rtw89_dev *rtwdev, struct seq_file *m)
- 	ver_hotfix = FIELD_GET(GENMASK(15, 8), chip->wlcx_desired);
- 	seq_printf(m, "(%s, desired:%d.%d.%d), ",
- 		   (wl->ver_info.fw_coex >= chip->wlcx_desired ?
--		   "Match" : "Mis-Match"), ver_main, ver_sub, ver_hotfix);
-+		   "Match" : "Mismatch"), ver_main, ver_sub, ver_hotfix);
- 
- 	seq_printf(m, "BT_FW_coex:%d(%s, desired:%d)\n",
- 		   bt->ver_info.fw_coex,
- 		   (bt->ver_info.fw_coex >= chip->btcx_desired ?
--		   "Match" : "Mis-Match"), chip->btcx_desired);
-+		   "Match" : "Mismatch"), chip->btcx_desired);
- 
- 	if (bt->enable.now && bt->ver_info.fw == 0)
- 		rtw89_btc_fw_en_rpt(rtwdev, RPT_EN_BT_VER_INFO, true);
-@@ -5075,7 +5075,7 @@ static void _show_dm_info(struct rtw89_dev *rtwdev, struct seq_file *m)
- 	seq_printf(m, "leak_ap:%d, fw_offload:%s%s\n", dm->leak_ap,
- 		   (BTC_CX_FW_OFFLOAD ? "Y" : "N"),
- 		   (dm->wl_fw_cx_offload == BTC_CX_FW_OFFLOAD ?
--		    "" : "(Mis-Match!!)"));
-+		    "" : "(Mismatch!!)"));
- 
- 	if (dm->rf_trx_para.wl_tx_power == 0xff)
- 		seq_printf(m,
--- 
-2.35.1
+Other than that:
 
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>

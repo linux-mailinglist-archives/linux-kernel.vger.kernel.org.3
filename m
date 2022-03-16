@@ -2,170 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75B54DB6AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7704DB6AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357571AbiCPQuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S241936AbiCPQu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357565AbiCPQty (ORCPT
+        with ESMTP id S1348702AbiCPQuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:49:54 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E26377D8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:48:39 -0700 (PDT)
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6C6B43F4C1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647449318;
-        bh=BYM5WDvDYDcwIeTSiyEk3x1GtL/EefMaA8BGpQ/2v1A=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=Y4HL+wfyN6/b/OyUwSCQxOQegXPTZctzGsqYGYwcp8BsNMNnzmF03F3xWKa3DbLYl
-         XAQuluzWi/Q0dCprpO8FSOTPUrKS0n9U8zQ+v2U+D76LkidISuyVtuJcRi4BQTbS3P
-         wMmfpdznl+na3z3br5dvYFMYhJG+RbBsW29Y9cwgzv0WNGMWI3ESpmZuBiO8NzYXqv
-         zeSkDFVWkgicf2KUFUnOcaCudyY9WuH7wrNoRIIrwIkTXV6qfupf2Siq/jlpn4oNdN
-         jEG+dkEZsBYL99UbJ8HIJWTgGy4oPMSW4DUZGJWMFkvFJRGmwg2u0ShpwqmBgq8ol9
-         Z/jppwlztJKjg==
-Received: by mail-il1-f198.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so1561423ilc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:48:38 -0700 (PDT)
+        Wed, 16 Mar 2022 12:50:22 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0EE38191
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:49:02 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2dbd97f9bfcso29961827b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bGKNOPcI723TyAogmId3EJCTD7xrrfL6vBjTUbZDdwc=;
+        b=G1Avxqp075V/9Rmuzp4slph4/avGCXKnP8LchL4LUG/V64EgwSFnLab3q6+4YIkxv/
+         LQSWzAZSb6/Lqcmld7Ei1qvl59sQ+lT8CGGUqpkO+ckyRhgofGe28NlAXCnHL2tt4aPA
+         yiWKgQdxAXZwV5YEs7ayjia/zBXfR+kuuoO1qw7jeTVMduslYyXkS3XjSQ0AotVOk0SD
+         ooSt22jJRXxyMMSJmsVJ4B67onUQUU6aT48ldKLhhbH8KeAGYw+P+B0jEBuqPzBOJ249
+         KB+N4rI/+W7vfjSRAZ/lvIyfFOjFk9uUF3AXKg5njzylee+rtqyh43p17G8sq840SO2W
+         tt7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BYM5WDvDYDcwIeTSiyEk3x1GtL/EefMaA8BGpQ/2v1A=;
-        b=vNdXruDiHjRSkIzkbarRLZMgiLMT52cjujnSQovRdx/BlXANgVRHu2584TCpcd0D0N
-         FDwRyiJwWrSDL2lhtmxA8CB8HuSl5eyGy8hnfLqcj7Y6uUeMFL4wOAf99kaivbhNv6Ub
-         HNO9DacY5f8ko48jvZu5W+KVf7UnnxDw7woJ+fgibdqp8aRYI8eRFkrJUfAP4QhG++pu
-         wE8aJLS2P1CBmykPTnjqTMtOD62UAAuci3dq/ay8MxjPWVKbZRPRC1xHXFi2VOLOcQLc
-         ZM/Deb6DFe+Qkbafg156XfxT8hMzn9qNG8kqijFJXi7YfCIVZ8YmJEwZk19o17Dl9OLa
-         F/Lg==
-X-Gm-Message-State: AOAM530ua1neMJ8bNxAhDyG6ZOZU9pOlYfHyTr0W7w6ehSkqRnjDK/qK
-        1gEIhZapIxPJZ/bMyWlq7i3M9mnqI/e/FqdHN0mJlpLtGTq7PEqJMrEY4udCAh1cm1diVu5aYNz
-        IZJJVWCq6T0yctKXc7S4mza1h1BS9PMLLMFtEBVuGMA==
-X-Received: by 2002:a05:6602:2f09:b0:648:dc2f:a42c with SMTP id q9-20020a0566022f0900b00648dc2fa42cmr468815iow.12.1647449317261;
-        Wed, 16 Mar 2022 09:48:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxwi+EVDk5h5dOMGdwjwqvVTXFk0TbR/HsZRPrhye1D0AkZQ/TAwQP2NTnZi3zu2Oq1DbidUg==
-X-Received: by 2002:a05:6602:2f09:b0:648:dc2f:a42c with SMTP id q9-20020a0566022f0900b00648dc2fa42cmr468796iow.12.1647449316977;
-        Wed, 16 Mar 2022 09:48:36 -0700 (PDT)
-Received: from localhost (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
-        by smtp.gmail.com with ESMTPSA id a6-20020a92c546000000b002c7a44bf1a5sm1381922ilj.48.2022.03.16.09.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 09:48:36 -0700 (PDT)
-From:   dann frazier <dann.frazier@canonical.com>
-To:     stable@vger.kernel.org
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergei Trofimovich <slyfox@gentoo.org>,
-        Anatoly Pugachev <matorola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4.19 3/3] ia64: ensure proper NUMA distance and possible map initialization
-Date:   Wed, 16 Mar 2022 10:48:08 -0600
-Message-Id: <20220316164808.569272-4-dann.frazier@canonical.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220316164808.569272-1-dann.frazier@canonical.com>
-References: <20220316164808.569272-1-dann.frazier@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bGKNOPcI723TyAogmId3EJCTD7xrrfL6vBjTUbZDdwc=;
+        b=h+cLWyt/+Qrm2NNUGOIr/pcsLkekA67VHzy8HaPkGXM0sP0oE/cY4N0Z9/9mjTkox0
+         VkK4UJj76WPE6dohl/957Yq43lL3wW04fNH/cBDx3be6EoAAPcWvnpDJT1QJe/UWUWyF
+         EQuEeMK+57flNhn9S2YqIBy27V4N7hPtuKSIA95V51hgKjAmT+S9Mox04Gbg7zbO67GE
+         XDIyNBnvdTJQuEf5h32q74IAyNDRyCyGpbqv0XcDKuDKfoHEVNBrEpsJpyrsJaa1D7Tc
+         M3dgebE/Bht2/PPo8Egux9CQ+mc1yjzziB6bQUqbU6RnKNYhhCGRihJbs14XUQ8fzIph
+         lI1Q==
+X-Gm-Message-State: AOAM533f5cFB3OKMZ4mVI8IjznHUlJmMkFYnci1BYz9LE+q8xWs6n4Nx
+        ZBBiqi63SUmuLAEHmflVAG+gtxgY7aDI3mDZw5o00uFLXaP7sQ==
+X-Google-Smtp-Source: ABdhPJyqD+jo4FVl00CMSuG5hHRTuUsEcIvkPgQyLahY+UHwiKfm0bQ9wYg3iLgEtmJMNve1sVrjCB58dzPFMrMfkD8=
+X-Received: by 2002:a81:9842:0:b0:2e5:9e00:288 with SMTP id
+ p63-20020a819842000000b002e59e000288mr1032295ywg.369.1647449341525; Wed, 16
+ Mar 2022 09:49:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220315073949.7541-1-jiangshanlai@gmail.com> <20220315073949.7541-7-jiangshanlai@gmail.com>
+ <YjH9qCkeCXZ4XjLx@hirez.programming.kicks-ass.net>
+In-Reply-To: <YjH9qCkeCXZ4XjLx@hirez.programming.kicks-ass.net>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 17 Mar 2022 00:48:50 +0800
+Message-ID: <CAJhGHyCP8V=tPmBknchgau9DCVGZXdrQZgzG0G=n=G38+qp7-g@mail.gmail.com>
+Subject: Re: [PATCH V3 6/7] x86/entry: Don't call error_entry for XENPV
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+On Wed, Mar 16, 2022 at 11:09 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Mar 15, 2022 at 03:39:48PM +0800, Lai Jiangshan wrote:
+> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> >
+> > When in XENPV, it is already in the task stack, and it can't fault
+> > for native_iret() nor native_load_gs_index() since XENPV uses its own
+> > pvops for iret and load_gs_index().  And it doesn't need to switch CR3.
+> > So there is no reason to call error_entry() in XENPV.
+> >
+> > Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> > ---
+> >  arch/x86/entry/entry_64.S | 13 +++++++++++--
+> >  1 file changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> > index e4a07276fd1c..ec885c2107de 100644
+> > --- a/arch/x86/entry/entry_64.S
+> > +++ b/arch/x86/entry/entry_64.S
+> > @@ -328,8 +328,17 @@ SYM_CODE_END(ret_from_fork)
+> >       PUSH_AND_CLEAR_REGS
+> >       ENCODE_FRAME_POINTER
+> >
+> > -     call    error_entry
+> > -     movq    %rax, %rsp                      /* switch stack settled by sync_regs() */
+> > +     /*
+> > +      * Call error_entry and switch stack settled by sync_regs().
+> > +      *
+> > +      * When in XENPV, it is already in the task stack, and it can't fault
+> > +      * for native_iret() nor native_load_gs_index() since XENPV uses its
+> > +      * own pvops for iret and load_gs_index().  And it doesn't need to
+> > +      * switch CR3.  So it can skip invoking error_entry().
+> > +      */
+> > +     ALTERNATIVE "call error_entry; movq %rax, %rsp", \
+> > +             "", X86_FEATURE_XENPV
+> > +
+> >       ENCODE_FRAME_POINTER
+> >       UNWIND_HINT_REGS
+> >
+>
+> Oooh, here we go, this is the answer to my question for patch #1, a note
+> in the changelog might be nice. Something like:
+>
+> "This looses a Xen PV optimization, which will be restored in a later
+> patch. The superfluous stack switch is just that."
 
-commit b22a8f7b4bde4e4ab73b64908ffd5d90ecdcdbfd upstream.
 
-John Paul reported a warning about bogus NUMA distance values spurred by
-commit:
-
-  620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
-
-In this case, the afflicted machine comes up with a reported 256 possible
-nodes, all of which are 0 distance away from one another.  This was
-previously silently ignored, but is now caught by the aforementioned
-commit.
-
-The culprit is ia64's node_possible_map which remains unchanged from its
-initialization value of NODE_MASK_ALL.  In John's case, the machine
-doesn't have any SRAT nor SLIT table, but AIUI the possible map remains
-untouched regardless of what ACPI tables end up being parsed.  Thus,
-!online && possible nodes remain with a bogus distance of 0 (distances \in
-[0, 9] are "reserved and have no meaning" as per the ACPI spec).
-
-Follow x86 / drivers/base/arch_numa's example and set the possible map to
-the parsed map, which in this case seems to be the online map.
-
-Link: http://lore.kernel.org/r/255d6b5d-194e-eb0e-ecdd-97477a534441@physik.fu-berlin.de
-Link: https://lkml.kernel.org/r/20210318130617.896309-1-valentin.schneider@arm.com
-Fixes: 620a6dc40754 ("sched/topology: Make sched_init_numa() use a set for the deduplicating sort")
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Reported-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: Sergei Trofimovich <slyfox@gentoo.org>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Anatoly Pugachev <matorola@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-[ dannf: Use node_distance instead of slit_distance since this is before
-  the rename that occurred in commit ef78e5ec9214 ("ia64: export
-  node_distance function"), plus a minor context adjustment ]
-Signed-off-by: dann frazier <dann.frazier@canonical.com>
----
- arch/ia64/kernel/acpi.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/ia64/kernel/acpi.c b/arch/ia64/kernel/acpi.c
-index 1dacbf5e9e09..0c1dac64e77b 100644
---- a/arch/ia64/kernel/acpi.c
-+++ b/arch/ia64/kernel/acpi.c
-@@ -537,7 +537,8 @@ void __init acpi_numa_fixup(void)
- 	if (srat_num_cpus == 0) {
- 		node_set_online(0);
- 		node_cpuid[0].phys_id = hard_smp_processor_id();
--		return;
-+		node_distance(0, 0) = LOCAL_DISTANCE;
-+		goto out;
- 	}
- 
- 	/*
-@@ -580,7 +581,7 @@ void __init acpi_numa_fixup(void)
- 			for (j = 0; j < MAX_NUMNODES; j++)
- 				node_distance(i, j) = i == j ? LOCAL_DISTANCE :
- 							REMOTE_DISTANCE;
--		return;
-+		goto out;
- 	}
- 
- 	memset(numa_slit, -1, sizeof(numa_slit));
-@@ -605,6 +606,8 @@ void __init acpi_numa_fixup(void)
- 		printk("\n");
- 	}
- #endif
-+out:
-+	node_possible_map = node_online_map;
- }
- #endif				/* CONFIG_ACPI_NUMA */
- 
--- 
-2.35.1
-
+In V2, the change of int80 thing is after this patch.  Maybe that order
+of patches is more natural.  I'm sorry to reorder them.

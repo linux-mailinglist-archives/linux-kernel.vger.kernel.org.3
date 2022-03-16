@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8106B4DBA76
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 23:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BCF4DBA79
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 23:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356693AbiCPWC2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Mar 2022 18:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S1358209AbiCPWDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 18:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiCPWCZ (ORCPT
+        with ESMTP id S236240AbiCPWDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 18:02:25 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B8020F5E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:01:11 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id D913F6081104;
-        Wed, 16 Mar 2022 23:01:09 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 8vaihv-rfqXQ; Wed, 16 Mar 2022 23:01:09 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 4F3016081107;
-        Wed, 16 Mar 2022 23:01:09 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dGMp6Mx7hpNU; Wed, 16 Mar 2022 23:01:09 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 1FE796081104;
-        Wed, 16 Mar 2022 23:01:09 +0100 (CET)
-Date:   Wed, 16 Mar 2022 23:01:09 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     libaokun <libaokun1@huawei.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        christian brauner <christian.brauner@ubuntu.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        yukuai3 <yukuai3@huawei.com>, stable <stable@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Message-ID: <1891491465.152789.1647468069089.JavaMail.zimbra@nod.at>
-In-Reply-To: <8a175ec6-1555-8575-1f03-0002efac1740@huawei.com>
-References: <20211228125430.1880252-1-libaokun1@huawei.com> <8a175ec6-1555-8575-1f03-0002efac1740@huawei.com>
-Subject: Re: [PATCH -next] jffs2: fix use-after-free in
- jffs2_clear_xattr_subsystem
+        Wed, 16 Mar 2022 18:03:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4864820F5E;
+        Wed, 16 Mar 2022 15:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GtlS9wUSOZ9cfsjzMLAk/9sxHz72iwQmD4i95Y7gkJQ=; b=OmxwiRiGh7EnEXL97rZBDmAXaK
+        At6CvUVW5iPvS71Irp4wkJ8dULsmym7frUR0ocnOiQMsX5Z5XbXJkEs/+ojpCRo7TyzgB87IdwltB
+        4GdrkzDbB1wL7EUP8uzuL2r5vn0883tecRfjDRDL3LT1rDAcbZl3AP4oCIO1uM18RDsRp649uYnA+
+        b9duNID+1QRN9MY+Vb9aD7i2HfMG3BpEvwMexExCBWeo1CC2ic1Usf83nU7vDql5n9ibjQrLfO79B
+        QR7mvzkdAUviuG6B4wP7HshnJN7DzOC1cJydreYb2CD8Lwns9qR8LSrl1oURd1TyulHVoCNg5X0Io
+        205ZL/8g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUbiW-006PXt-BM; Wed, 16 Mar 2022 22:02:04 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C052F9882B3; Wed, 16 Mar 2022 23:02:01 +0100 (CET)
+Date:   Wed, 16 Mar 2022 23:02:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jamie Heilman <jamie@audible.transient.net>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+Subject: Re: system locks up with CONFIG_SLS=Y; 5.17.0-rc
+Message-ID: <20220316220201.GM8939@worktop.programming.kicks-ass.net>
+References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
+ <YjHYh3XRbHwrlLbR@zn.tnic>
+ <YjIwRR5UsTd3W4Bj@audible.transient.net>
+ <YjI69aUseN/IuzTj@zn.tnic>
+ <YjJFb02Fc0jeoIW4@audible.transient.net>
+ <YjJVWYzHQDbI6nZM@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: jffs2: fix use-after-free in jffs2_clear_xattr_subsystem
-Thread-Index: CCC9RxtPxe322JVfIQ6ZCv5ouCR7KA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjJVWYzHQDbI6nZM@zn.tnic>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,101 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "libaokun" <libaokun1@huawei.com>
-> An: "richard" <richard@nod.at>, "David Woodhouse" <dwmw2@infradead.org>, "christian brauner"
-> <christian.brauner@ubuntu.com>, "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel"
-> <linux-kernel@vger.kernel.org>
-> CC: "yukuai3" <yukuai3@huawei.com>, "stable" <stable@vger.kernel.org>, "Hulk Robot" <hulkci@huawei.com>, "libaokun"
-> <libaokun1@huawei.com>
-> Gesendet: Donnerstag, 10. März 2022 09:35:18
-> Betreff: Re: [PATCH -next] jffs2: fix use-after-free in jffs2_clear_xattr_subsystem
+On Wed, Mar 16, 2022 at 10:23:37PM +0100, Borislav Petkov wrote:
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index f667bd8df533..e88ce4171c4a 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -430,8 +430,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+>  	FOP_END
+>  
+>  /* Special case for SETcc - 1 instruction per cc */
+> +
+> +#define SETCC_ALIGN 8
 
-> A gentle ping, sorry for the noise.
+I'd suggest writing that like:
+
+	#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
+
+That way people can enjoy smaller text when they don't do the whole SLS
+thing.... Also, it appears to me I added an ENDBR to this in
+tip/x86/core, well, that needs fixing too. Tomorrow tho.
+
+> +
+>  #define FOP_SETCC(op) \
+> -	".align 4 \n\t" \
+> +	".align " __stringify(SETCC_ALIGN) " \n\t" \
+>  	".type " #op ", @function \n\t" \
+>  	#op ": \n\t" \
+>  	ASM_ENDBR \
+> @@ -1049,7 +1052,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
+>  static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
+>  {
+>  	u8 rc;
+> -	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
+> +	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
+>  
+>  	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
+>  	asm("push %[flags]; popf; " CALL_NOSPEC
+> -- 
+> 2.29.2
 > 
-> 在 2021/12/28 20:54, Baokun Li 写道:
->> When we mount a jffs2 image, assume that the first few blocks of
->> the image are normal and contain at least one xattr-related inode,
->> but the next block is abnormal. As a result, an error is returned
->> in jffs2_scan_eraseblock(). jffs2_clear_xattr_subsystem() is then
->> called in jffs2_build_filesystem() and then again in
->> jffs2_do_fill_super().
->>
->> Finally we can observe the following report:
->>   ==================================================================
->>   BUG: KASAN: use-after-free in jffs2_clear_xattr_subsystem+0x95/0x6ac
->>   Read of size 8 at addr ffff8881243384e0 by task mount/719
->>
->>   Call Trace:
->>    dump_stack+0x115/0x16b
->>    jffs2_clear_xattr_subsystem+0x95/0x6ac
->>    jffs2_do_fill_super+0x84f/0xc30
->>    jffs2_fill_super+0x2ea/0x4c0
->>    mtd_get_sb+0x254/0x400
->>    mtd_get_sb_by_nr+0x4f/0xd0
->>    get_tree_mtd+0x498/0x840
->>    jffs2_get_tree+0x25/0x30
->>    vfs_get_tree+0x8d/0x2e0
->>    path_mount+0x50f/0x1e50
->>    do_mount+0x107/0x130
->>    __se_sys_mount+0x1c5/0x2f0
->>    __x64_sys_mount+0xc7/0x160
->>    do_syscall_64+0x45/0x70
->>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>
->>   Allocated by task 719:
->>    kasan_save_stack+0x23/0x60
->>    __kasan_kmalloc.constprop.0+0x10b/0x120
->>    kasan_slab_alloc+0x12/0x20
->>    kmem_cache_alloc+0x1c0/0x870
->>    jffs2_alloc_xattr_ref+0x2f/0xa0
->>    jffs2_scan_medium.cold+0x3713/0x4794
->>    jffs2_do_mount_fs.cold+0xa7/0x2253
->>    jffs2_do_fill_super+0x383/0xc30
->>    jffs2_fill_super+0x2ea/0x4c0
->>   [...]
->>
->>   Freed by task 719:
->>    kmem_cache_free+0xcc/0x7b0
->>    jffs2_free_xattr_ref+0x78/0x98
->>    jffs2_clear_xattr_subsystem+0xa1/0x6ac
->>    jffs2_do_mount_fs.cold+0x5e6/0x2253
->>    jffs2_do_fill_super+0x383/0xc30
->>    jffs2_fill_super+0x2ea/0x4c0
->>   [...]
->>
->>   The buggy address belongs to the object at ffff8881243384b8
->>    which belongs to the cache jffs2_xattr_ref of size 48
->>   The buggy address is located 40 bytes inside of
->>    48-byte region [ffff8881243384b8, ffff8881243384e8)
->>   [...]
->>   ==================================================================
->>
->> The triggering of the BUG is shown in the following stack:
->> -----------------------------------------------------------
->> jffs2_fill_super
->>    jffs2_do_fill_super
->>      jffs2_do_mount_fs
->>        jffs2_build_filesystem
->>          jffs2_scan_medium
->>            jffs2_scan_eraseblock        <--- ERROR
->>          jffs2_clear_xattr_subsystem    <--- free
->>      jffs2_clear_xattr_subsystem        <--- free again
->> -----------------------------------------------------------
->>
->> An error is returned in jffs2_do_mount_fs(). If the error is returned
->> by jffs2_sum_init(), the jffs2_clear_xattr_subsystem() does not need to
->> be executed. If the error is returned by jffs2_build_filesystem(), the
->> jffs2_clear_xattr_subsystem() also does not need to be executed again.
->> So move jffs2_clear_xattr_subsystem() from 'out_inohash' to 'out_root'
->> to fix this UAF problem.
->>
->> Fixes: aa98d7cf59b5 ("[JFFS2][XATTR] XATTR support on JFFS2 (version. 5)")
->> Cc: stable@vger.kernel.org
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-
-Applied. Thanks for fixing!
-
-Thanks,
-//richard
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,116 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD174DA6F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847764DA6F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 01:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245465AbiCPAjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 20:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S1345440AbiCPAkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 20:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiCPAjI (ORCPT
+        with ESMTP id S231308AbiCPAki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 20:39:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3528B7DD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 17:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647391075; x=1678927075;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=1B5z/Nx0Xne1evUi0mz4Jk1f+0RMxp3xPJHmzw1NwWQ=;
-  b=bEhnG6Neg6I3rcIbqK62Jk9UH1gLC4xi4Aue1Qnuu4FpNnQc4ghKX0Bo
-   dGJLlP7AR3evDXrfmFIt/ptDyg8bSDGYaQwKHQ2LGpaLeMqpWTNvUdTMl
-   MQuLWeCp9Mr5JnjpIU+/LdX3pJh0zfW5soH3SBIoJgqvzmeuQiGDeIrri
-   adYlm/86eaJxm0xk4d5vBnSy0jag2IIcU4BCUeoqnAQhRW6apLs7y1JNj
-   WpPZ94u7aAWtDpu7gluB4Ii05zJiXSp1B1TiRAUcwl3zHOeeTTQpk2dJf
-   Fqueft368h2pcrDEDJdk5/bxqe2BLlhq1RVt02U2ZumJ6OxKOIDro9yRB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="237060859"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="237060859"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:37:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="516101735"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:37:53 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Rik van Riel <riel@surriel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH -V3 2/2 UPDATE] NUMA balancing: avoid to migrate task to
- CPU-less node
-References: <20220214121553.582248-1-ying.huang@intel.com>
-        <20220214121553.582248-2-ying.huang@intel.com>
-        <87y21lkxlv.fsf_-_@yhuang6-desk2.ccr.corp.intel.com>
-        <87tuc9kxc0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Date:   Wed, 16 Mar 2022 08:37:51 +0800
-In-Reply-To: <87tuc9kxc0.fsf@yhuang6-desk2.ccr.corp.intel.com> (Ying Huang's
-        message of "Tue, 08 Mar 2022 10:11:11 +0800")
-Message-ID: <8735jizq8w.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 15 Mar 2022 20:40:38 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6EE5DA51;
+        Tue, 15 Mar 2022 17:39:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R461e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V7JkLTl_1647391161;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7JkLTl_1647391161)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 16 Mar 2022 08:39:22 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     serge@hallyn.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] capability: Add parameter description in kernel-doc comment
+Date:   Wed, 16 Mar 2022 08:39:20 +0800
+Message-Id: <20220316003920.108121-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Peter,
+Add the description of @mnt_userns in privileged_wrt_inode_uidgid()
+and capable_wrt_inode_uidgid() kernel-doc comment to remove warnings
+found by running scripts/kernel-doc, which is caused by using 'make W=1'.
 
-"Huang, Ying" <ying.huang@intel.com> writes:
+kernel/capability.c:491: warning: Function parameter or member
+'mnt_userns' not described in 'privileged_wrt_inode_uidgid'
+kernel/capability.c:507: warning: Function parameter or member
+'mnt_userns' not described in 'capable_wrt_inode_uidgid'
 
-> Hi, Peter,
->
-> "Huang, Ying" <ying.huang@intel.com> writes:
->
->> In a typical memory tiering system, there's no CPU in slow (PMEM) NUMA
->> nodes.  But if the number of the hint page faults on a PMEM node is
->> the max for a task, The current NUMA balancing policy may try to place
->> the task on the PMEM node instead of DRAM node.  This is unreasonable,
->> because there's no CPU in PMEM NUMA nodes.  To fix this, CPU-less
->> nodes are ignored when searching the migration target node for a task
->> in this patch.
->>
->> To test the patch, we run a workload that accesses more memory in PMEM
->> node than memory in DRAM node.  Without the patch, the PMEM node will
->> be chosen as preferred node in task_numa_placement().  While the DRAM
->> node will be chosen instead with the patch.
->>
->> Known issue: I don't have systems to test complex NUMA topology type,
->> for example, NUMA_BACKPLANE or NUMA_GLUELESS_MESH.
->>
->> v3:
->>
->> - Fix a boot crash for some uncovered marginal condition.  Thanks Qian
->>   Cai for reporting and testing the bug!
->>
->> - Fix several missing places to use CPU-less nodes as migrating
->>   target.
->>
->> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
->> Reported-and-tested-by: Qian Cai <quic_qiancai@quicinc.com> # boot crash
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Valentin Schneider <valentin.schneider@arm.com>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Mel Gorman <mgorman@suse.de>
->> Cc: Rik van Riel <riel@surriel.com>
->> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
->
-> Can you update the patch to fix the bug?  Or you prefer the incremental
-> patch?
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ kernel/capability.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Can you take a look at this?
+diff --git a/kernel/capability.c b/kernel/capability.c
+index 765194f5d678..ab401d17574d 100644
+--- a/kernel/capability.c
++++ b/kernel/capability.c
+@@ -481,6 +481,7 @@ EXPORT_SYMBOL(file_ns_capable);
+ /**
+  * privileged_wrt_inode_uidgid - Do capabilities in the namespace work over the inode?
+  * @ns: The user namespace in question
++ * @mnt_userns: The user namespace of the capability to use
+  * @inode: The inode in question
+  *
+  * Return true if the inode uid and gid are within the namespace.
+@@ -495,6 +496,7 @@ bool privileged_wrt_inode_uidgid(struct user_namespace *ns,
+ 
+ /**
+  * capable_wrt_inode_uidgid - Check nsown_capable and uid and gid mapped
++ * @mnt_userns: The user namespace of the capability to use
+  * @inode: The inode in question
+  * @cap: The capability in question
+  *
+-- 
+2.20.1.7.g153144c
 
-Best Regards,
-Huang, Ying

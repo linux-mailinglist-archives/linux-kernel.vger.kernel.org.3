@@ -2,321 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AD14DA7CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871AA4DA7D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbiCPCNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
+        id S241141AbiCPCPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353066AbiCPCL4 (ORCPT
+        with ESMTP id S232659AbiCPCPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:11:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643345E75F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647396616; x=1678932616;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jy8hmld/FRVFtw+SoRqVzGZssOns60kyihmirmt7mEs=;
-  b=aIRsGZ7LQVtKJwV6dnOsiYBGQFaZUOwRL5PujxNpHy2j8WJfZaNKrfcp
-   zQYgQQc5V7GRgQb4xc3z/m7238+NpInL53Ky9Qptuj6GCngz/TPGKjUQt
-   VV8vYxat+Mg1nlCpv6z4xFBTNTPuwCs51aqd3gHav8m6Jh9O3BKxay6nS
-   KF57EKX7+oiLWUK8AzFAyZhmV7Kmalkpeh7SFS/5l9rcTp3B56gpnwQ2d
-   tGuMzotTARFlt4brjQ0ApDlEjmDLGTjTojG0lI6xAea/g3vpoCx7P/1Tm
-   332TezspzowEOuHJJ7X9lXdbDzQhnXgRa5UmccVTkYH4LVkeGYHiDJIJH
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="236415700"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="236415700"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:10:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="714416797"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2022 19:10:06 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 16CF5F02; Wed, 16 Mar 2022 04:10:11 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [PATCHv6 30/30] Documentation/x86: Document TDX kernel architecture
-Date:   Wed, 16 Mar 2022 05:08:56 +0300
-Message-Id: <20220316020856.24435-31-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+        Tue, 15 Mar 2022 22:15:36 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8008DD8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:14:23 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d18so663181plr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZNODnXI0GG8OUMC7M4+T77BVFbBOatlGPAjnKZlPl/Q=;
+        b=ZOQrJMqceyEbrmy847BDz8rO1Y7ZnIUAR1UKmO8JWim/2yHYSkd0RGOQNgl3lS7djl
+         VXHzgd56aZvg0VcALGspo50mU6DS8jZQiAtNJPKTPDs65isMzIvlr3oDB8MxOf6yLhY1
+         GJEL2259m0OyEvh6jmyZRfa1sXptyo5neRJ6scuQlMLsqa1Libv1mQDlWXM3vBDwAsk7
+         ufH8IRXZ5oN1ZxNloqIZRP67SE5vj0LU+Fwjg1CqAnhM9+gvCa1l2MWwETlQwdyUl6UN
+         60eAmzY0BVbUfuHrkG7eC5SUsjUivvuHAHZXms2N+gFV2Xm9RdoSk3MH2Tpmk+ycRZfh
+         7sFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZNODnXI0GG8OUMC7M4+T77BVFbBOatlGPAjnKZlPl/Q=;
+        b=danuvobqH8OqF5y194+a2x6h0MorzRwv4zqaPqQEJdAdC3Wu4oeo7guzefE+h/3vxp
+         nPDEAIOTrIhX6OXNhkc6g6BlZkDNCVf9PcdcoEJPjsNpHvTbqmdbiT9jAujzpylP/r3c
+         v58brqajkXzcpllnaDuubTWt8PkA+/4fWuIVmA+p0YzpIDvmhZfiVGLNfZTA/RQaYJ2L
+         WIuMmAg8CibIX4VSPOW/ph9mTzz+TLvS42pYI5A+rR8rAV2tZkhe/5Z++VUQYGHRJh+r
+         64RK7NZFb104hSCViL6Mbad0l+mUpgRGW9wfScN2R969lt3UdNyHk59VD4T7aO3hBc7L
+         LCGg==
+X-Gm-Message-State: AOAM530AuifSJNfluiCrmGPG4D9tGoKUchsq+WhF8dSWrunJ87eDHdS5
+        LknQY7S9w8Z0Cwg0vbm3CdEX1Q==
+X-Google-Smtp-Source: ABdhPJyp4p2lLzdYUmpSbbIR7b7dCtVcRFuSn1KqZTrxASo7IhjJOMmDJruJHndLmJZMjfu9ufcvxg==
+X-Received: by 2002:a17:90a:4749:b0:1be:ea64:4348 with SMTP id y9-20020a17090a474900b001beea644348mr7674697pjg.231.1647396862810;
+        Tue, 15 Mar 2022 19:14:22 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id a23-20020aa794b7000000b004f7d633a87asm467073pfl.57.2022.03.15.19.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 19:14:22 -0700 (PDT)
+Message-ID: <7c235bfa-d0c3-dd41-e8b2-746ce69fee1f@linaro.org>
+Date:   Tue, 15 Mar 2022 19:14:21 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] ext4: check if offset+length is within a valid range in
+ fallocate
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, Theodore Ts'o <tytso@mit.edu>
+Cc:     kbuild-all@lists.01.org, Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-ext4@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
+References: <20220315191545.187366-1-tadeusz.struk@linaro.org>
+ <202203160919.MtfBk5N0-lkp@intel.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <202203160919.MtfBk5N0-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+On 3/15/22 18:22, kernel test robot wrote:
+> Hi Tadeusz,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on tytso-ext4/dev]
+> [also build test ERROR on linus/master v5.17-rc8 next-20220315]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:https://github.com/0day-ci/linux/commits/Tadeusz-Struk/ext4-check-if-offset-length-is-within-a-valid-range-in-fallocate/20220316-031841
+> base:https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git  dev
+> config: arc-randconfig-r043-20220313 (https://download.01.org/0day-ci/archive/20220316/202203160919.MtfBk5N0-lkp@intel.com/config)
+> compiler: arc-elf-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wgethttps://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross  -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          #https://github.com/0day-ci/linux/commit/bc1fdc20f07523e970c9dea4f0fbabbc437fb0d5
+>          git remote add linux-reviewhttps://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review Tadeusz-Struk/ext4-check-if-offset-length-is-within-a-valid-range-in-fallocate/20220316-031841
+>          git checkout bc1fdc20f07523e970c9dea4f0fbabbc437fb0d5
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash fs/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot<lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     fs/ext4/inode.c: In function 'ext4_punch_hole':
+>>> fs/ext4/inode.c:4002:50: error: 'struct ext4_sb_info' has no member named 's_blocksize'
+>      4002 |         max_length = sbi->s_bitmap_maxbytes - sbi->s_blocksize;
+>           |                                                  ^~
 
-Document the TDX guest architecture details like #VE support,
-shared memory, etc.
+Thanks for report, but I've already sent v2:
+https://lore.kernel.org/linux-ext4/20220315215439.269122-1-tadeusz.struk@linaro.org
 
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
----
- Documentation/x86/index.rst |   1 +
- Documentation/x86/tdx.rst   | 214 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 215 insertions(+)
- create mode 100644 Documentation/x86/tdx.rst
-
-diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
-index f498f1d36cd3..382e53ca850a 100644
---- a/Documentation/x86/index.rst
-+++ b/Documentation/x86/index.rst
-@@ -24,6 +24,7 @@ x86-specific Documentation
-    intel-iommu
-    intel_txt
-    amd-memory-encryption
-+   tdx
-    pti
-    mds
-    microcode
-diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
-new file mode 100644
-index 000000000000..8ca60256511b
---- /dev/null
-+++ b/Documentation/x86/tdx.rst
-@@ -0,0 +1,214 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================================
-+Intel Trust Domain Extensions (TDX)
-+=====================================
-+
-+Intel's Trust Domain Extensions (TDX) protect confidential guest VMs from
-+the host and physical attacks by isolating the guest register state and by
-+encrypting the guest memory. In TDX, a special TDX module sits between the
-+host and the guest, and runs in a special mode and manages the guest/host
-+separation.
-+
-+Since the host cannot directly access guest registers or memory, much
-+normal functionality of a hypervisor must be moved into the guest. This is
-+implemented using a Virtualization Exception (#VE) that is handled by the
-+guest kernel. Some #VEs are handled entirely inside the guest kernel, but
-+some require the hypervisor to be involved.
-+
-+TDX includes new hypercall-like mechanisms for communicating from the
-+guest to the hypervisor or the TDX module.
-+
-+New TDX Exceptions
-+==================
-+
-+TDX guests behave differently from bare-metal and traditional VMX guests.
-+In TDX guests, otherwise normal instructions or memory accesses can cause
-+#VE or #GP exceptions.
-+
-+Instructions marked with an '*' conditionally cause exceptions.  The
-+details for these instructions are discussed below.
-+
-+Instruction-based #VE
-+---------------------
-+
-+- Port I/O (INS, OUTS, IN, OUT)
-+- HLT
-+- MONITOR, MWAIT
-+- WBINVD, INVD
-+- VMCALL
-+- RDMSR*,WRMSR*
-+- CPUID*
-+
-+Instruction-based #GP
-+---------------------
-+
-+- All VMX instructions: INVEPT, INVVPID, VMCLEAR, VMFUNC, VMLAUNCH,
-+  VMPTRLD, VMPTRST, VMREAD, VMRESUME, VMWRITE, VMXOFF, VMXON
-+- ENCLS, ENCLU
-+- GETSEC
-+- RSM
-+- ENQCMD
-+- RDMSR*,WRMSR*
-+
-+RDMSR/WRMSR Behavior
-+--------------------
-+
-+MSR access behavior falls into three categories:
-+
-+- #GP generated
-+- #VE generated
-+- "Just works"
-+
-+In general, the #GP MSRs should not be used in guests.  Their use likely
-+indicates a bug in the guest.  The guest may try to handle the #GP with a
-+hypercall but it is unlikely to succeed.
-+
-+The #VE MSRs are typically able to be handled by the hypervisor.  Guests
-+can make a hypercall to the hypervisor to handle the #VE.
-+
-+The "just works" MSRs do not need any special guest handling.  They might
-+be implemented by directly passing through the MSR to the hardware or by
-+trapping and handling in the TDX module.  Other than possibly being slow,
-+these MSRs appear to function just as they would on bare metal.
-+
-+CPUID Behavior
-+--------------
-+
-+For some CPUID leaves and sub-leaves, the virtualized bit fields of CPUID
-+return values (in guest EAX/EBX/ECX/EDX) are configurable by the
-+hypervisor. For such cases, the Intel TDX module architecture defines two
-+virtualization types:
-+
-+- Bit fields for which the hypervisor configures the value seen by the
-+  guest TD.
-+
-+- Bit fields for which the hypervisor configures the value such that the
-+  guest TD either sees their native value or a value of 0
-+
-+#VE generated for CPUID leaves and sub-leaves that TDX module doesn't know
-+how to handle. The guest kernel may ask the hypervisor for the value with
-+a hypercall.
-+
-+#VE on Memory Accesses
-+======================
-+
-+There are essentially two classes of TDX memory: private and shared.
-+Private memory receives full TDX protections.  Its content is protected
-+against access from the hypervisor.  Shared memory is expected to be
-+shared between guest and hypervisor.
-+
-+A TD guest is in control of whether its memory accesses are treated as
-+private or shared.  It selects the behavior with a bit in its page table
-+entries.  This helps ensure that a guest does not place sensitive
-+information in shared memory, exposing it to the untrusted hypervisor.
-+
-+#VE on Shared Memory
-+--------------------
-+
-+Access to shared mappings can cause a #VE.  The hypervisor ultimately
-+controls whether a shared memory access causes a #VE, so the guest must be
-+careful to only reference shared pages it can safely handle a #VE.  For
-+instance, the guest should be careful not to access shared memory in the
-+#VE handler before it reads the #VE info structure (TDG.VP.VEINFO.GET).
-+
-+Shared mapping content is entirely controlled by the hypervisor. Shared
-+mappings must never be used for sensitive memory content like stacks or
-+kernel text, only for I/O buffers and MMIO regions.  A good rule of thumb
-+is that hypervisor-shared memory should be treated the same as memory
-+mapped to userspace.  Both the hypervisor and userspace are completely
-+untrusted.
-+
-+MMIO for virtual devices is implemented as shared memory.  The guest must
-+be careful not to access device MMIO regions unless it is also prepared to
-+handle a #VE.
-+
-+#VE on Private Pages
-+--------------------
-+
-+Accesses to private mappings can also cause #VEs.  Since all kernel memory
-+is also private memory, the kernel might theoretically need to handle a
-+#VE on arbitrary kernel memory accesses.  This is not feasible, so TDX
-+guests ensure that all guest memory has been "accepted" before memory is
-+used by the kernel.
-+
-+A modest amount of memory (typically 512M) is pre-accepted by the firmware
-+before the kernel runs to ensure that the kernel can start up without
-+being subjected to #VE's.
-+
-+The hypervisor is permitted to unilaterally move accepted pages to a
-+"blocked" state. However, if it does this, page access will not generate a
-+#VE.  It will, instead, cause a "TD Exit" where the hypervisor is required
-+to handle the exception.
-+
-+Linux #VE handler
-+=================
-+
-+Just like page faults or #GP's, #VE exceptions can be either handled or be
-+fatal.  Typically, unhandled userspace #VE's result in a SIGSEGV.
-+Unhandled kernel #VE's result in an oops.
-+
-+Handling nested exceptions on x86 is typically nasty business.  A #VE
-+could be interrupted by an NMI which triggers another #VE and hilarity
-+ensues.  TDX #VE's have a novel solution to make it slightly less nasty.
-+
-+During #VE handling, the TDX module ensures that all interrupts (including
-+NMIs) are blocked.  The block remains in place until the guest makes a
-+TDG.VP.VEINFO.GET TDCALL.  This allows the guest to choose when interrupts
-+or new #VE's can be delivered.
-+
-+However, the guest kernel must still be careful to avoid potential
-+#VE-triggering actions (discussed above) while this block is in place.
-+While the block is in place, #VE's are elevated to double faults (#DF)
-+which are not recoverable.
-+
-+MMIO handling
-+=============
-+
-+In non-TDX VMs, MMIO is usually implemented by giving a guest access to
-+a mapping which will cause a VMEXIT on access, and then the hypervisor emulates
-+the access.  That is not possible in TDX guests because VMEXIT will expose the
-+register state to the host. TDX guests don't trust the host and can't have
-+their state exposed to the host.
-+
-+In TDX, the MMIO regions typically trigger a #VE exception in the guest.
-+The guest #VE handler then emulates the MMIO instruction inside the guest
-+and converts it into a controlled TDCALL to the host, rather than exposing
-+guest state to the host.
-+
-+MMIO addresses on x86 are just special physical addresses. They can
-+theoretically be accessed with any instruction that accesses memory.
-+However, the kernel instruction decoding method is limited. It is only
-+designed to decode instructions like those generated by io.h macros.
-+
-+MMIO access via other means (like structure overlays) may result in an
-+oops.
-+
-+Shared Memory Conversions
-+=========================
-+
-+All TDX guest memory starts out as private at boot.  This memory can not
-+be accessed by the hypervisor.  However some kernel users like device
-+drivers might have a need to share data with the hypervisor.  To do this,
-+memory must be converted between shared and private.  This can be
-+accomplished using some existing memory encryption helpers:
-+
-+set_memory_decrypted() converts a range of pages to shared.
-+set_memory_encrypted() converts memory back to private.
-+
-+Device drivers are the primary user of shared memory, but there's no need
-+to touch every driver. DMA buffers and ioremap()'ed do the conversions
-+automatically.
-+
-+TDX uses SWIOTLB for most DMA allocations. The SWIOTLB buffer is
-+converted to shared on boot.
-+
-+For coherent DMA allocation, the DMA buffer gets converted on the
-+allocation. Check force_dma_unencrypted() for details.
-+
-+References
-+==========
-+
-+TDX reference material is collected here:
-+
-+https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
 -- 
-2.34.1
-
+Thanks,
+Tadeusz

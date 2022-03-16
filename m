@@ -2,270 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0984DA95F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 05:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAB84DA961
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 05:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346307AbiCPEi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 00:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S1351990AbiCPElT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 00:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236687AbiCPEi1 (ORCPT
+        with ESMTP id S236687AbiCPElQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 00:38:27 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74624266C;
-        Tue, 15 Mar 2022 21:37:13 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2e5a8a8c1cdso1838677b3.3;
-        Tue, 15 Mar 2022 21:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1WrOaftrOYXhOc8YRNKza9k7ilsLRkietfu0L6H5bl4=;
-        b=C2CYA9fviRP0AT73Jnb2hEul6HIY3WPFjgBUBz27XF+MA6snyAYu7mVZFm601W/Fb5
-         d1Ba7RLOe3JDSV+T76EI17RD1ai+gYoZ2AmBDbCyfI1LcUqInbumzruwWyoraqoH4B9Q
-         skr8N0rW6u3lxu5t3eKJL69Y+DJSf3G6MydDh1bpwNpThhUTT/s7a38s+gd7TsexXMoX
-         p+hxsOxBvSgB8ttXCn7EBkRs3zO2kdttdBN2tNH4cKgqU2AwxEcyV8MrpFOfW8sl3fK1
-         j5G8WEFkjuH5QVC/qQKAel0a8ig5Pibzsdrn4YEc0JS6LgTeHUrNZFVpM2A0woVg0nxb
-         IhSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1WrOaftrOYXhOc8YRNKza9k7ilsLRkietfu0L6H5bl4=;
-        b=wCEliKmtVrMpajS6UWyNLdZGj3INVYySVECtAgupavBB1D1IOUNs62KMwYHNyqOphp
-         5fa+TkkB576Q1/tbZk3jc/fcngiGy1hiqu00MB+NWrAvBpby8sUaWzxWGJuNmhdokoYh
-         Sv9JGdIzmB8g+CewIozZG/BmJLthJjGibjlLHO7Cz0fYDtz7/AgK+fwceBU7HjMBWYow
-         bo4z6xeM8QJYGn+c6yq+JPw28qwXfL0FnJGco2aLXmUJ/OMXaucOv0QNmaBcrRROJ/Bl
-         Yh+v+FGPgvs+8sFfiQLM//ur59h67mtMLfPg0fdEcsC6BjcGvUOOtPC0G/HKZybxCvt8
-         NTNg==
-X-Gm-Message-State: AOAM533yAAERGzDdruYcA5Ev6g1rQk0zujpR06adAxhkpT0hmvgtCO/m
-        S1dEDOdghcq9rftOBTxypyZMy03XzjzaeSnNQaY=
-X-Google-Smtp-Source: ABdhPJzvgD+wHokx0xa4G2qEhzbL2XNtG+pgg7JGz3GWzvma7u084w4kmXuS2TOk90fkpr9DMno6LJhsSzbDB/a7ATI=
-X-Received: by 2002:a81:a0d6:0:b0:2dc:3bce:140c with SMTP id
- x205-20020a81a0d6000000b002dc3bce140cmr30347262ywg.190.1647405432620; Tue, 15
- Mar 2022 21:37:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAOUHufbN_56UJBkgA2LjAfbTt9nzPOCHaSeS4P3GHcYst+Y+eg@mail.gmail.com>
- <20220314233812.9011-1-21cnbao@gmail.com> <CAOUHufa9eY44QadfGTzsxa2=hEvqwahXd7Canck5Gt-N6c4UKA@mail.gmail.com>
- <CAGsJ_4zvj5rmz7DkW-kJx+jmUT9G8muLJ9De--NZma9ey0Oavw@mail.gmail.com>
- <CAGsJ_4zZc0oFSmBKAN77vm7VstQH=ieaQ0cfyvcMi3OQRrEpSg@mail.gmail.com> <CAOUHufau34de-FmdBxNHpWWUUuN4DxT1fci9aX8Uc+RAfVXwXw@mail.gmail.com>
-In-Reply-To: <CAOUHufau34de-FmdBxNHpWWUUuN4DxT1fci9aX8Uc+RAfVXwXw@mail.gmail.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Wed, 16 Mar 2022 17:37:01 +1300
-Message-ID: <CAGsJ_4waTOj=zzC+gZAVMW5SQ_b9UWcXjKv3oj57s-YysTQmPw@mail.gmail.com>
-Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Brian Geffon <bgeffon@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Donald Carr <d@chaos-reins.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Mel Gorman <mgorman@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Huang Ying <ying.huang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 00:41:16 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806A63914F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 21:40:02 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220316044000epoutp039ba5cfc7efc546279e9c46f4c014ff1f~cwqpsWzHv2083020830epoutp03Y
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 04:40:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220316044000epoutp039ba5cfc7efc546279e9c46f4c014ff1f~cwqpsWzHv2083020830epoutp03Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647405600;
+        bh=Pg2YkgWrqEHxCCE72dS09UgZo3qysKXpEiubDt7UJcQ=;
+        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
+        b=Xux4FJmgZ78aMOuUP73aE1LsvTQczf33VBTYgWh/otP75Gt1byUZfd4N206CEFNr9
+         6twfBdhS2dt6Wmvlzb3Bf1BCtJasZc3wIRMzDn4T8buO6RxLPyaZlbb9mDVa50LQrJ
+         hxCnlOSnexkhz3AvD5v3MncEAWv+/2yzCMIXyYL8=
+Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220316044000epcas5p41a87ceb5d7c4cefee45cf344b92bd037~cwqpEBomk0863108631epcas5p4q;
+        Wed, 16 Mar 2022 04:40:00 +0000 (GMT)
+X-AuditID: b6c32a4a-5b7ff700000030eb-34-62316a205ad1
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6F.10.12523.02A61326; Wed, 16 Mar 2022 13:40:00 +0900 (KST)
+Date:   Wed, 16 Mar 2022 10:09:53 +0530
+Message-ID: <453510261.3922147.1647405593710@mail-kr5-2>
+Mime-Version: 1.0
+Subject: RE: [PATCH v3] kallsyms: enhance %pS/s/b printing when KALLSYSMS is
+ disabled
+Reply-To: maninder1.s@samsung.com
+Sender: Maninder Singh <maninder1.s@samsung.com>
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     "pmladek@suse.com" <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        Vaneet Narang <v.narang@samsung.com>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "avimalin@gmail.com" <avimalin@gmail.com>,
+        "atomlin@redhat.com" <atomlin@redhat.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+X-CMS-MailID: 20220316043953epcms5p64b6640822657cca1ceac10cc1bd94846
+Content-Type: multipart/mixed;
+        boundary="----=_Part_3922146_1652146221.1647405593709"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupik+LIzCtJLcpLzFFi42LZdlhTXVchyzDJ4MJULos569ewWfQ2TWey
+        ODJ/DavFg4PX2S0u75rDZtEw+zurxeNZ89gsbkx4ymixcv5yRov/j7+yWuzreMBksXvjIjaL
+        43eeMlkcOjmX0aLx831GB36P2Q0XWTx2zrrL7tGy7xaQOPKW1WPTqk42jxMzfrN4zDsZ6HGh
+        K9vj/b6rbB59W1YxeqzfcpXF4/MmuQCeKC6blNSczLLUIn27BK6MDa8KC6YqV/S/us/WwLhM
+        vouRk0NCwESiedNF9i5GLg4hgd2MElv2b2cHSbAIqEpMfraOBcTmFbCQaL95mbWLkQPIFpT4
+        u0MYJCwsEC5xcP85sBIhAUWJCzPWMIKUCAsYSPzaqgESZhPQk1i1aw9YiYiAhsS+Cb1MIKuY
+        BZ6zSryf28YOcQOvxIz2pywQtrTE9uVbGUFsTgEziY3rmpkg4qISN1e/ZYex3x+bzwhhi0i0
+        3jvLDGELSjz4uRsqLiOxenMvC8gyCYFuRon17/ZCOTMYJXoeTYPqMJdYv2QV1FQXiRs35oB1
+        MwN9dnj/T6i4rMTUU+uYIOJ8Er2/nzDBXL1jHoytKtFycwMrzAefP36E+sZDovnSI1ZI6G5k
+        lHi/6jLzBEb5WYiAnIVkHYQtL7H97RxmkBJmAU2J9bv0IcJqElP6v7BB2GYSDe1TWSBsRYkp
+        3Q/ZFzCyr2KUTC0ozk1PLTYtMMpLLdcrTswtLs1L10vOz93ECE6iWl47GB8++KB3iJGJg/EQ
+        owpQ+6MNqy8wSrHk5eelKonwnnmhnyTEm5JYWZValB9fVJqTWnyIUZqDRUmc93T6hkQhgfTE
+        ktTs1NSC1CKYLBMHp1QDU3rr4tdcBfPL1n6ZHsLN2OVlcFVX9+Spamb7de8cMkt3VDZ8WfTv
+        7JZJeg8fRhemJv3XZt14cOEhg7fMNnVyO34F7FlzwG77WQfZBbzHnl2Pc+R4nbQy84Dc3buX
+        94qsD1VdujQszcH6+sZGZ+GW581W+e6rlDsso+vcxVx3HPy90bJ4Paul0PINWY/bT3Rvt77H
+        HD2F/byOZ6qbsnP7wk21P5+bbl3z//fzzc+DJJUP1kt671xtHNMYl7RvRnXZ3IvPu5yjr2zT
+        vLuvYb7KHZsfV4RlQ8NL9Cft8ltwI0a7jzFQ5vBaXia7e1l71uwUmXBS2fx+9JcicX+Nx/8/
+        CznP1dyi9XF2a5z/D7XcN0osxRmJhlrMRcWJACtGHAEdBAAA
+X-CMS-RootMailID: 20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c
+References: <YjDScHjMUbqYV4s4@bombadil.infradead.org>
+        <20220315155100.516107-1-maninder1.s@samsung.com>
+        <CGME20220315155109epcas5p249963f50d68ee368edb569b1a9e7d63c@epcms5p6>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 3:47 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Tue, Mar 15, 2022 at 4:29 AM Barry Song <21cnbao@gmail.com> wrote:
->
-> <snipped>
->
-> > > I guess the main cause of the regression for the previous sequence
-> > > with 16 entries is that the ebizzy has a new allocated copy in
-> > > search_mem(), which is mapped and used only once in each loop.
-> > > and the temp copy can push out those hot chunks.
-> > >
-> > > Anyway, I understand it is a trade-off between warmly embracing new
-> > > pages and holding old pages tightly. Real user cases from phone, server,
-> > > desktop will be judging this better.
->
-> Thanks for all the details. I looked into them today and found no
-> regressions when running with your original program.
->
-> After I explain why, I hope you'd be convinced that using programs
-> like this one is not a good way to measure things :)
->
+------=_Part_3922146_1652146221.1647405593709
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
 
-Yep. I agree ebizzy might not be a good one to measure things.
-I chose it only because Kim's patchset which moved anon pages
-to inactive at the first detected access  was using it. Before kim's
-patchset, anon pages were placed in the active list from the first
-beginning:
-https://patchwork.kernel.org/project/linux-mm/cover/1581401993-20041-1-git-send-email-iamjoonsoo.kim@lge.com/
+Hi Luis,
 
-in ebizzy, there is a used-once allocated memory in each
-search_mem(). I guess that is why Kim's patchset chose
-it.
+>> ---
+>> commit id 'kallsyms: print module name in %ps/S case when KALLSYMS is disabled'
+>>         needs to be removed from mm(linux-next) tree, current change is
+>>         with ignorance of this commit. I was not sure how to send patch, with 2 patches
+>>         consisting reversal commit also, or current approach is correct.
+>> 
+>> v1->v2: hash base address of module, change *fmt to fmt[0] and removed
+>>         copy paste.
+>> v2->v3: fixed review comments from Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> 
+>>  include/linux/kallsyms.h |  2 +
+>>  include/linux/module.h   | 20 ++++++++++
+>>  kernel/kallsyms.c        | 27 +++++++------
+>>  kernel/module.c          |  4 +-
+>>  lib/vsprintf.c           | 85 ++++++++++++++++++++++++++++++++++------
+> 
+> Hey Maninder, thanks for your patch!
+>  
+> Since this touches kernel/module.c and include/linux/module.h I'd prefer
+> this go through modules-next [0], and as you will see that's a different
+> world right now. I also have a set of at least 2 other patch sets to
+> merge there before yours.
+>  
+> Also, what is on modules-next is not intended to go to Linus for the
+> next merge window as the changes there got merged only late, and I want
+> at least 2 months of testing on linux-newt before any pull requiest is
+> sent to Linus.
+>  
+> Can you rebase to modules-next? I can evaluate the patches then for
+> integration there once the other stuff gets merged into that tree too.
+>  
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
+>  
+>   Luis
 
-> Problems:
-> 1) Given the 2.5GB configuration and a sequence of cold/hot chunks, I
-> assume your program tries to simulate a handful of apps running on a
-> phone.  A short repeating sequence is closer to sequential access than
-> to real user behaviors, as I suggested last time. You could check out
-> how something similar is done here [1].
-> 2) Under the same assumption (phone), C programs are very different
-> from Android apps in terms of runtime memory behaviors, e.g., JVM GC
-> [2].
-> 3) Assuming you are interested in the runtime memory behavior of C/C++
-> programs, your program is still not very representative. All C/C++
-> programs I'm familiar with choose to link against TCmalloc, jemalloc
-> or implement their own allocators. GNU libc, IMO, has a small market
-> share nowadays.
-> 4) TCmalloc/jemalloc are not only optimized for multithreading, they
-> are also THP aware. THP is very important when benchmarking page
-> reclaim, e.g., two similarly warm THPs can comprise 511+1 or 1+511 of
-> warm+cold 4K pages. The LRU algorithm that chooses more of the former
-> is at the disadvantage. Unless it's recommended by the applications
-> you are trying to benchmark, THP should be disabled. (Android
-> generally doesn't use THP.)
-> 5) Swap devices are also important. Zram should NOT be used unless you
-> know your benchmark doesn't generate incompressible data. The LRU
-> algorithm that chooses more incompressible pages is at disadvantage.
->
+prepared and verified patch(KALLSYMS enabled and disabled both) on module-next rebase and sent in new mail.
+[PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when KALLSYSMS is disabled
 
-Thanks for all the information above. very useful.
+https://lkml.org/lkml/2022/3/16/7
 
-> Here is my result: on the same Snapdragon 7c + 2.5GB RAM + 1.5GB
-> ramdisk swap, with your original program compiled against libc malloc
-> and TCMalloc, to 32-bit and 64-bit binaries:
+Thanks,
+Maninder Singh
+------=_Part_3922146_1652146221.1647405593709
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="rcptInfo.txt"
+Content-Transfer-Encoding: base64
 
-I noticed an important difference is that you are using ramdisk, so there
-is no cost on "i/o". I assume compression/decompression is the i/o cost to
-zRAM.
+DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIHYzXSBr
+YWxsc3ltczogZW5oYW5jZSAlcFMvcy9iIHByaW50aW5nIHdoZW4gS0FMTFNZU01TIGlzIGRpc2Fi
+bGVkDQogICAgICBGcm9tICAgICAgIDogbnVsbA0KICAgICAgU2VudCBEYXRlICA6IDIwMjItMDMt
+MTUgMjM6MjMgIEdNVCs1OjMwDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgICAgICAgICAgICAg
+IE5hbWUgICAgICAgICAgICAgICAgVHlwZSAgICAgICAgICBKb2IgVGl0bGUgICAgICAgICAgICAg
+ICAgICAgICAgIERlcHQuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbXBhbnkgICAg
+ICAgICAgICAgICAgDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIE1hbmluZGVyIFNpbmdoICAg
+ICAgICAgICAgICAgICBUTyAgICAgICAgIFN0YWZmIEVuZ2luZWVyICAgICAgICAgICAgIFN5c3Rl
+bSBTL1cgR3JvdXAgL1NSSS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmfCoEVsZWN0cm9uaWNz
+wqANCiAgICAgIHBtbGFkZWtAc3VzZS5jb20gICAgICAgICAgICAgICBDQw0KICAgICAgcm9zdGVk
+dEBnb29kbWlzLm9yZyAgICAgICAgICAgIENDDQogICAgICBzZW5vemhhdHNreUBjaHJvbWl1bS5v
+cmcgICAgICAgQ0MNCiAgICAgIGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmkuLi4gICBDQw0KICAg
+ICAgbGludXhAcmFzbXVzdmlsbGVtb2VzLmRrICAgICAgIENDDQogICAgICBha3BtQGxpbnV4LWZv
+dW5kYXRpb24ub3JnICAgICAgQ0MNCiAgICAgIHdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tICAg
+ICBDQw0KICAgICAgVmFuZWV0IE5hcmFuZyAgICAgICAgICAgICAgICAgIENDICAgICAgICAgQXNz
+b2NpYXRlIEFyY2hpdGVjdCAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURlbGhpICAgICAg
+ICAgICAgICAgU2Ftc3VuZyBFbGVjdHJvbmljcw0KICAgICAgc3dib3lkQGNocm9taXVtLm9yZyAg
+ICAgICAgICAgIENDDQogICAgICBvamVkYUBrZXJuZWwub3JnICAgICAgICAgICAgICAgQ0MNCiAg
+ICAgIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcgICBDQw0KICAgICAgbGludXgtbW9kdWxl
+c0B2Z2VyLmtlcm5lbC4uLiAgIENDDQogICAgICBhdmltYWxpbkBnbWFpbC5jb20gICAgICAgICAg
+ICAgQ0MNCiAgICAgIGF0b21saW5AcmVkaGF0LmNvbSAgICAgICAgICAgICBDQw0KICAgPT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09DQo=
 
->
-> # cat /sys/kernel/mm/lru_gen/enabled
-> 0x0003
-> # cat /sys/kernel/mm/transparent_hugepage/enabled
-> always madvise [never]
->
-> # modprobe brd rd_nr=1 rd_size=1572864
-> # if=/dev/zero of=/dev/ram0 bs=1M
-> # mkswap /dev/ram0
-> # swapoff -a
-> # swapon /dev/ram0
->
-> # ldd test_absl_32
->         linux-vdso.so.1 (0xf6e7f000)
->         libabsl_malloc.so.2103.0.1 =>
-> /usr/lib/libabsl_malloc.so.2103.0.1 (0xf6e23000)
->         libpthread.so.0 => /lib/libpthread.so.0 (0xf6dff000)
->         libc.so.6 => /lib/libc.so.6 (0xf6d07000)
->         /lib/ld-linux-armhf.so.3 (0x09df0000)
->         libabsl_base.so.2103.0.1 => /usr/lib/libabsl_base.so.2103.0.1
-> (0xf6ce5000)
->         libabsl_raw_logging.so.2103.0.1 =>
-> /usr/lib/libabsl_raw_logging.so.2103.0.1 (0xf6cc4000)
->         libabsl_spinlock_wait.so.2103.0.1 =>
-> /usr/lib/libabsl_spinlock_wait.so.2103.0.1 (0xf6ca3000)
->         libc++.so.1 => /usr/lib/libc++.so.1 (0xf6c04000)
->         libc++abi.so.1 => /usr/lib/libc++abi.so.1 (0xf6bcd000)
-> # file test_absl_64
-> test_absl_64: ELF 64-bit LSB executable, ARM aarch64, version 1
-> (SYSV), statically linked
-> # ldd test_gnu_32
->         linux-vdso.so.1 (0xeabef000)
->         libpthread.so.0 => /lib/libpthread.so.0 (0xeab92000)
->         libc.so.6 => /lib/libc.so.6 (0xeaa9a000)
->         /lib/ld-linux-armhf.so.3 (0x05690000)
-> # file test_gnu_64
-> test_gnu_64: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV),
-> statically linked
->
-> ### baseline 5.17-rc8
->
-> # perf record ./test_gnu_64 -t 4 -s $((200*1024*1024)) -S 6000000
-> 10 records/s
-> real 59.00 s
-> user 39.83 s
-> sys  174.18 s
->
->     18.51%  [.] memcpy
->     15.98%  [k] __pi_clear_page
->      5.59%  [k] rmqueue_pcplist
->      5.19%  [k] do_raw_spin_lock
->      5.09%  [k] memmove
->      4.60%  [k] _raw_spin_unlock_irq
->      3.62%  [k] _raw_spin_unlock_irqrestore
->      3.61%  [k] free_unref_page_list
->      3.29%  [k] zap_pte_range
->      2.53%  [k] local_daif_restore
->      2.50%  [k] down_read_trylock
->      1.41%  [k] handle_mm_fault
->      1.32%  [k] do_anonymous_page
->      1.31%  [k] up_read
->      1.03%  [k] free_swap_cache
->
-> ### MGLRU v9
->
-> # perf record ./test_gnu_64 -t 4 -s $((200*1024*1024)) -S 6000000
-> 11 records/s
-> real 57.00 s
-> user 39.39 s
->
->     19.36%  [.] memcpy
->     16.50%  [k] __pi_clear_page
->      6.21%  [k] memmove
->      5.57%  [k] rmqueue_pcplist
->      5.07%  [k] do_raw_spin_lock
->      4.96%  [k] _raw_spin_unlock_irqrestore
->      4.25%  [k] free_unref_page_list
->      3.80%  [k] zap_pte_range
->      3.69%  [k] _raw_spin_unlock_irq
->      2.71%  [k] local_daif_restore
->      2.10%  [k] down_read_trylock
->      1.50%  [k] handle_mm_fault
->      1.29%  [k] do_anonymous_page
->      1.17%  [k] free_swap_cache
->      1.08%  [k] up_read
->
-
-I think your result is right. but if you take a look at the number of
-major faults, will you find mglru have more page faults?
-i ask this question because i can see mglru even wins with lower
-hit ratio in the previous report I sent.
-
-> [1] https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/refs/heads/main/src/chromiumos/tast/local/memory/mempressure/mempressure.go
-> [2] https://developer.android.com/topic/performance/memory-overview
-
-Thanks
-Barry
+------=_Part_3922146_1652146221.1647405593709--

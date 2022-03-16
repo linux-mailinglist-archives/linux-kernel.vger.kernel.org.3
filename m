@@ -2,176 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C11F4DB560
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A14A4DB56D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240847AbiCPPyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
+        id S1357404AbiCPP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243541AbiCPPyo (ORCPT
+        with ESMTP id S1357364AbiCPP4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:54:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35FB427FC7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:53:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E543C1476;
-        Wed, 16 Mar 2022 08:53:29 -0700 (PDT)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA4DC3F7D7;
-        Wed, 16 Mar 2022 08:53:28 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 15:52:59 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH 2/3] irqchip/gic-v3: Detect LPI invalidation MMIO
- registers
-Message-ID: <20220316155259.4ac3c4d2@slackpad.lan>
-In-Reply-To: <8735jhzz6x.wl-maz@kernel.org>
-References: <20220315165034.794482-1-maz@kernel.org>
-        <20220315165034.794482-3-maz@kernel.org>
-        <20220316145141.44d20486@slackpad.lan>
-        <8735jhzz6x.wl-maz@kernel.org>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-slackware-linux-gnu)
+        Wed, 16 Mar 2022 11:56:34 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944945F4F0;
+        Wed, 16 Mar 2022 08:55:19 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id hw13so5077104ejc.9;
+        Wed, 16 Mar 2022 08:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xrv4PFSyhAtwnCAL/pjWyzmn6e9Q3pw3qGeeMjVLkWc=;
+        b=ThLCeQCLe60XloIENcKZTLtoa92AsszbMGtlE1VP85Nj8ONYeGAtPtd3THFkwuE1R4
+         Rb+p8levz1Kkk/esESpsWOOce4y/GAs3zE/h/Iq8JTZadMNMhSzoXuCsi65zQcSj9uj9
+         roUu7BL6G2KSrbQdMUcXxa1eBfn7GLPhFdgtrRtKQ1B6XjhvDCk1M6WlSKyn57HnuVDa
+         81Zd+YwZwjEFy9IgsZIWqi9+OJ0hcLCs/C3anzU5mAn4GgUA+5ei9x+U8aPDc4PlCURW
+         8DQSGQ08z9c9bhp4uK79m+ecf2bqZ6sdte5Pd0FZyKDC2WwgAQ/cfFk5gcysCgAmWYjH
+         wmBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xrv4PFSyhAtwnCAL/pjWyzmn6e9Q3pw3qGeeMjVLkWc=;
+        b=jZbVG83EaNe51cfcqEo9zhXvbP0JhZmRa5ZQhstJYLcyw5r96NRrK+Quf/tVffXkRC
+         s4KfTzJCbYt6XC3lKngK7Pt9Cg8ORMH9LLnB+SDHbXt9IKMZfKa5bLo1VL9zjdsPtn0H
+         SqVNrKJp6hIjfAUDBJh0GMLgbC5PtvvPaXMhe1V+Y+r5o/vZTrbZntfJXz5ZcPvMonlN
+         DT22h5wzva3KgO7A9Ms9tGDqMTRKUfhMPkrW+D48QnGLV3u0A8INbVEZ43VF/B4RG5/q
+         DCedcz06rkUE02MyfAx2f927LmGrNhCkZnoQRIILqlyw0vy7Jn0wsDzDZ+Ns5lSCSQLi
+         jQHw==
+X-Gm-Message-State: AOAM532FM1C5NuMF+Jefu/fmEKnWuwFxwfW4y5qzanz2YoWIcBTMkeY7
+        lVwHu1j6CbKdJUvidv7pmqkKuZydHQWmUgZOtDA=
+X-Google-Smtp-Source: ABdhPJx7tfhflG1OGwg4hJv+lc6fCCCsMyBIcaeP4g7aVOZtvesN3U3Aevmj9sLhxYjH7UWlro+fkCpgMa2F3+GK74E=
+X-Received: by 2002:a17:907:6e01:b0:6d0:562c:e389 with SMTP id
+ sd1-20020a1709076e0100b006d0562ce389mr499870ejc.497.1647446118072; Wed, 16
+ Mar 2022 08:55:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220316150533.421349-1-krzysztof.kozlowski@canonical.com> <20220316150533.421349-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220316150533.421349-2-krzysztof.kozlowski@canonical.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 16 Mar 2022 17:54:04 +0200
+Message-ID: <CAHp75VeaQdzUKJSKzH9FjbmON5asqH799AS8OzHGoDiRnJifNw@mail.gmail.com>
+Subject: Re: [PATCH v5 01/11] driver: platform: Add helper for safer setting
+ of driver_override
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 15:36:54 +0000
-Marc Zyngier <maz@kernel.org> wrote:
+On Wed, Mar 16, 2022 at 5:06 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 
-Hi Marc,
+...
 
-> On Wed, 16 Mar 2022 14:51:58 +0000,
-> Andre Przywara <andre.przywara@arm.com> wrote:
-> > 
-> > On Tue, 15 Mar 2022 16:50:33 +0000
-> > Marc Zyngier <maz@kernel.org> wrote:
-> > 
-> > Hi,
-> >   
-> > > Since GICv4.1, an implementation can offer the same MMIO-based
-> > > implementation as DirectLPI, only with an ITS. Given that this
-> > > can be hugely beneficial for workloads that are very LPI masking
-> > > heavy (although these workloads are admitedly a bit odd).
-> > > 
-> > > Interestingly, this is independent of RVPEI, which only *implies*
-> > > the functionnality.
-> > > 
-> > > So let's detect whether the implementation has GICR_CTLR.IR set,
-> > > and propagate this as DirectLPI to the ITS driver.
-> > > 
-> > > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > > ---
-> > >  drivers/irqchip/irq-gic-v3.c       | 15 +++++++++++----
-> > >  include/linux/irqchip/arm-gic-v3.h |  2 ++
-> > >  2 files changed, 13 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-> > > index 736163d36b13..363bfe172033 100644
-> > > --- a/drivers/irqchip/irq-gic-v3.c
-> > > +++ b/drivers/irqchip/irq-gic-v3.c
-> > > @@ -918,7 +918,11 @@ static int gic_populate_rdist(void)
-> > >  static int __gic_update_rdist_properties(struct redist_region *region,
-> > >  					 void __iomem *ptr)
-> > >  {
-> > > -	u64 typer = gic_read_typer(ptr + GICR_TYPER);
-> > > +	u64 typer;
-> > > +	u32 ctlr;
-> > > +
-> > > +	typer = gic_read_typer(ptr + GICR_TYPER);
-> > > +	ctlr = readl_relaxed(ptr + GICR_CTLR);  
-> > 
-> > Is there any reason you didn't keep this together? I thought this was
-> > recommended, in general?  
-> 
-> Sorry, keep what together with what?
+> +int driver_set_override(struct device *dev, const char **override,
+> +                       const char *s, size_t len)
+> +{
+> +       const char *new, *old;
+> +       char *cp;
 
-Sorry, I meant the variable declaration with the initialisation:
+> +       if (!dev || !override || !s)
+> +               return -EINVAL;
 
-	u64 typer = gic_read_typer(ptr + GICR_TYPER);
-	u32 ctlr = readl_relaxed(ptr + GICR_CTLR);
+Sorry, I didn't pay much attention on this. First of all, I would drop
+dev checks and simply require that dev should be valid. Do you expect
+this can be called when dev is invalid? I would like to hear if it's
+anything but theoretical. Second one, is the !s requirement. Do I
+understand correctly that the string must be always present? But then
+how we NULify the override? Is it possible? Third one is absence of
+len check. See below.
 
-I see this a lot (especially in KVM code), so was just wondering if
-this is not cool anymore.
+> +       /*
+> +        * The stored value will be used in sysfs show callback (sysfs_emit()),
+> +        * which has a length limit of PAGE_SIZE and adds a trailing newline.
+> +        * Thus we can store one character less to avoid truncation during sysfs
+> +        * show.
+> +        */
+> +       if (len >= (PAGE_SIZE - 1))
+> +               return -EINVAL;
 
-> > >  
-> > >  	/* Boot-time cleanip */
-> > >  	if ((typer & GICR_TYPER_VLPIS) && (typer & GICR_TYPER_RVPEID)) {
-> > > @@ -941,6 +945,7 @@ static int __gic_update_rdist_properties(struct redist_region *region,
-> > >  	/* RVPEID implies some form of DirectLPI, no matter what the doc says... :-/ */
-> > >  	gic_data.rdists.has_rvpeid &= !!(typer & GICR_TYPER_RVPEID);
-> > >  	gic_data.rdists.has_direct_lpi &= (!!(typer & GICR_TYPER_DirectLPIS) |
-> > > +					   !!(ctlr & GICR_CTLR_IR) |  
-> > 
-> > So this means that has_direct_lpi is not really correct anymore, as the
-> > IR bit only covers the INVL and SYNCR registers, not the GICR_SETLPIR
-> > and GICR_CLRLPIR registers, if I understand the spec correctly?
-> > 
-> > But I guess this is nitpicking, as we don't use direct LPIs at all in
-> > Linux? And I guess the target is lpi_update_config(), which now doesn't
-> > need the command queue anymore?  
-> 
-> Exactly. The history of this crap is convoluted:
-> 
-> The canonical goal of DirectLPI was to support LPIs without an
-> ITS. Thankfully, this was never implemented. What was implemented by
-> our HiSi friends was DirectLPI *with* an ITS, which was illegal at the
-> time, but also the only way to make GICv4.0 work at a reasonable
-> speed. That's where the direct_lpi boolean comes from.
-> 
-> RVPEI added some more confusion by offering a subset of DirectLPI for
-> invalidation of vlpis. And then IR was introduced because there is
-> really no reason not to offer the same service on GICv3.
+I would relax this to make sure we can use it if \n is within this limit.
 
-Ah, I was hoping for this kind of answer ;-) , so many thanks!
+> +       cp = strnchr(s, len, '\n');
+> +       if (cp)
+> +               len = cp - s;
+> +
+> +       new = kstrndup(s, len, GFP_KERNEL);
 
-Cheers,
-Andre
+Here is a word about the len check.
 
-> 
-> > 
-> > Maybe this could be clarified in the commit message?  
-> 
-> Sure, can do.
-> 
-> >   
-> > >  					   gic_data.rdists.has_rvpeid);
-> > >  	gic_data.rdists.has_vpend_valid_dirty &= !!(typer & GICR_TYPER_DIRTY);
-> > >  
-> > > @@ -962,7 +967,11 @@ static void gic_update_rdist_properties(void)
-> > >  	gic_iterate_rdists(__gic_update_rdist_properties);
-> > >  	if (WARN_ON(gic_data.ppi_nr == UINT_MAX))
-> > >  		gic_data.ppi_nr = 0;
-> > > -	pr_info("%d PPIs implemented\n", gic_data.ppi_nr);
-> > > +	pr_info("GICv3 features: %d PPIs, %s%s\n",  
-> > 
-> > I like having that on one line, but it looks a bit odd with the
-> > trailing comma when we have neither RSS nor DirectLPI.
-> > What about:
-> > 	pr_info("GICv3 features: %d PPIs%s%s\n",
-> > 	gic_data.ppi_nr,
-> > 	gic_data.has_rss ? ", RSS" : "",
-> > 	gic_data.rdists.has_direct_lpi ? ", DirectLPI" : "");  
-> 
-> Yeah, looks better.
-> 
-> Thanks,
-> 
-> 	M.
-> 
+> +       if (!new)
 
+If len == 0, this won't trigger and you have something very
+interesting as a result.
+
+One way is to use ZERO_PTR_OR_NULL() another is explicitly check for 0
+and issue a (different?) error code.
+
+> +               return -ENOMEM;
+> +
+> +       device_lock(dev);
+> +       old = *override;
+> +       if (cp != s) {
+> +               *override = new;
+> +       } else {
+> +               kfree(new);
+> +               *override = NULL;
+> +       }
+> +       device_unlock(dev);
+> +
+> +       kfree(old);
+> +
+> +       return 0;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

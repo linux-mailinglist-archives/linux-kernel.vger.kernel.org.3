@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F664DBB71
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 129AC4DBB6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbiCPXy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S1353665AbiCPXyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354208AbiCPXyG (ORCPT
+        with ESMTP id S1353063AbiCPXyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:54:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2253C339;
-        Wed, 16 Mar 2022 16:52:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D92711515;
-        Wed, 16 Mar 2022 16:52:48 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.19.225])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EF7763F766;
+        Wed, 16 Mar 2022 19:54:03 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDD71BE86;
         Wed, 16 Mar 2022 16:52:45 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
-        sudeep.holla@arm.com, matthias.bgg@gmail.com
-Subject: [[PATCH 8/8] powercap: DTPM: Check for Energy Model type
-Date:   Wed, 16 Mar 2022 23:52:11 +0000
-Message-Id: <20220316235211.29370-9-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220316235211.29370-1-lukasz.luba@arm.com>
-References: <20220316235211.29370-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by mail-wr1-x42c.google.com with SMTP id p9so5077016wra.12;
+        Wed, 16 Mar 2022 16:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zKYyk16OQXNqPDT/mUJOjq8mRTj4QHt2PWKklBsV4+Q=;
+        b=Joc8R2f8jiNuENQ5gKMjNwDJ8HBnaKtUrlFOMs6FJH2hLEgJoJTH5PdYKzLQ4ixZwg
+         pl+ep7l24HdaEzUEECjQLOYm4R3vjAujf58FvVyX+Zjoh4fJSz4SWM2uhIBBxdfcGJKe
+         3B3xwvwadt4nZuBdoes8qwlxD7ki9xxq8AgjhXuqL9ZELJ/CIqzusMhM3a9YBhHFyHjp
+         15kkaUdDlZ2y6pvZx1l5gcffLhmDtdu0Ew8k1LYlFACCO+HnzeGClnuZIyuBIJaSAfH8
+         dJ9BA6CAGWW73HshqTzP2lHfvowEjVFicCKmb2tj4qPufYv1GtIwJQSjNPggi0ptt4cY
+         aDwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zKYyk16OQXNqPDT/mUJOjq8mRTj4QHt2PWKklBsV4+Q=;
+        b=RVvGM/7KIXkuRe8lP620eO9c1Cd9LAY81OcJSF7QdkpcJzHLTtvvG1qyORG+0BXB9F
+         malEOKeJkHQ20fT+rYA3d4OeD7XSPU15C88Gbegspywb0MqTD3zSvKQhXv1H4QJDAgeE
+         yzeRf2tkJo5XtL4kr/7UeuGJuICnk8fnz8QeAEUR526JXQ3tjZScGAQ0m8gxNefmc9fX
+         5Dpph+Yl/HFkGBTrvH5CYUtq8p9n2O+Lus4HLVngJdQZeiLPMQdEhKSH0NmmqFagAULL
+         7juhSZViF+Ssxk45O3VoBvGqr0GZpeyjLjT4JZH5wDkerAKwZ6HLdjTqJDuv7R+w+6/n
+         eshg==
+X-Gm-Message-State: AOAM531vueoO2WE01eJzADrMVt+AF2EuVyKTLuTSV0wct1KnyKhkeG9m
+        ZvL5DLsajPYOOjcfipJTKRUiPcYjgfiGFw==
+X-Google-Smtp-Source: ABdhPJzxOptlpMedYnGOKD3rYyxwTC4gVB9c93ji9zMQQ/lGZbyiKsAbJS9WDh4FE85/mw3hbDnThA==
+X-Received: by 2002:a5d:6d81:0:b0:203:e187:1faa with SMTP id l1-20020a5d6d81000000b00203e1871faamr1773716wrs.381.1647474764098;
+        Wed, 16 Mar 2022 16:52:44 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f7-20020a0560001a8700b00203c23e55e0sm2832308wry.78.2022.03.16.16.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 16:52:43 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iwlwifi: Fix spelling mistake "upto" -> "up to"
+Date:   Wed, 16 Mar 2022 23:52:42 +0000
+Message-Id: <20220316235242.56375-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Energy Model power values might be artificial. In such case
-it's safe to bail out during the registration, since the PowerCap
-framework supports only micro-Watts.
+There is a spelling mistake in a IWL_ERR error message. Fix it.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/powercap/dtpm_cpu.c | 2 +-
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index bca2f912d349..f5eced0842b3 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -211,7 +211,7 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
- 		return 0;
- 
- 	pd = em_cpu_get(cpu);
--	if (!pd)
-+	if (!pd || em_is_artificial(pd))
- 		return -EINVAL;
- 
- 	dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+index a2203f661321..ecbc5a3f3d18 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -898,7 +898,7 @@ static int iwl_parse_tlv_firmware(struct iwl_drv *drv,
+ 				drv->fw.img[IWL_UCODE_WOWLAN].is_dual_cpus =
+ 					true;
+ 			} else if ((num_of_cpus > 2) || (num_of_cpus < 1)) {
+-				IWL_ERR(drv, "Driver support upto 2 CPUs\n");
++				IWL_ERR(drv, "Driver support up to 2 CPUs\n");
+ 				return -EINVAL;
+ 			}
+ 			break;
 -- 
-2.17.1
+2.35.1
 

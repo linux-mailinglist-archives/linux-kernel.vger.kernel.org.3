@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBCA4DAD9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8554DAD9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354930AbiCPJi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S1354940AbiCPJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237334AbiCPJi5 (ORCPT
+        with ESMTP id S242737AbiCPJjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:38:57 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB0A2E0A4;
-        Wed, 16 Mar 2022 02:37:44 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 7C37D68AFE; Wed, 16 Mar 2022 10:37:40 +0100 (CET)
-Date:   Wed, 16 Mar 2022 10:37:40 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     axboe@kernel.dk
-Cc:     jaegeuk@kernel.org, chao@kernel.org, ulf.hansson@linaro.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Daeho Jeong <daehojeong@google.com>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: security issue: data exposure when using block layer secure erase
-Message-ID: <20220316093740.GA7714@lst.de>
+        Wed, 16 Mar 2022 05:39:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417FB62DA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:38:02 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1nUQ6O-0000vX-Bc; Wed, 16 Mar 2022 10:37:56 +0100
+Message-ID: <cf0943a1144e91048fc88fe9b11660bafe1a2d8d.camel@pengutronix.de>
+Subject: Re: [PATCH] PCI: imx6: Invoke the PHY exit function after PHY power
+ off
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Date:   Wed, 16 Mar 2022 10:37:55 +0100
+In-Reply-To: <1646289275-17813-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1646289275-17813-1-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Am Donnerstag, dem 03.03.2022 um 14:34 +0800 schrieb Richard Zhu:
+> To balance phy->init_count, invoke the phy_exit() after phy_power_off().
+> 
+This looks okay as a fix, but overall I don't like that we need to have
+special PHY handling in the suspend path and PHY init hidden in
+imx6_pcie_assert_core_reset() in the resume path. Maybe we can make
+this PHY handling a bit more obvious by splitting it out of the core
+reset sequence. I don't see the full implications of such a change yet,
+but I think we should at least give it a try.
 
-while staring at the block layer code I found what I think is a major
-security issue with the use of REQ_OP_SECURE_ERASE.
+For now, this patch is:
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
-The issue is not about the actual protocol implementation, which only
-exists for eMMC [1], but about we handle issuing the operation in the
-block layer.  That is done through __blkdev_issue_discard, which
-takes various parameters into account to align the issue discard
-request to what the hardware prefers.  Which is perfectly fine for
-discard as an advisory operation, but deadly for an operation that
-wants to make data inaccessible.  The problem has existed ever since
-secure erase support was added to the kernel with commit
-8d57a98ccd0b ("block: add secure discard"), which added secure erase
-support as a REQ_SECURE flag to the discard operation.
+> Fixes: 178e244cb6e2 ("PCI: imx: Add the imx8mm pcie support")
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 331490614d55..343fe1429e3c 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -973,6 +973,7 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
+>  	case IMX8MM:
+>  		if (phy_power_off(imx6_pcie->phy))
+>  			dev_err(dev, "unable to power off PHY\n");
+> +		phy_exit(imx6_pcie->phy);
+>  		break;
+>  	default:
+>  		break;
 
-The ioctl added there also as the only users for a long time, until f2fs
-added a second (really strange) user that uses secure erase if offered by 
-the device but otherwise plain old discard: 9af846486d78
-("f2fs: add F2FS_IOC_SEC_TRIM_FILE ioctl") which seems to treat the
-secure discard as nice to have but actually is fine with data leaks
-from the use of discard or an incorrect implementation of secure erase.
 
-My preference would be to just remove this ill designed feature entirely.
-The alternative 1 in this thead does just that.  Alternative 2 tries to
-fix it instead, but I haven't bee nable to get any interested party to
-actually test in more than three eeks, suggesting we're better off
-removing the code.
-
-[1] which is rather dubious as well, as sector based secure erase in
-flash based media can't really work due to the lack of in-place write
-support.  At best it is the equivalent for a Write Same or Write Zeroes
-command without deterministic data on the next read.

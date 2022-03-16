@@ -2,93 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4175B4DBB50
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8563B4DBB54
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347884AbiCPXrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S240242AbiCPXsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiCPXri (ORCPT
+        with ESMTP id S237308AbiCPXsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:47:38 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6CAE89;
-        Wed, 16 Mar 2022 16:46:23 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m42-20020a05600c3b2a00b00382ab337e14so4064592wms.3;
-        Wed, 16 Mar 2022 16:46:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RSX5Rth7wwj83rxTYc+rwdv+c14uPhz18sTsRPEgR/E=;
-        b=cDeXbYS8Zb7+0/CDX+L3jB2qUzVT/9dkvRHVIlv9xeSwjYyGVNRSEK2EnP9tx34m4Q
-         owsQe6WKA7D6BDCGu0GbZ8Eb9rP1LkGzPad+/fntJsAGWKwSMKlt1dcp/8zf7n9rsRah
-         q3ajz9xH0DJeaMc2c1L8z6n/QRswEGS9G5hvphVgOlgsqno6YB2VJggTYRcZjrBRhXFq
-         Z9rdEKWCwDmdX1dJPsCxg+0tI8aaDbGhDBJhdmswM0ZERBvUS1hc9kLBl5d5EH8f3vqF
-         y5/CGf/93cEzW2rnuQK7zDWJkXd4JlVphWgjIKDhxa0ZRWc+uLkImmpQRL2TBE+vSLOv
-         annQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RSX5Rth7wwj83rxTYc+rwdv+c14uPhz18sTsRPEgR/E=;
-        b=FFX+pG8XW/gceIQjzslWMvNErvZoYm1fBejJjwckeJo7DSli8T0ckBFvsrNG5lnNka
-         L0E5ZMZnSCv5qL6qa0bWdgxg4O81qpMToBcSbXFhBQZhVJhuYzE68ei1k5x3MNTtOuv+
-         utxe4AqTUutr1tVF7ZDPCuhic2WBWISKRUKaqbo7jhw43kZz4H7cP9jAp0Xr+hj3kEt0
-         ek7bi76Nut6CAphAVAQ2jwRHBkOqn7RvMxBGaxNqkoUTKIflCjDMvO1UqGhry8o4GCXU
-         dYnFlKPrDC9vxRXpSvOP2i/ziUtkClLJ/bTfq3/KmQq7PVDNlUIpLqLYlbStZ6CzGXUu
-         kV9g==
-X-Gm-Message-State: AOAM532LYGhVdF48gVJsrXrO5BpUv1dOzcn5CuYpVYWWxHyQT4GBwYN9
-        nI+ckVWk56UqmRrhDn3hdrs=
-X-Google-Smtp-Source: ABdhPJyxcNhyV4ys0YsNVf6IfPElpeiApCn9unzK7l2es+CC4mQwMkYYrz86YyuiUTom73kbiVIMEA==
-X-Received: by 2002:a05:600c:264e:b0:389:802e:c7fa with SMTP id 14-20020a05600c264e00b00389802ec7famr1622306wmy.93.1647474381806;
-        Wed, 16 Mar 2022 16:46:21 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id u15-20020a5d6daf000000b00203db33b2e4sm2825884wrs.26.2022.03.16.16.46.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 16:46:21 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ethernet: sun: Fix spelling mistake "mis-matched" -> "mismatched"
-Date:   Wed, 16 Mar 2022 23:46:20 +0000
-Message-Id: <20220316234620.55885-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 16 Mar 2022 19:48:22 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5961060CC;
+        Wed, 16 Mar 2022 16:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1647474424; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j8Ooh+LCxFFoGKBoaKiMAx0jGXjqFdxKO7NQQBvBgWI=;
+        b=ySeFFnByqVzcPFdMJTkKf8CMbUFhsu6DtcQL+g38yEIxB6TLHM719Bpgr5qLXUvqZvSu8n
+        hCb71dWGYeSq2SCcLrkjywWDMvVcggEgysEZKxhz5FAQBwxWAscDKm7xzi9vmIzieiag+w
+        1fQsCYvwHY9cSdTLW9o84tZTdFRgseQ=
+Date:   Wed, 16 Mar 2022 23:46:55 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3] pinctrl: ingenic: Fix regmap on X series SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <7E3V8R.2BAIBRJ6ON0W1@crapouillou.net>
+In-Reply-To: <20220316232029.965361-1-aidanmacdonald.0x0@gmail.com>
+References: <20220316232029.965361-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_err message. Fix it.
+Hi Aidan,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/sun/niu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Le mer., mars 16 2022 at 23:20:30 +0000, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The X series Ingenic SoCs have a shadow GPIO group which is at a=20
+> higher
+> offset than the other groups, and is used for all GPIO configuration.
+> The regmap did not take this offset into account and set max_register
+> too low, so the regmap API blocked writes to the shadow group, which
+> made the pinctrl driver unable to configure any pins.
+>=20
+> Fix this by adding regmap access tables to the chip info.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-diff --git a/drivers/net/ethernet/sun/niu.c b/drivers/net/ethernet/sun/niu.c
-index ba8ad76313a9..42460c0885fc 100644
---- a/drivers/net/ethernet/sun/niu.c
-+++ b/drivers/net/ethernet/sun/niu.c
-@@ -7909,7 +7909,7 @@ static int niu_ldg_assign_ldn(struct niu *np, struct niu_parent *parent,
- 		 * won't get any interrupts and that's painful to debug.
- 		 */
- 		if (nr64(LDG_NUM(ldn)) != ldg) {
--			dev_err(np->device, "Port %u, mis-matched LDG assignment for ldn %d, should be %d is %llu\n",
-+			dev_err(np->device, "Port %u, mismatched LDG assignment for ldn %d, should be %d is %llu\n",
- 				np->port, ldn, ldg,
- 				(unsigned long long) nr64(LDG_NUM(ldn)));
- 			return -EINVAL;
--- 
-2.35.1
+Since this is a fix, you need to add a Fixes: tag that points to the=20
+commit that introduced the bug, and add a Cc: <stable@vger.kernel.org>=20
+line as well.
+
+> ---
+> v1 -> v2: use regmap_access_table
+> v2 -> v3: compute max_register instead of putting it in chip_info
+>=20
+>  drivers/pinctrl/pinctrl-ingenic.c | 46=20
+> ++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
+> b/drivers/pinctrl/pinctrl-ingenic.c
+> index 2712f51eb238..fa6becca1788 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -119,6 +119,8 @@ struct ingenic_chip_info {
+>  	unsigned int num_functions;
+>=20
+>  	const u32 *pull_ups, *pull_downs;
+> +
+> +	const struct regmap_access_table *access_table;
+>  };
+>=20
+>  struct ingenic_pinctrl {
+> @@ -2179,6 +2181,17 @@ static const struct function_desc=20
+> x1000_functions[] =3D {
+>  	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
+>  };
+>=20
+> +static const struct regmap_range x1000_access_ranges[] =3D {
+> +	regmap_reg_range(0x000, 0x400 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X1500 */
+> +static const struct regmap_access_table x1000_access_table =3D {
+> +	.yes_ranges =3D x1000_access_ranges,
+> +	.n_yes_ranges =3D ARRAY_SIZE(x1000_access_ranges),
+> +};
+> +
+>  static const struct ingenic_chip_info x1000_chip_info =3D {
+>  	.num_chips =3D 4,
+>  	.reg_offset =3D 0x100,
+> @@ -2189,6 +2202,7 @@ static const struct ingenic_chip_info=20
+> x1000_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x1000_functions),
+>  	.pull_ups =3D x1000_pull_ups,
+>  	.pull_downs =3D x1000_pull_downs,
+> +	.access_table =3D &x1000_access_table,
+>  };
+>=20
+>  static int x1500_uart0_data_pins[] =3D { 0x4a, 0x4b, };
+> @@ -2300,6 +2314,7 @@ static const struct ingenic_chip_info=20
+> x1500_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x1500_functions),
+>  	.pull_ups =3D x1000_pull_ups,
+>  	.pull_downs =3D x1000_pull_downs,
+> +	.access_table =3D &x1000_access_table,
+>  };
+>=20
+>  static const u32 x1830_pull_ups[4] =3D {
+> @@ -2506,6 +2521,16 @@ static const struct function_desc=20
+> x1830_functions[] =3D {
+>  	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
+>  };
+>=20
+> +static const struct regmap_range x1830_access_ranges[] =3D {
+> +	regmap_reg_range(0x0000, 0x4000 - 4),
+> +	regmap_reg_range(0x7000, 0x8000 - 4),
+> +};
+> +
+> +static const struct regmap_access_table x1830_access_table =3D {
+> +	.yes_ranges =3D x1830_access_ranges,
+> +	.n_yes_ranges =3D ARRAY_SIZE(x1830_access_ranges),
+> +};
+> +
+>  static const struct ingenic_chip_info x1830_chip_info =3D {
+>  	.num_chips =3D 4,
+>  	.reg_offset =3D 0x1000,
+> @@ -2516,6 +2541,7 @@ static const struct ingenic_chip_info=20
+> x1830_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x1830_functions),
+>  	.pull_ups =3D x1830_pull_ups,
+>  	.pull_downs =3D x1830_pull_downs,
+> +	.access_table =3D &x1830_access_table,
+>  };
+>=20
+>  static const u32 x2000_pull_ups[5] =3D {
+> @@ -2969,6 +2995,17 @@ static const struct function_desc=20
+> x2000_functions[] =3D {
+>  	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
+>  };
+>=20
+> +static const struct regmap_range x2000_access_ranges[] =3D {
+> +	regmap_reg_range(0x000, 0x500 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X2100 */
+> +static const struct regmap_access_table x2000_access_table =3D {
+> +	.yes_ranges =3D x2000_access_ranges,
+> +	.n_yes_ranges =3D ARRAY_SIZE(x2000_access_ranges),
+> +};
+> +
+>  static const struct ingenic_chip_info x2000_chip_info =3D {
+>  	.num_chips =3D 5,
+>  	.reg_offset =3D 0x100,
+> @@ -2979,6 +3016,7 @@ static const struct ingenic_chip_info=20
+> x2000_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x2000_functions),
+>  	.pull_ups =3D x2000_pull_ups,
+>  	.pull_downs =3D x2000_pull_downs,
+> +	.access_table =3D &x2000_access_table,
+>  };
+>=20
+>  static const u32 x2100_pull_ups[5] =3D {
+> @@ -3189,6 +3227,7 @@ static const struct ingenic_chip_info=20
+> x2100_chip_info =3D {
+>  	.num_functions =3D ARRAY_SIZE(x2100_functions),
+>  	.pull_ups =3D x2100_pull_ups,
+>  	.pull_downs =3D x2100_pull_downs,
+> +	.access_table =3D &x2000_access_table,
+>  };
+>=20
+>  static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8=20
+> reg)
+> @@ -4168,7 +4207,12 @@ static int __init ingenic_pinctrl_probe(struct=20
+> platform_device *pdev)
+>  		return PTR_ERR(base);
+>=20
+>  	regmap_config =3D ingenic_pinctrl_regmap_config;
+> -	regmap_config.max_register =3D chip_info->num_chips *=20
+> chip_info->reg_offset;
+> +	if (chip_info->access_table) {
+> +		regmap_config.rd_table =3D chip_info->access_table;
+> +		regmap_config.wr_table =3D chip_info->access_table;
+> +	} else {
+> +		regmap_config.max_register =3D chip_info->num_chips *=20
+> chip_info->reg_offset - 4;
+
+You do actually change how regmap_config.max_register is computed here,=20
+without explaining anywhere why it is changed. I'm not saying that it's=20
+wrong, but you should explain in the commit message why this is changed.
+
+Cheers,
+-Paul
+
+> +	}
+>=20
+>  	jzpc->map =3D devm_regmap_init_mmio(dev, base, &regmap_config);
+>  	if (IS_ERR(jzpc->map)) {
+> --
+> 2.34.1
+>=20
+
 

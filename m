@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315134DA78A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C65DE4DA78F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353005AbiCPBth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 21:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S1353016AbiCPBuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 21:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbiCPBtf (ORCPT
+        with ESMTP id S1353008AbiCPBuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 21:49:35 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F7B340CB;
-        Tue, 15 Mar 2022 18:48:20 -0700 (PDT)
-Received: from IT-EXMB-1-123.meizu.com (172.16.1.123) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 16 Mar
- 2022 09:48:19 +0800
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by
- IT-EXMB-1-123.meizu.com (172.16.1.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 16 Mar 2022 09:48:18 +0800
-Received: from IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575]) by
- IT-EXMB-1-125.meizu.com ([fe80::7481:7d92:3801:4575%3]) with mapi id
- 15.01.2308.014; Wed, 16 Mar 2022 09:48:18 +0800
-From:   =?gb2312?B?sNe6xs7E?= <baihaowen@meizu.com>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "freude@linux.ibm.com" <freude@linux.ibm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>
-CC:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIIHYyXSBzMzkwOiBjcnlwdG86IFVzZSBtaW4oKSBpbnN0?=
- =?gb2312?Q?ead_of_doing_it_manually?=
-Thread-Topic: [PATCH v2] s390: crypto: Use min() instead of doing it manually
-Thread-Index: AQHYOELSbEbPEn7rqU+2mKCQuuOLcqy/sb0AgAGNOSc=
-Date:   Wed, 16 Mar 2022 01:48:18 +0000
-Message-ID: <9291974f2d914f68b037d79f7fe505e2@meizu.com>
-References: <1647331264-13853-1-git-send-email-baihaowen@meizu.com>,<cc26b079f808420592cfea19580e34f5@AcuMS.aculab.com>
-In-Reply-To: <cc26b079f808420592cfea19580e34f5@AcuMS.aculab.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.137.70]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Tue, 15 Mar 2022 21:50:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE455E157;
+        Tue, 15 Mar 2022 18:48:58 -0700 (PDT)
+X-UUID: 926dba9c6db54f90aa966f99697e9a0e-20220316
+X-UUID: 926dba9c6db54f90aa966f99697e9a0e-20220316
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2009940203; Wed, 16 Mar 2022 09:48:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Mar 2022 09:48:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Mar 2022 09:48:53 +0800
+Message-ID: <9b9d1cb4c606a051ffc2e926d40a7af33004aaf6.camel@mediatek.com>
+Subject: Re: [PATCH v3] remoteproc: mediatek: fix side effect of mt8195 sram
+ power on
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 16 Mar 2022 09:48:53 +0800
+In-Reply-To: <36e7847e-56ed-8768-388e-c6a00a2cb0ec@collabora.com>
+References: <20220314111806.28168-1-tinghan.shen@mediatek.com>
+         <36e7847e-56ed-8768-388e-c6a00a2cb0ec@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-aGksIERhdmlkDQoNClRoYW5rIHlvdSBmb3IgeW91ciByZXBseSwgYWxsIGlzIG9rLCBqdXN0IGEg
-Y29kaW5nIHN0eWxlLg0KSWdub3JlIG15IHBhdGNoLg0KX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXw0Kt6K8/sjLOiBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBBQ1VM
-QUIuQ09NPg0Kt6LLzcqxvOQ6IDIwMjLE6jPUwjE1yNUgMTg6MDU6MjQNCsrVvP7IyzogsNe6xs7E
-OyBmcmV1ZGVAbGludXguaWJtLmNvbTsgaGNhQGxpbnV4LmlibS5jb207IGdvckBsaW51eC5pYm0u
-Y29tOyBhZ29yZGVldkBsaW51eC5pYm0uY29tDQqzrcvNOiBsaW51eC1zMzkwQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0K1vfM4jogUkU6IFtQQVRDSCB2Ml0g
-czM5MDogY3J5cHRvOiBVc2UgbWluKCkgaW5zdGVhZCBvZiBkb2luZyBpdCBtYW51YWxseQ0KDQpG
-cm9tOiBIYW93ZW4gQmFpDQo+IFNlbnQ6IDE1IE1hcmNoIDIwMjIgMDg6MDENCj4NCj4gRml4IGZv
-bGxvd2luZyBjb2NjaWNoZWNrIHdhcm5pbmc6DQo+IGRyaXZlcnMvczM5MC9jcnlwdG8vemNyeXB0
-X2VwMTFtaXNjLmM6MTExMjoyNS0yNjogV0FSTklORyBvcHBvcnR1bml0eSBmb3IgbWluKCkNCj4N
-Cj4gU2lnbmVkLW9mZi1ieTogSGFvd2VuIEJhaSA8YmFpaGFvd2VuQG1laXp1LmNvbT4NCj4gLS0t
-DQo+ICBkcml2ZXJzL3MzOTAvY3J5cHRvL3pjcnlwdF9lcDExbWlzYy5jIHwgMiArLQ0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+DQo+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3MzOTAvY3J5cHRvL3pjcnlwdF9lcDExbWlzYy5jIGIvZHJpdmVycy9zMzkw
-L2NyeXB0by96Y3J5cHRfZXAxMW1pc2MuYw0KPiBpbmRleCA5Y2U1YTcxLi5iYjJhNTI3IDEwMDY0
-NA0KPiAtLS0gYS9kcml2ZXJzL3MzOTAvY3J5cHRvL3pjcnlwdF9lcDExbWlzYy5jDQo+ICsrKyBi
-L2RyaXZlcnMvczM5MC9jcnlwdG8vemNyeXB0X2VwMTFtaXNjLmMNCj4gQEAgLTExMDksNyArMTEw
-OSw3IEBAIHN0YXRpYyBpbnQgZXAxMV93cmFwa2V5KHUxNiBjYXJkLCB1MTYgZG9tYWluLA0KPiAg
-ICAgICBpZiAoa2ItPmhlYWQudHlwZSA9PSBUT0tUWVBFX05PTl9DQ0EgJiYNCj4gICAgICAgICAg
-IGtiLT5oZWFkLnZlcnNpb24gPT0gVE9LVkVSX0VQMTFfQUVTKSB7DQo+ICAgICAgICAgICAgICAg
-aGFzX2hlYWRlciA9IHRydWU7DQo+IC0gICAgICAgICAgICAga2V5c2l6ZSA9IGtiLT5oZWFkLmxl
-biA8IGtleXNpemUgPyBrYi0+aGVhZC5sZW4gOiBrZXlzaXplOw0KPiArICAgICAgICAgICAgIGtl
-eXNpemUgPSBtaW4oKHNpemVfdClrYi0+aGVhZC5sZW4sIGtleXNpemUpOw0KDQpJJ20gc3VyZSB0
-aGF0IHdvdWxkIGxvb2sgYmV0dGVyIGFzOg0KICAgICAgICAgICAgICAgIGlmIChrZXlzaXplID4g
-a2ItPmhlYWQubGVuKQ0KICAgICAgICAgICAgICAgICAgICAgICAga2V5c2l6ZSA9IGtiLT5oZWFk
-LmxlbjsNCndoaWNoIG1ha2VzIGl0IG11Y2ggbW9yZSBvYnZpb3VzIHRoYXQgdGhlIGV4aXN0aW5n
-IHZhbHVlDQppcyBiZWluZyBsaW1pdGVkIGJ5IGEgbmV3IGJvdW5kLg0KDQogICAgICAgIERhdmlk
-DQoNCj4gICAgICAgfQ0KPg0KPiAgICAgICAvKiByZXF1ZXN0IGNwcmIgYW5kIHBheWxvYWQgKi8N
-Cj4gLS0NCj4gMi43LjQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5
-IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRp
-b24gTm86IDEzOTczODYgKFdhbGVzKQ0KDQo=
+Hi Angelo,
+
+On Mon, 2022-03-14 at 12:31 +0100, AngeloGioacchino Del Regno wrote:
+> Il 14/03/22 12:18, Tinghan Shen ha scritto:
+> > The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
+> > 
+> > L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
+> > 
+> > L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
+> > These bits have to be powered on to allow EMI access for SCP.
+> > 
+> > Bits[7:4] also affect audio DSP because audio DSP and SCP are
+> > placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
+> > blocked too.
+> > 
+> > L1TCM_SRAM_PDN bits[31:8] are not used.
+> > 
+> > This fix removes modification of bits[7:4] when power on/off mt8195 SCP
+> > L1TCM. It's because the modification introduces a short period of time
+> > blocking audio DSP to access EMI. This was not a problem until we have
+> > to load both SCP module and audio DSP module. audio DSP needs to access
+> > EMI because it has source/data on DRAM. Audio DSP will have unexpected
+> > behavior when it accesses EMI and the SCP driver blocks the EMI path at
+> > the same time.
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> 
+> 
+> Hello Tinghan,
+> 
+> I'm sorry, but in the last review I forgot to mention that you should
+> really add a Fixes tag to this commit, since this is.. a fix.
+> 
+> This is the tag that you should use:
+> 
+> Fixes: 79111df414fc ("remoteproc: mediatek: Support mt8195 scp")
+> 
+> After adding that,
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+
+I'll add it at next version.
+thank you very much!
+
+Best regards,
+TingHan
+
+> > ---
+> > v3: fix build error
+> > v2: apply comments about macro definition and function calls
+> > ---
+> >   drivers/remoteproc/mtk_common.h |  2 +
+> >   drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++--------
+> >   2 files changed, 53 insertions(+), 16 deletions(-)
+> > 
+

@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF914DBAF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D364DBAFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244205AbiCPXZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S1344550AbiCPX0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiCPXZ3 (ORCPT
+        with ESMTP id S1344132AbiCPX0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:25:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895D6EA8;
-        Wed, 16 Mar 2022 16:24:13 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C6BED493;
-        Thu, 17 Mar 2022 00:24:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1647473050;
-        bh=FewMdmi8qEg2S9b7MWGLnLAfszTXPWwFEMPvKBys6OM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=wFX2XoKNsVfKJ9PnzNU5gr5EEIx/VnqBXfatkHwxQUWIk0vQs39KntBZbIIEcT+Fy
-         ileRxcJbLsynYWYtRRa75qONDrxoKggzSm3Fclt7HWgVSRRcqkaxsmWEkTrwy68B1A
-         EmF7rV00/epJR/t7+umRyqSDwv34FFjU8CoMQzcw=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Mar 2022 19:26:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311E8DFB4
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647473104; x=1679009104;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=olKeikmnasQX1H3yq4HT9Z5DQKu0tbikuNURRGppd/s=;
+  b=C3Yn6ME3rPEUePuqvPTA9cDMMI6/zI+xcteAPCG2EMH0Uy805N3EQHNk
+   BC9k9QGBCpNARZiDvwiV8ZkYqo3Wk9CX3FlL40+ry9yVB094vLVZBc2x4
+   Y/agfffTgDQF4CSFH24WIlLnU2HQ+TpgGZvy4VY3/ii+czEtqQcXvtfPc
+   0PBAE0HIWdNVVWlOTIppfpCJvQlHZ8BDhw4MaCZNeaSSL/iv9/nBe62LW
+   4Kt9F/IFgROeDQGUBloq3MI55rDD5f+YrFlg3/7QxaOChiQ2JaMv3mtTV
+   Ozhv20B6MLhGAk06ezflIwoxIRCnkrszCOgaeZhR7Ah7dDFkYEcs4y/J0
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="255565671"
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="255565671"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 16:25:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="516539020"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 16:25:02 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUd0n-000D4d-Ie; Wed, 16 Mar 2022 23:25:01 +0000
+Date:   Thu, 17 Mar 2022 07:24:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+Subject: [gfs2:for-next 11/11] fs/gfs2/file.c:796:10: warning: comparison of
+ distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof
+ (nr_dirtied * (1UL << 16)) *' (aka 'unsigned long *'))
+Message-ID: <202203170735.Ndb8Ua7n-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAD=FV=UcfrWLQdCOx5dCfjvjrLzkdLDeoAROmMtqFWB_X90rwQ@mail.gmail.com>
-References: <20220310152227.2122960-1-kieran.bingham+renesas@ideasonboard.com> <20220310152227.2122960-3-kieran.bingham+renesas@ideasonboard.com> <CAD=FV=UcfrWLQdCOx5dCfjvjrLzkdLDeoAROmMtqFWB_X90rwQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] drm/bridge: ti-sn65dsi86: Implement bridge connector operations
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-To:     Doug Anderson <dianders@chromium.org>
-Date:   Wed, 16 Mar 2022 23:24:08 +0000
-Message-ID: <164747304840.11309.8075169187883378445@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git for-next
+head:   a20050c14edf19add5a9588cb196bb00aa410650
+commit: a20050c14edf19add5a9588cb196bb00aa410650 [11/11] gfs2: Add read/write page 'fault_stats'
+config: hexagon-randconfig-r041-20220313 (https://download.01.org/0day-ci/archive/20220317/202203170735.Ndb8Ua7n-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=a20050c14edf19add5a9588cb196bb00aa410650
+        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git
+        git fetch --no-tags gfs2 for-next
+        git checkout a20050c14edf19add5a9588cb196bb00aa410650
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/gfs2/
 
-Quoting Doug Anderson (2022-03-10 23:10:20)
-> Hi,
->=20
-> On Thu, Mar 10, 2022 at 7:22 AM Kieran Bingham
-> <kieran.bingham+renesas@ideasonboard.com> wrote:
-> >
-> > From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> >
-> > Implement the bridge connector-related .get_edid() operation, and report
-> > the related bridge capabilities and type.
-> >
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.=
-com>
-> > Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > ---
-> > Changes since v1:
-> >
-> > - The connector .get_modes() operation doesn't rely on EDID anymore,
-> >   __ti_sn_bridge_get_edid() and ti_sn_bridge_get_edid() got merged
-> >   together
-> >  - Fix on top of Sam Ravnborg's DRM_BRIDGE_STATE_OPS
-> >
-> > Changes since v2: [Kieran]
-> >  - Only support EDID on DRM_MODE_CONNECTOR_DisplayPort modes.
-> >
-> >  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/br=
-idge/ti-sn65dsi86.c
-> > index 93b54fcba8ba..d581c820e5d8 100644
-> > --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-> > @@ -1135,10 +1135,24 @@ static void ti_sn_bridge_atomic_post_disable(st=
-ruct drm_bridge *bridge,
-> >         pm_runtime_put_sync(pdata->dev);
-> >  }
-> >
-> > +static struct edid *ti_sn_bridge_get_edid(struct drm_bridge *bridge,
-> > +                                         struct drm_connector *connect=
-or)
-> > +{
-> > +       struct ti_sn65dsi86 *pdata =3D bridge_to_ti_sn65dsi86(bridge);
-> > +       struct edid *edid;
-> > +
-> > +       pm_runtime_get_sync(pdata->dev);
-> > +       edid =3D drm_get_edid(connector, &pdata->aux.ddc);
-> > +       pm_runtime_put_autosuspend(pdata->dev);
->=20
-> I'm 99% sure that the pm_runtime calls here are not needed and can be
-> removed.. The AUX transfer function handles the pm_runtime_get_sync()
-> and it also does the "put" with autosuspend so that the whole EDID can
-> be read without constantly powering the bridge up and down again.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes, digging through I agree - It does look like this may be the case.
+All warnings (new ones prefixed by >>):
 
-ti_sn_aux_transfer() certainly looks like it handles the pm_runtime_
-calls, and drm_get_edid() looks like it goes through there from the core
-using the standard i2c interface, with nothing else expected to touch
-the hw between.
+>> fs/gfs2/file.c:796:10: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (nr_dirtied * (1UL << 16)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   size = min(size, nr_dirtied * PAGE_SIZE);
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
-So that more or less simplifies this function to just=20
-	return drm_get_edid(connector, &pdata->aux.ddc);
 
-Thanks
---
-Kieran
+vim +796 fs/gfs2/file.c
+
+   772	
+   773	static inline bool should_fault_in_pages(ssize_t ret, struct iov_iter *i,
+   774						 size_t *prev_count,
+   775						 size_t *window_size)
+   776	{
+   777		size_t count = iov_iter_count(i);
+   778		size_t size, offs;
+   779	
+   780		if (likely(!count))
+   781			return false;
+   782		if (ret <= 0 && ret != -EFAULT)
+   783			return false;
+   784		if (!iter_is_iovec(i))
+   785			return false;
+   786	
+   787		size = PAGE_SIZE;
+   788		offs = offset_in_page(i->iov[0].iov_base + i->iov_offset);
+   789		if (*prev_count != count || !*window_size) {
+   790			int nr_dirtied;
+   791	
+   792			size = ALIGN(offs + count, PAGE_SIZE);
+   793			size = min_t(size_t, size, SZ_1M);
+   794			nr_dirtied = max(current->nr_dirtied_pause -
+   795					 current->nr_dirtied, 8);
+ > 796			size = min(size, nr_dirtied * PAGE_SIZE);
+   797		}
+   798	
+   799		*prev_count = count;
+   800		*window_size = size - offs;
+   801		return true;
+   802	}
+   803	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

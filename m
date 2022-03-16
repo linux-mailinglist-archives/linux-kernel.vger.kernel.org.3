@@ -2,80 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3704DB7BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3204DB7C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348264AbiCPSGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S1356574AbiCPSHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236096AbiCPSGs (ORCPT
+        with ESMTP id S236096AbiCPSHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:06:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9947A4C436;
-        Wed, 16 Mar 2022 11:05:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 16 Mar 2022 14:07:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B01F4D622;
+        Wed, 16 Mar 2022 11:06:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51DC9B81637;
-        Wed, 16 Mar 2022 18:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED1DC340E9;
-        Wed, 16 Mar 2022 18:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647453931;
-        bh=EUwl1rJPMN38j2p42kZ+S3LhlRJpuLGqUxqQYMv+5QE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qgCW7RY/0j2r7RQhPEWzTAdZHI91zrT43bm01uJMd9tulx3QwbBL8PBjcxHTe5Uor
-         B6gu/3FB37YqzAa2bnXyFSLn2ugdAAPHJWucZ2ynC4yonofmq1dErOcRo7CTLyVmBX
-         QscVjgfsN3QeWa9mjSPnS9HLWUnohQDReVoFkrpd5GcIyoa/VgtJbypGyH6CS0WbaM
-         5Erftk/ilvDwQyzctnRJrZ+h3oSecgWG5tVoAjk4FN+D8Kcnr5Px94xWmz9IUnzxeQ
-         gmiedvhyi1MJB1coBxncSbLAHo1HeV2tRDLTcbnCXAfroE0UEruDfV0azXZiaDsWPp
-         0h+qWumkY3SfQ==
-Date:   Wed, 16 Mar 2022 18:05:29 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, jaegeuk@kernel.org, chao@kernel.org,
-        ulf.hansson@linaro.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Daeho Jeong <daehojeong@google.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Subject: Re: security issue: data exposure when using block layer secure erase
-Message-ID: <YjIm6f6pSX1CKeqb@gmail.com>
-References: <20220316093740.GA7714@lst.de>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C8F1A1F38A;
+        Wed, 16 Mar 2022 18:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647453976; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yscn5kD6MQtKQFswpK2eWv6RD7DA+7w1y9Ncb3yKw6Y=;
+        b=RmfLDp0vukQJBVBkTr+3Llb96gXwzHH6FuDP+CEUzpWugi/dj2l2YS6LNyMh8iYBtwTfrC
+        P7GNPza+WWWp/KyrE+0vvLY4q/Qks4FFbDDFnDQX1QBkOey/UXZsTg3cDLpPE2vxzd7qRa
+        Jz/GjNLPSku6hgVV7n+W29Gc6iCgldI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647453976;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yscn5kD6MQtKQFswpK2eWv6RD7DA+7w1y9Ncb3yKw6Y=;
+        b=vdWA+z91JfuCjGBBswU6dKi7YmW7VRHRfmBbJu+V69wNUISkmIdfNBmLG+Sft6o63OA1Za
+        M5/ZZ64nDGnq48BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9732313B69;
+        Wed, 16 Mar 2022 18:06:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1c58IxgnMmJWaQAAMHmgww
+        (envelope-from <ddiss@suse.de>); Wed, 16 Mar 2022 18:06:16 +0000
+Date:   Wed, 16 Mar 2022 19:06:15 +0100
+From:   David Disseldorp <ddiss@suse.de>
+To:     Vasant Karasulli <vkarasulli@suse.de>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>
+Subject: Re: [PATCH v3 2/2] exfat: keep trailing dots in paths if
+ keep_last_dots is
+Message-ID: <20220316190615.495163ae@suse.de>
+In-Reply-To: <20220311114746.7643-3-vkarasulli@suse.de>
+References: <20220311114746.7643-1-vkarasulli@suse.de>
+        <20220311114746.7643-3-vkarasulli@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316093740.GA7714@lst.de>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 10:37:40AM +0100, Christoph Hellwig wrote:
-> Hi all,
-> 
-> while staring at the block layer code I found what I think is a major
-> security issue with the use of REQ_OP_SECURE_ERASE.
-> 
-> The issue is not about the actual protocol implementation, which only
-> exists for eMMC [1], but about we handle issuing the operation in the
-> block layer.  That is done through __blkdev_issue_discard, which
-> takes various parameters into account to align the issue discard
-> request to what the hardware prefers.  Which is perfectly fine for
-> discard as an advisory operation, but deadly for an operation that
-> wants to make data inaccessible.  The problem has existed ever since
-> secure erase support was added to the kernel with commit
-> 8d57a98ccd0b ("block: add secure discard"), which added secure erase
-> support as a REQ_SECURE flag to the discard operation.
+Hi Vasant,
 
-__blkdev_issue_discard() can break up the region into multiple bios, but I don't
-see where it actually skips parts of the region.  Can you explain more
-specifically where the problem is?
+A couple of things I missed in the previous round...
 
-- Eric
+On Fri, 11 Mar 2022 12:47:46 +0100, Vasant Karasulli wrote:
+
+> exfat currently unconditionally strips trailing
+> periods '.' when performing path lookup, but allows them in the filenames
+> during file creation.
+
+Trailing periods *are* currently stripped during creation, so that
+statement should be removed, e.g.
+
+  The Linux kernel exfat driver currently unconditionally strips
+  trailing periods '.' from path components.
+
+> This is done intentionally, loosely following Windows
+> behaviour and specifications which state:
+> 
+>   #exFAT
+>   The concatenated file name has the same set of illegal characters as
+>   other FAT-based file systems (see Table 31).
+> 
+>   #FAT
+>   ...
+>   Leading and trailing spaces in a long name are ignored.
+>   Leading and embedded periods are allowed in a name and are stored in
+>   the long name. Trailing periods are ignored.
+> 
+> Note: Leading and trailing space ' ' characters are currently retained
+> by Linux kernel exfat, in conflict with the above specification.
+> On Windows 10, File Explore application retains leading and trailing
+> space characters. But on the commandline behavior was exactly the opposite.
+
+As mentioned earlier, my observations from Windows10 CopyFile() win32
+API calls were that trailing spaces and periods are stripped. AFAICT
+that's also the case for Windows Explorer and cmd.exe paths.
+
+Cheers, David

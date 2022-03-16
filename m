@@ -2,247 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24884DAD5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE7A4DAD62
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346808AbiCPJW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S1354840AbiCPJ05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353461AbiCPJWr (ORCPT
+        with ESMTP id S237322AbiCPJ04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:22:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594BE652F2;
-        Wed, 16 Mar 2022 02:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cZoOhn7yksZ8A8Ig5DEqI3AypkEzFO+D55ijtno6Otk=; b=V0APTf9IbANRluXADviIieoO8p
-        q6L3r0Ume1BQ7Zi5zlj2GPo51tIQH2MvAGlfWWO5zBScWlcPEJMhChUF3CtLgzct+qBX4F6+UAtGV
-        Vwo5at3Qg7SUJxlt3BIjKg/ZsIr8xH9G6fG7dju4FYQPLdJs6DUd9wKxyNXc2iZsOOhnzLsdkM/kT
-        bKvfxNkg7O6QCCCbLPfVCOfMKyvjP2P1PJQ/Gavhb/VMO8Wk732t1iJTSL9XHqWHhMO0SAJ0NZVem
-        aBIhRr+AxjCH1KRNQeyobSZeLdnhVhcN2eJF9OICwdf/JX7x78nqVP1LSmFsohCLYbaMkuUSuP/af
-        N6Lu0DGg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUPqH-001V17-Mq; Wed, 16 Mar 2022 09:21:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BA31B30007E;
-        Wed, 16 Mar 2022 10:21:15 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 731602D602535; Wed, 16 Mar 2022 10:21:15 +0100 (CET)
-Date:   Wed, 16 Mar 2022 10:21:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jui-Tse Huang <juitse.huang@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Beata Michalska <beata.michalska@arm.com>,
-        Chun-Hung Tseng <henrybear327@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Brendan Gregg <bgregg@netflix.com>,
-        Yiwei Lin <s921975628@gmail.com>
-Subject: Re: [PATCH v3] docs/scheduler: Introduce the doc of load average
-Message-ID: <YjGsCyS0t/+pdzZh@hirez.programming.kicks-ass.net>
-References: <20220315140857.41697-1-juitse.huang@gmail.com>
+        Wed, 16 Mar 2022 05:26:56 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68BF62A3A;
+        Wed, 16 Mar 2022 02:25:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nSldX50CXwISBH3l33aSOly+QEyXe+K/gKuzoKI8tGPGyCxRa6qHsxzf3vq33naeanwyjnCbtIsba3Ow8TK3pUT3wkjI5sEybB9cbI4X2trkhde5nCMFaag/+2P+fbUXxZaL64sNgH11ybpyTlEATVEQuXOsphc8o9K0lO0kji6E/47oNLFWiFW/EjcHRuoh5RNLLCgBk+xatZITF99vSQ6k2qyMA/rpZS17U308OpLbzRnq0PbW6EUaV+JY7aZ2PC8Ku7n8S5a0jcMQjHQv6PHQMDnuoSg0YNs/H5HKu1ySfizDOom92gw4IjqdKLHvOLbFks34eBjah45BiiqIFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t9819Vieiv0F7qnkfckksy302AFgdLh9p5SeJxv9vhU=;
+ b=F0p2EKcNoPTkP1sqnnkQ7t/PDEWDFpk4/t33/VuL/8U/HK6artDh2yFQnNP5w/xVrFNrpuKaNYibrXkJKuCEswFwEtgjaH1qrXptx9U5M0BGgh4AcpTuQekvLJH8JWubv2OvH2lxI6WUAQ5nun/vtMiSY+jIkJcIcR0wsU3E7cWcPUfs5wzVjHM+fB59ZB4w4fQ00h3IVfzm2GPD54HDI++V7Bd0V0+PR6NU+s4N3Kj6LaflJoKRnoJ5WxR+cffi+PYUgMif+3tZtMEjztFzLQXpCoi/x4Q7w/AyVU7QARK7rJ4ysjd6zG67XfD8W6R1jLkq0FYf6rTMpG1EaH23nQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t9819Vieiv0F7qnkfckksy302AFgdLh9p5SeJxv9vhU=;
+ b=WEaGOUtBrLcw4j63HAoTIRsXaepqaY5Z+Ql4IDDI5Xcw1NzyJAEf8/ALKd14JfYsvJT36h8j4jlDtlv0QtY/6C+C46Ke99MSeGHES+WBgZUqR1+1m4o0iKPPQXgTCtH0fy/LtKTe5lJPlwdwemZb7ga6UQfQyjzg78HxoeoCtCt1bsNk9anY1NX3e+RVlVISxI1VceUOHX7f/oZJ/8CQ9eByXyDyo1ZokIhUN0O53RidJoC6cQg3btqYofJxqb+ARq4txRWkFkULrorlHIsXA5VsuQCB8jemvRfUMoiHyxadzgKxRSqN/P0O8GZgREHDcS+pjeigZclnydZJfMIrZQ==
+Received: from DM6PR17CA0024.namprd17.prod.outlook.com (2603:10b6:5:1b3::37)
+ by BL0PR12MB4898.namprd12.prod.outlook.com (2603:10b6:208:1c7::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Wed, 16 Mar
+ 2022 09:25:41 +0000
+Received: from DM6NAM11FT006.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1b3:cafe::2d) by DM6PR17CA0024.outlook.office365.com
+ (2603:10b6:5:1b3::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14 via Frontend
+ Transport; Wed, 16 Mar 2022 09:25:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT006.mail.protection.outlook.com (10.13.173.104) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5081.14 via Frontend Transport; Wed, 16 Mar 2022 09:25:41 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 16 Mar
+ 2022 09:25:40 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 16 Mar
+ 2022 02:25:39 -0700
+Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Wed, 16 Mar 2022 02:25:36 -0700
+From:   Ashish Mhetre <amhetre@nvidia.com>
+To:     <krzysztof.kozlowski@canonical.com>, <robh+dt@kernel.org>,
+        <thierry.reding@gmail.com>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+CC:     <vdumpa@nvidia.com>, <Snikam@nvidia.com>, <amhetre@nvidia.com>
+Subject: [Patch v5 0/4] memory: tegra: Add MC channels and error logging
+Date:   Wed, 16 Mar 2022 14:55:21 +0530
+Message-ID: <20220316092525.4554-1-amhetre@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315140857.41697-1-juitse.huang@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3dfebe50-ab93-4850-9532-08da072ef0a1
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4898:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB48988D1D4B3D207D5C131EB6CA119@BL0PR12MB4898.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Va9XPFJKcgGq/0x1qG+2fD4zdkhv802UGazZmgpJJeTW6VkKpRFyr08ix93HZ6/+izbxaBLxHL574+gAU3OpQMI/yYzCcy4TCDjSDl9wLaYm/QCBT0jg2CWkS18OlZTfRY8pC2nH7wuSQgCGrl4h05byZ7GCin1x+VKvjvNBrmaIpf5rNEekJSLUqPgw83XGXmCFt57N7YcQhq2zkQz6Sgg63fkbV3alwdINghBbqm0LZA6jnWK2XokqBVgYq1sov1aoQiVqugI/bIrS8vR+wQEN2LEXaZVrF8YVmgy/n0Jg35SJ/sZCrz8omqBbdEbSlreIb5KxJc90Rq1450O/euYAx2n0QEocoL/lqyBpK4lzPow7nhJ0J85w3IsduhCZeIaJbIUA8/FxP3Cy/PBbxrEbGeYRxa32ZRmU6laagWUwzTwioV0SrCxAl5FSMuFKOWjadnsOvUmBLElYDs0ZpJQvWLUjqSkQuNVf+mYCyioh7xTP3BHz3DJMxSF5T0+GvoC4zSo75nUAz5WTADWNiUgInOA17M0IRquNFQv3cGPSNFEt04pFoaHCkMhAtDWipjHTPf2cSz+OZM4S88NXnG3wfHLIyFCm5nBus3b6JbrMVDk0+J8+3gRJleCm7i8hWxehJN7cnxGQvWOW1WX7KPefepAdFufw7VMc7ze480G5Y7COSJZGfJ7h7Zipc9VFX5403h8m3Ruj36sDvDk+uQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(36860700001)(86362001)(2906002)(40460700003)(81166007)(356005)(82310400004)(5660300002)(316002)(7696005)(1076003)(186003)(107886003)(2616005)(508600001)(54906003)(26005)(6666004)(36756003)(110136005)(83380400001)(47076005)(70206006)(4326008)(8676002)(336012)(426003)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 09:25:41.2107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3dfebe50-ab93-4850-9532-08da072ef0a1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT006.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4898
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 10:08:57PM +0800, Jui-Tse Huang wrote:
-> The load average is one of a common as well as easy observed statistic
-> provied by Linux, but still not well documented, which makes the numbers
+From tegra186 onward, memory controllers support multiple channels.
+Add memory controller channels in device tree and add support to map
+address spaces of these channels in tegra MC driver.
+When memory controller interrupt occurs, registers from these channels
+are required to be read in order to get error information.
+Add error logging support from tegra186 onward for memory controller
+interrupts.
 
-I'm really not sure what the target audience is; and I hate you're
-making me read rst garbage. For someone trying to make changes to
-load_avg.c this document is pure confusion, for a user trying to make
-sense of that number, I would imagine much the same.
+Ashish Mhetre (4):
+  memory: tegra: Add memory controller channels support
+  memory: tegra: Add MC error logging on tegra186 onward
+  dt-bindings: memory: Update reg maxitems for tegra186
+  arm64: tegra: Add memory controller channels
 
-> that users observes from the output of top, htop or other system
-> monitoring application are only numbers. This patch gives a discussion
-> on how Linux calculates the load average as well as what metrics are
-> concerned while calculating the load average.
-> 
-> The discussion flow is divided into several parts:
-> 1. The expression used to get the load average.
-> 2. Why Linux choose such average method from the other.
-> 2. The meaning of each term in the expression.
-> 3. The metrics, that is, the type of tasks that will be covered in the
->    calculation.
-> 4. A brief explanation over the fixed-point nubmer since the weights
->    defined in the Linux kernel are based on it.
-> 
-> Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
-> Signed-off-by: Yiwei Lin <s921975628@gmail.com>
-> Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
-> Co-Developed-by: Yiwei Lin <s921975628@gmail.com>
-> 
-> ---
-> 
-> v3:
->   - Fix typo (Randy Dunlap)
->   - Add further reading that links to Brendan Gregg's blog
-> 
-> v2:
->   - Fix typo (Chun-Hung Tseng) 
-> 
->  Documentation/scheduler/index.rst        |  1 +
->  Documentation/scheduler/load-average.rst | 82 ++++++++++++++++++++++++
->  2 files changed, 83 insertions(+)
->  create mode 100644 Documentation/scheduler/load-average.rst
-> 
-> diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-> index 88900aabdbf7..bdc779b4190f 100644
-> --- a/Documentation/scheduler/index.rst
-> +++ b/Documentation/scheduler/index.rst
-> @@ -17,6 +17,7 @@ Linux Scheduler
->      sched-nice-design
->      sched-rt-group
->      sched-stats
-> +    load-average
->  
->      text_files
->  
-> diff --git a/Documentation/scheduler/load-average.rst b/Documentation/scheduler/load-average.rst
-> new file mode 100644
-> index 000000000000..27ce6cbae5f4
-> --- /dev/null
-> +++ b/Documentation/scheduler/load-average.rst
-> @@ -0,0 +1,82 @@
-> +============
-> +Load Average
-> +============
-> +
-> +The load average, provided by common operating systems, indicates the average
-> +number of system load over a period of time.  In Linux, it shows the average
-> +number of tasks running and waiting for CPU time. The following expression is
-> +used in Linux to update the load average::
-> +
-> +                / 0                                      , if t = 0
-> +    load_{t} = |
-> +                \ load_{t - 1} * exp + active * (1 - exp), otherwise
+---
+Changes in v5:
+- Updated patch sequence such that driver patches are before DT patches
+- Fixed DT ABI break from v4
+- Fixed smatch bug
+- Updated description in DT binding documentation
+- Updated variable names
 
+Changes in v4:
+- Added memory controller channels support
+- Added newlines after every break statement of all switch cases
+- Fixed compile error with W=1 build
+- Fixed the interrupt mask bit logic
 
-Easier to follow is:
+Changes in v3:
+- Removed unnecessary ifdefs
+- Grouped newly added MC registers with existing MC registers
+- Removed unnecessary initialization of variables
+- Updated code to use newly added field 'has_addr_hi_reg' instead of ifdefs
 
-	load_{0} = 0
-	load_{t+1} = load_{t} * exp + active * (1 - exp)
+Changes in v2:
+- Updated patch subject and commit message
+- Removed separate irq handlers
+- Updated tegra30_mc_handle_irq to be used for tegra186 onwards as well
 
-> +The expression represents the exponential moving average of the historical
-> +loading of the system. There are several reasons that Linux kernel chooses
-> +exponential moving average from other similar average equations such as simple
-> +moving average or cumulative moving average:
-> +
-> +#. The exponential moving average consumes fixed memory space, while the simple
-> +   moving average has O(n) space complexity where n is the number of timeslices
-> +   within a given interval.
-> +#. The exponential moving average not only applies a higher weight to the most
-> +   recent record but also declines the weight exponentially, which makes the
-> +   resulting load average reflect the situation of the current system. Neither
-> +   the simple moving average nor cumulative moving average has this feature.
-> +
-> +In the expression, the load_{t} indicates the calculated load average at the
-> +given time t.
+ .../nvidia,tegra186-mc.yaml                   |  16 ++-
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi      |   7 +-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  21 +++-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  21 +++-
+ drivers/memory/tegra/mc.c                     | 114 +++++++++++++++---
+ drivers/memory/tegra/mc.h                     |  37 +++++-
+ drivers/memory/tegra/tegra186.c               |  87 +++++++++++++
+ drivers/memory/tegra/tegra194.c               |  44 +++++++
+ drivers/memory/tegra/tegra234.c               |  59 +++++++++
+ include/soc/tegra/mc.h                        |  11 ++
+ 10 files changed, 389 insertions(+), 28 deletions(-)
 
-> +The active is the most recent recorded system load. In Linux, the system load
+-- 
+2.17.1
 
-That's inaccurate at best, active is not the load, since you just gave a
-definition of load. As such, load is a function of time and active.
-
-Also, stop saying in Linux, you're reading the Linux documentation this
-is a given.
-
-> +means the number of tasks in the state of TASK_RUNNING or TASK_UNINTERRUPTIBLE
-> +of the entire system. Tasks with TASK_UNINTERRUPTIBLE state are usually waiting
-> +for disk I/O or holding an uninterruptible lock, which is considered as a part
-> +of system resource, thus, Linux kernel covers them while calculating the load
-> +average.
-
-This is inacurate, consider TASK_NOLOAD.
-
-> +The exp means the weight applied to the previous report of load average, while
-> +(1 - exp) is the weight applied to the most recently recorded system load.
-
-I get really itchy from statements like this; either you can read a
-formula or you can't, stuff like this doesn't help much in either case.
-
-> +There are three different weights defined in the Linux kernel, in
-> +include/linux/sched/loadavg.h, to perform statistics in various timescales::
-> +
-> +    // include/linux/sched/loadavg.h
-> +    ...
-> +    #define EXP_1    1884    /* 1/exp(5sec/1min) as fixed-point */
-> +    #define EXP_5    2014    /* 1/exp(5sec/5min) */
-> +    #define EXP_15   2037    /* 1/exp(5sec/15min) */
-> +    ...
-> +
-> +According to the expression shown on the top of this page, the weight (exp)
-> +controls how much of the last load load_{t - 1} will take place in the
-> +calculation of current load, while (1 - exp) is the weight applied to the most
-> +recent record of system load active.
-
-What page, this is a non-paginated document. Also, you're repeating
-yourself.
-
-> +Due to the security issue, the weights are defined as fixed-point numbers based
-
-This is complete nonsense
-
-> +on the unsigned integer rather than floating-pointing numbers. The introduction
-> +of the fixed-point number keeps the FPU away from the calculation process. Since
-> +the precision of the fixed-point used in the Linux kernel is 11 bits, a
-> +fixed-point can be converted to a floating-point by dividing it by 2048, as in
-> +the expressions shown bellow::
-> +
-> +    EXP_1  = 1884 / 2048 = 0.919922
-> +    EXP_5  = 2014 / 2048 = 0.983398
-> +    EXP_15 = 2037 / 2048 = 0.994629
-> +
-> +Which indicates the weights applied to active are::
-> +
-> +    (1 - EXP_1)  = (1 - 0.919922) = 0.080078
-> +    (1 - EXP_5)  = (1 - 0.983398) = 0.016602
-> +    (1 - EXP_15) = (1 - 0.994629) = 0.005371
-
-I don't think this is the place to explain fixed point arithmetic. The
-consumer of load_avg doesn't need the know, the developer looking at
-loadavg.c will have *MUCH* bigger problems.
-
-> +The load average will be updated every 5 seconds. Each time the scheduler_tick()
-> +be called, the function calc_global_load_tick() will also be invoked, which
-> +makes the active of each CPU core be calculated and be merged globally. Finally,
-> +the load average will be updated with that global active.
-
-That's wishful thinking, have you read loadavg.c ?
-
-> +
-> +As a user, the load average can be observed via top, htop, or other system
-> +monitor application, or more directly, by the following command::
-> +
-> +    $ cat /proc/loadavg
-> +
-> +Further Reading
-> +---------------
-> +The explanation and analysis done by Brendan Gregg on `his blog
-> +<https://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html>`_.
-
-That blogpost is actually useful, unlike most of what you've written
-here. Why not only link that and leave out the rest?

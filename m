@@ -2,43 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5694DB796
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581884DB794
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 18:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357707AbiCPRvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 13:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S1357625AbiCPRuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349080AbiCPRvH (ORCPT
+        with ESMTP id S236996AbiCPRum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 13:51:07 -0400
+        Wed, 16 Mar 2022 13:50:42 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8124B6B09F;
-        Wed, 16 Mar 2022 10:49:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD3F86AA6E;
+        Wed, 16 Mar 2022 10:49:27 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43C2A1476;
-        Wed, 16 Mar 2022 10:49:52 -0700 (PDT)
-Received: from [10.57.6.128] (unknown [10.57.6.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8815B3F66F;
-        Wed, 16 Mar 2022 10:49:50 -0700 (PDT)
-Subject: Re: [PATCH v2 1/1] perf test arm64: Test unwinding using fame-pointer
- (fp) mode
-To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org
-Cc:     mark.rutland@arm.com, namhyung@kernel.org, leo.yan@linaro.org,
-        Alexandre.Truong@arm.com, Jiri Olsa <jolsa@kernel.org>
-References: <20220316172015.98000-1-german.gomez@arm.com>
- <592a32d6-b618-951c-9db9-711d022ff85e@arm.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <b2ff473a-f252-89c9-78b3-bacff2876869@arm.com>
-Date:   Wed, 16 Mar 2022 17:48:50 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 687391476;
+        Wed, 16 Mar 2022 10:49:27 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E1AE3F66F;
+        Wed, 16 Mar 2022 10:49:25 -0700 (PDT)
+Message-ID: <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
+Date:   Wed, 16 Mar 2022 17:49:21 +0000
 MIME-Version: 1.0
-In-Reply-To: <592a32d6-b618-951c-9db9-711d022ff85e@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
+Content-Language: en-GB
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "hch@lst.de" <hch@lst.de>
+References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
+ <YjHb1xCx4UAmUjrR@lahna> <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
+ <YjIb+XOGZbWKpQDa@lahna>
+ <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjIgQfmcw6fydkXd@lahna>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YjIgQfmcw6fydkXd@lahna>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -48,120 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 16/03/2022 17:30, James Clark wrote:
->
-> On 16/03/2022 17:20, German Gomez wrote:
->> Add a shell script to check that the call-graphs generated using frame
->> pointers (--call-graph fp) are complete and not missing leaf functions:
+On 2022-03-16 17:37, Mika Westerberg wrote:
+> Hi Mario,
+> 
+> On Wed, Mar 16, 2022 at 05:24:38PM +0000, Limonciello, Mario wrote:
+>> [Public]
 >>
->>   | $ perf test 88 -v
->>   |  88: Check Arm64 callgraphs are complete in fp mode                  :
->>   | --- start ---
->>   | test child forked, pid 8734
->>   |  + Compiling test program (/tmp/test_program.Cz3yL)...
->>   |  + Recording (PID=8749)...
->>   |  + Stopping perf-record...
->>   | test_program.Cz
->>   |                  728 leaf
->>   |                  753 parent
->>   |                  76c main
->>   | test child finished with 0
->>   | ---- end ----
->>   | Check Arm SPE callgraphs are complete in fp mode: Ok
+>>> On Wed, Mar 16, 2022 at 02:49:09PM +0000, Robin Murphy wrote:
+>>>>> What we want is to make sure the Tunneled PCIe ports get the full
+>>> IOMMU
+>>>>> protection. In case of the discrete above it is also fine if all the
+>>>>> devices behind the PCIe root port get the full IOMMU protection. Note in
+>>>>> the integrated all the devices are "siblings".
+>>>>
+>>>> Ah, OK, I wasn't aware that the NHI isn't even the right thing in the first
+>>>> place :(
+>>>>
+>>>> Is there an easy way to get from the struct tb to a PCI device representing
+>>>> the end of its relevant tunnel, or do we have a circular dependency
+>>> problem
+>>>> where the latter won't appear until we've authorised it (and thus the
+>>> IOMMU
+>>>> layer won't know about it yet either)?
+>>>
+>>> The PCIe root ports (and the PCIe downstream ports) are there already
+>>> even without "authorization".
+>>>
+>>> There is a way to figure out the "tunneled" PCIe ports by looking at
+>>> certain properties and we do that already actually. The BIOS has the
+>>> following under these ports:
+>>>
+>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs
+>>> .microsoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-
+>>> for-pcie-root-ports%23identifying-externally-exposed-pcie-root-
+>>> ports&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7C0465d319a
+>>> 6684335d9c208da07710e7c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7
+>>> C0%7C637830479402895833%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4w
+>>> LjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&am
+>>> p;sdata=z6hpYGpj%2B%2BVvz9d6MXiO4N66PUm4zwhOdI%2Br6l3PjhQ%3D
+>>> &amp;reserved=0
+>>>
+>>> and the ports will have dev->external_facing set to 1. Perhaps looking
+>>> at that field helps here?
 >>
-> Ran it on N1SDP and it passes, and it fails if b9f6fbb3b2c2 isn't applied.
+>> External facing isn't a guarantee from the firmware though.  It's something we
+>> all expect in practice, but I think it's better to look at the ones that are from
+>> the _DSD usb4-host-interface to be safer.
+> 
+> Right but then we have the discrete ones with the DVSEC that exposes the
+> tunneled ports :(
+> 
+>> Mika, you might not have seen it yet, but I sent a follow up diff in this thread
+>> to Robin's patch.  If that looks good Robin can submit a v2 (or I'm happy to do
+>> so as well as I confirmed it helps my original intent too).
+> 
+> I saw it now and I'm thinking are we making this unnecessary complex? I
+> mean Microsoft solely depends on the DMAR platform opt-in flag:
+> 
+>    https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
+> 
+> We also do turn on full IOMMU mappings in that case for devices that are
+> marked as external facing by the same firmware that provided the DMAR
+> bit. If the user decides to disable IOMMU from command line for instance
+> then we expect she knows what she is doing.
 
-I forgot to mention in the notes that it's supposed to work with both unwinders:
+Yeah, if external_facing is set correctly then we can safely expect the 
+the IOMMU layer to do the right thing, so in that case it probably is OK 
+to infer that if an IOMMU is present for the NHI then it'll be managing 
+that whole bus hierarchy. What I'm really thinking about here is whether 
+we can defend against a case when external_facing *isn't* set, so we 
+treat the tunnelled ports as normal PCI buses, assume it's OK since 
+we've got an IOMMU and everything else is getting translation domains by 
+default, but then a Thunderbolt device shows up masquerading the VID:DID 
+of something that gets a passthrough quirk, and thus tricks its way 
+through the perceived protection.
 
-$ make                # for libunwind (default)
-$ make NO_LIBUNWIND=1 # for libdw
-
->
-> Reviewed-by: James Clark <james.clark@arm.com>
->
->> Fixes: b9f6fbb3b2c2 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
->> Suggested-by: Jiri Olsa <jolsa@kernel.org>
->> Signed-off-by: German Gomez <german.gomez@arm.com>
->> ---
->> Changes since v1: https://lore.kernel.org/all/a6ba0ea8-f070-9f79-f018-f638ff677c7c@arm.com/
->>  - Add explicit '-g' flag to GCC command
->> ---
->>  .../perf/tests/shell/test_arm_callgraph_fp.sh | 68 +++++++++++++++++++
->>  1 file changed, 68 insertions(+)
->>  create mode 100755 tools/perf/tests/shell/test_arm_callgraph_fp.sh
->>
->> diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
->> new file mode 100755
->> index 000000000..ea1b4e6bb
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
->> @@ -0,0 +1,68 @@
->> +#!/bin/sh
->> +# Check Arm64 callgraphs are complete in fp mode
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +lscpu | grep -q "aarch64" || exit 2
->> +
->> +if ! [ -x "$(command -v cc)" ]; then
->> +	echo "failed: no compiler, install gcc"
->> +	exit 2
->> +fi
->> +
->> +PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
->> +TEST_PROGRAM_SOURCE=$(mktemp /tmp/test_program.XXXXX.c)
->> +TEST_PROGRAM=$(mktemp /tmp/test_program.XXXXX)
->> +
->> +cleanup_files()
->> +{
->> +	rm -f $PERF_DATA
->> +	rm -f $TEST_PROGRAM_SOURCE
->> +	rm -f $TEST_PROGRAM
->> +}
->> +
->> +trap cleanup_files exit term int
->> +
->> +cat << EOF > $TEST_PROGRAM_SOURCE
->> +int a = 0;
->> +void leaf(void) {
->> +  for (;;)
->> +    a += a;
->> +}
->> +void parent(void) {
->> +  leaf();
->> +}
->> +int main(void) {
->> +  parent();
->> +  return 0;
->> +}
->> +EOF
->> +
->> +echo " + Compiling test program ($TEST_PROGRAM)..."
->> +
->> +CFLAGS="-g -O0 -fno-inline -fno-omit-frame-pointer"
->> +cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
->> +
->> +# Add a 1 second delay to skip samples that are not in the leaf() function
->> +perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 -- $TEST_PROGRAM 2> /dev/null &
->> +PID=$!
->> +
->> +echo " + Recording (PID=$PID)..."
->> +sleep 2
->> +echo " + Stopping perf-record..."
->> +
->> +kill $PID
->> +wait $PID
->> +
->> +# expected perf-script output:
->> +#
->> +# program 
->> +# 	728 leaf
->> +# 	753 parent
->> +# 	76c main
->> +# ...
->> +
->> +perf script -i $PERF_DATA -F comm,ip,sym | head -n4
->> +perf script -i $PERF_DATA -F comm,ip,sym | head -n4 | \
->> +	awk '{ if ($2 != "") sym[i++] = $2 } END { if (sym[0] != "leaf" ||
->> +						       sym[1] != "parent" ||
->> +						       sym[2] != "main") exit 1 }'
+Robin.

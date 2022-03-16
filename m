@@ -2,109 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A434DB066
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C82A4DB06A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356012AbiCPNKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S1356024AbiCPNK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239772AbiCPNKL (ORCPT
+        with ESMTP id S1356017AbiCPNK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:10:11 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745FE27FC6;
-        Wed, 16 Mar 2022 06:08:57 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dr20so4019795ejc.6;
-        Wed, 16 Mar 2022 06:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jDdo77E6bodwKomBqhyh/QFbllXF/eggXHy1SBgzqKk=;
-        b=KfJPqoODp5vXC/0ovUiSuFkJy9qoA9TeDaui0xqOmSWNJSPOdDZs6WG5GyEFkncY2V
-         qYne3m0ITU6LzsON/W5Y7OJ9VQL06vDxvGRLCyAIrLmSRXHLVgr4Y7urfOOm0QXAg0QC
-         pgKO/UZ7ADGlAQg4a9OCJXtesou/jdZbk9QKNd9teK30f7UWJDWyZWSPR0rpzRhVOGkX
-         h0u9s9YNAqOz2i8/uyd0fuwLHsDIGSbG5XbPBbeO2B4leWNxGAXuXIttZiJADMtyhf6y
-         1dgLlnQNzflL/cZRiKXOMVg5yQeRpJJNtnPUIdHil2QbnOZydEwzk013SaVI6wsAKsNQ
-         ncTg==
+        Wed, 16 Mar 2022 09:10:56 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931174F9E7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:09:42 -0700 (PDT)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1B1B83F325
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647436178;
+        bh=hMpVGD6o3TsybJH5wrGEkbZ3q6M86lmXlzkdgti+gZM=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=ajmhVyosPjPHewC9eWeEy8Gk5x03HOhY37sldJdEb7V8LzWc1AkFlEv3Fdz4MHxIS
+         9xIvzmA8QuKUDHjGdO0R2yBl6DLFjbC0I1UBWVgVkQ5byHYT6cOYiRYBHk1FYVDgu5
+         86JBj7OphBtExVKE0G5zNFSvj1vBF+21WIw4zbXN70B0kBtvymXH7MtOb/1ZSHLBkI
+         5jINgdOUHZwZjGpxJnkm0Hfr39IyA83XqnWSJ1vE4fbDFd3TDN6aN5RXFqnMcoOhUI
+         VpQPig8CWRv54gq1292rNP4cQRfGwJ5CsGPe7o1zABJFEg3lQ8CqhGwJSVnoS6sswE
+         FmJTkBp3GraRg==
+Received: by mail-ed1-f70.google.com with SMTP id v9-20020a509549000000b00418d7c2f62aso1278195eda.15
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:09:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jDdo77E6bodwKomBqhyh/QFbllXF/eggXHy1SBgzqKk=;
-        b=BWQZIbemJ/wISHgtNq54r3/iBjTH91Y7pwiYhh6Gw2SPkj2OdFWzN75AOZ1iUSslsE
-         wAUp/vOkkerkmLTINDcJ2M2pw1MONCfj6TLNc1dyKZ5YFtZWmX/111GAalWESkLKnVQP
-         7fINNWYZFY9sWYFNnhXiyXjXb/GgZozXXkKVteWy/VCt6RsoOvdtYbLXaSgBh70z/uSO
-         WjMfqQ7aiOyG3jZwmZEyOEDh2B9Yesh/moYfHuCDNIQUGlJpcYJCYp+j0/4kNgbvPlIZ
-         +eHtGWpiKEKmwQ1l0agl2vRNrvSpK8J3/caVtTpXkaWQMiHCaB+15HobI5bVt3/AFMgq
-         VJJg==
-X-Gm-Message-State: AOAM531kjxYCWhWUvY3nwPhAbbJX/wPYeu/+CZ3L4C+YZmJ6STOia/ns
-        7ADWP+1JjOxD2CTkC4Z0QMY=
-X-Google-Smtp-Source: ABdhPJx+jBX6oHN4EG2/kgYKkkBWSOOnoD8t2IR/Q650mW+5jb8RfbrPvQbLJrUxjy41H6tWiuSAug==
-X-Received: by 2002:a17:907:1c16:b0:6d7:622b:efea with SMTP id nc22-20020a1709071c1600b006d7622befeamr26957234ejc.110.1647436133169;
-        Wed, 16 Mar 2022 06:08:53 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id d7-20020a50cd47000000b004187eacb4d6sm970570edj.37.2022.03.16.06.08.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hMpVGD6o3TsybJH5wrGEkbZ3q6M86lmXlzkdgti+gZM=;
+        b=KTefUEapngWVsNmD5pOZt1hMvSJLW+GlgNa3hoW3hl3jhCew2RkTpfQrZDLXfpe0Z6
+         QNm3lMEFadrco2wZ/1FJJujetZUWup3pE6afj1I/2HRxn6/ovLKyJvNZHcUCO+UhvTdT
+         hc1ggncSCAYFchAYSaHAUVtrLBfrXntYrLKMXSK8F6Hn50V7lqsKX+yjp1QN8IhYoUyM
+         0esvavfAFmBUr3NkG1KoFkcry4stSb9lkbgN4JQxZ9e4Hvq8hQryIQZ03kWzE8p4TLXK
+         RsB834PoFlOQ+brAkyGbzoI2XRWQJw/EPvglj9BGc8EJIxqxLeL033Csi6dDwOSaX8+k
+         Fdsw==
+X-Gm-Message-State: AOAM531+vKT0B6gLCUbgZi2ALMhpQPzxWrW3qr5cjzyGtwQOWso7/uFJ
+        X7R5vYf1u44pD5NBB/t3V6q1WOHJFG0BwP/2bbhsu0OSOiFOQglQpqXICh/OaqJ6XNvRn2/QTV2
+        KIP2ZTzcsZE8EsxxzsMfi+N0xirqvHV/nRHKbg4oMmQ==
+X-Received: by 2002:a17:906:dc8c:b0:6df:831e:76d4 with SMTP id cs12-20020a170906dc8c00b006df831e76d4mr1659343ejc.139.1647436177716;
+        Wed, 16 Mar 2022 06:09:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzFY00Fte9yceTYtdcLIDEMUngEA7Vv2XIZrc94QHM+xHDidA3EN1sRimJG9UK5kh8CSQEOXQ==
+X-Received: by 2002:a17:906:dc8c:b0:6df:831e:76d4 with SMTP id cs12-20020a170906dc8c00b006df831e76d4mr1659302ejc.139.1647436177483;
+        Wed, 16 Mar 2022 06:09:37 -0700 (PDT)
+Received: from localhost.localdomain (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id mp33-20020a1709071b2100b006db6dea7f9dsm861597ejc.168.2022.03.16.06.09.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 06:08:52 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 15:08:51 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net-next] net: dsa: Never offload FDB entries on
- standalone ports
-Message-ID: <20220316130851.nrevmuktxuzkgxd3@skbuf>
-References: <20220315233033.1468071-1-tobias@waldekranz.com>
+        Wed, 16 Mar 2022 06:09:36 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        "A.s. Dong" <aisheng.dong@nxp.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Jesse Taube <Mr.Bossman075@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 1/2] dt-bindings: gpio: pca95xx: drop useless consumer example
+Date:   Wed, 16 Mar 2022 14:08:57 +0100
+Message-Id: <20220316130858.93455-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315233033.1468071-1-tobias@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 12:30:33AM +0100, Tobias Waldekranz wrote:
-> If a port joins a bridge that it can't offload, it will fallback to
-> standalone mode and software bridging. In this case, we never want to
-> offload any FDB entries to hardware either.
-> 
-> Previously, for host addresses, we would eventually end up in
-> dsa_port_bridge_host_fdb_add, which would unconditionally dereference
-> dp->bridge and cause a segfault.
-> 
-> Fixes: c26933639b54 ("net: dsa: request drivers to perform FDB isolation")
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
+Consumer examples in the bindings of resource providers are trivial,
+useless and duplication of code.  Remove the example code for consumer
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml | 8 --------
+ 1 file changed, 8 deletions(-)
 
->  net/dsa/slave.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-> index f9cecda791d5..d24b6bf845c1 100644
-> --- a/net/dsa/slave.c
-> +++ b/net/dsa/slave.c
-> @@ -2847,6 +2847,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->  	if (ctx && ctx != dp)
->  		return 0;
->  
-> +	if (!dp->bridge)
-> +		return 0;
-> +
->  	if (switchdev_fdb_is_dynamically_learned(fdb_info)) {
->  		if (dsa_port_offloads_bridge_port(dp, orig_dev))
->  			return 0;
-> -- 
-> 2.25.1
-> 
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+index b6a6e742b66d..dc0fc8fc4839 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
++++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
+@@ -190,14 +190,6 @@ examples:
+                               "chg-status+red", "green", "blue", "en-esata",
+                               "fault1", "p26", "p27";
+         };
+-
+-        ts3a227@3b {
+-            compatible = "ti,ts3a227e";
+-            reg = <0x3b>;
+-            interrupt-parent = <&gpio99>;
+-            interrupts = <14 IRQ_TYPE_EDGE_RISING>;
+-            ti,micbias = <0>; /* 2.1V */
+-        };
+     };
+ 
+   - |
+-- 
+2.32.0
+

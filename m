@@ -2,130 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB32C4DAFD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497DA4DAFEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355751AbiCPMki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 08:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S1355806AbiCPMnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 08:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355713AbiCPMke (ORCPT
+        with ESMTP id S1355821AbiCPMm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 08:40:34 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD4B5AEE5;
-        Wed, 16 Mar 2022 05:39:18 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id e2f96ae570f65f18; Wed, 16 Mar 2022 13:39:17 +0100
-Received: from kreacher.localnet (unknown [213.134.162.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id F1B0066B8A9;
-        Wed, 16 Mar 2022 13:39:15 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v1 2/2] ACPI: bus: Avoid using CPPC if not supported by firmware
-Date:   Wed, 16 Mar 2022 13:39:03 +0100
-Message-ID: <2107550.irdbgypaU6@kreacher>
-In-Reply-To: <4734682.31r3eYUQgx@kreacher>
-References: <4734682.31r3eYUQgx@kreacher>
+        Wed, 16 Mar 2022 08:42:59 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FD065D27;
+        Wed, 16 Mar 2022 05:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647434505; x=1678970505;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jG6WJEvJi1w8lkMOJ54bp1lSTssrIdv4mh4Lm+BFCH4=;
+  b=N6HhUzolSTAMJOXZUL+RKKEg0ZqhYC81pT2JiFez6ZhMyTd7fPkKfByo
+   x0K4g595e2ktxmm1dEjrABx70W2qyWOVn+Mzd66Z4JVeCMn0AdIhAjp4P
+   3t1knHy42+CzpPQw0W//eYQ0Z8Q1g29BoITBNYcGmpSqxiF1kTnpaB+Sg
+   IbhEMylHWbl7wwUWR5gPsVGP9z2Re3Wn4ig4YdP9WifaFrNLkjCdv5GQf
+   x0mYPqQMx1/3K6lUBnmVXtcLWYbkAeqstiSwqaJqVY4drtL7Bouw+aijQ
+   L3GHagbbTinexIxGfuJyzcQ6wTvtd4PapgTBNBd8i6iE3kvflItP6A5u1
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="343002119"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="343002119"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 05:41:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="646631233"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 05:41:41 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bae Chang Seok <chang.seok.bae@intel.com>
+Subject: [PATCH v8 0/1] Introduce XSAVE feature self-test
+Date:   Wed, 16 Mar 2022 20:40:00 +0800
+Message-Id: <cover.1646999762.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.1
-X-CLIENT-HOSTNAME: 213.134.162.1
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudefvddggedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeetgefgleetgeduheeugeeikeevudelueelvdeufeejfeffgeefjedugfetfeehhfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduiedvrddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddruddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghr
- sggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The XSAVE feature set supports the saving and restoring of xstate components.
+XSAVE feature has been used for process context switching. XSAVE components
+include x87 state for FP execution environment, SSE state, AVX state and so on.
 
-If the platform firmware indicates that it does not support CPPC by
-clearing the OSC_SB_CPC_SUPPORT and OSC_SB_CPCV2_SUPPORT bits in the
-platform _OSC capabilities mask, avoid attempting to evaluate _CPC
-which may fail in that case.
+In order to ensure that XSAVE works correctly, add XSAVE most basic test for
+XSAVE architecture functionality.
 
-Because the OSC_SB_CPC_SUPPORT and OSC_SB_CPCV2_SUPPORT bits are only
-added to the supported platform capabilities mask on x86, when
-X86_FEATURE_HWP is supported, allow _CPC to be evaluated regardless
-in the other cases.
+This patch tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
+AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
+1. The content of these xstates in the process should not change after the
+   signal handling.
+2. The content of these xstates in the child process should be the same as
+   the content of the parent process after the fork syscall.
 
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0i=ecAksq0TV+iLVObm-=fUfdqPABzzkgm9K6KxO1ZCcg@mail.gmail.com
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/bus.c       |    8 ++++++++
- drivers/acpi/cppc_acpi.c |    3 +++
- include/linux/acpi.h     |    1 +
- 3 files changed, 12 insertions(+)
+Because xstate like XMM will not be preserved across function calls, fork() and
+raise() are implemented and inlined.
+To prevent GCC from generating any FP/SSE(XMM)/AVX/PKRU code, add
+"-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler arguments. stdlib.h
+can not be used because of the "-mno-sse" option.
+Thanks Dave, Hansen for the above suggestion!
+Thanks Chen Yu; Shuah Khan; Chatre Reinette and Tony Luck's comments!
+Thanks to Bae, Chang Seok for a bunch of comments!
 
-Index: linux-pm/drivers/acpi/bus.c
-===================================================================
---- linux-pm.orig/drivers/acpi/bus.c
-+++ linux-pm/drivers/acpi/bus.c
-@@ -284,6 +284,8 @@ EXPORT_SYMBOL_GPL(osc_pc_lpi_support_con
- bool osc_sb_native_usb4_support_confirmed;
- EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
- 
-+bool osc_sb_cppc_not_supported;
-+
- static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
- static void acpi_bus_osc_negotiate_platform_control(void)
- {
-@@ -339,6 +341,12 @@ static void acpi_bus_osc_negotiate_platf
- 		return;
- 	}
- 
-+#ifdef CONFIG_X86
-+	if (boot_cpu_has(X86_FEATURE_HWP))
-+		osc_sb_cppc_not_supported = !(capbuf_ret[OSC_SUPPORT_DWORD] &
-+				(OSC_SB_CPC_SUPPORT | OSC_SB_CPCV2_SUPPORT));
-+#endif
-+
- 	/*
- 	 * Now run _OSC again with query flag clear and with the caps
- 	 * supported by both the OS and the platform.
-Index: linux-pm/drivers/acpi/cppc_acpi.c
-===================================================================
---- linux-pm.orig/drivers/acpi/cppc_acpi.c
-+++ linux-pm/drivers/acpi/cppc_acpi.c
-@@ -656,6 +656,9 @@ int acpi_cppc_processor_probe(struct acp
- 	acpi_status status;
- 	int ret = -EFAULT;
- 
-+	if (osc_sb_cppc_not_supported)
-+		return -ENODEV;
-+
- 	/* Parse the ACPI _CPC table for this CPU. */
- 	status = acpi_evaluate_object_typed(handle, "_CPC", NULL, &output,
- 			ACPI_TYPE_PACKAGE);
-Index: linux-pm/include/linux/acpi.h
-===================================================================
---- linux-pm.orig/include/linux/acpi.h
-+++ linux-pm/include/linux/acpi.h
-@@ -580,6 +580,7 @@ acpi_status acpi_run_osc(acpi_handle han
- extern bool osc_sb_apei_support_acked;
- extern bool osc_pc_lpi_support_confirmed;
- extern bool osc_sb_native_usb4_support_confirmed;
-+extern bool osc_sb_cppc_not_supported;
- 
- /* USB4 Capabilities */
- #define OSC_USB_USB3_TUNNELING			0x00000001
+========
+- Change from v7 to v8
+  Many thanks to Bae, Chang Seok for a bunch of comments as follow:
+  - Use the filling buffer way to prepare the xstate buffer, and use xrstor
+    instruction way to load the tested xstates.
+  - Remove useless dump_buffer, compare_buffer functions.
+  - Improve the struct of xstate_info.
+  - Added AVX512_ZMM_Hi256 and AVX512_Hi16_ZMM components in xstate test.
+  - Remove redundant xstate_info.xstate_mask, xstate_flag[], and
+    xfeature_test_mask, use xstate_info.mask instead.
+  - Check if xfeature is supported outside of fill_xstate_buf() , this change
+    is easier to read and understand.
+  - Remove useless wrpkru, only use filling all tested xstate buffer in
+    fill_xstates_buf().
+  - Improve a bunch of function names and variable names.
+  - Improve test steps flow for readability.
 
+- Change from v6 to v7:
+  - Added the error number and error description of the reason for the
+    failure, thanks Shuah Khan's suggestion.
+  - Added a description of what these tests are doing in the head comments.
+  - Added changes update in the head comments.
+  - Added description of the purpose of the function. thanks Shuah Khan.
 
+- Change from v5 to v6:
+  - In order to prevent GCC from generating any FP code by mistake,
+    "-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler parameter was
+    added, it's referred to the parameters for compiling the x86 kernel. Thanks
+    Dave Hansen's suggestion.
+  - Removed the use of "kselftest.h", because kselftest.h included <stdlib.h>,
+    and "stdlib.h" would use sse instructions in it's libc, and this *XSAVE*
+    test needed to be compiled without libc sse instructions(-mno-sse).
+  - Improved the description in commit header, thanks Chen Yu's suggestion.
+  - Becasue test code could not use buildin xsave64 in libc without sse, added
+    xsave function by instruction way.
+  - Every key test action would not use libc(like printf) except syscall until
+    it's failed or done. If it's failed, then it would print the failed reason.
+  - Used __cpuid_count() instead of native_cpuid(), becasue __cpuid_count()
+    was a macro definition function with one instruction in libc and did not
+    change xstate. Thanks Chatre Reinette, Shuah Khan.
+    https://lore.kernel.org/linux-sgx/8b7c98f4-f050-bc1c-5699-fa598ecc66a2@linuxfoundation.org/
+
+- Change from v4 to v5:
+  - Moved code files into tools/testing/selftests/x86.
+  - Delete xsave instruction test, becaue it's not related to kernel.
+  - Improved case description.
+  - Added AVX512 opmask change and related XSAVE content verification.
+  - Added PKRU part xstate test into instruction and signal handling test.
+  - Added XSAVE process swich test for FPU, AVX2, AVX512 opmask and PKRU part.
+
+- Change from v3 to v4:
+  - Improve the comment in patch 1.
+
+- Change from v2 to v3:
+  - Improve the description of patch 2 git log.
+
+- Change from v1 to v2:
+  - Improve the cover-letter. Thanks Dave Hansen's suggestion.
+
+Pengfei Xu (1):
+  selftests/x86/xstate: Add xstate test cases for XSAVE feature
+
+ tools/testing/selftests/x86/Makefile |   3 +-
+ tools/testing/selftests/x86/xstate.c | 574 +++++++++++++++++++++++++++
+ 2 files changed, 576 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/xstate.c
+
+-- 
+2.31.1
 

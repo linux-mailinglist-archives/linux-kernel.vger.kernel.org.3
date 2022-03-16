@@ -2,387 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40864DB0C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0B74DB08A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356145AbiCPNOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S1356081AbiCPNMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356136AbiCPNNy (ORCPT
+        with ESMTP id S1356044AbiCPNMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:13:54 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F5E66C80;
-        Wed, 16 Mar 2022 06:12:28 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22GAFxGW001886;
-        Wed, 16 Mar 2022 14:12:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=sJ1oIyVC/AnxmiVrqN8MoR+Qt7gRUBhnVNSOUHrRRO0=;
- b=ciDuNV8S7y2hCg8/J6L3tlA5hHw+7SDtffXDmux/S0mlNfM4MXstEg83G1ETQKFXfgio
- vacQQmva92+bdqxI2rpTO6+b30RLMalnQcJ5KVIoJAKKgq/7Dzboj2MyDKOwkBESom6P
- qflpfE1kKQfsF1h7nPMtT7ukR9lhSobf2aIqbCdEBlQoV4hDotUyt7QfttcceAGXjFoQ
- KXols+6hTOnOkbXHZA+7EFSsCH7YyKCLgbn/kT3dcVCW0RZ8Eig/OyIFFFWVh/Mu06yW
- GOv85QxXdf/gv81YOHX9C76E2XJD/2jur5AXPOELXROgEsOUiyE+Mx/8bhDpjGjATFCg bQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ethxu2hpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Mar 2022 14:12:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1B7C410002A;
-        Wed, 16 Mar 2022 14:12:17 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 12E6921FE9F;
-        Wed, 16 Mar 2022 14:12:17 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 16 Mar 2022 14:12:16
- +0100
-From:   <gabriel.fernandez@foss.st.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v3 13/13] ARM: dts: stm32: add RCC on STM32MP13x SoC family
-Date:   Wed, 16 Mar 2022 14:10:00 +0100
-Message-ID: <20220316131000.9874-14-gabriel.fernandez@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316131000.9874-1-gabriel.fernandez@foss.st.com>
-References: <20220316131000.9874-1-gabriel.fernandez@foss.st.com>
+        Wed, 16 Mar 2022 09:12:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4325D66211;
+        Wed, 16 Mar 2022 06:10:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65FBDB81B10;
+        Wed, 16 Mar 2022 13:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C654CC340E9;
+        Wed, 16 Mar 2022 13:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647436244;
+        bh=ESbbcLu/1iy4VCTs0pWTJ94umpC1+FygKacL+9W4w10=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DcPUYzV1Aku3NcbcTL9mdkMh1LWnKoJ2XTkIoBo8wtuneK7AqFc5LHQ4+RsZN47Ro
+         TUy+Ll7nYCAG/HLI4ecmBAy3F8pMq2hKFdrktfkGgYIUyQIqhi6BpKNY4NNZlrwBdc
+         bDycPpgG8QFWVaCQyI7Z7R9RUmhpU3ikfyMX+RiOvQJFuCwXkoOHOdgqt3f3mh2/4A
+         FLjpYtyz+8GJAufTG1ItDJyYjVNYgohQjdE6hRq2Z3M53jAH1DdJ8nEs29BzSHqjX1
+         WgXwGnUKBXVbeoSSLJNdFH0PUjhcoFnbgVtX/co3lCeBFRoQLvayqkwO2Xcs8DRi1M
+         UUGpV/32fmXNg==
+Date:   Wed, 16 Mar 2022 14:10:36 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
+        Niklas =?UTF-8?B?U8O2ZGVybHVuZA==?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Ondrej Jirman <megous@megous.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 47/67] media: platform: rename sunxi/ to allwinner/
+Message-ID: <20220316141036.1c9ad0c6@coco.lan>
+In-Reply-To: <YjBPuafv1B5dbu/r@pendragon.ideasonboard.com>
+References: <cover.1647274406.git.mchehab@kernel.org>
+        <85266b480902079391d4206b8aa276ff131a730f.1647274407.git.mchehab@kernel.org>
+        <2816975.e9J7NaK4W3@kista>
+        <20220315064005.10ecdab2@coco.lan>
+        <YjA4IRD//lb8SKgs@pendragon.ideasonboard.com>
+        <20220315092736.7e805c81@coco.lan>
+        <YjBPuafv1B5dbu/r@pendragon.ideasonboard.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-16_05,2022-03-15_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Em Tue, 15 Mar 2022 10:35:05 +0200
+Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
 
-Enables Reset and Clocks Controller on STM32MP13
+> On Tue, Mar 15, 2022 at 09:27:36AM +0100, Mauro Carvalho Chehab wrote:
+> > Em Tue, 15 Mar 2022 08:54:25 +0200
+> > Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
+> >  =20
+> > > Hi Mauro,
+> > >=20
+> > > On Tue, Mar 15, 2022 at 06:40:05AM +0100, Mauro Carvalho Chehab wrote=
+: =20
+> > > > Em Mon, 14 Mar 2022 18:22:20 +0100 Jernej =C5=A0krabec escreveu:
+> > > >    =20
+> > > > > Dne ponedeljek, 14. marec 2022 ob 17:34:42 CET je Mauro Carvalho =
+Chehab=20
+> > > > > napisal(a):   =20
+> > > > > > As the end goal is to have platform drivers split by vendor,
+> > > > > > rename sunxi/ to allwinner/.
+> > > > > >=20
+> > > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>     =
+=20
+> > > > >=20
+> > > > > I would rather not do that. Everything related to Allwinner is ca=
+lled sunxi,=20
+> > > > > albeit there are a few outliers. This is similar to Amlogic/meson=
+ situation.   =20
+> > > >=20
+> > > > The rationale of having one directory per manufacturer is that, if =
+drivers
+> > > > for newer platforms with different names from the same manufacturer=
+s are=20
+> > > > added, those will still fit under allwinner/ and amlogic/.
+> > > >=20
+> > > > The Kconfig names for sunxi and meson didn't change, nor the driver=
+'s name.=20
+> > > > Also, the directories under allwinner preserve sun<x>i name on them:
+> > > >=20
+> > > > 	drivers/media/platform/allwinner/
+> > > > 	=E2=94=9C=E2=94=80=E2=94=80 sun4i-csi
+> > > > 	=E2=94=9C=E2=94=80=E2=94=80 sun6i-csi
+> > > > 	=E2=94=9C=E2=94=80=E2=94=80 sun8i-di
+> > > > 	=E2=94=94=E2=94=80=E2=94=80 sun8i-rotate
+> > > >=20
+> > > > and so the directory under amlogic/:
+> > > >=20
+> > > > 	drivers/media/platform/amlogic/
+> > > > 	=E2=94=94=E2=94=80=E2=94=80 meson-ge2d
+> > > >=20
+> > > > Now, if Allinner decides to release a new platforms named after ano=
+ther star,
+> > > > let's say, "Vega" and "Rigel", it would be just a matter of adding=
+=20
+> > > > "vega/" and "rigel/" directories under allwinner. No need to touch
+> > > > media/platform/Kconfig and media/platform/Makefile. Everything will=
+ happen
+> > > > on much more smaller vendor-specific Kconfig/Makefile.   =20
+> > >=20
+> > > But the day Allwinner changes its name to Noloser, we'll have a simil=
+ar
+> > > problem.  =20
+> >=20
+> > Not really. It will still be a single directory per vendor (whatever
+> > name it is).
+> >  =20
+> > > Thnk about Freescale vs. NXP, or Altera bought by Intel. =20
+> >=20
+> > Yeah, when some drivers move from one vendor to another one that
+> > already exists there, we should probably move the directories, in
+> > order to keep things well organized. =20
+>=20
+> I'm not sure we should. We still have arch/arm64/boot/dts/freescale/ for
+> instance. We can answer that question later though, when confronted with
+> the situation.
 
-Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
----
- arch/arm/boot/dts/stm32mp131.dtsi  | 107 +++++++++++------------------
- arch/arm/boot/dts/stm32mp133.dtsi  |   4 +-
- arch/arm/boot/dts/stm32mp13xf.dtsi |   3 +-
- 3 files changed, 46 insertions(+), 68 deletions(-)
+It would be messy if some drivers under a
 
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index 78eac53224d4..d7300b00ec19 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -4,6 +4,8 @@
-  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-  */
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/stm32mp13-clks.h>
-+#include <dt-bindings/reset/stm32mp13-resets.h>
- 
- / {
- 	#address-cells = <1>;
-@@ -64,54 +66,8 @@ scmi_reset: protocol@16 {
- 			};
- 		};
- 	};
--	clocks {
--		clk_axi: clk-axi {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <266500000>;
--		};
--
--		clk_hse: clk-hse {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <24000000>;
--		};
--
--		clk_hsi: clk-hsi {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <64000000>;
--		};
--
--		clk_lsi: clk-lsi {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <32000>;
--		};
--
--		clk_pclk3: clk-pclk3 {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <104438965>;
--		};
- 
--		clk_pclk4: clk-pclk4 {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <133250000>;
--		};
--
--		clk_pll4_p: clk-pll4_p {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <50000000>;
--		};
--
--		clk_pll4_r: clk-pll4_r {
--			#clock-cells = <0>;
--			compatible = "fixed-clock";
--			clock-frequency = <99000000>;
--		};
-+	clocks {
- 	};
- 
- 	intc: interrupt-controller@a0021000 {
-@@ -148,7 +104,8 @@ uart4: serial@40010000 {
- 			compatible = "st,stm32h7-uart";
- 			reg = <0x40010000 0x400>;
- 			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&clk_hsi>;
-+			clocks = <&rcc UART4_K>;
-+			resets = <&rcc UART4_R>;
- 			status = "disabled";
- 		};
- 
-@@ -163,7 +120,8 @@ dma1: dma-controller@48000000 {
- 				     <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&clk_pclk4>;
-+			clocks = <&rcc DMA1>;
-+			resets = <&rcc DMA1_R>;
- 			#dma-cells = <4>;
- 			st,mem2mem;
- 			dma-requests = <8>;
-@@ -180,7 +138,8 @@ dma2: dma-controller@48001000 {
- 				     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&clk_pclk4>;
-+			clocks = <&rcc DMA2>;
-+			resets = <&rcc DMA2_R>;
- 			#dma-cells = <4>;
- 			st,mem2mem;
- 			dma-requests = <8>;
-@@ -189,13 +148,29 @@ dma2: dma-controller@48001000 {
- 		dmamux1: dma-router@48002000 {
- 			compatible = "st,stm32h7-dmamux";
- 			reg = <0x48002000 0x40>;
--			clocks = <&clk_pclk4>;
-+			clocks = <&rcc DMAMUX1>;
-+			resets = <&rcc DMAMUX1_R>;
- 			#dma-cells = <3>;
- 			dma-masters = <&dma1 &dma2>;
- 			dma-requests = <128>;
- 			dma-channels = <16>;
- 		};
- 
-+		rcc: rcc@50000000 {
-+			compatible = "st,stm32mp13-rcc", "syscon";
-+			reg = <0x50000000 0x1000>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+
-+			clock-names = "hse", "hsi", "csi", "lse", "lsi";
-+
-+			clocks = <&scmi_clk CK_SCMI_HSE>,
-+				 <&scmi_clk CK_SCMI_HSI>,
-+				 <&scmi_clk CK_SCMI_CSI>,
-+				 <&scmi_clk CK_SCMI_LSE>,
-+				 <&scmi_clk CK_SCMI_LSI>;
-+		};
-+
- 		exti: interrupt-controller@5000d000 {
- 			compatible = "st,stm32mp13-exti", "syscon";
- 			interrupt-controller;
-@@ -206,14 +181,14 @@ exti: interrupt-controller@5000d000 {
- 		syscfg: syscon@50020000 {
- 			compatible = "st,stm32mp157-syscfg", "syscon";
- 			reg = <0x50020000 0x400>;
--			clocks = <&clk_pclk3>;
-+			clocks = <&rcc SYSCFG>;
- 		};
- 
- 		mdma: dma-controller@58000000 {
- 			compatible = "st,stm32h7-mdma";
- 			reg = <0x58000000 0x1000>;
- 			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&clk_pclk4>;
-+			clocks = <&rcc MDMA>;
- 			#dma-cells = <5>;
- 			dma-channels = <32>;
- 			dma-requests = <48>;
-@@ -225,8 +200,9 @@ sdmmc1: mmc@58005000 {
- 			reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
- 			interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "cmd_irq";
--			clocks = <&clk_pll4_p>;
-+			clocks = <&rcc SDMMC1_K>;
- 			clock-names = "apb_pclk";
-+			resets = <&rcc SDMMC1_R>;
- 			cap-sd-highspeed;
- 			cap-mmc-highspeed;
- 			max-frequency = <130000000>;
-@@ -239,8 +215,9 @@ sdmmc2: mmc@58007000 {
- 			reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
- 			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "cmd_irq";
--			clocks = <&clk_pll4_p>;
-+			clocks = <&rcc SDMMC2_K>;
- 			clock-names = "apb_pclk";
-+			resets = <&rcc SDMMC2_R>;
- 			cap-sd-highspeed;
- 			cap-mmc-highspeed;
- 			max-frequency = <130000000>;
-@@ -250,7 +227,7 @@ sdmmc2: mmc@58007000 {
- 		iwdg2: watchdog@5a002000 {
- 			compatible = "st,stm32mp1-iwdg";
- 			reg = <0x5a002000 0x400>;
--			clocks = <&clk_pclk4>, <&clk_lsi>;
-+			clocks = <&rcc IWDG2>, <&scmi_clk CK_SCMI_LSI>;
- 			clock-names = "pclk", "lsi";
- 			status = "disabled";
- 		};
-@@ -289,7 +266,7 @@ gpioa: gpio@50002000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x0 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOA>;
- 				st,bank-name = "GPIOA";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 0 16>;
-@@ -301,7 +278,7 @@ gpiob: gpio@50003000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x1000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOB>;
- 				st,bank-name = "GPIOB";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 16 16>;
-@@ -313,7 +290,7 @@ gpioc: gpio@50004000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x2000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOC>;
- 				st,bank-name = "GPIOC";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 32 16>;
-@@ -325,7 +302,7 @@ gpiod: gpio@50005000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x3000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOD>;
- 				st,bank-name = "GPIOD";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 48 16>;
-@@ -337,7 +314,7 @@ gpioe: gpio@50006000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x4000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOE>;
- 				st,bank-name = "GPIOE";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 64 16>;
-@@ -349,7 +326,7 @@ gpiof: gpio@50007000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x5000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOF>;
- 				st,bank-name = "GPIOF";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 80 16>;
-@@ -361,7 +338,7 @@ gpiog: gpio@50008000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x6000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOG>;
- 				st,bank-name = "GPIOG";
- 				ngpios = <16>;
- 				gpio-ranges = <&pinctrl 0 96 16>;
-@@ -373,7 +350,7 @@ gpioh: gpio@50009000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x7000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOH>;
- 				st,bank-name = "GPIOH";
- 				ngpios = <15>;
- 				gpio-ranges = <&pinctrl 0 112 15>;
-@@ -385,7 +362,7 @@ gpioi: gpio@5000a000 {
- 				interrupt-controller;
- 				#interrupt-cells = <2>;
- 				reg = <0x8000 0x400>;
--				clocks = <&clk_pclk4>;
-+				clocks = <&rcc GPIOI>;
- 				st,bank-name = "GPIOI";
- 				ngpios = <8>;
- 				gpio-ranges = <&pinctrl 0 128 8>;
-diff --git a/arch/arm/boot/dts/stm32mp133.dtsi b/arch/arm/boot/dts/stm32mp133.dtsi
-index 0fb1386257cf..531c263c9f46 100644
---- a/arch/arm/boot/dts/stm32mp133.dtsi
-+++ b/arch/arm/boot/dts/stm32mp133.dtsi
-@@ -15,7 +15,7 @@ m_can1: can@4400e000 {
- 			interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "int0", "int1";
--			clocks = <&clk_hse>, <&clk_pll4_r>;
-+			clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
- 			clock-names = "hclk", "cclk";
- 			bosch,mram-cfg = <0x0 0 0 32 0 0 2 2>;
- 			status = "disabled";
-@@ -28,7 +28,7 @@ m_can2: can@4400f000 {
- 			interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "int0", "int1";
--			clocks = <&clk_hse>, <&clk_pll4_r>;
-+			clocks = <&scmi_clk CK_SCMI_HSE>, <&rcc FDCAN_K>;
- 			clock-names = "hclk", "cclk";
- 			bosch,mram-cfg = <0x1400 0 0 32 0 0 2 2>;
- 			status = "disabled";
-diff --git a/arch/arm/boot/dts/stm32mp13xf.dtsi b/arch/arm/boot/dts/stm32mp13xf.dtsi
-index fa6889e30591..4d00e7592882 100644
---- a/arch/arm/boot/dts/stm32mp13xf.dtsi
-+++ b/arch/arm/boot/dts/stm32mp13xf.dtsi
-@@ -10,7 +10,8 @@ cryp: crypto@54002000 {
- 			compatible = "st,stm32mp1-cryp";
- 			reg = <0x54002000 0x400>;
- 			interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&clk_axi>;
-+			clocks = <&rcc CRYP1>;
-+			resets = <&rcc CRYP1_R>;
- 			status = "disabled";
- 		};
- 	};
--- 
-2.25.1
+	media/platform/vendor_a/
 
+directory would actually belong to vendor_b, which also has its own
+media/platform/vendor_b/ directory.
+
+On such case, I do think we should move stuff. Now, if everything
+under a "media/platform/vendor_a/" directory are now property of
+a vendor_c which doesn't have yet any directory there, I don't see
+and problems on not renaming - and even adding new drivers there
+that would belong to vendor_c.
+
+>=20
+> > The worse case scenario is really if, let's say, TI decides to sell the=
+ir
+> > omap architecture to NXP, keeping the rest. On such case, the best would
+> > be to move platform/ti/omap* to the directory of its newer owner.
+> >=20
+> > That's said, when things like that happen, there are usually a change
+> > at MAINTAINERS, as e-mails, mailing lists and contact people will
+> > likely change. So, this will very likely generate patches anyway.
+> >  =20
+> > > No
+> > > naming scheme is totally future-proof. If the accepted standard throu=
+gh
+> > > the kernel is to use sunxi to refer to Allwinner SoCs, I don't think
+> > > it's a bit idea to go with that. =20
+> >=20
+> > I'm not too concerned about the name here, but rather about the
+> > process. Needing to do reorg like this is painful, as it causes=20
+> > all pending work to fail merging against upstream, requiring rebases.
+> > So, we should avoid needing to re-do it by trying our best to avoid
+> > the need of another global change like that in the future. =20
+>=20
+> Most of the pain we'll go through in the immediate future comes from the
+> fact that we never really cared about this.=20
+
+Nah, we had other reorgs in the past, also trying to better organize
+stuff, like splitting M2M from V4L and DVB platform drivers.
+
+The thing is that the number of entries at platform/ increased
+a lot, and that justifies a major change.
+
+> I think renames (of vendors
+> or product lines) will be infrequent enough that picking sunxi for
+> Allwinner drivers wouldn't be an issue.
+
+Agreed.
+
+> There's a similar think with Renesas, which had an SH product line and
+> then moved to ARM, creating R-Mobile and R-Car (among other product
+> liens). That's why we still have drivers/dma/sh/ for Renesas DMA
+> drivers.
+>=20
+> > By organizing entries per vendor, while we may need to do puntual
+> > per-vendor adjustments when they rename and change IP with other
+> > vendors, the global platform Kconfig/Make will contain a single entry
+> > per vendor. I can't foresee any need to change this in the future,
+> > if we take care of keeping the entries there properly sorted.
+> >=20
+> > With regards to naming the per-vendor directory, while I do prefer to h=
+ave
+> > the  directories named after the vendor, and not after a vendor's nick=
+=20
+> > name, It should also be ok to use a vendor's nick name, provided that=20
+> > such name is meant to be used by all their current and future IP.
+> >=20
+> > Not sure if "sunxi" is actually a vendor's nick name. It sounds
+> > much likely that it is, instead, a brand name that covers their=20
+> > current media-related SoC.=20
+> >=20
+> > Can someone from the vendor shed a light on it? =20
+>=20
+> Maybe we can let the Allwinner upstream community tell us what name to
+> pick ? I'm sure they know better than us :-)
+
+Works for me.
+
+Thanks,
+Mauro

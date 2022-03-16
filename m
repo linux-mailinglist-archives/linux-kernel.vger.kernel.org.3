@@ -2,88 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079B54DB947
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C8A4DB94B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346635AbiCPUYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S1347769AbiCPU0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234459AbiCPUYx (ORCPT
+        with ESMTP id S1346326AbiCPU0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:24:53 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78AE2A25F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:23:38 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w4so4141671edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:23:38 -0700 (PDT)
+        Wed, 16 Mar 2022 16:26:02 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9CC2C100
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:24:47 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id b189so2824920qkf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/W5laBTZHdKIhPFdmxssAJ/PyZmpniDY63SyfCg8328=;
-        b=m92o9PYDH2Pqko8Jg5f/4xBxboNuVcCi05N5Z1C883GeytGPj65qh0BEAk1u10aSnV
-         dfaAMMeRsQC/TAaxyiIOWqQKRSWb1yxJ603+SW+QjRXfbag83sfMfwgLhh0F8JHbkNlG
-         usP+N+nazlXyrHWY1l7vI/bS20wK1YND8MPmA3KLK8/aS3RaO28+0mAKMA6OsMEMKaeL
-         IZncXP+RvYJ5Reg5zdmKDqTSL42/VnFjc7Ngsyjt+cYYUVz/joGRXVc9KTVMnTjc0bMz
-         zhVuKHoiMkREpc/5V5w7JYm07Ns+ffWHc5NSOpUh69hf4jkPKRAVviOvU8uOd6X1R6nB
-         vbQw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ivPqLyiNJbnmJk4hxBVjVwg3q4Q1FQmH/sEVySOJZBA=;
+        b=l3sm7SDMmEOTusOKnBZMsCiPIMD62w6xc8H5g36QNSKU64kg3uK6rKuNYHwnyHvee3
+         vjADlXIj187GklEXa/0ioE+lTl0Wnku6ATX9T/1iyRujJ65k3/hyaowS9+W/ZPPSDs5i
+         sEWCYPD0dA7PDny7HOwkV65vKCMFcuaWmNSEs/jB9oyo0dFx1ErFNeeRd755/mHP6Uw5
+         9mBf+D2qonlRg2tuGv5nlhLXrOLmwgDSC9BaehHl4AuojRjaggs8qMdAVAz1mDd114nT
+         NQ9Z3zou3lO5w6oN/4rQ0/A51xGDEjKJTKV2JJArXf30iD1sglK3paYigUNXj5go6mxW
+         4WXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/W5laBTZHdKIhPFdmxssAJ/PyZmpniDY63SyfCg8328=;
-        b=6RsKvLWDYpRbA1/Ev/k7ulqsZFlfoELZKb/nJXrExP5mDt/mUN5eD1B0dl8ARVE0xr
-         Ml8Nfi7tbwRobxRUZh1tE9c1lHW4EpUvIl4YuE9Yt95fcM304l2kskGlFC1hUXiiNp6J
-         AvvS8STdT0H6bNZRJ4+4VPTBrtorZIgrSPnc6GD61CDFbONG1xmSTcQ39fd4KKDReKAY
-         STvBBInjTx/GA8JpnS2dRuCqD5UehBJSkuvk3l6gu0HF3IJld36PZjlQS/3Raknog2Q6
-         UHaIQyhXT73yUvtwaJodLRAUPdMSCtyuMLOqIaFM5nFYSJZ5GVgBy1JNlphGkKeSfb/v
-         MUTw==
-X-Gm-Message-State: AOAM532IZZJugmY/dawtNHzBUr0ePCY6xVpro9e1fQ5WRH6Ft3ehaUrE
-        2eqZQXuDbjwvfR+lTKRdRMQePoVjHUqk7arI
-X-Google-Smtp-Source: ABdhPJzXsMB8mZpAwg03dI85wTVY9KB/446Yl7/fe+M1GEUQN35mtGFiShQYS+jcP2KIlFVpFfIrsQ==
-X-Received: by 2002:a05:6402:278f:b0:416:a887:9853 with SMTP id b15-20020a056402278f00b00416a8879853mr1231698ede.44.1647462217169;
-        Wed, 16 Mar 2022 13:23:37 -0700 (PDT)
-Received: from nam-dell (dslb-002-203-132-165.002.203.pools.vodafone-ip.de. [2.203.132.165])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170906c20b00b006d584a09b9fsm1374872ejz.98.2022.03.16.13.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 13:23:36 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 21:23:35 +0100
-From:   Nam Cao <cvn249@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: sm750fb: fix CamelCase naming style
-Message-ID: <20220316202335.GB7346@nam-dell>
-References: <20220316113228.21243-1-cvn249@gmail.com>
- <YjHu0FjaHRoqfZ+y@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ivPqLyiNJbnmJk4hxBVjVwg3q4Q1FQmH/sEVySOJZBA=;
+        b=iIRg2DKmNYjN1CT3olU6QD3ePPgX1SC34yQIOWyX4SwGiKYcotw16z255o7penUu1M
+         2Xmp5uzWTc6i9GUKShEKCUKCl14IzSZUJR5wKd6/ANzMQHII2y/BaqF5Tw1kok+3ey9Y
+         HujkaQ+Jd56cVWVT8aDT1Bfw5VHRIZ1ZYmg+VdHPKqedGs6VJIRZ8B5429k4sNU8XRwy
+         kAIp978iOyOZP7piXkyBEuNZjSCW4fnc9nhv24Rr0ZKMErTdQLEfdssLzkelj4dj0UJ/
+         4zxqTec7aAyt+w4hmqT/vx/+zadlm7N1O8L6Ti42vMD1nc3E5P6RX2HHBUMVOlBW1V2D
+         A46g==
+X-Gm-Message-State: AOAM531A+DLUljo87PVefLCba3q5UV81DaE1fKvwHZTp5aDvEEO/Ajy2
+        XHoidBZBk8tEZzDyFSLerCf0v0i7IxXebxDkQv+gSA==
+X-Google-Smtp-Source: ABdhPJzqwlApxyq7lsWK+22acdlSBDDtBs7AEx7TtXUuEivO4VgVtHuDW20tK1Qk+3mgq1yJYe1/hzvMNuILSgh/WQA=
+X-Received: by 2002:a05:620a:28c7:b0:67d:6d4e:16ee with SMTP id
+ l7-20020a05620a28c700b0067d6d4e16eemr965648qkp.59.1647462286423; Wed, 16 Mar
+ 2022 13:24:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjHu0FjaHRoqfZ+y@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220316180322.88132-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20220316180322.88132-1-bjorn.andersson@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 16 Mar 2022 23:24:35 +0300
+Message-ID: <CAA8EJpotanjL_EHYr1-YQAXDOT--HGhGW2RH-0fO5189CEpB1Q@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/qcom/lmh: Fix irq handler return value
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 03:06:08PM +0100, Greg KH wrote: 
-> Why are you keeping "pfn_"?  You do not need to say that this is a
-> "pointer to a function" anymore, right?
-> 
-> thanks,
-> 
-> greg k-h
+On Wed, 16 Mar 2022 at 21:01, Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> After enough invocations the LMh irq is eventually reported as bad, because the
+> handler doesn't return IRQ_HANDLED, fix this.
+>
+> Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
+> Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Thanks for the feedback. As newcomer, I really appreciate it.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-I will send updated patch soon.
+> ---
+>  drivers/thermal/qcom/lmh.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+> index c7f91cbdccc7..af9f0872614f 100644
+> --- a/drivers/thermal/qcom/lmh.c
+> +++ b/drivers/thermal/qcom/lmh.c
+> @@ -45,7 +45,7 @@ static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
+>         if (irq)
+>                 generic_handle_irq(irq);
+>
+> -       return 0;
+> +       return IRQ_HANDLED;
+>  }
+>
+>  static void lmh_enable_interrupt(struct irq_data *d)
+> --
+> 2.33.1
+>
 
-Best regards,
 
-Nam
-
+-- 
+With best wishes
+Dmitry

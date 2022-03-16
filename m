@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942AF4DAA2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 07:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775424DAA2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 07:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353733AbiCPGBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 02:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S1353745AbiCPGCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 02:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353711AbiCPGBr (ORCPT
+        with ESMTP id S1353715AbiCPGBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 02:01:47 -0400
+        Wed, 16 Mar 2022 02:01:49 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA45260072;
-        Tue, 15 Mar 2022 23:00:33 -0700 (PDT)
-X-UUID: 07f728e142384181881e5723a21c1edf-20220316
-X-UUID: 07f728e142384181881e5723a21c1edf-20220316
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F0060064;
+        Tue, 15 Mar 2022 23:00:34 -0700 (PDT)
+X-UUID: 1a4f80253f744e09b2b271ebdd8c3688-20220316
+X-UUID: 1a4f80253f744e09b2b271ebdd8c3688-20220316
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <axe.yang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 292567649; Wed, 16 Mar 2022 14:00:24 +0800
+        with ESMTP id 1694223216; Wed, 16 Mar 2022 14:00:25 +0800
 Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 14:00:23 +0800
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Mar 2022 14:00:25 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
  (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Mar
- 2022 14:00:22 +0800
+ 2022 14:00:24 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 14:00:21 +0800
+ Transport; Wed, 16 Mar 2022 14:00:22 +0800
 From:   Axe Yang <axe.yang@mediatek.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -50,10 +50,11 @@ CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v6 2/3] mmc: core: Add support for SDIO wakeup interrupt
-Date:   Wed, 16 Mar 2022 14:00:13 +0800
-Message-ID: <20220316060014.12732-3-axe.yang@mediatek.com>
+        <linux-mediatek@lists.infradead.org>,
+        Yong Mao <yong.mao@mediatek.com>
+Subject: [PATCH v6 3/3] mmc: mediatek: add support for SDIO eint wakup IRQ
+Date:   Wed, 16 Mar 2022 14:00:14 +0800
+Message-ID: <20220316060014.12732-4-axe.yang@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220316060014.12732-1-axe.yang@mediatek.com>
 References: <20220316060014.12732-1-axe.yang@mediatek.com>
@@ -70,90 +71,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If wakeup-source flag is set in host dts node, parse EAI information
-from SDIO CCCR interrupt externsion segment for in-band wakeup. If
-async interrupt is supported by SDIO card then enable it and set
-enable_async_irq flag in sdio_cccr structure to 1. The parse flow is
-implemented in sdio_read_cccr().
+Add support for eint IRQ when MSDC is used as an SDIO host. This
+feature requires SDIO device support async IRQ function. With this
+feature, SDIO host can be awakened by SDIO card in suspend state,
+without additional pin.
 
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+resume, switch GPIO function back to DAT1 mode then turn on clock.
+
+Some device tree property should be added or modified in MSDC node
+to support SDIO eint IRQ. Pinctrls named "state_dat1" and "state_eint"
+are mandatory. Since this feature depends on asynchronous interrupts,
+"wakeup-source", "keep-power-in-suspend" and "cap-sdio-irq" flags are
+necessary, and the interrupts list should be extended:
+        &mmcX {
+		...
+		interrupts-extended = <...>,
+                              	      <&pio xxx IRQ_TYPE_LEVEL_LOW>;
+                ...
+                pinctrl-names = "default", "state_uhs", "state_eint",
+                                "state_dat1";
+                ...
+                pinctrl-2 = <&mmc2_pins_eint>;
+                pinctrl-3 = <&mmc2_pins_dat1>;
+                ...
+                cap-sdio-irq;
+		keep-power-in-suspend;
+		wakeup-source;
+                ...
+        };
+
+Co-developed-by: Yong Mao <yong.mao@mediatek.com>
+Signed-off-by: Yong Mao <yong.mao@mediatek.com>
 Signed-off-by: Axe Yang <axe.yang@mediatek.com>
 ---
- drivers/mmc/core/sdio.c  | 17 +++++++++++++++++
- include/linux/mmc/card.h |  8 +++++++-
- include/linux/mmc/sdio.h |  5 +++++
- 3 files changed, 29 insertions(+), 1 deletion(-)
+ drivers/mmc/host/mtk-sd.c | 99 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 91 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
-index 25799accf8a0..4898c5e9a299 100644
---- a/drivers/mmc/core/sdio.c
-+++ b/drivers/mmc/core/sdio.c
-@@ -226,6 +226,23 @@ static int sdio_read_cccr(struct mmc_card *card, u32 ocr)
- 				card->sw_caps.sd3_drv_type |= SD_DRIVER_TYPE_C;
- 			if (data & SDIO_DRIVE_SDTD)
- 				card->sw_caps.sd3_drv_type |= SD_DRIVER_TYPE_D;
-+
-+			if (card->host->pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-+				ret = mmc_io_rw_direct(card, 0, 0, SDIO_CCCR_INTERRUPT_EXT, 0,
-+						       &data);
-+				if (ret)
-+					goto out;
-+
-+				if (data & SDIO_INTERRUPT_EXT_SAI) {
-+					data |= SDIO_INTERRUPT_EXT_EAI;
-+					ret = mmc_io_rw_direct(card, 1, 0, SDIO_CCCR_INTERRUPT_EXT,
-+							       data, NULL);
-+					if (ret)
-+						goto out;
-+
-+					card->cccr.enable_async_irq = 1;
-+				}
-+			}
- 		}
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 65037e1d7723..5ff95f32bd45 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright (c) 2014-2015 MediaTek Inc.
++ * Copyright (c) 2014-2015, 2022 MediaTek Inc.
+  * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
+  */
  
- 		/* if no uhs mode ensure we check for high speed */
-diff --git a/include/linux/mmc/card.h b/include/linux/mmc/card.h
-index 37f975875102..968650c0b345 100644
---- a/include/linux/mmc/card.h
-+++ b/include/linux/mmc/card.h
-@@ -219,7 +219,8 @@ struct sdio_cccr {
- 				wide_bus:1,
- 				high_power:1,
- 				high_speed:1,
--				disable_cd:1;
-+				disable_cd:1,
-+				enable_async_irq:1;
- };
+@@ -20,6 +20,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/pm_runtime.h>
++#include <linux/pm_wakeirq.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+@@ -440,8 +441,12 @@ struct msdc_host {
+ 	struct pinctrl *pinctrl;
+ 	struct pinctrl_state *pins_default;
+ 	struct pinctrl_state *pins_uhs;
++	struct pinctrl_state *pins_eint;
++	struct pinctrl_state *pins_dat1;
+ 	struct delayed_work req_timeout;
+ 	int irq;		/* host interrupt */
++	int eint_irq;		/* interrupt from sdio device for waking up system */
++	int sdio_wake_irq_depth;
+ 	struct reset_control *reset;
  
- struct sdio_cis {
-@@ -343,6 +344,11 @@ static inline bool mmc_large_sector(struct mmc_card *card)
- 	return card->ext_csd.data_sector_size == 4096;
+ 	struct clk *src_clk;	/* msdc source clock */
+@@ -465,6 +470,7 @@ struct msdc_host {
+ 	bool hs400_tuning;	/* hs400 mode online tuning */
+ 	bool internal_cd;	/* Use internal card-detect logic */
+ 	bool cqhci;		/* support eMMC hw cmdq */
++	bool sdio_eint_ready;	/* Ready to support SDIO eint interrupt */
+ 	struct msdc_save_para save_para; /* used when gate HCLK */
+ 	struct msdc_tune_para def_tune_para; /* default tune setting */
+ 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+@@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
+ 	__msdc_enable_sdio_irq(host, enb);
+ 	spin_unlock_irqrestore(&host->lock, flags);
+ 
+-	if (enb)
+-		pm_runtime_get_noresume(host->dev);
+-	else
+-		pm_runtime_put_noidle(host->dev);
++	if (mmc->card && !mmc_card_enable_async_irq(mmc->card)) {
++		if (enb)
++			pm_runtime_get_noresume(host->dev);
++		else
++			pm_runtime_put_noidle(host->dev);
++	}
  }
  
-+static inline int mmc_card_enable_async_irq(struct mmc_card *card)
-+{
-+	return card->cccr.enable_async_irq;
-+}
-+
- bool mmc_card_is_blockaddr(struct mmc_card *card);
+ static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
+@@ -2631,6 +2639,23 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 		goto host_free;
+ 	}
  
- #define mmc_card_mmc(c)		((c)->type == MMC_TYPE_MMC)
-diff --git a/include/linux/mmc/sdio.h b/include/linux/mmc/sdio.h
-index 2a05d1ac4f0e..1ef400f28642 100644
---- a/include/linux/mmc/sdio.h
-+++ b/include/linux/mmc/sdio.h
-@@ -159,6 +159,11 @@
- #define  SDIO_DTSx_SET_TYPE_A	(1 << SDIO_DRIVE_DTSx_SHIFT)
- #define  SDIO_DTSx_SET_TYPE_C	(2 << SDIO_DRIVE_DTSx_SHIFT)
- #define  SDIO_DTSx_SET_TYPE_D	(3 << SDIO_DRIVE_DTSx_SHIFT)
++	/* Support for SDIO eint irq ? */
++	if (mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
++		host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
++		if (IS_ERR(host->pins_eint)) {
++			dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
++		} else {
++			host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
++			if (IS_ERR(host->pins_dat1)) {
++				ret = dev_err_probe(&pdev->dev, PTR_ERR(host->pins_dat1),
++						    "Cannot find pinctrl dat1!\n");
++				goto host_free;
++			}
 +
-+#define SDIO_CCCR_INTERRUPT_EXT	0x16
-+#define SDIO_INTERRUPT_EXT_SAI	(1 << 0)
-+#define SDIO_INTERRUPT_EXT_EAI	(1 << 1)
++			host->sdio_eint_ready = true;
++		}
++	}
 +
- /*
-  * Function Basic Registers (FBR)
-  */
+ 	msdc_of_property_parse(pdev, host);
+ 
+ 	host->dev = &pdev->dev;
+@@ -2722,6 +2747,20 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto release;
+ 
++	if (host->sdio_eint_ready) {
++		host->eint_irq = irq_of_parse_and_map(host->dev->of_node, 1);
++		ret = host->eint_irq ? dev_pm_set_dedicated_wake_irq(host->dev, host->eint_irq) :
++		      -ENODEV;
++
++		if (ret) {
++			dev_err(host->dev, "Failed to register data1 eint irq!\n");
++			goto release;
++		}
++
++		dev_pm_disable_wake_irq(host->dev);
++		pinctrl_select_state(host->pinctrl, host->pins_dat1);
++	}
++
+ 	pm_runtime_set_active(host->dev);
+ 	pm_runtime_set_autosuspend_delay(host->dev, MTK_MMC_AUTOSUSPEND_DELAY);
+ 	pm_runtime_use_autosuspend(host->dev);
+@@ -2734,6 +2773,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
+ 	return 0;
+ end:
+ 	pm_runtime_disable(host->dev);
++	dev_pm_clear_wake_irq(host->dev);
+ release:
+ 	platform_set_drvdata(pdev, NULL);
+ 	msdc_deinit_hw(host);
+@@ -2845,6 +2885,16 @@ static int __maybe_unused msdc_runtime_suspend(struct device *dev)
+ 	struct msdc_host *host = mmc_priv(mmc);
+ 
+ 	msdc_save_reg(host);
++
++	if (host->sdio_eint_ready) {
++		disable_irq(host->irq);
++		pinctrl_select_state(host->pinctrl, host->pins_eint);
++		if (host->sdio_wake_irq_depth == 0) {
++			dev_pm_enable_wake_irq(dev);
++			host->sdio_wake_irq_depth++;
++		}
++		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
++	}
+ 	msdc_gate_clock(host);
+ 	return 0;
+ }
+@@ -2860,12 +2910,25 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
+ 		return ret;
+ 
+ 	msdc_restore_reg(host);
++
++	if (host->sdio_eint_ready) {
++		if (host->sdio_wake_irq_depth > 0) {
++			dev_pm_disable_wake_irq(dev);
++			host->sdio_wake_irq_depth--;
++			sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
++		} else {
++			sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INTEN_SDIOIRQ);
++		}
++		pinctrl_select_state(host->pinctrl, host->pins_uhs);
++		enable_irq(host->irq);
++	}
+ 	return 0;
+ }
+ 
+-static int __maybe_unused msdc_suspend(struct device *dev)
++static int __maybe_unused msdc_suspend_noirq(struct device *dev)
+ {
+ 	struct mmc_host *mmc = dev_get_drvdata(dev);
++	struct msdc_host *host = mmc_priv(mmc);
+ 	int ret;
+ 
+ 	if (mmc->caps2 & MMC_CAP2_CQE) {
+@@ -2874,16 +2937,36 @@ static int __maybe_unused msdc_suspend(struct device *dev)
+ 			return ret;
+ 	}
+ 
++	if (host->sdio_eint_ready)
++		enable_irq_wake(host->eint_irq);
++
+ 	return pm_runtime_force_suspend(dev);
+ }
+ 
+-static int __maybe_unused msdc_resume(struct device *dev)
++static int __maybe_unused msdc_resume_noirq(struct device *dev)
+ {
++	struct mmc_host *mmc = dev_get_drvdata(dev);
++	struct msdc_host *host = mmc_priv(mmc);
++
++	if (host->sdio_eint_ready) {
++		disable_irq_wake(host->eint_irq);
++
++		/*
++		 * In noirq resume stage, msdc_runtime_resume()
++		 * won't be called, so disalbe wake irq here
++		 * to block dedicated wake irq handler callback.
++		 */
++		if (likely(host->sdio_wake_irq_depth > 0)) {
++			dev_pm_disable_wake_irq(dev);
++			host->sdio_wake_irq_depth--;
++		}
++	}
++
+ 	return pm_runtime_force_resume(dev);
+ }
+ 
+ static const struct dev_pm_ops msdc_dev_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq, msdc_resume_noirq)
+ 	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume, NULL)
+ };
+ 
 -- 
 2.25.1
 

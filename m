@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C8A4DB94B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7634DB960
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347769AbiCPU0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S1357920AbiCPU2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346326AbiCPU0C (ORCPT
+        with ESMTP id S1357944AbiCPU15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:26:02 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9CC2C100
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:24:47 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id b189so2824920qkf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:24:47 -0700 (PDT)
+        Wed, 16 Mar 2022 16:27:57 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74BD3F8AE;
+        Wed, 16 Mar 2022 13:26:41 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id v2so2821712qtc.5;
+        Wed, 16 Mar 2022 13:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ivPqLyiNJbnmJk4hxBVjVwg3q4Q1FQmH/sEVySOJZBA=;
-        b=l3sm7SDMmEOTusOKnBZMsCiPIMD62w6xc8H5g36QNSKU64kg3uK6rKuNYHwnyHvee3
-         vjADlXIj187GklEXa/0ioE+lTl0Wnku6ATX9T/1iyRujJ65k3/hyaowS9+W/ZPPSDs5i
-         sEWCYPD0dA7PDny7HOwkV65vKCMFcuaWmNSEs/jB9oyo0dFx1ErFNeeRd755/mHP6Uw5
-         9mBf+D2qonlRg2tuGv5nlhLXrOLmwgDSC9BaehHl4AuojRjaggs8qMdAVAz1mDd114nT
-         NQ9Z3zou3lO5w6oN/4rQ0/A51xGDEjKJTKV2JJArXf30iD1sglK3paYigUNXj5go6mxW
-         4WXQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qYynkwQ+j3b/YGx/TNtwPxZ5TKXzPPLTT7lPgCZm+48=;
+        b=DzH36QZjHNcrZ0UH3XWqpH7SBIvo6qxszr0gTMibyuzJMeuva7mRN9TFl0oiYdnYUE
+         FGF49z9z6uzwT68tr/hmHPEiExZSm/gPs0gxTgq0Hs8H7RvhCGWM+ambf3f3LOqxguVU
+         yPZO5j+UrdUUl1vkAOwvBK3jvEKbMHD9GnVo5fYaLHTy5KGuZvWEOEY0qXAFIss+GTuF
+         UZlMsSDenY9IG83XPNN4FsEGIqeGzMZphQKVqqVch1wF9GR1sbzZyjbCrTAmgdKvpVbV
+         63x9+aXkKCwhfqF/sk+fBURf0uoLkIh6JlHhQ8YIWW/a32CSj3o1NH4rEuUhJNKOKS3f
+         EIxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ivPqLyiNJbnmJk4hxBVjVwg3q4Q1FQmH/sEVySOJZBA=;
-        b=iIRg2DKmNYjN1CT3olU6QD3ePPgX1SC34yQIOWyX4SwGiKYcotw16z255o7penUu1M
-         2Xmp5uzWTc6i9GUKShEKCUKCl14IzSZUJR5wKd6/ANzMQHII2y/BaqF5Tw1kok+3ey9Y
-         HujkaQ+Jd56cVWVT8aDT1Bfw5VHRIZ1ZYmg+VdHPKqedGs6VJIRZ8B5429k4sNU8XRwy
-         kAIp978iOyOZP7piXkyBEuNZjSCW4fnc9nhv24Rr0ZKMErTdQLEfdssLzkelj4dj0UJ/
-         4zxqTec7aAyt+w4hmqT/vx/+zadlm7N1O8L6Ti42vMD1nc3E5P6RX2HHBUMVOlBW1V2D
-         A46g==
-X-Gm-Message-State: AOAM531A+DLUljo87PVefLCba3q5UV81DaE1fKvwHZTp5aDvEEO/Ajy2
-        XHoidBZBk8tEZzDyFSLerCf0v0i7IxXebxDkQv+gSA==
-X-Google-Smtp-Source: ABdhPJzqwlApxyq7lsWK+22acdlSBDDtBs7AEx7TtXUuEivO4VgVtHuDW20tK1Qk+3mgq1yJYe1/hzvMNuILSgh/WQA=
-X-Received: by 2002:a05:620a:28c7:b0:67d:6d4e:16ee with SMTP id
- l7-20020a05620a28c700b0067d6d4e16eemr965648qkp.59.1647462286423; Wed, 16 Mar
- 2022 13:24:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qYynkwQ+j3b/YGx/TNtwPxZ5TKXzPPLTT7lPgCZm+48=;
+        b=FrDn/n8DWgIh6adtm5uVePd+Q4g0vT/PQzz/fUFYc38S57u+yxImQOOUPuZil9xRmS
+         05SWvTy99/pO6XumJ5cGGihpglCsi03eA3fOHebkM4yceDXIj2V2cIwyIySKU9oRuod9
+         gjgEeUFABurkGIX2J6aJnUifiNd6Su5Xq1fD6rdhGBCu6KkkSsptj0cJdrXKr9+dtY0t
+         InG09egxumpbxO/Rg7b47niLXiEkbyT0xXZQ5ZUg2neiSBG7aPVsSvKI1/GkUtyu+uOj
+         YawWB4QP/9al4Roal1i55YfuQgqLRMAo0RhuoRbCbWlfcHqHJjBiqogS94q2zG4O/0w/
+         KtkQ==
+X-Gm-Message-State: AOAM531f3lwgOdvoFlDPackbt7fx1S4o/wTYAjcsXNgUv9CrKKN7Fi9r
+        wSRwEvaC+jKYsIzGOUH3uB8=
+X-Google-Smtp-Source: ABdhPJyUyCHgYvLQH1YEBa8eWojwkGpa42X+W5njt6/tHky6i+6enBnVEZTswalGWe4gbYUBQV4BYg==
+X-Received: by 2002:ac8:5711:0:b0:2e1:cde2:6922 with SMTP id 17-20020ac85711000000b002e1cde26922mr1383558qtw.116.1647462400814;
+        Wed, 16 Mar 2022 13:26:40 -0700 (PDT)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:7488:f626:3f3b:5607])
+        by smtp.gmail.com with ESMTPSA id bp9-20020a05622a1b8900b002e0e86b8ac6sm1940074qtb.67.2022.03.16.13.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 13:26:40 -0700 (PDT)
+From:   frowand.list@gmail.com
+To:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@groups.io,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/2] Documentation: dev-tools: begin KTAP spec v2 process
+Date:   Wed, 16 Mar 2022 15:26:20 -0500
+Message-Id: <20220316202622.324866-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220316180322.88132-1-bjorn.andersson@linaro.org>
-In-Reply-To: <20220316180322.88132-1-bjorn.andersson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 16 Mar 2022 23:24:35 +0300
-Message-ID: <CAA8EJpotanjL_EHYr1-YQAXDOT--HGhGW2RH-0fO5189CEpB1Q@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/qcom/lmh: Fix irq handler return value
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 at 21:01, Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> After enough invocations the LMh irq is eventually reported as bad, because the
-> handler doesn't return IRQ_HANDLED, fix this.
->
-> Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
-> Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+From: Frank Rowand <frank.rowand@sony.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+An August 2021 RFC patch [1] to create the KTAP Specification resulted in
+some discussion of possible items to add to the specification.
+The conversation ended without completing the document.
 
-> ---
->  drivers/thermal/qcom/lmh.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-> index c7f91cbdccc7..af9f0872614f 100644
-> --- a/drivers/thermal/qcom/lmh.c
-> +++ b/drivers/thermal/qcom/lmh.c
-> @@ -45,7 +45,7 @@ static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
->         if (irq)
->                 generic_handle_irq(irq);
->
-> -       return 0;
-> +       return IRQ_HANDLED;
->  }
->
->  static void lmh_enable_interrupt(struct irq_data *d)
-> --
-> 2.33.1
->
+Progress resumed with a December 2021 RFC patch [2] to add a KTAP
+Specification file (Version 1) to the Linux kernel.  Many of the
+suggestions from the August 2021 discussion were not included in
+Version 1.  This patch series is intended to revisit some of the
+suggestions from the August 2021 discussion.
 
+Patch 1 changes the Specification version to "2-rc" to indicate
+that following patches are not yet accepted into a final version 2.
+
+Patch 2 is an example of a simple change to the Specification.  The
+change does not change the content of the Specification, but updates
+a formatting directive as suggested by the Documentation maintainer.
+
+I intend to take some specific suggestions from the August 2021
+discussion to create stand-alone RFC patches to the Specification
+instead of adding them as additional patches in this series.  The
+intent is to focus discussion on a single area of the Specification
+in each patch email thread.
+
+[1] https://lore.kernel.org/r/CA+GJov6tdjvY9x12JsJT14qn6c7NViJxqaJk+r-K1YJzPggFDQ@mail.gmail.com
+[2] https://lore.kernel.org/r/20211207190251.18426-1-davidgow@google.com
+
+Frank Rowand (2):
+  Documentation: dev-tools: KTAP spec change version to 2-rc
+  Documentation: dev-tools: use literal block instead of code-block
+
+ Documentation/dev-tools/ktap.rst | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+Frank Rowand <frank.rowand@sony.com>
+

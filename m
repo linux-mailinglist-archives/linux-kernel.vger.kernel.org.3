@@ -2,61 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854094DB84D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEDA4DB850
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357831AbiCPS6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S1357353AbiCPTA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347175AbiCPS6v (ORCPT
+        with ESMTP id S232577AbiCPTA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:58:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDEC6E4E6;
-        Wed, 16 Mar 2022 11:57:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C7CF618F7;
-        Wed, 16 Mar 2022 18:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AECCC340E9;
-        Wed, 16 Mar 2022 18:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647457056;
-        bh=uI3OHf8QFMUZgXo1+ATmSOG9B0obHF8fJChcWMf1sm4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mYw10xgOwrJOxAsYfgDXXkfne9MuKmzWFeWnFyLjNjv3p+0lYQPgr+IvZ8jE3/PIV
-         OJegMGGfoHv/pky0LNNOpVYsg2M0x5JLAqTZprndlXZp/hdrCOMVnHcnzzM+Yyyf87
-         JVEQSZODxaJNK7WSJ0clmm2WX/9ahaMxqiRcY0Ri/b3FhlJonM6fN016pwgz1PIxfD
-         OIgIvdqLLtp5pI0vbvdpcCWSUqKPLDCrBUDOIOcpEEotn2B4ajMQL5LBBey8BEBwCK
-         CmNaeZ7q3RCUDsFUYzyH/d2R1NlhDPdDVTY5iAAZXfpdogA7Lbqz3Iwlv7bagVGwcc
-         rZk9SIP+iiP9A==
-Date:   Wed, 16 Mar 2022 11:57:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     menglong8.dong@gmail.com, rostedt@goodmis.org, mingo@redhat.com,
-        xeb@mail.ru, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Biao Jiang <benbjiang@tencent.com>
-Subject: Re: [PATCH net-next 1/3] net: gre_demux: add skb drop reasons to
- gre_rcv()
-Message-ID: <20220316115734.1899bb11@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <30b0991a-8c41-2571-b1b6-9edc7dc9c702@kernel.org>
-References: <20220314133312.336653-1-imagedong@tencent.com>
-        <20220314133312.336653-2-imagedong@tencent.com>
-        <20220315200847.68c2efee@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <daa287f3-fbed-515d-8f37-f2a36234cc8a@kernel.org>
-        <20220315215553.676a5d24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <30b0991a-8c41-2571-b1b6-9edc7dc9c702@kernel.org>
+        Wed, 16 Mar 2022 15:00:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83CB16A00A;
+        Wed, 16 Mar 2022 11:59:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BCA91476;
+        Wed, 16 Mar 2022 11:59:11 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4AC253F7F5;
+        Wed, 16 Mar 2022 11:59:10 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 18:59:07 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: xen: Add xen,scmi-devid property
+ description for SCMI
+Message-ID: <YjIzeyNoWhVAY5HK@bogus>
+References: <cover.1646639462.git.oleksii_moisieiev@epam.com>
+ <5859bb58c8caf87985deb84d7f6bfc8182bd6a59.1646639462.git.oleksii_moisieiev@epam.com>
+ <Yie47a4lqXjVzgxI@robh.at.kernel.org>
+ <20220316164619.GA3489934@EPUAKYIW015D>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316164619.GA3489934@EPUAKYIW015D>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,21 +50,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 08:56:14 -0600 David Ahern wrote:
-> > That's certainly true. I wonder if there is a systematic way of
-> > approaching these additions that'd help us picking the points were 
-> > we add reasons less of a judgment call.  
+On Wed, Mar 16, 2022 at 04:46:20PM +0000, Oleksii Moisieiev wrote:
 > 
-> In my head it's split between OS housekeeping and user visible data.
-> Housekeeping side of it is more the technical failure points like skb
-> manipulations - maybe interesting to a user collecting stats about how a
-> node is performing, but more than likely not. IMHO, those are ignored
-> for now (NOT_SPECIFIED).
+> > + The reason I want to keep it xen specific at the moment as we had some
+> > plan to extended the device-id usage in the spec which hasn't progressed
+> > a bit(I must admit that before you ask), and this addition should not be
+> > obstruct that future development. If we align with what we define xen
+> > specific as part of $subject work, we can always define generic binding
+> > in the future and slowly make the other obsolete over the time.
 > 
-> The immediate big win is for packets from a network where an analysis
-> can show code location (instruction pointer), user focused reason (csum
-> failure, 'otherhost', no socket open, no socket buffer space, ...) and
-> traceable to a specific host (headers in skb data).
+> IIUC you have some plans to provide device_id support to the device-tree
+> bindings from your side. Maybe we can discuss some of your plans here
+> and we can come up with the generic device-id binding?
+> So I will have something to base on in Xen.
+> 
 
-Maybe I'm oversimplifying but would that mean first order of business
-is to have drop codes for where we already bump MIB exception stats?
+Sorry if I wasn't clear in earlier emails. What I mentioned was that I would
+like to reserve the generic namespace(i.e. just device-id) for generic SCMI
+usage. Since we haven't defined it clearly in the spec, I don't want to
+introduce the generic definition and binding now.
+
+As mentioned earlier, though Xen definition and generic once may be exactly
+same, but we won't know until then. So keep the xen usage and namespace
+separate for now to avoid any future conflicts.
+
+-- 
+Regards,
+Sudeep

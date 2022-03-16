@@ -2,180 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515854DA9D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585BE4DA9F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353630AbiCPF1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 01:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S235977AbiCPFjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353639AbiCPF1w (ORCPT
+        with ESMTP id S237378AbiCPFji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 01:27:52 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AB85D5E2;
-        Tue, 15 Mar 2022 22:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647408398; x=1678944398;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=lslJ3Q9FvfJXCn5+f3KkGbeKasRdOfEXq0iio5WD8iE=;
-  b=Ohadg+1nIfBucsn5f3L94No8990RmPjeZgJmLZXrQtkMCUrwm6MZs35l
-   Rk4ENkpXyqRgtsRWpxat4ITmPHNPx8UR7z+i3h1rGj+l9xq+EfeqPN7M3
-   SxXQJZvCd/oFfflzje4wH4O0ZFGtEWE/x3eoqDUyyiN1zGnMVbIqzqYwJ
-   RXrmqSPM2DR5B/+wIuaPA/bWz4SxYYq7G+Bc2z1aET+Os6df3xbaAnuAq
-   VE2j1HVrvISeUDOm7FCOyjAtiHYP/Qry950dmtufgXLK2AjKSp05ANNpN
-   owH6DvKFXhhtmoERi1u2lVMQ+zx7w2hntacbr9yDXpkwTdBHRVXXzECUw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342926746"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="342926746"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 22:26:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="512888842"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga002.jf.intel.com with ESMTP; 15 Mar 2022 22:26:38 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 22:26:37 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 22:26:37 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Tue, 15 Mar 2022 22:26:37 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Tue, 15 Mar 2022 22:26:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IXFSM9x4OvtOVHZW0sx38MLft5HOF0/sl/9T3VlrPqYCHlcqHs+HhpwW1cs0D0BlgYzR92Dm9n0mH0ATUc1uoJbFna7nDHknl0gsFzYGhrgcG7ySOAc+7PisERIw4DRiqHJq9DgvAf9pEuq3PFtxLfDxMkjzM7HeQl5CqMBCUpMQpRZ+dOtEMjd/qSdR6DpzcAewf0EpfQkTd+eVwkqBIRsVdx0MVrDwjI/sUYMr605a/q0/lL2POg5qC2phOOcIPqtLB6ir9Ya6i1xFvcOjzxF8GbzRwXMZxa9eT2n5r7GW2lQDbt4miKw4hshImXGSDrb8wOMg+i89Z8K5f1TG6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YDcoM2YgiA0vvSlckQMiMWQ2nDACI8NxobJmkdrpPdU=;
- b=M6UenvcS9UTOIw+WY67XNOO4WIxAQtLMn0CgyV1HPFKmL7WPX5d7uwK9fs9BA2NIYsiGHC7kdG+tlgP7LIZDxXMbxMWyAktcpka++OIX8bHDn9rYJOWn/wEfP8IY1uZp4CrVfdpFAWUmsUu2P5iLwkWgmNTAXVj/ZMiTyG6qPi4NQo2J+xaj5K9ZtOeUCIXHX3KxnNtqA/aGPjT3JOGnPC0iEzchxTExQJcgXycrCsWvubKdSvQTBABAhHry4nwFczeBWQaqzw38HfTlp6Q0mx7cfIYe/5g8at49UktzkwUg7/7nw4RWUPjeW7o+N0rNeqNlgGBeVgZPB4voC9XPKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4914.namprd11.prod.outlook.com (2603:10b6:303:90::24)
- by CO1PR11MB4868.namprd11.prod.outlook.com (2603:10b6:303:90::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Wed, 16 Mar
- 2022 05:26:36 +0000
-Received: from CO1PR11MB4914.namprd11.prod.outlook.com
- ([fe80::2d6d:f382:c5a3:282b]) by CO1PR11MB4914.namprd11.prod.outlook.com
- ([fe80::2d6d:f382:c5a3:282b%6]) with mapi id 15.20.5081.014; Wed, 16 Mar 2022
- 05:26:36 +0000
-Message-ID: <6fda3983-a32f-c78c-0150-37593bf5db68@intel.com>
-Date:   Tue, 15 Mar 2022 22:26:33 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] ice: clean up one inconsistent indenting
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, <davem@davemloft.net>
-CC:     <kuba@kernel.org>, <anthony.l.nguyen@intel.com>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220316000307.66863-1-yang.lee@linux.alibaba.com>
-From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
-In-Reply-To: <20220316000307.66863-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR14CA0030.namprd14.prod.outlook.com
- (2603:10b6:300:12b::16) To CO1PR11MB4914.namprd11.prod.outlook.com
- (2603:10b6:303:90::24)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 385d3014-ee17-475a-bec3-08da070d8a35
-X-MS-TrafficTypeDiagnostic: CO1PR11MB4868:EE_
-X-Microsoft-Antispam-PRVS: <CO1PR11MB486844D3AA639369048C90FE97119@CO1PR11MB4868.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: B+Ay+3DNcgT2B3q1K8ZS95Z5f1lZ2aAFNxPLsHCoSJIgt2QbAxO/Fq5gWTihmo3t9CPd0KzbQfZfC83v588V7WO+H+FFVfeCXCBYewkybVUG3JAj2ogLC0AgPwMX3mdyP+vGhx4Z9KcA/9NOUGtuFPQdHBW9ewgKXnZV9+qsL79BhD0nqOc7NUVCH+x3njrPErTOKTaVBd8uWI6L3GDZwGG16c7NDSjusitjcYfIAZ8c0hB1DCJ0GlDER7ns7ZuyMDaAIf+YjbnwTW6g8zA4pxkWmxcxmhJNiY8GUl1TY9AMY43IttG+46KJPbDbRlPAnL5BeKQSkZf+bVLO41chsO+YONpHFsTVP21oUqrZ4gAyGAg8KcFldkbaintCwuW/i5s5QTxdhmjM3DvXsmxMGj1J6l4Z0Zcwn/XWc1zuQqRIpz5IDGnGVBoR9Zy+mqJcy1Ga9R8D388g5k57a866EdSY86ZFmPumOyH5pTvwGqHb6XdVDwhRl2njGkyL3qZASIbuMwhiaN5s2JVeq5+BkwQnaSnoiQ3Oua9hKZ8ZpVjty7RhoNAxDcQhkz1oOxgzrS5rZUduzBTMrMWpOkU6gGARwYFdcp4roWaRSZhokD29Bk7uta9QfLzzX2O6nObg68lsyIKUSV2zx6M7jxNVF7qD7pi5VGAIE4ezOYR+vUGVv+N7JQSWSb/qtg3z/hXbgABygHmgLc7UkXHXbavB33JdqamsWIg1ZnFbxpLqtEl3GLvoTl9XQBA+MfTg1bghcHPqZsTK8nGI1X7Lb9clQhalYy7O28GbURlnQLwZqOgDImpvT8m2wZe4ndWD3szdCBJKFGK2lJY5tHGTaT3xxKrEOvC4Tu3kmjUENuDKRs0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4914.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31696002)(86362001)(38100700002)(83380400001)(6666004)(4744005)(2906002)(8676002)(4326008)(508600001)(44832011)(6486002)(966005)(8936002)(5660300002)(66946007)(82960400001)(66476007)(66556008)(31686004)(53546011)(316002)(36756003)(6512007)(186003)(26005)(2616005)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDVmbnJqT3hoZVdQa01UYWNWRFptajlIaXcwUmc5eFMxRitmdjVWQkJzcG5v?=
- =?utf-8?B?VXF1VGp4Ukw3Z1RKNnE0SVQ5Y0FCbDV5OEt2MHByZ01ESDkydnBHd3B5cWJh?=
- =?utf-8?B?b3NGUGd4dkE1YitDSnpWdFhaKzUrVWRiMGtOdjZJSUpMNkVYRjlKZG00RWVw?=
- =?utf-8?B?cUwyZUpteWJ5SG5OZ1lZa0VHWDVScHVSaUJNSkhQVEpMVUhFSnR6TWRINGpo?=
- =?utf-8?B?MGtTZmxKRVRwTE5aM2ZaSlNUY3h0dkxBQnVhWHJXRTNFSXc5cjFpbE1BVHE1?=
- =?utf-8?B?RUFOWnlHRXJKYnh6Tk1tdHplV1duN0pxZWlVRDRGKzJTK0JDN3hTNnBJeDJT?=
- =?utf-8?B?N2d1M3hSRllqNFJLYWFmWlVOQXUvWlFvWHhWSGpQWW42TUFERVBxNlpIMG42?=
- =?utf-8?B?ckJLNFV3a1RTVW1vdXZ6UnFweTBmeVFpVFB2NlNMMFdyUDNBb3drVUhoMzM5?=
- =?utf-8?B?c1M5ZE1QbDN2Z202SkdGWkh5V05lTkV2VlBhYWNwa3ErNDdYSGErbVRlQ0Fy?=
- =?utf-8?B?UmlFYzJva0FjMFh2Rmc4UGhNd1IraGM4U0dHSHgxYUJZQWlXTzhkdXJjUGxa?=
- =?utf-8?B?WGEwQ2V1TnZtL0VoUWYwS1dJV2dlNjY3ajZ6eGY4R1ltdlNOWFhsVmVlYjlL?=
- =?utf-8?B?Z1lVQkR3aDYvYWZ5OGZpL0pjTXFpUnIza082RmUrNmVWV1NBUjc4SVdLb3Bx?=
- =?utf-8?B?elRKMWt4VTVpTUwyRVVTczBMdEg0RVhtSVY1Z3RYaUo4NVUwaFBKLzBVWkd5?=
- =?utf-8?B?dnp5OWNBcUVSSFhJRDJWTnJxMFJJRUFEa3Z4Z1NheGR2azBXQ2tCNVNLbzJH?=
- =?utf-8?B?cGNMeDFoZmdyR1FRRWg1NDBNUFIvRGRzM25xSjJsNXJ3ZVFPc1ZtZ1UrUS83?=
- =?utf-8?B?dWVyMitkYmNEaVVtM2FFaUk5UnNML1pUSVE1Wm9Ibkwwd1YrL1BTSlFiM2dF?=
- =?utf-8?B?TlUweDEwME9pc2Y5VFJwWm5BbjNvUUNONDZmYWVVWTgvbTdDUE5TU3Uxdll4?=
- =?utf-8?B?TDcrVWN6RVdqcjFyZUZSRHpSeDV2eFpiZzZoSzN1NlVkcjFlMTNSUGY0NVE3?=
- =?utf-8?B?aVIvbUk4Y3hQZ0tUL0ZrNXJ4TVZnSUtwS0R6alRycUpieFdpWWlpL3EvTU1j?=
- =?utf-8?B?QW1FajlmUndpMnpDWmljQjlwMGRFcnVadndWWlZKZUZCcTU5THoraEVJbm12?=
- =?utf-8?B?QWU2QlEwM09MTTJ5SHpzdUQvRk5JVDNGRkpCTEg0V3FzVGhDamMyaGZzVDEw?=
- =?utf-8?B?dTQ5UDRqK1NWUVJ2MWZGN0FSaWNWNHZNa00yc283UTM2SGxsZFlDSlJ5UjZw?=
- =?utf-8?B?Q1hrYXVOUHNiOWZtTnJZNDVGcm1WL010RmVGUHVJZkllTXlZNGlNNElUNlhX?=
- =?utf-8?B?TXd0bmh5V3pVdVdRRVJWRHRxeHNxUDNiU0hDNk12SkpPUU54eTROTEtBOTNV?=
- =?utf-8?B?Z1poSS9qbVVMbFppemFHc0x5WTZBd29OdTU1anQzWWJ0eDdIMCtjVmI0andX?=
- =?utf-8?B?aHk2eHlBZU1CWEFYM1R4ejFtRFRabDRrK0NzWHRzTkx4a296MUxKYlpxdldT?=
- =?utf-8?B?ZTFUMlQ0Z05aOERSVzZlQjdVSUhzeE9WWnJyRGUvWFZnWDl6MEFkR2JzUHpo?=
- =?utf-8?B?TVdOTkxGL0UyWEkwZmNGTFIrVCt4T3JlcGNhdytFKzBhWGdNSnR2OTR5eU1R?=
- =?utf-8?B?YVFqemRYb2tobVI1QVVnV0RuM2UzQXA3d3N3S08reUxZem5XNzNsWFk5UWFk?=
- =?utf-8?B?dXBwRUlyNWRzVE9hcmRjdVgyZUxVL0xOWmhPbThReDBMTDFSelNybFR0bkxK?=
- =?utf-8?B?T3ZyNXVVMXJWZnhNeEhZNWYrZWVqOFJuR3I3cm5kS2VFRmU1R1RrbjRGTk1G?=
- =?utf-8?B?UnhTMUYrL1dJRTYzYTNsRk1maFJoSTRoU2ZKQm8zOWhOZ0RCdk55ZDZvY25u?=
- =?utf-8?B?ZVpMYmNQZUVoVC9mTk9kY2VqbmtUNEZaTGJkd1JjcC92cnZ2d3FnWFpKVEF1?=
- =?utf-8?B?S1A2VVFGRmlnPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 385d3014-ee17-475a-bec3-08da070d8a35
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4914.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 05:26:36.2968
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: skb6JDGZf1fOU7yJo+oSi3B85YtBODuJ5RNsqKSSTcJ+i2kkzQD77vHNfyJOG8xd/iq99BcQ3f+nmnoFw+6R7UxHftZx3UHz3EVCKvsfW0k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4868
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 01:39:38 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB065FF3D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:38:24 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7B3E02004A6;
+        Wed, 16 Mar 2022 06:38:23 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 16A202003D3;
+        Wed, 16 Mar 2022 06:38:23 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 9338E183AD0B;
+        Wed, 16 Mar 2022 13:38:21 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: fsl_spdif: Add new registers included on i.MX8ULP
+Date:   Wed, 16 Mar 2022 13:28:58 +0800
+Message-Id: <1647408538-2982-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/2022 5:03 PM, Yang Li wrote:
-> Eliminate the follow smatch warning:
-> drivers/net/ethernet/intel/ice/ice_switch.c:5568 ice_find_dummy_packet()
-> warn: inconsistent indenting
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+There are some new registers added on i.MX8ULP, they are
+the SPDIF transmit Professional C channel registers,
+192bit SPDIF receive C channel registers, and 192bit SPDIF
+transmit C channel registers.
 
-Thanks but this patch has already been submitted on intel-wired-lan, as 
-it was already reported by the kernel test robot.
+There are two output lines, SPDIF_OUT1 and SPDIF_OUT2, the
+original REG_SPDIF_STCSCH and REG_SPDIF_STCSCL are used for
+SPDIF_OUT1, the new REG_SPDIF_STCSPH and REG_SPDIF_STCSPL
+are used for SPDIF_OUT2, the 192bit SPDIF C channel registers
+are used for both.
 
-https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20220314164314.15218-1-marcin.szycik@linux.intel.com/
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/fsl_spdif.c | 52 ++++++++++++++++++++++++++++++++++++++-
+ sound/soc/fsl/fsl_spdif.h | 14 +++++++++++
+ 2 files changed, 65 insertions(+), 1 deletion(-)
 
-As well, the other inconsistent indent patch is also fixed at
-https://patchwork.ozlabs.org/project/intel-wired-lan/patch/20220314164137.15101-1-marcin.szycik@linux.intel.com/
+diff --git a/sound/soc/fsl/fsl_spdif.c b/sound/soc/fsl/fsl_spdif.c
+index b502e7c3c04d..42d11aca38a1 100644
+--- a/sound/soc/fsl/fsl_spdif.c
++++ b/sound/soc/fsl/fsl_spdif.c
+@@ -50,6 +50,7 @@ static u8 srpc_dpll_locked[] = { 0x0, 0x1, 0x2, 0x3, 0x4, 0xa, 0xb };
+  * @shared_root_clock: flag of sharing a clock source with others;
+  *                     so the driver shouldn't set root clock rate
+  * @raw_capture_mode: if raw capture mode support
++ * @cchannel_192b: if there are registers for 192bits C channel data
+  * @interrupts: interrupt number
+  * @tx_burst: tx maxburst size
+  * @rx_burst: rx maxburst size
+@@ -59,6 +60,7 @@ struct fsl_spdif_soc_data {
+ 	bool imx;
+ 	bool shared_root_clock;
+ 	bool raw_capture_mode;
++	bool cchannel_192b;
+ 	u32 interrupts;
+ 	u32 tx_burst;
+ 	u32 rx_burst;
+@@ -196,6 +198,7 @@ static struct fsl_spdif_soc_data fsl_spdif_imx8ulp = {
+ 	.tx_burst = 2,		/* Applied for EDMA */
+ 	.rx_burst = 2,		/* Applied for EDMA */
+ 	.tx_formats = SNDRV_PCM_FMTBIT_S24_LE,	/* Applied for EDMA */
++	.cchannel_192b = true,
+ };
+ 
+ /* Check if clk is a root clock that does not share clock source with others */
+@@ -441,6 +444,23 @@ static void spdif_write_channel_status(struct fsl_spdif_priv *spdif_priv)
+ 	regmap_write(regmap, REG_SPDIF_STCSCL, ch_status);
+ 
+ 	dev_dbg(&pdev->dev, "STCSCL: 0x%06x\n", ch_status);
++
++	if (spdif_priv->soc->cchannel_192b) {
++		ch_status = (bitrev8(ctrl->ch_status[0]) << 24) |
++			    (bitrev8(ctrl->ch_status[1]) << 16) |
++			    (bitrev8(ctrl->ch_status[2]) << 8) |
++			    bitrev8(ctrl->ch_status[3]);
++
++		regmap_update_bits(regmap, REG_SPDIF_SCR, 0x1000000, 0x1000000);
++
++		/*
++		 * The first 32bit should be in REG_SPDIF_STCCA_31_0 register,
++		 * but here we need to set REG_SPDIF_STCCA_191_160 on 8ULP
++		 * then can get correct result with HDMI analyzer capture.
++		 * There is a hardware bug here.
++		 */
++		regmap_write(regmap, REG_SPDIF_STCCA_191_160, ch_status);
++	}
+ }
+ 
+ /* Set SPDIF PhaseConfig register for rx clock */
+@@ -1229,6 +1249,8 @@ static const struct reg_default fsl_spdif_reg_defaults[] = {
+ 	{REG_SPDIF_STR,	   0x00000000},
+ 	{REG_SPDIF_STCSCH, 0x00000000},
+ 	{REG_SPDIF_STCSCL, 0x00000000},
++	{REG_SPDIF_STCSPH, 0x00000000},
++	{REG_SPDIF_STCSPL, 0x00000000},
+ 	{REG_SPDIF_STC,	   0x00020f00},
+ };
+ 
+@@ -1248,8 +1270,22 @@ static bool fsl_spdif_readable_reg(struct device *dev, unsigned int reg)
+ 	case REG_SPDIF_SRQ:
+ 	case REG_SPDIF_STCSCH:
+ 	case REG_SPDIF_STCSCL:
++	case REG_SPDIF_STCSPH:
++	case REG_SPDIF_STCSPL:
+ 	case REG_SPDIF_SRFM:
+ 	case REG_SPDIF_STC:
++	case REG_SPDIF_SRCCA_31_0:
++	case REG_SPDIF_SRCCA_63_32:
++	case REG_SPDIF_SRCCA_95_64:
++	case REG_SPDIF_SRCCA_127_96:
++	case REG_SPDIF_SRCCA_159_128:
++	case REG_SPDIF_SRCCA_191_160:
++	case REG_SPDIF_STCCA_31_0:
++	case REG_SPDIF_STCCA_63_32:
++	case REG_SPDIF_STCCA_95_64:
++	case REG_SPDIF_STCCA_127_96:
++	case REG_SPDIF_STCCA_159_128:
++	case REG_SPDIF_STCCA_191_160:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -1268,6 +1304,12 @@ static bool fsl_spdif_volatile_reg(struct device *dev, unsigned int reg)
+ 	case REG_SPDIF_SRU:
+ 	case REG_SPDIF_SRQ:
+ 	case REG_SPDIF_SRFM:
++	case REG_SPDIF_SRCCA_31_0:
++	case REG_SPDIF_SRCCA_63_32:
++	case REG_SPDIF_SRCCA_95_64:
++	case REG_SPDIF_SRCCA_127_96:
++	case REG_SPDIF_SRCCA_159_128:
++	case REG_SPDIF_SRCCA_191_160:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -1286,7 +1328,15 @@ static bool fsl_spdif_writeable_reg(struct device *dev, unsigned int reg)
+ 	case REG_SPDIF_STR:
+ 	case REG_SPDIF_STCSCH:
+ 	case REG_SPDIF_STCSCL:
++	case REG_SPDIF_STCSPH:
++	case REG_SPDIF_STCSPL:
+ 	case REG_SPDIF_STC:
++	case REG_SPDIF_STCCA_31_0:
++	case REG_SPDIF_STCCA_63_32:
++	case REG_SPDIF_STCCA_95_64:
++	case REG_SPDIF_STCCA_127_96:
++	case REG_SPDIF_STCCA_159_128:
++	case REG_SPDIF_STCCA_191_160:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -1298,7 +1348,7 @@ static const struct regmap_config fsl_spdif_regmap_config = {
+ 	.reg_stride = 4,
+ 	.val_bits = 32,
+ 
+-	.max_register = REG_SPDIF_STC,
++	.max_register = REG_SPDIF_STCCA_191_160,
+ 	.reg_defaults = fsl_spdif_reg_defaults,
+ 	.num_reg_defaults = ARRAY_SIZE(fsl_spdif_reg_defaults),
+ 	.readable_reg = fsl_spdif_readable_reg,
+diff --git a/sound/soc/fsl/fsl_spdif.h b/sound/soc/fsl/fsl_spdif.h
+index bff8290e71f2..75b42a692c90 100644
+--- a/sound/soc/fsl/fsl_spdif.h
++++ b/sound/soc/fsl/fsl_spdif.h
+@@ -31,9 +31,23 @@
+ #define REG_SPDIF_STR			0x30	/* SPDIFTxRight Register */
+ #define REG_SPDIF_STCSCH		0x34	/* SPDIFTxCChannelCons_h Register */
+ #define REG_SPDIF_STCSCL		0x38	/* SPDIFTxCChannelCons_l Register */
++#define REG_SPDIF_STCSPH		0x3C	/* SPDIFTxCChannel_Prof_h Register */
++#define REG_SPDIF_STCSPL		0x40	/* SPDIFTxCChannel_Prof_l Register */
+ #define REG_SPDIF_SRFM			0x44	/* FreqMeas Register */
+ #define REG_SPDIF_STC			0x50	/* SPDIFTxClk Register */
+ 
++#define REG_SPDIF_SRCCA_31_0		0x60	/* SPDIF receive C channel register, bits 31-0 */
++#define REG_SPDIF_SRCCA_63_32		0x64	/* SPDIF receive C channel register, bits 63-32 */
++#define REG_SPDIF_SRCCA_95_64		0x68	/* SPDIF receive C channel register, bits 95-64 */
++#define REG_SPDIF_SRCCA_127_96		0x6C	/* SPDIF receive C channel register, bits 127-96 */
++#define REG_SPDIF_SRCCA_159_128		0x70	/* SPDIF receive C channel register, bits 159-128 */
++#define REG_SPDIF_SRCCA_191_160		0x74	/* SPDIF receive C channel register, bits 191-160 */
++#define REG_SPDIF_STCCA_31_0		0x78	/* SPDIF transmit C channel register, bits 31-0 */
++#define REG_SPDIF_STCCA_63_32		0x7C	/* SPDIF transmit C channel register, bits 63-32 */
++#define REG_SPDIF_STCCA_95_64		0x80	/* SPDIF transmit C channel register, bits 95-64 */
++#define REG_SPDIF_STCCA_127_96		0x84	/* SPDIF transmit C channel register, bits 127-96 */
++#define REG_SPDIF_STCCA_159_128		0x88	/* SPDIF transmit C channel register, bits 159-128 */
++#define REG_SPDIF_STCCA_191_160		0x8C	/* SPDIF transmit C channel register, bits 191-160 */
+ 
+ /* SPDIF Configuration register */
+ #define SCR_RXFIFO_CTL_OFFSET		23
+-- 
+2.17.1
 
-They will probably be sent to net-next tomorrow in the PDT timezone.
-
-Thanks!

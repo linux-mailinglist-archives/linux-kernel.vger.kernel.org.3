@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099F64DB86E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248814DB874
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346447AbiCPTSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S1348804AbiCPTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbiCPTSH (ORCPT
+        with ESMTP id S239247AbiCPTTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:18:07 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2182C11E;
-        Wed, 16 Mar 2022 12:16:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id yy13so6277988ejb.2;
-        Wed, 16 Mar 2022 12:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RkfrJNG8t17LURuEyWQI2LF3gagrZVlUtyrEQH/7zIc=;
-        b=oY35iQPJNL8kb2Q+kXv0zYjdB2FLgugzyrhKyq6Z0HiKYk4A6TUvfzg7+Uy+XB+1kg
-         wtgN1mbFlxcGBIp7xWv+3ZnGgUVVV82SyPHd/zKnXOAHlJlilK56P+fFkDVIAbNPiLAh
-         lG86yiJCgvcTLar05R7k4DlqAv3K0K25Y2vX4YXB1dxUnkPCt0Cqn69ombA9tzDLoFm0
-         ahGbO7ukP6BBY/qx42jcKf0bK0oBn+Ls93lcdtJIOo1IRFMK6mnW052mH/eOT7Rz/W3S
-         7pvaryusP1ONWmJVXh22xslPpHnPJkZ0QHXWraJvX4QlREyPh5XamR0IuNNSDVHHr2F7
-         j5Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RkfrJNG8t17LURuEyWQI2LF3gagrZVlUtyrEQH/7zIc=;
-        b=oDjVNUNIrJST+N8WO9ntDxSFOsgkjUrxq8XZsTHp7y0Jp7WZRH8ZAcVZNBML+EvsvN
-         EV/xlyzpQpO3QMCU2mRZl3ocrjRqVseeaLIFcA/7aC88Pdb+nWNFI2zqDnPi1v79e9Jr
-         Eu/waCMlsR1rJkg3zaYCltUhQ/JZdzNfYusyHDlpj0BW2QqrKX3hkrZQFS9cgrSxVP8r
-         lwNcLqsgre2ulKO0ZGS/oflrVakJ+RIwtM6980I0VNzcsFIRzgA8S2sVbqgVwK/qLhVc
-         YXKAcMg1ue/4ICjKG6zJUC2Da5YES6TlEm+H8LXCYIoreTYqyPNKpTKd98frVh/S6DjW
-         heaQ==
-X-Gm-Message-State: AOAM533YioskGADZjVG7hiEtbN9xBQM8IiFO0yVbTVYi5sgyysqNymx/
-        +yfQ8f107KVci+zX5zhdWJs=
-X-Google-Smtp-Source: ABdhPJyVDm6rP5DLjJJe3mX6QOo7rXtAop98+oEhFDNT550DP7C3nwbz1eBmMt6lpGyLPHCpqjEFwg==
-X-Received: by 2002:a17:906:c18c:b0:6d5:8518:e567 with SMTP id g12-20020a170906c18c00b006d58518e567mr1181411ejz.37.1647458210814;
-        Wed, 16 Mar 2022 12:16:50 -0700 (PDT)
-Received: from pswork ([62.96.250.75])
-        by smtp.gmail.com with ESMTPSA id rh13-20020a17090720ed00b006da69254082sm1248954ejb.135.2022.03.16.12.16.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 12:16:49 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 20:16:49 +0100
-From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-ID: <20220316191649.GA11547@pswork>
-References: <164724890153.731226.1478494969800777757.stgit@devnote2>
- <164724892075.731226.14103557516176115189.stgit@devnote2>
+        Wed, 16 Mar 2022 15:19:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E535C1D0DB;
+        Wed, 16 Mar 2022 12:18:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9BB11476;
+        Wed, 16 Mar 2022 12:18:03 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46CE03F7F5;
+        Wed, 16 Mar 2022 12:18:02 -0700 (PDT)
+Message-ID: <0709e994-1c8b-56fe-7743-8fdbf3ba748b@arm.com>
+Date:   Wed, 16 Mar 2022 19:17:57 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164724892075.731226.14103557516176115189.stgit@devnote2>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
+Content-Language: en-GB
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "hch@lst.de" <hch@lst.de>
+References: <b4356b228db9cb88d12db6559e28714ce26e022e.1647429348.git.robin.murphy@arm.com>
+ <YjHb1xCx4UAmUjrR@lahna> <16852eb2-98bb-6337-741f-8c2f06418b08@arm.com>
+ <YjIb+XOGZbWKpQDa@lahna>
+ <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjIgQfmcw6fydkXd@lahna> <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
+ <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
+ <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,204 +58,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Masami Hiramatsu,
-
-On Mon, Mar 14, 2022 at 06:08:41PM +0900, Masami Hiramatsu wrote:
-> This allows kernel developer to embed a default bootconfig file in
-> the kernel instead of embedding it in the initrd. This will be good
-> for who are using the kernel without initrd, or who needs a default
-> bootconfigs.
-> This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
-> the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
+On 2022-03-16 18:34, Limonciello, Mario wrote:
+> [Public]
 > 
-> Note that you still need 'bootconfig' command line option to load the
-> embedded bootconfig. Also if you boot using an initrd with a different
-> bootconfig, the kernel will use the bootconfig in the initrd, instead
-> of the default bootconfig.
+>>> Can the USB4 CM make the device links in the DVSEC case perhaps too?  I
+>> would
+>>> think we want that anyway to control device suspend ordering.
+>>>
+>>> If I had something discrete to try I'd dust off the DVSEC patch I wrote
+>> before to
+>>> try it, but alas all I have is integrated stuff on my hand.
+>>>
+>>>>>> Mika, you might not have seen it yet, but I sent a follow up diff in this
+>>>> thread
+>>>>>> to Robin's patch.  If that looks good Robin can submit a v2 (or I'm happy
+>> to
+>>>> do
+>>>>>> so as well as I confirmed it helps my original intent too).
+>>>>>
+>>>>> I saw it now and I'm thinking are we making this unnecessary complex? I
+>>>>> mean Microsoft solely depends on the DMAR platform opt-in flag:
+>>>>>
+>>>>>
+>>>>
+>>>
+>>> I think Microsoft doesn't allow you to turn off the IOMMU though or put it
+>> in
+>>> passthrough through on the kernel command line.
+>>>
+>>>>> We also do turn on full IOMMU mappings in that case for devices that
+>> are
+>>>>> marked as external facing by the same firmware that provided the
+>> DMAR
+>>>>> bit. If the user decides to disable IOMMU from command line for
+>> instance
+>>>>> then we expect she knows what she is doing.
+>>>>
+>>>> Yeah, if external_facing is set correctly then we can safely expect the
+>>>> the IOMMU layer to do the right thing, so in that case it probably is OK
+>>>> to infer that if an IOMMU is present for the NHI then it'll be managing
+>>>> that whole bus hierarchy. What I'm really thinking about here is whether
+>>>> we can defend against a case when external_facing *isn't* set, so we
+>>>> treat the tunnelled ports as normal PCI buses, assume it's OK since
+>>>> we've got an IOMMU and everything else is getting translation domains
+>> by
+>>>> default, but then a Thunderbolt device shows up masquerading the
+>> VID:DID
+>>>> of something that gets a passthrough quirk, and thus tricks its way
+>>>> through the perceived protection.
+>>>>
+>>>> Robin.
+>>>
+>>> Unless it happened after 5.17-rc8 looking at the code I think that's Intel
+>>> specific behavior though at the moment (has_external_pci).  I don't see it
+>>> in a generic layer.
+>>
+>> Ah, it's not necessarily the most obvious thing -
+>> pci_dev->external_facing gets propagated through to pci_dev->untrusted
+>> by set_pcie_untrusted(), and it's that that's then checked by
+>> iommu_get_def_domain_type() to enforce a translation domain regardless
+>> of default passthrough or quirks. It's then further checked by
+>> iommu-dma's dev_is_untrusted() to enforce bounce-buffering to avoid data
+>> leakage in sub-page mappings too.
+>>
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  include/linux/bootconfig.h |   10 ++++++++++
->  init/Kconfig               |   21 +++++++++++++++++++++
->  init/main.c                |   13 ++++++++-----
->  lib/.gitignore             |    1 +
->  lib/Makefile               |   12 ++++++++++++
->  lib/bootconfig.c           |   23 +++++++++++++++++++++++
->  6 files changed, 75 insertions(+), 5 deletions(-)
+> Ah thanks for explaining it, that was immediately obvious to me.
 > 
-> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> index a4665c7ab07c..5dbda5e3e9bb 100644
-> --- a/include/linux/bootconfig.h
-> +++ b/include/linux/bootconfig.h
-> @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
->  /* XBC cleanup data structures */
->  void __init xbc_exit(void);
->  
-> +/* XBC embedded bootconfig data in kernel */
-> +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> +char * __init xbc_get_embedded_bootconfig(size_t *size);
-> +#else
-> +static inline char *xbc_get_embedded_bootconfig(size_t *size)
-> +{
-> +	return NULL;
-> +}
-> +#endif
-> +
->  #endif
-> diff --git a/init/Kconfig b/init/Kconfig
-> index e9119bf54b1f..70440804874d 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
->  
->  	  If unsure, say Y.
->  
-> +config EMBED_BOOT_CONFIG
-> +	bool "Embed bootconfig file in the kernel"
-> +	depends on BOOT_CONFIG
-> +	default n
-> +	help
-> +	  Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
-> +	  kernel. Usually, the bootconfig file is loaded with the initrd
-> +	  image. But if the system doesn't support initrd, this option will
-> +	  help you by embedding a bootconfig file while building the kernel.
-> +
-> +	  If unsure, say N.
-> +
-> +config EMBED_BOOT_CONFIG_FILE
-> +	string "Embedded bootconfig file path"
-> +	default ""
-> +	depends on EMBED_BOOT_CONFIG
-> +	help
-> +	  Specify a bootconfig file which will be embedded to the kernel.
-> +	  This bootconfig will be used if there is no initrd or no other
-> +	  bootconfig in the initrd.
-> +
->  choice
->  	prompt "Compiler optimization level"
->  	default CC_OPTIMIZE_FOR_PERFORMANCE
-> diff --git a/init/main.c b/init/main.c
-> index 421050be5039..3803bf2e22ea 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
->  early_param("loglevel", loglevel);
->  
->  #ifdef CONFIG_BLK_DEV_INITRD
-> -static void * __init get_boot_config_from_initrd(u32 *_size)
-> +static void * __init get_boot_config_from_initrd(size_t *_size)
->  {
->  	u32 size, csum;
->  	char *data;
-> @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
->  	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
->  	const char *msg;
->  	int pos;
-> -	u32 size;
-> +	size_t size;
->  	char *data, *err;
->  	int ret;
->  
->  	/* Cut out the bootconfig data even if we have no bootconfig option */
->  	data = get_boot_config_from_initrd(&size);
-> +	/* If there is no bootconfig in initrd, try embedded one. */
-> +	if (!data)
-> +		data = xbc_get_embedded_bootconfig(&size);
->  
->  	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
->  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
->  	}
->  
->  	if (size >= XBC_DATA_MAX) {
-> -		pr_err("bootconfig size %d greater than max size %d\n",
-> -			size, XBC_DATA_MAX);
-> +		pr_err("bootconfig size %ld greater than max size %d\n",
-> +			(long)size, XBC_DATA_MAX);
->  		return;
->  	}
->  
-> @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
->  				msg, pos);
->  	} else {
->  		xbc_get_info(&ret, NULL);
-> -		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-> +		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
->  		/* keys starting with "kernel." are passed via cmdline */
->  		extra_command_line = xbc_make_cmdline("kernel");
->  		/* Also, "init." keys are init arguments */
-> diff --git a/lib/.gitignore b/lib/.gitignore
-> index e5e217b8307b..30a2a5db7033 100644
-> --- a/lib/.gitignore
-> +++ b/lib/.gitignore
-> @@ -6,3 +6,4 @@
->  /oid_registry_data.c
->  /test_fortify.log
->  /test_fortify/*.log
-> +/default.bconf
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 300f569c626b..8183785ee99d 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -279,6 +279,18 @@ $(foreach file, $(libfdt_files), \
->  	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
->  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
->  
-> +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
-> +# Since the specified bootconfig file can be switched, we forcibly update the
-> +# default.bconf file always.
-> +$(obj)/default.bconf: FORCE
-> +	$(call cmd,defbconf)
-> +
-> +quiet_cmd_defbconf = GEN     $@
-> +      cmd_defbconf = cat < /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE) > $@
-> +clean-files	+= default.bconf
-> +$(obj)/bootconfig.o: $(obj)/default.bconf
-> +endif
-> +
->  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
->  
->  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
-> diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-> index 74f3201ab8e5..3a3bf3a208e3 100644
-> --- a/lib/bootconfig.c
-> +++ b/lib/bootconfig.c
-> @@ -12,6 +12,29 @@
->  #include <linux/kernel.h>
->  #include <linux/memblock.h>
->  #include <linux/string.h>
-> +
-> +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> +asm (
-> +"	.pushsection .init.data, \"aw\"			\n"
-> +"	.global embedded_bootconfig_data		\n"
-> +"embedded_bootconfig_data:				\n"
-> +"	.incbin \"lib/default.bconf\"			\n"
-> +"	.global embedded_bootconfig_data_end		\n"
-> +"embedded_bootconfig_data_end:				\n"
-> +"	.popsection					\n"
-> +);
-> +
-> +extern __visible char embedded_bootconfig_data[];
-> +extern __visible char embedded_bootconfig_data_end[];
-> +
-> +char * __init xbc_get_embedded_bootconfig(size_t *size)
-> +{
-> +	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
-> +	return (*size) ? embedded_bootconfig_data : NULL;
-> +}
-> +
-> +#endif
-> +
->  #else /* !__KERNEL__ */
->  /*
->   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
->
+>>> In addition to the point Robin said about firmware not setting external
+>> facing
+>>> if the IOMMU was disabled on command line then iommu_dma_protection
+>>> would be showing the wrong values meaning userspace may choose to
+>>> authorize the device automatically in a potentially unsafe scenario.
+>>>
+>>> Even if the user "knew what they were doing", I would expect that we still
+>>> do our best to protect them from themselves and not advertise something
+>>> that will cause automatic authorization.
+>>
+>> Might it be reasonable for the Thunderbolt core to check early on if any
+>> tunnelled ports are not marked as external facing, and if so just tell
+>> the user that iommu_dma_protection is off the table and anything they
+>> authorise is at their own risk?
+>>
+>> Robin.
+> 
+> How about in iommu_dma_protection_show to just check that all the device
+> links to the NHI are marked as untrusted?
+> 
+> Then if there are device links missing we solve that separately (discrete USB4
+> DVSEC case we just need to make those device links).
 
-Thanks tested the implemation, it works as expected.
+The feeling I'm getting from all this is that if we've got as far as 
+iommu_dma_protection_show() then it's really too late to meaningfully 
+mitigate bad firmware. We should be able to detect missing 
+untrusted/external-facing properties as early as nhi_probe(), and if we 
+could go into "continue at your own risk" mode right then *before* 
+anything else happens, it all becomes a lot easier to reason about. If 
+there's a strong enough impetus from Microsoft for system vendors to get 
+their firmware right, hopefully we can get away with not trying too hard 
+to cope with systems that haven't.
 
-Also noted that a change in default.bconf requries a clean build, is it
-expected behaviour?
+I'm inclined to send v2 of this patch effectively going back to my 
+original (even simpler) cleanup, just now with much more reasoning about 
+why it isn't doing more :)
 
-Thanks and Regards,
-Padmanabha.S
+Cheers,
+Robin.

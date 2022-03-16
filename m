@@ -2,44 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1A34DB506
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074944DB505
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346884AbiCPPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S1346085AbiCPPiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242953AbiCPPil (ORCPT
+        with ESMTP id S242953AbiCPPiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:38:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 502C76D1B4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:37:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16BB51476;
-        Wed, 16 Mar 2022 08:37:26 -0700 (PDT)
-Received: from e122027.arm.com (unknown [10.57.43.235])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 560793F7D7;
-        Wed, 16 Mar 2022 08:37:24 -0700 (PDT)
-From:   Steven Price <steven.price@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+        Wed, 16 Mar 2022 11:38:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05606D1B0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:36:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ECCA6160B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F51C340E9;
+        Wed, 16 Mar 2022 15:36:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647445017;
+        bh=yB9AJOgY4sOTPrFxr8a/h8XcUZfs27iFeh3/dqiV4dM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lj1avmWrVAztkAfvUGT6/CZexumbiWZpWi2zCuvkfNXdKT2oEPetW4kkHGC9xii+0
+         BeWilsa7XdW+T6QR8SStRavIVerkxUMxccJtWl3i1GaV7vDTfbtdLKYAgS4b9FuHZ0
+         fh8Uk5+Jb3g46gpS63DjmbMpEmuWJDIdvekeFFnGEuAn6+XtXkeST9gU9L5ZNI9hR9
+         IzsStFDT0Of3kGUC5Ea2Qkeh27JO/FXsmVGSo6tJQl01ZqBWvDH6e2uHjALcTWfXIM
+         zdBBdd6VsayLZlV93+x5zcQvB2mqSFBgU1XeAIglL3kdickUBXfE1e/gdsNX/3kq6O
+         lPI/YG0Ugs+cQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUVhn-00ExZY-32; Wed, 16 Mar 2022 15:36:55 +0000
+Date:   Wed, 16 Mar 2022 15:36:54 +0000
+Message-ID: <8735jhzz6x.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Donnefort <vincent.donnefort@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Steven Price <steven.price@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: [PATCH v2] cpu/hotplug: Set st->cpu earlier
-Date:   Wed, 16 Mar 2022 15:36:37 +0000
-Message-Id: <20220316153637.288199-1-steven.price@arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        Eric Auger <eric.auger@redhat.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 2/3] irqchip/gic-v3: Detect LPI invalidation MMIO registers
+In-Reply-To: <20220316145141.44d20486@slackpad.lan>
+References: <20220315165034.794482-1-maz@kernel.org>
+        <20220315165034.794482-3-maz@kernel.org>
+        <20220316145141.44d20486@slackpad.lan>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: andre.przywara@arm.com, linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com, tglx@linutronix.de, eric.auger@redhat.com, oupton@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,50 +70,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting the 'cpu' member of struct cpuhp_cpu_state in cpuhp_create() is
-too late as other callbacks can be made before that point. In particular
-if one of the earlier callbacks fails and triggers a rollback that
-rollback will be done with st->cpu==0 causing CPU0 to be erroneously set
-to be dying, causing the scheduler to get mightily confused and throw
-its toys out of the pram.
+On Wed, 16 Mar 2022 14:51:58 +0000,
+Andre Przywara <andre.przywara@arm.com> wrote:
+> 
+> On Tue, 15 Mar 2022 16:50:33 +0000
+> Marc Zyngier <maz@kernel.org> wrote:
+> 
+> Hi,
+> 
+> > Since GICv4.1, an implementation can offer the same MMIO-based
+> > implementation as DirectLPI, only with an ITS. Given that this
+> > can be hugely beneficial for workloads that are very LPI masking
+> > heavy (although these workloads are admitedly a bit odd).
+> > 
+> > Interestingly, this is independent of RVPEI, which only *implies*
+> > the functionnality.
+> > 
+> > So let's detect whether the implementation has GICR_CTLR.IR set,
+> > and propagate this as DirectLPI to the ITS driver.
+> > 
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  drivers/irqchip/irq-gic-v3.c       | 15 +++++++++++----
+> >  include/linux/irqchip/arm-gic-v3.h |  2 ++
+> >  2 files changed, 13 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > index 736163d36b13..363bfe172033 100644
+> > --- a/drivers/irqchip/irq-gic-v3.c
+> > +++ b/drivers/irqchip/irq-gic-v3.c
+> > @@ -918,7 +918,11 @@ static int gic_populate_rdist(void)
+> >  static int __gic_update_rdist_properties(struct redist_region *region,
+> >  					 void __iomem *ptr)
+> >  {
+> > -	u64 typer = gic_read_typer(ptr + GICR_TYPER);
+> > +	u64 typer;
+> > +	u32 ctlr;
+> > +
+> > +	typer = gic_read_typer(ptr + GICR_TYPER);
+> > +	ctlr = readl_relaxed(ptr + GICR_CTLR);
+> 
+> Is there any reason you didn't keep this together? I thought this was
+> recommended, in general?
 
-Move the assignment earlier before any callbacks have a chance to run.
+Sorry, keep what together with what?
 
-Fixes: 2ea46c6fc945 ("cpumask/hotplug: Fix cpu_dying() state tracking")
-Signed-off-by: Steven Price <steven.price@arm.com>
-CC: Dietmar Eggemann <dietmar.eggemann@arm.com>
----
-Changes since v1[1]:
+> 
+> >  
+> >  	/* Boot-time cleanip */
+> >  	if ((typer & GICR_TYPER_VLPIS) && (typer & GICR_TYPER_RVPEID)) {
+> > @@ -941,6 +945,7 @@ static int __gic_update_rdist_properties(struct redist_region *region,
+> >  	/* RVPEID implies some form of DirectLPI, no matter what the doc says... :-/ */
+> >  	gic_data.rdists.has_rvpeid &= !!(typer & GICR_TYPER_RVPEID);
+> >  	gic_data.rdists.has_direct_lpi &= (!!(typer & GICR_TYPER_DirectLPIS) |
+> > +					   !!(ctlr & GICR_CTLR_IR) |
+> 
+> So this means that has_direct_lpi is not really correct anymore, as the
+> IR bit only covers the INVL and SYNCR registers, not the GICR_SETLPIR
+> and GICR_CLRLPIR registers, if I understand the spec correctly?
+> 
+> But I guess this is nitpicking, as we don't use direct LPIs at all in
+> Linux? And I guess the target is lpi_update_config(), which now doesn't
+> need the command queue anymore?
 
- * Added a Fixes: tag.
- * Moved the assignment to just before cpuhp_set_state() which is the
-   first place it is needed.
+Exactly. The history of this crap is convoluted:
 
-[1]: https://lore.kernel.org/r/20220225134918.105796-1-steven.price%40arm.com
+The canonical goal of DirectLPI was to support LPIs without an
+ITS. Thankfully, this was never implemented. What was implemented by
+our HiSi friends was DirectLPI *with* an ITS, which was illegal at the
+time, but also the only way to make GICv4.0 work at a reasonable
+speed. That's where the direct_lpi boolean comes from.
 
- kernel/cpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+RVPEI added some more confusion by offering a subset of DirectLPI for
+invalidation of vlpis. And then IR was introduced because there is
+really no reason not to offer the same service on GICv3.
 
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 407a2568f35e..c1324c8677cf 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -720,7 +720,6 @@ static void cpuhp_create(unsigned int cpu)
- 
- 	init_completion(&st->done_up);
- 	init_completion(&st->done_down);
--	st->cpu = cpu;
- }
- 
- static int cpuhp_should_run(unsigned int cpu)
-@@ -1351,6 +1350,7 @@ static int _cpu_up(unsigned int cpu, int tasks_frozen, enum cpuhp_state target)
- 
- 	cpuhp_tasks_frozen = tasks_frozen;
- 
-+	st->cpu = cpu;
- 	cpuhp_set_state(st, target);
- 	/*
- 	 * If the current CPU state is in the range of the AP hotplug thread,
+> 
+> Maybe this could be clarified in the commit message?
+
+Sure, can do.
+
+> 
+> >  					   gic_data.rdists.has_rvpeid);
+> >  	gic_data.rdists.has_vpend_valid_dirty &= !!(typer & GICR_TYPER_DIRTY);
+> >  
+> > @@ -962,7 +967,11 @@ static void gic_update_rdist_properties(void)
+> >  	gic_iterate_rdists(__gic_update_rdist_properties);
+> >  	if (WARN_ON(gic_data.ppi_nr == UINT_MAX))
+> >  		gic_data.ppi_nr = 0;
+> > -	pr_info("%d PPIs implemented\n", gic_data.ppi_nr);
+> > +	pr_info("GICv3 features: %d PPIs, %s%s\n",
+> 
+> I like having that on one line, but it looks a bit odd with the
+> trailing comma when we have neither RSS nor DirectLPI.
+> What about:
+> 	pr_info("GICv3 features: %d PPIs%s%s\n",
+> 	gic_data.ppi_nr,
+> 	gic_data.has_rss ? ", RSS" : "",
+> 	gic_data.rdists.has_direct_lpi ? ", DirectLPI" : "");
+
+Yeah, looks better.
+
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.

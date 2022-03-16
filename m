@@ -2,184 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904D04DAD0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE01A4DAD0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354743AbiCPI6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S1354745AbiCPI6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354725AbiCPI6V (ORCPT
+        with ESMTP id S1354733AbiCPI6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:58:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EC3A6517F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647421021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Bc153qdO6aJS+V+8boSatM96Pn9LsInVn8PpJNJpKY=;
-        b=V60Ao4Zw1OA7tAOzdGW44leJ0jkElJhSPole8p+6UPMribGjSmwXawi+d7wL2Q1uaj/FON
-        k2CwETmF1FBe7qqQ65ImSpIasQTWKeABDsfs/Z/Z9ZDbgpp3vQdsjJ7ohAKIiOP5I7+x9l
-        Ax1/tYInHk81E+ISM4zKnhPSG9WCdaE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-141-KcLGjKuhMAKiMQ_aGtUKDQ-1; Wed, 16 Mar 2022 04:56:59 -0400
-X-MC-Unique: KcLGjKuhMAKiMQ_aGtUKDQ-1
-Received: by mail-wr1-f69.google.com with SMTP id p9-20020adf9589000000b001e333885ac1so320976wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:56:59 -0700 (PDT)
+        Wed, 16 Mar 2022 04:58:23 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF01652E5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:57:07 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so2682831ejd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:57:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=O/67em/yLXrPExoOg5gE1gvocomogdUB8RybMctvAJM=;
+        b=J2fJNccFL/iSU5e+qBAklCrq0dqaFVTuRYOa9Fmwq4IqZ5Cd8Qg056WFn9TTfGRozY
+         IQNJng669LVesquPvHi9ZYEA1BOlWrXqXcOl2LGOBMRIc0UpZJdv3CMb10UMZDefr2iT
+         8qsutITVvBK/rsf1vcvUUdJuyLONzHdKRh3Tq3RWcxzO6PBybISIs7CiVvKrVj/g0PW9
+         BTmaLqBPf8ljw53VE9orE8K1kqCkY0FQtLNi7868ZbzB/wd/Xq4Kjxc5u/DqBPLR75XV
+         n5JtNtAp6NbS8RnD32eqEAayDkyXY055YX/6I3zBlbL1yEcTQO7DBvSnl24cUHgHp8p0
+         8eWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0Bc153qdO6aJS+V+8boSatM96Pn9LsInVn8PpJNJpKY=;
-        b=YBUcLItlOd+UxsPbAjX7fCoFAy9g4+Utq4WKO4jxxv0uVX0jrT49EuKQiHSb9H4/TL
-         skY5xljiGsAsgiHZWCKFp5crz0X3GSwOdndxFJ2dQggJKRohdkYdzQK3x9+JVol8sLdw
-         o/QkqZVGtOUdIfYenkfYZH3B4x2YozeHVgJBMeo09ubtgnBLz4h149qlatMVfTcx31Ln
-         9S2i45nPp3+gi2+T09649fIog5ZYFVSjKHnxveprgm47kaXJ651qcDRAyOq2SAhfIA14
-         QsP1F+v5kQDWUobg7RWb8SNZG1w6wq3yb9P20CMVasad3KBrjx2fohmg7rQW3Uf9iW6k
-         syGw==
-X-Gm-Message-State: AOAM532CIEVijGsyqxR5h9wjnpg6jQKY1RfyUIh+0Km5XGX6OlJ7TzRk
-        Bqb2Mt6vZiXoPseBnFfJYjQ1SgEvNp1m6bP5walHfzZTKQQF+2GbPVwmv886UHeUuaBCcz87XIZ
-        JhGkUiV1KmdO6EIhUy5xic+qu
-X-Received: by 2002:a5d:4d4b:0:b0:1f1:d99e:1122 with SMTP id a11-20020a5d4d4b000000b001f1d99e1122mr23570199wru.604.1647421018438;
-        Wed, 16 Mar 2022 01:56:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxxg+HdKFc+OlgI5Uf6j74GkTyT+tlDfMeOChHK9/5Na0k8DDsBUyiZqTzroGOmIKGPRSv82g==
-X-Received: by 2002:a5d:4d4b:0:b0:1f1:d99e:1122 with SMTP id a11-20020a5d4d4b000000b001f1d99e1122mr23570190wru.604.1647421018228;
-        Wed, 16 Mar 2022 01:56:58 -0700 (PDT)
-Received: from redhat.com ([2.53.2.35])
-        by smtp.gmail.com with ESMTPSA id p1-20020a5d59a1000000b00203d83b0ae4sm1136056wrr.109.2022.03.16.01.56.50
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=O/67em/yLXrPExoOg5gE1gvocomogdUB8RybMctvAJM=;
+        b=gH6wPa4yGE8r1LAviUaD17q49MdTz55VHPI17QH7QrVaFiiFZci+eCp4wsDCKEraDd
+         /uQQz5dMKomESCBXctfDHMF4oofdLbZ2YtfPo12x3wvrZzz90THBeEuQwFtszbIN9rdg
+         dQiwbxqJtubdPXfGAE1SKetOAnScUAl7nDGd7gxw7cEps0WPo0gxDX0TLSQlUTbRE8tY
+         ieo8XGP6sEZBeZ5yrFeOjoBKPP9uH5FmL0AyAXQg9MtBEzqEnY0bl6CtQwri7pg87F7o
+         zVQJdOVJdD/4j+P9pasOGK6oF01UGnV8DVP1MpDVE9Iz6ipcY0D3wBIKDo9MYCzZ9rvQ
+         3yOg==
+X-Gm-Message-State: AOAM532o9hgQ0Gei6XMzUcKg7A/upkZOrebbE5XpPL+9mXcYAS1vs4wh
+        nsMf0IO22ootVb5z4jQqhy/OdQ==
+X-Google-Smtp-Source: ABdhPJxp9p2Y38P+AibtSr2MgBfN2RM6VZypXhiQPrTLpvuTE0Fv+wx/vAsRkn+mTANDSg6YqsXPIQ==
+X-Received: by 2002:a17:907:1c9a:b0:6d8:633c:be32 with SMTP id nb26-20020a1709071c9a00b006d8633cbe32mr26709264ejc.159.1647421026152;
+        Wed, 16 Mar 2022 01:57:06 -0700 (PDT)
+Received: from localhost ([85.163.43.78])
+        by smtp.gmail.com with ESMTPSA id s14-20020aa7cb0e000000b00410bf015567sm624490edt.92.2022.03.16.01.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 01:56:57 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 04:56:48 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v4 08/11] vdpa: Use helper for safer setting of
- driver_override
-Message-ID: <20220316045633-mutt-send-email-mst@kernel.org>
-References: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com>
- <20220312132856.65163-9-krzysztof.kozlowski@canonical.com>
+        Wed, 16 Mar 2022 01:57:05 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 09:57:05 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     =?utf-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
+Cc:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, oliver@neukum.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH v2 3/4] net:bonding:Add support for IPV6 RLB to
+ balance-alb mode
+Message-ID: <YjGmYe9CuNiYSgk0@nanopsycho>
+References: <20220315073008.17441-1-sunshouxin@chinatelecom.cn>
+ <20220315073008.17441-4-sunshouxin@chinatelecom.cn>
+ <YjB0wCcubE6713C+@nanopsycho>
+ <c5d18455-c2ff-6e1d-c2d5-55417995c014@chinatelecom.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220312132856.65163-9-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c5d18455-c2ff-6e1d-c2d5-55417995c014@chinatelecom.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 02:28:53PM +0100, Krzysztof Kozlowski wrote:
-> Use a helper to set driver_override to reduce amount of duplicated code.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Wed, Mar 16, 2022 at 09:45:05AM CET, sunshouxin@chinatelecom.cn wrote:
+>
+>在 2022/3/15 19:13, Jiri Pirko 写道:
+>> Tue, Mar 15, 2022 at 08:30:07AM CET, sunshouxin@chinatelecom.cn wrote:
+>> > This patch is implementing IPV6 RLB for balance-alb mode.
+>> Out of curiosity, what is exactly your usecase? I'm asking because
+>> I don't see any good reason to use RLB/ALB modes. I have to be missing
+>> something.
+>
+>
+>This is previous discusion thread：
+>
+>https://www.spinics.net/lists/kernel/msg4187085.html
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-feel free to merge with the rest of the patchset.
-
-> ---
->  drivers/vdpa/vdpa.c  | 29 ++++-------------------------
->  include/linux/vdpa.h |  4 +++-
->  2 files changed, 7 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 1ea525433a5c..2dabed1df35c 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -77,32 +77,11 @@ static ssize_t driver_override_store(struct device *dev,
->  				     const char *buf, size_t count)
->  {
->  	struct vdpa_device *vdev = dev_to_vdpa(dev);
-> -	const char *driver_override, *old;
-> -	char *cp;
-> +	int ret;
->  
-> -	/* We need to keep extra room for a newline */
-> -	if (count >= (PAGE_SIZE - 1))
-> -		return -EINVAL;
-> -
-> -	driver_override = kstrndup(buf, count, GFP_KERNEL);
-> -	if (!driver_override)
-> -		return -ENOMEM;
-> -
-> -	cp = strchr(driver_override, '\n');
-> -	if (cp)
-> -		*cp = '\0';
-> -
-> -	device_lock(dev);
-> -	old = vdev->driver_override;
-> -	if (strlen(driver_override)) {
-> -		vdev->driver_override = driver_override;
-> -	} else {
-> -		kfree(driver_override);
-> -		vdev->driver_override = NULL;
-> -	}
-> -	device_unlock(dev);
-> -
-> -	kfree(old);
-> +	ret = driver_set_override(dev, &vdev->driver_override, buf, count);
-> +	if (ret)
-> +		return ret;
->  
->  	return count;
->  }
-> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> index 721089bb4c84..37117404660e 100644
-> --- a/include/linux/vdpa.h
-> +++ b/include/linux/vdpa.h
-> @@ -64,7 +64,9 @@ struct vdpa_mgmt_dev;
->   * struct vdpa_device - representation of a vDPA device
->   * @dev: underlying device
->   * @dma_dev: the actual device that is performing DMA
-> - * @driver_override: driver name to force a match
-> + * @driver_override: driver name to force a match; do not set directly,
-> + *                   because core frees it; use driver_set_override() to
-> + *                   set or clear it.
->   * @config: the configuration ops for this device.
->   * @cf_mutex: Protects get and set access to configuration layout.
->   * @index: device index
-> -- 
-> 2.32.0
-
+I don't see how it even remotely answers my question. Could you please
+spell it out for me here again? Thanks!

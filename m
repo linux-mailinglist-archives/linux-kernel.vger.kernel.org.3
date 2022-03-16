@@ -2,166 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55524DA7D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FBF4DA7E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343993AbiCPCQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S1347806AbiCPC03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241389AbiCPCQd (ORCPT
+        with ESMTP id S237405AbiCPC02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:16:33 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E126BCD7;
-        Tue, 15 Mar 2022 19:15:18 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:49050.1605950715
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.43 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 1994D1002AD;
-        Wed, 16 Mar 2022 10:15:12 +0800 (CST)
-Received: from  ([123.150.8.43])
-        by gateway-153622-dep-749df8664c-mvcg4 with ESMTP id 8f25d97f08c443a3a48ae68ce49704ae for johan@kernel.org;
-        Wed, 16 Mar 2022 10:15:18 CST
-X-Transaction-ID: 8f25d97f08c443a3a48ae68ce49704ae
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.43
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, elder@ieee.org
-Cc:     Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v5] staging: greybus: introduce pwm_ops::apply
-Date:   Wed, 16 Mar 2022 10:21:25 +0800
-Message-Id: <1647397285-30061-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 15 Mar 2022 22:26:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73E924F0A;
+        Tue, 15 Mar 2022 19:25:14 -0700 (PDT)
+X-UUID: ef7dc8dcbffc42f08972bc2395417310-20220316
+X-UUID: ef7dc8dcbffc42f08972bc2395417310-20220316
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 995455425; Wed, 16 Mar 2022 10:25:09 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Mar 2022 10:25:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Mar
+ 2022 10:25:06 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Mar 2022 10:25:06 +0800
+Message-ID: <00a1b51452d0a8fcdd9807845580678f6739e974.camel@mediatek.com>
+Subject: Re: [PATCH v13 1/6] soc: mediatek: mutex: add common interface to
+ accommodate multiple modules operationg MUTEX
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Jernej Skrabec" <jernej.skrabec@siol.net>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 16 Mar 2022 10:25:06 +0800
+In-Reply-To: <20220315061031.21642-2-moudy.ho@mediatek.com>
+References: <20220315061031.21642-1-moudy.ho@mediatek.com>
+         <20220315061031.21642-2-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce newer .apply function in pwm_ops to replace legacy operations,
-like enable, disable, config and set_polarity.
+Hi, Moudy:
 
-This guarantees atomic changes of the pwm controller configuration.
+On Tue, 2022-03-15 at 14:10 +0800, Moudy Ho wrote:
+> In order to allow multiple modules to operate MUTEX hardware through
+> a common interfrace, a flexible index "mtk_mutex_table_index" needs
+> to
+> be added to replace original component ID so that like DDP and MDP
+> can add their own MUTEX table settings independently.
+> 
+> In addition, 4 generic interface "mtk_mutex_set_mod",
+> "mtk_mutex_set_sof",
+> "mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added,
+> which is
+> expected to replace the "mtk_mutex_add_comp" and
+> "mtk_mutex_remove_comp"
+> pair originally dedicated to DDP in the future.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> ---
+>  drivers/soc/mediatek/mtk-mutex.c       | 122
+> +++++++++++++++++++++++++
+>  include/linux/soc/mediatek/mtk-mutex.h |  33 +++++++
+>  2 files changed, 155 insertions(+)
+> 
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
+[snip]
 
----
-v2:
-1, define duty_cycle and period as u64 in gb_pwm_config_operation.
-2, define duty and period as u64 in gb_pwm_config_request.
-3, disable before configuring duty and period if the eventual goal
-   is a disabled state.
+> 
+> diff --git a/include/linux/soc/mediatek/mtk-mutex.h
+> b/include/linux/soc/mediatek/mtk-mutex.h
+> index 6fe4ffbde290..c8355bb0e6d6 100644
+> --- a/include/linux/soc/mediatek/mtk-mutex.h
+> +++ b/include/linux/soc/mediatek/mtk-mutex.h
+> @@ -10,14 +10,47 @@ struct regmap;
+>  struct device;
+>  struct mtk_mutex;
+>  
+> +enum mtk_mutex_table_index {
+> +	MUTEX_TABLE_IDX_NONE = 0,	/* Invalid engine */
 
-v3:
-Regarding duty_cycle and period, I read more discussion in this thread,
-min, warn or -EINVAL, seems no perfect way acceptable for everyone.
-How about we limit their value to INT_MAX and throw a warning at the
-same time when they are wrong?
+Useless, so remove this.
 
-v4:
-1, explain why legacy operations are replaced.
-2, cap the value of period and duty to U32_MAX.
+> +
+> +	/* MDP table index */
+> +	MUTEX_TABLE_IDX_MDP_RDMA0,
+> +	MUTEX_TABLE_IDX_MDP_RSZ0,
+> +	MUTEX_TABLE_IDX_MDP_RSZ1,
+> +	MUTEX_TABLE_IDX_MDP_TDSHP0,
+> +	MUTEX_TABLE_IDX_MDP_WROT0,
+> +	MUTEX_TABLE_IDX_MDP_WDMA,
+> +	MUTEX_TABLE_IDX_MDP_AAL0,
+> +	MUTEX_TABLE_IDX_MDP_CCORR0,
+> +
+> +	/* DDP table index */
+> +	MUTEX_TABLE_IDX_DDP_DSI0,
+> +	MUTEX_TABLE_IDX_DDP_DSI1,
+> +	MUTEX_TABLE_IDX_DDP_DSI2,
+> +	MUTEX_TABLE_IDX_DDP_DSI3,
+> +	MUTEX_TABLE_IDX_DDP_DPI0,
+> +	MUTEX_TABLE_IDX_DDP_DPI1,
+> +	MUTEX_TABLE_IDX_DDP_DP_INTF0,
+> +	MUTEX_TABLE_IDX_DDP_DP_INTF1,
 
-v5:
-1, revise commit message.
----
- drivers/staging/greybus/pwm.c | 59 +++++++++++++++++++++--------------
- 1 file changed, 35 insertions(+), 24 deletions(-)
+If this patch would support DDP, add all DDP index. If this patch does
+not support DDP, remove these.
 
-diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-index 891a6a672378..3add3032678b 100644
---- a/drivers/staging/greybus/pwm.c
-+++ b/drivers/staging/greybus/pwm.c
-@@ -204,43 +204,54 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
- 	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
- }
- 
--static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
--			 int duty_ns, int period_ns)
-+static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-+			const struct pwm_state *state)
- {
-+	int err;
-+	bool enabled = pwm->state.enabled;
-+	u64 period = state->period;
-+	u64 duty_cycle = state->duty_cycle;
- 	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
- 
--	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
--};
-+	/* set polarity */
-+	if (state->polarity != pwm->state.polarity) {
-+		if (enabled) {
-+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-+			enabled = false;
-+		}
-+		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
-+		if (err)
-+			return err;
-+	}
- 
--static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
--			       enum pwm_polarity polarity)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	if (!state->enabled) {
-+		if (enabled)
-+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-+		return 0;
-+	}
- 
--	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
--};
-+	/* set period and duty cycle*/
-+	if (period > U32_MAX)
-+		period = U32_MAX;
- 
--static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	if (duty_cycle > period)
-+		duty_cycle = period;
- 
--	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
--};
-+	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
-+	if (err)
-+		return err;
- 
--static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	/* enable/disable */
-+	if (!enabled)
-+		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
- 
--	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
--};
-+	return 0;
-+}
- 
- static const struct pwm_ops gb_pwm_ops = {
- 	.request = gb_pwm_request,
- 	.free = gb_pwm_free,
--	.config = gb_pwm_config,
--	.set_polarity = gb_pwm_set_polarity,
--	.enable = gb_pwm_enable,
--	.disable = gb_pwm_disable,
-+	.apply = gb_pwm_apply,
- 	.owner = THIS_MODULE,
- };
- 
--- 
-2.25.1
+Regards,
+CK
+
+> +
+> +	MUTEX_TABLE_IDX_MAX		/* ALWAYS keep at the end */
+> +};
+> +
+>  struct mtk_mutex *mtk_mutex_get(struct device *dev);
+>  int mtk_mutex_prepare(struct mtk_mutex *mutex);
+>  void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+>  			enum mtk_ddp_comp_id id);
+> +void mtk_mutex_set_mod(struct mtk_mutex *mutex,
+> +		       enum mtk_mutex_table_index idx);
+> +void mtk_mutex_set_sof(struct mtk_mutex *mutex,
+> +		       enum mtk_mutex_table_index idx);
+>  void mtk_mutex_enable(struct mtk_mutex *mutex);
+>  void mtk_mutex_disable(struct mtk_mutex *mutex);
+>  void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+>  			   enum mtk_ddp_comp_id id);
+> +void mtk_mutex_clear_mod(struct mtk_mutex *mutex,
+> +			 enum mtk_mutex_table_index idx);
+> +void mtk_mutex_clear_sof(struct mtk_mutex *mutex);
+>  void mtk_mutex_unprepare(struct mtk_mutex *mutex);
+>  void mtk_mutex_put(struct mtk_mutex *mutex);
+>  void mtk_mutex_acquire(struct mtk_mutex *mutex);
 

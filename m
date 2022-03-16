@@ -2,113 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD4F4DB625
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D434DB62B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355606AbiCPQaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S1350307AbiCPQaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiCPQaH (ORCPT
+        with ESMTP id S230383AbiCPQaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:30:07 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E7E53B58
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:28:53 -0700 (PDT)
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 691503F338
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647448132;
-        bh=O9azuf7ICO8h5uyN+uYKd3/hmAqYJNPc/YeUIk6IvOY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Q0qgCv8g85usPyzQsDtGgDFalJ7TfoRPzDbFubrVduaO+EnSR+Jwmho7GLJBT0her
-         m2eVXmy2o6L443/C8vl81t9iWwgM8obJMbAfXS76tirzzcbUlK5DXTiZrQO1Ar5oPt
-         74qqjrdoPuO9b4cjO9PjBSiOMv+cuayW1niULMz2Ypw5LEgo95ozpwDRFUvmHkjEUH
-         P1IDwxi+JJcabZhL/vI1NBq6fy4TXvZ4v5l89off3mcM4d2xRD27ezXXid8LKFHjwG
-         g+gczEkKmWsctrK7Bm0tEJYxwggi9AGbIglwWvErO+7hig46FduXvlgo7hWlMcDn3A
-         DHcDtwHL5L+iw==
-Received: by mail-wr1-f72.google.com with SMTP id p9-20020adf9589000000b001e333885ac1so725811wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:28:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O9azuf7ICO8h5uyN+uYKd3/hmAqYJNPc/YeUIk6IvOY=;
-        b=Xn48X8f28XaOITFI68PmT9lPmkIUmCvlZfCTC7iMZuEoAt/N/+sZE606shfZ7Aj92x
-         eeK12ONFYIdzkyDzQzrGlVmOlZyQSAsmeUSH8dgTXau1XroJa/9fDyGGpGc2pguLVQD3
-         UzM1lIich9UAcX1oKcuAq5oVUgFvmCgGpOslA/e3AS0ILD9D/4M/pgy76mZE0c9Yizow
-         3eEp54tgMVQnaCtjHqA+K5nJB+dEm4PDRdFumqrsEVZehtxT6SG0hbozFGGDfdKHzBub
-         g7oX8DgTfrPZPBiENeb9sszHifupv7JqnHc1iovWF5SWHJICeelnnzpHhVCC9Z/sITuy
-         8CiA==
-X-Gm-Message-State: AOAM532ptMlqlEmN2SLonE30tKDsTigoZG9RaZQVj7laqTx0GVm8un4r
-        Nn0vrtrCrfTj2+X6BYfGO2tvWQ6JIZA48MqOpW0P/NzdIrA/5gbBJoOHn/gYDGF7sAio1vQP5+t
-        NNVgmF7ihQD5J33Hf1WIFRTSGzW1YgBuV+pd06d2Vzw==
-X-Received: by 2002:a05:600c:22c4:b0:38c:70f5:25a9 with SMTP id 4-20020a05600c22c400b0038c70f525a9mr399235wmg.119.1647448132149;
-        Wed, 16 Mar 2022 09:28:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKAKAWokuZKgPZXqwJlDzsHHWTVsJ9pCwRX+QtYBaOkXVUSCX+5SlHY5BD4mQkdYO5g15k/Q==
-X-Received: by 2002:a05:600c:22c4:b0:38c:70f5:25a9 with SMTP id 4-20020a05600c22c400b0038c70f525a9mr399217wmg.119.1647448131987;
-        Wed, 16 Mar 2022 09:28:51 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l18-20020adfe592000000b001f064ae9830sm2007779wrm.37.2022.03.16.09.28.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 09:28:51 -0700 (PDT)
-Message-ID: <662981fe-7cf4-b0e6-2d43-3f33a53a6abd@canonical.com>
-Date:   Wed, 16 Mar 2022 17:28:49 +0100
+        Wed, 16 Mar 2022 12:30:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307436C1F7
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:29:25 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUWWK-000210-Aj; Wed, 16 Mar 2022 17:29:08 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUWWH-0015JU-Ji; Wed, 16 Mar 2022 17:29:04 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUWWF-009aRe-Jt; Wed, 16 Mar 2022 17:29:03 +0100
+Date:   Wed, 16 Mar 2022 17:29:03 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alex Elder <elder@ieee.org>
+Cc:     Song Chen <chensong_2000@189.cn>, johan@kernel.org,
+        elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, lee.jones@linaro.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v5] staging: greybus: introduce pwm_ops::apply
+Message-ID: <20220316162903.kwkfefyznvopvr5g@pengutronix.de>
+References: <1647397285-30061-1-git-send-email-chensong_2000@189.cn>
+ <49f18070-0215-8475-907b-487d1e01c15c@ieee.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] dt-bindings: timer: Document arm,cortex-a7-timer for
- arch timer
-Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
- <20220316095433.20225-3-singh.kuldeep87k@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220316095433.20225-3-singh.kuldeep87k@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cxcpsasgt2uw47h7"
+Content-Disposition: inline
+In-Reply-To: <49f18070-0215-8475-907b-487d1e01c15c@ieee.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2022 10:54, Kuldeep Singh wrote:
-> Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
-> conjugation with "arm,armv7-timer". Since, initial entry is not
-> documented, it start raising dtbs_check warnings.
-> 
-> ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
-> 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
-> 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
-> 
-> In general, removing an existing entry is mostly devastating considering
-> backward compatibility. Therefore, document it.
 
-How removing undocumented and unused compatible is devastating for
-backwards compatibility? I don't see it.
+--cxcpsasgt2uw47h7
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-DTS is rather wrong, not bindings. Otherwise please explain it more, why
-DTS is correct.
+On Wed, Mar 16, 2022 at 10:14:30AM -0500, Alex Elder wrote:
+> On 3/15/22 9:21 PM, Song Chen wrote:
+> > diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pw=
+m.c
+> > index 891a6a672378..3add3032678b 100644
+> > --- a/drivers/staging/greybus/pwm.c
+> > +++ b/drivers/staging/greybus/pwm.c
+> > @@ -204,43 +204,54 @@ static void gb_pwm_free(struct pwm_chip *chip, st=
+ruct pwm_device *pwm)
+> >   	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+> >   }
+> > -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+> > -			 int duty_ns, int period_ns)
+> > +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> > +			const struct pwm_state *state)
+> >   {
+> > +	int err;
+> > +	bool enabled =3D pwm->state.enabled;
+> > +	u64 period =3D state->period;
+> > +	u64 duty_cycle =3D state->duty_cycle;
+>=20
+> The use of local variables here is inconsistent, and that
+> can be confusing.  Specifically, the "enabled" variable
+> represents the *current* state, while the "period" and
+> "duty_cycle" variables represent the *desired* state.  To
+> avoid confusion, if you're going to use local variables
+> like that, they should all represent *either* the current
+> state *or* the new state.  Please update your patch to
+> do one or the other.
 
+IMHO that it overly picky. I'm ok with the usage as is.
 
+> >   	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> > -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
+> > -};
+> > +	/* set polarity */
+> > +	if (state->polarity !=3D pwm->state.polarity) {
+> > +		if (enabled) {
+> > +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+> > +			enabled =3D false;
+> > +		}
+> > +		err =3D gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polar=
+ity);
+> > +		if (err)
+> > +			return err;
+> > +	}
+> > -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_devic=
+e *pwm,
+> > -			       enum pwm_polarity polarity)
+> > -{
+> > -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> > +	if (!state->enabled) {
+> > +		if (enabled)
+> > +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+> > +		return 0;
+>=20
+> If you are disabling the device, you return without updating the
+> period and duty cycle.  But you *do* set polarity.  Is that
+> required by the PWM API?  (I don't actually know.)  Or can the
+> polarity setting be simply ignored as well if the new state is
+> disabled?
 
-Best regards,
-Krzysztof
+All is well here. A disabled PWM is expected to emit the inactive level.
+So polarity matters, duty and period don't.
+
+> Also, if the polarity changed, the device will have already been
+> disabled above, so there's no need to do so again (and perhaps
+> it might be a bad thing to do twice?).
+
+That won't happen, because if the device was disabled for the polarity
+change, enabled =3D false. In fact that is the purpose of the local
+variable.
+
+> > +	}
+> > -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+> > -};
+>=20
+> Since you're clamping the values to 32 bits here, your comment
+> should explain why (because Greybus uses 32-bit values here,
+> while the API supports 64 bit values).  That would be a much
+> more useful piece of information than "set period and duty cycle".
+>=20
+> > +	/* set period and duty cycle*/
+>=20
+> Include a space before "*/" in your comments.
+
+ack
+
+> > +	if (period > U32_MAX)
+> > +		period =3D U32_MAX;
+> > -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+> > -{
+> > -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> > +	if (duty_cycle > period)
+> > +		duty_cycle =3D period;
+> > -	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+> > -};
+> > +	err =3D gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
+> > +	if (err)
+> > +		return err;
+>=20
+> What if the new state set usage_power to true?  It would
+> be ignored here.  Is it OK to silently ignore it?  Even
+> if it is, a comment about that would be good to see, so
+> we know it's intentional.
+
+ignoring usage_power is OK. All but a single driver do it that way.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--cxcpsasgt2uw47h7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIyEEwACgkQwfwUeK3K
+7AmO3Qf/SsTZlRSlCJmtso96gQJnzXFI1Ofx73IRpFAE0VVMWbQAAd0Gq+mB+lY0
+FPaB79Bx114E3tibvrAnOODi6ATJBGbqjkdj0q5oO0ZcK2b2ia5JZofdnHaCIWMJ
+KLuofdGhcVyc3eIXSkSxNpew5HvMTyCaeKiyfLb9rqnv9ZPMcsLQ3LCWS1jffAv1
+yPyWQW/C0K8OhKOOWglhkKdQNJ6BHPpBInYzX+OoaBKOUN8BRXUmh8VJqyRvp/Gv
+ToyE/PJBuzPd13ND7rF6BwmSW4hZ3zgFvINeWCf7DtoZxTQRZ/xbn5td7U46RPv2
+c/DFTosHasBcdtgV7+BQ1PrXegtLgw==
+=98PH
+-----END PGP SIGNATURE-----
+
+--cxcpsasgt2uw47h7--

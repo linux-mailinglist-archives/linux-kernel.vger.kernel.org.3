@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B614DB388
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A56F4DB389
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239686AbiCPOoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 10:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S1356814AbiCPOoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356572AbiCPOoP (ORCPT
+        with ESMTP id S1349287AbiCPOoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 10:44:15 -0400
+        Wed, 16 Mar 2022 10:44:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3D421E12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 07:43:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D035321E12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 07:43:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E17E61585
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D839C340E9;
-        Wed, 16 Mar 2022 14:42:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0B16157E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 439B7C340F0;
+        Wed, 16 Mar 2022 14:43:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647441780;
-        bh=o0roD4ZBsEokwd+y6YJx5uI4mHLLQzXII32jM5J1HYU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=A7p0hbPuGpnnb71a109WPF0UxXxtJjd75KJK525l/NOK2AtkW02H5akP95aYa4tmV
-         aTblbI+I3KTgvHkMyvW3A7VXmS291oIfFTixKysk7qIiWmws0w/K7R77kSQbNij5O7
-         n0gOmvp5ix1JUklAQKrPUawUdCaQ4Aeex53oqBaxEzBzbXQDJhwdEgr7OILBZMXxvY
-         nYnUDD1HsLM+jUHd5N5OsuWtH7nyRSmieoPd+ZTBMQUsoXSCAqadRJ/jyYU5hdpfgh
-         bdOMflBAQkpYdAhCllq5jW1b51FJOFp2wsRKhIcCnQdLWthgH3mWewh2M3L0Bztp2M
-         2bmAplaYiGzwA==
+        s=k20201202; t=1647441782;
+        bh=Btxl5/3u4gskbSG4b4/bNPaMjoqQkhs9Zqi5gM6zYuQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A7L6ywOzJGQ2utyWu78gOXP+PxjR/PLmPS90laso5pyGHal9pMDd13p5qdC6LoQ2h
+         q9B3FOVK2bTW1zoFOvRM/TRE0Ysw1B55RsYek8FgHzviftqmZZwpPvX1JamBsiBK01
+         sk50SEEKPX9IAgqvwcariiobAf0LVVbdB/8qso0YiZ/X5Cr7/A2HjIo7rkHyR+0fZo
+         65bRkAYATjY9upSLZrWbPrcMUdt0fXVktswB9C5MDE1rLD5GoCjN/RKSCJ8x1P8s7U
+         hgAuSstLvXO94sLozcxaf7vVRna5wEFF/pn1Dy1b60lkMko1tXKrq0wa0Y27Ta1gNJ
+         7qNPPjn3QgHsw==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -40,10 +40,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Neeraj Upadhyay <quic_neeraju@quicinc.com>,
         Joel Fernandes <joel@joelfernandes.org>
-Subject: [RFC PATCH 0/4] rcu: Expedited GP polling improvements
-Date:   Wed, 16 Mar 2022 15:42:51 +0100
-Message-Id: <20220316144255.336021-1-frederic@kernel.org>
+Subject: [PATCH 1/4] rcu: Remove needless polling work requeue for further waiter
+Date:   Wed, 16 Mar 2022 15:42:52 +0100
+Message-Id: <20220316144255.336021-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220316144255.336021-1-frederic@kernel.org>
+References: <20220316144255.336021-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,31 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I initially wanted to shape that into the form of reviews or questions
-but I thought I might as well send patches.
+If another expedited polling site is waiting for the next grace period,
+there is no need to requeue the work because it is guaranteed to be
+either already queued or executing the actual polling upon completion.
 
-Be careful, it's fairly possible I misunderstood some things and those
-patches are completely off the track.
-
-At least TREE07 looks happy.
-
-git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-	rcu/dev
-
-HEAD: dd1f68246e04fe03fde46cd55f1c87ea92a6c57e
-
-Thanks,
-	Frederic
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>
 ---
+ kernel/rcu/tree_exp.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Frederic Weisbecker (4):
-      rcu: Remove needless polling work requeue for further waiter
-      rcu: No need to reset the poll request flag before completion
-      rcu: Perform early sequence fetch for polling locklessly
-      rcu: Name internal polling flag
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index a6cb02a4d27c..b6fd857f34ba 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -919,9 +919,7 @@ static void sync_rcu_do_polled_gp(struct work_struct *wp)
+ 		__synchronize_rcu_expedited(true);
+ 	raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+ 	s = rnp->exp_seq_poll_rq;
+-	if (!(s & 0x1) && !sync_exp_work_done(s))
+-		queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
+-	else
++	if (!(s & 0x1) && sync_exp_work_done(s))
+ 		rnp->exp_seq_poll_rq |= 0x1;
+ 	raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
+ }
+-- 
+2.25.1
 
-
- kernel/rcu/rcu.h      |  5 +++++
- kernel/rcu/tree.c     |  2 +-
- kernel/rcu/tree_exp.h | 18 +++++++-----------
- 3 files changed, 13 insertions(+), 12 deletions(-)

@@ -2,154 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A914DA8BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AADD4DA8C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353441AbiCPDCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S1350600AbiCPDDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353430AbiCPDCF (ORCPT
+        with ESMTP id S237407AbiCPDDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:02:05 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182AC5E151;
-        Tue, 15 Mar 2022 20:00:52 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id i11so38424plr.1;
-        Tue, 15 Mar 2022 20:00:52 -0700 (PDT)
+        Tue, 15 Mar 2022 23:03:35 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0B55E144
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:02:22 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2e59939b862so8775217b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 20:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=TUol1yx6U2uQhjc6E23pRSVdv2Hed4TokG1wMm5Bz4E=;
-        b=XxTIG1ssL7nkTkRuihWLbqDzkdccZrZBULu6TTgsCanOT3QjCuQZadpzelJ8PFFg/a
-         ySqK2hheG+tdvu7V/TZEAV61J4zW5zhJtzNrPgOt0ZVEBDjhaIkQlRsZrmIDmyysvBUL
-         URIW2yUj4csvzgzUgELFMbejoLe8Q+rbl9vp2T1b0wFZQfvTKJqhBZmBLIdacEBlcfSR
-         M3usJezz9BXrXre16dyFDPJ6Zj+DZpBSgi9Zcah0n6PAMuUcyuss42WJCC6fz9xxsgZv
-         RsRTPOv7TVvcinSG0KOfmnb1hTdj02WpaJkNiAVSpfsQ7fVxNUsoAoit0PwJiOks36iQ
-         wNKw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q42cB1sXpkleTEE3htTcKFqSRwkO4cfCIMbXo1bHuXA=;
+        b=YEScOl+yvs+Q0HQwEqHF7fB2oF5Rk1EScvCGB5efpD7yLRA0nArU8esWedb8Nx/dxJ
+         cObfGBkY5RWJrKnyMfR4A18q1XTueH8sYeTiugYP7fVeWICcdDcbkbIEAQEIcxs2SUTq
+         2MfCAaFhcVhizy0QncKuQOm4aitlInCdifSFGa1EwNN+AR1kTBerrXlUqzN/UuLUTfpQ
+         xXEmjq3648/tBq9M/clJqMKHRB83+A8IzC7oDGvi/rRbS+GmwUxg1w7NGoN+fh6/s+uv
+         zqw7YgjSS+7s0umKs8a6r1xnn1jdiDyLRMgFSr6KBwpd01DaK7IpD9E0M/qlm0y7qp3z
+         4GNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=TUol1yx6U2uQhjc6E23pRSVdv2Hed4TokG1wMm5Bz4E=;
-        b=NyOfQIcOfDIadJlaBj1xY2iMEcFfsd+m6Ee16wZNI9R6Rk/W74Y+LdvxJQ3l/aBmFa
-         x54OS4NOWggy3vlaTjM6tXZ4T1lZDvQy2iXkAJz/TznE+6vLp9NmsuNVqeXmKhDXdxq3
-         71LNi1A4tFoDO+chH+09Nh/Cyb9sZ/l0i86vdhH0hNh5b+Vqw9NYBtIyMVouMnGRuItI
-         4MW2DbXDEfiY+qD99XBrQ4Z6hY7qfma0UkQON7JpNI/+iB0dtS1dsRXT3PH6W14OkPr4
-         IkeY784CWWiQzT2xtlyy+zdKOZNqjno50lAs4nZDuuEOfH3bxkYHm8T90D23l2c8/r4p
-         Ne6A==
-X-Gm-Message-State: AOAM532ONqS9MVy3Ov9Th5SiWSDY3Ebf61qFM8S9XmkLQGUQpshnNOHv
-        SKY5Hf9RmK/hzSWqCcRHWR+voIsHmxXRIA==
-X-Google-Smtp-Source: ABdhPJxuZFbHxFVIDqe725gysTmQhwpDnbEoEcwQj9+Pd3guLrQHvrUoRJ+bLdnDIO1M4BRf0fAsSg==
-X-Received: by 2002:a17:90b:3503:b0:1bf:27c6:3b33 with SMTP id ls3-20020a17090b350300b001bf27c63b33mr7987168pjb.225.1647399651346;
-        Tue, 15 Mar 2022 20:00:51 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm582329pjv.57.2022.03.15.20.00.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Mar 2022 20:00:51 -0700 (PDT)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v5 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
-Date:   Wed, 16 Mar 2022 11:01:06 +0800
-Message-Id: <71c1b80e0083f38de71f36193e12b3cbff2ec852.1647399369.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1647399369.git.lhjeff911@gmail.com>
-References: <cover.1647399369.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1647399369.git.lhjeff911@gmail.com>
-References: <cover.1647399369.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q42cB1sXpkleTEE3htTcKFqSRwkO4cfCIMbXo1bHuXA=;
+        b=X5TWTMvJJNv71XUb8I0yHYmziD3NDpAdW/6u91J50GWqwMLWs/oB37urM3SGLMWq/o
+         GlMcQWJ+tL0Edhq+OHm4Tf5Ap6lQPw+Juj6OzbeMt6UErtAwk23Ft0UF/1Vwndnm00ri
+         R+jkKQwEDYWGepO9P9V9t9T2bN9qeQRktZ9mb8QokyL9QBrf9ionnnScbDgXTcwx8j0y
+         dkinFNk2YZhyW5h6/jISUqoKN3d2oQPOHqzaHEuiUOdNv8znA32zIdlVpqadAJi3TUCT
+         qseaizJvYu6TlcwARJzsZMGsM1g08Fq3CBYw+wZIPBjltPhi66sX55x1hIIVZY8Q8YBJ
+         hU2A==
+X-Gm-Message-State: AOAM530jXooYNhHk68ZyJUHfycBgUdgWJ1aI1KOuzg1Bf13Qa8V5NPBB
+        C5uc0dCC4KD35uKY15tHdWVM9xr4E91nDmQF+o0=
+X-Google-Smtp-Source: ABdhPJyo3PY963IGL1wyKNsEuqFmxY+FkRoibl5Blq1JrX5V0Lk3+pY8xNwOGWC5F/A+4TAgeKG7Mvupg+CsjfNy0Jo=
+X-Received: by 2002:a81:7983:0:b0:2e5:9d0a:1c52 with SMTP id
+ u125-20020a817983000000b002e59d0a1c52mr2992384ywc.411.1647399741606; Tue, 15
+ Mar 2022 20:02:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220315073949.7541-1-jiangshanlai@gmail.com> <20220315073949.7541-4-jiangshanlai@gmail.com>
+ <20220316023710.jqmi666o6cqyoonh@treble>
+In-Reply-To: <20220316023710.jqmi666o6cqyoonh@treble>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 16 Mar 2022 11:02:09 +0800
+Message-ID: <CAJhGHyDs0O7XdZkc6pZVgRurYxEXmDE+aoipPwE-KLOBW-Scyg@mail.gmail.com>
+Subject: Re: [PATCH V3 3/7] x86/entry: Switch the stack after error_entry() returns
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for Sunplus SP7021 thermal driver
+On Wed, Mar 16, 2022 at 10:37 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+>
+> On Tue, Mar 15, 2022 at 03:39:45PM +0800, Lai Jiangshan wrote:
+> >  .Lerror_entry_from_usermode_after_swapgs:
+> >       /* Put us onto the real thread stack. */
+>
+> This comment is no longer correct.
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v5:
- - Modify yaml file remove reg name and change nvmem name
- - Addressed comments from Mr. Daniel Lezcano
+Thanks for the review.
 
- .../bindings/thermal/sunplus_thermal.yaml          | 47 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+I thought "us" is the pt_regs. But it can be everything including
+the "running environment" and "running stack".
 
-diff --git a/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-new file mode 100644
-index 0000000..176bc07
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sunplus_thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus Thermal controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  reg-names:
-+    items:
-+      - const: reg
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: therm_calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    thermal@9c000280 {
-+        compatible = "sunplus,sp7021-thermal";
-+        reg = <0x9c000280 0x80>;
-+        nvmem-cells = <&therm_calib>;
-+        nvmem-cell-names = "therm_calib";
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96d5218..5000b8a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18546,6 +18546,7 @@ SUNPLUS THERMAL DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
- F:	drivers/thermal/sunplus_thermal.c
- 
- SUPERH
--- 
-2.7.4
+I will change "us" to "the pt_regs"
 
+>
+> --
+> Josh
+>

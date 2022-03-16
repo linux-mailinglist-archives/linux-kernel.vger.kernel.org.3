@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65DE4DA78F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA454DA79D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353016AbiCPBuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 21:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
+        id S1353039AbiCPBzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 21:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353008AbiCPBuQ (ORCPT
+        with ESMTP id S1353030AbiCPBzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 21:50:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE455E157;
-        Tue, 15 Mar 2022 18:48:58 -0700 (PDT)
-X-UUID: 926dba9c6db54f90aa966f99697e9a0e-20220316
-X-UUID: 926dba9c6db54f90aa966f99697e9a0e-20220316
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2009940203; Wed, 16 Mar 2022 09:48:54 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 09:48:53 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 09:48:53 +0800
-Message-ID: <9b9d1cb4c606a051ffc2e926d40a7af33004aaf6.camel@mediatek.com>
-Subject: Re: [PATCH v3] remoteproc: mediatek: fix side effect of mt8195 sram
- power on
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 16 Mar 2022 09:48:53 +0800
-In-Reply-To: <36e7847e-56ed-8768-388e-c6a00a2cb0ec@collabora.com>
-References: <20220314111806.28168-1-tinghan.shen@mediatek.com>
-         <36e7847e-56ed-8768-388e-c6a00a2cb0ec@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 15 Mar 2022 21:55:02 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE0933EAE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:53:47 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id g17so1482940lfh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/w6g4UFapgjJyWigEntfY4YR+4uWCSZSSrQixa3u6+g=;
+        b=NOuO/gH2k2r8FqAWGTSFu3/K2RelH8l1bUKZJrYmiVaqA+UTjEqKY666OVXfT8d219
+         2YlKjBcEbW9rsLFaO+lVQexhLzkDhDnQGUhQ6bY4urMhIT5FyhNYWPgdC5OvZaiN9swo
+         /zne3iP33JmXYXygB8OBviNrskeEf2CIACj4MnvcwOiNM9JiuDaFHLDOnvuVC7Hg/n7i
+         XrNztpYGFUn6I7YMjneJT3ad4ZI8dzWyZuSAkx4zMcPbHYeRU8K1Y6jjkkV7xw0ze/KC
+         +eMZ95j3B3AybgLC9l3crRekrK+Y0eIwj3PxUJeA1TEud6ZXDuDCRYdWKXyGdbPpzgL8
+         W0WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/w6g4UFapgjJyWigEntfY4YR+4uWCSZSSrQixa3u6+g=;
+        b=ARkXmYqMWpjlXTHReqmP0/hgb7tJX6daob5BRdlNkENSnclzYFMS8gu/PVMVgyIt7k
+         9o44S1OQO58e93Bksyx4miEemHk+MhBp5i4+bAIwh6DDsLLus5krAKqNh9M+vfboGT1X
+         j1U0Vnsjh6TRMEn/IMvVvZL3aBCln6qmhlYjYodihI5mmJd1uOF/R+AV5cUC0drQHb/2
+         yKau1I0QW5jJWYoCK4mvIN5CNQ/rqQCK4K3woAjBHnIyltkHUzsNcWidH1chDRunsYCY
+         JbZUW7mC3ID1yImrxL0HdrlaqqIBvTKHByATklMeAYhaJM/Lgrxvl581U1R2mjXYZKB8
+         E4mQ==
+X-Gm-Message-State: AOAM533Rc9xJosKYr7BF4jGEmurrohur2MADwErZf13z7GBNimjgxy5U
+        qALNlv5bLYXkebxU9v1j2T1ghZ9c41Fs8JkTwvGnzw==
+X-Google-Smtp-Source: ABdhPJwJrWMGPCVAe9Kdw4+yO4dxhyREg9HzABowyT5uPfqBiphteSCarJzNDqam5BVctAGvnqC08Kzr648dwxePEXc=
+X-Received: by 2002:a05:6512:1510:b0:445:cbc3:a51f with SMTP id
+ bq16-20020a056512151000b00445cbc3a51fmr18924746lfb.116.1647395625908; Tue, 15
+ Mar 2022 18:53:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1646388139.git.zong.li@sifive.com> <db92d209fa700f7da8bc8028083476fcc138d80e.1646388139.git.zong.li@sifive.com>
+ <20220315225459.73F2DC340E8@smtp.kernel.org> <20220315225652.CDAD1C340E8@smtp.kernel.org>
+In-Reply-To: <20220315225652.CDAD1C340E8@smtp.kernel.org>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Wed, 16 Mar 2022 09:53:36 +0800
+Message-ID: <CANXhq0oAsxqL2PxkB8eOu_8L10pX_oWgwPH5y4edq5tw6ObWiQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] riscv: dts: Change the macro name of prci in each
+ device node
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+On Wed, Mar 16, 2022 at 6:56 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Stephen Boyd (2022-03-15 15:54:57)
+> > Quoting Zong Li (2022-03-04 02:03:19)
+> > > We currently change the macro name for fu540 and fu740 by adding the
+> > > prefix respectively, these marcos are referenced by some device nodes,
+> > > they should be modified as well.
+> > >
+> > > Signed-off-by: Zong Li <zong.li@sifive.com>
+> > > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > ---
+> >
+> > Cool. So it looks like I can take the clk patches and not this one and
+> > it should be OK?
+>
+> To speed things up I can take the whole pile. Thanks for fixing the
+> bisection problem.
 
-On Mon, 2022-03-14 at 12:31 +0100, AngeloGioacchino Del Regno wrote:
-> Il 14/03/22 12:18, Tinghan Shen ha scritto:
-> > The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
-> > 
-> > L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
-> > 
-> > L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
-> > These bits have to be powered on to allow EMI access for SCP.
-> > 
-> > Bits[7:4] also affect audio DSP because audio DSP and SCP are
-> > placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
-> > blocked too.
-> > 
-> > L1TCM_SRAM_PDN bits[31:8] are not used.
-> > 
-> > This fix removes modification of bits[7:4] when power on/off mt8195 SCP
-> > L1TCM. It's because the modification introduces a short period of time
-> > blocking audio DSP to access EMI. This was not a problem until we have
-> > to load both SCP module and audio DSP module. audio DSP needs to access
-> > EMI because it has source/data on DRAM. Audio DSP will have unexpected
-> > behavior when it accesses EMI and the SCP driver blocks the EMI path at
-> > the same time.
-> > 
-> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> 
-> 
-> Hello Tinghan,
-> 
-> I'm sorry, but in the last review I forgot to mention that you should
-> really add a Fixes tag to this commit, since this is.. a fix.
-> 
-> This is the tag that you should use:
-> 
-> Fixes: 79111df414fc ("remoteproc: mediatek: Support mt8195 scp")
-> 
-> After adding that,
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-
-I'll add it at next version.
-thank you very much!
-
-Best regards,
-TingHan
-
-> > ---
-> > v3: fix build error
-> > v2: apply comments about macro definition and function calls
-> > ---
-> >   drivers/remoteproc/mtk_common.h |  2 +
-> >   drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++--------
-> >   2 files changed, 53 insertions(+), 16 deletions(-)
-> > 
-
+I appreciate that you are willing to pick them up. Many thanks.

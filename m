@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBE04DB4B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5A84DB4BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349298AbiCPPTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S1357241AbiCPPUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343798AbiCPPTU (ORCPT
+        with ESMTP id S1357166AbiCPPU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:19:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50ED73B3D2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647443885;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w/uVU27MUQYVU+wgJKpbBvrcqEJY7UjfllrQP2RhSbk=;
-        b=dTQBUtzX3h0/frdZ2FQ+nBlTGHIcpqRC/ZDhktfHVHf3ZCuN89yPUi0fKQIwERvU80/1ES
-        lcJGt5ntkeaPqM+Voo2Y2XguOAPgCMCQV21m3VbzlxUs7+xGtXWJQsDXhCO/eotC+OUqyB
-        23b7kde0pRlbp+aBkDO9dmZi+1OX1rk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-AxUZb6LhM8aDZrXzeKvAwg-1; Wed, 16 Mar 2022 11:18:04 -0400
-X-MC-Unique: AxUZb6LhM8aDZrXzeKvAwg-1
-Received: by mail-wm1-f70.google.com with SMTP id c19-20020a05600c0ad300b00385bb3db625so2905028wmr.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:18:03 -0700 (PDT)
+        Wed, 16 Mar 2022 11:20:26 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B6762A2B
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:19:12 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9212D3F07E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647443951;
+        bh=l6KBwGM0uiIwlc1rKLa9ZFBDgTPatr0zsqNmkU7zEfs=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=hnBMVm5NuJPHWUriNwJEAOlygXoDV5wbnmaQGBeNGuOR2ufAhiBRhADZ5jGjxW/jN
+         5AadvsvS3O5L9v3mhL0W7zT/03qdMNrR9nubb7I/Jnk6gxQEBVH81vvgjTYrhxMD5k
+         Yf672IqY3tzqVH8QZqAdY/9H4IswTQUNZ/ZK4ucawyxfyJEYyellQdPdklM7BTEPrn
+         SfYY/WVrSYopzf2S96gnPaU//uWNVxHm6QdBCDwdveD5046ANkOu/SiQeQ2/lFPzfR
+         qrgAGstoNxy+CkqxX7F3jPh6xaQv6SjA8ljmGNhXTEps1X7qGtiSzKVqqL38Myac3q
+         ZFMLp+AuaQ8oQ==
+Received: by mail-ej1-f71.google.com with SMTP id my14-20020a1709065a4e00b006df7cbf896cso1194670ejc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:19:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=w/uVU27MUQYVU+wgJKpbBvrcqEJY7UjfllrQP2RhSbk=;
-        b=cVHwvKVBH/F2UNbH/Iw/dZCRnq+syp26SXjG3pcQ2dEnJfhgaN7D7aX4hQ/PIJCC5w
-         ovVrDjeERpi/zLv/7eHoRrHVEzmrOiflVtJETf2FstGWxZVuPDTMbLIs2SlY7h89tLGf
-         ndkJOlZju2HKQUs5/0dl6Y3U2oX5ywPm2suBr5Qys1TI+Z1IthBjkqz0w6sCtuHgNrn9
-         F83fRI34KhinZ7g3F7fXAN4AySVVjtBd8h4RGdsouIPKynjHVto9M9RfphVxqs01H1xf
-         PmNOjbf2Vc22CkNWePj1W/BzK/94XbYc6EzwlKb5zQO3dKxMxyotqxmyx5GObtoTErma
-         uf9w==
-X-Gm-Message-State: AOAM532yLJlkfMmaYtS2YuMKQhsR+wdc130yxgosiY0dvPsqNAc5wJsr
-        bIWyBCliH+W8zQg5yL4sf8oMpCMkYBUR3QyvpodJ7CUFsG4gxMPLEZ0J8WULfpRthT+JZWLc579
-        b0cdMgVFsjVxZmrWPJK+ehz+d
-X-Received: by 2002:a5d:6610:0:b0:1f1:e606:f097 with SMTP id n16-20020a5d6610000000b001f1e606f097mr384064wru.134.1647443882865;
-        Wed, 16 Mar 2022 08:18:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxgX7M3pSLfvswnCZinlxjE/UiPfGgG3EjL14bFT0DvEZXH3YwTrW3SFlGgJ6FkbccoaVZgJQ==
-X-Received: by 2002:a5d:6610:0:b0:1f1:e606:f097 with SMTP id n16-20020a5d6610000000b001f1e606f097mr384044wru.134.1647443882590;
-        Wed, 16 Mar 2022 08:18:02 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bk19-20020a0560001d9300b001a65e479d20sm1847666wrb.83.2022.03.16.08.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 08:18:02 -0700 (PDT)
-Message-ID: <0fa87883-829d-93d0-f0f3-7d3faa8d060c@redhat.com>
-Date:   Wed, 16 Mar 2022 16:18:01 +0100
+        bh=l6KBwGM0uiIwlc1rKLa9ZFBDgTPatr0zsqNmkU7zEfs=;
+        b=H3yhh7DDt4sSmlxLeaQ0ywLXqZs+YWcnbzncUMz8/t0NQaAaIMh0NxUvK35+8Yy1C6
+         wgVbLyvqKcAS+HNxe59Yvjsca6eYxnrl7Wrt0jJagjCpSLXgN9+kHnm4dkHccHIuqg+X
+         e1QCjqdBf1NNXjuGMjODJpvUoainDUFK5GNAhoAk+bO8lL17h80M9sCTifndfX866AFJ
+         OYioe4h+n9PhMSTnQBHicYAnSw01Phm46g+cU9q1oqaWHeEHT/xNe8x2HAkpBrzFbI1W
+         uc+14NKzioLlsgg9Sdjt+QSGmf+Dl/YMgn/5t0Z4uatOrFFomLDKp+HonxzHzWdaewm/
+         VQyA==
+X-Gm-Message-State: AOAM530L5Myq6WQDYnVJshRipyOQ0HBoru02GaDeCIS04TMyfHYvlMrj
+        RvDldq+RkG036mYoKLVRAHlN1U5VrvFYd310o5oVKoGqyrBD+wGAz3h2HV3lIbT+ZI5EynGB6YV
+        d+SqdSFyRSV7u2FgcwOj0QxnboC5XiVNZtq77uXuMtQ==
+X-Received: by 2002:a17:906:58d2:b0:6da:b635:fbf3 with SMTP id e18-20020a17090658d200b006dab635fbf3mr432682ejs.40.1647443951296;
+        Wed, 16 Mar 2022 08:19:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxoPSUJMHOAL6T3mNLew5/+8ilp8MWnQTCLDeDxeKP/9TPhEl9ftEH1knZ3RViNX+M9VfXG4g==
+X-Received: by 2002:a17:906:58d2:b0:6da:b635:fbf3 with SMTP id e18-20020a17090658d200b006dab635fbf3mr432665ejs.40.1647443951025;
+        Wed, 16 Mar 2022 08:19:11 -0700 (PDT)
+Received: from localhost.localdomain ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170906640800b006d5853081b7sm1016788ejm.70.2022.03.16.08.19.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 08:19:10 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, netdev@vger.kernel.org,
+        linux@armlinux.org.uk
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH] net: phy: mscc: Add MODULE_FIRMWARE macros
+Date:   Wed, 16 Mar 2022 16:18:35 +0100
+Message-Id: <20220316151835.88765-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next] drm/solomon: Make DRM_SSD130X depends on MMU
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     YueHaibing <yuehaibing@huawei.com>, airlied@linux.ie,
-        daniel@ffwll.ch, maxime@cerno.tech
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220312063437.19160-1-yuehaibing@huawei.com>
- <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
-In-Reply-To: <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 10:18, Javier Martinez Canillas wrote:
-> Hello YueHaibing,
-> 
-> Thanks for the patch.
-> 
-> On 3/12/22 07:34, YueHaibing wrote:
->> WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
->>   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
->>   Selected by [m]:
->>   - DRM_SSD130X [=m] && HAS_IOMEM [=y] && DRM [=m]
->>
->> DRM_GEM_SHMEM_HELPER depends on MMU, DRM_SSD130X should also depends on MMU.
->>
->> Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->> ---
-> 
-> Indeed. All the DRM drivers that select DRM_GEM_SHMEM_HELPER depend on MMU.
-> 
-> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
+The driver requires firmware so define MODULE_FIRMWARE so that modinfo
+provides the details.
 
-Pushed to drm-misc (drm-misc-next). Thanks!
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+---
+ drivers/net/phy/mscc/mscc_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
+index ebfeeb3c67c1..7e3017e7a1c0 100644
+--- a/drivers/net/phy/mscc/mscc_main.c
++++ b/drivers/net/phy/mscc/mscc_main.c
+@@ -2685,3 +2685,6 @@ MODULE_DEVICE_TABLE(mdio, vsc85xx_tbl);
+ MODULE_DESCRIPTION("Microsemi VSC85xx PHY driver");
+ MODULE_AUTHOR("Nagaraju Lakkaraju");
+ MODULE_LICENSE("Dual MIT/GPL");
++
++MODULE_FIRMWARE(MSCC_VSC8584_REVB_INT8051_FW);
++MODULE_FIRMWARE(MSCC_VSC8574_REVB_INT8051_FW);
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.32.0
 

@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4744DAC8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D89A4DAC9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354427AbiCPIiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        id S1354556AbiCPIlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243048AbiCPIhu (ORCPT
+        with ESMTP id S233630AbiCPIlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:37:50 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4132A46175
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:36:37 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n15so1233987plh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=fY/zaLzCuGHO00tXLKrc5cYu1RxjEzrTCpzH+5kdjtU=;
-        b=CNDnNE9KZy+3df6cRpaus30OZLx3PmJ7daQwTY/ZAkNcugLK6uvHFdQ/jm1WRkssdr
-         0VemyHlCitsLQ2xxJh9pl0/f3oDCS+l9Z+n3999w628BOOGjsmFsKAyNdt/EPCmMUnlW
-         Icb9BPtmYub98o4KGgk66Uqace8bAZ6JbXFHKFWe3O8MM6qrZSUUUwPBCmMxbNY/toWC
-         znRCXSqyySHAQzqPI5R2f1IgqsoOzd/3/mv3jbPRB9qfPmHPKw6sqUXHUzahYy+eIZuk
-         tDbewJILUS/mmKiBhRfrpCupE4/LPYDgP914mB74jaiAdTpsnRdhnaDIM21DZ5BCXvmp
-         y5Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=fY/zaLzCuGHO00tXLKrc5cYu1RxjEzrTCpzH+5kdjtU=;
-        b=MCfz0hnVhI/TNOV7O8qWj94hSVSj9tuhoKfgp6GD632JdoN645wwSUH1xylZvOEhYN
-         j8C5dSLGKyA6bEdTaZoQmg76dCQTKyWYy6/ZL2lpZkyXi1iURzU4xeyxx/uhvypvtbKR
-         1WGKN1cYiuIV6IxenHODQY7OkGiuc1+QywYrfiX3MfS+Ik8t1yGF6NydS8isKIFfNGFr
-         /B1tqaFT2qljUTUZSd2NiI1nwnnuWYha58LokdkEO7CPQ39w5QuClEsVN1yS4jKGTK6H
-         gsu4D7g0GoP8DbjVnM7A+bxc3XbKLeBczjKuj7eAMrQ02/kuDGEvAZXPnDe7oIgQAbtL
-         rx7Q==
-X-Gm-Message-State: AOAM5301rRTUS6pDNRxEui+nz7WVieQuFH79GPbrrp37Ga74pvLwrMHY
-        Y20CV604lKH5maHl3+g1FdY=
-X-Google-Smtp-Source: ABdhPJyzDQP71kpiZTM8gd8+SZoVddtqgb+feTmdopJLJpiVBmMmFLxFBmLZMo2rnfxTGipeqUpXrw==
-X-Received: by 2002:a17:903:244c:b0:151:bb4d:d8d8 with SMTP id l12-20020a170903244c00b00151bb4dd8d8mr32181559pls.121.1647419796782;
-        Wed, 16 Mar 2022 01:36:36 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id t7-20020a056a0021c700b004f7916d44bcsm2060381pfj.220.2022.03.16.01.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 01:36:36 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ASoC: codecs: wcd934x: Add missing of_node_put() in wcd934x_codec_parse_data
-Date:   Wed, 16 Mar 2022 08:36:31 +0000
-Message-Id: <20220316083631.14103-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 04:41:06 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66064BC4;
+        Wed, 16 Mar 2022 01:39:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 1D96D1F42CD2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647419991;
+        bh=OBn2nRrFw1dTirvfKDQG9NVJ8Eqyjie73NtNTXIBhSk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gwiAU68gIl2PnAoSpTZuwVmRdEYHTSoD9eRfwg027X8/0MqBSYwiNvvMt+Cdg7vyp
+         nsAu4DPoBSMepTgto63T+yf6RJ5VO3bFGMGwqPgZ9n3mqrpZYb9LsSgQt9G+JenDCt
+         cmtrK/hr1jeylxdFMPoa9RN+SI6GZMGDPgkia3BDBA30PwuxkipPMhpU0SQFJJk1/S
+         KtZptrEYh0CrYFLZ1X6XDaG4tadT765C2R5JBOLJ9xd8/WO+B252LFLnJMP6we2ZRk
+         MGB8hKGcecK/qdDJ3HpU38w9J7/WAPuKXRTCrUVDH4lOH5kOFYzITjvsTBsFc9cEJp
+         VR6Bz5tmzsMGQ==
+Message-ID: <dfca0eb8-9800-9feb-3608-f29c6333b0ce@collabora.com>
+Date:   Wed, 16 Mar 2022 09:39:48 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1 4/4] dt-bindings: pinctrl: mt8192: Add gpio-line-names
+ property
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kernel@collabora.com, Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20220315211936.442708-1-nfraprado@collabora.com>
+ <20220315211936.442708-5-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220315211936.442708-5-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
-This is similar to commit 64b92de9603f
-("ASoC: wcd9335: fix a leaked reference by adding missing of_node_put")
+Il 15/03/22 22:19, Nícolas F. R. A. Prado ha scritto:
+> Add the gpio-line-names optional property to the pinctrl-mt8192 binding
+> to prevent dt_binding_check warnings when it is present in the pinctrl
+> node in the Devicetree.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Fixes: a61f3b4f476e ("ASoC: wcd934x: add support to wcd9340/wcd9341 codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- sound/soc/codecs/wcd934x.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-index 6c468527fec6..acd344c4a37a 100644
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -5883,6 +5883,7 @@ static int wcd934x_codec_parse_data(struct wcd934x_codec *wcd)
- 	}
- 
- 	wcd->sidev = of_slim_get_device(wcd->sdev->ctrl, ifc_dev_np);
-+	of_node_put(ifc_dev_np);
- 	if (!wcd->sidev) {
- 		dev_err(dev, "Unable to get SLIM Interface device\n");
- 		return -EINVAL;
--- 
-2.17.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

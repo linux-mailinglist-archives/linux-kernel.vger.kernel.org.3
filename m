@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBCD4DA975
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 05:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD464DA97C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 06:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349997AbiCPE7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 00:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S1353569AbiCPFHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 01:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiCPE7d (ORCPT
+        with ESMTP id S235942AbiCPFHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 00:59:33 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BC017AB5;
-        Tue, 15 Mar 2022 21:58:20 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id C84D25C01C8;
-        Wed, 16 Mar 2022 00:58:17 -0400 (EDT)
-Received: from imap42 ([10.202.2.92])
-  by compute4.internal (MEProxy); Wed, 16 Mar 2022 00:58:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=czcBjoVsqPPg39vO8apkGg+bmRVVIBuPLCt1OZ
-        YyodU=; b=DWViUI6mvGCcx57kSprQy1T4IuOkxOXGPdemR2vBoR9tVOd6kvjtu7
-        MtQbZ8hnY92KABpFpMhKlN5HWCM4yMzen7837WiSyJqHAPgD3Ijbw12/5QGGm36i
-        W+SOAQu1VOYvz+xJTklVOkDKNQutb/U/IZ2WCPasDZv3wexfxDj1KcUHyOI9iBeU
-        Ic03KxItahTtON2LbrLGqIp4RiNJ1iZREPvqMXBRPi6yTYjUnroQ2O6pk/bQ+go0
-        COyZOkDmL4YPUVGL5Z0YI1dVLboLPrmD/tm8FM9HvhQeDo3YDzuOhPMt+Q5dKBOg
-        /vK/X3Jy7t9x+JBtQV+N0G5j11NImmaA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=czcBjoVsqPPg39vO8
-        apkGg+bmRVVIBuPLCt1OZYyodU=; b=iFcVYd0PwPp9KtUZurPx35+RZSeB7TDl2
-        8JJr0DuSuDSHe9AaaNEJKjfqGuj1EEr9QOype84mvKsmH0j1i/kQ/Irm5LuExtbc
-        ya1pXtpcEbV9zt7R0FfXA1HVvfcMo2/UkeTe451ThNIj7MWPHdqSPLDE7NKCd8gK
-        BCchnRwXjAc33GwBcnW2QURr5sJ6lWWRTAIrMJ9oa5g4mOMuJhX5hMPSNf8Xn6hB
-        9pvzTbXo6n0gU2l8AWd9sjG/Sy6rlwnvZ2caqIi/ftmhvYtsvDCswbIt3wQwroEZ
-        8UgEazRC94yQbJ2SgXUVWER6SHZPmxNJBB2vGpuQot6inKGMrkn8Q==
-X-ME-Sender: <xms:aW4xYpzDdo5ZFw7f_67cq1K0dxKDVSHIpGPvGExCFSCVPFdu8q3tiA>
-    <xme:aW4xYpSNFUDXMPOKzcTv1d2fVI7Ys96qaCfwJz-aut7O3Pssz0hcJQFHWkkXENQ63
-    Jm79TD_aFci_hlqGA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefuddgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvufgtsehttdertder
-    redtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihii
-    eqnecuggftrfgrthhtvghrnhepjefgveethfejlefgfedvtdfhffefuedtffegiefhkeet
-    feehffegiedtieefhfegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:aW4xYjWYMHpuQNnqZh_wvIOws5kcLrA4QltQrUKMp-lRcxW2tG66Fw>
-    <xmx:aW4xYrjYLztHbJUQjVFNnEN1B4qaddfq7bdxCCHhKGFC_Lu0cLW5pw>
-    <xmx:aW4xYrBa-MURkSyYHXbkHJcokKfSGJ7MXRcT7dCM9ljxrzpCJlJ_Qw>
-    <xmx:aW4xYiPl7BXQJFKmS4MyVfWGBSeawgTdkD62EvlP82xdQ6_g9H5MzQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2511C2180085; Wed, 16 Mar 2022 00:58:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4907-g25ce6f34a9-fm-20220311.001-g25ce6f34
-Mime-Version: 1.0
-Message-Id: <35ee9669-6ae1-4647-8028-eb7c82f10dac@www.fastmail.com>
-In-Reply-To: <CAADnVQ+bkyPPA9r_n+A7VeYQch-fOiPDHGO-2EZ1dhgva8GF8Q@mail.gmail.com>
-References: <1d2931e80c03f4d3f7263beaf8f19a4867e9fe32.1647212431.git.dxu@dxuuu.xyz>
- <CAADnVQJUvfKmN6=j5hzhgE25XSa2uqR3MJyq+c=AGCKkTKD05g@mail.gmail.com>
- <53a71699-3ffb-4a49-9d15-7fe4a0f51612@www.fastmail.com>
- <CAADnVQ+bkyPPA9r_n+A7VeYQch-fOiPDHGO-2EZ1dhgva8GF8Q@mail.gmail.com>
-Date:   Tue, 15 Mar 2022 21:57:56 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] bpftool: Add SPDX identifier to btf-dump-file output
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 16 Mar 2022 01:07:31 -0400
+Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F574FC5C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 22:06:16 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 05:06:10 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theinnocuous.com;
+        s=protonmail; t=1647407174;
+        bh=JcA2Bw/VmBv9ZYP7f55QJSNCUONYlIwl8L6H9SP7KLY=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=sHida3cL7byHm5pa5HMwrV13eGTHsRoKzk9qV6aGRvZh8YiGJVn5YOg6T1EXPT3Jc
+         fkyR3bbF2QoTQCxTypu0CPh/DO43Gny8It/v7HspS1GoxT+YGLQ7ujemv3ly0+vEqp
+         y3CiWvn++F0UbKK5UjGHU4N2ZSHA1JpjTd5tVzqxh6UadNtHbqJJPU0lykmde6Ihf+
+         cIeis2rjB/qoh0RocHMuZQwH9R/KAlP4uKz1ltK9jJ7xPJxqOFav/J3zOC6EvSychF
+         miw83EoZ5W9QYqTiQhFnWJBAFGGslZMtDW2OMWyPxQTZw3HAWEhunRdRDgxauggQL3
+         EMmrhNgGWRMNg==
+To:     Kees Cook <keescook@chromium.org>
+From:   James Jones <linux@theinnocuous.com>
+Cc:     bp@alien8.de, x86@kernel.org, linux-kernel@vger.kernel.org
+Reply-To: James Jones <linux@theinnocuous.com>
+Subject: Re: [PATCH] x86: Remove a.out support
+Message-ID: <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+In-Reply-To: <202203151150.1CDB1D8DA@keescook>
+References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com> <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com> <202203151150.1CDB1D8DA@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022, at 4:39 PM, Alexei Starovoitov wrote:
-> On Tue, Mar 15, 2022 at 4:10 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->>
->> Hi Alexei,
->>
->> On Tue, Mar 15, 2022, at 2:38 PM, Alexei Starovoitov wrote:
->> > On Sun, Mar 13, 2022 at 4:01 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->> >>
->> >> A concern about potential GPL violations came up at the new $DAYJOB when
->> >> I tried to vendor the vmlinux.h output. The central point was that the
->> >> generated vmlinux.h does not embed a license string -- making the
->> >> licensing of the file non-obvious.
->> >>
->> >> This commit adds a LGPL-2.1 OR BSD-2-Clause SPDX license identifier to
->> >> the generated vmlinux.h output. This is line with what bpftool generates
->> >> in object file skeletons.
->> >>
->> >> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->> >> ---
->> >>  tools/bpf/bpftool/btf.c | 1 +
->> >>  1 file changed, 1 insertion(+)
->> >>
->> >> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
->> >> index a2c665beda87..fca810a27768 100644
->> >> --- a/tools/bpf/bpftool/btf.c
->> >> +++ b/tools/bpf/bpftool/btf.c
->> >> @@ -425,6 +425,7 @@ static int dump_btf_c(const struct btf *btf,
->> >>         if (err)
->> >>                 return err;
->> >>
->> >> +       printf("/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */\n\n");
->> >
->> > I don't think we can add any kind of license identifier
->> > to the auto generated output.
->> > vmlinux.h is a pretty printed dwarfdump.
->>
->> Just so I understand better, when you say "I don't think we can",
->> do you mean:
->>
->> 1) There may be legal issues w/ adding the license identifier
->> 2) It doesn't make sense to add the license header
->> 3) Something else?
+On 3/15/22 12:51 PM, Kees Cook wrote:
+> On Sat, Mar 12, 2022 at 06:06:26PM +0000, James Jones wrote:
+>> [...]
+>>> docs, including copies of the old mac and aln a.out binaries, is
+>>> available here:
+>>>
+>>> https://github.com/cubanismo/jaguar-sdk
 >
-> 2
+> Do these end up requiring libc4, etc? I see "uselib" syscalls in the
+> disassembly...
+>
+> $ for i in $(objdump -b binary -D -m i386 aln mac | grep -B4 'int.*$0x80'=
+ \
+> =09| grep -E 'int|eax' | grep mov | awk '{print $8}' | cut -d, -f1 \
+> =09| cut -c2- | sort -u); do printf "%d\n" $i; done | sort -n
+> 1       exit
+> 3       read
+> 4       write
+> 5       open
+> 6       close
+> 10      unlink
+> 13      time
+> 19      lseek
+> 20      getpid
+> 37      kill
+> 45      brk
+> 54      ioctl
+> 55      fcntl
+> 86      uselib
+> 89      readdir
+> 91      munmap
+> 106     stat
+> 107     lstat
+> 108     fstat
+> 126     sigprocmask
+>
+> It seems like it should be possible to create an ELF wrapper for simple
+> a.out binaries...
 
-Got it, thanks.
+I didn't need to dig up any ancient libraries to get these working. They
+seem to be completely statically linked.
+
+Probably getting a bit off topic, but I did spend a few hours searching
+around for any existing tools to convert a binary from a.out->ELF, and
+trying to come up with something myself by extracting the sections with
+objdump and re-combining them into an ELF using a linker script placing
+the sections at the same locations. I couldn't get it working in an
+evening or two messing with it so I moved on, but I agree something like
+this seems possible in theory. I got 'mac' converted to an ELF that
+would load up and print its input prompt if run without parameters, but
+only if run as root. As a regular user, it segfaults somewhere before it
+even starts executing in the text section AFAICT. Any actual assembling
+segfaults even when running as root. I never got 'aln' to do anything
+but segfault.
+
+I dug the scripts up in the state they were in when I gave up (September
+2020 according to mtime), and put them on github in case anyone wants to
+have a go at it:
+
+https://github.com/cubanismo/aout-to-elf/
+
+It was an interesting problem in its own right, and I'd be curious to
+know what I missed.
+
+Thanks,
+-James
+
+> --
+> Kees Cook
+

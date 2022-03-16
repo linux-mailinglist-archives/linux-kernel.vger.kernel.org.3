@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2161E4DAD66
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CBF4DAD69
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354852AbiCPJ1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S1354862AbiCPJ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345828AbiCPJ1E (ORCPT
+        with ESMTP id S1354854AbiCPJ1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:27:04 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7463C62A3D;
-        Wed, 16 Mar 2022 02:25:50 -0700 (PDT)
+        Wed, 16 Mar 2022 05:27:14 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F586540A;
+        Wed, 16 Mar 2022 02:25:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gtbfqtQAs85FyoCFmjdyI+YL3Z5lmdrV/I+cQX9FMmJH20xCoyyMhfabew2jxJblNvxelj6cBkuOeRe/DJdao5RuLuvFRLcsDgKIMmirmF3QVSy3DbZjU8NLYonHZyyuiLBUaQDWVp7VKKqkzi/YeCIFTmi6tBTMiBmlvjpIVXauwfIMMqviR3f89gE18xBZXCdwZlReQxUmaHKCsO99qUvnnYZ+S/6AHNK2i31OUmkRje2I+E7+1Pfu7JxcBpnauD5fS/0xAwk1JLJJnBPAHEUPHDsiIG1xMR1L26YrKJPPRo+arI6ZzqCD/Qn1QDGH28ywbPSJZ7GhcmGoVQBKhA==
+ b=hC+7tUJrpco4VZXEyESEe2XW/tKBZEjSpa/bAy7Q0LLLWvrCH5pJB7GtcWlczIZfAXD4LyjJvMkikeHuIpTv2mOxtCseJeDdNzFgHLopzAvqqx8zAaT9/bFuebxorhFvC2uduI5ae++gUs634dcyo5Mxo0z0BclB8p6QGBD6zN8jzRpSGa+e8brNESDYKLfWQYKiXzb7wS0yzQRhfYbemxalGaHcau8TZdbUmYb3zVAhoEO6xrCQTx8pSwJaVyHL7F8vTMDYO2MYKvTi/Ui+6gflyLm7Fb9iSF1EbnV3C7GdNav23AfRYHa/6LO/+r1LYDGeeMQZW6zfo+wrSjo36A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iir9LMNTJGer+eHTQxxbGOmojodr9ahIfMkJS+CROIM=;
- b=hJ8Y5IYO3yWEHLMIjT77Lsc+znBHoDrXQaFprtJyDyXrIz4SQ1+EGEfgA3520NeZR4i3nUr1m2D6pw/pw2U+4mImZ+FHSTauQnaR9TlIWGurCs1wV1I+vbbf10fxlq91dhnTQd0qFbSNYB5y1d7UQdf830HrtsxgK23PhEXPZIeynUJBlFOIyAbStYc+9z1oCoVOnzyulPa4qYBHn0S6Zyr8hYJu15oosKfYlSBI8ANB4PkQW3evOr02Gtxe2LyO186kVBZ9wze0c6aIxgWVNIohEZGWV2efuvrQWC+Ja6KGC1sa/TdbQKnpeMLy8hItp5kVhHBiaBT4BkSBoXeY8g==
+ bh=2oXKsb/t03wLlCGqPTPwiMVH9MJ8H+bSHudHsoARYPs=;
+ b=XEffwuwtH6HJeHybldQwHu1rcuDsqYJ++3DcAbOA42FNLOg3KvJrb5EckPOvgv1V+OWaT0CDYkEJ0pd1UXtJyzy8MDarVYo1dOMdRtP6701w0pW4PjnUtiL+swAHP2H7kYMzQN+WlhM+qe5XPfSKdLdtB2jbo64DRyP5ixNWe254BWssCANxEAUN0Yld3cHgpy35KiZrSyeVJ+FdPimmDcAkF2y0I9vDXukhW5M8hMsMSCFhwOZXtGh8Ortocb+cK0rPenGRhiGgS96dBYEVpNFvAu+sj5S2MopclAQ5HuJpiNHiG+iIDQNepOYeNAZJSn/VFvkg6XAVcoPYun+hIg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iir9LMNTJGer+eHTQxxbGOmojodr9ahIfMkJS+CROIM=;
- b=WfPT/e2TD0hGkDRtrwt+x4M9Yb4ibuBg4vmBBn4HmaDqOv6kX/xCZ6dpbEY4UoXNi3XJsQxMdcLz9vf1DVOjorDAx03QeM72gqJgAX1RSg2avSDx95Ry3e54BH3fjRVFqIlnsNBXgTRdFDcDFbtW5sEDxvGfrpmK/zd54iqTSlvdLKEHURrYaIrjPQ6hVzfFyO9mRpnkjHSZf3go6xuSJsNMTIkRBRiAIAZBe+gl0kn+kEOjILWsFs3OYLJ7OQ41tG3ze/HYr7FRmNdUPf/ixk/tNeXGagb5bP2zrY+szSARi/EOnrdUsX5zi4kgiVvfabtYSnK/XvXXQy03JrsvQA==
-Received: from DM6PR07CA0121.namprd07.prod.outlook.com (2603:10b6:5:330::33)
- by SN6PR12MB2846.namprd12.prod.outlook.com (2603:10b6:805:70::33) with
+ bh=2oXKsb/t03wLlCGqPTPwiMVH9MJ8H+bSHudHsoARYPs=;
+ b=nqJ8kYI7vCoYlNTQQxDa1kY/Etw++iyU77+kfuQyDywlvjGWcdO3l1MqY/BOZE+SW/VvcvSK0IxmxgWvcfCvK4rsECk86tVqXH0aGHgJdQyrnlneSAHVhDL/EjienSZkxk5uOsJCNK5IVnD2dmaMeTQbttWHnc206i9Kcr98GjMbVZj4mpn3eQDNG1MNb8sex2e+if77/kxgBB7VDRD+AE0I4TGFtxRU1KymV77TLCvdnMzvJ8a39gwjM5Hv5vmoFqP/NMvGsxa+ltoYNlPZFOUu2/MyTB/wHVcckGvDeTzcZ7wx6Btb9V7O3lAmZzr+3Lrkkm1DArJ6gk1xjOGK6Q==
+Received: from DS7PR05CA0013.namprd05.prod.outlook.com (2603:10b6:5:3b9::18)
+ by DM5PR12MB2551.namprd12.prod.outlook.com (2603:10b6:4:b9::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Wed, 16 Mar
- 2022 09:25:48 +0000
-Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::56) by DM6PR07CA0121.outlook.office365.com
- (2603:10b6:5:330::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22 via Frontend
- Transport; Wed, 16 Mar 2022 09:25:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Wed, 16 Mar
+ 2022 09:25:54 +0000
+Received: from DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b9:cafe::61) by DS7PR05CA0013.outlook.office365.com
+ (2603:10b6:5:3b9::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14 via Frontend
+ Transport; Wed, 16 Mar 2022 09:25:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT038.mail.protection.outlook.com (10.13.173.137) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5081.14 via Frontend Transport; Wed, 16 Mar 2022 09:25:48 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 16 Mar
- 2022 09:25:47 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.5081.14 via Frontend Transport; Wed, 16 Mar 2022 09:25:54 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 16 Mar
+ 2022 09:25:54 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 16 Mar
- 2022 02:25:45 -0700
+ 2022 02:25:52 -0700
 Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
  (10.129.68.7) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Wed, 16 Mar 2022 02:25:42 -0700
+ Transport; Wed, 16 Mar 2022 02:25:49 -0700
 From:   Ashish Mhetre <amhetre@nvidia.com>
 To:     <krzysztof.kozlowski@canonical.com>, <robh+dt@kernel.org>,
         <thierry.reding@gmail.com>, <digetx@gmail.com>,
         <jonathanh@nvidia.com>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>
 CC:     <vdumpa@nvidia.com>, <Snikam@nvidia.com>, <amhetre@nvidia.com>
-Subject: [Patch v5 1/4] memory: tegra: Add memory controller channels support
-Date:   Wed, 16 Mar 2022 14:55:22 +0530
-Message-ID: <20220316092525.4554-2-amhetre@nvidia.com>
+Subject: [Patch v5 2/4] memory: tegra: Add MC error logging on tegra186 onward
+Date:   Wed, 16 Mar 2022 14:55:23 +0530
+Message-ID: <20220316092525.4554-3-amhetre@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220316092525.4554-1-amhetre@nvidia.com>
 References: <20220316092525.4554-1-amhetre@nvidia.com>
@@ -78,24 +78,24 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 432e1537-0d9d-4266-5044-08da072ef4b3
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2846:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB28467BC726A44B7B5511E151CA119@SN6PR12MB2846.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 31ad5c9b-e40a-4a63-bfe3-08da072ef8b2
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2551:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2551A95C72AAA05497989FB6CA119@DM5PR12MB2551.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IPVRaC0zkQ81uyv+EOyKliEs3XCyeKPSr5pselrw+p9x560dVvWwnWPmBGWEm5GfnTVMUMSwY/Um3WDKSjx9tAU7e5IMb82xhRqPCvaAlqIvgYHoOMxHh2NdoJuVwTQLzqdiMvX+Kplf6HnDRB901qmetYD4QCSH9RyBx5GekZbLFfED8Qhm6tBNt4MhK6Fy3V0wVyh+26/8han/VCSwjphltZ5Lvl8M5LfehC0b1XR5CqEnMzUMdMGnX0/8p+K/w62xn0wtun2hzZYRVO8rU5XxhnseJ3IGl3w50C9Rs4CGJFHk2LKKp1NEzfOZeRKTmW2po7YEI+fbGiemsUI29zJzW3y218QckxuwD7upAy5KJhU4Ng1OTd+P7zI9SIn3oFVraFiDx4b6aFrm7qiaeHuncFieveq0RkhlDBxWjH68gMz09UdhRRzop3P3cNxXiWHHnCHlXp+VZa4cv5b32iN1rJFXPS7ExCLAqYKoRaKpsJ67PPbj5EJSchq4keekPgmhzZHAwhjhez4aURnYZpGiIYWyW3Jv9akZPHsrLRZFeMlywrjogZ+essRv0HdQcacyBQ2b2bFGUrxYQiT2iIYox+fymqgXmOvzCLET5egVWQVEaNBTYPAFC8oPu26f73DM0jcjZEyFoeypwqtopG41UcAa2PATLlnBCKRYmfZHUJqRxx4qHAOdD5VL9wjV7cHJxtOGnwsj1S8RijmNrg==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(316002)(110136005)(7696005)(54906003)(36756003)(83380400001)(6666004)(2906002)(2616005)(336012)(70586007)(508600001)(186003)(26005)(1076003)(4326008)(426003)(70206006)(8676002)(40460700003)(36860700001)(47076005)(82310400004)(5660300002)(8936002)(356005)(86362001)(107886003)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CS1/p1Edl9ueUX+mb7zovieoVyF0y4+xn72daGN61OwSbdyESIXaaTfznKcTlxVlqXh0IWDkFYlCKT65vYVNSq2ph0+6HmKflvbC8fACmo68r2zj3dRoFIwkACJLhpXonODFA+wELvW25iEhBn7O1yA+LYkqpymk453rZ0JA/BKY0qj2pAyUIvfGBZlNCJi1Ww7SNHvcW23qMcrza/To2A0R93lhJWAMblhQRrhivCwx3OifcwVisJxEBvPeO+ffhQH86iDbtdCYOZO9VFViIsXdm3sJouP/hDd2oXLMg1tOSvAAaVm/Vtc4kIGCkcrtKQ86ZkSw57dK4fSw42mn8CXxvGarrspx1qi3+f/PZHhJHDPc7A1yxXOCsvqlmEJVGxPuca+V/G7jaDVXVeZQ/fiQbkJnJrB+680Qk248cp2R2Tos6AR/MRS7a5dDqSygJJTWra5EQVcP9B34aPxXNs1to+SVXvk87fRLxya4CuKqGGntWQFBElrvEJJi4wRVqDlPliDJ4xjHQ1l9sGY+IUrd4TZWOCQlCxguvN2PM8GdQDRXWuf0UG7UQF4aHg0Vj1zQ/x2vddEARXEWBBbIPu+0Yx4G0Kfqn7GNpfJP6T9O4KgCE/H6JNc0ChzyqWsixW1H6wJlyySO5CIvfwG6F/PKtk+JV3fjN2T689VKSwsZ4fLX2UvgUC66/9LEg/zAlkR4y9sfetKlEjiZ/eGvAg==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(186003)(81166007)(26005)(356005)(107886003)(336012)(2616005)(82310400004)(426003)(6666004)(86362001)(7696005)(2906002)(1076003)(508600001)(47076005)(36756003)(4326008)(5660300002)(8676002)(70206006)(70586007)(36860700001)(30864003)(8936002)(83380400001)(110136005)(40460700003)(54906003)(316002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 09:25:48.0222
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 09:25:54.6982
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 432e1537-0d9d-4266-5044-08da072ef4b3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31ad5c9b-e40a-4a63-bfe3-08da072ef8b2
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2846
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2551
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -106,174 +106,503 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From tegra186 onwards, memory controller support multiple channels.
-Add support for mapping address spaces of these channels.
-Make sure that number of channels are as expected on each SOC.
-During error interrupts from memory controller, appropriate registers
-from these channels need to be accessed for logging error info.
+Add new function 'get_int_channel' in tegra_mc_soc struture which is
+implemented by tegra SOCs which support multiple MC channels. This
+function returns the channel which should be used to get the information
+of interrupts.
+Remove static from tegra30_mc_handle_irq and use it as interrupt handler
+for MC interrupts on tegra186, tegra194 and tegra234 to log the errors.
+Add error specific MC status and address register bits and use them on
+tegra186, tegra194 and tegra234.
+Add error logging for generalized carveout interrupt on tegra186, tegra194
+and tegra234.
+Add error logging for route sanity interrupt on tegra194 an tegra234.
+Add register for higher bits of error address which is available on
+tegra194 and tegra234.
+Add a boolean variable 'has_addr_hi_reg' in tegra_mc_soc struture which
+will be true if soc has register for higher bits of memory controller
+error address. Set it true for tegra194 and tegra234.
 
 Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- drivers/memory/tegra/mc.c       |  6 ++++
- drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
- drivers/memory/tegra/tegra194.c |  1 +
- drivers/memory/tegra/tegra234.c |  1 +
- include/soc/tegra/mc.h          |  7 +++++
- 5 files changed, 67 insertions(+)
+ drivers/memory/tegra/mc.c       | 108 +++++++++++++++++++++++++++-----
+ drivers/memory/tegra/mc.h       |  37 ++++++++++-
+ drivers/memory/tegra/tegra186.c |  44 +++++++++++++
+ drivers/memory/tegra/tegra194.c |  43 +++++++++++++
+ drivers/memory/tegra/tegra234.c |  58 +++++++++++++++++
+ include/soc/tegra/mc.h          |   4 ++
+ 6 files changed, 278 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
-index bf3abb6d8354..3cda1d9ad32a 100644
+index 3cda1d9ad32a..c1c8b5c2ab7a 100644
 --- a/drivers/memory/tegra/mc.c
 +++ b/drivers/memory/tegra/mc.c
-@@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
- 	if (IS_ERR(mc->regs))
- 		return PTR_ERR(mc->regs);
- 
-+	if (mc->soc->ops && mc->soc->ops->map_regs) {
-+		err = mc->soc->ops->map_regs(mc, pdev);
-+		if (err < 0)
-+			return err;
-+	}
-+
- 	mc->debugfs.root = debugfs_create_dir("mc", NULL);
- 
- 	if (mc->soc->ops && mc->soc->ops->probe) {
-diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
-index 3d153881abc1..a8a45e6ff1f1 100644
---- a/drivers/memory/tegra/tegra186.c
-+++ b/drivers/memory/tegra/tegra186.c
-@@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
+@@ -508,14 +508,34 @@ int tegra30_mc_probe(struct tegra_mc *mc)
  	return 0;
  }
  
-+static int tegra186_mc_map_regs(struct tegra_mc *mc,
-+				struct platform_device *pdev)
+-static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
++const struct tegra_mc_ops tegra30_mc_ops = {
++	.probe = tegra30_mc_probe,
++	.handle_irq = tegra30_mc_handle_irq,
++};
++#endif
++
++irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+ {
+ 	struct tegra_mc *mc = data;
+ 	unsigned long status;
++	bool mc_has_channels;
+ 	unsigned int bit;
++	int channel;
++
++	mc_has_channels = mc->soc->num_channels && mc->soc->get_int_channel;
++	if (mc_has_channels) {
++		int err;
++
++		err = mc->soc->get_int_channel(mc, &channel);
++		if (err < 0)
++			return IRQ_NONE;
++
++		/* mask all interrupts to avoid flooding */
++		status = mc_ch_readl(mc, channel, MC_INTSTATUS) & mc->soc->intmask;
++	} else {
++		status = mc_readl(mc, MC_INTSTATUS) & mc->soc->intmask;
++	}
+ 
+-	/* mask all interrupts to avoid flooding */
+-	status = mc_readl(mc, MC_INTSTATUS) & mc->soc->intmask;
+ 	if (!status)
+ 		return IRQ_NONE;
+ 
+@@ -523,18 +543,70 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+ 		const char *error = tegra_mc_status_names[bit] ?: "unknown";
+ 		const char *client = "unknown", *desc;
+ 		const char *direction, *secure;
++		u32 status_reg, addr_reg;
++		u32 intmask = BIT(bit);
+ 		phys_addr_t addr = 0;
++#ifdef CONFIG_PHYS_ADDR_T_64BIT
++		u32 addr_hi_reg = 0;
++#endif
+ 		unsigned int i;
+ 		char perm[7];
+ 		u8 id, type;
+ 		u32 value;
+ 
+-		value = mc_readl(mc, MC_ERR_STATUS);
++		switch (intmask) {
++		case MC_INT_DECERR_VPR:
++			status_reg = MC_ERR_VPR_STATUS;
++			addr_reg = MC_ERR_VPR_ADR;
++			break;
++
++		case MC_INT_SECERR_SEC:
++			status_reg = MC_ERR_SEC_STATUS;
++			addr_reg = MC_ERR_SEC_ADR;
++			break;
++
++		case MC_INT_DECERR_MTS:
++			status_reg = MC_ERR_MTS_STATUS;
++			addr_reg = MC_ERR_MTS_ADR;
++			break;
++
++		case MC_INT_DECERR_GENERALIZED_CARVEOUT:
++			status_reg = MC_ERR_GENERALIZED_CARVEOUT_STATUS;
++			addr_reg = MC_ERR_GENERALIZED_CARVEOUT_ADR;
++			break;
++
++		case MC_INT_DECERR_ROUTE_SANITY:
++			status_reg = MC_ERR_ROUTE_SANITY_STATUS;
++			addr_reg = MC_ERR_ROUTE_SANITY_ADR;
++			break;
++
++		default:
++			status_reg = MC_ERR_STATUS;
++			addr_reg = MC_ERR_ADR;
++
++#ifdef CONFIG_PHYS_ADDR_T_64BIT
++			if (mc->soc->has_addr_hi_reg)
++				addr_hi_reg = MC_ERR_ADR_HI;
++#endif
++			break;
++		}
++
++		if (mc_has_channels)
++			value = mc_ch_readl(mc, channel, status_reg);
++		else
++			value = mc_readl(mc, status_reg);
+ 
+ #ifdef CONFIG_PHYS_ADDR_T_64BIT
+ 		if (mc->soc->num_address_bits > 32) {
+-			addr = ((value >> MC_ERR_STATUS_ADR_HI_SHIFT) &
+-				MC_ERR_STATUS_ADR_HI_MASK);
++			if (addr_hi_reg) {
++				if (mc_has_channels)
++					addr = mc_ch_readl(mc, channel, addr_hi_reg);
++				else
++					addr = mc_readl(mc, addr_hi_reg);
++			} else {
++				addr = ((value >> MC_ERR_STATUS_ADR_HI_SHIFT) &
++					MC_ERR_STATUS_ADR_HI_MASK);
++			}
+ 			addr <<= 32;
+ 		}
+ #endif
+@@ -591,7 +663,10 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+ 			break;
+ 		}
+ 
+-		value = mc_readl(mc, MC_ERR_ADR);
++		if (mc_has_channels)
++			value = mc_ch_readl(mc, channel, addr_reg);
++		else
++			value = mc_readl(mc, addr_reg);
+ 		addr |= value;
+ 
+ 		dev_err_ratelimited(mc->dev, "%s: %s%s @%pa: %s (%s%s)\n",
+@@ -600,17 +675,14 @@ static irqreturn_t tegra30_mc_handle_irq(int irq, void *data)
+ 	}
+ 
+ 	/* clear interrupts */
+-	mc_writel(mc, status, MC_INTSTATUS);
++	if (mc_has_channels)
++		mc_ch_writel(mc, channel, status, MC_INTSTATUS);
++	else
++		mc_writel(mc, status, MC_INTSTATUS);
+ 
+ 	return IRQ_HANDLED;
+ }
+ 
+-const struct tegra_mc_ops tegra30_mc_ops = {
+-	.probe = tegra30_mc_probe,
+-	.handle_irq = tegra30_mc_handle_irq,
+-};
+-#endif
+-
+ const char *const tegra_mc_status_names[32] = {
+ 	[ 1] = "External interrupt",
+ 	[ 6] = "EMEM address decode error",
+@@ -622,6 +694,8 @@ const char *const tegra_mc_status_names[32] = {
+ 	[12] = "VPR violation",
+ 	[13] = "Secure carveout violation",
+ 	[16] = "MTS carveout violation",
++	[17] = "Generalized carveout violation",
++	[20] = "Route Sanity error",
+ };
+ 
+ const char *const tegra_mc_error_names[8] = {
+@@ -770,7 +844,11 @@ static int tegra_mc_probe(struct platform_device *pdev)
+ 
+ 		WARN(!mc->soc->client_id_mask, "missing client ID mask for this SoC\n");
+ 
+-		mc_writel(mc, mc->soc->intmask, MC_INTMASK);
++		if (mc->soc->num_channels && mc->mcb_regs)
++			mc_ch_writel(mc, MC_BROADCAST_CHANNEL, mc->soc->intmask,
++				     MC_INTMASK);
++		else
++			mc_writel(mc, mc->soc->intmask, MC_INTMASK);
+ 
+ 		err = devm_request_irq(&pdev->dev, mc->irq, mc->soc->ops->handle_irq, 0,
+ 				       dev_name(&pdev->dev), mc);
+diff --git a/drivers/memory/tegra/mc.h b/drivers/memory/tegra/mc.h
+index 062886e94c04..3836c35ddd7a 100644
+--- a/drivers/memory/tegra/mc.h
++++ b/drivers/memory/tegra/mc.h
+@@ -43,7 +43,21 @@
+ #define MC_EMEM_ARB_OVERRIDE				0xe8
+ #define MC_TIMING_CONTROL_DBG				0xf8
+ #define MC_TIMING_CONTROL				0xfc
+-
++#define MC_ERR_VPR_STATUS				0x654
++#define MC_ERR_VPR_ADR					0x658
++#define MC_ERR_SEC_STATUS				0x67c
++#define MC_ERR_SEC_ADR					0x680
++#define MC_ERR_MTS_STATUS				0x9b0
++#define MC_ERR_MTS_ADR					0x9b4
++#define MC_ERR_ROUTE_SANITY_STATUS			0x9c0
++#define MC_ERR_ROUTE_SANITY_ADR				0x9c4
++#define MC_ERR_GENERALIZED_CARVEOUT_STATUS		0xc00
++#define MC_ERR_GENERALIZED_CARVEOUT_ADR			0xc04
++#define MC_GLOBAL_INTSTATUS				0xf24
++#define MC_ERR_ADR_HI					0x11fc
++
++#define MC_INT_DECERR_ROUTE_SANITY			BIT(20)
++#define MC_INT_DECERR_GENERALIZED_CARVEOUT		BIT(17)
+ #define MC_INT_DECERR_MTS				BIT(16)
+ #define MC_INT_SECERR_SEC				BIT(13)
+ #define MC_INT_DECERR_VPR				BIT(12)
+@@ -78,6 +92,8 @@
+ 
+ #define MC_TIMING_UPDATE				BIT(0)
+ 
++#define MC_BROADCAST_CHANNEL				~0
++
+ static inline u32 tegra_mc_scale_percents(u64 val, unsigned int percents)
+ {
+ 	val = val * percents;
+@@ -92,6 +108,24 @@ icc_provider_to_tegra_mc(struct icc_provider *provider)
+ 	return container_of(provider, struct tegra_mc, provider);
+ }
+ 
++static inline u32 mc_ch_readl(const struct tegra_mc *mc, int ch,
++			       unsigned long offset)
 +{
-+	struct device_node *np = pdev->dev.parent->of_node;
-+	int num_dt_channels, reg_cells = 0;
-+	struct resource *res;
-+	int i, ret;
-+	u32 val;
++	if (ch == MC_BROADCAST_CHANNEL)
++		return readl_relaxed(mc->mcb_regs + offset);
 +
-+	ret = of_property_read_u32(np, "#address-cells", &val);
-+	if (ret) {
-+		dev_err(&pdev->dev, "missing #address-cells property\n");
-+		return ret;
-+	}
++	return readl_relaxed(mc->mc_regs[ch] + offset);
++}
 +
-+	reg_cells = val;
++static inline void mc_ch_writel(const struct tegra_mc *mc, int ch,
++				u32 value, unsigned long offset)
++{
++	if (ch == MC_BROADCAST_CHANNEL)
++		writel_relaxed(value, mc->mcb_regs + offset);
++	else
++		writel_relaxed(value, mc->mc_regs[ch] + offset);
++}
 +
-+	ret = of_property_read_u32(np, "#size-cells", &val);
-+	if (ret) {
-+		dev_err(&pdev->dev, "missing #size-cells property\n");
-+		return ret;
-+	}
+ static inline u32 mc_readl(const struct tegra_mc *mc, unsigned long offset)
+ {
+ 	return readl_relaxed(mc->regs + offset);
+@@ -156,6 +190,7 @@ extern const struct tegra_mc_ops tegra30_mc_ops;
+ extern const struct tegra_mc_ops tegra186_mc_ops;
+ #endif
+ 
++irqreturn_t tegra30_mc_handle_irq(int irq, void *data);
+ extern const char * const tegra_mc_status_names[32];
+ extern const char * const tegra_mc_error_names[8];
+ 
+diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
+index a8a45e6ff1f1..1d8a93807f91 100644
+--- a/drivers/memory/tegra/tegra186.c
++++ b/drivers/memory/tegra/tegra186.c
+@@ -16,6 +16,8 @@
+ #include <dt-bindings/memory/tegra186-mc.h>
+ #endif
+ 
++#include "mc.h"
 +
-+	reg_cells += val;
+ #define MC_SID_STREAMID_OVERRIDE_MASK GENMASK(7, 0)
+ #define MC_SID_STREAMID_SECURITY_WRITE_ACCESS_DISABLED BIT(16)
+ #define MC_SID_STREAMID_SECURITY_OVERRIDE BIT(8)
+@@ -195,6 +197,7 @@ const struct tegra_mc_ops tegra186_mc_ops = {
+ 	.resume = tegra186_mc_resume,
+ 	.probe_device = tegra186_mc_probe_device,
+ 	.map_regs = tegra186_mc_map_regs,
++	.handle_irq = tegra30_mc_handle_irq,
+ };
+ 
+ #if defined(CONFIG_ARCH_TEGRA_186_SOC)
+@@ -922,11 +925,52 @@ static const struct tegra_mc_client tegra186_mc_clients[] = {
+ 	},
+ };
+ 
++static int tegra186_mc_get_channel(const struct tegra_mc *mc, int *mc_channel)
++{
++	u32 status;
 +
-+	num_dt_channels = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
-+							  reg_cells * sizeof(u32));
-+	/*
-+	 * On tegra186 onwards, memory controller support multiple channels.
-+	 * Apart from regular memory controller channels, there is one broadcast
-+	 * channel and one for stream-id registers.
-+	 */
-+	if (num_dt_channels < mc->soc->num_channels + 2) {
-+		dev_warn(&pdev->dev, "MC channels are missing, please update\n");
-+		return 0;
-+	}
++	status = mc_ch_readl(mc, MC_BROADCAST_CHANNEL, MC_GLOBAL_INTSTATUS);
 +
-+	mc->mcb_regs = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-+	if (IS_ERR(mc->mcb_regs))
-+		return PTR_ERR(mc->mcb_regs);
++	switch (status & mc->soc->int_channel_mask) {
++	case BIT(0):
++		*mc_channel = 0;
++		break;
 +
-+	for (i = 0; i < mc->soc->num_channels; i++) {
-+		mc->mc_regs[i] = devm_platform_get_and_ioremap_resource(pdev, i + 2, &res);
-+		if (IS_ERR(mc->mc_regs[i]))
-+			return PTR_ERR(mc->mc_regs[i]);
++	case BIT(1):
++		*mc_channel = 1;
++		break;
++
++	case BIT(2):
++		*mc_channel = 2;
++		break;
++
++	case BIT(3):
++		*mc_channel = 3;
++		break;
++
++	case BIT(24):
++		*mc_channel = MC_BROADCAST_CHANNEL;
++		break;
++
++	default:
++		pr_err("Unknown interrupt source\n");
++		return -EINVAL;
 +	}
 +
 +	return 0;
 +}
 +
- const struct tegra_mc_ops tegra186_mc_ops = {
- 	.probe = tegra186_mc_probe,
- 	.remove = tegra186_mc_remove,
- 	.resume = tegra186_mc_resume,
- 	.probe_device = tegra186_mc_probe_device,
-+	.map_regs = tegra186_mc_map_regs,
- };
- 
- #if defined(CONFIG_ARCH_TEGRA_186_SOC)
-@@ -875,6 +926,7 @@ const struct tegra_mc_soc tegra186_mc_soc = {
+ const struct tegra_mc_soc tegra186_mc_soc = {
  	.num_clients = ARRAY_SIZE(tegra186_mc_clients),
  	.clients = tegra186_mc_clients,
  	.num_address_bits = 40,
-+	.num_channels = 4,
+ 	.num_channels = 4,
++	.client_id_mask = 0xff,
++	.intmask = MC_INT_DECERR_GENERALIZED_CARVEOUT | MC_INT_DECERR_MTS |
++		   MC_INT_SECERR_SEC | MC_INT_DECERR_VPR |
++		   MC_INT_SECURITY_VIOLATION | MC_INT_DECERR_EMEM,
  	.ops = &tegra186_mc_ops,
++	.int_channel_mask = 0x100000f,
++	.get_int_channel = tegra186_mc_get_channel,
  };
  #endif
 diff --git a/drivers/memory/tegra/tegra194.c b/drivers/memory/tegra/tegra194.c
-index cab998b8bd5c..94001174deaf 100644
+index 94001174deaf..499bb71549c6 100644
 --- a/drivers/memory/tegra/tegra194.c
 +++ b/drivers/memory/tegra/tegra194.c
-@@ -1347,5 +1347,6 @@ const struct tegra_mc_soc tegra194_mc_soc = {
+@@ -1343,10 +1343,53 @@ static const struct tegra_mc_client tegra194_mc_clients[] = {
+ 	},
+ };
+ 
++static int tegra194_mc_get_channel(const struct tegra_mc *mc, int *mc_channel)
++{
++	u32 status;
++
++	status = mc_ch_readl(mc, MC_BROADCAST_CHANNEL, MC_GLOBAL_INTSTATUS);
++
++	switch (status & mc->soc->int_channel_mask) {
++	case BIT(8):
++		*mc_channel = 0;
++		break;
++
++	case BIT(9):
++		*mc_channel = 1;
++		break;
++
++	case BIT(10):
++		*mc_channel = 2;
++		break;
++
++	case BIT(11):
++		*mc_channel = 3;
++		break;
++
++	case BIT(25):
++		*mc_channel = MC_BROADCAST_CHANNEL;
++		break;
++
++	default:
++		pr_err("Unknown interrupt source\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ const struct tegra_mc_soc tegra194_mc_soc = {
  	.num_clients = ARRAY_SIZE(tegra194_mc_clients),
  	.clients = tegra194_mc_clients,
  	.num_address_bits = 40,
-+	.num_channels = 16,
+ 	.num_channels = 16,
++	.client_id_mask = 0xff,
++	.intmask = MC_INT_DECERR_ROUTE_SANITY |
++		   MC_INT_DECERR_GENERALIZED_CARVEOUT | MC_INT_DECERR_MTS |
++		   MC_INT_SECERR_SEC | MC_INT_DECERR_VPR |
++		   MC_INT_SECURITY_VIOLATION | MC_INT_DECERR_EMEM,
++	.has_addr_hi_reg = true,
  	.ops = &tegra186_mc_ops,
++	.int_channel_mask = 0x2000f00,
++	.get_int_channel = tegra194_mc_get_channel,
  };
 diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
-index e22824a79f45..6335a132be2d 100644
+index 6335a132be2d..0865dd1b48e9 100644
 --- a/drivers/memory/tegra/tegra234.c
 +++ b/drivers/memory/tegra/tegra234.c
-@@ -97,5 +97,6 @@ const struct tegra_mc_soc tegra234_mc_soc = {
+@@ -93,10 +93,68 @@ static const struct tegra_mc_client tegra234_mc_clients[] = {
+ 	},
+ };
+ 
++static int tegra234_mc_get_channel(const struct tegra_mc *mc, int *mc_channel)
++{
++	u32 status;
++
++	status = mc_ch_readl(mc, MC_BROADCAST_CHANNEL, MC_GLOBAL_INTSTATUS);
++
++	switch (status & mc->soc->int_channel_mask) {
++	case BIT(8):
++		*mc_channel = 0;
++		break;
++
++	case BIT(9):
++		*mc_channel = 1;
++		break;
++
++	case BIT(10):
++		*mc_channel = 2;
++		break;
++
++	case BIT(11):
++		*mc_channel = 3;
++		break;
++
++	case BIT(12):
++		*mc_channel = 4;
++		break;
++
++	case BIT(13):
++		*mc_channel = 5;
++		break;
++
++	case BIT(14):
++		*mc_channel = 6;
++		break;
++
++	case BIT(15):
++		*mc_channel = 7;
++		break;
++
++	case BIT(25):
++		*mc_channel = MC_BROADCAST_CHANNEL;
++		break;
++
++	default:
++		pr_err("Unknown interrupt source\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ const struct tegra_mc_soc tegra234_mc_soc = {
  	.num_clients = ARRAY_SIZE(tegra234_mc_clients),
  	.clients = tegra234_mc_clients,
  	.num_address_bits = 40,
-+	.num_channels = 16,
+ 	.num_channels = 16,
++	.intmask = MC_INT_DECERR_ROUTE_SANITY |
++		   MC_INT_DECERR_GENERALIZED_CARVEOUT | MC_INT_DECERR_MTS |
++		   MC_INT_SECERR_SEC | MC_INT_DECERR_VPR |
++		   MC_INT_SECURITY_VIOLATION | MC_INT_DECERR_EMEM,
++	.has_addr_hi_reg = true,
  	.ops = &tegra186_mc_ops,
++	.int_channel_mask = 0x200ff00,
++	.get_int_channel = tegra234_mc_get_channel,
  };
 diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
-index 1066b1194a5a..92f810c55b43 100644
+index 92f810c55b43..6f115436e344 100644
 --- a/include/soc/tegra/mc.h
 +++ b/include/soc/tegra/mc.h
-@@ -13,6 +13,9 @@
- #include <linux/irq.h>
- #include <linux/reset-controller.h>
- #include <linux/types.h>
-+#include <linux/platform_device.h>
-+
-+#define MC_MAX_CHANNELS 16
- 
- struct clk;
- struct device;
-@@ -181,6 +184,7 @@ struct tegra_mc_ops {
- 	int (*resume)(struct tegra_mc *mc);
- 	irqreturn_t (*handle_irq)(int irq, void *data);
- 	int (*probe_device)(struct tegra_mc *mc, struct device *dev);
-+	int (*map_regs)(struct tegra_mc *mc, struct platform_device *pdev);
- };
- 
- struct tegra_mc_soc {
-@@ -194,6 +198,7 @@ struct tegra_mc_soc {
- 	unsigned int atom_size;
- 
- 	u8 client_id_mask;
-+	u8 num_channels;
- 
+@@ -203,6 +203,8 @@ struct tegra_mc_soc {
  	const struct tegra_smmu_soc *smmu;
  
-@@ -212,6 +217,8 @@ struct tegra_mc {
- 	struct tegra_smmu *smmu;
- 	struct gart_device *gart;
- 	void __iomem *regs;
-+	void __iomem *mcb_regs;
-+	void __iomem *mc_regs[MC_MAX_CHANNELS];
- 	struct clk *clk;
- 	int irq;
+ 	u32 intmask;
++	u32 int_channel_mask;
++	bool has_addr_hi_reg;
  
+ 	const struct tegra_mc_reset_ops *reset_ops;
+ 	const struct tegra_mc_reset *resets;
+@@ -210,6 +212,8 @@ struct tegra_mc_soc {
+ 
+ 	const struct tegra_mc_icc_ops *icc_ops;
+ 	const struct tegra_mc_ops *ops;
++
++	int (*get_int_channel)(const struct tegra_mc *mc, int *mc_channel);
+ };
+ 
+ struct tegra_mc {
 -- 
 2.17.1
 

@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C0F4DA7E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DFD4DA7E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347806AbiCPCVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        id S1349457AbiCPCWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237405AbiCPCU6 (ORCPT
+        with ESMTP id S237405AbiCPCWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:20:58 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25B4427CE;
-        Tue, 15 Mar 2022 19:19:45 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2e59ea0f3d8so8313297b3.7;
-        Tue, 15 Mar 2022 19:19:45 -0700 (PDT)
+        Tue, 15 Mar 2022 22:22:53 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B52427CE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:21:40 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id g19so1872358pfc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2wDOJfE8Udv/yPkkP//z7M6l01Skx49rMSVyt4RFfkk=;
-        b=joGnnPIeYb+VlXp+ly8j/0oB5qBB3qaNJh0k/cLpE61oXjRpfr2OVYTdHqwm4hyLSg
-         1Bc0W3jnYw0d0kBXJ6PSvyDIzrUrQO4DGn0awBVEED2EpOgB14ixgrHd7dn+YTxkJ0ZL
-         ldT0E3UDLviwkPNemhjQLp7MJJXHNdM5342Y4PlJB0HQjFDgT+x/UvAypwVQUXDc6Jf5
-         sYqz35ghl125FMfkGglJNm+AUimgLhX+9kEup89hvsqXouTeQLYePAFOnjhdnToy1J6j
-         CllkkMQUYaUxGjLY58UYQGWcMMO2NQtkM/5cVWk0f+Ah8ztdGRQdvDl+ryhg5nKbi2rW
-         NWLw==
+        h=from:to:cc:subject:date:message-id;
+        bh=mpIGdb55Nd4sn/CpKfkQzU0+Ne3ozaz+3vbBHRA2I6U=;
+        b=STJJhjhySdxRolMQ6fId8pdd/hZAOz3EpMWlonsXd8vSgXzLo6gP73O9ekBBfrS9wI
+         3nsfbhCR+Q6YqWsymo5rs4GMKS51FLBlOZyYmGsucAWFRX3KFmT13t/rbwHSi+jaud3G
+         Dyh/+cXbCgtjWD1Ev5Xfg2olYx8TPAISk4lYVUuuJKiCDADcZoH9IaNu1gAjkdJSMGdP
+         P3NO2s8eFzTsWHg6sqKQJpC1GpDBYsclPozt9ZmRfQkQbv9Fn43YOgMZfCLaPsudrEuq
+         s9BDfBxnJ5sniUbt/+u49qELuen3qi2Ood2hji/DlR1rPP01jFM5F8dY7/52j0gqcTYZ
+         +TIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2wDOJfE8Udv/yPkkP//z7M6l01Skx49rMSVyt4RFfkk=;
-        b=yTEW7mEid4wt0t5yxuLYumyShRWcsR8mE1IBsvBv9rbcD90wSSR6pY91tMsND+JA+Y
-         USCWyeqLjv7IXrNNNzyYwrr0F0FQng4Fy2HIBF2PS3vKibBTnZfXdYk1Auywk5vgqak9
-         ASoOVoudZtii+vCAxmgpRntP9NW5M4C6Icp4trVnEa1gYgmsos2jkwXdEgoigDAyEFy6
-         t3O2N4B/IVACHOjxmBtGO5lDPkaIRA0ANHt7AdrriuMT0EVlXDa3TlRxf7NHI/bXNiBQ
-         YjL3QDEwkt5k3Wo+axX4b86iw5KRm/roL5d91l2T5hUFp67QqfYRB6inLATFEG8Trzje
-         XSxg==
-X-Gm-Message-State: AOAM532Z5u73mDNDRg8l66WaTm5aEsaz+Dq4/hpalEPL7EK3tkfi4+nM
-        ZajQBfy1GEcAwz3LfwPkj1H6sKsXb3CPbSAuC18=
-X-Google-Smtp-Source: ABdhPJw4huEMVFKmb4DDLz4qwY4nPYpek7DI+L85d5wjn5LwIdVaRy+YtAtrq+un+GInFq6nbuqV+PAXA+b1GQ4gGjI=
-X-Received: by 2002:a0d:eb02:0:b0:2e5:9d37:58ba with SMTP id
- u2-20020a0deb02000000b002e59d3758bamr2837723ywe.231.1647397184923; Tue, 15
- Mar 2022 19:19:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
-In-Reply-To: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Wed, 16 Mar 2022 10:19:33 +0800
-Message-ID: <CAJhGHyCDTxabp_5BizzFofXRNp2ggNFNT-NHCGBO9AgavJyAYw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Don't rebuild page when the page is synced
- and no tlb flushing is required
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mpIGdb55Nd4sn/CpKfkQzU0+Ne3ozaz+3vbBHRA2I6U=;
+        b=JYKQHzRwYeJaJmXp1M50JOXDcQdy1lSv8qyql2mMx0ReodxXj/+VmQ3y+Cvc+kQI8n
+         KAV3fQs4939gmS5ym2EKUEB4LTFWBAh8iYZqezBKsJZu+j5seZPnuAY5Q3tPRb41jNp9
+         O3KVviSxOG0UOOh8rCOQjwYSC8QVgWQLccllKXy6qssZcqesWbs+TLWwAVex7Fr+70UU
+         ZYXp0ulWSLohPxAwilmL3Edil/FKxriwDxDSk3Dm6D/WaKklwH4Htk/OEDx5UvBSIxBO
+         UBgQo58KgBf6frxGMSgwcM0+HroDWSpwobbXQuzKlqmpwXFAMcMHLKU6zWc7khQQAYe/
+         pgeQ==
+X-Gm-Message-State: AOAM533M9n0CLDsisEtZArGb6Fyz1p+HnE0B9tetC0jwqfoE9I4l5lPK
+        LzN92AuTn7pdI2GwBrKQ1UQ=
+X-Google-Smtp-Source: ABdhPJw2oM4iw4X9LdjPldazp7yPJi6PzmHFFz+lxJaiE9molHGTsa7R9nL6wpCNalHa8LzYxaDVBA==
+X-Received: by 2002:a63:4e52:0:b0:380:7c35:fc9a with SMTP id o18-20020a634e52000000b003807c35fc9amr26129775pgl.376.1647397299989;
+        Tue, 15 Mar 2022 19:21:39 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q10-20020a056a00084a00b004f7ebae5be6sm469764pfk.155.2022.03.15.19.21.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 19:21:39 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Igor Grinberg <grinberg@compulab.co.il>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ARM: pxa: Change clk_disable to clk_disable_unprepare
+Date:   Wed, 16 Mar 2022 02:21:22 +0000
+Message-Id: <20220316022122.7426-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 6:45 PM Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
->
-> Before Commit c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page()
-> to return true when remote flush is needed"), the return value
-> of kvm_sync_page() indicates whether the page is synced, and
-> kvm_mmu_get_page() would rebuild page when the sync fails.
-> But now, kvm_sync_page() returns false when the page is
-> synced and no tlb flushing is required, which leads to
-> rebuild page in kvm_mmu_get_page(). So return the return
-> value of mmu->sync_page() directly and check it in
-> kvm_mmu_get_page(). If the sync fails, the page will be
-> zapped and the invalid_list is not empty, so set flush as
-> true is accepted in mmu_sync_children().
->
+The corresponding API for clk_prepare_enable is clk_disable_unprepare,
+other than clk_disable_unprepare.
 
-Good catch.
+Fix this by changing clk_disable to clk_disable_unprepare.
 
-Acked-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Fixes: 7a5d9a913f91 ("ARM: pxa: ulpi: fix ulpi timeout and slowpath warn")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ arch/arm/mach-pxa/cm-x300.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
-> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 3b8da8b0745e..8efd165ee27c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1866,17 +1866,14 @@ static void kvm_mmu_commit_zap_page(struct kvm *kvm,
->           &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])     \
->                 if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
->
-> -static bool kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-> +static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
->                          struct list_head *invalid_list)
+diff --git a/arch/arm/mach-pxa/cm-x300.c b/arch/arm/mach-pxa/cm-x300.c
+index 2e35354b61f5..fcf5b8fa5b9f 100644
+--- a/arch/arm/mach-pxa/cm-x300.c
++++ b/arch/arm/mach-pxa/cm-x300.c
+@@ -538,7 +538,7 @@ static int cm_x300_u2d_init(struct device *dev)
+ 
+ 		err = cm_x300_ulpi_phy_reset();
+ 		if (err) {
+-			clk_disable(pout_clk);
++			clk_disable_unprepare(pout_clk);
+ 			clk_put(pout_clk);
+ 		}
+ 	}
+-- 
+2.17.1
 
-The comments for FNAME(sync_page) can be copied here.

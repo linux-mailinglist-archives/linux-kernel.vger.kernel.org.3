@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B7A4DAEC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 12:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D77A4DAECA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 12:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355285AbiCPLUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 07:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S1355292AbiCPLVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 07:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345088AbiCPLUE (ORCPT
+        with ESMTP id S1348129AbiCPLVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 07:20:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88EE3388E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 04:18:50 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nURfz-0003xq-O8; Wed, 16 Mar 2022 12:18:47 +0100
-Message-ID: <5ef2f1ae-f6b2-9905-801a-395c7269bd93@pengutronix.de>
-Date:   Wed, 16 Mar 2022 12:18:47 +0100
+        Wed, 16 Mar 2022 07:21:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2F33BF84;
+        Wed, 16 Mar 2022 04:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647429595; x=1678965595;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WOZPX280h/gDeG6eQLXb35wKGPqTHaoiFvqKuqkEwNg=;
+  b=IlYui+VZshSHfhBilyE1Fa5IfIXrFlPbWcYR9NVc+bO1aLJvHUDfGzNz
+   Qv6Ze3Ej9jrNZy/GRKpzOSYO2z35WcfJcxviXeIsoTDXkdeqr9oD91dg2
+   wx5ViquMl16akcuEUmaouItpssNIXQn2uIo+mti2VxLzxgi1Dpn7ZWd+0
+   YUj9YHRnl/dWfNEJuQM7V55SUdIGpPGWRnmrI2B03+3xjiwVHPiVEBxAC
+   oKdYum+p/ByteXCsET9QXTkcAeYlOP+MTq8wOxKu4cYSVoyDh6s7yKbEG
+   AydpU2AUdAVvTX+iRT1lRt5/h08CJ/CeEJVPvcWAgbXGpdZRsv6iv5zwA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="255383241"
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="255383241"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 04:19:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
+   d="scan'208";a="557392932"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.35.28])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 04:19:52 -0700
+Message-ID: <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
+Date:   Wed, 16 Mar 2022 13:19:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v8 1/2] dt-bindings: arm: Add OP-TEE transport for SCMI
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
 Content-Language: en-US
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20211028140009.23331-1-etienne.carriere@linaro.org>
- <58a0e791-9573-99c2-0cc5-3920a1048113@pengutronix.de>
- <Yh4304unzMxrQtoL@bogus>
- <2b4442d9-fb10-36ee-585d-4103b76abbbb@pengutronix.de>
- <CAN5uoS9eBfzezPZdjemBHbGRe4e50zm4=DDst-UCenN5ouQCoA@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <CAN5uoS9eBfzezPZdjemBHbGRe4e50zm4=DDst-UCenN5ouQCoA@mail.gmail.com>
+To:     "Steinar H. Gunderson" <sesse@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220310093844.982656-1-sesse@google.com>
+ <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
+ <YiuKAk7SaXP7B7Ee@google.com>
+ <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
+ <YjBnet2813sEGjZY@google.com>
+ <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
+ <YjDUO6bbyfGw/u0C@google.com>
+ <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
+ <YjGdoGy4Z2UUG9S9@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YjGdoGy4Z2UUG9S9@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,104 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Etienne,
+On 16.3.2022 10.19, Steinar H. Gunderson wrote:
+> On Tue, Mar 15, 2022 at 10:11:54PM +0200, Adrian Hunter wrote:
+>> Sorry, my first suggestion has issues, but the second is better.
+> 
+> I tried your second one, but can't see much difference. The original and
+> your patched version still differ by a lot, and I still see various
+> non-branch instructions getting very tiny fractions. (PSB packets
+> _might_ be it, as there are ~1000 of them in the 165M-cycle trace.)
+> 
+> I guess the good news is that the perf report coming out of your version
+> looks more likely to me; I have some functions that are around 1% that
+> shouldn't intuitively be that much (and, if I write some Perl to sum up
+> the cycles from the IPC lines in perf script, are more around 0.1%).
+> So perhaps we should stop chasing the difference? I don't know.
 
-On 08.03.22 11:18, Etienne Carriere wrote:
-> Hello Ahmad,
-> 
-> On Tue, 8 Mar 2022 at 10:51, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->>
->> Hello Sudeep,
->>
->> On 01.03.22 16:12, Sudeep Holla wrote:
->>>
->>> Hi Ahmad,
->>>
->>> On Mon, Feb 28, 2022 at 05:01:39PM +0100, Ahmad Fatoum wrote:
->>>> Hello Etienne,
->>>>
->>>> On 28.10.21 16:00, Etienne Carriere wrote:
->>>>> Introduce compatible "linaro,scmi-optee" for SCMI transport channel
->>>>> based on an OP-TEE service invocation. The compatible mandates a
->>>>> channel ID defined with property "linaro,optee-channel-id".
->>>>
->>>
->>> Not sure if Etienne's reply addressed your queries/concerns correctly.
->>> I thought I will add my view anyways.
->>>
->>>> I just found this thread via the compatible in the STM32MP131 patch set:
->>>> https://lore.kernel.org/all/20220225133137.813919-1-gabriel.fernandez@foss.st.com/
->>>>
->>>> Linux doesn't care whether PSCI is provided by TF-A, OP-TEE or something
->>>> else, so there is just the arm,psci* compatible.
->>>>
->>>
->>> Correct, the interface to the kernel is fixed and hence we must be able
->>> to manage with the standard and fixed sole set of bindings for the same.
->>>
->>>> What's different about SCMI that this is not possible? Why couldn't the
->>>> existing binding and driver be used to communicate with OP-TEE as secure
->>>> monitor as well?
->>>>
->>>
->>> However with SCMI, the spec concentrates and standardises all the aspects
->>> of the protocol used for the communication while it allows the transport
->>> used for such a communication to be implementation specific. It does
->>> address some standard transports like mailbox and PCC(ACPI). However,
->>> because of the flexibility and also depending on the hardware(or VM),
->>> different transports have been added to the list. SMC/HVC was the one,
->>> followed by the virtio and OPTEE. While I agree SMC/HVC and OPTEE seem
->>> to have lot of common and may have avoided separate bindings.
->>>
->>> However the FIDs for SMC/HVC is vendor defined(the spec doesn't cover this
->>> and hence we utilised/exploited DT). Some vendors wanted interrupt support
->>> too which got added. OPTEE eliminates the need for FID and can also provide
->>> dynamic shared memory info. In short, it does differ in a way that the driver
->>> needs to understand the difference and act differently with each of the
->>> unique transports defined in the binding.
->>>
->>> Hope that explains and addresses your concern.
->>
->> Thanks for the elaborate answer. I see now why it's beneficial to have
->> an OP-TEE transport in general. I don't yet see the benefit to use it
->> in the STM32MP13x instead of SMCs like with STM32MP15x, but that a discussion
->> that I need to have in the aforementioned thread.
-> 
-> Some SCMI operations in OP-TEE need to execute in a threaded context
-> (preemptible, ...).
-> There is no SMC function ID defined for an SCMI thread entry in
-> OP-TEE. We rather use standard invocation of a TEE service: opening a
-> session and invoking commands.
-> Invoked commands are executed in an OP-TEE native threaded context.
-> The service accessed is referred to as the OP-TEE SCMI PTA.
-> 
-> As for STM32MP15x, one willing to extend resources assigned to secure
-> world may also need to move mp15 SCMI from SMC transport to optee
-> transport.
-
-Yes. Makes sense.
-
-Thanks again for explaining,
-Ahmad
-
-> 
-> Regards,
-> Etienne
-> 
->>
->> Thanks again!
->> Ahmad
->>
->> --
->> Pengutronix e.K.                           |                             |
->> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
->> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
->> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-> 
-etienn
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+That doesn't sound right.  I will look at it more closely in the next few days.

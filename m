@@ -2,103 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF44DB6C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5650B4DB6D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353485AbiCPQy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
+        id S1350105AbiCPRAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 13:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239250AbiCPQy4 (ORCPT
+        with ESMTP id S232373AbiCPRAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:54:56 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0A931341;
-        Wed, 16 Mar 2022 09:53:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647449622; x=1678985622;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=67HJ5xsUQCH77LSjNv9g0hLBWeBJ7D0jAoL2UnUtLbY=;
-  b=RYXF41fW6Lv87cYDIdZS6gM/d4eBWGuBE/wt1/Oik+I0MJXv/VUrTExc
-   xW8/n5y5hQuECkFGYHBAOSIgB3kcv6Hr302EzvGOY/WVAtt8PXLnqXO0P
-   3qkVt5RI9Rq65csYsDEBAqdKnFX9B1TF441nrFp/dP45hHjK/t4ENHS2X
-   iYsFmRZmvKa40m/j8Z3GJNJjHAHENyf/oZ71Gs/NRmWnDBV/kfAzJpGwt
-   WgdHM8aJUq0GwFyYfpiIqDo5bYRSwGqplaUHzPqdnM/DfGDP9Z4O0cs33
-   1uUSGVvDKB9Meo1VAXJkyO5V/PVyHBX4EDitc9E1xhNpV0hrCIxDqiHNl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317381330"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="317381330"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:53:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="513107709"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2022 09:53:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7D8E3192; Wed, 16 Mar 2022 18:53:55 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 2/2] staging: fbtft: Consider type of init sequence values in fbtft_init_display()
-Date:   Wed, 16 Mar 2022 18:53:51 +0200
-Message-Id: <20220316165351.58107-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220316165351.58107-1-andriy.shevchenko@linux.intel.com>
-References: <20220316165351.58107-1-andriy.shevchenko@linux.intel.com>
+        Wed, 16 Mar 2022 13:00:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B9453E12;
+        Wed, 16 Mar 2022 09:59:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7517EB81A66;
+        Wed, 16 Mar 2022 16:59:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29167C340E9;
+        Wed, 16 Mar 2022 16:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647449972;
+        bh=cnadLeya2RVXcK9hXSU+BT7h71m43eVlGL4w/1EEdG0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Asm6Trp5HmdK9kspYRj08hT5NKP0OhV2Al4rL93IFQ0r1FAazVmg9SAzV04GjP61b
+         MgQY93B68fUm903vgOutIvTisAm8staIjJdU1+Ru2lc5yuuoOj7Jh+DO0/hJqdIc1Q
+         tEiGYO+u4ZCM7IgMeNJ/gk43NUzg+gzjyLRkVOTOogknfrqwBXGZuiuvKtj5OLI6K9
+         ogvO4cRzGXnLcolLB1jzhiiCMNZp6xmJ38Zblk2cUwxbsyJmaPX/7S78whfvSXf8x/
+         39Nn0DjCJ2aGIVexvzNq6U7zp3EN7iobNjo3O9xiIrOY/kmrz1UcETdmS6NdCSkJgz
+         xE64vCC36WSOg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B75675C0387; Wed, 16 Mar 2022 09:59:31 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 09:59:31 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "urezki@gmail.com" <urezki@gmail.com>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] rcu: Only boost rcu reader tasks with lower priority
+ than boost kthreads
+Message-ID: <20220316165931.GI4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220311022226.595905-1-qiang1.zhang@intel.com>
+ <Yist4IWWR/6BZzeK@linutronix.de>
+ <PH0PR11MB58802B8804EDFFC73BA676F2DA0D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB58807AD9A1BAA122218B92DBDA0D9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB58807AD9A1BAA122218B92DBDA0D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the fbtft_init_display() the init sequence is printed for
-the debug purposes. Unfortunately the current code doesn't take
-into account that values in the buffer are of the s16 type.
+On Sat, Mar 12, 2022 at 03:11:04AM +0000, Zhang, Qiang1 wrote:
+> On 2022-03-11 10:22:26 [+0800], Zqiang wrote:
+> > When RCU_BOOST is enabled, the boost kthreads will boosting readers
+> > who are blocking a given grace period, if the current reader tasks
+>                                        ^ Period.
+> 
+> > have a higher priority than boost kthreads(the boost kthreads priority
+> > not always 1, if the kthread_prio is set), 
+> 
+> >>This confuses me:
+> >>- Why does this matter
+> 
+> In preempt-rt system, if the kthread_prio is not set, it prio is 1.
+> the boost kthreads can preempt almost  rt task, It will affect
+> the real-time performance of some user rt  tasks.  In preempt-rt systems,
+> in most scenarios, this kthread_prio will be configured.
 
-Consider that and replace the printing code with fbtft_par_dbg_hex()
-call.
+Just following up...  These questions might have been answered, but
+I am not seeing those answers right off-hand.
 
-Fixes: b888897014a9 ("staging/fbtft: Remove all strcpy() uses")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no changes, just based on prerequisite
- drivers/staging/fbtft/fbtft-core.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Is the grace-period latency effect of choosing not to boost high-priority
+tasks visible at the system level in any actual workload?
 
-diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
-index 6dc77895a87c..3b182115bd6e 100644
---- a/drivers/staging/fbtft/fbtft-core.c
-+++ b/drivers/staging/fbtft/fbtft-core.c
-@@ -1034,10 +1034,9 @@ int fbtft_init_display(struct fbtft_par *par)
- 			for (j = 0; par->init_sequence[i + 1 + j] >= 0; j++)
- 				;
- 
--			fbtft_par_dbg(DEBUG_INIT_DISPLAY, par,
--				      "init: write(0x%02X) %*ph\n",
--				      par->init_sequence[i], j,
--				      &par->init_sequence[i + 1]);
-+			fbtft_par_dbg_hex(DEBUG_INIT_DISPLAY, par, par->info->device,
-+					  s16, &par->init_sequence[i + 1], j,
-+					  "init: write(0x%02X)", par->init_sequence[i]);
- 
- 			/* Write */
- 			j = 0;
--- 
-2.35.1
+Suppose that a SCHED_DEADLINE task has exhausted its time quantum,
+and has thus been preempted within an RCU read-side critical section.
+Can priority boosting from a SCHED_FIFO prio-1 task cause it to start
+running?
 
+Do delays in RCU priority boosting cause excessive grace-period
+latencies on real workloads, even when all the to-be-boosted
+tasks are SCHED_OTHER?
+
+Thoughts?
+
+							Thanx, Paul
+
+> Thanks
+> Zqiang
+> 
+> >>- If it is not RT prio, what is then? Higher or lower? Afaik it is
+> >>  always >= 1.
+> 
+> >>>If it is not RT prio, the sanitize_kthread_prio() will limit RT prio
+> 
+> > boosting is useless, skip
+> > current task and select next task to boosting, reduce the time for a
+> > given grace period.
+> 
+> >>So if the task, that is stuck in a rcu_read() section, has a higher
+> >>priority than the boosting thread then boosting is futile. Understood.
+> >>
+> >>Please correct me if I'm wrong but this is intended for !SCHED_OTHER
+> >>tasks since there shouldn't a be PI chain on boost_mtx so that its
+> >>default RT priority is boosted above what has been configured.
+> 
+> >>>Yes, you are right. If the boosting task which itself already boosted due to PI chain,
+> >>>and Its priority may only be temporarily higher than boost kthreads,  once that
+> >>>PI boost is lifted the task may still be in a RCU section, but if we have been skipped it,
+> >>>this task have been missed the opportunity to be boosted.
+> 
+> >>
+> >>You skip boosting tasks which are itself already boosted due to a PI
+> >>chain. Once that PI boost is lifted the task may still be in a RCU
+> >>section. But if I understand you right, your intention is skip boosting
+> >>tasks with a higher priority and concentrate and those which are in
+> >>need. This shouldn't make a difference unless the scheduler is able to
+> >>move the rcu-boosted task to another CPU.
+> >>
+> 
+> >>>Yes, It make sense when the rcu-boosted kthreads and task which to be boosting
+> >>>should run  difference CPU .
+> 
+> >>Am I right so far? If so this should be part of the commit message (the
+> >>intention and the result). Also, please add that part with
+> >>boost_exp_tasks. The comment above boost_mtx is now above
+> >>boost_exp_tasks with a space so it looks (at least to me) like these two
+> >>don't belong together.
+> 
+> >>>Yes, I will add your description to the commit  information.
+> 
+> 
+> > Suggested-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> 
+> >Sebastian

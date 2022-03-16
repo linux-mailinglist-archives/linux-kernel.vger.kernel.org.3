@@ -2,126 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47884DB052
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6743F4DB057
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355998AbiCPNFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
+        id S1355997AbiCPNF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345835AbiCPNFH (ORCPT
+        with ESMTP id S241627AbiCPNFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:05:07 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B8760D1;
-        Wed, 16 Mar 2022 06:03:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id d10so3983898eje.10;
-        Wed, 16 Mar 2022 06:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=se+rvnHLTMwCDJuZUUaKeJfsDcgnDN9KN2DXN5nL3LI=;
-        b=FqRhB8kJ7DAPHXMUR4z2dXdwLCMDBNZYZTQxZ8mZHljQbWDn62iBugk7EMcvIncaBu
-         XkX1ohnXLsVuz41HeOEZqTzvefSfZ6GVV2ojTj8B+yE9UVomafyGCXu43qCy9UYqUZZz
-         N1/1P29Zqpvkc75cVYt3YuF6wxMRhXbUEuucSLq/T5UGw3q40fX+pREKSbBezaoBeGV8
-         ybfL5HMUxmYPlOCp3VHcKTZ29Krhsn4fVpaBvhm2+AFt1Z/Kx+973+5/N2BkVzFU/6nV
-         rz2MtO8QBO2Szkw1W6xfAgaQek3XkEXq1Gn3QpmBBhcZzMyvoPy5WCjExWDmsDOu5rET
-         IDBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=se+rvnHLTMwCDJuZUUaKeJfsDcgnDN9KN2DXN5nL3LI=;
-        b=EVRBdPs22vKaEM/Vtyprm02Csedy+5pjlYX9QO57GaZ43bqP+juFtwFrS9l5CxrL7l
-         BSIM46R17QAONRPdx+N1gUQyOSntdWj0acytFlBvgogqeVc+LiFbUELeiGL+0/1Bvc2Z
-         erBWloJVEdp8h1Y6i0a12NDdK3E2T6dQsdTsceyBBXYzyhuU4ro78kknWpGYOoEloUuj
-         +9s2opMV+dZ3gQDeSIV6cDRVvXYq4+7x/zVZPBFb0DUck3aPjsAS1WjuCd3FbnCpaCF2
-         Hx7el9OGM1LHFzXLVjGxtEXFwD4zInbfsxPCfz3h7h9VvUaYsHknpTZkIi3t+AUjqxIP
-         Jt2Q==
-X-Gm-Message-State: AOAM531QuFijT247s3LjNIVZzGeYGVOJKH0OhicTg+RBVtouI0SXijFm
-        L8BnUqjYWhYav9NPO73eL2Y=
-X-Google-Smtp-Source: ABdhPJymWXJcSrB45wAn+bo52zxogrDTdURwJeZ8i8a4xfO9OafdGoinqX9reoqs6F5DLnijqYEJ3w==
-X-Received: by 2002:a17:906:2991:b0:6cf:6b24:e92f with SMTP id x17-20020a170906299100b006cf6b24e92fmr26688574eje.748.1647435831497;
-        Wed, 16 Mar 2022 06:03:51 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id p23-20020a170906605700b006ccebe7f75dsm875253ejj.123.2022.03.16.06.03.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 06:03:50 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 15:03:49 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH v4 net-next 10/15] net: dsa: Validate hardware support
- for MST
-Message-ID: <20220316130349.kmjonrhsx7upj55h@skbuf>
-References: <20220315002543.190587-1-tobias@waldekranz.com>
- <20220315002543.190587-11-tobias@waldekranz.com>
- <20220315171108.ameddbqv2sehq3pp@skbuf>
- <8735jil0m1.fsf@waldekranz.com>
+        Wed, 16 Mar 2022 09:05:49 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CFE1E3C0;
+        Wed, 16 Mar 2022 06:04:34 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22GAA8Yh009708;
+        Wed, 16 Mar 2022 14:04:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=caLH5xorRCEoALX4pq7ufOB8VX+um3FujwLjscQI2h8=;
+ b=n3cotjuT9QfJZ8TudzlmmakXMPIczQmnyDBqjgRXbOtBfTE3jysM7FkbnGnzeHiW/k4P
+ TaK9S2d1KPfI8+jf1cK7L4vNc8d1fk9m4k4Bi8Er8tYD2XNEPOv9jcauTlY+8Dp0K0Cn
+ DK/Pv6g/4MKBvbaMvjwEnxq/2JAOdzywlLlL9yEvIj78rviafd7C+M5lA8DXin5j9b03
+ jgFCRtTXFnH2K1YjPn9koH5+oGKZ1ar2zu5GrR7Wp3DlEj8QUpgwghmXyAQu7LJ6d4mb
+ lORWUvSfuEwWMIMVJNdbcM1HwrATJcLNFSRn9obh8OLd8h9N5AA8y75cKlVXy4yFL7M2 Og== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et63hdn0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 14:04:22 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C804B10002A;
+        Wed, 16 Mar 2022 14:04:20 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BFC4D2278A3;
+        Wed, 16 Mar 2022 14:04:20 +0100 (CET)
+Received: from [10.201.22.79] (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 16 Mar
+ 2022 14:04:20 +0100
+Message-ID: <ba05cd7e-0c1a-5188-f92a-20eb243789ab@foss.st.com>
+Date:   Wed, 16 Mar 2022 14:04:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735jil0m1.fsf@waldekranz.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 00/13] Introduction of STM32MP13 RCC driver (Reset
+ Clock Controller)
+Content-Language: en-US
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220316124553.6818-1-gabriel.fernandez@foss.st.com>
+From:   Gabriel FERNANDEZ <gabriel.fernandez@foss.st.com>
+In-Reply-To: <20220316124553.6818-1-gabriel.fernandez@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-16_04,2022-03-15_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 10:15:18AM +0100, Tobias Waldekranz wrote:
-> >> +int dsa_port_mst_enable(struct dsa_port *dp, bool on,
-> >> +			struct netlink_ext_ack *extack)
-> >> +{
-> >> +	if (!on)
-> >> +		return 0;
-> >> +
-> >> +	if (!dsa_port_supports_mst(dp)) {
-> >> +		NL_SET_ERR_MSG_MOD(extack, "Hardware does not support MST");
-> >> +		return -EINVAL;
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
-> >
-> > Experimenting a bit... maybe this looks tidier? We make the "if" condition
-> > have the same basic structure as the previous "if (br_mst_enabled(br) &&
-> > !dsa_port_supports_mst(dp))", albeit transformed using De Morgan's rules.
-> >
-> > {
-> > 	if (!on || dsa_port_supports_mst(dp))
-> > 		return 0;
-> >
-> > 	NL_SET_ERR_MSG_MOD(extack, "Hardware does not support MST");
-> > 	return -EINVAL;
-> > }
-> 
-> I initially had it like this. It looks tidier, yes - but to me the
-> intent is less obvious when reading it. How about:
-> 
-> {
-> 	if (on && !dsa_port_supports_mst(dp)) {
-> 		NL_SET_ERR_MSG_MOD(extack, "Hardware does not support MST");
-> 		return -EINVAL;
-> 	}
-> 
-> 	return 0;
-> }
+Sorry, this series is incomplete due to a firewall issue.
 
-Yes, let's go with this.
+I will resend it.
+
+Best regards
+
+Gabriel
+
+
+On 3/16/22 13:45, gabriel.fernandez@foss.st.com wrote:
+> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+>
+> v3:
+>    - cosmetic change from Stephen Boyd
+>    - rename some functions in clk-stm32-core
+>    - add missing static for variables or functions
+>
+> v2:
+>    - Resend because patch 9,10,12,13 has not been sent
+>    - add Reviewed by Krzysztof Kozlowski for patch 1
+>
+> Gabriel Fernandez (13):
+>    dt-bindings: rcc: stm32: add new compatible for STM32MP13 SoC
+>    clk: stm32: Introduce STM32MP13 RCC drivers (Reset Clock Controller)
+>    clk: stm32mp13: add stm32_mux clock management
+>    clk: stm32mp13: add stm32_gate management
+>    clk: stm32mp13: add stm32 divider clock
+>    clk: stm32mp13: add composite clock
+>    clk: stm32mp13: manage secured clocks
+>    clk: stm32mp13: add all STM32MP13 peripheral clocks
+>    clk: stm32mp13: add all STM32MP13 kernel clocks
+>    clk: stm32mp13: add multi mux function
+>    clk: stm32mp13: add safe mux management
+>    ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP13
+>    ARM: dts: stm32: add RCC on STM32MP13x SoC family
+>
+>   .../bindings/clock/st,stm32mp1-rcc.yaml       |    2 +
+>   arch/arm/boot/dts/stm32mp131.dtsi             |  128 +-
+>   arch/arm/boot/dts/stm32mp133.dtsi             |    4 +-
+>   arch/arm/boot/dts/stm32mp13xf.dtsi            |    3 +-
+>   drivers/clk/Kconfig                           |    5 +
+>   drivers/clk/Makefile                          |    1 +
+>   drivers/clk/stm32/Makefile                    |    1 +
+>   drivers/clk/stm32/clk-stm32-core.c            |  695 +++++++
+>   drivers/clk/stm32/clk-stm32-core.h            |  188 ++
+>   drivers/clk/stm32/clk-stm32mp13.c             | 1620 +++++++++++++++
+>   drivers/clk/stm32/reset-stm32.c               |  122 ++
+>   drivers/clk/stm32/reset-stm32.h               |    8 +
+>   drivers/clk/stm32/stm32mp13_rcc.h             | 1748 +++++++++++++++++
+>   include/dt-bindings/clock/stm32mp13-clks.h    |  229 +++
+>   include/dt-bindings/reset/stm32mp13-resets.h  |  100 +
+>   15 files changed, 4794 insertions(+), 60 deletions(-)
+>   create mode 100644 drivers/clk/stm32/Makefile
+>   create mode 100644 drivers/clk/stm32/clk-stm32-core.c
+>   create mode 100644 drivers/clk/stm32/clk-stm32-core.h
+>   create mode 100644 drivers/clk/stm32/clk-stm32mp13.c
+>   create mode 100644 drivers/clk/stm32/reset-stm32.c
+>   create mode 100644 drivers/clk/stm32/reset-stm32.h
+>   create mode 100644 drivers/clk/stm32/stm32mp13_rcc.h
+>   create mode 100644 include/dt-bindings/clock/stm32mp13-clks.h
+>   create mode 100644 include/dt-bindings/reset/stm32mp13-resets.h
+>

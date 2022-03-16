@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A894DAD3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE4B4DAD45
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 10:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344868AbiCPJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 05:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S1354773AbiCPJOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 05:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232911AbiCPJLz (ORCPT
+        with ESMTP id S243385AbiCPJOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 05:11:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086ED5BD2D
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647421842; x=1678957842;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GYVmQOhcdFAbfwKEexCd/VecqMoIgeWrILdw6jh/jwk=;
-  b=XavaRW41d9dirvc7jz3DBDme/m35wcdKpotUNBtH/zIC06pp11xeRShR
-   DjcMou6EpOpqzjv9Jow1ojp2WQT686aTYDPmxWbo3Gl+eIWtwmDNnTEl0
-   2H6Ip/4DTYstJvzW4kIyJeFn+1N/SsE6wxCaBW+9j7fiu4n1wfWEeW0Jt
-   hyVYkCU3Jkac5/0tFayQjG7rmo16QXsXyb+Jww5kbSN4cxoSmAD6Mjdkz
-   rPy926fOTBa80HUXEoulqMtBOqvuE9H5pYFxMW8QrgkZKAAeaKtpK+GT9
-   LG/jLMLIxWZeUNrz18nJIma5A4vNq30czr/xdmdrLTe1Ahgl8+IcgqYzK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256482956"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="256482956"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 02:10:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="714519679"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2022 02:10:40 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUPfz-000CCQ-NF; Wed, 16 Mar 2022 09:10:39 +0000
-Date:   Wed, 16 Mar 2022 17:09:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-02
- 1555/9999] kernel/tracepoint.c:720:5: warning: no previous prototype for
- 'android_rvh_probe_register'
-Message-ID: <202203161700.WbV8553N-lkp@intel.com>
+        Wed, 16 Mar 2022 05:14:52 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2395DE73
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:13:34 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1647421990t37qmosd
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 16 Mar 2022 17:13:04 +0800 (CST)
+X-QQ-SSF: 01400000002000D0H000000A0000000
+X-QQ-FEAT: TskX/GkkryCtF3MMUU7WGeLJerz6JGDXThH7VyNE/T3DPVypoS4JBKwYguSjL
+        +o/qFTpdpmvQ3QQU3Gz/AceDwgtpxI+JZtqgzzOtVSmIxSSJrqn6tmzQqom790x5nUVNb7M
+        ZcSHX6rwVMb+ihYHEpvAulQr2lQLyiPPsL0c9UjaxqDYDLE6nQLLJy2gxife7F3/zTaBIxG
+        QAeP+/gFa9KsRCvJMAZj+K8qJcPuRLwnjKRhq2erjDI/x+51xCTLgDDn6UEc4AOwrxAyfov
+        gnfnZ2maK3fRBEb1R0zdy2bI4w/aUbKy+J3lGQVtp7IARXgO1stlJ2Huqp8qZB8lRb7olhF
+        fkBx8mARx+DLFcYbmfcgG+RoDvTZtHbyENf86t2
+X-QQ-GoodBg: 1
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     perex@perex.cz, tiwai@suse.com, broonie@kernel.org,
+        lgirdwood@gmail.com, Vijendar.Mukunda@amd.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] ASoC: amd: Fix reference to PCM buffer address
+Date:   Wed, 16 Mar 2022 17:13:03 +0800
+Message-Id: <20220316091303.9745-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign8
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quentin,
+PCM buffers might be allocated dynamically when the buffer
+preallocation failed or a larger buffer is requested, and it's not
+guaranteed that substream->dma_buffer points to the actually used
+buffer.  The driver needs to refer to substream->runtime->dma_addr
+instead for the buffer address.
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-02
-head:   32c0a362f1a90ddf603ecd83a47a5b8e2b7a12fb
-commit: cc6eed90a467a413b9c62fdd76e8f06347266a88 [1555/9999] ANDROID: vendor_hooks: Allow multiple attachments to restricted hooks
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220316/202203161700.WbV8553N-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/cc6eed90a467a413b9c62fdd76e8f06347266a88
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-02
-        git checkout cc6eed90a467a413b9c62fdd76e8f06347266a88
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/tracepoint.c:720:5: warning: no previous prototype for 'android_rvh_probe_register' [-Wmissing-prototypes]
-     720 | int android_rvh_probe_register(struct tracepoint *tp, void *probe, void *data)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/android_rvh_probe_register +720 kernel/tracepoint.c
-
-   719	
- > 720	int android_rvh_probe_register(struct tracepoint *tp, void *probe, void *data)
-
+Fixes: cab396d8b22c1 ("ASoC: amd: add ACP5x pcm dma driver ops")
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ sound/soc/amd/vangogh/acp5x-pcm-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+index 31fa166df98a..d36bb718370f 100644
+--- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
++++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+@@ -281,7 +281,7 @@ static int acp5x_dma_hw_params(struct snd_soc_component *component,
+ 		return -EINVAL;
+ 	}
+ 	size = params_buffer_bytes(params);
+-	rtd->dma_addr = substream->dma_buffer.addr;
++	rtd->dma_addr = substream->runtime->dma_addr;
+ 	rtd->num_pages = (PAGE_ALIGN(size) >> PAGE_SHIFT);
+ 	config_acp5x_dma(rtd, substream->stream);
+ 	return 0;
+-- 
+2.20.1
+
+
+

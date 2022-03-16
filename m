@@ -2,157 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D7F4DB8B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7DB4DB8D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357918AbiCPTWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S1352938AbiCPTYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357942AbiCPTV4 (ORCPT
+        with ESMTP id S1358093AbiCPTYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:21:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EC26AA73;
-        Wed, 16 Mar 2022 12:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=vYNWn7/gWvdXVAuSqHEJdNrAy6DmSK7DzABaWvfRolU=; b=uz/gKWuyajnQkK6EymeSIkywI8
-        AKee4iVGItlSmtUcyfpMs2rpMKsnM+1/6giveeY/JiJlrqSVxOo/uKyCQMLRnf2rtJLUGAat2DheY
-        jlAWn5xBb7LboEv7888ALv/5/v+uInPkhSvt1z/XZ3RC/iEuJpn9ACgG9yZgYz+Oi6jgUxBqSCUmx
-        aCyq4+1vi7jjqsiV+NLiqIgV4WBYdtKnDD1jgX6hBWsAS/lCde6/J+6WW6RQvJO43a1TKudjCx5Lv
-        cA480jryLVqH5og5d6tTRnTuMIQ/mMRRCUvOHVwbY4zZr+mPiy5PCW5pN7fH3DP5OwZaIlFLgCqCM
-        qw9BeXNQ==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUZCC-00EArp-TR; Wed, 16 Mar 2022 19:20:33 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org
-Subject: [PATCH 9/9] testmmiotrace: eliminate anonymous module_init & module_exit
-Date:   Wed, 16 Mar 2022 12:20:10 -0700
-Message-Id: <20220316192010.19001-10-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220316192010.19001-1-rdunlap@infradead.org>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
+        Wed, 16 Mar 2022 15:24:23 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D86E576
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:21:51 -0700 (PDT)
+Received: from zn.tnic (p200300ea971561ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61ec:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7DC6E1EC0347;
+        Wed, 16 Mar 2022 20:21:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647458494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Rj/DRn2HS3AXggW7KqDfmpgD2DfDqz4E8zLMyP0tMd4=;
+        b=dCI/jpTlQ6nwAv+WNtOOw9llZkuV5neHMXYhlm4lNt/H1i+MMll2gUuvH2i/Tgr7YOniix
+        z7w3VEn2aseIWPr0+3l1+cuCF2xKmgj04NbexiAUtbeVuh2OSFEdQbRLiKGXlGONjwZMLn
+        443BBI79tiorOzZBZBslpoA7bpZmjjQ=
+Date:   Wed, 16 Mar 2022 20:21:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: system locks up with CONFIG_SLS=Y; 5.17.0-rc
+Message-ID: <YjI4u4VnkmzO+vQb@zn.tnic>
+References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
+ <YjHYh3XRbHwrlLbR@zn.tnic>
+ <YjIwRR5UsTd3W4Bj@audible.transient.net>
+ <dd8cdcfb-b92c-3279-5c9c-18ffce90a2e8@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <dd8cdcfb-b92c-3279-5c9c-18ffce90a2e8@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate anonymous module_init() and module_exit(), which can lead to
-confusion or ambiguity when reading System.map, crashes/oops/bugs,
-or an initcall_debug log.
+On Wed, Mar 16, 2022 at 12:02:59PM -0700, Dave Hansen wrote:
+> This hit one of the new int3's in "ASM_RET" in "setc" in
+> arch/x86/kvm/emulate.c:
+> 
+> 	FOP_SETCC(setc)
+> 
+> Did the extra 'int3' screw up some presumed jump offset or something?
 
-Give each of these init and exit functions unique driver-specific
-names to eliminate the anonymous names.
+Yap, looks like it. I wonder how no one managed to hit this yet...
 
-Example 1: (System.map)
- ffffffff832fc78c t init
- ffffffff832fc79e t init
- ffffffff832fc8f8 t init
+Jamie, does this fix it, per chance?
 
-Example 2: (initcall_debug log)
- calling  init+0x0/0x12 @ 1
- initcall init+0x0/0x12 returned 0 after 15 usecs
- calling  init+0x0/0x60 @ 1
- initcall init+0x0/0x60 returned 0 after 2 usecs
- calling  init+0x0/0x9a @ 1
- initcall init+0x0/0x9a returned 0 after 74 usecs
-
-Fixes: 8b7d89d02ef3 ("x86: mmiotrace - trace memory mapped IO")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Karol Herbst <karolherbst@gmail.com>
-Cc: Pekka Paalanen <ppaalanen@gmail.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: nouveau@lists.freedesktop.org
-Cc: x86@kernel.org
 ---
- arch/x86/mm/testmmiotrace.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index f667bd8df533..e88ce4171c4a 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -430,8 +430,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	FOP_END
+ 
+ /* Special case for SETcc - 1 instruction per cc */
++
++#define SETCC_ALIGN 8
++
+ #define FOP_SETCC(op) \
+-	".align 4 \n\t" \
++	".align " __stringify(SETCC_ALIGN) " \n\t" \
+ 	".type " #op ", @function \n\t" \
+ 	#op ": \n\t" \
+ 	ASM_ENDBR \
+@@ -1049,7 +1052,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
+ static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
+ {
+ 	u8 rc;
+-	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
++	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
+ 
+ 	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
+ 	asm("push %[flags]; popf; " CALL_NOSPEC
 
---- lnx-517-rc8.orig/arch/x86/mm/testmmiotrace.c
-+++ lnx-517-rc8/arch/x86/mm/testmmiotrace.c
-@@ -113,7 +113,7 @@ static void do_test_bulk_ioremapping(voi
- 	synchronize_rcu();
- }
- 
--static int __init init(void)
-+static int __init testmmiotrace_init(void)
- {
- 	unsigned long size = (read_far) ? (8 << 20) : (16 << 10);
- 	int ret = security_locked_down(LOCKDOWN_MMIOTRACE);
-@@ -136,11 +136,11 @@ static int __init init(void)
- 	return 0;
- }
- 
--static void __exit cleanup(void)
-+static void __exit testmmiotrace_cleanup(void)
- {
- 	pr_debug("unloaded.\n");
- }
- 
--module_init(init);
--module_exit(cleanup);
-+module_init(testmmiotrace_init);
-+module_exit(testmmiotrace_cleanup);
- MODULE_LICENSE("GPL");
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

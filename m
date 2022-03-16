@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AAA4DB387
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B614DB388
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 15:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351574AbiCPOnZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Mar 2022 10:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S239686AbiCPOoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 10:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiCPOnV (ORCPT
+        with ESMTP id S1356572AbiCPOoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 10:43:21 -0400
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D61D15F257;
-        Wed, 16 Mar 2022 07:42:05 -0700 (PDT)
-Received: from smtpclient.apple (p5b3d2183.dip0.t-ipconnect.de [91.61.33.131])
-        by mail.holtmann.org (Postfix) with ESMTPSA id BDC18CECF7;
-        Wed, 16 Mar 2022 15:42:04 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 2/2] Bluetooth: Send AdvMonitor Dev Found for all matched
- devices
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220312020707.2.Ie20f132ad5cb6bcd435d6c6e0fca8a9d858e83d4@changeid>
-Date:   Wed, 16 Mar 2022 15:42:04 +0100
-Cc:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        linux-bluetooth@vger.kernel.org,
-        Miao-chen Chou <mcchou@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <B4529896-AA8A-40F5-BC3D-A887E2C690E1@holtmann.org>
-References: <20220312020707.1.I2b7f789329979102339d7e0717522ba417b63109@changeid>
- <20220312020707.2.Ie20f132ad5cb6bcd435d6c6e0fca8a9d858e83d4@changeid>
-To:     Manish Mandlik <mmandlik@google.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 16 Mar 2022 10:44:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3D421E12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 07:43:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E17E61585
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:43:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D839C340E9;
+        Wed, 16 Mar 2022 14:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647441780;
+        bh=o0roD4ZBsEokwd+y6YJx5uI4mHLLQzXII32jM5J1HYU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=A7p0hbPuGpnnb71a109WPF0UxXxtJjd75KJK525l/NOK2AtkW02H5akP95aYa4tmV
+         aTblbI+I3KTgvHkMyvW3A7VXmS291oIfFTixKysk7qIiWmws0w/K7R77kSQbNij5O7
+         n0gOmvp5ix1JUklAQKrPUawUdCaQ4Aeex53oqBaxEzBzbXQDJhwdEgr7OILBZMXxvY
+         nYnUDD1HsLM+jUHd5N5OsuWtH7nyRSmieoPd+ZTBMQUsoXSCAqadRJ/jyYU5hdpfgh
+         bdOMflBAQkpYdAhCllq5jW1b51FJOFp2wsRKhIcCnQdLWthgH3mWewh2M3L0Bztp2M
+         2bmAplaYiGzwA==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: [RFC PATCH 0/4] rcu: Expedited GP polling improvements
+Date:   Wed, 16 Mar 2022 15:42:51 +0100
+Message-Id: <20220316144255.336021-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manish,
+I initially wanted to shape that into the form of reviews or questions
+but I thought I might as well send patches.
 
-> When an Advertisement Monitor is configured with SamplingPeriod 0xFF,
-> the controller reports only one adv report along with the MSFT Monitor
-> Device event.
-> 
-> When an advertiser matches multiple monitors, some controllers send one
-> adv report for each matched monitor; whereas, some controllers send just
-> one adv report for all matched monitors.
-> 
-> In such a case, report Adv Monitor Device Found event for each matched
-> monitor.
-> 
-> Signed-off-by: Manish Mandlik <mmandlik@google.com>
-> Reviewed-by: Miao-chen Chou <mcchou@chromium.org>
-> ---
-> 
-> net/bluetooth/mgmt.c | 70 +++++++++++++++++++++++---------------------
-> 1 file changed, 37 insertions(+), 33 deletions(-)
+Be careful, it's fairly possible I misunderstood some things and those
+patches are completely off the track.
 
-patch has been applied to bluetooth-next tree.
+At least TREE07 looks happy.
 
-> 
-> diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-> index d59c70e9166f..e4da2318a2f6 100644
-> --- a/net/bluetooth/mgmt.c
-> +++ b/net/bluetooth/mgmt.c
-> @@ -9628,17 +9628,44 @@ void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
-> 		   NULL);
-> }
-> 
-> +static void mgmt_send_adv_monitor_device_found(struct hci_dev *hdev,
-> +					       struct sk_buff *skb,
-> +					       struct sock *skip_sk,
-> +					       u16 handle)
-> +{
-> +	struct sk_buff *advmon_skb;
-> +	size_t advmon_skb_len;
-> +	__le16 *monitor_handle;
-> +
-> +	if (!skb)
-> +		return;
-> +
-> +	advmon_skb_len = (sizeof(struct mgmt_ev_adv_monitor_device_found) -
-> +			  sizeof(struct mgmt_ev_device_found)) + skb->len;
-> +	advmon_skb = mgmt_alloc_skb(hdev, MGMT_EV_ADV_MONITOR_DEVICE_FOUND,
-> +				    advmon_skb_len);
-> +	if (!advmon_skb)
-> +		return;
-> +
-> +	/* ADV_MONITOR_DEVICE_FOUND is similar to DEVICE_FOUND event except
-> +	 * that it also has 'monitor_handle'. Make a copy of DEVICE_FOUND and
-> +	 * store monitor_handle of the matched monitor.
-> +	 */
-> +	monitor_handle = skb_put(advmon_skb, sizeof(*monitor_handle));
-> +	*monitor_handle = cpu_to_le16(handle);
-> +	skb_put_data(advmon_skb, skb->data, skb->len);
-> +
-> +	mgmt_event_skb(advmon_skb, skip_sk);
-> +}
-> +
+git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+	rcu/dev
 
-However, this is rather hackish code. It will blow up in our faces at some point and we will spent weeks to find the bug.
+HEAD: dd1f68246e04fe03fde46cd55f1c87ea92a6c57e
 
-I realized that you already got this pattern merged by Luiz and that is why I merged your patch. I would have not accepted this in the first place. Maybe you need to spent some development cycles and check how all DEVICE_FOUND events can be properly generalized.
+Thanks,
+	Frederic
+---
 
-Regards
+Frederic Weisbecker (4):
+      rcu: Remove needless polling work requeue for further waiter
+      rcu: No need to reset the poll request flag before completion
+      rcu: Perform early sequence fetch for polling locklessly
+      rcu: Name internal polling flag
 
-Marcel
 
+ kernel/rcu/rcu.h      |  5 +++++
+ kernel/rcu/tree.c     |  2 +-
+ kernel/rcu/tree_exp.h | 18 +++++++-----------
+ 3 files changed, 13 insertions(+), 12 deletions(-)

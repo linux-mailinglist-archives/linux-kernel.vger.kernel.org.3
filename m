@@ -2,152 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857844DAB94
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E55494DABAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244008AbiCPHMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 03:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S1347172AbiCPHPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 03:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiCPHMa (ORCPT
+        with ESMTP id S244761AbiCPHPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 03:12:30 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90054.outbound.protection.outlook.com [40.107.9.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04295DE54
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:11:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L8WF89S5+sQYw8keiaDOrBTgKgapy8c4JOX3Y5Q/G2Z2N6hU3TorqtyZYd5j+ZDYqS8GGp5A5qslFeljMDJaNYVdPG8qXlJ+xTL95s1o5RlvOeTH2oKbNOA4ENP9cSq0eQMligr0PqZyxetEeSBV5l+l1NeNd41AUXQZlHzb0SUsTGTely8rABzpihv7Nm9EvgD+TIc7p9MOZw35TFaWlF+i0BZ4KDg9flUP/R5IQRsH8B8J9YF/5x45gtwib51k1i3mHIPyaghZ9SjakW98n5CbZkIXbRxzbiMV9QueSnhjSQMPFkVNamgji1lU+2FdsPnZ7kt65yZ0UId8sUXuJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9N87drQsQAfpDRyVdzp6IMEQM+BWGw+F7T79wfF3Vq8=;
- b=MaskkfpEB7ORLDgKoQYOZejd4IGNpy2vdGIC2kQKTvHtVpIGwtYl9atfi0X/VqxxY2LdjsUCCgh8c9XZko8V8VCAfv/2mDu5FbLdcrYyi8KT1dNRs9oZZLIn+fMl3nGeWEbJaveUYhr1gdR498ZyBx3cTEWYrUDyT3RLohT6UYC0/YSjSpyHQpOXIUByFoLORMk5gv7XiZFnYzSbteYcmzdKbB1c4iBVkLcIH9MRxV36S0PK5ZuCG3xdJTWfvrv6AzJKc8v7tnqWg1JAHVDvg/s5yEmr6pWIPitSmm6RIPwBp4BtfwUBJwmt0xhZXtjpFot/mRivYYeW1nHnV3G3dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2876.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:19::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22; Wed, 16 Mar
- 2022 07:11:14 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.014; Wed, 16 Mar 2022
- 07:11:14 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH] static_call: Don't make __static_call_return0 static
-Thread-Topic: [PATCH] static_call: Don't make __static_call_return0 static
-Thread-Index: AQHYN3QmErE3bJogF0unLvbGlzWypqzA87QAgACnbwA=
-Date:   Wed, 16 Mar 2022 07:11:14 +0000
-Message-ID: <eabd82b5-6617-1965-e65b-25abae19e1d5@csgroup.eu>
-References: <b301796066e4fdd45c50c9e202d36a43688eb78e.1647242388.git.christophe.leroy@csgroup.eu>
- <20220315211158.kymtyh2nv4xj7ite@treble>
-In-Reply-To: <20220315211158.kymtyh2nv4xj7ite@treble>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0321a8a3-b915-410d-b2d7-08da071c2886
-x-ms-traffictypediagnostic: MRZP264MB2876:EE_
-x-microsoft-antispam-prvs: <MRZP264MB287642F3195C0221E49C8115ED119@MRZP264MB2876.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XgP178r8FMDqD83GW/vzN1QBA4TAExc2ixg0lNSJ0AV56uq3ZMBKVz5qOqNPRO6UHJGzQ/6GXOHxe/PloCZzggBrtOyuYfud9FAvgvu9pCNKkpaJh3OUzU6kdzAmflLTWx8wD0oN35GfFbAYRoLsKNeCVqDwIuRZmBf23lCb14S5bpRAivu4Kp38Yy1kZ88r4XJVNEhUKDXfp7iMggrJO4qPojApNnqb7X9aa/rVKaVpU6qkVbP2AmKL8ZDKubiDNgOUSUAN0xdz2T+x7kmoaaSj5hJNXHld+0FRw1B9wNwe/u0QDHmwmIgycr5r55v2ddBC283cuhR+R7PeIVNMHE40PCtRfQLzErXr15d9eWjTBduIVnQPoegFozw1oAs3I3lPMH21dw+en0w7y9LkT8KkrqptP/F6FdWdZQoneSrRztOZkhuRhom+Ka4uQEMxxjfe7uo0RrWSaN9eUgXqiaQ/NIjNIxn6VHJqttH8RWMhFZLzSILJ2/hpD1DKhFYFSYbNG9isRFrPJa2SrvQjPUqlV8u31CE17vAb/X1y3yBqsSeJiQgU86AMY994qSBBukTkVA6lI8eT9CwtDMo5nLm7Mio/9QjT6QqRASNfB4IR+xGGyCxtKGwGNu7ZlrVqQwC4SI+DGgUCxqkRglSz3qhpdAfS4jCb/w9yIv7K56TihIuojOiyxb2MnRTz1EmQv8lM3YAS7xIcKMrcm/mI2crgDY7K1r3gMvJO7Q+BK3UJYGudO2VQZMbZGVR4J6nlbMRq6iPpK+1SUokmbif+VA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(316002)(38100700002)(31696002)(38070700005)(122000001)(91956017)(54906003)(6486002)(6916009)(5660300002)(2906002)(8936002)(8676002)(76116006)(64756008)(66556008)(66946007)(66476007)(66446008)(66574015)(2616005)(83380400001)(36756003)(44832011)(508600001)(71200400001)(26005)(6506007)(6512007)(186003)(31686004)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dEFlaG1FS2JmMTJvY2FUNTBlcW9YZkoyWlE0TnUwR1FiM2R1NU44dEtzWXB4?=
- =?utf-8?B?eTh4RjJTaGF0dENMVjhXZ0d1MVo3eGVoZXlUeWhQUmJUbXFLL3VkcjRXcHFO?=
- =?utf-8?B?ZEkzL2h2V0NyeG04RURGcDNIUStLbjlKa2s2OVdyVkY0L1R3RzYzZW00by9I?=
- =?utf-8?B?Y29WcDlmSHluelQ5ZE1PVTl5TzhiT1dRaUZvalJwdDZZTWMyU1JKMkJiRXVh?=
- =?utf-8?B?NC9Sbzg3SmVRQmF3dVRhYWE3T1NYcUNWb0dkMVBOWk1wekdVcUJGOVRyV2pD?=
- =?utf-8?B?Zm9iWks0SDVXcjVQR0U2aVJTYktlMnhZUWZUeGl1K3JZdGtnWENXeDQvR0NI?=
- =?utf-8?B?TUdGV3kxbVBXSk5zcjJ0bDVpa0lnV3JrS1NyUjlvOUNmN3M1cUNSNXpnMkJo?=
- =?utf-8?B?VnhiMUw5S0ludlg0RThBOFhVdXQ3bUZla0I0ZGFQQVdwSEc1NzZ1MlU3WVpz?=
- =?utf-8?B?Lzd2WnpOTDhKY2g5QXZ2WFJuVG9OQk4xUzhwb3hZL2FBZTlhWFUyVzh1Qm5G?=
- =?utf-8?B?dXpmaGp4NElwdDFUUHVqQWR4YnJoOElDUEVqbmZ6SndDRnMxNGpRSTFVSjVD?=
- =?utf-8?B?WmxEOEdzeHN2dzY1SWV1RWxibU1GYUplMlEyZHhWZDZlQ2xhdmxST3J2VkRF?=
- =?utf-8?B?VmRYcS9lRWxrbThSaE8rZ0NwdmdCWHM1dWc0NytscnZ3U0U2a2t1eUM3YlZL?=
- =?utf-8?B?M3lyK08wZm9Oc2JOS3N6a0UxVytSYTR0cEpicHgxMTJEVHJMei9zdGVHZEd2?=
- =?utf-8?B?TUlxMElpYkRGR1kwS1ZPdHc4cHBOcWNBUlBWZUpXVnZudVdsWEEySExtLzBD?=
- =?utf-8?B?dlErdmt5bzZZajNZWXo3WW5NOUU5RHRxWEtaTFAvWkJ0OUV2TTVDcU0xVEpU?=
- =?utf-8?B?aCtHbGgremJIQWQzNXd3Zk1OSXZXQlc3bklTRWJZOU10ZzlPcFlFVVA0ZGFF?=
- =?utf-8?B?Z3dqSytndG1XOUZrbEVzb2svVHQxNGhlb2tuR3VqOUVvSzlnTTVzK1JBSzNo?=
- =?utf-8?B?MzhnQUxQbC9Wd0ttMFFnM2ZZQms3ZlZpcmNEOWNWVXBvMDNQVXZ0OTNpZHgv?=
- =?utf-8?B?K0czTE15OTBWalJVR1lERjhpSHYwOU5YM3poWW01dHVxVFhMZGZYQ3Y2R0dI?=
- =?utf-8?B?NFFHQ1NnUTZzeDRPY2c0bmlSeTI2OTBmckdjZkd1LzlzeEp0NTFld3F0Y3ZE?=
- =?utf-8?B?RDlnRFhMRTBPRi9kM05VYTNaUTIzRDg2SENTMW12MDJBbGxSQVdWMmg5cnVO?=
- =?utf-8?B?cklzWjVQQk4xaWdSTlo3MElQV2FKSXczcGtDVlM2Q2Q4bjdpdjBrVDJZV0Ny?=
- =?utf-8?B?dU5RRE9nbkpGT1U0OUtpeDRVTkY2MFgyVkRHUmFlaytlNEM1a0NucnFEeUdu?=
- =?utf-8?B?dWVoY1pOOUNJNE5LNmM1bnI0enl1OU1nc3lOdVIwMUxCbjZ1bFcrdGU1eE53?=
- =?utf-8?B?RGhCVzNlV1JzTG52UTF5UTB3NG56bk5VTElBVXYzZWxSU3Q2bUFzN0Y1bTEy?=
- =?utf-8?B?QVkxZXJma3B0aU9yeHM4bGZML2tQUUJReEs3OTI0Skxqbk1CMVppRXorUHJK?=
- =?utf-8?B?NHVrZEJQQTJtZ09pSzFhUnVSSm9IMmsrN093L21vaGZRSUFkWFVvVndNMEVp?=
- =?utf-8?B?V3ZrbWpYTmRWUXV2enhpbjdxOWZqS3FkSVBKdThncjFqc1kwQ1A0UFc2QUIv?=
- =?utf-8?B?emVzMmlRcUNJTnBjMGFHL2NKblp1UWVSQUVqSkVqQlpxL0dDQi9pTGN2WEFx?=
- =?utf-8?B?YnlDcDlRZ09OL1I2OUdEdm8zZk5yTFcrNG1pMUhwdEpsRTdwNFFZNk5tSHdG?=
- =?utf-8?B?bHIzNG5wcHNzdENhUWhKMlpZcVRHTTdiczU5aG5XNVVlb21nckcvR0pIelYx?=
- =?utf-8?B?OGJOeXV0TzFEYjNjUHBiVll2b2ZvWGdMYlUzSDlrTkE2Q3pBa0ozMlFTck93?=
- =?utf-8?B?RzVkSVhwUWxCcWNkaERWZmpNWkhnc20zOHUwV3VmQVpQZ0hjaGplWCtKQlZu?=
- =?utf-8?Q?fJEWjJSl+hETP9IGwdhVOSlKvAyQoo=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4BA1BA2E0042934894BC2918EE847A11@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 16 Mar 2022 03:15:41 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2DD20F45
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:14:26 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id h23so989267wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KFOX7ONiGjYSWSbti5RTwYyu7K7YTppUYftBLz1HLt4=;
+        b=SLUAy3TTL1QidpE7T6uz6KQJK7yZ/+37tTvSX/fletRGEk+nPSvYifalrQYF1sd/h7
+         rXzEIsI2RNA+suUv/yhxBoLKp9jFLD/inyUvux85aLrPOArKYde6mcJePamAkznBiuU0
+         uzWg/9C+By4vPjhD+Jmw5Tf03Y8Q0uLe/mZ5FA7UI2B3mYZM2vvpzqMbGG17ULllB6cO
+         3R4IIcMO9tvfARlHamHPPYi+KkX3wKomO4VvnAoEm63uds+RkTAxzS2rJRLklzF1a2Wh
+         Ah3RenpDivYbG/zybPPCXBksq9+Ma/1KDMjiJ4pyxZdXYDMJu7YRL/LZsyem6kBHde+X
+         4TIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KFOX7ONiGjYSWSbti5RTwYyu7K7YTppUYftBLz1HLt4=;
+        b=gBE0t0vJgvA2ZbuJ4FbzxSphW/+uXlVOii7Kcfe9zH+n4iI8F7j0AfyVQr9f6zSUGk
+         nAzJpiinKtjJCTZFKydWK98f41Mwh3PUCoTrb5h8xozLS4vUgZxTFuELsDFwiWANlwV6
+         ru29/AgzW8EZyZQ55v0QeuUqIVoFuzSeRYMsF6h8R6QcFAM/zQIWjyNeqPCg+Z/FMmw3
+         7nye0cZRzlyKB/4W/IZv7mZfF5FEL+/COfwrwm/WLZ5brjfXkKR6oEnKG8FYTHv/TPVv
+         Go+X+5rXaeyaSDkzJabq/3ZVcc3G9Jufhye2pI7vdmDt9xgJPI0X79rmGzw7AXsqtMWQ
+         htIA==
+X-Gm-Message-State: AOAM531xJSEcEWc0XJAJHMNy4Cy4YH/GPNSKZq2hpFMuyRbwt0G66GJS
+        u1/zeF1gXmUzb6CeJ2ZMU5algwcB+LDUTqrA03rN0vgUX4uktQ==
+X-Google-Smtp-Source: ABdhPJwoRmRC7CL5BwG+W0shE7sMm5i/wn9T2S8+sXFDUOQJKG+BC6Y4m9S1tupWdK45vAG7cm3N7gAIYnvQeyZgUDk=
+X-Received: by 2002:a05:6000:f:b0:203:d97a:947 with SMTP id
+ h15-20020a056000000f00b00203d97a0947mr3757424wrx.654.1647414864554; Wed, 16
+ Mar 2022 00:14:24 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0321a8a3-b915-410d-b2d7-08da071c2886
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 07:11:14.6116
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: O1VUffJ46H+QQU8CzxI2INt5QnY9/7pY+YfLERitO9xi93uBf037ITyTEYMlY/dlj6ZHcpbojarIjQx88xjTVzae6m7hOw1sdl+rz5aFwsQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2876
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YjCLcpcX2peeQVCH@kernel.org>
+In-Reply-To: <YjCLcpcX2peeQVCH@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 16 Mar 2022 00:14:12 -0700
+Message-ID: <CAP-5=fUW0O2mVopONcTjwYLB6JsLY8HgGzggj=zw7R45wBhozA@mail.gmail.com>
+Subject: Re: 'perf stat --null sleep 1' segfault related to
+ evlist__for_each_entry with affinity == NULL
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE1LzAzLzIwMjIgw6AgMjI6MTEsIEpvc2ggUG9pbWJvZXVmIGEgw6ljcml0wqA6DQo+
-IE9uIE1vbiwgTWFyIDE0LCAyMDIyIGF0IDA4OjIxOjMwQU0gKzAxMDAsIENocmlzdG9waGUgTGVy
-b3kgd3JvdGU6DQo+PiBTeXN0ZW0ubWFwIHNob3dzIHRoYXQgdm1saW51eCBjb250YWlucyBzZXZl
-cmFsIGluc3RhbmNlcyBvZg0KPj4gX19zdGF0aWNfY2FsbF9yZXR1cm4wKCk6DQo+Pg0KPj4gCWMw
-MDA0ZmMwIHQgX19zdGF0aWNfY2FsbF9yZXR1cm4wDQo+PiAJYzAwMTE1MTggdCBfX3N0YXRpY19j
-YWxsX3JldHVybjANCj4+IAljMDBkODE2MCB0IF9fc3RhdGljX2NhbGxfcmV0dXJuMA0KPj4NCj4+
-IGFyY2hfc3RhdGljX2NhbGxfdHJhbnNmb3JtKCkgdXNlcyB0aGUgbWlkZGxlIG9uZSB0byBjaGVj
-ayB3aGV0aGVyIHdlIGFyZQ0KPj4gc2V0dGluZyBhIGNhbGwgdG8gX19zdGF0aWNfY2FsbF9yZXR1
-cm4wIG9yIG5vdDoNCj4+DQo+PiAJYzAwMTE1MjAgPGFyY2hfc3RhdGljX2NhbGxfdHJhbnNmb3Jt
-PjoNCj4+IAljMDAxMTUyMDogICAgICAgM2QgMjAgYzAgMDEgICAgIGxpcyAgICAgcjksLTE2Mzgz
-CTw9PSByOSA9ICAweGMwMDEgPDwgMTYNCj4+IAljMDAxMTUyNDogICAgICAgMzkgMjkgMTUgMTgg
-ICAgIGFkZGkgICAgcjkscjksNTQwMAk8PT0gcjkgKz0gMHgxNTE4DQo+PiAJYzAwMTE1Mjg6ICAg
-ICAgIDdjIDA1IDQ4IDAwICAgICBjbXB3ICAgIHI1LHI5CQk8PT0gcjkgaGFzIHZhbHVlIDB4YzAw
-MTE1MTggaGVyZQ0KPj4NCj4+IFNvIGlmIHN0YXRpY19jYWxsX3VwZGF0ZSgpIGlzIGNhbGxlZCB3
-aXRoIG9uZSBvZiB0aGUgb3RoZXIgaW5zdGFuY2VzIG9mDQo+PiBfX3N0YXRpY19jYWxsX3JldHVy
-bjAoKSwgYXJjaF9zdGF0aWNfY2FsbF90cmFuc2Zvcm0oKSB3b24ndCByZWNvZ25pc2UgaXQuDQo+
-Pg0KPj4gSW4gb3JkZXIgdG8gd29yayBwcm9wZXJseSwgZ2xvYmFsIHNpbmdsZSBpbnN0YW5jZSBv
-ZiBfX3N0YXRpY19jYWxsX3JldHVybjAoKSBpcyByZXF1aXJlZC4NCj4+DQo+PiBGaXhlczogM2Yy
-YThmYzRiMTVkICgic3RhdGljX2NhbGwveDg2OiBBZGQgX19zdGF0aWNfY2FsbF9yZXR1cm4wKCki
-KQ0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBj
-c2dyb3VwLmV1Pg0KPiANCj4gQWNrZWQtYnk6IEpvc2ggUG9pbWJvZXVmIDxqcG9pbWJvZUByZWRo
-YXQuY29tPg0KPiANCg0KVGhhbmtzIGZvciB0aGlzIEFjay4NCg0KQnkgdGhlIHdheSBJIHNlbnQg
-dmVyc2lvbiB2MiBiZWZvcmUgeW91ciBBY2sgZm9yIGEgbWlzc2luZyAjaW5jbHVkZQ0KDQpDaHJp
-c3RvcGhl
+On Tue, Mar 15, 2022 at 5:50 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> This bounced yesterday, resending :-\
+>
+> -----
+>
+> Hi Ian,
+>
+>         I just noticed this:
+>
+> (gdb) run stat --null sleep 1
+> `/var/home/acme/bin/perf' has changed; re-reading symbols.
+> Starting program: /var/home/acme/bin/perf stat --null sleep 1
+> [Thread debugging using libthread_db enabled]
+> Using host libthread_db library "/lib64/libthread_db.so.1".
+> [Detaching after fork from child process 900002]
+>
+> Program received signal SIGSEGV, Segmentation fault.
+> 0x0000000000596790 in create_perf_stat_counter (evsel=3D0xda9580, config=
+=3D0xcbeac0 <stat_config>, target=3D0xcbe8a0 <target>, cpu_map_idx=3D0) at =
+util/stat.c:548
+> 548             if (leader->core.nr_members > 1)
+> Missing separate debuginfos, use: dnf debuginfo-install bzip2-libs-1.0.8-=
+6.fc34.x86_64 cyrus-sasl-lib-2.1.27-8.fc34.x86_64 elfutils-debuginfod-clien=
+t-0.186-1.fc34.x86_64 elfutils-libelf-0.186-1.fc34.x86_64 elfutils-libs-0.1=
+86-1.fc34.x86_64 glib2-2.68.4-1.fc34.x86_64 glibc-2.33-21.fc34.x86_64 keyut=
+ils-libs-1.6.1-2.fc34.x86_64 libbabeltrace-1.5.8-6.fc34.x86_64 libbrotli-1.=
+0.9-4.fc34.x86_64 libcap-2.48-2.fc34.x86_64 libcom_err-1.45.6-5.fc34.x86_64=
+ libcurl-7.76.1-12.fc34.x86_64 libgcc-11.2.1-9.fc34.x86_64 libidn2-2.3.2-1.=
+fc34.x86_64 libnghttp2-1.43.0-2.fc34.x86_64 libpsl-0.21.1-3.fc34.x86_64 lib=
+ssh-0.9.6-1.fc34.x86_64 libstdc++-11.2.1-9.fc34.x86_64 libunistring-0.9.10-=
+10.fc34.x86_64 libunwind-1.4.0-5.fc34.x86_64 libuuid-2.36.2-1.fc34.x86_64 l=
+ibxcrypt-4.4.28-1.fc34.x86_64 libzstd-1.5.2-1.fc34.x86_64 numactl-libs-2.0.=
+14-3.fc34.x86_64 opencsd-1.1.1-1.fc34.x86_64 openldap-2.4.57-6.fc34.x86_64 =
+openssl-libs-1.1.1l-2.fc34.x86_64 pcre-8.44-3.fc34.1.x86_64 perl-libs-5.32.=
+1-477.fc34.x86_64 popt-1.18-4.fc34.x86_64 python3-libs-3.9.10-1.fc34.x86_64=
+ slang-2.3.2-9.fc34.x86_64 xz-libs-5.2.5-5.fc34.x86_64
+> (gdb) bt
+> #0  0x0000000000596790 in create_perf_stat_counter (evsel=3D0xda9580, con=
+fig=3D0xcbeac0 <stat_config>, target=3D0xcbe8a0 <target>, cpu_map_idx=3D0) =
+at util/stat.c:548
+> #1  0x0000000000438c2c in __run_perf_stat (argc=3D2, argv=3D0x7fffffffe1f=
+0, run_idx=3D0) at builtin-stat.c:835
+> #2  0x00000000004395d5 in run_perf_stat (argc=3D2, argv=3D0x7fffffffe1f0,=
+ run_idx=3D0) at builtin-stat.c:1047
+> #3  0x000000000043ce17 in cmd_stat (argc=3D2, argv=3D0x7fffffffe1f0) at b=
+uiltin-stat.c:2561
+> #4  0x00000000004dc2d1 in run_builtin (p=3D0xcd5760 <commands+288>, argc=
+=3D4, argv=3D0x7fffffffe1f0) at perf.c:313
+> #5  0x00000000004dc538 in handle_internal_command (argc=3D4, argv=3D0x7ff=
+fffffe1f0) at perf.c:365
+> #6  0x00000000004dc684 in run_argv (argcp=3D0x7fffffffe03c, argv=3D0x7fff=
+ffffe030) at perf.c:409
+> #7  0x00000000004dca50 in main (argc=3D4, argv=3D0x7fffffffe1f0) at perf.=
+c:539
+> (gdb) p leader
+> $1 =3D (struct evsel *) 0x0
+> (gdb) fr 1
+> #1  0x0000000000438c2c in __run_perf_stat (argc=3D2, argv=3D0x7fffffffe1f=
+0, run_idx=3D0) at builtin-stat.c:835
+> 835                     if (create_perf_stat_counter(counter, &stat_confi=
+g, &target,
+> (gdb) p evsel_list
+> $2 =3D (struct evlist *) 0xda9580
+> (gdb) p evsel_list->core.nr_entries
+> $3 =3D 0
+> (gdb)
+>
+> I've bisected it to a patch I added that avoids setting up affinity when
+> there is no need to do so, like when running 'perf stat sleep 1', this
+> one:
+>
+> commit 49de179577e7b05b57f625bf05cdc60a72de38d0
+> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+> Date:   Mon Jan 17 13:09:29 2022 -0300
+>
+>     perf stat: No need to setup affinities when starting a workload
+>
+>     I.e. the simple:
+>
+>       $ perf stat sleep 1
+>
+>     Uses a dummy CPU map and thus there is no need to setup/cleanup
+>     affinities to avoid IPIs, etc.
+>
+>     With this we're down to a sched_getaffinity() call, in the libnuma
+>     initialization, that probably can be removed in a followup patch.
+>
+>     Acked-by: Ian Rogers <irogers@google.com>
+>
+> The problem is that when using --null we end up with an empty evlist
+> and:
+>
+>   evlist__for_each_cpu(evlist_cpu_itr, evsel_list, affinity)
+>
+> in __run_perf_stat()
+>
+> gets called with affinity =3D=3D NULL.
+>
+> Looking at its code it checks if affinity is NULL, etc, so I thought it
+> would be ok, but it ends up passing, IIRC, the empty list head:
+>
+> (gdb) p evsel->core.node
+> $4 =3D {next =3D 0xda9580, prev =3D 0xda9580}
+> (gdb) p evsel
+> $5 =3D (struct evsel *) 0xda9580
+> (gdb) fr 1
+> #1  0x0000000000438c2c in __run_perf_stat (argc=3D2, argv=3D0x7fffffffe1f=
+0, run_idx=3D0) at builtin-stat.c:835
+> 835                     if (create_perf_stat_counter(counter, &stat_confi=
+g, &target,
+> (gdb) p evsel_list->core.entries
+> $6 =3D {next =3D 0xda9580, prev =3D 0xda9580}
+> (gdb)
+>
+> I.e. it gets confused with its end condition when
+> evlist->core.nr_entries is zero.
+>
+> Can you take a look at improving this? I'm going AFK now, so just wanted
+> to dump what I found so far.
+>
+> I guess the problem got introduced in:
+>
+> commit 472832d2c000b9611feaea66fe521055c3dbf17a
+> Author: Ian Rogers <irogers@google.com>
+> Date:   Tue Jan 4 22:13:37 2022 -0800
+>
+>     perf evlist: Refactor evlist__for_each_cpu()
+>
+>     Previously evlist__for_each_cpu() needed to iterate over the evlist i=
+n
+>     an inner loop and call "skip" routines. Refactor this so that the
+>     iteratr is smarter and the next function can update both the current =
+CPU
+>     and evsel.
+>
+>     By using a cpu map index, fix apparent off-by-1 in __run_perf_stat's
+>     call to perf_evsel__close_cpu().
+>
+> -----------------
+>
+> And was dormant as the affinity was being always setup, which we don't
+> want when it isn't needed.
+
+Thanks for the detailed report, I sent a fix in:
+https://lore.kernel.org/lkml/20220316071049.2368250-1-irogers@google.com/
+Any thoughts for a shell test to avoid this regressing again in the future?
+
+Thanks,
+Ian
+
+> I'm trying to use:
+>
+>         perf trace --summary perf stat --null sleep 1
+>
+> to see what is that perf is unconditionally doing that should be
+> deferred till it is really needed, for now I'll continue with:
+>
+> [root@five ~]# perf trace -s perf stat -e dummy sleep 1
+>
+>  Performance counter stats for 'sleep 1':
+>
+>                  0      dummy
+>
+>        1.000945692 seconds time elapsed
+>
+>        0.000000000 seconds user
+>        0.000861000 seconds sys
+>
+>
+>
+>  Summary of events:
+>
+>  perf (900261), 3127 events, 94.7%
+>
+>    syscall            calls  errors  total       min       avg       max =
+      stddev
+>                                      (msec)    (msec)    (msec)    (msec)=
+        (%)
+>    --------------- --------  ------ -------- --------- --------- --------=
+-     ------
+>    wait4                  1      0  1000.903  1000.903  1000.903  1000.90=
+3      0.00%
+>    openat               364    187     1.144     0.002     0.003     0.02=
+0      1.90%
+>    mmap                 263      0     0.796     0.001     0.003     0.01=
+5      2.60%
+>    clone                  1      0     0.620     0.620     0.620     0.62=
+0      0.00%
+>    read                 263      0     0.441     0.001     0.002     0.09=
+4     21.06%
+>    access                80     49     0.277     0.002     0.003     0.00=
+6      2.75%
+>    mprotect              80      0     0.269     0.002     0.003     0.00=
+6      3.15%
+>    newfstatat           174      1     0.210     0.001     0.001     0.00=
+7      3.57%
+>    close                183      0     0.171     0.001     0.001     0.00=
+3      1.64%
+>    getdents64            35      0     0.065     0.001     0.002     0.01=
+2     17.24%
+>    write                 18      0     0.052     0.001     0.003     0.00=
+9     15.24%
+>    brk                   12      0     0.034     0.001     0.003     0.00=
+5     11.27%
+>    ioctl                 29     29     0.029     0.001     0.001     0.00=
+3      8.38%
+>    futex                 20      0     0.026     0.001     0.001     0.00=
+2      8.30%
+>    perf_event_open        1      0     0.016     0.016     0.016     0.01=
+6      0.00%
+>    statfs                 3      0     0.011     0.002     0.004     0.00=
+6     38.92%
+>    rt_sigaction           8      0     0.009     0.001     0.001     0.00=
+2     12.76%
+>    pread64                6      0     0.006     0.001     0.001     0.00=
+1      1.44%
+>    pipe                   2      0     0.006     0.002     0.003     0.00=
+4     32.45%
+>    rt_sigprocmask         4      0     0.006     0.001     0.001     0.00=
+2     22.35%
+>    prctl                  6      4     0.005     0.001     0.001     0.00=
+1      6.86%
+>    munmap                 1      0     0.004     0.004     0.004     0.00=
+4      0.00%
+>    kill                   1      0     0.003     0.003     0.003     0.00=
+3      0.00%
+>    arch_prctl             2      1     0.002     0.001     0.001     0.00=
+1     11.96%
+>    sysinfo                1      0     0.002     0.002     0.002     0.00=
+2      0.00%
+>    sched_getaffinity      1      0     0.001     0.001     0.001     0.00=
+1      0.00%
+>    getpid                 1      0     0.001     0.001     0.001     0.00=
+1      0.00%
+>    fcntl                  1      0     0.001     0.001     0.001     0.00=
+1      0.00%
+>    set_tid_address        1      0     0.001     0.001     0.001     0.00=
+1      0.00%
+>    prlimit64              1      0     0.001     0.001     0.001     0.00=
+1      0.00%
+>    set_robust_list        1      0     0.001     0.001     0.001     0.00=
+1      0.00%
+>    execve                 1      0     0.000     0.000     0.000     0.00=
+0      0.00%
+>
+>
+>  sleep (900262), 107 events, 3.2%
+>
+>    syscall            calls  errors  total       min       avg       max =
+      stddev
+>                                      (msec)    (msec)    (msec)    (msec)=
+        (%)
+>    --------------- --------  ------ -------- --------- --------- --------=
+-     ------
+>    clock_nanosleep        1      0  1000.050  1000.050  1000.050  1000.05=
+0      0.00%
+>    execve                 8      7     0.282     0.008     0.035     0.19=
+8     66.26%
+>    read                   2      0     0.058     0.002     0.029     0.05=
+6     94.56%
+>    mmap                   9      0     0.027     0.002     0.003     0.00=
+5      9.92%
+>    mprotect               4      0     0.015     0.003     0.004     0.00=
+5     10.85%
+>    close                  8      0     0.013     0.001     0.002     0.00=
+3     13.67%
+>    prctl                  1      0     0.012     0.012     0.012     0.01=
+2      0.00%
+>    openat                 3      0     0.010     0.003     0.003     0.00=
+4      4.99%
+>    arch_prctl             2      1     0.006     0.001     0.003     0.00=
+5     68.42%
+>    brk                    3      0     0.006     0.001     0.002     0.00=
+2     21.26%
+>    access                 1      1     0.005     0.005     0.005     0.00=
+5      0.00%
+>    munmap                 1      0     0.005     0.005     0.005     0.00=
+5      0.00%
+>    newfstatat             3      0     0.005     0.001     0.002     0.00=
+2      8.55%
+>    pread64                4      0     0.005     0.001     0.001     0.00=
+1      5.39%
+>    rt_sigaction           1      0     0.002     0.002     0.002     0.00=
+2      0.00%
+>    fcntl                  1      0     0.002     0.002     0.002     0.00=
+2      0.00%
+>    set_robust_list        1      0     0.002     0.002     0.002     0.00=
+2      0.00%
+>    clone                  1      0     0.000     0.000     0.000     0.00=
+0      0.00%
+>
+>
+> [root@five ~]#
+>
+> - Arnaldo

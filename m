@@ -2,281 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A2E4DACF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B49B4DACFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354663AbiCPI5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S1354697AbiCPI50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345549AbiCPI5O (ORCPT
+        with ESMTP id S1354685AbiCPI5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:57:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FC3247049
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647420958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mOXL/dlYJ9Y7q9KmoEp9L9wBQeuY/rwi8nHu81o4BOc=;
-        b=Zjv+GKkD8TLQ5L/+ylqi/uX42nbdw2sUnxFBTaSL8L/We9CAzqttDt8SRvP4qXMI9JjZJh
-        LfbPgLEsh8R6ceM4RmTisfY8/9B7winDw5/FBKuq4LCaq2R5cO4tLQQGQQTbgByxxZMXx/
-        97YPcjhcwsbWuDSacO0fxDWkgOJH4NI=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-102-Z0TrKOyqMje-WVHsFJ9hzw-1; Wed, 16 Mar 2022 04:55:56 -0400
-X-MC-Unique: Z0TrKOyqMje-WVHsFJ9hzw-1
-Received: by mail-wr1-f70.google.com with SMTP id z1-20020adfec81000000b001f1f7e7ec99so315631wrn.17
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 01:55:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=mOXL/dlYJ9Y7q9KmoEp9L9wBQeuY/rwi8nHu81o4BOc=;
-        b=l0Nqs0vvylnimwDzs9YFJeTqPbIZugOaLh8STkB+cM2fCZXeHU2KzOdD4KUI+q9jow
-         H7/5FIuF9MoXDDUvWu07MwykT4ybtqfFqnlzg/OAs6GzWSMW3TgL2zlHypoGwbh84Ko8
-         GfPFFmJXBFQJpsNFN+V+/rXjM84FbRaYWQwnRoGCN9Hq7cCqPvco9xSF34gUYFpnj+ml
-         mIKPlWE1sSDHSO5BJ5xQgRBP1DNCflonx9SfsVOwG0DfBlisKb7p6+FTcHFDJ3PdTh7w
-         d1s9Vx69/xxcQ8kazpI9Am8V2546BW+xs4e0e/2AhHv7lV5VxmFmmeHiVHMY1NzxdzuG
-         JV5g==
-X-Gm-Message-State: AOAM5327u2T3ahPB+62S2jrJ6QqwFubs95IbbCqtaBPhfbNnz/6A/x3F
-        Qgp0T84QJTo/OF4hjL2OEKpabmU1Y7U5zdgwwkjh7iECLYUl6iufSGyut0OQfaouOfdOfle3Tqa
-        SLW5d3Wciql/eocebwdytKx8O
-X-Received: by 2002:a05:6000:2c9:b0:1f0:49aa:d347 with SMTP id o9-20020a05600002c900b001f049aad347mr23452348wry.453.1647420955620;
-        Wed, 16 Mar 2022 01:55:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyd7sa+0eL137AIqkXqTEIJzbfdMHDmQgaMRZl52+qq2qpQhfpnTOOt6EPW7m4NTjXbmHuow==
-X-Received: by 2002:a05:6000:2c9:b0:1f0:49aa:d347 with SMTP id o9-20020a05600002c900b001f049aad347mr23452321wry.453.1647420955257;
-        Wed, 16 Mar 2022 01:55:55 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:f900:aa79:cd25:e0:32d1? (p200300cbc706f900aa79cd2500e032d1.dip0.t-ipconnect.de. [2003:cb:c706:f900:aa79:cd25:e0:32d1])
-        by smtp.gmail.com with ESMTPSA id g26-20020a05600c4c9a00b00389a48b68bdsm1078382wmp.10.2022.03.16.01.55.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 01:55:54 -0700 (PDT)
-Message-ID: <b47a93fe-da50-d0d4-be8f-87071bf181f9@redhat.com>
-Date:   Wed, 16 Mar 2022 09:55:54 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
+        Wed, 16 Mar 2022 04:57:24 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2087.outbound.protection.outlook.com [40.107.20.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEC563BF9;
+        Wed, 16 Mar 2022 01:56:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mgegJnDQXbuEamqGfemS0bgaLccgwJkInvtGrlwdVTLHFn8WqpCllgzYHqvZUlL3Lo8K3weiXLsSYpVDTH30lFxHmK7MudGZs4kmHpmEQUqQKLezzKbKXeQyAnzzC3TPSclP6kvvtuDRd+vSUSf0LyjucIh8BrSMUBV+ZFEsW+AmzWWjFYc35ZWdb7KzVBSD4d04tZ1LqbxSy7DjP47ZV2XtA+Xo8HqbhaGhpfJrlaATBn6HxuC8BVT1dcGrNhxCvmA4ILFYSS0TiO1/1aKDHrKtCaNwO5ydz9mT3wOZDkcSnNPwoJcELG83aCicnKFO9ZhV9MQlVJlTcirTRpYMbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y+TjZOFaRL4Fx1+R67WVUAYA+62kyY6rs/TjdFRuRj8=;
+ b=Ef4nZdXDsAZLXDyn2U5mb4oQk9VfQos+F5574Io3Oh86Hkx99W2+a3if6GAzfle2FrApcfBRq+kpT5GM5sW5ZUlKWculboFakkhTjDraVGD+aMq3ot6JTqk55qPx2QyPEDuenH2+WhvdeI+jCG2Ee91moTCOFDQtvJnRcURhGgwtzVxgfwrqPMd+9Q9zttYoZORfyZKx/fmkPPwoMEZ2+yDak30U+CnKfDU74s31X4+uOPg6GnoPV0aOJPg7p2i8C/3wGJU0kTiJhnfK7xMi1i1Hp7dlHGYYKzwNoXCvzRhLOvRUcVOG/4Hq57+RQpMYFEe4BUwu7+N/DvZHwZZ9xA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y+TjZOFaRL4Fx1+R67WVUAYA+62kyY6rs/TjdFRuRj8=;
+ b=N6Y4il4Q+5q58apivv74OGiJu/VrDB2aZIi9pvPyuYJm0JXkHSrT0vNvQcU6uHotjBZoMWskW0N1Lxr3Ha4PUiycZVg6NA/HGKtQog+6BqDDYHkZ6vqrySsAKU/U60CaLSDI7gPdBaxXwfOylpsyfeBzWw94OkJLXt3mwEiFGsQ=
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM0PR04MB6577.eurprd04.prod.outlook.com (2603:10a6:208:175::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.29; Wed, 16 Mar
+ 2022 08:56:07 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5061.028; Wed, 16 Mar 2022
+ 08:56:07 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Shijie Qin <shijie.qin@nxp.com>,
+        Eagle Zhou <eagle.zhou@nxp.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH -next] media: amphion: Add missing of_node_put() in
+ vpu_core_parse_dt()
+Thread-Topic: [PATCH -next] media: amphion: Add missing of_node_put() in
+ vpu_core_parse_dt()
+Thread-Index: AQHYOQypw3RVUrmgVkmJzLgcRwYa3azBtK8Q
+Date:   Wed, 16 Mar 2022 08:56:07 +0000
+Message-ID: <AM6PR04MB63419CD129367B8F2C811DF3E7119@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <20220316081938.80819-1-wangxiongfeng2@huawei.com>
+In-Reply-To: <20220316081938.80819-1-wangxiongfeng2@huawei.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20220315085014.1047291-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH V4 1/2] selftests: vm: bring common functions to a new
- file
-In-Reply-To: <20220315085014.1047291-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3ccff1d5-c0d6-45ce-044f-08da072acf86
+x-ms-traffictypediagnostic: AM0PR04MB6577:EE_
+x-microsoft-antispam-prvs: <AM0PR04MB65774D664A57C71BB778867BE7119@AM0PR04MB6577.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aN6rImbLX78grZau8QuEO5sNpuvoASSwJTLXApjt3Tg5w3wjgHM+2AHwQi8KBL+gcJPVkBUCVn3XO36FIqt4xXiGddApFWwM7KgZvPkbardBfxfgKX7QIOxshoCMb2mtPAlsZZoVkjmDSSq7Ieu/0CIuGOWfVOEjVt9exMz9H6BksPURetpBxrs7RND/bX49v9CgAg0iEzxQ8ujejopTIvTxu3YmgSRm60vFFBCjHODjGti/71xnUGXtl4je0I7JqEcO3ycSkbu3sWt4tcAiRS9+6DYUdX0o1mqoMFUbVVGy13xx+4s3cTtFTnrzPuSe+QlY5Tdn0aCcDgDIVMHorj6Z/QeKo7Xoe81BJGxE45SgDMkU42Rfz827iSHfQStfD1KVD7Q7Xo4nvrzEdC2XkoW3PMHCiQ8Q6jQdqddxYCY+d92CuooevTcb8xKQh7Z8Ll9rEdnvZ8LQxLul8wVG8n4LK1F3L9QhXrp7dNPZsMNMWWV4yrSbKAHzt/4ztGSiLuEH+i6Tztk9eCTdhcMGUjjgFpRS+sc/XYiv3kaHzQNL6kwBh5AzeTNmDBublDag3Y/gsniPsCUTMWr+BbPNHsQwByHpO+mamI20wGPqI9Nw+BwltmejGFmxjPDPhwRAoej7ePNrTxcccuP2XUS/CiPZTo69CkRPtuwJXcz6YWhrNui3KZOzO9JIzVNybG3TkpSiWqyfiPVXfiFuxaA27hcx0yZ33Tr+i7ETnqkFRq5wCRKiVf0H2aG3ycQR2enyUwvwLlJL/btvoY1SJKTs6+Ra/qUVm/NXusGENfqa3Oc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66946007)(66556008)(76116006)(8676002)(64756008)(66446008)(86362001)(54906003)(4326008)(71200400001)(2906002)(110136005)(33656002)(316002)(53546011)(7696005)(6506007)(9686003)(44832011)(186003)(26005)(122000001)(55016003)(38070700005)(38100700002)(966005)(508600001)(52536014)(5660300002)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4FKY1nC8ymvaK2cAFQtltJFItH3sUE91KJeOWEGN0YXwrB+ZOTYrfm2X48v+?=
+ =?us-ascii?Q?zDf9t2wi8J0hHIkq8ZneLCSmkDNYuxmO3AkU4xgHf/zfpBcWOR1O9wJsumGy?=
+ =?us-ascii?Q?QtbTkSeLZwC8X11Nl7bYrvyI+n392TV/iYJleTJFFzUdTnYY0YaUH6SGsZB3?=
+ =?us-ascii?Q?9uOAhhe4FCT4CfFEux92uG9jUOIh7x4IS3oX4ey04XoQTorT+hSDUBc5fs5F?=
+ =?us-ascii?Q?YsBdnud7dS8nVPrq2yHmQiwHa/d6jP9UgPpuyizI+6MpNsb21JWsECRw1vM3?=
+ =?us-ascii?Q?EuSTtkFLMmnIO+H3vtAa9D2UrpQRZpytsYlsdjUoVySxtWtztK9D7zT5Nu5N?=
+ =?us-ascii?Q?HGr0BQsdya303Hj4iM+n0tvk0Wp7op71T3/45Qt3v4QKKKHx7inXy68Jl8Cb?=
+ =?us-ascii?Q?7MyEqnBTF8PwsvRQScD4qP+vA4WsBQ1Sj6OaZFjTalhxVELV2hYVpBi7mvV0?=
+ =?us-ascii?Q?WpBxA9JKltPR19l6eptcZ9nHiyDXl7BoqOZGmUWuK4tIq+NlKLHor17Umt7L?=
+ =?us-ascii?Q?5GwnlGYjeg2EgzgV9hiSD4DAU2Qjm6sR2KhksSITtnsfWly1UqnstTgDI1W6?=
+ =?us-ascii?Q?VuKz4fPHfc2HSxMsZ6hqhEBLA6DR4xeRrTv6D0maBCQyNkMinZaYz3C8+O4c?=
+ =?us-ascii?Q?4cymZqvE5fzJhvzVdCbbZ9Jbur6WCBOpMqBpHf0GdA8aLVDdwmoIuoqUl/O7?=
+ =?us-ascii?Q?OinyR6RY7PQ/3o8NJPD6pHnr15iX/98ylSuRTYFNI6aYhXmfeCJ2XMXqOHXt?=
+ =?us-ascii?Q?T1OvoCPfwjHZkmN1VLRVOnNxrVlZL1UxfT4qFBDfR4Ngcf7HQt+nFN7A9AEr?=
+ =?us-ascii?Q?nDkWVmqp5bq8ReSoO5+KAwPrNzGWPcDueUgZ3cMRFvPItqVhRCq/gYOHQsRj?=
+ =?us-ascii?Q?d1YrxPOeNiv7hUKWTgNydgld7EAdoefBXBZVD1hD8PAQ4mzbrcnjCMv+Cab+?=
+ =?us-ascii?Q?47ZK3TDfKnW/Y8JlKJKD9L0BVcSrsNBkujRD49fT/1pqmLJeN5mGWSM1NBkR?=
+ =?us-ascii?Q?ciExtoOu218gh2z0tvjuzd6IXG5jAalnPvsTi37MSvsNbJWlBDKBHEKlYSdV?=
+ =?us-ascii?Q?3FyOKSSxR+PBirkwrXKowPWD+5xEPib0YwSmKgdvhUZvbDkhJ8N/h1I8zf51?=
+ =?us-ascii?Q?2Dhi6xh4gG+VxIoNLQTEESf9DwTE81N9NFQLJuMpHA/Zhgd6l2Kr2Rb46936?=
+ =?us-ascii?Q?PgrO5txpEeE15Zy7KVkpO1Fk2HxX9BAbFCAjT+DyjUdo/EpDilW1acog0diL?=
+ =?us-ascii?Q?K3fMvdN1vdGQxqZtvQeE7xlMrVJL/yR27jA+ON8P+wMYYDiSEyomWgaSKs2J?=
+ =?us-ascii?Q?Oz8SOQSlgkbBhIZMfBueQ6CPIdLJUU8GubqjLEC0R0opDgwIA5NctlEKIQg5?=
+ =?us-ascii?Q?xXA3nsTrFibnL6t9TIWFqvUSQz6eeCFvER9NtnyEXggw36fnx/z1Bma0rl7D?=
+ =?us-ascii?Q?vwYxmD6H0Zw=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ccff1d5-c0d6-45ce-044f-08da072acf86
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2022 08:56:07.7565
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SDdoGjV2yAHgrHx/5SC1ojxUbgcSOuBxQiAIZEVYaT7y0yMOqapVIzl5H71TDNpfW/9GR5oF2XgVcceDzWESjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6577
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.03.22 09:50, Muhammad Usama Anjum wrote:
-> Bring common functions to a new file. These functions can be used in the
-> new tests. This helps in code duplication.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Hi Xiongfeng,
+
+    Lijun Fang has sent a patch to fix this issue.
+See link https://patchwork.linuxtv.org/project/linux-media/patch/2022031406=
+0952.66762-1-fanglijun3@huawei.com/
+
+Ming
+
+> From: Xiongfeng Wang [mailto:wangxiongfeng2@huawei.com]
+> Sent: Wednesday, March 16, 2022 4:20 PM
+> To: Ming Qian <ming.qian@nxp.com>; Shijie Qin <shijie.qin@nxp.com>; Eagle
+> Zhou <eagle.zhou@nxp.com>; mchehab@kernel.org
+> Cc: linux-media@vger.kernel.org; linux-kernel@vger.kernel.org;
+> wangxiongfeng2@huawei.com
+> Subject: [PATCH -next] media: amphion: Add missing of_node_put() in
+> vpu_core_parse_dt()
+>=20
+> of_parse_phandle() will increment the refcount of the returned device_nod=
+e.
+> Calling of_node_put() to avoid the refcount leak.
+>=20
+> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 > ---
->  tools/testing/selftests/vm/Makefile           |   7 +-
->  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
->  .../selftests/vm/split_huge_page_test.c       |  77 +------------
->  tools/testing/selftests/vm/vm_util.c          | 103 ++++++++++++++++++
->  tools/testing/selftests/vm/vm_util.h          |  15 +++
->  5 files changed, 125 insertions(+), 111 deletions(-)
->  create mode 100644 tools/testing/selftests/vm/vm_util.c
->  create mode 100644 tools/testing/selftests/vm/vm_util.h
-> 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 5e43f072f5b76..4e68edb26d6b6 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
->  TEST_GEN_FILES += hugepage-shm
->  TEST_GEN_FILES += hugepage-vmemmap
->  TEST_GEN_FILES += khugepaged
-> -TEST_GEN_FILES += madv_populate
-> +TEST_GEN_PROGS = madv_populate
->  TEST_GEN_FILES += map_fixed_noreplace
->  TEST_GEN_FILES += map_hugetlb
->  TEST_GEN_FILES += map_populate
-> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
->  TEST_GEN_FILES += thuge-gen
->  TEST_GEN_FILES += transhuge-stress
->  TEST_GEN_FILES += userfaultfd
-> -TEST_GEN_FILES += split_huge_page_test
-> +TEST_GEN_PROGS += split_huge_page_test
->  TEST_GEN_FILES += ksm_tests
->  
->  ifeq ($(MACHINE),x86_64)
-> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
->  KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
-> +$(OUTPUT)/madv_populate: vm_util.c
-> +$(OUTPUT)/split_huge_page_test: vm_util.c
+>  drivers/media/platform/amphion/vpu_core.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/media/platform/amphion/vpu_core.c
+> b/drivers/media/platform/amphion/vpu_core.c
+> index 016554387f3f..1da20335bc45 100644
+> --- a/drivers/media/platform/amphion/vpu_core.c
+> +++ b/drivers/media/platform/amphion/vpu_core.c
+> @@ -529,11 +529,14 @@ static int vpu_core_parse_dt(struct vpu_core *core,
+> struct device_node *np)
+>  	}
+>  	if (of_address_to_resource(node, 0, &res)) {
+>  		dev_err(core->dev, "boot-region of_address_to_resource error\n");
+> +		of_node_put(node);
+>  		return -EINVAL;
+>  	}
+>  	core->fw.phys =3D res.start;
+>  	core->fw.length =3D resource_size(&res);
+>=20
+> +	of_node_put(node);
 > +
-
-
-[...]
-
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdbool.h>
-> +#include <string.h>
-> +#include "vm_util.h"
+>  	node =3D of_parse_phandle(np, "memory-region", 1);
+>  	if (!node) {
+>  		dev_err(core->dev, "rpc-region of_parse_phandle error\n"); @@
+> -541,6 +544,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, stru=
+ct
+> device_node *np)
+>  	}
+>  	if (of_address_to_resource(node, 0, &res)) {
+>  		dev_err(core->dev, "rpc-region of_address_to_resource error\n");
+> +		of_node_put(node);
+>  		return -EINVAL;
+>  	}
+>  	core->rpc.phys =3D res.start;
+> @@ -549,6 +553,7 @@ static int vpu_core_parse_dt(struct vpu_core *core,
+> struct device_node *np)
+>  	if (core->rpc.length < core->res->rpc_size + core->res->fwlog_size) {
+>  		dev_err(core->dev, "the rpc-region <%pad, 0x%x> is not enough\n",
+>  			&core->rpc.phys, core->rpc.length);
+> +		of_node_put(node);
+>  		return -EINVAL;
+>  	}
+>=20
+> @@ -560,6 +565,7 @@ static int vpu_core_parse_dt(struct vpu_core *core,
+> struct device_node *np)
+>  	if (ret !=3D VPU_CORE_MEMORY_UNCACHED) {
+>  		dev_err(core->dev, "rpc region<%pad, 0x%x> isn't uncached\n",
+>  			&core->rpc.phys, core->rpc.length);
+> +		of_node_put(node);
+>  		return -EINVAL;
+>  	}
+>=20
+> @@ -571,6 +577,8 @@ static int vpu_core_parse_dt(struct vpu_core *core,
+> struct device_node *np)
+>  	core->act.length =3D core->rpc.length - core->res->rpc_size -
+> core->log.length;
+>  	core->rpc.length =3D core->res->rpc_size;
+>=20
+> +	of_node_put(node);
 > +
-> +uint64_t pagemap_get_entry(int fd, char *start)
-> +{
-> +	const unsigned long pfn = (unsigned long)start / getpagesize();
-> +	uint64_t entry;
-> +	int ret;
-> +
-> +	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
-> +	if (ret != sizeof(entry))
-> +		ksft_exit_fail_msg("reading pagemap failed\n");
-> +	return entry;
-> +}
-> +
-> +bool pagemap_is_softdirty(int fd, char *start)
-> +{
-> +	uint64_t entry = pagemap_get_entry(fd, start);
-> +
-> +	return ((entry >> DIRTY_BIT_LOCATION) & 1);
-> +}
-
-Please leave code you're moving around as untouched as possible to avoid
-unrelated bugs that happen by mistake and are hard to review.
-
-> +
-> +void clear_softdirty(void)
-> +{
-> +	int ret;
-> +	const char *ctrl = "4";
-> +	int fd = open("/proc/self/clear_refs", O_WRONLY);
-> +
-> +	if (fd < 0)
-> +		ksft_exit_fail_msg("opening clear_refs failed\n");
-> +	ret = write(fd, ctrl, strlen(ctrl));
-> +	close(fd);
-> +	if (ret != strlen(ctrl))
-> +		ksft_exit_fail_msg("writing clear_refs failed\n");
-> +}
-> +
-> +
-> +static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
-> +{
-> +	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
-> +		if (!strncmp(buf, pattern, strlen(pattern)))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +uint64_t read_pmd_pagesize(void)
-> +{
-> +	int fd;
-> +	char buf[20];
-> +	ssize_t num_read;
-> +
-> +	fd = open(PMD_SIZE, O_RDONLY);
-> +	if (fd == -1)
-> +		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
-> +
-> +	num_read = read(fd, buf, 19);
-> +	if (num_read < 1) {
-> +		close(fd);
-> +		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
-> +	}
-> +	buf[num_read] = '\0';
-> +	close(fd);
-> +
-> +	return strtoul(buf, NULL, 10);
-> +}
-> +
-> +uint64_t check_huge(void *addr)
-> +{
-> +	uint64_t thp = 0;
-> +	int ret;
-> +	FILE *fp;
-> +	char buffer[MAX_LINE_LENGTH];
-> +	char addr_pattern[MAX_LINE_LENGTH];
-> +
-> +	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-> +		       (unsigned long) addr);
-> +	if (ret >= MAX_LINE_LENGTH)
-> +		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
-> +
-> +	fp = fopen(SMAP, "r");
-> +	if (!fp)
-> +		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP);
-> +
-> +	if (!check_for_pattern(fp, addr_pattern, buffer))
-> +		goto err_out;
-> +
-> +	/*
-> +	 * Fetch the AnonHugePages: in the same block and check the number of
-> +	 * hugepages.
-> +	 */
-> +	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-> +		goto err_out;
-> +
-> +	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
-> +		ksft_exit_fail_msg("Reading smap error\n");
-> +
-> +err_out:
-> +	fclose(fp);
-> +	return thp;
-> +}
-> diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
-> new file mode 100644
-> index 0000000000000..7522dbb859f0f
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/vm_util.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <stdint.h>
-> +#include <fcntl.h>
-> +#include "../kselftest.h"
-> +
-> +#define	PMD_SIZE		"/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-
-Ehm no. PMD_SIZE_PATH at best -- just as it used to.
-
-> +#define	SMAP			"/proc/self/smaps"
-
-SMAPS_PATH
-
-> +#define	DIRTY_BIT_LOCATION	55
-
-Please inline that just as it used to. There is no value in a magic
-define without any proper namespace.
-
-> +#define	MAX_LINE_LENGTH		512
-
-This used to be 500. Why the change?
-
-
-Also: weird indentation and these all look like the should go into
-vm_util.c. They are not used outside that file.
-
-
-
--- 
-Thanks,
-
-David / dhildenb
+>  	return 0;
+>  }
+>=20
+> --
+> 2.20.1
 

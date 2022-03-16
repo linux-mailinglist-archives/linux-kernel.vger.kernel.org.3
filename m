@@ -2,144 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23C54DB9AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 760EE4DB9C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358040AbiCPUsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S1358102AbiCPUwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358107AbiCPUsE (ORCPT
+        with ESMTP id S1358089AbiCPUwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:48:04 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7F5A598
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647463609; x=1678999609;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=amVRG1zmPs9HJDAJXGSv/XhAzDgNn5MXqtThTcMFz2o=;
-  b=Yfce87SXPIuEZQ570NZmQ9G6yN7D9rXMKjjo/MVuaBvQkV1QiV0N9Sm8
-   qZojUtiAf4FLqlnG98JSH2cYxyhzQyaxtCZi95O3AnPJ43jf01fbL6oQj
-   apgeoXpFlNvUOrAeIJYcq/9OpuKqLWcbybbOhbHBKG3cW/vSZV2KdLI4W
-   y9dxxOqV1t0RIYRIDdQTVKQLZ0Vb9woS/JQykYzFvUxIPqwH1RqpUoiWY
-   4Wn2mBfifwSrt2wjeaXYcKL74wrpyUbIhdNBYvnWcMsVPh6IllTsqBBsW
-   uT0nn8NtWQ7xA2fvcJD6UL31JjXpNXQPgRNXwo/08tYaiL65hO9vXzjMr
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="237315565"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="237315565"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:46:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="513175592"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 13:46:48 -0700
-Date:   Wed, 16 Mar 2022 13:50:04 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Jacob Pan <jacob.jun.pan@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 3/8] iommu/vt-d: Implement device_pasid domain attach
- ops
-Message-ID: <20220316135004.61ae1611@jacob-builder>
-In-Reply-To: <20220315230457.GO11336@nvidia.com>
-References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
-        <20220315050713.2000518-4-jacob.jun.pan@linux.intel.com>
-        <20220315143322.GW11336@nvidia.com>
-        <20220315153620.710a30fa@jacob-builder>
-        <20220315230457.GO11336@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 16 Mar 2022 16:52:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC83F6E4EF;
+        Wed, 16 Mar 2022 13:51:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9284AB81D65;
+        Wed, 16 Mar 2022 20:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02D5EC340E9;
+        Wed, 16 Mar 2022 20:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647463866;
+        bh=+HuG5Y6nJnoHSDgnSkgLUxN1bJmKug6pEGnJtApwr1A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JDpmBNqFUegg535TbNiHKQgjpfoDq1KgLrOH4ZfhxszXezKJRQsW0VztRlA4avp8c
+         fDzG3BaUFhozIAHQ+DG8oNUFi1rTmmNnjmSZ3N8KwKzens25XPmdPYisYVpqsmjSuT
+         eoSiEy62NnB0bnVoB+oR7tmF3VQG/6EC5h5+qjWHfNgkkDeTo59ZjHIoV9qhDoyeqR
+         lfKr+WQOgE+RtlJuCCaHeDWcpdsvfSrrHiKbzVDg+zDHGVR+tF/Ea7gp+ebrBHNhBR
+         qtm2ZKqFJm7RoGFlDsFgxyzW9XTlU0n9wLbcaAJdZ40JJpOtf5iyfREg1CUtOwjNub
+         BhbWptanBn06Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5114D40407; Wed, 16 Mar 2022 17:51:03 -0300 (-03)
+Date:   Wed, 16 Mar 2022 17:51:03 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     kkourt@kkourt.io
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kornilios Kourtis <kornilios@isovalent.com>
+Subject: Re: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
+Message-ID: <YjJNt0GpA5fAm8PQ@kernel.org>
+References: <YjHjLkYBk/XfXSK0@tinh>
+ <20220316132354.3226908-1-kkourt@kkourt.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316132354.3226908-1-kkourt@kkourt.io>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On Tue, 15 Mar 2022 20:04:57 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Tue, Mar 15, 2022 at 03:36:20PM -0700, Jacob Pan wrote:
-> > Hi Jason,
-> > 
-> > On Tue, 15 Mar 2022 11:33:22 -0300, Jason Gunthorpe <jgg@nvidia.com>
-> > wrote: 
-> > > On Mon, Mar 14, 2022 at 10:07:07PM -0700, Jacob Pan wrote:  
-> > > > +	/*
-> > > > +	 * Each domain could have multiple devices attached with
-> > > > shared or per
-> > > > +	 * device PASIDs. At the domain level, we keep track of
-> > > > unique PASIDs and
-> > > > +	 * device user count.
-> > > > +	 * E.g. If a domain has two devices attached, device A has
-> > > > PASID 0, 1;
-> > > > +	 * device B has PASID 0, 2. Then the domain would have
-> > > > PASID 0, 1, 2.
-> > > > +	 */    
-> > > 
-> > > A 2d array of xarray's seems like a poor data structure for this task.
-> > > 
-> > > AFACIT this wants to store a list of (device, pasid) tuples, so a
-> > > simple linked list, 1d xarray vector or a red black tree seems more
-> > > appropriate..
-> > >   
-> > Agreed.
-> > It might need some surgery for dmar_domain and device_domain_info, which
-> > already has a simple device list. I am trying to leverage the existing
-> > data struct, let me take a closer look.  
+Em Wed, Mar 16, 2022 at 02:23:54PM +0100, kkourt@kkourt.io escreveu:
+> From: Kornilios Kourtis <kornilios@isovalent.com>
 > 
-> Maybe the core code should provide this data structure in the
-> iommu_domain.
+> This patch improves the error seen by the user by setting errno in
+> cus__load_files(). Otherwise, we get a "No such file or directory" error
+> which might be confusing.
 > 
-> Figuring out what stuff is attached is something every driver has to
-> do right?
-yeah, seems we already have some duplicated device list in vendor domain
-struct, e.g. VT-d's dmar_domain, AMD's protection_domain. Similarly for 
-device_domain_info equivalent.
+> Before the patch, using a bogus file:
+> $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> pahole: ./vmlinux-5.3.18-24.102-default.debug: No such file or directory
+> $ ls ./vmlinux-5.3.18-24.102-default.debug
+> /home/kkourt/src/hubble-fgs/vmlinux-5.3.18-24.102-default.debug
+> 
+> After the patch:
+> $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> pahole: ./vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+> 
+> Which is not very helpful, but less confusing.
 
-If core code provides domain-device-pasid tracking, we could do device-pasid
-tracking in ioasid.c, when we support per device PASID allocation, each
-phy device could be an IOASID set, thus its own namespace.
+Humm, because you should've set errno to -err back in cus__load_files(),
+with this on top of your two patches we should get the:
 
-Perhaps, we could do the following: add a device list to struct
-iommu_domain, this will replace vender's domain lists. The data would be
-something like:
-struct iommu_dev_pasid_data {
-	struct list_head list;	  /* For iommu_domain->dev_list */
-	struct ioasid_set *pasids;  /* For the PASIDs used by the device */
-	struct device *dev;
-};
+#define EINVAL          22      /* Invalid argument */
 
-I guess a list of (device, pasid) tuples as you suggested could work but it
-will have duplicated device entries since each device could have multiple
-PASIDs. right?
 
-Have to code this up to see.
+"Invalid argument" or so from getting.
 
-Thanks for the pointers,
+diff --git a/dwarves.c b/dwarves.c
+index 5d0b420f0110452e..89609e96c46747ce 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -2401,7 +2401,7 @@ int cus__load_files(struct cus *cus, struct conf_load *conf,
+ 	while (filenames[i] != NULL) {
+ 		int err = cus__load_file(cus, conf, filenames[i]);
+ 		if (err) {
+-			errno = err;
++			errno = -err;
+ 			return -++i;
+ 		}
+ 		++i;
 
-Jacob
+
+
+Agreed? I'll fix it up here and apply if so.
+
+- Arnaldo
+ 
+> Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+> ---
+>  dwarves.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/dwarves.c b/dwarves.c
+> index 89b58ef..5d0b420 100644
+> --- a/dwarves.c
+> +++ b/dwarves.c
+> @@ -2399,8 +2399,11 @@ int cus__load_files(struct cus *cus, struct conf_load *conf,
+>  	int i = 0;
+>  
+>  	while (filenames[i] != NULL) {
+> -		if (cus__load_file(cus, conf, filenames[i]))
+> +		int err = cus__load_file(cus, conf, filenames[i]);
+> +		if (err) {
+> +			errno = err;
+>  			return -++i;
+> +		}
+>  		++i;
+>  	}
+>  
+> -- 
+> 2.25.1
+
+-- 
+
+- Arnaldo

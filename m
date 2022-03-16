@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5B64DAC57
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88A34DAC38
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354483AbiCPIT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S1354401AbiCPIHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347658AbiCPIT5 (ORCPT
+        with ESMTP id S240102AbiCPIHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:19:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131E23D4AB;
-        Wed, 16 Mar 2022 01:18:42 -0700 (PDT)
-X-UUID: a72b291d1f464eb1952bece34dd9c0b7-20220316
-X-UUID: a72b291d1f464eb1952bece34dd9c0b7-20220316
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1692572578; Wed, 16 Mar 2022 16:18:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 16 Mar 2022 16:18:39 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 16:18:38 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <yang.lee@linux.alibaba.com>
-CC:     <abaci@linux.alibaba.com>, <andrew-ct.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mchehab@kernel.org>, <tiffany.lin@mediatek.com>
-Subject: Re: [PATCH -next] media: platform: Remove unnecessary print function dev_err()
-Date:   Wed, 16 Mar 2022 16:18:39 +0800
-Message-ID: <20220316081839.22093-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220316001411.80167-1-yang.lee@linux.alibaba.com>
-References: <20220316001411.80167-1-yang.lee@linux.alibaba.com>
+        Wed, 16 Mar 2022 04:07:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3D5E773;
+        Wed, 16 Mar 2022 01:05:54 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KJN8B3WltzfZ6l;
+        Wed, 16 Mar 2022 16:03:54 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Mar 2022 16:05:22 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Mar 2022 16:05:21 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <ming.qian@nxp.com>, <shijie.qin@nxp.com>, <eagle.zhou@nxp.com>,
+        <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangxiongfeng2@huawei.com>
+Subject: [PATCH -next] media: amphion: Add missing of_node_put() in vpu_core_parse_dt()
+Date:   Wed, 16 Mar 2022 16:19:38 +0800
+Message-ID: <20220316081938.80819-1-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
+of_parse_phandle() will increment the refcount of the returned
+device_node. Calling of_node_put() to avoid the refcount leak.
 
->The print function dev_err() is redundant because platform_get_irq()
->already prints an error.
->
->Eliminate the follow coccicheck warnings:
->./drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c:119:2-9:
->line 119 is redundant because platform_get_irq() already prints an error
->./drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c:103:2-9:
->line 103 is redundant because platform_get_irq() already prints an error
->
->Reported-by: Abaci Robot <abaci@linux.alibaba.com>
->Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
->---
-> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c | 4 +---
-> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c  | 4 +---
-> 2 files changed, 2 insertions(+), 6 deletions(-)
->
->diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
->index 48dad9bb13d2..df7b25e9cbc8 100644
->--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
->+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
->@@ -115,10 +115,8 @@ static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
-> 		return 0;
-> 
-> 	dev->dec_irq = platform_get_irq(pdev, 0);
->-	if (dev->dec_irq < 0) {
->-		dev_err(&pdev->dev, "failed to get irq number");
->+	if (dev->dec_irq < 0)
-> 		return dev->dec_irq;
->-	}
-> 
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+---
+ drivers/media/platform/amphion/vpu_core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks for the patch, 
-Yihao has submitted a patch to fix mtk_vcodec_init_dec_resources() [1]
-[1] https://lore.kernel.org/lkml/20220310023645.10082-1-hanyihao@vivo.com/
+diff --git a/drivers/media/platform/amphion/vpu_core.c b/drivers/media/platform/amphion/vpu_core.c
+index 016554387f3f..1da20335bc45 100644
+--- a/drivers/media/platform/amphion/vpu_core.c
++++ b/drivers/media/platform/amphion/vpu_core.c
+@@ -529,11 +529,14 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	}
+ 	if (of_address_to_resource(node, 0, &res)) {
+ 		dev_err(core->dev, "boot-region of_address_to_resource error\n");
++		of_node_put(node);
+ 		return -EINVAL;
+ 	}
+ 	core->fw.phys = res.start;
+ 	core->fw.length = resource_size(&res);
+ 
++	of_node_put(node);
++
+ 	node = of_parse_phandle(np, "memory-region", 1);
+ 	if (!node) {
+ 		dev_err(core->dev, "rpc-region of_parse_phandle error\n");
+@@ -541,6 +544,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	}
+ 	if (of_address_to_resource(node, 0, &res)) {
+ 		dev_err(core->dev, "rpc-region of_address_to_resource error\n");
++		of_node_put(node);
+ 		return -EINVAL;
+ 	}
+ 	core->rpc.phys = res.start;
+@@ -549,6 +553,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	if (core->rpc.length < core->res->rpc_size + core->res->fwlog_size) {
+ 		dev_err(core->dev, "the rpc-region <%pad, 0x%x> is not enough\n",
+ 			&core->rpc.phys, core->rpc.length);
++		of_node_put(node);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -560,6 +565,7 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	if (ret != VPU_CORE_MEMORY_UNCACHED) {
+ 		dev_err(core->dev, "rpc region<%pad, 0x%x> isn't uncached\n",
+ 			&core->rpc.phys, core->rpc.length);
++		of_node_put(node);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -571,6 +577,8 @@ static int vpu_core_parse_dt(struct vpu_core *core, struct device_node *np)
+ 	core->act.length = core->rpc.length - core->res->rpc_size - core->log.length;
+ 	core->rpc.length = core->res->rpc_size;
+ 
++	of_node_put(node);
++
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
 
-> 	irq_set_status_flags(dev->dec_irq, IRQ_NOAUTOEN);
-> 	ret = devm_request_irq(&pdev->dev, dev->dec_irq,
->diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
->index 8d2a641d92f1..5f07313676bb 100644
->--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
->+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
->@@ -99,10 +99,8 @@ static int mtk_vdec_hw_init_irq(struct mtk_vdec_hw_dev *dev)
-> 	int ret;
-> 
-> 	dev->dec_irq = platform_get_irq(pdev, 0);
->-	if (dev->dec_irq < 0) {
->-		dev_err(&pdev->dev, "Failed to get irq resource");
->+	if (dev->dec_irq < 0)
-> 		return dev->dec_irq;
->-	}
-> 
-> 	irq_set_status_flags(dev->dec_irq, IRQ_NOAUTOEN);
-> 	ret = devm_request_irq(&pdev->dev, dev->dec_irq,
-
-Would you mind submitting mtk_vdec_hw_init_irq() part by another patch?
-
-Thanks,
-Miles

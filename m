@@ -2,109 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E722C4DAC08
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4064DAC0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354331AbiCPHum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 03:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S1354339AbiCPHu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 03:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354319AbiCPHul (ORCPT
+        with ESMTP id S1344701AbiCPHu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 03:50:41 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B825B3CC;
-        Wed, 16 Mar 2022 00:49:27 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id qx21so2301959ejb.13;
-        Wed, 16 Mar 2022 00:49:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=tUhUqhCZr3Ci9RwcBawEUsZqc3exEqG+C+hiEi1bt3o=;
-        b=Qdz3pKmqBlQml7ykunNJ/2JZd3cNQv7tHehFkUAPf34XiFOrK/ikMKNpdXu8G/GVS6
-         0Ue/yjavDy5/F7t96PQjwftMdCCZ9Ox161NdP8UQvaUvIOPOrv+eeWAdpRMMhWwVckvv
-         eXUdgGgGv970IJy8V3q7YBrlxFrNr1OHGzW3UItTfUouFZom1PNsM4eygMYGcXG3k2t6
-         2y02UvdiKXwMQdCZA5mEFPZ7PBk6lHzauVpgtlk1E7TvqITAeaSbxBnMoxiF1puw9mbW
-         GuSY0kT8Q9K1RreoBFhDuq0H6Rpn50WWr0rHCQ6kdNhPLUcSR/jWo4NaHJ7566IlpY3P
-         siTg==
-X-Gm-Message-State: AOAM530NbhmDwpkFtUrkha0QJsuoWXoCgy5E4OOrTXjhUHz+HbdaI1lh
-        0qUS4i9QmPUWo/GPsYGKYyhAhzIjjL0=
-X-Google-Smtp-Source: ABdhPJyomDpckdtCRwpmmD3AhOt4xIymEoU15tK2Y1+NiAVFCV2W9tXei0gENoMkOVoEhK47YRiRsw==
-X-Received: by 2002:a17:907:1c10:b0:6da:6316:d009 with SMTP id nc16-20020a1709071c1000b006da6316d009mr25815337ejc.621.1647416965904;
-        Wed, 16 Mar 2022 00:49:25 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id y20-20020a056402271400b004187d967b1asm564659edd.84.2022.03.16.00.49.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 00:49:25 -0700 (PDT)
-Message-ID: <af1c7dd1-d86d-d737-643e-1f20a19c3890@kernel.org>
-Date:   Wed, 16 Mar 2022 08:49:24 +0100
+        Wed, 16 Mar 2022 03:50:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCFB5D5D3;
+        Wed, 16 Mar 2022 00:49:41 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KJMk127WrzcbLf;
+        Wed, 16 Mar 2022 15:44:41 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Mar 2022 15:49:38 +0800
+CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
+        <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v5 2/8] hwtracing: Add trace function support for
+ HiSilicon PCIe Tune and Trace device
+To:     John Garry <john.garry@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+References: <20220308084930.5142-1-yangyicong@hisilicon.com>
+ <20220308084930.5142-3-yangyicong@hisilicon.com>
+ <2049e270-7cf4-84c5-eb84-5bb1a425e897@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <3f8bff53-e6fb-d4ae-b48f-d9d9ef22f929@huawei.com>
+Date:   Wed, 16 Mar 2022 15:49:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] docs: serial: fix a reference file name in driver.rst
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Wan Jiabing <wanjiabing@vivo.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kael_w@qq.com
-References: <20220304100315.6732-1-wanjiabing@vivo.com>
- <f48dcaba-8015-380f-ac3b-54818c48350d@kernel.org>
- <87mthw2o93.fsf@meer.lwn.net> <YixE4K3ScGL3v5yQ@kroah.com>
- <eee93a4c-2629-af0f-03b3-4379a128c7dd@kernel.org>
-In-Reply-To: <eee93a4c-2629-af0f-03b3-4379a128c7dd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <2049e270-7cf4-84c5-eb84-5bb1a425e897@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14. 03. 22, 7:16, Jiri Slaby wrote:
-> On 12. 03. 22, 7:59, Greg Kroah-Hartman wrote:
->> On Fri, Mar 11, 2022 at 02:06:00PM -0700, Jonathan Corbet wrote:
->>> Jiri Slaby <jirislaby@kernel.org> writes:
->>>
->>>> On 04. 03. 22, 11:03, Wan Jiabing wrote:
->>>>> Fix the following 'make refcheckdocs' warning:
->>>>> Warning: Documentation/driver-api/serial/driver.rst references a file
->>>>> that doesn't exist: Documentation/driver-api/serial/tty.rst
->>>>>
->>>>> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
->>>>
->>>> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
->>>
->>> I've applied this.  But I have to wonder why Documentation/tty exists at
->>> all; is there any reason not to move it all under driver-api?
->>
->> No reason at all, it should probably be moved someday.
+On 2022/3/12 1:55, John Garry wrote:
+>> +
+>> +static int hisi_ptt_alloc_trace_buf(struct hisi_ptt *hisi_ptt)
 > 
-> The only reason was that I don't completely understand what "driver-api" 
-> should contain. To be presice, documentation of line disciplines, tty 
-> buffer and tty internals (which is all contained in Documentation/tty) 
-> doesn't belong to "driver-api" IMO. If it it preferred to be there, I 
-> can move it, of course.
+> no caller
+> 
+>> +{
+>> +    struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +    struct device *dev = &hisi_ptt->pdev->dev;
+>> +    int i;
+>> +
+>> +    hisi_ptt->trace_ctrl.buf_index = 0;
+>> +
+>> +    /* If the trace buffer has already been allocated, zero it. */
+>> +    if (ctrl->trace_buf) {
+>> +        for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++)
+>> +            memset(ctrl->trace_buf[i].addr, 0, HISI_PTT_TRACE_BUF_SIZE);
+>> +        return 0;
+>> +    }
+>> +
+>> +    ctrl->trace_buf = devm_kcalloc(dev, HISI_PTT_TRACE_BUF_CNT,
+>> +                       sizeof(struct hisi_ptt_dma_buffer), GFP_KERNEL);
+>> +    if (!ctrl->trace_buf)
+>> +        return -ENOMEM;
+>> +
+>> +    for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; ++i) {
+>> +        ctrl->trace_buf[i].addr = dmam_alloc_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
+>> +                                 &ctrl->trace_buf[i].dma,
+>> +                                 GFP_KERNEL);
+>> +        if (!ctrl->trace_buf[i].addr) {
+>> +            hisi_ptt_free_trace_buf(hisi_ptt);
+>> +            return -ENOMEM;
+>> +        }
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void hisi_ptt_trace_end(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +    hisi_ptt->trace_ctrl.started = false;
+>> +}
+>> +
+>> +static int hisi_ptt_trace_start(struct hisi_ptt *hisi_ptt)
+> 
+> again this function has no caller, so I assume a warn is generated if we only apply up to this patch (when compiling)
+> 
+> please only add code per-patch which is actually referenced
+> 
 
-Returning to this: staring into Documentation/index.rst and 
-Documentation/driver-api/index.rst. Looking at documents/paths they 
-reference, I still don't quite understand what is the rule to put the 
-stuff to either of them.
+it's because I split the trace part into 2 patches as 2/8 provides probe and some basic
+functions (mentioned in the commit message) and 3/8 adds the PMU device which use the function
+in 2/8, assuming that it'll be easier to review..
 
-What I used to decide to put the tty stuff to the root is that it's not 
-only driver-api documented there. It documents also tty internals and 
-implementation of some line disciplines.
+I think it's suggested to squash patch 2/8 and 3/8, then the comments here is addressed.
 
-So, now I'm confused why it does NOT belong to the root.
+>> +{
+>> +    struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +    u32 val;
+>> +    int i;
+>> +
+>> +    /* Check device idle before start trace */
+>> +    if (!hisi_ptt_wait_trace_hw_idle(hisi_ptt)) {
+>> +        pci_err(hisi_ptt->pdev, "Failed to start trace, the device is still busy.\n");
+> 
+> Are we already going to have a "device busy" message? I just wonder if we need this at all
+> 
 
-thanks,
--- 
-js
-suse labs
+The message is necessary as the caller pmu::start() is void and we cannot pass the failure
+to the user by the return value. So a message is printed here to notify user the error reason.
+
+>> +        return -EBUSY;
+>> +    }
+>> +
+>> +    ctrl->started = true;
+>> +
+[...]
+>> +static int hisi_ptt_init_ctrls(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    struct pci_dev *pdev = hisi_ptt->pdev;
+>> +    struct pci_bus *bus;
+>> +    int ret;
+>> +    u32 reg;
+>> +
+>> +    INIT_LIST_HEAD(&hisi_ptt->port_filters);
+>> +    INIT_LIST_HEAD(&hisi_ptt->req_filters);
+>> +
+>> +    /*
+>> +     * The device range register provides the information about the
+>> +     * root ports which the RCiEP can control and trace. The RCiEP
+>> +     * and the root ports it support are on the same PCIe core, with
+>> +     * same domain number but maybe different bus number. The device
+>> +     * range register will tell us which root ports we can support,
+>> +     * Bit[31:16] indicates the upper BDF numbers of the root port,
+>> +     * while Bit[15:0] indicates the lower.
+>> +     */
+>> +    reg = readl(hisi_ptt->iobase + HISI_PTT_DEVICE_RANGE);
+>> +    hisi_ptt->upper = FIELD_GET(HISI_PTT_DEVICE_RANGE_UPPER, reg);
+>> +    hisi_ptt->lower = FIELD_GET(HISI_PTT_DEVICE_RANGE_LOWER, reg);
+>> +
+>> +    /*
+>> +     * hisi_ptt_init_filters() only fails when the memory allocation failed.
+>> +     * We don't check the failure here as it won't fail after adding the
+>> +     * support of dynamically updating the filters in the following patch.
+> 
+> please structure the series such that we don't need to talk about how we will fix it later
+> 
+
+will drop the comment here and handle the error as usual.
+
+>> +     */
+>> +    bus = pci_find_bus(pci_domain_nr(pdev->bus), PCI_BUS_NUM(hisi_ptt->upper));
+>> +    if (bus)
+>> +        pci_walk_bus(bus, hisi_ptt_init_filters, hisi_ptt);
+>> +
+>> +    ret = devm_add_action_or_reset(&pdev->dev, hisi_ptt_release_filters, hisi_ptt);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    hisi_ptt->trace_ctrl.default_cpu = cpumask_first(cpumask_of_node(dev_to_node(&pdev->dev)));
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +/*
+>> + * The DMA of PTT trace can only use direct mapping, due to some
+>> + * hardware restriction. Check whether there is an IOMMU or the
+>> + * policy of the IOMMU domain is passthrough, otherwise the trace
+>> + * cannot work.
+>> + *
+>> + * The PTT device is supposed to behind the ARM SMMUv3, which
+>> + * should have passthrough the device by a quirk.
+>> + */
+>> +static int hisi_ptt_check_iommu_mapping(struct pci_dev *pdev)
+>> +{
+>> +    struct iommu_domain *iommu_domain;
+>> +
+>> +    iommu_domain = iommu_get_domain_for_dev(&pdev->dev);
+>> +    if (!iommu_domain || iommu_domain->type == IOMMU_DOMAIN_IDENTITY)
+>> +        return 0;
+>> +
+>> +    return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static int hisi_ptt_probe(struct pci_dev *pdev,
+>> +              const struct pci_device_id *id)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt;
+>> +    int ret;
+>> +
+>> +    ret = hisi_ptt_check_iommu_mapping(pdev);
+>> +    if (ret) {
+>> +        pci_err(pdev, "cannot work with non-direct DMA mapping.\n");
+> 
+> please no double-negatives like this, so maybe "requires direct DMA mappings"
+> 
+
+will refine the message.
+
+>> +        return ret;
+>> +    }
+>> +
+>> +    hisi_ptt = devm_kzalloc(&pdev->dev, sizeof(*hisi_ptt), GFP_KERNEL);
+>> +    if (!hisi_ptt)
+>> +        return -ENOMEM;
+>> +
+>> +    mutex_init(&hisi_ptt->mutex);
+>> +    hisi_ptt->pdev = pdev;
+>> +    pci_set_drvdata(pdev, hisi_ptt);
+>> +
+>> +    ret = pcim_enable_device(pdev);
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to enable device, ret = %d.\n", ret);
+> 
+> nit: no '.' at end of any messages
+> 
+
+will drop '.' for all the messages.
+
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = pcim_iomap_regions(pdev, BIT(2), DRV_NAME);
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to remap io memory, ret = %d.\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    hisi_ptt->iobase = pcim_iomap_table(pdev)[2];
+>> +
+>> +    ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to set 64 bit dma mask, ret = %d.\n", ret);
+> 
+> I do doubt that this message is any use
+> 
+
+I think it's useful as with the message it will be easier to find on which stage the probe fails.
+
+Thanks,
+Yicong
+
+

@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7774DAB5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664E44DAAEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 08:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237911AbiCPHJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 03:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S1353991AbiCPHEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 03:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354285AbiCPHHe (ORCPT
+        with ESMTP id S233835AbiCPHEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 03:07:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0D127CD4;
-        Wed, 16 Mar 2022 00:05:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 05368CE1D38;
-        Wed, 16 Mar 2022 07:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03B3C340F2;
-        Wed, 16 Mar 2022 07:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647414325;
-        bh=qyoPYJlSA6NEig6jnwlt/QYfSWiYQ9maXb6WEkmPDVA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIDcpiyYJGUG0u1uBju5PqK5t9M2mPYNatynjN0Mv5NqHVzP2HQEfvwkvepJ1eMla
-         lipxIQuXxrUrwGQy+P12VKgy/HG8qmRmlXKH/+sdG5/TnC4qKfeyeIxsGR+5xgliN3
-         XJEOAcpVeh9dPEEXypx+oaEiFkbKOvlbAsW+aff2lx976+56uP4Qfqs2fKMTCJrcNK
-         GK7/mXelJLLIDZNpWb3Bx4q5VlhLdMLQurplQ0PA3sk2WAdqUdMULGsg5qucMreHuj
-         3XuyRm7ks8Zc0ee6nsctIa1LxX4BEA/wJ3945l11HpcWRMoPwwQn4QztJS7nyI/XpV
-         8xhP4p6q/rBXg==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org, hch@lst.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V8 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-Date:   Wed, 16 Mar 2022 15:03:17 +0800
-Message-Id: <20220316070317.1864279-21-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316070317.1864279-1-guoren@kernel.org>
-References: <20220316070317.1864279-1-guoren@kernel.org>
+        Wed, 16 Mar 2022 03:04:49 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC3241037
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 00:03:34 -0700 (PDT)
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxvxPAizFiBhcKAA--.7401S3;
+        Wed, 16 Mar 2022 15:03:29 +0800 (CST)
+Subject: Re: [PATCH] mm: add access/dirty bit on numa page fault
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220316010836.1137084-1-maobibo@loongson.cn>
+ <93302a47-9fda-25c7-4212-41b8dd027696@arm.com>
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <3756661c-d710-7bf6-76ab-39ac44f8e8b3@loongson.cn>
+Date:   Wed, 16 Mar 2022 15:03:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <93302a47-9fda-25c7-4212-41b8dd027696@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxvxPAizFiBhcKAA--.7401S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw4rWw48Ww18JF47tr47urg_yoW8Kw43pF
+        Z3Cayjqa12qr1IyanrG3Wqvr1rXa48KFy7Cr9rt3Wjkws8Zrn7Cry8u3yruaykAry8tws8
+        Jr4jgFWUuan8Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv0b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
+        02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU5
+        PpnJUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,72 +61,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
 
-Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-64bit S-mode) support.
- - Setup kconfig & dummy functions for compiling.
- - Implement compat_start_thread by the way.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+On 03/16/2022 02:43 PM, Anshuman Khandual wrote:
+> 
+> 
+> On 3/16/22 06:38, Bibo Mao wrote:
+>> During numa page fault, dirty bit can be added for old pte if
+>> fail to migrate on write fault. And if it succeeds to migrate,
+>> access bit can be added for migrated new pte, also dirty bit
+>> can be added for write fault.
+> 
+> The current code does not set the access and dirty bits when ever
+> applicable i.e on FAULT_FLAG_WRITE, on the pte (old if migration
+> fails, new if migration succeeds) ? Did not this cause any problem
+> earlier ? I am wondering how this might have gone unnoticed.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..6f11df8c189f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -73,6 +73,7 @@ config RISCV
- 	select HAVE_ARCH_KGDB if !XIP_KERNEL
- 	select HAVE_ARCH_KGDB_QXFER_PKT
- 	select HAVE_ARCH_MMAP_RND_BITS if MMU
-+	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
-@@ -123,12 +124,18 @@ config ARCH_MMAP_RND_BITS_MIN
- 	default 18 if 64BIT
- 	default 8
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MIN
-+	default 8
-+
- # max bits determined by the following formula:
- #  VA_BITS - PAGE_SHIFT - 3
- config ARCH_MMAP_RND_BITS_MAX
- 	default 24 if 64BIT # SV39 based
- 	default 17
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MAX
-+	default 17
-+
- # set if we run in machine mode, cleared if we run in supervisor mode
- config RISCV_M_MODE
- 	bool
-@@ -406,6 +413,18 @@ config CRASH_DUMP
- 
- 	  For more details see Documentation/admin-guide/kdump/kdump.rst
- 
-+config COMPAT
-+	bool "Kernel support for 32-bit U-mode"
-+	default 64BIT
-+	depends on 64BIT && MMU
-+	help
-+	  This option enables support for a 32-bit U-mode running under a 64-bit
-+	  kernel at S-mode. riscv32-specific components such as system calls,
-+	  the user helper functions (vdso), signal rt_frame functions and the
-+	  ptrace interface are handled appropriately by the kernel.
-+
-+	  If you want to execute 32-bit userspace applications, say Y.
-+
- endmenu
- 
- menu "Boot options"
--- 
-2.25.1
+On arm/x86 platform hw will set access/dirty bits automatically,
+however on MIPS platform access/dirty bits are set by software in next
+page fault, it is relatively easier to watch on MIPS platform.
+
+regards
+bibo,mao
+
+> 
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>>  mm/memory.c | 21 ++++++++++++++++++++-
+>>  1 file changed, 20 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index c125c4969913..65813bec9c06 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -4404,6 +4404,22 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+>>  	if (migrate_misplaced_page(page, vma, target_nid)) {
+>>  		page_nid = target_nid;
+>>  		flags |= TNF_MIGRATED;
+>> +
+>> +		/*
+>> +		 * update pte entry with access bit, and dirty bit for
+>> +		 * write fault
+>> +		 */
+>> +		spin_lock(vmf->ptl);
+>> +		pte = *vmf->pte;
+>> +		pte = pte_mkyoung(pte);
+>> +		if (was_writable) {
+>> +			pte = pte_mkwrite(pte);
+>> +			if (vmf->flags & FAULT_FLAG_WRITE)
+>> +				pte = pte_mkdirty(pte);
+>> +		}
+>> +		set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
+>> +		update_mmu_cache(vma, vmf->address, vmf->pte);
+>> +		pte_unmap_unlock(vmf->pte, vmf->ptl);
+>>  	} else {
+>>  		flags |= TNF_MIGRATE_FAIL;
+>>  		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
+>> @@ -4427,8 +4443,11 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
+>>  	old_pte = ptep_modify_prot_start(vma, vmf->address, vmf->pte);
+>>  	pte = pte_modify(old_pte, vma->vm_page_prot);
+>>  	pte = pte_mkyoung(pte);
+>> -	if (was_writable)
+>> +	if (was_writable) {
+>>  		pte = pte_mkwrite(pte);
+>> +		if (vmf->flags & FAULT_FLAG_WRITE)
+>> +			pte = pte_mkdirty(pte);
+>> +	}
+>>  	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
+>>  	update_mmu_cache(vma, vmf->address, vmf->pte);
+>>  	pte_unmap_unlock(vmf->pte, vmf->ptl);
 

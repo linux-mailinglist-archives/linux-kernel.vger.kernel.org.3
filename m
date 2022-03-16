@@ -2,90 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5DA4DB8E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960AA4DB8EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 20:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350714AbiCPTc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 15:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S1343506AbiCPTiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 15:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238244AbiCPTcY (ORCPT
+        with ESMTP id S238244AbiCPTit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 15:32:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3173B3E2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 12:31:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 31E8E1F38D;
-        Wed, 16 Mar 2022 19:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647459065; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oyijL7wKYvaw8yuN+KHZKQOHPhOkToksPX5D1lko3sc=;
-        b=my+6mduhWv45lUofaLcRvxeKyxsqAsyruuPYZb1X3yRNtEinKwqkhY4NcjTw3sFpmT9Wv6
-        /z2l2lO8vp3Ji0eHetMDXRSIXogZPSO6KRQ+1rzoGZShTaFadYpl3hSq2Z2Yr9X7umQx/x
-        2dJYp8j5ruh5lM+Ac2cGZwti2HY92LM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647459065;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oyijL7wKYvaw8yuN+KHZKQOHPhOkToksPX5D1lko3sc=;
-        b=sA/41s0RxL5JEV2NCdTHBxXTiZN8H30+Y4OCHWyVV3dtbDg0jzFuRF7yAkIQ0XGV6QdsJF
-        BU5pOcw3GULkwfCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B256813A32;
-        Wed, 16 Mar 2022 19:31:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id C5EhKvg6MmLaBgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 16 Mar 2022 19:31:04 +0000
-Message-ID: <1f6c4559-ee48-ca67-8ff1-f7f9d330bc12@suse.de>
-Date:   Wed, 16 Mar 2022 20:31:03 +0100
+        Wed, 16 Mar 2022 15:38:49 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC166211D;
+        Wed, 16 Mar 2022 12:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647459454; x=1678995454;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VoK7NCHknJwS9CczrBoyoyzwwOqpTK80AgOJjhOYGzQ=;
+  b=TI011b3GxCKjXdsI65+orEqr0HKZoJxyaTALmWQ7Nj49PWhXLO4KcYEj
+   DkAqT2yhTRVKXJ3kNr00l0+UzF3nTkRlNpOgCGhnNuqU5uxmEKJDhNuv4
+   A2HXplAiF9PqPqeq34Ji9JIQvNEUTU4rp1LngkdXUESUzrPZfxW2XD/Z4
+   inRN7S/8fi1lmxBk6dhAYQYmTW/QpLTg5buU553DurZeFr2gMXmjSmTSx
+   CWIkgkos3GofpJVL8vtmWGYUzPfBQEyAfpEKkEgAuTwVCCaN2yGAil8ZC
+   uWbWDxYcS2yEDVVA32wRP+rlmCIQQS/SbhIHmn3a+hpU+rPFkHiLFAfOp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317416690"
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="317416690"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 12:37:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="513158149"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2022 12:37:28 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUZSa-000CoG-0a; Wed, 16 Mar 2022 19:37:28 +0000
+Date:   Thu, 17 Mar 2022 03:37:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
+        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org
+Cc:     kbuild-all@lists.01.org, torvalds@linux-foundation.org,
+        gregkh@linuxfoundation.org, willy@infradead.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
+Subject: Re: [PATCH v5 04/22] cachefiles: notify user daemon with anon_fd
+ when looking up cookie
+Message-ID: <202203170323.idYrKxCZ-lkp@intel.com>
+References: <20220316131723.111553-5-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220316183708.1505846-1-arnd@kernel.org>
- <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
-In-Reply-To: <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------fo6D0fbjn00q0zS8Eq3Sj3sl"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316131723.111553-5-jefflexu@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,151 +71,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------fo6D0fbjn00q0zS8Eq3Sj3sl
-Content-Type: multipart/mixed; boundary="------------It0SmhopNWRK4Y8F8SvBLNER";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Thierry Reding <thierry.reding@gmail.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>, Kees Cook
- <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
- Jani Nikula <jani.nikula@intel.com>, Sam Ravnborg <sam@ravnborg.org>,
- Javier Martinez Canillas <javierm@redhat.com>,
- dri-devel@lists.freedesktop.org, Douglas Anderson <dianders@chromium.org>,
- Deepak Rawat <drawat.floss@gmail.com>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
- <noralf@tronnes.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Alex Deucher <alexander.deucher@amd.com>,
- Dillon Min <dillon.minfei@gmail.com>, linux-kernel@vger.kernel.org
-Message-ID: <1f6c4559-ee48-ca67-8ff1-f7f9d330bc12@suse.de>
-Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
-References: <20220316183708.1505846-1-arnd@kernel.org>
- <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
-In-Reply-To: <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
+Hi Jeffle,
 
---------------It0SmhopNWRK4Y8F8SvBLNER
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thank you for the patch! Yet something to improve:
 
-DQoNCkFtIDE2LjAzLjIyIHVtIDIwOjEyIHNjaHJpZWIgVGhvbWFzIFppbW1lcm1hbm46DQo+
-IEhpDQo+IA0KPiBBbSAxNi4wMy4yMiB1bSAxOTozNiBzY2hyaWViIEFybmQgQmVyZ21hbm46
-DQo+PiBGcm9tOiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPj4NCj4+IFRoZSBk
-cml2ZXIgZmFpbHMgdG8gYnVpbGQgd2hlbiB0aGUgS01TIGhlbHBlcnMgYXJlIGRpc2FibGVk
-Og0KPj4NCj4+IGxkLmxsZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9nZW1fZmJf
-Z2V0X29iag0KPj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+Pj4gwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBp
-X2RiaV9idWZfY29weSkgaW4gDQo+Pj4+PiBhcmNoaXZlIGRyaXZlcnMvYnVpbHQtaW4uYQ0K
-Pj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+Pj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2RiaV9mYl9k
-aXJ0eSkgaW4gDQo+Pj4+PiBhcmNoaXZlIGRyaXZlcnMvYnVpbHQtaW4uYQ0KPj4NCj4+IGxk
-LmxsZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9nZW1fZmJfYmVnaW5fY3B1X2Fj
-Y2Vzcw0KPj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+Pj4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2Ri
-aV9idWZfY29weSkgaW4gDQo+Pj4+PiBhcmNoaXZlIGRyaXZlcnMvYnVpbHQtaW4uYQ0KPj4N
-Cj4+IGxkLmxsZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9mYl9zd2FiDQo+Pj4+
-PiByZWZlcmVuY2VkIGJ5IGRybV9taXBpX2RiaS5jDQo+Pj4+PiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGdwdS9kcm0vZHJtX21pcGlfZGJpLm86KG1pcGlfZGJpX2J1Zl9jb3B5
-KSBpbiANCj4+Pj4+IGFyY2hpdmUgZHJpdmVycy9idWlsdC1pbi5hDQo+Pg0KPj4gbGQubGxk
-OiBlcnJvcjogdW5kZWZpbmVkIHN5bWJvbDogZHJtX2ZiX3hyZ2I4ODg4X3RvX3JnYjU2NQ0K
-Pj4+Pj4gcmVmZXJlbmNlZCBieSBkcm1fbWlwaV9kYmkuYw0KPj4+Pj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBncHUvZHJtL2RybV9taXBpX2RiaS5vOihtaXBpX2RiaV9idWZf
-Y29weSkgaW4gDQo+Pj4+PiBhcmNoaXZlIGRyaXZlcnMvYnVpbHQtaW4uYQ0KPj4NCj4+IGxk
-LmxsZDogZXJyb3I6IHVuZGVmaW5lZCBzeW1ib2w6IGRybV9mYl9tZW1jcHkNCj4+Pj4+IHJl
-ZmVyZW5jZWQgYnkgZHJtX21pcGlfZGJpLmMNCj4+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgZ3B1L2RybS9kcm1fbWlwaV9kYmkubzoobWlwaV9kYmlfYnVmX2NvcHkpIGlu
-IA0KPj4+Pj4gYXJjaGl2ZSBkcml2ZXJzL2J1aWx0LWluLmENCj4+DQo+PiBUaGlzIGlzIGZh
-aXJseSBoYXJkIHRvIGhpdCBpbiByYW5kY29uZmlnIGRyaXZlcnMsIGJ1dCBpdCBldmVudHVh
-bGx5DQo+PiBkaWQgdHJpZ2dlciBmb3IgbWUgaW4gYSBjb25maWd1cmF0aW9uIHdoZXJlIGFs
-bCBvdGhlciBEUk0gZHJpdmVycw0KPj4gYXJlIGxvYWRhYmxlIG1vZHVsZXMsIGJ1dCBEUk1f
-UEFORUxfV0lERUNISVBTX1dTMjQwMSB3YXMgYnVpbHQtaW4uDQo+Pg0KPj4gQWRkaW5nIGEg
-ZGVwZW5kZW5jeSBpbiBhbGwgZHJpdmVycyB0aGF0IHNlbGVjdCBEUk1fTUlQSV9EQkkgYXZv
-aWRzDQo+PiB0aGUgcHJvYmxlbSBmb3Igbm93LCBhZGRpbmcgdGhlIGRlcGVuZGVuY3kgaW4g
-RFJNX01JUElfREJJIGFzIHdlbGwNCj4+IHNob3VsZCBoZWxwIG1ha2UgaXQgZWFzaWVyIHRv
-IGZpZ3VyZSBvdXQgd2h5IGl0IGJyZWFrcyBpZiBzb21lb25lDQo+PiBmb3JnZXRzIHRoZSBk
-ZXBlbmRlbmN5IHRoZSBuZXh0IHRpbWUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQXJuZCBC
-ZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4+IC0tLQ0KPj4gwqAgZHJpdmVycy9ncHUvZHJt
-L0tjb25maWfCoMKgwqDCoMKgwqAgfCAyICstDQo+PiDCoCBkcml2ZXJzL2dwdS9kcm0vcGFu
-ZWwvS2NvbmZpZyB8IDQgKysrKw0KPj4gwqAgMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlv
-bnMoKyksIDEgZGVsZXRpb24oLSkNCj4+DQo+PiBJIHNlZSB0aGlzIHdhcm5pbmcgb24gNS4x
-Ny1yYzgsIGJ1dCBkaWQgbm90IHRlc3QgaXQgb24gbGludXgtbmV4dCwNCj4+IHdoaWNoIG1h
-eSBhbHJlYWR5IGhhdmUgYSBmaXguDQo+Pg0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L2dwdS9kcm0vS2NvbmZpZyBiL2RyaXZlcnMvZ3B1L2RybS9LY29uZmlnDQo+PiBpbmRleCBi
-MWYyMmU0NTdmZDAuLmQ1ZWMwYjc3YzAxMCAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvZ3B1
-L2RybS9LY29uZmlnDQo+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vS2NvbmZpZw0KPj4gQEAg
-LTMwLDcgKzMwLDcgQEAgbWVudWNvbmZpZyBEUk0NCj4+IMKgIGNvbmZpZyBEUk1fTUlQSV9E
-QkkNCj4+IMKgwqDCoMKgwqAgdHJpc3RhdGUNCj4+IC3CoMKgwqAgZGVwZW5kcyBvbiBEUk0N
-Cj4+ICvCoMKgwqAgZGVwZW5kcyBvbiBEUk1fS01TX0hFTFBFUg0KPiANCj4gVGhpcyBzeW1i
-b2wgY2Fubm90IGJlIHNlbGVjdGVkIGJ5IHVzZXJzLCBzbyBpdCdzIG1heWJlIG5vdCBhIGdv
-b2QgaWRlYSANCj4gdG8gZGVwZW5kIG9uIGl0LiBJbiBmYWN0LCBJJ3ZlIGhhZCB0byByZW1v
-dmUgc3VjaCBhIHN0YXRlbWVudCBiZWNhdXNlIGl0IA0KPiBjcmVhdGVkIGEgY3ljbGljIGRl
-cGVuZGVuY3kuIFsxXQ0KDQpbMV0gDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2
-ZWwvMjAyMjAzMTUwODQ1NTkuMjM1MTAtMS10emltbWVybWFubkBzdXNlLmRlLw0KDQo+IA0K
-PiBNYWtpbmcgdGhlIGRyaXZlcnMgZGVwZW5kIG9uIEtNUyBoZWxwZXJzIGlzIHRoZSByaWdo
-dCB0aGluZyB0aG91Z2guIElmIA0KPiB0aGVyZSdzIGEgYmV0dGVyIHNvbHV0aW9uLCBwbGVh
-c2UgbGV0IG1lIGtub3cuDQo+IA0KPiBCZXN0IHJlZ2FyZHMNCj4gVGhvbWFzDQo+IA0KPj4g
-wqAgY29uZmlnIERSTV9NSVBJX0RTSQ0KPj4gwqDCoMKgwqDCoCBib29sDQo+PiBkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9ncHUvZHJtL3BhbmVsL0tjb25maWcgDQo+PiBiL2RyaXZlcnMvZ3B1
-L2RybS9wYW5lbC9LY29uZmlnDQo+PiBpbmRleCAwYWVjNWExMGIwNjQuLjk2ODg3ZDBlZmI5
-ZiAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9wYW5lbC9LY29uZmlnDQo+PiAr
-KysgYi9kcml2ZXJzL2dwdS9kcm0vcGFuZWwvS2NvbmZpZw0KPj4gQEAgLTQyNSw2ICs0MjUs
-NyBAQCBjb25maWcgRFJNX1BBTkVMX1NBTVNVTkdfREI3NDMwDQo+PiDCoMKgwqDCoMKgIHRy
-aXN0YXRlICJTYW1zdW5nIERCNzQzMC1iYXNlZCBEUEkgcGFuZWxzIg0KPj4gwqDCoMKgwqDC
-oCBkZXBlbmRzIG9uIE9GICYmIFNQSSAmJiBHUElPTElCDQo+PiDCoMKgwqDCoMKgIGRlcGVu
-ZHMgb24gQkFDS0xJR0hUX0NMQVNTX0RFVklDRQ0KPj4gK8KgwqDCoCBkZXBlbmRzIG9uIERS
-TV9LTVNfSEVMUEVSDQo+PiDCoMKgwqDCoMKgIHNlbGVjdCBEUk1fTUlQSV9EQkkNCj4+IMKg
-wqDCoMKgwqAgaGVscA0KPj4gwqDCoMKgwqDCoMKgwqAgU2F5IFkgaGVyZSBpZiB5b3Ugd2Fu
-dCB0byBlbmFibGUgc3VwcG9ydCBmb3IgdGhlIFNhbXN1bmcNCj4+IEBAIC00NDAsNiArNDQx
-LDcgQEAgY29uZmlnIERSTV9QQU5FTF9TQU1TVU5HX1M2RDE2RDANCj4+IMKgIGNvbmZpZyBE
-Uk1fUEFORUxfU0FNU1VOR19TNkQyN0ExDQo+PiDCoMKgwqDCoMKgIHRyaXN0YXRlICJTYW1z
-dW5nIFM2RDI3QTEgRFBJIHBhbmVsIGRyaXZlciINCj4+IMKgwqDCoMKgwqAgZGVwZW5kcyBv
-biBPRiAmJiBTUEkgJiYgR1BJT0xJQg0KPj4gK8KgwqDCoCBkZXBlbmRzIG9uIERSTV9LTVNf
-SEVMUEVSDQo+PiDCoMKgwqDCoMKgIHNlbGVjdCBEUk1fTUlQSV9EQkkNCj4+IMKgwqDCoMKg
-wqAgaGVscA0KPj4gwqDCoMKgwqDCoMKgwqAgU2F5IFkgaGVyZSBpZiB5b3Ugd2FudCB0byBl
-bmFibGUgc3VwcG9ydCBmb3IgdGhlIFNhbXN1bmcNCj4+IEBAIC00NzYsNiArNDc4LDcgQEAg
-Y29uZmlnIERSTV9QQU5FTF9TQU1TVU5HX1M2RTYzTTBfU1BJDQo+PiDCoMKgwqDCoMKgIGRl
-cGVuZHMgb24gU1BJDQo+PiDCoMKgwqDCoMKgIGRlcGVuZHMgb24gRFJNX1BBTkVMX1NBTVNV
-TkdfUzZFNjNNMA0KPj4gwqDCoMKgwqDCoCBkZWZhdWx0IERSTV9QQU5FTF9TQU1TVU5HX1M2
-RTYzTTANCj4+ICvCoMKgwqAgZGVwZW5kcyBvbiBEUk1fS01TX0hFTFBFUg0KPj4gwqDCoMKg
-wqDCoCBzZWxlY3QgRFJNX01JUElfREJJDQo+PiDCoMKgwqDCoMKgIGhlbHANCj4+IMKgwqDC
-oMKgwqDCoMKgIFNheSBZIGhlcmUgaWYgeW91IHdhbnQgdG8gYmUgYWJsZSB0byBhY2Nlc3Mg
-dGhlIFNhbXN1bmcNCj4+IEBAIC02NzcsNiArNjgwLDcgQEAgY29uZmlnIERSTV9QQU5FTF9X
-SURFQ0hJUFNfV1MyNDAxDQo+PiDCoMKgwqDCoMKgIHRyaXN0YXRlICJXaWRlY2hpcHMgV1My
-NDAxIERQSSBwYW5lbCBkcml2ZXIiDQo+PiDCoMKgwqDCoMKgIGRlcGVuZHMgb24gU1BJICYm
-IEdQSU9MSUINCj4+IMKgwqDCoMKgwqAgZGVwZW5kcyBvbiBCQUNLTElHSFRfQ0xBU1NfREVW
-SUNFDQo+PiArwqDCoMKgIGRlcGVuZHMgb24gRFJNX0tNU19IRUxQRVINCj4+IMKgwqDCoMKg
-wqAgc2VsZWN0IERSTV9NSVBJX0RCSQ0KPj4gwqDCoMKgwqDCoCBoZWxwDQo+PiDCoMKgwqDC
-oMKgwqDCoCBTYXkgWSBoZXJlIGlmIHlvdSB3YW50IHRvIGVuYWJsZSBzdXBwb3J0IGZvciB0
-aGUgV2lkZWNoaXBzIA0KPj4gV1MyNDAxIERQSQ0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVy
-bWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlv
-bnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1h
-bnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8g
-VG90ZXYNCg==
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on rostedt-trace/for-next linus/master v5.17-rc8]
+[cannot apply to xiang-erofs/dev-test dhowells-fs/fscache-next next-20220316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
---------------It0SmhopNWRK4Y8F8SvBLNER--
+url:    https://github.com/0day-ci/linux/commits/Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220316-214711
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+config: ia64-randconfig-r033-20220317 (https://download.01.org/0day-ci/archive/20220317/202203170323.idYrKxCZ-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ef29cbdc09ec1e6ab918eaf5a16fa7ba8d23fb54
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jeffle-Xu/fscache-erofs-fscache-based-on-demand-read-semantics/20220316-214711
+        git checkout ef29cbdc09ec1e6ab918eaf5a16fa7ba8d23fb54
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash fs/cachefiles/
 
---------------fo6D0fbjn00q0zS8Eq3Sj3sl
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
------BEGIN PGP SIGNATURE-----
+All errors (new ones prefixed by >>):
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIyOvcFAwAAAAAACgkQlh/E3EQov+Di
-cw//c67LjK07GGoG8PgUmslj3l7PcmbquCNrO+150DbCs1tDZiY2TRYTagZRhoK5wvuZHqj8Zu4N
-2sclIKGBRGIKSvvHrxF41l9ScH5+tK+7aduEGVrhveoJdXVcor4SsRYp3bcMSspD1A7N6eTN/XM7
-Fa5qF1+cVr/K2drUplYioe/hVHT63n4qycBVxrQs9ZmrJpymVIexHrdJiS+A74Lim7D2AMhLve/S
-nj9ftlL4O6S1FRDsDk1eRqmYJTVxuJg8svje/7s1Kzsv/baAPMaeKrSioerF1M79PO9Fy/+A4gZ+
-8J9rZDgtOcxqI73IteTmgvBRXhKMYYsbOrE+wTB9aaSVWPpT+K/NWtrRYqoRNk2RknpoImL2yjJM
-64VaTgq7UMnR/ObbxJJ7475KW3LA31ExWVo9je1S10lxwPZpdHQPalYom6x7OEzDjlCd2feOxpl2
-1xtD58e912YlNveP/ZyAZTFI1BpQ2A0kL2aPeu8hOyw6+DY2wcrfELhIeeZHvhzN5RoA7GZjAK8U
-XfkuFWBJNrkooTE8WrANFs7zK83bUVPuE2gRS3jqIY3x3fPAVOwJ4t2HswROF5m4Dqexucfys2OV
-mL3oKmIjehEMqg/DhtBOySkJdMgdNWkAq5dQlrZcHhJm1TRZP8lJILlNntQdQQ7vlIWsaqcZfM4I
-s88=
-=h/uC
------END PGP SIGNATURE-----
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from arch/ia64/include/asm/uaccess.h:40,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from fs/cachefiles/daemon.c:13:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   fs/cachefiles/daemon.c: In function 'cachefiles_ondemand_fd_write_iter':
+>> fs/cachefiles/daemon.c:160:26: error: invalid use of undefined type 'struct iov_iter'
+     160 |         size_t len = iter->count;
+         |                          ^~
 
---------------fo6D0fbjn00q0zS8Eq3Sj3sl--
+
+vim +160 fs/cachefiles/daemon.c
+
+   153	
+   154	static ssize_t cachefiles_ondemand_fd_write_iter(struct kiocb *kiocb,
+   155							 struct iov_iter *iter)
+   156	{
+   157		struct cachefiles_object *object = kiocb->ki_filp->private_data;
+   158		struct cachefiles_cache *cache = object->volume->cache;
+   159		struct file *file = object->file;
+ > 160		size_t len = iter->count;
+   161		loff_t pos = kiocb->ki_pos;
+   162		const struct cred *saved_cred;
+   163		int ret;
+   164	
+   165		if (!file)
+   166			return -ENOBUFS;
+   167	
+   168		cachefiles_begin_secure(cache, &saved_cred);
+   169		ret = __cachefiles_prepare_write(object, file, &pos, &len, true);
+   170		cachefiles_end_secure(cache, saved_cred);
+   171		if (ret < 0)
+   172			return ret;
+   173	
+   174		ret = __cachefiles_write(object, file, pos, iter, NULL, NULL);
+   175		if (!ret)
+   176			ret = len;
+   177	
+   178		return ret;
+   179	}
+   180	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

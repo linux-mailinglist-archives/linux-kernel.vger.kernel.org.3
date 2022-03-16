@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6804DAFED
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386A44DAFE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355815AbiCPMnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 08:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S1355785AbiCPMmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 08:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355832AbiCPMnD (ORCPT
+        with ESMTP id S1355776AbiCPMmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 08:43:03 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E6965D27;
-        Wed, 16 Mar 2022 05:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647434508; x=1678970508;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W1ESKmjVnh7gVKx522vWNGMUaT2xmQeAPQOV7Y+ZArU=;
-  b=Dwl1UtfQUrHePk5VF4wUUxhWGOBYAXqhPRTJRTPeV+VS9EtHKlBNpeVi
-   jfarbqY6szKycsLEQTvMbQK/FzDBcyR5BUE0Sk60jwoKltyANIq5HReTn
-   5gE34Qw4v0EMqazuow53cFIb/I3vd8fSt/Ekds68OVRQEfcfbqiQtnKys
-   ODQ+uh1f3isAzrq0SmXksJla2uufIEJs0TYrvYgqTnah1ZWaNDTZdGtXd
-   afrn/KVNGAjdPiQrJb2TifsbIy2CnqacTp/jw3VRIf7voDbZmEDQwlx2c
-   Yu6k3pCRXNN5P4QbFU6zVu2mAd/1QwlMWEGhdj22/CbGIQm9zACfkwfUq
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="343002135"
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="343002135"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 05:41:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,186,1643702400"; 
-   d="scan'208";a="646631240"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by orsmga004.jf.intel.com with ESMTP; 16 Mar 2022 05:41:44 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bae Chang Seok <chang.seok.bae@intel.com>
-Subject: [PATCH v8 1/1] selftests/x86/xstate: Add xstate test cases for XSAVE feature
-Date:   Wed, 16 Mar 2022 20:40:01 +0800
-Message-Id: <4268a0203fd6e42a31bde3254ee50dd93fd233ea.1646999762.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1646999762.git.pengfei.xu@intel.com>
-References: <cover.1646999762.git.pengfei.xu@intel.com>
+        Wed, 16 Mar 2022 08:42:07 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB6865810
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:40:50 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bu29so3624167lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pVFH9BpKVbHm9bXnXqAIr/WLiiyhiQGyhTXaSSQ7LZY=;
+        b=G1GXXeifm0qj1kKoK91Zj6eKh5mdhfG9szcjDozLMv65r54QAC2J87S6svUbkDZv0K
+         GaUTDIueC69yDJMntkf+FR3wX7Zsz82tiNpi+OYh3r+Tppagk2SgjhudJZoX5Y1PZWBT
+         Gyct/jPPaRfPu99kbxgF1HvR7JcmtWKGWfimcYB5YQN6DHI5sjpK9wM+jihs4v3dcbOG
+         hj5Tsw0FUPa10r9eNDFY/qHuq3fp1SSwNC9VQDpm5ltdtihOi9mnBJmpIxekkk1px1cT
+         eRTVWkmBugAXMqsQ9G0h5HWteSDLebANAbRo2mIK0aFtvf8jNEvaoe16e1dQZ1TqjvLw
+         OsiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pVFH9BpKVbHm9bXnXqAIr/WLiiyhiQGyhTXaSSQ7LZY=;
+        b=ACVoLR8RaJiak1UiFhItt21GIPE+j+rxViiGhHIydHOfWj56vJS9IXq/ZdPuaSpTOF
+         AWFdJA7RQG0moEPG0dO21YdEikeig1N/ACWSoyeL5I8Hqyvsa3i0C/XH5vsdgF8mmcCn
+         RqtK9xhca92XNJH844Zmk3hPplv+IiQCMF83XbRJTQAsdKeMmANbeX29+iXAwQunKev+
+         Bn+kX8uhQAYFTP+ABs9mROorjKYkb7nrTMMAeXZrNDbCQfZQjKI8gL2CCBkviQvhzCNy
+         u+Zhy1UBA41FPdCL5MfdlKfcY5P18UmLR4xOtfw0VWmnsdQt8iKP9xlTApvouh9He9YH
+         Jf2w==
+X-Gm-Message-State: AOAM533JvGSFwBxbob0hvalOwRb6KMHHWwZe/awDK+WuMUM8CoLua3tF
+        Krowco3aPyA2y9o65GRrOJHttA==
+X-Google-Smtp-Source: ABdhPJyv9yidLO0IFekV1WNUGKaZgcYNV8/yRS1RpIFwb8bLDUEQ2ag651Zr49S3EJOPE7nW1pK/oA==
+X-Received: by 2002:a05:6512:4d0:b0:448:96f1:f03 with SMTP id w16-20020a05651204d000b0044896f10f03mr8643239lfq.40.1647434447996;
+        Wed, 16 Mar 2022 05:40:47 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u12-20020ac248ac000000b004483213f60csm172474lfg.133.2022.03.16.05.40.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 05:40:47 -0700 (PDT)
+Message-ID: <3a27045b-ddcc-9d62-fe23-375e07914653@linaro.org>
+Date:   Wed, 16 Mar 2022 15:40:46 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v5] drm/msm/disp/dpu1: add inline rotation support for
+ sc7280 target
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, quic_kalyant@quicinc.com
+References: <1647338841-24485-1-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1647338841-24485-1-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,625 +77,680 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The XSAVE feature set supports the saving and restoring of xstate components.
+On 15/03/2022 13:07, Vinod Polimera wrote:
+> - Some DPU versions support inline rot90. It is supported only for
+> limited amount of UBWC formats.
+> - There are two versions of inline rotators, v1 (present on sm8250 and
+> sm7250) and v2 (sc7280). These versions differ in the list of supported
+> formats and in the scaler possibilities.
+> 
+> Changes in RFC:
+> - Rebase changes to the latest code base.
+> - Append rotation config variables with v2 and
+> remove unused variables.(Dmitry)
+> - Move pixel_ext setup separately from scaler3 config.(Dmitry)
+> - Add 270 degree rotation to supported rotation list.(Dmitry)
+> 
+> Changes in V2:
+> - Remove unused macros and fix indentation.
+> - Add check if 90 rotation is supported and
+> add supported rotations to rot_cfg.
+> 
+> Changes in V3:
+> - Fix indentation.
+> - Move rot_supported to sspp capabilities. (Dmitry)
+> - Config pixel_ext based on src_h/src_w directly. (Dmitry)
+> - Misc changes.
+> 
+> Changes in V4:
+> - Pass boolean value to sspp blk based on supported rotations for each hw.
+> 
+> Changes in V5:
+> - update boolean value to true/false and add it for qcm2290.
+> 
+> Co-developed-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 187 ++++++++++++++-----------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  18 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c      | 113 ++++++++++++---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h      |   2 +
+>   4 files changed, 215 insertions(+), 105 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index a4fe77c..060bf53 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -35,6 +35,9 @@
+>   	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
+>   	BIT(DPU_SSPP_CDP) | BIT(DPU_SSPP_EXCL_RECT))
+>   
+> +#define VIG_SC7280_MASK \
+> +	(VIG_SC7180_MASK | BIT(DPU_SSPP_INLINE_ROTATION))
+> +
+>   #define DMA_SDM845_MASK \
+>   	(BIT(DPU_SSPP_SRC) | BIT(DPU_SSPP_QOS) | BIT(DPU_SSPP_QOS_8LVL) |\
+>   	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
+> @@ -203,6 +206,11 @@ static const uint32_t plane_formats_yuv[] = {
+>   	DRM_FORMAT_YVU420,
+>   };
+>   
+> +static const u32 rotation_v2_formats[] = {
+> +	DRM_FORMAT_NV12,
+> +	/* TODO add formats after validation */
+> +};
+> +
+>   /*************************************************************
+>    * DPU sub blocks config
+>    *************************************************************/
+> @@ -642,8 +650,7 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
+>    *************************************************************/
+>   
+>   /* SSPP common configuration */
+> -
+> -#define _VIG_SBLK(num, sdma_pri, qseed_ver) \
+> +#define _VIG_SBLK(num, sdma_pri, qseed_ver, rot_cfg) \
+>   	{ \
+>   	.maxdwnscale = MAX_DOWNSCALE_RATIO, \
+>   	.maxupscale = MAX_UPSCALE_RATIO, \
+> @@ -660,6 +667,7 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
+>   	.num_formats = ARRAY_SIZE(plane_formats_yuv), \
+>   	.virt_format_list = plane_formats, \
+>   	.virt_num_formats = ARRAY_SIZE(plane_formats), \
+> +	.rotation_cfg = rot_cfg, \
+>   	}
+>   
+>   #define _DMA_SBLK(num, sdma_pri) \
+> @@ -676,22 +684,28 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
+>   	}
+>   
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =
+> -				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =
+> -				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("1", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_2 =
+> -				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("2", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_3 =
+> -				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("3", 0, DPU_SSPP_SCALER_QSEED3, NULL);
+> +
+> +static const struct dpu_rotation_cfg dpu_rot_sc7280_cfg_v2 = {
+> +	.rot_maxheight = 1088,
+> +	.rot_num_formats = ARRAY_SIZE(rotation_v2_formats),
+> +	.rot_format_list = rotation_v2_formats,
+> +};
+>   
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_0 =
+> -				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_1 =
+> -				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_2 =
+> -				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3, NULL);
+>   static const struct dpu_sspp_sub_blks sdm845_vig_sblk_3 =
+> -				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3);
+> +				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3, NULL);
+>   
+>   static const struct dpu_sspp_sub_blks sdm845_dma_sblk_0 = _DMA_SBLK("8", 1);
+>   static const struct dpu_sspp_sub_blks sdm845_dma_sblk_1 = _DMA_SBLK("9", 2);
+> @@ -699,7 +713,7 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_2 = _DMA_SBLK("10", 3);
+>   static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
+>   
+>   #define SSPP_BLK(_name, _id, _base, _features, \
+> -		_sblk, _xinid, _type, _clkctrl) \
+> +		_sblk, _xinid, _type, _clkctrl, _rotsupported) \
+>   	{ \
+>   	.name = _name, .id = _id, \
+>   	.base = _base, .len = 0x1c8, \
+> @@ -707,98 +721,103 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
+>   	.sblk = &_sblk, \
+>   	.xin_id = _xinid, \
+>   	.type = _type, \
+> -	.clk_ctrl = _clkctrl \
+> +	.clk_ctrl = _clkctrl, \
+> +	.rot_supported = _rotsupported ? DRM_MODE_ROTATE_MASK | DRM_MODE_REFLECT_MASK : \
+> +			DRM_MODE_ROTATE_0 | DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK, \
+>   	}
+>   
+>   static const struct dpu_sspp_cfg msm8998_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> -	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> -	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_MSM8998_MASK,
+> -		msm8998_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_MSM8998_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_MSM8998_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_MSM8998_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_MSM8998_MASK,
+> -		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK, sdm845_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, 0),
 
-In order to ensure that XSAVE works correctly, add XSAVE most basic test for
-XSAVE architecture functionality, this patch tests "FP, SSE(XMM), AVX2(YMM),
-AVX512_OPMASK/AVX512_ZMM_Hi256/AVX512_Hi16_ZMM and PKRU parts" xstates with
-following cases:
-1. The content of these xstates in the process should not change after the
-   signal handling.
-2. The content of these xstates in the child process should be the same as
-   the content of the parent process after the fork syscall.
+Please use booleans.
 
-  [ Dave Hansen; Chang S. Bae: bunches of cleanups ]
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK, sdm845_vig_sblk_1,
+> +		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, 0),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK, sdm845_vig_sblk_2,
+> +		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, 0),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK, sdm845_vig_sblk_3,
+> +		12, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, 0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, 0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, 0),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, 0),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
+> +		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, 0),
+>   };
 
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
-Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
----
- tools/testing/selftests/x86/Makefile |   3 +-
- tools/testing/selftests/x86/xstate.c | 574 +++++++++++++++++++++++++++
- 2 files changed, 576 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/xstate.c
+Let me quote my previous email:
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 8a1f62ab3c8e..19cc548cdd1e 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
- TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
--			corrupt_xstate_header amx
-+			corrupt_xstate_header amx xstate
- # Some selftests require 32bit support enabled also on 64bit systems
- TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
- 
-@@ -105,3 +105,4 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
- # state.
- $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
- $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
-+$(OUTPUT)/xstate_64: CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku
-diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-new file mode 100644
-index 000000000000..818769e38a66
---- /dev/null
-+++ b/tools/testing/selftests/x86/xstate.c
-@@ -0,0 +1,574 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * xstate.c - tests XSAVE feature with fork and signal handling.
-+ *
-+ * The XSAVE feature set supports the saving and restoring of state components.
-+ * It tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
-+ * AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
-+ * 1. The content of these xstates in the process should not change after the
-+ *    signal handling.
-+ * 2. The content of these xstates in the child process should be the same as
-+ *    the content of the parent process after the fork syscall.
-+ *
-+ * The regions and reserved bytes of the components tested for XSAVE feature
-+ * are as follows:
-+ * FP             (0 - 159 bytes)
-+ * SSE(XMM)       (160-415 bytes)
-+ * Reserved       (416-511 bytes)
-+ * Header_used    (512-527 bytes; XSTATE BV(bitmap vector) mask:512-519 bytes)
-+ * Header_reserved(528-575 bytes must be 00)
-+ * YMM            (Offset:CPUID.(EAX=0D,ECX=2).EBX Size:CPUID(EAX=0D,ECX=2).EAX)
-+ * AVX512_OPMASK  (Offset:CPUID.(EAX=0D,ECX=5).EBX Size:CPUID(EAX=0D,ECX=5).EAX)
-+ * ZMM_Hi256      (Offset:CPUID.(EAX=0D,ECX=6).EBX Size:CPUID(EAX=0D,ECX=6).EAX)
-+ * Hi16_ZMM       (Offset:CPUID.(EAX=0D,ECX=7).EBX Size:CPUID(EAX=0D,ECX=7).EAX)
-+ * PKRU           (Offset:CPUID.(EAX=0D,ECX=9).EBX Size:CPUID(EAX=0D,ECX=9).EAX)
-+ *
-+ * Because xstate like XMM will not be preserved across function calls, it uses
-+ * assembly instruction to call a system call of fork or raise signal, and uses
-+ * the "inline" keyword in key test functions.
-+ * To prevent GCC from generating any FP/SSE(XMM)/AVX/PKRU code, add
-+ * "-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler arguments. stdlib.h
-+ * can not be used because of the "-mno-sse" option.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <err.h>
-+#include <stdio.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <signal.h>
-+#include <unistd.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <sys/wait.h>
-+#include <sys/syscall.h>
-+#include <cpuid.h>
-+#include <malloc.h>
-+
-+struct xsave_buffer *valid_xbuf, *compared_xbuf;
-+static uint32_t xstate_size;
-+static bool sigusr1_done;
-+
-+#define XSTATE_TESTBYTE 0x8f
-+/* Bits 0-1 in first byte of PKRU must be 0 for RW access to linear address. */
-+#define PKRU_TESTBYTE 0xfc
-+/* FP xstate(0-159 bytes) offset(0) and size(160 bytes) are fixed. */
-+#define FP_SIZE	160
-+/* XMM xstate(160-415 bytes) offset(160 byte) and size(256 bytes) are fixed. */
-+#define XMM_OFFSET	160
-+#define XMM_SIZE	256
-+/*
-+ * xstate 416-511 bytes are reserved, XSAVE header offset 512 bytes
-+ * and header size 64 bytes are fixed.
-+ */
-+#define XSAVE_HDR_OFFSET	512
-+#define XSAVE_HDR_SIZE		64
-+/* The following definition is from arch/x86/include/asm/fpu/types.h */
-+#define XFEATURE_MASK_FP (1 << XFEATURE_FP)
-+#define XFEATURE_MASK_SSE (1 << XFEATURE_SSE)
-+#define XFEATURE_MASK_YMM (1 << XFEATURE_YMM)
-+#define XFEATURE_MASK_OPMASK (1 << XFEATURE_OPMASK)
-+#define XFEATURE_MASK_ZMM_Hi256 (1 << XFEATURE_ZMM_Hi256)
-+#define XFEATURE_MASK_Hi16_ZMM (1 << XFEATURE_Hi16_ZMM)
-+#define XFEATURE_MASK_PKRU (1 << XFEATURE_PKRU)
-+
-+#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)  /* XSAVE instructions */
-+#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27) /* OSXSAVE flag */
-+
-+#define CPUID_LEAF7_EBX_AVX2_MASK	(1U << 5) /* AVX2 instructions */
-+#define CPUID_LEAF7_EBX_AVX512F_MASK	(1U << 16) /* AVX-512 Foundation */
-+
-+#define CPUID_LEAF7_ECX_PKU_MASK   (1U << 3) /* Protection Keys for Userspace */
-+#define CPUID_LEAF7_ECX_OSPKE_MASK (1U << 4) /* OS Protection Keys Enable */
-+
-+#define CPUID_LEAF_XSTATE		0xd
-+#define CPUID_SUBLEAF_XSTATE_USER	0x0
-+
-+#ifndef __cpuid_count
-+#define __cpuid_count(level, count, a, b, c, d) ({	\
-+	__asm__ __volatile__ ("cpuid\n\t"	\
-+			: "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
-+			: "0" (level), "2" (count));	\
-+})
-+#endif
-+
-+/* err() exits and will not return. */
-+#define fatal_error(msg, ...)	err(1, "[FAIL]\t" msg, ##__VA_ARGS__)
-+
-+/*
-+ * While this function prototype is in the stdlib.h, the header file cannot be
-+ * included with the -mno-sse option.
-+ */
-+void *aligned_alloc(size_t alignment, size_t size);
-+
-+enum supportability {
-+	NOT_SUPPORT,
-+	SUPPORT,
-+};
-+
-+/* It's from arch/x86/kernel/fpu/xstate.c. */
-+static const char * const xfeature_names[] = {
-+	"x87 floating point registers",
-+	"SSE registers",
-+	"AVX registers",
-+	"MPX bounds registers",
-+	"MPX CSR",
-+	"AVX-512 opmask",
-+	"AVX-512 Hi256",
-+	"AVX-512 ZMM_Hi256",
-+	"Processor Trace (unused)",
-+	"Protection Keys User registers",
-+	"PASID state",
-+	"unknown xstate feature",
-+	"unknown xstate feature",
-+	"unknown xstate feature",
-+	"unknown xstate feature",
-+	"unknown xstate feature",
-+	"unknown xstate feature",
-+	"AMX Tile config",
-+	"AMX Tile data",
-+	"unknown xstate feature",
-+};
-+
-+/* List of XSAVE features Linux knows about. */
-+enum xfeature {
-+	XFEATURE_FP,
-+	XFEATURE_SSE,
-+	/*
-+	 * Values above here are "legacy states".
-+	 * Those below are "extended states".
-+	 */
-+	XFEATURE_YMM,
-+	XFEATURE_BNDREGS,
-+	XFEATURE_BNDCSR,
-+	XFEATURE_OPMASK,
-+	XFEATURE_ZMM_Hi256,
-+	XFEATURE_Hi16_ZMM,
-+	XFEATURE_PT_UNIMPLEMENTED_SO_FAR,
-+	XFEATURE_PKRU,
-+	XFEATURE_PASID,
-+	XFEATURE_RSRVD_COMP_11,
-+	XFEATURE_RSRVD_COMP_12,
-+	XFEATURE_RSRVD_COMP_13,
-+	XFEATURE_RSRVD_COMP_14,
-+	XFEATURE_LBR,
-+	XFEATURE_RSRVD_COMP_16,
-+	XFEATURE_XTILE_CFG,
-+	XFEATURE_XTILE_DATA,
-+	XFEATURE_MAX,
-+};
-+
-+struct xsave_buffer {
-+	union {
-+		struct {
-+			char legacy[XSAVE_HDR_OFFSET];
-+			char header[XSAVE_HDR_SIZE];
-+			char extended[0];
-+		};
-+		char bytes[0];
-+	};
-+};
-+
-+static struct {
-+	uint64_t mask;
-+	uint32_t size[XFEATURE_MAX];
-+	uint32_t offset[XFEATURE_MAX];
-+} xstate_info;
-+
-+static inline void check_cpuid_xsave_availability(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	/*
-+	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
-+	 * support for the XSAVE feature set, including
-+	 * XGETBV.
-+	 */
-+	__cpuid_count(1, 0, eax, ebx, ecx, edx);
-+	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
-+		fatal_error("cpuid: no CPU xsave support");
-+	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
-+		fatal_error("cpuid: no OS xsave support");
-+}
-+
-+static inline bool xstate_tested(int xfeature_num)
-+{
-+	return !!(xstate_info.mask & (1 << xfeature_num));
-+}
-+
-+static inline int cpu_has_avx2(void)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	/* CPUID.7.0:EBX.AVX2[bit 5]: the support for AVX2 instructions */
-+	__cpuid_count(7, 0, eax, ebx, ecx, edx);
-+
-+	return !!(ebx & CPUID_LEAF7_EBX_AVX2_MASK);
-+}
-+
-+static inline int cpu_has_avx512f(void)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	/* CPUID.7.0:EBX.AVX512F[bit 16]: the support for AVX512F instructions */
-+	__cpuid_count(7, 0, eax, ebx, ecx, edx);
-+
-+	return !!(ebx & CPUID_LEAF7_EBX_AVX512F_MASK);
-+}
-+
-+static inline int cpu_has_pkeys(void)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	/* CPUID.7.0:ECX.PKU[bit 3]: the support for PKRU instructions */
-+	__cpuid_count(7, 0, eax, ebx, ecx, edx);
-+	if (!(ecx & CPUID_LEAF7_ECX_PKU_MASK))
-+		return NOT_SUPPORT;
-+	/* CPUID.7.0:ECX.OSPKE[bit 4]: the support for OS set CR4.PKE */
-+	if (!(ecx & CPUID_LEAF7_ECX_OSPKE_MASK))
-+		return NOT_SUPPORT;
-+
-+	return SUPPORT;
-+}
-+
-+static uint32_t get_xstate_size(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER, eax, ebx,
-+		      ecx, edx);
-+	/*
-+	 * EBX enumerates the size (in bytes) required by the XSAVE
-+	 * instruction for an XSAVE area containing all the user state
-+	 * components corresponding to bits currently set in XCR0.
-+	 */
-+	return ebx;
-+}
-+
-+static struct xsave_buffer *alloc_xbuf(uint32_t buf_size)
-+{
-+	struct xsave_buffer *xbuf;
-+
-+	/* XSAVE buffer should be 64B-aligned. */
-+	xbuf = aligned_alloc(64, buf_size);
-+	if (!xbuf)
-+		fatal_error("aligned_alloc()");
-+
-+	return xbuf;
-+}
-+
-+static inline void __xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile("xsave (%%rdi)"
-+		     : : "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi)
-+		     : "memory");
-+}
-+
-+static inline void __xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile("xrstor (%%rdi)"
-+		     : : "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
-+}
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
-+		       int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		fatal_error("sigaction");
-+}
-+
-+static void clearhandler(int sig)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		fatal_error("sigaction");
-+}
-+
-+/* Retrieve the offset and size of a specific xstate. */
-+static void retrieve_xstate_size_and_offset(uint32_t xfeature_num)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(CPUID_LEAF_XSTATE, xfeature_num, eax, ebx, ecx, edx);
-+	/*
-+	 * CPUID.(EAX=0xd, ECX=xfeature_num), and output is as follow:
-+	 * eax: xfeature num state component size
-+	 * ebx: xfeature num state component offset in user buffer
-+	 */
-+	xstate_info.size[xfeature_num] = eax;
-+	xstate_info.offset[xfeature_num] = ebx;
-+}
-+
-+static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
-+{
-+	/* XSTATE_BV is at the beginning of xstate header. */
-+	*(uint64_t *)(&buffer->header) = bv;
-+}
-+
-+static void check_cpuid_xstate_info(void)
-+{
-+	/* CPUs that support XSAVE could support FP and SSE by default. */
-+	xstate_info.mask = XFEATURE_MASK_FP | XFEATURE_MASK_SSE;
-+
-+	xstate_size = get_xstate_size();
-+	if (cpu_has_avx2()) {
-+		xstate_info.mask |= XFEATURE_MASK_YMM;
-+		retrieve_xstate_size_and_offset(XFEATURE_YMM);
-+	}
-+
-+	if (cpu_has_avx512f()) {
-+		xstate_info.mask |= XFEATURE_MASK_OPMASK | XFEATURE_MASK_ZMM_Hi256 |
-+				    XFEATURE_MASK_Hi16_ZMM;
-+		retrieve_xstate_size_and_offset(XFEATURE_OPMASK);
-+		retrieve_xstate_size_and_offset(XFEATURE_ZMM_Hi256);
-+		retrieve_xstate_size_and_offset(XFEATURE_Hi16_ZMM);
-+	}
-+
-+	if (cpu_has_pkeys()) {
-+		xstate_info.mask |= XFEATURE_MASK_PKRU;
-+		retrieve_xstate_size_and_offset(XFEATURE_PKRU);
-+	}
-+}
-+
-+static void fill_xstate_buf(uint8_t test_byte, unsigned char *buf,
-+			    int xfeature_num)
-+{
-+	uint32_t i;
-+
-+	for (i = 0; i < xstate_info.size[xfeature_num]; i++)
-+		buf[xstate_info.offset[xfeature_num] + i] = test_byte;
-+}
-+
-+/* Fill FP/XMM/YMM/OPMASK and PKRU xstates into buffer. */
-+static void fill_xstates_buf(struct xsave_buffer *buf, uint32_t xsave_mask)
-+{
-+	uint32_t i;
-+	/* The data of FP x87 state are as follows. */
-+	unsigned char fp_data[160] = {
-+		0x7f, 0x03, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
-+		0xf0, 0x19, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		0x00, 0x78, 0xfa, 0x79, 0xf9, 0x78, 0xfa, 0xf9,
-+		0xf2, 0x3d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-+
-+	/* Clean the buffer with all 0 first. */
-+	memset(buf, 0, xstate_size);
-+
-+	/* Fill fp x87 state: MXCSR and MXCSR_MASK data(0-159 bytes) into buffer. */
-+	memcpy(buf, fp_data, FP_SIZE);
-+
-+	/*
-+	 * Fill test byte value into XMM xstate buffer(160-415 bytes).
-+	 * xstate 416-511 bytes are reserved as 0.
-+	 */
-+	for (i = 0; i < XMM_SIZE; i++)
-+		*((unsigned char *)buf + XMM_OFFSET + i) = XSTATE_TESTBYTE;
-+
-+	/*
-+	 * Fill xstate-component bitmap(512-519 bytes) into xstate header.
-+	 * xstate header range is 512-575 bytes.
-+	 */
-+	set_xstatebv(buf, xsave_mask);
-+
-+	/* Fill test byte value into YMM xstate buffer(YMM offset/size). */
-+	if (xstate_tested(XFEATURE_YMM))
-+		fill_xstate_buf(XSTATE_TESTBYTE, (unsigned char *)buf, XFEATURE_YMM);
-+
-+	/*
-+	 * Fill test byte value into AVX512 OPMASK/ZMM xstates buffer
-+	 * (AVX512_OPMASK/ZMM_Hi256/Hi16_ZMM offset/size).
-+	 */
-+	if (xstate_tested(XFEATURE_OPMASK))
-+		fill_xstate_buf(XSTATE_TESTBYTE, (unsigned char *)buf, XFEATURE_OPMASK);
-+	if (xstate_tested(XFEATURE_ZMM_Hi256)) {
-+		fill_xstate_buf(XSTATE_TESTBYTE, (unsigned char *)buf,
-+				XFEATURE_ZMM_Hi256);
-+	}
-+	if (xstate_tested(XFEATURE_Hi16_ZMM)) {
-+		fill_xstate_buf(XSTATE_TESTBYTE, (unsigned char *)buf,
-+				XFEATURE_Hi16_ZMM);
-+	}
-+
-+	if (xstate_tested(XFEATURE_PKRU)) {
-+		/* Only 0-3 bytes of pkru xstates are allowed to be written. */
-+		memset((unsigned char *)buf + xstate_info.offset[XFEATURE_PKRU],
-+			PKRU_TESTBYTE, sizeof(uint32_t));
-+	}
-+}
-+
-+/*
-+ * Because xstate like XMM, YMM registers are not preserved across function
-+ * calls, so use inline function with assembly code only for fork syscall.
-+ */
-+static inline long long __fork(void)
-+{
-+	long long ret, nr = SYS_fork;
-+
-+	asm volatile("syscall"
-+		 : "=a" (ret)
-+		 : "a" (nr), "b" (nr)
-+		 : "rcx", "r11", "memory", "cc");
-+
-+	return ret;
-+}
-+
-+/*
-+ * Because xstate like XMM, YMM registers are not preserved across function
-+ * calls, so use inline function with assembly code only to raise signal.
-+ */
-+static inline long long __raise(long long pid_num, long long sig_num)
-+{
-+	long long ret, nr = SYS_kill;
-+
-+	register long long arg1 asm("rdi") = pid_num;
-+	register long long arg2 asm("rsi") = sig_num;
-+
-+	asm volatile("syscall"
-+		 : "=a" (ret)
-+		 : "a" (nr), "b" (nr), "r" (arg1), "r" (arg2)
-+		 : "rcx", "r11", "memory", "cc");
-+
-+	return ret;
-+}
-+
-+static void sigusr1_handler(int signum, siginfo_t *info, void *__ctxp)
-+{
-+	sigusr1_done = true;
-+}
-+
-+static void test_xstate_sig_handle(void)
-+{
-+	pid_t process_pid;
-+
-+	sethandler(SIGUSR1, sigusr1_handler, 0);
-+	printf("[RUN]\tCheck xstate around signal handling test.\n");
-+	process_pid = getpid();
-+
-+	/*
-+	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
-+	 * save the xstate to compared_xbuf after signal handling for comparison.
-+	 */
-+	__xrstor(valid_xbuf, xstate_info.mask);
-+	__raise(process_pid, SIGUSR1);
-+	__xsave(compared_xbuf, xstate_info.mask);
-+	if (sigusr1_done == true)
-+		printf("[NOTE]\tSIGUSR1 handling is done.\n");
-+	else
-+		fatal_error("Didn't access SIGUSR1 handling after raised SIGUSR1");
-+
-+	if (memcmp(&valid_xbuf->bytes[0], &compared_xbuf->bytes[0], xstate_size))
-+		printf("[FAIL]\tProcess xstate is not same after signal handling\n");
-+	else
-+		printf("[PASS]\tProcess xstate is same after signal handling.\n");
-+
-+	clearhandler(SIGUSR1);
-+}
-+
-+static void test_xstate_fork(void)
-+{
-+	pid_t child;
-+	int status;
-+
-+	printf("[RUN]\tParent pid:%d check xstate around fork test.\n", getpid());
-+	memset(compared_xbuf, 0, xstate_size);
-+
-+	/*
-+	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
-+	 * save the xstate to compared_xbuf in child process for comparison.
-+	 */
-+	__xrstor(valid_xbuf, xstate_info.mask);
-+	child = __fork();
-+	if (child < 0) {
-+		/* Fork syscall failed */
-+		fatal_error("fork failed");
-+	} else if (child == 0) {
-+		/* Fork syscall succeeded, now in the child. */
-+		__xsave(compared_xbuf, xstate_info.mask);
-+		if (memcmp(&valid_xbuf->bytes[0], &compared_xbuf->bytes[0],
-+			xstate_size)) {
-+			printf("[FAIL]\tXstate of child process:%d is not same as xstate of parent\n",
-+				getpid());
-+		} else {
-+			printf("[PASS]\tXstate of child process:%d is same as xstate of parent.\n",
-+				getpid());
-+		}
-+	} else {
-+		if (waitpid(child, &status, 0) != child || !WIFEXITED(status))
-+			fatal_error("Child exit with error status");
-+	}
-+}
-+
-+static void free_xbuf(void)
-+{
-+	free(valid_xbuf);
-+	free(compared_xbuf);
-+}
-+
-+static void prepare_xbuf(void)
-+{
-+	valid_xbuf = alloc_xbuf(xstate_size);
-+	compared_xbuf = alloc_xbuf(xstate_size);
-+	/* Populate the specified data into the validate xstate buffer. */
-+	fill_xstates_buf(valid_xbuf, xstate_info.mask);
-+}
-+
-+static void show_tested_xfeatures(void)
-+{
-+	uint32_t i;
-+	const char *feature_name;
-+
-+	printf("[NOTE]\tTest following xstates with mask:%lx.\n", xstate_info.mask);
-+	for (i = 0; i < XFEATURE_MAX; i++) {
-+		if (!xstate_tested(i))
-+			continue;
-+		feature_name = xfeature_names[i];
-+		printf("[NOTE]\tXSAVE feature num %02d: '%s'.\n", i, feature_name);
-+	}
-+}
-+
-+int main(void)
-+{
-+	/* Check hardware availability for xsave at first. */
-+	check_cpuid_xsave_availability();
-+	/* Check tested xstate by CPU id and retrieve CPU xstate info. */
-+	check_cpuid_xstate_info();
-+	show_tested_xfeatures();
-+	prepare_xbuf();
-+
-+	test_xstate_sig_handle();
-+	test_xstate_fork();
-+	free_xbuf();
-+
-+	return 0;
-+}
+Why are you changing msm8998 to use sdm845_vig_sblk ?
+
+This issue has been pointed at least twice by the kernel testing robot, 
+but you keep on ignoring it.
+
+>   
+>   static const struct dpu_sspp_cfg sdm845_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> -	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> -	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK,
+> -		sdm845_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SDM845_MASK, sdm845_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, 0),
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SDM845_MASK, sdm845_vig_sblk_1,
+> +		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, 0),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SDM845_MASK, sdm845_vig_sblk_2,
+> +		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, 0),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SDM845_MASK, sdm845_vig_sblk_3,
+> +		12, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, 0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, 0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, 0),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, 0),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
+> +		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, 0),
+>   };
+>   
+>   static const struct dpu_sspp_sub_blks sc7180_vig_sblk_0 =
+> -				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4);
+> +				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4, NULL);
+> +
+> +static const struct dpu_sspp_sub_blks sc7280_vig_sblk_0 =
+> +				_VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED4, &dpu_rot_sc7280_cfg_v2);
+>   
+>   static const struct dpu_sspp_cfg sc7180_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
+> -		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK, sc7180_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, 0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, 0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,	sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, 0),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, 0),
+>   };
+>   
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_0 =
+> -				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_1 =
+> -				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_2 =
+> -				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_3 =
+> -				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE);
+> +				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE, NULL);
+>   
+>   static const struct dpu_sspp_cfg sm8250_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
+> -	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
+> -	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SM8250_MASK,
+> -		sm8250_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SM8250_MASK, sm8250_vig_sblk_0,
+> +		0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, 0),
+> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SM8250_MASK, sm8250_vig_sblk_1,
+> +		4, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1, 0),
+> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SM8250_MASK, sm8250_vig_sblk_2,
+> +		8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2, 0),
+> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SM8250_MASK, sm8250_vig_sblk_3,
+> +		12, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3, 0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, 0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_SDM845_MASK, sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1, 0),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, 0),
+> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_3,
+> +		13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, 0),
+>   };
+>   
+>   static const struct dpu_sspp_cfg sc7280_sspp[] = {
+> -	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
+> -		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> -	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> -	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> -	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK,
+> -		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7280_MASK, sc7280_vig_sblk_0,
+> +		0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, 1),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK, sdm845_dma_sblk_0,
+> +		1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, 0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000,  DMA_CURSOR_SDM845_MASK,	sdm845_dma_sblk_1,
+> +		5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0, 0),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000,  DMA_CURSOR_SDM845_MASK, sdm845_dma_sblk_2,
+> +		9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1, 0),
+>   };
+>   
+>   
+> @@ -820,9 +839,11 @@ static const struct dpu_sspp_sub_blks qcm2290_dma_sblk_0 = _DMA_SBLK("8", 1);
+>   
+>   static const struct dpu_sspp_cfg qcm2290_sspp[] = {
+>   	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_QCM2290_MASK,
+> -		 qcm2290_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> +		qcm2290_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0, DRM_MODE_ROTATE_0 |
+> +		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
+>   	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000,  DMA_SDM845_MASK,
+> -		 qcm2290_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> +		qcm2290_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0, DRM_MODE_ROTATE_0 |
+> +		DRM_MODE_ROTATE_180 | DRM_MODE_REFLECT_MASK),
+
+These still have the DRM_MODE_ROTATE values rather than a boolean 
+(despite the changelog).
+
+>   };
+>   
+>   /*************************************************************
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index b85b24b..d009d83 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -112,6 +112,7 @@ enum {
+>    * @DPU_SSPP_TS_PREFILL      Supports prefill with traffic shaper
+>    * @DPU_SSPP_TS_PREFILL_REC1 Supports prefill with traffic shaper multirec
+>    * @DPU_SSPP_CDP             Supports client driven prefetch
+> + * @DPU_SSPP_INLINE_ROTATION Support inline rotation
+>    * @DPU_SSPP_MAX             maximum value
+>    */
+>   enum {
+> @@ -132,6 +133,7 @@ enum {
+>   	DPU_SSPP_TS_PREFILL,
+>   	DPU_SSPP_TS_PREFILL_REC1,
+>   	DPU_SSPP_CDP,
+> +	DPU_SSPP_INLINE_ROTATION,
+>   	DPU_SSPP_MAX
+>   };
+>   
+> @@ -315,6 +317,18 @@ struct dpu_qos_lut_tbl {
+>   };
+>   
+>   /**
+> + * struct dpu_rotation_cfg - define inline rotation config
+> + * @rot_maxheight: max pre rotated height allowed for rotation
+> + * @rot_num_formats: number of elements in @rot_format_list
+> + * @rot_format_list: list of supported rotator formats
+> + */
+> +struct dpu_rotation_cfg {
+> +	u32 rot_maxheight;
+> +	size_t rot_num_formats;
+> +	const u32 *rot_format_list;
+> +};
+> +
+> +/**
+>    * struct dpu_caps - define DPU capabilities
+>    * @max_mixer_width    max layer mixer line width support.
+>    * @max_mixer_blendstages max layer mixer blend stages or
+> @@ -369,6 +383,7 @@ struct dpu_caps {
+>    * @num_formats: Number of supported formats
+>    * @virt_format_list: Pointer to list of supported formats for virtual planes
+>    * @virt_num_formats: Number of supported formats for virtual planes
+> + * @dpu_rotation_cfg: inline rotation configuration
+>    */
+>   struct dpu_sspp_sub_blks {
+>   	u32 creq_vblank;
+> @@ -390,6 +405,7 @@ struct dpu_sspp_sub_blks {
+>   	u32 num_formats;
+>   	const u32 *virt_format_list;
+>   	u32 virt_num_formats;
+> +	const struct dpu_rotation_cfg *rotation_cfg;
+>   };
+>   
+>   /**
+> @@ -492,6 +508,7 @@ struct dpu_ctl_cfg {
+>    * @xin_id:            bus client identifier
+>    * @clk_ctrl           clock control identifier
+>    * @type               sspp type identifier
+> + * @rot_supported      allowed rotations
+>    */
+>   struct dpu_sspp_cfg {
+>   	DPU_HW_BLK_INFO;
+> @@ -499,6 +516,7 @@ struct dpu_sspp_cfg {
+>   	u32 xin_id;
+>   	enum dpu_clk_ctrl_type clk_ctrl;
+>   	u32 type;
+> +	u32 rot_supported;
+>   };
+>   
+>   /**
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> index 6565682..7017fc7 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> @@ -528,11 +528,19 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
+>   		struct dpu_plane_state *pstate,
+>   		uint32_t src_w, uint32_t src_h, uint32_t dst_w, uint32_t dst_h,
+>   		struct dpu_hw_scaler3_cfg *scale_cfg,
+> -		struct dpu_hw_pixel_ext *pixel_ext,
+>   		const struct dpu_format *fmt,
+>   		uint32_t chroma_subsmpl_h, uint32_t chroma_subsmpl_v)
+>   {
+>   	uint32_t i;
+> +	bool inline_rotation = pstate->rotation & DRM_MODE_ROTATE_90;
+> +
+> +	/*
+> +	 * For inline rotation cases, scaler config is post-rotation,
+> +	 * so swap the dimensions here. However, pixel extension will
+> +	 * need pre-rotation settings.
+> +	 */
+> +	if (inline_rotation)
+> +		swap(src_w, src_h);
+>   
+>   	scale_cfg->phase_step_x[DPU_SSPP_COMP_0] =
+>   		mult_frac((1 << PHASE_STEP_SHIFT), src_w, dst_w);
+> @@ -571,11 +579,6 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
+>   			scale_cfg->preload_x[i] = DPU_QSEED3_DEFAULT_PRELOAD_H;
+>   			scale_cfg->preload_y[i] = DPU_QSEED3_DEFAULT_PRELOAD_V;
+>   		}
+> -
+> -		pixel_ext->num_ext_pxls_top[i] =
+> -			scale_cfg->src_height[i];
+> -		pixel_ext->num_ext_pxls_left[i] =
+> -			scale_cfg->src_width[i];
+>   	}
+>   	if (!(DPU_FORMAT_IS_YUV(fmt)) && (src_h == dst_h)
+>   		&& (src_w == dst_w))
+> @@ -591,6 +594,24 @@ static void _dpu_plane_setup_scaler3(struct dpu_plane *pdpu,
+>   	scale_cfg->enable = 1;
+>   }
+>   
+> +static void _dpu_plane_setup_pixel_ext(struct dpu_hw_scaler3_cfg *scale_cfg,
+> +				struct dpu_hw_pixel_ext *pixel_ext,
+> +				uint32_t src_w, uint32_t src_h,
+> +				uint32_t chroma_subsmpl_h, uint32_t chroma_subsmpl_v)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < DPU_MAX_PLANES; i++) {
+> +		if (i == DPU_SSPP_COMP_1_2 || i == DPU_SSPP_COMP_2) {
+> +			src_w /= chroma_subsmpl_h;
+> +			src_h /= chroma_subsmpl_v;
+> +		}
+> +
+> +		pixel_ext->num_ext_pxls_top[i] = src_h;
+> +		pixel_ext->num_ext_pxls_left[i] = src_w;
+> +	}
+> +}
+> +
+>   static const struct dpu_csc_cfg dpu_csc_YUV2RGB_601L = {
+>   	{
+>   		/* S15.16 format */
+> @@ -665,7 +686,12 @@ static void _dpu_plane_setup_scaler(struct dpu_plane *pdpu,
+>   			drm_rect_height(&pipe_cfg->src_rect),
+>   			drm_rect_width(&pipe_cfg->dst_rect),
+>   			drm_rect_height(&pipe_cfg->dst_rect),
+> -			&scaler3_cfg, &pixel_ext, fmt,
+> +			&scaler3_cfg, fmt,
+> +			info->hsub, info->vsub);
+> +
+> +	/* configure pixel extension based on scalar config */
+> +	_dpu_plane_setup_pixel_ext(&scaler3_cfg, &pixel_ext,
+> +			drm_rect_width(&pipe_cfg->src_rect), drm_rect_height(&pipe_cfg->src_rect),
+>   			info->hsub, info->vsub);
+>   
+>   	if (pdpu->pipe_hw->ops.setup_pe)
+> @@ -956,6 +982,41 @@ static bool dpu_plane_validate_src(struct drm_rect *src,
+>   		drm_rect_equals(fb_rect, src);
+>   }
+>   
+> +static int dpu_plane_check_inline_rotation(struct dpu_plane *pdpu,
+> +						const struct dpu_sspp_sub_blks *sblk,
+> +						struct drm_rect src, const struct dpu_format *fmt)
+> +{
+> +	bool found = false;
+> +	size_t i, num_formats;
+> +	const u32 *supported_formats;
+> +
+> +	if (drm_rect_width(&src) > sblk->rotation_cfg->rot_maxheight) {
+> +		DPU_DEBUG_PLANE(pdpu, "invalid height for inline rot:%d max:%d\n",
+> +				src.y2, sblk->rotation_cfg->rot_maxheight);
+> +		return -EINVAL;
+> +	}
+> +
+
+Please check that sblk->rotation_cfg is not NULL.
+
+> +	supported_formats = sblk->rotation_cfg->rot_format_list;
+> +	num_formats = sblk->rotation_cfg->rot_num_formats;
+> +
+> +	for (i = 0; i < num_formats; i++) {
+> +		/* check for valid formats supported by inline rotation */
+> +		if (fmt->base.pixel_format == supported_formats[i] &&
+> +			DPU_FORMAT_IS_UBWC(fmt)) {
+> +			found = true;
+> +			break;
+> +		}
+> +	}
+
+We have more or less the same loop in the 
+dpu_plane_format_mod_supported(). Please extract it to dpu_format.h as a 
+static inline function.
+
+Then we can do:
+if (!DPU_FORMAT_IS_UBWC(fmt) ||
+     !dpu_find_format(fmt, supported_formats, num_formats))
+    return -EINVAL;
+
+return 0;
+
+
+> +
+> +	if (!found || !num_formats) {
+> +		DPU_DEBUG_PLANE(pdpu, "supported_format not found num: %zu\n",
+> +				num_formats);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   				  struct drm_atomic_state *state)
+>   {
+> @@ -968,15 +1029,18 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   	const struct dpu_format *fmt;
+>   	struct drm_rect src, dst, fb_rect = { 0 };
+>   	uint32_t min_src_size, max_linewidth;
+> +	unsigned int rotation = 0;
+> +	const struct dpu_sspp_cfg *pipe_hw_caps = pdpu->pipe_hw->cap;
+> +	const struct dpu_sspp_sub_blks *sblk = pdpu->pipe_hw->cap->sblk;
+>   
+>   	if (new_plane_state->crtc)
+>   		crtc_state = drm_atomic_get_new_crtc_state(state,
+>   							   new_plane_state->crtc);
+>   
+> -	min_scale = FRAC_16_16(1, pdpu->pipe_hw->cap->sblk->maxupscale);
+> +	min_scale = FRAC_16_16(1, sblk->maxupscale);
+>   	ret = drm_atomic_helper_check_plane_state(new_plane_state, crtc_state,
+>   						  min_scale,
+> -						  pdpu->pipe_hw->cap->sblk->maxdwnscale << 16,
+> +						  sblk->maxdwnscale << 16,
+>   						  true, true);
+>   	if (ret) {
+>   		DPU_DEBUG_PLANE(pdpu, "Check plane state failed (%d)\n", ret);
+> @@ -1002,8 +1066,8 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   	min_src_size = DPU_FORMAT_IS_YUV(fmt) ? 2 : 1;
+>   
+>   	if (DPU_FORMAT_IS_YUV(fmt) &&
+> -		(!(pdpu->pipe_hw->cap->features & DPU_SSPP_SCALER) ||
+> -		 !(pdpu->pipe_hw->cap->features & DPU_SSPP_CSC_ANY))) {
+> +		(!(pipe_hw_caps->features & DPU_SSPP_SCALER) ||
+> +		 !(pipe_hw_caps->features & DPU_SSPP_CSC_ANY))) {
+>   		DPU_DEBUG_PLANE(pdpu,
+>   				"plane doesn't have scaler/csc for yuv\n");
+>   		return -EINVAL;
+> @@ -1036,6 +1100,17 @@ static int dpu_plane_atomic_check(struct drm_plane *plane,
+>   		return -E2BIG;
+>   	}
+>   
+> +	rotation = drm_rotation_simplify(new_plane_state->rotation,
+> +					pipe_hw_caps->rot_supported);
+
+I should ask your pardon here, I was wrong in my previous comment.
+
+I spend some time looking onto (and testing) the ways other driver do 
+this and checking how does that map to drm_rotation_simplify().
+
+My findings so far:
+- Please pass full mask to drm_plane_create_rotation_property().
+   If the plane does not support rot90, you should pass rot0 | rot180 | 
+reflect_x | reflect_y.
+   If the plane supports rot90, you should pass DRM_MODE_ROTATE_MASK | 
+DRM_MODE_REFLECT_MASK (note, this includes rot270).
+
+For the drm_rotation_simplify we should not pass rot270. Instead for the 
+planes supporting rot90 the driver should pass rot0 | rot90 | rot180 | 
+reflect_mask.
+
+This way drm_rotation_simplify will map rot270 to rot90 | reflect_x | 
+reflect_y.
+
+Given that you have to pass different values to different functions, I'd 
+ask to check capabilities & DPU_SSPP_INLINE_ROTATION flag and to 
+construct rotation masks on demand.
+
+> +
+> +	if ((pipe_hw_caps->features & BIT(DPU_SSPP_INLINE_ROTATION)) &&
+> +		(rotation & DRM_MODE_ROTATE_90)) {
+> +		ret = dpu_plane_check_inline_rotation(pdpu, sblk, src, fmt);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	pstate->rotation = rotation;
+>   	pstate->needs_qos_remap = drm_atomic_crtc_needs_modeset(crtc_state);
+>   
+>   	return 0;
+> @@ -1151,21 +1226,19 @@ static void dpu_plane_sspp_atomic_update(struct drm_plane *plane)
+>   				pstate->multirect_mode);
+>   
+>   	if (pdpu->pipe_hw->ops.setup_format) {
+> -		unsigned int rotation;
+> +		unsigned int rotation = pstate->rotation;
+>   
+>   		src_flags = 0x0;
+>   
+> -		rotation = drm_rotation_simplify(state->rotation,
+> -						 DRM_MODE_ROTATE_0 |
+> -						 DRM_MODE_REFLECT_X |
+> -						 DRM_MODE_REFLECT_Y);
+> -
+>   		if (rotation & DRM_MODE_REFLECT_X)
+>   			src_flags |= DPU_SSPP_FLIP_LR;
+>   
+>   		if (rotation & DRM_MODE_REFLECT_Y)
+>   			src_flags |= DPU_SSPP_FLIP_UD;
+>   
+> +		if (rotation & DRM_MODE_ROTATE_90)
+> +			src_flags |= DPU_SSPP_ROT_90;
+> +
+>   		/* update format */
+>   		pdpu->pipe_hw->ops.setup_format(pdpu->pipe_hw, fmt, src_flags,
+>   				pstate->multirect_index);
+> @@ -1531,11 +1604,7 @@ struct drm_plane *dpu_plane_init(struct drm_device *dev,
+>   			BIT(DRM_MODE_BLEND_COVERAGE));
+>   
+>   	drm_plane_create_rotation_property(plane,
+> -			DRM_MODE_ROTATE_0,
+> -			DRM_MODE_ROTATE_0 |
+> -			DRM_MODE_ROTATE_180 |
+> -			DRM_MODE_REFLECT_X |
+> -			DRM_MODE_REFLECT_Y);
+> +		    DRM_MODE_ROTATE_0, pdpu->pipe_hw->cap->rot_supported);
+>   
+>   	drm_plane_enable_fb_damage_clips(plane);
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
+> index 50781e2..e146310 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h
+> @@ -26,6 +26,7 @@
+>    * @plane_fetch_bw: calculated BW per plane
+>    * @plane_clk: calculated clk per plane
+>    * @needs_dirtyfb: whether attached CRTC needs pixel data explicitly flushed
+> + * @rotation: simplified drm rotation hint
+>    */
+>   struct dpu_plane_state {
+>   	struct drm_plane_state base;
+> @@ -40,6 +41,7 @@ struct dpu_plane_state {
+>   	u64 plane_clk;
+>   
+>   	bool needs_dirtyfb;
+> +	unsigned int rotation;
+>   };
+>   
+>   /**
+
+
 -- 
-2.31.1
-
+With best wishes
+Dmitry

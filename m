@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5997E4DB978
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137484DB97E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 21:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357995AbiCPUh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 16:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S1358052AbiCPUh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 16:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358014AbiCPUhT (ORCPT
+        with ESMTP id S1358028AbiCPUhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 16:37:19 -0400
+        Wed, 16 Mar 2022 16:37:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9261E66AE8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:36:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EEF6E4CA
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 13:36:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E080B81D48
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 20:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65CE3C340EC;
-        Wed, 16 Mar 2022 20:35:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58544B81D46
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 20:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D87C340E9;
+        Wed, 16 Mar 2022 20:36:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647462962;
-        bh=ckBpUYs7lGZ5xVv8erHYOiifWXqrkP05DbKl6A1MzhM=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=JlAvFFQ614+Y/9z+uHoovLZ2D34RImM7vhHicpisrn9mUPgCs9dCoMeHHKvh16Bu/
-         DkENs9F6KIeRQE3xK6lpuU3jupIggS3otE8qqEkaGREzYqXv7w6QvSjVzuixD9LSnn
-         IJTyofcFBkLLVJ/qbQn/vab/ZPvr65w4lLKBSINAtFORVtwofyzJuU+BQ1Sk9STkBf
-         QFBbQOXVKU4KKanwvPOJrHRCQ6FmRvK5+WEHgkC8ZhY8hcRcCLHb3O2N9R3jVcw2LI
-         LRjolW9TpyjYCVjyKy6Mzi6VBL9liP3znV7LQiWMci4I3gpL+/pGmRtdbaMm2Hl2Uw
-         Q855HmIPnIyyw==
+        s=k20201202; t=1647462964;
+        bh=77CmR3PRSwOpZa9z7OgyvODafo7b24EZUQZHs/ST0ng=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UTtcv3eY8E4C0fvZnR+ahydqPhx746oNIIajfmRyjKxWB6o1ntmXUEEnW5lQascjJ
+         M/zUbqvteX9kodh6f08YNHCKyEqdmMTXszuE+b0ktl3EqDYuMtJQG1IcT66+fngLso
+         rCfiI6QqkOMQqD0GZlgEtSt7BJ39QK5oWLaHUnaMpFBlztAapmY9mU92wfpdXWy30l
+         bD6gf2Cvr1ejg9Iu+yYq8zJEpokFiA8rBefU32SZU7YKmo/vsOjRPmI3v72R9WmsJC
+         D6eReQ1PaYAOfejFDR6yaN1gQNainZrXMnJp2b7NcPs33k2BRgqYW1d125pD0C6ORN
+         cxYM+6w3RTDjQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        YC Hung <yc.hung@mediatek.com>, alsa-devel@alsa-project.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-kernel@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20220316084623.24238-1-linmq006@gmail.com>
-References: <20220316084623.24238-1-linmq006@gmail.com>
-Subject: Re: [PATCH] ASoC: mediatek: mt8195: Fix error handling in mt8195_mt6359_rt1019_rt5682_dev_probe
-Message-Id: <164746295912.1220201.14496447901680691673.b4-ty@kernel.org>
-Date:   Wed, 16 Mar 2022 20:35:59 +0000
+To:     tiwai@suse.com, perex@perex.cz, Vijendar.Mukunda@amd.com,
+        lgirdwood@gmail.com, Meng Tang <tangmeng@uniontech.com>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20220316091303.9745-1-tangmeng@uniontech.com>
+References: <20220316091303.9745-1-tangmeng@uniontech.com>
+Subject: Re: [PATCH] ASoC: amd: Fix reference to PCM buffer address
+Message-Id: <164746296229.1220201.5798586348184991333.b4-ty@kernel.org>
+Date:   Wed, 16 Mar 2022 20:36:02 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,12 +54,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 08:46:15 +0000, Miaoqian Lin wrote:
-> The device_node pointer is returned by of_parse_phandle()  with refcount
-> incremented. We should use of_node_put() on it when done.
-> 
-> This function only calls of_node_put() in the regular path.
-> And it will cause refcount leak in error path.
+On Wed, 16 Mar 2022 17:13:03 +0800, Meng Tang wrote:
+> PCM buffers might be allocated dynamically when the buffer
+> preallocation failed or a larger buffer is requested, and it's not
+> guaranteed that substream->dma_buffer points to the actually used
+> buffer.  The driver needs to refer to substream->runtime->dma_addr
+> instead for the buffer address.
 > 
 > 
 > [...]
@@ -79,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: mediatek: mt8195: Fix error handling in mt8195_mt6359_rt1019_rt5682_dev_probe
-      commit: c4b7174fe5bb875a09a78674a14a1589d1a672f3
+[1/1] ASoC: amd: Fix reference to PCM buffer address
+      commit: 54e1bf9f6177a3ffbd920474f4481a25361163aa
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

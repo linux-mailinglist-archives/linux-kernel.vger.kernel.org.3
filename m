@@ -2,160 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383CE4DBB51
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4175B4DBB50
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 00:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350450AbiCPXsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 19:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S1347884AbiCPXrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 19:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiCPXr7 (ORCPT
+        with ESMTP id S237308AbiCPXri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 19:47:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2379E63DF
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 16:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647474404; x=1679010404;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4GjD/OZt9YStp94vzGfTNFNjIbukRi5WMqeI8i4H3aY=;
-  b=K0BF81gylwfoEKDk/OYm9fgF1bjWkvnR76MPKLok4LcijNF1YuzJ/yxu
-   ifXd5vMblKNGTXVJhvjC7p+/XSnOAGMxD0hHZ32dG3eFWmeRvncOkHGWz
-   4RIrFOJp/mmbuTN1CeqMKAEM8fHBYUU/DRrzDPfn5Tzhe9yFdjAbGHauo
-   GDTeOM1FMlbmi6Yv7sjjocCIkpIzY7e2DcjI15cv6Rl0yFJlRn44GBkDi
-   A4ZSVoYUJdMpcX8erx2By22cMiscsK3QL0Io0Y+T8AMO3Ao7AvnBYQNKN
-   XjAFKlxX0ybWxPWU4+H93wxYGAU38is0EnitiUvPPZvGzi8lgHs8g4WDr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="319954013"
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="319954013"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 16:46:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="516547578"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 16:46:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUdLk-000D5w-Jn; Wed, 16 Mar 2022 23:46:40 +0000
-Date:   Thu, 17 Mar 2022 07:45:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:rostedt/linux-trace/merge-next-20220315 403/512]
- WARNING: modpost: vmlinux.o(.text+0x3e43c2): Section mismatch in reference
- from the function ufs_make_empty() to the function
- .init.text:set_reset_devices()
-Message-ID: <202203170727.Iy1d0my1-lkp@intel.com>
+        Wed, 16 Mar 2022 19:47:38 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6CAE89;
+        Wed, 16 Mar 2022 16:46:23 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m42-20020a05600c3b2a00b00382ab337e14so4064592wms.3;
+        Wed, 16 Mar 2022 16:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RSX5Rth7wwj83rxTYc+rwdv+c14uPhz18sTsRPEgR/E=;
+        b=cDeXbYS8Zb7+0/CDX+L3jB2qUzVT/9dkvRHVIlv9xeSwjYyGVNRSEK2EnP9tx34m4Q
+         owsQe6WKA7D6BDCGu0GbZ8Eb9rP1LkGzPad+/fntJsAGWKwSMKlt1dcp/8zf7n9rsRah
+         q3ajz9xH0DJeaMc2c1L8z6n/QRswEGS9G5hvphVgOlgsqno6YB2VJggTYRcZjrBRhXFq
+         Z9rdEKWCwDmdX1dJPsCxg+0tI8aaDbGhDBJhdmswM0ZERBvUS1hc9kLBl5d5EH8f3vqF
+         y5/CGf/93cEzW2rnuQK7zDWJkXd4JlVphWgjIKDhxa0ZRWc+uLkImmpQRL2TBE+vSLOv
+         annQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RSX5Rth7wwj83rxTYc+rwdv+c14uPhz18sTsRPEgR/E=;
+        b=FFX+pG8XW/gceIQjzslWMvNErvZoYm1fBejJjwckeJo7DSli8T0ckBFvsrNG5lnNka
+         L0E5ZMZnSCv5qL6qa0bWdgxg4O81qpMToBcSbXFhBQZhVJhuYzE68ei1k5x3MNTtOuv+
+         utxe4AqTUutr1tVF7ZDPCuhic2WBWISKRUKaqbo7jhw43kZz4H7cP9jAp0Xr+hj3kEt0
+         ek7bi76Nut6CAphAVAQ2jwRHBkOqn7RvMxBGaxNqkoUTKIflCjDMvO1UqGhry8o4GCXU
+         dYnFlKPrDC9vxRXpSvOP2i/ziUtkClLJ/bTfq3/KmQq7PVDNlUIpLqLYlbStZ6CzGXUu
+         kV9g==
+X-Gm-Message-State: AOAM532LYGhVdF48gVJsrXrO5BpUv1dOzcn5CuYpVYWWxHyQT4GBwYN9
+        nI+ckVWk56UqmRrhDn3hdrs=
+X-Google-Smtp-Source: ABdhPJyxcNhyV4ys0YsNVf6IfPElpeiApCn9unzK7l2es+CC4mQwMkYYrz86YyuiUTom73kbiVIMEA==
+X-Received: by 2002:a05:600c:264e:b0:389:802e:c7fa with SMTP id 14-20020a05600c264e00b00389802ec7famr1622306wmy.93.1647474381806;
+        Wed, 16 Mar 2022 16:46:21 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u15-20020a5d6daf000000b00203db33b2e4sm2825884wrs.26.2022.03.16.16.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 16:46:21 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ethernet: sun: Fix spelling mistake "mis-matched" -> "mismatched"
+Date:   Wed, 16 Mar 2022 23:46:20 +0000
+Message-Id: <20220316234620.55885-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/merge-next-20220315
-head:   87a21b60077d8cb23d3e70a00a969b542d0695d8
-commit: 76c068f7115ac5a6fb351db3cf91147ccfbd955b [403/512] mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
-config: riscv-randconfig-r042-20220314 (https://download.01.org/0day-ci/archive/20220317/202203170727.Iy1d0my1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/76c068f7115ac5a6fb351db3cf91147ccfbd955b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/merge-next-20220315
-        git checkout 76c068f7115ac5a6fb351db3cf91147ccfbd955b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+There is a spelling mistake in a dev_err message. Fix it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.text+0x3e43c2): Section mismatch in reference from the function ufs_make_empty() to the function .init.text:set_reset_devices()
-The function ufs_make_empty() references
-the function __init set_reset_devices().
-This is often because ufs_make_empty lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x3eb1f8): Section mismatch in reference from the function ufs_mknod() to the variable .init.text:.LBB130_23
-The function ufs_mknod() references
-the variable __init .LBB130_23.
-This is often because ufs_mknod lacks a __init
-annotation or the annotation of .LBB130_23 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x446e7c): Section mismatch in reference from the function fuse_open_common() to the variable .init.data:__TRACE_SYSTEM_afs_FS_InlineBulkStatus
-The function fuse_open_common() references
-the variable __initdata __TRACE_SYSTEM_afs_FS_InlineBulkStatus.
-This is often because fuse_open_common lacks a __initdata
-annotation or the annotation of __TRACE_SYSTEM_afs_FS_InlineBulkStatus is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x47be1a): Section mismatch in reference from the function duplicateIXtree() to the variable .init.data:__TRACE_SYSTEM_afs_file_error_dir_unmarked_ext
-The function duplicateIXtree() references
-the variable __initdata __TRACE_SYSTEM_afs_file_error_dir_unmarked_ext.
-This is often because duplicateIXtree lacks a __initdata
-annotation or the annotation of __TRACE_SYSTEM_afs_file_error_dir_unmarked_ext is wrong.
-
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x34c044): Section mismatch in reference from the function nfs3_proc_unlink_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34c090): Section mismatch in reference from the function nfs3_proc_rename_rpc_prepare() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x34f5ee): Section mismatch in reference from the function nfs3_xdr_enc_getacl3args() to the variable .init.text:.LBB96_19
-<< WARNING: modpost: vmlinux.o(.text+0x359bd0): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359bda): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359be4): Section mismatch in reference from the function __nlm4svc_proc_unlock() to the variable .exit.text:.LBB97_6
-<< WARNING: modpost: vmlinux.o(.text+0x359c2e): Section mismatch in reference from the function __nlm4svc_proc_granted() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359c72): Section mismatch in reference from the function nlm4svc_callback() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x359ca8): Section mismatch in reference from the function nlm4svc_callback() to the function .exit.text:test_ww_mutex_exit()
-<< WARNING: modpost: vmlinux.o(.text+0x359cec): Section mismatch in reference from the function nlm4svc_callback_release() to the function .exit.text:test_ww_mutex_exit()
-
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/ethernet/sun/niu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/sun/niu.c b/drivers/net/ethernet/sun/niu.c
+index ba8ad76313a9..42460c0885fc 100644
+--- a/drivers/net/ethernet/sun/niu.c
++++ b/drivers/net/ethernet/sun/niu.c
+@@ -7909,7 +7909,7 @@ static int niu_ldg_assign_ldn(struct niu *np, struct niu_parent *parent,
+ 		 * won't get any interrupts and that's painful to debug.
+ 		 */
+ 		if (nr64(LDG_NUM(ldn)) != ldg) {
+-			dev_err(np->device, "Port %u, mis-matched LDG assignment for ldn %d, should be %d is %llu\n",
++			dev_err(np->device, "Port %u, mismatched LDG assignment for ldn %d, should be %d is %llu\n",
+ 				np->port, ldn, ldg,
+ 				(unsigned long long) nr64(LDG_NUM(ldn)));
+ 			return -EINVAL;
+-- 
+2.35.1
+

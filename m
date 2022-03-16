@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC774DB036
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D538B4DB038
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355960AbiCPNA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S1355964AbiCPNBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347364AbiCPNAZ (ORCPT
+        with ESMTP id S1355963AbiCPNA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:00:25 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8960C3AA75
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:59:11 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h23so2253620wrb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jzYXuFw6t1GGQ3e3ytY3BE4kwazLUF9JZA0pvkZu3z4=;
-        b=iQaN/Sbaut6GOISotqqPoNkJFQ+MWqEf1XyixuSqzk0zUegChILr9hjzs4eQAEcGFf
-         5CbZdnbhqzW5BGerIU7MGk1y+KdFteT4OozVaSQLCxXaEeOmOjeR9jdrk6skw6iDuE/M
-         55uSOsAv6jbfabjZ0U8qoS+KtLcxO/ASaH91YcQsEyFPANKaNZiO16GPjBajaO1gDQXo
-         FLH8y76ix2FlS7eAoA2QgLdQYhLJqaZ3jdEKhdZ5bKTQhsQswFwt0dHS4EoFIQ3LqftF
-         x3cYxP5ysX1NdyRaRYKew9ixCkmyjfNbrhDhMPXoL44gIVES779zI9pOcwo6O4NSejw5
-         AxYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jzYXuFw6t1GGQ3e3ytY3BE4kwazLUF9JZA0pvkZu3z4=;
-        b=ZWBIbpkMKoRRdcyPuDKe1fUDDdC1n+S2nOVZCxyN8TXHWMIoA26hwM8uizjYwWeEge
-         R9M6dqmHQLuuSKhYCFSCiuJUHpA5KW/xvPSzVT/tzup6oYVV68Z+0t0g7SRKIxZBA2op
-         bZRVMzAKF+Aq7lyrT6Sa81gndW0ETmp27NDk2pFUcW6cB+YXqvT9Wfnl9wi8uUfEvM9A
-         NqqNctyR4dbcz+AzPlLl7DiTYb2j58auKZc7ozVQ2HPLlaqP0tkY/B0l8H23EByUKD9u
-         XdcJCoXleFn5texQZZ6sB4JsHOUTJZWviB4TkGig/13s3SrDCc4BZfQMEx4zO1ebxcDd
-         5S+Q==
-X-Gm-Message-State: AOAM533Htxt7Ed6XGSaEcZINDxvdwxqLZHKTQJMy6hNsLRunySF5jUrb
-        ozHkJBFoAEjQqiiRU2aPKgudnQ==
-X-Google-Smtp-Source: ABdhPJy4Hy20R7yN9hagwqQupnDiBP8RLHhFW5oKMad0+kO9NjMwJuHWi2WWa16dNvC0YERmuq+J0Q==
-X-Received: by 2002:a5d:6344:0:b0:1f0:21ee:9705 with SMTP id b4-20020a5d6344000000b001f021ee9705mr23929753wrw.93.1647435549892;
-        Wed, 16 Mar 2022 05:59:09 -0700 (PDT)
-Received: from google.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
-        by smtp.gmail.com with ESMTPSA id v8-20020a1cf708000000b0034d7b5f2da0sm1681873wmh.33.2022.03.16.05.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 05:59:09 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 13:59:06 +0100
-From:   "Steinar H. Gunderson" <sesse@google.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
-Message-ID: <YjHfGrZovk3N/H0f@google.com>
-References: <20220310093844.982656-1-sesse@google.com>
- <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
- <YiuKAk7SaXP7B7Ee@google.com>
- <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
- <YjBnet2813sEGjZY@google.com>
- <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
- <YjDUO6bbyfGw/u0C@google.com>
- <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
- <YjGdoGy4Z2UUG9S9@google.com>
- <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
+        Wed, 16 Mar 2022 09:00:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2836C4D62E;
+        Wed, 16 Mar 2022 05:59:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6FE3617AB;
+        Wed, 16 Mar 2022 12:59:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B49FC340E9;
+        Wed, 16 Mar 2022 12:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647435581;
+        bh=dbD++lW9Tr1+BL/UUfYy+iGVAouthSAwSpl2YxzDMA8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TlxKC01X+t6CZ79mJ1QYJt1h5RK8Q1eG3mmDCxI3GHu2Ua77/V7AbaPVxiSfBQ6Y4
+         l8ru0Ag5EJBLo9pWIji2t1gGPj6RHNWngvT0nqHWFkAJhEs8DZr1QWh0cjtm6eM34i
+         l/ZNhJobWN3PbCRTRx2J+WNGiYGU8gfmJgXyy3yI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.19.235
+Date:   Wed, 16 Mar 2022 13:59:36 +0100
+Message-Id: <1647435576128162@kroah.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 01:19:46PM +0200, Adrian Hunter wrote:
->> I guess the good news is that the perf report coming out of your version
->> looks more likely to me; I have some functions that are around 1% that
->> shouldn't intuitively be that much (and, if I write some Perl to sum up
->> the cycles from the IPC lines in perf script, are more around 0.1%).
->> So perhaps we should stop chasing the difference? I don't know.
-> That doesn't sound right.  I will look at it more closely in the next few days.
+I'm announcing the release of the 4.19.235 kernel.
 
-If you need, I can supply the perf.data and binaries, but we're talking
-a couple of gigabytes of data (and I don't know immediately if there's
-an easy way I can package up everything perf.data references) :-)
+All users of the 4.19 kernel series must upgrade.
 
-/* Steinar */
+The updated 4.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                         |    2 -
+ arch/arm/include/asm/spectre.h                   |    6 +++
+ arch/arm/kernel/entry-armv.S                     |    4 +-
+ arch/riscv/kernel/module.c                       |   21 +++++++++---
+ drivers/gpio/gpio-ts4900.c                       |   24 ++++++++++---
+ drivers/net/ethernet/cadence/macb_main.c         |   25 +++++++++++++-
+ drivers/net/ethernet/freescale/gianfar_ethtool.c |    1 
+ drivers/net/ethernet/nxp/lpc_eth.c               |    5 ++
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c      |   18 ++++++----
+ drivers/net/ethernet/qlogic/qed/qed_vf.c         |    7 ++++
+ drivers/net/ethernet/ti/cpts.c                   |    4 +-
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c    |    4 +-
+ drivers/net/phy/dp83822.c                        |    2 -
+ drivers/net/xen-netback/xenbus.c                 |   13 ++-----
+ drivers/nfc/port100.c                            |    2 +
+ drivers/staging/gdm724x/gdm_lte.c                |    5 +-
+ drivers/virtio/virtio.c                          |   40 ++++++++++++-----------
+ fs/btrfs/extent-tree.c                           |    1 
+ fs/ext4/resize.c                                 |    5 ++
+ include/linux/mlx5/mlx5_ifc.h                    |    4 +-
+ include/linux/virtio.h                           |    1 
+ include/linux/virtio_config.h                    |    3 +
+ kernel/trace/trace.c                             |   10 +++--
+ net/ax25/af_ax25.c                               |    7 ++++
+ net/core/net-sysfs.c                             |    2 -
+ net/sctp/diag.c                                  |    9 +----
+ tools/testing/selftests/memfd/memfd_test.c       |    1 
+ 27 files changed, 157 insertions(+), 69 deletions(-)
+
+Clément Léger (1):
+      net: phy: DP83822: clear MISR2 register to disable interrupts
+
+Dan Carpenter (1):
+      staging: gdm724x: fix use after free in gdm_lte_rx()
+
+Duoming Zhou (1):
+      ax25: Fix NULL pointer dereference in ax25_kill_by_device
+
+Emil Renner Berthing (1):
+      riscv: Fix auipc+jalr relocation range checks
+
+Eric Dumazet (1):
+      sctp: fix kernel-infoleak for SCTP sockets
+
+Greg Kroah-Hartman (1):
+      Linux 4.19.235
+
+Jia-Ju Bai (1):
+      net: qlogic: check the return value of dma_alloc_coherent() in qed_vf_hw_prepare()
+
+Jiasheng Jiang (2):
+      net: ethernet: ti: cpts: Handle error for clk_enable
+      net: ethernet: lpc_eth: Handle error for clk_enable
+
+Josh Triplett (1):
+      ext4: add check to prevent attempting to resize an fs with sparse_super2
+
+Marek Marczykowski-Górecki (2):
+      Revert "xen-netback: remove 'hotplug-status' once it has served its purpose"
+      Revert "xen-netback: Check for hotplug-status existence before watching"
+
+Mark Featherston (1):
+      gpio: ts4900: Do not set DAT and OE together
+
+Miaoqian Lin (2):
+      ethernet: Fix error handling in xemaclite_of_probe
+      gianfar: ethtool: Fix refcount leak in gfar_get_ts_info
+
+Michael S. Tsirkin (2):
+      virtio: unexport virtio_finalize_features
+      virtio: acknowledge all features before access
+
+Mike Kravetz (1):
+      selftests/memfd: clean up mapping in mfd_fail_write
+
+Mohammad Kabat (1):
+      net/mlx5: Fix size field in bufferx_reg struct
+
+Pavel Skripkin (1):
+      NFC: port100: fix use-after-free in port100_send_complete
+
+Qu Wenruo (1):
+      btrfs: unlock newly allocated extent buffer after error
+
+Randy Dunlap (1):
+      ARM: Spectre-BHB: provide empty stub for non-config
+
+Robert Hancock (1):
+      net: macb: Fix lost RX packet wakeup race in NAPI receive
+
+Russell King (Oracle) (1):
+      ARM: fix Thumb2 regression with Spectre BHB
+
+Sven Schnelle (1):
+      tracing: Ensure trace buffer is at least 4096 bytes large
+
+Tom Rix (1):
+      qed: return status of qed_iov_get_link
+
+suresh kumar (1):
+      net-sysfs: add check for netdevice being present to speed_show
+

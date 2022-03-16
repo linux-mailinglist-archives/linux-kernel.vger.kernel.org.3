@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD6B4DB5C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8091F4DB5C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356926AbiCPQSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S1352225AbiCPQRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356229AbiCPQSm (ORCPT
+        with ESMTP id S240622AbiCPQRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:18:42 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91136302;
-        Wed, 16 Mar 2022 09:17:27 -0700 (PDT)
+        Wed, 16 Mar 2022 12:17:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3967BBC2F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647447447; x=1678983447;
+  t=1647447382; x=1678983382;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hunw0Nfvtf3Ds3vVfeFfVP3FYH5Tn5uXoCg/qsncEpw=;
-  b=YwYBsjCQ0mefQp5SvSOjRbmMh3S3u5f8wkX6VyIEKoLPmEkvme4ImiSC
-   M791ZTBhV9r44YKxxrXSqrNOiKAyB4zczZTGEtbbPVDONQeh/654sQJn1
-   oZiedzROXf33ejgBGqlByZw/7GHWoGyYpxxctPXCyy0g2sjsI3JM0iVfH
-   kBfw7n3Bf4bsNlNCxJSDzxpKYcQ3OHxAi7dE1OpzKN6DS1Qz6K7w+yU9x
-   IHJbivR1pZ/001VH6mfKQMgplIODBrte6Rcy2QKxwSkk4SEM5tmvXdx7y
-   xkdViQSyYWikXdr9TcCrcbAOcRSbYDWFwiLWH52HC6g7JvIyGKzW5BqUm
+  bh=DEtLWo8Ecdeq9AIs99N5iWens02agHgLncfV1oWxOY0=;
+  b=iFOKtCzEghX99cx6i0uj7dBDOlpCIHUAHh3sR+5yGWB51odT97K9dFji
+   RCJRhbD0DsOuPPpedPoaSwM/FcqcZUWzkkusoYnGlpGX6kVbt69i81Fvw
+   niZ6LJLESdb8Ih9dTStq5aFxtD3b7fA9EL7SCvIcg55GN4QJrKWl+W7n/
+   NCBpw38yTt5GSX+FuXVskWQqji4HrVaE0P0rijLrqIa7AHxSK6LlBvi83
+   HPP4ojiFArz5FjJgFPNXlakn9g/9ID9aTg/UxVsYxSyI3vIW42Xu7U6IH
+   G7WGXFRZZMD/vMAPC8bcfcOiAJ+HodLG0zOOBPOxszyQg6riZ2LGv07r6
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="254207215"
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256601188"
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="254207215"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:13:02 -0700
+   d="scan'208";a="256601188"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:13:26 -0700
 X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
-   d="scan'208";a="646721436"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:13:00 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nUWG3-000zQ0-K0;
-        Wed, 16 Mar 2022 18:12:19 +0200
-Date:   Wed, 16 Mar 2022 18:12:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, micklorain@protonmail.com
-Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
-Message-ID: <YjIMY1/r15xj65pZ@smile.fi.intel.com>
-References: <YjG7rZ11PP3vWz89@smile.fi.intel.com>
- <20220316115209.GA666450@bhelgaas>
+   d="scan'208";a="557523347"
+Received: from zhaoq-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.255.29.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:13:16 -0700
+Date:   Thu, 17 Mar 2022 00:13:11 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Abel Wu <wuyun.abel@bytedance.com>, linux-kernel@vger.kernel.org,
+        Tim Chen <tim.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>
+Subject: Re: [PATCH v2][RFC] sched/fair: Change SIS_PROP to search idle CPU
+ based on sum of util_avg
+Message-ID: <20220316161311.GA41632@chenyu5-mobl1>
+References: <20220310005228.11737-1-yu.c.chen@intel.com>
+ <444bfebb-ac1c-42b9-58f5-332780e749f7@bytedance.com>
+ <20220314125657.GA30418@chenyu5-mobl1>
+ <87541edf7b46c1475f73cf464a9edca932f65da5.camel@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220316115209.GA666450@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87541edf7b46c1475f73cf464a9edca932f65da5.camel@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 06:52:09AM -0500, Bjorn Helgaas wrote:
-> On Wed, Mar 16, 2022 at 12:27:57PM +0200, Andy Shevchenko wrote:
-> > On Tue, Mar 15, 2022 at 03:22:31PM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
-> > > > On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
-> > > > > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
-> > > > > > ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
-> > > > > > Enable the respective quirk as it's done for other ATI devices on this chipset,
-> > > > > > 
-> > > > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
-> > > > > 
-> > > > > This is interesting because there must be a TON of these AMD/ATI SB600
-> > > > > USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
-> > > > > appeared in v5.9.
-> > > > > 
-> > > > > So why would we only get a report now, in February 2022?  Is there
-> > > > > some change more recent than 306c54d0edb6 that exposed this problem?
-> > > > 
-> > > > I think it's a rhetorical question. To me it's as simple as the latency
-> > > > between getting the change into the kernel.
-> > > > 
-> > > > However, I'm a bit worried that in case of ATI there are not so many
-> > > > platforms that are kept up-to-dated.
-> > > 
-> > > This would be a rhetorical question if I were not interested in the
-> > > answer but asking only to make a point.  That's not the case at all.
-> > > 
-> > > If these SB600 USB devices stopped working in v5.9 (October 2020),
-> > > that would affect lots of keyboards and mice, and I would be surprised
-> > > if we didn't hear about it until February, 2022.
-> > > 
-> > > I looked through https://github.com/linuxhw/Dmesg, and there are at
-> > > least 40 dmesg logs from v5.9 or later with SB600 USB, so I'm
-> > > still a little skeptical that 306c54d0edb6 by itself is enough to
-> > > explain this.
-> > > 
-> > > Anyway, I applied this to pci/msi for v5.18 with the following commit
-> > > log:
-> > > 
-> > >     PCI: Disable broken MSI on ATI SB600 USB adapters
-> > > 
-> > >     Some ATI SB600 USB adapters advertise MSI, but MSI doesn't work if INTx is
-> > >     disabled.  Disable MSI on these adapters.
+On Mon, Mar 14, 2022 at 10:34:30AM -0700, Tim Chen wrote:
+> On Mon, 2022-03-14 at 20:56 +0800, Chen Yu wrote:
 > > 
-> > But IIUC MSI is _not_ disabled. That's why I have issued this version of the
-> > patch with different commit message. Did I misunderstand something?
+> > > 
+> > > So nr_scan will probably be updated at llc-domain-lb-interval, which
+> > > is llc_size milliseconds. Since load can be varied a lot during such
+> > > a period, would this brought accuracy issues?
+> > > 
+> > I agree there might be delay in reflecting the latest utilization.
+> > The sum_util calculated by periodic load balance after 112ms would be
+> > decay to about 0.5 * 0.5 * 0.5 * 0.7 = 8.75%.
+> > But consider that this is a server platform, I have an impression that
+> > the CPU utilization jitter during a small period of time is not a regular
+> > scenario? It seems to be a trade-off. Checking the util_avg in newidle
+> > load balance path would be more frequent, but it also brings overhead -
+> > multiple CPUs write/read the per-LLC shared variable and introduces cache
+> > false sharing. But to make this more robust, maybe we can add time interval
+> > control in newidle load balance too.
+> > 
+> > 
 > 
-> Oh, right, of course.  Sorry, I was asleep at the wheel.
+> Also the idea is we allow ourselves to be non-optimal in terms of
+> scheduling for the short term variations.  But we want to make sure that if
+> there's a long term trend in the load behavior, the scheduler should
+> adjust for that.  I think if you see high utilization and CPUs are
+> all close to fully busy for quite a while, that is a long term trend 
+> that overwhelms any short load jitters.
+>
+Agree. From long term trend, the scheduler should approach an optimization
+status.
 
-Are you going to fix that?
-
-> I guess it's just that for these devices, we don't disable INTx when
-> enabling MSI.  I can't remember why we disable INTx when enabling MSI,
-> but it raises the question of whether it's better to leave INTx
-> enabled or to just disable use of MSI completely.
-
-It's required by specification to disable INTx if I read 6.1.4.3
-Enabling Operation correctly.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+thanks,
+Chenyu 
+> Tim
+> 

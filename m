@@ -2,70 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F63E4DA72C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FD44DA72E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 02:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352891AbiCPBEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 21:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
+        id S1347400AbiCPBFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 21:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352888AbiCPBEV (ORCPT
+        with ESMTP id S236125AbiCPBFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 21:04:21 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CE5E36;
-        Tue, 15 Mar 2022 18:03:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V7JXSGt_1647392583;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7JXSGt_1647392583)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Mar 2022 09:03:04 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     herbert@gondor.apana.org.au
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] crypto: engine: Add parameter description in crypto_transfer_request() kernel-doc comment
-Date:   Wed, 16 Mar 2022 09:03:01 +0800
-Message-Id: <20220316010301.3166-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 15 Mar 2022 21:05:01 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA60B87E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:03:47 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q5so1146296ljb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 18:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nhmwtf/VjoQV7F5h0NhBM6NJo4NB3/oDyqq5QgKUcBo=;
+        b=XK6ukyJcvRudCRFreqwkI/ZibKG5OxRAZAZKt0vdZYPRwhihL8jVgAQutWBInC/+U8
+         oN5bKJWIL9Czm3Hd68rOx+kHlXfrmAWFcSl8HeEkMtvg4YfWoz39R/zC2bhsip5jCXYb
+         CauKoudJ/QFlP5RZAGpoVbY8Td6WINL6xtG5d6DKEI/nEeoCG7guBuT2VFRPFGT0DsKp
+         MIJeksid/Uj8o84X19iL0UQQuhCnbMErWbUZP9TSWCNz0v3ob76iQku5az/2z2dtziZ6
+         2d1gAahHloqs/pUJYO4C08f8gPodGcAhc8ZLxWqJ77MRVGwl0n9WMz+HQotsY9FEp7VG
+         JHpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nhmwtf/VjoQV7F5h0NhBM6NJo4NB3/oDyqq5QgKUcBo=;
+        b=zJKnrt14Gha5n+/aQ2sAxs4meXhXiQo3S0a7SA/eQAk2XPuwXDpBupTQRlNc/Wom5M
+         N7ya2J3pIcF5TdifwINlSPiDOcgL5/Gs9dyb/CJJ9NmUS7wVecsVtxME5dz3Wn5n34s7
+         jWM1t47e/KkhrksVsA04j6REWgTaVOXFeP9IAIqp/yk+CSaPVZ1d7EZD+kuWTSMemISg
+         kyIqGI+q9b2XYPG7hfCHhfHT0RpZ8I33bAVuUHdl0Ri3XBM1idYzQdY30OZ091qaUGDM
+         IoSERR1gHrdTgCcAsSbvyncotrxDPCcXfqal9t9WYjoUYfwQWR6yRkuI1oWwiUd7vnrh
+         H4ow==
+X-Gm-Message-State: AOAM531QAJ0c1QVAFVr+6nFBuhsClWys88A33Q5BiaDm19o8AF9frQgd
+        +hsKycitPqhTU0n1rJIkgEG7pdZdDXZIC9+6wfC7cg==
+X-Google-Smtp-Source: ABdhPJyCf73Ia/8zLvpmsufs/bjwOHOazg++Gw0hXDw/QV8/e2mFDrs+TGn7YwFIBM7OUFLVjACS3f2wdOxePnW6NlU=
+X-Received: by 2002:a05:651c:a06:b0:246:71a3:556a with SMTP id
+ k6-20020a05651c0a0600b0024671a3556amr18781599ljq.5.1647392625976; Tue, 15 Mar
+ 2022 18:03:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20201211141656.24915-1-mw@semihalf.com> <CAPDyKFqsSO+f9iG8vccwXZXDDNHgLEg7bfUe-KfHn2C-ZnOU4A@mail.gmail.com>
+ <20220314154033.4x74zscayee32rrj@pali> <CAPv3WKc4MFeLgnJMWx=YNT5Ta5yi6fVhb4f-Rf211FTEmkvyog@mail.gmail.com>
+ <20220315230333.eyznbu5tuxneizbs@pali>
+In-Reply-To: <20220315230333.eyznbu5tuxneizbs@pali>
+From:   Marcin Wojtas <mw@semihalf.com>
+Date:   Wed, 16 Mar 2022 02:03:35 +0100
+Message-ID: <CAPv3WKc96vDsW_duXYMYbr3X05=-p28N5_cf2PHo-tiwDLjaWg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-xenon: fix 1.8v regulator stabilization
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Ziji Hu <huziji@marvell.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Kostya Porotchkin <kostap@marvell.com>,
+        Alex Leibovich <alexl@marvell.com>,
+        "# 4.0+" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the description of @need_pump in crypto_transfer_request() kernel-doc
-comment to remove warning found by running scripts/kernel-doc, which is
-caused by using 'make W=1'.
+Hi Pali,
 
-crypto/crypto_engine.c:260: warning: Function parameter or member
-'need_pump' not described in 'crypto_transfer_request'
+=C5=9Br., 16 mar 2022 o 00:03 Pali Roh=C3=A1r <pali@kernel.org> napisa=C5=
+=82(a):
+>
+> Hello!
+>
+> On Monday 14 March 2022 16:51:25 Marcin Wojtas wrote:
+> > Hi Pali,
+> >
+> >
+> > pon., 14 mar 2022 o 16:40 Pali Roh=C3=A1r <pali@kernel.org> napisa=C5=
+=82(a):
+> > >
+> > > On Monday 11 January 2021 19:06:24 Ulf Hansson wrote:
+> > > > On Fri, 11 Dec 2020 at 15:17, Marcin Wojtas <mw@semihalf.com> wrote=
+:
+> > > > >
+> > > > > From: Alex Leibovich <alexl@marvell.com>
+> > > > >
+> > > > > Automatic Clock Gating is a feature used for the power
+> > > > > consumption optimisation. It turned out that
+> > > > > during early init phase it may prevent the stable voltage
+> > > > > switch to 1.8V - due to that on some platfroms an endless
+> > > > > printout in dmesg can be observed:
+> > > > > "mmc1: 1.8V regulator output did not became stable"
+> > > > > Fix the problem by disabling the ACG at very beginning
+> > > > > of the sdhci_init and let that be enabled later.
+> > > > >
+> > > > > Fixes: 3a3748dba881 ("mmc: sdhci-xenon: Add Marvell Xenon SDHC co=
+re functionality")
+> > > > > Signed-off-by: Alex Leibovich <alexl@marvell.com>
+> > > > > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+> > > > > Cc: stable@vger.kernel.org
+> > > >
+> > > > Applied for fixes (by fixing the typos), thanks!
+> > >
+> > > Hello!
+> > >
+> > > Is not this patch address same issue which was fixed by patch which w=
+as
+> > > merged earlier?
+> > >
+> > > bb32e1987bc5 ("mmc: sdhci-xenon: fix annoying 1.8V regulator warning"=
+)
+> > > https://lore.kernel.org/linux-mmc/CAPDyKFqAsvgAjfL-c9ukFNWeGJmufQosR2=
+Eg9SKjXMVpNitdkA@mail.gmail.com/
+> > >
+> >
+> > This indeed look similar. This fix was originally developed for CN913x
+> > platform without the mentioned patch (I'm wondering if it would also
+> > suffice to fix A3k board's problem). Anyway, I don't think we have an
+> > issue here, as everything seems to work fine on top of mainline Linux
+> > with both changes.
+>
+> Yea, there should be no issue. Just question is if we need _both_ fixes.
+>
+> I could probably try to revert bb32e1987bc5 and check what happens on
+> A3k board.
+>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- crypto/crypto_engine.c | 1 +
- 1 file changed, 1 insertion(+)
+Yes, that would be interesting. Please let me know whenever you find
+time to check.
 
-diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
-index 6056a990c9f2..bb8e77077f02 100644
---- a/crypto/crypto_engine.c
-+++ b/crypto/crypto_engine.c
-@@ -253,6 +253,7 @@ static void crypto_pump_work(struct kthread_work *work)
-  * crypto_transfer_request - transfer the new request into the engine queue
-  * @engine: the hardware engine
-  * @req: the request need to be listed into the engine queue
-+ * @need_pump: indicates whether queue the pump of request to kthread_work
-  */
- static int crypto_transfer_request(struct crypto_engine *engine,
- 				   struct crypto_async_request *req,
--- 
-2.20.1.7.g153144c
+Best regards,
+Marcin
 
+> > > >
+> > > >
+> > > > > ---
+> > > > >  drivers/mmc/host/sdhci-xenon.c | 7 ++++++-
+> > > > >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sd=
+hci-xenon.c
+> > > > > index c67611fdaa8a..4b05f6fdefb4 100644
+> > > > > --- a/drivers/mmc/host/sdhci-xenon.c
+> > > > > +++ b/drivers/mmc/host/sdhci-xenon.c
+> > > > > @@ -168,7 +168,12 @@ static void xenon_reset_exit(struct sdhci_ho=
+st *host,
+> > > > >         /* Disable tuning request and auto-retuning again */
+> > > > >         xenon_retune_setup(host);
+> > > > >
+> > > > > -       xenon_set_acg(host, true);
+> > > > > +       /*
+> > > > > +        * The ACG should be turned off at the early init time, i=
+n order
+> > > > > +        * to solve a possile issues with the 1.8V regulator stab=
+ilization.
+> > > > > +        * The feature is enabled in later stage.
+> > > > > +        */
+> > > > > +       xenon_set_acg(host, false);
+> > > > >
+> > > > >         xenon_set_sdclk_off_idle(host, sdhc_id, false);
+> > > > >
+> > > > > --
+> > > > > 2.29.0
+> > > > >

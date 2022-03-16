@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E534DA87A
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01634DA87B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243175AbiCPCfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S1348348AbiCPCfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353403AbiCPCfB (ORCPT
+        with ESMTP id S1343497AbiCPCfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:35:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB6065BE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:32:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46FAF6149A
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 02:32:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3CBC340E8;
-        Wed, 16 Mar 2022 02:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647397940;
-        bh=JlWuwsVAf8tixVVfAj7k3At1hsOc2H52eSxmDWkWpNE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qi4zpYKrUUrbZLKM+Xl0nS5aG1eZ4vTX/qCHb5xZQd4h2K4CZaJPT1O3J8f4cuQmO
-         ikj643PaI0do9JOx4U2u20nixZmCCxYuFzyRXN69OlhnqPurTuTfA9dQQW1ARw+Aol
-         KrNmCKUUJhcFAdjc+xxLaBYPXIsPsze9agB9ApcFHB3/35FGDi8F3WHpVM3l1sIbw5
-         RijlwULauuXFxRWs85GucfaVVoAI8vfxYmrlpklI3lk3kptoCMXwPZhbtiBcFUrXB9
-         ykvLNpzHC1kX8zWNLMV3btNhs/7fH8zY80RnvNRhH9j6CWIaJi55cHaRMGGDpeUXRU
-         7BCfWIauqWRBg==
-Date:   Wed, 16 Mar 2022 10:32:16 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Shunli Wang <shunli.wang@mediatek.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ASoC: mediatek: Fix error handling in
- mt8183_da7219_max98357_dev_probe
-Message-ID: <YjFMMEniUVlb1QsX@google.com>
-References: <Yia5XgkGyLbIRc1f@google.com>
- <20220316014059.19292-1-linmq006@gmail.com>
+        Tue, 15 Mar 2022 22:35:14 -0400
+Received: from out29-195.mail.aliyun.com (out29-195.mail.aliyun.com [115.124.29.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D5AF2C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:33:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2041822|-1;BR=01201311R111S35rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0423659-0.00231199-0.955322;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047193;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.N5VpE7V_1647398035;
+Received: from sunxibot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.N5VpE7V_1647398035)
+          by smtp.aliyun-inc.com(33.37.2.29);
+          Wed, 16 Mar 2022 10:33:56 +0800
+From:   Victor Hassan <victor@allwinnertech.com>
+To:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, yanfei.xu@windriver.com, ardb@kernel.org,
+        tglx@linutronix.de, mirq-linux@rere.qmqm.pl, arnd@arndb.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com,
+        Victor Hassan <victor@allwinnertech.com>
+Subject: [PATCH] ARM: mmu: fix access to illegal address when using earlycon & memblock=debug
+Date:   Wed, 16 Mar 2022 10:33:56 +0800
+Message-Id: <20220316023356.120595-1-victor@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316014059.19292-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 01:40:57AM +0000, Miaoqian Lin wrote:
-> The device_node pointer is returned by of_parse_phandle()  with refcount
-> incremented. We should use of_node_put() on it when done.
-> 
-> This function only calls of_node_put() in the regular path.
-> And it will cause refcount leak in error paths.
-> Fix this by calling of_node_put() in error handling too.
-> 
-> Fixes: 5bdbe9771177 ("ASoC: mediatek: mt8183-da7219: use hdmi-codec")
-> Fixes: ebbddc75bbe8 ("ASoC: Mediatek: MT8183: Add machine driver with DA7219")
+earlycon uses fixmap to create a memory map,
+So we need to close earlycon before closing fixmap,
+otherwise printk will access illegal addresses.
+After creating a new memory map, we open earlycon again.
 
-Again, I am not sure if the Fixes tag makes sense.  Although the issue was
-there when the driver birth, there are some more commits after then.
+Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+---
+ arch/arm/mm/mmu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Given that:
-- The patch is a minor fix (see [1][2]).
-- There is no specific commit the patch aims to fix.
-I prefer to drop the Fixes tags.  In any case, I don't think the tags would be
-helpful.
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 274e4f73fd33..f3511f07a7d0 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -14,6 +14,7 @@
+ #include <linux/fs.h>
+ #include <linux/vmalloc.h>
+ #include <linux/sizes.h>
++#include <linux/console.h>
+ 
+ #include <asm/cp15.h>
+ #include <asm/cputype.h>
+@@ -1695,6 +1696,9 @@ static void __init early_fixmap_shutdown(void)
+ 	pmd_clear(fixmap_pmd(va));
+ 	local_flush_tlb_kernel_page(va);
+ 
++#ifdef CONFIG_FIX_EARLYCON_MEM
++	console_stop(console_drivers);
++#endif
+ 	for (i = 0; i < __end_of_permanent_fixed_addresses; i++) {
+ 		pte_t *pte;
+ 		struct map_desc map;
+@@ -1713,6 +1717,9 @@ static void __init early_fixmap_shutdown(void)
+ 
+ 		create_mapping(&map);
+ 	}
++#ifdef CONFIG_FIX_EARLYCON_MEM
++	console_start(console_drivers);
++#endif
+ }
+ 
+ /*
+-- 
+2.29.0
 
-I would defer to Mark.
-
-[1]: https://elixir.bootlin.com/linux/v5.17-rc8/source/include/linux/of.h#L129
-[2]: https://elixir.bootlin.com/linux/v5.17-rc8/source/drivers/of/Kconfig#L55
-
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>

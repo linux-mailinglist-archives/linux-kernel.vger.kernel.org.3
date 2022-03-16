@@ -2,72 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D89A4DAC9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229A54DAC9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 09:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354556AbiCPIlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 04:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S1354568AbiCPIlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 04:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233630AbiCPIlG (ORCPT
+        with ESMTP id S1354506AbiCPIlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 04:41:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66064BC4;
+        Wed, 16 Mar 2022 04:41:07 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA46D5FF24;
         Wed, 16 Mar 2022 01:39:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 1D96D1F42CD2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647419991;
-        bh=OBn2nRrFw1dTirvfKDQG9NVJ8Eqyjie73NtNTXIBhSk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gwiAU68gIl2PnAoSpTZuwVmRdEYHTSoD9eRfwg027X8/0MqBSYwiNvvMt+Cdg7vyp
-         nsAu4DPoBSMepTgto63T+yf6RJ5VO3bFGMGwqPgZ9n3mqrpZYb9LsSgQt9G+JenDCt
-         cmtrK/hr1jeylxdFMPoa9RN+SI6GZMGDPgkia3BDBA30PwuxkipPMhpU0SQFJJk1/S
-         KtZptrEYh0CrYFLZ1X6XDaG4tadT765C2R5JBOLJ9xd8/WO+B252LFLnJMP6we2ZRk
-         MGB8hKGcecK/qdDJ3HpU38w9J7/WAPuKXRTCrUVDH4lOH5kOFYzITjvsTBsFc9cEJp
-         VR6Bz5tmzsMGQ==
-Message-ID: <dfca0eb8-9800-9feb-3608-f29c6333b0ce@collabora.com>
-Date:   Wed, 16 Mar 2022 09:39:48 +0100
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B4D912223E;
+        Wed, 16 Mar 2022 09:39:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647419990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mfWEyVdNhZ2PEbQ7xLSXglp7UcYPsmqDrsv7e0s9JhA=;
+        b=BaKtRWUqplLjFdATAVwcnIXV8nbQ51yM+K4qZ++8hd8s5flFZjiaJoEAIlCC+aJKmvf//V
+        FArxoXQyWkOcWvnvVtAy1ih5ZuFDyLNlnSIdZQ5CJLmrduoaotqd38R3ArdxHSK2Yp1evs
+        skS46O66wMZw0ZFQqN9iHY0wN9T6gIc=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v1 4/4] dt-bindings: pinctrl: mt8192: Add gpio-line-names
- property
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kernel@collabora.com, Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220315211936.442708-1-nfraprado@collabora.com>
- <20220315211936.442708-5-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220315211936.442708-5-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 16 Mar 2022 09:39:48 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tudor.Ambarus@microchip.com, p.yadav@ti.com, broonie@kernel.org,
+        miquel.raynal@bootlin.com, richard@nod.at,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Nicolas.Ferre@microchip.com,
+        zhengxunli@mxic.com.tw, jaimeliao@mxic.com.tw,
+        andreasilvagni@macronix.com
+Subject: Re: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
+ mode
+In-Reply-To: <8e6e3dcb-0771-560f-4eb8-d49e7cf1f1df@ti.com>
+References: <20220311080147.453483-1-tudor.ambarus@microchip.com>
+ <76eb13b6-9263-975f-3196-312259634301@ti.com>
+ <9e0b6bde-838d-b8a4-9fe7-75c4f916fb27@microchip.com>
+ <8e6e3dcb-0771-560f-4eb8-d49e7cf1f1df@ti.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <09fe05b41a8b325150d44969ebf39d01@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/03/22 22:19, Nícolas F. R. A. Prado ha scritto:
-> Add the gpio-line-names optional property to the pinctrl-mt8192 binding
-> to prevent dt_binding_check warnings when it is present in the pinctrl
-> node in the Devicetree.
+Am 2022-03-16 08:08, schrieb Vignesh Raghavendra:
+> On 15/03/22 12:28 pm, Tudor.Ambarus@microchip.com wrote:
+>> On 3/15/22 08:08, Vignesh Raghavendra wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
+>>> know the content is safe
+>>> 
+>>> Hi,
+>> 
+>> Hi,
+>> 
+>>> 
+>>> On 11/03/22 1:31 pm, Tudor Ambarus wrote:
+>>>> There are NOR flashes (Macronix) that swap the bytes on a 16-bit 
+>>>> boundary
+>>>> when configured in Octal DTR mode. The byte order of 16-bit words is
+>>>> swapped when read or written in Octal Double Transfer Rate (DTR) 
+>>>> mode
+>>>> compared to Single Transfer Rate (STR) modes. If one writes D0 D1 D2 
+>>>> D3
+>>>> bytes using 1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it 
+>>>> will
+>>>> read back D1 D0 D3 D2. Swapping the bytes is a bad design decision 
+>>>> because
+>>>> it may introduce some endianness problems. It can affect the boot 
+>>>> sequence
+>>>> if the entire boot sequence is not handled in either 8D-8D-8D mode 
+>>>> or 1-1-1
+>>>> mode. So we must swap the bytes back to have the same byte order as 
+>>>> in STR
+>>>> modes. Fortunately there are controllers that can swap the bytes 
+>>>> back at
+>>>> runtime, addressing the flash's endiannesses requirements.
+>>>> If the controllers are not capable of swapping the bytes, the 
+>>>> protocol is
+>>>> downgraded via spi_nor_spimem_adjust_hwcaps(). When available, the 
+>>>> swapping
+>>>> of the bytes is always done regardless if it's a data or register 
+>>>> access,
+>>>> so that we comply with the JESD216 requirements: "Byte order of 
+>>>> 16-bit
+>>>> words is swapped when read in 8D-8D-8D mode compared to 1-1-1".
+>>>> 
+>>> 
+>>> Sorry, bit late to the thread. But, dropping 8D-8D-8D mode support is
+>> 
+>> no worries
+>> 
+>>> quite restrictive IMO.
+>>> 
+>>> AFAIK, SFDP standard does not dictate how data should be stored in 
+>>> flash
+>>> or how SW should interpret after reading data from flash. It merely
+>>> indicates endian-ness compared to 1-1-1 mode.
+>>> 
+>>> So, its up to various system SWs like bootloader/Linux to work 
+>>> according
+>>> to pre-aligned layout as there is no rule that data needs to be 
+>>> stored
+>>> in byte order.
+>>> 
+>>> We have two types of controllers:
+>>> 
+>>> 1. SPI controllers supporting swapping endian-ness on the fly:
+>>> -> For such flashes, better choice is to have SWAP option always
+>>> enabled. So that data written in 8D-8D-8D mode can be read correctly 
+>>> in
+>>> 1-1-1 mode and vice-versa.
+>>> ( I am assuming SWAP option of controller is only effective in 
+>>> 8D-8D-8D
+>>> mode and is NOP in 1-1-1 or other modes)
+>>> 
+>>> But, its possible that "ROM" or other non-upgradable SWs may choose 
+>>> not
+>>> make to use of this SWAP option of HW to keep things simple in which
+>>> case, they cannot boot from 8D-8D-8D mode with above setting. Such SW
+>>> don't always have knowledge of flash and cannot be forced to have a
+>>> constraint to enable byte swap on read.
+>>> 
+>>> So, IMO, its best left to system integrators to specify whether or 
+>>> not
+>>> SWAP option needs to be enabled (perhaps via DT as its per flash
+>>> specific property?)
+>> 
+>> we can't use DT for configuration, maybe a Kconfig instead. Are there 
+>> any
+>> other options?
+>> 
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Problem with Kconfig is that it cannot be used when there are multiple
+> flash instances on the board and both behave differently.
+> 
+> This is similar to big-endian vs little-endian property used by CFI
+> physmap driver and other places in kernel[1]
 
+On more thing to consider is that if we are using Kconfig things
+cannot be changed during runtime. While this might be ok when you
+are building your typical embedded distribution, there are efforts
+to be able to boot standard distributions on embedded platforms (see
+ARM SystemReady). A Kconfig option won't work there.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+-michael
 
+>>> 
+>>> 2.  SPI controllers don't support endian-ness SWAP on the fly:
+>>> It is still possible to reliably read and write data as long as its
+>>> written and read back in same mode.
+>>> 
+>>> De-rating speeds because of absence of this support would mean 
+>>> reduction
+>>> of speed by **16 times** (maybe even higher as 8D mode tends to 
+>>> support
+>>> higher bus freqs). Swapping bytes in Linux before writing or after
+>>> reading is not an option either as it negatively impacts performance.
+>>> 
+>>> Asking ROM/bootloaders to swap bytes based on SFDP indication is
+>>> restrictive too as it involves boot time penalty and most systems 
+>>> with
+>>> OSPI flashes are using them to achieve super fast boot times.
+>>> 
+>>> One more case to consider is flashes that dont have SFDP table to
+>>> indicate byte order but follow Macronix's convention. In such cases, 
+>>> its
+>>> better for SPI NOR layer to be as dumb as possible and not really do 
+>>> any
+>>> byte swapping, leaving it up to user space to handle/interpret data
+>>> appropriately.
+>>> 
+>>> Also, Macronix is probably in violation of xSPI spec (JESD251A 
+>>> 6.9.5.2
+>>> 8D-8D-8D Profile 1.0) where diagrams clearly show data output should 
+>>> be
+>>> D0 D1 D2 D3... So ROMs following xSPI spec (which is the only spec
+>>> providing flash agnostic way of switching to 8D mode and reading data 
+>>> in
+>>> 8D mode) would not care about SFDP bit indicating byteorder and its 
+>>> up
+>>> to flasher programs to take care of the same
+>> 
+>> This is a bit in contradiction, because if the ROMs follow xSPI, thus 
+>> little
+>> endian byte order, they should swap the bytes.
+>> 
+> 
+> As I indicated below xSPI (JESD251) spec seems to align on little 
+> endian
+> order. So, don't really need to swap the bytes on read. Anyways impact
+> on performance prohibits such support and thus most ROM designs will
+> expect flashing program to take care of it (especially in case where
+> controller does not support on the fly swapping).
+> 
+>>> 
+>>> IMO, kernel device drivers should just provide access to underlying 
+>>> HW
+>>> and not have too much intelligence to interpret data/take decisions
+>>> 
+>>> So, simpler constraint to put is:
+>>> Flasher programs should program data in the same mode in which
+>>> ROM/bootloder/Linux is expected to read the data on that system.
+>> 
+>> No, this constraint doesn't cover all possible cases: take a 1-1-1 
+>> ROMcode,
+>> 8D-8D-8D for other bootloaders and kernel. You need to dynamically 
+>> change modes
+>> in the flasher program in order to address this use case, which is a 
+>> no go.
+>> 
+> 
+> Flash programmer need not change the mode, but needs to generate a byte
+> swapped image and write it knowing that image is being flashed in
+> 8D-8D-8D mode and read in 1-1-1 mode or vice versa.
+> 
+>>> 
+>>> For Macronix like flashes, if one has a ROM/bootloader that only
+>>> supports 1-1-1 mode and flashing data in 8D-8D-8D mode with Linux, 
+>>> then
+>>> please generate a byte-swapped image offline and flash it. Don't 
+>>> impose
+>> 
+>> we can't do that, see the example from above.
+>> 
+> 
+> See above, no need to change mode dynamically.
+> 
+>>> penalty on systems that do best to handle this messy situation.
+>>> I see this as the only option with least performance penalty.
+>>> 
+>> 
+>> I take from this that we should let the byte swap be 
+>> user-configurable,
+>> thus a Kconfig. Which I'm not against it, but it will give users
+>> headaches to sync all the software components. Making such a decision
+>> implies that users know SPI NOR internal details, which also is a bit
+>> stretched. Let's sync so that we move forward with this. Opinions?
+>> 
+> 
+> I am fine with things being configurable
+> 
+> Only issues with Kconfig: it does not help systems with multiple OSPIs
+> with different endian-ness.
+> 
+> 
+> [1] Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
+> 
+> 
+> Regards
+> Vignesh
+
+-- 
+-michael

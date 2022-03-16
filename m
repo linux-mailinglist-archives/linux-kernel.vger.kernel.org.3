@@ -2,316 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED464DB3E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121EE4DB402
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243630AbiCPPFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S1350606AbiCPPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352788AbiCPPFh (ORCPT
+        with ESMTP id S1346101AbiCPPHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:05:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CC0D1E3CD
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:04:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F24421476;
-        Wed, 16 Mar 2022 08:04:20 -0700 (PDT)
-Received: from [10.57.43.235] (unknown [10.57.43.235])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5001D3F7D7;
-        Wed, 16 Mar 2022 08:04:18 -0700 (PDT)
-Message-ID: <4e6256d0-a3c6-ba01-c31f-a5757b79a9ce@arm.com>
-Date:   Wed, 16 Mar 2022 15:04:17 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 8/8] drm/panfrost: Switch to generic memory shrinker
-Content-Language: en-GB
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
+        Wed, 16 Mar 2022 11:07:46 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEABA245B6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:06:31 -0700 (PDT)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7FC653F1AF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:06:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647443184;
+        bh=YN/pEmxY5lmFXd8VsSTx/x5950RRmwZUldBJe65d5RE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=VOA+PD1+2qUpqZXHGWlwcyjtzpIG3usD2n8P8zi27gAwkqJo/F8NpTK6gpTlZmwqi
+         JcerOeFM/WOCw3Iac52xFUA+dW5GILLQQYlXL5Zc42OH2wc7TMg0ks4d12Oc1DMn+a
+         M3bUgWv8VJw7uYERcOOcij6/ZkakN7kxVoxRUKle5MEAKz3AdUDA3Vn+7+8qbpcaJZ
+         d8S/Pcp3iU7WIAD/CZPlqGN8Kx7U7xKN3J2/F0b+gduFw4BWbd07aZf04XznuCL/VY
+         0g718dys0x15xFW3zUl8Y2a/PHFdFRFh/bjghcue6mskotZlCelmHv5X3qJXfSWg5r
+         3zHXyrfZJgUWQ==
+Received: by mail-wr1-f71.google.com with SMTP id f9-20020a5d58e9000000b001f0247e5e96so656621wrd.15
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:06:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YN/pEmxY5lmFXd8VsSTx/x5950RRmwZUldBJe65d5RE=;
+        b=QjYp2huUxeY5Bxx4EwxRnDDN3fXo++S1Xi1o7YBgO+KzdPJjIyX7lWLKq1ci6K8jhD
+         ogAmVKooWObVe6smuzeSCav7nPkOMJUkUjvsuIBYuRwUvMNI9vMlOJdkgI35v+YopiuT
+         jzvvBWC0YF2vKnsAPdWtFw5hICg34nFdPnYkMKSrOSYFCK2wiNCntaP+jFk/8hSqb6It
+         LLFgiq5hrWlcwlcRyh5Th3UvRUtjDplmc3/Gn0oNXQ7MsCfQc6bpr+GkbtTuqz084fmj
+         oVs87EUw78AQbvRy6cT5mCglSQh6GqSMA5Dt+023Eo86BXy3sfT5eprPQplwriS0iWRY
+         ZTSQ==
+X-Gm-Message-State: AOAM533svJOjJIT/OdcBJ/iE7PTjfbnV59O4u/kh43e27jkIuT9aqSaZ
+        JlvNHZIi6tmUlXY4kUxm4eRkgh5BqBMAwrxtVa5ByrVv+JP8sMvJUlII7TiSMs5QnzrWoRCI2N6
+        4GrMIaA2gWsdjE53DNMLWYJxQjo2qt+S2ME4ZG4n6YQ==
+X-Received: by 2002:adf:d1e3:0:b0:1f1:f268:aea1 with SMTP id g3-20020adfd1e3000000b001f1f268aea1mr286244wrd.463.1647443184083;
+        Wed, 16 Mar 2022 08:06:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwK/0iXUCy7W2hGO6fQCeqBcBjEbHGvRHvC+ntVQfT1EKGUSf6rpLBWwFreMjWSWRs9UQG0wA==
+X-Received: by 2002:adf:d1e3:0:b0:1f1:f268:aea1 with SMTP id g3-20020adfd1e3000000b001f1f268aea1mr286217wrd.463.1647443183806;
+        Wed, 16 Mar 2022 08:06:23 -0700 (PDT)
+Received: from localhost.localdomain (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p14-20020a5d59ae000000b00203dcc87d39sm3130155wrr.54.2022.03.16.08.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 08:06:21 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
- <20220314224253.236359-9-dmitry.osipenko@collabora.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20220314224253.236359-9-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v5 00/11] Fix broken usage of driver_override (and kfree of static memory)
+Date:   Wed, 16 Mar 2022 16:05:22 +0100
+Message-Id: <20220316150533.421349-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2022 22:42, Dmitry Osipenko wrote:
-> Replace Panfrost's memory shrinker with a generic DRM memory shrinker.
-> 
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
+Hi,
 
-I gave this a spin on my Firefly-RK3288 board and everything seems to
-work. So feel free to add a:
+This is a continuation of my old patchset from 2019. [1]
+Back then, few drivers set driver_override wrong. I fixed Exynos
+in a different way after discussions. QCOM NGD was not fixed
+and a new user appeared - IMX SCU.
 
-Tested-by: Steven Price <steven.price@arm.com>
+It seems "char *" in driver_override looks too consty, so we
+tend to make a mistake of storing there string literals.
 
-As Alyssa has already pointed out you need to remove the
-panfrost_gem_shrinker.c file. But otherwise everything looks fine, and
-I'm very happy to see the shrinker code gone ;)
+Changes since latest v4
+=======================
+1. Correct commit msgs and comments after Andy's review.
+2. Re-order code in new helper (patch #1) (Andy).
+3. Add tags.
 
-Thanks,
+Changes since latest v3
+=======================
+1. Wrap comments, extend comment in driver_set_override() about newline.
+2. Minor commit msg fixes.
+3. Add tags.
 
-Steve
+Changes since latest v2
+=======================
+1. Make all driver_override fields as "const char *", just like SPI
+   and VDPA. (Mark)
+2. Move "count" check to the new helper and add "count" argument. (Michael)
+3. Fix typos in docs, patch subject. Extend doc. (Michael, Bjorn)
+4. Compare pointers to reduce number of string readings in the helper.
+5. Fix clk-imx return value.
 
->  drivers/gpu/drm/panfrost/Makefile          |  1 -
->  drivers/gpu/drm/panfrost/panfrost_device.h |  4 ----
->  drivers/gpu/drm/panfrost/panfrost_drv.c    | 19 ++-------------
->  drivers/gpu/drm/panfrost/panfrost_gem.c    | 27 ++++++++++++++--------
->  drivers/gpu/drm/panfrost/panfrost_gem.h    |  9 --------
->  drivers/gpu/drm/panfrost/panfrost_job.c    | 22 +++++++++++++++++-
->  6 files changed, 40 insertions(+), 42 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panfrost/Makefile b/drivers/gpu/drm/panfrost/Makefile
-> index b71935862417..ecf0864cb515 100644
-> --- a/drivers/gpu/drm/panfrost/Makefile
-> +++ b/drivers/gpu/drm/panfrost/Makefile
-> @@ -5,7 +5,6 @@ panfrost-y := \
->  	panfrost_device.o \
->  	panfrost_devfreq.o \
->  	panfrost_gem.o \
-> -	panfrost_gem_shrinker.o \
->  	panfrost_gpu.o \
->  	panfrost_job.o \
->  	panfrost_mmu.o \
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
-> index 8b25278f34c8..fe04b21fc044 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
-> @@ -115,10 +115,6 @@ struct panfrost_device {
->  		atomic_t pending;
->  	} reset;
->  
-> -	struct mutex shrinker_lock;
-> -	struct list_head shrinker_list;
-> -	struct shrinker shrinker;
-> -
->  	struct panfrost_devfreq pfdevfreq;
->  };
->  
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 94b6f0a19c83..b014dadcf51f 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -160,7 +160,6 @@ panfrost_lookup_bos(struct drm_device *dev,
->  			break;
->  		}
->  
-> -		atomic_inc(&bo->gpu_usecount);
->  		job->mappings[i] = mapping;
->  	}
->  
-> @@ -390,7 +389,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
->  {
->  	struct panfrost_file_priv *priv = file_priv->driver_priv;
->  	struct drm_panfrost_madvise *args = data;
-> -	struct panfrost_device *pfdev = dev->dev_private;
->  	struct drm_gem_object *gem_obj;
->  	struct panfrost_gem_object *bo;
->  	int ret = 0;
-> @@ -403,7 +401,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
->  
->  	bo = to_panfrost_bo(gem_obj);
->  
-> -	mutex_lock(&pfdev->shrinker_lock);
->  	mutex_lock(&bo->mappings.lock);
->  	if (args->madv == PANFROST_MADV_DONTNEED) {
->  		struct panfrost_gem_mapping *first;
-> @@ -429,17 +426,8 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
->  
->  	args->retained = drm_gem_shmem_madvise(&bo->base, args->madv);
->  
-> -	if (args->retained) {
-> -		if (args->madv == PANFROST_MADV_DONTNEED)
-> -			list_add_tail(&bo->base.madv_list,
-> -				      &pfdev->shrinker_list);
-> -		else if (args->madv == PANFROST_MADV_WILLNEED)
-> -			list_del_init(&bo->base.madv_list);
-> -	}
-> -
->  out_unlock_mappings:
->  	mutex_unlock(&bo->mappings.lock);
-> -	mutex_unlock(&pfdev->shrinker_lock);
->  
->  	drm_gem_object_put(gem_obj);
->  	return ret;
-> @@ -570,9 +558,6 @@ static int panfrost_probe(struct platform_device *pdev)
->  	ddev->dev_private = pfdev;
->  	pfdev->ddev = ddev;
->  
-> -	mutex_init(&pfdev->shrinker_lock);
-> -	INIT_LIST_HEAD(&pfdev->shrinker_list);
-> -
->  	err = panfrost_device_init(pfdev);
->  	if (err) {
->  		if (err != -EPROBE_DEFER)
-> @@ -594,7 +579,7 @@ static int panfrost_probe(struct platform_device *pdev)
->  	if (err < 0)
->  		goto err_out1;
->  
-> -	panfrost_gem_shrinker_init(ddev);
-> +	drm_gem_shmem_shrinker_register(ddev);
->  
->  	return 0;
->  
-> @@ -612,8 +597,8 @@ static int panfrost_remove(struct platform_device *pdev)
->  	struct panfrost_device *pfdev = platform_get_drvdata(pdev);
->  	struct drm_device *ddev = pfdev->ddev;
->  
-> +	drm_gem_shmem_shrinker_unregister(ddev);
->  	drm_dev_unregister(ddev);
-> -	panfrost_gem_shrinker_cleanup(ddev);
->  
->  	pm_runtime_get_sync(pfdev->dev);
->  	pm_runtime_disable(pfdev->dev);
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
-> index 293e799e2fe8..d164d05ed84e 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
-> @@ -19,16 +19,6 @@ static void panfrost_gem_free_object(struct drm_gem_object *obj)
->  	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
->  	struct panfrost_device *pfdev = obj->dev->dev_private;
->  
-> -	/*
-> -	 * Make sure the BO is no longer inserted in the shrinker list before
-> -	 * taking care of the destruction itself. If we don't do that we have a
-> -	 * race condition between this function and what's done in
-> -	 * panfrost_gem_shrinker_scan().
-> -	 */
-> -	mutex_lock(&pfdev->shrinker_lock);
-> -	list_del_init(&bo->base.madv_list);
-> -	mutex_unlock(&pfdev->shrinker_lock);
-> -
->  	/*
->  	 * If we still have mappings attached to the BO, there's a problem in
->  	 * our refcounting.
-> @@ -195,6 +185,22 @@ static int panfrost_gem_pin(struct drm_gem_object *obj)
->  	return drm_gem_shmem_pin(&bo->base);
->  }
->  
-> +static unsigned long panfrost_gem_purge(struct drm_gem_object *obj)
-> +{
-> +	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
-> +	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
-> +
-> +	if (!mutex_trylock(&bo->mappings.lock))
-> +		return 0;
-> +
-> +	panfrost_gem_teardown_mappings_locked(bo);
-> +	drm_gem_shmem_purge_locked(&bo->base);
-> +
-> +	mutex_unlock(&bo->mappings.lock);
-> +
-> +	return shmem->base.size >> PAGE_SHIFT;
-> +}
-> +
->  static const struct drm_gem_object_funcs panfrost_gem_funcs = {
->  	.free = panfrost_gem_free_object,
->  	.open = panfrost_gem_open,
-> @@ -207,6 +213,7 @@ static const struct drm_gem_object_funcs panfrost_gem_funcs = {
->  	.vunmap = drm_gem_shmem_object_vunmap,
->  	.mmap = drm_gem_shmem_object_mmap,
->  	.vm_ops = &drm_gem_shmem_vm_ops,
-> +	.purge = panfrost_gem_purge,
->  };
->  
->  /**
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
-> index 8088d5fd8480..09da064f1c07 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_gem.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
-> @@ -30,12 +30,6 @@ struct panfrost_gem_object {
->  		struct mutex lock;
->  	} mappings;
->  
-> -	/*
-> -	 * Count the number of jobs referencing this BO so we don't let the
-> -	 * shrinker reclaim this object prematurely.
-> -	 */
-> -	atomic_t gpu_usecount;
-> -
->  	bool noexec		:1;
->  	bool is_heap		:1;
->  };
-> @@ -84,7 +78,4 @@ panfrost_gem_mapping_get(struct panfrost_gem_object *bo,
->  void panfrost_gem_mapping_put(struct panfrost_gem_mapping *mapping);
->  void panfrost_gem_teardown_mappings_locked(struct panfrost_gem_object *bo);
->  
-> -void panfrost_gem_shrinker_init(struct drm_device *dev);
-> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev);
-> -
->  #endif /* __PANFROST_GEM_H__ */
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_job.c b/drivers/gpu/drm/panfrost/panfrost_job.c
-> index a6925dbb6224..e767e526e897 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_job.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_job.c
-> @@ -267,6 +267,22 @@ static void panfrost_attach_object_fences(struct drm_gem_object **bos,
->  		dma_resv_add_excl_fence(bos[i]->resv, fence);
->  }
->  
-> +static bool panfrost_objects_alive(struct drm_gem_object **bos, int bo_count)
-> +{
-> +	struct panfrost_gem_object *bo;
-> +	bool alive = true;
-> +
-> +	while (alive && bo_count--) {
-> +		bo = to_panfrost_bo(bos[bo_count]);
-> +
-> +		mutex_lock(&bo->mappings.lock);
-> +		alive = !bo->base.madv;
-> +		mutex_unlock(&bo->mappings.lock);
-> +	}
-> +
-> +	return alive;
-> +}
-> +
->  int panfrost_job_push(struct panfrost_job *job)
->  {
->  	struct panfrost_device *pfdev = job->pfdev;
-> @@ -278,6 +294,11 @@ int panfrost_job_push(struct panfrost_job *job)
->  	if (ret)
->  		return ret;
->  
-> +	if (!panfrost_objects_alive(job->bos, job->bo_count)) {
-> +		ret = -ENOMEM;
-> +		goto unlock;
-> +	}
-> +
->  	mutex_lock(&pfdev->sched_lock);
->  	drm_sched_job_arm(&job->base);
->  
-> @@ -319,7 +340,6 @@ static void panfrost_job_cleanup(struct kref *ref)
->  			if (!job->mappings[i])
->  				break;
->  
-> -			atomic_dec(&job->mappings[i]->obj->gpu_usecount);
->  			panfrost_gem_mapping_put(job->mappings[i]);
->  		}
->  		kvfree(job->mappings);
+Changes since latest v1 (not the old 2019 solution):
+====================================================
+https://lore.kernel.org/all/708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk/
+1. Add helper for setting driver_override.
+2. Use the helper.
+
+Dependencies (and stable):
+==========================
+1. All patches, including last three fixes, depend on the first patch
+   introducing the helper.
+2. The last three commits - fixes - are probably not backportable
+   directly, because of this dependency. I don't know how to express
+   this dependency here, since stable-kernel-rules.rst mentions only commits as
+   possible dependencies.
+
+[1] https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (11):
+  driver: platform: Add helper for safer setting of driver_override
+  amba: Use driver_set_override() instead of open-coding
+  fsl-mc: Use driver_set_override() instead of open-coding
+  hv: Use driver_set_override() instead of open-coding
+  PCI: Use driver_set_override() instead of open-coding
+  s390/cio: Use driver_set_override() instead of open-coding
+  spi: Use helper for safer setting of driver_override
+  vdpa: Use helper for safer setting of driver_override
+  clk: imx: scu: Fix kfree() of static memory on setting driver_override
+  slimbus: qcom-ngd: Fix kfree() of static memory on setting
+    driver_override
+  rpmsg: Fix kfree() of static memory on setting driver_override
+
+ drivers/amba/bus.c              | 28 +++--------------
+ drivers/base/driver.c           | 56 +++++++++++++++++++++++++++++++++
+ drivers/base/platform.c         | 28 +++--------------
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 25 +++------------
+ drivers/clk/imx/clk-scu.c       |  7 ++++-
+ drivers/hv/vmbus_drv.c          | 28 +++--------------
+ drivers/pci/pci-sysfs.c         | 28 +++--------------
+ drivers/rpmsg/rpmsg_core.c      |  3 +-
+ drivers/rpmsg/rpmsg_internal.h  | 11 +++++--
+ drivers/rpmsg/rpmsg_ns.c        | 14 +++++++--
+ drivers/s390/cio/cio.h          |  6 +++-
+ drivers/s390/cio/css.c          | 28 +++--------------
+ drivers/slimbus/qcom-ngd-ctrl.c | 13 +++++++-
+ drivers/spi/spi.c               | 26 +++------------
+ drivers/vdpa/vdpa.c             | 29 +++--------------
+ include/linux/amba/bus.h        |  6 +++-
+ include/linux/device/driver.h   |  2 ++
+ include/linux/fsl/mc.h          |  6 ++--
+ include/linux/hyperv.h          |  6 +++-
+ include/linux/pci.h             |  6 +++-
+ include/linux/platform_device.h |  6 +++-
+ include/linux/rpmsg.h           |  6 ++--
+ include/linux/spi/spi.h         |  2 ++
+ include/linux/vdpa.h            |  4 ++-
+ 24 files changed, 169 insertions(+), 205 deletions(-)
+
+-- 
+2.32.0
 

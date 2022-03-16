@@ -2,182 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60DF4DB133
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D6D4DB13A
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 14:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356349AbiCPNU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 09:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S238313AbiCPNV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 09:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356324AbiCPNTr (ORCPT
+        with ESMTP id S1356435AbiCPNVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 09:19:47 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CC94617E;
-        Wed, 16 Mar 2022 06:18:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V7NEPse_1647436676;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V7NEPse_1647436676)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Mar 2022 21:17:57 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com
-Subject: [PATCH v5 22/22] erofs: add 'uuid' mount option
-Date:   Wed, 16 Mar 2022 21:17:23 +0800
-Message-Id: <20220316131723.111553-23-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220316131723.111553-1-jefflexu@linux.alibaba.com>
-References: <20220316131723.111553-1-jefflexu@linux.alibaba.com>
+        Wed, 16 Mar 2022 09:21:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2483266AD1
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 06:19:36 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id A53301F44846
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647436774;
+        bh=KlpubNGA6jnqdOcoZkfYGoeHVn6Iss9ryIjC0eGTdmA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RWvZRt4Ig4J2VCzgPFSTDLCZAtrjGk1beFTZ339Yz5BXql21elMmTptUePF4HxO66
+         y96Hxrz3VPZnRChbrS2ybn0Ftd0J/HYye8L8KiMOVxp2J/prOA18acNY7ouKB+Yt6K
+         d20u/Vm1fkSyO6oDO6qByKsWACR845Vd5RfJgqlntAz+EOj1F/yaiCI5id6FeDCciP
+         4cn+sm7NBu13LJICIpxDJYpOUrrt7WQ1Ja4nHuTd/wqufbFUhtbWqlWnxvbFCvvqwZ
+         CFCgmr26YsfMaf8l/9pcYrfKkwvEExr0oXHK52c7NOuFmtgFje4nkd+G+2uWf8kmuA
+         QCnjT6BY1H+sg==
+Message-ID: <1eef3b71-ef7c-24d1-b0d7-695fc1d2d353@collabora.com>
+Date:   Wed, 16 Mar 2022 13:19:32 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 5/7] drm/ttm: add range busy check for range manager
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org, Huang Rui <ray.huang@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220315180444.3327283-1-bob.beckett@collabora.com>
+ <20220315180444.3327283-6-bob.beckett@collabora.com>
+ <2918e4a2-3bb8-23e0-3b8c-90c620b82328@amd.com>
+From:   Robert Beckett <bob.beckett@collabora.com>
+In-Reply-To: <2918e4a2-3bb8-23e0-3b8c-90c620b82328@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'uuid' mount option to enable on-demand read sementics. In
-this case, erofs could be mounted from blob files instead of blkdev.
-By then users could specify the path of bootstrap blob file containing
-the complete erofs image.
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/super.c | 44 +++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 37 insertions(+), 7 deletions(-)
 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 2942029a7049..8bc4b782f9a9 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -400,6 +400,7 @@ enum {
- 	Opt_dax,
- 	Opt_dax_enum,
- 	Opt_device,
-+	Opt_uuid,
- 	Opt_err
- };
- 
-@@ -424,6 +425,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_flag("dax",             Opt_dax),
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
-+	fsparam_string("uuid",		Opt_uuid),
- 	{}
- };
- 
-@@ -519,6 +521,12 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 		}
- 		++ctx->devs->extra_devices;
- 		break;
-+	case Opt_uuid:
-+		kfree(ctx->opt.uuid);
-+		ctx->opt.uuid = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.uuid)
-+			return -ENOMEM;
-+		break;
- 	default:
- 		return -ENOPARAM;
- 	}
-@@ -593,9 +601,14 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_magic = EROFS_SUPER_MAGIC;
- 
--	if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
--		erofs_err(sb, "failed to set erofs blksize");
--		return -EINVAL;
-+	if (erofs_bdev_mode(sb)) {
-+		if (!sb_set_blocksize(sb, EROFS_BLKSIZ)) {
-+			erofs_err(sb, "failed to set erofs blksize");
-+			return -EINVAL;
-+		}
-+	} else {
-+		sb->s_blocksize = EROFS_BLKSIZ;
-+		sb->s_blocksize_bits = LOG_BLOCK_SIZE;
- 	}
- 
- 	sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
-@@ -604,11 +617,12 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
--	sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
- 
--	if (!erofs_bdev_mode(sb)) {
-+	if (erofs_bdev_mode(sb)) {
-+		sbi->dax_dev = fs_dax_get_by_bdev(sb->s_bdev, &sbi->dax_part_off);
-+	} else {
- 		struct erofs_fscache_context *bootstrap;
- 
- 		bootstrap = erofs_fscache_get_ctx(sb, ctx->opt.uuid, true);
-@@ -620,6 +634,8 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 		err = super_setup_bdi(sb);
- 		if (err)
- 			return err;
-+
-+		sbi->dax_dev = NULL;
- 	}
- 
- 	err = erofs_read_superblock(sb);
-@@ -682,6 +698,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- static int erofs_fc_get_tree(struct fs_context *fc)
- {
-+	struct erofs_fs_context *ctx = fc->fs_private;
-+
-+	if (ctx->opt.uuid)
-+		return get_tree_nodev(fc, erofs_fc_fill_super);
-+
- 	return get_tree_bdev(fc, erofs_fc_fill_super);
- }
- 
-@@ -731,6 +752,7 @@ static void erofs_fc_free(struct fs_context *fc)
- 	struct erofs_fs_context *ctx = fc->fs_private;
- 
- 	erofs_free_dev_context(ctx->devs);
-+	kfree(ctx->opt.uuid);
- 	kfree(ctx);
- }
- 
-@@ -771,7 +793,10 @@ static void erofs_kill_sb(struct super_block *sb)
- 
- 	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
- 
--	kill_block_super(sb);
-+	if (erofs_bdev_mode(sb))
-+		kill_block_super(sb);
-+	else
-+		generic_shutdown_super(sb);
- 
- 	sbi = EROFS_SB(sb);
- 	if (!sbi)
-@@ -889,7 +914,12 @@ static int erofs_statfs(struct dentry *dentry, struct kstatfs *buf)
- {
- 	struct super_block *sb = dentry->d_sb;
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
--	u64 id = huge_encode_dev(sb->s_bdev->bd_dev);
-+	u64 id;
-+
-+	if (erofs_bdev_mode(sb))
-+		id = huge_encode_dev(sb->s_bdev->bd_dev);
-+	else
-+		id = 0; /* TODO */
- 
- 	buf->f_type = sb->s_magic;
- 	buf->f_bsize = EROFS_BLKSIZ;
--- 
-2.27.0
+On 16/03/2022 09:54, Christian König wrote:
+> Am 15.03.22 um 19:04 schrieb Robert Beckett:
+>> RFC: do we want this to become a generic interface in
+>> ttm_resource_manager_func?
+>>
+>> RFC: would we prefer a different interface? e.g.
+>> for_each_resource_in_range or for_each_bo_in_range
+> 
+> Well completely NAK to that. Why do you need that?
+> 
+> The long term goal is to completely remove the range checks from TTM 
+> instead.
 
+ah, I did not know that.
+I wanted it just to enable parity with a selftest that checks whether a 
+range is allocated before initializing a given range with test data 
+behind the allocator's back. It needs to check the range so that it 
+doesn't destroy in use data.
+
+I suppose we could add another drm_mm range tracker just for testing and 
+shadow track each allocation in the range, but that seemed like a lot of 
+extra infrastructure for no general runtime use.
+
+would you mind explaining the rationale for removing range checks? It 
+seems to me like a natural fit for a memory manager
+
+> 
+> Regards,
+> Christian.
+> 
+>>
+>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>> ---
+>>   drivers/gpu/drm/ttm/ttm_range_manager.c | 21 +++++++++++++++++++++
+>>   include/drm/ttm/ttm_range_manager.h     |  3 +++
+>>   2 files changed, 24 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/ttm/ttm_range_manager.c 
+>> b/drivers/gpu/drm/ttm/ttm_range_manager.c
+>> index 8cd4f3fb9f79..5662627bb933 100644
+>> --- a/drivers/gpu/drm/ttm/ttm_range_manager.c
+>> +++ b/drivers/gpu/drm/ttm/ttm_range_manager.c
+>> @@ -206,3 +206,24 @@ int ttm_range_man_fini_nocheck(struct ttm_device 
+>> *bdev,
+>>       return 0;
+>>   }
+>>   EXPORT_SYMBOL(ttm_range_man_fini_nocheck);
+>> +
+>> +/**
+>> + * ttm_range_man_range_busy - Check whether anything is allocated 
+>> with a range
+>> + *
+>> + * @man: memory manager to check
+>> + * @fpfn: first page number to check
+>> + * @lpfn: last page number to check
+>> + *
+>> + * Return: true if anything allocated within the range, false otherwise.
+>> + */
+>> +bool ttm_range_man_range_busy(struct ttm_resource_manager *man,
+>> +                  unsigned fpfn, unsigned lpfn)
+>> +{
+>> +    struct ttm_range_manager *rman = to_range_manager(man);
+>> +    struct drm_mm *mm = &rman->mm;
+>> +
+>> +    if (__drm_mm_interval_first(mm, PFN_PHYS(fpfn), PFN_PHYS(lpfn + 
+>> 1) - 1))
+>> +        return true;
+>> +    return false;
+>> +}
+>> +EXPORT_SYMBOL(ttm_range_man_range_busy);
+>> diff --git a/include/drm/ttm/ttm_range_manager.h 
+>> b/include/drm/ttm/ttm_range_manager.h
+>> index 7963b957e9ef..86794a3f9101 100644
+>> --- a/include/drm/ttm/ttm_range_manager.h
+>> +++ b/include/drm/ttm/ttm_range_manager.h
+>> @@ -53,4 +53,7 @@ static __always_inline int ttm_range_man_fini(struct 
+>> ttm_device *bdev,
+>>       BUILD_BUG_ON(__builtin_constant_p(type) && type >= 
+>> TTM_NUM_MEM_TYPES);
+>>       return ttm_range_man_fini_nocheck(bdev, type);
+>>   }
+>> +
+>> +bool ttm_range_man_range_busy(struct ttm_resource_manager *man,
+>> +                  unsigned fpfn, unsigned lpfn);
+>>   #endif
+> 

@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0634DA906
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8294DA90D
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 04:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353494AbiCPDuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 23:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S1353501AbiCPDwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 23:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353487AbiCPDuW (ORCPT
+        with ESMTP id S229983AbiCPDwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 23:50:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA97D26576;
-        Tue, 15 Mar 2022 20:49:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6180DB81883;
-        Wed, 16 Mar 2022 03:49:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20867C340EC;
-        Wed, 16 Mar 2022 03:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647402546;
-        bh=8Cz/B7fg9fX5P0J2gHVThCXGpy/dkB3BtfxpXeVzrOU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PnmdovmZqxb/vqdEiFUoPidYDz/m4hVUp3VYwHaCoobFRXd6AmdyKDNa8YIu3BOY6
-         roZ7qsE1eaFt4oQrA9FbBHPA9oTJKCckb2M+tqbzJ16U/RAhHW4s405ErVt2Lt9uc7
-         T4L8JvOm2lDEdfv4STZmbhz4q+S6RTzP8zGtm2tiT0oYlqaS54QQ4mSVRO5MNNNnhj
-         wkyfWhTFgKKVNqKwpXH4zZ4JAZuZFLMuSZr2kirPnzZEs5EhoCurHsBwCnrI0iV4c/
-         QxVn/ROUl7z8pgc3hTZbvy3JR1hwDx8zMW2cfoZN3tEU1jaTT9dZdudn1s53Sf+HnZ
-         dUnPaZCl3c4EA==
-Message-ID: <daa287f3-fbed-515d-8f37-f2a36234cc8a@kernel.org>
-Date:   Tue, 15 Mar 2022 21:49:01 -0600
+        Tue, 15 Mar 2022 23:52:01 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CAC5F8EF;
+        Tue, 15 Mar 2022 20:50:46 -0700 (PDT)
+X-UUID: 734cacb41e7f4e69a2c2c425b2af9b79-20220316
+X-UUID: 734cacb41e7f4e69a2c2c425b2af9b79-20220316
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 562391288; Wed, 16 Mar 2022 11:50:36 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 16 Mar 2022 11:50:34 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Mar 2022 11:50:34 +0800
+Message-ID: <ada140c4418b90a5a5bf7282b4bcce7baa502208.camel@mediatek.com>
+Subject: Re: [PATCH v13 4/6] dt-bindings: soc: mediatek: add gce-client-reg
+ for MUTEX
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Jernej Skrabec" <jernej.skrabec@siol.net>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 16 Mar 2022 11:50:34 +0800
+In-Reply-To: <20220315061031.21642-5-moudy.ho@mediatek.com>
+References: <20220315061031.21642-1-moudy.ho@mediatek.com>
+         <20220315061031.21642-5-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.2
-Subject: Re: [PATCH net-next 1/3] net: gre_demux: add skb drop reasons to
- gre_rcv()
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, menglong8.dong@gmail.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, xeb@mail.ru,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Biao Jiang <benbjiang@tencent.com>
-References: <20220314133312.336653-1-imagedong@tencent.com>
- <20220314133312.336653-2-imagedong@tencent.com>
- <20220315200847.68c2efee@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220315200847.68c2efee@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/22 9:08 PM, Jakub Kicinski wrote:
-> On Mon, 14 Mar 2022 21:33:10 +0800 menglong8.dong@gmail.com wrote:
->> +	reason = SKB_DROP_REASON_NOT_SPECIFIED;
->>  	if (!pskb_may_pull(skb, 12))
->>  		goto drop;
-> 
-> REASON_HDR_TRUNC ?
-> 
->>  	ver = skb->data[1]&0x7f;
->> -	if (ver >= GREPROTO_MAX)
->> +	if (ver >= GREPROTO_MAX) {
->> +		reason = SKB_DROP_REASON_GRE_VERSION;
-> 
-> TBH I'm still not sure what level of granularity we should be shooting
-> for with the reasons. I'd throw all unexpected header values into one 
-> bucket, not go for a reason per field, per protocol. But as I'm said
-> I'm not sure myself, so we can keep what you have..
+Hi, Moudy:
 
-I have stated before I do not believe every single drop point in the
-kernel needs a unique reason code. This is overkill. The reason augments
-information we already have -- the IP from kfree_skb tracepoint.
+On Tue, 2022-03-15 at 14:10 +0800, Moudy Ho wrote:
+> In order to allow modules with latency requirements such as MDP3
+> to set registers through CMDQ, add the relevant GCE property.
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
 > 
->>  		goto drop;
->> +	}
->>  
->>  	rcu_read_lock();
->>  	proto = rcu_dereference(gre_proto[ver]);
->> -	if (!proto || !proto->handler)
->> +	if (!proto || !proto->handler) {
->> +		reason = SKB_DROP_REASON_GRE_NOHANDLER;
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> ---
+>  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml  | 8
+> ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> I think the ->handler check is defensive programming, there's no
-> protocol upstream which would leave handler NULL.
-> 
-> This is akin to SKB_DROP_REASON_PTYPE_ABSENT, we can reuse that or add
-> a new reason, but I'd think the phrasing should be kept similar.
-> 
->>  		goto drop_unlock;
->> +	}
->>  	ret = proto->handler(skb);
+> diff --git
+> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+> index 4adc67cafd29..06106779d129 100644
+> ---
+> a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+> +++
+> b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+> @@ -56,6 +56,14 @@ properties:
+>        include/dt-bindings/gce/<chip>-gce.h of each chips.
+>      $ref: /schemas/types.yaml#/definitions/phandle-array
+>  
+> +  mediatek,gce-client-reg:
+> +    description: The register of client driver can be configured by
+> gce with
+> +      4 arguments defined in this property, such as phandle of gce,
+> subsys id,
+> +      register offset and size. Each GCE subsys id is mapping to a
+> client
+> +      defined in the header include/dt-bindings/gce/<chip>-gce.h.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
 

@@ -2,170 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7EF4DB522
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759184DB52F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238054AbiCPPrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
+        id S1357339AbiCPPsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240242AbiCPPrE (ORCPT
+        with ESMTP id S230089AbiCPPsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:47:04 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB336D1B4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:45:49 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id p9so3519712wra.12
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:45:49 -0700 (PDT)
+        Wed, 16 Mar 2022 11:48:13 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BC66D1BA;
+        Wed, 16 Mar 2022 08:46:59 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a8so5068243ejc.8;
+        Wed, 16 Mar 2022 08:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=wAgk6NoEkSGQYtklkyp/XBe3mmZFGzBwfiqA3+Hd+Uc=;
-        b=UaDuw6uE+eA3eoFtbNNWGH31fmxdFNfCd+8KTwJiz+XVa67E6qGA7rnSF18inN9r7Y
-         qagW0lhTrjPtdLbMts8uQresOtZcaucElVE6QTjJOHL4nHQiHmARLSAiHbxM+ilNC8I9
-         0pB+mcIYzA8CpBXVvR2Muc6zTjci9aX7iOglulhiX/5PGxKANkvqyGmlBXTy1HgQZtZa
-         dbiMZu3JglXKMidVnZzd7qJ7o28dPtoNgg2mpDLH8lwkr9ymuiri75xLap5GrnGWoiKM
-         2YmMN97zjLq8pQYxfLoXbmyytnuWDrXDEPJT6p/AzVirsoxEYO2L+1VZIt0QeRwrV5A/
-         a5Ng==
+         :content-disposition:in-reply-to;
+        bh=f3ts7NrETiD/n+vGF+vAT89sY+x2BlKtnOMPf3PZf04=;
+        b=Lkv9c8HyZ6iRngQe1gj3rOwvUiOqcf11dtCXHUzAo430dtSDwHvHNs73TVoH3YS0EI
+         8w9dXdJzXDyU6d9rI+E19PoW/DaPwiqFAAp7P1JDGN9ZQ4sMe4KHGPn/JL+0RDSNQP5b
+         DAEn2FiUzfv6OQpa8T7/GPntezVHuP6TPzbAqpE9xydvP+P3f3LlyBA4hYYPQ7vcSMyK
+         KOQcog8dO8ZeouHQDnuu9hE4XAb4lZ/pqxIUX1f2bpcH9EwMyi1SpLh70mPoVXl+/4Kt
+         BXqz0jqaT1yXASDhiHXQaaRw7hn7TqmZ7ttmuZML+vpdPvN3IIalWLAInye23B5fqvbA
+         c6Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=wAgk6NoEkSGQYtklkyp/XBe3mmZFGzBwfiqA3+Hd+Uc=;
-        b=CK9amKJUfxr6WVkV1GDZLHxFOSK/2WXuGHDzA0EkqFad/okddXgyEdIC6dtwq6Dj06
-         02T6h7fUcoi+W9GZGU8i70OrSWgn+c5Tdj9ezZ4xI5cDA7TlzERRAt/ytzzVBNRIHc6W
-         lJVa0osIn99aN4B/buXHfVI8KTpp4ts8dIsHu2LLSV+yzBVQdWiAbc+3aytmgNNUVED4
-         XSaLawnGHCsoer57VIc4wze+WCIyE6zIfp+nvscK6yPnDCog7a8D6Aey9LtOjzOhH+oT
-         fRugwUkgEi2aZRRHvTkYGs1qIBlR+vEJ+D5s4HTnmrLkg/7h3+pNeKWDaRY9Rk3b4ncu
-         aJXg==
-X-Gm-Message-State: AOAM5308GPso80axpTPuxzHwM9xyzTn6sP2vL/gw6Ag1065nibfAwT+k
-        YJn6x+OQIzGhMDhTLscVb8NSmA==
-X-Google-Smtp-Source: ABdhPJyMUpPUtVKC6CCFRGjl7Q7U86a/YVte8/m4ryk1rwUIF5Hpq9WZjwkjrrTrbJgh9LWKNGjfCg==
-X-Received: by 2002:a5d:4cc1:0:b0:1f0:98e7:6af0 with SMTP id c1-20020a5d4cc1000000b001f098e76af0mr409578wrt.363.1647445547485;
-        Wed, 16 Mar 2022 08:45:47 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05600c26cb00b0037ff53511f2sm4927285wmv.31.2022.03.16.08.45.45
+         :mime-version:content-disposition:in-reply-to;
+        bh=f3ts7NrETiD/n+vGF+vAT89sY+x2BlKtnOMPf3PZf04=;
+        b=hRTXUEERQ8O5wWns6ekfFO1Yy/jdRBrCItp74NxSBRIygEdDFloySWwyL8tUv0j98s
+         yy1U1PPskjFIU8XbEeBopWhGrQB3OT+XGJ2Wq6/O5vObCNS/F/DRvIEczZC94PGk0/PV
+         Or0pz5EBb/AK0iciD/ZJRGAQJnp9qmG0tJ7fX6DoyGMA4IUiXo0dvWPCGtP0yaI9EBoL
+         lVm5s78/6glzCuvKF09DWeGu+zCyMM38kXVhlAve5SqlpEMLg5zgZD3JdOOBT7V4wEhA
+         fFq7HMq6dEhyQKhWC/2dmeIFa8sX5yYSp1uylIl0r9XvWFspOwV78HH4N73TM8DmaTgP
+         FD4Q==
+X-Gm-Message-State: AOAM533SzPFYWa1GRuPzI/+dFjBix1qst8EnSzlYqj6kGOfHtg5exhuN
+        TRRH5Wp8wj6RP2uVMXDzxq6JdKqMk1U=
+X-Google-Smtp-Source: ABdhPJwTDo0b3UgbE88SkpZ3LeHwHJ4IP8X1wdvjwxvXjhF64Gmi2f42UFZQA6PavRIQ4AtL/D4JDg==
+X-Received: by 2002:a17:906:1e4c:b0:6cf:7429:cfea with SMTP id i12-20020a1709061e4c00b006cf7429cfeamr556994ejj.158.1647445617173;
+        Wed, 16 Mar 2022 08:46:57 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
+        by smtp.gmail.com with ESMTPSA id sb31-20020a1709076d9f00b006ceb969822esm1042752ejc.76.2022.03.16.08.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 08:45:46 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 15:45:44 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>,
-        =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Subject: Re: [PATCH 2/6] list: add new MACROs to make iterator invisiable
- outside the loop
-Message-ID: <20220316154544.bfewwi7zseyyja47@maple.lan>
-References: <CAHk-=whJX52b1jNsmzXeVr6Z898R=9rBcSYx2oLt69XKDbqhOg@mail.gmail.com>
- <20220304025109.15501-1-xiam0nd.tong@gmail.com>
- <CAHk-=wjesxw9U6JvTw34FREFAsayEE196Fi=VHtJXL8_9wgi=A@mail.gmail.com>
- <CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com>
- <20220311142754.a3jnnjqxpok75qgp@maple.lan>
- <CAHk-=wi58pvQhMX2sRt7nKqwHAFAmn27MrJg3XbeJgio6ONgdA@mail.gmail.com>
+        Wed, 16 Mar 2022 08:46:56 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 16:46:54 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 12/16] clk: qcom: clk-krait: add 8064 errata workaround
+Message-ID: <YjIGbs+Pz2EK9riB@Ansuel-xps.localdomain>
+References: <20220313190419.2207-1-ansuelsmth@gmail.com>
+ <20220313190419.2207-13-ansuelsmth@gmail.com>
+ <169795c1-607e-ee60-7ac7-538ed888bedf@linaro.org>
+ <Yi84aNrJ7p+3jy2A@Ansuel-xps.localdomain>
+ <20220315213431.DB6C4C340EE@smtp.kernel.org>
+ <YjEJjB/Hwj/1Ncum@Ansuel-xps.localdomain>
+ <20220315224115.EA1F9C340E8@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wi58pvQhMX2sRt7nKqwHAFAmn27MrJg3XbeJgio6ONgdA@mail.gmail.com>
+In-Reply-To: <20220315224115.EA1F9C340E8@smtp.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 10:41:06AM -0800, Linus Torvalds wrote:
-> On Fri, Mar 11, 2022 at 6:27 AM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> >
-> > It is possible simply to use spelling to help uncover errors in
-> > list_traverse()?
+On Tue, Mar 15, 2022 at 03:41:14PM -0700, Stephen Boyd wrote:
+> Quoting Ansuel Smith (2022-03-15 14:47:56)
+> > On Tue, Mar 15, 2022 at 02:34:30PM -0700, Stephen Boyd wrote:
+> > > Quoting Ansuel Smith (2022-03-14 05:43:20)
+> > > > On Mon, Mar 14, 2022 at 11:20:21AM +0300, Dmitry Baryshkov wrote:
+> > > > > On 13/03/2022 22:04, Ansuel Smith wrote:
+> > > > > > Add 8064 errata workaround where the sec_src clock gating needs to be
+> > > > > 
+> > > > > Could you please be more specific whether the errata applies only to the
+> > > > > ipq8064 or to the apq8064 too? 8064 is not specific enough.
+> > > > >
+> > > > 
+> > > > That's a good question... Problem is that we really don't know the
+> > > > answer. This errata comes from qsdk on an old sourcecode. I assume this
+> > > > is specific to ipq8064 and apq8064 have different mux configuration.
+> > > > 
+> > > 
+> > > I think it was some glitch that happened when the automatic clk gating
+> > > was enabled during a switch. The automatic clk gating didn't know that
+> > > software was running and switching the input so it killed the CPU and
+> > > stopped the clk. That lead to hangs and super badness. I assume it was
+> > > applicable to apq8064 as well because ipq8064 is basically apq8064 with
+> > > the multimedia subsystem replaced by the networking subsystem. Also I
+> > > wouldn't remember all these details because I worked on apq8064 but not
+> > > so much on ipq8064 :)
+> > 
+> > Honest question. Do you remember other glitch present on the platform?
+> > We are trying to bisect an instability problem and we still needs to
+> > find the reason. We really can't understand if it's just a power
+> > delivery problem or a scaling problem from muxes or other things.
+> > 
+> > The current problem is that after some time the device kernel panics
+> > with a number of strange reason like invalid kernel paging and other
+> > strange (or the device just freze and reboots, not even a crash log)
+> > Many kernel panics reports the crash near the mux switch (like random
+> > error right before the mux switch) So I suspect there is a problem
+> > there. But due to the fact that is very random we have NO exact way to
+> > repro it. I manage sometime, while playing with the code, to repo
+> > similar kernel crash but still i'm not sure of the real cause.
+> > 
+> > I know it's OT but do you have any idea about it? If you remember
+> > anything about it?
+> > (To scale the freq i'm using a dedicated cpufreq driver that works this
+> > way:
+> > - We first scale the cache to the max freq across all core, we set the
+> >   voltage
+> > - We scale the cpu to the correct target.
+> > This is all done under a lock. Do you see anything wrong in this logic?
 > 
-> I'd love to, and thought that would be a lovely idea, but in another
-> thread ("") Barnabás Pőcze pointed out that we actually have a fair
-> number of cases where the list member entries are embedded in internal
-> structures and have a '.' in them:
+> I honestly don't remember much anymore about this. It's been a decade.
+> Scaling the cache used to be an independent clk and operation vs. the
+> CPU. Basically the clk domain and power domain for the cache was
+> separate from the CPU. There's also the fuse stuff that means you have
+> to read the fuse to know what OPP table to use. Otherwise you may be
+> overclocking the CPU or undervolting it. It may also be that cpuidle
+> can't happen during a frequency transition. Otherwise the clk gating
+> will be reenabled when the cpu startup code reinitializes all the cpu
+> registers? I'd have to look through some old vendor kernels to see if
+> anything jogs my memory.
 > 
->   https://lore.kernel.org/all/wKlkWvCGvBrBjshT6gHT23JY9kWImhFPmTKfZWtN5Bkv_OtIFHTy7thr5SAEL6sYDthMDth-rvFETX-gCZPPCb9t2bO1zilj0Q-OTTSbe00=@protonmail.com/
-> 
-> which means that you can't actually append the target_member name
-> except in the simplest cases, because it wouldn't result in one single
-> identifier.
-> 
-> Otherwise it would be a lovely idea.
+> > To mee these random crash looks to be really related to something wrong
+> > with the mux or with the cache set to a wrong state)
+> > 
+> > Thx for any suggestion about this.
+> > (also I will update this commit and mention both apq and ipq in the
+> > comments)
 
-When I prototyped this I did actually include a backdoor to cover
-situations like this but I ended up (incorrectly at appears) editing it
-out for simplicity.
+Hi, i'm checking the spm qcom idle driver and something doesn't look
+right to me... Aside from the different sequence used for boot cpu and
+the abset l2 sequence, it looks like to me that WFI is enabled anyway
+(even if it's not defined in the DTS or set disabled) and on top of that
+it looks like we overwrite the WFI logic but we actually set to
+enter power collapse (spc). Why?
 
-Basically the union is free so we can have more than one type * member:
+Also I think we are missing the assembly code to enter wfi on krait cpu.
+Am I totally confused or there are some problems in the code that nobody
+notice?
 
-#define list_traversal_head(type, name, target_member) \
-       union { \
-               struct list_head name; \
-               type *name##_traversal_type; \
-               type *name##_traversal_mismatch_##target_member; \
-       }
-
-This allows that the single structure cases to be checked whilst nested
-structures (and array which I noticed also crop up) have a trap door such
-as list_traverse_unchecked().
-
-I did a quick grep to estimate how many nested/array cases there are and
-came up with around 2.5% (roughly ~200 in ~8500, counting only the single
-line users of list_for_each_entry() ).
-
-As you say, lovely idea but having to use special API 2.5% of the time
-seems a bit on the high side.
-
-BTW, a complete aside, but whilst I was looking for trouble I also
-spotted code where the list head is an array which means we are not able
-to lookup the travesral type correctly:
-list_for_each_entry(modes[i], &connector->modes, head)
-However I found only one instance of this so it
-much more acceptable rate of special cases than the 2.5% above.
-
-
-> > > [this bit used to quote the definition of LIST_HEAD() ;-) ]
-> > For architectures without HAVE_LD_DEAD_CODE_DATA_ELIMINATION then the
-> > "obvious" extension of list_traversal_head() ends up occupying bss
-> > space. Even replacing the pointer with a zero length array is still
-> > provoking gcc-11 (arm64) to allocate a byte from bss (often with a lot
-> > of padding added).
-> 
-> I think compilers give objects at least one byte of space, so that two
-> different objects get different addresses, and don't compare equal.
-> 
-> That said, I'm not seeing your issue. list_traversal_head() is a
-> union, and always has that 'struct list_head' in it, and that's the
-> biggest part of the union.
-
-Perhaps its a bit overblown for the safe of a few kilobytes (even if
-there were two traversal types members) but I was wondering if there is
-any cunning trick for LIST_HEAD() since we cannot have an anonymous
-union outside a struct. In short, is this the best we can do for
-LIST_TRAVERSE_HEAD():
-
-#define LIST_TRAVERSE_HEAD(type, name, target_member) \
-	type * name##_traversal_type; \
-	struct list_head name = LIST_HEAD_INIT(name)
-
-
-#define STATIC_LIST_TRAVERSE_HEAD(type, name, target_member) \
-	static type * name##_traversal_type; \
-	static list_head name = LIST_HEAD_INIT(name)
-
-
-Daniel.
+-- 
+	Ansuel

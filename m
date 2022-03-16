@@ -2,88 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655D24DB5AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:10:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD6B4DB5C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 17:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350013AbiCPQL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 12:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        id S1356926AbiCPQSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 12:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244162AbiCPQLz (ORCPT
+        with ESMTP id S1356229AbiCPQSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 12:11:55 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCFB62125
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:10:40 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id l8so4416463pfu.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 09:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OZK9uutJfo42bFp7MFXbl2mQl2FDOmFpqXMqzYnq/NI=;
-        b=g35DWi8sGB1G87635f+Qy/XBR3EjLwq750c1JTAtGhNM9QgsEJqfSne5G2/4+9U81C
-         5NNBcH2ELL7u2+ZduchNKPqnwh9SDvSJPnreKC6u8M20gn2Njk24Squ0DTIiefvQlfoi
-         72uRMBkys28E5r6lUM8/qDBzEuhr2GoR8vaUk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OZK9uutJfo42bFp7MFXbl2mQl2FDOmFpqXMqzYnq/NI=;
-        b=eW1MiJKe//p80V1BgC1nxXwXHLVFPe+PnlhdJ9URzraOCuwoXqOc9lcik2qnGGOTU3
-         JX7Fy7hobQma/+E3Qf0asCWvMFgjv829fTLuGEmhjIKn8Kjo73VFD1jgZWBx/68kNZbO
-         TN9CpewIySOwru06/hibB1kmgmLWYchEw+oDSvNA0rjdYohrgCDSDM5ijRN2PoICRYwq
-         GH1jz5mUMzY7hQfEWoFkQcLBroVUfOMJO2rBjhr7cfqCXThPBHYpAuNMeLV6QTfHGnit
-         w0qY20SyNRcTW9ADL7hvukOdolGpTLqg7Wky0q9QVUVxe+4KzAlOAvtweRYnG+rxk/ey
-         sGZA==
-X-Gm-Message-State: AOAM533/BDPRyqxA58j7B8fL0StC0XLw6E5a/eTCWuEI8ASPkmeHo10Z
-        eB5KBVRHY7Wj74jy33Pw9d2/1Q==
-X-Google-Smtp-Source: ABdhPJw3qQsorrI2cuT/YjC71UlT+F557BgFwyW6/liffKsmrlRcD/sK4D2Ul6d+pSSdP4vzIA9qlg==
-X-Received: by 2002:a63:8749:0:b0:37f:f8e1:1877 with SMTP id i70-20020a638749000000b0037ff8e11877mr218310pge.529.1647447040172;
-        Wed, 16 Mar 2022 09:10:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm4115135pfu.202.2022.03.16.09.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 09:10:39 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 09:10:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     James Jones <linux@theinnocuous.com>
-Cc:     bp@alien8.de, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86: Remove a.out support
-Message-ID: <202203160909.B1A022B@keescook>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
- <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
- <202203151150.1CDB1D8DA@keescook>
- <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+        Wed, 16 Mar 2022 12:18:42 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91136302;
+        Wed, 16 Mar 2022 09:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647447447; x=1678983447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hunw0Nfvtf3Ds3vVfeFfVP3FYH5Tn5uXoCg/qsncEpw=;
+  b=YwYBsjCQ0mefQp5SvSOjRbmMh3S3u5f8wkX6VyIEKoLPmEkvme4ImiSC
+   M791ZTBhV9r44YKxxrXSqrNOiKAyB4zczZTGEtbbPVDONQeh/654sQJn1
+   oZiedzROXf33ejgBGqlByZw/7GHWoGyYpxxctPXCyy0g2sjsI3JM0iVfH
+   kBfw7n3Bf4bsNlNCxJSDzxpKYcQ3OHxAi7dE1OpzKN6DS1Qz6K7w+yU9x
+   IHJbivR1pZ/001VH6mfKQMgplIODBrte6Rcy2QKxwSkk4SEM5tmvXdx7y
+   xkdViQSyYWikXdr9TcCrcbAOcRSbYDWFwiLWH52HC6g7JvIyGKzW5BqUm
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="254207215"
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="254207215"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:13:02 -0700
+X-IronPort-AV: E=Sophos;i="5.90,187,1643702400"; 
+   d="scan'208";a="646721436"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 09:13:00 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nUWG3-000zQ0-K0;
+        Wed, 16 Mar 2022 18:12:19 +0200
+Date:   Wed, 16 Mar 2022 18:12:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, micklorain@protonmail.com
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+Message-ID: <YjIMY1/r15xj65pZ@smile.fi.intel.com>
+References: <YjG7rZ11PP3vWz89@smile.fi.intel.com>
+ <20220316115209.GA666450@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220316115209.GA666450@bhelgaas>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 05:06:10AM +0000, James Jones wrote:
-> I dug the scripts up in the state they were in when I gave up (September
-> 2020 according to mtime), and put them on github in case anyone wants to
-> have a go at it:
+On Wed, Mar 16, 2022 at 06:52:09AM -0500, Bjorn Helgaas wrote:
+> On Wed, Mar 16, 2022 at 12:27:57PM +0200, Andy Shevchenko wrote:
+> > On Tue, Mar 15, 2022 at 03:22:31PM -0500, Bjorn Helgaas wrote:
+> > > On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
+> > > > On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
+> > > > > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> > > > > > ATI PCIe-USB adapter advertises MSI, but it doesn't work if INTx is disabled.
+> > > > > > Enable the respective quirk as it's done for other ATI devices on this chipset,
+> > > > > > 
+> > > > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+> > > > > 
+> > > > > This is interesting because there must be a TON of these AMD/ATI SB600
+> > > > > USB devices in the field, and 306c54d0edb6 was merged in July 2020 and
+> > > > > appeared in v5.9.
+> > > > > 
+> > > > > So why would we only get a report now, in February 2022?  Is there
+> > > > > some change more recent than 306c54d0edb6 that exposed this problem?
+> > > > 
+> > > > I think it's a rhetorical question. To me it's as simple as the latency
+> > > > between getting the change into the kernel.
+> > > > 
+> > > > However, I'm a bit worried that in case of ATI there are not so many
+> > > > platforms that are kept up-to-dated.
+> > > 
+> > > This would be a rhetorical question if I were not interested in the
+> > > answer but asking only to make a point.  That's not the case at all.
+> > > 
+> > > If these SB600 USB devices stopped working in v5.9 (October 2020),
+> > > that would affect lots of keyboards and mice, and I would be surprised
+> > > if we didn't hear about it until February, 2022.
+> > > 
+> > > I looked through https://github.com/linuxhw/Dmesg, and there are at
+> > > least 40 dmesg logs from v5.9 or later with SB600 USB, so I'm
+> > > still a little skeptical that 306c54d0edb6 by itself is enough to
+> > > explain this.
+> > > 
+> > > Anyway, I applied this to pci/msi for v5.18 with the following commit
+> > > log:
+> > > 
+> > >     PCI: Disable broken MSI on ATI SB600 USB adapters
+> > > 
+> > >     Some ATI SB600 USB adapters advertise MSI, but MSI doesn't work if INTx is
+> > >     disabled.  Disable MSI on these adapters.
+> > 
+> > But IIUC MSI is _not_ disabled. That's why I have issued this version of the
+> > patch with different commit message. Did I misunderstand something?
 > 
-> https://github.com/cubanismo/aout-to-elf/
-> 
-> It was an interesting problem in its own right, and I'd be curious to
-> know what I missed.
+> Oh, right, of course.  Sorry, I was asleep at the wheel.
 
-Yeah, this is a good start. I think the main problem is with how program
-entry works, specifically that %esp is pointing to argc (with all the
-args in memory above there), which isn't the way ELF sets %esp.
+Are you going to fix that?
 
-It might be possible to make a userspace loader, though. Hmm.
+> I guess it's just that for these devices, we don't disable INTx when
+> enabling MSI.  I can't remember why we disable INTx when enabling MSI,
+> but it raises the question of whether it's better to leave INTx
+> enabled or to just disable use of MSI completely.
+
+It's required by specification to disable INTx if I read 6.1.4.3
+Enabling Operation correctly.
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
+
+

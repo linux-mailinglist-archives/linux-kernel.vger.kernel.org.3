@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65BA4DB9E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FBF4DB9F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 22:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346403AbiCPVK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 17:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S1358103AbiCPVLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 17:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiCPVKX (ORCPT
+        with ESMTP id S244926AbiCPVLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 17:10:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0A0C05;
-        Wed, 16 Mar 2022 14:09:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42FB4B81D66;
-        Wed, 16 Mar 2022 21:09:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 917E4C340EC;
-        Wed, 16 Mar 2022 21:09:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1647464946;
-        bh=oWK3VcNvpXGTNhy85nGsEuBb0xLj+hGobYNogj8xemA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u7h37YQ6uAvKEsqQZ/qS24pnWVadk3WbVxPK1DDYOhSGSuTASwzPaNBR/gUruokiX
-         rGftaV3gnwWPlFCmHHKM2zZ9tWQcC+cAOBryIHekRu2sTKBWaeIqbN5YS6QGRqtasn
-         NphHE2JPraITErtwDaRJOE6rN9QbiIl7banPPseI=
-Date:   Wed, 16 Mar 2022 14:09:04 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Dong Aisheng <dongas86@gmail.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, linux-imx@nxp.com, m.szyprowski@samsung.com,
-        lecopzer.chen@mediatek.com, david@redhat.com, vbabka@suse.cz,
-        stable@vger.kernel.org, shijie.qin@nxp.com
-Subject: Re: [PATCH v3 1/2] mm: cma: fix allocation may fail sometimes
-Message-Id: <20220316140904.513fe0e8180b4e3fcad24e3b@linux-foundation.org>
-In-Reply-To: <CAA+hA=Ss=YBt-3f=r1BL1NuO7FK56kTf31zWzNjMBkAKQE41Rg@mail.gmail.com>
-References: <20220315144521.3810298-1-aisheng.dong@nxp.com>
-        <20220315144521.3810298-2-aisheng.dong@nxp.com>
-        <20220315155837.2dcef6eb226ad74e37ca31ca@linux-foundation.org>
-        <CAA+hA=Ss=YBt-3f=r1BL1NuO7FK56kTf31zWzNjMBkAKQE41Rg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 16 Mar 2022 17:11:40 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9EC2BEF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:10:25 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 15-20020a17090a098f00b001bef0376d5cso3647544pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 14:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=squareup.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=A6cOxdUaG1A86kAtWaCIf07+aXGBjHiOUH8wcQkHkjE=;
+        b=TjOnIiyszh7cP5J8N0RqNG9sx+4l3KYhzHYTAvRuldydNoM5hA7bqJDoN0u8cG8lPS
+         xmPxH2lwD4DW466GeuWuezsrVQjQnMuCdy1P3dATg2yFshWYKPLFNwjWH2C0T2z/pO4L
+         +F7zv//JFDverjj7xHns6RBHNrf5JIsvbkMMo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=A6cOxdUaG1A86kAtWaCIf07+aXGBjHiOUH8wcQkHkjE=;
+        b=VCJPH4i1Zhd65iS97b21qYOJ+EqW80/plyyex34xAQWW/zNxRc2D6/YYtaZiAJTtis
+         GiT1bvdL1XQSVZbuXkiVeZrs58QGyaXEqF07T7KpG1qTgzXgZNzh0gMem61uILH31juE
+         R1UVEvltvIi515x5t8AXtHfg7JzdtuWHTE7XsCdhWJlz/AYBY+712M41UPx3pZh7oXhw
+         jPgg0zEXClh7n2dLcz4/CTTjh+PWy2QN3WNbiXkCkHZRHR11Hr2vgNQC3etyy8zEok5S
+         gqYubxcRPgvhqdKe7+Wct+Hvb2Xh4nSZRg97ChRipVlcjqDUAl2fY+qku3bCX9eOPut0
+         rPrg==
+X-Gm-Message-State: AOAM532wg2SeFg4anuOBU0TeQ2/OT+Sjgf9Q7HJx9EPuj4Ph+RAZyx/z
+        y4CKf0tEdja4KudQa5oIxMZx0w==
+X-Google-Smtp-Source: ABdhPJzb5vzfkKFyarFdtMtfUhu+EIlpoWuPTm+nXYoeixxrBzfHa8F64Rja2IagUyaJIoRZgNy+TQ==
+X-Received: by 2002:a17:902:bd89:b0:14d:93b4:71a9 with SMTP id q9-20020a170902bd8900b0014d93b471a9mr1505304pls.98.1647465024771;
+        Wed, 16 Mar 2022 14:10:24 -0700 (PDT)
+Received: from localhost ([135.84.132.250])
+        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm3341246pgo.6.2022.03.16.14.10.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Mar 2022 14:10:23 -0700 (PDT)
+From:   Benjamin Li <benl@squareup.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zac Crosby <zac@squareup.com>, Benjamin Li <benl@squareup.com>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] thermal: thermal_of: pass-through change_mode & implement for tsens
+Date:   Wed, 16 Mar 2022 14:09:43 -0700
+Message-Id: <20220316210946.6935-1-benl@squareup.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,46 +67,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 11:41:37 +0800 Dong Aisheng <dongas86@gmail.com> wrote:
+Plumb through the change_mode callback from thermal core into thermal_of,
+and implement change_mode for the Qualcomm tsens driver.
 
-> On Wed, Mar 16, 2022 at 6:58 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Tue, 15 Mar 2022 22:45:20 +0800 Dong Aisheng <aisheng.dong@nxp.com> wrote:
-> >
-> > > --- a/mm/cma.c
-> > > +++ b/mm/cma.c
-> > >
-> > > ...
-> > >
-> > > @@ -457,6 +458,16 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
-> > >                               offset);
-> > >               if (bitmap_no >= bitmap_maxno) {
-> > >                       spin_unlock_irq(&cma->lock);
-> > > +                     pr_debug("%s(): alloc fail, retry loop %d\n", __func__, loop++);
-> > > +                     /*
-> > > +                      * rescan as others may finish the memory migration
-> > > +                      * and quit if no available CMA memory found finally
-> > > +                      */
-> > > +                     if (start) {
-> > > +                             schedule();
-> > > +                             start = 0;
-> > > +                             continue;
-> > > +                     }
-> > >                       break;
-> >
-> > The schedule() is problematic. For a start, we'd normally use
-> > cond_resched() here, so we avoid calling the more expensive schedule()
-> > if we know it won't perform any action.
-> >
-> > But cond_resched() is problematic if this thread has realtime
-> > scheduling policy and the process we're waiting on does not.  One way
-> > to address that is to use an unconditional msleep(1), but that's still
-> > just a hack.
-> >
-> 
-> I think we can simply drop schedule() here during the second round of retry
-> as the estimated delay may not be really needed.
+Supersedes "[PATCH v3] drivers: thermal: tsens: respect thermal_device_mode
+in threshold irq reporting". Changelog for that patchset:
 
-That will simply cause a tight loop, so I'm obviously not understanding
-the proposal.
+Changes in v3:
+- Upgraded logging to dev_info_ratelimited and revised log message.
+- Remove unrelated hunk.
+
+Some drivers that support thermal zone disabling implement a set_mode
+operation and simply disable the sensor or the relevant IRQ(s), so they
+actually don't log anything when zones are disabled. These drivers are
+imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
+
+For tsens.c, implementing a change_mode would require migrating the driver
+from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
+(or updating thermal_of.c to add a change_mode operation in thermal_zone_
+of_device_ops).
+
+stm_thermal.c seems to use this patch's model of not disabling IRQs when
+the zone is disabled (they still perform the thermal_zone_device_update
+upon IRQ, but return -EAGAIN from their get_temp).
+
+Changes in v2:
+- Reordered sentences in first part of commit message to make sense.
+
+Benjamin Li (2):
+  thermal: thermal_of: add pass-through change_mode to ops struct
+  drivers: thermal: tsens: implement change_mode to disable sensor IRQs
+
+ drivers/thermal/qcom/tsens.c | 43 ++++++++++++++++++++++++++++++++++--
+ drivers/thermal/qcom/tsens.h |  4 ++++
+ drivers/thermal/thermal_of.c | 14 ++++++++++++
+ include/linux/thermal.h      |  2 ++
+ 4 files changed, 61 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
 

@@ -2,251 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EF34DB553
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453C04DB55E
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357271AbiCPPwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S1345970AbiCPPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238734AbiCPPwL (ORCPT
+        with ESMTP id S240847AbiCPPyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:52:11 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685B240E6E
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:50:56 -0700 (PDT)
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7B3AE3F221
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647445854;
-        bh=HvaRNfutCNKLhahjNo+JQfIF58rvJReA0Z+kiiuJ6gw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=pLPSyt4Dfl6KXFSCeVSvapJubJTqUCfiz4heTB4zSul1wzEUxa/eBaHfmJcgUxnAe
-         sRjr9a06MeBDNiT5gHRmdmDhZMXl2It5hXq9xNZEnqeUv3Nmqwqg2PPmKlhLFYNsGk
-         dnj/UzqY4LOpE2H8b5zGA2Hxfv2zRgo4CFnharelMqmWTZZhiDpgpXpF1CzEDVTyN+
-         xcqpE8rJtC9iFoDK0+8eeBEYsOxD96T5dW4DZTgMN3HfsRIELFMM67+YoFyBgr5ddr
-         p2VESvHxd5VhWCIdJvx9ZvG6duol/5ZsJdFRydOqoOnoAyQzanEtH+TSPYIVK3QMgQ
-         IJZAPVeELIAUQ==
-Received: by mail-wr1-f70.google.com with SMTP id d17-20020adfc3d1000000b00203e2ff73a6so485157wrg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:50:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HvaRNfutCNKLhahjNo+JQfIF58rvJReA0Z+kiiuJ6gw=;
-        b=qUOPxpR7SjfdiLeO5HA2new/BGmNAx7mcZavjolO2Y7rwkAgckdoTqJItVX6eroteW
-         1JGFVGNqBcu62ZvmstAMw3Zj8/CI7+BREKPaDPL0y9JLfTAMA4pC+v+ikUpPjp2T4olR
-         npO2chUb4mtl4v0XHpKMWtz0iorzieLydRzzGhjcAKY0ezDl3BwOqMywQPGjux7sjPmu
-         oZA4WUHOwgcX/qHWoCuVgF6+X8J8kcc7j2F6CinX2hHvRJVK53hwUTtgNzoZru3n1Uha
-         3Urw5muHVDcwlBAhCx24YbmwPGm6YHffhTslIRHR78jzme1KL9zFZiMrk0WH82f95BR6
-         gC+w==
-X-Gm-Message-State: AOAM530Dn4olF+8W+iME5Yr1AtYkN8hb2UjzSktAfRySZx5u0vCq/Vfx
-        62WPkP95faSiTQKRCPYPreNDkCWvneiC3t4UIMq3D+FaG3/XjjZHCqfXScDjwQuyBIGfAiHRSZ4
-        B6db8GGuT5j8E1Oy8cbkwwQkD+iXQdIo6b8NSmw+z7w==
-X-Received: by 2002:adf:a551:0:b0:1f0:23fd:6f11 with SMTP id j17-20020adfa551000000b001f023fd6f11mr436404wrb.7.1647445854080;
-        Wed, 16 Mar 2022 08:50:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyQqqJ+nDGKXrOS1VEARwnjbWFRztgMdeejd2f0SHoTsOezIbLIQvsvGOybcrd8b3UelpB/+A==
-X-Received: by 2002:adf:a551:0:b0:1f0:23fd:6f11 with SMTP id j17-20020adfa551000000b001f023fd6f11mr436386wrb.7.1647445853859;
-        Wed, 16 Mar 2022 08:50:53 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id v8-20020a1cf708000000b0034d7b5f2da0sm2043363wmh.33.2022.03.16.08.50.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 08:50:53 -0700 (PDT)
-Message-ID: <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com>
-Date:   Wed, 16 Mar 2022 16:50:52 +0100
+        Wed, 16 Mar 2022 11:54:22 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D35D17E0D;
+        Wed, 16 Mar 2022 08:53:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647445987; x=1678981987;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ytX2SFvM53HE0N3pYke/nVlK3T7iEr7di47zL9BakSQ=;
+  b=ntSXzeCrFQlF+fNsrIQBnsllg3kABjFx14Wg3lqY9hom/5qFEefcQulu
+   q8hvcipD68+0UsLrCAF0SG7TLIZoVoD/zx249jdQtRHQjqPYuRcIgUfbO
+   K4uWtjpPBWJoSKlMlwbiE4a175BNx444QFAI7PbPkI0I/2Jcd9CC177Uy
+   E=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 16 Mar 2022 08:53:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 08:53:06 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 16 Mar 2022 08:53:05 -0700
+Received: from [10.216.40.72] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 16 Mar
+ 2022 08:52:59 -0700
+Message-ID: <0b68bc4c-62e3-d40f-3114-0c6864c01f1a@quicinc.com>
+Date:   Wed, 16 Mar 2022 21:22:56 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device
- tree
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v11 4/7] pinctrl: qcom: Update lpi pin group custiom
+ functions with framework generic functions
 Content-Language: en-US
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220310195229.109477-1-nick.hawkins@hpe.com>
- <20220310195229.109477-9-nick.hawkins@hpe.com>
- <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com>
- <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <quic_plai@quicinc.com>,
+        <bgoswami@codeaurora.org>, <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1647359413-31662-1-git-send-email-quic_srivasam@quicinc.com>
+ <1647359413-31662-5-git-send-email-quic_srivasam@quicinc.com>
+ <YjDCs9AEJTJNIawj@builder.lan>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YjDCs9AEJTJNIawj@builder.lan>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2022 16:41, Hawkins, Nick wrote:
-> -----Original Message-----
-> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
-> Sent: Friday, March 11, 2022 4:30 AM
-> To: Hawkins, Nick <nick.hawkins@hpe.com>>; Verdun, Jean-Marie <verdun@hpe.com>>
-> Cc: Arnd Bergmann <arnd@arndb.de>>; Olof Johansson <olof@lixom.net>>; soc@kernel.org; Rob Herring <robh+dt@kernel.org>>; linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device tree
-> 
-> On 10/03/2022 20:52, nick.hawkins@hpe.com wrote:
->>> From: Nick Hawkins <nick.hawkins@hpe.com>>
->>>
->>> The HPE SoC is new to linux. This patch creates the basic device tree 
->>> layout with minimum required for linux to boot. This includes timer 
->>> and watchdog support.
->>>
->>> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>>
->>> ---
->>>  arch/arm/boot/dts/Makefile               |   2 +
->>>  arch/arm/boot/dts/hpe-bmc-dl360gen10.dts |  27 +++++
->>>  arch/arm/boot/dts/hpe-gxp.dtsi           | 148 +++++++++++++++++++++++
->>>  3 files changed, 177 insertions(+)
->>>  create mode 100644 arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
->>>  create mode 100644 arch/arm/boot/dts/hpe-gxp.dtsi
->>>
->>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile 
->>> index e41eca79c950..2823b359d373 100644
->>> --- a/arch/arm/boot/dts/Makefile
->>> +++ b/arch/arm/boot/dts/Makefile
->>> @@ -1550,3 +1550,5 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->>>  	aspeed-bmc-vegman-n110.dtb \
->>>  	aspeed-bmc-vegman-rx20.dtb \
->>>  	aspeed-bmc-vegman-sx20.dtb
->>> +dtb-$(CONFIG_ARCH_HPE_GXP) += \
->>> +	hpe-bmc-dl360gen10.dtb
-> 
->> Alphabetically, also in respect to other architectures, so before CONFIG_ARCH_INTEGRATOR.
-> 
-> Done
-> 
->>> diff --git a/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
->>> b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
->>> new file mode 100644
->>> index 000000000000..da5eac1213a8
->>> --- /dev/null
->>> +++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
->>> @@ -0,0 +1,27 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Device Tree file for HPE DL360Gen10  */
->>> +
->>> +/include/ "hpe-gxp.dtsi"
->>> +
->>> +/ {
->>> +	#address-cells = <1>>;
->>> +	#size-cells = <1>>;
->>> +	compatible = "hpe,gxp";
-> 
->> Missing board compatible.
-> 
-> Will become compatible =  "hpe,gxp","hpe,bmc-dl360gen10"; If that seems okay to you.
 
-Yes, except hpe,gxp goes at the end.
-
-> 
->>> +	model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
->>> +
-
-(...)
-
->>> +
->>> +		usb0: usb@cefe0000 {
->>> +			compatible = "generic-ehci";
-> 
->> I think one of previous comments was that you cannot have "generic-ehci"
->> only, right?
-> 
-> Yes there was, I removed the usb0: ehci@cefe0000. I see now that this is in reference to the compatible. This is our ehci controller. What would be a more appropriate compatible? Do we need hpe,gxp-ehci perhaps?
-
-Yes,, see other cases in generic-ehci.yaml bindings. Your current choice
-would be pointed out by dtbs_check, that it's invalid according to
-current bindings.
-
-> 
->>> +			reg = <0xcefe0000 0x100>>;
->>> +			interrupts = <7>>;
->>> +			interrupt-parent = <&vic0>>;
->>> +		};
->>> +
->>> +		usb1: usb@cefe0100 {
->>> +			compatible = "generic-ohci";
->>> +			reg = <0xcefe0100 0x110>>;
->>> +			interrupts = <6>>;
->>> +			interrupt-parent = <&vic0>>;
->>> +		};
->>> +
->>> +		vrom@58000000 {
->>> +			compatible = "mtd-ram";
->>> +			bank-width = <4>>;
->>> +			reg = <0x58000000 0x4000000>>;
->>> +			#address-cells = <1>>;
->>> +			#size-cells = <1>>;
->>> +			partition@0 {
->>> +				label = "vrom-prime";
->>> +				reg = <0x0 0x2000000>>;
->>> +			};
->>> +			partition@2000000 {
->>> +				label = "vrom-second";
->>> +				reg = <0x2000000 0x2000000>>;
->>> +			};
->>> +		};
->>> +
->>> +		i2cg: syscon@c00000f8 {
-> 
-> 
->>> +			compatible = "simple-mfd", "syscon";
->>> +			reg = <0xc00000f8 0x08>>;
->>> +		};
->>> +	};
->>> +
->>> +	clocks {
->>> +		osc: osc {
-> 
->> Keep node naming consistent, so just "clk"... but it's also very generic comparing to others, so I wonder what is this clock?
-> 
-> We are in the process of redoing the clocks. This was the oscillator but no longer needed for the minimum boot config.
-> 
->>> +			compatible = "fixed-clock";
->>> +			#clock-cells = <0>>;
->>> +			clock-output-names = "osc";
->>> +			clock-frequency = <33333333>>;
->>> +		};
->>> +
->>> +		iopclk: iopclk {
->>> +			compatible = "fixed-clock";
->>> +			#clock-cells = <0>>;
->>> +			clock-output-names = "iopclk";
->>> +			clock-frequency = <400000000>>;
->>> +		};
->>> +
->>> +		memclk: memclk {
->>> +			compatible = "fixed-clock";
->>> +			#clock-cells = <0>>;
->>> +			clock-output-names = "memclk";
->>> +			clock-frequency = <800000000>>;
->>> +		};
-> 
->> What are these clocks? If external to the SoC, then where are they? On the board?
-> 
-> This was the internal iopclk and memclk they were both internal to the chip.
-> For now I am removing osc and memclk and will just have an iopclk that Gxp-timer will refer to.
-
-You should rather have a clock controller driver which defines this (and
-many others). They can stay as a temporary work-around, if you really
-need them for some other nodes.
-
-Best regards,
-Krzysztof
+On 3/15/2022 10:15 PM, Bjorn Andersson wrote:
+Thanks for your time Bjorn!!!
+> On Tue 15 Mar 10:50 CDT 2022, Srinivasa Rao Mandadapu wrote:
+>
+>> Update custom pin group structure members with framework generic group_desc structure
+>> and replace the driver's custom pinctrl_ops with framework provided generic pin control
+>> group functions to avoid redundant code written in lpass lpi driver.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   drivers/pinctrl/qcom/Kconfig             |  1 +
+>>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 98 +++++++++++++++-----------------
+>>   2 files changed, 48 insertions(+), 51 deletions(-)
+>>
+>> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+>> index ca6f68a..31c4aa6 100644
+>> --- a/drivers/pinctrl/qcom/Kconfig
+>> +++ b/drivers/pinctrl/qcom/Kconfig
+>> @@ -351,6 +351,7 @@ config PINCTRL_LPASS_LPI
+>>   	select PINMUX
+>>   	select PINCONF
+>>   	select GENERIC_PINCONF
+>> +	select GENERIC_PINCTRL_GROUPS
+>>   	depends on GPIOLIB
+>>   	help
+>>   	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+>> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+>> index 3c15f80..5e27a38 100644
+>> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+>> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
+>> @@ -51,11 +51,11 @@
+>>   
+>>   #define LPI_PINGROUP(id, soff, f1, f2, f3, f4)		\
+>>   	{						\
+>> -		.name = "gpio" #id,			\
+>> -		.pins = gpio##id##_pins,		\
+>> +		.group.name = "gpio" #id,			\
+>> +		.group.pins = gpio##id##_pins,		\
+>>   		.pin = id,				\
+>>   		.slew_offset = soff,			\
+>> -		.npins = ARRAY_SIZE(gpio##id##_pins),	\
+>> +		.group.num_pins = ARRAY_SIZE(gpio##id##_pins),	\
+>>   		.funcs = (int[]){			\
+>>   			LPI_MUX_gpio,			\
+>>   			LPI_MUX_##f1,			\
+>> @@ -67,9 +67,7 @@
+>>   	}
+>>   
+>>   struct lpi_pingroup {
+>> -	const char *name;
+>> -	const unsigned int *pins;
+>> -	unsigned int npins;
+>> +	struct group_desc group;
+>>   	unsigned int pin;
+>>   	/* Bit offset in slew register for SoundWire pins only */
+>>   	int slew_offset;
+>> @@ -150,20 +148,20 @@ enum sm8250_lpi_functions {
+>>   	LPI_MUX__,
+>>   };
+>>   
+>> -static const unsigned int gpio0_pins[] = { 0 };
+>> -static const unsigned int gpio1_pins[] = { 1 };
+>> -static const unsigned int gpio2_pins[] = { 2 };
+>> -static const unsigned int gpio3_pins[] = { 3 };
+>> -static const unsigned int gpio4_pins[] = { 4 };
+>> -static const unsigned int gpio5_pins[] = { 5 };
+>> -static const unsigned int gpio6_pins[] = { 6 };
+>> -static const unsigned int gpio7_pins[] = { 7 };
+>> -static const unsigned int gpio8_pins[] = { 8 };
+>> -static const unsigned int gpio9_pins[] = { 9 };
+>> -static const unsigned int gpio10_pins[] = { 10 };
+>> -static const unsigned int gpio11_pins[] = { 11 };
+>> -static const unsigned int gpio12_pins[] = { 12 };
+>> -static const unsigned int gpio13_pins[] = { 13 };
+>> +static int gpio0_pins[] = { 0 };
+>> +static int gpio1_pins[] = { 1 };
+>> +static int gpio2_pins[] = { 2 };
+>> +static int gpio3_pins[] = { 3 };
+>> +static int gpio4_pins[] = { 4 };
+>> +static int gpio5_pins[] = { 5 };
+>> +static int gpio6_pins[] = { 6 };
+>> +static int gpio7_pins[] = { 7 };
+>> +static int gpio8_pins[] = { 8 };
+>> +static int gpio9_pins[] = { 9 };
+>> +static int gpio10_pins[] = { 10 };
+>> +static int gpio11_pins[] = { 11 };
+>> +static int gpio12_pins[] = { 12 };
+>> +static int gpio13_pins[] = { 13 };
+>>   static const char * const swr_tx_clk_groups[] = { "gpio0" };
+>>   static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio5" };
+>>   static const char * const swr_rx_clk_groups[] = { "gpio3" };
+>> @@ -250,38 +248,10 @@ static int lpi_gpio_write(struct lpi_pinctrl *state, unsigned int pin,
+>>   	return 0;
+>>   }
+>>   
+>> -static int lpi_gpio_get_groups_count(struct pinctrl_dev *pctldev)
+>> -{
+>> -	struct lpi_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+>> -
+>> -	return pctrl->data->ngroups;
+>> -}
+>> -
+>> -static const char *lpi_gpio_get_group_name(struct pinctrl_dev *pctldev,
+>> -					   unsigned int group)
+>> -{
+>> -	struct lpi_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+>> -
+>> -	return pctrl->data->groups[group].name;
+>> -}
+>> -
+>> -static int lpi_gpio_get_group_pins(struct pinctrl_dev *pctldev,
+>> -				   unsigned int group,
+>> -				   const unsigned int **pins,
+>> -				   unsigned int *num_pins)
+>> -{
+>> -	struct lpi_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
+>> -
+>> -	*pins = pctrl->data->groups[group].pins;
+>> -	*num_pins = pctrl->data->groups[group].npins;
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>   static const struct pinctrl_ops lpi_gpio_pinctrl_ops = {
+>> -	.get_groups_count	= lpi_gpio_get_groups_count,
+>> -	.get_group_name		= lpi_gpio_get_group_name,
+>> -	.get_group_pins		= lpi_gpio_get_group_pins,
+>> +	.get_groups_count	= pinctrl_generic_get_group_count,
+>> +	.get_group_name		= pinctrl_generic_get_group_name,
+>> +	.get_group_pins		= pinctrl_generic_get_group_pins,
+>>   	.dt_node_to_map		= pinconf_generic_dt_node_to_map_group,
+>>   	.dt_free_map		= pinctrl_utils_free_map,
+>>   };
+>> @@ -582,6 +552,28 @@ static const struct gpio_chip lpi_gpio_template = {
+>>   	.dbg_show		= lpi_gpio_dbg_show,
+>>   };
+>>   
+>> +static int lpi_build_pin_desc_groups(struct lpi_pinctrl *pctrl)
+>> +{
+>> +	struct group_desc *lpi_groups;
+>> +	int i;
+>> +
+>> +	lpi_groups = devm_kcalloc(pctrl->dev, pctrl->data->npins,
+>> +					 sizeof(*lpi_groups), GFP_KERNEL);
+>> +	if (!lpi_groups)
+>> +		return -ENOMEM;
+>> +
+>> +	for (i = 0; i < pctrl->data->npins; i++) {
+>> +		const struct pinctrl_pin_desc *pin_info = pctrl->desc.pins + i;
+>> +		struct group_desc *group = lpi_groups + i;
+>> +
+>> +		group->name = pin_info->name;
+>> +		group->pins = (int *)&pin_info->number;
+>> +		pinctrl_generic_add_group(pctrl->ctrl, group->name, group->pins, 1, NULL);
+> I've not used this generic interface before, but I believe you need to
+> pair your add with pinctrl_generic_remove_group(), both in error paths
+> and driver remove.
+Okay. Will add pinctrl_generic_remove_group() accordingly.
+>
+> Makes me wonder about the usefulness of this, as you will end up with
+> a bit more code than you remove and you have the additional heap
+> allocation. Feels like I'm missing something...
+Here Heap allocation can be avoided.  will do accordingly and re post.
+>
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int lpi_pinctrl_probe(struct platform_device *pdev)
+>>   {
+>>   	const struct lpi_pinctrl_variant_data *data;
+>> @@ -647,6 +639,10 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
+>>   		goto err_pinctrl;
+>>   	}
+>>   
+>> +	ret = lpi_build_pin_desc_groups(pctrl);
+>> +	if (ret)
+>> +		return ret;
+> A few lines up the code does error handling by goto err_pinctrl, you
+> should do the same.
+Okay. will update accordingly.
+>
+> Regards,
+> Bjorn
+>
+>> +
+>>   	ret = devm_gpiochip_add_data(dev, &pctrl->chip, pctrl);
+>>   	if (ret) {
+>>   		dev_err(pctrl->dev, "can't add gpio chip\n");
+>> -- 
+>> 2.7.4
+>>

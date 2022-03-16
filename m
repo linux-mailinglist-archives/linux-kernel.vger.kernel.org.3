@@ -2,102 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531584DB507
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC0C4DB512
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346912AbiCPPiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 11:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S1357198AbiCPPmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242953AbiCPPio (ORCPT
+        with ESMTP id S1354923AbiCPPmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:38:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220F46D1B6;
-        Wed, 16 Mar 2022 08:37:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB6B3616E4;
-        Wed, 16 Mar 2022 15:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0F9C340E9;
-        Wed, 16 Mar 2022 15:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647445049;
-        bh=68Zz2mmmOY9kRePELD6PjgSej7vxXzhD0fkCtGTg+DA=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=vE7HdrWycRkrMGzV0PqWzHlM/0FKnZCzXjRK0AUECKi1xSoiRvIdEfmZcwiUS9KqD
-         fUcYj5VQJVnxlz5eX1X8LsVilqyo31MUEkdK/OipBD9CLGyab6blQVfDmq5G5Y1E/Y
-         hgq1bRjk3PQAoVaxD6YaTVonN0JyT6XEbYOA+jLL2aFib5x0nhzOYmpdq8XsuEeJyC
-         c7BgtbdAbA6EVzBy+ebNofxYzxXLeCJ7t8MsYYCUa6H5FtW5ayQ38RiCAPG/oOlxQo
-         Qc1QZ88fYZJqzknFwfShpY87H84869KjDeX/qi1ZWgTc/NJzZqVyHp7LAIjWJ5oiZs
-         Pm4hKwr1/FkeA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Chris Chiu <chris.chiu@canonical.com>
-Cc:     Jes.Sorensen@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        code@reto-schneider.ch, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] rtl8xxxu: fill up txrate info for gen1 chips
-References: <20220307125852.13606-1-chris.chiu@canonical.com>
-        <20220307125852.13606-3-chris.chiu@canonical.com>
-Date:   Wed, 16 Mar 2022 17:37:23 +0200
-In-Reply-To: <20220307125852.13606-3-chris.chiu@canonical.com> (Chris Chiu's
-        message of "Mon, 7 Mar 2022 20:58:52 +0800")
-Message-ID: <87o825x618.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 16 Mar 2022 11:42:09 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB3849CA2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:40:53 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5D04F20000D;
+        Wed, 16 Mar 2022 15:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1647445251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yvaTKdVkvoK+k9A//eTH+hD8ZVKex8j820Ugfib5OWM=;
+        b=OBRJ98tC7G23OKzFoiHmLACw6kNVmFzEbguDzCMZDn2zk+ngtTQPFWh8P8ELaswuuVaJpY
+        KlXWnm0AFhEWfzow7uZAN5/x2JolmTOC5AuqbbJTGv8WekODlwqcp+6yS0NKfxrQ+ehh8r
+        RfVvTywVn4f6Ef1uUVlNEE9TVsxt+SJ9MVsBtQfG87FPUAIMZSZclTYMN4JDrZ2qamqtHX
+        qiik7L1vqXpCemEEUrSduhCXKzPwC+ANGxBst216qTfSpdhfnt2NeYOC4MvBaCq/BMvENg
+        k4CI3cxRsdcJ8t/CJIdPgWco66UibQtHbDAOy9iFm13gtHeEEuILBeO9hY/crQ==
+Date:   Wed, 16 Mar 2022 16:40:49 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: Re: [PATCH] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <YjIFAR2NSfjXdJGe@aptenodytes>
+References: <20220309143200.111292-1-paul.kocialkowski@bootlin.com>
+ <20220310145423.but7r7ul4j7h3wxw@houat>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KXMtiZ7mfH5WW4cU"
+Content-Disposition: inline
+In-Reply-To: <20220310145423.but7r7ul4j7h3wxw@houat>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chris Chiu <chris.chiu@canonical.com> writes:
 
-> RTL8188CUS/RTL8192CU(gen1) don't support rate adatptive report hence
-> no real txrate info can be retrieved. The vendor driver reports the
-> highest rate in HT capabilities from the IEs to avoid empty txrate.
-> This commit initiates the txrate information with the highest supported
-> rate negotiated with AP. The gen2 chip keeps update the txrate from
-> the rate adaptive reports, and gen1 chips at least have non-NULL txrate
-> after associated.
->
-> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> ---
->  .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->
-> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-> index d225a1257530..285acf303e3d 100644
-> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-> @@ -4473,6 +4473,35 @@ void rtl8xxxu_gen1_init_aggregation(struct rtl8xxxu_priv *priv)
->  	priv->rx_buf_aggregation = 1;
->  }
->  
-> +static struct ieee80211_rate rtl8xxxu_legacy_ratetable[] = {
-> +	{.bitrate = 10, .hw_value = 0x00,},
-> +	{.bitrate = 20, .hw_value = 0x01,},
-> +	{.bitrate = 55, .hw_value = 0x02,},
-> +	{.bitrate = 110, .hw_value = 0x03,},
-> +	{.bitrate = 60, .hw_value = 0x04,},
-> +	{.bitrate = 90, .hw_value = 0x05,},
-> +	{.bitrate = 120, .hw_value = 0x06,},
-> +	{.bitrate = 180, .hw_value = 0x07,},
-> +	{.bitrate = 240, .hw_value = 0x08,},
-> +	{.bitrate = 360, .hw_value = 0x09,},
-> +	{.bitrate = 480, .hw_value = 0x0a,},
-> +	{.bitrate = 540, .hw_value = 0x0b,},
-> +};
+--KXMtiZ7mfH5WW4cU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Should this be static const?
+Hi Maxime,
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Thanks for the review!
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+On Thu 10 Mar 22, 15:54, Maxime Ripard wrote:
+> Hi Paul,
+>=20
+> On Wed, Mar 09, 2022 at 03:32:00PM +0100, Paul Kocialkowski wrote:
+> > While bridge/panel detection was initially relying on the usual
+> > port/ports-based of graph detection, it was recently changed to
+> > perform the lookup on any child node that is not port/ports
+> > instead when such a node is available, with no fallback on the
+> > usual way.
+> >=20
+> > This results in breaking detection when a child node is present
+> > but does not contain any panel or bridge node, even when the
+> > usual port/ports-based of graph is there.
+> >=20
+> > In order to support both situations properly, this commit reworks
+> > the logic to try both options and not just one of the two: it will
+> > only return -EPROBE_DEFER when both have failed.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > Fixes: 80253168dbfd ("drm: of: Lookup if child node has panel or bridge=
+")
+>=20
+> Thanks, it's in pretty good shape now, but I have a few bike sheds to pai=
+nt :)
+>=20
+> > ---
+> >  drivers/gpu/drm/drm_of.c | 93 +++++++++++++++++++++-------------------
+> >  1 file changed, 49 insertions(+), 44 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> > index 9d90cd75c457..67f1b7dfc892 100644
+> > --- a/drivers/gpu/drm/drm_of.c
+> > +++ b/drivers/gpu/drm/drm_of.c
+> > @@ -219,6 +219,35 @@ int drm_of_encoder_active_endpoint(struct device_n=
+ode *node,
+> >  }
+> >  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+> > =20
+> > +static int drm_of_find_remote_panel_or_bridge(struct device_node *remo=
+te,
+> > +					      struct drm_panel **panel,
+> > +					      struct drm_bridge **bridge)
+>=20
+> This function performs its look up directly on the struct device_node
+> passed as argument, so I don't think the "remote" in the name is great.
+> Since it's static, we can just call it find_panel_or_bridge, what do you
+> think?
+
+=46rom a quick look at other DRM code I got the impression that static func=
+tions
+also usually carry the drm prefix but I might be wrong.
+
+> > +{
+> > +	int ret =3D -EPROBE_DEFER;
+> > +
+> > +	if (panel) {
+> > +		*panel =3D of_drm_find_panel(remote);
+> > +		if (!IS_ERR(*panel))
+> > +			ret =3D 0;
+>=20
+> return 0?
+
+The idea was to still go through the "*bridge =3D NULL;" path if a bridge
+pointer is provided, to preserve the original behavior of the function.
+There may or may not not be any hard expectation on that, in any case
+I feel like it would be good to avoid out-of-scope functional changes here.
+
+> > +		else
+> > +			*panel =3D NULL;
+> > +
+> > +	}
+> > +
+> > +	/* No panel found yet, check for a bridge next. */
+> > +	if (bridge) {
+> > +		if (ret) {
+>=20
+> And the return above allows to remove that test
+>=20
+> > +			*bridge =3D of_drm_find_bridge(remote);
+> > +			if (*bridge)
+> > +				ret =3D 0;
+>=20
+> return 0?
+>=20
+> > +		} else {
+> > +			*bridge =3D NULL;
+> > +		}
+> > +
+> > +	}
+> > +
+> > +	return ret;
+>=20
+> And here we can just return -EPROBE_DEFER
+>=20
+> > +}
+> > +
+>=20
+> >  /**
+> >   * drm_of_find_panel_or_bridge - return connected panel or bridge devi=
+ce
+> >   * @np: device tree node containing encoder output ports
+> > @@ -249,57 +278,33 @@ int drm_of_find_panel_or_bridge(const struct devi=
+ce_node *np,
+> >  	if (panel)
+> >  		*panel =3D NULL;
+> > =20
+> > -	/**
+> > -	 * Devices can also be child nodes when we also control that device
+> > -	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+> > -	 *
+> > -	 * Lookup for a child node of the given parent that isn't either port
+> > -	 * or ports.
+> > -	 */
+> > -	for_each_available_child_of_node(np, remote) {
+> > -		if (of_node_name_eq(remote, "port") ||
+> > -		    of_node_name_eq(remote, "ports"))
+> > -			continue;
+> > -
+> > -		goto of_find_panel_or_bridge;
+> > +	/* Check for a graph on the device node first. */
+> > +	if (of_graph_is_present(np)) {
+> > +		remote =3D of_graph_get_remote_node(np, port, endpoint);
+> > +		if (remote) {
+> > +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
+> > +								 bridge);
+> > +			of_node_put(remote);
+> > +		}
+> >  	}
+> > =20
+> > -	/*
+> > -	 * of_graph_get_remote_node() produces a noisy error message if port
+> > -	 * node isn't found and the absence of the port is a legit case here,
+> > -	 * so at first we silently check whether graph presents in the
+> > -	 * device-tree node.
+> > -	 */
+> > -	if (!of_graph_is_present(np))
+> > -		return -ENODEV;
+> > -
+> > -	remote =3D of_graph_get_remote_node(np, port, endpoint);
+> > -
+> > -of_find_panel_or_bridge:
+> > -	if (!remote)
+> > -		return -ENODEV;
+> > +	/* Otherwise check for any child node other than port/ports. */
+> > +	if (ret) {
+> > +		for_each_available_child_of_node(np, remote) {
+> > +			if (of_node_name_eq(remote, "port") ||
+> > +			    of_node_name_eq(remote, "ports"))
+> > +				continue;
+> > =20
+> > -	if (panel) {
+> > -		*panel =3D of_drm_find_panel(remote);
+> > -		if (!IS_ERR(*panel))
+> > -			ret =3D 0;
+> > -		else
+> > -			*panel =3D NULL;
+> > -	}
+> > +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
+> > +								 bridge);
+> > +			of_node_put(remote);
+> > =20
+> > -	/* No panel found yet, check for a bridge next. */
+> > -	if (bridge) {
+> > -		if (ret) {
+> > -			*bridge =3D of_drm_find_bridge(remote);
+> > -			if (*bridge)
+> > -				ret =3D 0;
+> > -		} else {
+> > -			*bridge =3D NULL;
+> > +			/* Stop at the first found occurrence. */
+> > +			if (!ret)
+> > +				break;
+> >  		}
+> > -
+> >  	}
+> > =20
+> > -	of_node_put(remote);
+> >  	return ret;
+> >  }
+>=20
+> So the diff is fairly hard to read, but it ends up as:
+
+Yeah I agree, not sure what I can do about that.
+
+> >        int ret =3D -EPROBE_DEFER;
+> >        struct device_node *remote;
+> >
+> >        if (!panel && !bridge)
+> >                return -EINVAL;
+> >        if (panel)
+> >                *panel =3D NULL;
+> >
+> >        /* Check for a graph on the device node first. */
+> >       if (of_graph_is_present(np)) {
+> >                remote =3D of_graph_get_remote_node(np, port, endpoint);
+> >                if (remote) {
+> >                        ret =3D drm_of_find_remote_panel_or_bridge(remot=
+e, panel,
+> >                                                                 bridge);
+> >                        of_node_put(remote);
+>=20
+> I think we can simplify this by doing
+>=20
+>                         if (!ret)
+> 			        return ret;
+>=20
+> >                }
+> >        }
+> >
+> >        /* Otherwise check for any child node other than port/ports. */
+> >        if (ret) {
+>=20
+> And thus we won't have to check for ret here
+
+Yes I agree this one makes things more readable.
+
+> >                for_each_available_child_of_node(np, remote) {
+>=20
+> I'm a bit reluctant with variables that we reuse from one loop to
+> another, especially since it's a bit misleading here. What about using a
+> (loop local) remote variable in the of_graph path, and a loop-local
+> variable node or child here?
+
+I feel like reusing variables across loops is quite a common thing and
+not really an issue on its own, but I agree that calling this one remote
+is confusing and "child" would make things clearer here.
+
+> >                        if (of_node_name_eq(remote, "port") ||
+> >                            of_node_name_eq(remote, "ports"))
+> >                                continue;
+> >
+> >                        ret =3D drm_of_find_remote_panel_or_bridge(remot=
+e, panel,
+> >                                                                 bridge);
+> >                        of_node_put(remote);
+> >
+> >                        /* Stop at the first found occurrence. */
+> >                        if (!ret)
+> >                                break;
+>=20
+> Ditto, let's just return here
+
+Sure, fair enough!
+
+> >                }
+> >       }
+> >
+> >        return ret;
+>=20
+> And then we can just return EPROBE_DEFER here (and get rid of ret entirel=
+y)
+
+Sounds good to me, thanks!
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--KXMtiZ7mfH5WW4cU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIyBQEACgkQ3cLmz3+f
+v9F+oAf/ciGczxoupYmT3Pnv1aSOfqs0G2KaF8kiOUt+LxjBasejZPuerM6INk7P
+636bFeiPd4B5Lf6NjFx9fJspBFK93qXdC3ym7hEsobSKYD8/OtDwlw9Y6u3JsKNk
+lOvCyawaVLLhzD7Qlt/vO+HqK6Xe/KYOemsEEp7Lnr+SCkVFcg7WrbPAANgAzrVH
+J2IQh2Mm99SH6FlwRcMyVijEVm3XLqYpQGiBqqYKANZMP1nlHTwEhuhIv6d4dZfQ
+YaGTYQBFL+zGaGB+yYTlgEASOTABd/LlgsLI9I08DttLTeBFxFBJUpln6OvTYNCW
+Kb38uayMpwwplWiWKETJg1NjKtBuRQ==
+=vilI
+-----END PGP SIGNATURE-----
+
+--KXMtiZ7mfH5WW4cU--

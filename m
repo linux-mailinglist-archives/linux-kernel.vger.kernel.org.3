@@ -2,172 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FBF4DA7E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFE34DA7E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 03:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347806AbiCPC03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Mar 2022 22:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S1349466AbiCPC0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Mar 2022 22:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237405AbiCPC02 (ORCPT
+        with ESMTP id S231411AbiCPC0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Mar 2022 22:26:28 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73E924F0A;
-        Tue, 15 Mar 2022 19:25:14 -0700 (PDT)
-X-UUID: ef7dc8dcbffc42f08972bc2395417310-20220316
-X-UUID: ef7dc8dcbffc42f08972bc2395417310-20220316
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 995455425; Wed, 16 Mar 2022 10:25:09 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 16 Mar 2022 10:25:08 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 16 Mar
- 2022 10:25:06 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 16 Mar 2022 10:25:06 +0800
-Message-ID: <00a1b51452d0a8fcdd9807845580678f6739e974.camel@mediatek.com>
-Subject: Re: [PATCH v13 1/6] soc: mediatek: mutex: add common interface to
- accommodate multiple modules operationg MUTEX
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "Jernej Skrabec" <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 16 Mar 2022 10:25:06 +0800
-In-Reply-To: <20220315061031.21642-2-moudy.ho@mediatek.com>
-References: <20220315061031.21642-1-moudy.ho@mediatek.com>
-         <20220315061031.21642-2-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 15 Mar 2022 22:26:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E4A4B408
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Mar 2022 19:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647397534; x=1678933534;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2VA94Eh1qS411dAUoSCxbhcrRfvG6zQ7XscUmqUXoRY=;
+  b=SPLTKn6kf+pUR36OW/W+mo8d+EBvpt+E3FNwyQh0JbGP91v1Fwsg9bdS
+   rviTEM5R5aJ75edDWfGpi17/EArvhHgRauKjEG4UNNJBWGL1cIhAPdjhE
+   WalV9jxr6Qr8IOXyHDuFUrluS3TI4lRuqhAfQIv8wlkimLVi5XYIkIU4O
+   gPDLzCNJ19aAKnXI/KL/Jm4JI528WP15YtIx7AEWb0LejA434pHCbcQH1
+   57fO4WEuJmD8Zc2BihCWL20rY0Bp/RA8ctjfFKvJWu7Zxn+/5aBKlh+zo
+   K6myq+HuDnnmR+/UvVbULwP90iwl4Gw0H9x0hN1uAfludx/W4YfxMIicZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="319690484"
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="319690484"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:34 -0700
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="557221241"
+Received: from lingshan-mobl.ccr.corp.intel.com (HELO [10.255.31.20]) ([10.255.31.20])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 19:25:31 -0700
+Message-ID: <eb3b0964-662e-2c5f-02c6-6141c4c5bf92@intel.com>
+Date:   Wed, 16 Mar 2022 10:25:28 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.6.1
+Subject: Re: [PATCH] vDPA/ifcvf: match pointer check to use
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>, Tom Rix <trix@redhat.com>
+Cc:     jasowang@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+        sgarzare@redhat.com, xieyongji@bytedance.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220315124130.1710030-1-trix@redhat.com>
+ <20220315092656-mutt-send-email-mst@kernel.org>
+ <512a392d-23d7-c25b-7576-571001f28288@redhat.com>
+ <20220315111456-mutt-send-email-mst@kernel.org>
+From:   "Zhu, Lingshan" <lingshan.zhu@intel.com>
+In-Reply-To: <20220315111456-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Moudy:
 
-On Tue, 2022-03-15 at 14:10 +0800, Moudy Ho wrote:
-> In order to allow multiple modules to operate MUTEX hardware through
-> a common interfrace, a flexible index "mtk_mutex_table_index" needs
-> to
-> be added to replace original component ID so that like DDP and MDP
-> can add their own MUTEX table settings independently.
-> 
-> In addition, 4 generic interface "mtk_mutex_set_mod",
-> "mtk_mutex_set_sof",
-> "mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added,
-> which is
-> expected to replace the "mtk_mutex_add_comp" and
-> "mtk_mutex_remove_comp"
-> pair originally dedicated to DDP in the future.
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> ---
->  drivers/soc/mediatek/mtk-mutex.c       | 122
-> +++++++++++++++++++++++++
->  include/linux/soc/mediatek/mtk-mutex.h |  33 +++++++
->  2 files changed, 155 insertions(+)
-> 
 
-[snip]
+On 3/15/2022 11:15 PM, Michael S. Tsirkin wrote:
+> On Tue, Mar 15, 2022 at 08:03:26AM -0700, Tom Rix wrote:
+>> On 3/15/22 6:28 AM, Michael S. Tsirkin wrote:
+>>> On Tue, Mar 15, 2022 at 05:41:30AM -0700, trix@redhat.com wrote:
+>>>> From: Tom Rix <trix@redhat.com>
+>>>>
+>>>> Clang static analysis reports this issue
+>>>> ifcvf_main.c:49:4: warning: Called function
+>>>>     pointer is null (null dereference)
+>>>>     vf->vring->cb.callback(vring->cb.private);
+>>>>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>>
+>>>> The check
+>>>>     vring = &vf->vring[i];
+>>>>     if (vring->cb.callback)
+>>>>
+>>>> Does not match the use.  Change dereference so they match.
+>>>>
+>>>> Fixes: 79333575b8bd ("vDPA/ifcvf: implement shared IRQ feature")
+>>> Thanks a lot! I squashed this into the offending patch - no point in
+>>> breaking bisect. Pushed to linux. However I'm now
+>>> having second thoughts about applying that patchset - I'd like
+>>> soma analysis explaining how this got through testing.
+>> static analysis is something i do treewide.
+>>
+>> There are currently ~2500 issues in linux-next, do not panic! many are false
+>> positives.
+>>
+>> It is pretty easy to setup and once you have a baseline you can filter only
+>> your files.
+>>
+>> Tom
+> Thanks for that info! I was actually directing this question to the
+> contributor since the code does not look like it could have ever
+> worked. I don't have the hardware in question myself.
+Oh, that's my bad introducing this bug by typo, thanks Tom for fixing that!
+In my previous testing, I tolerated the lower performance(only one queue 
+working as you pointed out)
+due to the shared irq, and did not check mq status, sorry for that.
 
-> 
-> diff --git a/include/linux/soc/mediatek/mtk-mutex.h
-> b/include/linux/soc/mediatek/mtk-mutex.h
-> index 6fe4ffbde290..c8355bb0e6d6 100644
-> --- a/include/linux/soc/mediatek/mtk-mutex.h
-> +++ b/include/linux/soc/mediatek/mtk-mutex.h
-> @@ -10,14 +10,47 @@ struct regmap;
->  struct device;
->  struct mtk_mutex;
->  
-> +enum mtk_mutex_table_index {
-> +	MUTEX_TABLE_IDX_NONE = 0,	/* Invalid engine */
+After fixing this issue, test again:
 
-Useless, so remove this.
+(1)set nvectors = 2 after allocate MSI vectors, force the queues share 
+one vector. from /proc/interrupts, we can see:
+[lszhu@localhost linux]$ cat /proc/interrupts | grep ifcvf
+  241:          0          0          0          0 0          0          
+0          0          0          0 0          0          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0    2724424          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+534528-edge      ifcvf[0000:01:00.5]-vqs-reused-irq
+  242:          0          0          0          0 0          0          
+0          0          0          0 0          0          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0          0          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+534529-edge      ifcvf[0000:01:00.5]-config
+  251:          0          0          0          0 0          0          
+0          0          0          0 0    2693318          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0          0          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+536576-edge      ifcvf[0000:01:00.6]-vqs-reused-irq
+  252:          0          0          0          0 0          0          
+0          0          0          0 0          0          0          
+0          0          0 0          0          0          0          
+0          0 0          0          0          0          0          0 
+0          0          0          0          0          0 0          
+0          0          0          0          0 IR-PCI-MSI 
+536577-edge      ifcvf[0000:01:00.6]-config
 
-> +
-> +	/* MDP table index */
-> +	MUTEX_TABLE_IDX_MDP_RDMA0,
-> +	MUTEX_TABLE_IDX_MDP_RSZ0,
-> +	MUTEX_TABLE_IDX_MDP_RSZ1,
-> +	MUTEX_TABLE_IDX_MDP_TDSHP0,
-> +	MUTEX_TABLE_IDX_MDP_WROT0,
-> +	MUTEX_TABLE_IDX_MDP_WDMA,
-> +	MUTEX_TABLE_IDX_MDP_AAL0,
-> +	MUTEX_TABLE_IDX_MDP_CCORR0,
-> +
-> +	/* DDP table index */
-> +	MUTEX_TABLE_IDX_DDP_DSI0,
-> +	MUTEX_TABLE_IDX_DDP_DSI1,
-> +	MUTEX_TABLE_IDX_DDP_DSI2,
-> +	MUTEX_TABLE_IDX_DDP_DSI3,
-> +	MUTEX_TABLE_IDX_DDP_DPI0,
-> +	MUTEX_TABLE_IDX_DDP_DPI1,
-> +	MUTEX_TABLE_IDX_DDP_DP_INTF0,
-> +	MUTEX_TABLE_IDX_DDP_DP_INTF1,
+(2) after several rounds of scp from a VF to another, at the source 
+side, ethtool -S shows(cut off, only tx):
+localhost:/home/lszhu # ethtool -S eth1
+NIC statistics:
+      tx_queue_0_packets: 437256
+      tx_queue_0_bytes: 629246017
+      tx_queue_0_xdp_tx: 0
+      tx_queue_0_xdp_tx_drops: 0
+      tx_queue_0_kicks: 34089
+      tx_queue_1_packets: 73
+      tx_queue_1_bytes: 96721
+      tx_queue_1_xdp_tx: 0
+      tx_queue_1_xdp_tx_drops: 0
+      tx_queue_1_kicks: 12
+      tx_queue_2_packets: 294647
+      tx_queue_2_bytes: 433949815
+      tx_queue_2_xdp_tx: 0
+      tx_queue_2_xdp_tx_drops: 0
+      tx_queue_2_kicks: 14948
+      tx_queue_3_packets: 20226451
+      tx_queue_3_bytes: 29735633548
+      tx_queue_3_xdp_tx: 0
+      tx_queue_3_xdp_tx_drops: 0
+      tx_queue_3_kicks: 1123675
 
-If this patch would support DDP, add all DDP index. If this patch does
-not support DDP, remove these.
+so every queue carries traffic now, all enabled
 
-Regards,
-CK
+Thanks,
+Zhu Lingshan
 
-> +
-> +	MUTEX_TABLE_IDX_MAX		/* ALWAYS keep at the end */
-> +};
-> +
->  struct mtk_mutex *mtk_mutex_get(struct device *dev);
->  int mtk_mutex_prepare(struct mtk_mutex *mutex);
->  void mtk_mutex_add_comp(struct mtk_mutex *mutex,
->  			enum mtk_ddp_comp_id id);
-> +void mtk_mutex_set_mod(struct mtk_mutex *mutex,
-> +		       enum mtk_mutex_table_index idx);
-> +void mtk_mutex_set_sof(struct mtk_mutex *mutex,
-> +		       enum mtk_mutex_table_index idx);
->  void mtk_mutex_enable(struct mtk_mutex *mutex);
->  void mtk_mutex_disable(struct mtk_mutex *mutex);
->  void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
->  			   enum mtk_ddp_comp_id id);
-> +void mtk_mutex_clear_mod(struct mtk_mutex *mutex,
-> +			 enum mtk_mutex_table_index idx);
-> +void mtk_mutex_clear_sof(struct mtk_mutex *mutex);
->  void mtk_mutex_unprepare(struct mtk_mutex *mutex);
->  void mtk_mutex_put(struct mtk_mutex *mutex);
->  void mtk_mutex_acquire(struct mtk_mutex *mutex);
+
+>
+>
+>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>> ---
+>>>>    drivers/vdpa/ifcvf/ifcvf_main.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
+>>>> index 3b48e717e89f7..4366320fb68d3 100644
+>>>> --- a/drivers/vdpa/ifcvf/ifcvf_main.c
+>>>> +++ b/drivers/vdpa/ifcvf/ifcvf_main.c
+>>>> @@ -46,7 +46,7 @@ static irqreturn_t ifcvf_vqs_reused_intr_handler(int irq, void *arg)
+>>>>    	for (i = 0; i < vf->nr_vring; i++) {
+>>>>    		vring = &vf->vring[i];
+>>>>    		if (vring->cb.callback)
+>>>> -			vf->vring->cb.callback(vring->cb.private);
+>>>> +			vring->cb.callback(vring->cb.private);
+>>>>    	}
+>>>>    	return IRQ_HANDLED;
+>>>> -- 
+>>>> 2.26.3
 

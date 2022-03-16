@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D034DB7FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DE64DB804
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 19:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352025AbiCPSij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 14:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S1357752AbiCPSit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 14:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241347AbiCPSii (ORCPT
+        with ESMTP id S241347AbiCPSip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 14:38:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C956F6D971
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 11:37:19 -0700 (PDT)
+        Wed, 16 Mar 2022 14:38:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEC56E290;
+        Wed, 16 Mar 2022 11:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 723CFB81CA4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:37:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB06C340E9;
-        Wed, 16 Mar 2022 18:37:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A32E8618D3;
+        Wed, 16 Mar 2022 18:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF1AC340F7;
+        Wed, 16 Mar 2022 18:37:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647455837;
-        bh=AeOKmCyzq1uIA6ULnTh98t5emlpFl5gxplN7rmXD6BI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Qockax2Wfb9NicmpzRdcZsGmXxQ288gBYZ1jXZDnmCyNI5T0nA+duNoHrBT9avwLO
-         cHBehu4dH8vAvxB1d87pIy4Ov4pfvc/FeQD3LLfMhNZl99EPVsAljonngYLtCErt97
-         s7ctPZUnA2QYbgyE3OIQdB7AN1JngCj2OqJAXvFwXImb9nW5PA9va3OsazHqNgjWXv
-         uTktlMJ7CTXLAyQllkKGDxrajDY0i55gUpl223flIJQXH+Unat1Lm0L1EQdkCHAp2+
-         oAdoNjEusV0T7DUZFYsP+ojVz8hI3adWn3OWMrn55rr9XE/liQQSRJOUNKWiXIavGf
-         jER51JVbhKioQ==
+        s=k20201202; t=1647455850;
+        bh=SIbAZruduzRSnrWzOuWAI4SxaF18hsmgKxmS/1M5bhI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=M7pAnQaGxH5XguHxVvJXRImcQeTVI3Ghe06RgDHhhIeS2LKTdJ5665C2pJ5SdYO+7
+         Di2cKTvLZSwnBz71+ZkTKj6c8kFx9zThPZCxgSspTu24wQJPs59+/IYh9gqBDNoM0p
+         GzeFUdcI+WWA0Pioii1/wbYWRjGV03+Dc+DnuF5sBGLI1FT/wCbTjT3CowmUgylqP8
+         /aOUAkBV7+slOzBawZSK0Q6+rP77MxjawrlvTZUAMclTdgyLVYKobaUFFyo01GQm5A
+         D/Zy9AtQ+M4e4OGlPYqOEfLm8Toee2Tg8HVhC3AVBbtQ6wQ3v5TksI/TbTDXwO5gIZ
+         WMJ7CvOwTgfiQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+To:     Thierry Reding <thierry.reding@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
-Date:   Wed, 16 Mar 2022 19:36:46 +0100
-Message-Id: <20220316183708.1505846-1-arnd@kernel.org>
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/tegra: vic: fix unused-function warnings
+Date:   Wed, 16 Mar 2022 19:36:47 +0100
+Message-Id: <20220316183708.1505846-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20220316183708.1505846-1-arnd@kernel.org>
+References: <20220316183708.1505846-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -72,98 +64,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The driver fails to build when the KMS helpers are disabled:
+The use of the old-style SET_RUNTIME_PM_OPS() and
+SET_SYSTEM_SLEEP_PM_OPS() macros requires function definitions
+to be hidden to avoid
 
-ld.lld: error: undefined symbol: drm_gem_fb_get_obj
->>> referenced by drm_mipi_dbi.c
->>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
->>> referenced by drm_mipi_dbi.c
->>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
+drivers/gpu/drm/tegra/vic.c:326:12: error: 'vic_runtime_suspend' defined but not used [-Werror=unused-function]
+  326 | static int vic_runtime_suspend(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/tegra/vic.c:292:12: error: 'vic_runtime_resume' defined but not used [-Werror=unused-function]
+  292 | static int vic_runtime_resume(struct device *dev)
+      |            ^~~~~~~~~~~~~~~~~~
 
-ld.lld: error: undefined symbol: drm_gem_fb_begin_cpu_access
->>> referenced by drm_mipi_dbi.c
->>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
+Use the new-style SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() instead.
 
-ld.lld: error: undefined symbol: drm_fb_swab
->>> referenced by drm_mipi_dbi.c
->>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-
-ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
->>> referenced by drm_mipi_dbi.c
->>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-
-ld.lld: error: undefined symbol: drm_fb_memcpy
->>> referenced by drm_mipi_dbi.c
->>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-
-This is fairly hard to hit in randconfig drivers, but it eventually
-did trigger for me in a configuration where all other DRM drivers
-are loadable modules, but DRM_PANEL_WIDECHIPS_WS2401 was built-in.
-
-Adding a dependency in all drivers that select DRM_MIPI_DBI avoids
-the problem for now, adding the dependency in DRM_MIPI_DBI as well
-should help make it easier to figure out why it breaks if someone
-forgets the dependency the next time.
-
+Fixes: 1e15f5b911d6 ("drm/tegra: vic: Stop channel on suspend")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/Kconfig       | 2 +-
- drivers/gpu/drm/panel/Kconfig | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/tegra/vic.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 I see this warning on 5.17-rc8, but did not test it on linux-next,
 which may already have a fix.
 
-
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index b1f22e457fd0..d5ec0b77c010 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -30,7 +30,7 @@ menuconfig DRM
+diff --git a/drivers/gpu/drm/tegra/vic.c b/drivers/gpu/drm/tegra/vic.c
+index 1e342fa3d27b..f56f5921a8c2 100644
+--- a/drivers/gpu/drm/tegra/vic.c
++++ b/drivers/gpu/drm/tegra/vic.c
+@@ -513,9 +513,8 @@ static int vic_remove(struct platform_device *pdev)
+ }
  
- config DRM_MIPI_DBI
- 	tristate
--	depends on DRM
-+	depends on DRM_KMS_HELPER
+ static const struct dev_pm_ops vic_pm_ops = {
+-	SET_RUNTIME_PM_OPS(vic_runtime_suspend, vic_runtime_resume, NULL)
+-	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+-				pm_runtime_force_resume)
++	RUNTIME_PM_OPS(vic_runtime_suspend, vic_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
+ };
  
- config DRM_MIPI_DSI
- 	bool
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 0aec5a10b064..96887d0efb9f 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -425,6 +425,7 @@ config DRM_PANEL_SAMSUNG_DB7430
- 	tristate "Samsung DB7430-based DPI panels"
- 	depends on OF && SPI && GPIOLIB
- 	depends on BACKLIGHT_CLASS_DEVICE
-+	depends on DRM_KMS_HELPER
- 	select DRM_MIPI_DBI
- 	help
- 	  Say Y here if you want to enable support for the Samsung
-@@ -440,6 +441,7 @@ config DRM_PANEL_SAMSUNG_S6D16D0
- config DRM_PANEL_SAMSUNG_S6D27A1
- 	tristate "Samsung S6D27A1 DPI panel driver"
- 	depends on OF && SPI && GPIOLIB
-+	depends on DRM_KMS_HELPER
- 	select DRM_MIPI_DBI
- 	help
- 	  Say Y here if you want to enable support for the Samsung
-@@ -476,6 +478,7 @@ config DRM_PANEL_SAMSUNG_S6E63M0_SPI
- 	depends on SPI
- 	depends on DRM_PANEL_SAMSUNG_S6E63M0
- 	default DRM_PANEL_SAMSUNG_S6E63M0
-+	depends on DRM_KMS_HELPER
- 	select DRM_MIPI_DBI
- 	help
- 	  Say Y here if you want to be able to access the Samsung
-@@ -677,6 +680,7 @@ config DRM_PANEL_WIDECHIPS_WS2401
- 	tristate "Widechips WS2401 DPI panel driver"
- 	depends on SPI && GPIOLIB
- 	depends on BACKLIGHT_CLASS_DEVICE
-+	depends on DRM_KMS_HELPER
- 	select DRM_MIPI_DBI
- 	help
- 	  Say Y here if you want to enable support for the Widechips WS2401 DPI
+ struct platform_driver tegra_vic_driver = {
 -- 
 2.29.2
 

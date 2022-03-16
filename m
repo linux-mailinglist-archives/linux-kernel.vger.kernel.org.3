@@ -2,171 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087264DAFF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5914DAFEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 13:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355837AbiCPMne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 08:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S1355822AbiCPMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 08:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355824AbiCPMnc (ORCPT
+        with ESMTP id S1355804AbiCPMnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 08:43:32 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054F666623
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:42:14 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id v35so4119172ybi.10
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=8ZUl50izl5XTdOzAJcdDsecVVhU46smQU8A68ZRWLG4=;
-        b=lFzwR/Jub1Yg/lKMmW0U/1yHjyPFf/NbxtGfEEWBka6CeEOX/OG61lVmQfkv6KOuK/
-         H99HlyKx9Cb5StArZJGjU5ZnmGpuwpAnD/+og1HE6kwZQrmZkpCY4/IvcOa84kJV0bMF
-         Cssd0jZ/4kwFJq6El7csZUvwTqi/DtKGH6XkCJiCuIKY7Hj7eJGkDxec1FH5xZcm34KV
-         45IVjPw3Zixdaleh6fzL/yL1FxF2L5FLvf7HQdb61InYYkHhsyLGHmcaKRN0MzsRFKkO
-         TO0+axbfIHLHFVIpyig8KVZurRFMsj960thlPtgUmL58NUWxw1kgoSmbEkEPK25r+/LB
-         HAfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=8ZUl50izl5XTdOzAJcdDsecVVhU46smQU8A68ZRWLG4=;
-        b=jRpm/o8jg0wOwlzmUmAnRud6+viMeHd9o+kPDVu64L4h2kDGSsVDy8a+dcdadREU19
-         aOGIUbAN4bXp/OsvVAcrx0Ybwbogx77Id8JBVy485kfnbpmlR3UEfV7Gzg4J3Vmx9KXQ
-         mG1IbEr11x8tLk+idrVqLFor8USIxdo4VHmSkUhFhercS85aWbtS74ALe89Syzt3gOib
-         NqlXgkDby08gzU8d6roP8VM23PMZyskmz2f8dTo+2LdpZ4X8yjrwbqCD8PsZ5od8Lzw5
-         p0UgCGH9NkzV8O8596O1lvsaNk2UYUi2mq10VGZxJd+X5xn1gOcvUKesmLne7z4Atj7w
-         i0jg==
-X-Gm-Message-State: AOAM530bHo55AsRcGE7an2tK0Hr/cF2xSxwX59JR5YoTad3ttsPYOqhX
-        ZwE2GNablhRHoB8LeifOvwJPncJG9UTnOa4VratD5g==
-X-Google-Smtp-Source: ABdhPJxB80wG+ojKETJv7yBdRo6Azrs2Hkadc5V+b2cDQonRXQdBy6DQdPwetodn7KtaURM4mic8pcZjwQZ0Qk5aCXE=
-X-Received: by 2002:a25:3c41:0:b0:62c:2929:84b1 with SMTP id
- j62-20020a253c41000000b0062c292984b1mr27842661yba.338.1647434533874; Wed, 16
- Mar 2022 05:42:13 -0700 (PDT)
+        Wed, 16 Mar 2022 08:43:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D0A365D27
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 05:41:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B57231476;
+        Wed, 16 Mar 2022 05:41:54 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 046133F85F;
+        Wed, 16 Mar 2022 05:41:50 -0700 (PDT)
+Message-ID: <f2fed903-c61b-8040-ddfd-25a7bf0a625a@arm.com>
+Date:   Wed, 16 Mar 2022 12:41:46 +0000
 MIME-Version: 1.0
-References: <20220314145920.247358804@linuxfoundation.org> <CAG=yYwktdQ1Ep0r=VKitta=1gWrNN1Wi0Ft9t0+sXdy1bsX81Q@mail.gmail.com>
-In-Reply-To: <CAG=yYwktdQ1Ep0r=VKitta=1gWrNN1Wi0Ft9t0+sXdy1bsX81Q@mail.gmail.com>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Wed, 16 Mar 2022 18:11:37 +0530
-Message-ID: <CAG=yYw=SrONeQb3mn6C+9RievV-8zbW7h7j+CGZP2gK1JesoOw@mail.gmail.com>
-Subject: previous mail relted
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000002f557005da553e19"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 4/8] drm/virtio: Improve DMA API usage for shmem BOs
+Content-Language: en-GB
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel@lists.freedesktop.org, Dmitry Osipenko <digetx@gmail.com>
+References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
+ <20220314224253.236359-5-dmitry.osipenko@collabora.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220314224253.236359-5-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002f557005da553e19
-Content-Type: text/plain; charset="UTF-8"
+On 2022-03-14 22:42, Dmitry Osipenko wrote:
+> DRM API requires the DRM's driver to be backed with the device that can
+> be used for generic DMA operations. The VirtIO-GPU device can't perform
+> DMA operations if it uses PCI transport because PCI device driver creates
+> a virtual VirtIO-GPU device that isn't associated with the PCI. Use PCI's
+> GPU device for the DRM's device instead of the VirtIO-GPU device and drop
+> DMA-related hacks from the VirtIO-GPU driver.
+> 
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>   drivers/gpu/drm/virtio/virtgpu_drv.c    | 22 +++++++---
+>   drivers/gpu/drm/virtio/virtgpu_drv.h    |  5 +--
+>   drivers/gpu/drm/virtio/virtgpu_kms.c    |  7 ++--
+>   drivers/gpu/drm/virtio/virtgpu_object.c | 56 +++++--------------------
+>   drivers/gpu/drm/virtio/virtgpu_vq.c     | 13 +++---
+>   5 files changed, 37 insertions(+), 66 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.c b/drivers/gpu/drm/virtio/virtgpu_drv.c
+> index 5f25a8d15464..8449dad3e65c 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_drv.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_drv.c
+> @@ -46,9 +46,9 @@ static int virtio_gpu_modeset = -1;
+>   MODULE_PARM_DESC(modeset, "Disable/Enable modesetting");
+>   module_param_named(modeset, virtio_gpu_modeset, int, 0400);
+>   
+> -static int virtio_gpu_pci_quirk(struct drm_device *dev, struct virtio_device *vdev)
+> +static int virtio_gpu_pci_quirk(struct drm_device *dev)
+>   {
+> -	struct pci_dev *pdev = to_pci_dev(vdev->dev.parent);
+> +	struct pci_dev *pdev = to_pci_dev(dev->dev);
+>   	const char *pname = dev_name(&pdev->dev);
+>   	bool vga = (pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA;
+>   	char unique[20];
+> @@ -101,6 +101,7 @@ static int virtio_gpu_pci_quirk(struct drm_device *dev, struct virtio_device *vd
+>   static int virtio_gpu_probe(struct virtio_device *vdev)
+>   {
+>   	struct drm_device *dev;
+> +	struct device *dma_dev;
+>   	int ret;
+>   
+>   	if (drm_firmware_drivers_only() && virtio_gpu_modeset == -1)
+> @@ -109,18 +110,29 @@ static int virtio_gpu_probe(struct virtio_device *vdev)
+>   	if (virtio_gpu_modeset == 0)
+>   		return -EINVAL;
+>   
+> -	dev = drm_dev_alloc(&driver, &vdev->dev);
+> +	/*
+> +	 * If GPU's parent is a PCI device, then we will use this PCI device
+> +	 * for the DRM's driver device because GPU won't have PCI's IOMMU DMA
+> +	 * ops in this case since GPU device is sitting on a separate (from PCI)
+> +	 * virtio-bus.
+> +	 */
+> +	if (!strcmp(vdev->dev.parent->bus->name, "pci"))
 
-hello,
-did you get my previous email?
+Nit: dev_is_pci() ?
 
-i am forwarding it .
+However, what about other VirtIO transports? Wouldn't virtio-mmio with 
+F_ACCESS_PLATFORM be in a similar situation?
 
+Robin.
 
-
----------- Forwarded message ---------
-From: Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date: Tue, Mar 15, 2022 at 11:04 PM
-Subject: Re: [PATCH 4.19 00/29] 4.19.235-rc2 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: lkml <linux-kernel@vger.kernel.org>, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org>, <stable@vger.kernel.org>,
-<torvalds@linux-foundation.org>, Andrew Morton
-<akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, Shuah
-Khan <shuah@kernel.org>, <patches@kernelci.org>,
-<lkft-triage@lists.linaro.org>, Pavel Machek <pavel@denx.de>,
-<jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-<sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-
-
-On Mon, Mar 14, 2022 at 11:00 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.235 release.
-> There are 29 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Mar 2022 14:59:12 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.235-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-hello,
-
-Compiled and  booted 4.19.235-rc2+ on ...
-
-Processor Information
-    Socket Designation: FM2
-    Type: Central Processor
-    Family: A-Series
-    Manufacturer: AuthenticAMD
-    ID: 31 0F 61 00 FF FB 8B 17
-    Signature: Family 21, Model 19, Stepping 1
-
-
-I think No major new  regression or regressions  from dmesg.
-Some error related stuff has happened.
-Please see the  attachment for build issues related.
-
-Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-Reported-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-
-
---
-software engineer
-rajagiri school of engineering and technology  -  autonomous
-
-
--- 
-software engineer
-rajagiri school of engineering and technology
-
---0000000000002f557005da553e19
-Content-Type: text/plain; charset="US-ASCII"; name="error-4.19.235-rc2.txt"
-Content-Disposition: attachment; filename="error-4.19.235-rc2.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l0seymyd0>
-X-Attachment-Id: f_l0seymyd0
-
-Ci0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLTxlcnJvciByZWxhdGVkIGNsaXBwaW5nIDE+LS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0KSW4gZnVuY3Rpb24gJ21lbWNweScsCiAgaW5saW5lZCBmcm9t
-IG1lbWNweV9mcm9taW8gYXQgLi9pbmNsdWRlL2FzbS1nZW5lcmljL2lvLmg6MTExNzoyLAogICAg
-aW5saW5lZCBmcm9tIGdoZXNfY29weV90b2Zyb21fcGh5cyBhdCBkcml2ZXJzL2FjcGkvYXBlaS9n
-aGVzLmM6MzExOjQ6Ci4vaW5jbHVkZS9saW51eC9zdHJpbmcuaDoyNjE6MzM6IHdhcm5pbmc6IF9f
-YnVpbHRpbl9tZW1jcHkgcmVhZGluZyBiZXR3ZWVuIDEgYW5kIDQwOTYgYnl0ZXMgZnJvbSBhIHJl
-Z2lvbiBvZiBzaXplIDAgWy1Xc3RyaW5nb3Atb3ZlcnJlYWRdCiAgMjYxIHwgI2RlZmluZSBfX3Vu
-ZGVybHlpbmdfbWVtY3B5ICAgICBfX2J1aWx0aW5fbWVtY3B5CiAgICAgIHwgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBeCi4vaW5jbHVkZS9saW51eC9zdHJpbmcuaDozNzc6MTY6IG5v
-dGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyBfX3VuZGVybHlpbmdfbWVtY3B5CiAgMzc3IHwgICAg
-ICAgICByZXR1cm4gX191bmRlcmx5aW5nX21lbWNweShwLCBxLCBzaXplKTsKCi0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLTxlcnJvciByZWxhdGVkIGNsaXBwaW5nID4tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLQoKCgoKCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLTxlcnJvciByZWxhdGVkIGNsaXBw
-aW5nIDI+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCmRyaXZlcnMvY3J5cHRvL2NjcC9zcC1w
-bGF0Zm9ybS5jOjM3OjM0OiB3YXJuaW5nOiBhcnJheSBzcF9vZl9tYXRjaCBhc3N1bWVkIHRvIGhh
-dmUgb25lIGVsZW1lbnQKICAgMzcgfCBzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBz
-cF9vZl9tYXRjaFtdOwotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08ZXJyb3IgcmVsYXRlZCBjbGlw
-cGluZz4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKCgoKCgotLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS08ZXJyb3IgcmVsYXRlZCBjbGlwcGluZyAzPi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-CmxkOiBhcmNoL3g4Ni9ib290L2NvbXByZXNzZWQvaGVhZF82NC5vOiB3YXJuaW5nOiByZWxvY2F0
-aW9uIGluIHJlYWQtb25seSBzZWN0aW9uIGAuaGVhZC50ZXh0JwpsZDogd2FybmluZzogY3JlYXRp
-bmcgRFRfVEVYVFJFTCBpbiBhIFBJRQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08ZXJyb3IgcmVs
-YXRlZCBjbGlwcGluZz4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ==
---0000000000002f557005da553e19--
+> +		dma_dev = vdev->dev.parent;
+> +	else
+> +		dma_dev = &vdev->dev;
+> +
+> +	dev = drm_dev_alloc(&driver, dma_dev);
+>   	if (IS_ERR(dev))
+>   		return PTR_ERR(dev);
+>   	vdev->priv = dev;
+>   
+>   	if (!strcmp(vdev->dev.parent->bus->name, "pci")) {
+> -		ret = virtio_gpu_pci_quirk(dev, vdev);
+> +		ret = virtio_gpu_pci_quirk(dev);
+>   		if (ret)
+>   			goto err_free;
+>   	}
+>   
+> -	ret = virtio_gpu_init(dev);
+> +	ret = virtio_gpu_init(vdev, dev);
+>   	if (ret)
+>   		goto err_free;
+>   
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
+> index 0a194aaad419..b2d93cb12ebf 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_drv.h
+> +++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
+> @@ -100,8 +100,6 @@ struct virtio_gpu_object {
+>   
+>   struct virtio_gpu_object_shmem {
+>   	struct virtio_gpu_object base;
+> -	struct sg_table *pages;
+> -	uint32_t mapped;
+>   };
+>   
+>   struct virtio_gpu_object_vram {
+> @@ -214,7 +212,6 @@ struct virtio_gpu_drv_cap_cache {
+>   };
+>   
+>   struct virtio_gpu_device {
+> -	struct device *dev;
+>   	struct drm_device *ddev;
+>   
+>   	struct virtio_device *vdev;
+> @@ -282,7 +279,7 @@ extern struct drm_ioctl_desc virtio_gpu_ioctls[DRM_VIRTIO_NUM_IOCTLS];
+>   void virtio_gpu_create_context(struct drm_device *dev, struct drm_file *file);
+>   
+>   /* virtgpu_kms.c */
+> -int virtio_gpu_init(struct drm_device *dev);
+> +int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev);
+>   void virtio_gpu_deinit(struct drm_device *dev);
+>   void virtio_gpu_release(struct drm_device *dev);
+>   int virtio_gpu_driver_open(struct drm_device *dev, struct drm_file *file);
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+> index 3313b92db531..0d1e3eb61bee 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_kms.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+> @@ -110,7 +110,7 @@ static void virtio_gpu_get_capsets(struct virtio_gpu_device *vgdev,
+>   	vgdev->num_capsets = num_capsets;
+>   }
+>   
+> -int virtio_gpu_init(struct drm_device *dev)
+> +int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+>   {
+>   	static vq_callback_t *callbacks[] = {
+>   		virtio_gpu_ctrl_ack, virtio_gpu_cursor_ack
+> @@ -123,7 +123,7 @@ int virtio_gpu_init(struct drm_device *dev)
+>   	u32 num_scanouts, num_capsets;
+>   	int ret = 0;
+>   
+> -	if (!virtio_has_feature(dev_to_virtio(dev->dev), VIRTIO_F_VERSION_1))
+> +	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+>   		return -ENODEV;
+>   
+>   	vgdev = kzalloc(sizeof(struct virtio_gpu_device), GFP_KERNEL);
+> @@ -132,8 +132,7 @@ int virtio_gpu_init(struct drm_device *dev)
+>   
+>   	vgdev->ddev = dev;
+>   	dev->dev_private = vgdev;
+> -	vgdev->vdev = dev_to_virtio(dev->dev);
+> -	vgdev->dev = dev->dev;
+> +	vgdev->vdev = vdev;
+>   
+>   	spin_lock_init(&vgdev->display_info_lock);
+>   	spin_lock_init(&vgdev->resource_export_lock);
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
+> index 0b8cbb87f8d8..1964c0d8b51f 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_object.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_object.c
+> @@ -67,21 +67,6 @@ void virtio_gpu_cleanup_object(struct virtio_gpu_object *bo)
+>   
+>   	virtio_gpu_resource_id_put(vgdev, bo->hw_res_handle);
+>   	if (virtio_gpu_is_shmem(bo)) {
+> -		struct virtio_gpu_object_shmem *shmem = to_virtio_gpu_shmem(bo);
+> -
+> -		if (shmem->pages) {
+> -			if (shmem->mapped) {
+> -				dma_unmap_sgtable(vgdev->vdev->dev.parent,
+> -					     shmem->pages, DMA_TO_DEVICE, 0);
+> -				shmem->mapped = 0;
+> -			}
+> -
+> -			sg_free_table(shmem->pages);
+> -			kfree(shmem->pages);
+> -			shmem->pages = NULL;
+> -			drm_gem_shmem_unpin(&bo->base);
+> -		}
+> -
+>   		drm_gem_shmem_free(&bo->base);
+>   	} else if (virtio_gpu_is_vram(bo)) {
+>   		struct virtio_gpu_object_vram *vram = to_virtio_gpu_vram(bo);
+> @@ -153,37 +138,18 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
+>   					unsigned int *nents)
+>   {
+>   	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+> -	struct virtio_gpu_object_shmem *shmem = to_virtio_gpu_shmem(bo);
+>   	struct scatterlist *sg;
+> -	int si, ret;
+> +	struct sg_table *pages;
+> +	int si;
+>   
+> -	ret = drm_gem_shmem_pin(&bo->base);
+> -	if (ret < 0)
+> -		return -EINVAL;
+> -
+> -	/*
+> -	 * virtio_gpu uses drm_gem_shmem_get_sg_table instead of
+> -	 * drm_gem_shmem_get_pages_sgt because virtio has it's own set of
+> -	 * dma-ops. This is discouraged for other drivers, but should be fine
+> -	 * since virtio_gpu doesn't support dma-buf import from other devices.
+> -	 */
+> -	shmem->pages = drm_gem_shmem_get_sg_table(&bo->base);
+> -	ret = PTR_ERR(shmem->pages);
+> -	if (ret) {
+> -		drm_gem_shmem_unpin(&bo->base);
+> -		shmem->pages = NULL;
+> -		return ret;
+> -	}
+> +	pages = drm_gem_shmem_get_pages_sgt(&bo->base);
+> +	if (IS_ERR(pages))
+> +		return PTR_ERR(pages);
+>   
+> -	if (use_dma_api) {
+> -		ret = dma_map_sgtable(vgdev->vdev->dev.parent,
+> -				      shmem->pages, DMA_TO_DEVICE, 0);
+> -		if (ret)
+> -			return ret;
+> -		*nents = shmem->mapped = shmem->pages->nents;
+> -	} else {
+> -		*nents = shmem->pages->orig_nents;
+> -	}
+> +	if (use_dma_api)
+> +		*nents = pages->nents;
+> +	else
+> +		*nents = pages->orig_nents;
+>   
+>   	*ents = kvmalloc_array(*nents,
+>   			       sizeof(struct virtio_gpu_mem_entry),
+> @@ -194,13 +160,13 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
+>   	}
+>   
+>   	if (use_dma_api) {
+> -		for_each_sgtable_dma_sg(shmem->pages, sg, si) {
+> +		for_each_sgtable_dma_sg(pages, sg, si) {
+>   			(*ents)[si].addr = cpu_to_le64(sg_dma_address(sg));
+>   			(*ents)[si].length = cpu_to_le32(sg_dma_len(sg));
+>   			(*ents)[si].padding = 0;
+>   		}
+>   	} else {
+> -		for_each_sgtable_sg(shmem->pages, sg, si) {
+> +		for_each_sgtable_sg(pages, sg, si) {
+>   			(*ents)[si].addr = cpu_to_le64(sg_phys(sg));
+>   			(*ents)[si].length = cpu_to_le32(sg->length);
+>   			(*ents)[si].padding = 0;
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_vq.c b/drivers/gpu/drm/virtio/virtgpu_vq.c
+> index 2edf31806b74..06566e44307d 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_vq.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_vq.c
+> @@ -593,11 +593,10 @@ void virtio_gpu_cmd_transfer_to_host_2d(struct virtio_gpu_device *vgdev,
+>   	struct virtio_gpu_transfer_to_host_2d *cmd_p;
+>   	struct virtio_gpu_vbuffer *vbuf;
+>   	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+> -	struct virtio_gpu_object_shmem *shmem = to_virtio_gpu_shmem(bo);
+>   
+>   	if (virtio_gpu_is_shmem(bo) && use_dma_api)
+> -		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
+> -					    shmem->pages, DMA_TO_DEVICE);
+> +		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
+> +					    bo->base.sgt, DMA_TO_DEVICE);
+>   
+>   	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
+>   	memset(cmd_p, 0, sizeof(*cmd_p));
+> @@ -1017,11 +1016,9 @@ void virtio_gpu_cmd_transfer_to_host_3d(struct virtio_gpu_device *vgdev,
+>   	struct virtio_gpu_vbuffer *vbuf;
+>   	bool use_dma_api = !virtio_has_dma_quirk(vgdev->vdev);
+>   
+> -	if (virtio_gpu_is_shmem(bo) && use_dma_api) {
+> -		struct virtio_gpu_object_shmem *shmem = to_virtio_gpu_shmem(bo);
+> -		dma_sync_sgtable_for_device(vgdev->vdev->dev.parent,
+> -					    shmem->pages, DMA_TO_DEVICE);
+> -	}
+> +	if (virtio_gpu_is_shmem(bo) && use_dma_api)
+> +		dma_sync_sgtable_for_device(&vgdev->vdev->dev,
+> +					    bo->base.sgt, DMA_TO_DEVICE);
+>   
+>   	cmd_p = virtio_gpu_alloc_cmd(vgdev, &vbuf, sizeof(*cmd_p));
+>   	memset(cmd_p, 0, sizeof(*cmd_p));

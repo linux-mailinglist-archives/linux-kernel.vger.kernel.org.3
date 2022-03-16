@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30604DB4CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203AE4DB4D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 16:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347903AbiCPP2r convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Mar 2022 11:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
+        id S1349954AbiCPP3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 11:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiCPP2p (ORCPT
+        with ESMTP id S1347360AbiCPP3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 11:28:45 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D45A4673D5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 08:27:30 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-38-f6wgHKZ6OgqCN6WP2rtJ0g-1; Wed, 16 Mar 2022 15:27:27 +0000
-X-MC-Unique: f6wgHKZ6OgqCN6WP2rtJ0g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 16 Mar 2022 15:27:26 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 16 Mar 2022 15:27:26 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Wander Lairson Costa' <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?iso-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andre.goddard@gmail.com" <andre.goddard@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "phil@raspberrypi.com" <phil@raspberrypi.com>
-Subject: RE: [PATCH v4 1/5] serial/8250: Use fifo in 8250 console driver
-Thread-Topic: [PATCH v4 1/5] serial/8250: Use fifo in 8250 console driver
-Thread-Index: AQHYOUNg+UxO79+xmUuDTD6Kl8POG6zCIVEg
-Date:   Wed, 16 Mar 2022 15:27:26 +0000
-Message-ID: <bb5f03ec092f462c9656f224895bb224@AcuMS.aculab.com>
-References: <20220316143646.13301-1-wander@redhat.com>
- <20220316143646.13301-2-wander@redhat.com>
-In-Reply-To: <20220316143646.13301-2-wander@redhat.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 16 Mar 2022 11:29:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69F51EAE8;
+        Wed, 16 Mar 2022 08:28:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 620986154E;
+        Wed, 16 Mar 2022 15:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C6BC340EC;
+        Wed, 16 Mar 2022 15:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647444505;
+        bh=5rbztnXVsrPksaO1G7Gp7Ki/1G4oYU03f3llLlYU4fQ=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Yr93PbHj8a/yKJrbZJKXDrn8ftjsRpej4pOn+ABJuBKwn2cnE8Hq/rOkSxi6D5CiR
+         z7w8kweUvo1hZzp6YZzLn4QPT3DIFI+RFi7XzcnCxorb+JS6Eqf/nk8UXr8H93MzIE
+         uDm/gWbzheOwBQmImPdVvXUW8M1ybdMj/C0mGgpCRFT3QDK9bnxkvziEJM5AdfzOWu
+         ttluVhZnzyP34v1YFOnrf+kgXqZCyPs9/t/GGWMVNMzciNw4VhavsytmJD23QaujiH
+         m7txBK8JfNgHpiKOWBKsW/v+2NNp9xw50zoCJIuhrdPMJl8NGkXWAIlV2RoDOXGRYV
+         n3EgO3UIk1o7g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] mwifiex: make read-only array wmm_oui static const
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220311225610.10895-1-colin.i.king@gmail.com>
+References: <20220311225610.10895-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164744450133.16413.10583656975501578777.kvalo@kernel.org>
+Date:   Wed, 16 Mar 2022 15:28:23 +0000 (UTC)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wander Lairson Costa
-> Sent: 16 March 2022 14:37
-> 
-> Note: I am using a small test app + driver located at [0] for the
-> problem description. serco is a driver whose write function dispatches
-> to the serial controller. sertest is a user-mode app that writes n bytes
-> to the serial console using the serco driver.
-> 
-> While investigating a bug in the RHEL kernel, I noticed that the serial
-> console throughput is way below the configured speed of 115200 bps in
-> a HP Proliant DL380 Gen9. I was expecting something above 10KB/s, but
-> I got 2.5KB/s.
-> 
-> $ time ./sertest -n 2500 /tmp/serco
-> 
-> real    0m0.997s
-> user    0m0.000s
-> sys     0m0.997s
-> 
-> With the help of the function tracer, I then noticed the serial
-> controller was taking around 410us seconds to dispatch one single byte:
+Colin Ian King <colin.i.king@gmail.com> wrote:
 
-Did you verify the baud rate?
+> Don't populate the read-only array wmm_oui on the stack but
+> instead make it static const. Also makes the object code a little
+> smaller.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Or is there some horrid serial redirection going on.
-It is even possible there is a bios smm interrupt
-chugging through on another cpu core.
+Patch applied to wireless-next.git, thanks.
 
-	David
+e7d1fc0b5ff2 mwifiex: make read-only array wmm_oui static const
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220311225610.10895-1-colin.i.king@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

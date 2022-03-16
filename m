@@ -2,423 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F3A4DBABB
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 23:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1624DBAC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Mar 2022 23:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiCPWr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 18:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S235194AbiCPWyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 18:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiCPWrQ (ORCPT
+        with ESMTP id S229501AbiCPWyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 18:47:16 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D32317AB6;
-        Wed, 16 Mar 2022 15:46:01 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id c2so1251067pga.10;
-        Wed, 16 Mar 2022 15:46:01 -0700 (PDT)
+        Wed, 16 Mar 2022 18:54:00 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAEE1DA40
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:52:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id d10so7153541eje.10
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 15:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VwEDDEJobGkNmiRYjqXq64WHLYJ5/paFbvAI6vzbTEw=;
-        b=WSOjnn6pcFlNHew8Yfxxulx5PI5I5+KOVNLmo2Yb7G6G9gTiyihSejJPJmlAV9Hii4
-         pi+1nAg+l4FbPfRGUD3ug/wVzbAWemC6jLm4g5/Pzn6aV5u9ltWwJ6dHwWHBbPejXbom
-         ZYtYDcT/s896dlXqzI3lZ57JEqmPenKL5+3h0uIvIhDiBu/78DnEUgmk5UCvK/CcBsnX
-         dqmgIwwVXrvXRio6FgfGAuUKH/kTlSscHRAwZyMiZC+EnsOTN6SPp8+8caJA7R1cLFA4
-         tL9lo8E5nMStkVugfsQdfh+hn5XsBNBNeVHBGCGNvrA5n2YnISlBXcaLt4w0mOH2p3tw
-         hY5w==
+        bh=S9gCTWlc9p2G4Mf4tEdAge9wxpXHZ7B8VpsEVH/T2so=;
+        b=UMwAkeqZVJIh/5hKCUjeTsWOPqTAbH/K7YrpyWna1gutUilxrY2/7iduvI7svjw8PP
+         uLzxGFyRck4+jsBNIbE589EtFtC5PT19VJduymJcJDsVz6r9BLL1oQ+hTXRpc6jpCzAf
+         0crOO0KIgM840B9UOSVTkzcWTkod8nnEK/0VCI2OErworV2TUrPE0npOsGEIH2C+pdJF
+         oYjKaNtKYR9HGResMUM0wIoz+HxZAxhcDWBIzxuqSjveOmMF1F1LeoHFeCcAI7lC6L29
+         abZTlQa048L6nNZeql2wBr6dsYd58Y2nsY6uWQtGFXk9KQ73fKf/ExrmuUiczuSRJl0k
+         ivaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=VwEDDEJobGkNmiRYjqXq64WHLYJ5/paFbvAI6vzbTEw=;
-        b=VvnLgcN4XIMj2DZIqOyy55LFdWxRQ48hBV/h6u6RvaKMpF73xtC1p1RGZK7IFzCB9Z
-         fyLKwDysb1GSib1ASpwfUCGSD2RlL7Ml31p8M0uXsI6w68x6/yVSpQyJhFCgXylYkU1w
-         TyDMovh5Cpk6He/lIYmXxuz5tDh3K24atOE6oofBWbu1MW+f82kzSDa7P3QpDyTOK5ZT
-         1eLO6FLtUM3CXHenZNc7AgEkEJB7+k9sR/xAr+w2r4pf81+tFTFOGslHyRFZD/OfdWqP
-         f8y65MBzGB/c7mYpq7NHchJMq1RGTdPhZ24p3D9GT5qjde7LzJnIGmhioWken6Lw4dm1
-         jrgg==
-X-Gm-Message-State: AOAM530OV3pTHYbfCtmZ2iREntv/wx6CnMQs2W0bKjLc0KAlRL59Rlsj
-        aYsuOarZ5tzljBXCLLZsvZs=
-X-Google-Smtp-Source: ABdhPJzTUccwATYE4P2rM1zaFpKWXdxokL4flpnseXPVJgWAtS/nhPMSO4rJPO9gjY6KEEvbfm8gHA==
-X-Received: by 2002:a63:82c7:0:b0:37c:8729:a70c with SMTP id w190-20020a6382c7000000b0037c8729a70cmr1419597pgd.108.1647470760884;
-        Wed, 16 Mar 2022 15:46:00 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:9b43:96ac:9f9:5093])
-        by smtp.gmail.com with ESMTPSA id v13-20020a17090a088d00b001c64d30fa8bsm6397832pjc.1.2022.03.16.15.45.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=S9gCTWlc9p2G4Mf4tEdAge9wxpXHZ7B8VpsEVH/T2so=;
+        b=ovXgvuBLW3EPkgxilLsQFor0Gw72u/MhMqo4L1OopkBkOu+gBUyo7hFl0PlYM6PqAI
+         LI8TIkTCnE4G137TA6OHxbFyw8QIJw7Y7AmS4JgaA8+vK6pq1VruTuCTWTpsTVr7JfVN
+         nWIAmmBqr/L1uOL68gkAHljt3Jiwd/pdYLBY8A+fO/Vrn2INc5wuY0XwhAsPXkhYgAK4
+         ME5oJtQWr4h9ti25S0oSYQBZ5xxBpEtUz7abqsPn8ayz+unocRNQw9jWa5TpcxkqZFPG
+         y5eK4a9TIKRgbgeptUG/t4XHbc0a5CkldSZSgCGIOMjyq/HXVjngnNyunmIsWtvs3xZ1
+         PUFg==
+X-Gm-Message-State: AOAM531iKWoYGhv3sfge0Rf7RuNvlRoe78ovaPSBMPh04oVo0G8Q5FB2
+        FvTiIJfVCgNY9L67VmDropM=
+X-Google-Smtp-Source: ABdhPJwG8k2AQakxj1x52lpQ78SDqvtYBPscQ5njb53RQX3s5Z4nQSiDJF1p+E6Uk+IMMI9LQ6HewQ==
+X-Received: by 2002:a17:906:7954:b0:6da:9ee0:2e54 with SMTP id l20-20020a170906795400b006da9ee02e54mr1914401ejo.630.1647471163128;
+        Wed, 16 Mar 2022 15:52:43 -0700 (PDT)
+Received: from linux-kernel-dev (159.137.141.34.bc.googleusercontent.com. [34.141.137.159])
+        by smtp.gmail.com with ESMTPSA id bk1-20020a170906b0c100b006d47308d84dsm1494452ejb.33.2022.03.16.15.52.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 15:46:00 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH 2/2] locking: Apply contention tracepoints in the slow path
-Date:   Wed, 16 Mar 2022 15:45:48 -0700
-Message-Id: <20220316224548.500123-3-namhyung@kernel.org>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-In-Reply-To: <20220316224548.500123-1-namhyung@kernel.org>
-References: <20220316224548.500123-1-namhyung@kernel.org>
+        Wed, 16 Mar 2022 15:52:42 -0700 (PDT)
+From:   Nam Cao <cvn249@gmail.com>
+To:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Nam Cao <cvn249@gmail.com>
+Subject: [PATCH v2] staging: sm750fb: fix naming style
+Date:   Wed, 16 Mar 2022 22:49:41 +0000
+Message-Id: <20220316224940.70107-1-cvn249@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220316202335.GB7346@nam-dell>
+References: <20220316202335.GB7346@nam-dell>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding the lock contention tracepoints in various lock function slow
-paths.  Note that each arch can define spinlock differently, I only
-added it only to the generic qspinlock for now.
+Fix CamelCase names defined in ddk750_dvi.c and ddk750_dvi.h, as
+reported by checkpatch.pl. Remove name suffixes such as pfn_ and g_.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Nam Cao <cvn249@gmail.com>
 ---
- kernel/locking/mutex.c        |  3 +++
- kernel/locking/percpu-rwsem.c |  3 +++
- kernel/locking/qrwlock.c      |  9 +++++++++
- kernel/locking/qspinlock.c    |  5 +++++
- kernel/locking/rtmutex.c      | 11 +++++++++++
- kernel/locking/rwbase_rt.c    |  3 +++
- kernel/locking/rwsem.c        |  9 +++++++++
- kernel/locking/semaphore.c    | 14 +++++++++++++-
- 8 files changed, 56 insertions(+), 1 deletion(-)
+Changes in v2:
+  - Remove name suffixes including pfn_, g_ and p_.
+  - Typo: deskew_eetting -> deskew_setting
 
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index ee2fd7614a93..c88deda77cf2 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	}
+ drivers/staging/sm750fb/ddk750_dvi.c | 68 ++++++++++++++--------------
+ drivers/staging/sm750fb/ddk750_dvi.h | 64 +++++++++++++-------------
+ 2 files changed, 66 insertions(+), 66 deletions(-)
+
+diff --git a/drivers/staging/sm750fb/ddk750_dvi.c b/drivers/staging/sm750fb/ddk750_dvi.c
+index cd564ea40779..029d9acec47d 100644
+--- a/drivers/staging/sm750fb/ddk750_dvi.c
++++ b/drivers/staging/sm750fb/ddk750_dvi.c
+@@ -11,50 +11,50 @@
+  * function API. Please set the function pointer to NULL whenever the function
+  * is not supported.
+  */
+-static struct dvi_ctrl_device g_dcftSupportedDviController[] = {
++static struct dvi_ctrl_device dcft_supported_dvi_controller[] = {
+ #ifdef DVI_CTRL_SII164
+ 	{
+-		.pfnInit = sii164InitChip,
+-		.pfnGetVendorId = sii164GetVendorID,
+-		.pfnGetDeviceId = sii164GetDeviceID,
++		.init = sii164InitChip,
++		.get_vendor_id = sii164GetVendorID,
++		.get_device_id = sii164GetDeviceID,
+ #ifdef SII164_FULL_FUNCTIONS
+-		.pfnResetChip = sii164ResetChip,
+-		.pfnGetChipString = sii164GetChipString,
+-		.pfnSetPower = sii164SetPower,
+-		.pfnEnableHotPlugDetection = sii164EnableHotPlugDetection,
+-		.pfnIsConnected = sii164IsConnected,
+-		.pfnCheckInterrupt = sii164CheckInterrupt,
+-		.pfnClearInterrupt = sii164ClearInterrupt,
++		.reset_chip = sii164ResetChip,
++		.get_chip_string = sii164GetChipString,
++		.set_power = sii164SetPower,
++		.enable_hot_plug_detection = sii164EnableHotPlugDetection,
++		.is_connected = sii164IsConnected,
++		.check_interrupt = sii164CheckInterrupt,
++		.clear_interrupt = sii164ClearInterrupt,
+ #endif
+ 	},
+ #endif
+ };
  
- 	set_current_state(state);
-+	trace_contention_begin(lock, 0);
- 	for (;;) {
- 		bool first;
- 
-@@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- skip_wait:
- 	/* got the lock - cleanup and rejoice! */
- 	lock_acquired(&lock->dep_map, ip);
-+	trace_contention_end(lock, 0);
- 
- 	if (ww_ctx)
- 		ww_mutex_lock_acquired(ww, ww_ctx);
-@@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- err:
- 	__set_current_state(TASK_RUNNING);
- 	__mutex_remove_waiter(lock, &waiter);
-+	trace_contention_end(lock, ret);
- err_early_kill:
- 	raw_spin_unlock(&lock->wait_lock);
- 	debug_mutex_free_waiter(&waiter);
-diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-index c9fdae94e098..833043613af6 100644
---- a/kernel/locking/percpu-rwsem.c
-+++ b/kernel/locking/percpu-rwsem.c
-@@ -9,6 +9,7 @@
- #include <linux/sched/task.h>
- #include <linux/sched/debug.h>
- #include <linux/errno.h>
-+#include <trace/events/lock.h>
- 
- int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
- 			const char *name, struct lock_class_key *key)
-@@ -154,6 +155,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
- 	}
- 	spin_unlock_irq(&sem->waiters.lock);
- 
-+	trace_contention_begin(sem, LCB_F_PERCPU | (reader ? LCB_F_READ : LCB_F_WRITE));
- 	while (wait) {
- 		set_current_state(TASK_UNINTERRUPTIBLE);
- 		if (!smp_load_acquire(&wq_entry.private))
-@@ -161,6 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
- 		schedule();
- 	}
- 	__set_current_state(TASK_RUNNING);
-+	trace_contention_end(sem, 0);
- }
- 
- bool __sched __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
-diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-index ec36b73f4733..b9f6f963d77f 100644
---- a/kernel/locking/qrwlock.c
-+++ b/kernel/locking/qrwlock.c
-@@ -12,6 +12,7 @@
- #include <linux/percpu.h>
- #include <linux/hardirq.h>
- #include <linux/spinlock.h>
-+#include <trace/events/lock.h>
- 
- /**
-  * queued_read_lock_slowpath - acquire read lock of a queue rwlock
-@@ -34,6 +35,8 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 	}
- 	atomic_sub(_QR_BIAS, &lock->cnts);
- 
-+	trace_contention_begin(lock, LCB_F_READ | LCB_F_SPIN);
-+
- 	/*
- 	 * Put the reader into the wait queue
- 	 */
-@@ -51,6 +54,8 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 	 * Signal the next one in queue to become queue head
- 	 */
- 	arch_spin_unlock(&lock->wait_lock);
-+
-+	trace_contention_end(lock, 0);
- }
- EXPORT_SYMBOL(queued_read_lock_slowpath);
- 
-@@ -62,6 +67,8 @@ void queued_write_lock_slowpath(struct qrwlock *lock)
+-int dviInit(unsigned char edge_select,
+-	    unsigned char bus_select,
+-	    unsigned char dual_edge_clk_select,
+-	    unsigned char hsync_enable,
+-	    unsigned char vsync_enable,
+-	    unsigned char deskew_enable,
+-	    unsigned char deskew_setting,
+-	    unsigned char continuous_sync_enable,
+-	    unsigned char pll_filter_enable,
+-	    unsigned char pll_filter_value)
++int dvi_init(unsigned char edge_select,
++	     unsigned char bus_select,
++	     unsigned char dual_edge_clk_select,
++	     unsigned char hsync_enable,
++	     unsigned char vsync_enable,
++	     unsigned char deskew_enable,
++	     unsigned char deskew_setting,
++	     unsigned char continuous_sync_enable,
++	     unsigned char pll_filter_enable,
++	     unsigned char pll_filter_value)
  {
- 	int cnts;
+-	struct dvi_ctrl_device *pCurrentDviCtrl;
++	struct dvi_ctrl_device *current_dvi_ctrl;
  
-+	trace_contention_begin(lock, LCB_F_WRITE | LCB_F_SPIN);
-+
- 	/* Put the writer into the wait queue */
- 	arch_spin_lock(&lock->wait_lock);
- 
-@@ -79,5 +86,7 @@ void queued_write_lock_slowpath(struct qrwlock *lock)
- 	} while (!atomic_try_cmpxchg_acquire(&lock->cnts, &cnts, _QW_LOCKED));
- unlock:
- 	arch_spin_unlock(&lock->wait_lock);
-+
-+	trace_contention_end(lock, 0);
- }
- EXPORT_SYMBOL(queued_write_lock_slowpath);
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index cbff6ba53d56..65a9a10caa6f 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -22,6 +22,7 @@
- #include <linux/prefetch.h>
- #include <asm/byteorder.h>
- #include <asm/qspinlock.h>
-+#include <trace/events/lock.h>
- 
- /*
-  * Include queued spinlock statistics code
-@@ -401,6 +402,8 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	idx = node->count++;
- 	tail = encode_tail(smp_processor_id(), idx);
- 
-+	trace_contention_begin(lock, LCB_F_SPIN);
-+
- 	/*
- 	 * 4 nodes are allocated based on the assumption that there will
- 	 * not be nested NMIs taking spinlocks. That may not be true in
-@@ -554,6 +557,8 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	pv_kick_node(lock, next);
- 
- release:
-+	trace_contention_end(lock, 0);
-+
- 	/*
- 	 * release the node
- 	 */
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 8555c4efe97c..7779ee8abc2a 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -24,6 +24,8 @@
- #include <linux/sched/wake_q.h>
- #include <linux/ww_mutex.h>
- 
-+#include <trace/events/lock.h>
-+
- #include "rtmutex_common.h"
- 
- #ifndef WW_RT
-@@ -1579,6 +1581,8 @@ static int __sched __rt_mutex_slowlock(struct rt_mutex_base *lock,
- 
- 	set_current_state(state);
- 
-+	trace_contention_begin(lock, LCB_F_RT);
-+
- 	ret = task_blocks_on_rt_mutex(lock, waiter, current, ww_ctx, chwalk);
- 	if (likely(!ret))
- 		ret = rt_mutex_slowlock_block(lock, ww_ctx, state, NULL, waiter);
-@@ -1601,6 +1605,9 @@ static int __sched __rt_mutex_slowlock(struct rt_mutex_base *lock,
- 	 * unconditionally. We might have to fix that up.
- 	 */
- 	fixup_rt_mutex_waiters(lock);
-+
-+	trace_contention_end(lock, ret);
-+
- 	return ret;
- }
- 
-@@ -1683,6 +1690,8 @@ static void __sched rtlock_slowlock_locked(struct rt_mutex_base *lock)
- 	/* Save current state and set state to TASK_RTLOCK_WAIT */
- 	current_save_and_set_rtlock_wait_state();
- 
-+	trace_contention_begin(lock, LCB_F_RT);
-+
- 	task_blocks_on_rt_mutex(lock, &waiter, current, NULL, RT_MUTEX_MIN_CHAINWALK);
- 
- 	for (;;) {
-@@ -1712,6 +1721,8 @@ static void __sched rtlock_slowlock_locked(struct rt_mutex_base *lock)
- 	 */
- 	fixup_rt_mutex_waiters(lock);
- 	debug_rt_mutex_free_waiter(&waiter);
-+
-+	trace_contention_end(lock, 0);
- }
- 
- static __always_inline void __sched rtlock_slowlock(struct rt_mutex_base *lock)
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index 6fd3162e4098..ec7b1fda7982 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -247,11 +247,13 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 		goto out_unlock;
- 
- 	rwbase_set_and_save_current_state(state);
-+	trace_contention_begin(rwb, LCB_F_WRITE | LCB_F_RT);
- 	for (;;) {
- 		/* Optimized out for rwlocks */
- 		if (rwbase_signal_pending_state(state, current)) {
- 			rwbase_restore_current_state();
- 			__rwbase_write_unlock(rwb, 0, flags);
-+			trace_contention_end(rwb, -EINTR);
- 			return -EINTR;
- 		}
- 
-@@ -265,6 +267,7 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 		set_current_state(state);
+-	pCurrentDviCtrl = g_dcftSupportedDviController;
+-	if (pCurrentDviCtrl->pfnInit) {
+-		return pCurrentDviCtrl->pfnInit(edge_select,
+-						bus_select,
+-						dual_edge_clk_select,
+-						hsync_enable,
+-						vsync_enable,
+-						deskew_enable,
+-						deskew_setting,
+-						continuous_sync_enable,
+-						pll_filter_enable,
+-						pll_filter_value);
++	current_dvi_ctrl = dcft_supported_dvi_controller;
++	if (current_dvi_ctrl->init) {
++		return current_dvi_ctrl->init(edge_select,
++					      bus_select,
++					      dual_edge_clk_select,
++					      hsync_enable,
++					      vsync_enable,
++					      deskew_enable,
++					      deskew_setting,
++					      continuous_sync_enable,
++					      pll_filter_enable,
++					      pll_filter_value);
  	}
- 	rwbase_restore_current_state();
-+	trace_contention_end(rwb, 0);
- 
- out_unlock:
- 	raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index acde5d6f1254..465db7bd84f8 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -27,6 +27,7 @@
- #include <linux/export.h>
- #include <linux/rwsem.h>
- #include <linux/atomic.h>
-+#include <trace/events/lock.h>
- 
- #ifndef CONFIG_PREEMPT_RT
- #include "lock_events.h"
-@@ -1014,6 +1015,8 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	wake_up_q(&wake_q);
- 
-+	trace_contention_begin(sem, LCB_F_READ);
-+
- 	/* wait to be given the lock */
- 	for (;;) {
- 		set_current_state(state);
-@@ -1035,6 +1038,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 
- 	__set_current_state(TASK_RUNNING);
- 	lockevent_inc(rwsem_rlock);
-+	trace_contention_end(sem, 0);
- 	return sem;
- 
- out_nolock:
-@@ -1042,6 +1046,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	__set_current_state(TASK_RUNNING);
- 	lockevent_inc(rwsem_rlock_fail);
-+	trace_contention_end(sem, -EINTR);
- 	return ERR_PTR(-EINTR);
+ 	return -1; /* error */
  }
+diff --git a/drivers/staging/sm750fb/ddk750_dvi.h b/drivers/staging/sm750fb/ddk750_dvi.h
+index 1c7a565b617a..c2518b73bdbd 100644
+--- a/drivers/staging/sm750fb/ddk750_dvi.h
++++ b/drivers/staging/sm750fb/ddk750_dvi.h
+@@ -4,54 +4,54 @@
  
-@@ -1109,6 +1114,8 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- wait:
- 	/* wait until we successfully acquire the lock */
- 	set_current_state(state);
-+	trace_contention_begin(sem, LCB_F_WRITE);
-+
- 	for (;;) {
- 		if (rwsem_try_write_lock(sem, &waiter)) {
- 			/* rwsem_try_write_lock() implies ACQUIRE on success */
-@@ -1148,6 +1155,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 	__set_current_state(TASK_RUNNING);
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	lockevent_inc(rwsem_wlock);
-+	trace_contention_end(sem, 0);
- 	return sem;
+ /* dvi chip stuffs structros */
  
- out_nolock:
-@@ -1159,6 +1167,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	wake_up_q(&wake_q);
- 	lockevent_inc(rwsem_wlock_fail);
-+	trace_contention_end(sem, -EINTR);
- 	return ERR_PTR(-EINTR);
- }
+-typedef long (*PFN_DVICTRL_INIT)(unsigned char edgeSelect,
+-				 unsigned char busSelect,
+-				 unsigned char dualEdgeClkSelect,
+-				 unsigned char hsyncEnable,
+-				 unsigned char vsyncEnable,
+-				 unsigned char deskewEnable,
+-				 unsigned char deskewSetting,
+-				 unsigned char continuousSyncEnable,
+-				 unsigned char pllFilterEnable,
+-				 unsigned char pllFilterValue);
++typedef long (*PFN_DVICTRL_INIT)(unsigned char edge_select,
++				 unsigned char bus_select,
++				 unsigned char dual_edge_clk_select,
++				 unsigned char hsync_enable,
++				 unsigned char vsync_enable,
++				 unsigned char deskew_enable,
++				 unsigned char deskew_setting,
++				 unsigned char continuous_sync_enable,
++				 unsigned char pll_filter_enable,
++				 unsigned char pll_filter_value);
  
-diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
-index 9ee381e4d2a4..e3c19668dfee 100644
---- a/kernel/locking/semaphore.c
-+++ b/kernel/locking/semaphore.c
-@@ -32,6 +32,7 @@
- #include <linux/semaphore.h>
- #include <linux/spinlock.h>
- #include <linux/ftrace.h>
-+#include <trace/events/lock.h>
+ typedef void (*PFN_DVICTRL_RESETCHIP)(void);
+ typedef char* (*PFN_DVICTRL_GETCHIPSTRING)(void);
+ typedef unsigned short (*PFN_DVICTRL_GETVENDORID)(void);
+ typedef unsigned short (*PFN_DVICTRL_GETDEVICEID)(void);
+-typedef void (*PFN_DVICTRL_SETPOWER)(unsigned char powerUp);
+-typedef void (*PFN_DVICTRL_HOTPLUGDETECTION)(unsigned char enableHotPlug);
++typedef void (*PFN_DVICTRL_SETPOWER)(unsigned char power_up);
++typedef void (*PFN_DVICTRL_HOTPLUGDETECTION)(unsigned char enable_hot_plug);
+ typedef unsigned char (*PFN_DVICTRL_ISCONNECTED)(void);
+ typedef unsigned char (*PFN_DVICTRL_CHECKINTERRUPT)(void);
+ typedef void (*PFN_DVICTRL_CLEARINTERRUPT)(void);
  
- static noinline void __down(struct semaphore *sem);
- static noinline int __down_interruptible(struct semaphore *sem);
-@@ -209,6 +210,7 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
- 								long timeout)
- {
- 	struct semaphore_waiter waiter;
-+	bool tracing = false;
+ /* Structure to hold all the function pointer to the DVI Controller. */
+ struct dvi_ctrl_device {
+-	PFN_DVICTRL_INIT		pfnInit;
+-	PFN_DVICTRL_RESETCHIP		pfnResetChip;
+-	PFN_DVICTRL_GETCHIPSTRING	pfnGetChipString;
+-	PFN_DVICTRL_GETVENDORID		pfnGetVendorId;
+-	PFN_DVICTRL_GETDEVICEID		pfnGetDeviceId;
+-	PFN_DVICTRL_SETPOWER		pfnSetPower;
+-	PFN_DVICTRL_HOTPLUGDETECTION	pfnEnableHotPlugDetection;
+-	PFN_DVICTRL_ISCONNECTED		pfnIsConnected;
+-	PFN_DVICTRL_CHECKINTERRUPT	pfnCheckInterrupt;
+-	PFN_DVICTRL_CLEARINTERRUPT	pfnClearInterrupt;
++	PFN_DVICTRL_INIT		init;
++	PFN_DVICTRL_RESETCHIP		reset_chip;
++	PFN_DVICTRL_GETCHIPSTRING	get_chip_string;
++	PFN_DVICTRL_GETVENDORID		get_vendor_id;
++	PFN_DVICTRL_GETDEVICEID		get_device_id;
++	PFN_DVICTRL_SETPOWER		set_power;
++	PFN_DVICTRL_HOTPLUGDETECTION	enable_hot_plug_detection;
++	PFN_DVICTRL_ISCONNECTED		is_connected;
++	PFN_DVICTRL_CHECKINTERRUPT	check_interrupt;
++	PFN_DVICTRL_CLEARINTERRUPT	clear_interrupt;
+ };
  
- 	list_add_tail(&waiter.list, &sem->wait_list);
- 	waiter.task = current;
-@@ -220,18 +222,28 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
- 		if (unlikely(timeout <= 0))
- 			goto timed_out;
- 		__set_current_state(state);
-+		if (!tracing) {
-+			trace_contention_begin(sem, 0);
-+			tracing = true;
-+		}
- 		raw_spin_unlock_irq(&sem->lock);
- 		timeout = schedule_timeout(timeout);
- 		raw_spin_lock_irq(&sem->lock);
--		if (waiter.up)
-+		if (waiter.up) {
-+			trace_contention_end(sem, 0);
- 			return 0;
-+		}
- 	}
+ #define DVI_CTRL_SII164
  
-  timed_out:
-+	if (tracing)
-+		trace_contention_end(sem, -ETIME);
- 	list_del(&waiter.list);
- 	return -ETIME;
+ /* dvi functions prototype */
+-int dviInit(unsigned char edgeSelect,
+-	    unsigned char busSelect,
+-	    unsigned char dualEdgeClkSelect,
+-	    unsigned char hsyncEnable,
+-	    unsigned char vsyncEnable,
+-	    unsigned char deskewEnable,
+-	    unsigned char deskewSetting,
+-	    unsigned char continuousSyncEnable,
+-	    unsigned char pllFilterEnable,
+-	    unsigned char pllFilterValue);
++int dvi_init(unsigned char edge_select,
++	     unsigned char bus_select,
++	     unsigned char dual_edge_clk_select,
++	     unsigned char hsync_enable,
++	     unsigned char vsync_enable,
++	     unsigned char deskew_enable,
++	     unsigned char deskew_setting,
++	     unsigned char continuous_sync_enable,
++	     unsigned char pll_filter_enable,
++	     unsigned char pll_filter_value);
  
-  interrupted:
-+	if (tracing)
-+		trace_contention_end(sem, -EINTR);
- 	list_del(&waiter.list);
- 	return -EINTR;
- }
+ #endif
+ 
 -- 
-2.35.1.894.gb6a874cedc-goog
+2.32.0
 

@@ -2,211 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2342A4DBB7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 01:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FEA4DBB85
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 01:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344396AbiCQAI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 20:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
+        id S1346480AbiCQALj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 20:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiCQAI0 (ORCPT
+        with ESMTP id S229566AbiCQALh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 20:08:26 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E561C913;
-        Wed, 16 Mar 2022 17:07:11 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a8so7452426ejc.8;
-        Wed, 16 Mar 2022 17:07:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ulUxnTUsYR6KfkBVjLDy5nWlu5Zsp3IoA/hxl7MBCIA=;
-        b=ZWaIk+1B8z2e6yf5z8Pyt40DH1CJpIThUpnuaCoTZrNRVItWFJfYQNwjUDJT28WTya
-         wqgiBJfZmFKsy2On+mCIO6l7RDao1lOOvq43Jhi2bO0nLvCWTeYoWtU/q2MXnQyNlAFl
-         e0Q0Wel36O1tM84enVvNCDWa1hmj4gtOh7aPyJKpy23uOTo0UdYdq8catfuVJThQ9OHb
-         ayGm5BSwGT5jZfXbeDG0YqK3XCC+vrBoXddHxZUUV3jAfucJgfCfuDDNv21dA7Zy7t4m
-         Fhj9Bjqg1ZpR+nRhNZ5TTpLRYdfJol7WSZEv7pFKZfFuzjLo1IRg1QG3fc94S+kaRiJq
-         tuKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ulUxnTUsYR6KfkBVjLDy5nWlu5Zsp3IoA/hxl7MBCIA=;
-        b=WA7yVODwXmTkJOzYGHz+y+iImPysca08/2/KOGydrQV1SdB0nrnC4Lu1ATCVLintfn
-         5GkVwLnFZ7GoGdnHU2DDIR8qZQC4hS8DgYF6p3GCWJdSLi51NnzLLtW/xRZ9NJRovZtO
-         YuKGjGUmsrfRgwibUcZ+8uerCpxHujyWnR4POZnq0NcCfItLoHDkLLzq/8GiXrgrIp0a
-         C4OSso26FLP6GwWgWINd3PT2EUgABJT1wvJYIt3Fr0jY3gQhfP5uPJlfGXVstZBhSjPI
-         5aar3LoUM28DW250u+zG1LqEiPXdtGWrMKYCvSIlxn0Zb7OdbaEWaZ2bGeBo4QS+xXvW
-         vW6Q==
-X-Gm-Message-State: AOAM533WNINHFtifT81y1QqycvsHSdW5iKFzseWh1s+O8KA8dV4sqDwh
-        ZQosW7BJGekSKcZOQpivYQE=
-X-Google-Smtp-Source: ABdhPJzqK7BkiabAt36R6gWwrFbucKdnBPmuNRhib2BMBaM1mmLWf154xtRu87y3011vXx9S+e1WqA==
-X-Received: by 2002:a17:906:18b2:b0:6d0:ee54:1add with SMTP id c18-20020a17090618b200b006d0ee541addmr1971946ejf.499.1647475629726;
-        Wed, 16 Mar 2022 17:07:09 -0700 (PDT)
-Received: from localhost (92.40.202.150.threembb.co.uk. [92.40.202.150])
-        by smtp.gmail.com with ESMTPSA id d23-20020aa7d5d7000000b00418f7b2f1dbsm309509eds.71.2022.03.16.17.07.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 17:07:09 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, linus.walleij@linaro.org
-Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] pinctrl: ingenic: Fix regmap on X series SoCs
-Date:   Thu, 17 Mar 2022 00:07:40 +0000
-Message-Id: <20220317000740.1045204-1-aidanmacdonald.0x0@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 16 Mar 2022 20:11:37 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8D19C22;
+        Wed, 16 Mar 2022 17:10:20 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 22H0A0fnC004517, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 22H0A0fnC004517
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 17 Mar 2022 08:10:00 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 17 Mar 2022 08:10:00 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 08:09:59 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::41d7:1d2e:78a6:ff34]) by
+ RTEXMBS04.realtek.com.tw ([fe80::41d7:1d2e:78a6:ff34%5]) with mapi id
+ 15.01.2308.021; Thu, 17 Mar 2022 08:09:59 +0800
+From:   Pkshih <pkshih@realtek.com>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] rtw89: Fix spelling mistake "Mis-Match" -> "Mismatch"
+Thread-Topic: [PATCH] rtw89: Fix spelling mistake "Mis-Match" -> "Mismatch"
+Thread-Index: AQHYOY+MjEpKADeJ1EiR/B9g/alLqKzCs3rQ
+Date:   Thu, 17 Mar 2022 00:09:59 +0000
+Message-ID: <895366eef1d44540beab3145a36a02bb@realtek.com>
+References: <20220316234242.55515-1-colin.i.king@gmail.com>
+In-Reply-To: <20220316234242.55515-1-colin.i.king@gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzMvMTYg5LiL5Y2IIDA1OjE3OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The X series Ingenic SoCs have a shadow GPIO group which is at a higher
-offset than the other groups, and is used for all GPIO configuration.
-The regmap did not take this offset into account and set max_register
-too low, so the regmap API blocked writes to the shadow group, which
-made the pinctrl driver unable to configure any pins.
-
-Fix this by adding regmap access tables to the chip info. The way that
-max_register was computed was also off by one, since max_register is an
-inclusive bound, not an exclusive bound; this has been fixed.
-
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
-v1 -> v2: use regmap_access_table
-v2 -> v3: compute max_register instead of putting it in chip_info
-v3 -> v4: explain the fix to the max_register calculation
-
- drivers/pinctrl/pinctrl-ingenic.c | 46 ++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-index 2712f51eb238..fa6becca1788 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -119,6 +119,8 @@ struct ingenic_chip_info {
- 	unsigned int num_functions;
- 
- 	const u32 *pull_ups, *pull_downs;
-+
-+	const struct regmap_access_table *access_table;
- };
- 
- struct ingenic_pinctrl {
-@@ -2179,6 +2181,17 @@ static const struct function_desc x1000_functions[] = {
- 	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
- };
- 
-+static const struct regmap_range x1000_access_ranges[] = {
-+	regmap_reg_range(0x000, 0x400 - 4),
-+	regmap_reg_range(0x700, 0x800 - 4),
-+};
-+
-+/* shared with X1500 */
-+static const struct regmap_access_table x1000_access_table = {
-+	.yes_ranges = x1000_access_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(x1000_access_ranges),
-+};
-+
- static const struct ingenic_chip_info x1000_chip_info = {
- 	.num_chips = 4,
- 	.reg_offset = 0x100,
-@@ -2189,6 +2202,7 @@ static const struct ingenic_chip_info x1000_chip_info = {
- 	.num_functions = ARRAY_SIZE(x1000_functions),
- 	.pull_ups = x1000_pull_ups,
- 	.pull_downs = x1000_pull_downs,
-+	.access_table = &x1000_access_table,
- };
- 
- static int x1500_uart0_data_pins[] = { 0x4a, 0x4b, };
-@@ -2300,6 +2314,7 @@ static const struct ingenic_chip_info x1500_chip_info = {
- 	.num_functions = ARRAY_SIZE(x1500_functions),
- 	.pull_ups = x1000_pull_ups,
- 	.pull_downs = x1000_pull_downs,
-+	.access_table = &x1000_access_table,
- };
- 
- static const u32 x1830_pull_ups[4] = {
-@@ -2506,6 +2521,16 @@ static const struct function_desc x1830_functions[] = {
- 	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
- };
- 
-+static const struct regmap_range x1830_access_ranges[] = {
-+	regmap_reg_range(0x0000, 0x4000 - 4),
-+	regmap_reg_range(0x7000, 0x8000 - 4),
-+};
-+
-+static const struct regmap_access_table x1830_access_table = {
-+	.yes_ranges = x1830_access_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(x1830_access_ranges),
-+};
-+
- static const struct ingenic_chip_info x1830_chip_info = {
- 	.num_chips = 4,
- 	.reg_offset = 0x1000,
-@@ -2516,6 +2541,7 @@ static const struct ingenic_chip_info x1830_chip_info = {
- 	.num_functions = ARRAY_SIZE(x1830_functions),
- 	.pull_ups = x1830_pull_ups,
- 	.pull_downs = x1830_pull_downs,
-+	.access_table = &x1830_access_table,
- };
- 
- static const u32 x2000_pull_ups[5] = {
-@@ -2969,6 +2995,17 @@ static const struct function_desc x2000_functions[] = {
- 	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
- };
- 
-+static const struct regmap_range x2000_access_ranges[] = {
-+	regmap_reg_range(0x000, 0x500 - 4),
-+	regmap_reg_range(0x700, 0x800 - 4),
-+};
-+
-+/* shared with X2100 */
-+static const struct regmap_access_table x2000_access_table = {
-+	.yes_ranges = x2000_access_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(x2000_access_ranges),
-+};
-+
- static const struct ingenic_chip_info x2000_chip_info = {
- 	.num_chips = 5,
- 	.reg_offset = 0x100,
-@@ -2979,6 +3016,7 @@ static const struct ingenic_chip_info x2000_chip_info = {
- 	.num_functions = ARRAY_SIZE(x2000_functions),
- 	.pull_ups = x2000_pull_ups,
- 	.pull_downs = x2000_pull_downs,
-+	.access_table = &x2000_access_table,
- };
- 
- static const u32 x2100_pull_ups[5] = {
-@@ -3189,6 +3227,7 @@ static const struct ingenic_chip_info x2100_chip_info = {
- 	.num_functions = ARRAY_SIZE(x2100_functions),
- 	.pull_ups = x2100_pull_ups,
- 	.pull_downs = x2100_pull_downs,
-+	.access_table = &x2000_access_table,
- };
- 
- static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8 reg)
-@@ -4168,7 +4207,12 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	regmap_config = ingenic_pinctrl_regmap_config;
--	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
-+	if (chip_info->access_table) {
-+		regmap_config.rd_table = chip_info->access_table;
-+		regmap_config.wr_table = chip_info->access_table;
-+	} else {
-+		regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset - 4;
-+	}
- 
- 	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
- 	if (IS_ERR(jzpc->map)) {
--- 
-2.34.1
-
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IENvbGluIElhbiBLaW5nIDxj
+b2xpbi5pLmtpbmdAZ21haWwuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgTWFyY2ggMTcsIDIwMjIg
+Nzo0MyBBTQ0KPiBUbzogUGtzaGloIDxwa3NoaWhAcmVhbHRlay5jb20+OyBLYWxsZSBWYWxvIDxr
+dmFsb0BrZXJuZWwub3JnPjsgRGF2aWQgUyAuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47
+DQo+IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5vcmc+OyBsaW51eC13aXJlbGVzc0B2Z2Vy
+Lmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGtlcm5lbC1qYW5pdG9y
+c0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVj
+dDogW1BBVENIXSBydHc4OTogRml4IHNwZWxsaW5nIG1pc3Rha2UgIk1pcy1NYXRjaCIgLT4gIk1p
+c21hdGNoIg0KPiANCj4gVGhlcmUgYXJlIHNvbWUgc3BlbGxpbmcgbWlzdGFrZXMgaW4gc29tZSBs
+aXRlcmFsIHN0cmluZ3MuIEZpeCB0aGVtLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQ29saW4gSWFu
+IEtpbmcgPGNvbGluLmkua2luZ0BnbWFpbC5jb20+DQoNCkFja2VkLWJ5OiBQaW5nLUtlIFNoaWgg
+PHBrc2hpaEByZWFsdGVrLmNvbT4NCg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3Jl
+YWx0ZWsvcnR3ODkvY29leC5jIHwgNiArKystLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2Vy
+dGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvcmVhbHRlay9ydHc4OS9jb2V4LmMgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFs
+dGVrL3J0dzg5L2NvZXguYw0KPiBpbmRleCAwN2YyNjcxOGI2NmYuLjk5YWJkMGZlN2YxNSAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9jb2V4LmMNCj4g
+KysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9jb2V4LmMNCj4gQEAgLTQ2
+MjMsMTIgKzQ2MjMsMTIgQEAgc3RhdGljIHZvaWQgX3Nob3dfY3hfaW5mbyhzdHJ1Y3QgcnR3ODlf
+ZGV2ICpydHdkZXYsIHN0cnVjdCBzZXFfZmlsZSAqbSkNCj4gIAl2ZXJfaG90Zml4ID0gRklFTERf
+R0VUKEdFTk1BU0soMTUsIDgpLCBjaGlwLT53bGN4X2Rlc2lyZWQpOw0KPiAgCXNlcV9wcmludGYo
+bSwgIiglcywgZGVzaXJlZDolZC4lZC4lZCksICIsDQo+ICAJCSAgICh3bC0+dmVyX2luZm8uZndf
+Y29leCA+PSBjaGlwLT53bGN4X2Rlc2lyZWQgPw0KPiAtCQkgICAiTWF0Y2giIDogIk1pcy1NYXRj
+aCIpLCB2ZXJfbWFpbiwgdmVyX3N1YiwgdmVyX2hvdGZpeCk7DQo+ICsJCSAgICJNYXRjaCIgOiAi
+TWlzbWF0Y2giKSwgdmVyX21haW4sIHZlcl9zdWIsIHZlcl9ob3RmaXgpOw0KPiANCj4gIAlzZXFf
+cHJpbnRmKG0sICJCVF9GV19jb2V4OiVkKCVzLCBkZXNpcmVkOiVkKVxuIiwNCj4gIAkJICAgYnQt
+PnZlcl9pbmZvLmZ3X2NvZXgsDQo+ICAJCSAgIChidC0+dmVyX2luZm8uZndfY29leCA+PSBjaGlw
+LT5idGN4X2Rlc2lyZWQgPw0KPiAtCQkgICAiTWF0Y2giIDogIk1pcy1NYXRjaCIpLCBjaGlwLT5i
+dGN4X2Rlc2lyZWQpOw0KPiArCQkgICAiTWF0Y2giIDogIk1pc21hdGNoIiksIGNoaXAtPmJ0Y3hf
+ZGVzaXJlZCk7DQo+IA0KPiAgCWlmIChidC0+ZW5hYmxlLm5vdyAmJiBidC0+dmVyX2luZm8uZncg
+PT0gMCkNCj4gIAkJcnR3ODlfYnRjX2Z3X2VuX3JwdChydHdkZXYsIFJQVF9FTl9CVF9WRVJfSU5G
+TywgdHJ1ZSk7DQo+IEBAIC01MDc1LDcgKzUwNzUsNyBAQCBzdGF0aWMgdm9pZCBfc2hvd19kbV9p
+bmZvKHN0cnVjdCBydHc4OV9kZXYgKnJ0d2Rldiwgc3RydWN0IHNlcV9maWxlICptKQ0KPiAgCXNl
+cV9wcmludGYobSwgImxlYWtfYXA6JWQsIGZ3X29mZmxvYWQ6JXMlc1xuIiwgZG0tPmxlYWtfYXAs
+DQo+ICAJCSAgIChCVENfQ1hfRldfT0ZGTE9BRCA/ICJZIiA6ICJOIiksDQo+ICAJCSAgIChkbS0+
+d2xfZndfY3hfb2ZmbG9hZCA9PSBCVENfQ1hfRldfT0ZGTE9BRCA/DQo+IC0JCSAgICAiIiA6ICIo
+TWlzLU1hdGNoISEpIikpOw0KPiArCQkgICAgIiIgOiAiKE1pc21hdGNoISEpIikpOw0KPiANCj4g
+IAlpZiAoZG0tPnJmX3RyeF9wYXJhLndsX3R4X3Bvd2VyID09IDB4ZmYpDQo+ICAJCXNlcV9wcmlu
+dGYobSwNCj4gLS0NCj4gMi4zNS4xDQo+IA0KPiAtLS0tLS1QbGVhc2UgY29uc2lkZXIgdGhlIGVu
+dmlyb25tZW50IGJlZm9yZSBwcmludGluZyB0aGlzIGUtbWFpbC4NCg==

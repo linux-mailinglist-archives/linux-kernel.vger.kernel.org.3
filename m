@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A554E4DD102
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9635D4DD104
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiCQXDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S230117AbiCQXEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiCQXDF (ORCPT
+        with ESMTP id S229820AbiCQXEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:03:05 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA362B78E9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:01:48 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id o5so12991932ybe.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BjpeHshr55oXVbRkRUel/sp4CJH7Ek81QT6z+rRB6S8=;
-        b=HtQ8698j/GkuPOZp01hGhOmnDThwuykSIVbzZT8HLyvOMehvriKXIHX3PT+MEnXiuu
-         9lwzZcsl1IkVVuTIBPZbV5ekm6upDD5S6p6Kl0b7eXclg6iINdHjGxQrKPXdldyuBUsg
-         h23/4Q6kkdZ+Etckx4W8ponNMzQ3iRuFDpKSS6Zd/JLP+p0lEYCynNvRPmlClU03Onro
-         grI/EMU8xcuHkARp5fDq1FopIwxeXkki1ZHaOsyS0ftNmZinm327BN43hb9lMeYXrq7z
-         uzc4oLY/xeBkyTT9bD5cv3Q4uvoEt6o3ccWfoYik6eiY20eZ0Uvsd/AniL+StFDalV+t
-         eXHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BjpeHshr55oXVbRkRUel/sp4CJH7Ek81QT6z+rRB6S8=;
-        b=3pE849znWXtZaBKtyqr+w0lRQnGvAul3TbuUJQ9+Ocoq5AtcKlN9jaoHqdbllEDKp4
-         KIDG0hE1SmMwYPLAOKvqiIZK+wRO/9tdj0TuOgq1e2qYDPx6TT2blJ66VDzb//7PBUss
-         3SrGy5oha9K5SuvADSrIKzWFBx9GhM+4udVvwiMHhUyfNJnJk0lnY9TUMtWrwifphhhk
-         gUtwIf0Tt/ee7uh4y2q6L08mEEoqtTICrMQp3qrEOfrQ9m8Behdv90I9FGMtZ6477pPd
-         ATWLfqrD7pOGDv91u+5HUC4KuXoklwEBYgudcsTWmO2Na+azgqWfFeyhxFZjeayIglya
-         nyQg==
-X-Gm-Message-State: AOAM531iVCUpWCEWeDxCEOh+0oqAAK2wEx0RwuyHIiHLYUlBMZOPRf8+
-        jYK1QShYotWhyHd5Zj79T7UxbVZLbJ6df7W8PTywsA==
-X-Google-Smtp-Source: ABdhPJxUH7FDJL8h8BnBMwdlrY2wLUcnT5H3QzKOyq8DCn5DLiSJpxwc/UeAB4reijZISa/1f6WVJpXdp16QsqcRX/Y=
-X-Received: by 2002:a25:ab64:0:b0:633:6d02:ebc8 with SMTP id
- u91-20020a25ab64000000b006336d02ebc8mr7372536ybi.492.1647558107436; Thu, 17
- Mar 2022 16:01:47 -0700 (PDT)
+        Thu, 17 Mar 2022 19:04:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D2319BFC1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647558164; x=1679094164;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CSzoxUhh8hZ7J0pgyJ5dB8hc+ItTa+n+HXD4RDPKlU4=;
+  b=iYAWRYuJiVVlxhoDr3cvZYdPlQRARFlg6fcTo8fn3BkheGBji/UUhnoi
+   Q7/xgKEX8syfxXxLRXQKQ5ahUjJcteOKq+KZBvVH9anD68Ee/iEgGcffF
+   oqbONYZUlx6KSp8pFoLrsSi9UvAOafE0/WjT8FSE9Mga9f90f1cVIIP1g
+   C52DH/SItUEsY8ZDFu4FUvYmuycHx8UtwT0XUDXgFPNCfOJwkhGWyRX0q
+   KfO4zlsgej2FuosZLS3u28NPK+jBk5Sfsomyy4esTLeU48ogylRNBcpg3
+   nsxUDTT2WfmlyjAvISXaHJPNh8NFXsbCSk5x+IpdDjiEV89Bs4YipDkhI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256950294"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="256950294"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 16:02:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="558146356"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 17 Mar 2022 16:02:24 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUz8S-000ECC-2k; Thu, 17 Mar 2022 23:02:24 +0000
+Date:   Fri, 18 Mar 2022 07:01:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no
+ previous prototype for '__bswapdi2'
+Message-ID: <202203180644.cQo8rUA8-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com> <20220317115705.450427-6-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220317115705.450427-6-krzysztof.kozlowski@canonical.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 18 Mar 2022 00:01:35 +0100
-Message-ID: <CACRpkdafKz7hqinCgWrKuSQjefaN7cZgLbhiYUtVXg3=mrELow@mail.gmail.com>
-Subject: Re: [PATCH 07/18] dt-bindings: irqchip: intel,ixp4xx: include generic schema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Michael Walle <michael@walle.cc>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Suman Anna <s-anna@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-oxnas@groups.io
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 12:57 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
+Hi Masahiro,
 
-> Include generic interrupt-controller.yaml schema, which enforces node
-> naming and other generic properties.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+FYI, the error/warning still remains.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   56e337f2cf1326323844927a04e9dbce9a244835
+commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
+date:   4 months ago
+config: mips-randconfig-r036-20220317 (https://download.01.org/0day-ci/archive/20220318/202203180644.cQo8rUA8-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-Yours,
-Linus Walleij
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/mips/boot/compressed/bswapdi.c:2:
+>> arch/mips/boot/compressed/../../lib/bswapdi.c:5:28: warning: no previous prototype for '__bswapdi2' [-Wmissing-prototypes]
+       5 | unsigned long long notrace __bswapdi2(unsigned long long u)
+         |                            ^~~~~~~~~~
+
+
+vim +/__bswapdi2 +5 arch/mips/boot/compressed/../../lib/bswapdi.c
+
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   4  
+aedcfbe06558a9 Harvey Hunt  2016-05-25  @5  unsigned long long notrace __bswapdi2(unsigned long long u)
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   6  {
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   7  	return (((u) & 0xff00000000000000ull) >> 56) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   8  	       (((u) & 0x00ff000000000000ull) >> 40) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29   9  	       (((u) & 0x0000ff0000000000ull) >> 24) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  10  	       (((u) & 0x000000ff00000000ull) >>  8) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  11  	       (((u) & 0x00000000ff000000ull) <<  8) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  12  	       (((u) & 0x0000000000ff0000ull) << 24) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  13  	       (((u) & 0x000000000000ff00ull) << 40) |
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  14  	       (((u) & 0x00000000000000ffull) << 56);
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  15  }
+1ee3630a3e57f3 Ralf Baechle 2015-09-29  16  
+
+:::::: The code at line 5 was first introduced by commit
+:::::: aedcfbe06558a9f53002e82d5be64c6c94687726 MIPS: lib: Mark intrinsics notrace
+
+:::::: TO: Harvey Hunt <harvey.hunt@imgtec.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

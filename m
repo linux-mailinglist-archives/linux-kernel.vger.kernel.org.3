@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953DA4DCAD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627134DCAD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbiCQQMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S236360AbiCQQM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiCQQMQ (ORCPT
+        with ESMTP id S236354AbiCQQMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:12:16 -0400
+        Thu, 17 Mar 2022 12:12:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AF421415D;
-        Thu, 17 Mar 2022 09:11:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B480F214F85;
+        Thu, 17 Mar 2022 09:11:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD51260EED;
-        Thu, 17 Mar 2022 16:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C81BC340E9;
-        Thu, 17 Mar 2022 16:10:57 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 12:10:55 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Byungchul Park <byungchul.park@lge.com>,
-        paulmck <paulmck@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <20220317121055.33812ac1@gandalf.local.home>
-In-Reply-To: <365529974.156362.1647524728813.JavaMail.zimbra@efficios.com>
-References: <20220316224548.500123-1-namhyung@kernel.org>
-        <20220316224548.500123-3-namhyung@kernel.org>
-        <365529974.156362.1647524728813.JavaMail.zimbra@efficios.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5146660F77;
+        Thu, 17 Mar 2022 16:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF3FC340E9;
+        Thu, 17 Mar 2022 16:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647533466;
+        bh=DipHHogWaewP/FbS/bJMU0tYn92ipv83Ht+R98R5vt4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EXCr8puBCcTF1evc3yydkeMu6vvvojbBLLTdSyKk40ZNklT859Qnq6nnvbc0wipId
+         +KnFe28cqBEFqFA+aYb3hLYP6OD7Qqi+LfklWIxbSDNtPgq/hqcWcS5PAPGGLhwF45
+         LzHaJutqvOuTh/STuaLX7U8JMymrRm+vaGgfYjLbZkAMcVoCIw51hYF9k+JDxReoZH
+         sICvY13gwyuTYYJDutbphlu3+pZuiwu6RP5ChyWquRbez1nTxcsTqLsfh71vT9Lp4r
+         H8vUOkC2iXo/IeKX6k7TkaBwb255O/bJwyCw73oyaQOL8r+/KyfIP0ONefwhAg1GZb
+         enxP06EGUVvKg==
+Date:   Thu, 17 Mar 2022 09:11:04 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org,
+        poros@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Slawomir Laba <slawomirx.laba@intel.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Phani Burra <phani.r.burra@intel.com>,
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH] iavf: Fix hang during reboot/shutdown
+Message-ID: <20220317091104.1d911864@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220317104524.2802848-1-ivecera@redhat.com>
+References: <20220317104524.2802848-1-ivecera@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 09:45:28 -0400 (EDT)
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+On Thu, 17 Mar 2022 11:45:24 +0100 Ivan Vecera wrote:
+> Recent commit 974578017fc1 ("iavf: Add waiting so the port is
+> initialized in remove") adds a wait-loop at the beginning of
+> iavf_remove() to ensure that port initialization is finished
+> prior unregistering net device. This causes a regression
+> in reboot/shutdown scenario because in this case callback
+> iavf_shutdown() is called and this callback detaches the device,
+> makes it down if it is running and sets its state to __IAVF_REMOVE.
+> Later shutdown callback of associated PF driver (e.g. ice_shutdown)
+> is called. That callback calls among other things sriov_disable()
+> that calls indirectly iavf_remove() (see stack trace below).
+> As the adapter state is already __IAVF_REMOVE then the mentioned
+> loop is end-less and shutdown process hangs.
 
-> > *sem, bool reader)
-> > 		schedule();
-> > 	}
-> > 	__set_current_state(TASK_RUNNING);
-> > +	trace_contention_end(sem, 0);  
-> 
-> So for the reader-write locks, and percpu rwlocks, the "trace contention end" will always
-> have ret=0. Likewise for qspinlock, qrwlock, and rtlock. It seems to be a waste of trace
-> buffer space to always have space for a return value that is always 0.
-> 
-> Sorry if I missed prior dicussions of that topic, but why introduce this single
-> "trace contention begin/end" muxer tracepoint with flags rather than per-locking-type
-> tracepoint ? The per-locking-type tracepoint could be tuned to only have the fields
-> that are needed for each locking type.
-
-per-locking-type tracepoint will also add a bigger footprint.
-
-One extra byte is not an issue. This is just the tracepoints. You can still
-attach your own specific LTTng trace events that ignores the zero
-parameter, and can multiplex into specific types of trace events on your
-end.
-
-I prefer the current approach as it keeps the tracing footprint down.
-
--- Steve
+Tony, Jesse, looks like the regression is from 5.17-rc6, should 
+I take this directly so it makes 5.17 final?

@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7715D4DCA35
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA1D4DCA31
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236014AbiCQPlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S235658AbiCQPki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbiCQPk5 (ORCPT
+        with ESMTP id S231924AbiCQPkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:40:57 -0400
-Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:8d8e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D508220C2E0;
-        Thu, 17 Mar 2022 08:39:38 -0700 (PDT)
-Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
-        by unicorn.mansr.com (Postfix) with ESMTPS id EF05B15360;
-        Thu, 17 Mar 2022 15:39:35 +0000 (GMT)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id 86495210BC8; Thu, 17 Mar 2022 15:39:35 +0000 (GMT)
-From:   Mans Rullgard <mans@mansr.com>
-To:     Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vitaly Bordug <vbordug@ru.mvista.com>,
-        Dan Malek <dan@embeddededge.com>,
-        Joakim Tjernlund <joakim.tjernlund@lumentis.se>,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC][PATCH] net: fs_enet: fix tx error handling
-Date:   Thu, 17 Mar 2022 15:38:58 +0000
-Message-Id: <20220317153858.20719-1-mans@mansr.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 11:40:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1256F20C2E0;
+        Thu, 17 Mar 2022 08:39:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A37256199A;
+        Thu, 17 Mar 2022 15:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E67C340E9;
+        Thu, 17 Mar 2022 15:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647531560;
+        bh=kAnUC1aavvusyWa+wFL6sbzRNu9ksr/TulLSJxlxVL8=;
+        h=From:To:Subject:Date:From;
+        b=syX9WOU1OyD5EzA6dIyZgD/DEBIhb1Bfem0i5y0y9fP0z9TLnbqKxkmWgkWUT0DL1
+         rcEOhYwMEVM6jtuI0GJefJevUgNMCqKLioJ0rtpdIFeBi/ZuKtXHASYu0G5IVUuPqB
+         ANVUCGbTaBX8KspC8/H3urbvthJvsLWbcUNru5ygQ97HXoDG1e5MUw1Y1zX+0lZRyN
+         Gtfi3Ij95S+gTsC+n46n5oT8dNNVecSuaj6CN6DDq4slIsjcz1DbCPN7Z9wRroqCQp
+         Uca2MxPc989aHEWjYceokpcIYAHSBlqNKZiud9eDGsrepAfIrNNqEKaWXpHC6whETP
+         pQ/pQ4+RrJdQw==
+From:   zanussi@kernel.org
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <wagi@monom.org>,
+        Clark Williams <williams@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH RT 0/2] Linux v5.4.182-rt72-rc1
+Date:   Thu, 17 Mar 2022 10:39:15 -0500
+Message-Id: <cover.1647531549.git.zanussi@kernel.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, the TXE flag is apparently set without any error
-indication in the buffer descriptor status. When this happens, tx
-stalls until the tx_restart() function is called via the device
-watchdog which can take a long time.
+From: Tom Zanussi <zanussi@kernel.org>
 
-To fix this, check for TXE in the napi poll function and trigger a
-tx_restart() call as for errors reported in the buffer descriptor.
+Dear RT Folks,
 
-This change makes the FCC based Ethernet controller on MPC82xx devices
-usable. It probably breaks the other modes (FEC, SCC) which I have no
-way of testing.
+This is the RT stable review cycle of patch 5.4.182-rt72-rc1.
 
-Signed-off-by: Mans Rullgard <mans@mansr.com>
----
- .../ethernet/freescale/fs_enet/fs_enet-main.c | 47 +++++++------------
- .../net/ethernet/freescale/fs_enet/mac-fcc.c  |  2 +-
- 2 files changed, 19 insertions(+), 30 deletions(-)
+Please scream at me if I messed something up. Please test the patches
+too.
 
-diff --git a/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c b/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
-index 78e008b81374..4276becd07cf 100644
---- a/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
-+++ b/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
-@@ -94,14 +94,22 @@ static int fs_enet_napi(struct napi_struct *napi, int budget)
- 	int curidx;
- 	int dirtyidx, do_wake, do_restart;
- 	int tx_left = TX_RING_SIZE;
-+	u32 int_events;
- 
- 	spin_lock(&fep->tx_lock);
- 	bdp = fep->dirty_tx;
-+	do_wake = do_restart = 0;
-+
-+	int_events = (*fep->ops->get_int_events)(dev);
-+
-+	if (int_events & fep->ev_err) {
-+		(*fep->ops->ev_error)(dev, int_events);
-+		do_restart = 1;
-+	}
- 
- 	/* clear status bits for napi*/
- 	(*fep->ops->napi_clear_event)(dev);
- 
--	do_wake = do_restart = 0;
- 	while (((sc = CBDR_SC(bdp)) & BD_ENET_TX_READY) == 0 && tx_left) {
- 		dirtyidx = bdp - fep->tx_bd_base;
- 
-@@ -318,43 +326,24 @@ fs_enet_interrupt(int irq, void *dev_id)
- {
- 	struct net_device *dev = dev_id;
- 	struct fs_enet_private *fep;
--	const struct fs_platform_info *fpi;
- 	u32 int_events;
--	u32 int_clr_events;
--	int nr, napi_ok;
--	int handled;
- 
- 	fep = netdev_priv(dev);
--	fpi = fep->fpi;
- 
--	nr = 0;
--	while ((int_events = (*fep->ops->get_int_events)(dev)) != 0) {
--		nr++;
-+	int_events = (*fep->ops->get_int_events)(dev);
-+	if (!int_events)
-+		return IRQ_NONE;
- 
--		int_clr_events = int_events;
--		int_clr_events &= ~fep->ev_napi;
-+	int_events &= ~fep->ev_napi;
- 
--		(*fep->ops->clear_int_events)(dev, int_clr_events);
--
--		if (int_events & fep->ev_err)
--			(*fep->ops->ev_error)(dev, int_events);
--
--		if (int_events & fep->ev) {
--			napi_ok = napi_schedule_prep(&fep->napi);
--
--			(*fep->ops->napi_disable)(dev);
--			(*fep->ops->clear_int_events)(dev, fep->ev_napi);
--
--			/* NOTE: it is possible for FCCs in NAPI mode    */
--			/* to submit a spurious interrupt while in poll  */
--			if (napi_ok)
--				__napi_schedule(&fep->napi);
--		}
-+	(*fep->ops->clear_int_events)(dev, int_events);
- 
-+	if (napi_schedule_prep(&fep->napi)) {
-+		(*fep->ops->napi_disable)(dev);
-+		__napi_schedule(&fep->napi);
- 	}
- 
--	handled = nr > 0;
--	return IRQ_RETVAL(handled);
-+	return IRQ_HANDLED;
- }
- 
- void fs_init_bds(struct net_device *dev)
-diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
-index b47490be872c..66c8f82a8333 100644
---- a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
-+++ b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
-@@ -124,7 +124,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
- 	return ret;
- }
- 
--#define FCC_NAPI_EVENT_MSK	(FCC_ENET_RXF | FCC_ENET_RXB | FCC_ENET_TXB)
-+#define FCC_NAPI_EVENT_MSK	(FCC_ENET_RXF | FCC_ENET_RXB | FCC_ENET_TXB | FCC_ENET_TXE)
- #define FCC_EVENT		(FCC_ENET_RXF | FCC_ENET_TXB)
- #define FCC_ERR_EVENT_MSK	(FCC_ENET_TXE)
- 
+The -rc release will be uploaded to kernel.org and will be deleted
+when the final release is out. This is just a review release (or
+release candidate).
+
+The pre-releases will not be pushed to the git repository, only the
+final release is.
+
+If all goes well, this patch will be converted to the next main
+release on 2022-03-20.
+
+To build 5.4.182-rt72-rc1 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.4.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.4.182.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/patch-5.4.182-rt72-rc1.patch.xz
+
+You can also build from 5.4.182-rt71 by applying the incremental patch:
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/incr/patch-5.4.182-rt71-rt72-rc1.patch.xz
+
+
+Enjoy,
+
+-- Tom
+
+
+Tom Zanussi (2):
+  eventfd: Fix stable-rt v5.4.182-rt71 conflict fixup issue
+  Linux 5.4.182-rt72-rc1
+
+ include/linux/sched.h | 8 --------
+ localversion-rt       | 2 +-
+ 2 files changed, 1 insertion(+), 9 deletions(-)
+
 -- 
-2.35.1
+2.17.1
 

@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0E14DBEF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 07:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA714DBECD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 06:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiCQGII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 02:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
+        id S229463AbiCQF4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 01:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiCQGHe (ORCPT
+        with ESMTP id S229546AbiCQF4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 02:07:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6B119315A;
-        Wed, 16 Mar 2022 22:42:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87DE36176A;
-        Thu, 17 Mar 2022 04:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254F7C340E9;
-        Thu, 17 Mar 2022 04:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647489936;
-        bh=NGN9ZhkibSIf00mfrRrfihSPTloWTNjxCfxfbDIq/Hs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aLh9rNSOkAFytCS8Z6mFXcO9YVBj4JsA2EgLEVv+SuQbXfgpIQlXWIHiB02uwdloX
-         rILE1trsxG8UIQfRXImbAl7sIM+pbH8qjC1lRCI0vh+MYkm8TZHpNIx3Fy9Qv5hhA1
-         lRCe3GeVHLBRFXpXvYdNSzLSIzeBWyop1NI4Vvp/rinYWnfBunx5gigrWhptuP2W2I
-         /uTb8FElp4xGu5Drf9TettlTNtWQ3BVrlCPy7mZ9KqjqT8l3UCoAMatcUdbJlcalSv
-         gbOPdJ6vxWXR9B0lycilHPgcMXiNs8rvGCgw6+HhC9nBcnuadvV1QtGm8cdjtHbXKj
-         VdRql+nyKrwww==
-Date:   Wed, 16 Mar 2022 21:05:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     menglong8.dong@gmail.com, pabeni@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, xeb@mail.ru, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, imagedong@tencent.com,
-        edumazet@google.com, kafai@fb.com, talalahmad@google.com,
-        keescook@chromium.org, alobakin@pm.me, flyingpeng@tencent.com,
-        mengensun@tencent.com, dongli.zhang@oracle.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        benbjiang@tencent.com
-Subject: Re: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
- to icmp protocol
-Message-ID: <20220316210534.06b6cfe0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <4315b50e-9077-cc4b-010b-b38a2fbb7168@kernel.org>
-References: <20220316063148.700769-1-imagedong@tencent.com>
-        <20220316063148.700769-4-imagedong@tencent.com>
-        <20220316201853.0734280f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <4315b50e-9077-cc4b-010b-b38a2fbb7168@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 01:56:15 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DEB2DCBFF
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:30:44 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id o26so1845025pgb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Gfg0sfM1yOZcobziVscETOqEbK+m4KH2STWY/RhzvKM=;
+        b=p/DaaFIBXMKLYKdMeigqMEbkNzz2UmwkZ1EFHnR+vGLGHiUzJ+oKoWCc75yRbblKlU
+         XY6wS1b4XYolAjRWWIbz2PyAx1bgYIMsc/BNIwUvTkGVTrriASyMjIxrZlTWbEkWFKc+
+         UXp4FsH2NtXkPBUVp8Hjm6oD+oW2I+mh6qhDStIhDHojgZEvqp48XO9zh0KiOf1HRfoK
+         3rmwCExGHErobvapU73Qay5djJ77vuKl037+x+eIuxYIb6IQBBkHSZEuQQzhEnbiHm4s
+         zHWtECJsTTjb2A09PYM3BfQlKkWw1gwtBiNSPD8mj3xWLFyCUcVjn8ySAgg4nMNupmoQ
+         uTcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Gfg0sfM1yOZcobziVscETOqEbK+m4KH2STWY/RhzvKM=;
+        b=i87FYNvJ0Fo9PE15NMKKryG9IjUzpzRq5lZTMpqGRKXpxLUIGP2vBAQrIlSZMvi3LV
+         SHAh8379f91eFjqeD+6tWE5DtfTef4EFL1kbha14BZh/5UVFUdmEwNnxe6wZH7rBFF1L
+         O+HMWyWdafPo1VZ10Q5cbXgljSN6ObSWSH4Lao3teQASSejbKTGt7OIgXVmdVmnzW7Pj
+         5+vkgyqs82tqo2aHIosnlq/ytK7Jn+TfVWENKOYHNlfDAy++TqOM0B0xCcRzEBeDioJZ
+         ElRF1Atuc5iLYD1X+mU1yWhU6u8xbpldwkBSCLAbO307Pp8ZWoBNzfJWGGrlWzhIKYpw
+         vIAA==
+X-Gm-Message-State: AOAM533YAlXh3awEsJohj84F/c+L1hIstBGp5WW1dJ/gBIBaWFb0rzZG
+        GW0gFXFLI087kwabyTCx78DAQ7RVCQg=
+X-Google-Smtp-Source: ABdhPJzkf6aRGNT4PCjsIj3xSQL7MwoZQSgaVrVC2ZHHBuegkwTvvtn8/goU3JG9vEQ+mi8RqnmORg==
+X-Received: by 2002:a63:1743:0:b0:381:42cf:187 with SMTP id 3-20020a631743000000b0038142cf0187mr2089420pgx.397.1647490701303;
+        Wed, 16 Mar 2022 21:18:21 -0700 (PDT)
+Received: from Asurada-Nvidia.nvidia.com ([12.154.207.45])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056a00170d00b004f757a795fesm5047654pfc.219.2022.03.16.21.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 21:18:20 -0700 (PDT)
+From:   Nicolin Chen <nicoleotsuka@gmail.com>
+To:     broonie@kernel.org, shengjiu.wang@nxp.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, lgirdwood@gmail.com,
+        shengjiu.wang@gmail.com
+Subject: [PATCH] MAINTAINERS: Add Shengjiu to maintainer list of sound/soc/fsl
+Date:   Wed, 16 Mar 2022 21:18:06 -0700
+Message-Id: <20220317041806.28230-1-nicoleotsuka@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 21:35:47 -0600 David Ahern wrote:
-> On 3/16/22 9:18 PM, Jakub Kicinski wrote:
-> > 
-> > I guess this set raises the follow up question to Dave if adding 
-> > drop reasons to places with MIB exception stats means improving 
-> > the granularity or one MIB stat == one reason?
-> 
-> There are a few examples where multiple MIB stats are bumped on a drop,
-> but the reason code should always be set based on first failure. Did you
-> mean something else with your question?
+Shengjiu has been actively working on latest FSL platforms and
+keeping upstream effort as well, while I have been working on
+other subsystem lately and cannot guarantee audio patch review
+in the near term. So replacing with him in the maintainer list.
 
-I meant whether we want to differentiate between TYPE, and BROADCAST or
-whatever other possible invalid protocol cases we can get here or just
-dump them all into a single protocol error code.
+Cc: Shengjiu Wang <shengjiu.wang@gmail.com>
+Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 46ffe05eaeb7..bf7a0ae10d06 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7779,10 +7779,10 @@ F:	drivers/net/ethernet/freescale/fs_enet/
+ F:	include/linux/fs_enet_pd.h
+ 
+ FREESCALE SOC SOUND DRIVERS
+-M:	Nicolin Chen <nicoleotsuka@gmail.com>
++M:	Shengjiu Wang <shengjiu.wang@gmail.com>
+ M:	Xiubo Li <Xiubo.Lee@gmail.com>
+ R:	Fabio Estevam <festevam@gmail.com>
+-R:	Shengjiu Wang <shengjiu.wang@gmail.com>
++R:	Nicolin Chen <nicoleotsuka@gmail.com>
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ L:	linuxppc-dev@lists.ozlabs.org
+ S:	Maintained
+-- 
+2.17.1
+

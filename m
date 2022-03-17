@@ -2,49 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79DC4DCBCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 380B04DCBCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiCQQyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S236689AbiCQQyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiCQQyE (ORCPT
+        with ESMTP id S231928AbiCQQye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:54:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 345B5217950;
-        Thu, 17 Mar 2022 09:52:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB4591682;
-        Thu, 17 Mar 2022 09:52:47 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23B8C3F7B4;
-        Thu, 17 Mar 2022 09:52:44 -0700 (PDT)
-Message-ID: <e2ceb902-6fe2-bcb9-259a-f120901672b6@arm.com>
-Date:   Thu, 17 Mar 2022 16:52:37 +0000
+        Thu, 17 Mar 2022 12:54:34 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A12B62A37
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:53:18 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id y142so11272799ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FpjeJ8QdW/CmqR2xDeXs/92h46wSWjFSBCozUg7uNqs=;
+        b=gTvdJVxU5LXYliDDCmEWbkrnko0Ce8YhCfpPalJdRHYuKPj+8//gr2BTDR8yZuyx79
+         4oCQWvQSP8YEA5A7vu1LShb0QVL7Fcaqv6rdI6MeqhbdOKifbeY3D9tZPurpvUX2Xs+5
+         kQEl8nMNYOnXuBSo+pLVwAsTPHgEY7lyEtP/MS7BOXxzJlMY7i3URcR4m/pNAqDSn+6V
+         BhvslQJFvA1k9FvAAb/rqBCGb4LNeyyjqO5S6J4988CUISzgL8FadrAqSPvORUKSVE06
+         OHjLmZq38EpO1GILzdeg00H+5f064X0Dm0gKV/6+BKBK91tCsw6CwDPP1bTQqomXh+51
+         vY+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FpjeJ8QdW/CmqR2xDeXs/92h46wSWjFSBCozUg7uNqs=;
+        b=cadTiFvW5wKSTpPfk7gbLhkoyG/a135b5KMCXwcrBuA+6K4px/RSWFlQYU+RT752z3
+         DmkepCyw+vQZ6m3gNjLFQjFYUb+t7KITcQtvfGTx8bjfCncftlP44fSiyq9T6TdYkYow
+         rp9dLP4yvAjjCaAK/hv4m5CZ89cnNAG1SuxSmw8HEa/Qv1OElegOIm08u/cplKMFklNG
+         EUQTkkh3o4NJ9ErGCR+aS9MbFQSEt8pJiRfUUtfpTpKNeTiULZzW/szAeEoFLpqo6lfU
+         /xDflj8wNLows5r2GSNF9deotGHpDK5t7NqXCGo+eL8y05AeFPwI10Re6cWermo32Zdg
+         bv/w==
+X-Gm-Message-State: AOAM532OXPiZvxZR4BZ4Z808cd9uznRjQuQrZkdxR6UpwE4+3OK6y7hM
+        Wgp/0F9+ZaP0umCVjym8zne2B6MJM/SzTEqREpCP5A==
+X-Google-Smtp-Source: ABdhPJyJYSYDZjLCDSULZ1P1ZZ5vjZFLsDMYo99t43UMgeiqWKfG6cxaG3yU+sgeECqkvltfODNP3glHpXcKDREAQnU=
+X-Received: by 2002:a25:1906:0:b0:61d:9576:754e with SMTP id
+ 6-20020a251906000000b0061d9576754emr5795294ybz.426.1647535997540; Thu, 17 Mar
+ 2022 09:53:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 3/4 RESEND] Drivers: hv: vmbus: Propagate VMbus coherence
- to each VMbus device
-Content-Language: en-GB
-To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, rafael@kernel.org, lenb@kernel.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, hch@lst.de, m.szyprowski@samsung.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-References: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
- <1647534311-2349-4-git-send-email-mikelley@microsoft.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1647534311-2349-4-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+ <YjEaFBWterxc3Nzf@google.com> <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
+ <YjFAzuLKWw5eadtf@google.com> <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+ <20220316142906.e41e39d2315e35ef43f4aad6@linux-foundation.org> <YjNhvhb7l2i9WTfF@google.com>
+In-Reply-To: <YjNhvhb7l2i9WTfF@google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 17 Mar 2022 09:53:06 -0700
+Message-ID: <CAJuCfpGBJev_h92S0xLEQXghGQzNPCsqWTunpVPJQX4WWPjGzw@mail.gmail.com>
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to process_madvise
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        =?UTF-8?Q?Edgar_Arriaga_Garc=C3=ADa?= <edgararriaga@google.com>,
+        nadav.amit@gmail.com, Michal Hocko <mhocko@suse.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "# 5 . 10+" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,54 +79,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-17 16:25, Michael Kelley via iommu wrote:
-> VMbus synthetic devices are not represented in the ACPI DSDT -- only
-> the top level VMbus device is represented. As a result, on ARM64
-> coherence information in the _CCA method is not specified for
-> synthetic devices, so they default to not hardware coherent.
-> Drivers for some of these synthetic devices have been recently
-> updated to use the standard DMA APIs, and they are incurring extra
-> overhead of unneeded software coherence management.
-> 
-> Fix this by propagating coherence information from the VMbus node
-> in ACPI to the individual synthetic devices. There's no effect on
-> x86/x64 where devices are always hardware coherent.
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->   drivers/hv/vmbus_drv.c | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 12a2b37..c0e993ad 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -904,6 +904,21 @@ static int vmbus_probe(struct device *child_device)
->   			drv_to_hv_drv(child_device->driver);
->   	struct hv_device *dev = device_to_hv_device(child_device);
->   	const struct hv_vmbus_device_id *dev_id;
-> +	enum dev_dma_attr coherent;
-> +
-> +	/*
-> +	 * On ARM64, propagate the DMA coherence setting from the top level
-> +	 * VMbus ACPI device to the child VMbus device being added here.
-> +	 * Older Hyper-V ARM64 versions don't set the _CCA method on the
-> +	 * top level VMbus ACPI device as they should.  Treat these cases
-> +	 * as DMA coherent since that's the assumption made by Hyper-V.
-> +	 *
-> +	 * On x86/x64 these calls assume coherence and have no effect.
-> +	 */
-> +	coherent = acpi_get_dma_attr(hv_acpi_dev);
-> +	if (coherent == DEV_DMA_NOT_SUPPORTED)
-> +		coherent = DEV_DMA_COHERENT;
-> +	acpi_dma_configure(child_device, coherent);
+On Thu, Mar 17, 2022 at 9:28 AM Minchan Kim <minchan@kernel.org> wrote:
+>
+> On Wed, Mar 16, 2022 at 02:29:06PM -0700, Andrew Morton wrote:
+> > On Wed, 16 Mar 2022 19:49:38 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
+> >
+> > > > IMO, it's worth to note in man page.
+> > > >
+> > >
+> > > Or the current patch for just ENOMEM is sufficient here and we just have
+> > > to update the man page?
+> >
+> > I think the "On success, process_madvise() returns the number of bytes
+> > advised" behaviour sounds useful.  But madvise() doesn't do that.
+> >
+> > RETURN VALUE
+> >        On  success, madvise() returns zero.  On error, it returns -1 and errno
+> >        is set to indicate the error.
+> >
+> > So why is it desirable in the case of process_madvise()?
+>
+> Since process_madvise deal with multiple ranges and could fail at one of
+> them in the middle or pocessing, people could decide where the call
+> failed and then make a strategy whether they will abort at the point or
+> continue to hint next addresses. Here, problem of the strategy is API
+> doesn't return any error vaule if it has processed any bytes so they
+> would have limitation to decide a policy. That's the limitation for
+> every vector IO syscalls, unfortunately.
+>
+> >
+> >
+> >
+> > And why was process_madvise() designed this way?   Or was it
+> > always simply an error in the manpage?
 
-acpi_dma_configure is for devices represented in ACPI. The commit 
-message implies that these VMBus devices aren't represented in ACPI. 
-What gives?
-
-Robin.
-
->   
->   	dev_id = hv_vmbus_get_id(drv, dev);
->   	if (drv->probe) {
+Taking a closer look, indeed manpage seems to be wrong.
+https://elixir.bootlin.com/linux/v5.17-rc8/source/mm/madvise.c#L1154
+indicates that in the presence of unmapped holes madvise will skip
+them but will return ENOMEM and that's what process_madvise is
+ultimately returning in this case. So, the manpage claim of "This
+return value may be less than the total number of requested bytes, if
+an error occurred after some iovec elements were already processed."
+does not reflect the reality in our case because the return value will
+be -ENOMEM. After the desired behavior is finalized I'll modify the
+manpage accordingly.

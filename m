@@ -2,58 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2F84DC567
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213B84DC56C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiCQMCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S233363AbiCQMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiCQMCm (ORCPT
+        with ESMTP id S233195AbiCQMDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:02:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC318FADD;
-        Thu, 17 Mar 2022 05:01:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F418AB80E8A;
-        Thu, 17 Mar 2022 12:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6FAC340E9;
-        Thu, 17 Mar 2022 12:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647518479;
-        bh=Qf8CBbHvzkdofb9fpNdW6CQM9HNMKy+UOcace2VJYCw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=tdxDnyrbQ3jnvwbKN7ctQjVnoMcyTI0dYBfVhBAXFaZFNcyJ0WjMLi9BGyKlALHvL
-         hXtKP+3jnMTbE8SrVCsfrl3pKxqoRzBF9m5txFRmwJRUNnX9NMUnm5cmCl33whIMBJ
-         X3vW8nyoNp4NTB04PYRzNffMdIqhXEMDSmm9ET/RaWs8LMOjM610DISEgyi14rRcvu
-         cjkdPrXDnNjOlyU4F/CoNwbbobxnXWHY3hCvNnQ9aDfjHH89kXxoI88gtALsWldwEz
-         SbiFEjJeZrp2/anICt9K8uprD41kdKphA8UKIes+FtDK3UeHoYpvb+a5s8A7SXCWPn
-         3naZaDM9tNqbg==
-Message-ID: <c2f494b61674e63985e4e2a0fb3b6c503e17334b.camel@kernel.org>
-Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
- encryption
-From:   Jeff Layton <jlayton@kernel.org>
-To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Xiubo Li <xiubli@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Ceph Development <ceph-devel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 17 Mar 2022 08:01:17 -0400
-In-Reply-To: <87wngshlzb.fsf@brahms.olymp>
-References: <20220315161959.19453-1-lhenriques@suse.de>
-         <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
-         <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
-         <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
-         <87wngshlzb.fsf@brahms.olymp>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 17 Mar 2022 08:03:37 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97F61E95CE;
+        Thu, 17 Mar 2022 05:02:20 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22H9cmH9008529;
+        Thu, 17 Mar 2022 12:01:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=vfIXFVzBYVYCGJ9paDohUySVCQL2EjCszKhxvr9T5hE=;
+ b=A3kvDZtIURAt7ojq1h4+YH63/I04UlyKABS0CI3gcgaRaWnKgM/QSHr7NduPQGiED1Ks
+ Ily+r7RTDKSQm02cv1lTUEXIdHDBnl4HdRBb6vCOf+5T4NFQnCKFwWtEpspQz6un6Ndd
+ JXvkDyc3CfXRbcDijhsox5sH6g8g2xdIPspCB2DlQSPxy/vIfHKDmG3JlazoYVjoLQHp
+ wHclXgN/LRqts5UhFw0Gk1zKKNG8M1zTZnyrkA6BMDLEhTSjjs+0xPL5jmDkJKurCASX
+ 6FnDj9wT+RUtDak00Y1mxeixPcHhw+0cYtMkTzW7KVWwLH49rP/EDSC9pAT5O+9FxALj ww== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev0m5vkrj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 12:01:55 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22HBtrQJ021011;
+        Thu, 17 Mar 2022 12:01:55 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev0m5vkqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 12:01:54 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HBqkhb004603;
+        Thu, 17 Mar 2022 12:01:53 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3erjshskwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 12:01:52 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HC1oci45875640
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Mar 2022 12:01:50 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85360A405D;
+        Thu, 17 Mar 2022 12:01:50 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A537A4053;
+        Thu, 17 Mar 2022 12:01:50 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 17 Mar 2022 12:01:50 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
+References: <cover.1647057583.git.riteshh@linux.ibm.com>
+        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+Date:   Thu, 17 Mar 2022 13:01:49 +0100
+In-Reply-To: <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+        (Ritesh Harjani's message of "Sat, 12 Mar 2022 11:09:47 +0530")
+Message-ID: <yt9dr1706b4i.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: I05qBJXbb_wl6wSZAWMPX25f2BRaoFU1
+X-Proofpoint-ORIG-GUID: Rpr6UriCIbwTRJQf1XkiMSwaP8I7My-O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-17_04,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=991 adultscore=0
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 clxscore=1011 impostorscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203170070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,55 +95,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-17 at 11:11 +0000, Luís Henriques wrote:
-> Xiubo Li <xiubli@redhat.com> writes:
-> 
-> > On 3/17/22 6:01 PM, Jeff Layton wrote:
-> > > I'm not sure we want to worry about .snap directories here since they
-> > > aren't "real". IIRC, snaps are inherited from parents too, so you could
-> > > do something like
-> > > 
-> > >      mkdir dir1
-> > >      mkdir dir1/.snap/snap1
-> > >      mkdir dir1/dir2
-> > >      fscrypt encrypt dir1/dir2
-> > > 
-> > > There should be nothing to prevent encrypting dir2, but I'm pretty sure
-> > > dir2/.snap will not be empty at that point.
-> > 
-> > If we don't take care of this. Then we don't know which snapshots should do
-> > encrypt/dencrypt and which shouldn't when building the path in lookup and when
-> > reading the snapdir ?
-> 
-> In my patchset (which I plan to send a new revision later today, I think I
-> still need to rebase it) this is handled by using the *real* snapshot
-> parent inode.  If we're decrypting/encrypting a name for a snapshot that
-> starts with a '_' character, we first find the parent inode for that
-> snapshot and only do the operation if that parent is encrypted.
-> 
-> In the other email I suggested that we could prevent enabling encryption
-> in a directory when there are snapshots above in the hierarchy.  But now
-> that I think more about it, it won't solve any problem because you could
-> create those snapshots later and then you would still need to handle these
-> (non-encrypted) "_name_xxxx" snapshots anyway.
-> 
+Ritesh Harjani <riteshh@linux.ibm.com> writes:
 
-Yeah, that sounds about right.
+> ftrace's __print_symbolic() requires that any enum values used in the
+> symbol to string translation table be wrapped in a TRACE_DEFINE_ENUM
+> so that the enum value can be decoded from the ftrace ring buffer by
+> user space tooling.
+>
+> This patch also fixes few other problems found in this trace point.
+> e.g. dereferencing structures in TP_printk which should not be done
+> at any cost.
+>
+> Also to avoid checkpatch warnings, this patch removes those
+> whitespaces/tab stops issues.
+>
+> Cc: stable@kernel.org
+> Fixes: commit aa75f4d3daae ("ext4: main fast-commit commit path")
+> Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+> ---
+>  include/trace/events/ext4.h | 78 +++++++++++++++++++++++--------------
+>  1 file changed, 49 insertions(+), 29 deletions(-)
+>
+> diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
+> index 19e957b7f941..1a0b7030f72a 100644
+> --- a/include/trace/events/ext4.h
+> +++ b/include/trace/events/ext4.h
+> @@ -95,6 +95,17 @@ TRACE_DEFINE_ENUM(ES_REFERENCED_B);
+>  	{ FALLOC_FL_COLLAPSE_RANGE,	"COLLAPSE_RANGE"},	\
+>  	{ FALLOC_FL_ZERO_RANGE,		"ZERO_RANGE"})
+>
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_XATTR);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_CROSS_RENAME);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_NOMEM);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_SWAP_BOOT);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RESIZE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RENAME_DIR);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_FALLOC_RANGE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_INODE_JOURNAL_DATA);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);
 
-What happens if you don't have the snapshot parent's inode in cache?
-That can happen if you (e.g.) are running NFS over ceph, or if you get
-crafty with name_to_handle_at() and open_by_handle_at().
+I'm getting the following oops with that patch:
 
-Do we have to do a LOOKUPINO in that case or does the trace contain that
-info? If it doesn't then that could really suck in a big hierarchy if
-there are a lot of different snapshot parent inodes to hunt down.
+[    0.937455] VFS: Disk quotas dquot_6.6.0
+[    0.937474] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    0.958347] Unable to handle kernel pointer dereference in virtual kernel address space
+[    0.958350] Failing address: 00000000010de000 TEID: 00000000010de407
+[    0.958353] Fault in home space mode while using kernel ASCE.
+[    0.958357] AS:0000000001ed0007 R3:00000002ffff0007 S:0000000001003701
+[    0.958388] Oops: 0004 ilc:3 [#1] SMP
+[    0.958393] Modules linked in:
+[    0.958398] CPU: 0 PID: 8 Comm: kworker/u128:0 Not tainted 5.17.0-rc8-next-20220317 #396
+[    0.958403] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
+[    0.958407] Workqueue: eval_map_wq eval_map_work_func
 
-I think this is a case where the client just doesn't have complete
-control over the dentry name. It may be better to just not encrypt them
-if it's too ugly.
+[    0.958446] Krnl PSW : 0704e00180000000 000000000090a9d6 (number+0x25e/0x3c0)
+[    0.958456]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
+[    0.958461] Krnl GPRS: 0000000000000058 00000000010de0ac 0000000000000001 00000000fffffffc
+[    0.958467]            0000038000047b80 0affffff010de0ab 0000000000000000 0000000000000000
+[    0.958481]            0000000000000020 0000038000000000 00000000010de0ad 00000000010de0ab
+[    0.958484]            0000000080312100 0000000000e68910 0000038000047b50 0000038000047ab8
+[    0.958494] Krnl Code: 000000000090a9c6: f0c84112b001        srp     274(13,%r4),1(%r11),8
+[    0.958494]            000000000090a9cc: 41202001            la      %r2,1(%r2)
+[    0.958494]           #000000000090a9d0: ecab0006c065        clgrj   %r10,%r11,12,000000000090a9dc
+[    0.958494]           >000000000090a9d6: d200b0004000        mvc     0(1,%r11),0(%r4)
+[    0.958494]            000000000090a9dc: 41b0b001            la      %r11,1(%r11)
+[    0.958494]            000000000090a9e0: a74bffff
+            aghi    %r4,-1
+[    0.958494]            000000000090a9e4: a727fff6            brctg   %r2,000000000090a9d0
+[    0.958494]            000000000090a9e8: a73affff            ahi     %r3,-1
+[    0.958575] Call Trace:
+[    0.958580]  [<000000000090a9d6>] number+0x25e/0x3c0
+[    0.958594] ([<0000000000289516>] update_event_printk+0xde/0x200)
+[    0.958602]  [<0000000000910020>] vsnprintf+0x4b0/0x7c8
+[    0.958606]  [<00000000009103e8>] snprintf+0x40/0x50
+[    0.958610]  [<00000000002893d2>] eval_replace+0x62/0xc8
+[    0.958614]  [<000000000028e2fe>] trace_event_eval_update+0x206/0x248
+[    0.958619]  [<0000000000171bba>] process_one_work+0x1fa/0x460
+[    0.958625]  [<000000000017234c>] worker_thread+0x64/0x468
+[    0.958629]  [<000000000017af90>] kthread+0x108/0x110
+[    0.958634]  [<00000000001032ec>] __ret_from_fork+0x3c/0x58
+[    0.958640]  [<0000000000cce43a>] ret_from_fork+0xa/0x40
+[    0.958648] Last Breaking-Event-Address:
+[    0.958652]  [<000000000090a99c>] number+0x224/0x3c0
+[    0.958661] Kernel panic - not syncing: Fatal exception: panic_on_oops
 
-Another idea might be to just use the same parent inode (maybe the
-root?) for all snapshot names. It's not as secure, but it's probably
-better than nothing.
--- 
-Jeff Layton <jlayton@kernel.org>
+I haven't really checked what TRACE_DEFINE_ENUM() does, but removing the
+last line ("TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);") makes the oops go
+away. Looking at all the other defines looks like the _MAX enum
+shouldn't be added there?
+
+Thanks
+Sven

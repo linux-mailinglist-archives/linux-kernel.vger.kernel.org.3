@@ -2,114 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D36E4DD025
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622374DD028
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiCQVZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S230261AbiCQV1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiCQVZ0 (ORCPT
+        with ESMTP id S230252AbiCQV1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:25:26 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F033885
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:24:08 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id mm4-20020a17090b358400b001c68e836fa6so2281831pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:24:08 -0700 (PDT)
+        Thu, 17 Mar 2022 17:27:44 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B30E127E;
+        Thu, 17 Mar 2022 14:26:26 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so6640850pjp.3;
+        Thu, 17 Mar 2022 14:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WIe3D5+ePhkPZn/3RQ1oBQYxy3ysEY3SEmYSs340hZE=;
-        b=jFn0CkqZROMhdVM40ZKnNqQV9cOoRUy5Q+JZqc9yI0kvVx5yP9V4r8UWUFnlH+Abt+
-         KhRKEvr1CUsYbM4sgBvEjEIeHaXmHBQnHd6HS44n1uv7WhcNcShX33s/bbDxtSgpc7t/
-         B32v9Lo0HGWOhLJCkliWdwOWAspA6qfA3fDLjcDh7SrQ11CHgf3XjV/3RjpdDxZQ5grb
-         hQBAI6GqdwgE9DaPdaAhWxBy3Gdi1kHH0PnpYbTWBJ/4WhpNk+roNhE+SmZljIITY8wm
-         0iExGClDo26JI9hYyNebYpXe7pEq+di1J0JNdS0243gqZEcfz+lDue/KcUbXka/3HQkP
-         /POQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O28KFB9Z1FTz+AymH1IN8bgHj7fL/zlAB/PUyRZgUJs=;
+        b=p46uwofeLg5Vu8lhhImWBLOdalf9R9c51tbeP4ZqSXmJbVrnjwLKBmGO9x6y741/9C
+         F1z3FT9GcfO3w8Uy5wgXkvY6Zwo2xF4zgYMtDHHrA2e3Tsx6H8wPajgjqunwWno7+obU
+         O6jsg/z1Bm5Zqn45iBnmqEX6OA1XWo7u0lsPGuH6iRhhTvHzeE2ZhCcy8SVHLf76esom
+         jC4E5SjBuceJocPckCw5BIzd3ZvDCUpxHgkpX8+G+QJVoz3BlD1LcuU1moF9RfTaOcXO
+         EkObbZW7qdIyoS1dWuTav1xwouqRxh6yOZ1vBaCw4wPeTtMpIuOCslctpNdt1fGceRqP
+         Q0kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WIe3D5+ePhkPZn/3RQ1oBQYxy3ysEY3SEmYSs340hZE=;
-        b=6hkuIZqposbVz9/oZKQJ59tXA30Hd7XuB8Nffyh73juaAjuwcAOGHplnX6wx6NosjG
-         AB4JPbn+AsE+VJizRCjYXmAo2MYvrPjiuvdKptBwkWsvUQiPNL9kndOrO3SEHaHyte0w
-         uAqBMs9lK4vAr0SNFN6s8moFyWbs2TGFN2vBkaIlmYzowWt6mQVnrO9mWqcHA//DVynQ
-         Eq73EYxbq/X6EmFawGXbwRX4CMLSUw/MVh+55+OknHDyxcGeFI5pW3uTIBJrgwM6mokW
-         5yCvKCuyrB2xpm4CCbie0TKRVQNrY1MzRPQt1hzPvuuLvqnmmPscSijIO41aSdGjBm9O
-         YYaQ==
-X-Gm-Message-State: AOAM530CZwO3Zp4WhypDOIvVRo6541Pwic4XJ06tG5GGsPrH20Zc6hei
-        cPwbX7tq6uYZ1E3//4Y+x0RD4A==
-X-Google-Smtp-Source: ABdhPJwZVPJSdruZ+pO18HT47fRCQgTApX4Z1RusxL4vRiIf7iuDH/NTvwTUbikHQV2jpOb+p6m1tw==
-X-Received: by 2002:a17:902:7296:b0:151:62b1:e2b0 with SMTP id d22-20020a170902729600b0015162b1e2b0mr6936666pll.165.1647552247973;
-        Thu, 17 Mar 2022 14:24:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:38d4:55df:8747:480:f0df:4c1a? ([2600:1700:38d4:55df:8747:480:f0df:4c1a])
-        by smtp.gmail.com with ESMTPSA id k186-20020a636fc3000000b00381ef1e50a2sm5399417pgc.25.2022.03.17.14.24.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 14:24:07 -0700 (PDT)
-Message-ID: <897714f7-033f-a888-aba5-e0bd275effd0@google.com>
-Date:   Thu, 17 Mar 2022 14:24:05 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O28KFB9Z1FTz+AymH1IN8bgHj7fL/zlAB/PUyRZgUJs=;
+        b=1Zbw8PbbMsfRlZbFZJYq30NNsPA1/xsrHRAijo3POLNEeakSr29lEu+lTQyEquU72d
+         l6aAwgnBjDdHWcVS/zOyUk2BK7Fu8+IORtKCHLISRZM04rNjN0MOylKFr7Cv+8HDpPXp
+         Z3CsDCz9yyr5iENVabZjjdfUY00/BwC4C7o5XBymhs1asQPAjgXG4qzqKSi4usc3QGgf
+         eqatnONAdxukug2UCL21408S8tFQMSS//vk9o2WzivxeFINi9ApulD+kAGLS+r71mJOh
+         dqkicxyiOA4Tx8B96ykzgk3McYNuvLd2D7kEFAowiUWrPccxkjEDRbGNW3FqBJneIg3p
+         ykYA==
+X-Gm-Message-State: AOAM532r1jwS82VZxbd6Rnx8zt5XQMehQcEQokR2AxgUCxLdI66pZcK3
+        ikIl1Xa5inExEDdx6jJkykw=
+X-Google-Smtp-Source: ABdhPJwiI+1DF6j6F1CN5z+IyxD3suUX3qc9ceGaxuETSEpJcT/76Ll3c9nj5XiMyX7kuDZiR4jblg==
+X-Received: by 2002:a17:90b:3e8c:b0:1bf:4043:daa with SMTP id rj12-20020a17090b3e8c00b001bf40430daamr7630460pjb.233.1647552315163;
+        Thu, 17 Mar 2022 14:25:15 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id k185-20020a6384c2000000b003821dcd9020sm1284016pgd.27.2022.03.17.14.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 14:25:14 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 02:55:08 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: timer: Document arm, cortex-a7-timer
+ in arch timer
+Message-ID: <20220317212508.GB99538@9a2d8922b8f1>
+References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
+ <20220317191527.96237-3-singh.kuldeep87k@gmail.com>
+ <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH 00/47] Address Space Isolation for KVM
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
-        pjt@google.com, oweisse@google.com, alexandre.chartre@oracle.com,
-        rppt@linux.ibm.com, dave.hansen@linux.intel.com,
-        peterz@infradead.org, luto@kernel.org, linux-mm@kvack.org
-References: <20220223052223.1202152-1-junaids@google.com>
- <87sfrh3430.ffs@tglx>
-From:   Junaid Shahid <junaids@google.com>
-In-Reply-To: <87sfrh3430.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 15:49, Thomas Gleixner wrote:
-> Junaid,
+On Thu, Mar 17, 2022 at 08:25:12PM +0000, Robin Murphy wrote:
+> On 2022-03-17 19:15, Kuldeep Singh wrote:
+> > Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
+> > conjugation with "arm,armv7-timer". Since, initial entry is not
+> > documented, it start raising dtbs_check warnings.
+> > 
+> > ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
+> > 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
+> > 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
+> > 
+> > Document this compatible to address it. The motivation to add this
+> > change is taken from an already existing entry "arm,cortex-a15-timer".
+> > Please note, this will not hurt any arch timer users.
 > 
-> On Tue, Feb 22 2022 at 21:21, Junaid Shahid wrote:
->>
->> The patches apply on top of Linux v5.16.
+> Eh, if it's never been documented or supported, I say just get rid of it.
+> The arch timer interface is by definition part of a CPU, and we can tell
+> what the CPU is by reading its ID registers. Indeed that's how the driver
+> handles the non-zero number of CPU-specific errata that already exist - we
+> don't need compatibles for that.
 > 
-> Why are you posting patches against some randomly chosen release?
-> 
-> Documentation/process/ is pretty clear about how this works. It's not
-> optional.
+> In some ways it might have been nice to have *SoC-specific* compatibles
+> given the difficulty some integrators seem to have had in wiring up a stable
+> count *to* the interface, but it's not like they could be magically added to
+> already-deployed DTs after a bug is discovered, and nor could we have
+> mandated them from day 1 just in case and subsequently maintained a binding
+> that is just an ever-growing list of every SoC. Oh well.
 
-Sorry, I assumed that for an RFC, it may be acceptable to base on the last release version, but looks like I guessed wrong. I will base the next version of the RFC on the HEAD of the Linus tree.
+Robin, A similar discussion was already done on v1 thread. Please see
+below for details:
+https://lore.kernel.org/linux-devicetree/20220317065925.GA9158@9a2d8922b8f1/
+https://lore.kernel.org/linux-devicetree/726bde76-d792-febf-d364-6eedeb748c3b@canonical.com/
 
-> 
->> These patches are also available via
->> gerrit at https://linux-review.googlesource.com/q/topic:asi-rfc.
-> 
-> This is useful because?
-> 
-> If you want to provide patches in a usable form then please expose them
-> as git tree which can be pulled and not via the random tool of the day.
+And final outcome of discussion turns out to add this compatible string.
 
-The patches are now available as the branch "asi-rfc-v1" in the git repo https://github.com/googleprodkernel/linux-kvm.git
+I see people with different set of perspective in regard to whether keep
+compatible string or not. We should have some sort of evidences to
+support claims so that next time when similar situation arises, we'll be
+aware beforehand how to proceed.
 
-Thanks,
-Junaid
-
+- Kuldeep
 > 
-> Thanks,
+> Robin.
 > 
->          tglx
-> 
-> 
-
+> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> > ---
+> >   Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> > index ba2910f0a7b2..ea390e5df71d 100644
+> > --- a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> > +++ b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
+> > @@ -26,6 +26,7 @@ properties:
+> >             - arm,armv8-timer
+> >         - items:
+> >             - enum:
+> > +              - arm,cortex-a7-timer
+> >                 - arm,cortex-a15-timer
+> >             - const: arm,armv7-timer

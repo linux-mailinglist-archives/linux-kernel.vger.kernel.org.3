@@ -2,48 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50CE4DD015
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B644DD010
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiCQVUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S230274AbiCQVUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiCQVUM (ORCPT
+        with ESMTP id S230135AbiCQVUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:20:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39A1DE9F;
-        Thu, 17 Mar 2022 14:18:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKKky3w3Sz4xXV;
-        Fri, 18 Mar 2022 08:18:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647551931;
-        bh=jqK0nPVtwvYOHbKN9F3phggl61z9dDkP0bv/+owb1cs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BueAf71JoiUmW+CB8lI5l3ubEFhjscGX5qCh6LoWpvg1tk2VKvLhZ9bTStK1ZosgS
-         mSn72S91v2hqItq6qJjFds0vL9MAUbTJVhiY4SmpJ4mDplDKhky5A6hg95dAW6gT66
-         5OcfSLpS5NS7+dV7+mUXLggKMth8eO19wNRwnMa7NLcitO2wTLZBHuUpNrQ3XZYyzn
-         QhXwSTMYeE8F+yxz417+ABU43eEB/+VP75tzDcs2LamiRWw4aDye3kwJa4plxBUXP+
-         17eej4qmEGIFvkXbvEqSV8kkz9/ITeQ9JwedDJDZbrlfbPB1/a3GUszMfQtVucoYmi
-         s1ZtVySji6I5A==
-Date:   Fri, 18 Mar 2022 08:18:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the spi tree
-Message-ID: <20220318081849.71228339@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dffVoO4x=ie4M/uiw6W0RMs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 17 Mar 2022 17:20:34 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADBEB2455
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:19:16 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id b18-20020a63d812000000b0037e1aa59c0bso2312030pgh.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6mHysSGkjSaV0ili798Q1zLL9ynUJ9JmihmTcdCLIZY=;
+        b=kgTRMhvOjKo0YDi1oWQ8YuJ3ZeMPo74qt+/vjGdCcuqs8dkrP0TRKHe74cxBTHRisY
+         pXpC7Ow+2tv6+LH3Y4J+kRigvMhRBwP34m3TIOywj5vMh3PHyuS2pozWWwFAF+JxmyQI
+         ijSEtzxiCCln73+qzuFQho1qJyA+9K7PlXH2aic3sOO5/pXWtBiwYCpg7UtF2Nc/mZ0y
+         leTXS0J1RZwoak/k4U9aNUICFCK2CU74Zziu/oRs7R4IMrbpMQExf1frRcDqN5tTsem9
+         7Y9xQ2+RG8tgUfvE4x3Xa2sLU0ccGllxOI/YzO8blwRuY/8ZXvt3XFGf8gf/N8V/mUXi
+         VhHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6mHysSGkjSaV0ili798Q1zLL9ynUJ9JmihmTcdCLIZY=;
+        b=jYknUa3FcELtmKVMWrBpchRhk3ef5gQPddJ2h23jkwmOZ1QlOY8cKttrrPnHiLDM+t
+         8MOFIfq3caoz17MV3oFFmXzWNfH2O+J9uj1kALURlD/HmFakwbOpAhFcTaD/j4Qjrfl7
+         uBMFUT4XLYJGFiS2JaA+fOO8evulV49230ydwKHDh93ALYMgfLDdpZzRypHEulZqTJz0
+         HHdcJiANO8Ad6CBC1rtNWKDgTXOFI3Dkw7qaMUmpghj5uW6eV8K4PI7sNXslX2Q9qRIQ
+         c9Z9QK+y77bMllGyCER0FoaluvZPEr9vu6s79WfKVTT7+byj4NAnoXvCDscYWkN/IbjI
+         7MbA==
+X-Gm-Message-State: AOAM532vxw346IBpTH7AfpRALLRotHNiB4MRMgzYmVtrHaCtPHHsSp4e
+        Zcrg5QEiK7orfn63YjzW7WnEE0mSUHk=
+X-Google-Smtp-Source: ABdhPJzRlMtFf9+BfW4ekzaU3Vlw86V5D1cZQ96eDB6kmJFiiAOOAjp/f1ObJsH6I7e0TQxtVo1VhFUhRlE=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:ef70:31aa:2364:9dda])
+ (user=pgonda job=sendgmr) by 2002:a17:902:e74f:b0:151:c20b:5f39 with SMTP id
+ p15-20020a170902e74f00b00151c20b5f39mr6866669plf.43.1647551956388; Thu, 17
+ Mar 2022 14:19:16 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 14:19:13 -0700
+Message-Id: <20220317211913.1397427-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [PATCH] x86/sev-es: Replace open-coded hlt-loop with sev_es_terminate()
+From:   Peter Gonda <pgonda@google.com>
+To:     x86@kernel.org
+Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,42 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/dffVoO4x=ie4M/uiw6W0RMs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Replace the hlt loop in handle_vc_boot_ghcb() with an
+sev_es_terminate(). The hlt gives the system no indication the guest is
+unhappy. The termination request will signal there was an error during
+VC handling during boot.
 
-Hi all,
 
-In commit
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: x86@kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Peter Gonda <pgonda@google.com>
+---
+ arch/x86/kernel/sev.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-  ebc4cb43ea5a ("spi: Fix erroneous sgs value with min_t()")
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index e6d316a01fdd..ae87fbf27724 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -1425,6 +1425,5 @@ bool __init handle_vc_boot_ghcb(struct pt_regs *regs)
+ fail:
+ 	show_regs(regs);
+ 
+-	while (true)
+-		halt();
++	sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
+ }
+-- 
+2.35.1.894.gb6a874cedc-goog
 
-Fixes tag
-
-  Fixes: commit 1a4e53d2fc4f68aa ("spi: Fix invalid sgs value")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dffVoO4x=ie4M/uiw6W0RMs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIzpbkACgkQAVBC80lX
-0GxU7Qf9G65RsTpMLymE5l1gsFUfTs+x8fscNzAT2eKQ1YQiA6QqjYHAn8KDqMfw
-/LVS7Rvdl71Uhx0QrPCRZ3djLa85Vyda8rGhiGHb843kuNQpLvvfkLWuKbO6BYD4
-uGA/Ce5xbp85HiQSjo8vatmyqUi/fblU6R93eAuHNP+7KpHRsCTRuAklERHmVS0f
-95m/D5hINbEYr27UXq8kK3Wi6Iwz6w5IoodybLOW5qbndLOD6uoWb0pHoiRenUKI
-HsUxjF4P4kLD/AN1skuN1pq6vItO6ely3gzs6wUB/tIu6qMXdCMfsDxSWemI9RNY
-uX7kmBbiEj4bNqFP85MJTyz/+qqVOQ==
-=DfGM
------END PGP SIGNATURE-----
-
---Sig_/dffVoO4x=ie4M/uiw6W0RMs--

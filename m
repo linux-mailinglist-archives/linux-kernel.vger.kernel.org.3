@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E424DC6A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621B44DC63E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbiCQMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S233795AbiCQMuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiCQMwh (ORCPT
+        with ESMTP id S233944AbiCQMtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:52:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73051F2DC2;
-        Thu, 17 Mar 2022 05:50:17 -0700 (PDT)
+        Thu, 17 Mar 2022 08:49:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FDD1F1629;
+        Thu, 17 Mar 2022 05:48:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A2DB612AC;
-        Thu, 17 Mar 2022 12:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D34C340EF;
-        Thu, 17 Mar 2022 12:50:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7651B81EA0;
+        Thu, 17 Mar 2022 12:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4A8C36AE2;
+        Thu, 17 Mar 2022 12:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521416;
-        bh=iryJeOipI2fQm2Kduh61gmmU2fuSQG5Cfrxuy+fQi50=;
+        s=korg; t=1647521292;
+        bh=Dm/LD2dDTvLmsg3m5Yi7zDqvDVviXv1hULbqhrMd73k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ylsJs3mKHqsNq0G57dflJTnUzcYdF76U1fYJTaqsnGyrx7w77Ce7LjcudhX3DKc53
-         sjmLMYxBV1UB6Y3DsABFPwxs/eYst3LGNKkRG6BiGMOUiAW3jK6ISNbgRMYbjQJmxM
-         FAdyjQBlE6bMyh11UmfSX3g2M5XWzS8gEpIyEpag=
+        b=KYYM5KeAjEZSsSc3m933gOe9/OSpaBNq4HAUV1rIi6GU1Pd6yAWwh50SlXR3gN/dI
+         z3UDZ2mL08miTepqJhMcb+Bcd7VPCQNMi4DH+DCEwHhrEqEAe/Xr0GA+/v5TnJ7OW8
+         I1cpZmQTMUt6t7iEIswnMMKumgssUjUzLPHsWV3E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yan Yan <evitayan@google.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Julian Braha <julianbraha@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 03/23] xfrm: Check if_id in xfrm_migrate
-Date:   Thu, 17 Mar 2022 13:45:44 +0100
-Message-Id: <20220317124526.056046170@linuxfoundation.org>
+Subject: [PATCH 5.4 34/43] ARM: 9178/1: fix unmet dependency on BITREVERSE for HAVE_ARCH_BITREVERSE
+Date:   Thu, 17 Mar 2022 13:45:45 +0100
+Message-Id: <20220317124528.616695237@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-References: <20220317124525.955110315@linuxfoundation.org>
+In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
+References: <20220317124527.672236844@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,203 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yan Yan <evitayan@google.com>
+From: Julian Braha <julianbraha@gmail.com>
 
-[ Upstream commit c1aca3080e382886e2e58e809787441984a2f89b ]
+[ Upstream commit 11c57c3ba94da74c3446924260e34e0b1950b5d7 ]
 
-This patch enables distinguishing SAs and SPs based on if_id during
-the xfrm_migrate flow. This ensures support for xfrm interfaces
-throughout the SA/SP lifecycle.
+Resending this to properly add it to the patch tracker - thanks for letting
+me know, Arnd :)
 
-When there are multiple existing SPs with the same direction,
-the same xfrm_selector and different endpoint addresses,
-xfrm_migrate might fail with ENODATA.
+When ARM is enabled, and BITREVERSE is disabled,
+Kbuild gives the following warning:
 
-Specifically, the code path for performing xfrm_migrate is:
-  Stage 1: find policy to migrate with
-    xfrm_migrate_policy_find(sel, dir, type, net)
-  Stage 2: find and update state(s) with
-    xfrm_migrate_state_find(mp, net)
-  Stage 3: update endpoint address(es) of template(s) with
-    xfrm_policy_migrate(pol, m, num_migrate)
+WARNING: unmet direct dependencies detected for HAVE_ARCH_BITREVERSE
+  Depends on [n]: BITREVERSE [=n]
+  Selected by [y]:
+  - ARM [=y] && (CPU_32v7M [=n] || CPU_32v7 [=y]) && !CPU_32v6 [=n]
 
-Currently "Stage 1" always returns the first xfrm_policy that
-matches, and "Stage 3" looks for the xfrm_tmpl that matches the
-old endpoint address. Thus if there are multiple xfrm_policy
-with same selector, direction, type and net, "Stage 1" might
-rertun a wrong xfrm_policy and "Stage 3" will fail with ENODATA
-because it cannot find a xfrm_tmpl with the matching endpoint
-address.
+This is because ARM selects HAVE_ARCH_BITREVERSE
+without selecting BITREVERSE, despite
+HAVE_ARCH_BITREVERSE depending on BITREVERSE.
 
-The fix is to allow userspace to pass an if_id and add if_id
-to the matching rule in Stage 1 and Stage 2 since if_id is a
-unique ID for xfrm_policy and xfrm_state. For compatibility,
-if_id will only be checked if the attribute is set.
+This unmet dependency bug was found by Kismet,
+a static analysis tool for Kconfig. Please advise if this
+is not the appropriate solution.
 
-Tested with additions to Android's kernel unit test suite:
-https://android-review.googlesource.com/c/kernel/tests/+/1668886
-
-Signed-off-by: Yan Yan <evitayan@google.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/xfrm.h     |  5 +++--
- net/key/af_key.c       |  2 +-
- net/xfrm/xfrm_policy.c | 14 ++++++++------
- net/xfrm/xfrm_state.c  |  7 ++++++-
- net/xfrm/xfrm_user.c   |  6 +++++-
- 5 files changed, 23 insertions(+), 11 deletions(-)
+ lib/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/net/xfrm.h b/include/net/xfrm.h
-index 4a2843441caf..0049a7459649 100644
---- a/include/net/xfrm.h
-+++ b/include/net/xfrm.h
-@@ -1668,14 +1668,15 @@ int km_migrate(const struct xfrm_selector *sel, u8 dir, u8 type,
- 	       const struct xfrm_migrate *m, int num_bundles,
- 	       const struct xfrm_kmaddress *k,
- 	       const struct xfrm_encap_tmpl *encap);
--struct xfrm_state *xfrm_migrate_state_find(struct xfrm_migrate *m, struct net *net);
-+struct xfrm_state *xfrm_migrate_state_find(struct xfrm_migrate *m, struct net *net,
-+						u32 if_id);
- struct xfrm_state *xfrm_state_migrate(struct xfrm_state *x,
- 				      struct xfrm_migrate *m,
- 				      struct xfrm_encap_tmpl *encap);
- int xfrm_migrate(const struct xfrm_selector *sel, u8 dir, u8 type,
- 		 struct xfrm_migrate *m, int num_bundles,
- 		 struct xfrm_kmaddress *k, struct net *net,
--		 struct xfrm_encap_tmpl *encap);
-+		 struct xfrm_encap_tmpl *encap, u32 if_id);
- #endif
- 
- int km_new_mapping(struct xfrm_state *x, xfrm_address_t *ipaddr, __be16 sport);
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index ef9b4ac03e7b..d1364b858fdf 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2627,7 +2627,7 @@ static int pfkey_migrate(struct sock *sk, struct sk_buff *skb,
- 	}
- 
- 	return xfrm_migrate(&sel, dir, XFRM_POLICY_TYPE_MAIN, m, i,
--			    kma ? &k : NULL, net, NULL);
-+			    kma ? &k : NULL, net, NULL, 0);
- 
-  out:
- 	return err;
-diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-index c4a195cb3681..3d0ffd927004 100644
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -4287,7 +4287,7 @@ static bool xfrm_migrate_selector_match(const struct xfrm_selector *sel_cmp,
- }
- 
- static struct xfrm_policy *xfrm_migrate_policy_find(const struct xfrm_selector *sel,
--						    u8 dir, u8 type, struct net *net)
-+						    u8 dir, u8 type, struct net *net, u32 if_id)
- {
- 	struct xfrm_policy *pol, *ret = NULL;
- 	struct hlist_head *chain;
-@@ -4296,7 +4296,8 @@ static struct xfrm_policy *xfrm_migrate_policy_find(const struct xfrm_selector *
- 	spin_lock_bh(&net->xfrm.xfrm_policy_lock);
- 	chain = policy_hash_direct(net, &sel->daddr, &sel->saddr, sel->family, dir);
- 	hlist_for_each_entry(pol, chain, bydst) {
--		if (xfrm_migrate_selector_match(sel, &pol->selector) &&
-+		if ((if_id == 0 || pol->if_id == if_id) &&
-+		    xfrm_migrate_selector_match(sel, &pol->selector) &&
- 		    pol->type == type) {
- 			ret = pol;
- 			priority = ret->priority;
-@@ -4308,7 +4309,8 @@ static struct xfrm_policy *xfrm_migrate_policy_find(const struct xfrm_selector *
- 		if ((pol->priority >= priority) && ret)
- 			break;
- 
--		if (xfrm_migrate_selector_match(sel, &pol->selector) &&
-+		if ((if_id == 0 || pol->if_id == if_id) &&
-+		    xfrm_migrate_selector_match(sel, &pol->selector) &&
- 		    pol->type == type) {
- 			ret = pol;
- 			break;
-@@ -4424,7 +4426,7 @@ static int xfrm_migrate_check(const struct xfrm_migrate *m, int num_migrate)
- int xfrm_migrate(const struct xfrm_selector *sel, u8 dir, u8 type,
- 		 struct xfrm_migrate *m, int num_migrate,
- 		 struct xfrm_kmaddress *k, struct net *net,
--		 struct xfrm_encap_tmpl *encap)
-+		 struct xfrm_encap_tmpl *encap, u32 if_id)
- {
- 	int i, err, nx_cur = 0, nx_new = 0;
- 	struct xfrm_policy *pol = NULL;
-@@ -4443,14 +4445,14 @@ int xfrm_migrate(const struct xfrm_selector *sel, u8 dir, u8 type,
- 	}
- 
- 	/* Stage 1 - find policy */
--	if ((pol = xfrm_migrate_policy_find(sel, dir, type, net)) == NULL) {
-+	if ((pol = xfrm_migrate_policy_find(sel, dir, type, net, if_id)) == NULL) {
- 		err = -ENOENT;
- 		goto out;
- 	}
- 
- 	/* Stage 2 - find and update state(s) */
- 	for (i = 0, mp = m; i < num_migrate; i++, mp++) {
--		if ((x = xfrm_migrate_state_find(mp, net))) {
-+		if ((x = xfrm_migrate_state_find(mp, net, if_id))) {
- 			x_cur[nx_cur] = x;
- 			nx_cur++;
- 			xc = xfrm_state_migrate(x, mp, encap);
-diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-index f5b846a2edcd..37fe22b2e843 100644
---- a/net/xfrm/xfrm_state.c
-+++ b/net/xfrm/xfrm_state.c
-@@ -1569,7 +1569,8 @@ static struct xfrm_state *xfrm_state_clone(struct xfrm_state *orig,
- 	return NULL;
- }
- 
--struct xfrm_state *xfrm_migrate_state_find(struct xfrm_migrate *m, struct net *net)
-+struct xfrm_state *xfrm_migrate_state_find(struct xfrm_migrate *m, struct net *net,
-+						u32 if_id)
- {
- 	unsigned int h;
- 	struct xfrm_state *x = NULL;
-@@ -1585,6 +1586,8 @@ struct xfrm_state *xfrm_migrate_state_find(struct xfrm_migrate *m, struct net *n
- 				continue;
- 			if (m->reqid && x->props.reqid != m->reqid)
- 				continue;
-+			if (if_id != 0 && x->if_id != if_id)
-+				continue;
- 			if (!xfrm_addr_equal(&x->id.daddr, &m->old_daddr,
- 					     m->old_family) ||
- 			    !xfrm_addr_equal(&x->props.saddr, &m->old_saddr,
-@@ -1600,6 +1603,8 @@ struct xfrm_state *xfrm_migrate_state_find(struct xfrm_migrate *m, struct net *n
- 			if (x->props.mode != m->mode ||
- 			    x->id.proto != m->proto)
- 				continue;
-+			if (if_id != 0 && x->if_id != if_id)
-+				continue;
- 			if (!xfrm_addr_equal(&x->id.daddr, &m->old_daddr,
- 					     m->old_family) ||
- 			    !xfrm_addr_equal(&x->props.saddr, &m->old_saddr,
-diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
-index 518462059a9a..1ece01cd67a4 100644
---- a/net/xfrm/xfrm_user.c
-+++ b/net/xfrm/xfrm_user.c
-@@ -2436,6 +2436,7 @@ static int xfrm_do_migrate(struct sk_buff *skb, struct nlmsghdr *nlh,
- 	int n = 0;
- 	struct net *net = sock_net(skb->sk);
- 	struct xfrm_encap_tmpl  *encap = NULL;
-+	u32 if_id = 0;
- 
- 	if (attrs[XFRMA_MIGRATE] == NULL)
- 		return -EINVAL;
-@@ -2460,7 +2461,10 @@ static int xfrm_do_migrate(struct sk_buff *skb, struct nlmsghdr *nlh,
- 			return 0;
- 	}
- 
--	err = xfrm_migrate(&pi->sel, pi->dir, type, m, n, kmp, net, encap);
-+	if (attrs[XFRMA_IF_ID])
-+		if_id = nla_get_u32(attrs[XFRMA_IF_ID]);
-+
-+	err = xfrm_migrate(&pi->sel, pi->dir, type, m, n, kmp, net, encap, if_id);
- 
- 	kfree(encap);
- 
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 3321d04dfa5a..fa129b5c4320 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -42,7 +42,6 @@ config BITREVERSE
+ config HAVE_ARCH_BITREVERSE
+ 	bool
+ 	default n
+-	depends on BITREVERSE
+ 	help
+ 	  This option enables the use of hardware bit-reversal instructions on
+ 	  architectures which support such operations.
 -- 
 2.34.1
 

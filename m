@@ -2,215 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1C54DC592
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D479B4DC595
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiCQMLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S233462AbiCQMMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbiCQMLc (ORCPT
+        with ESMTP id S233283AbiCQMMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:11:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 258A61A94AE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:10:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E10E1570;
-        Thu, 17 Mar 2022 05:10:15 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5155D3F766;
-        Thu, 17 Mar 2022 05:10:12 -0700 (PDT)
-Message-ID: <73b491fe-b5e8-ebca-081e-fa339cc903e1@arm.com>
-Date:   Thu, 17 Mar 2022 13:10:02 +0100
+        Thu, 17 Mar 2022 08:12:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DD861EA5DF
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647519077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kSyLNb7c0c9c2nmyWguqMnTLe+v+e82hE8o/QMG7rOE=;
+        b=DpG2BjfxyUsI+9RhpX9DTxTOQI8TbQvSGq5Jrh1aEaxR9dkER14CVAtER0gDt2LC7ibdym
+        NvNig/uunnTWRUDrx3NRFEqSKn3nctcgfm0YiCuiiQRMONQaX2Oye38JMuei63j6mRg4rG
+        YjBaZbvRK3ia0E9Mx0/DWeP3Ce/IvOc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-JU4rq-ViMCGRX6mSvoSgDw-1; Thu, 17 Mar 2022 08:11:16 -0400
+X-MC-Unique: JU4rq-ViMCGRX6mSvoSgDw-1
+Received: by mail-wr1-f69.google.com with SMTP id t15-20020a5d534f000000b001f1e5759cebso1494335wrv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:11:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=kSyLNb7c0c9c2nmyWguqMnTLe+v+e82hE8o/QMG7rOE=;
+        b=fqgYMECIwgaSrIFqnTWZPKeFP2swuwHXMdvC5uP2wetrCZOfgbFAHbv720pQNVigMe
+         QiT9rTcN4eYtUrCvaW8rc6/r18hntFKu+kjLWQ9jjoXwekBf1uP9BQhmqzMNHNrDS3VO
+         0De8bUk/vcwJI3z+Nky44+I9JQPQu41ui11Ygf0qycq2hd2crfuFDGAuq/EI3PkKm0lj
+         0kFegR3SWJEWxj3FkJAy0D5E9CF23anejEkFkxXMpIEIngsKh7PJ9iTxPsNm6wMwv8F7
+         ShU7jOnw34fVZIIbq8433qSrHf9hDZNeazMqFmIgqeG8F8jT+TG0ISxoTxrJDaXwAxY3
+         UQVw==
+X-Gm-Message-State: AOAM531TtiO1QJF+koPc/n//6+oq6julb0Wol+pSq3WFd33WhaG51NhO
+        zXDr8loTrrqeW3gb/UnR3c4RHoOWiPnnD8dRYRYttTlGYdYVwGcnjdl4oLGPybmim0woVunipO8
+        8tD1vxXWmpNgRymV0nORhUWa+
+X-Received: by 2002:a05:6000:1868:b0:203:732e:6a96 with SMTP id d8-20020a056000186800b00203732e6a96mr3801006wri.39.1647519075000;
+        Thu, 17 Mar 2022 05:11:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwIXv62JgKNxYPnclkj3sS/CEL9HC1KuwOkjCVGiyV8rjULO7uR2QBoywnzjHaePed8KaNoGA==
+X-Received: by 2002:a05:6000:1868:b0:203:732e:6a96 with SMTP id d8-20020a056000186800b00203732e6a96mr3800992wri.39.1647519074755;
+        Thu, 17 Mar 2022 05:11:14 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm4781066wmb.3.2022.03.17.05.11.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 05:11:14 -0700 (PDT)
+Message-ID: <9f26eccb-d0f3-1c00-dce1-ab7fdd439fbb@redhat.com>
+Date:   Thu, 17 Mar 2022 13:11:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH] sched: dynamic config sd_flags if described in DT
-To:     =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-References: <1647331137-69890-1-git-send-email-wangqing@vivo.com>
- <68df2f49-9b74-7ea2-0178-be55824b3c89@arm.com>
- <SL2PR06MB3082DBB58303601F73FB77D3BD119@SL2PR06MB3082.apcprd06.prod.outlook.com>
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 2/2] mm/memory-failure.c: make non-LRU movable pages
+ unhandlable
 Content-Language: en-US
-In-Reply-To: <SL2PR06MB3082DBB58303601F73FB77D3BD119@SL2PR06MB3082.apcprd06.prod.outlook.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        naoya.horiguchi@nec.com, shy828301@gmail.com,
+        mike.kravetz@oracle.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220318073945.62164-1-linmiaohe@huawei.com>
+ <20220318073945.62164-3-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220318073945.62164-3-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2022 03:46, 王擎 wrote:
+On 18.03.22 08:39, Miaohe Lin wrote:
+> We can not really handle non-LRU movable pages in memory failure. Typically
+> they are balloon, zsmalloc, etc. Assuming we run into a base (4K) non-LRU
+> movable page, we could reach as far as identify_page_state(), it should not
+> fall into any category except me_unknown. For the non-LRU compound movable
+> pages, they could be taken for transhuge pages but it's unexpected to split
+> non-LRU  movable pages using split_huge_page_to_list in memory_failure. So
+> we could just simply make non-LRU  movable pages unhandlable to avoid these
+> possible nasty cases.
 > 
->> (1) Can you share more information about your CPU topology?
->>
->> I guess it is a single DSU (DynamIQ Shared Unit) ARMv9 system with 8
->> CPUs? So L3 spans over [CPU0..CPU7].
->>
->> You also mentioned complexes. Am I right in assuming that [CPU0..CPU3]
->> are Cortex-A510 cores where each 2 CPUs share a complex?
->>
->> What kind of uarch are the CPUs in [CPU4..CPU7]? Are they Cortex-A510's
->> as well? I'm not sure after reading your email:
+> Suggested-by: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
+> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  mm/memory-failure.c | 20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
 > 
-> Yes, Android systems are currently used default_domain with wrong sd_flags, 
-> take Qualcomm SM8450 as an example, the CPU and cache topology(1+3+4):
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index ecf45961f3b6..bf14bea2ed93 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1176,12 +1176,18 @@ void ClearPageHWPoisonTakenOff(struct page *page)
+>   * does not return true for hugetlb or device memory pages, so it's assumed
+>   * to be called only in the context where we never have such pages.
+>   */
+> -static inline bool HWPoisonHandlable(struct page *page)
+> +static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
+>  {
+> -	return PageLRU(page) || __PageMovable(page) || is_free_buddy_page(page);
+> +	bool movable = false;
+> +
+> +	/* Soft offline could mirgate non-LRU movable pages */
 
-Ah, your system looks like this:
+s/mirgate/migrate/
 
-      .---------------.
-CPU   |0 1 2 3 4 5 6 7|
-      +---------------+
-uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
-      +---------------+
-  L2  |   |   | | | | |
-      +---------------+
-  L3  |<--         -->|
-      +---------------+
-      |<-- cluster -->|
-      +---------------+
-      |<--   DSU   -->|
-      '---------------'
+> +	if ((flags & MF_SOFT_OFFLINE) && __PageMovable(page))
+> +		movable = true;
 
-> |                           DSU                            |
-> |           cluster0         |       cluster1     |cluster2|
+simply "return true" and drop "bool movable".
 
-^^^ Those aren't real clusters, hence the name <Phantom> SD. The cluster
-is [CPU0...CPU7]. Android uses Phantom SD to subgroup CPUs with the same
-uarch. That's why you get your MC->DIE SD's on your system and
-SHARE_PKG_RESOURCES (ShPR) on MC, rather DIE.
+> +
+> +	return movable || PageLRU(page) || is_free_buddy_page(page);
 
-Note, you should already have an asymmetric SD hierarchy. CPU7 should
-only have DIE not MC! Each CPU has its own SD hierarchy!
+-- 
+Thanks,
 
-> | core0  core1  core2  core3 |  core4 core5 core6 | core7  |
-> |   complex0  |   complex1   |  ------------------------   |
-> |   L2 cache  |   L2 cache   |   L2  |  L2 |  L2  |   L2   |
-> |                         L3 cache                         |
-> 
-> The sched domain now:
-> DIE[0-7]  (no SD_SHARE_PKG_RESOURCES)
-> MC[0-3][4-6][7] (SD_SHARE_PKG_RESOURCES)
-> 
-> The sched domain should be:
-> DIE[0-7]  (SD_SHARE_PKG_RESOURCES)
-> MC[0-3][4-6][7] (no SD_SHARE_PKG_RESOURCES)
+David / dhildenb
 
-First remember, using Phantom SD in Android is already a hack. Normally
-your system should only have an MC SD for each CPU (with ShPR).
-
-Now, if you want to move ShPR from MC to DIE then a custom topology
-table should do it, i.e. you don't have to change any generic task
-scheduler code.
-
-static inline int cpu_cpu_flags(void)
-{
-       return SD_SHARE_PKG_RESOURCES;
-}
-
-static struct sched_domain_topology_level custom_topology[] = {
-#ifdef CONFIG_SCHED_SMT
-        { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
-#endif
-
-#ifdef CONFIG_SCHED_CLUSTER
-        { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
-#endif
-
-#ifdef CONFIG_SCHED_MC
-        { cpu_coregroup_mask, SD_INIT_NAME(MC) },
-                            ^^^^
-#endif
-        { cpu_cpu_mask, cpu_cpu_flags, SD_INIT_NAME(DIE) },
-                        ^^^^^^^^^^^^^
-        { NULL, },
-};
-
-set_sched_topology(custom_topology);
-
-> *CLS[0-1][2-3](SD_SHARE_PKG_RESOURCES)
-
-But why do you want to have yet another SD underneath MC for CPU0-CPU3?
-sd_llc is assigned to the highest ShPR SD, which would be DIE.
-
->> https://lkml.kernel.org/r/SL2PR06MB30828CF9FF2879AFC9DC53D2BD0C9@SL2PR06MB3082.apcprd06.prod.outlook.com
->>
->> You might run into the issue that individual CPUs of your system see a
->> different SD hierarchy in case that [CPU4..CPU7] aren't Cortex-A510's,
->> i.e. CPUs not sharing complexes.
->>
->> (2) Related to your MC Sched Domain (SD) layer:
->>
->> If you have a single DSU ARMv9 system, then in Linux kernel mainline you
->> shouldn't have sub-clustering of [CPU0..CPU3] and [CPU4...CPU7].
->>
->> I.e. the cpu-map entry in your dts file should only list cores, not
->> clusters.
-> 
-> But in fact we will, as mentioned above.
-
-OK, so your system needs this `fake` sub-grouping on uarch boundaries.
-Probably because of (out-of-tree) Android/platform code? Have you tried
-to run on a clean mainline SD hierarchy (only MC)? Is the Phantom SD
-still required?
-
->> I know that in Android the cluster entries are used to sub-group
->> different uarch CPUs in an asymmetric CPU capacity system (a.k.a. Arm
->> DynamIQ and Phantom domains) but this is eclipsing the true L3 (LLC)
->> information and is not "supported" (in the sense of "used") in mainline.
->>
->> But I have a hard time to see what [CPU0..CPU3] or [CPU4..CPU7] are
->> shareing in your system.
-> 
-> They share L3 cache, but no share L2 which only shared within complex.
-
-I should have written: What do they share exclusively? I can only see
-that they ([CPU0..CPU3], [CPU4..CPU6], [CPU7]) share uarch exclusively.
-Which relates to this fake (Phantom) SD. L3 is shared between all CPUs.
-
->> (3) Why do you want this different SD hierarchy?
->>
->> I assume in mainline your system will have a single SD which is MC (w/o
->> the Phantom domain approach from Android).
->>
->> You mentioned cpus_share_cache(). Or is it the extra SD level which
->> changes the behaviour of CFS load-balancing? I'm just wondering since
->> EAS wouldn't be affected here. I'm sure I can understand this better
->> once we know more about your CPU topology.
-> 
-> What I want to do is :
-> 1.Config the right sd_llc to sd, better to get it dynamically from DT
-
-So this should be ShPR on DIE. You have 2 choices here. Use flat MC SD
-(mainline) or Phantom SD's + custom_topology.
-
-> 2.Benefit from the shared cache(L2) of the complex
-> i.e. when we look for sibling idle CPU, prior select the L2 shared CPU(inner complex) if L3 is all shared.
-
-But cpus_share_cache() operates on sd_llc_id which relates to DIE SD
-even for [CPU0..CPU3]?

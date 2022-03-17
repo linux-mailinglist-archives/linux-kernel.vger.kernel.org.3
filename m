@@ -2,29 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5444DC907
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F764DC8FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbiCQOlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiCQOlI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235235AbiCQOlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 17 Mar 2022 10:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235189AbiCQOk7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 17 Mar 2022 10:40:59 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8245612E15A;
-        Thu, 17 Mar 2022 07:39:50 -0700 (PDT)
-X-UUID: b80ffed8ef3a41a1b4bd7e63f5f1c4fd-20220317
-X-UUID: b80ffed8ef3a41a1b4bd7e63f5f1c4fd-20220317
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A17E29C2;
+        Thu, 17 Mar 2022 07:39:38 -0700 (PDT)
+X-UUID: e6f5fb6e0a5d43c48370a451db1fe921-20220317
+X-UUID: e6f5fb6e0a5d43c48370a451db1fe921-20220317
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1354995263; Thu, 17 Mar 2022 22:39:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 17 Mar 2022 22:39:28 +0800
+        with ESMTP id 156937937; Thu, 17 Mar 2022 22:39:30 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 17 Mar 2022 22:39:29 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Mar
+ 2022 22:39:28 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Thu, 17 Mar 2022 22:39:28 +0800
@@ -56,9 +58,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v14 3/6] dt-bindings: soc: mediatek: move out common module from display folder
-Date:   Thu, 17 Mar 2022 22:39:23 +0800
-Message-ID: <20220317143926.15835-4-moudy.ho@mediatek.com>
+Subject: [PATCH v14 4/6] dt-bindings: soc: mediatek: add gce-client-reg for MUTEX
+Date:   Thu, 17 Mar 2022 22:39:24 +0800
+Message-ID: <20220317143926.15835-5-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220317143926.15835-1-moudy.ho@mediatek.com>
 References: <20220317143926.15835-1-moudy.ho@mediatek.com>
@@ -74,31 +76,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to share the same hardware information with MDP3,
-change the MUTEX dt-binding to the path "soc/mediatek".
+In order to allow modules with latency requirements such as MDP3
+to set registers through CMDQ, add the relevant GCE property.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 ---
- .../bindings/{display => soc}/mediatek/mediatek,mutex.yaml      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
- rename Documentation/devicetree/bindings/{display => soc}/mediatek/mediatek,mutex.yaml (97%)
+ .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml  | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-similarity index 97%
-rename from Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml
-rename to Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-index 6eca525eced0..f825af49f820 100644
---- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mutex.yaml
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
+index f825af49f820..a4892979480c 100644
+--- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
 +++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/display/mediatek/mediatek,mutex.yaml#
-+$id: http://devicetree.org/schemas/soc/mediatek/mediatek,mutex.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+@@ -60,6 +60,14 @@ properties:
+       include/dt-bindings/gce/<chip>-gce.h of each chips.
+     $ref: /schemas/types.yaml#/definitions/phandle-array
  
- title: Mediatek mutex
++  mediatek,gce-client-reg:
++    description: The register of client driver can be configured by gce with
++      4 arguments defined in this property, such as phandle of gce, subsys id,
++      register offset and size. Each GCE subsys id is mapping to a client
++      defined in the header include/dt-bindings/gce/<chip>-gce.h.
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
 -- 
 2.18.0
 

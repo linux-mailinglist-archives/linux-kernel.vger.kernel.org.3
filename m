@@ -2,140 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDCB4DC433
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51DE4DC447
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiCQKqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S232743AbiCQKw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiCQKqt (ORCPT
+        with ESMTP id S231938AbiCQKw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:46:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD54DEBAB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647513931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZuoRHSiS5sMoIOb7MZ6BQa2RBfHZJ9wFo+kGOXs9LKw=;
-        b=Gdt0feiGs7Yssi7ksRXP+v22c7+7sYBXQTKB4pfWhaXKLj//xtDW3K5ViXWTkOvaPk1WNJ
-        ZL6mv1vgkwjJ2Ivc4DRCw3ceX81ve0OgOIXb79LfizQKmmv+eRxnAjZIylGN4mmASIrPvY
-        lNcv/U9avULtCOYqmIYshb4Sl87z380=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-k1Mx3SeaPEmGbW7fj8nQYg-1; Thu, 17 Mar 2022 06:45:28 -0400
-X-MC-Unique: k1Mx3SeaPEmGbW7fj8nQYg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F224E1C06909;
-        Thu, 17 Mar 2022 10:45:27 +0000 (UTC)
-Received: from ceranb.redhat.com (unknown [10.40.193.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BD363C28100;
-        Thu, 17 Mar 2022 10:45:25 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     poros@redhat.com, Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Slawomir Laba <slawomirx.laba@intel.com>,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Phani Burra <phani.r.burra@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] iavf: Fix hang during reboot/shutdown
-Date:   Thu, 17 Mar 2022 11:45:24 +0100
-Message-Id: <20220317104524.2802848-1-ivecera@redhat.com>
+        Thu, 17 Mar 2022 06:52:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE7F1D66FC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:51:42 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HA8J3j003456;
+        Thu, 17 Mar 2022 10:46:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Ek19Esc6ZZmiBAKjyETufbmdvxjoKaXqi/0i1QXhHIs=;
+ b=F10U3CzA4r5vwV4tCuxHD5Xw53fV7O/hbBeai8BTvxMS+rz4QH7dxM6GH01qlfSl62GR
+ 5qfHUz0T+vWauy7wKa1IS1r8y416Z4GHSC+ktDPGimIk6Mz5vcnDBpN3SXQa1I4rc8k2
+ YcaZ5Qkk83vnp35jXeAMBEq32hqIWBokoCKI1xQJNojRG6M33gXPxeWyfLa57rCGg8Ox
+ OpKwgtG/4Z73aw7vWhkg7uygRU9prv8ckxTL0yTvre1VjOxvqpI00dAMQTcNPisSDB14
+ G2Z0xecbOD2H09pFPUF/22WICCoaylB/E06Feoc7AAEAck5Effl98d+8O3W9EGVtq0V+ JA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev04pv0sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 10:46:20 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22HA2PSP023744;
+        Thu, 17 Mar 2022 10:46:20 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev04pv0s6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 10:46:20 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HAj4Vh017094;
+        Thu, 17 Mar 2022 10:46:18 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3euc6r2m6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 10:46:17 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HAkFRT38535646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Mar 2022 10:46:15 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82362A4055;
+        Thu, 17 Mar 2022 10:46:15 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 16A5CA404D;
+        Thu, 17 Mar 2022 10:46:09 +0000 (GMT)
+Received: from [9.43.110.37] (unknown [9.43.110.37])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Mar 2022 10:46:08 +0000 (GMT)
+Message-ID: <79d08021-699a-016e-6ff3-15b67efa895d@linux.ibm.com>
+Date:   Thu, 17 Mar 2022 16:16:07 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 4/8] crash: generic crash hotplug support
+ infrastructure
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220303162725.49640-1-eric.devolder@oracle.com>
+ <20220303162725.49640-5-eric.devolder@oracle.com>
+ <1b7405e4-e6a3-56ff-5068-d598ba2f2b5e@linux.ibm.com>
+ <2ca17bd8-fc81-19e2-7a16-e458ce8a097e@oracle.com>
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <2ca17bd8-fc81-19e2-7a16-e458ce8a097e@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zFkJpA3B0jXEM5aAtf1ncQP4KS_WTTiN
+X-Proofpoint-ORIG-GUID: 2Uc7Q0t7RxKbJLb5lsZZfxWP_uTP8JQD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-17_04,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203170060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent commit 974578017fc1 ("iavf: Add waiting so the port is
-initialized in remove") adds a wait-loop at the beginning of
-iavf_remove() to ensure that port initialization is finished
-prior unregistering net device. This causes a regression
-in reboot/shutdown scenario because in this case callback
-iavf_shutdown() is called and this callback detaches the device,
-makes it down if it is running and sets its state to __IAVF_REMOVE.
-Later shutdown callback of associated PF driver (e.g. ice_shutdown)
-is called. That callback calls among other things sriov_disable()
-that calls indirectly iavf_remove() (see stack trace below).
-As the adapter state is already __IAVF_REMOVE then the mentioned
-loop is end-less and shutdown process hangs.
 
-The patch fixes this by checking adapter's state at the beginning
-of iavf_remove() and skips the rest of the function if the adapter
-is already in remove state (shutdown is in progress).
+On 15/03/22 19:42, Eric DeVolder wrote:
+>
+>
+> On 3/15/22 07:08, Sourabh Jain wrote:
+>> Hello Eric,
+>>
+>> On 03/03/22 21:57, Eric DeVolder wrote:
+>>> This patch introduces a generic crash hot plug/unplug infrastructure
+>>> for CPU and memory changes. Upon CPU and memory changes, a generic
+>>> crash_hotplug_handler() obtains the appropriate lock, does some
+>>> important house keeping and then dispatches the hot plug/unplug event
+>>> to the architecture specific arch_crash_hotplug_handler(), and when
+>>> that handler returns, the lock is released.
+>>>
+>>> This patch modifies crash_core.c to implement a subsys_initcall()
+>>> function that installs handlers for hot plug/unplug events. If CPU
+>>> hotplug is enabled, then cpuhp_setup_state() is invoked to register a
+>>> handler for CPU changes. Similarly, if memory hotplug is enabled, then
+>>> register_memory_notifier() is invoked to install a handler for memory
+>>> changes. These handlers in turn invoke the common generic handler
+>>> crash_hotplug_handler().
+>>>
+>>> On the CPU side, cpuhp_setup_state_nocalls() is invoked with parameter
+>>> CPUHP_AP_ONLINE_DYN. While this works, when a CPU is being unplugged,
+>>> the CPU still shows up in foreach_present_cpu() during the regeneration
+>>> of the new CPU list, thus the need to explicitly check and exclude the
+>>> soon-to-be offlined CPU in crash_prepare_elf64_headers().
+>>>
+>>> On the memory side, each un/plugged memory block passes through the
+>>> handler. For example, if a 1GiB DIMM is hotplugged, that generate 8
+>>> memory events, one for each 128MiB memblock.
+>>>
+>>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>>> ---
+>>>   include/linux/kexec.h |  16 +++++++
+>>>   kernel/crash_core.c   | 108 
+>>> ++++++++++++++++++++++++++++++++++++++++++
+>>>   2 files changed, 124 insertions(+)
+>>>
+>>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>>> index d7b59248441b..b11d75a6b2bc 100644
+>>> --- a/include/linux/kexec.h
+>>> +++ b/include/linux/kexec.h
+>>> @@ -300,6 +300,13 @@ struct kimage {
+>>>       /* Information for loading purgatory */
+>>>       struct purgatory_info purgatory_info;
+>>> +
+>>> +#ifdef CONFIG_CRASH_HOTPLUG
+>>> +    bool hotplug_event;
+>>> +    int offlinecpu;
+>>> +    bool elf_index_valid;
+>>> +    int elf_index;
+>>
+>> How about keeping an array to track all kexec segment index need to 
+>> be updated in
+>> crash hotplug handler.
+>>
+>> struct hp_segment {
+>>     name;
+>>     index;
+>>     is_valid;
+>>   }
+>>
+>> It will be helpful if architecture need to updated multiple kexec 
+>> segments  for a hotplug event.
+>>
+>> For example, on PowerPC, we might need to update FDT and elfcorehdr 
+>> on memory hot plug/unplug.
+>>
+>> Thanks,
+>> Sourabh Jain
+>
+> Sourabh,
+> I'm OK with that. Another idea might be if there are just two, and one 
+> of them is elfcorehdr, then perhaps in addition to elf_index and 
+> elf_index_valid, maybe we add an arch_index and arch_index_valid? In 
+> the case of PPC, the FDT would be stored in arch_index?
 
-Reproducer:
-1. Create VF on PF driven by ice or i40e driver
-2. Ensure that the VF is bound to iavf driver
-3. Reboot
+Yes it seems like we might not need to keep more than two kexec indexes. 
+Since this indexes are arch specific lets push them to struct 
+kimage_arch (part of kimage). So for now I will push fdt_index to struct 
+kimage_arch.
 
-[52625.981294] sysrq: SysRq : Show Blocked State
-[52625.988377] task:reboot          state:D stack:    0 pid:17359 ppid:     1 f2
-[52625.996732] Call Trace:
-[52625.999187]  __schedule+0x2d1/0x830
-[52626.007400]  schedule+0x35/0xa0
-[52626.010545]  schedule_hrtimeout_range_clock+0x83/0x100
-[52626.020046]  usleep_range+0x5b/0x80
-[52626.023540]  iavf_remove+0x63/0x5b0 [iavf]
-[52626.027645]  pci_device_remove+0x3b/0xc0
-[52626.031572]  device_release_driver_internal+0x103/0x1f0
-[52626.036805]  pci_stop_bus_device+0x72/0xa0
-[52626.040904]  pci_stop_and_remove_bus_device+0xe/0x20
-[52626.045870]  pci_iov_remove_virtfn+0xba/0x120
-[52626.050232]  sriov_disable+0x2f/0xe0
-[52626.053813]  ice_free_vfs+0x7c/0x340 [ice]
-[52626.057946]  ice_remove+0x220/0x240 [ice]
-[52626.061967]  ice_shutdown+0x16/0x50 [ice]
-[52626.065987]  pci_device_shutdown+0x34/0x60
-[52626.070086]  device_shutdown+0x165/0x1c5
-[52626.074011]  kernel_restart+0xe/0x30
-[52626.077593]  __do_sys_reboot+0x1d2/0x210
-[52626.093815]  do_syscall_64+0x5b/0x1a0
-[52626.097483]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-
-Fixes: 974578017fc1 ("iavf: Add waiting so the port is initialized in remove")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/iavf/iavf_main.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 45570e3f782e..0e178a0a59c5 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -4620,6 +4620,13 @@ static void iavf_remove(struct pci_dev *pdev)
- 	struct iavf_hw *hw = &adapter->hw;
- 	int err;
- 
-+	/* When reboot/shutdown is in progress no need to do anything
-+	 * as the adapter is already REMOVE state that was set during
-+	 * iavf_shutdown() callback.
-+	 */
-+	if (adapter->state == __IAVF_REMOVE)
-+		return;
-+
- 	set_bit(__IAVF_IN_REMOVE_TASK, &adapter->crit_section);
- 	/* Wait until port initialization is complete.
- 	 * There are flows where register/unregister netdev may race.
--- 
-2.34.1
+Thanks,
+Sourabh Jain
 

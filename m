@@ -2,194 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227004DD044
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B014DD048
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiCQVhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S230375AbiCQVjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiCQVhB (ORCPT
+        with ESMTP id S230372AbiCQVjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:37:01 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EDE1AFEA5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:35:43 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7F3102C0AE0;
-        Thu, 17 Mar 2022 21:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1647552939;
-        bh=DlueJLxm9RcO/tRmC2VtXRzjrDErf+I1jJMg4aCB1kM=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=2ePZXTRNg+QVavVMFpbvctvcLVPEh2KRYA49jE5V9UCnxaJtSlPk0ipUHAeXckQiq
-         U2ixilxyPOxwg3XPkCGs9zjUFdI+7GqG3DFqcpw2USpL+CBSnkqBnITNhI1sHm+s37
-         uFWE2nNq0v19j34KP5xWwT/1f3O4k6H8BR+wEEDVhikOboVjcXnHMiu0cUF2+BNvPt
-         O1Cd2je+uY0tXBuVvxwaFVC5Urr8cNj53o+6AXthJmxnm2k6Z4mGi9TmYEtcGkDrNp
-         xuzSU3v3ren7svVNGXLk0Rmc8J62hwCaxb+A/hg/hhi1bzFBepGVZcSoKCOPs4Gy2F
-         5pxZ2vHn+KxEw==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6233a9ab0001>; Fri, 18 Mar 2022 10:35:39 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 10:35:39 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.033; Fri, 18 Mar 2022 10:35:39 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-Thread-Topic: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-Thread-Index: AQHYOY9kLKbL3RzLBkeZC7t5/EMPlKzCuNeAgACH+gA=
-Date:   Thu, 17 Mar 2022 21:35:38 +0000
-Message-ID: <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
-References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
- <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
- <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
-In-Reply-To: <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B6A5DA8C65BEE047A726C46EBBE6D2B4@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Thu, 17 Mar 2022 17:39:07 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1574F1B087E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:37:50 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id o64so7015406oib.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=mYahFg1u8AWNshIkG0ACNOEuY23IE74jTRUAFlXlZgs=;
+        b=LzAlpuAIvhSFB57UMk4TIVaAFjG+yZiFO7gvk21cjYrKKivdM394ahnLTPM1TB1S8x
+         V4Rek+owRzgElF1h34+BD/zJItn/bmK9nvLvYkifZusOqMQOwrDCfSKepPe+k4Wgq1sf
+         6FamhJegmjo6xbuGqtZsF4IhIuI+2CtxU1p1Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=mYahFg1u8AWNshIkG0ACNOEuY23IE74jTRUAFlXlZgs=;
+        b=QGLL5CPb8z0jv/KDk1eaWXGc2VAGQCioBUy0ejTd4+OJ4oMc7lg5OkmXMOwD6hAZ93
+         BVwK+KP9iPxf7KNKxbuybSWvS/C4wcxCbMLgTG1f6nNoXNKpMYkvvcyEN1JlUnZfcNmk
+         BcqRrBh7Rqot6rnryrW+SdVCoMU4oTfqjHSGmnoucYJIZ65O9o3HwSYbA+ucNqKE1BDF
+         4eTX0SCprrc5KKemCEwglDocaMGQQO7q/hMHnod4ss0TMjloSRdaFawHdN2lZcODF9Ny
+         IkGsXMasOhz9Mn+033j0ZDhso6MPl8dWcYOQksZY6XVyqBl9upRL7yKoou9rn7lgYwnH
+         uVfw==
+X-Gm-Message-State: AOAM531loKP2tjHryz6ntx5RMRduXoCdNFmM+ZzBuPSSLCHWHebcaAD5
+        8CdW5509hIpT8Zv5bCxMdytdZu9PS9dHl5afKFovSQ==
+X-Google-Smtp-Source: ABdhPJyGHg7pzS0hejsylQTRq/KbshJeBY747RjvdABUqcwVlbZBxy0liBFxJXm6e5w3U9vj0KJv+6WpvTei0kthD/8=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr2860328oie.193.1647553069283; Thu, 17
+ Mar 2022 14:37:49 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 17 Mar 2022 17:37:48 -0400
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=o8Y5sQTvuykA:10 a=r7lCqylzDVdJZBd3QE4A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1647452154-16361-6-git-send-email-quic_sbillaka@quicinc.com>
+References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com> <1647452154-16361-6-git-send-email-quic_sbillaka@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 17 Mar 2022 17:37:48 -0400
+Message-ID: <CAE-0n50dmA0ETgNvaBGs+XmGu+r=6RbfbmnHqXAFqUBGjVGDvg@mail.gmail.com>
+Subject: Re: [PATCH v5 5/9] drm/msm/dp: Add eDP support via aux_bus
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     robdclark@gmail.com, seanpaul@chromium.org,
+        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
+        dianders@chromium.org, quic_khsieh@quicinc.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        thierry.reding@gmail.com, sam@ravnborg.org,
+        dmitry.baryshkov@linaro.org, quic_vproddut@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxOC8wMy8yMiAwMjoyOCwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gMy8xNi8yMiAx
-Njo0MSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IFRoZSBhZHQ3NDczLCBhZHQ3NDc1LCBhZHQ3
-NDc2IGFuZCBhZHQ3NDkwIGhhdmUgcGlucyB0aGF0IGNhbiBiZSB1c2VkIGZvcg0KPj4gZGlmZmVy
-ZW50IGZ1bmN0aW9ucy4gT24gdGhlIGFkdDc0NzMgYW5kwqAgYWR0NzQ3NSB0aGlzIGlzIHBpbnMg
-NSBhbmQgOS4NCj4+IE9uIHRoZSBhZHQ3NDc2IGFuZCBhZHQ3NDkwIHRoaXMgaXMgcGlucyAxMCBh
-bmQgMTQuDQo+Pg0KPj4gVGhlIGZpcnN0IHBpbiBjYW4gZWl0aGVyIGJlIFBXTTIoZGVmYXVsdCkg
-b3IgU01CQUxFUlQjLiBUaGUgc2Vjb25kIHBpbg0KPj4gY2FuIGJlIFRBQ0g0KGRlZmF1bHQpLCBU
-SEVSTSMsIFNNQkFMRVJUIyBvciBHUElPLg0KPj4NCj4+IFRoZSBhZHQ3NDc1IGRyaXZlciBoYXMg
-YWx3YXlzIGJlZW4gYWJsZSB0byBkZXRlY3QgdGhlIGNvbmZpZ3VyYXRpb24gaWYNCj4+IGl0IGhh
-ZCBiZWVuIGRvbmUgYnkgYW4gZWFybGllciBib290IHN0YWdlLiBBZGQgc3VwcG9ydCBmb3IgY29u
-ZmlndXJpbmcNCj4+IHRoZSBwaW5zIGJhc2VkIG9uIHRoZSBoYXJkd2FyZSBkZXNjcmlwdGlvbiBp
-biB0aGUgZGV2aWNlIHRyZWUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8
-Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJz
-L2h3bW9uL2FkdDc0NzUuYyB8IDk1ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrDQo+PiDCoCAxIGZpbGUgY2hhbmdlZCwgOTUgaW5zZXJ0aW9ucygrKQ0KPj4NCj4+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FkdDc0NzUuYyBiL2RyaXZlcnMvaHdtb24vYWR0NzQ3
-NS5jDQo+PiBpbmRleCA5ZDViMDE5NjUxZjIuLmFkNWU1YTdhODQ0YiAxMDA2NDQNCj4+IC0tLSBh
-L2RyaXZlcnMvaHdtb24vYWR0NzQ3NS5jDQo+PiArKysgYi9kcml2ZXJzL2h3bW9uL2FkdDc0NzUu
-Yw0KPj4gQEAgLTExMiw2ICsxMTIsOCBAQA0KPj4gwqAgI2RlZmluZSBDT05GSUczX1RIRVJNwqDC
-oMKgwqDCoMKgwqAgMHgwMg0KPj4gwqAgwqAgI2RlZmluZSBDT05GSUc0X1BJTkZVTkPCoMKgwqDC
-oMKgwqDCoCAweDAzDQo+PiArI2RlZmluZSBDT05GSUc0X1RIRVJNwqDCoMKgwqDCoMKgwqAgMHgw
-MQ0KPj4gKyNkZWZpbmUgQ09ORklHNF9TTUJBTEVSVMKgwqDCoCAweDAyDQo+PiDCoCAjZGVmaW5l
-IENPTkZJRzRfTUFYRFVUWcKgwqDCoMKgwqDCoMKgIDB4MDgNCj4+IMKgICNkZWZpbmUgQ09ORklH
-NF9BVFROX0lOMTDCoMKgwqAgMHgzMA0KPj4gwqAgI2RlZmluZSBDT05GSUc0X0FUVE5fSU40M8Kg
-wqDCoCAweEMwDQo+PiBAQCAtMTQ2MCw2ICsxNDYyLDk1IEBAIHN0YXRpYyBpbnQgYWR0NzQ3NV91
-cGRhdGVfbGltaXRzKHN0cnVjdCANCj4+IGkyY19jbGllbnQgKmNsaWVudCkNCj4+IMKgwqDCoMKg
-wqAgcmV0dXJuIDA7DQo+PiDCoCB9DQo+PiDCoCArc3RhdGljIGludCBsb2FkX3BpbjEwX2NvbmZp
-Zyhjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCANCj4+IGNvbnN0IGNoYXIgKnByb3Bu
-YW1lKQ0KPj4gK3sNCj4NCj4gQSBiZXR0ZXIgZnVuY3Rpb24gbmFtZSB3b3VsZCBwcm9iYWJseSBi
-ZSBsb2FkX2NvbmZpZzMoKSBvciBzaW1pbGFyLg0KDQpZZXAgdGhhdCdkIGJlIGEgYmV0dGVyIG5h
-bWUuDQoNCj4NCj4+ICvCoMKgwqAgY29uc3QgY2hhciAqZnVuY3Rpb247DQo+PiArwqDCoMKgIHU4
-IGNvbmZpZzM7DQo+PiArwqDCoMKgIGludCBlcnI7DQo+PiArDQo+PiArwqDCoMKgIGVyciA9IG9m
-X3Byb3BlcnR5X3JlYWRfc3RyaW5nKGNsaWVudC0+ZGV2Lm9mX25vZGUsIHByb3BuYW1lLCANCj4+
-ICZmdW5jdGlvbik7DQo+PiArwqDCoMKgIGlmICghZXJyKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAg
-Y29uZmlnMyA9IGFkdDc0NzVfcmVhZChSRUdfQ09ORklHMyk7DQo+DQo+IGVycm9yIGNoZWNrIG1p
-c3NpbmcgKEkgc2VlIHRoZSBkcml2ZXIgaXMgbm90b3Jpb3VzIGZvciB0aGF0LCBidXQgdGhhdCAN
-Cj4gaXMgbm90DQo+IGEgcmVhc29uIHRvIGtlZXAgZG9pbmcgaXQpLg0KDQpJa2VnYW1pLXNhbiBh
-bmQgRGFuIGRpZCB0byBzb21lIGdvb2Qgd29yayB0byBhZGRyZXNzIHNvbWUgb2YgdGhhdC4gVGhl
-IA0KcHJvYmUgZnVuY3Rpb24gaXMgc3RpbGwgcXVpdGUgY2FyZWxlc3MuDQoNCkknbGwgc2VlIHdo
-YXQgSSBjYW4gZG8gdG8gbWFrZSBzdXJlIG15IGFkZGl0aW9ucyBkb24ndCBtYWtlIGl0IHdvcnNl
-Lg0KPg0KPj4gKw0KPj4gK8KgwqDCoMKgwqDCoMKgIGlmICghc3RyY21wKCJwd20yIiwgZnVuY3Rp
-b24pKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29uZmlnMyAmPSB+Q09ORklHM19TTUJB
-TEVSVDsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlIGlmICghc3RyY21wKCJzbWJhbGVydCMiLCBm
-dW5jdGlvbikpDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25maWczIHw9IENPTkZJRzNf
-U01CQUxFUlQ7DQo+PiArwqDCoMKgwqDCoMKgwqAgZWxzZQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIC1FSU5WQUw7DQo+PiArDQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGky
-Y19zbWJ1c193cml0ZV9ieXRlX2RhdGEoY2xpZW50LCBSRUdfQ09ORklHMywgY29uZmlnMyk7DQo+
-PiArwqDCoMKgIH0NCj4+ICsNCj4+ICvCoMKgwqAgcmV0dXJuIDA7DQo+PiArfQ0KPj4gKw0KPj4g
-K3N0YXRpYyBpbnQgbG9hZF9waW4xNF9jb25maWcoY29uc3Qgc3RydWN0IGkyY19jbGllbnQgKmNs
-aWVudCwgY29uc3QgDQo+PiBjaGFyICpwcm9wbmFtZSkNCj4+ICt7DQo+DQo+IGxvYWRfY29uZmln
-NCgpID8NCj4NCj4+ICvCoMKgwqAgY29uc3QgY2hhciAqZnVuY3Rpb247DQo+PiArwqDCoMKgIHU4
-IGNvbmZpZzQ7DQo+PiArwqDCoMKgIGludCBlcnI7DQo+PiArDQo+PiArwqDCoMKgIGVyciA9IG9m
-X3Byb3BlcnR5X3JlYWRfc3RyaW5nKGNsaWVudC0+ZGV2Lm9mX25vZGUsIHByb3BuYW1lLCANCj4+
-ICZmdW5jdGlvbik7DQo+PiArwqDCoMKgIGlmICghZXJyKSB7DQo+PiArwqDCoMKgwqDCoMKgwqAg
-Y29uZmlnNCA9IGFkdDc0NzVfcmVhZChSRUdfQ09ORklHNCk7DQo+DQo+IGVycm9yIGNoZWNrDQo+
-DQo+PiArwqDCoMKgwqDCoMKgwqAgY29uZmlnNCAmPSB+Q09ORklHNF9QSU5GVU5DOw0KPj4gKw0K
-Pj4gK8KgwqDCoMKgwqDCoMKgIGlmICghc3RyY21wKCJ0YWNoNCIsIGZ1bmN0aW9uKSkNCj4+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIDsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlIGlmICghc3Ry
-Y21wKCJ0aGVybSMiLCBmdW5jdGlvbikpDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25m
-aWc0IHw9IENPTkZJRzRfVEhFUk07DQo+PiArwqDCoMKgwqDCoMKgwqAgZWxzZSBpZiAoIXN0cmNt
-cCgic21iYWxlcnQjIiwgZnVuY3Rpb24pKQ0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29u
-ZmlnNCB8PSBDT05GSUc0X1NNQkFMRVJUOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGVsc2UgaWYgKCFz
-dHJjbXAoImdwaW8iLCBmdW5jdGlvbikpDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb25m
-aWc0IHw9IENPTkZJRzRfUElORlVOQzsNCj4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlDQo+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCj4+ICsNCj4+ICvCoMKgwqDCoMKg
-wqDCoCByZXR1cm4gaTJjX3NtYnVzX3dyaXRlX2J5dGVfZGF0YShjbGllbnQsIFJFR19DT05GSUc0
-LCBjb25maWc0KTsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCByZXR1cm4gMDsNCj4+
-ICt9DQo+PiArDQo+PiArc3RhdGljIGludCBsb2FkX2NvbmZpZyhjb25zdCBzdHJ1Y3QgaTJjX2Ns
-aWVudCAqY2xpZW50LCBpbnQgY2hpcCkNCj4+ICt7DQo+PiArwqDCoMKgIGludCBlcnI7DQo+PiAr
-wqDCoMKgIGNvbnN0IGNoYXIgKmNvbmZfcHJvcDEsICpjb25mX3Byb3AyOw0KPg0KPiBjb25mXyBw
-cmVmaXggaXMgdW5uZWNlc3NhcnkuDQo+DQo+PiArDQo+PiArwqDCoMKgIHN3aXRjaCAoY2hpcCkg
-ew0KPj4gK8KgwqDCoCBjYXNlIGFkdDc0NzM6DQo+PiArwqDCoMKgIGNhc2UgYWR0NzQ3NToNCj4+
-ICvCoMKgwqDCoMKgwqDCoCBjb25mX3Byb3AxID0gImFkaSxwaW41LWZ1bmN0aW9uIjsNCj4+ICvC
-oMKgwqDCoMKgwqDCoCBjb25mX3Byb3AyID0gImFkaSxwaW45LWZ1bmN0aW9uIjsNCj4+ICvCoMKg
-wqDCoMKgwqDCoCBicmVhazsNCj4+ICvCoMKgwqAgY2FzZSBhZHQ3NDc2Og0KPj4gK8KgwqDCoCBj
-YXNlIGFkdDc0OTA6DQo+PiArwqDCoMKgwqDCoMKgwqAgY29uZl9wcm9wMSA9ICJhZGkscGluMTAt
-ZnVuY3Rpb24iOw0KPj4gK8KgwqDCoMKgwqDCoMKgIGNvbmZfcHJvcDIgPSAiYWRpLHBpbjE0LWZ1
-bmN0aW9uIjsNCj4+ICvCoMKgwqDCoMKgwqDCoCBicmVhazsNCj4+ICvCoMKgwqAgZGVmYXVsdDoN
-Cj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCj4NCj4gSXQgZG9lc24ndCBzZWVt
-IHJpZ2h0IHRvIHJldHVybiAtRUlOVkFMIGhlcmUuDQo+DQpIYXZlIHlvdSBnb3QgYSBiZXR0ZXIg
-c3VnZ2VzdGlvbj8gSSB3YXMgdHJ5aW5nIHRvIGF2b2lkIHNvbWVvbmUgDQpzcGVjaWZ5aW5nIGNv
-bXBhdGlibGUgPSAiYWRpLGFkdDc0NzYiIHdpdGggImFkaSxwaW41LWZ1bmN0aW9uIi4gSXMgeW91
-ciANCmNvbmNlcm4gdGhhdCBJIHNob3VsZCB1c2UgLUVOT0RFViBvciB0aGF0IEkgc2hvdWxkIGp1
-c3QgcGljayBtb3JlIA0KZ2VuZXJpYyBuYW1lcyBmb3IgdGhlIGNvbmZpZ3VyYWJsZSBwaW5zIChu
-YW1pbmcgdGhpbmdzIGlzIGhhcmQpLg0KDQpPciBwZXJoYXBzIGp1c3QgZGV2X3dhcm4oKSBhbmQg
-cmV0dXJuIDA/DQoNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBpZiAoY2hpcCAhPSBh
-ZHQ3NDc2ICYmIGNoaXAgIT0gYWR0NzQ5MCkNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsN
-Cj4+ICsNCj4NCj4gV2h5IG5vdCBjaGVjayB0aGlzIGZpcnN0LCBhbmQgd2hhdCBpcyB0aGUgcG9p
-bnQgb2YgYXNzaWduaW5nIHZhbHVlcyB0bw0KPiBjb25mX3Byb3AxIGFuZCBjb25mX3Byb3AyIGZv
-ciB0aGUgb3RoZXIgY2hpcHMgaW4gdGhlIGNhc2Ugc3RhdGVtZW50IGFib3ZlDQo+IG9ubHkgdG8g
-cmV0dXJuIDAgaGVyZSA/IEl0IHdvdWxkIGJlIG11Y2ggc2ltcGxlciB0byBkcm9wIHRoZSBvdGhl
-ciBjaGlwcw0KPiBmcm9tIHRoZSBjYXNlIHN0YXRlbWVudCBhbmQgaGF2ZSBkZWZhdWx0OiByZXR1
-cm4gMC4NCj4NClNvcnJ5IHRoYXQgaXMgb2xkLiBJIGluaXRpYWxseSB3YXMgdW5kZXIgdGhlIGlt
-cHJlc3Npb24gdGhhdCBvbmx5IHRoZXNlIA0KMiBoYWQgY29uZmlndXJhYmxlIHBpbnMgYnV0IHRo
-ZW4gSSByZWFkIHRoZSBvdGhlciBkYXRhc2hlZXRzIG1vcmUgY2xvc2VseS4NCj4+ICvCoMKgwqAg
-ZXJyID0gbG9hZF9waW4xMF9jb25maWcoY2xpZW50LCBjb25mX3Byb3AxKTsNCj4+ICvCoMKgwqAg
-aWYgKGVycikgew0KPj4gK8KgwqDCoMKgwqDCoMKgIGRldl9lcnIoJmNsaWVudC0+ZGV2LCAiZmFp
-bGVkIHRvIGNvbmZpZ3VyZSBQSU4xMFxuIik7DQo+DQo+IFRoZSBtZXNzYWdlcyBhcmUgbWlzbGVh
-ZGluZy4gVGhpcyBpc24ndCBhbHdheXMgcGluIDEwLzE0Lg0KPg0KTm93IEkndmUgZ290IHRoZSBw
-cm9wIG5hbWVzIEkgY2FuIHVzZSB0aGF0IGluc3RlYWQuDQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0
-dXJuIGVycjsNCj4+ICvCoMKgwqAgfQ0KPj4gKw0KPj4gK8KgwqDCoCBlcnIgPSBsb2FkX3BpbjE0
-X2NvbmZpZyhjbGllbnQsIGNvbmZfcHJvcDIpOw0KPj4gK8KgwqDCoCBpZiAoZXJyKSB7DQo+PiAr
-wqDCoMKgwqDCoMKgwqAgZGV2X2VycigmY2xpZW50LT5kZXYsICJmYWlsZWQgdG8gY29uZmlndXJl
-IFBJTjE0XG4iKTsNCj4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gZXJyOw0KPj4gK8KgwqDCoCB9
-DQo+PiArDQo+PiArwqDCoMKgIHJldHVybiAwOw0KPj4gK30NCj4+ICsNCj4+IMKgIHN0YXRpYyBp
-bnQgc2V0X3Byb3BlcnR5X2JpdChjb25zdCBzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50LCBjaGFy
-IA0KPj4gKnByb3BlcnR5LA0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB1
-OCAqY29uZmlnLCB1OCBiaXRfaW5kZXgpDQo+PiDCoCB7DQo+PiBAQCAtMTU4NSw2ICsxNjc2LDEw
-IEBAIHN0YXRpYyBpbnQgYWR0NzQ3NV9wcm9iZShzdHJ1Y3QgaTJjX2NsaWVudCANCj4+ICpjbGll
-bnQpDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqAgcmV2aXNpb24gPSBhZHQ3NDc1X3JlYWQoUkVHX0RF
-VklEMikgJiAweDA3Ow0KPj4gwqDCoMKgwqDCoCB9DQo+PiDCoCArwqDCoMKgIHJldCA9IGxvYWRf
-Y29uZmlnKGNsaWVudCwgY2hpcCk7DQo+PiArwqDCoMKgIGlmIChyZXQpDQo+PiArwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIHJldDsNCj4+ICsNCj4+IMKgwqDCoMKgwqAgY29uZmlnMyA9IGFkdDc0NzVf
-cmVhZChSRUdfQ09ORklHMyk7DQo+PiDCoMKgwqDCoMKgIC8qIFBpbiBQV00yIG1heSBhbHRlcm5h
-dGl2ZWx5IGJlIHVzZWQgZm9yIEFMRVJUIG91dHB1dCAqLw0KPj4gwqDCoMKgwqDCoCBpZiAoIShj
-b25maWczICYgQ09ORklHM19TTUJBTEVSVCkpDQo+
+Quoting Sankeerth Billakanti (2022-03-16 10:35:50)
+>         This patch adds support for generic eDP sink through aux_bus.
+
+Please unindent commit text paragraphs. This isn't a book.
+
+> The eDP/DP controller driver should support aux transactions originating
+> from the panel-edp driver and hence should be initialized and ready.
+>
+>         The panel bridge supporting the panel should be ready before
+> the bridge connector is initialized. The generic panel probe needs the
+> controller resources to be enabled to support aux tractions originating
+
+s/tractions/transactions/
+
+> from it. So, the host_init and phy_init are moved to execute before the
+> panel probe.
+>
+>         The host_init has to return early if the core is already
+> initialized so that the regulator and clock votes for the controller
+> resources are balanced.
+>
+>         EV_HPD_INIT_SETUP needs to execute immediately to enable the
+> interrupts for the aux transactions from panel-edp to get the modes
+> supported.
+
+There are a lot of things going on in this patch. Can it be split up?
+
+>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 65 +++++++++++++++++++++++++++++++++++--
+>  drivers/gpu/drm/msm/dp/dp_drm.c     | 10 +++---
+>  drivers/gpu/drm/msm/dp/dp_parser.c  | 21 +-----------
+>  drivers/gpu/drm/msm/dp/dp_parser.h  |  1 +
+>  4 files changed, 70 insertions(+), 27 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 382b3aa..688bbed 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/component.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/delay.h>
+> +#include <drm/drm_dp_aux_bus.h>
+>
+>  #include "msm_drv.h"
+>  #include "msm_kms.h"
+> @@ -265,8 +266,6 @@ static int dp_display_bind(struct device *dev, struct device *master,
+>                 goto end;
+>         }
+>
+> -       dp->dp_display.next_bridge = dp->parser->next_bridge;
+> -
+>         dp->aux->drm_dev = drm;
+>         rc = dp_aux_register(dp->aux);
+>         if (rc) {
+> @@ -421,6 +420,11 @@ static void dp_display_host_init(struct dp_display_private *dp)
+>                 dp->dp_display.connector_type, dp->core_initialized,
+>                 dp->phy_initialized);
+>
+> +       if (dp->core_initialized) {
+> +               DRM_DEBUG_DP("DP core already initialized\n");
+> +               return;
+> +       }
+> +
+>         dp_power_init(dp->power, false);
+>         dp_ctrl_reset_irq_ctrl(dp->ctrl, true);
+>         dp_aux_init(dp->aux);
+> @@ -433,6 +437,11 @@ static void dp_display_host_deinit(struct dp_display_private *dp)
+>                 dp->dp_display.connector_type, dp->core_initialized,
+>                 dp->phy_initialized);
+>
+> +       if (!dp->core_initialized) {
+> +               DRM_DEBUG_DP("DP core not initialized\n");
+> +               return;
+> +       }
+> +
+>         dp_ctrl_reset_irq_ctrl(dp->ctrl, false);
+>         dp_aux_deinit(dp->aux);
+>         dp_power_deinit(dp->power);
+> @@ -1502,7 +1511,7 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>
+>         dp_hpd_event_setup(dp);
+>
+> -       dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+> +       dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 0);
+>  }
+>
+>  void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+> @@ -1524,6 +1533,52 @@ void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+>         }
+>  }
+>
+> +static int dp_display_get_next_bridge(struct msm_dp *dp)
+> +{
+> +       int rc = 0;
+
+Drop initialization.
+
+> +       struct dp_display_private *dp_priv;
+> +       struct device_node *aux_bus;
+> +       struct device *dev;
+> +
+> +       dp_priv = container_of(dp, struct dp_display_private, dp_display);
+> +       dev = &dp_priv->pdev->dev;
+> +       aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
+> +
+> +       if (aux_bus) {
+> +               dp_display_host_init(dp_priv);
+> +               dp_catalog_ctrl_hpd_config(dp_priv->catalog);
+> +               enable_irq(dp_priv->irq);
+> +               dp_display_host_phy_init(dp_priv);
+> +
+> +               devm_of_dp_aux_populate_ep_devices(dp_priv->aux);
+> +
+> +               disable_irq(dp_priv->irq);
+
+Why do we disable irq?
+
+> +       }
+
+The aux_bus node leaked.
+
+> +
+> +       /*
+> +        * External bridges are mandatory for eDP interfaces: one has to
+> +        * provide at least an eDP panel (which gets wrapped into panel-bridge).
+> +        *
+> +        * For DisplayPort interfaces external bridges are optional, so
+> +        * silently ignore an error if one is not present (-ENODEV).
+> +        */
+> +       rc = dp_parser_find_next_bridge(dp_priv->parser);
+> +       if (rc == -ENODEV) {
+> +               if (dp->connector_type == DRM_MODE_CONNECTOR_eDP) {
+> +                       DRM_ERROR("eDP: next bridge is not present\n");
+> +                       return rc;
+> +               }
+> +       } else if (rc) {
+> +               if (rc != -EPROBE_DEFER)
+> +                       DRM_ERROR("DP: error parsing next bridge: %d\n", rc);
+> +               return rc;
+> +       }
+> +
+> +       dp->next_bridge = dp_priv->parser->next_bridge;
+> +
+> +       return 0;
+> +}
+> +
+>  int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>                         struct drm_encoder *encoder)
+>  {
+> @@ -1547,6 +1602,10 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>
+>         dp_display->encoder = encoder;
+>
+> +       ret = dp_display_get_next_bridge(dp_display);
+
+Didn't we just move bridge attachment out of modeset? Why is it being
+done here?
+
+> +       if (ret)
+> +               return ret;
+> +
+>         dp_display->bridge = dp_bridge_init(dp_display, dev, encoder);
+>         if (IS_ERR(dp_display->bridge)) {
+>                 ret = PTR_ERR(dp_display->bridge);
+> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+> index 7ce1aca..5254bd6 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+> @@ -114,10 +114,12 @@ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *
+>         bridge->funcs = &dp_bridge_ops;
+>         bridge->type = dp_display->connector_type;
+>
+> -       bridge->ops =
+> -               DRM_BRIDGE_OP_DETECT |
+> -               DRM_BRIDGE_OP_HPD |
+> -               DRM_BRIDGE_OP_MODES;
+> +       if (bridge->type == DRM_MODE_CONNECTOR_DisplayPort) {
+
+Why can't eDP have bridge ops that are the same?
+
+> +               bridge->ops =
+> +                       DRM_BRIDGE_OP_DETECT |
+> +                       DRM_BRIDGE_OP_HPD |
+> +                       DRM_BRIDGE_OP_MODES;
+> +       }
+>
+>         rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>         if (rc) {

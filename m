@@ -2,57 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5054C4DC45E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB76B4DC462
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbiCQLAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S232795AbiCQLEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiCQLAg (ORCPT
+        with ESMTP id S232750AbiCQLEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:00:36 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF572176D29;
-        Thu, 17 Mar 2022 03:59:19 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3453021110;
-        Thu, 17 Mar 2022 10:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647514758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 17 Mar 2022 07:04:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B31081DFDF3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647514963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FRZFWYXu0lglEsdbgAkHKkmcItgzgemxTYTZc8fsVTc=;
-        b=InraB4+0kSCdc8UDu/okTjNgatj5P6RAXhgCUwmKkl5JBuP6Jc7a82aAVFQCKM5cJV03oP
-        loW9dzgewNjtEz6rsoEZ9jmW3SA7GOPDLYpS9JFRAiS9/7oKRCLfQcaX5T5WrPRqHSmMPf
-        97Oh7UgJ4tESVOfSiJe/aFWx82wNEnE=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 97D36A3B83;
-        Thu, 17 Mar 2022 10:59:16 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 11:59:15 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     mcgrof@kernel.org, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
-        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
-        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
-Subject: Re: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
- KALLSYSMS is disabled
-Message-ID: <YjMUg8xwgRAH3lzA@alley>
-References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
- <20220316043540.677128-1-maninder1.s@samsung.com>
+        bh=cXeXA633cVJ0LM/fTbIriWK2KPHFVHlaSXmXHmrJHuE=;
+        b=TjzAJVdhmUSdDo8GVziUW68lFde70vSx1FlmW532Z1pq9bT7zobyokhWgb38frgNxw2dYL
+        n31avcjucisQCoj8RFksEhpf3QnBc7AyC3HWCypinI132GiDkhP4Swy8grYI9py47074S2
+        DYsIKDTQm4r7BoqJudg+qiCvYM6Z6ws=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-W6vPVYDVMaa4gVxNzMXqJw-1; Thu, 17 Mar 2022 07:02:42 -0400
+X-MC-Unique: W6vPVYDVMaa4gVxNzMXqJw-1
+Received: by mail-pf1-f198.google.com with SMTP id a23-20020aa794b7000000b004f6a3ac7a87so3305411pfl.23
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:02:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=cXeXA633cVJ0LM/fTbIriWK2KPHFVHlaSXmXHmrJHuE=;
+        b=wlM+nB1E8vgMUGh/t9nz5REoCqnpBqAalOJsHks2YJI4siK15XL4AhPwPMSx5Kabm4
+         zM2Lahwm5MlBYOsK3+8CHvsgRjqXJBKbaHNInCuo3Lyde/ECNoDGqdJog2b/8a5G6MHw
+         1v+/VRdppPr6IFAjTHWk71gPgAZsvYw/fDxcUwA3SnScYwaE6s3/AezmuKzmhNNTEwQb
+         pXZd0qnsib8IvSb0BGaZIvtytBkvh8T+wDLbzHMb/9QB8dqvDmbL0mPihW9geC2iHrjQ
+         EazMLF/t6g/Zi/MJoadUUmML6Kj82BY9T1pxYetAGvsB+bs7ZHVDlZnOyvrcMi2+4yX8
+         3BXQ==
+X-Gm-Message-State: AOAM533/xZiwQgXuOzftggpItXPe2qBLQyXRZwn4T1RH6RcwcTKYGJH9
+        va9AQ97K5yMy6hFZeNOENjafSHkrx14RgSrBoV+4cS8+wYZOKH3XIuFAZX+4petcHErvHgPchbg
+        qQ/GgMYwisXfrIrhocCwauKL2Oos3FyWzN7pdNZZfja8O/k/xqe/jI9Wlrn6bNOvgmNIOfTmU8g
+        ==
+X-Received: by 2002:a05:6a00:2182:b0:4f6:5051:61db with SMTP id h2-20020a056a00218200b004f6505161dbmr4330485pfi.40.1647514961245;
+        Thu, 17 Mar 2022 04:02:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxffglap+v5MUI+kVmbnqT1uzfdTGAL3EPrbxLZLqztCmhYGIklsmmjv87OoBNqs7vKc8TCVg==
+X-Received: by 2002:a05:6a00:2182:b0:4f6:5051:61db with SMTP id h2-20020a056a00218200b004f6505161dbmr4330445pfi.40.1647514960792;
+        Thu, 17 Mar 2022 04:02:40 -0700 (PDT)
+Received: from [10.72.12.110] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id kk12-20020a17090b4a0c00b001bed1ff3717sm5549766pjb.6.2022.03.17.04.02.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 04:02:40 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
+ encryption
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220315161959.19453-1-lhenriques@suse.de>
+ <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+ <87bky4j36l.fsf@brahms.olymp>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <64d590ad-ae0c-21c2-f24d-1be3e7662578@redhat.com>
+Date:   Thu, 17 Mar 2022 19:02:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316043540.677128-1-maninder1.s@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <87bky4j36l.fsf@brahms.olymp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,112 +88,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-03-16 10:05:40, Maninder Singh wrote:
-> print module information when KALLSYMS is disabled.
-> 
-> No change for %pB, as it needs to know symbol name to adjust address
-> value which can't be done without KALLSYMS.
-> 
-> (A) original output with KALLSYMS:
-> [8.842129] ps function_1 [crash]
-> [8.842735] pS function_1+0x4/0x2c [crash]
-> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> [8.843175] pB function_1+0x4/0x2c [crash]
-> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
-> 
-> (B) original output without KALLSYMS:
-> [12.487424] ps 0xffff800000eb008c
-> [12.487598] pS 0xffff800000eb008c
-> [12.487723] pSb 0xffff800000eb008c
-> [12.487850] pB 0xffff800000eb008c
-> [12.487967] pBb 0xffff800000eb008c
-> 
-> (C) With patched kernel
-> with KALLYSMS:
-> [41.974576] ps function_1 [crash]
-> [41.975173] pS function_1+0x4/0x2c [crash]
-> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [41.975879] pB function_1+0x4/0x2c [crash]
-> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> without KALLSYMS:
-> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
-> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
-> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
-> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
-> 
-> with disable hashing:
-> [8.563916] ps 0xffff800000f2008c [crash]
-> [8.564574] pS 0xffff800000f20000+0x8c [crash]
-> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> [8.565008] pB 0xffff800000f20000+0x8c [crash]
-> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
-> 
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -979,33 +979,92 @@ char *bdev_name(char *buf, char *end, struct block_device *bdev,
->  }
->  #endif
->  
-> +#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
-> +static int sprint_module_info(char *buf, unsigned long value,
-> +			     int modbuildid, int backtrace, int symbol)
-> +{
-> +	struct module *mod;
-> +	unsigned long offset;
-> +	void *base;
-> +	char *modname;
-> +	int len;
-> +	const unsigned char *buildid = NULL;
-> +	bool add_offset;
-> +
-> +	if (is_ksym_addr(value))
-> +		return 0;
-> +
-> +	if (backtrace || symbol)
-> +		add_offset = true;
-> +	else
-> +		add_offset = false;
-> +
-> +	preempt_disable();
-> +	mod = __module_address(value);
-> +	if (mod) {
-> +		modname = mod->name;
-> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-> +		if (modbuildid)
-> +			buildid = mod->build_id;
-> +#endif
-> +		if (add_offset) {
-> +			base = mod->core_layout.base;
-> +			offset = value - (unsigned long)base;
-> +		}
-> +	}
-> +	preempt_enable();
-> +	if (!mod)
-> +		return 0;
 
-I think that some earlier version of the patch allowed to print
-also the address from vmlinux with the offset. My concern was
-that it would show non-hashed base pointer. IMHO, it is fine
-to show it hashed.
+On 3/17/22 6:14 PM, Luís Henriques wrote:
+> Xiubo Li <xiubli@redhat.com> writes:
+>
+>> Hi Luis,
+>>
+>> There has another issue you need to handle at the same time.
+>>
+>> Currently only the empty directory could be enabled the file encryption, such as
+>> for the following command:
+>>
+>> $ fscrypt encrypt mydir/
+>>
+>> But should we also make sure that the mydir/.snap/ is empty ?
+>>
+>> Here the 'empty' is not totally empty, which allows it should allow long snap
+>> names exist.
+>>
+>> Make sense ?
+> Right, actually I had came across that question in the past but completely
+> forgot about it.
+>
+> Right now we simply check the dir stats to ensure a directory is empty.
+> We could add an extra check in ceph_crypt_empty_dir() to ensure that there
+> are no snapshots _above_ that directory (i.e. that there are no
+> "mydir/.snap/_name_xxxxx").
+>
+> Unfortunately, I don't know enough of snapshots implementation details to
+> understand if it's a problem to consider a directory as being empty (in
+> the fscrypt context) when there are these '_name_xxx' directories.  My
+> feeling is that this is not a problem but I really don't know.
+>
+> Do you (or anyone) have any ideas/suggestions?
 
-> +
-> +	/* address belongs to module */
-> +	if (add_offset)
-> +		len = sprintf(buf, "0x%p+0x%lx", base, offset);
-> +	else
-> +		len = sprintf(buf, "0x%lx", value);
-> +
-> +	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
-> +}
+There is no need to care about the long snap names in .snap, because 
+they are all from the parent snaprealms.
 
-Otherwise, it looks good to me. I did also some basic testing.
-The vmlinux address with offset can be added by a followup patch.
-Feel free to use:
+What you need to make sure is that there shouldn't have any local 
+snapshot before encrypting the directory.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
+If we don't make sure about this then when encrypting/decrypting the 
+snapshot names you will hit errors in theory.
 
-Best Regards,
-Petr
+But I didn't test this yet, you can try.
+
+-- Xiubo
+
+> Cheers,
+
